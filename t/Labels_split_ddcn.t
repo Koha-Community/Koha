@@ -24,11 +24,10 @@ use Test::More;
 
 BEGIN {
     our $ddcns = {};
-    if ($ARGV[0]) {
+    if ( $ARGV[0] ) {
         BAIL_OUT("USAGE: perl Labels_split_ddcn.t '621.3828 J28l' '621.3828,J28l'") unless $ARGV[1];
-        $ddcns = {$ARGV[0] => [split (/,/,$ARGV[1])],};
-    }
-    else {
+        $ddcns = { $ARGV[0] => [ split( /,/, $ARGV[1] ) ], };
+    } else {
         $ddcns = {
             'R220.3 H2793Z H32 c.2' => [qw(R 220.3 H2793Z H32 c.2)],
             'CD-ROM 787.87 EAS'     => [qw(CD-ROM 787.87 EAS)],
@@ -36,28 +35,28 @@ BEGIN {
         };
     }
     my $test_num = 1;
-    foreach (keys(%$ddcns)) {
-        my $split_num = scalar(@{$ddcns->{$_}});
+    foreach ( keys(%$ddcns) ) {
+        my $split_num = scalar( @{ $ddcns->{$_} } );
         $test_num += 2 * $split_num;
         $test_num += 4;
     }
     plan tests => $test_num;
-    use_ok('C4::ClassSplitRoutine::Dewey', qw( split_callnumber ));
+    use_ok( 'C4::ClassSplitRoutine::Dewey', qw( split_callnumber ) );
     use vars qw($ddcns);
 }
 
-foreach my $ddcn (sort keys %$ddcns) {
-    my (@parts, @expected);
-    ok($ddcn, "ddcn: $ddcn");
-    ok(@expected = @{$ddcns->{$ddcn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::ClassSplitRoutine::Dewey::split_callnumber($ddcn), "Dewey::split_callnumber($ddcn)");
+foreach my $ddcn ( sort keys %$ddcns ) {
+    my ( @parts, @expected );
+    ok( $ddcn, "ddcn: $ddcn" );
+    ok( @expected = @{ $ddcns->{$ddcn} }, "split expected to produce " . scalar(@expected) . " pieces" );
+    ok( @parts    = C4::ClassSplitRoutine::Dewey::split_callnumber($ddcn), "Dewey::split_callnumber($ddcn)" );
 
-    ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
+    ok( scalar(@expected) == scalar(@parts), sprintf( "%d of %d pieces produced", scalar(@parts), scalar(@expected) ) );
     my $i = 0;
     foreach my $unit (@expected) {
         my $part;
-        ok($part = $parts[$i], "($ddcn)[$i] populated: " . (defined($part) ? $part : 'UNDEF'));
-        ok((defined($part) and $part eq $unit),     "($ddcn)[$i]   matches: $unit");
+        ok( $part = $parts[$i],                    "($ddcn)[$i] populated: " . ( defined($part) ? $part : 'UNDEF' ) );
+        ok( ( defined($part) and $part eq $unit ), "($ddcn)[$i]   matches: $unit" );
         $i++;
     }
 }

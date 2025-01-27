@@ -7,7 +7,7 @@ use IPC::Cmd;
 use Carp qw( carp );
 
 use C4::Templates qw ( gettemplate );
-use C4::Letters qw( GetPreparedLetter );
+use C4::Letters   qw( GetPreparedLetter );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -18,18 +18,17 @@ sub count {
     my ($params) = @_;
     my $values = {};
 
-    if( $params->{borrowernumber} ) {
+    if ( $params->{borrowernumber} ) {
         $values->{borrower} = $params->{borrowernumber};
     }
-    if( $params->{pending} ) {
-        $values->{needed} = { '!=', undef };
+    if ( $params->{pending} ) {
+        $values->{needed}    = { '!=', undef };
         $values->{validated} = undef;
-    }
-    elsif( $params->{validated} ) {
+    } elsif ( $params->{validated} ) {
         $values->{validated} = { '!=', undef };
     }
 
-    return search_limited( $values )->count;
+    return search_limited($values)->count;
 }
 
 sub can_be_discharged {
@@ -48,10 +47,10 @@ sub is_discharged {
     return unless $params->{borrowernumber};
     my $borrowernumber = $params->{borrowernumber};
 
-    my $restricted = Koha::Patrons->find( $borrowernumber )->is_debarred;
-    my @validated = get_validated({borrowernumber => $borrowernumber});
+    my $restricted = Koha::Patrons->find($borrowernumber)->is_debarred;
+    my @validated  = get_validated( { borrowernumber => $borrowernumber } );
 
-    if ($restricted && @validated) {
+    if ( $restricted && @validated ) {
         return 1;
     } else {
         return 0;
@@ -62,13 +61,15 @@ sub request {
     my ($params) = @_;
     my $borrowernumber = $params->{borrowernumber};
     return unless $borrowernumber;
-    return unless can_be_discharged({ borrowernumber => $borrowernumber });
+    return unless can_be_discharged( { borrowernumber => $borrowernumber } );
 
     my $rs = Koha::Database->new->schema->resultset('Discharge');
-    return $rs->create({
-        borrower => $borrowernumber,
-        needed   => dt_from_string,
-    });
+    return $rs->create(
+        {
+            borrower => $borrowernumber,
+            needed   => dt_from_string,
+        }
+    );
 }
 
 sub discharge {
@@ -77,29 +78,32 @@ sub discharge {
     return unless $borrowernumber and can_be_discharged( { borrowernumber => $borrowernumber } );
 
     # Cancel reserves
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    my $holds = $patron->holds;
+    my $patron = Koha::Patrons->find($borrowernumber);
+    my $holds  = $patron->holds;
     while ( my $hold = $holds->next ) {
         $hold->cancel;
     }
 
     # Debar the member
-    Koha::Patron::Debarments::AddDebarment({
-        borrowernumber => $borrowernumber,
-        type           => 'DISCHARGE',
-    });
+    Koha::Patron::Debarments::AddDebarment(
+        {
+            borrowernumber => $borrowernumber,
+            type           => 'DISCHARGE',
+        }
+    );
 
     # Generate the discharge
-    my $rs = Koha::Database->new->schema->resultset('Discharge');
-    my $discharge = $rs->search({ borrower => $borrowernumber }, { order_by => { -desc => 'needed' }, rows => 1 });
-    if( $discharge->count > 0 ) {
-        $discharge->update({ validated => dt_from_string });
-    }
-    else {
-        $rs->create({
-            borrower  => $borrowernumber,
-            validated => dt_from_string,
-        });
+    my $rs        = Koha::Database->new->schema->resultset('Discharge');
+    my $discharge = $rs->search( { borrower => $borrowernumber }, { order_by => { -desc => 'needed' }, rows => 1 } );
+    if ( $discharge->count > 0 ) {
+        $discharge->update( { validated => dt_from_string } );
+    } else {
+        $rs->create(
+            {
+                borrower  => $borrowernumber,
+                validated => dt_from_string,
+            }
+        );
     }
 }
 
@@ -119,15 +123,15 @@ sub generate_as_pdf {
     $letter->{'title'}   =~ s/<<today>>/$today/g;
     $letter->{'content'} =~ s/<<today>>/$today/g;
 
-    my $tmpl = C4::Templates::gettemplate('batch/print-notices.tt', 'intranet', CGI->new);
+    my $tmpl = C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet', CGI->new );
     $tmpl->param(
         stylesheet => C4::Context->preference("NoticeCSS"),
         today      => $today,
         messages   => [$letter],
     );
 
-    my $html_path = tmpnam() . '.html';
-    my $pdf_path = tmpnam() . '.pdf';
+    my $html_path    = tmpnam() . '.html';
+    my $pdf_path     = tmpnam() . '.pdf';
     my $html_content = $tmpl->output;
 
     # export to HTML
@@ -136,18 +140,17 @@ sub generate_as_pdf {
     close $html_fh;
 
     if ( IPC::Cmd::can_run('weasyprint') ) {
-        my( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+        my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
             IPC::Cmd::run( command => "weasyprint $html_path $pdf_path", verbose => 0 );
 
-        map {warn $_} @$stderr_buf
-          if $stderr_buf and scalar @$stderr_buf;
+        map { warn $_ } @$stderr_buf
+            if $stderr_buf and scalar @$stderr_buf;
 
-        unless ( $success ) {
+        unless ($success) {
             warn $error_message;
             $pdf_path = undef;
         }
-    }
-    else {
+    } else {
         warn "weasyprint not found!";
         $pdf_path = undef;
     }
@@ -163,11 +166,11 @@ sub get_pendings {
     my $cond = {
         'me.needed'    => { '!=', undef },
         'me.validated' => undef,
-        ( defined $borrowernumber ? ( 'me.borrower' => $borrowernumber ) : () ),
-        ( defined $branchcode ? ( 'borrower.branchcode' => $branchcode ) : () ),
+        ( defined $borrowernumber ? ( 'me.borrower'         => $borrowernumber ) : () ),
+        ( defined $branchcode     ? ( 'borrower.branchcode' => $branchcode )     : () ),
     };
 
-    return search_limited( $cond );
+    return search_limited($cond);
 }
 
 sub get_validated {
@@ -177,11 +180,11 @@ sub get_validated {
 
     my $cond = {
         'me.validated' => { '!=', undef },
-        ( defined $borrowernumber ? ( 'me.borrower' => $borrowernumber ) : () ),
-        ( defined $branchcode ? ( 'borrower.branchcode' => $branchcode ) : () ),
+        ( defined $borrowernumber ? ( 'me.borrower'         => $borrowernumber ) : () ),
+        ( defined $branchcode     ? ( 'borrower.branchcode' => $branchcode )     : () ),
     };
 
-    return search_limited( $cond );
+    return search_limited($cond);
 }
 
 # TODO This module should be based on Koha::Object[s]
@@ -194,7 +197,7 @@ sub search_limited {
         @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
     }
     $params->{'borrower.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
-    $attributes->{join} = 'borrower';
+    $attributes->{join}              = 'borrower';
 
     my $rs = Koha::Database->new->schema->resultset('Discharge');
     return $rs->search( $params, { join => 'borrower' } );

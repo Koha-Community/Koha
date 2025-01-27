@@ -4,11 +4,12 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Change estimated delivery date") | html %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Change estimated delivery date") | html %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -33,24 +34,22 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-
-      <h1>Change estimated delivery date</h1>
-      <form action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
-          [% INCLUDE 'csrf-token.inc' %]
+    <h1>Change estimated delivery date</h1>
+    <form action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="brief">
-          <label for="estimated_delivery_date">Estimated delivery date:</label>
-          <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]"/>
-          <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            <label for="estimated_delivery_date">Estimated delivery date:</label>
+            <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]" />
+            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         </fieldset>
         <input type="hidden" name="referrer" value="[% referrer | html %]" />
         <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
         <input type="hidden" name="op" value="cud-save" />
         <fieldset class="action">
-          <input type="submit" class="btn btn-primary" value="Save" />
-          <a class="cancel" href="[% referrer | url %]">Cancel</a>
+            <input type="submit" class="btn btn-primary" value="Save" />
+            <a class="cancel" href="[% referrer | url %]">Cancel</a>
         </fieldset>
-      </form>
-
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

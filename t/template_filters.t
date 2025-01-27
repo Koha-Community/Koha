@@ -82,29 +82,30 @@ EXPECTED
     my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply(
         \@missing_filters,
-        [{
-                error => "missing_filter",
-                line => "        [% just_a_var %]",
+        [
+            {
+                error       => "missing_filter",
+                line        => "        [% just_a_var %]",
                 line_number => 3,
             },
             {
-                error => "missing_filter",
-                line => "        [% just_a_var %] A N D [% another_one_on_same_line %]",
+                error       => "missing_filter",
+                line        => "        [% just_a_var %] A N D [% another_one_on_same_line %]",
                 line_number => 4,
             },
             {
-                error => "missing_filter",
-                line => "        [% just_a_var %] A N D [% another_one_on_same_line %]",
+                error       => "missing_filter",
+                line        => "        [% just_a_var %] A N D [% another_one_on_same_line %]",
                 line_number => 4,
             },
             {
-                error => "missing_filter",
-                line => "    [% IF ( patron.othernames ) %]&ldquo;[% patron.othernames %]&rdquo;[% END %]",
+                error       => "missing_filter",
+                line        => "    [% IF ( patron.othernames ) %]&ldquo;[% patron.othernames %]&rdquo;[% END %]",
                 line_number => 6,
             },
             {
-                error => "missing_filter",
-                line  => "[% patron_message.get_column('manager_surname') %]",
+                error       => "missing_filter",
+                line        => "[% patron_message.get_column('manager_surname') %]",
                 line_number => 8
             }
         ],
@@ -164,8 +165,7 @@ EXPECTED
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
     is( $new_content . "\n", $expected, );
     my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
-    is_deeply(
-        \@missing_filters,[],);
+    is_deeply( \@missing_filters, [], );
 };
 
 subtest 'Preserve pre/post chomps' => sub {
@@ -239,9 +239,8 @@ INPUT
         \@missing_filters,
         [
             {
-                error => "wrong_html_filter",
-                line =>
-                  '<a href="[% wrong_filter | html %]">[% var | html %]</a>',
+                error       => "wrong_html_filter",
+                line        => '<a href="[% wrong_filter | html %]">[% var | html %]</a>',
                 line_number => 1
             }
 
@@ -257,8 +256,8 @@ INPUT
         [
             {
                 error => "wrong_html_filter",
-                line =>
-                  '<a href="[% good_filter | uri %]">[% var | html %]</a><a href="[% wrong_filter | html %]">[% var | html %]</a>',
+                line  =>
+                    '<a href="[% good_filter | uri %]">[% var | html %]</a><a href="[% wrong_filter | html %]">[% var | html %]</a>',
                 line_number => 1
             }
 
@@ -301,7 +300,6 @@ EXPECTED
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
     is( $new_content . "\n", $expected, );
 
-
     my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply(
         \@missing_filters,
@@ -335,7 +333,6 @@ EXPECTED
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
     is( $new_content . "\n", $expected, );
 
-
     my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
-    is_deeply(\@missing_filters, []);
+    is_deeply( \@missing_filters, [] );
 };

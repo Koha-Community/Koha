@@ -19,7 +19,6 @@ package Koha::Suggestions;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Suggestion;
@@ -48,7 +47,7 @@ sub search_limited {
     my $resultset = $self;
 
     # filter on user branch
-    if (   C4::Context->preference('IndependentBranches')
+    if ( C4::Context->preference('IndependentBranches')
         && !C4::Context->IsSuperLibrarian() )
     {
         # If IndependentBranches is set and the logged in user is not superlibrarian
@@ -56,11 +55,11 @@ sub search_limited {
         # from other libraries)
         my $userenv = C4::Context->userenv;
 
-        $resultset = $self->search({ 'me.branchcode' => $userenv->{branch} })
+        $resultset = $self->search( { 'me.branchcode' => $userenv->{branch} } )
             if $userenv && $userenv->{branch};
     }
 
-    return $resultset->search( $params, $attributes);
+    return $resultset->search( $params, $attributes );
 }
 
 =head3 filter_by_pending

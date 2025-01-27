@@ -20,7 +20,7 @@ package Koha::Item;
 use Modern::Perl;
 
 use List::MoreUtils qw( any );
-use Try::Tiny qw( catch try );
+use Try::Tiny       qw( catch try );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -29,7 +29,7 @@ use C4::Context;
 use C4::Circulation qw( barcodedecode GetBranchItemRule );
 use C4::Reserves;
 use C4::ClassSource qw( GetClassSort );
-use C4::Log qw( logaction );
+use C4::Log         qw( logaction );
 
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblio::ItemGroups;
@@ -82,7 +82,7 @@ You should not turn it on if you do not understand what it is doing exactly.
 =cut
 
 sub store {
-    my $self = shift;
+    my $self   = shift;
     my $params = @_ ? shift : {};
 
     my $log_action = $params->{log_action} // 1;
@@ -95,27 +95,27 @@ sub store {
 
     # See related changes from C4::Items::AddItem
     unless ( $self->itype ) {
-        $self->itype($self->biblio->biblioitem->itemtype);
+        $self->itype( $self->biblio->biblioitem->itemtype );
     }
 
     # Ensure barcode is either defined or undef
-    $self->barcode(undef) if ( defined($self->barcode) && $self->barcode eq '' );
+    $self->barcode(undef) if ( defined( $self->barcode ) && $self->barcode eq '' );
 
     $self->barcode( C4::Circulation::barcodedecode( $self->barcode ) );
 
     my $today  = dt_from_string;
     my $action = 'create';
 
-    unless ( $self->in_storage ) { #AddItem
+    unless ( $self->in_storage ) {    #AddItem
 
         unless ( $self->permanent_location ) {
-            $self->permanent_location($self->location);
+            $self->permanent_location( $self->location );
         }
 
         my $default_location = C4::Context->preference('NewItemsDefaultLocation');
         unless ( $self->location || !$default_location ) {
             $self->permanent_location( $self->location || $default_location )
-              unless $self->permanent_location;
+                unless $self->permanent_location;
             $self->location($default_location);
         }
 
@@ -142,7 +142,7 @@ sub store {
             $self->_add_statistic('item_lost');
         }
 
-    } else { # ModItem
+    } else {    # ModItem
 
         $action = 'modify';
 
@@ -156,9 +156,9 @@ sub store {
 
         # Retrieve the item for comparison if we need to
         my $pre_mod_item = (
-                 exists $updated_columns{itemlost}
-              or exists $updated_columns{withdrawn}
-              or exists $updated_columns{damaged}
+                   exists $updated_columns{itemlost}
+                or exists $updated_columns{withdrawn}
+                or exists $updated_columns{damaged}
         ) ? $self->get_from_storage : undef;
 
         # Update *_on  fields if needed
@@ -176,6 +176,7 @@ sub store {
                 my $field_on = "${field}_on";
                 $self->$field_on(undef);
             }
+
             # If the field has changed otherwise, we much update
             # the 'on' field
             elsif (exists $updated_columns{$field}
@@ -194,9 +195,8 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
-
         if (    exists $updated_columns{location}
-            and ( !defined($self->location) or $self->location !~ /^(CART|PROC)$/ )
+            and ( !defined( $self->location ) or $self->location !~ /^(CART|PROC)$/ )
             and not exists $updated_columns{permanent_location} )
         {
             $self->permanent_location( $self->location );
@@ -221,23 +221,21 @@ sub store {
     }
 
     my $original = Koha::Items->find( $self->itemnumber );    # $original will be undef if $action eq 'create'
-    my $result = $self->SUPER::store;
+    my $result   = $self->SUPER::store;
     $self->discard_changes;
     if ( $log_action && C4::Context->preference("CataloguingLog") ) {
         $action eq 'create'
-            ? logaction( "CATALOGUING", "ADD", $self->itemnumber, 'item', undef, $self )
-            : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, $self, undef, $original );
+            ? logaction( "CATALOGUING", "ADD",    $self->itemnumber, 'item', undef, $self )
+            : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, $self,  undef, $original );
     }
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_record_index};
-    $self->_after_item_action_hooks({ action => $action });
+    $self->_after_item_action_hooks( { action => $action } );
 
-    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
-        {
-            biblio_ids => [ $self->biblionumber ]
-        }
-    ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $self->biblionumber ] } )
+        unless $params->{skip_holds_queue}
+        or !C4::Context->preference('RealTimeHoldsQueue');
 
     return $result;
 }
@@ -263,7 +261,7 @@ sub _add_statistic {
 =cut
 
 sub delete {
-    my $self = shift;
+    my $self   = shift;
     my $params = @_ ? shift : {};
 
     # FIXME check the item has no current issues
@@ -277,20 +275,18 @@ sub delete {
     # Delete the item group if it has no items left
     $item_group->delete if ( $item_group && $item_group->items->count == 0 );
 
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_record_index};
 
-    $self->_after_item_action_hooks({ action => 'delete' });
+    $self->_after_item_action_hooks( { action => 'delete' } );
 
     logaction( "CATALOGUING", "DELETE", $self->itemnumber, "item", undef, $self )
-      if C4::Context->preference("CataloguingLog");
+        if C4::Context->preference("CataloguingLog");
 
-    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
-        {
-            biblio_ids => [ $self->biblionumber ]
-        }
-    ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $self->biblionumber ] } )
+        unless $params->{skip_holds_queue}
+        or !C4::Context->preference('RealTimeHoldsQueue');
 
     return $result;
 }
@@ -300,7 +296,7 @@ sub delete {
 =cut
 
 sub safe_delete {
-    my $self = shift;
+    my $self   = shift;
     my $params = @_ ? shift : {};
 
     my $safe_to_delete = $self->safe_to_delete;
@@ -335,27 +331,27 @@ sub safe_to_delete {
     $error = "book_on_loan" if $self->checkout;
 
     $error //= "not_same_branch"
-      if defined C4::Context->userenv
-      and defined C4::Context->userenv->{number}
-      and !Koha::Patrons->find( C4::Context->userenv->{number} )->can_edit_items_from( $self->homebranch );
+        if defined C4::Context->userenv
+        and defined C4::Context->userenv->{number}
+        and !Koha::Patrons->find( C4::Context->userenv->{number} )->can_edit_items_from( $self->homebranch );
 
     # check it doesn't have a waiting reserve
     $error //= "book_reserved"
-      if $self->holds->filter_by_found->count;
+        if $self->holds->filter_by_found->count;
 
     $error //= "linked_analytics"
-      if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
+        if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
 
     $error //= "last_item_for_hold"
-      if $self->biblio->items->count == 1
-      && $self->biblio->holds->search(
-          {
-              itemnumber => undef,
-          }
-        )->count;
+        if $self->biblio->items->count == 1
+        && $self->biblio->holds->search(
+        {
+            itemnumber => undef,
+        }
+    )->count;
 
-    if ( $error ) {
-        return Koha::Result::Boolean->new(0)->add_message({ message => $error });
+    if ($error) {
+        return Koha::Result::Boolean->new(0)->add_message( { message => $error } );
     }
 
     return Koha::Result::Boolean->new(1);
@@ -373,7 +369,8 @@ This can be done before deleting an item, to make sure the data are not complete
 sub move_to_deleted {
     my ($self) = @_;
     my $item_infos = $self->unblessed;
-    delete $item_infos->{timestamp}; #This ensures the timestamp date in deleteditems will be set to the current timestamp
+    delete $item_infos->{timestamp}
+        ;    #This ensures the timestamp date in deleteditems will be set to the current timestamp
     $item_infos->{deleted_on} = dt_from_string;
     return Koha::Database->new->schema->resultset('Deleteditem')->create($item_infos);
 }
@@ -385,7 +382,7 @@ Returns the itemtype for the item based on whether item level itemtypes are set 
 =cut
 
 sub effective_itemtype {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->_result()->effective_itemtype();
 }
@@ -410,7 +407,7 @@ sub home_library {
     my ($self) = @_;
     my $hb_rs = $self->_result->homebranch;
 
-    return Koha::Library->_new_from_dbic( $hb_rs );
+    return Koha::Library->_new_from_dbic($hb_rs);
 }
 
 =head3 holding_branch
@@ -434,7 +431,7 @@ sub holding_library {
 
     my $hb_rs = $self->_result->holdingbranch;
 
-    return Koha::Library->_new_from_dbic( $hb_rs );
+    return Koha::Library->_new_from_dbic($hb_rs);
 }
 
 =head3 biblio
@@ -446,9 +443,9 @@ Return the bibliographic record of this item
 =cut
 
 sub biblio {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $biblio_rs = $self->_result->biblio;
-    return Koha::Biblio->_new_from_dbic( $biblio_rs );
+    return Koha::Biblio->_new_from_dbic($biblio_rs);
 }
 
 =head3 biblioitem
@@ -460,9 +457,9 @@ Return the biblioitem record of this item
 =cut
 
 sub biblioitem {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $biblioitem_rs = $self->_result->biblioitem;
-    return Koha::Biblioitem->_new_from_dbic( $biblioitem_rs );
+    return Koha::Biblioitem->_new_from_dbic($biblioitem_rs);
 }
 
 =head3 checkout
@@ -474,10 +471,10 @@ Return the checkout for this item
 =cut
 
 sub checkout {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $checkout_rs = $self->_result->issue;
     return unless $checkout_rs;
-    return Koha::Checkout->_new_from_dbic( $checkout_rs );
+    return Koha::Checkout->_new_from_dbic($checkout_rs);
 }
 
 =head3 serial_item
@@ -485,7 +482,7 @@ sub checkout {
 =cut
 
 sub serial_item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->serial_item;
     return unless $rs;
     return Koha::Serial::Item->_new_from_dbic($rs);
@@ -500,7 +497,7 @@ Return the item group for this item
 =cut
 
 sub item_group {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $item_group_item = $self->_result->item_group_item;
     return unless $item_group_item;
@@ -508,7 +505,7 @@ sub item_group {
     my $item_group_rs = $item_group_item->item_group;
     return unless $item_group_rs;
 
-    my $item_group = Koha::Biblio::ItemGroup->_new_from_dbic( $item_group_rs );
+    my $item_group = Koha::Biblio::ItemGroup->_new_from_dbic($item_group_rs);
     return $item_group;
 }
 
@@ -521,12 +518,11 @@ Return the item group for this item
 =cut
 
 sub item_group_item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->item_group_item;
     return unless $rs;
     return Koha::Biblio::ItemGroup::Item->_new_from_dbic($rs);
 }
-
 
 =head3 return_claims
 
@@ -538,8 +534,8 @@ Return any return_claims associated with this item
 
 sub return_claims {
     my ( $self, $params, $attrs ) = @_;
-    my $claims_rs = $self->_result->return_claims->search($params, $attrs);
-    return Koha::Checkouts::ReturnClaims->_new_from_dbic( $claims_rs );
+    my $claims_rs = $self->_result->return_claims->search( $params, $attrs );
+    return Koha::Checkouts::ReturnClaims->_new_from_dbic($claims_rs);
 }
 
 =head3 return_claim
@@ -552,9 +548,10 @@ Returns the most recent unresolved return_claims associated with this item
 
 sub return_claim {
     my ($self) = @_;
-    my $claims_rs =
-      $self->_result->return_claims->search( { resolution => undef },
-        { order_by => { '-desc' => 'created_on' }, rows => 1 } )->single;
+    my $claims_rs = $self->_result->return_claims->search(
+        { resolution => undef },
+        { order_by   => { '-desc' => 'created_on' }, rows => 1 }
+    )->single;
     return unless $claims_rs;
     return Koha::Checkouts::ReturnClaim->_new_from_dbic($claims_rs);
 }
@@ -570,9 +567,9 @@ Return holds attached to an item, optionally accept a hashref of params to pass 
 =cut
 
 sub holds {
-    my ( $self,$params ) = @_;
+    my ( $self, $params ) = @_;
     my $holds_rs = $self->_result->reserves->search($params);
-    return Koha::Holds->_new_from_dbic( $holds_rs );
+    return Koha::Holds->_new_from_dbic($holds_rs);
 }
 
 =head3 bookings
@@ -785,21 +782,20 @@ sub request_transfer {
     my @mandatory = ( 'to', 'reason' );
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
 
     Koha::Exceptions::Item::Transfer::Limit->throw()
-      unless ( $params->{ignore_limits}
+        unless ( $params->{ignore_limits}
         || $self->can_be_transferred( { to => $params->{to} } ) );
 
     my $request = $self->get_transfer;
     Koha::Exceptions::Item::Transfer::InQueue->throw( transfer => $request )
-      if ( $request && !$params->{enqueue} && !$params->{replace} );
+        if ( $request && !$params->{enqueue} && !$params->{replace} );
 
     $request->cancel( { reason => $params->{replace}, force => 1 } )
-      if ( defined($request) && $params->{replace} );
+        if ( defined($request) && $params->{replace} );
 
     my $transfer = Koha::Item::Transfer->new(
         {
@@ -905,13 +901,15 @@ my $patron = $item->last_returned_by();
 
 sub last_returned_by {
     my ( $self, $borrowernumber ) = @_;
-    if ( $borrowernumber ) {
-        $self->_result->update_or_create_related('last_returned_by',
-            { borrowernumber => $borrowernumber, itemnumber => $self->itemnumber } );
+    if ($borrowernumber) {
+        $self->_result->update_or_create_related(
+            'last_returned_by',
+            { borrowernumber => $borrowernumber, itemnumber => $self->itemnumber }
+        );
     }
     my $rs = $self->_result->last_returned_by;
     return unless $rs;
-    return Koha::Patron->_new_from_dbic($rs->borrowernumber);
+    return Koha::Patron->_new_from_dbic( $rs->borrowernumber );
 }
 
 =head3 can_article_request
@@ -955,8 +953,8 @@ sub hidden_in_opac {
     my $rules = $params->{rules} // {};
 
     return 1
-        if C4::Context->preference('hidelostitems') and
-           $self->itemlost > 0;
+        if C4::Context->preference('hidelostitems')
+        and $self->itemlost > 0;
 
     my $hidden_in_opac = 0;
 
@@ -997,7 +995,7 @@ multiple items of the same biblio.
 =cut
 
 sub can_be_transferred {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $to   = $params->{to};
     my $from = $params->{from};
@@ -1005,16 +1003,17 @@ sub can_be_transferred {
     $to   = $to->branchcode;
     $from = defined $from ? $from->branchcode : $self->holdingbranch;
 
-    return 1 if $from eq $to; # Transfer to current branch is allowed
+    return 1 if $from eq $to;    # Transfer to current branch is allowed
     return 1 unless C4::Context->preference('UseBranchTransferLimits');
 
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
-    return Koha::Item::Transfer::Limits->search({
-        toBranch => $to,
-        fromBranch => $from,
-        $limittype => $limittype eq 'itemtype'
-                        ? $self->effective_itemtype : $self->ccode
-    })->count ? 0 : 1;
+    return Koha::Item::Transfer::Limits->search(
+        {
+            toBranch   => $to,
+            fromBranch => $from,
+            $limittype => $limittype eq 'itemtype' ? $self->effective_itemtype : $self->ccode
+        }
+    )->count ? 0 : 1;
 
 }
 
@@ -1031,10 +1030,10 @@ is not passed.
 =cut
 
 sub pickup_locations {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
-      unless exists $params->{patron};
+        unless exists $params->{patron};
 
     my $patron = $params->{patron};
 
@@ -1064,18 +1063,14 @@ sub pickup_locations {
     }
 
     return $pickup_libraries->search(
-        {
-            pickup_location => 1
-        },
-        {
-            order_by => ['branchname']
-        }
+        { pickup_location => 1 },
+        { order_by        => ['branchname'] }
     ) unless C4::Context->preference('UseBranchTransferLimits');
 
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
     my $ccode;
     my $itype;
-    if( $limittype eq 'ccode' ){
+    if ( $limittype eq 'ccode' ) {
         $ccode = $self->ccode;
     } else {
         $itype = $self->itype;
@@ -1092,13 +1087,9 @@ sub pickup_locations {
     return $pickup_libraries->search(
         {
             pickup_location => 1,
-            branchcode      => {
-                '-not_in' => $limits->_resultset->as_query
-            }
+            branchcode      => { '-not_in' => $limits->_resultset->as_query }
         },
-        {
-            order_by => ['branchname']
-        }
+        { order_by => ['branchname'] }
     );
 }
 
@@ -1117,12 +1108,12 @@ sub article_request_type {
 
     my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
     my $branchcode =
-        $branch_control eq 'homebranch'    ? $self->homebranch
-      : $branch_control eq 'holdingbranch' ? $self->holdingbranch
-      :                                      undef;
+          $branch_control eq 'homebranch'    ? $self->homebranch
+        : $branch_control eq 'holdingbranch' ? $self->holdingbranch
+        :                                      undef;
     my $borrowertype = $borrower->categorycode;
-    my $itemtype = $self->effective_itemtype();
-    my $rule = Koha::CirculationRules->get_effective_rule(
+    my $itemtype     = $self->effective_itemtype();
+    my $rule         = Koha::CirculationRules->get_effective_rule(
         {
             rule_name    => 'article_requests',
             categorycode => $borrowertype,
@@ -1132,7 +1123,7 @@ sub article_request_type {
     );
 
     return q{} unless $rule;
-    return $rule->rule_value || q{}
+    return $rule->rule_value || q{};
 }
 
 =head3 current_holds
@@ -1140,13 +1131,13 @@ sub article_request_type {
 =cut
 
 sub current_holds {
-    my ( $self ) = @_;
+    my ($self)     = @_;
     my $attributes = { order_by => 'priority' };
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $params = {
+    my $dtf        = Koha::Database->new->schema->storage->datetime_parser;
+    my $params     = {
         itemnumber => $self->itemnumber,
-        suspend => 0,
-        -or => [
+        suspend    => 0,
+        -or        => [
             reservedate => { '<=' => $dtf->format_date(dt_from_string) },
             waitingdate => { '!=' => undef },
         ],
@@ -1164,7 +1155,7 @@ Returns the first I<Koha::Hold> for the item.
 =cut
 
 sub first_hold {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->current_holds->next;
 }
 
@@ -1177,10 +1168,10 @@ Returns the stock rotation item associated with the current item.
 =cut
 
 sub stockrotationitem {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->stockrotationitem;
     return 0 if !$rs;
-    return Koha::StockRotationItem->_new_from_dbic( $rs );
+    return Koha::StockRotationItem->_new_from_dbic($rs);
 }
 
 =head3 add_to_rota
@@ -1195,7 +1186,7 @@ with a rota, then we will move it to the new rota.
 
 sub add_to_rota {
     my ( $self, $rota_id ) = @_;
-    Koha::StockRotationRotas->find($rota_id)->add_item($self->itemnumber);
+    Koha::StockRotationRotas->find($rota_id)->add_item( $self->itemnumber );
     return $self;
 }
 
@@ -1221,13 +1212,13 @@ Return if whether has pending recall of not.
 =cut
 
 sub has_pending_recall {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # FIXME Must be moved to $self->recalls
     return Koha::Recalls->search(
         {
-            item_id   => $self->itemnumber,
-            status    => 'waiting',
+            item_id => $self->itemnumber,
+            status  => 'waiting',
         }
     )->count;
 }
@@ -1242,11 +1233,11 @@ with the current mappings configuration.
 =cut
 
 sub as_marc_field {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my ( $itemtag, $itemtagsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+    my ( $itemtag, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
 
-    my $tagslib = C4::Biblio::GetMarcStructure( 1, $self->biblio->frameworkcode, { unsafe => 1 });
+    my $tagslib = C4::Biblio::GetMarcStructure( 1, $self->biblio->frameworkcode, { unsafe => 1 } );
 
     my @subfields;
 
@@ -1254,32 +1245,32 @@ sub as_marc_field {
 
     my $more_subfields = $self->additional_attributes->to_hashref;
     foreach my $subfield (
-        sort {
-               $a->{display_order} <=> $b->{display_order}
-            || $a->{subfield} cmp $b->{subfield}
-        } grep { ref($_) && %$_ } values %$item_field
-    ){
+        sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} }
+        grep { ref($_) && %$_ } values %$item_field
+        )
+    {
 
-        my $kohafield = $subfield->{kohafield};
+        my $kohafield   = $subfield->{kohafield};
         my $tagsubfield = $subfield->{tagsubfield};
         my $value;
         if ( defined $kohafield && $kohafield ne '' ) {
-            next if $kohafield !~ m{^items\.}; # That would be weird!
+            next if $kohafield !~ m{^items\.};                # That would be weird!
             ( my $attribute = $kohafield ) =~ s|^items\.||;
-            $value = $self->$attribute # This call may fail if a kohafield is not a DB column but we don't want to add extra work for that there
+            $value = $self
+                ->$attribute # This call may fail if a kohafield is not a DB column but we don't want to add extra work for that there
                 if defined $self->$attribute and $self->$attribute ne '';
         } else {
-            $value = $more_subfields->{$tagsubfield}
+            $value = $more_subfields->{$tagsubfield};
         }
 
-        next unless defined $value
+        next
+            unless defined $value
             and $value ne q{};
 
         if ( $subfield->{repeatable} ) {
             my @values = split '\|', $value;
             push @subfields, ( $tagsubfield => $_ ) for @values;
-        }
-        else {
+        } else {
             push @subfields, ( $tagsubfield => $value );
         }
 
@@ -1287,9 +1278,7 @@ sub as_marc_field {
 
     return unless @subfields;
 
-    return MARC::Field->new(
-        "$itemtag", ' ', ' ', @subfields
-    );
+    return MARC::Field->new( "$itemtag", ' ', ' ', @subfields );
 }
 
 =head3 renewal_branchcode
@@ -1351,7 +1340,7 @@ Return the cover images associated with this item.
 =cut
 
 sub cover_images {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $cover_images_rs = $self->_result->cover_images;
     return Koha::CoverImages->_new_from_dbic($cover_images_rs);
@@ -1379,19 +1368,20 @@ This is meant to be used for display purpose only.
 =cut
 
 sub columns_to_str {
-    my ( $self ) = @_;
-    my $frameworkcode = C4::Biblio::GetFrameworkCode($self->biblionumber);
+    my ($self)        = @_;
+    my $frameworkcode = C4::Biblio::GetFrameworkCode( $self->biblionumber );
     my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
     my $mss           = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
 
-    my ( $itemtagfield, $itemtagsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+    my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
 
     my $values = {};
-    for my $column ( @{$self->_columns}) {
+    for my $column ( @{ $self->_columns } ) {
 
         next if $column eq 'more_subfields_xml';
 
         my $value = $self->$column;
+
         # Maybe we need to deal with datetime columns here, but so far we have damaged_on, itemlost_on and withdrawn_on, and they are not linked with kohafield
 
         if ( not defined $value or $value eq "" ) {
@@ -1399,40 +1389,42 @@ sub columns_to_str {
             next;
         }
 
-        my $subfield =
-          exists $mss->{"items.$column"}
-          ? @{ $mss->{"items.$column"} }[0] # Should we deal with several subfields??
-          : undef;
+        my $subfield = exists $mss->{"items.$column"}
+            ? @{ $mss->{"items.$column"} }[0]    # Should we deal with several subfields??
+            : undef;
 
         $values->{$column} =
-            $subfield
-          ? $subfield->{authorised_value}
-              ? C4::Biblio::GetAuthorisedValueDesc( $itemtagfield,
-                  $subfield->{tagsubfield}, $value, '', $tagslib )
-              : $value
-          : $value;
+              $subfield
+            ? $subfield->{authorised_value}
+                ? C4::Biblio::GetAuthorisedValueDesc(
+                    $itemtagfield,
+                    $subfield->{tagsubfield}, $value, '', $tagslib
+                )
+                : $value
+            : $value;
     }
 
-    my $marc_more=
-      $self->more_subfields_xml
-      ? MARC::Record->new_from_xml( $self->more_subfields_xml, 'UTF-8' )
-      : undef;
+    my $marc_more =
+        $self->more_subfields_xml
+        ? MARC::Record->new_from_xml( $self->more_subfields_xml, 'UTF-8' )
+        : undef;
 
     my $more_values;
-    if ( $marc_more ) {
-        my ( $field ) = $marc_more->fields;
+    if ($marc_more) {
+        my ($field) = $marc_more->fields;
         for my $sf ( $field->subfields ) {
             my $subfield_code = $sf->[0];
-            my $value = $sf->[1];
-            my $subfield = $tagslib->{$itemtagfield}->{$subfield_code};
-            next unless $subfield; # We have the value but it's not mapped, data lose! No regression however.
-            $value =
-              $subfield->{authorised_value}
-              ? C4::Biblio::GetAuthorisedValueDesc( $itemtagfield,
-                $subfield->{tagsubfield}, $value, '', $tagslib )
-              : $value;
+            my $value         = $sf->[1];
+            my $subfield      = $tagslib->{$itemtagfield}->{$subfield_code};
+            next unless $subfield;    # We have the value but it's not mapped, data lose! No regression however.
+            $value = $subfield->{authorised_value}
+                ? C4::Biblio::GetAuthorisedValueDesc(
+                $itemtagfield,
+                $subfield->{tagsubfield}, $value, '', $tagslib
+                )
+                : $value;
 
-            push @{$more_values->{$subfield_code}}, $value;
+            push @{ $more_values->{$subfield_code} }, $value;
         }
 
         while ( my ( $k, $v ) = each %$more_values ) {
@@ -1476,14 +1468,12 @@ Internal function, not exported, called only by Koha::Item->store.
 
 sub _set_found_trigger {
     my ( $self, $pre_mod_item ) = @_;
+
     # Reverse any lost item charges if necessary.
-    my $no_refund_after_days =
-      C4::Context->preference('NoRefundOnLostReturnedItemsAge');
+    my $no_refund_after_days = C4::Context->preference('NoRefundOnLostReturnedItemsAge');
     if ($no_refund_after_days) {
-        my $today = dt_from_string();
-        my $lost_age_in_days =
-          dt_from_string( $pre_mod_item->itemlost_on )->delta_days($today)
-          ->in_units('days');
+        my $today            = dt_from_string();
+        my $lost_age_in_days = dt_from_string( $pre_mod_item->itemlost_on )->delta_days($today)->in_units('days');
 
         return $self unless $lost_age_in_days < $no_refund_after_days;
     }
@@ -1495,10 +1485,10 @@ sub _set_found_trigger {
             ? C4::Context->userenv->{'branch'}
             : undef,
         }
-      );
+    );
     my $lostreturn_policy = $lost_proc_return_policy->{lostreturn};
 
-    if ( $lostreturn_policy ) {
+    if ($lostreturn_policy) {
 
         # refund charge made for lost book
         my $lost_charge = Koha::Account::Lines->search(
@@ -1513,10 +1503,10 @@ sub _set_found_trigger {
             }
         )->single;
 
-        if ( $lost_charge ) {
+        if ($lost_charge) {
 
             my $patron = $lost_charge->patron;
-            if ( $patron ) {
+            if ($patron) {
 
                 my $account = $patron->account;
 
@@ -1524,10 +1514,9 @@ sub _set_found_trigger {
                 my $credit_total = $lost_charge->amountoutstanding;
 
                 # Use cases
-                if (
-                    $lost_charge->amount > $lost_charge->amountoutstanding &&
-                    $lostreturn_policy ne "refund_unpaid"
-                ) {
+                if (   $lost_charge->amount > $lost_charge->amountoutstanding
+                    && $lostreturn_policy ne "refund_unpaid" )
+                {
                     # some amount has been cancelled. collect the offsets that are not writeoffs
                     # this works because the only way to subtract from this kind of a debt is
                     # using the UI buttons 'Pay' and 'Write off'
@@ -1570,10 +1559,13 @@ sub _set_found_trigger {
                         { join => 'credit' }
                     );
 
-                    my $total_to_refund = ( $credit_offsets->count > 0 ) ?
+                    my $total_to_refund = ( $credit_offsets->count > 0 )
+                        ?
+
                         # credits are negative on the DB
-                        $credit_offsets->total * -1 :
-                        0;
+                        $credit_offsets->total * -1
+                        : 0;
+
                     # Credit the outstanding amount, then add what has been
                     # paid to create a net credit for this amount
                     $credit_total += $total_to_refund;
@@ -1581,8 +1573,7 @@ sub _set_found_trigger {
 
                 my $credit;
                 if ( $credit_total > 0 ) {
-                    my $branchcode =
-                      C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+                    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
                     $credit = $account->add_credit(
                         {
                             amount      => $credit_total,
@@ -1647,9 +1638,10 @@ sub _set_found_trigger {
                     { order_by => { '-desc' => 'date' }, rows => 1 }
                 )->single;
 
-                if ( $refund ) {
+                if ($refund) {
+
                     # Revert the forgive credit
-                    $refund->void({ interface => 'trigger' });
+                    $refund->void( { interface => 'trigger' } );
                     $self->add_message(
                         {
                             type    => 'info',
@@ -1677,7 +1669,7 @@ sub _set_found_trigger {
 
     my $processingreturn_policy = $lost_proc_return_policy->{processingreturn};
 
-    if ( $processingreturn_policy ) {
+    if ($processingreturn_policy) {
 
         # refund processing charge made for lost book
         my $processing_charge = Koha::Account::Lines->search(
@@ -1692,10 +1684,10 @@ sub _set_found_trigger {
             }
         )->single;
 
-        if ( $processing_charge ) {
+        if ($processing_charge) {
 
             my $patron = $processing_charge->patron;
-            if ( $patron ) {
+            if ($patron) {
 
                 my $account = $patron->account;
 
@@ -1703,10 +1695,9 @@ sub _set_found_trigger {
                 my $credit_total = $processing_charge->amountoutstanding;
 
                 # Use cases
-                if (
-                    $processing_charge->amount > $processing_charge->amountoutstanding &&
-                    $processingreturn_policy ne "refund_unpaid"
-                ) {
+                if (   $processing_charge->amount > $processing_charge->amountoutstanding
+                    && $processingreturn_policy ne "refund_unpaid" )
+                {
                     # some amount has been cancelled. collect the offsets that are not writeoffs
                     # this works because the only way to subtract from this kind of a debt is
                     # using the UI buttons 'Pay' and 'Write off'
@@ -1726,10 +1717,13 @@ sub _set_found_trigger {
                         { join => 'credit' }
                     );
 
-                    my $total_to_refund = ( $credit_offsets->count > 0 ) ?
+                    my $total_to_refund = ( $credit_offsets->count > 0 )
+                        ?
+
                         # credits are negative on the DB
-                        $credit_offsets->total * -1 :
-                        0;
+                        $credit_offsets->total * -1
+                        : 0;
+
                     # Credit the outstanding amount, then add what has been
                     # paid to create a net credit for this amount
                     $credit_total += $total_to_refund;
@@ -1737,8 +1731,7 @@ sub _set_found_trigger {
 
                 my $credit;
                 if ( $credit_total > 0 ) {
-                    my $branchcode =
-                      C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+                    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
                     $credit = $account->add_credit(
                         {
                             amount      => $credit_total,
@@ -1747,7 +1740,7 @@ sub _set_found_trigger {
                             interface   => C4::Context->interface,
                             library_id  => $branchcode,
                             item_id     => $self->itemnumber,
-                            issue_id    => $processing_charge->checkout ? $processing_charge->checkout->issue_id : undef,
+                            issue_id => $processing_charge->checkout ? $processing_charge->checkout->issue_id : undef,
                         }
                     );
 
@@ -1875,7 +1868,7 @@ Returns Koha object for effective itemtype
 =cut
 
 sub itemtype {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::ItemTypes->find( $self->effective_itemtype );
 }
@@ -1909,8 +1902,8 @@ Returns the effective not for loan status of the item
 =cut
 
 sub effective_not_for_loan_status {
-    my ($self) = @_;
-    my $itemtype = $self->itemtype;
+    my ($self)           = @_;
+    my $itemtype         = $self->itemtype;
     my $itype_notforloan = $itemtype ? $itemtype->notforloan : undef;
     return ( defined($itype_notforloan) && !$self->notforloan ) ? $itype_notforloan : $self->notforloan;
 }
@@ -1938,7 +1931,7 @@ Returns a Koha::Acquisition::Orders object
 =cut
 
 sub orders {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $orders = $self->_result->item_orders;
     return Koha::Acquisition::Orders->_new_from_dbic($orders);
@@ -1953,7 +1946,7 @@ Returns a Koha::TrackedLinks object
 =cut
 
 sub tracked_links {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $tracked_links = $self->_result->linktrackers;
     return Koha::TrackedLinks->_new_from_dbic($tracked_links);
@@ -2001,29 +1994,31 @@ sub move_to_biblio {
     return if $self->biblionumber == $to_biblio->biblionumber;
 
     my $from_biblionumber = $self->biblionumber;
-    my $to_biblionumber = $to_biblio->biblionumber;
+    my $to_biblionumber   = $to_biblio->biblionumber;
 
     # Own biblionumber and biblioitemnumber
-    $self->set({
-        biblionumber => $to_biblionumber,
-        biblioitemnumber => $to_biblio->biblioitem->biblioitemnumber
-    })->store({ skip_record_index => $params->{skip_record_index} });
+    $self->set(
+        {
+            biblionumber     => $to_biblionumber,
+            biblioitemnumber => $to_biblio->biblioitem->biblioitemnumber
+        }
+    )->store( { skip_record_index => $params->{skip_record_index} } );
 
-    unless ($params->{skip_record_index}) {
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    unless ( $params->{skip_record_index} ) {
+        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
         $indexer->index_records( $from_biblionumber, "specialUpdate", "biblioserver" );
     }
 
     # Acquisition orders
-    $self->orders->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
+    $self->orders->update( { biblionumber => $to_biblionumber }, { no_triggers => 1 } );
 
     # Holds
-    $self->holds->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
+    $self->holds->update( { biblionumber => $to_biblionumber }, { no_triggers => 1 } );
 
     # hold_fill_target (there's no Koha object available yet)
     my $hold_fill_target = $self->_result->hold_fill_target;
     if ($hold_fill_target) {
-        $hold_fill_target->update({ biblionumber => $to_biblionumber });
+        $hold_fill_target->update( { biblionumber => $to_biblionumber } );
     }
 
     # tmp_holdsqueues - Can't update with DBIx since the table is missing a primary key
@@ -2031,14 +2026,17 @@ sub move_to_biblio {
     my $storage = $self->_result->result_source->storage;
     $storage->dbh_do(
         sub {
-            my ($storage, $dbh, @cols) = @_;
+            my ( $storage, $dbh, @cols ) = @_;
 
-            $dbh->do("UPDATE tmp_holdsqueue SET biblionumber=? WHERE itemnumber=?", undef, $to_biblionumber, $self->itemnumber);
+            $dbh->do(
+                "UPDATE tmp_holdsqueue SET biblionumber=? WHERE itemnumber=?", undef, $to_biblionumber,
+                $self->itemnumber
+            );
         }
     );
 
     # tracked_links
-    $self->tracked_links->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
+    $self->tracked_links->update( { biblionumber => $to_biblionumber }, { no_triggers => 1 } );
 
     return $to_biblionumber;
 }
@@ -2057,7 +2055,6 @@ sub bundle_items {
     my $rs = $self->_result->bundle_items;
     return Koha::Items->_new_from_dbic($rs);
 }
-
 
 =head3 bundle_items_not_lost
 
@@ -2111,7 +2108,7 @@ sub bundle_host {
 
     my $bundle_items_rs = $self->_result->item_bundles_item;
     return unless $bundle_items_rs;
-    return Koha::Item->_new_from_dbic($bundle_items_rs->host);
+    return Koha::Item->_new_from_dbic( $bundle_items_rs->host );
 }
 
 =head3 in_bundle
@@ -2141,7 +2138,7 @@ sub add_to_bundle {
     $options //= {};
 
     Koha::Exceptions::Item::Bundle::IsBundle->throw()
-      if ( $self->itemnumber eq $bundle_item->itemnumber
+        if ( $self->itemnumber eq $bundle_item->itemnumber
         || $bundle_item->is_bundle
         || $self->in_bundle );
 
@@ -2157,36 +2154,35 @@ sub add_to_bundle {
 
                 my $checkout = $bundle_item->checkout;
                 if ($checkout) {
-                    unless ($options->{force_checkin}) {
+                    unless ( $options->{force_checkin} ) {
                         Koha::Exceptions::Item::Bundle::ItemIsCheckedOut->throw();
                     }
 
                     my $branchcode = C4::Context->userenv->{'branch'};
-                    my ($success) = C4::Circulation::AddReturn($bundle_item->barcode, $branchcode);
+                    my ($success) = C4::Circulation::AddReturn( $bundle_item->barcode, $branchcode );
                     unless ($success) {
                         Koha::Exceptions::Checkin::FailedCheckin->throw();
                     }
                 }
 
                 my $holds = $bundle_item->current_holds;
-                if ($holds->count) {
-                    unless ($options->{ignore_holds}) {
+                if ( $holds->count ) {
+                    unless ( $options->{ignore_holds} ) {
                         Koha::Exceptions::Item::Bundle::ItemHasHolds->throw();
                     }
                 }
 
-                $self->_result->add_to_item_bundles_hosts(
-                    { item => $bundle_item->itemnumber } );
+                $self->_result->add_to_item_bundles_hosts( { item => $bundle_item->itemnumber } );
 
                 $bundle_item->notforloan($BundleNotLoanValue)->store();
             }
         );
-    }
-    catch {
+    } catch {
 
         # FIXME: See if we can move the below copy/paste from Koha::Object::store into it's own class and catch at a lower level in the Schema instantiation, take inspiration from DBIx::Error
         if ( ref($_) eq 'DBIx::Class::Exception' ) {
             if ( $_->{msg} =~ /Cannot add or update a child row: a foreign key constraint fails/ ) {
+
                 # FK constraints
                 # FIXME: MySQL error, if we support more DB engines we should implement this for each
                 if ( $_->{msg} =~ /FOREIGN KEY \(`(?<column>.*?)`\)/ ) {
@@ -2195,18 +2191,12 @@ sub add_to_bundle {
                         broken_fk => $+{column}
                     );
                 }
-            }
-            elsif (
-                $_->{msg} =~ /Duplicate entry '(.*?)' for key '(?<key>.*?)'/ )
-            {
+            } elsif ( $_->{msg} =~ /Duplicate entry '(.*?)' for key '(?<key>.*?)'/ ) {
                 Koha::Exceptions::Object::DuplicateID->throw(
                     error        => 'Duplicate ID',
                     duplicate_id => $+{key}
                 );
-            }
-            elsif ( $_->{msg} =~
-/Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/
-              )
+            } elsif ( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/ )
             {    # The optional \W in the regex might be a quote or backtick
                 my $type     = $+{type};
                 my $value    = $+{value};
@@ -2217,15 +2207,13 @@ sub add_to_bundle {
                     value    => $value,
                     property => $property =~ /(\w+\.\w+)$/
                     ? $1
-                    : $property
-                    ,    # results in table.column without quotes or backtics
+                    : $property,    # results in table.column without quotes or backtics
                 );
             }
 
             # Catch-all for foreign key breakages. It will help find other use cases
             $_->rethrow();
-        }
-        else {
+        } else {
             $_->rethrow();
         }
     };
@@ -2247,7 +2235,7 @@ sub remove_from_bundle {
     Koha::Exceptions::Item::Bundle::BundleIsCheckedOut->throw if $bundle_host->checkout;
 
     my $bundle_item_rs = $self->_result->item_bundles_item;
-    if ( $bundle_item_rs ) {
+    if ($bundle_item_rs) {
         $bundle_item_rs->delete;
         $self->notforloan(0)->store();
         return 1;
@@ -2342,52 +2330,66 @@ sub can_be_recalled {
     my $patron = $params->{patron};
 
     my $branchcode = C4::Context->userenv->{'branch'};
-    if ( $patron ) {
+    if ($patron) {
         $branchcode = C4::Circulation::_GetCircControlBranch( $self, $patron );
     }
 
     # Check the circulation rule for each relevant itemtype for this item
-    my $rule = Koha::CirculationRules->get_effective_rules({
-        branchcode => $branchcode,
-        categorycode => $patron ? $patron->categorycode : undef,
-        itemtype => $self->effective_itemtype,
-        rules => [
-            'recalls_allowed',
-            'recalls_per_record',
-            'on_shelf_recalls',
-        ],
-    });
+    my $rule = Koha::CirculationRules->get_effective_rules(
+        {
+            branchcode   => $branchcode,
+            categorycode => $patron ? $patron->categorycode : undef,
+            itemtype     => $self->effective_itemtype,
+            rules        => [
+                'recalls_allowed',
+                'recalls_per_record',
+                'on_shelf_recalls',
+            ],
+        }
+    );
 
     # check recalls allowed has been set and is not zero
-    return 0 if ( !defined($rule->{recalls_allowed}) || $rule->{recalls_allowed} == 0 );
+    return 0 if ( !defined( $rule->{recalls_allowed} ) || $rule->{recalls_allowed} == 0 );
 
-    if ( $patron ) {
+    if ($patron) {
+
         # check borrower has not reached open recalls allowed limit
         return 0 if ( $patron->recalls->filter_by_current->count >= $rule->{recalls_allowed} );
 
         # check borrower has not reach open recalls allowed per record limit
-        return 0 if ( $patron->recalls->filter_by_current->search({ biblio_id => $self->biblionumber })->count >= $rule->{recalls_per_record} );
+        return 0
+            if ( $patron->recalls->filter_by_current->search( { biblio_id => $self->biblionumber } )->count >=
+            $rule->{recalls_per_record} );
 
         # check if this patron has already recalled this item
-        return 0 if ( Koha::Recalls->search({ item_id => $self->itemnumber, patron_id => $patron->borrowernumber })->filter_by_current->count > 0 );
+        return 0
+            if ( Koha::Recalls->search( { item_id => $self->itemnumber, patron_id => $patron->borrowernumber } )
+            ->filter_by_current->count > 0 );
 
         # check if this patron has already checked out this item
-        return 0 if ( Koha::Checkouts->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->count > 0 );
+        return 0
+            if (
+            Koha::Checkouts->search( { itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber } )
+            ->count > 0 );
 
         # check if this patron has already reserved this item
-        return 0 if ( Koha::Holds->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->count > 0 );
+        return 0
+            if ( Koha::Holds->search( { itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber } )
+            ->count > 0 );
     }
 
     # check item availability
     # items are unavailable for recall if they are lost, withdrawn or notforloan
-    my @items = Koha::Items->search({ biblionumber => $self->biblionumber, itemlost => 0, withdrawn => 0, notforloan => 0 })->as_list;
+    my @items =
+        Koha::Items->search( { biblionumber => $self->biblionumber, itemlost => 0, withdrawn => 0, notforloan => 0 } )
+        ->as_list;
 
     # if there are no available items at all, no recall can be placed
     return 0 if ( scalar @items == 0 );
 
     my $checked_out_count = 0;
     foreach (@items) {
-        if ( Koha::Checkouts->search({ itemnumber => $_->itemnumber })->count > 0 ){ $checked_out_count++; }
+        if ( Koha::Checkouts->search( { itemnumber => $_->itemnumber } )->count > 0 ) { $checked_out_count++; }
     }
 
     # can't recall if on shelf recalls only allowed when all unavailable, but items are still available for checkout
@@ -2410,7 +2412,7 @@ At this point the item has already been recalled. We are now at the checkin and 
 =cut
 
 sub can_be_waiting_recall {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return 0 if !( C4::Context->preference('UseRecalls') );
 
@@ -2420,15 +2422,21 @@ sub can_be_waiting_recall {
     return 0 if ( $self->withdrawn != 0 );
 
     my $branchcode = $self->holdingbranch;
-    if ( C4::Context->preference('CircControl') eq 'PickupLibrary' and C4::Context->userenv and C4::Context->userenv->{'branch'} ) {
+    if (    C4::Context->preference('CircControl') eq 'PickupLibrary'
+        and C4::Context->userenv
+        and C4::Context->userenv->{'branch'} )
+    {
         $branchcode = C4::Context->userenv->{'branch'};
     } else {
-        $branchcode = ( C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ) ? $self->homebranch : $self->holdingbranch;
+        $branchcode =
+            ( C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' )
+            ? $self->homebranch
+            : $self->holdingbranch;
     }
 
     # Check the circulation rule for each relevant itemtype for this item
     my $most_relevant_recall = $self->check_recalls;
-    my $rule = Koha::CirculationRules->get_effective_rules(
+    my $rule                 = Koha::CirculationRules->get_effective_rules(
         {
             branchcode   => $branchcode,
             categorycode => $most_relevant_recall ? $most_relevant_recall->patron->categorycode : undef,
@@ -2438,7 +2446,7 @@ sub can_be_waiting_recall {
     );
 
     # check recalls allowed has been set and is not zero
-    return 0 if ( !defined($rule->{recalls_allowed}) || $rule->{recalls_allowed} == 0 );
+    return 0 if ( !defined( $rule->{recalls_allowed} ) || $rule->{recalls_allowed} == 0 );
 
     # can recall
     return 1;
@@ -2453,20 +2461,22 @@ Get the most relevant recall for this item.
 =cut
 
 sub check_recalls {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my @recalls = Koha::Recalls->search(
-        {   biblio_id => $self->biblionumber,
+        {
+            biblio_id => $self->biblionumber,
             item_id   => [ $self->itemnumber, undef ]
         },
         { order_by => { -asc => 'created_date' } }
     )->filter_by_current->as_list;
 
     my $recall;
+
     # iterate through relevant recalls to find the best one.
     # if we come across a waiting recall, use this one.
     # if we have iterated through all recalls and not found a waiting recall, use the first recall in the array, which should be the oldest recall.
-    foreach my $r ( @recalls ) {
+    foreach my $r (@recalls) {
         if ( $r->waiting ) {
             $recall = $r;
             last;
@@ -2489,20 +2499,22 @@ rules set in the ItemsDeniedRenewal system preference.
 =cut
 
 sub is_denied_renewal {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $denyingrules = C4::Context->yaml_preference('ItemsDeniedRenewal');
     return 0 unless $denyingrules;
-    foreach my $field (keys %$denyingrules) {
+    foreach my $field ( keys %$denyingrules ) {
+
         # Silently ignore bad column names; TODO we should validate elsewhere
         next if !$self->_result->result_source->has_column($field);
         my $val = $self->$field;
-        if( !defined $val) {
-            if ( any { !defined $_ }  @{$denyingrules->{$field}} ){
+        if ( !defined $val ) {
+            if ( any { !defined $_ } @{ $denyingrules->{$field} } ) {
                 return 1;
             }
-        } elsif (any { defined($_) && $val eq $_ } @{$denyingrules->{$field}}) {
-           # If the results matches the values in the syspref
-           # We return true if match found
+        } elsif ( any { defined($_) && $val eq $_ } @{ $denyingrules->{$field} } ) {
+
+            # If the results matches the values in the syspref
+            # We return true if match found
             return 1;
         }
     }
@@ -2521,7 +2533,7 @@ It returns 0 if I<EasyAnalyticalRecords> is disabled.
 
 sub analytics_count {
     my ($self) = @_;
-    return C4::Items::GetAnalyticsCount($self->itemnumber);
+    return C4::Items::GetAnalyticsCount( $self->itemnumber );
 }
 
 =head3 strings_map
@@ -2539,7 +2551,7 @@ or staff client strings.
 
 sub strings_map {
     my ( $self, $params ) = @_;
-    my $frameworkcode = C4::Biblio::GetFrameworkCode($self->biblionumber);
+    my $frameworkcode = C4::Biblio::GetFrameworkCode( $self->biblionumber );
     my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
     my $mss           = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
 
@@ -2555,7 +2567,7 @@ sub strings_map {
     # Handle not null and default values for integers and dates
     my $strings = {};
 
-    foreach my $col ( @{$self->_columns} ) {
+    foreach my $col ( @{ $self->_columns } ) {
 
         # By now, we are done with known columns, now check the framework for mappings
         my $field = $self->_result->result_source->name . '.' . $col;
@@ -2568,7 +2580,10 @@ sub strings_map {
             my $subfield = $mss->{$field}[0];
             my $code     = $subfield->{authorised_value};
 
-            my $str  = C4::Biblio::GetAuthorisedValueDesc( $itemtagfield, $subfield->{tagsubfield}, $self->$col, '', $tagslib, undef, $params->{public} );
+            my $str = C4::Biblio::GetAuthorisedValueDesc(
+                $itemtagfield, $subfield->{tagsubfield}, $self->$col, '', $tagslib,
+                undef, $params->{public}
+            );
             my $type = exists $code_to_type->{$code} ? $code_to_type->{$code} : 'av';
             $strings->{$col} = {
                 str  => $str,
@@ -2580,10 +2595,10 @@ sub strings_map {
         if ( $col eq 'booksellerid' ) {
             my $booksellerid = $self->booksellerid;
             if ($booksellerid) {
-                my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+                my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
 
                 $strings->{$col} = {
-                    str => $bookseller->name,
+                    str  => $bookseller->name,
                     type => 'acquisition_source'
                 } if $bookseller;
             }
@@ -2592,7 +2607,6 @@ sub strings_map {
 
     return $strings;
 }
-
 
 =head3 location_update_trigger
 
@@ -2682,7 +2696,6 @@ sub location_update_trigger {
     }
     return $messages;
 }
-
 
 =head3 z3950_status
 

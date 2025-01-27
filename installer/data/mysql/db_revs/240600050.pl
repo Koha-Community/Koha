@@ -16,7 +16,7 @@ return {
             }
             );
         }
-        say_success( $out, "Added column 'reserves.deleted_biblionumber'");
+        say_success( $out, "Added column 'reserves.deleted_biblionumber'" );
         if ( !column_exists( 'old_reserves', 'deleted_biblionumber' ) ) {
 
             $dbh->do(
@@ -26,6 +26,6 @@ return {
             }
             );
         }
-        say_success( $out, "Added column 'old_reserves.deleted_biblionumber'");
+        say_success( $out, "Added column 'old_reserves.deleted_biblionumber'" );
     },
 };

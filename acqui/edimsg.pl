@@ -21,16 +21,16 @@ use Modern::Perl;
 use CGI;
 use Koha::Database;
 use C4::Koha;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 my $q = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
-        template_name   => 'acqui/edimsg.tt',
-        query           => $q,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => 'edi_manage' },
+        template_name => 'acqui/edimsg.tt',
+        query         => $q,
+        type          => 'intranet',
+        flagsrequired => { acquisition => 'edi_manage' },
     }
 );
 my $msg_id = $q->param('id');
@@ -42,8 +42,7 @@ if ($msg) {
 
     my @segments = segmentize($transmission);
     $template->param( segments => \@segments );
-}
-else {
+} else {
     $template->param( no_message => 1 );
 }
 

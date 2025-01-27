@@ -37,19 +37,19 @@ $Test::Strict::TEST_STRICT = 0;
 
 my $ncpu;
 if ( $ENV{KOHA_PROVE_CPUS} ) {
-    $ncpu = $ENV{KOHA_PROVE_CPUS} ; # set number of cpus to use
+    $ncpu = $ENV{KOHA_PROVE_CPUS};    # set number of cpus to use
 } else {
     $ncpu = Sys::CPU::cpu_count();
 }
 
-my $pm   = Parallel::ForkManager->new($ncpu);
+my $pm = Parallel::ForkManager->new($ncpu);
 
 foreach my $d (@dirs) {
-    $pm->start and next;    # do the fork
+    $pm->start and next;              # do the fork
 
     all_perl_files_ok($d);
 
-    $pm->finish;            # do the exit in the child process
+    $pm->finish;                      # do the exit in the child process
 }
 
 $pm->wait_all_children;

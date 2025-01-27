@@ -1,11 +1,11 @@
 use Modern::Perl;
 
 return {
-    bug_number => "33262",
+    bug_number  => "33262",
     description => "Store biblionumber of deleted record in acquisition orders",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
         if ( !column_exists( 'aqorders', 'deleted_biblionumber' ) ) {
 
             $dbh->do(

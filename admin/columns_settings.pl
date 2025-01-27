@@ -4,39 +4,38 @@ use Modern::Perl;
 use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output                            qw( output_html_with_http_headers );
 use C4::Utils::DataTables::TablesSettings qw( get_modules );
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/columns_settings.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_column_config' },
+        template_name => "admin/columns_settings.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_column_config' },
     }
 );
 
 my $op = $input->param('op') // 'list';
 
 if ( $op eq 'cud-save' ) {
-    my $module = $input->param('module');
+    my $module    = $input->param('module');
     my @columnids = $input->multi_param("columnid");
     my @columns;
     for my $columnid (@columnids) {
         next unless $columnid =~ m{^([^\|]*)\|([^\|]*)\|(.*)$};
-        my $is_hidden = $input->param( $columnid . '_hidden' ) // 0;
-        my $cannot_be_toggled =
-          $input->param( $columnid . '_cannot_be_toggled' ) // 0;
+        my $is_hidden         = $input->param( $columnid . '_hidden' )            // 0;
+        my $cannot_be_toggled = $input->param( $columnid . '_cannot_be_toggled' ) // 0;
         push @columns,
-          {
+            {
             module            => $module,
             page              => $1,
             tablename         => $2,
             columnname        => $3,
             is_hidden         => $is_hidden,
             cannot_be_toggled => $cannot_be_toggled,
-          };
+            };
     }
 
     C4::Utils::DataTables::TablesSettings::update_columns(
@@ -58,8 +57,7 @@ if ( $op eq 'cud-save' ) {
         $default_save_state        //= 0;
         $default_save_state_search //= 0;
 
-        if ( defined $default_display_length || defined $default_sort_order || defined $default_save_state )
-        {
+        if ( defined $default_display_length || defined $default_sort_order || defined $default_save_state ) {
             C4::Utils::DataTables::TablesSettings::update_table_settings(
                 {
                     module                    => $module,

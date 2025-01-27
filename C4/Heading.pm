@@ -22,7 +22,7 @@ use Modern::Perl;
 use MARC::Field;
 use C4::Context;
 use Module::Load qw( load );
-use List::Util qw( none );
+use List::Util   qw( none );
 
 =head1 NAME
 
@@ -61,10 +61,10 @@ is returned.
 sub new_from_field {
     my $class         = shift;
     my $field         = shift;
-    my $frameworkcode = shift; #FIXME this is not used?
+    my $frameworkcode = shift;                                    #FIXME this is not used?
     my $auth          = shift;
     my $marcflavour   = C4::Context->preference('marcflavour');
-    my $marc_handler = _marc_format_handler($marcflavour);
+    my $marc_handler  = _marc_format_handler($marcflavour);
 
     return unless $field;
     my $tag = $field->tag();
@@ -76,7 +76,7 @@ sub new_from_field {
         $self->{'auth_type'},   $self->{'thesaurus'},
         $self->{'search_form'}, $self->{'display_form'},
         $self->{'match_type'}
-    ) = $marc_handler->parse_heading($field, $auth );
+    ) = $marc_handler->parse_heading( $field, $auth );
 
     bless $self, $class;
     return $self;
@@ -160,10 +160,10 @@ Check if the given subfield is valid for the given field.
 =cut
 
 sub valid_heading_subfield {
-    my $tag           = shift;
-    my $subfield      = shift;
-    my $marcflavour   = C4::Context->preference('marcflavour');
-    my $auth          = shift;
+    my $tag         = shift;
+    my $subfield    = shift;
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $auth        = shift;
 
     my $marc_handler = _marc_format_handler($marcflavour);
     return $marc_handler->valid_heading_subfield( $tag, $subfield, $auth );
@@ -176,10 +176,10 @@ sub valid_heading_subfield {
 =cut
 
 sub _search {
-    my $self         = shift;
-    my $index        = shift || undef;
-    my $skipmetadata = shift || undef;
-    my $thesaurus = $self->{thesaurus};
+    my $self                      = shift;
+    my $index                     = shift || undef;
+    my $skipmetadata              = shift || undef;
+    my $thesaurus                 = $self->{thesaurus};
     my $subject_heading_thesaurus = '';
     my @marclist;
     my @and_or;
@@ -199,11 +199,11 @@ sub _search {
     }
 
     if ( $check_thesaurus && $thesaurus ) {
-        push @marclist, 'thesaurus';
-        push @and_or, 'and';
+        push @marclist,  'thesaurus';
+        push @and_or,    'and';
         push @excluding, '';
-        push @operator, 'is';
-        push @value, $thesaurus;
+        push @operator,  'is';
+        push @value,     $thesaurus;
     }
 
     require Koha::SearchEngine::QueryBuilder;
@@ -212,10 +212,8 @@ sub _search {
     # Use state variables to avoid recreating the objects every time.
     # With Elasticsearch this also avoids creating a massive amount of
     # ES connectors that would eventually run out of file descriptors.
-    state $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    state $searcher = Koha::SearchEngine::Search->new(
-        {index => $Koha::SearchEngine::AUTHORITIES_INDEX} );
+    state $builder  = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    state $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
 
     my $search_query = $builder->build_authorities_query_compat(
         \@marclist, \@and_or, \@excluding, \@operator,
@@ -224,6 +222,7 @@ sub _search {
     );
 
     my ( $matched_auths, $total ) = $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
+
     # Some auth records may not contain the 040$f to specify their source
     # This is legal, so we do a fallback search
     if (
@@ -235,16 +234,16 @@ sub _search {
             'notspecified', 'cash', 'rvm',  'sears',
             'aat'
         )
-      )
+        )
     {
         pop @value;
         push @value, 'notdefined';
-        $search_query =
-          $builder->build_authorities_query_compat( \@marclist, \@and_or,
+        $search_query = $builder->build_authorities_query_compat(
+            \@marclist,  \@and_or,
             \@excluding, \@operator, \@value, $self->{'auth_type'},
-            'AuthidAsc' );
-        ( $matched_auths, $total ) =
-          $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
+            'AuthidAsc'
+        );
+        ( $matched_auths, $total ) = $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
     }
     return ( $matched_auths, $total );
 
@@ -261,7 +260,7 @@ depending on the selected MARC flavour.
 
 sub _marc_format_handler {
     my $marcflavour = uc shift;
-    my $pname = "C4::Heading::$marcflavour";
+    my $pname       = "C4::Heading::$marcflavour";
     load $pname;
     return $pname->new();
 }

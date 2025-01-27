@@ -8,23 +8,23 @@ use Module::CPANfile;
 
 sub new {
     my $invocant = shift;
-    my $self = {
-        missing_pm  => [],
-        upgrade_pm  => [],
-        current_pm  => [],
+    my $self     = {
+        missing_pm => [],
+        upgrade_pm => [],
+        current_pm => [],
     };
 
     my $type = ref($invocant) || $invocant;
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
 sub prereqs {
     my $self = shift;
 
-    unless (defined $self->{prereqs}) {
+    unless ( defined $self->{prereqs} ) {
         my $filename = $INC{'C4/Installer/PerlModules.pm'};
-        my $path = dirname(dirname(dirname($filename)));
+        my $path     = dirname( dirname( dirname($filename) ) );
         $self->{prereqs} = Module::CPANfile->load("$path/cpanfile")->prereqs;
     }
 
@@ -35,8 +35,8 @@ sub prereq_pm {
     my $self = shift;
 
     my $prereq_pm = {};
-    my $reqs = $self->prereqs->merged_requirements;
-    foreach my $module ($reqs->required_modules) {
+    my $reqs      = $self->prereqs->merged_requirements;
+    foreach my $module ( $reqs->required_modules ) {
         $prereq_pm->{$module} = $reqs->requirements_for_module($module);
     }
 
@@ -51,10 +51,10 @@ sub versions_info {
     $self->{'upgrade_pm'} = [];
     $self->{'current_pm'} = [];
 
-    foreach my $phase ($self->prereqs->phases) {
-        foreach my $type ($self->prereqs->types_in($phase)) {
-            my $reqs = $self->prereqs->requirements_for($phase, $type);
-            foreach my $module (sort $reqs->required_modules) {
+    foreach my $phase ( $self->prereqs->phases ) {
+        foreach my $type ( $self->prereqs->types_in($phase) ) {
+            my $reqs = $self->prereqs->requirements_for( $phase, $type );
+            foreach my $module ( sort $reqs->required_modules ) {
                 my $module_infos = {
                     cur_ver  => 0,
                     required => $type eq 'requires',
@@ -67,14 +67,14 @@ sub versions_info {
                     } elsif ( $req->[0] eq '<=' || $req->[0] eq '<' ) {
                         $module_infos->{max_ver} = $req->[1];
                     } else {
-                        push @{$module_infos->{exc_ver}}, $req->[1];
+                        push @{ $module_infos->{exc_ver} }, $req->[1];
                     }
                 }
 
                 my $attr;
                 {
                     # ignore warnings from noisy modules
-                    local $SIG{__WARN__} = sub {};
+                    local $SIG{__WARN__} = sub { };
                     eval "require $module";
                 }
                 if ($@) {
@@ -82,7 +82,7 @@ sub versions_info {
                 } else {
                     my $pkg_version = $module->can("VERSION") ? $module->VERSION : 0;
                     $module_infos->{cur_ver} = $pkg_version;
-                    if ($reqs->accepts_module($module => $pkg_version)) {
+                    if ( $reqs->accepts_module( $module => $pkg_version ) ) {
                         $attr = 'current_pm';
                     } else {
                         $attr = 'upgrade_pm';
@@ -96,7 +96,7 @@ sub versions_info {
 }
 
 sub get_attr {
-    return $_[0]->{$_[1]};
+    return $_[0]->{ $_[1] };
 }
 
 1;

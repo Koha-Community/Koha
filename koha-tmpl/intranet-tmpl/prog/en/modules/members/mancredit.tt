@@ -8,11 +8,12 @@
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET registers = Registers.all( { filters => { current_branch => 1 } } ) %]
-<title>[% FILTER collapse %]
-    [% t("Create manual credit") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Create manual credit") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -37,80 +38,83 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-            [% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-            <h1>Manual credit</h1>
+    <h1>Manual credit</h1>
 
-            <!-- The manual invoice and credit buttons -->
-            <div class="toptabs">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="nav-item transactions">
-                        <a class="nav-link" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
-                    </li>
-                    <li role="presentation" class="nav-item makepayment">
-                        <a class="nav-link" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
-                    </li>
-                    [% IF CAN_user_updatecharges_manual_invoice %]
-                        <li role="presentation" class="nav-item manualinvoice">
-                            <a class="nav-link" href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
-                        </li>
-                    [% END %]
-                    <li role="presentation" class="nav-item manualcredit">
-                        <a class="nav-link active" href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
-                    </li>
-                </ul> <!-- /.nav.nav-tabs -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active">
-                        <form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
-                            <input type="hidden" name="op" value="cud-add" />
-                            <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                            [% INCLUDE 'csrf-token.inc' %]
+    <!-- The manual invoice and credit buttons -->
+    <div class="toptabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="nav-item transactions">
+                <a class="nav-link" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
+            </li>
+            <li role="presentation" class="nav-item makepayment">
+                <a class="nav-link" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
+            </li>
+            [% IF CAN_user_updatecharges_manual_invoice %]
+                <li role="presentation" class="nav-item manualinvoice">
+                    <a class="nav-link" href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
+                </li>
+            [% END %]
+            <li role="presentation" class="nav-item manualcredit">
+                <a class="nav-link active" href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
+            </li>
+        </ul>
+        <!-- /.nav.nav-tabs -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
+                <form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
+                    <input type="hidden" name="op" value="cud-add" />
+                    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    [% INCLUDE 'csrf-token.inc' %]
 
-                            <fieldset class="rows">
-                                <legend>Manual credit</legend>
-                                <ol>
-                                    <li>
-                                        <label for="type">Credit type: </label>
-                                        <select name="type" id="type">
-                                            [% FOREACH credit_type IN credit_types %]
-                                            <option value="[% credit_type.code | html %]">[%- PROCESS credit_type_description credit_type=credit_type -%]</option>
-                                            [% END %]
-                                        </select>
-                                    </li>
-                                    <li><label for="barcode">Item barcode: </label><input type="text" name="barcode" id="barcode" /></li>
-                                    <li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
-                                    <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
-                                    <li><label for="amount" class="required">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value=""/> Example: 5.00</li>
-                                    [% INCLUDE 'transaction_types.inc' type="credit" %]
-                                    [% IF Koha.Preference('UseCashRegisters') %]
-                                    <li>
-                                        <label for="cash_register" [% IF Koha.Preference('RequireCashRegister') %]class="required"[% END %]>
-                                            Cash register:
-                                        </label>
-
-                                        <select name="cash_register" id="cash_register" [% IF Koha.Preference('RequireCashRegister') %]required="required"[% END %]>
-                                            <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
-                                            [% PROCESS options_for_registers %]
-                                        </select>
-
-                                        [% IF Koha.Preference('RequireCashRegister') %]
-                                            <span class="required">Required</span>
-                                        [% END %]
-                                    </li>
+                    <fieldset class="rows">
+                        <legend>Manual credit</legend>
+                        <ol>
+                            <li>
+                                <label for="type">Credit type: </label>
+                                <select name="type" id="type">
+                                    [% FOREACH credit_type IN credit_types %]
+                                        <option value="[% credit_type.code | html %]">[%- PROCESS credit_type_description credit_type=credit_type -%]</option>
                                     [% END %]
-                                </ol>
-                            </fieldset>
+                                </select>
+                            </li>
+                            <li><label for="barcode">Item barcode: </label><input type="text" name="barcode" id="barcode" /></li>
+                            <li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
+                            <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
+                            <li><label for="amount" class="required">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value="" /> Example: 5.00</li>
+                            [% INCLUDE 'transaction_types.inc' type="credit" %]
+                            [% IF Koha.Preference('UseCashRegisters') %]
+                                <li>
+                                    <label for="cash_register" [% IF Koha.Preference('RequireCashRegister') %]class="required"[% END %]> Cash register: </label>
 
-                            [% IF available_additional_fields %]
-                                [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+                                    <select name="cash_register" id="cash_register" [% IF Koha.Preference('RequireCashRegister') %]required="required"[% END %]>
+                                        <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+                                        [% PROCESS options_for_registers %]
+                                    </select>
+
+                                    [% IF Koha.Preference('RequireCashRegister') %]
+                                        <span class="required">Required</span>
+                                    [% END %]
+                                </li>
                             [% END %]
+                        </ol>
+                    </fieldset>
 
-                            <fieldset class="action"><input class="btn btn-primary" type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
-                        </form>
-                    </div> <!-- /.tab-pane -->
-                </div> <!-- /.tab-content -->
-            </div> <!-- /.toptabs -->
+                    [% IF available_additional_fields %]
+                        [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+                    [% END %]
 
+                    <fieldset class="action"
+                        ><input class="btn btn-primary" type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset
+                    >
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+    <!-- /.toptabs -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

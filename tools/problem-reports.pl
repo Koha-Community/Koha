@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use Koha::ProblemReports;
 
 my $query = CGI->new;
@@ -42,20 +42,20 @@ my $action = $query->param("op") || 'none';
 my @report_ids = $query->multi_param('report_ids');
 
 if ( $action eq 'cud-mark_selected-viewed' ) {
-    foreach my $report_id ( @report_ids ) {
+    foreach my $report_id (@report_ids) {
         my $report = Koha::ProblemReports->find($report_id);
-        $report->set({ status => 'Viewed' })->store;
-                                }
+        $report->set( { status => 'Viewed' } )->store;
+    }
 } elsif ( $action eq 'cud-mark_selected-closed' ) {
-    foreach my $report_id ( @report_ids ) {
+    foreach my $report_id (@report_ids) {
         my $report = Koha::ProblemReports->find($report_id);
-        $report->set({ status => 'Closed' })->store;
+        $report->set( { status => 'Closed' } )->store;
     }
 
 } elsif ( $action eq 'cud-mark_selected-new' ) {
-    foreach my $report_id ( @report_ids ) {
+    foreach my $report_id (@report_ids) {
         my $report = Koha::ProblemReports->find($report_id);
-        $report->set({ status => 'New' })->store;
+        $report->set( { status => 'New' } )->store;
     }
 }
 

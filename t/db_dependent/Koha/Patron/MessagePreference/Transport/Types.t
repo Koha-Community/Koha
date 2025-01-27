@@ -23,7 +23,7 @@ use Test::More tests => 2;
 
 use Koha::Database;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 
 subtest 'Test class imports' => sub {
     plan tests => 2;
@@ -37,16 +37,19 @@ subtest 'Test Koha::Patron::MessagePreference::Transport::Types' => sub {
 
     $schema->storage->txn_begin;
 
-    my $transport_type = Koha::Patron::MessagePreference::Transport::Type->new({
-        message_transport_type => 'test'
-    })->store;
+    my $transport_type =
+        Koha::Patron::MessagePreference::Transport::Type->new( { message_transport_type => 'test' } )->store;
 
-    is($transport_type->message_transport_type, 'test',
-       'Added a new message transport type.');
+    is(
+        $transport_type->message_transport_type, 'test',
+        'Added a new message transport type.'
+    );
 
     $transport_type->delete;
-    is(Koha::Patron::MessagePreference::Transport::Types->find('test'), undef,
-       'Deleted the message transport type.');
+    is(
+        Koha::Patron::MessagePreference::Transport::Types->find('test'), undef,
+        'Deleted the message transport type.'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -6,11 +6,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Transfers to receive") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Transfers to receive") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -32,69 +33,80 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-
-        <h1>Transfers made to your library as of [% show_date | $KohaDates %]</h1>
-	[% IF ( branchesloop ) %]
+    <h1>Transfers made to your library as of [% show_date | $KohaDates %]</h1>
+    [% IF ( branchesloop ) %]
         <p>Your library is the destination for the following transfer(s)</p>
-		[% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning | html %] days.</p>[% END %]
+        [% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning | html %] days.</p>[% END %]
         <div id="resultlist">
-        [% FOREACH branchesloo IN branchesloop %]
-            [% IF ( branchesloo.branchcode ) %]
-                <div class="page-section">
-            <table style="width: 100%" id="transferst[% branchesloo.branchcode | html %]">
-            <caption>Coming from [% branchesloo.branchname | html %]</caption>
-            <thead><tr>
-                <th>Date of transfer</th>
-                <th class="anti-the">Title</th>
-                <th>On hold for</th>
-                <th>Home library</th>
-                <th>Call number</th>
-                <th>&nbsp;</th>
-            </tr></thead>
-            <tbody>[% FOREACH reser IN branchesloo.reserv %]
-                [% SET tr_class = '' %]
-                [% IF ( reser.messcompa ) %]
-                    [% tr_class = 'problem' %]
+            [% FOREACH branchesloo IN branchesloop %]
+                [% IF ( branchesloo.branchcode ) %]
+                    <div class="page-section">
+                        <table style="width: 100%" id="transferst[% branchesloo.branchcode | html %]">
+                            <caption>Coming from [% branchesloo.branchname | html %]</caption>
+                            <thead
+                                ><tr>
+                                    <th>Date of transfer</th>
+                                    <th class="anti-the">Title</th>
+                                    <th>On hold for</th>
+                                    <th>Home library</th>
+                                    <th>Call number</th>
+                                    <th>&nbsp;</th>
+                                </tr></thead
+                            >
+                            <tbody
+                                >[% FOREACH reser IN branchesloo.reserv %]
+                                    [% SET tr_class = '' %]
+                                    [% IF ( reser.messcompa ) %]
+                                        [% tr_class = 'problem' %]
+                                    [% END %]
+                                    <tr class="[% tr_class | html %]">
+                                        <td data-order="[% reser.datetransfer | html %]"
+                                            ><p>[% reser.datetransfer | $KohaDates %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td
+                                        >
+                                        <td>
+                                            [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
+                                            [% IF ( reser.itemtype ) %](<strong>[% reser.itemtype | html %]</strong>)[% END %]
+                                            <br />Barcode: [% reser.barcode | html %]
+                                        </td>
+                                        <td
+                                            >[% IF ( reser.patron ) %]
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber | uri %]">
+                                                    [% reser.patron.surname | html %][% IF ( reser.patron.firstname ) %], [% reser.patron.firstname | html %][% END %]
+                                                </a>
+                                                [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone | html %][% END %]
+                                                [% IF ( reser.patron.notice_email_address ) %]
+                                                    <br />
+                                                    [% BLOCK subject %]Hold:[% END %]
+                                                    <a href="mailto:[% reser.patron.notice_email_address | uri %]?subject=[% INCLUDE subject %] [% reser.title | uri %]"> [% reser.patron.notice_email_address | html %] </a>
+                                                [% END %]
+                                            [% ELSIF ( reser.recall ) %]
+                                                Recall requested by
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.recall.patron_id | uri %]"
+                                                    >[% reser.recall.patron.surname | html %][% IF reser.recall.patron.firstname %], [% reser.recall.patron.firstname | html %][% END %] ([% reser.recall.patron.cardnumber | html %])</a
+                                                >
+                                            [% ELSE %]
+                                                <p>None</p>
+                                            [% END %]
+                                        </td>
+                                        <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) | html %][% END %]</td>
+                                        <td>[% reser.itemcallnumber | html %]</td>
+                                        <td class="actions"
+                                            ><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber | uri %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"
+                                                ><i class="fa fa-times"></i> Cancel transfer</a
+                                            ></td
+                                        >
+                                    </tr>
+                                [% END %]</tbody
+                            >
+                        </table>
+                    </div>
+                    <!-- /.page-section -->
                 [% END %]
-                <tr class="[% tr_class | html %]">
-                    <td data-order="[% reser.datetransfer | html %]"><p>[% reser.datetransfer | $KohaDates %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td>
-                    <td>
-                        [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
-                            [% IF ( reser.itemtype ) %] (<strong>[% reser.itemtype | html %]</strong>)[% END %]
-                            <br />Barcode: [% reser.barcode | html %]
-                    </td>
-                    <td>[% IF ( reser.patron ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber | uri %]">
-                            [% reser.patron.surname | html %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname | html %][% END %]
-                        </a>
-                        [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone | html %][% END %]
-                            [% IF ( reser.patron.notice_email_address ) %]
-                                <br />
-                                [% BLOCK subject %]Hold:[% END %]
-                                <a href="mailto:[% reser.patron.notice_email_address | uri %]?subject=[% INCLUDE subject %] [% reser.title | uri %]">
-                                    [% reser.patron.notice_email_address | html %]
-                                </a>
-                            [% END %]
-                        [% ELSIF ( reser.recall ) %]
-                            Recall requested by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.recall.patron_id | uri %]">[% reser.recall.patron.surname | html %][% IF reser.recall.patron.firstname %], [% reser.recall.patron.firstname | html %][% END %] ([% reser.recall.patron.cardnumber | html %])</a>
-                        [% ELSE %]
-                        <p>None</p>
-                    [% END %]
-                    </td>
-                    <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) | html %][% END %]</td>
-                    <td>[% reser.itemcallnumber | html %]</td>
-                    <td class="actions"><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber | uri %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel transfer</a></td>
-                </tr>
-            [% END %]</tbody>
-            </table>
-            </div> <!-- /.page-section -->
             [% END %]
-        [% END %]
         </div>
     [% ELSE %]
         <p>No transfers to receive</p>
     [% END %]
-
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

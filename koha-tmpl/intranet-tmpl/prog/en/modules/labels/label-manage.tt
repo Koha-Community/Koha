@@ -4,29 +4,38 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK translate_label_element %]
-[%-  SWITCH element -%]
-[%-  CASE 'layout'    -%][% t('layout') | html %]
-[%-  CASE 'Layouts'   -%][% t('Label layouts') | html %]
-[%-  CASE 'template'  -%][% t('template') | html %]
-[%-  CASE 'Templates' -%][% t('Label templates') | html %]
-[%-  CASE 'profile'   -%][% t('profile') | html %]
-[%-  CASE 'Profiles'  -%][% t('Printer profiles') | html %]
-[%-  CASE 'batch'     -%][% t('batch') | html %]
-[%-  CASE 'Batches'   -%][% t('Label batches') | html %]
-[%-  END -%]
+    [%- SWITCH element -%]
+
+    [%- CASE 'layout' -%]
+        [% t('layout') | html %]
+    [%- CASE 'Layouts' -%]
+        [% t('Label layouts') | html %]
+    [%- CASE 'template' -%]
+        [% t('template') | html %]
+    [%- CASE 'Templates' -%]
+        [% t('Label templates') | html %]
+    [%- CASE 'profile' -%]
+        [% t('profile') | html %]
+    [%- CASE 'Profiles' -%]
+        [% t('Printer profiles') | html %]
+    [%- CASE 'batch' -%]
+        [% t('batch') | html %]
+    [%- CASE 'Batches' -%]
+        [% t('Label batches') | html %]
+    [%- END -%]
 [% END %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% PROCESS translate_label_element element=label_element_title %] &rsaquo;
-        [% t("Label creator") | html %] &rsaquo;
-        [% t("Cataloging") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% PROCESS translate_label_element element=label_element_title %]
+        &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="labels_label-manage" class="tools labels">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -46,78 +55,104 @@
 
 [% WRAPPER 'main-container.inc' aside='cat-menu' %]
 
-                    [% INCLUDE 'labels-toolbar.inc' %]
-                    <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
+    [% INCLUDE 'labels-toolbar.inc' %]
+    <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
 
-                        [% IF ( error ) %]
-                            <div class="alert alert-warning">
-                                <strong>WARNING:</strong> An error was encountered and the [% op | html %] operation for [% label_element | html %] [% element_id | html %] was not completed. Please have your system administrator check the error log for details.
-                            </div>
-                        [% END %]
+    [% IF ( error ) %]
+        <div class="alert alert-warning">
+            <strong>WARNING:</strong> An error was encountered and the [% op | html %] operation for [% label_element | html %] [% element_id | html %] was not completed. Please have your system administrator check the error log for
+            details.
+        </div>
+    [% END %]
 
-                        <div id="manage-label-layouts" class="page-section">
-                            [% IF ( table_loop ) %]
-                            <form method="get" name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element | html %]">
-
-                            <div class="page-section">
-                                <table id="labels-table">
-                                    [% FOREACH table_loo IN table_loop %]
-                                        [% IF ( table_loo.header_fields ) %]
-                                            <thead>
-                                            <tr>
-                                                [% FOREACH header_field IN table_loo.header_fields %]
-                                                    [% SWITCH header_field.field_label %]
-                                                        [% CASE 'Layout ID'       %]<th>Layout ID</th>
-                                                        [% CASE 'Layout'          %]<th>Layout</th>
-                                                        [% CASE 'Barcode Type'    %]<th>Barcode type</th>
-                                                        [% CASE 'Print Type'      %]<th>Print type</th>
-                                                        [% CASE 'Template ID'     %]<th>Template ID</th>
-                                                        [% CASE 'Template Name'   %]<th>Template name</th>
-                                                        [% CASE 'Description'     %]<th>Description</th>
-                                                        [% CASE 'Actions'         %]<th class="noExport">Actions</th>
-                                                        [% CASE 'Profile ID'      %]<th>Profile ID</th>
-                                                        [% CASE 'Printer Name'    %]<th>Printer name</th>
-                                                        [% CASE 'Paper Bin'       %]<th>Paper bin</th>
-                                                        [% CASE 'Batch ID'        %]<th>Batch ID</th>
-                                                        [% CASE 'Item Count'      %]<th>Item count</th>
-                                                        [% CASE 'Fields to Print' %]<th>Fields to print</th>
-                                                        [% CASE                   %]<th>[% header_field.field_label | html %]</th>
-                                                    [% END %]
-                                                [% END %]
-                                            </tr>
-                                            </thead>
-                                        [% ELSE %]
-                                            <tr>
-                                            [% FOREACH text_field IN table_loo.text_fields %]
-                                                [% IF ( text_field.select_field ) %]
-                                                    <td class="actions">
-                                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit_form&amp;element_id=[% text_field.field_value |url %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-
-                                                        <a class="btn btn-default btn-xs submit-form-link" href="#" data-label_element="[% label_element | html %]" data-element_id="[% text_field.field_value | html %]" data-action="label-manage.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="[% t('Are you sure you want to delete this?') | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                                                    </td>
-                                                    [% IF label_element == 'batch' %] <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
-                                                [% ELSIF ( text_field.field_value ) %]
-                                                    <td>[% text_field.field_value | html %]</td>
-                                                [% ELSE %]
-                                                    <td>&nbsp;</td>
-                                                [% END %]
+    <div id="manage-label-layouts" class="page-section">
+        [% IF ( table_loop ) %]
+            <form method="get" name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element | html %]">
+                <div class="page-section">
+                    <table id="labels-table">
+                        [% FOREACH table_loo IN table_loop %]
+                            [% IF ( table_loo.header_fields ) %]
+                                <thead>
+                                    <tr>
+                                        [% FOREACH header_field IN table_loo.header_fields %]
+                                            [% SWITCH header_field.field_label %]
+                                            [% CASE 'Layout ID' %]
+                                                <th>Layout ID</th>
+                                            [% CASE 'Layout' %]
+                                                <th>Layout</th>
+                                            [% CASE 'Barcode Type' %]
+                                                <th>Barcode type</th>
+                                            [% CASE 'Print Type' %]
+                                                <th>Print type</th>
+                                            [% CASE 'Template ID' %]
+                                                <th>Template ID</th>
+                                            [% CASE 'Template Name' %]
+                                                <th>Template name</th>
+                                            [% CASE 'Description' %]
+                                                <th>Description</th>
+                                            [% CASE 'Actions' %]
+                                                <th class="noExport">Actions</th>
+                                            [% CASE 'Profile ID' %]
+                                                <th>Profile ID</th>
+                                            [% CASE 'Printer Name' %]
+                                                <th>Printer name</th>
+                                            [% CASE 'Paper Bin' %]
+                                                <th>Paper bin</th>
+                                            [% CASE 'Batch ID' %]
+                                                <th>Batch ID</th>
+                                            [% CASE 'Item Count' %]
+                                                <th>Item count</th>
+                                            [% CASE 'Fields to Print' %]
+                                                <th>Fields to print</th>
+                                            [% CASE %]
+                                                <th>[% header_field.field_label | html %]</th>
                                             [% END %]
-                                            </tr>
+                                        [% END %]
+                                    </tr>
+                                </thead>
+                            [% ELSE %]
+                                <tr>
+                                    [% FOREACH text_field IN table_loo.text_fields %]
+                                        [% IF ( text_field.select_field ) %]
+                                            <td class="actions">
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit_form&amp;element_id=[% text_field.field_value |url %]"
+                                                    ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                                                >
+
+                                                <a
+                                                    class="btn btn-default btn-xs submit-form-link"
+                                                    href="#"
+                                                    data-label_element="[% label_element | html %]"
+                                                    data-element_id="[% text_field.field_value | html %]"
+                                                    data-action="label-manage.pl"
+                                                    data-method="post"
+                                                    data-op="cud-delete"
+                                                    data-confirmation-msg="[% t('Are you sure you want to delete this?') | html %]"
+                                                    ><i class="fa fa-trash-can"></i> Delete</a
+                                                >
+                                            </td>
+                                            [% IF label_element == 'batch' %]<td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
+                                        [% ELSIF ( text_field.field_value ) %]
+                                            <td>[% text_field.field_value | html %]</td>
+                                        [% ELSE %]
+                                            <td>&nbsp;</td>
                                         [% END %]
                                     [% END %]
-                                </table>
-                            </div> <!-- /.page-section -->
-                            [% IF ( print ) %]<button type="button" class="btn btn-default" id="print">Export selected</button>[% END %]
-                            </form>
-                            [% ELSE %]
-                                <div class="alert alert-info">
-                            <h4>There are no
-                            [% PROCESS translate_label_element element=label_element_title %]
-                            currently available.</h4>
-                            <p>Use the toolbar above to create a new
-                            [% PROCESS translate_label_element element=label_element %].</p></div>
+                                </tr>
                             [% END %]
-                        </div>
+                        [% END %]
+                    </table>
+                </div>
+                <!-- /.page-section -->
+                [% IF ( print ) %]<button type="button" class="btn btn-default" id="print">Export selected</button>[% END %]
+            </form>
+        [% ELSE %]
+            <div class="alert alert-info">
+                <h4>There are no [% PROCESS translate_label_element element=label_element_title %] currently available.</h4>
+                <p>Use the toolbar above to create a new [% PROCESS translate_label_element element=label_element %].</p></div
+            >
+        [% END %]
+    </div>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

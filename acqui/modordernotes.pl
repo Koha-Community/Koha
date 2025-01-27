@@ -28,33 +28,34 @@ Modify just notes when basket is closed.
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use CGI             qw ( -utf8 );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Acquisition qw( GetOrder GetBasket ModOrder );
 
 use Koha::Acquisition::Booksellers;
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'acqui/modordernotes.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'acquisition' => '*' },
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'acqui/modordernotes.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'acquisition' => '*' },
+    }
+);
 
-my $op = $input->param('op');
+my $op          = $input->param('op');
 my $ordernumber = $input->param('ordernumber');
-my $referrer = $input->param('referrer') || $input->referer();
-my $type = $input->param('type');
-my $order = GetOrder($ordernumber);
-my $basket = GetBasket($order->{basketno});
-my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
+my $referrer    = $input->param('referrer') || $input->referer();
+my $type        = $input->param('type');
+my $order       = GetOrder($ordernumber);
+my $basket      = GetBasket( $order->{basketno} );
+my $bookseller  = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
 
-
-if($op and $op eq 'cud-save') {
+if ( $op and $op eq 'cud-save' ) {
     my $ordernotes = $input->param('ordernotes');
-    if ($type eq "vendor") {
+    if ( $type eq "vendor" ) {
         $order->{'order_vendornote'} = $ordernotes;
     } else {
         $order->{'order_internalnote'} = $ordernotes;
@@ -63,26 +64,25 @@ if($op and $op eq 'cud-save') {
     print $input->redirect($referrer);
     exit;
 } else {
-    if ($type eq "vendor") {
-        $template->param(ordernotes => $order->{'order_vendornote'});
+    if ( $type eq "vendor" ) {
+        $template->param( ordernotes => $order->{'order_vendornote'} );
     } else {
-        $template->param(ordernotes => $order->{'order_internalnote'});
+        $template->param( ordernotes => $order->{'order_internalnote'} );
     }
 }
 
-if($op) {
-    $template->param($op => 1);
+if ($op) {
+    $template->param( $op => 1 );
 }
 
 $template->param(
-    basketname           => $basket->{'basketname'},
-    basketno             => $order->{basketno},
-    booksellerid         => $bookseller->id,
-    booksellername       => $bookseller->name,
-    ordernumber => $ordernumber,
-    referrer => $referrer,
-    type => $type,
+    basketname     => $basket->{'basketname'},
+    basketno       => $order->{basketno},
+    booksellerid   => $bookseller->id,
+    booksellername => $bookseller->name,
+    ordernumber    => $ordernumber,
+    referrer       => $referrer,
+    type           => $type,
 );
-
 
 output_html_with_http_headers $input, $cookie, $template->output;

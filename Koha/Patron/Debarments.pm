@@ -32,12 +32,12 @@ BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      AddDebarment
-      DelDebarment
-      ModDebarment
+        AddDebarment
+        DelDebarment
+        ModDebarment
 
-      AddUniqueDebarment
-      DelUniqueDebarment
+        AddUniqueDebarment
+        DelUniqueDebarment
 
     );
 }
@@ -68,8 +68,8 @@ sub AddDebarment {
 
     my $borrowernumber = $params->{'borrowernumber'};
     my $expiration     = $params->{'expiration'} || undef;
-    my $type           = $params->{'type'} || 'MANUAL';
-    my $comment        = $params->{'comment'} || undef;
+    my $type           = $params->{'type'}       || 'MANUAL';
+    my $comment        = $params->{'comment'}    || undef;
 
     return unless ( $borrowernumber && $type );
 
@@ -201,18 +201,17 @@ sub AddUniqueDebarment {
     return unless $patron;
 
     my $debarment =
-      $patron->restrictions->search( { type => $type }, { rows => 1 } )->single;
+        $patron->restrictions->search( { type => $type }, { rows => 1 } )->single;
 
     my $r;
     if ($debarment) {
 
         # We don't want to shorten a unique debarment's period, so if this 'update' would do so, just keep the current expiration date instead
         $params->{'expiration'} = $debarment->expiration
-          if ( $debarment->expiration
+            if ( $debarment->expiration
             && $debarment->expiration gt $params->{'expiration'} );
 
-        $params->{'borrower_debarment_id'} =
-          $debarment->borrower_debarment_id;
+        $params->{'borrower_debarment_id'} = $debarment->borrower_debarment_id;
         $r = ModDebarment($params);
     } else {
 
@@ -250,9 +249,9 @@ sub DelUniqueDebarment {
     return unless $patron;
 
     my $debarment =
-      $patron->restrictions->search( { type => $type }, { rows => 1 } )->single;
+        $patron->restrictions->search( { type => $type }, { rows => 1 } )->single;
 
-    return unless ( $debarment );
+    return unless ($debarment);
 
     return DelDebarment( $debarment->borrower_debarment_id );
 }
@@ -291,7 +290,10 @@ sub UpdateBorrowerDebarmentFlags {
         $comment    = undef;
     }
 
-    return $dbh->do( "UPDATE borrowers SET debarred = ?, debarredcomment = ? WHERE borrowernumber = ?", {}, ( $expiration, $comment, $borrowernumber ) );
+    return $dbh->do(
+        "UPDATE borrowers SET debarred = ?, debarredcomment = ? WHERE borrowernumber = ?", {},
+        ( $expiration, $comment, $borrowernumber )
+    );
 }
 
 =head2 del_restrictions_after_payment

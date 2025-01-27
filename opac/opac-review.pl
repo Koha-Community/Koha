@@ -18,8 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Scrubber;
 
@@ -45,52 +45,53 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # FIXME: need to allow user to delete their own comment(s)
 
 my ( $clean, @errors, $savedreview );
-my $biblio = Koha::Biblios->find( $biblionumber );
+my $biblio = Koha::Biblios->find($biblionumber);
 
-if( !$biblio ) {
+if ( !$biblio ) {
     push @errors, { nobiblio => 1 };
-} elsif( $reviewid ) { # edit existing one, check on creator
-    $savedreview = Koha::Reviews->search({ reviewid => $reviewid, borrowernumber => $borrowernumber })->next;
+} elsif ($reviewid) {    # edit existing one, check on creator
+    $savedreview = Koha::Reviews->search( { reviewid => $reviewid, borrowernumber => $borrowernumber } )->next;
     push @errors, { unauthorized => 1 } if !$savedreview;
-} else { # this check prevents adding multiple comments
-    # FIXME biblionumber, borrowernumber should be a unique key of reviews
-    $savedreview = Koha::Reviews->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber })->next;
-    $review = $savedreview? $savedreview->review: $review;
+} else {    # this check prevents adding multiple comments
+            # FIXME biblionumber, borrowernumber should be a unique key of reviews
+    $savedreview = Koha::Reviews->search( { biblionumber => $biblionumber, borrowernumber => $borrowernumber } )->next;
+    $review      = $savedreview ? $savedreview->review : $review;
 }
 
-if( $op =~ /^cud-/ && !@errors && defined $review ) {
-	if ($review !~ /\S/) {
-		push @errors, {empty=>1};
-	} else {
-		$clean = C4::Scrubber->new('comment')->scrub($review);
-		if ($clean !~ /\S/) {
-			push @errors, {scrubbed_all=>1};
-		} else {
-			if ($clean ne $review) {
-				push @errors, {scrubbed=>$clean};
-			}
+if ( $op =~ /^cud-/ && !@errors && defined $review ) {
+    if ( $review !~ /\S/ ) {
+        push @errors, { empty => 1 };
+    } else {
+        $clean = C4::Scrubber->new('comment')->scrub($review);
+        if ( $clean !~ /\S/ ) {
+            push @errors, { scrubbed_all => 1 };
+        } else {
+            if ( $clean ne $review ) {
+                push @errors, { scrubbed => $clean };
+            }
             if ($savedreview) {
                 $savedreview->set(
                     {
-                        review        => $clean,
-                        approved      => 0,
-                        datereviewed  => dt_from_string
+                        review       => $clean,
+                        approved     => 0,
+                        datereviewed => dt_from_string
                     }
                 )->store;
             } else {
                 $reviewid = Koha::Review->new(
-                    {   biblionumber   => $biblionumber,
+                    {
+                        biblionumber   => $biblionumber,
                         borrowernumber => $borrowernumber,
                         review         => $clean,
                         datereviewed   => dt_from_string
                     }
                 )->store->reviewid;
             }
-			unless (@errors){ $template->param(WINDOW_CLOSE=>1); }
-		}
-	}
+            unless (@errors) { $template->param( WINDOW_CLOSE => 1 ); }
+        }
+    }
 }
-(@errors   ) and $template->param(   ERRORS=>\@errors);
+(@errors) and $template->param( ERRORS => \@errors );
 $review = $clean;
 $review ||= $savedreview->review if $savedreview;
 $template->param(

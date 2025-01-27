@@ -47,7 +47,7 @@ $module->mock(
                                 { columnname => 'active' },
                                 { columnname => 'actions' }
                             ]
-                            }
+                        }
                     }
                 },
             }
@@ -117,52 +117,52 @@ my $modules_expected = {
     'admin' => {
         'currency' => {
             'currencies-table' => {
-                default_display_length => 20,
-                default_sort_order => 1,
-                default_save_state => 1,
+                default_display_length    => 20,
+                default_sort_order        => 1,
+                default_save_state        => 1,
                 default_save_state_search => 0,
-                columns => [
+                columns                   => [
                     {
                         columnname         => 'currency',
                         cannot_be_toggled  => 1,
                         cannot_be_modified => 1,
-                        is_hidden  => 0,
+                        is_hidden          => 0,
                     },
                     {
                         columnname         => 'rate',
                         cannot_be_toggled  => 1,
                         cannot_be_modified => 1,
-                        is_hidden  => 0,
+                        is_hidden          => 0,
                     },
                     {
-                        columnname => 'symbol',
+                        columnname         => 'symbol',
                         cannot_be_toggled  => 0,
                         cannot_be_modified => 0,
-                        is_hidden  => 0,
+                        is_hidden          => 0,
                     },
                     {
-                        columnname => 'iso_code',
+                        columnname         => 'iso_code',
                         cannot_be_toggled  => 0,
                         cannot_be_modified => 0,
-                        is_hidden  => 0,
+                        is_hidden          => 0,
                     },
                     {
-                        columnname => 'last_updated',
+                        columnname         => 'last_updated',
                         cannot_be_toggled  => 0,
                         cannot_be_modified => 0,
-                        is_hidden  => 0,
+                        is_hidden          => 0,
                     },
                     {
-                        columnname => 'active',
+                        columnname         => 'active',
                         cannot_be_toggled  => 0,
                         cannot_be_modified => 0,
-                        is_hidden  => 1,
+                        is_hidden          => 1,
                     },
                     {
-                        columnname        => 'actions',
-                        cannot_be_toggled => 1,
+                        columnname         => 'actions',
+                        cannot_be_toggled  => 1,
                         cannot_be_modified => 0,
-                        is_hidden  => 0,
+                        is_hidden          => 0,
                     },
                 ]
             }
@@ -175,19 +175,18 @@ is_deeply( $modules, $modules_expected, 'get_modules returns all values' );
 for my $m ( keys %$modules ) {
     for my $p ( keys %{ $modules->{$m} } ) {
         for my $t ( keys %{ $modules->{$m}{$p} } ) {
-            my $columns =
-              C4::Utils::DataTables::TablesSettings::get_columns( $m, $p, $t );
+            my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $m, $p, $t );
+
             # We do not store default_save_state and default_save_state_search in the yml file
             # Removing them before comparison
-            delete $_->{default_save_state} for @$columns;
+            delete $_->{default_save_state}        for @$columns;
             delete $_->{default_save_state_search} for @$columns;
             is_deeply(
                 $columns,
                 $modules->{$m}{$p}{$t}{columns},
                 "columns for $m>$p>$t"
             );
-            my $table_settings =
-              C4::Utils::DataTables::TablesSettings::get_table_settings( $m, $p, $t );
+            my $table_settings = C4::Utils::DataTables::TablesSettings::get_table_settings( $m, $p, $t );
             is_deeply(
                 {
                     default_display_length    => $table_settings->{default_display_length},

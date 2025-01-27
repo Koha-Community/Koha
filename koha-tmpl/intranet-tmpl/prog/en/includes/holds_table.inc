@@ -8,7 +8,7 @@
 <table id="patron_holds_table" class="holds_table">
     <thead>
         <tr>
-            <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all"/></th>
+            <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
             <th id="priority" data-colname="priority">Priority</th>
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
                 <th id="change_priority" data-colname="change_priority">Change priority</th>
@@ -38,18 +38,18 @@
 
     <tbody>
         [% FOREACH hold IN holds %]
-        [%- IF !hold.found && first_priority == 0 -%]
-            [%- first_priority = hold.priority -%]
-            [%- found_holds = loop.index() -%]
-        [%- END -%]
-        [%- IF Koha.Preference('HoldsSplitQueueNumbering') == 'actual' -%]
-            [%- this_priority = hold.priority -%]
-        [%- ELSE -%]
-            [%- this_priority = loop.count() - found_holds -%]
-        [%- END -%]
+            [%- IF !hold.found && first_priority == 0 -%]
+                [%- first_priority = hold.priority -%]
+                [%- found_holds = loop.index() -%]
+            [%- END -%]
+            [%- IF Koha.Preference('HoldsSplitQueueNumbering') == 'actual' -%]
+                [%- this_priority = hold.priority -%]
+            [%- ELSE -%]
+                [%- this_priority = loop.count() - found_holds -%]
+            [%- END -%]
             [% SET tr_class = hold.suspend ? 'suspend' : '' %]
             <tr class="[% tr_class | html %]">
-                <td><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]"/></td>
+                <td><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]" /></td>
                 <td>
                     <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                     <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
@@ -57,68 +57,118 @@
                     [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
                         [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
                             <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id | html %]">
-                            [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-                                [% FOREACH priority IN all_priorities %]
-                                    [% IF priority == this_priority %]
-                                        <option value="[% priority | html %]" selected="selected">[% priority | html %]</option>
-                                    [% ELSE %]
-                                        <option value="[% priority | html %]">[% priority | html %]</option>
+                                [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+                                    [% FOREACH priority IN all_priorities %]
+                                        [% IF priority == this_priority %]
+                                            <option value="[% priority | html %]" selected="selected">[% priority | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% priority | html %]">[% priority | html %]</option>
+                                        [% END %]
                                     [% END %]
+                                [% ELSE %]
+                                    <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
                                 [% END %]
-                            [% ELSE %]
-                                <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
-                            [% END %]
                                 <option value="del">del</option>
                             </select>
                         [% ELSE %]
-                            <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]">
+                            <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]" />
                             <select name="rank-request" class="rank-request" disabled="disabled" data-hold-id="[% hold.reserve_id | html %]">
-                            [% IF ( hold.found ) %]
-                                [% IF ( hold.intransit ) %]
-                                    <option value="T" selected="selected">In transit</option>
-                                [% ELSIF (hold.inprocessing) %]
-                                    <option value="P" selected="selected">In processing</option>
+                                [% IF ( hold.found ) %]
+                                    [% IF ( hold.intransit ) %]
+                                        <option value="T" selected="selected">In transit</option>
+                                    [% ELSIF (hold.inprocessing) %]
+                                        <option value="P" selected="selected">In processing</option>
+                                    [% ELSE %]
+                                        <option value="W" selected="selected">Waiting</option>
+                                    [% END %]
                                 [% ELSE %]
-                                    <option value="W" selected="selected">Waiting</option>
+                                    <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
                                 [% END %]
-                            [% ELSE %]
-                                <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
-                            [% END %]
                             </select>
                         [% END %]
                     [% ELSE %]
-                        <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]">
+                        <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]" />
                         [% hold.priority | html %]
                     [% END %]
                 </td>
                 [%- IF ( CAN_user_reserveforothers_modify_holds_priority ) -%]
-                [%- UNLESS hold.found -%]
+                    [%- UNLESS hold.found -%]
                         [%- SET prev_priority  = loop.prev.priority -%]
                         [%- SET next_priority  = loop.next.priority -%]
                         <td style="white-space:nowrap;">
-                            <a class="hold-arrow" title="Move hold up" data-op="cud-move" data-where="up" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                            <a
+                                class="hold-arrow"
+                                title="Move hold up"
+                                data-op="cud-move"
+                                data-where="up"
+                                data-first_priority="[% first_priority | html %]"
+                                data-last_priority="[% last_priority | html %]"
+                                data-prev_priority="[% prev_priority | html %]"
+                                data-next_priority="[% next_priority | html %]"
+                                data-borrowernumber="[% hold.borrowernumber | html %]"
+                                data-biblionumber="[% hold.biblionumber | html %]"
+                                data-reserve_id="[% hold.reserve_id | html %]"
+                                data-date="[% hold.date | html %]"
+                            >
                                 <i class="fa fa-lg icon-move-hold-up" aria-hidden="true"></i>
                             </a>
 
-                            <a class="hold-arrow" title="Move hold to top" data-op="cud-move" data-where="top" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                            <a
+                                class="hold-arrow"
+                                title="Move hold to top"
+                                data-op="cud-move"
+                                data-where="top"
+                                data-first_priority="[% first_priority | html %]"
+                                data-last_priority="[% last_priority | html %]"
+                                data-prev_priority="[% prev_priority | html %]"
+                                data-next_priority="[% next_priority | html %]"
+                                data-borrowernumber="[% hold.borrowernumber | html %]"
+                                data-biblionumber="[% hold.biblionumber | html %]"
+                                data-reserve_id="[% hold.reserve_id | html %]"
+                                data-date="[% hold.date | html %]"
+                            >
                                 <i class="fa fa-lg icon-move-hold-top" aria-hidden="true"></i>
                             </a>
 
-                            <a class="hold-arrow" title="Move hold to bottom" data-op="cud-move" data-where="bottom" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                            <a
+                                class="hold-arrow"
+                                title="Move hold to bottom"
+                                data-op="cud-move"
+                                data-where="bottom"
+                                data-first_priority="[% first_priority | html %]"
+                                data-last_priority="[% last_priority | html %]"
+                                data-prev_priority="[% prev_priority | html %]"
+                                data-next_priority="[% next_priority | html %]"
+                                data-borrowernumber="[% hold.borrowernumber | html %]"
+                                data-biblionumber="[% hold.biblionumber | html %]"
+                                data-reserve_id="[% hold.reserve_id | html %]"
+                                data-date="[% hold.date | html %]"
+                            >
                                 <i class="fa fa-lg icon-move-hold-bottom" aria-hidden="true"></i>
                             </a>
 
-                            <a class="hold-arrow" title="Move hold down" data-op="cud-move" data-where="down" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                            <a
+                                class="hold-arrow"
+                                title="Move hold down"
+                                data-op="cud-move"
+                                data-where="down"
+                                data-first_priority="[% first_priority | html %]"
+                                data-last_priority="[% last_priority | html %]"
+                                data-prev_priority="[% prev_priority | html %]"
+                                data-next_priority="[% next_priority | html %]"
+                                data-borrowernumber="[% hold.borrowernumber | html %]"
+                                data-biblionumber="[% hold.biblionumber | html %]"
+                                data-reserve_id="[% hold.reserve_id | html %]"
+                                data-date="[% hold.date | html %]"
+                            >
                                 <i class="fa fa-lg icon-move-hold-down" aria-hidden="true"></i>
                             </a>
                         </td>
-            [%- ELSE -%]
-                <td></td>
-            [%- END -%]
+                    [%- ELSE -%]
+                        <td></td>
+                    [%- END -%]
                 [%- END -%]
-                <td>
-                    [% INCLUDE 'patron-title.inc' patron=hold.patron hide_patron_infos_if_needed=1 %]
-                </td>
+                <td> [% INCLUDE 'patron-title.inc' patron=hold.patron hide_patron_infos_if_needed=1 %] </td>
                 <td>[% hold.notes | html | html_line_break %]</td>
                 <td data-order="[% hold.date| html %]">
                     [% IF Koha.Preference('AllowHoldDateInFuture') %]
@@ -134,7 +184,7 @@
                     [%- IF ( hold.found ) -%]
                         <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
                         [%- IF ( hold.atdestination ) -%]
-                                Item waiting at <strong> [% hold.wbrname | html %]</strong>[% IF hold.desk_name %], [% hold.desk_name | html %],[% END %] since [% hold.waiting_date | $KohaDates %]
+                            Item waiting at <strong> [% hold.wbrname | html %]</strong>[% IF hold.desk_name %], [% hold.desk_name | html %],[% END %] since [% hold.waiting_date | $KohaDates %]
                         [%- ELSIF (hold.intransit) -%]
                             Item being transferred to <strong> [% hold.wbrname | html %]</strong>
                         [%- ELSIF (hold.inprocessing) -%]
@@ -146,15 +196,11 @@
                         [%- IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 -%]
                             [% Branches.GetName(hold.branchcode) | html %] <input type="hidden" name="pickup" value="[% hold.branchcode | html %]" />
                         [%- ELSE -%]
-                            <select class="pickup_location_dropdown"
-                                    data-selected="[% hold.branchcode | html %]"
-                                    data-hold-id="[% hold.reserve_id | html %]"
-                                    data-pickup-location-source="hold"
-                                    name="pickup">
+                            <select class="pickup_location_dropdown" data-selected="[% hold.branchcode | html %]" data-hold-id="[% hold.reserve_id | html %]" data-pickup-location-source="hold" name="pickup">
                                 <option selected="selected" value="[% hold.branchcode | html %]">[% Branches.GetName(hold.branchcode) | html %]</option>
                                 <option value="" disabled="disabled" class="loading">Loading...</option>
                             </select>
-                            <img class="loading_[% hold.reserve_id | html %]" src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" style="display:none;"/>
+                            <img class="loading_[% hold.reserve_id | html %]" src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" style="display:none;" />
                         [%- END -%]
                     [%- END -%]
                 </td>
@@ -182,12 +228,14 @@
                                         <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                                     </a>
                                 [%- ELSE -%]
-                                        <select name="change_hold_type_[% hold.reserve_id | html %]">
-                                        <option selected="selected" value="">Only item [%- IF ( hold.barcodenumber ) -%]
-                                            [%- hold.barcodenumber | html -%]
-                                        [%- ELSE -%]
-                                            No barcode
-                                        [%- END -%]
+                                    <select name="change_hold_type_[% hold.reserve_id | html %]">
+                                        <option selected="selected" value=""
+                                            >Only item
+                                            [%- IF ( hold.barcodenumber ) -%]
+                                                [%- hold.barcodenumber | html -%]
+                                            [%- ELSE -%]
+                                                No barcode
+                                            [%- END -%]
                                         </option>
                                         <option value="1">Next available</option>
                                     </select>
@@ -214,25 +262,41 @@
                         [%- END -%]
                     [%- END -%]
                     [%- IF hold.non_priority -%]
-                        <br><i>Non priority hold</i>
+                        <br /><i>Non priority hold</i>
                     [%- END -%]
                 </td>
                 [%- IF ( CAN_user_reserveforothers_modify_holds_priority ) -%]
-                [%- UNLESS hold.found -%]
+                    [%- UNLESS hold.found -%]
                         <td>
                             [% IF ( hold.lowestPriority ) %]
-                                <a class="hold-arrow" title="Remove lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                                <a
+                                    class="hold-arrow"
+                                    title="Remove lowest priority"
+                                    data-op="cud-setLowestPriority"
+                                    data-borrowernumber="[% hold.borrowernumber | html %]"
+                                    data-biblionumber="[% hold.biblionumber | html %]"
+                                    data-reserve_id="[% hold.reserve_id | html %]"
+                                    data-date="[% hold.date | html %]"
+                                >
                                     <i class="fa fa-lg fa-rotate-90 icon-unset-lowest" aria-hidden="true"></i>
                                 </a>
                             [% ELSE %]
-                                <a class="hold-arrow" title="Set lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                                <a
+                                    class="hold-arrow"
+                                    title="Set lowest priority"
+                                    data-op="cud-setLowestPriority"
+                                    data-borrowernumber="[% hold.borrowernumber | html %]"
+                                    data-biblionumber="[% hold.biblionumber | html %]"
+                                    data-reserve_id="[% hold.reserve_id | html %]"
+                                    data-date="[% hold.date | html %]"
+                                >
                                     <i class="fa fa-lg fa-rotate-90 icon-set-lowest" aria-hidden="true"></i>
                                 </a>
                             [% END %]
                         </td>
-            [%- ELSE -%]
-                <td></td>
-            [%- END -%]
+                    [%- ELSE -%]
+                        <td></td>
+                    [%- END -%]
                 [%- END -%]
                 <td>
                     <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="#">
@@ -253,19 +317,45 @@
                             [% END %]
 
                             [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
-                                <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>
-                                <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | html %]" class="flatpickr" data-flatpickr-futuredate="true" />
+                                <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %]on[% ELSE %]until[% END %]</label>
+                                <input
+                                    type="text"
+                                    name="suspend_until_[% hold.reserve_id | html %]"
+                                    id="suspend_until_[% hold.reserve_id | html %]"
+                                    size="10"
+                                    value="[% hold.suspend_until | html %]"
+                                    class="flatpickr"
+                                    data-flatpickr-futuredate="true"
+                                />
                             [%- ELSE -%]
-                                <input type="hidden" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" value=""/>
+                                <input type="hidden" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" value="" />
                             [%- END -%]
                         [%- END -%]
                     [%- END # IF SuspendHoldsIntranet -%]
                     [%- IF ( hold.found ) -%]
-                        <a class="btn btn-default  submit-form-link" href="#" id="revert_hold_[% hold.reserve_id | html %]" data-op="cud-move" data-where="down" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="0" data-next_priority="1" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-itemnumber="[% hold.itemnumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]" data-action="request.pl" data-method="post">[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]</a>
+                        <a
+                            class="btn btn-default  submit-form-link"
+                            href="#"
+                            id="revert_hold_[% hold.reserve_id | html %]"
+                            data-op="cud-move"
+                            data-where="down"
+                            data-first_priority="[% first_priority | html %]"
+                            data-last_priority="[% last_priority | html %]"
+                            data-prev_priority="0"
+                            data-next_priority="1"
+                            data-borrowernumber="[% hold.borrowernumber | html %]"
+                            data-biblionumber="[% hold.biblionumber | html %]"
+                            data-itemnumber="[% hold.itemnumber | html %]"
+                            data-reserve_id="[% hold.reserve_id | html %]"
+                            data-date="[% hold.date | html %]"
+                            data-action="request.pl"
+                            data-method="post"
+                            >[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]</a
+                        >
                     [%- END -%]
                 </td>
                 [% IF ( hold.intransit || hold.atdestination ) %]
-                    <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id="[% hold.reserve_id | html %]"></td>
+                    <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id="[% hold.reserve_id | html %]" /></td>
                 [% ELSE %]
                     <td></td>
                 [% END %]

@@ -39,10 +39,14 @@ is( $msg_count, 6, 'correct message count returned' );
 is( $messages->[0]->message_type, 'INVOIC', 'Message shows correct type' );
 
 my $expected_date = '20140729';
-is( $messages->[0]->message_date,
-    $expected_date, 'Message date correctly returned' );
-is( $messages->[0]->tax_point_date,
-    $expected_date, 'Tax point date correctly returned' );
+is(
+    $messages->[0]->message_date,
+    $expected_date, 'Message date correctly returned'
+);
+is(
+    $messages->[0]->tax_point_date,
+    $expected_date, 'Tax point date correctly returned'
+);
 
 my $expected_invoicenumber = '01975490';
 
@@ -51,8 +55,10 @@ my $invoicenumber = $messages->[1]->docmsg_number();
 is( $messages->[0]->buyer_ean,    '5013546121974', 'Buyer ean correct' );
 is( $messages->[0]->supplier_ean, '5013546025078', 'Supplier ean correct' );
 
-is( $invoicenumber, $expected_invoicenumber,
-    'correct invoicenumber extracted' );
+is(
+    $invoicenumber, $expected_invoicenumber,
+    'correct invoicenumber extracted'
+);
 
 my $lines = $messages->[1]->lineitems();
 
@@ -91,9 +97,9 @@ my $qty_invoiced = $lines->[7]->quantity_invoiced;
 
 is( $qty_invoiced, 1, 'quantity_invoiced returns correct value' );
 
-my ($lt, $excl) = Koha::EDI::_get_invoiced_price($lines->[7], 1);
-is( $lt, 4.55, 'invoiced price calculated');
-is($excl, 4.55, 'Price excluding tax returned correctly');
+my ( $lt, $excl ) = Koha::EDI::_get_invoiced_price( $lines->[7], 1 );
+is( $lt,   4.55, 'invoiced price calculated' );
+is( $excl, 4.55, 'Price excluding tax returned correctly' );
 
-($lt, $excl) = Koha::EDI::_get_invoiced_price($lines->[7], 2);
-is( $lt, 4.55 / 2, 'invoiced pricei calculated for copies > 1');
+( $lt, $excl ) = Koha::EDI::_get_invoiced_price( $lines->[7], 2 );
+is( $lt, 4.55 / 2, 'invoiced pricei calculated for copies > 1' );

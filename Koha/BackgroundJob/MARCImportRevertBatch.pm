@@ -70,20 +70,19 @@ sub process {
     try {
         $schema->storage->txn_begin;
         ( $num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored ) =
-          BatchRevertRecords( $import_batch_id ); # TODO BatchRevertRecords still needs a progress_callback
+            BatchRevertRecords($import_batch_id);    # TODO BatchRevertRecords still needs a progress_callback
         $schema->storage->txn_commit;
 
         my $count = $num_deleted + $num_reverted;
-        if( $count ) {
-            $self->set({ progress => $count, size => $count });
-        } else { # TODO Nothing happened? Refine later
-            $self->set({ progress => 0, status => 'failed' });
+        if ($count) {
+            $self->set( { progress => $count, size => $count } );
+        } else {                                     # TODO Nothing happened? Refine later
+            $self->set( { progress => 0, status => 'failed' } );
         }
-    }
-    catch {
+    } catch {
         warn $_;
         $schema->storage->txn_rollback;
-        $self->set({ progress => 0, status => 'failed' });
+        $self->set( { progress => 0, status => 'failed' } );
     };
 
     my $report = {
@@ -109,13 +108,15 @@ Enqueue the new job
 =cut
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
-    $self->SUPER::enqueue({
-        job_size  => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
-        job_args  => $args,
-        job_queue => 'long_tasks',
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size  => Koha::Import::Records->search( { import_batch_id => $args->{import_batch_id} } )->count,
+            job_args  => $args,
+            job_queue => 'long_tasks',
+        }
+    );
 }
 
 1;

@@ -9,11 +9,11 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use C4::Context;
 use C4::HoldsQueue qw(CreateQueue);
-use C4::Log qw( cronlogaction );
+use C4::Log        qw( cronlogaction );
 use Koha::Script -cron;
 
 =head1 NAME

@@ -59,9 +59,9 @@ sub is_overdue {
     $dt ||= dt_from_string();
 
     my $is_overdue =
-      DateTime->compare( dt_from_string( $self->date_due, 'sql' ), $dt ) == -1
-      ? 1
-      : 0;
+        DateTime->compare( dt_from_string( $self->date_due, 'sql' ), $dt ) == -1
+        ? 1
+        : 0;
     return $is_overdue;
 }
 
@@ -74,9 +74,9 @@ Return the checked out item
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $item_rs = $self->_result->item;
-    return Koha::Item->_new_from_dbic( $item_rs );
+    return Koha::Item->_new_from_dbic($item_rs);
 }
 
 =head3 account_lines
@@ -88,9 +88,9 @@ Return the checked out account_lines
 =cut
 
 sub account_lines {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $account_lines_rs = $self->_result->account_lines;
-    return Koha::Account::Lines->_new_from_dbic( $account_lines_rs );
+    return Koha::Account::Lines->_new_from_dbic($account_lines_rs);
 }
 
 =head3 overdue_fines
@@ -102,9 +102,9 @@ Return the account lines for just the overdue fines
 =cut
 
 sub overdue_fines {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $account_lines_rs = $self->_result->account_lines->search( { debit_type_code => 'OVERDUE' } );
-    return Koha::Account::Lines->_new_from_dbic( $account_lines_rs );
+    return Koha::Account::Lines->_new_from_dbic($account_lines_rs);
 }
 
 =head3 library
@@ -116,9 +116,9 @@ Return the library in which the transaction took place
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $library_rs = $self->_result->library;
-    return Koha::Library->_new_from_dbic( $library_rs );
+    return Koha::Library->_new_from_dbic($library_rs);
 }
 
 =head3 patron
@@ -130,9 +130,9 @@ Return the patron for who the checkout has been done
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $patron_rs = $self->_result->patron;
-    return Koha::Patron->_new_from_dbic( $patron_rs );
+    return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
 =head3 issuer
@@ -144,10 +144,10 @@ Return the patron by whom the checkout was done
 =cut
 
 sub issuer {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $issuer_rs = $self->_result->issuer;
     return unless $issuer_rs;
-    return Koha::Patron->_new_from_dbic( $issuer_rs );
+    return Koha::Patron->_new_from_dbic($issuer_rs);
 }
 
 =head3 renewals
@@ -159,10 +159,10 @@ Return a Koha::Checkouts::Renewals set attached to this checkout
 =cut
 
 sub renewals {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $renewals_rs = $self->_result->renewals;
     return unless $renewals_rs;
-    return Koha::Checkouts::Renewals->_new_from_dbic( $renewals_rs );
+    return Koha::Checkouts::Renewals->_new_from_dbic($renewals_rs);
 }
 
 =head3 attempt_auto_renew
@@ -278,15 +278,17 @@ sub claim_returned {
 
                 my $ClaimReturnedChargeFee = C4::Context->preference('ClaimReturnedChargeFee');
                 $charge_lost_fee =
-                    $ClaimReturnedChargeFee eq 'charge'    ? 1
-                : $ClaimReturnedChargeFee eq 'no_charge' ? 0
-                :   $charge_lost_fee;    # $ClaimReturnedChargeFee eq 'ask'
+                      $ClaimReturnedChargeFee eq 'charge'    ? 1
+                    : $ClaimReturnedChargeFee eq 'no_charge' ? 0
+                    :                                          $charge_lost_fee;    # $ClaimReturnedChargeFee eq 'ask'
 
-                if ( $charge_lost_fee ) {
+                if ($charge_lost_fee) {
                     C4::Circulation::LostItem( $self->itemnumber, 'claim_returned' );
-                }
-                elsif ( C4::Context->preference( 'MarkLostItemsAsReturned' ) =~ m/claim_returned/ ) {
-                    C4::Circulation::MarkIssueReturned( $self->borrowernumber, $self->itemnumber, undef, $self->patron->privacy );
+                } elsif ( C4::Context->preference('MarkLostItemsAsReturned') =~ m/claim_returned/ ) {
+                    C4::Circulation::MarkIssueReturned(
+                        $self->borrowernumber, $self->itemnumber, undef,
+                        $self->patron->privacy
+                    );
                 }
 
                 if ($refund_lost_fee) {
@@ -296,14 +298,13 @@ sub claim_returned {
                 return $claim;
             }
         );
-    }
-    catch {
+    } catch {
         if ( $_->isa('Koha::Exception') ) {
             $_->rethrow();
-        }
-        else {
+        } else {
+
             # ?
-            Koha::Exception->throw( "Unhandled exception" );
+            Koha::Exception->throw("Unhandled exception");
         }
     };
 }

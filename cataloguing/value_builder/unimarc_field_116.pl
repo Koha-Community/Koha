@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,8 +20,8 @@
 use Modern::Perl;
 
 use Koha::Util::FrameworkPlugin qw(wrapper);
-use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use C4::Auth                    qw( get_template_and_user );
+use CGI                         qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
@@ -44,7 +43,6 @@ function Clic$field_number(event) {
     return ( $field_number, $res );
 }
 
-
 sub plugin {
     my ($input) = @_;
     my $index   = $input->param('index');
@@ -56,23 +54,34 @@ sub plugin {
             template_name => "cataloguing/value_builder/unimarc_field_116.tt",
             query         => $input,
             type          => "intranet",
-            flagsrequired   => { editcatalogue => '*' },
+            flagsrequired => { editcatalogue => '*' },
         }
     );
-    my $f1 = substr( $result, 0, 1 ); $f1 = wrapper( $f1 ) if $f1;
-    my $f2 = substr( $result, 1, 1 ); $f2 = wrapper( $f2 ) if $f2;
-    my $f3 = substr( $result, 2, 1 ); $f3 = wrapper( $f3 ) if $f3;
-    my $f4 = substr( $result, 3, 1 ); $f4 = wrapper( $f4 ) if $f4;
+    my $f1 = substr( $result, 0, 1 );
+    $f1 = wrapper($f1) if $f1;
+    my $f2 = substr( $result, 1, 1 );
+    $f2 = wrapper($f2) if $f2;
+    my $f3 = substr( $result, 2, 1 );
+    $f3 = wrapper($f3) if $f3;
+    my $f4 = substr( $result, 3, 1 );
+    $f4 = wrapper($f4) if $f4;
 
-    my $f5 = substr( $result, 4, 2 ); $f5 = wrapper( $f5 ) if $f5;
-    my $f6 = substr( $result, 6, 2 ); $f6 = wrapper( $f6 ) if $f6;
-    my $f7 = substr( $result, 8, 2 ); $f7 = wrapper( $f7 ) if $f7;
+    my $f5 = substr( $result, 4, 2 );
+    $f5 = wrapper($f5) if $f5;
+    my $f6 = substr( $result, 6, 2 );
+    $f6 = wrapper($f6) if $f6;
+    my $f7 = substr( $result, 8, 2 );
+    $f7 = wrapper($f7) if $f7;
 
-    my $f8  = substr( $result, 10, 2 ); $f8  = wrapper( $f8 ) if $f8;
-    my $f9  = substr( $result, 12, 2 ); $f9  = wrapper( $f9 ) if $f9;
-    my $f10 = substr( $result, 14, 2 ); $f10 = wrapper( $f10 ) if $f10;
+    my $f8 = substr( $result, 10, 2 );
+    $f8 = wrapper($f8) if $f8;
+    my $f9 = substr( $result, 12, 2 );
+    $f9 = wrapper($f9) if $f9;
+    my $f10 = substr( $result, 14, 2 );
+    $f10 = wrapper($f10) if $f10;
 
-    my $f11 = substr( $result, 16, 2 ); $f11 = wrapper( $f11 ) if $f11;
+    my $f11 = substr( $result, 16, 2 );
+    $f11 = wrapper($f11) if $f11;
 
     $template->param(
         index     => $index,

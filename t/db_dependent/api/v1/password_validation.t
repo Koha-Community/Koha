@@ -39,7 +39,7 @@ $schema->storage->txn_begin;
 my $librarian = $builder->build_object(
     {
         class => 'Koha::Patrons',
-        value => { flags => 2 ** 4 } # borrowers flag = 4
+        value => { flags => 2**4 }    # borrowers flag = 4
     }
 );
 my $password = 'thePassword123';
@@ -59,15 +59,13 @@ subtest 'password validation - account lock out' => sub {
         password   => "bad",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400)
-      ->json_is({ error => q{Validation failed} });
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
+        ->json_is( { error => q{Validation failed} } );
 
     $json->{password} = $password;
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400)
-      ->json_is({ error => q{Validation failed} });
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
+        ->json_is( { error => q{Validation failed} } );
 
     $schema->storage->txn_rollback;
 };
@@ -81,7 +79,7 @@ subtest 'password validation - unauthorized user' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2 ** 2 } # catalogue flag = 2
+            value => { flags => 2**2 }    # catalogue flag = 2
         }
     );
     my $password = 'thePassword123';
@@ -93,9 +91,8 @@ subtest 'password validation - unauthorized user' => sub {
         password   => "test",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(403)
-      ->json_is('/error' => 'Authorization failure. Missing required permission(s).');
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(403)
+        ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $schema->storage->txn_rollback;
 };
@@ -111,8 +108,7 @@ subtest 'password validation - unauthenticated user' => sub {
     };
 
     $t->post_ok( "/api/v1/auth/password/validation" => json => $json )
-      ->json_is( '/error' => 'Authentication failure.' )
-      ->status_is(401);
+        ->json_is( '/error' => 'Authentication failure.' )->status_is(401);
 
     $schema->storage->txn_rollback;
 };
@@ -193,7 +189,8 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-        ->status_is( 400, 'Validating using a cardnumber as userid fails' )->json_is( { error => 'Validation failed' } );
+        ->status_is( 400, 'Validating using a cardnumber as userid fails' )
+        ->json_is( { error => 'Validation failed' } );
 
     $json = {
         identifier => $userid,

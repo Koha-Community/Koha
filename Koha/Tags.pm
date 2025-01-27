@@ -17,7 +17,6 @@ package Koha::Tags;
 
 use Modern::Perl;
 
-
 use Koha::Tag;
 
 use base qw(Koha::Objects);

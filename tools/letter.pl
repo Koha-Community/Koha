@@ -46,46 +46,49 @@ use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output  qw( output_html_with_http_headers );
 use C4::Letters qw( GetMessageTransportTypes );
-use C4::Log qw( logaction );
+use C4::Log     qw( logaction );
 use Koha::Notice::Templates;
 use Koha::Patron::Attribute::Types;
 
 # $protected_letters = protected_letters()
 # - return a hashref of letter_codes representing letters that should never be deleted
 sub protected_letters {
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $codes = $dbh->selectall_arrayref(q{SELECT DISTINCT letter_code FROM message_transports});
     return { map { $_->[0] => 1 } @{$codes} };
 }
 
-our $input       = CGI->new;
+our $input = CGI->new;
 my $searchfield = $input->param('searchfield');
-our $branchcode  = $input->param('branchcode');
+our $branchcode = $input->param('branchcode');
 $branchcode = '' if defined $branchcode and $branchcode eq '*';
-my $code        = $input->param('code');
-my $module      = $input->param('module') || '';
-my $content     = $input->param('content');
-my $op          = $input->param('op') || '';
-my $redirect    = $input->param('redirect');
-my $section     = $input->param('section');
-my $langtab     = $input->param('langtab');
+my $code     = $input->param('code');
+my $module   = $input->param('module') || '';
+my $content  = $input->param('content');
+my $op       = $input->param('op') || '';
+my $redirect = $input->param('redirect');
+my $section  = $input->param('section');
+my $langtab  = $input->param('langtab');
 
 my $dbh = C4::Context->dbh;
 
 our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     {
-        template_name   => 'tools/letter.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { tools => 'edit_notices' },
+        template_name => 'tools/letter.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { tools => 'edit_notices' },
     }
 );
 
-our $my_branch = C4::Context->preference("IndependentBranches") && !$staffflags->{'superlibrarian'}
-  ?  C4::Context->userenv()->{'branch'}
-  : undef;
+our $my_branch =
+    C4::Context->preference("IndependentBranches")
+    && !$staffflags->{'superlibrarian'}
+    ? C4::Context->userenv()->{'branch'}
+    : undef;
+
 # we show only the TMPL_VAR names $op
 
 $template->param(
@@ -98,51 +101,50 @@ $template->param(
 
 if ( $op eq 'cud-add_validate' or $op eq 'cud-copy_validate' ) {
     add_validate();
-    if( $redirect eq "just_save" ){
-        print $input->redirect("/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=$branchcode&module=$module&code=$code&redirect=done&section=$section&langtab=$langtab");
+    if ( $redirect eq "just_save" ) {
+        print $input->redirect(
+            "/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=$branchcode&module=$module&code=$code&redirect=done&section=$section&langtab=$langtab"
+        );
         exit;
     } else {
-        $op = q{}; # we return to the default screen for the next operation
+        $op = q{};    # we return to the default screen for the next operation
     }
 }
-if ($op eq 'cud-copy_form') {
+if ( $op eq 'cud-copy_form' ) {
     my $oldbranchcode = $input->param('oldbranchcode') || q||;
-    my $branchcode = $input->param('branchcode');
-    add_form($oldbranchcode, $module, $code);
+    my $branchcode    = $input->param('branchcode');
+    add_form( $oldbranchcode, $module, $code );
     $template->param(
         oldbranchcode => $oldbranchcode,
-        branchcode => $branchcode,
-        copy_form => 1,
-        modify => 0,
+        branchcode    => $branchcode,
+        copy_form     => 1,
+        modify        => 0,
     );
-}
-elsif ( $op eq 'add_form' ) {
-    add_form($branchcode, $module, $code);
-}
-elsif ( $op eq 'delete_confirm' ) {
-    delete_confirm($branchcode, $module, $code);
-}
-elsif ( $op eq 'cud-delete_confirmed' ) {
-    delete_confirmed($branchcode, $module, $code);
-    $op = q{}; # next operation is to return to default screen
-}
-else {
-    default_display($branchcode,$searchfield);
+} elsif ( $op eq 'add_form' ) {
+    add_form( $branchcode, $module, $code );
+} elsif ( $op eq 'delete_confirm' ) {
+    delete_confirm( $branchcode, $module, $code );
+} elsif ( $op eq 'cud-delete_confirmed' ) {
+    delete_confirmed( $branchcode, $module, $code );
+    $op = q{};    # next operation is to return to default screen
+} else {
+    default_display( $branchcode, $searchfield );
 }
 
 # Do this last as delete_confirmed resets
 if ($op) {
-    $template->param($op  => 1);
+    $template->param( $op => 1 );
 } else {
-    $template->param(no_op_set => 1);
+    $template->param( no_op_set => 1 );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub add_form {
-    my ( $branchcode,$module, $code ) = @_;
+    my ( $branchcode, $module, $code ) = @_;
 
     my $letters;
+
     # if code has been passed we can identify letter and its an update action
     if ($code) {
         $letters = C4::Letters::GetLetterTemplates(
@@ -155,8 +157,8 @@ sub add_form {
     }
 
     my $message_transport_types = GetMessageTransportTypes();
-    my $templates = { map { $_ => { message_transport_type => $_ } } sort @$message_transport_types };
-    my %letters = ( default => { templates => {%$templates} } );
+    my $templates               = { map { $_ => { message_transport_type => $_ } } sort @$message_transport_types };
+    my %letters                 = ( default => { templates => {%$templates} } );
 
     my $translated_languages = C4::Languages::getTranslatedLanguages(
         'opac',
@@ -299,13 +301,13 @@ sub add_form {
     my $preview_is_available = 0;
 
     if ($code) {
-        $preview_is_available = grep {$_ eq $code } qw( CHECKIN CHECKOUT HOLD_SLIP );
+        $preview_is_available = grep { $_ eq $code } qw( CHECKIN CHECKOUT HOLD_SLIP );
     }
 
     $template->param(
-        module     => $module,
-        SQLfieldnames => $field_selection,
-        branchcode => $branchcode,
+        module               => $module,
+        SQLfieldnames        => $field_selection,
+        branchcode           => $branchcode,
         preview_is_available => $preview_is_available,
     );
     return;
@@ -313,16 +315,17 @@ sub add_form {
 
 sub add_validate {
     my $dbh        = C4::Context->dbh;
-    my $branchcode    = $input->param('branchcode');
-    my $module        = $input->param('module');
-    my $oldmodule     = $input->param('oldmodule');
-    my $code          = $input->param('code');
-    my $name          = $input->param('name');
-    my @mtt           = $input->multi_param('message_transport_type');
-    my @title         = $input->multi_param('title');
-    my @content       = $input->multi_param('content');
-    my @lang          = $input->multi_param('lang');
-    for my $mtt ( @mtt ) {
+    my $branchcode = $input->param('branchcode');
+    my $module     = $input->param('module');
+    my $oldmodule  = $input->param('oldmodule');
+    my $code       = $input->param('code');
+    my $name       = $input->param('name');
+    my @mtt        = $input->multi_param('message_transport_type');
+    my @title      = $input->multi_param('title');
+    my @content    = $input->multi_param('content');
+    my @lang       = $input->multi_param('lang');
+
+    for my $mtt (@mtt) {
         my $lang       = shift @lang;
         my $style      = $input->param("style_$lang");
         my $format_all = $input->param("format_all_$lang");
@@ -335,7 +338,7 @@ sub add_validate {
         my $is_html = $input->param("is_html_$mtt\_$lang");
         my $title   = shift @title;
         my $content = shift @content;
-        my $letter = Koha::Notice::Templates->find(
+        my $letter  = Koha::Notice::Templates->find(
             {
                 module                 => $oldmodule,
                 code                   => $code,
@@ -346,14 +349,16 @@ sub add_validate {
         );
 
         unless ( $title and $content ) {
+
             # Delete this mtt if no title or content given
             delete_confirmed( $branchcode, $oldmodule, $code, $mtt, $lang );
             next;
-        }
-        elsif ( $letter ) {
-            logaction( 'NOTICES', 'MODIFY', $letter->id, $content,
-                'Intranet' )
-              if ( C4::Context->preference("NoticesLog")
+        } elsif ($letter) {
+            logaction(
+                'NOTICES', 'MODIFY', $letter->id, $content,
+                'Intranet'
+                )
+                if ( C4::Context->preference("NoticesLog")
                 && $content ne $letter->content );
 
             $letter->set(
@@ -384,21 +389,22 @@ sub add_validate {
                     style                  => $style
                 }
             )->store;
-            logaction( 'NOTICES', 'CREATE', $letter->id, $letter->content,
-                'Intranet' )
-              if C4::Context->preference("NoticesLog");
+            logaction(
+                'NOTICES', 'CREATE', $letter->id, $letter->content,
+                'Intranet'
+            ) if C4::Context->preference("NoticesLog");
         }
     }
+
     # set up default display
     default_display($branchcode);
     return 1;
 }
 
 sub delete_confirm {
-    my ($branchcode, $module, $code) = @_;
-    my $dbh = C4::Context->dbh;
-    my $letter = Koha::Notice::Templates->search(
-        { module => $module, code => $code, branchcode => $branchcode } );
+    my ( $branchcode, $module, $code ) = @_;
+    my $dbh    = C4::Context->dbh;
+    my $letter = Koha::Notice::Templates->search( { module => $module, code => $code, branchcode => $branchcode } );
     $template->param(
         letter => $letter ? $letter->next : undef,
     );
@@ -412,14 +418,15 @@ sub delete_confirmed {
             branchcode => $branchcode || '',
             module     => $module,
             code       => $code,
-            ( $mtt ? ( message_transport_type => $mtt ) : () ),
-            ( $lang ? ( lang => $lang ) : () ),
+            ( $mtt  ? ( message_transport_type => $mtt )  : () ),
+            ( $lang ? ( lang                   => $lang ) : () ),
         }
     );
     while ( my $letter = $letters->next ) {
-        logaction( 'NOTICES', 'DELETE', $letter->id, $letter->content,
-            'Intranet' )
-          if C4::Context->preference("NoticesLog");
+        logaction(
+            'NOTICES', 'DELETE', $letter->id, $letter->content,
+            'Intranet'
+        ) if C4::Context->preference("NoticesLog");
         $letter->delete;
     }
 
@@ -429,40 +436,38 @@ sub delete_confirmed {
 }
 
 sub retrieve_letters {
-    my ($branchcode, $searchstring) = @_;
+    my ( $branchcode, $searchstring ) = @_;
 
     $branchcode = $my_branch if $branchcode && $my_branch;
 
     my $dbh = C4::Context->dbh;
-    my ($sql, @where, @args);
+    my ( $sql, @where, @args );
     $sql = "SELECT branchcode, module, code, name, branchname, MAX(updated_on) as updated_on
             FROM letter
             LEFT OUTER JOIN branches USING (branchcode)
     ";
-    if ($searchstring && $searchstring=~m/(\S+)/) {
+    if ( $searchstring && $searchstring =~ m/(\S+)/ ) {
         $searchstring = $1 . q{%};
         push @where, 'code LIKE ?';
-        push @args, $searchstring;
-    }
-    elsif ($branchcode) {
+        push @args,  $searchstring;
+    } elsif ($branchcode) {
         push @where, 'branchcode = ?';
-        push @args, $branchcode || '';
-    }
-    elsif ($my_branch) {
+        push @args,  $branchcode || '';
+    } elsif ($my_branch) {
         push @where, "(branchcode = ? OR branchcode = '')";
-        push @args, $my_branch;
+        push @args,  $my_branch;
     }
 
-    $sql .= " WHERE ".join(" AND ", @where) if @where;
+    $sql .= " WHERE " . join( " AND ", @where ) if @where;
     $sql .= " GROUP BY branchcode,module,code,name,branchname";
 
     $sql .= " ORDER BY module, code, branchcode";
 
-    return $dbh->selectall_arrayref($sql, { Slice => {} }, @args);
+    return $dbh->selectall_arrayref( $sql, { Slice => {} }, @args );
 }
 
 sub default_display {
-    my ($branchcode, $searchfield) = @_;
+    my ( $branchcode, $searchfield ) = @_;
 
     unless ( defined $branchcode ) {
         if ( C4::Context->preference('DefaultToLoggedInLibraryNoticesSlips') ) {
@@ -470,22 +475,22 @@ sub default_display {
         }
     }
 
-    if ( $searchfield  ) {
-        $template->param( search      => 1 );
+    if ($searchfield) {
+        $template->param( search => 1 );
     }
-    my $results = retrieve_letters($branchcode,$searchfield);
+    my $results = retrieve_letters( $branchcode, $searchfield );
 
-    my $loop_data = [];
+    my $loop_data         = [];
     my $protected_letters = protected_letters();
 
-    foreach my $row (@{$results}) {
+    foreach my $row ( @{$results} ) {
         $row->{protected} = !$row->{branchcode} && $protected_letters->{ $row->{code} };
         push @{$loop_data}, $row;
 
     }
 
     $template->param(
-        letter => $loop_data,
+        letter     => $loop_data,
         branchcode => $branchcode,
     );
 }
@@ -503,7 +508,8 @@ sub add_fields {
 
 sub get_columns_for {
     my $table = shift;
-# FIXME untranslatable
+
+    # FIXME untranslatable
     my %column_map = (
         aqbooksellers => '---BOOKSELLERS---',
         aqorders      => '---ORDERS---',
@@ -512,33 +518,36 @@ sub get_columns_for {
         suggestions   => '---SUGGESTIONS---',
     );
     my @fields = ();
-    if (exists $column_map{$table} ) {
+    if ( exists $column_map{$table} ) {
         push @fields, {
             value => q{},
-            text  => $column_map{$table} ,
+            text  => $column_map{$table},
         };
-    }
-    else {
+    } else {
         my $tlabel = '---' . uc $table;
-        $tlabel.= '---';
+        $tlabel .= '---';
         push @fields, {
             value => q{},
             text  => $tlabel,
         };
     }
 
-    my $sql = "SHOW COLUMNS FROM $table";# TODO not db agnostic
+    my $sql          = "SHOW COLUMNS FROM $table";                                      # TODO not db agnostic
     my $table_prefix = $table . q|.|;
-    my $rows = C4::Context->dbh->selectall_arrayref($sql, { Slice => {} });
-    for my $row (@{$rows}) {
-        next if $row->{'Field'} eq 'timestamp'; # this is really an irrelevant field and there may be other common fields that should be excluded from the list
-        next if $row->{'Field'} eq 'password'; # passwords can no longer be shown in notices so the password field should be removed as a template option
+    my $rows         = C4::Context->dbh->selectall_arrayref( $sql, { Slice => {} } );
+    for my $row ( @{$rows} ) {
+        next
+            if $row->{'Field'} eq 'timestamp'
+            ; # this is really an irrelevant field and there may be other common fields that should be excluded from the list
+        next
+            if $row->{'Field'} eq 'password'
+            ; # passwords can no longer be shown in notices so the password field should be removed as a template option
         push @fields, {
             value => $table_prefix . $row->{Field},
             text  => $table_prefix . $row->{Field},
-        }
+        };
     }
-    if ($table eq 'borrowers') {
+    if ( $table eq 'borrowers' ) {
         my $attribute_types = Koha::Patron::Attribute::Types->search(
             {},
             { order_by => 'code' },
@@ -547,7 +556,7 @@ sub get_columns_for {
             push @fields, {
                 value => "borrower-attribute:" . $at->code,
                 text  => "attribute:" . $at->code,
-            }
+            };
         }
     }
     return @fields;

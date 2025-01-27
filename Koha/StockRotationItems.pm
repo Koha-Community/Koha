@@ -78,41 +78,41 @@ Koha::StockRotationRota->investigate.
 =cut
 
 sub investigate {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $items_report = {
-        items => [],
-        log => [],
-        initiable_items => [],
+        items             => [],
+        log               => [],
+        initiable_items   => [],
         repatriable_items => [],
         advanceable_items => [],
-        indemand_items => [],
-        actionable => 0,
-        stationary => 0,
+        indemand_items    => [],
+        actionable        => 0,
+        stationary        => 0,
     };
     while ( my $item = $self->next ) {
         my $report = $item->investigate;
         if ( $report->{reason} eq 'initiation' ) {
             $items_report->{initiable}++;
             $items_report->{actionable}++;
-            push @{$items_report->{items}}, $report;
-            push @{$items_report->{initiable_items}}, $report;
+            push @{ $items_report->{items} },           $report;
+            push @{ $items_report->{initiable_items} }, $report;
         } elsif ( $report->{reason} eq 'repatriation' ) {
             $items_report->{repatriable}++;
             $items_report->{actionable}++;
-            push @{$items_report->{items}}, $report;
-            push @{$items_report->{repatriable_items}}, $report;
+            push @{ $items_report->{items} },             $report;
+            push @{ $items_report->{repatriable_items} }, $report;
         } elsif ( $report->{reason} eq 'advancement' ) {
             $items_report->{actionable}++;
-            push @{$items_report->{items}}, $report;
-            push @{$items_report->{advanceable_items}}, $report;
+            push @{ $items_report->{items} },             $report;
+            push @{ $items_report->{advanceable_items} }, $report;
         } elsif ( $report->{reason} eq 'in-demand' ) {
             $items_report->{actionable}++;
-            push @{$items_report->{items}}, $report;
-            push @{$items_report->{indemand_items}}, $report;
+            push @{ $items_report->{items} },          $report;
+            push @{ $items_report->{indemand_items} }, $report;
         } else {
             $items_report->{stationary}++;
-            push @{$items_report->{log}}, $report;
+            push @{ $items_report->{log} }, $report;
         }
     }
 

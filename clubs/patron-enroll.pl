@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Clubs;
 use Koha::Club::Enrollment::Fields;
@@ -30,10 +30,10 @@ my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "clubs/patron-enroll.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { clubs => '*' },
+        template_name => "clubs/patron-enroll.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { clubs => '*' },
     }
 );
 
@@ -42,7 +42,8 @@ my $borrowernumber = $cgi->param('borrowernumber');
 my $enrollent_id   = scalar $cgi->param('enrollent_id');
 
 my $club = Koha::Clubs->find($id);
-my @club_enrollment_fields = Koha::Club::Enrollment::Fields->search({'club_enrollment_id'=> $enrollent_id})->as_list;
+my @club_enrollment_fields =
+    Koha::Club::Enrollment::Fields->search( { 'club_enrollment_id' => $enrollent_id } )->as_list;
 
 $template->param(
     club                   => $club,

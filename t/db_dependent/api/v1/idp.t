@@ -178,7 +178,10 @@ subtest 'provider endpoint tests' => sub {
     my $modified_provider_data      = \%modified_provider_data_hash;
     $modified_provider_data->{code} = 'some_code';
 
-    $tx = $t->ua->build_tx( PUT => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id, json => $modified_provider_data );
+    $tx = $t->ua->build_tx(
+        PUT  => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id,
+        json => $modified_provider_data
+    );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
@@ -217,7 +220,10 @@ subtest 'domain endpoint tests' => sub {
 
     my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers' } );
 
-    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains", json => $domain_not_matching );
+    my $tx = $t->ua->build_tx(
+        POST => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains",
+        json => $domain_not_matching
+    );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
@@ -237,7 +243,10 @@ subtest 'domain endpoint tests' => sub {
     $modified_domain_data->{domain} = 'some.domain.com';
 
     $tx = $t->ua->build_tx(
-        PUT  => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains/" . $domain->identity_provider_domain_id,
+              PUT => "/api/v1/auth/identity_providers/"
+            . $provider->identity_provider_id
+            . "/domains/"
+            . $domain->identity_provider_domain_id,
         json => $modified_domain_data
     );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
@@ -245,13 +254,21 @@ subtest 'domain endpoint tests' => sub {
 
     $t->request_ok($tx)->status_is(200);
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains/" . $domain->identity_provider_domain_id );
+    $tx =
+        $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/"
+            . $provider->identity_provider_id
+            . "/domains/"
+            . $domain->identity_provider_domain_id );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
     $t->request_ok($tx)->json_has( '/domain', 'some.domain.com' );
 
-    $tx = $t->ua->build_tx( DELETE => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains/" . $domain->identity_provider_domain_id );
+    $tx =
+        $t->ua->build_tx( DELETE => "/api/v1/auth/identity_providers/"
+            . $provider->identity_provider_id
+            . "/domains/"
+            . $domain->identity_provider_domain_id );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
@@ -307,7 +324,8 @@ sub create_user_and_session {
     my $flags = ( $args->{authorized} ) ? 1 : 0;
 
     my $user = $builder->build(
-        {   source => 'Borrower',
+        {
+            source => 'Borrower',
             value  => { flags => $flags }
         }
     );

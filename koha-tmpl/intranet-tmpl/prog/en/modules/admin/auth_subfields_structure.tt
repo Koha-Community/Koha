@@ -4,28 +4,31 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( add_form ) %]
-        [% t("Edit subfields constraints") | html %] &rsaquo;
-    [% END %]
+<title
+    >[% FILTER collapse %]
+        [% IF ( add_form ) %]
+            [% t("Edit subfields constraints") | html %]
+            &rsaquo;
+        [% END %]
 
-    [% IF ( delete_confirm ) %]
-        [% tx("Confirm deletion of subfield '{subfield}'", {subfield = ass.tagsubfield }) | html %] &rsaquo;
-    [% END %]
+        [% IF ( delete_confirm ) %]
+            [% tx("Confirm deletion of subfield '{subfield}'", {subfield = ass.tagsubfield }) | html %]
+            &rsaquo;
+        [% END %]
 
-    [% IF ( add_form || delete_confirm || else ) %]
-        [% tx("Tag {tag}", { tag = tagfield}) | html %] &rsaquo;
-    [% END %]
+        [% IF ( add_form || delete_confirm || else ) %]
+            [% tx("Tag {tag}", { tag = tagfield}) | html %]
+            &rsaquo;
+        [% END %]
 
-    [% IF ( authtypecode ) %]
-        [% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]
-    [% ELSE %]
-        [% t("Default framework") | html %]
-    [% END %] &rsaquo;
-    [% t("Authority types") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+        [% IF ( authtypecode ) %]
+            [% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]
+        [% ELSE %]
+            [% t("Default framework") | html %]
+        [% END %]
+        &rsaquo; [% t("Authority types") | html %] &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -46,7 +49,7 @@
 
         [% IF ( authtypecode ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri%]">[% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]</a>
+                <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]</a>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
@@ -88,309 +91,344 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% IF ( add_form ) %]
-
-    <h1>[% IF ( use_heading_flags_p ) %]
-    [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints for field [% tagfield | html %] authority [% authtypecode | html %][% END %]
-    [% ELSE %][% action | html %][% END %]</h1>
-    <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
-    <form action="/cgi-bin/koha/admin/auth_subfields_structure.pl" name="Aform" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-add_validate" />
-        <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-        <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
-
-        [% BLOCK outputsubfield %][% FILTER collapse %]
-            [% SWITCH ( subfieldanchor ) %]
-                [%   CASE "@" %]
-                AT
-                [%   CASE "%" %]
-                %
-                [%   CASE  %]
-                [% subfieldanchor | html %]
-            [% END %]
-        [% END %][% END %]
-
-        [% WRAPPER tabs id= "subfieldtabs" %]
-            [% WRAPPER tabs_nav %]
-                [% FOREACH loo IN loop %]
-                    [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.tagsubfield %]
-                    [% WRAPPER tab_item tabname= outputsubfield id= "tab_subfield_${outputsubfield}" %]
-                        [% IF ( loo.new_subfield ) %]
-                            <span>New</span>
-                        [% ELSE %]
-                            [% loo.tagsubfield | html %]
-                        [% END # IF loo.new_subfield%]
-                    [% END # WRAPPER tab_item %]
-                [% END # FOREACH loo %]
-            [% END # /WRAPPER tabs_nav %]
-
-            [% WRAPPER tab_panels %]
-                [% FOREACH loo IN loop %]
-                    [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.tagsubfield %]
-                    [% WRAPPER tab_panel tabname=outputsubfield %]
-                        <fieldset class="rows"><ol>
-
-                            [% IF ( loo.new_subfield ) %]
-                                <li>
-                                    <label for="tagsubfieldinput[% loo.row | html %]">Subfield code: </label>
-                                    <input type="text" name="tagsubfield" value="[% loo.tagsubfield | html %]" size="1" id="tagsubfield" maxlength="1" />
-                                </li>
-                            [% ELSE %]
-                                <li>
-                                    <input type="hidden" name="tagsubfield" value="[% loo.tagsubfield | html %]" />
-                                </li>
-                            [% END %]
-                            <li>
-                                <label for="repeatable[% loo.row | html %]">Repeatable: </label>
-                                [% IF loo.repeatable %]
-                                    <input type="checkbox" id="repeatable[% loo.row | html %]" name="repeatable[% loo.row | html %]" checked="checked" value="1" />
-                                [% ELSE %]
-                                    <input type="checkbox" id="repeatable[% loo.row | html %]" name="repeatable[% loo.row | html %]" value="1" />
-                                [% END %]
-                            </li>
-                            <li>
-                                <label for="mandatory[% loo.row | html %]">Mandatory: </label>
-                                [% IF loo.mandatory %]
-                                    <input type="checkbox" id="mandatory[% loo.row | html %]" name="mandatory[% loo.row | html %]" checked="checked" value="1" />
-                                [% ELSE %]
-                                    <input type="checkbox" id="mandatory[% loo.row | html %]" name="mandatory[% loo.row | html %]" value="1" />
-                                [% END %]
-                            </li>
-                            <li><label for="liblibrarian[% loo.row | html %]">Description in staff interface: </label><input id="liblibrarian[% loo.row | html %]" type="text" name="liblibrarian" value="[% loo.liblibrarian | html_entity %]" size="40" maxlength="255" /></li>
-                            <li><label for="libopac[% loo.row | html %]">Description in OPAC: </label><input type="text" id="libopac[% loo.row | html %]" name="libopac" value="[% loo.libopac | html_entity %]" size="40" maxlength="255" /></li>
-                            <li><label for="tab[% loo.row | html %]">Managed in tab: </label>
-                                <select name="tab" id="tab[% loo.row | html %]">
-                                    [%- IF ( loo.tab ==  -1 ) -%]
-                                    <option value="-1" selected="selected">ignore</option>
-                                    [%- ELSE -%]
-                                    <option value="-1">ignore</option>
-                                    [%- END -%]
-                                [%- FOREACH t IN [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] -%]
-                                    [%- IF ( loo.tab ==  t && t.length>0 ) -%]
-                                    <option value="[%- t | html -%]" selected="selected">[%- t | html -%]</option>
-                                    [%- ELSIF ( loo.tab ==  t ) -%]
-                                    <option value="[%- t | html -%]" selected="selected">&nbsp;</option>
-                                    [%- ELSE -%]
-                                    <option value="[%- t | html -%]">[%- t | html -%]</option>
-                                    [%- END -%]
-                                [%- END -%]
-                                </select>
-                                <div class="hint"><i class="fa-solid fa-triangle-exclamation"></i> <span>Ignore means that the subfield does not display in the record editor and that its value, if any, is deleted from the record</span></div>
-                            </li>
-                            <li>
-                                <fieldset>
-                                    <legend>Display</legend>
-                                    <ol>
-                                        <li><label for="ohidden[% loo.row | html %]">Select to display or not:</label>
-                                            <select name="ohidden" id="ohidden[% loo.row | html %]">
-                                                [%- IF ( loo.hidden ==  0 ) -%]
-                                                <option value= "0" selected="selected">Show all</option>
-                                                <option value="1">Hide all</option>
-                                                [%- ELSE -%]
-                                                [%# All other non-zero values mean: Hide %]
-                                                <option value= "0">Show all</option>
-                                                <option value="1" selected="selected">Hide all</option>
-                                                [%- END -%]
-                                            </select>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </li>
-                            <li>
-                                <fieldset class="rows">
-                                    <legend>Advanced constraints:</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="isurl[% loo.row | html %]">Is a URL:</label>
-                                            [% IF loo.isurl %]
-                                                <input type="checkbox" id="isurl[% loo.row | html %]" name="isurl[% loo.row | html %]" checked="checked" value="1" />
-                                            [% ELSE %]
-                                                <input type="checkbox" id="isurl[% loo.row | html %]" name="isurl[% loo.row | html %]" value="1" />
-                                            [% END %]
-                                            <span class="hint">If checked, it means that the subfield is a URL and can be clicked.</span>
-                                        </li>
-                                        <li>
-                                            <label for="defaultvalue[% loo.row | html %]">Default value:</label>
-                                            <input type="text" name="defaultvalue" id="defaultvalue[% loo.row | html %]" value="[% loo.defaultvalue | html %]" />
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </li>
-                            <li>
-                                <fieldset><legend>Help input</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="kohafield[% loo.row | html %]">Koha field:</label>
-                                            <select name="kohafield" id="kohafield[% loo.row | html %]">
-                                            [%- FOREACH value IN loo.kohafields %]
-                                                [% IF ( value == loo.kohafield  && value.length>0 ) -%]
-                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-                                                [%- ELSIF ( value == loo.kohafield ) -%]
-                                                <option value="[% value | html %]" selected="selected">&nbsp;</option>
-                                                [%- ELSIF ( value.length==0 ) -%]
-                                                <option value="[% value | html %]">&nbsp;</option>
-                                                [%- ELSE -%]
-                                                <option value="[% value | html %]">[% value | html %]</option>
-                                                [%- END -%]
-                                            [%- END %]
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <label for="authorised_value[% loo.row | html %]">Authorized value:</label>
-                                            <select name="authorised_value" id="authorised_value[% loo.row | html %]">
-                                            [%- FOREACH value IN loo.authorised_values %]
-                                                [% IF ( value == loo.authorised_value && value.length>0 ) -%]
-                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-                                                [%- ELSIF ( value == loo.authorised_value ) -%]
-                                                <option value="[% value | html %]" selected>&nbsp;</option>
-                                                [%- ELSIF ( value.length==0 ) -%]
-                                                <option value="[% value | html %]">&nbsp;</option>
-                                                [%- ELSE -%]
-                                                <option value="[% value | html %]">[% value | html %]</option>
-                                                [%- END -%]
-                                            [%- END %]
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <label for="frameworkcode[% loo.row | html %]">Thesaurus:</label>
-                                            <select name="frameworkcode" id="frameworkcode[% loo.row | html %]">
-                                            [%- FOREACH value IN loo.frameworkcodes %]
-                                                [% IF ( value == loo.frameworkcode && value.length>0 ) -%]
-                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-                                                [%- ELSIF ( value == loo.frameworkcode ) -%]
-                                                <option value="[% value | html %]" selected="selected">&nbsp;</option>
-                                                [%- ELSIF ( value.length==0 ) -%]
-                                                <option value="[% value | html %]">&nbsp;</option>
-                                                [%- ELSE -%]
-                                                <option value="[% value | html %]">[% value | html %]</option>
-                                                [%- END -%]
-                                            [%- END %]
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <label for="value_builder[% loo.row | html %]">Plugin:</label>
-                                            <select name="value_builder" id="value_builder[% loo.row | html %]">
-                                            [%- FOREACH value IN loo.value_builders %]
-                                                [% IF ( value == loo.value_builder && value.length>0 ) -%]
-                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-                                                [%- ELSIF ( value == loo.value_builder ) -%]
-                                                <option value="[% value | html %]" selected="selected">&nbsp;</option>
-                                                [%- ELSIF ( value.length==0 ) -%]
-                                                <option value="[% value | html %]">&nbsp;</option>
-                                                [%- ELSE -%]
-                                                <option value="[% value | html %]">[% value | html %]</option>
-                                                [%- END -%]
-                                            [%- END %]
-                                            </select>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </li>
-                        </ol></fieldset><br class="clear" />
-                    [% END # /WRAPPER   tab_panel %]
-                [% END # /FOREACH loo %]
-            [% END # /WRAPPER tab_panels %]
-        [% END # /WRAPPER tabs %]
-    </form>
-[% END %]
-
-[% IF ( delete_confirm ) %]
-
-    <div class="alert alert-warning">
-        <h1>Confirm deletion of subfield <span class="ex">'[% ass.tagsubfield | html %]'?</span></h1>
-        <form action="[% delete_link | html %]" method="post">
+    [% IF ( add_form ) %]
+        <h1
+            >[% IF ( use_heading_flags_p ) %]
+                [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints for field [% tagfield | html %] authority [% authtypecode | html %][% END %]
+            [% ELSE %]
+                [% action | html %]
+            [% END %]</h1
+        >
+        <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
+        <form action="/cgi-bin/koha/admin/auth_subfields_structure.pl" name="Aform" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete_confirmed" />
-            <table>
-                <tr><th scope="row">Subfield:</th> <td>[% ass.tagsubfield | html %]</td></tr>
-                <tr><th scope="row">Description:</th> <td>[% ass.liblibrarian | html_entity %]</td></tr>
-            </table>
-            <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
-            <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
-            <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
-            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
+            <input type="hidden" name="op" value="cud-add_validate" />
+            <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
+            <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
+            <fieldset class="action"
+                ><input type="submit" class="btn btn-primary" value="Save changes" />
+                <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset
+            >
+
+            [% BLOCK outputsubfield %][% FILTER collapse %]
+                [% SWITCH ( subfieldanchor ) %]
+                [% CASE "@" %]
+                    AT
+                [% CASE "%" %]
+                    %
+                [% CASE %]
+                    [% subfieldanchor | html %]
+                [% END %]
+            [% END %][% END %]
+
+            [% WRAPPER tabs id= "subfieldtabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% FOREACH loo IN loop %]
+                        [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.tagsubfield %]
+                        [% WRAPPER tab_item tabname= outputsubfield id= "tab_subfield_${outputsubfield}" %]
+                            [% IF ( loo.new_subfield ) %]
+                                <span>New</span>
+                            [% ELSE %]
+                                [% loo.tagsubfield | html %]
+                            [% END # IF loo.new_subfield %]
+                        [% END # WRAPPER tab_item %]
+                    [% END # FOREACH loo %]
+                [% END # /WRAPPER tabs_nav %]
+
+                [% WRAPPER tab_panels %]
+                    [% FOREACH loo IN loop %]
+                        [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.tagsubfield %]
+                        [% WRAPPER tab_panel tabname=outputsubfield %]
+                            <fieldset class="rows"
+                                ><ol>
+                                    [% IF ( loo.new_subfield ) %]
+                                        <li>
+                                            <label for="tagsubfieldinput[% loo.row | html %]">Subfield code: </label>
+                                            <input type="text" name="tagsubfield" value="[% loo.tagsubfield | html %]" size="1" id="tagsubfield" maxlength="1" />
+                                        </li>
+                                    [% ELSE %]
+                                        <li>
+                                            <input type="hidden" name="tagsubfield" value="[% loo.tagsubfield | html %]" />
+                                        </li>
+                                    [% END %]
+                                    <li>
+                                        <label for="repeatable[% loo.row | html %]">Repeatable: </label>
+                                        [% IF loo.repeatable %]
+                                            <input type="checkbox" id="repeatable[% loo.row | html %]" name="repeatable[% loo.row | html %]" checked="checked" value="1" />
+                                        [% ELSE %]
+                                            <input type="checkbox" id="repeatable[% loo.row | html %]" name="repeatable[% loo.row | html %]" value="1" />
+                                        [% END %]
+                                    </li>
+                                    <li>
+                                        <label for="mandatory[% loo.row | html %]">Mandatory: </label>
+                                        [% IF loo.mandatory %]
+                                            <input type="checkbox" id="mandatory[% loo.row | html %]" name="mandatory[% loo.row | html %]" checked="checked" value="1" />
+                                        [% ELSE %]
+                                            <input type="checkbox" id="mandatory[% loo.row | html %]" name="mandatory[% loo.row | html %]" value="1" />
+                                        [% END %]
+                                    </li>
+                                    <li
+                                        ><label for="liblibrarian[% loo.row | html %]">Description in staff interface: </label
+                                        ><input id="liblibrarian[% loo.row | html %]" type="text" name="liblibrarian" value="[% loo.liblibrarian | html_entity %]" size="40" maxlength="255"
+                                    /></li>
+                                    <li
+                                        ><label for="libopac[% loo.row | html %]">Description in OPAC: </label
+                                        ><input type="text" id="libopac[% loo.row | html %]" name="libopac" value="[% loo.libopac | html_entity %]" size="40" maxlength="255"
+                                    /></li>
+                                    <li
+                                        ><label for="tab[% loo.row | html %]">Managed in tab: </label>
+                                        <select name="tab" id="tab[% loo.row | html %]">
+                                            [%- IF ( loo.tab ==  -1 ) -%]
+                                                <option value="-1" selected="selected">ignore</option>
+                                            [%- ELSE -%]
+                                                <option value="-1">ignore</option>
+                                            [%- END -%]
+                                            [%- FOREACH t IN [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] -%]
+                                                [%- IF ( loo.tab ==  t && t.length>0 ) -%]
+                                                    <option value="[%- t | html -%]" selected="selected">[%- t | html -%]</option>
+                                                [%- ELSIF ( loo.tab ==  t ) -%]
+                                                    <option value="[%- t | html -%]" selected="selected">&nbsp;</option>
+                                                [%- ELSE -%]
+                                                    <option value="[%- t | html -%]">[%- t | html -%]</option>
+                                                [%- END -%]
+                                            [%- END -%]
+                                        </select>
+                                        <div class="hint"
+                                            ><i class="fa-solid fa-triangle-exclamation"></i> <span>Ignore means that the subfield does not display in the record editor and that its value, if any, is deleted from the record</span></div
+                                        >
+                                    </li>
+                                    <li>
+                                        <fieldset>
+                                            <legend>Display</legend>
+                                            <ol>
+                                                <li
+                                                    ><label for="ohidden[% loo.row | html %]">Select to display or not:</label>
+                                                    <select name="ohidden" id="ohidden[% loo.row | html %]">
+                                                        [%- IF ( loo.hidden ==  0 ) -%]
+                                                            <option value="0" selected="selected">Show all</option>
+                                                            <option value="1">Hide all</option>
+                                                        [%- ELSE -%]
+                                                            [%# All other non-zero values mean: Hide %]
+                                                            <option value="0">Show all</option>
+                                                            <option value="1" selected="selected">Hide all</option>
+                                                        [%- END -%]
+                                                    </select>
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                    </li>
+                                    <li>
+                                        <fieldset class="rows">
+                                            <legend>Advanced constraints:</legend>
+                                            <ol>
+                                                <li>
+                                                    <label for="isurl[% loo.row | html %]">Is a URL:</label>
+                                                    [% IF loo.isurl %]
+                                                        <input type="checkbox" id="isurl[% loo.row | html %]" name="isurl[% loo.row | html %]" checked="checked" value="1" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" id="isurl[% loo.row | html %]" name="isurl[% loo.row | html %]" value="1" />
+                                                    [% END %]
+                                                    <span class="hint">If checked, it means that the subfield is a URL and can be clicked.</span>
+                                                </li>
+                                                <li>
+                                                    <label for="defaultvalue[% loo.row | html %]">Default value:</label>
+                                                    <input type="text" name="defaultvalue" id="defaultvalue[% loo.row | html %]" value="[% loo.defaultvalue | html %]" />
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                    </li>
+                                    <li>
+                                        <fieldset
+                                            ><legend>Help input</legend>
+                                            <ol>
+                                                <li>
+                                                    <label for="kohafield[% loo.row | html %]">Koha field:</label>
+                                                    <select name="kohafield" id="kohafield[% loo.row | html %]">
+                                                        [%- FOREACH value IN loo.kohafields %]
+                                                            [% IF ( value == loo.kohafield  && value.length>0 ) -%]
+                                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                                            [%- ELSIF ( value == loo.kohafield ) -%]
+                                                                <option value="[% value | html %]" selected="selected">&nbsp;</option>
+                                                            [%- ELSIF ( value.length==0 ) -%]
+                                                                <option value="[% value | html %]">&nbsp;</option>
+                                                            [%- ELSE -%]
+                                                                <option value="[% value | html %]">[% value | html %]</option>
+                                                            [%- END -%]
+                                                        [%- END %]
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                    <label for="authorised_value[% loo.row | html %]">Authorized value:</label>
+                                                    <select name="authorised_value" id="authorised_value[% loo.row | html %]">
+                                                        [%- FOREACH value IN loo.authorised_values %]
+                                                            [% IF ( value == loo.authorised_value && value.length>0 ) -%]
+                                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                                            [%- ELSIF ( value == loo.authorised_value ) -%]
+                                                                <option value="[% value | html %]" selected>&nbsp;</option>
+                                                            [%- ELSIF ( value.length==0 ) -%]
+                                                                <option value="[% value | html %]">&nbsp;</option>
+                                                            [%- ELSE -%]
+                                                                <option value="[% value | html %]">[% value | html %]</option>
+                                                            [%- END -%]
+                                                        [%- END %]
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                    <label for="frameworkcode[% loo.row | html %]">Thesaurus:</label>
+                                                    <select name="frameworkcode" id="frameworkcode[% loo.row | html %]">
+                                                        [%- FOREACH value IN loo.frameworkcodes %]
+                                                            [% IF ( value == loo.frameworkcode && value.length>0 ) -%]
+                                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                                            [%- ELSIF ( value == loo.frameworkcode ) -%]
+                                                                <option value="[% value | html %]" selected="selected">&nbsp;</option>
+                                                            [%- ELSIF ( value.length==0 ) -%]
+                                                                <option value="[% value | html %]">&nbsp;</option>
+                                                            [%- ELSE -%]
+                                                                <option value="[% value | html %]">[% value | html %]</option>
+                                                            [%- END -%]
+                                                        [%- END %]
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                    <label for="value_builder[% loo.row | html %]">Plugin:</label>
+                                                    <select name="value_builder" id="value_builder[% loo.row | html %]">
+                                                        [%- FOREACH value IN loo.value_builders %]
+                                                            [% IF ( value == loo.value_builder && value.length>0 ) -%]
+                                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                                            [%- ELSIF ( value == loo.value_builder ) -%]
+                                                                <option value="[% value | html %]" selected="selected">&nbsp;</option>
+                                                            [%- ELSIF ( value.length==0 ) -%]
+                                                                <option value="[% value | html %]">&nbsp;</option>
+                                                            [%- ELSE -%]
+                                                                <option value="[% value | html %]">[% value | html %]</option>
+                                                            [%- END -%]
+                                                        [%- END %]
+                                                    </select>
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                    </li>
+                                </ol></fieldset
+                            ><br class="clear" />
+                        [% END # /WRAPPER   tab_panel %]
+                    [% END # /FOREACH loo %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
         </form>
-
-        <form action="[% delete_link | html %]" method="get">
-            <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
-            <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
-            <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
-            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
-        </form>
-    </div>
-[% END %]
-
-[% IF ( else ) %]
-<h1>Authority MARC subfield structure admin for [% tagfield | html %] (authority: [% authtypecode | html %])</h1>
-<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
-<p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>
-
-<div class="page-section">
-<table id="table_authsubfieldstructure">
-    <thead>
-        <tr>
-            <th>Subfield</th>
-            <th>Description</th>
-            <th>Constraints</th>
-            <th class="NoSort">&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody>
-    [% FOREACH loo IN loop %]
-    <tr>
-        <td>
-            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% subfieldanchor | uri %]field">[% loo.tagsubfield | html %]</a>
-        </td>
-        <td>
-            [% IF loo.tab == -1 %]
-                    <em>[% loo.liblibrarian | html_entity %]</em>
-            [% ELSE %]
-                    [% loo.liblibrarian | html_entity %]
-            [% END %]
-        </td>
-        <td>
-            [% IF loo.subfield_ignored == -1 %]
-                    <em>subfield ignored</em>
-            [% ELSE %]
-                <strong>Tab:</strong>[% loo.tab | html %],
-                [% IF ( loo.kohafield ) %] | <strong>Koha field:</strong> [% loo.kohafield | html %], [% END %]
-                [% IF ( loo.repeatable ) %]<span>Repeatable</span>, [% ELSE %]<span>Not repeatable</span>,
-                [% END %]
-                        [% IF ( loo.mandatory ) %]<span>Mandatory</span>, [% ELSE %]<span>Not mandatory</span>,
-                [% END %]
-                        [% IF ( loo.hidden ) %]<span>hidden</span>,
-                [% END %]
-                        [% IF ( loo.isurl ) %]<span>is a URL</span>,
-                [% END %]
-                        [% IF ( loo.authorised_value ) %] | <strong>Auth value:</strong>[% loo.authorised_value | html %],
-                [% END %]
-                        [% IF ( loo.frameworkcode ) %] | <strong>Authority:</strong>[% loo.frameworkcode | html %],
-                [% END %]
-                [% IF ( loo.value_builder ) %] | <strong>Plugin:</strong>[% loo.value_builder | html %],[% END %]
-            [% END %]
-        </td>
-        <td class="actions">
-            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;authtypecode=[% authtypecode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</a>
-        </td>
-    </tr>
     [% END %]
-    </tbody>
-</table>
-</div> <!-- /.page-section -->
 
-    <form action="/cgi-bin/koha/admin/auth_subfields_structure.pl" method="get">
-    <fieldset class="action"><input type="hidden" name="op" value="add_form" />
-    <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
-    <input type="hidden" name="authtypecode" value="[% edit_authtypecode | html %]" />
-    <input type="submit" class="btn btn-primary" value="Edit subfields" />
-    <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
-    </form>
+    [% IF ( delete_confirm ) %]
+        <div class="alert alert-warning">
+            <h1>Confirm deletion of subfield <span class="ex">'[% ass.tagsubfield | html %]'?</span></h1>
+            <form action="[% delete_link | html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
+                <table>
+                    <tr><th scope="row">Subfield:</th> <td>[% ass.tagsubfield | html %]</td></tr>
+                    <tr><th scope="row">Description:</th> <td>[% ass.liblibrarian | html_entity %]</td></tr>
+                </table>
+                <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
+                <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
+                <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
+            </form>
 
-[% END %]
+            <form action="[% delete_link | html %]" method="get">
+                <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
+                <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
+                <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            </form>
+        </div>
+    [% END %]
 
+    [% IF ( else ) %]
+        <h1>Authority MARC subfield structure admin for [% tagfield | html %] (authority: [% authtypecode | html %])</h1>
+        <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
+        <p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>
+
+        <div class="page-section">
+            <table id="table_authsubfieldstructure">
+                <thead>
+                    <tr>
+                        <th>Subfield</th>
+                        <th>Description</th>
+                        <th>Constraints</th>
+                        <th class="NoSort">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH loo IN loop %]
+                        <tr>
+                            <td>
+                                <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% subfieldanchor | uri %]field">[% loo.tagsubfield | html %]</a>
+                            </td>
+                            <td>
+                                [% IF loo.tab == -1 %]
+                                    <em>[% loo.liblibrarian | html_entity %]</em>
+                                [% ELSE %]
+                                    [% loo.liblibrarian | html_entity %]
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF loo.subfield_ignored == -1 %]
+                                    <em>subfield ignored</em>
+                                [% ELSE %]
+                                    <strong>Tab:</strong>[% loo.tab | html %], [% IF ( loo.kohafield ) %]| <strong>Koha field:</strong> [% loo.kohafield | html %],[% END %]
+                                    [% IF ( loo.repeatable ) %]
+                                        <span>Repeatable</span>,
+                                    [% ELSE %]
+                                        <span>Not repeatable</span>,
+                                    [% END %]
+                                    [% IF ( loo.mandatory ) %]
+                                        <span>Mandatory</span>,
+                                    [% ELSE %]
+                                        <span>Not mandatory</span>,
+                                    [% END %]
+                                    [% IF ( loo.hidden ) %]
+                                        <span>hidden</span>,
+                                    [% END %]
+                                    [% IF ( loo.isurl ) %]
+                                        <span>is a URL</span>,
+                                    [% END %]
+                                    [% IF ( loo.authorised_value ) %]
+                                        | <strong>Auth value:</strong>[% loo.authorised_value | html %],
+                                    [% END %]
+                                    [% IF ( loo.frameworkcode ) %]
+                                        | <strong>Authority:</strong>[% loo.frameworkcode | html %],
+                                    [% END %]
+                                    [% IF ( loo.value_builder ) %]| <strong>Plugin:</strong>[% loo.value_builder | html %],[% END %]
+                                [% END %]
+                            </td>
+                            <td class="actions">
+                                <a
+                                    href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% loo.tagsubfield | uri %]field"
+                                    class="btn btn-default btn-xs"
+                                    ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                                >
+                                <a
+                                    href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"
+                                    class="btn btn-default btn-xs"
+                                    ><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</a
+                                >
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+
+        <form action="/cgi-bin/koha/admin/auth_subfields_structure.pl" method="get">
+            <fieldset class="action"
+                ><input type="hidden" name="op" value="add_form" />
+                <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
+                <input type="hidden" name="authtypecode" value="[% edit_authtypecode | html %]" />
+                <input type="submit" class="btn btn-primary" value="Edit subfields" />
+                <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset
+            >
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -5,96 +5,100 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("An error has occurred") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("An error has occurred") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 <body id="error[% errno | html %]" class="error">
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item bc_active = 1 %]
-                <span>An error has occurred</span>
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active = 1 %]
+            <span>An error has occurred</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                [% END %]
+            <div class="[% column_class | html %]">
+                <div id="errormsg[% errno | html %]">
+                    <h1>Sorry, the requested page is not available</h1>
+                    <h2>Error [% errno | html %]</h2>
+                    <p><strong>This message can have the following reason(s):</strong></p>
+                    <ul>
+                        [% IF ( errno == 400 ) %]
+                            <li>The link is broken and the page does not exist.</li>
+                        [% END %]
 
-                <div class="[% column_class | html %]">
+                        [% IF ( errno == 401 ) %]
+                            <li>You are not authorized to view this page.</li>
+                        [% END %]
 
-                    <div id="errormsg[% errno | html %]">
-                        <h1>Sorry, the requested page is not available</h1>
-                        <h2>Error [% errno | html %]</h2>
-                        <p><strong>This message can have the following reason(s):</strong></p>
-                        <ul>
-                            [% IF ( errno == 400 ) %]
-                                <li>The link is broken and the page does not exist.</li>
-                            [% END %]
+                        [% IF ( errno == 402 ) %]
+                            <li>The link is invalid.</li>
+                        [% END %]
 
-                            [% IF ( errno == 401 ) %]
-                                <li>You are not authorized to view this page.</li>
-                            [% END %]
-
-                            [% IF ( errno == 402 ) %]
-                               <li>The link is invalid.</li>
-                            [% END %]
-
-                            [% IF ( errno == 403 ) %]
-                                [% IF ( csrf_error ) %]
-                                    [% IF csrf_error == 'wrong_csrf_token' %]
-                                        <li>The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</li>
-                                    [% ELSE %]
-                                        [%# Programming errors, we do not want to display them at the OPAC %]
-                                        <li>An unexpected error occurred while processing your request.</li>
-                                    [% END %]
+                        [% IF ( errno == 403 ) %]
+                            [% IF ( csrf_error ) %]
+                                [% IF csrf_error == 'wrong_csrf_token' %]
+                                    <li>The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</li>
                                 [% ELSE %]
-                                    <li>You are forbidden to view this page.</li>
+                                    [%# Programming errors, we do not want to display them at the OPAC %]
+                                    <li>An unexpected error occurred while processing your request.</li>
                                 [% END %]
+                            [% ELSE %]
+                                <li>You are forbidden to view this page.</li>
                             [% END %]
+                        [% END %]
 
-                            [% IF ( errno == 404 ) %]
-                                <li>You made use of an external link to a catalog item that is no longer available.</li>
-                                <li>You followed an outdated link e.g. from a search engine or a bookmark.</li>
-                                <li>You tried to access a page that needs authentication.</li>
-                                <li>An internal link in our catalog home page is broken and the page does not exist.</li>
-                            [% END %]
-                            [% IF ( errno == 500 ) %]
-                                <li>An error occurred while processing your request.</li>
-                            [% END %]
-                        </ul>
-                        <h2>What's next?</h2>
-                        <ul>
-                            [% IF ( errno == 401 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
-                                <li>Please log in to the catalog and try again. <a href="/cgi-bin/koha/opac-user.pl">Login page</a></li>
-                            [% END %]
-                            <li>You can use the menu and links at the top of the page</li>
-                            <li>You can search our catalog using the search form at the top of this page.</li>
-                            <li><a href="/cgi-bin/koha/opac-main.pl">Return to the catalog home page.</a></li>
-                        </ul>
-                        <h2>Report issues and broken links</h2>
-                        <ul>
-                            <li>To report this error, please contact the Koha Administrator.
-                                    <a href="mailto:[% admin | uri %]">Send email</a>.</li>
-                        </ul>
-                    </div> <!-- / #errormsg[% errno | html %] -->
-                </div> <!-- / .col-lg10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                        [% IF ( errno == 404 ) %]
+                            <li>You made use of an external link to a catalog item that is no longer available.</li>
+                            <li>You followed an outdated link e.g. from a search engine or a bookmark.</li>
+                            <li>You tried to access a page that needs authentication.</li>
+                            <li>An internal link in our catalog home page is broken and the page does not exist.</li>
+                        [% END %]
+                        [% IF ( errno == 500 ) %]
+                            <li>An error occurred while processing your request.</li>
+                        [% END %]
+                    </ul>
+                    <h2>What's next?</h2>
+                    <ul>
+                        [% IF ( errno == 401 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+                            <li>Please log in to the catalog and try again. <a href="/cgi-bin/koha/opac-user.pl">Login page</a></li>
+                        [% END %]
+                        <li>You can use the menu and links at the top of the page</li>
+                        <li>You can search our catalog using the search form at the top of this page.</li>
+                        <li><a href="/cgi-bin/koha/opac-main.pl">Return to the catalog home page.</a></li>
+                    </ul>
+                    <h2>Report issues and broken links</h2>
+                    <ul>
+                        <li>To report this error, please contact the Koha Administrator. <a href="mailto:[% admin | uri %]">Send email</a>.</li>
+                    </ul>
+                </div>
+                <!-- / #errormsg[% errno | html %] -->
+            </div>
+            <!-- / .col-lg10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

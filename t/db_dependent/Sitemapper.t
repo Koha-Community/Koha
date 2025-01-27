@@ -58,7 +58,7 @@ subtest 'Sitemapper' => sub {
         dir     => $dir,
         short   => 0,
     );
-    $sitemapper->run( "biblionumber>=$id1" );
+    $sitemapper->run("biblionumber>=$id1");
 
     my $file = "$dir/sitemapindex.xml";
     ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml created' );
@@ -103,7 +103,7 @@ EOS
         dir     => $dir,
         short   => 1,
     );
-    $sitemapper->run( "biblionumber>=$id1" );
+    $sitemapper->run("biblionumber>=$id1");
 
     $file = "$dir/sitemap_0001.xml";
     ok( -e $file, 'File sitemap_0001.xml with short URLs created' );
@@ -127,8 +127,9 @@ EOS
     # No need to create 75000 biblios here. Let's create 10 more with $MAX == 6.
     # Expecting 3 files: index plus 2 url files with 6 and 4 urls (when we start after biblio2).
     $Koha::Sitemapper::Writer::MAX = 6;
-    for my $count ( 0..9 ) {
-        my $biblio2 = $builder->build_sample_biblio->set({ datecreated => '2015-08-31', timestamp => '2015-08-31' })->store;
+    for my $count ( 0 .. 9 ) {
+        my $biblio2 =
+            $builder->build_sample_biblio->set( { datecreated => '2015-08-31', timestamp => '2015-08-31' } )->store;
     }
 
     $sitemapper = Koha::Sitemapper->new(
@@ -137,7 +138,7 @@ EOS
         dir     => $dir,
         short   => 1,
     );
-    $sitemapper->run( "biblionumber>$id2" ); # Note: new filter
+    $sitemapper->run("biblionumber>$id2");    # Note: new filter
 
     $file = "$dir/sitemapindex.xml";
     ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml for 10 bibs created' );

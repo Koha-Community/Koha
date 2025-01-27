@@ -43,45 +43,42 @@ USAGE
     exit $_[0];
 }
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $help, $days, $verbose );
 
 GetOptions(
-    'h|help'       => \$help,
-    'days:i'       => \$days,
-    'v|verbose'    => \$verbose,
+    'h|help'    => \$help,
+    'days:i'    => \$days,
+    'v|verbose' => \$verbose,
 ) || usage(1);
 
 if ($help) {
     usage(0);
 }
 
-if ( !$days  ) {
+if ( !$days ) {
     print "The days parameter is mandatory.\n\n";
     usage(1);
 }
 
 my $date = dt_from_string->subtract( days => $days );
 
-print "Checkouts and holds before " . output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } ) . " will be anonymised.\n"
-  if $verbose;
+print "Checkouts and holds before "
+    . output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } )
+    . " will be anonymised.\n"
+    if $verbose;
 
-my $rows = Koha::Old::Checkouts
-          ->filter_by_anonymizable
-          ->filter_by_last_update( { days => $days, timestamp_column_name => 'returndate' })
-          ->anonymize;
+my $rows = Koha::Old::Checkouts->filter_by_anonymizable->filter_by_last_update(
+    { days => $days, timestamp_column_name => 'returndate' } )->anonymize;
 
 $verbose and print int($rows) . " checkouts anonymised.\n";
 
-$rows = Koha::Old::Holds
-          ->filter_by_anonymizable
-          ->filter_by_last_update( { days => $days } )
-          ->anonymize;
+$rows = Koha::Old::Holds->filter_by_anonymizable->filter_by_last_update( { days => $days } )->anonymize;
 
 $verbose and print int($rows) . " holds anonymised.\n";
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit(0);

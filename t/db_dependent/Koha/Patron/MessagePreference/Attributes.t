@@ -23,7 +23,7 @@ use Test::More tests => 2;
 
 use Koha::Database;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 
 subtest 'Test class imports' => sub {
     plan tests => 2;
@@ -37,36 +37,44 @@ subtest 'Test Koha::Patron::MessagePreference::Attributes' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Patron::MessagePreference::Attribute->new({
-        message_name => 'Test_Attribute'
-    })->store;
-    Koha::Patron::MessagePreference::Attribute->new({
-        message_name => 'Test_Attribute2',
-        takes_days   => 1
-    })->store;
+    Koha::Patron::MessagePreference::Attribute->new( { message_name => 'Test_Attribute' } )->store;
+    Koha::Patron::MessagePreference::Attribute->new(
+        {
+            message_name => 'Test_Attribute2',
+            takes_days   => 1
+        }
+    )->store;
 
-    my $attribute  = Koha::Patron::MessagePreference::Attributes->find({
-        message_name => 'Test_Attribute' });
-    my $attribute2 = Koha::Patron::MessagePreference::Attributes->find({
-        message_name => 'Test_Attribute2' });
+    my $attribute  = Koha::Patron::MessagePreference::Attributes->find( { message_name => 'Test_Attribute' } );
+    my $attribute2 = Koha::Patron::MessagePreference::Attributes->find( { message_name => 'Test_Attribute2' } );
 
-    is($attribute->message_name, 'Test_Attribute',
-       'Added a new messaging attribute.');
-    is($attribute->takes_days, 0,
-       'For that messaging attribute, takes_days is disabled by default.');
-    is($attribute2->message_name, 'Test_Attribute2',
-       'Added another messaging attribute.');
-    is($attribute2->takes_days, 1,
-       'takes_days is enabled for that message attribute (as expected).');
+    is(
+        $attribute->message_name, 'Test_Attribute',
+        'Added a new messaging attribute.'
+    );
+    is(
+        $attribute->takes_days, 0,
+        'For that messaging attribute, takes_days is disabled by default.'
+    );
+    is(
+        $attribute2->message_name, 'Test_Attribute2',
+        'Added another messaging attribute.'
+    );
+    is(
+        $attribute2->takes_days, 1,
+        'takes_days is enabled for that message attribute (as expected).'
+    );
 
     $attribute->delete;
     $attribute2->delete;
-    is(Koha::Patron::MessagePreference::Attributes->find({
-        message_name => 'Test_Attribute' }), undef,
-       'Deleted the first message attribute.');
-    is(Koha::Patron::MessagePreference::Attributes->find({
-        message_name => 'Test_Attribute2' }), undef,
-       'Deleted the second message attribute.');
+    is(
+        Koha::Patron::MessagePreference::Attributes->find( { message_name => 'Test_Attribute' } ), undef,
+        'Deleted the first message attribute.'
+    );
+    is(
+        Koha::Patron::MessagePreference::Attributes->find( { message_name => 'Test_Attribute2' } ), undef,
+        'Deleted the second message attribute.'
+    );
 
     $schema->storage->txn_rollback;
 };

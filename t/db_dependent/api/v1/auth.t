@@ -44,15 +44,14 @@ subtest 'under() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ($borrowernumber, $session_id) = create_user_and_session();
+    my ( $borrowernumber, $session_id ) = create_user_and_session();
 
     # disable the /public namespace
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 0 );
     $tx = $t->ua->build_tx( POST => "/api/v1/public/patrons/$borrowernumber/password" );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
-      ->status_is(403)
-      ->json_is('/error', 'Configuration prevents the usage of this endpoint by unprivileged users');
+    $t->request_ok($tx)->status_is(403)
+        ->json_is( '/error', 'Configuration prevents the usage of this endpoint by unprivileged users' );
 
     # enable the /public namespace
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
@@ -63,46 +62,34 @@ subtest 'under() tests' => sub {
     # 401 (no authentication)
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
-      ->status_is(401)
-      ->json_is('/error', 'Authentication failure.');
+    $t->request_ok($tx)->status_is(401)->json_is( '/error', 'Authentication failure.' );
 
     # 403 (no permission)
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $session_id } );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
-      ->status_is(403)
-      ->json_is('/error', 'Authorization failure. Missing required permission(s).');
+    $t->request_ok($tx)->status_is(403)->json_is( '/error', 'Authorization failure. Missing required permission(s).' );
 
     # 401 (session expired)
     t::lib::Mocks::mock_preference( 'timeout', '1' );
-    ($borrowernumber, $session_id) = create_user_and_session();
+    ( $borrowernumber, $session_id ) = create_user_and_session();
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $session_id } );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     sleep(2);
-    $t->request_ok($tx)
-      ->status_is(401)
-      ->json_is('/error', 'Session has been expired.');
+    $t->request_ok($tx)->status_is(401)->json_is( '/error', 'Session has been expired.' );
 
     # 503 (under maintenance & pending update)
-    t::lib::Mocks::mock_preference('Version', 1);
+    t::lib::Mocks::mock_preference( 'Version', 1 );
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
-      ->status_is(503)
-      ->json_is('/error', 'System is under maintenance.');
+    $t->request_ok($tx)->status_is(503)->json_is( '/error', 'System is under maintenance.' );
 
     # 503 (under maintenance & database not installed)
-    t::lib::Mocks::mock_preference('Version', undef);
+    t::lib::Mocks::mock_preference( 'Version', undef );
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
-      ->status_is(503)
-      ->json_is('/error', 'System is under maintenance.');
+    $t->request_ok($tx)->status_is(503)->json_is( '/error', 'System is under maintenance.' );
 
     # 503 (public while maintenance syspref activated)
     t::lib::Mocks::mock_preference( 'OPACMaintenance', 1 );
@@ -120,39 +107,34 @@ subtest 'CORS support' => sub {
 
     plan tests => 6;
 
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','');
-    $t->get_ok("/api/v1/patrons")
-      ->header_is( 'Access-control-allow-origin', undef, 'Header not returned' );
-      # FIXME: newer Test::Mojo has header_exists_not
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', '' );
+    $t->get_ok("/api/v1/patrons")->header_is( 'Access-control-allow-origin', undef, 'Header not returned' );
 
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin',undef);
-    $t->get_ok("/api/v1/patrons")
-      ->header_is( 'Access-control-allow-origin', undef, 'Header not returned' );
     # FIXME: newer Test::Mojo has header_exists_not
 
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','*');
-    $t->get_ok("/api/v1/patrons")
-      ->header_is( 'Access-control-allow-origin', '*', 'Header set' );
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', undef );
+    $t->get_ok("/api/v1/patrons")->header_is( 'Access-control-allow-origin', undef, 'Header not returned' );
+
+    # FIXME: newer Test::Mojo has header_exists_not
+
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', '*' );
+    $t->get_ok("/api/v1/patrons")->header_is( 'Access-control-allow-origin', '*', 'Header set' );
 };
 
 subtest 'spec retrieval tests' => sub {
 
     plan tests => 4;
 
-    $t->get_ok("/api/v1/")
-      ->status_is(200);
+    $t->get_ok("/api/v1/")->status_is(200);
 
-    $t->get_ok("/api/v1/.html")
-      ->status_is(200);
+    $t->get_ok("/api/v1/.html")->status_is(200);
 };
 
 sub create_user_and_session {
     my $user = $builder->build(
         {
             source => 'Borrower',
-            value  => {
-                flags => 0
-            }
+            value  => { flags => 0 }
         }
     );
 

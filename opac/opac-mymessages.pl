@@ -30,17 +30,21 @@ my $query = CGI->new();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => 'opac-mymessages.tt',
-        query           => $query,
-        type            => 'opac',
+        template_name => 'opac-mymessages.tt',
+        query         => $query,
+        type          => 'opac',
     }
 );
 
+my $messages = C4::Letters::GetRSSMessages(
+    {
+        borrowernumber => $borrowernumber,
+        limit          => 20
+    }
+);
 
-my $messages = C4::Letters::GetRSSMessages( { borrowernumber => $borrowernumber,
-                                            limit           => 20 } );
-
-$template->param( message_list => $messages,
-             );
+$template->param(
+    message_list => $messages,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

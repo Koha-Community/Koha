@@ -18,26 +18,28 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Acquisition::Orders;
 use Koha::Patrons;
 
 my $cgi = CGI->new;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-    template_name   => "acqui/showorder.tt",
-    query           => $cgi,
-    type            => "intranet",
-    flagsrequired   => { acquisition => '*' },
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "acqui/showorder.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { acquisition => '*' },
+    }
+);
 
 my $ordernumber = $cgi->param('ordernumber');
-my $order = Koha::Acquisition::Orders->find($ordernumber);
-my $creator = Koha::Patrons->find($order->created_by);
+my $order       = Koha::Acquisition::Orders->find($ordernumber);
+my $creator     = Koha::Patrons->find( $order->created_by );
 
 $template->param(
-    order => $order,
+    order   => $order,
     creator => $creator,
 );
 

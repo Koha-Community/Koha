@@ -17,36 +17,42 @@ use t::lib::Mocks;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
-my $yesCatCode = $builder->build({
-    source => 'Category',
-    value => {
-        categorycode => 'yesCat',
-        checkprevcheckout => 'yes',
-    },
-});
+my $builder    = t::lib::TestBuilder->new;
+my $yesCatCode = $builder->build(
+    {
+        source => 'Category',
+        value  => {
+            categorycode      => 'yesCat',
+            checkprevcheckout => 'yes',
+        },
+    }
+);
 
-my $noCatCode = $builder->build({
-    source => 'Category',
-    value => {
-        categorycode => 'noCat',
-        checkprevcheckout => 'no',
-    },
-});
+my $noCatCode = $builder->build(
+    {
+        source => 'Category',
+        value  => {
+            categorycode      => 'noCat',
+            checkprevcheckout => 'no',
+        },
+    }
+);
 
-my $inheritCatCode = $builder->build({
-    source => 'Category',
-    value => {
-        categorycode => 'inheritCat',
-        checkprevcheckout => 'inherit',
-    },
-});
+my $inheritCatCode = $builder->build(
+    {
+        source => 'Category',
+        value  => {
+            categorycode      => 'inheritCat',
+            checkprevcheckout => 'inherit',
+        },
+    }
+);
 
 # Create context for some tests late on in the file.
-my $library = $builder->build({ source => 'Branch' });
-my $staff = $builder->build({source => 'Borrower'});
+my $library = $builder->build( { source => 'Branch' } );
+my $staff   = $builder->build( { source => 'Borrower' } );
 
-t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 
 # wants_check_for_previous_checkout
 
@@ -70,25 +76,25 @@ my $mappings = [
             {
                 setting => 'yes',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 1},
-                    {setting => 'inherit', result => 1},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 1 },
+                    { setting => 'inherit', result => 1 },
                 ],
             },
             {
                 setting => 'no',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 1},
-                    {setting => 'inherit', result => 1},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 1 },
+                    { setting => 'inherit', result => 1 },
                 ],
             },
             {
                 setting => 'inherit',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 1},
-                    {setting => 'inherit', result => 1},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 1 },
+                    { setting => 'inherit', result => 1 },
                 ],
             },
         ],
@@ -99,25 +105,25 @@ my $mappings = [
             {
                 setting => 'yes',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 1},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 1 },
                 ],
             },
             {
                 setting => 'no',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 0},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 0 },
                 ],
             },
             {
                 setting => 'inherit',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 1},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 1 },
                 ],
             },
         ],
@@ -128,25 +134,25 @@ my $mappings = [
             {
                 setting => 'yes',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 1},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 1 },
                 ],
             },
             {
                 setting => 'no',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 0},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 0 },
                 ],
             },
             {
                 setting => 'inherit',
                 patrons => [
-                    {setting => 'yes',     result => 1},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 0},
+                    { setting => 'yes',     result => 1 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 0 },
                 ],
             },
         ],
@@ -157,25 +163,25 @@ my $mappings = [
             {
                 setting => 'yes',
                 patrons => [
-                    {setting => 'yes',     result => 0},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 0},
+                    { setting => 'yes',     result => 0 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 0 },
                 ],
             },
             {
                 setting => 'no',
                 patrons => [
-                    {setting => 'yes',     result => 0},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 0},
+                    { setting => 'yes',     result => 0 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 0 },
                 ],
             },
             {
                 setting => 'inherit',
                 patrons => [
-                    {setting => 'yes',     result => 0},
-                    {setting => 'no',      result => 0},
-                    {setting => 'inherit', result => 0},
+                    { setting => 'yes',     result => 0 },
+                    { setting => 'no',      result => 0 },
+                    { setting => 'inherit', result => 0 },
                 ],
             },
         ],
@@ -184,25 +190,26 @@ my $mappings = [
 
 map {
     my $syspref = $_->{syspref};
-    t::lib::Mocks::mock_preference('checkprevcheckout', $syspref);
+    t::lib::Mocks::mock_preference( 'checkprevcheckout', $syspref );
     map {
         my $code = $_->{setting} . 'Cat';
         map {
-            my $kpatron = $builder->build({
-                source => 'Borrower',
-                value  => {
-                    checkprevcheckout => $_->{setting},
-                    categorycode => $code,
-                },
-            });
-            my $patron = Koha::Patrons->find($kpatron->{borrowernumber});
+            my $kpatron = $builder->build(
+                {
+                    source => 'Borrower',
+                    value  => {
+                        checkprevcheckout => $_->{setting},
+                        categorycode      => $code,
+                    },
+                }
+            );
+            my $patron = Koha::Patrons->find( $kpatron->{borrowernumber} );
             is(
                 $patron->wants_check_for_previous_checkout, $_->{result},
-                "Predicate with syspref " . $syspref . ", cat " . $code
-                    . ", patron " . $_->{setting}
-              );
-        } @{$_->{patrons}};
-    } @{$_->{categories}};
+                "Predicate with syspref " . $syspref . ", cat " . $code . ", patron " . $_->{setting}
+            );
+        } @{ $_->{patrons} };
+    } @{ $_->{categories} };
 } @{$mappings};
 
 # do_check_for_previous_checkout
@@ -233,121 +240,121 @@ map {
 
 # Requirements:
 # $patron, $different_patron, $items (same bib number), $different_item
-my $patron = $builder->build({source => 'Borrower'});
-my $patron_d = $builder->build({source => 'Borrower'});
+my $patron   = $builder->build( { source => 'Borrower' } );
+my $patron_d = $builder->build( { source => 'Borrower' } );
 
 my $biblio = $builder->build_sample_biblio;
 $biblio->serial(0)->store;
-my $item_1 = $builder->build_sample_item({biblionumber => $biblio->biblionumber})->unblessed;
-my $item_2 = $builder->build_sample_item({biblionumber => $biblio->biblionumber})->unblessed;
+my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )->unblessed;
+my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )->unblessed;
 my $item_d = $builder->build_sample_item->unblessed;
 
 ## Testing Sub
 sub test_it {
-    my ($mapping, $stage) = @_;
+    my ( $mapping, $stage ) = @_;
     map {
-        my $patron = Koha::Patrons->find($_->{patron}->{borrowernumber});
+        my $patron = Koha::Patrons->find( $_->{patron}->{borrowernumber} );
         is(
-            $patron->do_check_for_previous_checkout($_->{item}),
+            $patron->do_check_for_previous_checkout( $_->{item} ),
             $_->{result}, $stage . ": " . $_->{msg}
         );
     } @{$mapping};
-};
+}
 
 ## Initial Mappings
 my $cpvmappings = [
     {
-        msg => "Item, patron [0]",
-        item => $item_1,
+        msg    => "Item, patron [0]",
+        item   => $item_1,
         patron => $patron,
         result => 0,
     },
     {
-        msg => "Diff item, same bib, same patron [0]",
-        item => $item_2,
+        msg    => "Diff item, same bib, same patron [0]",
+        item   => $item_2,
         patron => $patron,
         result => 0,
     },
     {
-        msg => "Diff item, diff bib, same patron [0]",
-        item => $item_d,
+        msg    => "Diff item, diff bib, same patron [0]",
+        item   => $item_d,
         patron => $patron,
         result => 0,
     },
     {
-        msg => "Same item, diff patron [0]",
-        item => $item_1,
+        msg    => "Same item, diff patron [0]",
+        item   => $item_1,
         patron => $patron_d,
         result => 0,
     },
     {
-        msg => "Diff item, same bib, diff patron [0]",
-        item => $item_2,
+        msg    => "Diff item, same bib, diff patron [0]",
+        item   => $item_2,
         patron => $patron_d,
         result => 0,
     },
     {
-        msg => "Diff item, diff bib, diff patron [0]",
-        item => $item_d,
+        msg    => "Diff item, diff bib, diff patron [0]",
+        item   => $item_d,
         patron => $patron_d,
         result => 0,
     },
 ];
 
-test_it($cpvmappings, "PreIssue");
+test_it( $cpvmappings, "PreIssue" );
 
 # Issue item_1 to $patron:
 my $patron_get_mem = Koha::Patrons->find( $patron->{borrowernumber} );
 BAIL_OUT("Issue failed")
-    unless AddIssue($patron_get_mem, $item_1->{barcode});
+    unless AddIssue( $patron_get_mem, $item_1->{barcode} );
 
 # Then test:
 my $cpvPmappings = [
     {
-        msg => "Same item, same patron [1]",
-        item => $item_1,
+        msg    => "Same item, same patron [1]",
+        item   => $item_1,
         patron => $patron,
         result => 1,
     },
     {
-        msg => "Diff item, same bib, same patron [1]",
-        item => $item_2,
+        msg    => "Diff item, same bib, same patron [1]",
+        item   => $item_2,
         patron => $patron,
         result => 1,
     },
     {
-        msg => "Diff item, diff bib, same patron [0]",
-        item => $item_d,
+        msg    => "Diff item, diff bib, same patron [0]",
+        item   => $item_d,
         patron => $patron,
         result => 0,
     },
     {
-        msg => "Same item, diff patron [0]",
-        item => $item_1,
+        msg    => "Same item, diff patron [0]",
+        item   => $item_1,
         patron => $patron_d,
         result => 0,
     },
     {
-        msg => "Diff item, same bib, diff patron [0]",
-        item => $item_2,
+        msg    => "Diff item, same bib, diff patron [0]",
+        item   => $item_2,
         patron => $patron_d,
         result => 0,
     },
     {
-        msg => "Diff item, diff bib, diff patron [0]",
-        item => $item_d,
+        msg    => "Diff item, diff bib, diff patron [0]",
+        item   => $item_d,
         patron => $patron_d,
         result => 0,
     },
 ];
 
-test_it($cpvPmappings, "PostIssue");
+test_it( $cpvPmappings, "PostIssue" );
 
 # Return item_1 from patron:
-BAIL_OUT("Return Failed") unless AddReturn($item_1->{barcode}, $patron->{branchcode});
+BAIL_OUT("Return Failed") unless AddReturn( $item_1->{barcode}, $patron->{branchcode} );
 
 # Then:
-test_it($cpvPmappings, "PostReturn");
+test_it( $cpvPmappings, "PostReturn" );
 
 # Finally test C4::Circulation::CanBookBeIssued
 
@@ -373,16 +380,19 @@ test_it($cpvPmappings, "PostReturn");
 # - $checkprevcheckout pref (first hardno, then hardyes)
 
 # Our Patron
-my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } });
-my $CBBI_patron = $builder->build({source => 'Borrower', value => { categorycode => $patron_category->{categorycode} }});
+my $patron_category = $builder->build( { source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } } );
+my $CBBI_patron =
+    $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 $patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} );
+
 # Our Items
 
-my $new_item = $builder->build_sample_item->unblessed;
+my $new_item  = $builder->build_sample_item->unblessed;
 my $prev_item = $builder->build_sample_item->unblessed;
+
 # Second is Checked Out
 BAIL_OUT("CanBookBeIssued Issue failed")
-    unless AddIssue($patron, $prev_item->{barcode});
+    unless AddIssue( $patron, $prev_item->{barcode} );
 
 # Mappings
 my $CBBI_mappings = [
@@ -415,12 +425,9 @@ my $CBBI_mappings = [
 
 # Tests
 map {
-    t::lib::Mocks::mock_preference('checkprevcheckout', $_->{syspref});
-    my ( $issuingimpossible, $needsconfirmation ) =
-        C4::Circulation::CanBookBeIssued(
-            $patron, $_->{item}->{barcode}
-        );
-    is($needsconfirmation->{PREVISSUE}, $_->{result}, $_->{msg});
+    t::lib::Mocks::mock_preference( 'checkprevcheckout', $_->{syspref} );
+    my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $_->{item}->{barcode} );
+    is( $needsconfirmation->{PREVISSUE}, $_->{result}, $_->{msg} );
 } @{$CBBI_mappings};
 
 $schema->storage->txn_rollback;
@@ -429,26 +436,32 @@ subtest 'Check previous checkouts for serial' => sub {
     plan tests => 2;
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object({ class => 'Koha::Libraries'});
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $patron = $builder->build_object({
+    my $patron = $builder->build_object(
+        {
             class => 'Koha::Patrons',
-            value => {
-                branchcode => $library->branchcode
-            }
-        });
-    t::lib::Mocks::mock_userenv({ patron => $patron });
+            value => { branchcode => $library->branchcode }
+        }
+    );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
 
     my $biblio = $builder->build_sample_biblio;
     $biblio->serial(1)->store;
 
-    my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
-    my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    AddIssue($patron, $item1->barcode);
+    AddIssue( $patron, $item1->barcode );
 
-    is($patron->do_check_for_previous_checkout($item1->unblessed), 1, 'Check only one item if bibliographic record is serial');
-    is($patron->do_check_for_previous_checkout($item2->unblessed), 0, 'Check only one item if bibliographic record is serial');
+    is(
+        $patron->do_check_for_previous_checkout( $item1->unblessed ), 1,
+        'Check only one item if bibliographic record is serial'
+    );
+    is(
+        $patron->do_check_for_previous_checkout( $item2->unblessed ), 0,
+        'Check only one item if bibliographic record is serial'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -456,31 +469,36 @@ subtest 'Check previous checkouts for serial' => sub {
 subtest 'Check previous checkouts with delay' => sub {
     plan tests => 3;
     $schema->storage->txn_begin;
-    my $library = $builder->build_object({ class => 'Koha::Libraries'});
-    my $biblio = $builder->build_sample_biblio;
-    my $patron = $builder->build({source => 'Borrower'});
-    my $item_object = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $library     = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio      = $builder->build_sample_biblio;
+    my $patron      = $builder->build( { source => 'Borrower' } );
+    my $item_object = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    my $issue = Koha::Checkout->new({ branchcode => $library->branchcode, borrowernumber => $patron->{borrowernumber}, itemnumber => $item_object->itemnumber })->store;
+    my $issue = Koha::Checkout->new(
+        {
+            branchcode => $library->branchcode, borrowernumber => $patron->{borrowernumber},
+            itemnumber => $item_object->itemnumber
+        }
+    )->store;
     my $returndate = dt_from_string()->subtract( days => 3 );
-    my $return = AddReturn($item_object->barcode, $library->branchcode, undef, $returndate);
+    my $return     = AddReturn( $item_object->barcode, $library->branchcode, undef, $returndate );
 
-    t::lib::Mocks::mock_preference('checkprevcheckout', 'hardyes');
-    t::lib::Mocks::mock_preference('checkprevcheckoutdelay', 0);
-    my $patron1 = Koha::Patrons->find($patron->{borrowernumber});
+    t::lib::Mocks::mock_preference( 'checkprevcheckout',      'hardyes' );
+    t::lib::Mocks::mock_preference( 'checkprevcheckoutdelay', 0 );
+    my $patron1 = Koha::Patrons->find( $patron->{borrowernumber} );
     is(
-            $patron1->do_check_for_previous_checkout($item_object->unblessed),
-            1, "Checking CheckPrevCheckoutDelay disabled"
+        $patron1->do_check_for_previous_checkout( $item_object->unblessed ),
+        1, "Checking CheckPrevCheckoutDelay disabled"
     );
-    t::lib::Mocks::mock_preference('checkprevcheckoutdelay', 5);
+    t::lib::Mocks::mock_preference( 'checkprevcheckoutdelay', 5 );
     is(
-            $patron1->do_check_for_previous_checkout($item_object->unblessed),
-            1, "Checking CheckPrevCheckoutDelay enabled within delay"
+        $patron1->do_check_for_previous_checkout( $item_object->unblessed ),
+        1, "Checking CheckPrevCheckoutDelay enabled within delay"
     );
-    t::lib::Mocks::mock_preference('checkprevcheckoutdelay', 1);
+    t::lib::Mocks::mock_preference( 'checkprevcheckoutdelay', 1 );
     is(
-            $patron1->do_check_for_previous_checkout($item_object->unblessed),
-            0, "Checking CheckPrevCheckoutDelay enabled after delay"
+        $patron1->do_check_for_previous_checkout( $item_object->unblessed ),
+        0, "Checking CheckPrevCheckoutDelay enabled after delay"
     );
     $schema->storage->txn_rollback;
-}
+    }

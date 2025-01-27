@@ -42,49 +42,49 @@ ALSO :
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI          qw ( -utf8 );
 use MIME::Base64 qw( encode_base64 );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth     qw( get_template_and_user );
 use C4::Context;
-use C4::Koha qw( getallthemes );
-use C4::Languages qw( getTranslatedLanguages );
+use C4::Koha        qw( getallthemes );
+use C4::Languages   qw( getTranslatedLanguages );
 use C4::ClassSource qw( GetClassSources GetClassSource );
-use C4::Output qw( output_html_with_http_headers output_and_exit_if_error );
+use C4::Output      qw( output_html_with_http_headers output_and_exit_if_error );
 use YAML::XS;
 
-my %tabsysprefs; #we do no longer need to keep track of a tab per pref (yaml)
+my %tabsysprefs;    #we do no longer need to keep track of a tab per pref (yaml)
 
 sub StringSearch {
     my ( $searchstring, $tab ) = @_;
-    return (0,[]) if $tab ne 'local_use';
+    return ( 0, [] ) if $tab ne 'local_use';
 
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
-    my @data = split( ' ', $searchstring );
+    my @data  = split( ' ', $searchstring );
     my $count = @data;
     my @results;
     my $cnt = 0;
     my $sth;
 
     my $strsth = "Select variable,value,explanation,type,options from systempreferences where variable in (";
-    my $first = 1;
+    my $first  = 1;
     my @sql_bind;
     for my $name ( get_local_prefs() ) {
-                $strsth .= ',' unless $first;
-                $strsth .= "?";
-                push(@sql_bind,$name);
-                $first = 0;
+        $strsth .= ',' unless $first;
+        $strsth .= "?";
+        push( @sql_bind, $name );
+        $first = 0;
     }
     $strsth .= ") order by variable";
     $sth = $dbh->prepare($strsth);
     $sth->execute(@sql_bind);
 
     while ( my $data = $sth->fetchrow_hashref ) {
-            unless (defined $data->{value}) { $data->{value} = "";}
-            $data->{shortvalue} = $data->{value};
-            $data->{shortvalue} = substr( $data->{value}, 0, 60 ) . "..." if length( $data->{value} ) > 60;
-            push( @results, $data );
-            $cnt++;
+        unless ( defined $data->{value} ) { $data->{value} = ""; }
+        $data->{shortvalue} = $data->{value};
+        $data->{shortvalue} = substr( $data->{value}, 0, 60 ) . "..." if length( $data->{value} ) > 60;
+        push( @results, $data );
+        $cnt++;
     }
 
     return ( $cnt, \@results );
@@ -106,7 +106,7 @@ sub GetPrefParams {
     $params->{'prefoptions'} = $data->{'options'};
 
     if ( not defined( $data->{'type'} ) ) {
-        $params->{'type_free'} = 1;
+        $params->{'type_free'}   = 1;
         $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 );
     } elsif ( $data->{'type'} eq 'cud-Upload' ) {
         $params->{'type_upload'} = 1;
@@ -122,7 +122,10 @@ sub GetPrefParams {
         }
     } elsif ( $data->{'type'} eq 'Integer' || $data->{'type'} eq 'Float' ) {
         $params->{'type_free'} = 1;
-        $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 ) ? $data->{'options'} : 10;
+        $params->{'fieldlength'} =
+            ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 )
+            ? $data->{'options'}
+            : 10;
     } elsif ( $data->{'type'} eq 'Textarea' ) {
         $params->{'type_textarea'} = 1;
         $data->{options} =~ /(.*)\|(.*)/;
@@ -192,7 +195,10 @@ sub GetPrefParams {
         $params->{'type_langselector'} = 1;
     } else {
         $params->{'type_free'} = 1;
-        $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 ) ? $data->{'options'} : 30;
+        $params->{'fieldlength'} =
+            ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 )
+            ? $data->{'options'}
+            : 30;
     }
 
     if ( $params->{'type_choice'} || $params->{'type_free'} || $params->{'type_yesno'} ) {
@@ -212,14 +218,15 @@ my $offset      = $input->param('offset') || 0;
 my $script_name = "/cgi-bin/koha/admin/systempreferences.pl";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/systempreferences.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_sysprefs' },
+    {
+        template_name => "admin/systempreferences.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_sysprefs' },
     }
 );
 my $pagesize = 100;
-my $op = $input->param('op') || '';
+my $op       = $input->param('op') || '';
 $searchfield =~ s/\,//g;
 
 if ($op) {
@@ -229,7 +236,7 @@ if ($op) {
 }
 
 if ( $op eq 'update_and_reedit' ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
+    output_and_exit_if_error( $input, $cookie, $template, { check => 'csrf_token' } );
     foreach ( $input->param ) {
     }
     my $value = '';
@@ -262,7 +269,7 @@ if ( $op eq 'update_and_reedit' ) {
         }
     }
     my $variable = $input->param('variable');
-    C4::Context->set_preference($variable, $value);
+    C4::Context->set_preference( $variable, $value );
 }
 
 ################## ADD_FORM ##################################
@@ -274,7 +281,8 @@ if ( $op eq 'add_form' ) {
     my $data;
     if ($searchfield) {
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
+        my $sth =
+            $dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
         $sth->execute($searchfield);
         $data = $sth->fetchrow_hashref;
         $template->param( modify => 1 );
@@ -285,13 +293,14 @@ if ( $op eq 'add_form' ) {
 
     $data->{'lang'} = $template->param('lang');
     my $prefparams = GetPrefParams($data);
-    $template->param( %$prefparams );
+    $template->param(%$prefparams);
     $template->param( searchfield => $searchfield );
 
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
 } elsif ( $op eq 'cud-add_validate' ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
+    output_and_exit_if_error( $input, $cookie, $template, { check => 'csrf_token' } );
+
     # to handle multiple values
     my $value;
 
@@ -338,9 +347,10 @@ if ( $op eq 'add_form' ) {
 ################## DELETE_CONFIRMED ##################################
     # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ( $op eq 'cud-delete_confirmed' ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
+    output_and_exit_if_error( $input, $cookie, $template, { check => 'csrf_token' } );
     C4::Context->delete_preference($searchfield);
     $template->param( delete_confirmed => 1 );
+
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else {    # DEFAULT
@@ -352,7 +362,7 @@ if ( $op eq 'add_form' ) {
     for ( my $i = $offset ; $i < ( $offset + $pagesize < $count ? $offset + $pagesize : $count ) ; $i++ ) {
         my $row_data = $results->[$i];
         $row_data->{'lang'} = $template->param('lang');
-        $row_data           = GetPrefParams($row_data);                                                         # get a fresh hash for the row data
+        $row_data           = GetPrefParams($row_data);    # get a fresh hash for the row data
         $row_data->{edit}   = "$script_name?op=add_form&amp;searchfield=" . $results->[$i]{'variable'};
         $row_data->{delete} = "$script_name?op=delete_confirm&amp;searchfield=" . $results->[$i]{'variable'};
         push( @loop_data, $row_data );
@@ -370,24 +380,23 @@ if ( $op eq 'add_form' ) {
 }    #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
 
-
 # Return an array containing all preferences defined in current Koha instance
 # .pref files.
 
 sub get_prefs_from_files {
-    my $path_pref_en  = C4::Context->config('intrahtdocs') .
-                        '/prog/en/modules/admin/preferences';
+    my $path_pref_en = C4::Context->config('intrahtdocs') . '/prog/en/modules/admin/preferences';
+
     # Get all .pref file names
-    opendir ( my $fh, $path_pref_en );
+    opendir( my $fh, $path_pref_en );
     my @pref_files = grep { /.pref$/ } readdir($fh);
     close $fh;
 
-    my @names = ();
+    my @names  = ();
     my $append = sub {
         my $prefs = shift;
-        for my $pref ( @$prefs ) {
-            for my $element ( @$pref ) {
-                if ( ref( $element) eq 'HASH' ) {
+        for my $pref (@$prefs) {
+            for my $element (@$pref) {
+                if ( ref($element) eq 'HASH' ) {
                     my $name = $element->{pref};
                     next unless $name;
                     push @names, $name;
@@ -397,7 +406,7 @@ sub get_prefs_from_files {
         }
     };
     for my $file (@pref_files) {
-        my $pref = YAML::XS::LoadFile( "$path_pref_en/$file" );
+        my $pref = YAML::XS::LoadFile("$path_pref_en/$file");
         for my $tab ( keys %$pref ) {
             my $content = $pref->{$tab};
             if ( ref($content) eq 'ARRAY' ) {
@@ -413,7 +422,6 @@ sub get_prefs_from_files {
     return @names;
 }
 
-
 # Return an array containg all preferences defined in DB
 
 sub get_prefs_from_db {
@@ -421,24 +429,23 @@ sub get_prefs_from_db {
     my $sth = $dbh->prepare("SELECT variable FROM systempreferences");
     $sth->execute;
     my @names = ();
-    while ( (my $name) = $sth->fetchrow_array ) {
+    while ( ( my $name ) = $sth->fetchrow_array ) {
         push @names, $name if $name;
     }
     return @names;
 }
-
 
 # Return an array containing all local preferences: those which are defined in
 # DB and not defined in Koha .pref files.
 
 sub get_local_prefs {
     my @prefs_file = get_prefs_from_files();
-    my @prefs_db = get_prefs_from_db();
+    my @prefs_db   = get_prefs_from_db();
 
     my %prefs_file = map { lc $_ => 1 } @prefs_file;
-    my @names = ();
+    my @names      = ();
     foreach my $name (@prefs_db) {
-        push @names, $name  unless $prefs_file{lc $name};
+        push @names, $name unless $prefs_file{ lc $name };
     }
 
     return @names;

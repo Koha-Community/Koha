@@ -43,14 +43,13 @@ sub list {
     return try {
 
         my $funds_rs = Koha::Acquisition::Funds->new;
-        my $funds = $c->objects->search( $funds_rs );
+        my $funds    = $c->objects->search($funds_rs);
 
         return $c->render(
             status  => 200,
             openapi => $funds
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -67,14 +66,13 @@ sub list_owners {
     return try {
 
         my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('acquisition.budget_modify');
-        my $patrons    = $c->objects->search( $patrons_rs );
+        my $patrons    = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -91,14 +89,13 @@ sub list_users {
     return try {
 
         my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('acquisition.budget_modify');
-        my $patrons    = $c->objects->search( $patrons_rs );
+        my $patrons    = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

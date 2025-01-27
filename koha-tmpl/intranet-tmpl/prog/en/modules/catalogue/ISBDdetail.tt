@@ -4,16 +4,17 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( unknownbiblionumber ) %]
-        [% t("Unknown record") | html %]
-    [% ELSE %]
-        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
-        [% tx("ISBD details for {title}", { title = title_in_title }) | html %]
-    [% END %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( unknownbiblionumber ) %]
+            [% t("Unknown record") | html %]
+        [% ELSE %]
+            [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+            [% tx("ISBD details for {title}", { title = title_in_title }) | html %]
+        [% END %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_ISBDdetail" class="catalog">
@@ -44,41 +45,43 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
-                [% INCLUDE 'cat-toolbar.inc' %]
-                <h1>
-                    [% IF ( unknownbiblionumber ) %]
-                        Unknown record
-                    [% ELSE %]
-                        ISBD details for [% INCLUDE 'biblio-title-head.inc' %]
-                    [% END %]
-                </h1>
+    [% INCLUDE 'cat-toolbar.inc' %]
+    <h1>
+        [% IF ( unknownbiblionumber ) %]
+            Unknown record
+        [% ELSE %]
+            ISBD details for [% INCLUDE 'biblio-title-head.inc' %]
+        [% END %]
+    </h1>
 
-                [% IF ( unknownbiblionumber ) %]
-                    <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
-                [% ELSE %]
+    [% IF ( unknownbiblionumber ) %]
+        <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
+    [% ELSE %]
 
-                    [% IF ( ocoins ) %]
-                    <!-- COinS / OpenURL -->
-                    <span class="Z3988" title="[% ocoins | html %]"></span>
-                    [% END %]
+        [% IF ( ocoins ) %]
+            <!-- COinS / OpenURL -->
+            <span class="Z3988" title="[% ocoins | html %]"></span>
+        [% END %]
 
-                    <div id="catalogue_ISBDdetail" class="page-section">
-                        [% ISBD | $raw %]
-                    </div>
-                [% END %]
+        <div id="catalogue_ISBDdetail" class="page-section"> [% ISBD | $raw %] </div>
+    [% END %]
 [% END %]
 
-    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+[% IF ( Koha.Preference('CatalogConcerns') ) %]
     [% INCLUDE 'modals/add_catalog_concern.inc' %]
-    [% END %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+    </script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+    </script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]

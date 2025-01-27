@@ -22,7 +22,7 @@ use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output  qw( output_html_with_http_headers );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Members;
 use C4::Members::Messaging qw( SetMessagingPreferencesFromDefaults );
@@ -42,7 +42,7 @@ unless ( C4::Context->preference('PatronSelfRegistration') ) {
 }
 
 my $token = $cgi->param('token');
-my $op = $cgi->param('op');
+my $op    = $cgi->param('op');
 my $confirmed;
 if ( $op && $op eq 'cud-confirmed' ) {
     $confirmed = 1;
@@ -74,12 +74,12 @@ if ( $rego_found
         }
     );
     $template->param( "token" => $token );
-}
-elsif ( $rego_found
+} elsif ( $rego_found
     and $confirmed )
 {
     my $patron_attrs = $m->unblessed;
-    $patron_attrs->{password} ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($patron_attrs->{categorycode}));
+    $patron_attrs->{password} ||=
+        Koha::AuthUtils::generate_password( Koha::Patron::Categories->find( $patron_attrs->{categorycode} ) );
     my $consent_dt = delete $patron_attrs->{gdpr_proc_consent};
     $patron_attrs->{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
     delete $patron_attrs->{timestamp};
@@ -89,8 +89,10 @@ elsif ( $rego_found
 
     my $patron;
     try {
-        $patron = Koha::Patron->new( $patron_attrs )->store;
-        Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $patron && $consent_dt;
+        $patron = Koha::Patron->new($patron_attrs)->store;
+        Koha::Patron::Consent->new(
+            { borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt } )->store
+            if $patron && $consent_dt;
         C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
             { borrowernumber => $patron->borrowernumber, categorycode => $patron->categorycode } );
     } catch {
@@ -99,9 +101,9 @@ elsif ( $rego_found
     };
 
     if ($patron) {
-        if( $m->extended_attributes ){
-            $m->borrowernumber( $patron->borrowernumber);
-            $m->changed_fields(['extended_attributes']);
+        if ( $m->extended_attributes ) {
+            $m->borrowernumber( $patron->borrowernumber );
+            $m->changed_fields( ['extended_attributes'] );
             $m->approve();
         } else {
             $m->delete();
@@ -117,12 +119,14 @@ elsif ( $rego_found
         $template->param( "confirmed" => 1 );
 
         $template->param( password_cleartext => $patron->plain_text_password );
-        $template->param( borrower => $patron );
+        $template->param( borrower           => $patron );
 
         # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( C4::Context->preference("AutoEmailNewUser") ) {
+
             # Look up correct email address taking EmailFieldPrimary into account
             my $emailaddr = $patron->notice_email_address;
+
             # if we manage to find a valid email address, send notice
             if ($emailaddr) {
                 eval {
@@ -157,24 +161,26 @@ elsif ( $rego_found
             $patron->notify_library_of_registration($notify_library);
         }
 
-        $template->param(
-            PatronSelfRegistrationAdditionalInstructions =>
-              C4::Context->preference(
-                'PatronSelfRegistrationAdditionalInstructions')
-        );
+        $template->param( PatronSelfRegistrationAdditionalInstructions =>
+                C4::Context->preference('PatronSelfRegistrationAdditionalInstructions') );
 
-        my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-registration-confirmation.tt','opac',$cgi);
+        my ( $theme, $news_lang, $availablethemes ) = C4::Templates::themelanguage(
+            C4::Context->config('opachtdocs'), 'opac-registration-confirmation.tt',
+            'opac',                            $cgi
+        );
         $template->param( news_lang => $news_lang );
     }
 }
 
-if( !$template ) { # Missing token, patron exception, etc.
-    ( $template, $borrowernumber, $cookie ) = get_template_and_user({
-        template_name   => "opac-registration-invalid.tt",
-        type            => "opac",
-        query           => $cgi,
-        authnotrequired => C4::Context->preference("OpacPublic") ? 1 : 0,
-    });
+if ( !$template ) {    # Missing token, patron exception, etc.
+    ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+        {
+            template_name   => "opac-registration-invalid.tt",
+            type            => "opac",
+            query           => $cgi,
+            authnotrequired => C4::Context->preference("OpacPublic") ? 1 : 0,
+        }
+    );
     $template->param( error_type => $error_type, error_info => $error_info );
 }
 

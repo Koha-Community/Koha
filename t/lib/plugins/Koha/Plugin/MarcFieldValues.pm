@@ -6,7 +6,7 @@ use MARC::Record;
 
 use base qw(Koha::Plugins::Base);
 
-our $VERSION = 1.00;
+our $VERSION  = 1.00;
 our $metadata = {
     name            => 'MarcFieldValues',
     author          => 'M. de Rooy',
@@ -49,15 +49,17 @@ sub new {
 
 sub to_marc {
     my ( $self, $args ) = @_;
+
     # $args->{data} contains text to convert to MARC
-    my $retval = '';
+    my $retval  = '';
     my @records = split /\r?\n\r?\n/, $args->{data};
-    foreach my $rec ( @records ) {
-        my @lines = split /\r?\n/, $rec;
-        my $marc = MARC::Record->new;
-        my $inds = {};
+    foreach my $rec (@records) {
+        my @lines    = split /\r?\n/, $rec;
+        my $marc     = MARC::Record->new;
+        my $inds     = {};
         my $fldcount = 0;
-        foreach my $line ( @lines ) {
+        foreach my $line (@lines) {
+
             # each line is of the form field [,ind1|,ind2|,subcode] = value
             my @temp = split /\s*=\s*/, $line, 2;
             next if @temp < 2;
@@ -65,18 +67,26 @@ sub to_marc {
             $temp[1] =~ s/\s*$//;
             my $value = $temp[1];
             @temp = split /\s*,\s*/, $temp[0];
-            if( @temp > 1 && $temp[1] =~ /ind[12]/ ) {
-                $inds->{$temp[0]}->{$temp[1]} = substr($value, 0, 1);
+            if ( @temp > 1 && $temp[1] =~ /ind[12]/ ) {
+                $inds->{ $temp[0] }->{ $temp[1] } = substr( $value, 0, 1 );
                 next;
             }
             $fldcount++;
-            $marc->append_fields( MARC::Field->new(
-                $temp[0],
-                $temp[0] < 10
+            $marc->append_fields(
+                MARC::Field->new(
+                    $temp[0],
+                    $temp[0] < 10
                     ? ()
-                    : ( ( $inds->{$temp[0]} ? $inds->{$temp[0]}->{ind1} // '' : '', $inds->{$temp[0]} ? $inds->{$temp[0]}->{ind2} // '' : ''), substr( $temp[1], 0, 1 ) ),
-                $value,
-            ));
+                    : (
+                        (
+                            $inds->{ $temp[0] } ? $inds->{ $temp[0] }->{ind1} // '' : '',
+                            $inds->{ $temp[0] } ? $inds->{ $temp[0] }->{ind2} // '' : ''
+                        ),
+                        substr( $temp[1], 0, 1 )
+                    ),
+                    $value,
+                )
+            );
         }
         $retval .= $marc->as_usmarc if $fldcount;
     }

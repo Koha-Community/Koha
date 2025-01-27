@@ -57,41 +57,45 @@ sub process {
 
     $self->start;
 
-    my $import_batch_id = $args->{import_batch_id};
-    my $frameworkcode = $args->{frameworkcode};
+    my $import_batch_id       = $args->{import_batch_id};
+    my $frameworkcode         = $args->{frameworkcode};
     my $overlay_frameworkcode = $args->{overlay_framework};
 
     my @messages;
     my $job_progress = 0;
 
-    my ( $num_added, $num_updated, $num_items_added,
-        $num_items_replaced, $num_items_errored, $num_ignored );
+    my (
+        $num_added,          $num_updated,       $num_items_added,
+        $num_items_replaced, $num_items_errored, $num_ignored
+    );
     try {
-        my $size = Koha::Import::Records->search({ import_batch_id => $import_batch_id })->count;
+        my $size = Koha::Import::Records->search( { import_batch_id => $import_batch_id } )->count;
         $self->size($size)->store;
-        ( $num_added, $num_updated, $num_items_added,
-          $num_items_replaced, $num_items_errored, $num_ignored ) =
-          BatchCommitRecords({
-            batch_id => $import_batch_id,
-            framework => $frameworkcode,
-            overlay_framework => $overlay_frameworkcode,
-            progress_interval => 50,
-            progress_callback =>
-                sub { my $job_progress = shift; $self->progress( $job_progress )->store },
-            });
+        (
+            $num_added,          $num_updated,       $num_items_added,
+            $num_items_replaced, $num_items_errored, $num_ignored
+            )
+            = BatchCommitRecords(
+            {
+                batch_id          => $import_batch_id,
+                framework         => $frameworkcode,
+                overlay_framework => $overlay_frameworkcode,
+                progress_interval => 50,
+                progress_callback => sub { my $job_progress = shift; $self->progress($job_progress)->store },
+            }
+            );
         my $count = $num_added + $num_updated;
-        if( $count ) {
-            $self->set({ progress => $count, size => $count });
-        } else { # TODO Refine later
-            $self->set({ progress => 0, status => 'failed' });
+        if ($count) {
+            $self->set( { progress => $count, size => $count } );
+        } else {    # TODO Refine later
+            $self->set( { progress => 0, status => 'failed' } );
         }
-    }
-    catch {
+    } catch {
         warn $_;
-        Koha::Database->schema->storage->txn_rollback; # TODO BatchCommitRecords started a transaction
+        Koha::Database->schema->storage->txn_rollback;    # TODO BatchCommitRecords started a transaction
         die "Something terrible has happened!"
-          if ( $_ =~ /Rollback failed/ );    # Rollback failed
-        $self->set({ progress => 0, status => 'failed' });
+            if ( $_ =~ /Rollback failed/ );               # Rollback failed
+        $self->set( { progress => 0, status => 'failed' } );
     };
 
     my $report = {
@@ -117,13 +121,15 @@ Enqueue the new job
 =cut
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
-    $self->SUPER::enqueue({
-        job_size  => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
-        job_args  => $args,
-        job_queue => 'long_tasks',
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size  => Koha::Import::Records->search( { import_batch_id => $args->{import_batch_id} } )->count,
+            job_args  => $args,
+            job_queue => 'long_tasks',
+        }
+    );
 }
 
 1;

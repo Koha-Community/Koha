@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Members;
 use C4::Circulation qw( GetIssuingCharges );
@@ -34,21 +34,24 @@ my $borrowernumber = $input->param('borrowernumber');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/moremember-print.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "members/moremember-print.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 my $total = $patron->account->balance;
 my $accts = Koha::Account::Lines->search(
     { borrowernumber => $patron->borrowernumber, amountoutstanding => { '!=' => 0 } },
-    { order_by       => { -desc => 'accountlines_id' } }
+    { order_by => { -desc => 'accountlines_id' } }
 );
 
 our $totalprice = 0;
@@ -63,21 +66,23 @@ $template->param(
     accounts => $accts,
     totaldue => $total,
 
-    issues     => build_issue_data( $borrowernumber ),
+    issues     => build_issue_data($borrowernumber),
     totalprice => $totalprice,
 
-    reserves => build_reserve_data( $holds_rs ),
+    reserves => build_reserve_data($holds_rs),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub build_issue_data {
-    my ( $borrowernumber ) = @_;
-    my $patron = Koha::Patrons->find( $borrowernumber );
+    my ($borrowernumber) = @_;
+    my $patron = Koha::Patrons->find($borrowernumber);
     return unless $patron;
 
-    my $pending_checkouts = $patron->pending_checkouts->search( {},
-        { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] } );
+    my $pending_checkouts = $patron->pending_checkouts->search(
+        {},
+        { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] }
+    );
 
     my @checkouts;
 
@@ -89,7 +94,7 @@ sub build_issue_data {
 
         #find the charge for an item
         my ( $charge, $itemtype ) =
-          GetIssuingCharges( $checkout->{itemnumber}, $borrowernumber );
+            GetIssuingCharges( $checkout->{itemnumber}, $borrowernumber );
 
         $checkout->{charge} = $charge;
 

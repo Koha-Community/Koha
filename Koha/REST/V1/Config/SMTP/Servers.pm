@@ -38,13 +38,12 @@ sub list {
 
     return try {
         my $smtp_servers_set = Koha::SMTP::Servers->new;
-        my $smtp_servers = $c->objects->search( $smtp_servers_set );
+        my $smtp_servers     = $c->objects->search($smtp_servers_set);
         return $c->render(
             status  => 200,
             openapi => $smtp_servers
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -68,8 +67,7 @@ sub get {
             status  => 200,
             openapi => $c->objects->to_api($smtp_server),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     }
 }
@@ -94,8 +92,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($smtp_server),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
@@ -132,8 +129,7 @@ sub update {
             status  => 200,
             openapi => $c->objects->to_api($smtp_server),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,

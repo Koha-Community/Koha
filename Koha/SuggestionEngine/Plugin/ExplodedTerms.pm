@@ -83,7 +83,7 @@ sub get_suggestions {
     foreach my $index ( keys %{$indexes_to_label} ) {
         my $thissearch = $search;
         $thissearch = "$index:$thissearch"
-          unless ( $thissearch =~ s/OP!/$index:/g );
+            unless ( $thissearch =~ s/OP!/$index:/g );
         push @results, {
             'search'  => $thissearch,
             relevance => 100,

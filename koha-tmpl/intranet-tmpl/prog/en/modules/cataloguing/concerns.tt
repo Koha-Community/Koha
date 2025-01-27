@@ -7,56 +7,57 @@
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Catalog concerns") | html %] &rsaquo;
-    [% t("Cataloging") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Catalog concerns") | html %]
+        &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_concerns" class="cat">
-    [% INCLUDE 'header.inc' %]
-    [% INCLUDE 'cataloging-search.inc' %]
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cataloging-search.inc' %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Catalog concerns</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' aside='cat-menu' %]
+    <h1>Catalog concerns</h1>
+
+    <div class="page-section">
+        <fieldset class="action filters" style="cursor:pointer;">
+            <a id="resolved_filter"><i class="fa fa-bars"></i> Include resolved</a>
+            <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
+            [% FOR st IN status %]
+                | <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
+                <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" />
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Catalog concerns</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
+        </fieldset>
 
-    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
-                    <h1>Catalog concerns</h1>
-
-                    <div class="page-section">
-                        <fieldset class="action filters" style="cursor:pointer;">
-                            <a id="resolved_filter"><i class="fa fa-bars"></i> Include resolved</a>
-                            <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
-                            [% FOR st IN status %]
-                            | <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
-                            <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" />
-                            [% END %]
-                        </fieldset>
-
-                        <table id="table_concerns">
-                            <thead>
-                                <tr>
-                                    <th>Reported</th>
-                                    <th>Details</th>
-                                    <th>Title</th>
-                                    <th>Status</th>
-                                    <th data-class-name="actions noExport">Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-    [% END %]
-        [% INCLUDE 'modals/display_ticket.inc' %]
+        <table id="table_concerns">
+            <thead>
+                <tr>
+                    <th>Reported</th>
+                    <th>Details</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th data-class-name="actions noExport">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+[% END %]
+[% INCLUDE 'modals/display_ticket.inc' %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

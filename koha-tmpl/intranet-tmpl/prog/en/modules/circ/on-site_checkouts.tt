@@ -7,11 +7,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Pending on-site checkouts") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Pending on-site checkouts") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -33,56 +34,52 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-
-        <h1>Pending on-site checkouts</h1>
-        [% IF pending_onsite_checkouts %]
-            <div class="page-section">
-                <table id="pending_onsite_checkout">
-                    <thead>
+    <h1>Pending on-site checkouts</h1>
+    [% IF pending_onsite_checkouts %]
+        <div class="page-section">
+            <table id="pending_onsite_checkout">
+                <thead>
+                    <tr> <th>Date</th><th>Patron</th><th>Title</th><th>Call number</th><th>Barcode</th><th>Library</th><th>Location</th> </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH item IN pending_onsite_checkouts %]
                         <tr>
-                            <th>Date</th><th>Patron</th><th>Title</th><th>Call number</th><th>Barcode</th><th>Library</th><th>Location</th>
+                            <td data-order="[% item.date_due | html %]">
+                                [% IF item.is_overdue %]
+                                    <span class="overdue"> [% item.date_due | $KohaDates as_due_date => 1 %] </span>
+                                [% ELSE %]
+                                    [% item.date_due | $KohaDates as_due_date => 1 %]
+                                [% END %]
+                            </td>
+                            <td>
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber | uri %]">[% item.firstname | html %] [% item.surname | html %]</a>
+                            </td>
+                            <td>
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]"><strong>[% item.title | html %]</strong></a
+                                >[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | $raw %]</span>[% END %]
+                            </td>
+                            <td>[% item.itemcallnumber | html %]</td>
+                            <td>
+                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a>
+                            </td>
+                            <td>[% Branches.GetName(item.branchcode) | html %]</td>
+                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH item IN pending_onsite_checkouts %]
-                            <tr>
-                                <td data-order="[% item.date_due | html %]">
-                                    [% IF item.is_overdue %]
-                                        <span class="overdue">
-                                            [% item.date_due | $KohaDates as_due_date => 1 %]
-                                        </span>
-                                    [% ELSE %]
-                                        [% item.date_due | $KohaDates as_due_date => 1 %]
-                                    [% END %]
-                                </td>
-                                <td>
-                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber | uri %]">[% item.firstname | html %] [% item.surname | html %]</a>
-                                </td>
-                                <td>
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]"><strong>[% item.title | html %]</strong></a>[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | $raw %]</span>[% END %]
-                                </td>
-                                <td>[% item.itemcallnumber | html %]</td>
-                                <td>
-                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a>
-                                </td>
-                                <td>[% Branches.GetName(item.branchcode) | html %]</td>
-                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
-                            </tr>
-                        [% END %]
-                    </tbody>
-                </table>
-            </div> <!-- /.page-section -->
-        [% ELSE %]
-          <h3>No pending on-site checkout.</h3>
-        [% END %]
-
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <h3>No pending on-site checkout.</h3>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function(){
-            if ( $("#pending_onsite_checkout").length ) {
+        $(document).ready(function () {
+            if ($("#pending_onsite_checkout").length) {
                 $("#pending_onsite_checkout").dataTable($.extend(true, {}, dataTablesDefaults));
             }
         });

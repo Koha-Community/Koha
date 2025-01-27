@@ -28,8 +28,7 @@ sub TIEHANDLE {
 sub PRINT {
     my $self = shift;
     $Log::Log4perl::caller_depth += 3;
-    my $logger =
-      Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
+    my $logger = Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
     warn @_;
     $logger->warn(@_);
     $Log::Log4perl::caller_depth -= 3;
@@ -55,6 +54,6 @@ sub OPEN {
 sub BINMODE {
     my ( $self, $mode ) = @_;
     binmode( STDOUT, $mode );
-};
+}
 
 1;

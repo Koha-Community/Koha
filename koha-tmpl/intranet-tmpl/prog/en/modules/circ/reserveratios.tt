@@ -9,16 +9,23 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Hold ratios") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Hold ratios") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-    .sql { display: none; }
-    .ulined { text-decoration: underline; }
-    #holdst ul li {  list-style: outside url("[% interface | html %]/[% theme | html %]/img/item-bullet.svg") disc; }
+    .sql {
+        display: none;
+    }
+    .ulined {
+        text-decoration: underline;
+    }
+    #holdst ul li {
+        list-style: outside url("[% interface | html %]/[% theme | html %]/img/item-bullet.svg") disc;
+    }
 </style>
 </head>
 
@@ -44,161 +51,165 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-<h1>Hold ratios to calculate items needed</h1>
-   <h3>Calculated on [% todaysdate | $KohaDates %]. From [% from | $KohaDates %]
-    to [% to | $KohaDates %]</h3>
-<p>These items have a hold ratio &ge; [% ratio | html %].</p>
-<div class="sql">[% sql | html %]</div>
+                <h1>Hold ratios to calculate items needed</h1>
+                <h3>Calculated on [% todaysdate | $KohaDates %]. From [% from | $KohaDates %] to [% to | $KohaDates %]</h3>
+                <p>These items have a hold ratio &ge; [% ratio | html %].</p>
+                <div class="sql">[% sql | html %]</div>
 
-[% IF ( reserveloop ) %]
-    <div class="page-section">
-        <table id="holds-ratios">
-            <thead>
-                <tr>
-                <th>Holds</th>
-                <th>Items</th>
-                <th>Hold ratio</th>
-                <th class="anti-the">Title</th>
-                <th>Home libraries</th>
-                <th>Holding libraries</th>
-                <th>Location</th>
-                <th>Itype</th>
-                <th>Collection</th>
-                <th class="natural">Call numbers</th>
-                <th>Items needed</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH reserveloo IN reserveloop %]
-                    <tr>
-                        <td><p>[% reserveloo.reservecount | html %]</p></td>
-                        <td><p>[% reserveloo.itemcount | html %]</p></td>
-                        <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reserveloo.biblionumber | uri %]" >[% reserveloo.thisratio | html %]</a></td>
-                        <td>
-                            [% INCLUDE 'biblio-title.inc' biblio=reserveloo link = 1 %][% IF ( reserveloo.author ) %] by [% reserveloo.author | html %][% END %]
-                        </td>
-                        <td>
-                            <ul>
-                                [% FOREACH homebranch IN reserveloo.homebranch_list %]
-                                    <li>[% Branches.GetName ( homebranch ) | html %]</li>
+                [% IF ( reserveloop ) %]
+                    <div class="page-section">
+                        <table id="holds-ratios">
+                            <thead>
+                                <tr>
+                                    <th>Holds</th>
+                                    <th>Items</th>
+                                    <th>Hold ratio</th>
+                                    <th class="anti-the">Title</th>
+                                    <th>Home libraries</th>
+                                    <th>Holding libraries</th>
+                                    <th>Location</th>
+                                    <th>Itype</th>
+                                    <th>Collection</th>
+                                    <th class="natural">Call numbers</th>
+                                    <th>Items needed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH reserveloo IN reserveloop %]
+                                    <tr>
+                                        <td><p>[% reserveloo.reservecount | html %]</p></td>
+                                        <td><p>[% reserveloo.itemcount | html %]</p></td>
+                                        <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reserveloo.biblionumber | uri %]">[% reserveloo.thisratio | html %]</a></td>
+                                        <td> [% INCLUDE 'biblio-title.inc' biblio=reserveloo link = 1 %][% IF ( reserveloo.author ) %]by [% reserveloo.author | html %][% END %] </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH homebranch IN reserveloo.homebranch_list %]
+                                                    <li>[% Branches.GetName ( homebranch ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH holdingbranch IN reserveloo.holdingbranch_list %]
+                                                    <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH location IN reserveloo.location %]
+                                                    <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => location ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH itype IN reserveloo.itype %]
+                                                    <li>[% ItemTypes.GetDescription( itype ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH ccode IN reserveloo.ccode %]
+                                                    <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ccode ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH listcall IN reserveloo.listcall %]
+                                                    <li>[% listcall | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td class="actions" data-sort="[% reserveloo.copies_to_buy | html %]">
+                                            <p>
+                                                [% IF ( reserveloo.thisratio_atleast1 ) %]
+                                                    [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
+                                                        <!-- [% reserveloo.copies_to_buy | html %] -->
+                                                        <a
+                                                            href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.copies_to_buy | uri %]"
+                                                            class="btn btn-default btn-xs"
+                                                            ><i class="fa fa-plus"></i> [% reserveloo.copies_to_buy | html %] to order</a
+                                                        >
+                                                    [% ELSE %]
+                                                        <strong>[% reserveloo.copies_to_buy | html %] to order</strong>
+                                                    [% END %]
+                                                    [% IF ( reserveloo.pendingorders ) %]<br /><strong>[% reserveloo.pendingorders | html %] pending</strong>[% END %]
+                                                [% ELSE %]
+                                                    <span>0 to order</span>
+                                                [% END %]
+                                            </p>
+                                        </td>
+                                    </tr>
                                 [% END %]
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                [% FOREACH holdingbranch IN reserveloo.holdingbranch_list %]
-                                    <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
-                                [% END %]
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                [% FOREACH location IN reserveloo.location %]
-                                    <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => location ) | html %]</li>
-                                [% END %]
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                [% FOREACH itype IN reserveloo.itype %]
-                                    <li>[% ItemTypes.GetDescription( itype ) | html %]</li>
-                                [% END %]
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                [% FOREACH ccode IN reserveloo.ccode %]
-                                    <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ccode ) | html %]</li>
-                                [% END %]
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                [% FOREACH listcall IN reserveloo.listcall %]
-                                    <li>[% listcall | html %]</li>
-                                [% END %]
-                            </ul>
-                        </td>
-                        <td class="actions" data-sort="[% reserveloo.copies_to_buy | html %]">
-                            <p>
-                                [% IF ( reserveloo.thisratio_atleast1 ) %]
-                                    [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.copies_to_buy | html %] -->
-                                        <a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.copies_to_buy | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% reserveloo.copies_to_buy | html %] to order</a>
-                                    [% ELSE %]
-                                        <strong>[% reserveloo.copies_to_buy | html %] to order</strong>
-                                    [% END %]
-                                    [% IF ( reserveloo.pendingorders ) %]<br><strong>[% reserveloo.pendingorders | html %] pending</strong>[% END %]
-                                [% ELSE %]
-                                    <span>0 to order</span>
-                                [% END %]
-                            </p>
-                        </td>
-                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.page-section -->
+                [% ELSE %]
+                    <strong>No items found.</strong>
                 [% END %]
-            </tbody>
-        </table>
-    </div> <!-- /.page-section -->
-[% ELSE %]
-    <strong>No items found.</strong>
-[% END %]
-
             </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
+                <form action="/cgi-bin/koha/circ/reserveratios.pl" method="get">
+                    <fieldset class="brief">
+                        <h4>Refine results:</h4>
+                        <ol>
+                            <li>
+                                <label for="ratio">Hold ratio (greater than or equal to):</label>
+                                <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
+                            </li>
 
-<form action="/cgi-bin/koha/circ/reserveratios.pl" method="get" >
-<fieldset class="brief">
-<h4>Refine results:</h4>
-<ol>
-    <li>
-        <label for="ratio">Hold ratio (greater than or equal to):</label>
-        <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
-    </li>
+                            <li class="checkbox">
+                                [% IF include_ordered %]
+                                    <input id="include_ordered" name="include_ordered" type="checkbox" checked="checked" />
+                                [% ELSE %]
+                                    <input id="include_ordered" name="include_ordered" type="checkbox" />
+                                [% END %]
+                                <label for="include_ordered">Include ordered</label>
+                            </li>
 
-    <li class="checkbox">
-        [% IF include_ordered %]
-            <input id="include_ordered" name="include_ordered" type="checkbox" checked="checked"/>
-        [% ELSE %]
-            <input id="include_ordered" name="include_ordered" type="checkbox"/>
-        [% END %]
-        <label for="include_ordered">Include ordered</label>
-    </li>
+                            <li class="checkbox">
+                                [% IF include_suspended %]
+                                    <input id="include_suspended" name="include_suspended" type="checkbox" checked="checked" />
+                                [% ELSE %]
+                                    <input id="include_suspended" name="include_suspended" type="checkbox" />
+                                [% END %]
+                                <label for="include_suspended">Include suspended</label>
+                            </li>
 
-    <li class="checkbox">
-        [% IF include_suspended %]
-            <input id="include_suspended" name="include_suspended" type="checkbox" checked="checked"/>
-        [% ELSE %]
-            <input id="include_suspended" name="include_suspended" type="checkbox"/>
-        [% END %]
-        <label for="include_suspended">Include suspended</label>
-    </li>
+                            <li>
+                                <label for="from">Start date:</label>
+                                <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to" />
+                            </li>
 
-    <li>
-        <label for="from">Start date:</label>
-        <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to" />
-    </li>
+                            <li>
+                                <label for="to">End date:</label>
+                                <input size="10" id="to" name="to" value="[% to | html %]" type="text" class="flatpickr" />
+                            </li>
+                        </ol>
+                        (inclusive)
 
-    <li>
-        <label for="to">End date:</label>
-        <input size="10" id="to" name="to" value="[% to | html %]" type="text" class="flatpickr" />
-    </li>
-</ol>
-(inclusive)
-
-<fieldset class="action"><input type="submit" value="Go" class="submit"/></fieldset>
-</fieldset>
-[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
-<input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-<input type="hidden" name="basketno" value="[% basketno | html %]" />
-[% END %]
-</form>
-
+                        <fieldset class="action"><input type="submit" value="Go" class="submit" /></fieldset>
+                    </fieldset>
+                    [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
+                        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                        <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                    [% END %]
+                </form>
             </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
@@ -206,18 +217,18 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
-        $(document).ready(function() {
-            KohaTable("holds-ratios", {
-                "order": [ [2,'desc'], [3,'asc'] ],
-                  "columnDefs": [
-                      { "type": "anti-the", "targets":  [ "anti-the" ] },
-                      { "type": "natural", "targets":  [ "natural" ] },
-                    ],
-                "pagingType": "full",
-                "autoWidth": false
-            }, table_settings);
-       });
-  </script>
+         $(document).ready(function() {
+             KohaTable("holds-ratios", {
+                 "order": [ [2,'desc'], [3,'asc'] ],
+                   "columnDefs": [
+                       { "type": "anti-the", "targets":  [ "anti-the" ] },
+                       { "type": "natural", "targets":  [ "natural" ] },
+                     ],
+                 "pagingType": "full",
+                 "autoWidth": false
+             }, table_settings);
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

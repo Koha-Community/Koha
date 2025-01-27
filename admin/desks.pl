@@ -17,23 +17,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Desks;
 
 my $input       = CGI->new;
 my $searchfield = $input->param('desk_name') // q||;
-my $desk_id      = $input->param('desk_id') || '';
-my $op          = $input->param('op') || 'list';
+my $desk_id     = $input->param('desk_id') || '';
+my $op          = $input->param('op')      || 'list';
 my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/desks.tt",
+    {
+        template_name   => "admin/desks.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -51,11 +51,11 @@ if ( $op eq 'add_form' ) {
 
     $template->param( desk => $desk, );
 } elsif ( $op eq 'cud-add_validate' ) {
-    my $desk_id       = $input->param('desk_id');
-    my $desk_name    = $input->param('desk_name');
-    my $branchcode   = $input->param('branchcode');
+    my $desk_id    = $input->param('desk_id');
+    my $desk_name  = $input->param('desk_name');
+    my $branchcode = $input->param('branchcode');
 
-    if (Koha::Desks->find($desk_id)) {
+    if ( Koha::Desks->find($desk_id) ) {
         my $desk = Koha::Desks->find($desk_id);
         $desk->desk_name($desk_name);
         $desk->branchcode($branchcode);
@@ -68,9 +68,9 @@ if ( $op eq 'add_form' ) {
     } else {
         my $desk = Koha::Desk->new(
             {
-                desk_id       => $desk_id,
-                desk_name    => $desk_name,
-                branchcode   => $branchcode,
+                desk_id    => $desk_id,
+                desk_name  => $desk_name,
+                branchcode => $branchcode,
             }
         );
         eval { $desk->store; };
@@ -86,7 +86,7 @@ if ( $op eq 'add_form' ) {
     my $desk = Koha::Desks->find($desk_id);
     $template->param( desk => $desk, );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
-    my $desk = Koha::Desks->find($desk_id);
+    my $desk    = Koha::Desks->find($desk_id);
     my $deleted = eval { $desk->delete; };
 
     if ( $@ or not $deleted ) {
@@ -97,13 +97,13 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 }
 
-if ( $op eq 'list' || ! $op) {
+if ( $op eq 'list' || !$op ) {
     my $desks = Koha::Desks->search( { desk_name => { -like => "%$searchfield%" } } );
     $template->param( desks => $desks, );
 }
 
 $template->param(
-    desk_id      => $desk_id,
+    desk_id     => $desk_id,
     searchfield => $searchfield,
     messages    => \@messages,
     op          => $op,

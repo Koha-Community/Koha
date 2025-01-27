@@ -2,106 +2,96 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 106 builder") | html %] &rsaquo;
-    [% t("Cataloguing") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 106 builder") | html %]
+        &rsaquo; [% t("Cataloguing") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_106" class="cat value_builder">
-    <h1>UNIMARC field 106 builder</h1>
-    <form method="get" name="f_pop" action="">
-        <div class="page-section">
-            <table>
-                <tr>
-                    <td><label for="f1">Form of item: Coded data: Medium designator (not repeatable)</label></td>
-                    <td>
-                        <select name="f1" id="f1">
+<h1>UNIMARC field 106 builder</h1>
+<form method="get" name="f_pop" action="">
+    <div class="page-section">
+        <table>
+            <tr>
+                <td><label for="f1">Form of item: Coded data: Medium designator (not repeatable)</label></td>
+                <td>
+                    <select name="f1" id="f1">
+                        [% IF ( f1r ) %]
+                            <option value="r" selected="selected">regular print</option>
+                        [% ELSE %]
+                            <option value="r">regular print</option>
+                        [% END %]
+                        [% IF ( f1b ) %]
+                            <option value="d" selected="selected">large print</option>
+                        [% ELSE %]
+                            <option value="d">large print</option>
+                        [% END %]
+                        [% IF ( f1e ) %]
+                            <option value="e" selected="selected">newspaper format</option>
+                        [% ELSE %]
+                            <option value="e">newspaper format</option>
+                        [% END %]
 
-                            [% IF ( f1r ) %]
-                                <option value="r" selected="selected">regular print</option>
-                            [% ELSE %]
-                                <option value="r">regular print</option>
-                            [% END %]
-                            [% IF ( f1b ) %]
-                                <option value="d" selected="selected">large print</option>
-                            [% ELSE %]
-                                <option value="d">large print</option>
-                            [% END %]
-                            [% IF ( f1e ) %]
-                                <option value="e" selected="selected">newspaper format</option>
-                            [% ELSE %]
-                                <option value="e">newspaper format</option>
-                            [% END %]
+                        [% IF ( f1f ) %]
+                            <option value="f" selected="selected">Braille or Moon script</option>
+                        [% ELSE %]
+                            <option value="f">Braille or Moon script</option>
+                        [% END %]
+                        [% IF ( f1g ) %]
+                            <option value="g" selected="selected">microprint</option>
+                        [% ELSE %]
+                            <option value="g">microprint</option>
+                        [% END %]
+                        [% IF ( f1h ) %]
+                            <option value="h" selected="selected">handwritten</option>
+                        [% ELSE %]
+                            <option value="h">handwritten</option>
+                        [% END %]
+                        [% IF ( f1i ) %]
+                            <option value="i" selected="selected">multimedia (e.g. an item in regular print with a microfiche supplement)</option>
+                        [% ELSE %]
+                            <option value="i">multimedia (e.g. an item in regular print with a microfiche supplement)</option>
+                        [% END %]
+                        [% IF ( f1j ) %]
+                            <option value="j" selected="selected">mini-print</option>
+                        [% ELSE %]
+                            <option value="j">mini-print</option>
+                        [% END %]
+                        [% IF ( f1s ) %]
+                            <option value="s" selected="selected">electronic</option>
+                        [% ELSE %]
+                            <option value="s">electronic</option>
+                        [% END %]
+                        [% IF ( f1t ) %]
+                            <option value="t" selected="selected">microform</option>
+                        [% ELSE %]
+                            <option value="t">microform</option>
+                        [% END %]
+                        [% IF ( f1z ) %]
+                            <option value="z" selected="selected">other form of material</option>
+                        [% ELSE %]
+                            <option value="z">other form of material</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.page-section -->
 
-                            [% IF ( f1f ) %]
-                                <option value="f" selected="selected">Braille or Moon script</option>
-                            [% ELSE %]
-                                <option value="f">Braille or Moon script</option>
-
-                            [% END %]
-                            [% IF ( f1g ) %]
-                                <option value="g" selected="selected">microprint</option>
-                            [% ELSE %]
-                                <option value="g">microprint</option>
-
-                            [% END %]
-                            [% IF ( f1h ) %]
-                                <option value="h" selected="selected">handwritten</option>
-                            [% ELSE %]
-                                <option value="h">handwritten</option>
-
-                            [% END %]
-                            [% IF ( f1i ) %]
-                                <option value="i" selected="selected">multimedia (e.g. an item in regular print with a microfiche
-                                    supplement)</option>
-                            [% ELSE %]
-                                <option value="i">multimedia (e.g. an item in regular print with a microfiche
-                                supplement)</option>
-
-                            [% END %]
-                            [% IF ( f1j ) %]
-                                <option value="j" selected="selected">mini-print</option>
-                            [% ELSE %]
-                                <option value="j">mini-print</option>
-
-                            [% END %]
-                            [% IF ( f1s ) %]
-                                <option value="s" selected="selected">electronic</option>
-                            [% ELSE %]
-                                <option value="s">electronic</option>
-
-                            [% END %]
-                            [% IF ( f1t ) %]
-                                <option value="t" selected="selected">microform</option>
-                            [% ELSE %]
-                                <option value="t">microform</option>
-
-                            [% END %]
-                            [% IF ( f1z ) %]
-                                <option value="z" selected="selected">other form of material</option>
-                            [% ELSE %]
-                                <option value="z">other form of material</option>
-
-                            [% END %]
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </div> <!-- /.page-section -->
-
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
-                    <button class="btn btn-default close_window">Cancel</button>
-                </fieldset>
-            </div>
-        </nav>
-
-    </form>
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
+</form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

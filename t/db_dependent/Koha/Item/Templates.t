@@ -83,11 +83,11 @@ subtest 'get_available' => sub {
             is_shared => 0,
         }
     )->store;
-    $unshared_template->discard_changes; # refresh
+    $unshared_template->discard_changes;    # refresh
     is( $unshared_template->decoded_contents->{location}, 'test🙂', 'Tested encoding/decoding' );
 
     my $templates = Koha::Item::Templates->get_available( $patron_1->id );
-    is( $templates->{owned}->count, 1, "Got back one owned template" );
+    is( $templates->{owned}->count,  1, "Got back one owned template" );
     is( $templates->{shared}->count, 1, "Got back one shared templated" );
 
     $schema->storage->txn_rollback;

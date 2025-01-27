@@ -65,19 +65,18 @@ imagenumber, a random image is selected.
 
 =cut
 
-my ( $image );
+my ($image);
 if ( C4::Context->preference("LocalCoverImages") ) {
-    my $imagenumber = $input->param('imagenumber');
+    my $imagenumber  = $input->param('imagenumber');
     my $biblionumber = $input->param('biblionumber');
     if ( defined $imagenumber ) {
         $imagenumber = $input->param('imagenumber');
-        $image = Koha::CoverImages->find($imagenumber);
+        $image       = Koha::CoverImages->find($imagenumber);
         unless ($image) {
             print $input->redirect("/cgi-bin/koha/errors/404.pl");
             exit;
         }
-    }
-    elsif ( defined $biblionumber ) {
+    } elsif ( defined $biblionumber ) {
         my $biblio = Koha::Biblios->find($biblionumber);
         unless ($biblio) {
             print $input->redirect("/cgi-bin/koha/errors/404.pl");
@@ -93,14 +92,14 @@ if ( C4::Context->preference("LocalCoverImages") ) {
 $image ||= Koha::CoverImages->no_image;
 
 my $image_data =
-    $input->param('thumbnail')
-  ? $image->thumbnail
-  : $image->imagefile;
+      $input->param('thumbnail')
+    ? $image->thumbnail
+    : $image->imagefile;
 
 print $input->header(
-    -type            => $image->mimetype,
-    -expires         => '+30m',
-    -Content_Length  => length($image_data)
+    -type           => $image->mimetype,
+    -expires        => '+30m',
+    -Content_Length => length($image_data)
 ), $image_data;
 
 =head1 AUTHOR

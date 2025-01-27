@@ -4,14 +4,17 @@
 [% USE ItemTypes %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Items with no checkouts") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Items with no checkouts") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-    .sql {display: none;}
+    .sql {
+        display: none;
+    }
 </style>
 </head>
 
@@ -41,184 +44,188 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
-                [% IF ( do_it ) %]
-                    <h1>Items with no checkouts</h1>
-                    [% FOREACH mainloo IN mainloop %]
-                        [% IF ( mainloo.loopfilter ) %]
-                            <p>Filtered on:</p>
-                            <ul>
-                                [% FOREACH loopfilte IN mainloo.loopfilter %]
-                                    [% IF ( loopfilte.err ) %]
-                                        <p class="error">Error: [% loopfilte.filter | html %]</p>
-                                    [% ELSIF ( loopfilte.sql ) %]
-                                        <span class="sql">
-                                            [% loopfilte.crit | html %] = [% loopfilte.filter | html %]
-                                        </span>
+    [% IF ( do_it ) %]
+        <h1>Items with no checkouts</h1>
+        [% FOREACH mainloo IN mainloop %]
+            [% IF ( mainloo.loopfilter ) %]
+                <p>Filtered on:</p>
+                <ul>
+                    [% FOREACH loopfilte IN mainloo.loopfilter %]
+                        [% IF ( loopfilte.err ) %]
+                            <p class="error">Error: [% loopfilte.filter | html %]</p>
+                        [% ELSIF ( loopfilte.sql ) %]
+                            <span class="sql"> [% loopfilte.crit | html %] = [% loopfilte.filter | html %] </span>
+                        [% ELSE %]
+                            [% SWITCH loopfilte.crit %]
+                            [% CASE 'homelibrary' %]
+                                <li>Home library: [% Branches.GetName( loopfilte.filter ) | html %]</li>
+                            [% CASE 'itemtype' %]
+                                <li>Item type: [% ItemTypes.GetDescription( loopfilte.filter ) | html %]</li>
+                            [% CASE 'limit' %]
+                                <li>Limit: [% loopfilte.filter | html %]</li>
+                            [% CASE 'by' %]
+                                <li
+                                    >By: [% group_by = loopfilte.filter %]
+                                    [% IF ( group_by == "homebranch") %]
+                                        Home library
+                                    [% ELSIF ( group_by == "itype" ) %]
+                                        Item type
                                     [% ELSE %]
-                                        [% SWITCH loopfilte.crit %]
-                                            [% CASE 'homelibrary' %]<li>Home library: [% Branches.GetName( loopfilte.filter ) | html %]</li>
-                                            [% CASE 'itemtype' %]<li>Item type: [% ItemTypes.GetDescription( loopfilte.filter ) | html %]</li>
-                                            [% CASE 'limit' %]<li>Limit: [% loopfilte.filter | html %]</li>
-                                            [% CASE 'by' %]
-                                                <li>By:
-                                                    [% group_by = loopfilte.filter %]
-                                                    [% IF ( group_by == "homebranch") %]
-                                                        Home library
-                                                    [% ELSIF ( group_by == "itype" ) %]
-                                                        Item type
-                                                    [% ELSE %]
-                                                        None
-                                                    [% END %]
-                                                </li>
-                                            [% CASE %]<li>[% loopfilte.crit | html %]: [% loopfilte.filter | html %]</li>
-                                        [% END %]
+                                        None
                                     [% END %]
-                                [% END %]
-                            </ul>
-                        [% END %]
-
-                        [% IF ( mainloo.looptables ) %]
-                            <div class="page-section">
-                                <h3>Summary</h3>
-                                <table id="summary_table">
-                                    <tr>
-                                        <th>Group</th>
-                                        <th>Call number range</th>
-                                        <th>Number of items displayed</th>
-                                        <th>Total items in group</th>
-                                    </tr>
-                                    [% FOREACH looptable IN mainloo.looptables %]
-                                        <tr>
-                                            <td>
-                                                [% IF ( group_by=="itype" ) %]
-                                                    <a href="#table[% looptable.coltitle | uri %]">[% ItemTypes.GetDescription( looptable.coltitle ) | html %]</a>
-                                                [% ELSIF ( group_by=="homebranch" ) %]
-                                                    <a href="#table[% looptable.coltitle | uri %]">[% Branches.GetName( looptable.coltitle ) | html %]</a>
-                                                [% ELSE %]
-                                                    <a href="#table[% looptable.coltitle | uri %]">Ungrouped</a>
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% IF ( looptable.looptable_count ) %]
-                                                    [% looptable.looptable_first | html %] to [% looptable.looptable_last | html %]
-                                                [% END %]
-                                            </td>
-                                            <td>[% looptable.looptable_count | html %]</td>
-                                            <td>[% looptable.coltitle_count | html %]</td>
-                                        </tr>
-                                    [% END %]
-                                    <tr>
-                                        <th>TOTAL</th>
-                                        <th></th>
-                                        <th>[% mainloo.total_looptable_count | html %]</th>
-                                        <th>[% mainloo.total_coltitle_count | html %]</th>
-                                    </tr>
-                                </table>
-                            </div>
-                        [% END %]
-
-                        [% FOREACH looptable IN mainloo.looptables %]
-                            <div class="page-section">
-                                <h3>
-                                    [% IF ( group_by=="itype" ) %]
-                                        <a id="table[% looptable.coltitle | html %]" >[% ItemTypes.GetDescription( looptable.coltitle ) | html %]</a>
-                                    [% ELSIF ( group_by=="homebranch" ) %]
-                                        <a id="table[% looptable.coltitle | html %]" >[% Branches.GetName( looptable.coltitle ) | html %]</a>
-                                    [% ELSE %]
-                                        Ungrouped
-                                    [% END %]
-                                </h3>
-                                <table>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Call number</th>
-                                        <th>Barcode</th>
-                                        <th>Item details</th>
-                                    </tr>
-                                    [% IF ( looptable.looprow ) %]
-                                        [% FOREACH loopro IN looptable.looprow %]
-                                            <tr>
-                                                <td>[% loop.count | html %]</td>
-                                                <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber | html %][% ELSE %]No call number[% END %]</td>
-                                                <td>[% IF ( loopro.barcode ) %][% loopro.barcode | html %][% ELSE %]No barcode[% END %]</td>
-                                                <td>
-                                                    <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]">[% IF ( loopro.title ) %][% loopro.title | html %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author | html %][% END %]</p>
-                                                    [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) | html %][% END %]
-                                                </td>
-                                            </tr>
-                                        [% END %]
-                                        [% ELSE %]
-                                            <tr>
-                                                <td colspan="4">No items for [% looptable.coltitle | html %]</td>
-                                            </tr>
-                                        [% END %]
-                                </table>
-                            </div>
+                                </li>
+                            [% CASE %]
+                                <li>[% loopfilte.crit | html %]: [% loopfilte.filter | html %]</li>
+                            [% END %]
                         [% END %]
                     [% END %]
-                [% ELSE %]
-
-                    <h1>Items with no checkouts</h1>
-
-                    <form method="get" action="/cgi-bin/koha/reports/catalogue_out.pl">
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="branch">Library: </label>
-                                    <select name="Filter" id="branch">
-                                        <option value="">Any library</option>
-                                        [% PROCESS options_for_libraries libraries => Branches.all() %]
-                                    </select>
-                                </li>
-                                <li>
-                                    <label for="documenttype">Item type: </label>
-                                    <select name="Filter" id="documenttype">
-                                        <option value="">Any item type</option>
-                                        [% FOREACH itemtype IN itemtypes %]
-                                            <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
-                                        [% END %]
-                                    </select>
-                                </li>
-                            </ol>
-                    </fieldset>
-
-                    <fieldset class="rows">
-                        <legend>Limits</legend>
-                        <ol>
-                            <li>
-                                <label for="numberlimit">Limit to: </label>
-                                <select name="Limit" id="numberlimit">
-                                    <option value ="10">10</option>
-                                    <option value ="20">20</option>
-                                    <option value ="50">50</option>
-                                    <option value ="100">100</option>
-                                    <option value ="200">200</option>
-                                    <option value ="300">300</option>
-                                    <option value ="400">400</option>
-                                    <option value ="500">500</option>
-                                    <option value ="1000">1000</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label for="criteria">By: </label>
-                                <select name="Criteria" id="criteria">
-                                    <option value ="" selected="selected">None</option>
-                                    <option value ="homebranch">Library</option>
-                                    <option value ="itype">Item type</option>
-                                </select>
-                            </li>
-                        </ol>
-                    </fieldset>
-
-                    <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                        <input type="hidden" name="report_name" value="[% report_name | html %]" />
-                        <input type="hidden" name="do_it" value="1" />
-                        <input type="hidden" name="output" value="screen" />
-                    </fieldset>
-                </form>
+                </ul>
             [% END %]
 
+            [% IF ( mainloo.looptables ) %]
+                <div class="page-section">
+                    <h3>Summary</h3>
+                    <table id="summary_table">
+                        <tr>
+                            <th>Group</th>
+                            <th>Call number range</th>
+                            <th>Number of items displayed</th>
+                            <th>Total items in group</th>
+                        </tr>
+                        [% FOREACH looptable IN mainloo.looptables %]
+                            <tr>
+                                <td>
+                                    [% IF ( group_by=="itype" ) %]
+                                        <a href="#table[% looptable.coltitle | uri %]">[% ItemTypes.GetDescription( looptable.coltitle ) | html %]</a>
+                                    [% ELSIF ( group_by=="homebranch" ) %]
+                                        <a href="#table[% looptable.coltitle | uri %]">[% Branches.GetName( looptable.coltitle ) | html %]</a>
+                                    [% ELSE %]
+                                        <a href="#table[% looptable.coltitle | uri %]">Ungrouped</a>
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF ( looptable.looptable_count ) %]
+                                        [% looptable.looptable_first | html %]
+                                        to [% looptable.looptable_last | html %]
+                                    [% END %]
+                                </td>
+                                <td>[% looptable.looptable_count | html %]</td>
+                                <td>[% looptable.coltitle_count | html %]</td>
+                            </tr>
+                        [% END %]
+                        <tr>
+                            <th>TOTAL</th>
+                            <th></th>
+                            <th>[% mainloo.total_looptable_count | html %]</th>
+                            <th>[% mainloo.total_coltitle_count | html %]</th>
+                        </tr>
+                    </table>
+                </div>
+            [% END %]
+
+            [% FOREACH looptable IN mainloo.looptables %]
+                <div class="page-section">
+                    <h3>
+                        [% IF ( group_by=="itype" ) %]
+                            <a id="table[% looptable.coltitle | html %]">[% ItemTypes.GetDescription( looptable.coltitle ) | html %]</a>
+                        [% ELSIF ( group_by=="homebranch" ) %]
+                            <a id="table[% looptable.coltitle | html %]">[% Branches.GetName( looptable.coltitle ) | html %]</a>
+                        [% ELSE %]
+                            Ungrouped
+                        [% END %]
+                    </h3>
+                    <table>
+                        <tr>
+                            <th>#</th>
+                            <th>Call number</th>
+                            <th>Barcode</th>
+                            <th>Item details</th>
+                        </tr>
+                        [% IF ( looptable.looprow ) %]
+                            [% FOREACH loopro IN looptable.looprow %]
+                                <tr>
+                                    <td>[% loop.count | html %]</td>
+                                    <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber | html %][% ELSE %]No call number[% END %]</td>
+                                    <td>[% IF ( loopro.barcode ) %][% loopro.barcode | html %][% ELSE %]No barcode[% END %]</td>
+                                    <td>
+                                        <p
+                                            ><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]">[% IF ( loopro.title ) %][% loopro.title | html %][% ELSE %]NO TITLE[% END %]</a>
+                                            [% IF ( loopro.author ) %]by [% loopro.author | html %][% END %]</p
+                                        >
+                                        [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) | html %][% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        [% ELSE %]
+                            <tr>
+                                <td colspan="4">No items for [% looptable.coltitle | html %]</td>
+                            </tr>
+                        [% END %]
+                    </table>
+                </div>
+            [% END %]
+        [% END %]
+    [% ELSE %]
+        <h1>Items with no checkouts</h1>
+
+        <form method="get" action="/cgi-bin/koha/reports/catalogue_out.pl">
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="branch">Library: </label>
+                        <select name="Filter" id="branch">
+                            <option value="">Any library</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all() %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="documenttype">Item type: </label>
+                        <select name="Filter" id="documenttype">
+                            <option value="">Any item type</option>
+                            [% FOREACH itemtype IN itemtypes %]
+                                <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="rows">
+                <legend>Limits</legend>
+                <ol>
+                    <li>
+                        <label for="numberlimit">Limit to: </label>
+                        <select name="Limit" id="numberlimit">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="300">300</option>
+                            <option value="400">400</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="criteria">By: </label>
+                        <select name="Criteria" id="criteria">
+                            <option value="" selected="selected">None</option>
+                            <option value="homebranch">Library</option>
+                            <option value="itype">Item type</option>
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="report_name" value="[% report_name | html %]" />
+                <input type="hidden" name="do_it" value="1" />
+                <input type="hidden" name="output" value="screen" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

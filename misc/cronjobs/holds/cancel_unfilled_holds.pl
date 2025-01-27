@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use C4::Reserves;
@@ -85,17 +85,17 @@ my $verbose      = 0;
 my $confirm      = 0;
 my $reason;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'h|help|?'   => \$help,
-    'days=s'     => \$days,
-    'library=s'  => \@branchcodes,
-    'holidays'   => \$use_calendar,
-    'v|verbose'  => \$verbose,
-    'confirm'    => \$confirm,
-    'reason=s'   => \$reason
+    'h|help|?'  => \$help,
+    'days=s'    => \$days,
+    'library=s' => \@branchcodes,
+    'holidays'  => \$use_calendar,
+    'v|verbose' => \$verbose,
+    'confirm'   => \$confirm,
+    'reason=s'  => \$reason
 ) or pod2usage(1);
 pod2usage(1) if $help;
 
@@ -103,8 +103,7 @@ unless ( defined $days ) {
     pod2usage(
         {
             -exitval => 1,
-            -msg =>
-qq{\nError: You must specify a value for days waiting to cancel holds.\n},
+            -msg     => qq{\nError: You must specify a value for days waiting to cancel holds.\n},
         }
     );
 }
@@ -122,32 +121,30 @@ $cancellation_params->{cancellation_reason} = $reason if $reason;
 foreach my $branch (@branchcodes) {
 
     my $holds =
-      Koha::Holds->search( { branchcode => $branch } )->unfilled();
+        Koha::Holds->search( { branchcode => $branch } )->unfilled();
 
     while ( my $hold = $holds->next ) {
 
-        my $age = $hold->age( $use_calendar );
+        my $age = $hold->age($use_calendar);
 
         $verbose
-          and warn "Hold #"
-          . $hold->reserve_id
-          . " has been unfilled for $age day(s)\n";
+            and warn "Hold #" . $hold->reserve_id . " has been unfilled for $age day(s)\n";
 
         if ( $age >= $days ) {
             my $action = $confirm ? "Cancelling " : "Would have cancelled ";
             $verbose
-              and warn $action
-              . "reserve_id: "
-              . $hold->reserve_id
-              . " for borrower: "
-              . $hold->borrowernumber
-              . " on biblio: "
-              . $hold->biblionumber . "\n";
-            $hold->cancel( $cancellation_params ) if $confirm;
+                and warn $action
+                . "reserve_id: "
+                . $hold->reserve_id
+                . " for borrower: "
+                . $hold->borrowernumber
+                . " on biblio: "
+                . $hold->biblionumber . "\n";
+            $hold->cancel($cancellation_params) if $confirm;
         }
 
     }
 
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

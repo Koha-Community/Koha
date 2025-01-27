@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw/check_api_auth/;
 use C4::Context;
 use C4::Koha;
@@ -29,13 +29,13 @@ use XML::Simple;
 
 my $query = CGI->new;
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { editcatalogue => 'edit_catalogue' } );
 
-if ($status eq "ok") {
-    print $query->header(-type => 'text/xml', cookie => $cookie);
+if ( $status eq "ok" ) {
+    print $query->header( -type => 'text/xml', cookie => $cookie );
 } else {
-    print $query->header(-type => 'text/xml', -status => '403 Forbidden');
-    print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    print $query->header( -type => 'text/xml', -status => '403 Forbidden' );
+    print XMLout( { auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
     exit 0;
 }
 
@@ -49,18 +49,23 @@ _get_mandatory_subfields($result);
 _get_reserved_tags($result);
 _get_bib_number_tag($result);
 _get_biblioitem_itemtypes($result);
-print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1,  
-        GroupTags => {mandatory_tags => 'tag', mandatory_subfields => 'subfield', reserved_tags => 'tag',
-                      valid_values => 'value'});
+print XMLout(
+    $result, NoAttr => 1, RootName => 'response', XMLDecl => 1,
+    GroupTags => {
+        mandatory_tags => 'tag', mandatory_subfields => 'subfield', reserved_tags => 'tag',
+        valid_values   => 'value'
+    }
+);
 
 exit 0;
 
 sub _get_mandatory_tags {
     my $result = shift;
-    my $sth = $dbh->prepare_cached("SELECT tagfield FROM marc_tag_structure WHERE frameworkcode = '' AND mandatory = 1");
+    my $sth =
+        $dbh->prepare_cached("SELECT tagfield FROM marc_tag_structure WHERE frameworkcode = '' AND mandatory = 1");
     $sth->execute();
     my @tags = ();
-    while (my $row = $sth->fetchrow_arrayref) {
+    while ( my $row = $sth->fetchrow_arrayref ) {
         push @tags, $row->[0];
     }
     $result->{'mandatory_tags'} = \@tags;
@@ -68,15 +73,17 @@ sub _get_mandatory_tags {
 
 sub _get_mandatory_subfields {
     my $result = shift;
-    my $sth = $dbh->prepare_cached("SELECT tagfield, tagsubfield 
+    my $sth    = $dbh->prepare_cached(
+        "SELECT tagfield, tagsubfield 
                                     FROM marc_subfield_structure 
                                     WHERE frameworkcode = '' 
                                     AND tagsubfield <> '\@' 
                                     AND kohafield <> 'biblioitems.itemtype'
-                                    AND mandatory = 1");
+                                    AND mandatory = 1"
+    );
     $sth->execute();
     my @subfields = ();
-    while (my $row = $sth->fetchrow_arrayref) {
+    while ( my $row = $sth->fetchrow_arrayref ) {
         push @subfields, { tag => $row->[0], subfield_label => $row->[1] };
     }
     $result->{'mandatory_subfields'} = \@subfields;
@@ -84,14 +91,16 @@ sub _get_mandatory_subfields {
 
 sub _get_reserved_tags {
     my $result = shift;
-    my $sth = $dbh->prepare_cached("SELECT DISTINCT tagfield
+    my $sth    = $dbh->prepare_cached(
+        "SELECT DISTINCT tagfield
                                     FROM marc_subfield_structure 
                                     WHERE frameworkcode = '' 
                                     AND (kohafield = 'items.itemnumber' OR kohafield = 'biblioitems.itemtype' OR
-                                         kohafield = 'biblio.biblionumber')");
+                                         kohafield = 'biblio.biblionumber')"
+    );
     $sth->execute();
     my @tags = ();
-    while (my $row = $sth->fetchrow_arrayref) {
+    while ( my $row = $sth->fetchrow_arrayref ) {
         push @tags, $row->[0];
     }
     $result->{'reserved_tags'} = \@tags;
@@ -99,31 +108,35 @@ sub _get_reserved_tags {
 
 sub _get_bib_number_tag {
     my $result = shift;
-    my $sth = $dbh->prepare_cached("SELECT tagfield, tagsubfield
+    my $sth    = $dbh->prepare_cached(
+        "SELECT tagfield, tagsubfield
                                     FROM marc_subfield_structure 
                                     WHERE frameworkcode = '' 
-                                    AND kohafield = 'biblio.biblionumber'");
+                                    AND kohafield = 'biblio.biblionumber'"
+    );
     $sth->execute();
     my @tags = ();
-    while (my $row = $sth->fetchrow_arrayref) {
+    while ( my $row = $sth->fetchrow_arrayref ) {
         push @tags, { tag => $row->[0], subfield => $row->[1] };
     }
     $result->{'bib_number'} = \@tags;
 }
 
 sub _get_biblioitem_itemtypes {
-    my $result = shift;
+    my $result    = shift;
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-    my $sth = $dbh->prepare_cached("SELECT tagfield, tagsubfield
+    my $sth       = $dbh->prepare_cached(
+        "SELECT tagfield, tagsubfield
                                     FROM marc_subfield_structure 
                                     WHERE frameworkcode = '' 
-                                    AND kohafield = 'biblioitems.itemtype'");
+                                    AND kohafield = 'biblioitems.itemtype'"
+    );
     $sth->execute();
     my @tags = ();
-    while (my $row = $sth->fetchrow_arrayref) {
+    while ( my $row = $sth->fetchrow_arrayref ) {
         push @tags, { tag => $row->[0], subfield => $row->[1] };
     }
-    my @valid_values = map { { code => $_,  description => $itemtypes->{$_}->{'description'} } } sort keys %$itemtypes;
-    $result->{'special_entry'} = { field => \@tags,  valid_values => \@valid_values };
-    
+    my @valid_values = map { { code => $_, description => $itemtypes->{$_}->{'description'} } } sort keys %$itemtypes;
+    $result->{'special_entry'} = { field => \@tags, valid_values => \@valid_values };
+
 }

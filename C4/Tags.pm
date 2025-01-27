@@ -29,37 +29,39 @@ use Koha::Tags;
 use Koha::Tags::Approvals;
 use Koha::Tags::Indexes;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
-use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
+use constant TAG_SELECT => "SELECT " . join( ',', TAG_FIELDS ) . "\n FROM   tags_all\n";
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      get_tags get_tag_rows
-      add_tags
-      add_tag
-      add_tag_approval
-      add_tag_index
-      remove_tag
-      get_approval_rows
-      blacklist
-      whitelist
-      is_approved
-      approval_counts
-      get_count_by_tag_status
-      get_filters
-      stratify_tags
+        get_tags get_tag_rows
+        add_tags
+        add_tag
+        add_tag_approval
+        add_tag_index
+        remove_tag
+        get_approval_rows
+        blacklist
+        whitelist
+        is_approved
+        approval_counts
+        get_count_by_tag_status
+        get_filters
+        stratify_tags
     );
     my $ext_dict = C4::Context->preference('TagsExternalDictionary');
-    if ( $ext_dict && ! check_install( module => 'Lingua::Ispell' ) ) {
+
+    if ( $ext_dict && !check_install( module => 'Lingua::Ispell' ) ) {
         warn "Ignoring TagsExternalDictionary, because Lingua::Ispell is not installed.";
         $ext_dict = q{};
     }
-	if ($ext_dict) {
-		require Lingua::Ispell;
+    if ($ext_dict) {
+        require Lingua::Ispell;
         import Lingua::Ispell qw(spellcheck add_word_lc);
         $Lingua::Ispell::path = $ext_dict;
-	}
+    }
 }
 
 =head1 C4::Tags.pm - Support for user tagging of biblios.
@@ -67,32 +69,32 @@ BEGIN {
 =cut
 
 sub get_filters {
-	my $query = "SELECT * FROM tags_filters ";
-	my ($sth);
-	if (@_) {
-		$sth = C4::Context->dbh->prepare($query . " WHERE filter_id = ? ");
-		$sth->execute(shift);
-	} else {
-		$sth = C4::Context->dbh->prepare($query);
-		$sth->execute;
-	}
-	return $sth->fetchall_arrayref({});
+    my $query = "SELECT * FROM tags_filters ";
+    my ($sth);
+    if (@_) {
+        $sth = C4::Context->dbh->prepare( $query . " WHERE filter_id = ? " );
+        $sth->execute(shift);
+    } else {
+        $sth = C4::Context->dbh->prepare($query);
+        $sth->execute;
+    }
+    return $sth->fetchall_arrayref( {} );
 }
 
 # 	(SELECT count(*) FROM tags_all     ) as tags_all,
 # 	(SELECT count(*) FROM tags_index   ) as tags_index,
 
 sub approval_counts {
-	my $query = "SELECT
+    my $query = "SELECT
 		(SELECT count(*) FROM tags_approval WHERE approved= 1) as approved_count,
 		(SELECT count(*) FROM tags_approval WHERE approved=-1) as rejected_count,
 		(SELECT count(*) FROM tags_approval WHERE approved= 0) as unapproved_count
 	";
-	my $sth = C4::Context->dbh->prepare($query);
-	$sth->execute;
-	my $result = $sth->fetchrow_hashref();
-	$result->{approved_total} = $result->{approved_count} + $result->{rejected_count} + $result->{unapproved_count};
-	return $result;
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute;
+    my $result = $sth->fetchrow_hashref();
+    $result->{approved_total} = $result->{approved_count} + $result->{rejected_count} + $result->{unapproved_count};
+    return $result;
 }
 
 =head2 get_count_by_tag_status
@@ -103,198 +105,197 @@ Takes a status and gets a count of tags with that status
 
 =cut
 
-sub get_count_by_tag_status  {
+sub get_count_by_tag_status {
     my ($status) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $query          =
-      "SELECT count(*) FROM tags_approval WHERE approved=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $status );
-  return $sth->fetchrow;
+    my $dbh      = C4::Context->dbh;
+    my $query    = "SELECT count(*) FROM tags_approval WHERE approved=?";
+    my $sth      = $dbh->prepare($query);
+    $sth->execute($status);
+    return $sth->fetchrow;
 }
 
 sub remove_tag {
     my $tag_id  = shift or return;
     my $user_id = (@_) ? shift : undef;
-    my $rows = (defined $user_id) ?
-            get_tag_rows({tag_id=>$tag_id, borrowernumber=>$user_id}) :
-            get_tag_rows({tag_id=>$tag_id}) ;
-    $rows or return 0;
-    (scalar(@$rows) == 1) or return;    # should never happen (duplicate ids)
+    my $rows =
+        ( defined $user_id )
+        ? get_tag_rows( { tag_id => $tag_id, borrowernumber => $user_id } )
+        : get_tag_rows( { tag_id => $tag_id } );
+    $rows                   or return 0;
+    ( scalar(@$rows) == 1 ) or return;     # should never happen (duplicate ids)
     my $row = shift(@$rows);
-    ($tag_id == $row->{tag_id}) or return 0;
-    my $tags = get_tags({term=>$row->{term}, biblionumber=>$row->{biblionumber}});
+    ( $tag_id == $row->{tag_id} ) or return 0;
+    my $tags  = get_tags( { term => $row->{term}, biblionumber => $row->{biblionumber} } );
     my $index = shift(@$tags);
-    if ($index->{weight} <= 1) {
-        Koha::Tags::Indexes->search({ term => $row->{term}, biblionumber => $row->{biblionumber} })->delete;
+
+    if ( $index->{weight} <= 1 ) {
+        Koha::Tags::Indexes->search( { term => $row->{term}, biblionumber => $row->{biblionumber} } )->delete;
     } else {
-        decrement_weight($row->{term},$row->{biblionumber});
+        decrement_weight( $row->{term}, $row->{biblionumber} );
     }
-    if ($index->{weight_total} <= 1) {
-        Koha::Tags::Approvals->search({ term => $row->{term} })->delete;
+    if ( $index->{weight_total} <= 1 ) {
+        Koha::Tags::Approvals->search( { term => $row->{term} } )->delete;
     } else {
-        decrement_weight_total($row->{term});
+        decrement_weight_total( $row->{term} );
     }
-    Koha::Tags->search({ tag_id => $tag_id })->delete;
+    Koha::Tags->search( { tag_id => $tag_id } )->delete;
 }
 
 sub get_tag_rows {
-	my $hash = shift || {};
+    my $hash      = shift || {};
     my @ok_fields = TAG_FIELDS;
-	push @ok_fields, 'limit';	# push the limit! :)
-	my $wheres;
-	my $limit  = "";
-	my @exe_args = ();
-	foreach my $key (keys %$hash) {
-		unless (length $key) {
-			carp "Empty argument key to get_tag_rows: ignoring!";
-			next;
-		}
-		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
+    push @ok_fields, 'limit';    # push the limit! :)
+    my $wheres;
+    my $limit    = "";
+    my @exe_args = ();
+    foreach my $key ( keys %$hash ) {
+        unless ( length $key ) {
+            carp "Empty argument key to get_tag_rows: ignoring!";
+            next;
+        }
+        unless ( 1 == scalar grep { $_ eq $key } @ok_fields ) {
             carp "get_tag_rows received unrecognized argument key '$key'.";
-			next;
-		}
-		if ($key eq 'limit') {
-			my $val = $hash->{$key};
-			unless ($val =~ /^(\d+,)?\d+$/) {
-				carp "Non-nuerical limit value '$val' ignored!";
-				next;
-			}
-			$limit = " LIMIT $val\n";
-		} else {
-			$wheres .= ($wheres) ? " AND    $key = ?\n" : " WHERE  $key = ?\n";
-			push @exe_args, $hash->{$key};
-		}
-	}
-    my $query = TAG_SELECT . ($wheres||'') . $limit;
-	my $sth = C4::Context->dbh->prepare($query);
-	if (@exe_args) {
-		$sth->execute(@exe_args);
-	} else {
-		$sth->execute;
-	}
-	return $sth->fetchall_arrayref({});
+            next;
+        }
+        if ( $key eq 'limit' ) {
+            my $val = $hash->{$key};
+            unless ( $val =~ /^(\d+,)?\d+$/ ) {
+                carp "Non-nuerical limit value '$val' ignored!";
+                next;
+            }
+            $limit = " LIMIT $val\n";
+        } else {
+            $wheres .= ($wheres) ? " AND    $key = ?\n" : " WHERE  $key = ?\n";
+            push @exe_args, $hash->{$key};
+        }
+    }
+    my $query = TAG_SELECT . ( $wheres || '' ) . $limit;
+    my $sth   = C4::Context->dbh->prepare($query);
+    if (@exe_args) {
+        $sth->execute(@exe_args);
+    } else {
+        $sth->execute;
+    }
+    return $sth->fetchall_arrayref( {} );
 }
 
-sub get_tags {		# i.e., from tags_index
-	my $hash = shift || {};
-	my @ok_fields = qw(term biblionumber weight limit sort approved);
-	my $wheres;
-	my $limit  = "";
-	my $order  = "";
-	my @exe_args = ();
-	foreach my $key (keys %$hash) {
-		unless (length $key) {
-			carp "Empty argument key to get_tags: ignoring!";
-			next;
-		}
-		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
+sub get_tags {    # i.e., from tags_index
+    my $hash      = shift || {};
+    my @ok_fields = qw(term biblionumber weight limit sort approved);
+    my $wheres;
+    my $limit    = "";
+    my $order    = "";
+    my @exe_args = ();
+    foreach my $key ( keys %$hash ) {
+        unless ( length $key ) {
+            carp "Empty argument key to get_tags: ignoring!";
+            next;
+        }
+        unless ( 1 == scalar grep { $_ eq $key } @ok_fields ) {
             carp "get_tags received unrecognized argument key '$key'.";
-			next;
-		}
-		if ($key eq 'limit') {
-			my $val = $hash->{$key};
-			unless ($val =~ /^(\d+,)?\d+$/) {
-				carp "Non-nuerical limit value '$val' ignored!";
-				next;
-			}
-			$limit = " LIMIT $val\n";
-		} elsif ($key eq 'sort') {
-			foreach my $by (split /\,/, $hash->{$key}) {
-				unless (
-					$by =~ /^([-+])?(term)/ or
-					$by =~ /^([-+])?(biblionumber)/ or
-					$by =~ /^([-+])?(weight)/
-				) {
-					carp "get_tags received illegal sort order '$by'";
-					next;
-				}
-				if ($order) {
-					$order .= ", ";
-				} else {
-					$order = " ORDER BY ";
-				}
-				$order .= $2 . " " . ((!$1) ? '' : $1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '') . "\n";
-			}
-			
-		} else {
-			my $whereval = $hash->{$key};
-			my $longkey = ($key eq 'term'    ) ? 'tags_index.term'        :
-				 		  ($key eq 'approved') ? 'tags_approval.approved' : $key;
-			my $op = ($whereval =~ s/^(>=|<=)// or
-					  $whereval =~ s/^(>|=|<)//   ) ? $1 : '=';
-			$wheres .= ($wheres) ? " AND    $longkey $op ?\n" : " WHERE  $longkey $op ?\n";
-			push @exe_args, $whereval;
-		}
-	}
-	my $query = "
+            next;
+        }
+        if ( $key eq 'limit' ) {
+            my $val = $hash->{$key};
+            unless ( $val =~ /^(\d+,)?\d+$/ ) {
+                carp "Non-nuerical limit value '$val' ignored!";
+                next;
+            }
+            $limit = " LIMIT $val\n";
+        } elsif ( $key eq 'sort' ) {
+            foreach my $by ( split /\,/, $hash->{$key} ) {
+                unless ( $by =~ /^([-+])?(term)/
+                    or $by =~ /^([-+])?(biblionumber)/
+                    or $by =~ /^([-+])?(weight)/ )
+                {
+                    carp "get_tags received illegal sort order '$by'";
+                    next;
+                }
+                if ($order) {
+                    $order .= ", ";
+                } else {
+                    $order = " ORDER BY ";
+                }
+                $order .= $2 . " " . ( ( !$1 ) ? '' : $1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '' ) . "\n";
+            }
+
+        } else {
+            my $whereval = $hash->{$key};
+            my $longkey =
+                  ( $key eq 'term' )     ? 'tags_index.term'
+                : ( $key eq 'approved' ) ? 'tags_approval.approved'
+                :                          $key;
+            my $op = ( $whereval =~ s/^(>=|<=)// or $whereval =~ s/^(>|=|<)// ) ? $1 : '=';
+            $wheres .= ($wheres) ? " AND    $longkey $op ?\n" : " WHERE  $longkey $op ?\n";
+            push @exe_args, $whereval;
+        }
+    }
+    my $query = "
 	SELECT    tags_index.term as term,biblionumber,weight,weight_total
 	FROM      tags_index
 	LEFT JOIN tags_approval 
 	ON        tags_index.term = tags_approval.term
-	" . ($wheres||'') . $order . $limit;
-	my $sth = C4::Context->dbh->prepare($query);
-	if (@exe_args) {
-		$sth->execute(@exe_args);
-	} else {
-		$sth->execute;
-	}
-	return $sth->fetchall_arrayref({});
+	" . ( $wheres || '' ) . $order . $limit;
+    my $sth = C4::Context->dbh->prepare($query);
+    if (@exe_args) {
+        $sth->execute(@exe_args);
+    } else {
+        $sth->execute;
+    }
+    return $sth->fetchall_arrayref( {} );
 }
 
-sub get_approval_rows {		# i.e., from tags_approval
-	my $hash = shift || {};
-	my @ok_fields = qw(term approved date_approved approved_by weight_total limit sort borrowernumber);
-	my $wheres;
-	my $limit  = "";
-	my $order  = "";
-	my @exe_args = ();
-	foreach my $key (keys %$hash) {
-		unless (length $key) {
-			carp "Empty argument key to get_approval_rows: ignoring!";
-			next;
-		}
-		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
+sub get_approval_rows {    # i.e., from tags_approval
+    my $hash      = shift || {};
+    my @ok_fields = qw(term approved date_approved approved_by weight_total limit sort borrowernumber);
+    my $wheres;
+    my $limit    = "";
+    my $order    = "";
+    my @exe_args = ();
+    foreach my $key ( keys %$hash ) {
+        unless ( length $key ) {
+            carp "Empty argument key to get_approval_rows: ignoring!";
+            next;
+        }
+        unless ( 1 == scalar grep { $_ eq $key } @ok_fields ) {
             carp "get_approval_rows received unrecognized argument key '$key'.";
-			next;
-		}
-		if ($key eq 'limit') {
-			my $val = $hash->{$key};
-			unless ($val =~ /^(\d+,)?\d+$/) {
-				carp "Non-numerical limit value '$val' ignored!";
-				next;
-			}
-			$limit = " LIMIT $val\n";
-		} elsif ($key eq 'sort') {
-			foreach my $by (split /\,/, $hash->{$key}) {
-				unless (
-					$by =~ /^([-+])?(term)/            or
-					$by =~ /^([-+])?(biblionumber)/    or
-                    $by =~ /^([-+])?(borrowernumber)/  or
-					$by =~ /^([-+])?(weight_total)/    or
-					$by =~ /^([-+])?(approved(_by)?)/  or
-					$by =~ /^([-+])?(date_approved)/
-				) {
-					carp "get_approval_rows received illegal sort order '$by'";
-					next;
-				}
-				if ($order) {
-					$order .= ", ";
-				} else {
-					$order = " ORDER BY " unless $order;
-				}
-				$order .= $2 . " " . ((!$1) ? '' : $1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '') . "\n";
-			}
-			
-		} else {
-			my $whereval = $hash->{$key};
-			my $op = ($whereval =~ s/^(>=|<=)// or
-					  $whereval =~ s/^(>|=|<)//   ) ? $1 : '=';
-			$wheres .= ($wheres) ? " AND    $key $op ?\n" : " WHERE  $key $op ?\n";
-			push @exe_args, $whereval;
-		}
-	}
-	my $query = "
+            next;
+        }
+        if ( $key eq 'limit' ) {
+            my $val = $hash->{$key};
+            unless ( $val =~ /^(\d+,)?\d+$/ ) {
+                carp "Non-numerical limit value '$val' ignored!";
+                next;
+            }
+            $limit = " LIMIT $val\n";
+        } elsif ( $key eq 'sort' ) {
+            foreach my $by ( split /\,/, $hash->{$key} ) {
+                unless ( $by =~ /^([-+])?(term)/
+                    or $by =~ /^([-+])?(biblionumber)/
+                    or $by =~ /^([-+])?(borrowernumber)/
+                    or $by =~ /^([-+])?(weight_total)/
+                    or $by =~ /^([-+])?(approved(_by)?)/
+                    or $by =~ /^([-+])?(date_approved)/ )
+                {
+                    carp "get_approval_rows received illegal sort order '$by'";
+                    next;
+                }
+                if ($order) {
+                    $order .= ", ";
+                } else {
+                    $order = " ORDER BY " unless $order;
+                }
+                $order .= $2 . " " . ( ( !$1 ) ? '' : $1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '' ) . "\n";
+            }
+
+        } else {
+            my $whereval = $hash->{$key};
+            my $op       = ( $whereval =~ s/^(>=|<=)// or $whereval =~ s/^(>|=|<)// ) ? $1 : '=';
+            $wheres .= ($wheres) ? " AND    $key $op ?\n" : " WHERE  $key $op ?\n";
+            push @exe_args, $whereval;
+        }
+    }
+    my $query = "
 	SELECT 	tags_approval.term          AS term,
 			tags_approval.approved      AS approved,
 			tags_approval.date_approved AS date_approved,
@@ -304,208 +305,224 @@ sub get_approval_rows {		# i.e., from tags_approval
 	FROM 	tags_approval
 	LEFT JOIN borrowers
 	ON      tags_approval.approved_by = borrowers.borrowernumber ";
-	$query .= ($wheres||'') . $order . $limit;
-	my $sth = C4::Context->dbh->prepare($query);
-	if (@exe_args) {
-		$sth->execute(@exe_args);
-	} else {
-		$sth->execute;
-	}
-	return $sth->fetchall_arrayref({});
+    $query .= ( $wheres || '' ) . $order . $limit;
+    my $sth = C4::Context->dbh->prepare($query);
+    if (@exe_args) {
+        $sth->execute(@exe_args);
+    } else {
+        $sth->execute;
+    }
+    return $sth->fetchall_arrayref( {} );
 }
 
 sub is_approved {
-	my $term = shift or return;
-	my $sth = C4::Context->dbh->prepare("SELECT approved FROM tags_approval WHERE term = ?");
-	$sth->execute($term);
+    my $term = shift or return;
+    my $sth  = C4::Context->dbh->prepare("SELECT approved FROM tags_approval WHERE term = ?");
+    $sth->execute($term);
     my $ext_dict = C4::Context->preference('TagsExternalDictionary');
-	unless ($sth->rows) {
-		$ext_dict and return (spellcheck($term) ? 0 : 1);	# spellcheck returns empty on OK word
-		return 0;
-	}
-	return $sth->fetchrow;
+    unless ( $sth->rows ) {
+        $ext_dict and return ( spellcheck($term) ? 0 : 1 );    # spellcheck returns empty on OK word
+        return 0;
+    }
+    return $sth->fetchrow;
 }
 
 sub get_tag_index {
-	my $term = shift or return;
-	my $sth;
-	if (@_) {
-		$sth = C4::Context->dbh->prepare("SELECT * FROM tags_index WHERE term = ? AND biblionumber = ?");
-		$sth->execute($term,shift);
-	} else {
-		$sth = C4::Context->dbh->prepare("SELECT * FROM tags_index WHERE term = ?");
-		$sth->execute($term);
-	}
-	return $sth->fetchrow_hashref;
+    my $term = shift or return;
+    my $sth;
+    if (@_) {
+        $sth = C4::Context->dbh->prepare("SELECT * FROM tags_index WHERE term = ? AND biblionumber = ?");
+        $sth->execute( $term, shift );
+    } else {
+        $sth = C4::Context->dbh->prepare("SELECT * FROM tags_index WHERE term = ?");
+        $sth->execute($term);
+    }
+    return $sth->fetchrow_hashref;
 }
 
 sub whitelist {
-	my $operator = shift;
-	defined $operator or return; # have to test defined to allow =0 (kohaadmin)
+    my $operator = shift;
+    defined $operator or return;    # have to test defined to allow =0 (kohaadmin)
     my $ext_dict = C4::Context->preference('TagsExternalDictionary');
-	if ($ext_dict) {
-		foreach (@_) {
-			spellcheck($_) or next;
-			add_word_lc($_);
-		}
-	}
-	foreach (@_) {
-		my $aref = get_approval_rows({term=>$_});
-		if ($aref and scalar @$aref) {
-			mod_tag_approval($operator,$_,1);
-		} else {
-			add_tag_approval($_,$operator);
-		}
-	}
-	return scalar @_;
+    if ($ext_dict) {
+        foreach (@_) {
+            spellcheck($_) or next;
+            add_word_lc($_);
+        }
+    }
+    foreach (@_) {
+        my $aref = get_approval_rows( { term => $_ } );
+        if ( $aref and scalar @$aref ) {
+            mod_tag_approval( $operator, $_, 1 );
+        } else {
+            add_tag_approval( $_, $operator );
+        }
+    }
+    return scalar @_;
 }
+
 # note: there is no "unwhitelist" operation because there is no remove for Ispell.
 # The blacklist regexps should operate "in front of" the whitelist, so if you approve
 # a term mistakenly, you can still reverse it. But there is no going back to "neutral".
 sub blacklist {
-	my $operator = shift;
-	defined $operator or return; # have to test defined to allow =0 (kohaadmin)
-	foreach (@_) {
-		my $aref = get_approval_rows({term=>$_});
-		if ($aref and scalar @$aref) {
-			mod_tag_approval($operator,$_,-1);
-		} else {
-			add_tag_approval($_,$operator,-1);
-		}
-	}
-	return scalar @_;
-}
-sub add_filter {
-	my $operator = shift;
-	defined $operator or return; # have to test defined to allow =0 (kohaadmin)
-	my $query = "INSERT INTO tags_blacklist (regexp,y,z) VALUES (?,?,?)";
-	# my $sth = C4::Context->dbh->prepare($query);
-	return scalar @_;
-}
-sub remove_filter {
-	my $operator = shift;
-	defined $operator or return; # have to test defined to allow =0 (kohaadmin)
-	my $query = "REMOVE FROM tags_blacklist WHERE blacklist_id = ?";
-	# my $sth = C4::Context->dbh->prepare($query);
-	# $sth->execute($term);
-	return scalar @_;
+    my $operator = shift;
+    defined $operator or return;    # have to test defined to allow =0 (kohaadmin)
+    foreach (@_) {
+        my $aref = get_approval_rows( { term => $_ } );
+        if ( $aref and scalar @$aref ) {
+            mod_tag_approval( $operator, $_, -1 );
+        } else {
+            add_tag_approval( $_, $operator, -1 );
+        }
+    }
+    return scalar @_;
 }
 
-sub add_tag_approval {	# or disapproval
-	my $term = shift or return;
-	my $query = "SELECT * FROM tags_approval WHERE term = ?";
-	my $sth = C4::Context->dbh->prepare($query);
-	$sth->execute($term);
-	($sth->rows) and return increment_weight_total($term);
-	my $operator = shift || 0;
-	my $approval = (@_ ? shift : 0);	# default is unapproved
-	my @exe_args = ($term);		# all 3 queries will use this argument
-	if ($operator) {
-		$query = "INSERT INTO tags_approval (term,approved_by,approved,date_approved) VALUES (?,?,?,NOW())";
-		push @exe_args, $operator, $approval;
-	} elsif ($approval) {
-		$query = "INSERT INTO tags_approval (term,approved,date_approved) VALUES (?,?,NOW())";
-		push @exe_args, $approval;
-	} else {
-		$query = "INSERT INTO tags_approval (term,date_approved) VALUES (?,NOW())";
-	}
-	$sth = C4::Context->dbh->prepare($query);
-	$sth->execute(@exe_args);
-	return $sth->rows;
+sub add_filter {
+    my $operator = shift;
+    defined $operator or return;    # have to test defined to allow =0 (kohaadmin)
+    my $query = "INSERT INTO tags_blacklist (regexp,y,z) VALUES (?,?,?)";
+
+    # my $sth = C4::Context->dbh->prepare($query);
+    return scalar @_;
+}
+
+sub remove_filter {
+    my $operator = shift;
+    defined $operator or return;    # have to test defined to allow =0 (kohaadmin)
+    my $query = "REMOVE FROM tags_blacklist WHERE blacklist_id = ?";
+
+    # my $sth = C4::Context->dbh->prepare($query);
+    # $sth->execute($term);
+    return scalar @_;
+}
+
+sub add_tag_approval {    # or disapproval
+    my $term  = shift or return;
+    my $query = "SELECT * FROM tags_approval WHERE term = ?";
+    my $sth   = C4::Context->dbh->prepare($query);
+    $sth->execute($term);
+    ( $sth->rows ) and return increment_weight_total($term);
+    my $operator = shift || 0;
+    my $approval = ( @_ ? shift : 0 );    # default is unapproved
+    my @exe_args = ($term);               # all 3 queries will use this argument
+
+    if ($operator) {
+        $query = "INSERT INTO tags_approval (term,approved_by,approved,date_approved) VALUES (?,?,?,NOW())";
+        push @exe_args, $operator, $approval;
+    } elsif ($approval) {
+        $query = "INSERT INTO tags_approval (term,approved,date_approved) VALUES (?,?,NOW())";
+        push @exe_args, $approval;
+    } else {
+        $query = "INSERT INTO tags_approval (term,date_approved) VALUES (?,NOW())";
+    }
+    $sth = C4::Context->dbh->prepare($query);
+    $sth->execute(@exe_args);
+    return $sth->rows;
 }
 
 sub mod_tag_approval {
-	my $operator = shift;
-	defined $operator or return; # have to test defined to allow =0 (kohaadmin)
-	my $term     = shift or return;
-	my $approval = (scalar @_ ? shift : 1);	# default is to approve
-	my $query = "UPDATE tags_approval SET approved_by=?, approved=?, date_approved=NOW() WHERE term = ?";
-	my $sth = C4::Context->dbh->prepare($query);
-	$sth->execute($operator,$approval,$term);
+    my $operator = shift;
+    defined $operator or return;                 # have to test defined to allow =0 (kohaadmin)
+    my $term     = shift or return;
+    my $approval = ( scalar @_ ? shift : 1 );    # default is to approve
+    my $query    = "UPDATE tags_approval SET approved_by=?, approved=?, date_approved=NOW() WHERE term = ?";
+    my $sth      = C4::Context->dbh->prepare($query);
+    $sth->execute( $operator, $approval, $term );
 }
 
 sub add_tag_index {
-	my $term         = shift or return;
-	my $biblionumber = shift or return;
-	my $query = "SELECT * FROM tags_index WHERE term = ? AND biblionumber = ?";
-	my $sth = C4::Context->dbh->prepare($query);
-	$sth->execute($term,$biblionumber);
-	($sth->rows) and return increment_weight($term,$biblionumber);
-	$query = "INSERT INTO tags_index (term,biblionumber) VALUES (?,?)";
-	$sth = C4::Context->dbh->prepare($query);
-	$sth->execute($term,$biblionumber);
-	return $sth->rows;
+    my $term         = shift or return;
+    my $biblionumber = shift or return;
+    my $query        = "SELECT * FROM tags_index WHERE term = ? AND biblionumber = ?";
+    my $sth          = C4::Context->dbh->prepare($query);
+    $sth->execute( $term, $biblionumber );
+    ( $sth->rows ) and return increment_weight( $term, $biblionumber );
+    $query = "INSERT INTO tags_index (term,biblionumber) VALUES (?,?)";
+    $sth   = C4::Context->dbh->prepare($query);
+    $sth->execute( $term, $biblionumber );
+    return $sth->rows;
 }
 
 sub increment_weights {
-	increment_weight(@_);
-	increment_weight_total(shift);
+    increment_weight(@_);
+    increment_weight_total(shift);
 }
+
 sub decrement_weights {
-	decrement_weight(@_);
-	decrement_weight_total(shift);
+    decrement_weight(@_);
+    decrement_weight_total(shift);
 }
+
 sub increment_weight_total {
-	_set_weight_total('weight_total+1',shift);
+    _set_weight_total( 'weight_total+1', shift );
 }
+
 sub increment_weight {
-	_set_weight('weight+1',shift,shift);
+    _set_weight( 'weight+1', shift, shift );
 }
+
 sub decrement_weight_total {
-	_set_weight_total('weight_total-1',shift);
+    _set_weight_total( 'weight_total-1', shift );
 }
+
 sub decrement_weight {
-	_set_weight('weight-1',shift,shift);
+    _set_weight( 'weight-1', shift, shift );
 }
+
 sub _set_weight_total {
-	my $sth = C4::Context->dbh->prepare("
+    my $sth = C4::Context->dbh->prepare( "
 	UPDATE tags_approval
 	SET    weight_total=" . (shift) . "
 	WHERE  term=?
-	");						# note: CANNOT use "?" for weight_total (see the args above).
-	$sth->execute(shift);	# just the term
+	" );    # note: CANNOT use "?" for weight_total (see the args above).
+    $sth->execute(shift);    # just the term
 }
+
 sub _set_weight {
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( "
 	UPDATE tags_index
 	SET    weight=" . (shift) . "
 	WHERE  term=?
 	AND    biblionumber=?
-	");
-	$sth->execute(@_);
+	" );
+    $sth->execute(@_);
 }
 
-sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
-	my $biblionumber = shift or return;
-	my $term         = shift or return;
-	my $borrowernumber = (@_) ? shift : 0;		# the user, default to kohaadmin
-	$term =~ s/^\s+//;
-	$term =~ s/\s+$//;
-	($term) or return;	# must be more than whitespace
-	my $rows = get_tag_rows({biblionumber=>$biblionumber, borrowernumber=>$borrowernumber, term=>$term, limit=>1});
-	my $query = "INSERT INTO tags_all
+sub add_tag {    # biblionumber,term,[borrowernumber,approvernumber]
+    my $biblionumber   = shift or return;
+    my $term           = shift or return;
+    my $borrowernumber = (@_) ? shift : 0;    # the user, default to kohaadmin
+    $term =~ s/^\s+//;
+    $term =~ s/\s+$//;
+    ($term) or return;                        # must be more than whitespace
+    my $rows =
+        get_tag_rows( { biblionumber => $biblionumber, borrowernumber => $borrowernumber, term => $term, limit => 1 } );
+    my $query = "INSERT INTO tags_all
 	(borrowernumber,biblionumber,term,date_created)
 	VALUES (?,?,?,NOW())";
-	if (scalar @$rows) {
-		return;
-	}
-	# add to tags_all regardless of approaval
-	my $sth = C4::Context->dbh->prepare($query);
-	$sth->execute($borrowernumber,$biblionumber,$term);
 
-	# then 
-	if (scalar @_) { 	# if arg remains, it is the borrowernumber of the approver: tag is pre-approved.
-		my $approver = shift;
-		add_tag_approval($term,$approver,1);
-		add_tag_index($term,$biblionumber,$approver);
-	} elsif (is_approved($term) >= 1) {
-		add_tag_approval($term,0,1);
-		add_tag_index($term,$biblionumber,1);
-	} else {
-		add_tag_approval($term);
-		add_tag_index($term,$biblionumber);
-	}
+    if ( scalar @$rows ) {
+        return;
+    }
+
+    # add to tags_all regardless of approaval
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute( $borrowernumber, $biblionumber, $term );
+
+    # then
+    if ( scalar @_ ) {    # if arg remains, it is the borrowernumber of the approver: tag is pre-approved.
+        my $approver = shift;
+        add_tag_approval( $term, $approver, 1 );
+        add_tag_index( $term, $biblionumber, $approver );
+    } elsif ( is_approved($term) >= 1 ) {
+        add_tag_approval( $term, 0, 1 );
+        add_tag_index( $term, $biblionumber, 1 );
+    } else {
+        add_tag_approval($term);
+        add_tag_index( $term, $biblionumber );
+    }
 }
 
 # This takes a set of tags, as returned by C<get_approval_rows> and divides
@@ -523,7 +540,7 @@ sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
 # value.
 sub stratify_tags {
     my ( $strata, $tags ) = @_;
-    return (0,0) if !@$tags;
+    return ( 0, 0 ) if !@$tags;
     my ( $min, $max );
     foreach (@$tags) {
         my $w = $_->{weight_total};

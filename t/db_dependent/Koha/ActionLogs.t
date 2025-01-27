@@ -27,7 +27,7 @@ use Koha::DateUtils qw( dt_from_string );
 use t::lib::TestBuilder;
 
 BEGIN {
-  use_ok('Koha::ActionLogs');
+    use_ok('Koha::ActionLogs');
 }
 
 my $schema  = Koha::Database->new->schema;
@@ -39,21 +39,25 @@ subtest 'store() tests' => sub {
     $schema->storage->txn_begin;
 
     my $logs_count = Koha::ActionLogs->count;
-    my $log = Koha::ActionLog->new({
-        module => 'CIRCULATION',
-        action => 'ISSUE',
-        interface => 'intranet',
-    })->store;
+    my $log        = Koha::ActionLog->new(
+        {
+            module    => 'CIRCULATION',
+            action    => 'ISSUE',
+            interface => 'intranet',
+        }
+    )->store;
     $log->discard_changes;
 
-    is( ref($log), 'Koha::ActionLog', 'Log object creation success');
-    is( Koha::ActionLogs->count, $logs_count + 1, 'Exactly one log was saved');
+    is( ref($log),               'Koha::ActionLog', 'Log object creation success' );
+    is( Koha::ActionLogs->count, $logs_count + 1,   'Exactly one log was saved' );
 
     my $yesterday = dt_from_string->subtract( days => 1 );
     $log->timestamp($yesterday)->store;
     $log->info("a new info")->store;    # Must be 2 different store calls
-    is( dt_from_string( $log->get_from_storage->timestamp ), $yesterday,
-        'timestamp column should not be updated to current_timestamp' );
+    is(
+        dt_from_string( $log->get_from_storage->timestamp ), $yesterday,
+        'timestamp column should not be updated to current_timestamp'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -63,13 +67,18 @@ subtest 'search() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron1 = $builder->build_object({
-        class => 'Koha::Patrons',
-    });
+    my $patron1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+        }
+    );
 
-    logaction("MEMBERS", "MODIFY", $patron1->borrowernumber, "test");
+    logaction( "MEMBERS", "MODIFY", $patron1->borrowernumber, "test" );
 
-    is(Koha::ActionLogs->search({ object => $patron1->borrowernumber })->count, 1, 'search() return right number of action logs');
+    is(
+        Koha::ActionLogs->search( { object => $patron1->borrowernumber } )->count, 1,
+        'search() return right number of action logs'
+    );
 
     $schema->storage->txn_rollback;
 };

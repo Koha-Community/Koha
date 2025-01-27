@@ -40,11 +40,11 @@ use Modern::Perl;
 use MARC::Record;
 use MARC::File::XML;
 use List::MoreUtils qw( uniq );
-use Getopt::Std qw( getopts );
+use Getopt::Std     qw( getopts );
 
 use Koha::Script;
 use C4::Context;
-use C4::Charset qw( StripNonXmlChars );
+use C4::Charset   qw( StripNonXmlChars );
 use C4::OAI::Sets qw(
     AddOAISetsBiblios
     CalcOAISetsBiblio
@@ -58,18 +58,18 @@ use Koha::Biblio::Metadata;
 
 my %opts;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
-my $go = getopts('vo:l:ihr', \%opts);
+my $go = getopts( 'vo:l:ihr', \%opts );
 
-if(!$go or $opts{h}){
+if ( !$go or $opts{h} ) {
     &print_usage;
     exit;
 }
 
-my $verbose = $opts{v};
-my $offset = $opts{o};
-my $length = $opts{l};
+my $verbose     = $opts{v};
+my $offset      = $opts{o};
+my $length      = $opts{l};
 my $embed_items = $opts{i};
-my $reset = $opts{r};
+my $reset       = $opts{r};
 
 my $dbh = C4::Context->dbh;
 
@@ -90,15 +90,15 @@ my $query = qq{
     AND  `schema` = ?
     ORDER BY biblionumber ASC
 };
-if($length) {
+if ($length) {
     $query .= "LIMIT $length";
-    if($offset) {
+    if ($offset) {
         $query .= " OFFSET $offset";
     }
 }
 my $sth = $dbh->prepare($query);
-$sth->execute( C4::Context->preference('marcflavour'), C4::Context->preference('marcflavour'));
-my $results = $sth->fetchall_arrayref({});
+$sth->execute( C4::Context->preference('marcflavour'), C4::Context->preference('marcflavour') );
+my $results = $sth->fetchall_arrayref( {} );
 print "done.\n" if $verbose;
 
 # Build lists of parents sets
@@ -106,11 +106,11 @@ my $sets = GetOAISets;
 my $parentsets;
 foreach my $set (@$sets) {
     my $setSpec = $set->{'spec'};
-    while($setSpec =~ /^(.+):(.+)$/) {
-        my $parent = $1;
+    while ( $setSpec =~ /^(.+):(.+)$/ ) {
+        my $parent     = $1;
         my $parent_set = GetOAISetBySpec($parent);
-        if($parent_set) {
-            push @{ $parentsets->{$set->{'id'}} }, $parent_set->{'id'};
+        if ($parent_set) {
+            push @{ $parentsets->{ $set->{'id'} } }, $parent_set->{'id'};
             $setSpec = $parent;
         } else {
             last;
@@ -118,30 +118,29 @@ foreach my $set (@$sets) {
     }
 }
 
-my $num_biblios = scalar @$results;
-my $i = 1;
+my $num_biblios  = scalar @$results;
+my $i            = 1;
 my $sets_biblios = {};
 foreach my $res (@$results) {
     my $biblionumber = $res->{'biblionumber'};
-    my $marcxml = $res->{'metadata'};
-    if($verbose and $i % 1000 == 0) {
-        my $percent = ($i * 100) / $num_biblios;
-        $percent = sprintf("%.2f", $percent);
+    my $marcxml      = $res->{'metadata'};
+    if ( $verbose and $i % 1000 == 0 ) {
+        my $percent = ( $i * 100 ) / $num_biblios;
+        $percent = sprintf( "%.2f", $percent );
         say "Progression: $i/$num_biblios ($percent %)";
     }
+
     # The following lines are copied from GetMarcBiblio
     # We don't call GetMarcBiblio to avoid a sql query to be executed each time
     $marcxml = StripNonXmlChars($marcxml);
-    MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
+    MARC::File::XML->default_record_format( C4::Context->preference('marcflavour') );
     my $record;
-    eval {
-        $record = MARC::Record::new_from_xml($marcxml, "UTF-8", C4::Context->preference('marcflavour'));
-    };
-    if($@) {
+    eval { $record = MARC::Record::new_from_xml( $marcxml, "UTF-8", C4::Context->preference('marcflavour') ); };
+    if ($@) {
         warn "(biblio $biblionumber) Error while creating record from marcxml: $@";
         next;
     }
-    if( $embed_items && !($res->{'deleted'}) ) {
+    if ( $embed_items && !( $res->{'deleted'} ) ) {
         $record = Koha::Biblio::Metadata->record(
             {
                 record       => $record,
@@ -151,7 +150,7 @@ foreach my $res (@$results) {
         );
     }
 
-    my @biblio_sets = CalcOAISetsBiblio($record, $mappings);
+    my @biblio_sets = CalcOAISetsBiblio( $record, $mappings );
     foreach my $set_id (@biblio_sets) {
         push @{ $sets_biblios->{$set_id} }, $biblionumber;
         foreach my $parent_set_id ( @{ $parentsets->{$set_id} } ) {
@@ -163,15 +162,15 @@ foreach my $res (@$results) {
 say "Progression: done." if $verbose;
 
 say "Summary:";
-foreach my $set_id (keys %$sets_biblios) {
+foreach my $set_id ( keys %$sets_biblios ) {
     $sets_biblios->{$set_id} = [ uniq @{ $sets_biblios->{$set_id} } ];
-    my $set = GetOAISet($set_id);
+    my $set     = GetOAISet($set_id);
     my $setSpec = $set->{'spec'};
-    say "Set '$setSpec': ". scalar(@{$sets_biblios->{$set_id}}) ." biblios";
+    say "Set '$setSpec': " . scalar( @{ $sets_biblios->{$set_id} } ) . " biblios";
 }
 
 print "Updating database... ";
-if($reset) {
+if ($reset) {
     ModOAISetsBiblios( {} );
 }
 AddOAISetsBiblios($sets_biblios);

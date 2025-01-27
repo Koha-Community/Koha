@@ -19,8 +19,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use Koha::Patrons;
@@ -30,10 +30,10 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/accountline-details.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {
+        template_name => "members/accountline-details.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => {
             borrowers     => 'edit_borrowers',
             updatecharges => 'remaining_permissions'
         },
@@ -47,22 +47,19 @@ my $accountline = Koha::Account::Lines->find($accountlines_id);
 if ($accountline) {
     my $account_offsets = Koha::Account::Offsets->search(
         [
-            {
-                credit_id => $accountline->accountlines_id
-            },
-            {
-                debit_id => $accountline->accountlines_id
-            }
+            { credit_id => $accountline->accountlines_id },
+            { debit_id  => $accountline->accountlines_id }
         ],
         { order_by => 'created_on' }
     );
 
     $template->param(
-        accountline     => $accountline,
-        account_offsets => $account_offsets,
-        additional_field_values => $accountline->get_additional_field_values_for_template,
+        accountline                 => $accountline,
+        account_offsets             => $account_offsets,
+        additional_field_values     => $accountline->get_additional_field_values_for_template,
         available_additional_fields => Koha::AdditionalFields->search(
-            { tablename => $accountline->credit_type_code ? 'accountlines:credit' : 'accountlines:debit' } ),
+            { tablename => $accountline->credit_type_code ? 'accountlines:credit' : 'accountlines:debit' }
+        ),
     );
 
     my $patron = Koha::Patrons->find( $accountline->borrowernumber );

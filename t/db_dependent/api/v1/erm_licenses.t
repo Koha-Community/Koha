@@ -62,15 +62,12 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No licenses, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses")->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses")->status_is(200)->json_is( [] );
 
-    my $license =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } );
+    my $license = $builder->build_object( { class => 'Koha::ERM::Licenses' } );
 
     # One license created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses")->status_is(200)
-      ->json_is( [ $license->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses")->status_is(200)->json_is( [ $license->to_api ] );
 
     my $another_license = $builder->build_object(
         {
@@ -78,31 +75,27 @@ subtest 'list() tests' => sub {
             value => { vendor_id => $license->vendor_id }
         }
     );
-    my $license_with_another_vendor_id =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } );
+    my $license_with_another_vendor_id = $builder->build_object( { class => 'Koha::ERM::Licenses' } );
 
     # Two licenses created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses")->status_is(200)
-      ->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses")->status_is(200)->json_is(
         [
             $license->to_api,
             $another_license->to_api,
             $license_with_another_vendor_id->to_api
         ]
-      );
+    );
 
     # Filtering works, two licenses sharing vendor_id
-    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses?vendor_id="
-          . $license->vendor_id )->status_is(200)
-      ->json_is( [ $license->to_api, $another_license->to_api ] );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses?vendor_id=" . $license->vendor_id )->status_is(200)
+        ->json_is( [ $license->to_api, $another_license->to_api ] );
 
     # Attempt to search by name like 'ko'
     $license->delete;
     $another_license->delete;
     $license_with_another_vendor_id->delete;
-    $t->get_ok( qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)
-      ->status_is(200)
-      ->json_is( [] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)->status_is(200)
+        ->json_is( [] );
 
     my $license_to_search = $builder->build_object(
         {
@@ -114,19 +107,15 @@ subtest 'list() tests' => sub {
     );
 
     # Search works, searching for name like 'ko'
-    $t->get_ok( qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)
-      ->status_is(200)
-      ->json_is( [ $license_to_search->to_api ] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)->status_is(200)
+        ->json_is( [ $license_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses?blah=blah")
-      ->status_is(400)
-      ->json_is(
-        [ { path => '/query/blah', message => 'Malformed query string' } ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
-    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/licenses")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/licenses")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -137,8 +126,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $license =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } );
+    my $license   = $builder->build_object( { class => 'Koha::ERM::Licenses' } );
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -160,27 +148,24 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This license exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses/"
-          . $license->license_id )->status_is(200)
-      ->json_is( $license->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses/" . $license->license_id )->status_is(200)
+        ->json_is( $license->to_api );
 
     # Return one license with embed
-    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses/"
-          . $license->license_id  => {'x-koha-embed' => 'documents'} )->status_is(200)
-      ->json_is( { %{ $license->to_api }, documents => [] });
+    $t->get_ok(
+        "//$userid:$password@/api/v1/erm/licenses/" . $license->license_id => { 'x-koha-embed' => 'documents' } )
+        ->status_is(200)->json_is( { %{ $license->to_api }, documents => [] } );
 
     # Unauthorized access
-    $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/licenses/"
-          . $license->license_id )->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/licenses/" . $license->license_id )->status_is(403);
 
     # Attempt to get non-existent license
-    my $license_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } );
-    my $non_existent_id = $license_to_delete->license_id;
+    my $license_to_delete = $builder->build_object( { class => 'Koha::ERM::Licenses' } );
+    my $non_existent_id   = $license_to_delete->license_id;
     $license_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses/$non_existent_id")
-      ->status_is(404)->json_is( '/error' => 'License not found' );
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses/$non_existent_id")->status_is(404)
+        ->json_is( '/error' => 'License not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -212,70 +197,62 @@ subtest 'add() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $license = {
-        name             => "License name",
-        description      => "License description",
-        type             => 'local',
-        status           => "active",
-        started_on       => undef,
-        ended_on         => undef,
+        name        => "License name",
+        description => "License description",
+        type        => 'local',
+        status      => "active",
+        started_on  => undef,
+        ended_on    => undef,
     };
 
     # Unauthorized attempt to write
-    $t->post_ok( "//$unauth_userid:$password@/api/v1/erm/licenses" => json =>
-          $license )->status_is(403);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/erm/licenses" => json => $license )->status_is(403);
 
     # Authorized attempt to write invalid data
     my $license_with_invalid_field = {
-        blah             => "License Blah",
-        name             => "License name",
-        description      => "License description",
-        type             => 'local',
-        status           => "active",
-        started_on       => undef,
-        ended_on         => undef,
+        blah        => "License Blah",
+        name        => "License name",
+        description => "License description",
+        type        => 'local',
+        status      => "active",
+        started_on  => undef,
+        ended_on    => undef,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json =>
-          $license_with_invalid_field )->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license_with_invalid_field )->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-          );
+        );
 
     # Authorized attempt to write
     my $license_id =
-      $t->post_ok(
-        "//$userid:$password@/api/v1/erm/licenses" => json => $license )
-      ->status_is( 201, 'REST3.2.1' )->header_like(
+        $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license )->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^/api/v1/erm/licenses/\d*|,
         'REST3.4.1'
-    )->json_is( '/name'             => $license->{name} )
-      ->json_is( '/description'     => $license->{description} )
-      ->json_is( '/type'            => $license->{type} )
-      ->json_is( '/status'          => $license->{status} )
-      ->tx->res->json->{license_id};
+    )->json_is( '/name' => $license->{name} )->json_is( '/description' => $license->{description} )
+        ->json_is( '/type' => $license->{type} )->json_is( '/status' => $license->{status} )
+        ->tx->res->json->{license_id};
 
     # Authorized attempt to create with null id
     $license->{license_id} = undef;
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/licenses" => json => $license )
-      ->status_is(400)->json_has('/errors');
+    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license )->status_is(400)->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $license->{license_id} = $license_id;
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/licenses" => json => $license )
-      ->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license )->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
                 path    => "/body/license_id"
             }
         ]
-      );
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -306,81 +283,71 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $license_id =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } )->license_id;
+    my $license_id = $builder->build_object( { class => 'Koha::ERM::Licenses' } )->license_id;
 
     # Unauthorized attempt to update
-    $t->put_ok(
-        "//$unauth_userid:$password@/api/v1/erm/licenses/$license_id" =>
-          json => { name => 'New unauthorized name change' } )->status_is(403);
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/erm/licenses/$license_id" => json =>
+            { name => 'New unauthorized name change' } )->status_is(403);
 
     # Attempt partial update on a PUT
     my $license_with_missing_field = {
-        description      => 'New description',
-        type             => 'national',
-        status           => 'expired',
-        started_on       => undef,
-        ended_on         => undef,
+        description => 'New description',
+        type        => 'national',
+        status      => 'expired',
+        started_on  => undef,
+        ended_on    => undef,
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/erm/licenses/$license_id" => json =>
-          $license_with_missing_field )->status_is(400)
-      ->json_is( "/errors" =>
-          [ { message => "Missing property.", path => "/body/name" } ] );
+    $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_missing_field )
+        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $license_with_updated_field = {
-        name             => 'New name',
-        description      => 'New description',
-        type             => 'national',
-        status           => 'expired',
-        started_on       => undef,
-        ended_on         => undef,
+        name        => 'New name',
+        description => 'New description',
+        type        => 'national',
+        status      => 'expired',
+        started_on  => undef,
+        ended_on    => undef,
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/erm/licenses/$license_id" => json =>
-          $license_with_updated_field )->status_is(200)
-      ->json_is( '/name' => 'New name' );
+    $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_updated_field )
+        ->status_is(200)->json_is( '/name' => 'New name' );
 
     # Authorized attempt to write invalid data
     my $license_with_invalid_field = {
-        blah             => "License Blah",
-        name             => "License name",
-        description      => "License description",
-        type             => 'national',
-        status           => 'expired',
-        started_on       => undef,
-        ended_on         => undef,
+        blah        => "License Blah",
+        name        => "License name",
+        description => "License description",
+        type        => 'national',
+        status      => 'expired',
+        started_on  => undef,
+        ended_on    => undef,
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/erm/licenses/$license_id" => json =>
-          $license_with_invalid_field )->status_is(400)->json_is(
+    $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_invalid_field )
+        ->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-          );
+        );
 
     # Attempt to update non-existent license
-    my $license_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } );
-    my $non_existent_id = $license_to_delete->id;
+    my $license_to_delete = $builder->build_object( { class => 'Koha::ERM::Licenses' } );
+    my $non_existent_id   = $license_to_delete->id;
     $license_to_delete->delete;
 
-    $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$non_existent_id" =>
-          json => $license_with_updated_field )->status_is(404);
+    $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$non_existent_id" => json => $license_with_updated_field )
+        ->status_is(404);
 
     # Wrong method (POST)
     $license_with_updated_field->{license_id} = 2;
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/licenses/$license_id" => json =>
-          $license_with_updated_field )->status_is(404);
+    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_updated_field )
+        ->status_is(404);
 
     $schema->storage->txn_rollback;
 };
@@ -411,21 +378,17 @@ subtest 'delete() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $license_id =
-      $builder->build_object( { class => 'Koha::ERM::Licenses' } )->license_id;
+    my $license_id = $builder->build_object( { class => 'Koha::ERM::Licenses' } )->license_id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok(
-        "//$unauth_userid:$password@/api/v1/erm/licenses/$license_id")
-      ->status_is(403);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/licenses/$license_id")->status_is(403);
 
     # Delete existing license
-    $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")
-      ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent license
-    $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")
-      ->status_is(404);
+    $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

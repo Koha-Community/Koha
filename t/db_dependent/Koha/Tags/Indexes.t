@@ -24,7 +24,7 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::Tags::Indexes;
 
-my $schema = Koha::Database->schema;
+my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'search() tests' => sub {
@@ -35,8 +35,8 @@ subtest 'search() tests' => sub {
 
     my $current_count = Koha::Tags::Indexes->search->count;
 
-    my $approval_1 = $builder->build_object({ class => 'Koha::Tags::Indexes' });
-    my $approval_2 = $builder->build_object({ class => 'Koha::Tags::Indexes' });
+    my $approval_1 = $builder->build_object( { class => 'Koha::Tags::Indexes' } );
+    my $approval_2 = $builder->build_object( { class => 'Koha::Tags::Indexes' } );
 
     is( Koha::Tags::Indexes->search->count, $current_count + 2, 'Indexes count consistent' );
 

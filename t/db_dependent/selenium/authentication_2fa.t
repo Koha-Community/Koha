@@ -33,80 +33,89 @@ SKIP: {
     eval { require Selenium::Remote::Driver; };
     skip "Selenium::Remote::Driver is needed for selenium tests.", 2 if $@;
 
-    my $builder  = t::lib::TestBuilder->new;
+    my $builder = t::lib::TestBuilder->new;
 
     my $library_name = 'my ❤ library';
     my $library = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => $library_name } } );
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1, branchcode => $library->branchcode } } );
-    $patron->flags(1)->store; # superlibrarian permission
-    my $password = Koha::AuthUtils::generate_password($patron->category);
+    my $patron  = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 1, branchcode => $library->branchcode } } );
+    $patron->flags(1)->store;    # superlibrarian permission
+    my $password = Koha::AuthUtils::generate_password( $patron->category );
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-    $patron->set_password({ password => $password });
+    $patron->set_password( { password => $password } );
 
     push @data_to_cleanup, $patron, $patron->category, $patron->library;
 
-    my $s        = t::lib::Selenium->new({ login => $patron->userid, password => $password });
-    my $driver   = $s->driver;
+    my $s      = t::lib::Selenium->new( { login => $patron->userid, password => $password } );
+    my $driver = $s->driver;
 
     subtest 'Setup' => sub {
         plan tests => 13;
 
         my $mainpage = $s->base_url . q|mainpage.pl|;
         $driver->get($mainpage);
-        like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form');
+        like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form' );
 
-        C4::Context->set_preference('TwoFactorAuthentication', 'disabled');
+        C4::Context->set_preference( 'TwoFactorAuthentication', 'disabled' );
 
         fill_login_form($s);
-        like( $driver->get_title, qr(Koha staff interface), 'Patron with flags superlibrarian should be able to login' );
+        like(
+            $driver->get_title, qr(Koha staff interface),
+            'Patron with flags superlibrarian should be able to login'
+        );
 
-        $driver->get($s->base_url . q|members/two_factor_auth.pl|);
+        $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
         like( $driver->get_title, qr(Error 404), 'Must be redirected to 404 is the pref is off' );
 
-        C4::Context->set_preference('TwoFactorAuthentication', 'enabled');
-        $driver->get($s->base_url . q|members/two_factor_auth.pl|);
+        C4::Context->set_preference( 'TwoFactorAuthentication', 'enabled' );
+        $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
         like( $driver->get_title, qr(Two-factor authentication), 'Must be on the page with the pref on' );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
+            $driver->find_element(
+                '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
             'Status: Disabled',
             '2FA is disabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
-            '', # 'Status: Enabled' is not shown
+            $driver->find_element(
+                '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
+            '',    # 'Status: Enabled' is not shown
             '2FA is disabled'
         );
 
         $driver->find_element('//*[@id="enable-2FA"]')->click;
         $s->wait_for_ajax;
-        ok($driver->find_element('//img[@id="qr_code"]'), 'There is a QR code');
-        is($driver->find_element('//span[@id="issuer"]')->get_text, $library_name);
+        ok( $driver->find_element('//img[@id="qr_code"]'), 'There is a QR code' );
+        is( $driver->find_element('//span[@id="issuer"]')->get_text, $library_name );
 
         $driver->find_element('//*[@id="pin_code"]')->send_keys('wrong_code');
         $driver->find_element('//*[@id="register-2FA"]')->click;
         $s->wait_for_ajax;
-        ok($driver->find_element('//div[@class="alert alert-error"][contains(text(), "Invalid PIN code")]'));
+        ok( $driver->find_element('//div[@class="alert alert-error"][contains(text(), "Invalid PIN code")]') );
         is( $patron->get_from_storage->secret, undef, 'secret is not set in DB yet' );
 
         my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value();
-        my $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron, secret32 => $secret32});
-        my $code = $auth->code();
+        my $auth     = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret32 => $secret32 } );
+        my $code     = $auth->code();
         $driver->find_element('//*[@id="pin_code"]')->clear;
         $driver->find_element('//*[@id="pin_code"]')->send_keys($code);
         $driver->find_element('//*[@id="register-2FA"]')->click;
+
         # Wait for the response then go to the page, don't wait for the redirect
         $s->wait_for_ajax;
-        $driver->get($s->base_url . q|members/two_factor_auth.pl|);
+        $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
-            '', # 'Status: Disabled' is not shown
+            $driver->find_element(
+                '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
+            '',    # 'Status: Disabled' is not shown
             '2FA is enabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
+            $driver->find_element(
+                '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
             'Status: Enabled',
             '2FA is enabled'
         );
@@ -122,16 +131,15 @@ SKIP: {
         my $mainpage = $s->base_url . q|mainpage.pl|;
 
         my $secret32 = $patron->decoded_secret;
-        { # ok first try
-            $driver->get($mainpage . q|?logout.x=1|);
-            $driver->get($s->base_url . q|circ/circulation.pl?borrowernumber=|.$patron->borrowernumber);
+        {    # ok first try
+            $driver->get( $mainpage . q|?logout.x=1| );
+            $driver->get( $s->base_url . q|circ/circulation.pl?borrowernumber=| . $patron->borrowernumber );
             like( $driver->get_title, qr(Log in to Koha), 'Must be on the first auth screen' );
             fill_login_form($s);
             like( $driver->get_title, qr(Two-factor authentication), 'Must be on the second auth screen' );
             is( login_error($s), undef );
 
-            my $auth = Koha::Auth::TwoFactorAuth->new(
-                { patron => $patron, secret32 => $secret32 } );
+            my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret32 => $secret32 } );
             my $code = $auth->code();
             $auth->clear;
             $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys($code);
@@ -139,9 +147,9 @@ SKIP: {
             like( $driver->get_title, qr(Checking out to ), 'Must be redirected to the original page' );
         }
 
-        { # second try and logout
-            $driver->get($mainpage . q|?logout.x=1|);
-            $driver->get($s->base_url . q|circ/circulation.pl?borrowernumber=|.$patron->borrowernumber);
+        {    # second try and logout
+            $driver->get( $mainpage . q|?logout.x=1| );
+            $driver->get( $s->base_url . q|circ/circulation.pl?borrowernumber=| . $patron->borrowernumber );
             like( $driver->get_title, qr(Log in to Koha), 'Must be on the first auth screen' );
             fill_login_form($s);
             like( $driver->get_title, qr(Two-factor authentication), 'Must be on the second auth screen' );
@@ -158,10 +166,10 @@ SKIP: {
             is( login_error($s), undef );
         }
 
-        { # second try and success
+        {    # second try and success
 
-            $driver->get($mainpage . q|?logout.x=1|);
-            $driver->get($s->base_url . q|circ/circulation.pl?borrowernumber=|.$patron->borrowernumber);
+            $driver->get( $mainpage . q|?logout.x=1| );
+            $driver->get( $s->base_url . q|circ/circulation.pl?borrowernumber=| . $patron->borrowernumber );
             like( $driver->get_title, qr(Log in to Koha), 'Must be on the first auth screen' );
             like( login_error($s), qr(Session timed out) );
             fill_login_form($s);
@@ -171,8 +179,7 @@ SKIP: {
             $driver->find_element('//input[@type="submit"]')->click;
             is( login_error($s), "Invalid two-factor code" );
 
-            my $auth = Koha::Auth::TwoFactorAuth->new(
-                { patron => $patron, secret32 => $secret32 } );
+            my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret32 => $secret32 } );
             my $code = $auth->code();
             $auth->clear;
             $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys($code);
@@ -264,30 +271,33 @@ SKIP: {
             'Must be on the 2FA auth setup screen'
         );
 
-        $s->wait_for_ajax; # There is an ajax request to populate the qr_code and the secret
+        $s->wait_for_ajax;    # There is an ajax request to populate the qr_code and the secret
         $driver->set_window_size( 3840, 1080 );
         $s->wait_for_element_visible('//*[@id="registration-form"]');
 
         isnt( $driver->find_element('//*[@id="qr_code"]')->get_attribute("src"), "" );
         my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value;
 
-        my $auth = Koha::Auth::TwoFactorAuth->new(
-            { patron => $patron, secret32 => $secret32 } );
+        my $auth     = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret32 => $secret32 } );
         my $pin_code = $auth->code;
 
         $driver->find_element('//*[@id="pin_code"]')->send_keys("wrong code");
         $driver->find_element('//*[@id="register-2FA"]')->click;
         $s->wait_for_ajax;
-        is( $driver->find_element('//*[@id="errors"]')->get_text,
-            "Invalid PIN code" );
+        is(
+            $driver->find_element('//*[@id="errors"]')->get_text,
+            "Invalid PIN code"
+        );
 
         $driver->find_element('//*[@id="pin_code"]')->clear;
         $driver->find_element('//*[@id="pin_code"]')->send_keys($pin_code);
         $driver->find_element('//*[@id="register-2FA"]')->click;
-        is( $s->get_next_alert_text,
+        is(
+            $s->get_next_alert_text,
             "Two-factor authentication correctly configured. You will be redirected to the login screen."
         );
         $driver->accept_alert;
+
         # FIXME How to test the redirect to the mainpage here
 
         $patron = $patron->get_from_storage;
@@ -304,20 +314,21 @@ SKIP: {
         my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $patron } );
         my $code = $auth->code();
         $auth->clear;
-        $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')
-          ->send_keys($code);
+        $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys($code);
         $driver->find_element('//input[@type="submit"]')->click;
 
         $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
-            '', # 'Status: Disabled' is not shown
+            $driver->find_element(
+                '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
+            '',    # 'Status: Disabled' is not shown
             '2FA is enabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
+            $driver->find_element(
+                '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
             'Status: Enabled',
             '2FA is enabled'
         );
@@ -325,34 +336,35 @@ SKIP: {
         $driver->find_element('//form[@id="two-factor-auth"]//input[@type="submit"]')->click;
 
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
+            $driver->find_element(
+                '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
             'Status: Disabled',
             '2FA is disabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
-            '', # 'Status: Enabled' is not shown
+            $driver->find_element(
+                '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]')->get_text,
+            '',    # 'Status: Enabled' is not shown
             '2FA is disabled'
         );
 
         $patron = $patron->get_from_storage;
-        is( $patron->secret, undef, "Secret has been cleared" );
+        is( $patron->secret,        undef,      "Secret has been cleared" );
         is( $patron->auth_method(), 'password', 'auth_method has been reset to "password"' );
     };
 
     $driver->quit();
-};
+}
 
 END {
     $_->delete for @data_to_cleanup;
-    C4::Context->set_preference('TwoFactorAuthentication', $pref_value);
-};
-
+    C4::Context->set_preference( 'TwoFactorAuthentication', $pref_value );
+}
 
 sub login_error {
-    my ( $s ) = @_;
-    my $driver   = $s->driver;
+    my ($s) = @_;
+    my $driver = $s->driver;
 
     $s->remove_error_handler;
     my $login_error = eval {
@@ -365,7 +377,7 @@ sub login_error {
 
 # Don't use the usual t::lib::Selenium->auth as we don't want the ->get($mainpage) to test the redirect
 sub fill_login_form {
-    my ( $s ) = @_;
-    $s->fill_form({ userid => $s->login, password => $s->password });
+    my ($s) = @_;
+    $s->fill_form( { userid => $s->login, password => $s->password } );
     $s->driver->find_element('//input[@id="submit-button"]')->click;
 }

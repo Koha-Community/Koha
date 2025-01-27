@@ -60,9 +60,9 @@ sub add_authorised_value {
             image_url        => $av->imageurl,
         );
     };
-    C4::Service->return_error ( $@ ) if $@;
+    C4::Service->return_error($@) if $@;
 
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 C4::Service->dispatch(

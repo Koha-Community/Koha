@@ -18,10 +18,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( catch try );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Letters;
 use Koha::ProblemReport;
@@ -48,11 +48,11 @@ if (   !C4::Context->preference('OPACReportProblem')
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
 }
 
-my $referer = Koha::Util::Navigation::local_referer($input );
+my $referer = Koha::Util::Navigation::local_referer($input);
 $referer = Encode::decode_utf8 uri_unescape $referer,
 
-my $patron = Koha::Patrons->find($borrowernumber);
-my $library = $patron->library;
+    my $patron = Koha::Patrons->find($borrowernumber);
+my $library  = $patron->library;
 my $username = $patron->userid;
 my @messages;
 
@@ -65,8 +65,8 @@ $template->param(
 my $op = $input->param('op') || '';
 if ( $op eq 'cud-addreport' ) {
 
-    my $subject = $input->param('subject');
-    my $message = $input->param('message');
+    my $subject     = $input->param('subject');
+    my $message     = $input->param('message');
     my $problempage = $input->param('problempage');
     $problempage = Encode::decode_utf8 uri_unescape $problempage;
     my $recipient = $input->param('recipient') || 'admin';
@@ -89,34 +89,39 @@ if ( $op eq 'cud-addreport' ) {
 
                 # send notice to library
                 my $letter = C4::Letters::GetPreparedLetter(
-                    module => 'members',
+                    module      => 'members',
                     letter_code => 'PROBLEM_REPORT',
-                    branchcode => $problem->branchcode,
-                    tables => {
-                        'problem_reports', $problem->reportid
-                    }
+                    branchcode  => $problem->branchcode,
+                    tables      => { 'problem_reports', $problem->reportid }
                 );
 
-                my $transport = 'email';
+                my $transport     = 'email';
                 my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
-                if ( $recipient eq 'library' and defined($library->inbound_email_address) and $library->inbound_email_address ne C4::Context->preference('KohaAdminEmailAddress') ) {
+                if (    $recipient eq 'library'
+                    and defined( $library->inbound_email_address )
+                    and $library->inbound_email_address ne C4::Context->preference('KohaAdminEmailAddress') )
+                {
                     # the problem report is intended for a librarian and will be received at a library email address
-                    C4::Letters::EnqueueLetter({
-                        letter                 => $letter,
-                        borrowernumber         => $borrowernumber,
-                        message_transport_type => $transport,
-                        to_address             => $library->inbound_email_address,
-                        reply_address          => $reply_address,
-                    });
+                    C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $borrowernumber,
+                            message_transport_type => $transport,
+                            to_address             => $library->inbound_email_address,
+                            reply_address          => $reply_address,
+                        }
+                    );
                 } else {
-                    C4::Letters::EnqueueLetter({
-                        letter                 => $letter,
-                        borrowernumber         => $borrowernumber,
-                        message_transport_type => $transport,
-                        to_address             => C4::Context->preference('KohaAdminEmailAddress'),
-                        reply_address          => $reply_address,
-                    });
+                    C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $borrowernumber,
+                            message_transport_type => $transport,
+                            to_address             => C4::Context->preference('KohaAdminEmailAddress'),
+                            reply_address          => $reply_address,
+                        }
+                    );
                 }
 
                 push @messages, {
@@ -129,8 +134,7 @@ if ( $op eq 'cud-addreport' ) {
                 );
             }
         );
-    }
-    catch {
+    } catch {
         warn "Something wrong happened when sending the report problem: $_";
         push @messages, {
             type => 'error',

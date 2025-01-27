@@ -26,7 +26,7 @@ use C4::Context;
 # FIXME We should certainly remove output_pref from here
 use Koha::DateUtils qw( dt_from_string output_pref );
 
-use constant WIDTH => 4; # FIXME: too small for sizeable or multi-branch libraries?
+use constant WIDTH => 4;    # FIXME: too small for sizeable or multi-branch libraries?
 
 use vars qw(@ISA);
 
@@ -38,57 +38,61 @@ BEGIN {
 # 	increment resets yearly -fbcit
 
 sub db_max {
-	my $self = shift;
+    my $self  = shift;
     my $width = WIDTH;
-    my $query = "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ? ORDER BY chunk DESC LIMIT 1";
-	my $sth = C4::Context->dbh->prepare($query);
-	my ($iso);
-        if (@_) {
-                my $input = shift;
-                $iso = output_pref({ dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 }); # try to set the date w/ 2nd arg
-                unless ($iso) {
-                        warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
-                        $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });      # failover back to today
-                }
-        } else {
-                $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+    my $query =
+        "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ? ORDER BY chunk DESC LIMIT 1";
+    my $sth = C4::Context->dbh->prepare($query);
+    my ($iso);
+    if (@_) {
+        my $input = shift;
+        $iso = output_pref( { dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 } )
+            ;    # try to set the date w/ 2nd arg
+        unless ($iso) {
+            warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
+            $iso = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } ); # failover back to today
         }
-	my $year = substr($iso,2,2);    # i.e. "08" for 2008
-	my $andtwo = $width+2;
-	$sth->execute("^[a-zA-Z]{1,}" . $year . "[0-9]{$andtwo}");	# the extra two digits are the month.  we don't care what they are, just that they are there.
-	unless ($sth->rows) {
-		warn "No existing hbyymmincr barcodes found.  Reverting to initial value.";
-		return $self->initial;
-	}
-	my ($row) = $sth->fetchrow_hashref;
-	my $max = $row->{barcode};
-	return ($max || 0);
+    } else {
+        $iso = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } );
+    }
+    my $year   = substr( $iso, 2, 2 );    # i.e. "08" for 2008
+    my $andtwo = $width + 2;
+    $sth->execute( "^[a-zA-Z]{1,}" . $year . "[0-9]{$andtwo}" )
+        ;    # the extra two digits are the month.  we don't care what they are, just that they are there.
+    unless ( $sth->rows ) {
+        warn "No existing hbyymmincr barcodes found.  Reverting to initial value.";
+        return $self->initial;
+    }
+    my ($row) = $sth->fetchrow_hashref;
+    my $max = $row->{barcode};
+    return ( $max || 0 );
 }
 
 sub initial {
-	my $self = shift;
-	# FIXME: populated branch?
-    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # like "2008-07-02"
+    my $self = shift;
+
+    # FIXME: populated branch?
+    my $iso = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } );    # like "2008-07-02"
     warn "HBYYMM Barcode was not passed a branch, default is blank" if ( $self->branch eq '' );
     my $width = WIDTH;
-	return $self->branch . substr($iso,2,2) . substr($iso,5,2) . sprintf('%' . "$width.$width" . 'd',1);
+    return $self->branch . substr( $iso, 2, 2 ) . substr( $iso, 5, 2 ) . sprintf( '%' . "$width.$width" . 'd', 1 );
 }
 
-sub parse {   # return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
-	my $self = shift;
-	my $barcode = (@_) ? shift : $self->value;
-	my $branch = $self->branch;
-	unless ($barcode =~ /($branch\d{4})(\d+)$/) {
-		carp "Barcode '$barcode' has no incrementing part!";
-		return ($barcode,undef,undef);
-	}
-	return ($1,$2,'');  # the third part is in anticipation of barcodes that include checkdigits
+sub parse {    # return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
+    my $self    = shift;
+    my $barcode = (@_) ? shift : $self->value;
+    my $branch  = $self->branch;
+    unless ( $barcode =~ /($branch\d{4})(\d+)$/ ) {
+        carp "Barcode '$barcode' has no incrementing part!";
+        return ( $barcode, undef, undef );
+    }
+    return ( $1, $2, '' );    # the third part is in anticipation of barcodes that include checkdigits
 }
 
 sub branch {
-	my $self = shift;
-	(@_) and $self->{branch} = shift;
-	return $self->{branch};
+    my $self = shift;
+    (@_) and $self->{branch} = shift;
+    return $self->{branch};
 }
 
 # Commented out (BZ 16635)
@@ -98,12 +102,12 @@ sub branch {
 #    return $width;
 #}
 
-sub process_head {	# (self,head,whole,specific)
-	my ($self,$head,$whole,$specific) = @_;
-	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
-	$head =~ s/\d{4}$//;		# else strip the old yymm
-    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # like "2008-07-02"
-	return $head . substr($iso,2,2) . substr($iso,5,2);
+sub process_head {    # (self,head,whole,specific)
+    my ( $self, $head, $whole, $specific ) = @_;
+    $specific and return $head;    # if this is built off an existing barcode, just return the head unchanged.
+    $head =~ s/\d{4}$//;           # else strip the old yymm
+    my $iso = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } );    # like "2008-07-02"
+    return $head . substr( $iso, 2, 2 ) . substr( $iso, 5, 2 );
 }
 
 sub new_object {
@@ -112,11 +116,11 @@ sub new_object {
     my $type = ref($class_or_object) || $class_or_object;
 
     my $from_obj =
-      ref($class_or_object)
-      ? 1
-      : 0;    # are we building off another Barcodes object?
+        ref($class_or_object)
+        ? 1
+        : 0;    # are we building off another Barcodes object?
 
-      my $self = $class_or_object->default_self('hbyymmincr');
+    my $self = $class_or_object->default_self('hbyymmincr');
     bless $self, $type;
 
     $self->branch( @_ ? shift : $from_obj ? $class_or_object->branch : '' );

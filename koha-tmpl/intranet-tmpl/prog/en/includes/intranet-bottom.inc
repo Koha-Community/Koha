@@ -42,13 +42,17 @@
                                                     [% IF ( sublanguages_loo.sublanguage_current ) %]
                                                         <li>
                                                             <a class="nav-link currentlanguage" href="#">
-                                                                [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])
+                                                                [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %]
+                                                                [% sublanguages_loo.variant_description | html %]
+                                                                ([% sublanguages_loo.rfc4646_subtag | html %])
                                                             </a>
                                                         </li>
                                                     [% ELSE %]
                                                         <li>
                                                             <a class="dropdown-item" href="/cgi-bin/koha/changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]">
-                                                                [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])
+                                                                [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %]
+                                                                [% sublanguages_loo.variant_description | html %]
+                                                                ([% sublanguages_loo.rfc4646_subtag | html %])
                                                             </a>
                                                         </li>
                                                     [% END %]
@@ -83,10 +87,14 @@
                                 [% END # /IF ( languages_loo.plural ) %]
                             [% END # /IF ( languages_loo.group_enabled ) %]
                         [% END # /FOREACH languages_loo %]
-                    </ul> <!-- /#i18nMenu -->
-                </div> <!-- /.navbar-collapse -->
-            </div> <!-- /.container-fluid -->
-        </div> <!-- /#changelanguage -->
+                    </ul>
+                    <!-- /#i18nMenu -->
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#changelanguage -->
     [% END # /UNLESS ( one_language_enabled ) %]
 [% END # /IF ( ( languages_loop )... %]
 
@@ -110,7 +118,8 @@
             <button type="button" class="btn btn-primary consentAcceptEssential">Accept essential cookies</button>
             <button type="button" class="btn btn-default" id="consentMoreInfo">More information</button>
         </div>
-    </div> <!-- /#cookieConsentBar -->
+    </div>
+    <!-- /#cookieConsentBar -->
 
     <!-- Cookie consent modal -->
     <div id="cookieConsentModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="cookieConsentModalLabel" aria-hidden="true">
@@ -132,7 +141,7 @@
                         [% FOREACH consent IN consents %]
                             <div class="consentModalItem">
                                 <div class="consentItemCheckbox">
-                                    <input class="consentCheckbox" type="checkbox" name="consentCheckbox" value="[% consent.id | html %]" aria-label="Consent to cookie">
+                                    <input class="consentCheckbox" type="checkbox" name="consentCheckbox" value="[% consent.id | html %]" aria-label="Consent to cookie" />
                                 </div>
                                 <div class="consentItemMeta">
                                     <div class="consentItemName">[% consent.name | html %]</div>
@@ -152,15 +161,28 @@
                         <button type="button" class="btn btn-secondary consentCloseModal">Cancel</button>
                     </div>
                 </div>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div>  <!-- /#cookieConsentModal  -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /#cookieConsentModal  -->
 [% END %]
 <!-- CookieConsentedJS code that may run -->
 [% IF Koha.Preference( 'CookieConsent' ) && JSConsents.all('staffConsent').size %]
     [% consents = JSConsents.all('staffConsent') %]
     [% FOREACH consent IN consents %]
-        <div class="consentCode" style="display:none" aria-hidden="true" data-consent-id="[% consent.id | html %]" data-consent-code="[% consent.code | html %]" data-consent-match-pattern="[% consent.matchPattern | html %]" data-consent-cookie-domain="[% consent.cookieDomain | html %]" data-consent-cookie-path="[% consent.cookiePath | html %]" data-requires-consent="[% consent.staffConsent ? 'true' : 'false' | html %]"></div>
+        <div
+            class="consentCode"
+            style="display:none"
+            aria-hidden="true"
+            data-consent-id="[% consent.id | html %]"
+            data-consent-code="[% consent.code | html %]"
+            data-consent-match-pattern="[% consent.matchPattern | html %]"
+            data-consent-cookie-domain="[% consent.cookieDomain | html %]"
+            data-consent-cookie-path="[% consent.cookiePath | html %]"
+            data-requires-consent="[% consent.staffConsent ? 'true' : 'false' | html %]"
+        ></div>
     [% END %]
 [% END %]
 

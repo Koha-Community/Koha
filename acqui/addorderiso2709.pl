@@ -97,7 +97,7 @@ if ( $op eq "" ) {
     #display batches
     my $batches_list = Koha::MarcOrder->import_batches_list();
     $template->param(
-        batch_list => $batches_list->{list},
+        batch_list  => $batches_list->{list},
         num_results => $batches_list->{num_results}
     );
     #
@@ -116,7 +116,7 @@ if ( $op eq "" ) {
         bookseller => $bookseller,
         "allmatch" => $allmatch,
     );
-    my $biblios_list = Koha::MarcOrder->import_biblios_list( $cgiparams->{'import_batch_id'} );
+    my $biblios_list   = Koha::MarcOrder->import_biblios_list( $cgiparams->{'import_batch_id'} );
     my $overlay_action = $biblios_list->{overlay_action};
     my $nomatch_action = $biblios_list->{nomatch_action};
     my $item_action    = $biblios_list->{item_action};
@@ -168,13 +168,15 @@ if ( $op eq "" ) {
 
         $template->param( items => \@itemloop );
     }
-#
-# 3rd step = import the records
-#
+    #
+    # 3rd step = import the records
+    #
 } elsif ( $op eq 'cud-import_records' ) {
-#import selected lines
-    $template->param('basketno' => $cgiparams->{'basketno'});
-# Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this aftewards
+
+    #import selected lines
+    $template->param( 'basketno' => $cgiparams->{'basketno'} );
+
+    # Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this aftewards
     my $budgets = GetBudgets();
     if ( scalar @$budgets == 0 ) {
         die "No budgets defined, can't continue";
@@ -228,34 +230,32 @@ if ( $op eq "" ) {
         my $all_currency       = $cgiparams->{'all_currency'};
 
         my $client_item_fields = {
-            quantity          => scalar(@homebranches),
-            homebranches      => \@homebranches,
-            holdingbranches   => \@holdingbranches,
-            itypes            => \@itypes,
-            nonpublic_notes   => \@nonpublic_notes,
-            public_notes      => \@public_notes,
-            locs              => \@locs,
-            ccodes            => \@ccodes,
-            notforloans       => \@notforloans,
-            uris              => \@uris,
-            copynos           => \@copynos,
-            budget_codes      => \@budget_codes,
-            itemprices        => \@itemprices,
-            replacementprices => \@replacementprices,
-            itemcallnumbers   => \@itemcallnumbers,
+            quantity                  => scalar(@homebranches),
+            homebranches              => \@homebranches,
+            holdingbranches           => \@holdingbranches,
+            itypes                    => \@itypes,
+            nonpublic_notes           => \@nonpublic_notes,
+            public_notes              => \@public_notes,
+            locs                      => \@locs,
+            ccodes                    => \@ccodes,
+            notforloans               => \@notforloans,
+            uris                      => \@uris,
+            copynos                   => \@copynos,
+            budget_codes              => \@budget_codes,
+            itemprices                => \@itemprices,
+            replacementprices         => \@replacementprices,
+            itemcallnumbers           => \@itemcallnumbers,
             coded_location_qualifiers => \@coded_location_qualifiers,
-            barcodes           => \@barcodes,
-            enumchrons         => \@enumchrons,
-            tags               => \@tags,
-            subfields          => \@subfields,
-            field_values       => \@field_values,
-            serials            => \@serials,
-            c_quantity =>
-                $input->param( 'quantity_' . $import_record->import_record_id )
+            barcodes                  => \@barcodes,
+            enumchrons                => \@enumchrons,
+            tags                      => \@tags,
+            subfields                 => \@subfields,
+            field_values              => \@field_values,
+            serials                   => \@serials,
+            c_quantity                => $input->param( 'quantity_' . $import_record->import_record_id )
                 || GetMarcQuantity( $marcrecord, C4::Context->preference('marcflavour') )
                 || 1,
-            c_budget_id =>
-                $input->param( 'budget_id_' . $import_record->import_record_id )
+            c_budget_id => $input->param( 'budget_id_' . $import_record->import_record_id )
                 || $input->param('all_budget_id')
                 || $budget_id,
             c_discount => $input->param( 'discount_' . $import_record->import_record_id ),

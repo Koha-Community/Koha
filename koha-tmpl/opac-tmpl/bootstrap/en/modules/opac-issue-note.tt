@@ -8,7 +8,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Editing checkout note for [% title | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-issue-note' %]
 [% INCLUDE 'masthead.inc' %]
@@ -26,43 +27,46 @@
                 <a href="#" aria-current="page">Editing checkout note for '[% title | html %]' [% author | html %]</a>
             </li>
         </ol>
-    </nav> <!-- /#breadcrumbs -->
+    </nav>
+    <!-- /#breadcrumbs -->
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="issuenote" class="maincontent">
                     <h1>Editing checkout note for [% title | html %] [% author | html %]</h1>
-                        [% IF not(Koha.Preference("AllowCheckoutNotes")) %]
-                            Checkout notes have not been enabled. Please contact the library.
-                        [% ELSE %]
-                            <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <legend class="sr-only">Edit checkout note</legend>
-                                <fieldset>
-                                    <label for="note" class="required">Note:</label>
-                                    <input type="text" name="note" value="[% note | html %]">
-                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]">
-                                    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]">
-                                    <input type="hidden" name="issue_id" value="[% issue_id | html %]">
-                                    <input type="hidden" name="op" value="cud-issuenote">
-                                </fieldset>
-                                <fieldset class="action">
-                                    <input type="submit" value="Submit note" class="btn btn-primary"><a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a>
-                                </fieldset>
-                            </form> <!-- issue-note -->
-                        [% END %]
-                </div> <!-- issuenote -->
-            </div> <!-- col-10 -->
-        </div> <!-- row-fluid -->
-    </div> <!-- container-fluid -->
-
-</div> <!-- main -->
+                    [% IF not(Koha.Preference("AllowCheckoutNotes")) %]
+                        Checkout notes have not been enabled. Please contact the library.
+                    [% ELSE %]
+                        <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <legend class="sr-only">Edit checkout note</legend>
+                            <fieldset>
+                                <label for="note" class="required">Note:</label>
+                                <input type="text" name="note" value="[% note | html %]" />
+                                <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                                <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+                                <input type="hidden" name="issue_id" value="[% issue_id | html %]" />
+                                <input type="hidden" name="op" value="cud-issuenote" />
+                            </fieldset>
+                            <fieldset class="action"> <input type="submit" value="Submit note" class="btn btn-primary" /><a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a> </fieldset>
+                        </form>
+                        <!-- issue-note -->
+                    [% END %]
+                </div>
+                <!-- issuenote -->
+            </div>
+            <!-- col-10 -->
+        </div>
+        <!-- row-fluid -->
+    </div>
+    <!-- container-fluid -->
+</div>
+<!-- main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

@@ -18,9 +18,9 @@
 use Modern::Perl;
 use CGI;
 use Scalar::Util qw( looks_like_number );
-use List::Util qw( first );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use List::Util   qw( first );
+use C4::Output   qw( output_html_with_http_headers );
+use C4::Auth     qw( get_template_and_user );
 use C4::Log;
 
 use Koha::SearchEngine::Elasticsearch;
@@ -30,57 +30,56 @@ use Koha::SearchFields;
 use Koha::Caches;
 use Koha::AuthorisedValues;
 
-use Try::Tiny qw( catch try );
+use Try::Tiny                 qw( catch try );
 use Module::Load::Conditional qw( can_load );
-
 
 my $input = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => 'admin/searchengine/elasticsearch/mappings.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { parameters => 'manage_search_engine_config' },
+        template_name => 'admin/searchengine/elasticsearch/mappings.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { parameters => 'manage_search_engine_config' },
     }
 );
 
 unless ( can_load( modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => undef } ) ) {
-    output_and_exit( $input, $cookie, $template, 'missing_es_modules');
+    output_and_exit( $input, $cookie, $template, 'missing_es_modules' );
 }
-
 
 my $index = $input->param('index') || 'biblios';
 my $op    = $input->param('op')    || 'list';
 my ( @messages, @errors );
 push @messages, { type => 'message', code => 'elasticsearch_disabled' }
-  if ( C4::Context->preference('SearchEngine') ne 'Elasticsearch' );
+    if ( C4::Context->preference('SearchEngine') ne 'Elasticsearch' );
 
 my $database = Koha::Database->new();
 my $schema   = $database->schema;
 
 my $marc_type = lc C4::Context->preference('marcflavour');
 
-my @index_names = ($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX);
+my @index_names =
+    ( $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX );
 
 my $update_mappings = sub {
     for my $index_name (@index_names) {
-        my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => $index_name });
+        my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
         try {
             $indexer->update_mappings();
         } catch {
             my $conf = $indexer->get_elasticsearch_params();
             push @errors, {
-                type => 'error',
-                code => 'error_on_update_es_mappings',
+                type    => 'error',
+                code    => 'error_on_update_es_mappings',
                 message => $_[0],
-                index => $conf->{index_name},
+                index   => $conf->{index_name},
             };
         };
     }
 };
 
 my $search_fields_aliases = {};
-while ( my ( $key, $value ) = each(%{Koha::SearchEngine::Elasticsearch::QueryBuilder->get_index_field_convert}) ) {
+while ( my ( $key, $value ) = each( %{ Koha::SearchEngine::Elasticsearch::QueryBuilder->get_index_field_convert } ) ) {
     my $field_aliases = $search_fields_aliases->{$value};
     $field_aliases = [] unless $field_aliases;
     push @$field_aliases, $key;
@@ -205,33 +204,30 @@ if ( $op eq 'cud-edit' ) {
 
         $update_mappings->();
     }
-}
-elsif( $op eq 'cud-reset_confirmed' ) {
+} elsif ( $op eq 'cud-reset_confirmed' ) {
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     push @messages, { type => 'message', code => 'success_on_reset' };
     C4::Log::logaction( 'SEARCHENGINE', 'RESET_MAPPINGS', undef, q{} );
-}
-elsif( $op eq 'reset_confirm' ) {
+} elsif ( $op eq 'reset_confirm' ) {
     $template->param( reset_confirm => 1 );
 }
 
 my @indexes;
 
 for my $index_name (@index_names) {
-    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => $index_name });
-    if (!$indexer->is_index_status_ok) {
+    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
+    if ( !$indexer->is_index_status_ok ) {
         my $conf = $indexer->get_elasticsearch_params();
-        if ($indexer->is_index_status_reindex_required) {
+        if ( $indexer->is_index_status_reindex_required ) {
             push @errors, {
-                type => 'error',
-                code => 'reindex_required',
+                type  => 'error',
+                code  => 'reindex_required',
                 index => $conf->{index_name},
             };
-        }
-        elsif($indexer->is_index_status_recreate_required) {
+        } elsif ( $indexer->is_index_status_recreate_required ) {
             push @errors, {
-                type => 'error',
-                code => 'recreate_required',
+                type  => 'error',
+                code  => 'recreate_required',
                 index => $conf->{index_name},
             };
         }
@@ -273,17 +269,17 @@ for my $index_name (@index_names) {
     while ( my $s = $search_fields->next ) {
         my $name = $s->name;
         push @mappings, {
-            search_field_name  => $name,
-            search_field_label => $s->label,
-            search_field_type  => $s->type,
-            search_field_mandatory  => $s->mandatory,
-            marc_field         => $s->get_column('marc_field'),
-            sort               => $s->get_column('sort') // 'undef', # To avoid warnings "Use of uninitialized value in lc"
-            suggestible        => $s->get_column('suggestible'),
-            search             => $s->get_column('search'),
-            filter             => $s->get_column('filter'),
-            facet              => $s->get_column('facet'),
-            is_facetable       => ( grep { $_ eq $name } @facetable_field_names ) ? 1 : 0,
+            search_field_name      => $name,
+            search_field_label     => $s->label,
+            search_field_type      => $s->type,
+            search_field_mandatory => $s->mandatory,
+            marc_field             => $s->get_column('marc_field'),
+            sort         => $s->get_column('sort') // 'undef',    # To avoid warnings "Use of uninitialized value in lc"
+            suggestible  => $s->get_column('suggestible'),
+            search       => $s->get_column('search'),
+            filter       => $s->get_column('filter'),
+            facet        => $s->get_column('facet'),
+            is_facetable => ( grep { $_ eq $name } @facetable_field_names ) ? 1 : 0,
         };
     }
 
@@ -295,8 +291,8 @@ my @all_search_fields;
 while ( my $search_field = $search_fields->next ) {
     my $search_field_unblessed = $search_field->unblessed;
     $search_field_unblessed->{mapped_biblios} = 1 if $search_field->is_mapped_biblios;
-    $search_field_unblessed->{is_mapped} = $search_field->is_mapped;
-    $search_field_unblessed->{aliases} = $search_fields_aliases->{$search_field_unblessed->{name}};
+    $search_field_unblessed->{is_mapped}      = $search_field->is_mapped;
+    $search_field_unblessed->{aliases}        = $search_fields_aliases->{ $search_field_unblessed->{name} };
     push @all_search_fields, $search_field_unblessed;
 }
 

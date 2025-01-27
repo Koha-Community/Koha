@@ -48,10 +48,10 @@ If it exists, C<$basketno> is the basket we edit
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Acquisition qw( GetBasket ModBasket ModBasketHeader NewBasket );
-use C4::Contract qw( GetContracts GetContract );
+use C4::Contract    qw( GetContracts GetContract );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Baskets;
@@ -60,34 +60,37 @@ use Koha::AdditionalFields;
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/basketheader.tt",
-        query           => $input,
-        type            => "intranet",
-       flagsrequired   => { acquisition => 'order_manage' },
+        template_name => "acqui/basketheader.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
     }
 );
 
 #parameters:
 my $booksellerid = $input->param('booksellerid');
-my $basketno = $input->param('basketno');
+my $basketno     = $input->param('basketno');
 my $basket;
-my $op = $input->param('op');
+my $op         = $input->param('op');
 my $is_an_edit = $input->param('is_an_edit');
 
 $template->param( available_additional_fields => Koha::AdditionalFields->search( { tablename => 'aqbasket' } ) );
 
 if ( $op eq 'add_form' ) {
     my @contractloop;
-    if ( $basketno ) {
-    #this is an edit
+    if ($basketno) {
+
+        #this is an edit
         $basket = GetBasket($basketno);
-        if (! $booksellerid) {
-            $booksellerid=$basket->{'booksellerid'};
+        if ( !$booksellerid ) {
+            $booksellerid = $basket->{'booksellerid'};
         }
-        my $contracts = GetContracts({
-            booksellerid => $booksellerid,
-            activeonly => 1,
-        });
+        my $contracts = GetContracts(
+            {
+                booksellerid => $booksellerid,
+                activeonly   => 1,
+            }
+        );
 
         @contractloop = @$contracts;
         for (@contractloop) {
@@ -95,46 +98,53 @@ if ( $op eq 'add_form' ) {
                 $_->{'selected'} = 1;
             }
         }
-        $template->param( is_an_edit => 1);
+        $template->param( is_an_edit => 1 );
         $template->param( additional_field_values =>
                 Koha::Acquisition::Baskets->find($basketno)->get_additional_field_values_for_template );
     } else {
-    #new basket
+
+        #new basket
         my $basket;
-        my $contracts = GetContracts({
-            booksellerid => $booksellerid,
-            activeonly => 1,
-        });
-        push(@contractloop, @$contracts);
+        my $contracts = GetContracts(
+            {
+                booksellerid => $booksellerid,
+                activeonly   => 1,
+            }
+        );
+        push( @contractloop, @$contracts );
     }
-    my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
-    my $count = scalar @contractloop;
-    if ( $count > 0) {
-        $template->param(contractloop => \@contractloop,
-                         basketcontractnumber => $basket->{'contractnumber'});
+    my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
+    my $count      = scalar @contractloop;
+    if ( $count > 0 ) {
+        $template->param(
+            contractloop         => \@contractloop,
+            basketcontractnumber => $basket->{'contractnumber'}
+        );
     }
 
-    $template->param( add_form => 1,
-                    basketname => $basket->{'basketname'},
-                    basketnote => $basket->{'note'},
-                    basketbooksellernote => $basket->{'booksellernote'},
-                    booksellername => $bookseller->name,
-                    booksellerid => $booksellerid,
-                    basketno => $basketno,
-                    is_standing => $basket->{is_standing},
-                    create_items => $basket->{create_items},
+    $template->param(
+        add_form             => 1,
+        basketname           => $basket->{'basketname'},
+        basketnote           => $basket->{'note'},
+        basketbooksellernote => $basket->{'booksellernote'},
+        booksellername       => $bookseller->name,
+        booksellerid         => $booksellerid,
+        basketno             => $basketno,
+        is_standing          => $basket->{is_standing},
+        create_items         => $basket->{create_items},
     );
 
-    my $billingplace = $basket->{'billingplace'} || C4::Context->userenv->{"branch"};
+    my $billingplace  = $basket->{'billingplace'}  || C4::Context->userenv->{"branch"};
     my $deliveryplace = $basket->{'deliveryplace'} || C4::Context->userenv->{"branch"};
 
-    $template->param( billingplace => $billingplace );
+    $template->param( billingplace  => $billingplace );
     $template->param( deliveryplace => $deliveryplace );
 
-#End Edit
+    #End Edit
 } elsif ( $op eq 'cud-add_validate' ) {
-#we are confirming the changes, save the basket
-    if ( $is_an_edit ) {
+
+    #we are confirming the changes, save the basket
+    if ($is_an_edit) {
         ModBasketHeader(
             $basketno,
             scalar $input->param('basketname'),
@@ -147,7 +157,7 @@ if ( $op eq 'add_form' ) {
             scalar $input->param('is_standing') ? 1 : undef,
             scalar $input->param('create_items')
         );
-    } else { #New basket
+    } else {    #New basket
         $basketno = NewBasket(
             scalar $input->param('basketbooksellerid'),
             $loggedinuser,
@@ -164,9 +174,9 @@ if ( $op eq 'add_form' ) {
 
     my @additional_fields =
         Koha::Acquisition::Baskets->find($basketno)->prepare_cgi_additional_field_values( $input, 'aqbasket' );
-    Koha::Acquisition::Baskets->find($basketno)->set_additional_fields(\@additional_fields);
+    Koha::Acquisition::Baskets->find($basketno)->set_additional_fields( \@additional_fields );
 
-    print $input->redirect('basket.pl?basketno='.$basketno);
+    print $input->redirect( 'basket.pl?basketno=' . $basketno );
     exit 0;
 }
 output_html_with_http_headers $input, $cookie, $template->output;

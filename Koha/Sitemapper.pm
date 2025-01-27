@@ -24,15 +24,14 @@ use Moo;
 use Koha::Biblios;
 use Koha::Sitemapper::Writer;
 
-
 has url => ( is => 'rw', );
 
 has dir => (
-    is => 'rw',
+    is      => 'rw',
     default => sub { '.' },
     trigger => sub {
-        my ($self, $dir) = @_;
-        unless (-d $dir) {
+        my ( $self, $dir ) = @_;
+        unless ( -d $dir ) {
             say "This is not a valid directory: $dir";
             exit;
         }
@@ -49,7 +48,6 @@ has writer => ( is => 'rw', );
 
 has count => ( is => 'rw', default => sub { 0 } );
 
-
 sub run {
     my ( $self, $where ) = @_;
     my $filter = $where ? \$where : {};
@@ -58,7 +56,7 @@ sub run {
         if $self->verbose;
 
     $self->writer( Koha::Sitemapper::Writer->new( sitemapper => $self ) );
-    my $rs = Koha::Biblios->search( $filter, { columns => [ qw/biblionumber timestamp/ ] });
+    my $rs = Koha::Biblios->search( $filter, { columns => [qw/biblionumber timestamp/] } );
 
     while ( $self->process($rs) ) {
         say "..... ", $self->count
@@ -66,15 +64,14 @@ sub run {
     }
 }
 
-
 sub process {
     my ( $self, $rs ) = @_;
 
     my $biblio = $rs->next;
-    unless( $biblio ) {
+    unless ($biblio) {
         $self->writer->end();
-        say "Number of biblio records processed: ", $self->count, "\n" .
-            "Number of Sitemap files:            ", $self->writer->count
+        say "Number of biblio records processed: ", $self->count, "\n" . "Number of Sitemap files:            ",
+            $self->writer->count
             if $self->verbose;
         return;
     }
@@ -83,6 +80,5 @@ sub process {
     $self->count( $self->count + 1 );
     return $self->count;
 }
-
 
 1;

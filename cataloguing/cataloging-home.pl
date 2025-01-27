@@ -17,8 +17,8 @@
 #
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_cataloguing_page_permissions get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_cataloguing_page_permissions get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 
@@ -38,16 +38,16 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 my $servers = Koha::Z3950Servers->search(
     {
         recordtype => 'biblio',
-        servertype => ['zed','sru'],
+        servertype => [ 'zed', 'sru' ],
     }
 );
 
-my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
-$template->param( fast_cataloging => 1 ) if $frameworks->find({ frameworkcode => 'FA' });
+my $frameworks = Koha::BiblioFrameworks->search( {}, { order_by => ['frameworktext'] } );
+$template->param( fast_cataloging => 1 ) if $frameworks->find( { frameworkcode => 'FA' } );
 
 $template->param(
-    servers           => $servers,
-    frameworks        => $frameworks
+    servers    => $servers,
+    frameworks => $frameworks
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

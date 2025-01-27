@@ -26,18 +26,18 @@ use MARC::Record;
 our ( $query, $response ) = C4::Service->init( editcatalogue => 'edit_catalogue' );
 
 sub get_and_increment {
-    my ( $control_num_sequence ) = @_;
+    my ($control_num_sequence) = @_;
 
-    my $schema = Koha::Database->new->schema();
-    my $authval = $schema->resultset( 'AuthorisedValue' )->find(
+    my $schema  = Koha::Database->new->schema();
+    my $authval = $schema->resultset('AuthorisedValue')->find(
         {
             category => 'CONTROL_NUM_SEQUENCE',
-            lib => $control_num_sequence
+            lib      => $control_num_sequence
         }
     );
 
     if ( !$authval ) {
-        C4::Service->return_error( 'not_found' );
+        C4::Service->return_error('not_found');
     }
 
     my $value = $authval->authorised_value;
@@ -46,12 +46,12 @@ sub get_and_increment {
 
     my ( $prefix, $num ) = ( $value =~ /(.+?)(\d+)$/ );
 
-    $value = $prefix . sprintf( '%0*d', length( $num ), $num + 1 );
+    $value = $prefix . sprintf( '%0*d', length($num), $num + 1 );
 
-    $authval->authorised_value( $value );
+    $authval->authorised_value($value);
     $authval->update();
 
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 C4::Service->dispatch(

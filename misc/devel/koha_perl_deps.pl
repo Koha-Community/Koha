@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
-use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Getopt::Long    qw( GetOptions );
+use Pod::Usage      qw( pod2usage );
 use Term::ANSIColor qw( color );
-use FindBin; # we need to enforce which C4::Installer is used in case more than one is installed
+use FindBin;    # we need to enforce which C4::Installer is used in case more than one is installed
 
 use lib $FindBin::Bin;
 
@@ -11,40 +11,40 @@ use C4::Installer::PerlModules;
 
 use Modern::Perl;
 
-my $help = 0;
-my $missing = 0;
+my $help      = 0;
+my $missing   = 0;
 my $installed = 0;
-my $upgrade = 0;
-my $all = 0;
-my $color = 0;
-my $brief = 0;
-my $req = 0;
+my $upgrade   = 0;
+my $all       = 0;
+my $color     = 0;
+my $brief     = 0;
+my $req       = 0;
 
 GetOptions(
-            'h|help|?'    => \$help,
-            'm|missing'   => \$missing,
-            'i|installed' => \$installed,
-            'u|upgrade'   => \$upgrade,
-            'a|all'       => \$all,
-            'b|brief'     => \$brief,
-            'r|required'  => \$req,
-            'c|color'     => \$color,
-          );
+    'h|help|?'    => \$help,
+    'm|missing'   => \$missing,
+    'i|installed' => \$installed,
+    'u|upgrade'   => \$upgrade,
+    'a|all'       => \$all,
+    'b|brief'     => \$brief,
+    'r|required'  => \$req,
+    'c|color'     => \$color,
+);
 
-pod2usage(1) if $help || (!$missing && !$installed && !$upgrade && !$all);
+pod2usage(1) if $help || ( !$missing && !$installed && !$upgrade && !$all );
 
 my $koha_pm = C4::Installer::PerlModules->new;
 $koha_pm->versions_info;
 
 my @pm = ();
 
-push @pm, 'missing_pm' if $missing || $all;
-push @pm, 'upgrade_pm' if $upgrade || $all;
+push @pm, 'missing_pm' if $missing   || $all;
+push @pm, 'upgrade_pm' if $upgrade   || $all;
 push @pm, 'current_pm' if $installed || $all;
 
-if (!$brief) {
+if ( !$brief ) {
     print color 'bold blue' if $color;
-    print"
+    print "
                                               Installed         Required          Module is
 Module Name                                   Version           Version            Required
 --------------------------------------------------------------------------------------------
@@ -57,25 +57,27 @@ foreach my $type (@pm) {
     $mod_type =~ s/_pm$//;
     my $pm = $koha_pm->get_attr($type);
     foreach (@$pm) {
-        foreach my $pm (keys(%$_)) {
+        foreach my $pm ( keys(%$_) ) {
             print color 'yellow' if $type eq 'upgrade_pm' && $color;
-            print color 'red' if $type eq 'missing_pm' && $color;
-            print color 'green' if $type eq 'current_pm' && $color;
-            my $required = ($_->{$pm}->{'required'}?'Yes':'No');
-            my $current_version = ($color ? $_->{$pm}->{'cur_ver'} :
-                                   $type eq 'missing_pm' || $type eq 'upgrade_pm' ? $_->{$pm}->{'cur_ver'}." *" : $_->{$pm}->{'cur_ver'});
-            if (!$brief) {
-                if (($req && $required eq 'Yes') || !$req) {
-format =
+            print color 'red'    if $type eq 'missing_pm' && $color;
+            print color 'green'  if $type eq 'current_pm' && $color;
+            my $required        = ( $_->{$pm}->{'required'} ? 'Yes' : 'No' );
+            my $current_version = (
+                  $color                                         ? $_->{$pm}->{'cur_ver'}
+                : $type eq 'missing_pm' || $type eq 'upgrade_pm' ? $_->{$pm}->{'cur_ver'} . " *"
+                :                                                  $_->{$pm}->{'cur_ver'}
+            );
+            if ( !$brief ) {
+                if ( ( $req && $required eq 'Yes' ) || !$req ) {
+                    format =
 @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<<       @<<<<<
 $pm,                                          $current_version, $_->{$pm}->{'min_ver'},  $required
 .
-write;
+                    write;
                     $count++;
                 }
-            }
-            else {
-                if (($req && $required eq 'Yes') || !$req) {
+            } else {
+                if ( ( $req && $required eq 'Yes' ) || !$req ) {
                     print "$pm\n";
                     $count++;
                 }
@@ -84,7 +86,7 @@ write;
     }
 }
 
-if (!$brief) {
+if ( !$brief ) {
     print color 'bold blue' if $color;
     my $footer = "
 --------------------------------------------------------------------------------------------
@@ -92,8 +94,7 @@ Total modules reported: $count                      ";
 
     if ($color) {
         $footer .= "\n\n";
-    }
-    else {
+    } else {
         $footer .= "* Module is missing or requires an upgrade.\n\n";
     }
 

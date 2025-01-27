@@ -33,8 +33,7 @@ sub check_sys_pref {
                             next;
                         }
                     }
-                    print
-"$name has a reference to $variable, this does not exist in the database\n";
+                    print "$name has a reference to $variable, this does not exist in the database\n";
                 }
             }
             close $fh;

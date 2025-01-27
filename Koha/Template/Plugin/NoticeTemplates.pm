@@ -59,4 +59,5 @@ In a template, you can get notice templates by module with
 Alex Arnaud <alex.arnaud@biblibre.com>
 
 =cut
+
 1;

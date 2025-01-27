@@ -46,25 +46,26 @@ subtest 'list() tests' => sub {
     # Mock ILLBackend (as object)
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
-    $backend->set_always('name', 'Mock');
-    $backend->set_always('capabilities', sub { return 'bar'; } );
+    $backend->set_always( 'name',         'Mock' );
+    $backend->set_always( 'capabilities', sub { return 'bar'; } );
     $backend->mock(
         'metadata',
         sub {
             my ( $self, $rq ) = @_;
             return {
-                ID => $rq->illrequest_id,
+                ID    => $rq->illrequest_id,
                 Title => $rq->patron->borrowernumber
-            }
+            };
         }
     );
     $backend->mock(
-        'status_graph', sub {},
+        'status_graph', sub { },
     );
 
     # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
     my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
-    $illreqmodule->mock( 'load_backend',
+    $illreqmodule->mock(
+        'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
     );
 
@@ -76,7 +77,7 @@ subtest 'list() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2 ** 22 } # 22 => ill
+            value => { flags => 2**22 }    # 22 => ill
         }
     );
     my $password = 'thePassword123';
@@ -100,42 +101,40 @@ subtest 'list() tests' => sub {
             { class => 'Koha::AuthorisedValueCategories', value => { category_name => 'ILL_STATUS_ALIAS' } } );
     }
 
-    my $tag = "Print copy";
+    my $tag     = "Print copy";
     my $av_code = "print_copy";
-    my $av  = $builder->build_object(
-        {   class => 'Koha::AuthorisedValues',
+    my $av      = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
             value => {
-                category => 'ILL_STATUS_ALIAS',
+                category         => 'ILL_STATUS_ALIAS',
                 authorised_value => $av_code,
-                lib      => $tag,
+                lib              => $tag,
             }
         }
     );
 
     # No requests, expect empty
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests")
-      ->status_is(200)
-      ->json_is( [] );
-
+    $t->get_ok("//$userid:$password@/api/v1/ill/requests")->status_is(200)->json_is( [] );
 
     # Prepare some expected response structure
     my $request_status = {
-        code =>"REQ",
-        str =>"Requested"
+        code => "REQ",
+        str  => "Requested"
     };
 
     my $response_status = {
         backend => $backend->name,
-        code =>$request_status->{code},
-        str =>$request_status->{str},
-        type =>"ill_status"
+        code    => $request_status->{code},
+        str     => $request_status->{str},
+        type    => "ill_status"
     };
 
     my $response_status_av = {
         category => "ILL_STATUS_ALIAS",
-        code => $av_code,
-        str => $tag,
-        type => "av"
+        code     => $av_code,
+        str      => $tag,
+        type     => "av"
     };
 
     # Create some ILL requests
@@ -164,15 +163,18 @@ subtest 'list() tests' => sub {
 
         }
     );
-    my $ret = $builder->build_object({ class => 'Koha::ILL::Requests', value => { status => 'RET' } });
+    my $ret = $builder->build_object( { class => 'Koha::ILL::Requests', value => { status => 'RET' } } );
 
     # Three requests exist, expect all three to be returned
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests")
-      ->status_is(200)
-      ->json_is( [ $req_1->to_api({user=> $librarian}), $req_2->to_api({user=> $librarian}), $ret->to_api({user=> $librarian}) ]);
+    $t->get_ok("//$userid:$password@/api/v1/ill/requests")->status_is(200)->json_is(
+        [
+            $req_1->to_api( { user => $librarian } ), $req_2->to_api( { user => $librarian } ),
+            $ret->to_api( { user => $librarian } )
+        ]
+    );
 
-    my $status_query = encode_json({ status => 'REQ' });
-    my $status_alias_query = encode_json({ status_av => $av_code });
+    my $status_query       = encode_json( { status    => 'REQ' } );
+    my $status_alias_query = encode_json( { status_av => $av_code } );
 
     # x-koha-embed: +strings
     # Two requests exist with status 'REQ', expect them to be returned
@@ -200,7 +202,7 @@ subtest 'list() tests' => sub {
         );
 
     # x-koha-embed: patron
-    my $patron_query = encode_json({ borrowernumber => $patron->borrowernumber });
+    my $patron_query = encode_json( { borrowernumber => $patron->borrowernumber } );
 
     # One request related to $patron, make sure it comes back
     $t->get_ok( "//$userid:$password@/api/v1/ill/requests" => { "x-koha-embed" => "patron" } )->status_is(200)
@@ -209,24 +211,30 @@ subtest 'list() tests' => sub {
     # x-koha-embed: comments
     # Create comment
     my $comment_text = "This is the comment";
-    my $comment = $builder->build_object({ class => 'Koha::ILL::Comments', value => { illrequest_id => $req_1->illrequest_id, comment => $comment_text , borrowernumber => $patron->borrowernumber } } );
+    my $comment      = $builder->build_object(
+        {
+            class => 'Koha::ILL::Comments',
+            value => {
+                illrequest_id  => $req_1->illrequest_id, comment => $comment_text,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
 
     # Make sure comments come back
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests" => {"x-koha-embed" => "comments"} )
-      ->status_is(200)
-      ->json_has('/0/comments', $comment_text);
+    $t->get_ok( "//$userid:$password@/api/v1/ill/requests" => { "x-koha-embed" => "comments" } )->status_is(200)
+        ->json_has( '/0/comments', $comment_text );
 
     # x-koha-embed: id_prefix
     # Mock ILL::Request::Config to return a static prefix
     my $id_prefix = 'ILL';
-    my $config = Test::MockObject->new;
+    my $config    = Test::MockObject->new;
     $config->set_isa('Koha::ILL::Request::Config::Mock');
-    $config->set_always('getPrefixes', $id_prefix);
+    $config->set_always( 'getPrefixes', $id_prefix );
 
     # Make sure id_prefix comes back
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests" => {"x-koha-embed" => "id_prefix"} )
-      ->status_is(200)
-      ->json_has('/0/id_prefix', $id_prefix);
+    $t->get_ok( "//$userid:$password@/api/v1/ill/requests" => { "x-koha-embed" => "id_prefix" } )->status_is(200)
+        ->json_has( '/0/id_prefix', $id_prefix );
 
     # ILLHiddenRequestStatuses syspref
     # Hide 'REQ', expect to return just 1 'RET'
@@ -241,21 +249,14 @@ subtest 'list() tests' => sub {
 
     # Status code
     # Warn on unsupported query parameter
-    $t->get_ok( "//$userid:$password@/api/v1/ill/requests?request_blah=blah" )
-      ->status_is(400)
-      ->json_is(
-        [{ path => '/query/request_blah', message => 'Malformed query string'}]
-    );
+    $t->get_ok("//$userid:$password@/api/v1/ill/requests?request_blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/request_blah', message => 'Malformed query string' } ] );
 
     # Unauthorized attempt to list
-    $t->get_ok(
-        "//$unauth_userid:$password@/api/v1/ill/requests")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/ill/requests")->status_is(403);
 
     # DELETE method not supported
-    $t->delete_ok(
-        "//$unauth_userid:$password@/api/v1/ill/requests/1")
-      ->status_is(404);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/ill/requests/1")->status_is(404);
 
     #TODO; test complex query on extended_attributes
 
@@ -269,15 +270,17 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_begin;
 
     # create an authorized user
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 22 } # 22 => ill
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**22 }    # 22 => ill
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
     # Create an ILL request
     my $illrequest = $builder->build_object(
@@ -295,20 +298,20 @@ subtest 'add() tests' => sub {
     # Mock ILLBackend (as object)
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
-    $backend->set_always('name', 'Mock');
+    $backend->set_always( 'name', 'Mock' );
 
     $backend->mock(
         'metadata',
         sub {
             my ( $self, $rq ) = @_;
             return {
-                ID => $rq->illrequest_id,
+                ID    => $rq->illrequest_id,
                 Title => $rq->patron->borrowernumber
-            }
+            };
         }
     );
     $backend->mock(
-        'status_graph', sub {},
+        'status_graph', sub { },
     );
 
     # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
@@ -325,7 +328,7 @@ subtest 'add() tests' => sub {
             $self->{_my_backend} = $backend if ($backend);
 
             return $self;
-            }
+        }
     );
 
     $illreqmodule->mock(
@@ -336,7 +339,7 @@ subtest 'add() tests' => sub {
             my $capabilities = {
 
                 create_api => sub {
-                    my ($body, $request ) = @_;
+                    my ( $body, $request ) = @_;
 
                     my $api_req = $builder->build_object(
                         {
@@ -364,13 +367,12 @@ subtest 'add() tests' => sub {
 
     my $body = {
         ill_backend_id => 'Mock',
-        patron_id => $patron->borrowernumber,
-        library_id => $library->branchcode
+        patron_id      => $patron->borrowernumber,
+        library_id     => $library->branchcode
     };
 
     ## Authorized user test
-    $t->post_ok( "//$userid:$password@/api/v1/ill/requests" => json => $body)
-      ->status_is(201);
+    $t->post_ok( "//$userid:$password@/api/v1/ill/requests" => json => $body )->status_is(201);
 
     $schema->storage->txn_rollback;
 };

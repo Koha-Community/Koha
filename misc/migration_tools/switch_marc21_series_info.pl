@@ -39,14 +39,14 @@ my $result = GetOptions(
     'f'      => \$update_frameworks,
     'h|help' => \$show_help,
     'v'      => \$verbose,
-    );
+);
 
 # warn and exit if we're running UNIMARC
-if (C4::Context->preference('MARCFLAVOUR') eq 'UNIMARC') {
+if ( C4::Context->preference('MARCFLAVOUR') eq 'UNIMARC' ) {
     print "This script is useless when you're running UNIMARC\n";
     exit 0;
 }
-if ( ! $result || $show_help ) {
+if ( !$result || $show_help ) {
     print_usage();
     exit 0;
 }
@@ -85,19 +85,18 @@ my $bibs_sth = $dbh->prepare(
     |
 );
 
-unless ( $commit ) {
+unless ($commit) {
     print_usage();
 }
 
 print "Examining MARC records...\n";
 $count_sth->execute( C4::Context->preference('marcflavour') );
-my ( $num_records ) = $count_sth->fetchrow;
+my ($num_records) = $count_sth->fetchrow;
 
-unless ( $commit ) {
-    if ( $num_records ) {
+unless ($commit) {
+    if ($num_records) {
         print "This action would change $num_records MARC records\n";
-    }
-    else {
+    } else {
         print "There appears to be no series information to change\n";
     }
     print "Please run this again with the '-c' option to change the records\n";
@@ -126,46 +125,46 @@ my %fields = (
         '6' => 'link',
         '8' => 'ln',
     },
-    );
+);
 
 $bibs_sth->execute( C4::Context->preference('marcflavour') );
-while ( my ( $biblionumber ) = $bibs_sth->fetchrow ) {
-    my $framework = GetFrameworkCode( $biblionumber ) || '';
-    my ( @newfields );
+while ( my ($biblionumber) = $bibs_sth->fetchrow ) {
+    my $framework = GetFrameworkCode($biblionumber) || '';
+    my (@newfields);
 
     # Get biblio marc
     my $biblio = Koha::Biblios->find($biblionumber);
-    $biblio  &&= $biblio->metadata->record;
+    $biblio &&= $biblio->metadata->record;
 
-    foreach my $field ( $biblio->field( '440' ) ) {
+    foreach my $field ( $biblio->field('440') ) {
         my @newsubfields;
         my @linksubfields;
         my $has_links = '0';
         foreach my $subfield ( sort keys %{ $fields{'440'} } ) {
-            my @values = $field->subfield( $subfield );
+            my @values = $field->subfield($subfield);
 
             if ( $add_links && @values ) {
                 if ( $subfield eq 'w' || $subfield eq '0' ) {
                     $has_links = '1';
                 }
-                foreach my $v ( @values ) {
+                foreach my $v (@values) {
                     push @linksubfields, ( $subfield, $v );
                 }
             }
 
             if ( $subfield eq 'a' ) {
-                my @numbers = $field->subfield( 'n' );
-                my @parts = $field->subfield( 'p' );
-                my $i = 0;
+                my @numbers = $field->subfield('n');
+                my @parts   = $field->subfield('p');
+                my $i       = 0;
                 while ( $i < @numbers || $i < @parts ) {
-                    my @strings = grep {$_} ( $values[$i], $numbers[$i], $parts[$i] );
+                    my @strings = grep { $_ } ( $values[$i], $numbers[$i], $parts[$i] );
                     $values[$i] = join ' ', @strings;
                     $i++;
                 }
             }
 
             if ( $fields{'490'}{$subfield} ) {
-                foreach my $v ( @values ) {
+                foreach my $v (@values) {
                     push @newsubfields, ( $subfield, $v );
                 }
             }
@@ -176,77 +175,80 @@ while ( my ( $biblionumber ) = $bibs_sth->fetchrow ) {
                 '830',
                 $field->indicator(1), $field->indicator(2),
                 @linksubfields
-                );
+            );
             push @newfields, $link_field;
         }
 
-        if ( @newsubfields ) {
-            my $new_field = MARC::Field->new( '490', $has_links, '',
-                                              @newsubfields );
+        if (@newsubfields) {
+            my $new_field = MARC::Field->new(
+                '490', $has_links, '',
+                @newsubfields
+            );
             push @newfields, $new_field;
         }
 
-        $biblio->delete_fields( $field );
+        $biblio->delete_fields($field);
     }
 
-    foreach my $field ( $biblio->field( '490' ) ) {
+    foreach my $field ( $biblio->field('490') ) {
         my @newsubfields;
         foreach my $subfield ( sort keys %{ $fields{'490'} } ) {
-            my @values = $field->subfield( $subfield );
+            my @values = $field->subfield($subfield);
 
             if ( $fields{'440'}{$subfield} ) {
-                foreach my $v ( @values ) {
+                foreach my $v (@values) {
                     push @newsubfields, ( $subfield, $v );
                 }
             }
         }
 
-        if ( @newsubfields ) {
-            my $new_field = MARC::Field->new( '440', '', '',
-                                              @newsubfields );
+        if (@newsubfields) {
+            my $new_field = MARC::Field->new(
+                '440', '', '',
+                @newsubfields
+            );
             push @newfields, $new_field;
         }
 
-        $biblio->delete_fields( $field );
+        $biblio->delete_fields($field);
     }
-    $biblio->insert_fields_ordered( @newfields );
+    $biblio->insert_fields_ordered(@newfields);
 
-    if ( $verbose ) {
+    if ($verbose) {
         print "Changing MARC for biblio number $biblionumber.\n";
-    }
-    else {
+    } else {
         print ".";
     }
     ModBiblioMarc( $biblio, $biblionumber );
 }
 print "\n";
 
-if ( $update_frameworks ) {
+if ($update_frameworks) {
     print "Updating Koha to MARC mappings for seriestitle and volume\n";
 
     # set new mappings for koha fields
     $dbh->do(
-"UPDATE marc_subfield_structure SET kohafield='biblio.seriestitle'
+        "UPDATE marc_subfield_structure SET kohafield='biblio.seriestitle'
   WHERE tagfield='490' AND tagsubfield='a'"
     );
     $dbh->do(
-"UPDATE marc_subfield_structure SET kohafield='biblioitems.volume'
+        "UPDATE marc_subfield_structure SET kohafield='biblioitems.volume'
   WHERE tagfield='490' AND tagsubfield='v'"
     );
 
     # empty old koha fields
     $dbh->do(
-"UPDATE marc_subfield_structure SET kohafield=''
+        "UPDATE marc_subfield_structure SET kohafield=''
   WHERE kohafield='biblio.seriestitle' AND tagfield='440' AND tagsubfield='a'"
-        );
+    );
     $dbh->do(
-"UPDATE marc_subfield_structure SET kohafield=''
+        "UPDATE marc_subfield_structure SET kohafield=''
   WHERE kohafield='biblioitems.volume' AND tagfield='440' AND tagsubfield='v'"
-        );
+    );
     $dbh->do(
-"UPDATE marc_subfield_structure SET kohafield=''
+        "UPDATE marc_subfield_structure SET kohafield=''
   WHERE kohafield='biblioitems.number' AND tagfield='440' AND tagsubfield='n'"
-        );
+    );
 }
 
 sub print_usage {

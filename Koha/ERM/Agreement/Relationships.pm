@@ -17,7 +17,6 @@ package Koha::ERM::Agreement::Relationships;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::ERM::Agreement::Relationship;

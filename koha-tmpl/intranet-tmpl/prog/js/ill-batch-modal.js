@@ -1,11 +1,11 @@
 (function () {
     // Bail if there aren't any metadata enrichment plugins installed
-    if (typeof metadata_enrichment_services === 'undefined') {
-        console.log('No metadata enrichment plugins found.')
+    if (typeof metadata_enrichment_services === "undefined") {
+        console.log("No metadata enrichment plugins found.");
         return;
     }
 
-    window.addEventListener('load', onload);
+    window.addEventListener("load", onload);
 
     // Delay between API requests
     var debounceDelay = 1000;
@@ -23,10 +23,12 @@
     var createProgressCount = document.getElementById("processed_count");
     var createProgressFailed = document.getElementById("processed_failed");
     var createProgressBar = document.getElementById("processed_progress_bar");
-    var identifierTable = document.getElementById('identifier-table');
-    var createRequestsButton = document.getElementById('create-requests-button');
-    var statusesSelect = document.getElementById('status_code');
-    var cancelButton = document.getElementById('lhs').querySelector('button');
+    var identifierTable = document.getElementById("identifier-table");
+    var createRequestsButton = document.getElementById(
+        "create-requests-button"
+    );
+    var statusesSelect = document.getElementById("status_code");
+    var cancelButton = document.getElementById("lhs").querySelector("button");
     var cancelButtonOriginalText = cancelButton.innerHTML;
 
     // We need a data structure keyed on identifier type, which tells us how to parse that
@@ -45,11 +47,11 @@
 
     // An object for when we're creating a new batch
     var emptyBatch = {
-        name: '',
+        name: "",
         backend: null,
-        cardnumber: '',
-        branchcode: '',
-        status_code: 'NEW'
+        cardnumber: "",
+        branchcode: "",
+        status_code: "NEW",
     };
 
     // The object that holds the batch we're working with
@@ -68,7 +70,7 @@
                 disableCardnumberInput();
                 displayPatronName();
                 updateStatusesSelect();
-            }
+            },
         }
     );
 
@@ -86,7 +88,7 @@
                 updateTable();
                 updateRowCount();
                 updateProcessTotals();
-            }
+            },
         }
     );
 
@@ -102,13 +104,13 @@
             set: function (obj, prop, value) {
                 obj[prop] = value;
                 updateStatusesSelect();
-            }
+            },
         }
     );
 
     var progressTotals = new Proxy(
         {
-            data: {}
+            data: {},
         },
         {
             get: function (obj, prop) {
@@ -117,7 +119,7 @@
             set: function (obj, prop, value) {
                 obj[prop] = value;
                 showCreateRequestsButton();
-            }
+            },
         }
     );
 
@@ -134,16 +136,16 @@
 
     // The datatable
     var table;
-    var tableEl = document.getElementById('identifier-table');
+    var tableEl = document.getElementById("identifier-table");
 
     // The element that potentially holds the ID of the batch
     // we're working with
-    var idEl = document.getElementById('ill-batch-details');
+    var idEl = document.getElementById("ill-batch-details");
     var batchId = null;
     var backend = null;
 
     function onload() {
-        $('#ill-batch-modal').on('shown.bs.modal', function () {
+        $("#ill-batch-modal").on("shown.bs.modal", function () {
             init();
             patronAutocomplete();
             batchInputsEventListeners();
@@ -152,26 +154,26 @@
             moreLessEventListener();
             removeRowEventListener();
         });
-        $('#ill-batch-modal').on('hidden.bs.modal', function () {
+        $("#ill-batch-modal").on("hidden.bs.modal", function () {
             // Reset our state when we close the modal
             // TODO: need to also reset progress bar and already processed identifiers
             delete idEl.dataset.batchId;
             delete idEl.dataset.backend;
             batchId = null;
-            tableEl.style.display = 'none';
+            tableEl.style.display = "none";
             tableContent.data = [];
             progressTotals.data = {
                 total: 0,
                 count: 0,
-                failed: 0
+                failed: 0,
             };
-            textarea.value = '';
+            textarea.value = "";
             batch.data = {};
             cancelButton.innerHTML = cancelButtonOriginalText;
             // Remove event listeners we created
             removeEventListeners();
         });
-    };
+    }
 
     function init() {
         batchId = idEl.dataset.batchId;
@@ -180,7 +182,7 @@
         progressTotals.data = {
             total: 0,
             count: 0,
-            failed: 0
+            failed: 0,
         };
         if (batchId) {
             fetchBatch();
@@ -197,29 +199,29 @@
         displaySupportedIdentifiers();
         createButtonEventListener();
         updateRowCount();
-    };
+    }
 
     function initPostCreate() {
         disableCreateButton();
         cancelButton.innerHTML = ill_batch_create_cancel_button;
-    };
+    }
 
     function setFinishButton() {
         if (batch.data.patron) {
-            finishButton.removeAttribute('disabled');
+            finishButton.removeAttribute("disabled");
         }
-    };
+    }
 
     function setModalHeading() {
-        var heading = document.getElementById('ill-batch-modal-label');
+        var heading = document.getElementById("ill-batch-modal-label");
         heading.textContent = isUpdate ? ill_batch_update : ill_batch_add;
     }
 
     // Identify items that have metadata and therefore can have a local request
     // created, and do so
     function requestRequestable() {
-        createRequestsButton.setAttribute('disabled', true);
-        createRequestsButton.setAttribute('aria-disabled', true);
+        createRequestsButton.setAttribute("disabled", true);
+        createRequestsButton.setAttribute("aria-disabled", true);
         setFinishButton();
         var toCheck = tableContent.data;
         toCheck.forEach(function (row) {
@@ -232,52 +234,63 @@
                 makeLocalSubmission(row.value, row.metadata);
             }
         });
-    };
+    }
 
     async function populateAvailability(row) {
         let metadata = row.metadata;
 
         let availability_object = {};
-        if (metadata.issn) availability_object['issn'] = metadata.issn;
-        if (metadata.doi) availability_object['doi'] = metadata.doi;
-        if (metadata.pubmedid) availability_object['pubmedid'] = metadata.pubmedid;
+        if (metadata.issn) availability_object["issn"] = metadata.issn;
+        if (metadata.doi) availability_object["doi"] = metadata.doi;
+        if (metadata.pubmedid)
+            availability_object["pubmedid"] = metadata.pubmedid;
 
         // Check each service and use the first results we get, if any
-            var av_hits = [];
-        for (const service of batch_availability_services){
-            var prepped = encodeURIComponent(base64EncodeUnicode(JSON.stringify(availability_object)));
+        var av_hits = [];
+        for (const service of batch_availability_services) {
+            var prepped = encodeURIComponent(
+                base64EncodeUnicode(JSON.stringify(availability_object))
+            );
 
             var endpoint = service.endpoint + prepped;
             var availability = await getAvailability(endpoint);
-            if (availability.results.search_results && availability.results.search_results.length > 0) {
-                av_hits.push({name: service.name, url: availability.results.search_results[0].url});
-            }else{
-                av_hits.push({ name: service.name, empty:1 });
+            if (
+                availability.results.search_results &&
+                availability.results.search_results.length > 0
+            ) {
+                av_hits.push({
+                    name: service.name,
+                    url: availability.results.search_results[0].url,
+                });
+            } else {
+                av_hits.push({ name: service.name, empty: 1 });
             }
-        };
+        }
         return av_hits;
-    };
+    }
 
     // Help btoa with > 8 bit strings
     // Shamelessly grabbed from: https://www.base64encoder.io/javascript/
     function base64EncodeUnicode(str) {
         // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters,
         // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
-        utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-                return String.fromCharCode('0x' + p1);
-        });
+        utf8Bytes = encodeURIComponent(str).replace(
+            /%([0-9A-F]{2})/g,
+            function (match, p1) {
+                return String.fromCharCode("0x" + p1);
+            }
+        );
 
         return btoa(utf8Bytes);
-    };
+    }
 
     // Create a local submission and update our local state
     // upon success
     function makeLocalSubmission(identifier, metadata) {
-
         // Prepare extended_attributes in array format for POST
         var extended_attributes = [];
         for (const [key, value] of Object.entries(metadata)) {
-            extended_attributes.push({"type":key, "value":value});
+            extended_attributes.push({ type: key, value: value });
         }
 
         var payload = {
@@ -285,9 +298,10 @@
             ill_backend_id: batch.data.backend,
             patron_id: batch.data.patron.patron_id,
             library_id: batch.data.library_id,
-            extended_attributes: extended_attributes
+            extended_attributes: extended_attributes,
         };
-        window.doCreateSubmission(payload)
+        window
+            .doCreateSubmission(payload)
             .then(function (response) {
                 return response.json();
             })
@@ -303,13 +317,13 @@
             .catch(function () {
                 window.handleApiError(ill_batch_api_request_fail);
             });
-    };
+    }
 
     function updateProcessTotals() {
         var init = {
             total: 0,
             count: 0,
-            failed: 0
+            failed: 0,
         };
         progressTotals.data = init;
         var toUpdate = progressTotals.data;
@@ -326,14 +340,14 @@
         createProgressCount.innerHTML = toUpdate.count;
         createProgressFailed.innerHTML = toUpdate.failed;
         var percentDone = Math.ceil((toUpdate.count / toUpdate.total) * 100);
-        createProgressBar.setAttribute('aria-valuenow', percentDone);
-        createProgressBar.innerHTML = percentDone + '%';
-        createProgressBar.style.width = percentDone + '%';
+        createProgressBar.setAttribute("aria-valuenow", percentDone);
+        createProgressBar.innerHTML = percentDone + "%";
+        createProgressBar.style.width = percentDone + "%";
         progressTotals.data = toUpdate;
-    };
+    }
 
     function displayPatronName() {
-        var span = document.getElementById('patron_link');
+        var span = document.getElementById("patron_link");
         if (batch.data.patron) {
             var link = createPatronLink();
             span.appendChild(link);
@@ -342,98 +356,101 @@
                 span.removeChild(span.firstChild);
             }
         }
-    };
+    }
 
     function updateStatusesSelect() {
         while (statusesSelect.options.length > 0) {
             statusesSelect.remove(0);
         }
         statuses.data.forEach(function (status) {
-            var option = document.createElement('option')
+            var option = document.createElement("option");
             option.value = status.code;
             option.text = status.name;
-            if (batch.data.ill_batch_id && batch.data.status_code === status.code) {
+            if (
+                batch.data.ill_batch_id &&
+                batch.data.status_code === status.code
+            ) {
                 option.selected = true;
             }
             statusesSelect.add(option);
         });
         if (isUpdate) {
-            statusesSelect.parentElement.style.display = 'block';
+            statusesSelect.parentElement.style.display = "block";
         }
-    };
+    }
 
     function removeEventListeners() {
-        textarea.removeEventListener('paste', processButtonState);
-        textarea.removeEventListener('keyup', processButtonState);
-        processButton.removeEventListener('click', processIdentifiers);
-        nameInput.removeEventListener('keyup', createButtonState);
-        cardnumberInput.removeEventListener('keyup', createButtonState);
-        branchcodeSelect.removeEventListener('change', createButtonState);
-        createButton.removeEventListener('click', createBatch);
-        identifierTable.removeEventListener('click', toggleMetadata);
-        identifierTable.removeEventListener('click', removeRow);
-        createRequestsButton.remove('click', requestRequestable);
-    };
+        textarea.removeEventListener("paste", processButtonState);
+        textarea.removeEventListener("keyup", processButtonState);
+        processButton.removeEventListener("click", processIdentifiers);
+        nameInput.removeEventListener("keyup", createButtonState);
+        cardnumberInput.removeEventListener("keyup", createButtonState);
+        branchcodeSelect.removeEventListener("change", createButtonState);
+        createButton.removeEventListener("click", createBatch);
+        identifierTable.removeEventListener("click", toggleMetadata);
+        identifierTable.removeEventListener("click", removeRow);
+        createRequestsButton.remove("click", requestRequestable);
+    }
 
     function finishButtonEventListener() {
-        finishButton.addEventListener('click', doFinish);
-    };
+        finishButton.addEventListener("click", doFinish);
+    }
 
     function identifierTextareaEventListener() {
-        textarea.addEventListener('paste', textareaUpdate);
-        textarea.addEventListener('keyup', textareaUpdate);
-    };
+        textarea.addEventListener("paste", textareaUpdate);
+        textarea.addEventListener("keyup", textareaUpdate);
+    }
 
     function processButtonEventListener() {
-        processButton.addEventListener('click', processIdentifiers);
-    };
+        processButton.addEventListener("click", processIdentifiers);
+    }
 
     function createRequestsButtonEventListener() {
-        createRequestsButton.addEventListener('click', requestRequestable);
-    };
+        createRequestsButton.addEventListener("click", requestRequestable);
+    }
 
     function createButtonEventListener() {
-        createButton.addEventListener('click', createBatch);
-    };
+        createButton.addEventListener("click", createBatch);
+    }
 
     function batchInputsEventListeners() {
-        nameInput.addEventListener('keyup', createButtonState);
-        cardnumberInput.addEventListener('keyup', createButtonState);
-        branchcodeSelect.addEventListener('change', createButtonState);
-    };
+        nameInput.addEventListener("keyup", createButtonState);
+        cardnumberInput.addEventListener("keyup", createButtonState);
+        branchcodeSelect.addEventListener("change", createButtonState);
+    }
 
     function moreLessEventListener() {
-        identifierTable.addEventListener('click', toggleMetadata);
-    };
+        identifierTable.addEventListener("click", toggleMetadata);
+    }
 
     function removeRowEventListener() {
-        identifierTable.addEventListener('click', removeRow);
-    };
+        identifierTable.addEventListener("click", removeRow);
+    }
 
     function textareaUpdate() {
         processButtonState();
         updateRowCount();
-    };
+    }
 
     function processButtonState() {
         if (textarea.value.length > 0) {
-            processButton.removeAttribute('disabled');
-            processButton.removeAttribute('aria-disabled');
+            processButton.removeAttribute("disabled");
+            processButton.removeAttribute("aria-disabled");
         } else {
-            processButton.setAttribute('disabled', true);
-            processButton.setAttribute('aria-disabled', true);
+            processButton.setAttribute("disabled", true);
+            processButton.setAttribute("aria-disabled", true);
         }
-    };
+    }
 
     function disableCardnumberInput() {
         if (batch.data.patron) {
-            cardnumberInput.setAttribute('disabled', true);
-            cardnumberInput.setAttribute('aria-disabled', true);
+            cardnumberInput.setAttribute("disabled", true);
+            cardnumberInput.setAttribute("aria-disabled", true);
         } else {
-            cardnumberInput.removeAttribute('disabled');
-            cardnumberInput.removeAttribute('aria-disabled');
+            cardnumberInput.removeAttribute("disabled");
+            cardnumberInput.removeAttribute("aria-disabled");
         }
-    };
+    }
 
     function createButtonState() {
         if (
@@ -441,25 +458,27 @@
             cardnumberInput.value.length > 0 &&
             branchcodeSelect.selectedOptions.length === 1
         ) {
-            createButton.removeAttribute('disabled');
-            createButton.setAttribute('display', 'inline-block');
+            createButton.removeAttribute("disabled");
+            createButton.setAttribute("display", "inline-block");
         } else {
-            createButton.setAttribute('disabled', 1);
-            createButton.setAttribute('display', 'none');
+            createButton.setAttribute("disabled", 1);
+            createButton.setAttribute("display", "none");
         }
-    };
+    }
 
     function doFinish() {
-        updateBatch()
-            .then(function () {
-                $('#ill-batch-modal').modal({ show: false });
-                location.href = '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + batch.data.ill_batch_id;
-            });
-    };
+        updateBatch().then(function () {
+            $("#ill-batch-modal").modal({ show: false });
+            location.href =
+                "/cgi-bin/koha/ill/ill-requests.pl?batch_id=" +
+                batch.data.ill_batch_id;
+        });
+    }
 
     // Get all batch statuses
     function fetchStatuses() {
-        window.doApiRequest('/api/v1/ill/batchstatuses')
+        window
+            .doApiRequest("/api/v1/ill/batchstatuses")
             .then(function (response) {
                 return response.json();
             })
@@ -469,14 +488,15 @@
             .catch(function (e) {
                 window.handleApiError(ill_batch_statuses_api_fail);
             });
-    };
+    }
 
     // Get the batch
     function fetchBatch() {
-        window.doBatchApiRequest("/" + batchId, {
+        window
+            .doBatchApiRequest("/" + batchId, {
                 headers: {
-                    'x-koha-embed': 'patron'
-                }
+                    "x-koha-embed": "patron",
+                },
             })
             .then(function (response) {
                 return response.json();
@@ -488,8 +508,8 @@
                     backend: jsoned.backend,
                     cardnumber: jsoned.cardnumber,
                     library_id: jsoned.library_id,
-                    status_code: jsoned.status_code
-                }
+                    status_code: jsoned.status_code,
+                };
                 return jsoned;
             })
             .then(function (data) {
@@ -498,27 +518,27 @@
             .catch(function () {
                 window.handleApiError(ill_batch_api_fail);
             });
-    };
+    }
 
     function createBatch() {
         var selectedBranchcode = branchcodeSelect.selectedOptions[0].value;
         var selectedStatuscode = statusesSelect.selectedOptions[0].value;
-        return doBatchApiRequest('', {
-            method: 'POST',
+        return doBatchApiRequest("", {
+            method: "POST",
             headers: {
-                'Content-type': 'application/json',
-                'x-koha-embed': 'patron'
+                "Content-type": "application/json",
+                "x-koha-embed": "patron",
             },
             body: JSON.stringify({
                 name: nameInput.value,
                 backend: backend,
                 cardnumber: cardnumberInput.value,
                 library_id: selectedBranchcode,
-                status_code: selectedStatuscode
-            })
+                status_code: selectedStatuscode,
+            }),
         })
             .then(function (response) {
-                if ( response.ok ) {
+                if (response.ok) {
                     return response.json();
                 }
                 return Promise.reject(response);
@@ -533,53 +553,55 @@
                     library_id: body.library_id,
                     status_code: body.status_code,
                     patron: body.patron,
-                    status: body.status
+                    status: body.status,
                 };
                 initPostCreate();
             })
             .catch(function (response) {
-                response.json().then((json) => {
-                    if( json.error ) {
+                response.json().then(json => {
+                    if (json.error) {
                         handleApiError(json.error);
                     } else {
                         handleApiError(ill_batch_create_api_fail);
                     }
-                })
+                });
             });
-    };
+    }
 
     function updateBatch() {
         var selectedBranchcode = branchcodeSelect.selectedOptions[0].value;
         var selectedStatuscode = statusesSelect.selectedOptions[0].value;
 
-        return doBatchApiRequest('/' + batch.data.ill_batch_id, {
-            method: 'PUT',
+        return doBatchApiRequest("/" + batch.data.ill_batch_id, {
+            method: "PUT",
             headers: {
-                'Content-type': 'application/json'
+                "Content-type": "application/json",
             },
             body: JSON.stringify({
                 name: nameInput.value,
                 backend: batch.data.backend,
                 cardnumber: batch.data.patron.cardnumber,
                 library_id: selectedBranchcode,
-                status_code: selectedStatuscode
-            })
-        })
-            .catch(function () {
-                handleApiError(ill_batch_update_api_fail);
-            });
-    };
+                status_code: selectedStatuscode,
+            }),
+        }).catch(function () {
+            handleApiError(ill_batch_update_api_fail);
+        });
+    }
 
     function displaySupportedIdentifiers() {
-        var names = Object.keys(supportedIdentifiers).map(function (identifier) {
-            return window['ill_batch_' + identifier];
-        });
-        var displayEl = document.getElementById('supported_identifiers');
-        displayEl.textContent = names.length > 0 ? names.join(', ') : ill_batch_none;
+        var names = Object.keys(supportedIdentifiers).map(
+            function (identifier) {
+                return window["ill_batch_" + identifier];
+            }
+        );
+        var displayEl = document.getElementById("supported_identifiers");
+        displayEl.textContent =
+            names.length > 0 ? names.join(", ") : ill_batch_none;
     }
 
     function updateRowCount() {
-        var textEl = document.getElementById('row_count_value');
+        var textEl = document.getElementById("row_count_value");
         var val = textarea.value.trim();
         var cnt = 0;
         if (val.length > 0) {
@@ -589,14 +611,15 @@
     }
 
     function showProgress() {
-        var el = document.getElementById('create-progress');
-        el.style.display = 'block';
+        var el = document.getElementById("create-progress");
+        el.style.display = "block";
     }
 
     function showCreateRequestsButton() {
         var data = progressTotals.data;
-        var el = document.getElementById('create-requests');
-        el.style.display = (data.total > 0 && data.count === data.total) ? 'flex' : 'none';
+        var el = document.getElementById("create-requests");
+        el.style.display =
+            data.total > 0 && data.count === data.total ? "flex" : "none";
     }
 
     async function processIdentifiers() {
@@ -605,7 +628,7 @@
         if (content.length === 0) return;
 
         disableProcessButton();
-        var label = document.getElementById('progress-label').firstChild;
+        var label = document.getElementById("progress-label").firstChild;
         label.innerHTML = ill_batch_retrieving_metadata;
         showProgress();
 
@@ -627,8 +650,8 @@
             // what it is
             if (match.length != 1) {
                 parsed.push({
-                    type: 'unknown',
-                    value: identifier
+                    type: "unknown",
+                    value: identifier,
                 });
             } else {
                 parsed.push(match[0]);
@@ -637,7 +660,7 @@
 
         var unknownIdentifiers = parsed
             .filter(function (parse) {
-                if (parse.type == 'unknown') {
+                if (parse.type == "unknown") {
                     return parse;
                 }
             })
@@ -647,10 +670,10 @@
 
         if (unknownIdentifiers.length > 0) {
             processErrors.badidentifiers = {
-                element: 'badids',
-                values: unknownIdentifiers.join(', ')
+                element: "badids",
+                values: unknownIdentifiers.join(", "),
             };
-        };
+        }
 
         // Deduping
         var deduped = [];
@@ -673,8 +696,8 @@
         // Update duplicate error if dupes were found
         if (Object.keys(dupes).length > 0) {
             processErrors.duplicates = {
-                element: 'dupelist',
-                values: Object.keys(dupes).join(', ')
+                element: "dupelist",
+                values: Object.keys(dupes).join(", "),
             };
         }
 
@@ -694,7 +717,7 @@
         var notInTable = deduped.filter(function (ded) {
             if (!tabIdentifiers.includes(ded.value)) {
                 return ded;
-           }
+            }
         });
         if (notInTable.length > 0) {
             tableContent.data = tableContent.data.concat(notInTable);
@@ -708,7 +731,8 @@
             if (
                 Object.keys(tableContent.data[i].metadata).length > 0 ||
                 Object.keys(tableContent.data[i].failed).length > 0
-            ) continue;
+            )
+                continue;
             var identifier = { type: row.type, value: row.value };
             try {
                 var populated = await populateMetadata(identifier);
@@ -717,7 +741,7 @@
                 row.failed = ill_populate_failed;
             }
 
-            if (ill_check_availability_syspref == 1){
+            if (ill_check_availability_syspref == 1) {
                 try {
                     var availability = await populateAvailability(row);
                     row.availability_hits = availability || {};
@@ -732,13 +756,13 @@
     }
 
     function disableProcessButton() {
-        processButton.setAttribute('disabled', true);
-        processButton.setAttribute('aria-disabled', true);
+        processButton.setAttribute("disabled", true);
+        processButton.setAttribute("aria-disabled", true);
     }
 
     function disableCreateButton() {
-        createButton.setAttribute('disabled', true);
-        createButton.setAttribute('aria-disabled', true);
+        createButton.setAttribute("disabled", true);
+        createButton.setAttribute("aria-disabled", true);
     }
 
     async function populateMetadata(identifier) {
@@ -747,77 +771,91 @@
         // Check each service and use the first results we get, if any
         for (var i = 0; i < services.length; i++) {
             var service = services[i];
-            var endpoint = '/api/v1/contrib/' + service.api_namespace + service.search_endpoint + '?' + identifier.type + '=' + identifier.value;
+            var endpoint =
+                "/api/v1/contrib/" +
+                service.api_namespace +
+                service.search_endpoint +
+                "?" +
+                identifier.type +
+                "=" +
+                identifier.value;
             var metadata = await getMetadata(endpoint);
             if (metadata.errors.length === 0) {
                 var parsed = await parseMetadata(metadata, service);
                 if (parsed.errors.length > 0) {
-                    throw Error(metadata.errors.map(function (error) {
-                        return error.message;
-                    }).join(', '));
+                    throw Error(
+                        metadata.errors
+                            .map(function (error) {
+                                return error.message;
+                            })
+                            .join(", ")
+                    );
                 }
                 return parsed;
             }
         }
-    };
+    }
 
     async function getAvailability(endpoint) {
         var response = await debounce(doApiRequest)(endpoint);
         return response.json();
-    };
+    }
 
     async function getMetadata(endpoint) {
         var response = await debounce(doApiRequest)(endpoint);
         return response.json();
-    };
+    }
 
     async function parseMetadata(metadata, service) {
-        var endpoint = '/api/v1/contrib/' + service.api_namespace + service.ill_parse_endpoint;
+        var endpoint =
+            "/api/v1/contrib/" +
+            service.api_namespace +
+            service.ill_parse_endpoint;
         var response = await doApiRequest(endpoint, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-type': 'application/json'
+                "Content-type": "application/json",
             },
-            body: JSON.stringify(metadata)
+            body: JSON.stringify(metadata),
         });
         return response.json();
     }
 
     // A render function for identifier type
     function createIdentifierType(data) {
-        return window['ill_batch_' + data];
-    };
+        return window["ill_batch_" + data];
+    }
 
     // Get an item's title
     function getTitle(meta) {
         if (meta.article_title && meta.article_title.length > 0) {
-            return 'article_title';
+            return "article_title";
             return {
-                prop: 'article_title',
-                value: meta.article_title
+                prop: "article_title",
+                value: meta.article_title,
             };
         } else if (meta.title && meta.title.length > 0) {
-            return 'title';
+            return "title";
             return {
-                prop: 'title',
-                value: meta.title
+                prop: "title",
+                value: meta.title,
             };
         }
-    };
+    }
 
     // Create a metadata row
     function createMetadataRow(data, meta, prop) {
         if (!meta[prop]) return;
 
-        var div = document.createElement('div');
-        div.classList.add('metadata-row');
-        var label = document.createElement('span');
-        label.classList.add('metadata-label');
-        label.innerText = ill_batch_metadata[prop] + ': ';
+        var div = document.createElement("div");
+        div.classList.add("metadata-row");
+        var label = document.createElement("span");
+        label.classList.add("metadata-label");
+        label.innerText = ill_batch_metadata[prop] + ": ";
 
         // Add a link to the availability URL if appropriate
-        var value = document.createElement('span');
-        value.classList.add('metadata-value');
+        var value = document.createElement("span");
+        value.classList.add("metadata-value");
         value.innerText = meta[prop];
         div.appendChild(label);
         div.appendChild(value);
@@ -837,11 +875,23 @@
             return ill_populate_waiting;
         }
 
-        var core = ['doi', 'pmid', 'issn', 'title', 'year', 'issue', 'pages', 'publisher', 'article_title', 'article_author', 'volume'];
+        var core = [
+            "doi",
+            "pmid",
+            "issn",
+            "title",
+            "year",
+            "issue",
+            "pages",
+            "publisher",
+            "article_title",
+            "article_author",
+            "volume",
+        ];
         var meta = data.metadata;
 
-        var container = document.createElement('div');
-        container.classList.add('metadata-container');
+        var container = document.createElement("div");
+        container.classList.add("metadata-container");
 
         // Create the title row
         var title = getTitle(meta);
@@ -855,9 +905,9 @@
             container.appendChild(titleRow);
         }
 
-        var remainder = document.createElement('div');
-        remainder.classList.add('metadata-remainder');
-        remainder.style.display = 'none';
+        var remainder = document.createElement("div");
+        remainder.classList.add("metadata-remainder");
+        remainder.style.display = "none";
         // Create the remaining rows
         core.sort().forEach(function (prop) {
             var div = createMetadataRow(data, meta, prop);
@@ -869,24 +919,24 @@
 
         // Add a more/less toggle
         var firstField = container.firstChild;
-        var moreLess = document.createElement('div');
-        moreLess.classList.add('more-less');
-        var moreLessLink = document.createElement('a');
-        moreLessLink.setAttribute('href', '#');
-        moreLessLink.classList.add('more-less-link');
-        moreLessLink.innerText = ' [' + ill_batch_metadata_more + ']';
+        var moreLess = document.createElement("div");
+        moreLess.classList.add("more-less");
+        var moreLessLink = document.createElement("a");
+        moreLessLink.setAttribute("href", "#");
+        moreLessLink.classList.add("more-less-link");
+        moreLessLink.innerText = " [" + ill_batch_metadata_more + "]";
         moreLess.appendChild(moreLessLink);
         firstField.appendChild(moreLess);
 
         return container.outerHTML;
-    };
+    }
 
     function removeRow(ev) {
-        if (ev.target.className.includes('remove-row')) {
+        if (ev.target.className.includes("remove-row")) {
             if (!confirm(ill_batch_item_remove)) return;
             // Find the parent row
-            var ancestor = ev.target.closest('tr');
-            var identifier = ancestor.querySelector('.identifier').innerText;
+            var ancestor = ev.target.closest("tr");
+            var identifier = ancestor.querySelector(".identifier").innerText;
             tableContent.data = tableContent.data.filter(function (row) {
                 return row.value !== identifier;
             });
@@ -894,57 +944,66 @@
     }
 
     function toggleMetadata(ev) {
-        if (ev.target.className === 'more-less-link') {
+        if (ev.target.className === "more-less-link") {
             // Find the element we need to show
-            var ancestor = ev.target.closest('.metadata-container');
-            var meta = ancestor.querySelector('.metadata-remainder');
+            var ancestor = ev.target.closest(".metadata-container");
+            var meta = ancestor.querySelector(".metadata-remainder");
 
             // Display or hide based on its current state
             var display = window.getComputedStyle(meta).display;
 
-            meta.style.display = display === 'block' ? 'none' : 'block';
+            meta.style.display = display === "block" ? "none" : "block";
 
             // Update the More / Less text
-            ev.target.innerText = ' [ ' + (display === 'none' ? ill_batch_metadata_less : ill_batch_metadata_more) + ' ]';
+            ev.target.innerText =
+                " [ " +
+                (display === "none"
+                    ? ill_batch_metadata_less
+                    : ill_batch_metadata_more) +
+                " ]";
         }
     }
 
     // A render function for the link to a request ID
     function createRequestId(x, y, data) {
-        return data.requestId || '-';
+        return data.requestId || "-";
     }
 
     function createRequestStatus(x, y, data) {
-        return data.requestStatus || '-';
+        return data.requestStatus || "-";
     }
 
     function createRequestAvailability(x, y, data) {
-
         // If the fetch failed
         if (data.failed.length > 0) {
             return data.failed;
         }
 
-        if (Object.keys(data.availability_hits).length === 0){
+        if (Object.keys(data.availability_hits).length === 0) {
             return ill_populate_waiting;
         }
 
-        let str = '';
+        let str = "";
         let has_some = false;
         for (i = 0; i < data.availability_hits.length; i++) {
-            if (!data.availability_hits[i].empty){
+            if (!data.availability_hits[i].empty) {
                 has_some = true;
-                str += "<li><a href=" + data.availability_hits[i].url + " target=\"_blank\">" + data.availability_hits[i].name + "</a></li>"
+                str +=
+                    "<li><a href=" +
+                    data.availability_hits[i].url +
+                    ' target="_blank">' +
+                    data.availability_hits[i].name +
+                    "</a></li>";
             }
         }
-        if(!has_some){
+        if (!has_some) {
             str = ill_batch_none;
         }
         return str;
-    };
+    }
 
     function buildTable(identifiers) {
-        table = KohaTable('identifier-table', {
+        table = KohaTable("identifier-table", {
             processing: true,
             ordering: false,
             paging: false,
@@ -952,62 +1011,70 @@
             autoWidth: false,
             columns: [
                 {
-                    data: 'type',
-                    width: '13%',
-                    render: createIdentifierType
+                    data: "type",
+                    width: "13%",
+                    render: createIdentifierType,
                 },
                 {
-                    data: 'value',
-                    width: '25%',
-                    className: 'identifier'
+                    data: "value",
+                    width: "25%",
+                    className: "identifier",
                 },
                 {
-                    data: 'metadata',
-                    render: createMetadata
+                    data: "metadata",
+                    render: createMetadata,
                 },
                 {
-                    data: 'requestId',
-                    width: '6.5%',
-                    render: createRequestId
+                    data: "requestId",
+                    width: "6.5%",
+                    render: createRequestId,
                 },
                 {
-                    data: 'requestStatus',
-                    width: '6.5%',
-                    render: createRequestStatus
+                    data: "requestStatus",
+                    width: "6.5%",
+                    render: createRequestStatus,
                 },
-                ...( ill_check_availability_syspref == 1 ? [{
-                    data: '',
-                    width: '13%',
-                    render: createRequestAvailability, }] : []
-                    ),
+                ...(ill_check_availability_syspref == 1
+                    ? [
+                          {
+                              data: "",
+                              width: "13%",
+                              render: createRequestAvailability,
+                          },
+                      ]
+                    : []),
                 {
-                    width: '6.5%',
+                    width: "6.5%",
                     render: createActions,
-                    className: 'action-column noExport'
-                }
+                    className: "action-column noExport",
+                },
             ],
             createdRow: function (row, data) {
                 if (data.failed.length > 0) {
-                    row.classList.add('fetch-failed');
+                    row.classList.add("fetch-failed");
                 }
-            }
+            },
         });
     }
 
     function createActions(x, y, data) {
-        return '<button type="button" aria-label='+ ill_button_remove + (data.requestId ? ' disabled aria-disabled="true"' : '') + ' class="btn btn-xs btn-danger remove-row">' + ill_button_remove + '</button>';
+        return (
+            '<button type="button" aria-label=' +
+            ill_button_remove +
+            (data.requestId ? ' disabled aria-disabled="true"' : "") +
+            ' class="btn btn-xs btn-danger remove-row">' +
+            ill_button_remove +
+            "</button>"
+        );
     }
 
     // Redraw the table
     function updateTable() {
         if (!table) return;
-        tableEl.style.display = tableContent.data.length > 0 ? 'table' : 'none';
-        tableEl.style.width = '100%';
-        table.api()
-            .clear()
-            .rows.add(tableContent.data)
-            .draw();
-    };
+        tableEl.style.display = tableContent.data.length > 0 ? "table" : "none";
+        tableEl.style.width = "100%";
+        table.api().clear().rows.add(tableContent.data).draw();
+    }
 
     function identifyIdentifier(identifier) {
         var matches = [];
@@ -1017,12 +1084,14 @@
             // Since all the services supporting this identifier type should use the same
             // regex to identify it, we can just use the first
             var service = supportedIdentifiers[identifierType][0];
-            var regex = new RegExp(service.identifiers_supported[identifierType].regex);
+            var regex = new RegExp(
+                service.identifiers_supported[identifierType].regex
+            );
             var match = identifier.match(regex);
             if (match && match.groups && match.groups.identifier) {
                 matches.push({
                     type: identifierType,
-                    value: match.groups.identifier
+                    value: match.groups.identifier,
                 });
             }
         });
@@ -1035,34 +1104,36 @@
             keys.forEach(function (key) {
                 var el = document.getElementById(errors[key].element);
                 el.textContent = errors[key].values;
-                el.style.display = 'inline';
+                el.style.display = "inline";
                 var container = document.getElementById(key);
-                container.style.display = 'block';
+                container.style.display = "block";
             });
-            var el = document.getElementById('textarea-errors');
-            el.style.display = 'flex';
+            var el = document.getElementById("textarea-errors");
+            el.style.display = "flex";
         }
     }
 
     function hideErrors() {
-        var dupelist = document.getElementById('dupelist');
-        var badids = document.getElementById('badids');
-        dupelist.textContent = '';
-        dupelist.parentElement.style.display = 'none';
-        badids.textContent = '';
-        badids.parentElement.style.display = 'none';
-        var tae = document.getElementById('textarea-errors');
-        tae.style.display = 'none';
+        var dupelist = document.getElementById("dupelist");
+        var badids = document.getElementById("badids");
+        dupelist.textContent = "";
+        dupelist.parentElement.style.display = "none";
+        badids.textContent = "";
+        badids.parentElement.style.display = "none";
+        var tae = document.getElementById("textarea-errors");
+        tae.style.display = "none";
     }
 
     function manageBatchItemsDisplay() {
-        batchItemsDisplay.style.display = batch.data.ill_batch_id ? 'block' : 'none'
-    };
+        batchItemsDisplay.style.display = batch.data.ill_batch_id
+            ? "block"
+            : "none";
+    }
 
     function updateBatchInputs() {
-        nameInput.value = batch.data.name || '';
-        cardnumberInput.value = batch.data.cardnumber || '';
-        branchcodeSelect.value = batch.data.library_id || '';
+        nameInput.value = batch.data.name || "";
+        cardnumberInput.value = batch.data.cardnumber || "";
+        branchcodeSelect.value = batch.data.library_id || "";
     }
 
     function debounce(func) {
@@ -1076,31 +1147,29 @@
                     return resolve(func(...args));
                 }, debounceDelay);
             });
-        }
+        };
     }
 
     function patronAutocomplete() {
-        patron_autocomplete(
-            $('#batch-form #batchcardnumber'),
-            {
-              'on-select-callback': function( event, ui ) {
-                $("#batch-form #batchcardnumber").val( ui.item.cardnumber );
+        patron_autocomplete($("#batch-form #batchcardnumber"), {
+            "on-select-callback": function (event, ui) {
+                $("#batch-form #batchcardnumber").val(ui.item.cardnumber);
                 return false;
-              }
-            }
-          );
-    };
+            },
+        });
+    }
 
     function createPatronLink() {
         if (!batch.data.patron) return;
         var patron = batch.data.patron;
-        var a = document.createElement('a');
-        var href = '/cgi-bin/koha/members/moremember.pl?borrowernumber=' + patron.borrowernumber;
-        var text = patron.surname + ' (' + patron.cardnumber + ')';
-        a.setAttribute('title', ill_borrower_details);
-        a.setAttribute('href', href);
+        var a = document.createElement("a");
+        var href =
+            "/cgi-bin/koha/members/moremember.pl?borrowernumber=" +
+            patron.borrowernumber;
+        var text = patron.surname + " (" + patron.cardnumber + ")";
+        a.setAttribute("title", ill_borrower_details);
+        a.setAttribute("href", href);
         a.textContent = text;
         return a;
-    };
-
+    }
 })();

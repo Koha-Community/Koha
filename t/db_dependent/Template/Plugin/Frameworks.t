@@ -34,7 +34,7 @@ $schema->storage->txn_begin;
 subtest 'GetName tests' => sub {
     plan tests => 3;
 
-    my $framework = $builder->build_object({ class => 'Koha::BiblioFrameworks' })->store;
+    my $framework = $builder->build_object( { class => 'Koha::BiblioFrameworks' } )->store;
 
     my $plugin = Koha::Template::Plugin::Frameworks->new();
 

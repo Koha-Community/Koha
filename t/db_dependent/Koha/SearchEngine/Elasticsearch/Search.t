@@ -25,63 +25,53 @@ use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 use Koha::SearchEngine::Elasticsearch::Indexer;
 use Koha::SearchFields;
 
-my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
-$se->mock( 'get_elasticsearch_mappings', sub {
-    my ($self) = @_;
+my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
+$se->mock(
+    'get_elasticsearch_mappings',
+    sub {
+        my ($self) = @_;
 
-    my %all_mappings;
+        my %all_mappings;
 
-    my $mappings = {
-        properties => {
-            title => {
-                type => 'text'
-            },
-            title__sort => {
-                type => 'text'
-            },
-            subject => {
-                type => 'text'
-            },
-            itemnumber => {
-                type => 'integer'
-            },
-            sortablenumber => {
-                type => 'integer'
-            },
-            sortablenumber__sort => {
-                type => 'integer'
+        my $mappings = {
+            properties => {
+                title                => { type => 'text' },
+                title__sort          => { type => 'text' },
+                subject              => { type => 'text' },
+                itemnumber           => { type => 'integer' },
+                sortablenumber       => { type => 'integer' },
+                sortablenumber__sort => { type => 'integer' }
             }
-        }
-    };
-    $all_mappings{$self->index} = $mappings;
+        };
+        $all_mappings{ $self->index } = $mappings;
 
-    my $sort_fields = {
-        $self->index => {
-            title => 1,
-            subject => 0,
-            itemnumber => 0,
-            sortablenumber => 1
-        }
-    };
-    $self->sort_fields($sort_fields->{$self->index});
+        my $sort_fields = {
+            $self->index => {
+                title          => 1,
+                subject        => 0,
+                itemnumber     => 0,
+                sortablenumber => 1
+            }
+        };
+        $self->sort_fields( $sort_fields->{ $self->index } );
 
-    return $all_mappings{$self->index};
-});
+        return $all_mappings{ $self->index };
+    }
+);
 
 my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
 
 use_ok('Koha::SearchEngine::Elasticsearch::Search');
 
 ok(
-    my $searcher = Koha::SearchEngine::Elasticsearch::Search->new(
-        { 'nodes' => ['localhost:9200'], 'index' => 'mydb' }
-    ),
+    my $searcher =
+        Koha::SearchEngine::Elasticsearch::Search->new( { 'nodes' => ['localhost:9200'], 'index' => 'mydb' } ),
     'Creating a Koha::SearchEngine::Elasticsearch::Search object'
 );
 
 is( $searcher->index, 'mydb', 'Testing basic accessor' );
 
-ok( my $query = $builder->build_query('easy'), 'Build a search query');
+ok( my $query = $builder->build_query('easy'), 'Build a search query' );
 
 SKIP: {
 
@@ -90,40 +80,43 @@ SKIP: {
     skip 'Elasticsearch configuration not available', 9
         if $@;
 
-    Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'mydb' })->drop_index;
-    Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'mydb' })->create_index;
+    Koha::SearchEngine::Elasticsearch::Indexer->new( { index => 'mydb' } )->drop_index;
+    Koha::SearchEngine::Elasticsearch::Indexer->new( { index => 'mydb' } )->create_index;
 
-    ok( my $results = $searcher->search( $query) , 'Do a search ' );
+    ok( my $results = $searcher->search($query), 'Do a search ' );
 
-    is (my $count = $searcher->count( $query ), 0 , 'Get a count of the results, without returning results ');
+    is( my $count = $searcher->count($query), 0, 'Get a count of the results, without returning results ' );
 
-    ok ($results = $searcher->search_compat( $query ), 'Test search_compat' );
+    ok( $results = $searcher->search_compat($query), 'Test search_compat' );
 
     my ( undef, $scan_query ) = $builder->build_query_compat( undef, ['easy'], [], undef, undef, 1 );
-    ok ((undef, $results) = $searcher->search_compat( $scan_query, undef, [], [], 20, 0, undef, undef, undef, 1 ), 'Test search_compat scan query' );
+    ok(
+        ( undef, $results ) = $searcher->search_compat( $scan_query, undef, [], [], 20, 0, undef, undef, undef, 1 ),
+        'Test search_compat scan query'
+    );
     my $expected = {
         biblioserver => {
-            hits => 0,
+            hits    => 0,
             RECORDS => []
         }
     };
-    is_deeply($results, $expected, 'Scan query results ok');
+    is_deeply( $results, $expected, 'Scan query results ok' );
 
-    ok (($results,$count) = $searcher->search_auth_compat ( $query ), 'Test search_auth_compat' );
+    ok( ( $results, $count ) = $searcher->search_auth_compat($query), 'Test search_auth_compat' );
 
-    is ( $count = $searcher->count_auth_use($searcher,1), 0, 'Testing count_auth_use');
+    is( $count = $searcher->count_auth_use( $searcher, 1 ), 0, 'Testing count_auth_use' );
 
-    is ($searcher->max_result_window, 1000000, 'By default, max_result_window is 1000000');
+    is( $searcher->max_result_window, 1000000, 'By default, max_result_window is 1000000' );
 
     $searcher->get_elasticsearch()->indices->put_settings(
         index => $searcher->index_name,
-        body => {
+        body  => {
             'index' => {
                 'max_result_window' => 12000,
             },
         }
     );
-    is ($searcher->max_result_window, 12000, 'max_result_window returns the correct value');
+    is( $searcher->max_result_window, 12000, 'max_result_window returns the correct value' );
 
     subtest "_convert_facets" => sub {
         plan tests => 5;

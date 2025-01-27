@@ -29,7 +29,7 @@ use C4::Context;
 use Koha::Patron::Attribute;
 use Koha::Patron::Modification;
 
-use JSON qw( from_json );
+use JSON       qw( from_json );
 use List::Util qw( none );
 
 use base qw(Koha::Objects);
@@ -59,19 +59,18 @@ sub pending_count {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
         if ($branchcode) {
             return 0 unless $logged_in_user->can_see_patrons_from($branchcode);
-            @branchcodes = ( $branchcode );
-        }
-        else {
+            @branchcodes = ($branchcode);
+        } else {
             @branchcodes = $logged_in_user->libraries_where_can_see_patrons;
         }
     }
     my @sql_params;
-    if ( @branchcodes ) {
+    if (@branchcodes) {
         $query .= ' AND borrowers.branchcode IN ( ' . join( ',', ('?') x @branchcodes ) . ' )';
         push( @sql_params, @branchcodes );
     }
 
-    my ( $count ) = $dbh->selectrow_array( $query, undef, @sql_params );
+    my ($count) = $dbh->selectrow_array( $query, undef, @sql_params );
     return $count;
 }
 
@@ -96,18 +95,17 @@ sub pending {
 
     my $userenv = C4::Context->userenv;
     my @branchcodes;
-    if ( $userenv ) {
+    if ($userenv) {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
         if ($branchcode) {
             return 0 unless $logged_in_user->can_see_patrons_from($branchcode);
-            @branchcodes = ( $branchcode );
-        }
-        else {
+            @branchcodes = ($branchcode);
+        } else {
             @branchcodes = $logged_in_user->libraries_where_can_see_patrons;
         }
     }
     my @sql_params;
-    if ( @branchcodes ) {
+    if (@branchcodes) {
         $query .= ' AND borrowers.branchcode IN ( ' . join( ',', ('?') x @branchcodes ) . ' )';
         push( @sql_params, @branchcodes );
     }
@@ -119,7 +117,7 @@ sub pending {
     while ( my $row = $sth->fetchrow_hashref() ) {
         my @changed_keys = split /,/, $row->{changed_fields};
         foreach my $key ( keys %$row ) {
-            if ($key eq 'changed_fields') {
+            if ( $key eq 'changed_fields' ) {
                 delete $row->{$key};
                 next;
             }
@@ -129,7 +127,8 @@ sub pending {
                 foreach my $attr ( @{$attributes} ) {
                     push @pending_attributes,
                         Koha::Patron::Attribute->new(
-                        {   borrowernumber => $row->{borrowernumber},
+                        {
+                            borrowernumber => $row->{borrowernumber},
                             code           => $attr->{code},
                             attribute      => exists $attr->{attribute} ? $attr->{attribute} : $attr->{value},
                         }
@@ -138,7 +137,7 @@ sub pending {
 
                 $row->{$key} = \@pending_attributes;
             }
-            if (none { $_ eq $key } @changed_keys) {
+            if ( none { $_ eq $key } @changed_keys ) {
                 delete $row->{$key} unless defined $row->{$key};
             }
         }

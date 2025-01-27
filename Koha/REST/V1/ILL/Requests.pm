@@ -28,7 +28,7 @@ use Koha::Libraries;
 use Koha::DateUtils qw( format_sqldatetime );
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -47,7 +47,7 @@ sub list {
 
     return try {
 
-        my $reqs = $c->objects->search(Koha::ILL::Requests->new->filter_by_visible);
+        my $reqs = $c->objects->search( Koha::ILL::Requests->new->filter_by_visible );
 
         return $c->render(
             status  => 200,
@@ -73,37 +73,34 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
-                $body->{backend} = delete $body->{ill_backend_id};
+                $body->{backend}        = delete $body->{ill_backend_id};
                 $body->{borrowernumber} = delete $body->{patron_id};
-                $body->{branchcode} = delete $body->{library_id};
+                $body->{branchcode}     = delete $body->{library_id};
 
                 my $request = Koha::ILL::Request->new->load_backend( $body->{backend} );
 
                 my $create_api = $request->_backend->capabilities('create_api');
 
-                if (!$create_api) {
+                if ( !$create_api ) {
                     return $c->render(
                         status  => 405,
-                        openapi => {
-                            errors => [ 'This backend does not allow request creation via API' ]
-                        }
+                        openapi => { errors => ['This backend does not allow request creation via API'] }
                     );
                 }
 
-                my $create_result = &{$create_api}($body, $request);
-                my $new_id = $create_result->illrequest_id;
+                my $create_result = &{$create_api}( $body, $request );
+                my $new_id        = $create_result->illrequest_id;
 
                 my $new_req = Koha::ILL::Requests->find($new_id);
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $new_req->illrequest_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $new_req->illrequest_id );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($new_req),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::ILL::Request->new->to_api_mapping;
 
@@ -113,25 +110,15 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }

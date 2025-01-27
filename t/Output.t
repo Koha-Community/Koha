@@ -22,14 +22,14 @@ use Test::Warn;
 use Test::MockModule;
 
 use File::Temp qw/tempfile/;
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
 
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('C4::Output', qw( output_html_with_http_headers output_and_exit_if_error parametrized_url ));
+    use_ok( 'C4::Output', qw( output_html_with_http_headers output_and_exit_if_error parametrized_url ) );
 }
 
 our $output_module = Test::MockModule->new('C4::Output');
@@ -43,26 +43,28 @@ my $output = 'foobarbaz';
     my $stdout;
     open STDOUT, '>', \$stdout;
     output_html_with_http_headers $query, $cookie, $output, undef, { force_no_caching => 1 };
-    like($stdout, qr/Cache-control: no-cache, no-store, max-age=0/, 'force_no_caching sets Cache-control as desired');
-    like($stdout, qr/Expires: /, 'force_no_caching sets an Expires header');
+    like( $stdout, qr/Cache-control: no-cache, no-store, max-age=0/, 'force_no_caching sets Cache-control as desired' );
+    like( $stdout, qr/Expires: /,                                    'force_no_caching sets an Expires header' );
     $stdout = '';
     close STDOUT;
     open STDOUT, '>', \$stdout;
     output_html_with_http_headers $query, $cookie, $output, undef, undef;
-    like($stdout, qr/Cache-control: no-cache[^,]/, 'not using force_no_caching sets Cache-control as desired');
-    unlike($stdout, qr/Expires: /, 'force_no_caching does not set an Expires header');
+    like( $stdout, qr/Cache-control: no-cache[^,]/, 'not using force_no_caching sets Cache-control as desired' );
+    unlike( $stdout, qr/Expires: /, 'force_no_caching does not set an Expires header' );
 }
 
 subtest 'parametrized_url' => sub {
     plan tests => 2;
 
-    my $url = 'https://somesite.com/search?q={TITLE}&author={AUTHOR}{SUFFIX}';
+    my $url  = 'https://somesite.com/search?q={TITLE}&author={AUTHOR}{SUFFIX}';
     my $subs = { TITLE => '_title_', AUTHOR => undef, ISBN => '123456789' };
     my $res;
     warning_is { $res = C4::Output::parametrized_url( $url, $subs ) }
-        q{}, 'No warning expected on undefined author';
-    is( $res, 'https://somesite.com/search?q=_title_&author=',
-        'Title replaced, author empty and SUFFIX removed' );
+    q{}, 'No warning expected on undefined author';
+    is(
+        $res, 'https://somesite.com/search?q=_title_&author=',
+        'Title replaced, author empty and SUFFIX removed'
+    );
 };
 
 subtest 'output_with_http_headers() tests' => sub {
@@ -77,27 +79,30 @@ subtest 'output_with_http_headers() tests' => sub {
     my $output = 'foobarbaz';
 
     open STDOUT, '>', \$stdout;
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','');
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', '' );
     output_html_with_http_headers $query, $cookie, $output, undef;
-    unlike($stdout, qr/Access-control-allow-origin/, 'No header set if no value on syspref');
+    unlike( $stdout, qr/Access-control-allow-origin/, 'No header set if no value on syspref' );
     close STDOUT;
 
     open STDOUT, '>', \$stdout;
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin',undef);
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', undef );
     output_html_with_http_headers $query, $cookie, $output, undef;
-    unlike($stdout, qr/Access-control-allow-origin/, 'No header set if no value on syspref');
+    unlike( $stdout, qr/Access-control-allow-origin/, 'No header set if no value on syspref' );
     close STDOUT;
 
     open STDOUT, '>', \$stdout;
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','*');
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', '*' );
     output_html_with_http_headers $query, $cookie, $output, undef;
-    like($stdout, qr/Access-control-allow-origin: \*/, 'Header set to *');
+    like( $stdout, qr/Access-control-allow-origin: \*/, 'Header set to *' );
     close STDOUT;
 
     open STDOUT, '>', \$stdout;
-    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','https://koha-community.org');
+    t::lib::Mocks::mock_preference( 'AccessControlAllowOrigin', 'https://koha-community.org' );
     output_html_with_http_headers $query, $cookie, $output, undef;
-    like($stdout, qr/Access-control-allow-origin: https:\/\/koha-community\.org/, 'Header set to https://koha-community.org');
+    like(
+        $stdout, qr/Access-control-allow-origin: https:\/\/koha-community\.org/,
+        'Header set to https://koha-community.org'
+    );
     close STDOUT;
 };
 
@@ -112,13 +117,13 @@ subtest 'output_and_exit_if_error() tests' => sub {
         }
     );
 
-    t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context::temporary_directory ] );
+    t::lib::Mocks::mock_config( 'pluginsdir', [C4::Context::temporary_directory] );
     my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context::temporary_directory );
     print $fh qq|[% blocking_error %]|;
     close $fh;
 
     my $query = CGI->new();
-    $query->param('csrf_token','');
+    $query->param( 'csrf_token', '' );
     my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
         {
             template_name   => $fn,
@@ -127,6 +132,7 @@ subtest 'output_and_exit_if_error() tests' => sub {
             authnotrequired => 1,
         }
     );
+
     # Next call triggers test in the mocked sub
-    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
+    output_and_exit_if_error( $query, $cookie, $template, { check => 'csrf_token' } );
 };

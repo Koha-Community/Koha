@@ -27,44 +27,49 @@ use Koha::Patrons;
 my $query = CGI->new;
 
 # if OPACPrivacy is disabled, leave immediately
-if ( ! C4::Context->preference('OPACPrivacy') || ! C4::Context->preference('opacreadinghistory') ) {
+if ( !C4::Context->preference('OPACPrivacy') || !C4::Context->preference('opacreadinghistory') ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-privacy.tt",
-        query           => $query,
-        type            => "opac",
+        template_name => "opac-privacy.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
-my $op                         = $query->param("op");
-my $privacy                    = $query->param("privacy");
+my $op                          = $query->param("op");
+my $privacy                     = $query->param("privacy");
 my $privacy_guarantor_checkouts = $query->param("privacy_guarantor_checkouts");
 my $privacy_guarantor_fines     = $query->param("privacy_guarantor_fines");
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron = Koha::Patrons->find($borrowernumber);
 
 if ( $op eq "cud-update_privacy" ) {
-    if ( $patron ) {
-        $patron->set({
-            privacy                    => $privacy,
-            privacy_guarantor_checkouts => defined $privacy_guarantor_checkouts?$privacy_guarantor_checkouts:$patron->privacy_guarantor_checkouts,
-            privacy_guarantor_fines     => defined $privacy_guarantor_fines?$privacy_guarantor_fines:$patron->privacy_guarantor_fines,
-        })->store;
+    if ($patron) {
+        $patron->set(
+            {
+                privacy                     => $privacy,
+                privacy_guarantor_checkouts => defined $privacy_guarantor_checkouts
+                ? $privacy_guarantor_checkouts
+                : $patron->privacy_guarantor_checkouts,
+                privacy_guarantor_fines => defined $privacy_guarantor_fines
+                ? $privacy_guarantor_fines
+                : $patron->privacy_guarantor_fines,
+            }
+        )->store;
         $template->param( 'privacy_updated' => 1 );
     }
-}
-elsif ( $op eq "cud-delete_record" ) {
+} elsif ( $op eq "cud-delete_record" ) {
 
     my $holds     = $query->param('holds');
     my $checkouts = $query->param('checkouts');
     my $all       = $query->param('all');
 
     $template->param( delete_all_quested => 1 )
-      if $all;
+        if $all;
 
     if ( $all or $checkouts ) {
 

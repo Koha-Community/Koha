@@ -19,26 +19,28 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Item::Search::Field qw(GetItemSearchField AddItemSearchField ModItemSearchField);
 
 my $cgi = CGI->new;
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => 'admin/items_search_field.tt',
-    query => $cgi,
-    type => 'intranet',
-    flagsrequired   => { parameters => 'manage_item_search_fields' },
-});
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => 'admin/items_search_field.tt',
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { parameters => 'manage_item_search_fields' },
+    }
+);
 
-my $op = $cgi->param('op') || '';
+my $op   = $cgi->param('op') || '';
 my $name = $cgi->param('name');
 
-if ($op eq 'cud-mod') {
-    my %vars = $cgi->Vars;
-    my $field = { name => $name };
+if ( $op eq 'cud-mod' ) {
+    my %vars   = $cgi->Vars;
+    my $field  = { name => $name };
     my @params = qw(label tagfield tagsubfield authorised_values_category);
     @$field{@params} = @vars{@params};
     if ( $field->{authorised_values_category} eq '' ) {
@@ -46,7 +48,7 @@ if ($op eq 'cud-mod') {
     }
     $field = ModItemSearchField($field);
     my $updated = ($field) ? 1 : 0;
-    print $cgi->redirect('/cgi-bin/koha/admin/items_search_fields.pl?updated=' . $updated);
+    print $cgi->redirect( '/cgi-bin/koha/admin/items_search_fields.pl?updated=' . $updated );
     exit;
 } elsif ( $op eq 'cud-add' ) {
     my %vars = $cgi->Vars;

@@ -24,32 +24,42 @@ use C4::ClassSplitRoutine::LCC qw( split_callnumber );
 use Test::More tests => 11;
 
 BEGIN {
-    use_ok('C4::Labels::Label', qw( _get_text_fields _check_params _guide_box ));
+    use_ok( 'C4::Labels::Label', qw( _get_text_fields _check_params _guide_box ) );
 }
 
-my $format_string = "title, callnumber";
-my $parsed_fields = C4::Labels::Label::_get_text_fields($format_string);
+my $format_string   = "title, callnumber";
+my $parsed_fields   = C4::Labels::Label::_get_text_fields($format_string);
 my $expected_fields = [
-    { code => 'title', desc => 'title' }, 
-    { code => 'itemcallnumber', desc => 'itemcallnumber' }, 
+    { code => 'title',          desc => 'title' },
+    { code => 'itemcallnumber', desc => 'itemcallnumber' },
 ];
-is_deeply($parsed_fields, $expected_fields, '"callnumber" in label layout alias for "itemcallnumber" per bug 5653');
+is_deeply( $parsed_fields, $expected_fields, '"callnumber" in label layout alias for "itemcallnumber" per bug 5653' );
 
-is(C4::Labels::Label::_check_params(),"0",'test checking parameters');
+is( C4::Labels::Label::_check_params(), "0", 'test checking parameters' );
 
-my ($llx,$lly,$width,$height) = ( 0, 0, 10, 10 );
-ok(!defined C4::Labels::Label::_guide_box(),
-        "Test guide box with undefined parameters returns undef");
-ok(!defined C4::Labels::Label::_guide_box(undef,$lly,$width,$height),
-        "Test guide box with undefined 'x' coordinate returns undef");
-ok(!defined C4::Labels::Label::_guide_box($llx,undef,$width,$height),
-        "Test guide box with undefined 'y' coordinate returns undef");
-ok(!defined C4::Labels::Label::_guide_box($llx,$lly,undef,$height),
-        "Test guide box with undefined 'width' returns undef");
-ok(!defined C4::Labels::Label::_guide_box($llx,$lly,$width,undef),
-        "Test guide box with undefined 'height' returns undef");
+my ( $llx, $lly, $width, $height ) = ( 0, 0, 10, 10 );
+ok(
+    !defined C4::Labels::Label::_guide_box(),
+    "Test guide box with undefined parameters returns undef"
+);
+ok(
+    !defined C4::Labels::Label::_guide_box( undef, $lly, $width, $height ),
+    "Test guide box with undefined 'x' coordinate returns undef"
+);
+ok(
+    !defined C4::Labels::Label::_guide_box( $llx, undef, $width, $height ),
+    "Test guide box with undefined 'y' coordinate returns undef"
+);
+ok(
+    !defined C4::Labels::Label::_guide_box( $llx, $lly, undef, $height ),
+    "Test guide box with undefined 'width' returns undef"
+);
+ok(
+    !defined C4::Labels::Label::_guide_box( $llx, $lly, $width, undef ),
+    "Test guide box with undefined 'height' returns undef"
+);
 is(
-    C4::Labels::Label::_guide_box($llx, $lly, $width, $height),
+    C4::Labels::Label::_guide_box( $llx, $lly, $width, $height ),
     'q
 0.5 w
 1.0 0.0 0.0  RG
@@ -61,6 +71,6 @@ Q
     'Return guide box if all four parameters are defined'
 );
 
-ok(C4::Labels::Label::_get_text_fields(), 'test getting textx fields');
+ok( C4::Labels::Label::_get_text_fields(), 'test getting textx fields' );
 
-is(C4::ClassSplitRoutine::LCC::split_callnumber(),"0", 'test when split LCC is null');
+is( C4::ClassSplitRoutine::LCC::split_callnumber(), "0", 'test when split LCC is null' );

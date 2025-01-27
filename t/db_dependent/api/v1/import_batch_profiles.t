@@ -27,7 +27,7 @@ use Koha::ImportBatchProfiles;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
-my $dbh = C4::Context->dbh;
+my $dbh     = C4::Context->dbh;
 
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
@@ -42,9 +42,7 @@ subtest 'unauth access' => sub {
     my $patron1 = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                flags => 4
-            }
+            value => { flags => 4 }
         }
     );
 
@@ -52,21 +50,17 @@ subtest 'unauth access' => sub {
     my $patron2 = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                flags => 4096
-            }
+            value => { flags => 4096 }
         }
     );
 
     my $uid = $patron1->userid;
     my $pwd = $patron1->password;
-    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")
-      ->status_is(403);
+    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")->status_is(403);
 
     $uid = $patron1->userid;
     $pwd = $patron1->password;
-    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")
-      ->status_is(403);
+    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -78,33 +72,31 @@ subtest 'list profiles' => sub {
 
     Koha::ImportBatchProfiles->search()->delete;
 
-    my $ibp1 = $builder->build_object({ class => 'Koha::ImportBatchProfiles', value => { name => 'a_ibp' } });
-    my $ibp2 = $builder->build_object({ class => 'Koha::ImportBatchProfiles', value => { name => 'b_ibp' } });
+    my $ibp1 = $builder->build_object( { class => 'Koha::ImportBatchProfiles', value => { name => 'a_ibp' } } );
+    my $ibp2 = $builder->build_object( { class => 'Koha::ImportBatchProfiles', value => { name => 'b_ibp' } } );
 
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                flags => 4096
-            }
+            value => { flags => 4096 }
         }
     );
 
-    my $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+    my $sth = $dbh->prepare(
+        "INSERT INTO user_permissions (borrowernumber, module_bit, code)
                         SELECT ?, bit, ?
                         FROM userflags
-                        WHERE flag = ?");
-    $sth->execute($patron->borrowernumber, 'stage_marc_import', 'tools');
+                        WHERE flag = ?"
+    );
+    $sth->execute( $patron->borrowernumber, 'stage_marc_import', 'tools' );
 
     my $pwd = 'thePassword123';
     $patron->set_password( { password => $pwd, skip_validation => 1 } );
 
     my $uid = $patron->userid;
 
-    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")
-      ->status_is(200)
-      ->json_is('/0/name', $ibp1->name)
-      ->json_is('/1/name', $ibp2->name);
+    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")->status_is(200)
+        ->json_is( '/0/name', $ibp1->name )->json_is( '/1/name', $ibp2->name );
 
     $schema->storage->txn_rollback;
 
@@ -121,31 +113,29 @@ subtest 'add() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                flags => 4096
-            }
+            value => { flags => 4096 }
         }
     );
 
-    my $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+    my $sth = $dbh->prepare(
+        "INSERT INTO user_permissions (borrowernumber, module_bit, code)
                         SELECT ?, bit, ?
                         FROM userflags
-                        WHERE flag = ?");
-    $sth->execute($patron->borrowernumber, 'stage_marc_import', 'tools');
+                        WHERE flag = ?"
+    );
+    $sth->execute( $patron->borrowernumber, 'stage_marc_import', 'tools' );
 
     my $pwd = 'thePassword123';
     $patron->set_password( { password => $pwd, skip_validation => 1 } );
 
-    my $uid = $patron->userid;
+    my $uid       = $patron->userid;
     my $post_data = {
-        name => 'profileName',
+        name           => 'profileName',
         overlay_action => 'overlay_action'
     };
 
-    $t->post_ok( "//$uid:$pwd@/api/v1/import_batch_profiles", json => $post_data )
-        ->status_is(201)
-        ->json_has('/profile_id')
-        ->json_is( '/name',           $post_data->{name} )
+    $t->post_ok( "//$uid:$pwd@/api/v1/import_batch_profiles", json => $post_data )->status_is(201)
+        ->json_has('/profile_id')->json_is( '/name', $post_data->{name} )
         ->json_is( '/overlay_action', $post_data->{overlay_action} )
         ->header_is( 'Location', '/api/v1/import_batch_profiles/' . $t->tx->res->json->{profile_id}, 'REST3.4.1' );
 
@@ -163,38 +153,33 @@ subtest 'edit profile' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                flags => 4096
-            }
+            value => { flags => 4096 }
         }
     );
 
-    my $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+    my $sth = $dbh->prepare(
+        "INSERT INTO user_permissions (borrowernumber, module_bit, code)
                         SELECT ?, bit, ?
                         FROM userflags
-                        WHERE flag = ?");
-    $sth->execute($patron->borrowernumber, 'stage_marc_import', 'tools');
+                        WHERE flag = ?"
+    );
+    $sth->execute( $patron->borrowernumber, 'stage_marc_import', 'tools' );
 
     my $pwd = 'thePassword123';
     $patron->set_password( { password => $pwd, skip_validation => 1 } );
 
     my $uid = $patron->userid;
 
-    my $ibp = $builder->build_object({class => 'Koha::ImportBatchProfiles', value => { name => 'someProfile' }});
+    my $ibp = $builder->build_object( { class => 'Koha::ImportBatchProfiles', value => { name => 'someProfile' } } );
 
-    my $post_data = {
-        name => 'theProfile'
-    };
+    my $post_data = { name => 'theProfile' };
 
-    $t->put_ok("//$uid:$pwd@/api/v1/import_batch_profiles/".$ibp->id, json => $post_data)
-      ->status_is(200)
-      ->json_is('/profile_id', $ibp->id)
-      ->json_is('/name', $post_data->{name});
+    $t->put_ok( "//$uid:$pwd@/api/v1/import_batch_profiles/" . $ibp->id, json => $post_data )->status_is(200)
+        ->json_is( '/profile_id', $ibp->id )->json_is( '/name', $post_data->{name} );
 
     $ibp->discard_changes;
 
-    is($ibp->name, $post_data->{name}, 'profile name should be the updated one');
-
+    is( $ibp->name, $post_data->{name}, 'profile name should be the updated one' );
 
     $schema->storage->txn_rollback;
 
@@ -210,32 +195,30 @@ subtest 'delete profile' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                flags => 4096
-            }
+            value => { flags => 4096 }
         }
     );
 
-    my $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+    my $sth = $dbh->prepare(
+        "INSERT INTO user_permissions (borrowernumber, module_bit, code)
                         SELECT ?, bit, ?
                         FROM userflags
-                        WHERE flag = ?");
-    $sth->execute($patron->borrowernumber, 'stage_marc_import', 'tools');
+                        WHERE flag = ?"
+    );
+    $sth->execute( $patron->borrowernumber, 'stage_marc_import', 'tools' );
 
     my $pwd = 'thePassword123';
     $patron->set_password( { password => $pwd, skip_validation => 1 } );
 
     my $uid = $patron->userid;
 
-    my $ibp = $builder->build_object({class => 'Koha::ImportBatchProfiles'});
+    my $ibp = $builder->build_object( { class => 'Koha::ImportBatchProfiles' } );
 
-    $t->delete_ok("//$uid:$pwd@/api/v1/import_batch_profiles/".$ibp->id)
-      ->status_is(204);
+    $t->delete_ok( "//$uid:$pwd@/api/v1/import_batch_profiles/" . $ibp->id )->status_is(204);
 
-    my $search = Koha::ImportBatchProfiles->find($ibp->id);
+    my $search = Koha::ImportBatchProfiles->find( $ibp->id );
 
-    is($search, undef, 'profile should be erased');
-
+    is( $search, undef, 'profile should be erased' );
 
     $schema->storage->txn_rollback;
 

@@ -25,8 +25,8 @@ use Koha::Patrons;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 
 use List::MoreUtils qw(any);
-use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Scalar::Util    qw( blessed );
+use Try::Tiny       qw( catch try );
 
 =head1 NAME
 
@@ -47,21 +47,20 @@ sub list {
 
     return try {
 
-        my $query = {};
+        my $query      = {};
         my $restricted = $c->param('restricted');
         $c->req->params->remove('restricted');
         $query->{debarred} = { '!=' => undef }
             if $restricted;
 
         my $patrons_rs = Koha::Patrons->search($query);
-        my $patrons    = $c->objects->search( $patrons_rs );
+        my $patrons    = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -86,8 +85,7 @@ sub get {
             status  => 200,
             openapi => $patron
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -147,11 +145,7 @@ sub add {
                 }
 
                 $patron->extended_attributes(
-                    [
-                        map { { code => $_->{type}, attribute => $_->{value} } }
-                          @$extended_attributes
-                    ]
-                );
+                    [ map { { code => $_->{type}, attribute => $_->{value} } } @$extended_attributes ] );
                 if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
                     C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
                         {
@@ -161,15 +155,14 @@ sub add {
                     );
                 }
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $patron->borrowernumber);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $patron->borrowernumber );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($patron),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::Patron->new->to_api_mapping;
 
@@ -179,64 +172,37 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Patron::InvalidUserid') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::InvalidUserid') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => { error => "Problem with ". $_->userid }
+                    openapi => { error => "Problem with " . $_->userid }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute')
-              )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_", error_code => 'missing_mandatory_attribute' }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType')
-              )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_", error_code => 'invalid_attribute_type' }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable')
-              )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_", error_code => 'non_repeatable_attribute' }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint')
-              )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_", error_code => 'attribute_not_unique' }
@@ -247,7 +213,6 @@ sub add {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 update
 
@@ -405,9 +370,10 @@ sub delete {
         my $safe_to_delete = $patron->safe_to_delete;
 
         if ( !$safe_to_delete ) {
+
             # Pick the first error, if any
-            my ( $error ) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
-            unless ( $error ) {
+            my ($error) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
+            unless ($error) {
                 Koha::Exception->throw('Koha::Patron->safe_to_delete returned false but carried no error message');
             }
 
@@ -428,7 +394,8 @@ sub delete {
                     }
                 );
             } else {
-                Koha::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
+                Koha::Exception->throw(
+                    'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
             }
         }
 
@@ -457,27 +424,22 @@ sub guarantors_can_see_charges {
 
     return try {
         if ( C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor') ) {
-            my $patron = $c->stash( 'koha.user' );
-            my $privacy_setting = ($c->req->json->{allowed}) ? 1 : 0;
+            my $patron          = $c->stash('koha.user');
+            my $privacy_setting = ( $c->req->json->{allowed} ) ? 1 : 0;
 
-            $patron->privacy_guarantor_fines( $privacy_setting )->store;
+            $patron->privacy_guarantor_fines($privacy_setting)->store;
 
             return $c->render(
                 status  => 200,
                 openapi => {}
             );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 403,
-                openapi => {
-                    error =>
-                      'The current configuration doesn\'t allow the requested action.'
-                }
+                openapi => { error => 'The current configuration doesn\'t allow the requested action.' }
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -493,27 +455,22 @@ sub guarantors_can_see_checkouts {
 
     return try {
         if ( C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') ) {
-            my $patron = $c->stash( 'koha.user' );
+            my $patron          = $c->stash('koha.user');
             my $privacy_setting = ( $c->req->json->{allowed} ) ? 1 : 0;
 
-            $patron->privacy_guarantor_checkouts( $privacy_setting )->store;
+            $patron->privacy_guarantor_checkouts($privacy_setting)->store;
 
             return $c->render(
                 status  => 200,
                 openapi => {}
             );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 403,
-                openapi => {
-                    error =>
-                      'The current configuration doesn\'t allow the requested action.'
-                }
+                openapi => { error => 'The current configuration doesn\'t allow the requested action.' }
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

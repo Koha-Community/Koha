@@ -24,10 +24,10 @@ use Encode;
 use Koha::Database::Columns;
 
 my $koha_i18n = Test::MockModule->new('Koha::I18N');
-$koha_i18n->mock('_base_directory', sub { "$Bin/../I18N/po" });
+$koha_i18n->mock( '_base_directory', sub { "$Bin/../I18N/po" } );
 
 my $c4_languages = Test::MockModule->new('C4::Languages');
-$c4_languages->mock('getlanguage', sub { 'xx-XX' });
+$c4_languages->mock( 'getlanguage', sub { 'xx-XX' } );
 
 my $columns = Koha::Database::Columns->columns;
 

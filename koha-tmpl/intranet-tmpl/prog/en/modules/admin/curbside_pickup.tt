@@ -6,17 +6,18 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Curbside pickup") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Curbside pickup") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .pickup-slot {
         border: 2px solid #b9d8d9;
-        padding: 0 .1em;
-        margin: 0 .1em;
+        padding: 0 0.1em;
+        margin: 0 0.1em;
     }
 </style>
 </head>
@@ -42,141 +43,137 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% FOR m IN messages %]
-    <div class="alert alert-[% m.type | html %]">
-        [% SWITCH m.code %]
-        [% CASE %]
-            <span>[% m.code | html %]</span>
-        [% END %]
-    </div>
-[% END %]
-
-[% IF op == 'list' %]
-
-    <h1>Curbside pickup configuration</h1>
-
-    [% UNLESS Koha.Preference('CurbsidePickup') %]
-        [% SET pref_CurbsidePickup_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CurbsidePickup">CurbsidePickup</a>' %]
-        <div class="alert alert-info">The [% pref_CurbsidePickup_link | $raw | $KohaSpan %] preference is not enabled, do not forget to enable it to turn the feature on.</div>
+    [% FOR m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
     [% END %]
-    <form method="post" class="form">
-        [% INCLUDE 'csrf-token.inc' %]
-        [% WRAPPER tabs id= "curbside_pickup_tabs" %]
-            [% WRAPPER tabs_nav %]
-                [% FOREACH l IN libraries %]
-                    [% IF loop.first %]
-                        [% SET bt_active = 1 %]
-                    [% ELSE %]
-                        [% SET bt_active = 0 %]
+
+    [% IF op == 'list' %]
+        <h1>Curbside pickup configuration</h1>
+
+        [% UNLESS Koha.Preference('CurbsidePickup') %]
+            [% SET pref_CurbsidePickup_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CurbsidePickup">CurbsidePickup</a>' %]
+            <div class="alert alert-info">The [% pref_CurbsidePickup_link | $raw | $KohaSpan %] preference is not enabled, do not forget to enable it to turn the feature on.</div>
+        [% END %]
+        <form method="post" class="form">
+            [% INCLUDE 'csrf-token.inc' %]
+            [% WRAPPER tabs id= "curbside_pickup_tabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% FOREACH l IN libraries %]
+                        [% IF loop.first %]
+                            [% SET bt_active = 1 %]
+                        [% ELSE %]
+                            [% SET bt_active = 0 %]
+                        [% END %]
+                        [% WRAPPER tab_item tabname= "conf-${l.branchcode}" bt_active= bt_active %]<span>[% l.branchname | html %]</span>[% END %]
                     [% END %]
-                    [% WRAPPER tab_item tabname= "conf-${l.branchcode}" bt_active= bt_active %] <span>[% l.branchname | html %]</span> [% END %]
-                [% END %]
-            [% END # /WRAPPER tabs_nav %]
+                [% END # /WRAPPER tabs_nav %]
 
-            [% WRAPPER tab_panels %]
-                [% FOREACH l IN libraries %]
-                    [% SET branchcode = l.branchcode %]
-                    [% IF loop.first %]
-                        [% SET bt_active = 1 %]
-                    [% ELSE %]
-                        [% SET bt_active = 0 %]
-                    [% END %]
-                    [% WRAPPER tab_panel tabname= "conf-${l.branchcode}" bt_active= bt_active %]
-                        <fieldset class="rows" style="float: none;">
-                            <ol>
-                                <li>
-                                    <label for="enable-[% l.branchcode | html %]">Enable: </label>
-                                    [% IF policies.$branchcode.enabled %]
-                                        <input name="enable-[% l.branchcode | html %]" id="enable-[% l.branchcode | html %]" value="1" type="checkbox" checked>
-                                    [% ELSE %]
-                                        <input name="enable-[% l.branchcode | html %]" id="enable-[% l.branchcode | html %]" value="1" type="checkbox">
-                                    [% END %]
-                                    <span class="hint">Enable curbside pickup.</span>
-                                </li>
+                [% WRAPPER tab_panels %]
+                    [% FOREACH l IN libraries %]
+                        [% SET branchcode = l.branchcode %]
+                        [% IF loop.first %]
+                            [% SET bt_active = 1 %]
+                        [% ELSE %]
+                            [% SET bt_active = 0 %]
+                        [% END %]
+                        [% WRAPPER tab_panel tabname= "conf-${l.branchcode}" bt_active= bt_active %]
+                            <fieldset class="rows" style="float: none;">
+                                <ol>
+                                    <li>
+                                        <label for="enable-[% l.branchcode | html %]">Enable: </label>
+                                        [% IF policies.$branchcode.enabled %]
+                                            <input name="enable-[% l.branchcode | html %]" id="enable-[% l.branchcode | html %]" value="1" type="checkbox" checked />
+                                        [% ELSE %]
+                                            <input name="enable-[% l.branchcode | html %]" id="enable-[% l.branchcode | html %]" value="1" type="checkbox" />
+                                        [% END %]
+                                        <span class="hint">Enable curbside pickup.</span>
+                                    </li>
 
-                                <li>
-                                    <label for="interval-[% l.branchcode | html %]">Pickup interval: </label>
-                                    <input name="interval-[% l.branchcode | html %]" id="interval-[% l.branchcode | html %]" value="[% policies.$branchcode.pickup_interval | html %]" type="text">
-                                    <span class="hint">Number of minutes each curbside pickup interaction will take.</span>
-                                </li>
+                                    <li>
+                                        <label for="interval-[% l.branchcode | html %]">Pickup interval: </label>
+                                        <input name="interval-[% l.branchcode | html %]" id="interval-[% l.branchcode | html %]" value="[% policies.$branchcode.pickup_interval | html %]" type="text" />
+                                        <span class="hint">Number of minutes each curbside pickup interaction will take.</span>
+                                    </li>
 
-                                <li>
-                                    <label for="max-per-interval-[% l.branchcode | html %]">Maximum patrons per interval: </label>
-                                    <input name="max-per-interval-[% l.branchcode | html %]" id="max-per-interval-[% l.branchcode | html %]" value="[% policies.$branchcode.patrons_per_interval | html %]" type="text">
-                                    <span class="hint">Maximum number of simultaneous pickups per interval.</span>
-                                </li>
+                                    <li>
+                                        <label for="max-per-interval-[% l.branchcode | html %]">Maximum patrons per interval: </label>
+                                        <input name="max-per-interval-[% l.branchcode | html %]" id="max-per-interval-[% l.branchcode | html %]" value="[% policies.$branchcode.patrons_per_interval | html %]" type="text" />
+                                        <span class="hint">Maximum number of simultaneous pickups per interval.</span>
+                                    </li>
 
-                                <li>
-                                    <label for="patron-scheduled-[% l.branchcode | html %]">Patron-scheduled pickup: </label>
-                                    [% IF policies.$branchcode.patron_scheduled_pickup %]
-                                        <input name="patron-scheduled-[% l.branchcode | html %]" id="patron-scheduled-[% l.branchcode | html %]" value="1" type="checkbox" checked>
-                                    [% ELSE %]
-                                        <input name="patron-scheduled-[% l.branchcode | html %]" id="patron-scheduled-[% l.branchcode | html %]" value="1" type="checkbox">
-                                    [% END %]
-                                    <span class="hint">Enable patrons to schedule their own curbside pickups.</span>
-                                </li>
+                                    <li>
+                                        <label for="patron-scheduled-[% l.branchcode | html %]">Patron-scheduled pickup: </label>
+                                        [% IF policies.$branchcode.patron_scheduled_pickup %]
+                                            <input name="patron-scheduled-[% l.branchcode | html %]" id="patron-scheduled-[% l.branchcode | html %]" value="1" type="checkbox" checked />
+                                        [% ELSE %]
+                                            <input name="patron-scheduled-[% l.branchcode | html %]" id="patron-scheduled-[% l.branchcode | html %]" value="1" type="checkbox" />
+                                        [% END %]
+                                        <span class="hint">Enable patrons to schedule their own curbside pickups.</span>
+                                    </li>
 
-                                <li>
-                                    <label for="enable-waiting-holds-only-[% l.branchcode | html %]">Enable for waiting holds only: </label>
-                                    [% IF policies.$branchcode.enable_waiting_holds_only %]
-                                        <input name="enable-waiting-holds-only-[% l.branchcode | html %]" id="enable-waiting-holds-only-[% l.branchcode | html %]" value="1" type="checkbox" checked>
-                                    [% ELSE %]
-                                        <input name="enable-waiting-holds-only-[% l.branchcode | html %]" id="enable-waiting-holds-only-[% l.branchcode | html %]" value="1" type="checkbox">
-                                    [% END %]
-                                    <span class="hint">Enable only if the patron has waiting holds.</span>
-                                </li>
-                            </ol>
-                        </fieldset>
+                                    <li>
+                                        <label for="enable-waiting-holds-only-[% l.branchcode | html %]">Enable for waiting holds only: </label>
+                                        [% IF policies.$branchcode.enable_waiting_holds_only %]
+                                            <input name="enable-waiting-holds-only-[% l.branchcode | html %]" id="enable-waiting-holds-only-[% l.branchcode | html %]" value="1" type="checkbox" checked />
+                                        [% ELSE %]
+                                            <input name="enable-waiting-holds-only-[% l.branchcode | html %]" id="enable-waiting-holds-only-[% l.branchcode | html %]" value="1" type="checkbox" />
+                                        [% END %]
+                                        <span class="hint">Enable only if the patron has waiting holds.</span>
+                                    </li>
+                                </ol>
+                            </fieldset>
 
-                        <fieldset class="rows" style="float: none;">
-                            <legend>Curbside pickup hours</legend>
+                            <fieldset class="rows" style="float: none;">
+                                <legend>Curbside pickup hours</legend>
 
-                            <em>Times should be in 24-hour format (00:00 to 23:59).</em>
+                                <em>Times should be in 24-hour format (00:00 to 23:59).</em>
 
-                            <ol class="pickup_hours"></ol>
+                                <ol class="pickup_hours"></ol>
 
-                            <ol>
-                                <li>
-                                    <label>New slot:</label>
-                                    [% days = { "0" = t("Sunday"), "1" = t("Monday"), "2" = t("Tuesday"), "3" = t("Wednesday"), "4" = t("Thursday"), "5" = t("Friday"), "6" = t("Saturday") } %]
-                                    [% SET CalendarFirstDayOfWeek = Koha.Preference("CalendarFirstDayOfWeek") %]
-                                    <div>
-                                        <select id="day-[% l.branchcode | html %]">
-                                            [% FOR i IN [0, 1, 2, 3, 4, 5, 6] %]
-                                                [% SET d = ( CalendarFirstDayOfWeek + i ) % 7 %]
-                                                <option value="[% d | html %]">[% days.$d | html %]</option>
-                                            [% END %]
-                                        </select>
+                                <ol>
+                                    <li>
+                                        <label>New slot:</label>
+                                        [% days = { "0" = t("Sunday"), "1" = t("Monday"), "2" = t("Tuesday"), "3" = t("Wednesday"), "4" = t("Thursday"), "5" = t("Friday"), "6" = t("Saturday") } %]
+                                        [% SET CalendarFirstDayOfWeek = Koha.Preference("CalendarFirstDayOfWeek") %]
+                                        <div>
+                                            <select id="day-[% l.branchcode | html %]">
+                                                [% FOR i IN [0, 1, 2, 3, 4, 5, 6] %]
+                                                    [% SET d = ( CalendarFirstDayOfWeek + i ) % 7 %]
+                                                    <option value="[% d | html %]">[% days.$d | html %]</option>
+                                                [% END %]
+                                            </select>
                                             <span>
-                                                From <input type="text" size="5" class="noEnterSubmit" id="new-start-[% l.branchcode | html %]" placeholder="00:00" />
-                                                to <input type="text" size="5" class="noEnterSubmit" id="new-end-[% l.branchcode | html %]" placeholder="23:55" />
+                                                From <input type="text" size="5" class="noEnterSubmit" id="new-start-[% l.branchcode | html %]" placeholder="00:00" /> to
+                                                <input type="text" size="5" class="noEnterSubmit" id="new-end-[% l.branchcode | html %]" placeholder="23:55" />
                                             </span>
-                                        <input type="button" class="btn btn-default btn-sm add-new-slot" data-branchcode="[% l.branchcode | html %]" value="Add" />
-                                        <span id="invalid_slot_warning" style="display:none;">Invalid format for this new slot, must be '00:00 to 23:59'.</span>
-                                    </div>
-                                </li>
+                                            <input type="button" class="btn btn-default btn-sm add-new-slot" data-branchcode="[% l.branchcode | html %]" value="Add" />
+                                            <span id="invalid_slot_warning" style="display:none;">Invalid format for this new slot, must be '00:00 to 23:59'.</span>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        [% END # /tab_panel %]
+                    [% END #FOREACH l %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
 
-                            </ol>
-                        </fieldset>
-                    [% END # /tab_panel %]
-                [% END #FOREACH l %]
-            [% END # /WRAPPER tab_panels %]
-        [% END # /WRAPPER tabs %]
+            <input type="hidden" name="op" value="cud-save" />
 
-        <input type="hidden" name="op" value="cud-save" />
-
-        <fieldset class="action">
-            <input type="submit" class="btn btn-primary" value="Save configuration" />
-        </fieldset>
-    </form>
-[% END %]
-
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save configuration" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
-
         let opening_slots = {};
         let slots;
         [% FOR l IN libraries %]

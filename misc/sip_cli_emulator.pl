@@ -121,7 +121,7 @@ $| = 1;
 print "Attempting socket connection to $host:$port...";
 
 my $socket = IO::Socket::INET->new("$host:$port")
-  or die "failed! : $!\n";
+    or die "failed! : $!\n";
 say "connected!";
 
 my $handlers = {
@@ -137,8 +137,7 @@ my $handlers = {
     sc_status_request => {
         name       => 'SC Status',
         subroutine => \&build_sc_status_command_message,
-        parameters => {
-        },
+        parameters => {},
     },
     patron_status_request => {
         name       => 'Patron Status Request',
@@ -268,9 +267,9 @@ my $handlers = {
             transaction_id    => $transaction_id,
         },
         optional => [
-            'fee_type', # has default
-            'payment_type', # has default
-            'currency_type', #has default
+            'fee_type',         # has default
+            'payment_type',     # has default
+            'currency_type',    #has default
             'terminal_password',
             'patron_password',
             'fee_identifier',
@@ -281,18 +280,18 @@ my $handlers = {
         name       => 'Hold',
         subroutine => \&build_hold_command_message,
         parameters => {
-            hold_mode           => $hold_mode eq '-' ? '-' : '+',
-            transaction_date    => $transaction_date,
-            expiration_date     => undef,
-            pickup_location     => $pickup_location,
-            hold_type           => undef,
-            institution_id      => $location_code,
-            patron_identifier   => $patron_identifier,
-            patron_password     => $patron_password,
-            item_identifier     => $item_identifier,
-            title_identifier    => undef,
-            terminal_password   => $terminal_password,
-            fee_acknowledged    => $fee_acknowledged,
+            hold_mode         => $hold_mode eq '-' ? '-' : '+',
+            transaction_date  => $transaction_date,
+            expiration_date   => undef,
+            pickup_location   => $pickup_location,
+            hold_type         => undef,
+            institution_id    => $location_code,
+            patron_identifier => $patron_identifier,
+            patron_password   => $patron_password,
+            item_identifier   => $item_identifier,
+            title_identifier  => undef,
+            terminal_password => $terminal_password,
+            fee_acknowledged  => $fee_acknowledged,
         },
         optional => [
             'expiration_date',
@@ -316,8 +315,7 @@ if ( $data =~ '^941' ) {    ## we are logged in
         my $data = run_command_message($m);
 
     }
-}
-else {
+} else {
     say "Login Failed!";
 }
 
@@ -371,10 +369,10 @@ sub build_login_command_message {
     my $location_code  = $params->{location_code};
 
     return
-        LOGIN . "00"
-      . build_field( FID_LOGIN_UID,     $login_user_id )
-      . build_field( FID_LOGIN_PWD,     $login_password )
-      . build_field( FID_LOCATION_CODE, $location_code );
+          LOGIN . "00"
+        . build_field( FID_LOGIN_UID,     $login_user_id )
+        . build_field( FID_LOGIN_PWD,     $login_password )
+        . build_field( FID_LOCATION_CODE, $location_code );
 }
 
 sub build_sc_status_command_message {
@@ -393,13 +391,13 @@ sub build_patron_status_request_command_message {
     my $patron_password   = $params->{patron_password};
 
     return
-        PATRON_STATUS_REQ
-      . LANGUAGE
-      . $transaction_date
-      . build_field( FID_INST_ID,      $institution_id )
-      . build_field( FID_PATRON_ID,    $patron_identifier )
-      . build_field( FID_TERMINAL_PWD, $terminal_password )
-      . build_field( FID_PATRON_PWD,   $patron_password );
+          PATRON_STATUS_REQ
+        . LANGUAGE
+        . $transaction_date
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_PATRON_ID,    $patron_identifier )
+        . build_field( FID_TERMINAL_PWD, $terminal_password )
+        . build_field( FID_PATRON_PWD,   $patron_password );
 }
 
 sub build_patron_information_command_message {
@@ -414,21 +412,21 @@ sub build_patron_information_command_message {
     my $end_item          = $params->{end_item};
     my $summary           = $params->{summary};
 
-    $summary //= "          ";
+    $summary    //= "          ";
     $start_item //= "";
-    $end_item //= "";
+    $end_item   //= "";
 
     return
-        PATRON_INFO
-      . LANGUAGE
-      . $transaction_date
-      . $summary
-      . build_field( FID_INST_ID,      $institution_id )
-      . build_field( FID_PATRON_ID,    $patron_identifier )
-      . build_field( FID_TERMINAL_PWD, $terminal_password )
-      . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } )
-      . build_field( FID_START_ITEM,   $start_item, { optional => 1 } )
-      . build_field( FID_END_ITEM,     $end_item, { optional => 1 } );
+          PATRON_INFO
+        . LANGUAGE
+        . $transaction_date
+        . $summary
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_PATRON_ID,    $patron_identifier )
+        . build_field( FID_TERMINAL_PWD, $terminal_password )
+        . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } )
+        . build_field( FID_START_ITEM,   $start_item,      { optional => 1 } )
+        . build_field( FID_END_ITEM,     $end_item,        { optional => 1 } );
 }
 
 sub build_item_information_command_message {
@@ -440,19 +438,19 @@ sub build_item_information_command_message {
     my $terminal_password = $params->{terminal_password};
 
     return
-        ITEM_INFORMATION
-      . LANGUAGE
-      . $transaction_date
-      . build_field( FID_INST_ID,      $institution_id )
-      . build_field( FID_ITEM_ID,      $item_identifier )
-      . build_field( FID_TERMINAL_PWD, $terminal_password );
+          ITEM_INFORMATION
+        . LANGUAGE
+        . $transaction_date
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_ITEM_ID,      $item_identifier )
+        . build_field( FID_TERMINAL_PWD, $terminal_password );
 }
 
 sub build_checkout_command_message {
     my ($params) = @_;
 
     my $SC_renewal_policy = $params->{SC_renewal_policy} || 'N';
-    my $no_block          = $params->{no_block} || 'N';
+    my $no_block          = $params->{no_block}          || 'N';
     my $transaction_date  = $params->{transaction_date};
     my $nb_due_date       = $params->{nb_due_date};
     my $institution_id    = $params->{institution_id};
@@ -465,25 +463,25 @@ sub build_checkout_command_message {
     my $cancel            = $params->{cancel} || 'N';
 
     $SC_renewal_policy = $SC_renewal_policy eq 'Y' ? 'Y' : 'N';
-    $no_block          = $no_block          eq 'Y' ? 'Y' : 'N';
-    $cancel            = $cancel            eq 'Y' ? 'Y' : 'N';
+    $no_block          = $no_block eq 'Y'          ? 'Y' : 'N';
+    $cancel            = $cancel eq 'Y'            ? 'Y' : 'N';
 
     $nb_due_date ||= $transaction_date;
 
     return
-        CHECKOUT
-      . $SC_renewal_policy
-      . $no_block
-      . $transaction_date
-      . $nb_due_date
-      . build_field( FID_INST_ID,      $institution_id )
-      . build_field( FID_PATRON_ID,    $patron_identifier )
-      . build_field( FID_ITEM_ID,      $item_identifier )
-      . build_field( FID_TERMINAL_PWD, $terminal_password )
-      . build_field( FID_ITEM_PROPS,   $item_properties, { optional => 1 } )
-      . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } )
-      . build_field( FID_FEE_ACK,      $fee_acknowledged, { optional => 1 } )
-      . build_field( FID_CANCEL,       $cancel, { optional => 1 } );
+          CHECKOUT
+        . $SC_renewal_policy
+        . $no_block
+        . $transaction_date
+        . $nb_due_date
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_PATRON_ID,    $patron_identifier )
+        . build_field( FID_ITEM_ID,      $item_identifier )
+        . build_field( FID_TERMINAL_PWD, $terminal_password )
+        . build_field( FID_ITEM_PROPS,   $item_properties,  { optional => 1 } )
+        . build_field( FID_PATRON_PWD,   $patron_password,  { optional => 1 } )
+        . build_field( FID_FEE_ACK,      $fee_acknowledged, { optional => 1 } )
+        . build_field( FID_CANCEL,       $cancel,           { optional => 1 } );
 }
 
 sub build_checkin_command_message {
@@ -500,21 +498,21 @@ sub build_checkin_command_message {
     my $cancel            = $params->{cancel} || 'N';
 
     $no_block = $no_block eq 'Y' ? 'Y' : 'N';
-    $cancel   = $cancel   eq 'Y' ? 'Y' : 'N';
+    $cancel   = $cancel eq 'Y'   ? 'Y' : 'N';
 
     $return_date ||= $transaction_date;
 
     return
-        CHECKIN
-      . $no_block
-      . $transaction_date
-      . $return_date
-      . build_field( FID_CURRENT_LOCN, $current_location )
-      . build_field( FID_INST_ID,      $institution_id )
-      . build_field( FID_ITEM_ID,      $item_identifier )
-      . build_field( FID_TERMINAL_PWD, $terminal_password )
-      . build_field( FID_ITEM_PROPS,   $item_properties, { optional => 1 } )
-      . build_field( FID_CANCEL,       $cancel, { optional => 1 } );
+          CHECKIN
+        . $no_block
+        . $transaction_date
+        . $return_date
+        . build_field( FID_CURRENT_LOCN, $current_location )
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_ITEM_ID,      $item_identifier )
+        . build_field( FID_TERMINAL_PWD, $terminal_password )
+        . build_field( FID_ITEM_PROPS,   $item_properties, { optional => 1 } )
+        . build_field( FID_CANCEL,       $cancel,          { optional => 1 } );
 }
 
 sub build_hold_command_message {
@@ -534,19 +532,19 @@ sub build_hold_command_message {
     my $fee_acknowledged  = $params->{fee_acknowledged};
 
     return
-        HOLD
-      . $hold_mode
-      . $transaction_date
-      . build_field( FID_EXPIRATION,   $expiration_date,   { optional => 1 } )
-      . build_field( FID_PICKUP_LOCN,  $pickup_location,   { optional => 1 } )
-      . build_field( FID_HOLD_TYPE,    $hold_type,         { optional => 1 } )
-      . build_field( FID_INST_ID,      $institution_id                       )
-      . build_field( FID_PATRON_ID,    $patron_identifier                    )
-      . build_field( FID_PATRON_PWD,   $patron_password,   { optional => 1 } )
-      . build_field( FID_ITEM_ID,      $item_identifier,   { optional => 1 } )
-      . build_field( FID_TITLE_ID,     $title_identifier,  { optional => 1 } )
-      . build_field( FID_TERMINAL_PWD, $terminal_password, { optional => 1 } )
-      . build_field( FID_FEE_ACK,      $fee_acknowledged,  { optional => 1 } );
+          HOLD
+        . $hold_mode
+        . $transaction_date
+        . build_field( FID_EXPIRATION,   $expiration_date, { optional => 1 } )
+        . build_field( FID_PICKUP_LOCN,  $pickup_location, { optional => 1 } )
+        . build_field( FID_HOLD_TYPE,    $hold_type,       { optional => 1 } )
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_PATRON_ID,    $patron_identifier )
+        . build_field( FID_PATRON_PWD,   $patron_password,   { optional => 1 } )
+        . build_field( FID_ITEM_ID,      $item_identifier,   { optional => 1 } )
+        . build_field( FID_TITLE_ID,     $title_identifier,  { optional => 1 } )
+        . build_field( FID_TERMINAL_PWD, $terminal_password, { optional => 1 } )
+        . build_field( FID_FEE_ACK,      $fee_acknowledged,  { optional => 1 } );
 }
 
 sub build_renew_command_message {
@@ -566,32 +564,32 @@ sub build_renew_command_message {
     my $fee_acknowledged    = $params->{fee_acknowledged};
 
     $third_party_allowed = $third_party_allowed eq 'Y' ? 'Y' : 'N';
-    $no_block            = $no_block            eq 'Y' ? 'Y' : 'N';
+    $no_block            = $no_block eq 'Y'            ? 'Y' : 'N';
 
     $nb_due_date ||= $transaction_date;
 
     return
-        RENEW
-      . $third_party_allowed
-      . $no_block
-      . $transaction_date
-      . $nb_due_date
-      . build_field( FID_INST_ID,      $institution_id )
-      . build_field( FID_PATRON_ID,    $patron_identifier )
-      . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } )
-      . build_field( FID_ITEM_ID,      $item_identifier )
-      . build_field( FID_TITLE_ID,     $title_identifier )
-      . build_field( FID_TERMINAL_PWD, $terminal_password )
-      . build_field( FID_ITEM_PROPS,   $item_properties, { optional => 1 } )
-      . build_field( FID_FEE_ACK,      $fee_acknowledged, { optional => 1 } );
+          RENEW
+        . $third_party_allowed
+        . $no_block
+        . $transaction_date
+        . $nb_due_date
+        . build_field( FID_INST_ID,      $institution_id )
+        . build_field( FID_PATRON_ID,    $patron_identifier )
+        . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } )
+        . build_field( FID_ITEM_ID,      $item_identifier )
+        . build_field( FID_TITLE_ID,     $title_identifier )
+        . build_field( FID_TERMINAL_PWD, $terminal_password )
+        . build_field( FID_ITEM_PROPS,   $item_properties,  { optional => 1 } )
+        . build_field( FID_FEE_ACK,      $fee_acknowledged, { optional => 1 } );
 }
 
 sub build_fee_paid_command_message {
     my ($params) = @_;
 
     my $transaction_date  = $params->{transaction_date};
-    my $fee_type          = $params->{fee_type} || '01';
-    my $payment_type      = $params->{payment_type} || '00';
+    my $fee_type          = $params->{fee_type}      || '01';
+    my $payment_type      = $params->{payment_type}  || '00';
     my $currency_type     = $params->{currency_type} || 'USD';
     my $fee_amount        = $params->{fee_amount};
     my $institution_id    = $params->{location_code};
@@ -602,18 +600,18 @@ sub build_fee_paid_command_message {
     my $transaction_id    = $params->{transaction_id};
 
     return
-        FEE_PAID
-      . $transaction_date
-      . $fee_type
-      . $payment_type
-      . $currency_type
-      . build_field( FID_FEE_AMT,        $fee_amount )
-      . build_field( FID_INST_ID,        $institution_id )
-      . build_field( FID_PATRON_ID,      $patron_identifier )
-      . build_field( FID_TERMINAL_PWD,   $terminal_password, { optional => 1 } )
-      . build_field( FID_PATRON_PWD,     $patron_password, { optional => 1 } )
-      . build_field( FID_FEE_ID,         $fee_identifier, { optional => 1 } )
-      . build_field( FID_TRANSACTION_ID, $transaction_id, { optional => 1 } );
+          FEE_PAID
+        . $transaction_date
+        . $fee_type
+        . $payment_type
+        . $currency_type
+        . build_field( FID_FEE_AMT,        $fee_amount )
+        . build_field( FID_INST_ID,        $institution_id )
+        . build_field( FID_PATRON_ID,      $patron_identifier )
+        . build_field( FID_TERMINAL_PWD,   $terminal_password, { optional => 1 } )
+        . build_field( FID_PATRON_PWD,     $patron_password,   { optional => 1 } )
+        . build_field( FID_FEE_ID,         $fee_identifier,    { optional => 1 } )
+        . build_field( FID_TRANSACTION_ID, $transaction_id,    { optional => 1 } );
 }
 
 sub build_field {
@@ -623,7 +621,7 @@ sub build_field {
 
     return q{} if ( $params->{optional} && !$value );
 
-    return $field_identifier . (($value) ? $value : '') . '|';
+    return $field_identifier . ( ($value) ? $value : '' ) . '|';
 }
 
 sub help {

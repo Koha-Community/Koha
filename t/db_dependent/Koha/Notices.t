@@ -30,8 +30,8 @@ use t::lib::Mocks;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder       = t::lib::TestBuilder->new;
-my $library       = $builder->build( { source => 'Branch' } );
+my $builder         = t::lib::TestBuilder->new;
+my $library         = $builder->build( { source => 'Branch' } );
 my $nb_of_templates = Koha::Notice::Templates->search->count;
 my ( $module, $mtt ) = ( 'circulation', 'email' );
 my $new_template = Koha::Notice::Template->new(
@@ -60,12 +60,16 @@ my $retrieved_template = Koha::Notice::Templates->find(
         message_transport_type => $mtt,
     }
 );
-is( $retrieved_template->name, $new_template->name,
-    'Find a notice template by pk should return the correct template' );
+is(
+    $retrieved_template->name, $new_template->name,
+    'Find a notice template by pk should return the correct template'
+);
 
 $retrieved_template->delete;
-is( Koha::Notice::Templates->search->count,
-    $nb_of_templates, 'Delete should have deleted the template' );
+is(
+    Koha::Notice::Templates->search->count,
+    $nb_of_templates, 'Delete should have deleted the template'
+);
 
 ## Tests for Koha::Notice::Messages->get_failed_notices
 
@@ -169,17 +173,15 @@ subtest 'find_effective_template' => sub {
     plan tests => 7;
 
     my $default_template = $builder->build_object(
-        { class => 'Koha::Notice::Templates', value => { branchcode => '', lang => 'default' } }
-    );
+        { class => 'Koha::Notice::Templates', value => { branchcode => '', lang => 'default' } } );
     my $key = {
         module                 => $default_template->module,
         code                   => $default_template->code,
         message_transport_type => $default_template->message_transport_type,
     };
 
-    my $library_specific_template = $builder->build_object(
-        { class => 'Koha::Notice::Templates', value => { %$key, lang => 'default' } }
-    );
+    my $library_specific_template =
+        $builder->build_object( { class => 'Koha::Notice::Templates', value => { %$key, lang => 'default' } } );
 
     my $es_template = $builder->build_object(
         {
@@ -195,30 +197,36 @@ subtest 'find_effective_template' => sub {
     my $template = Koha::Notice::Templates->find_effective_template($key);
     is( $template->lang, 'default', 'no lang passed, default is returned' );
     $template = Koha::Notice::Templates->find_effective_template( { %$key, lang => 'es-ES' } );
-    is( $template->lang, 'default',
-        'TranslateNotices is off, default is returned' );
+    is(
+        $template->lang, 'default',
+        'TranslateNotices is off, default is returned'
+    );
 
     t::lib::Mocks::mock_preference( 'TranslateNotices', 1 );
     $template = Koha::Notice::Templates->find_effective_template($key);
     is( $template->lang, 'default', 'no lang passed, default is returned' );
     $template = Koha::Notice::Templates->find_effective_template( { %$key, lang => 'es-ES' } );
-    is( $template->lang, 'es-ES',
-        'TranslateNotices is on and es-ES is requested, es-ES is returned' );
-
+    is(
+        $template->lang, 'es-ES',
+        'TranslateNotices is on and es-ES is requested, es-ES is returned'
+    );
 
     {    # IndependentBranches => 1
         t::lib::Mocks::mock_userenv( { branchcode => $library_specific_template->branchcode, flag => 0 } );
         t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
-        $template = Koha::Notice::Templates->find_effective_template( { %$key, branchcode => $library_specific_template->branchcode } );
-        is( $template->content, $library_specific_template->content,
+        $template = Koha::Notice::Templates->find_effective_template(
+            { %$key, branchcode => $library_specific_template->branchcode } );
+        is(
+            $template->content, $library_specific_template->content,
             'IndependentBranches is on, logged in patron is not superlibrarian but asks for their specific template, it is returned'
         );
 
         my $another_library = $builder->build_object( { class => 'Koha::Libraries' } );
         t::lib::Mocks::mock_userenv( { branchcode => $another_library->branchcode, flag => 0 } );
         $template = Koha::Notice::Templates->find_effective_template($key);
-        is( $template->content, $default_template->content,
-'IndependentBranches is on, logged in patron is not superlibrarian, default is returned'
+        is(
+            $template->content, $default_template->content,
+            'IndependentBranches is on, logged in patron is not superlibrarian, default is returned'
         );
     }
 
@@ -226,7 +234,8 @@ subtest 'find_effective_template' => sub {
     $es_template->delete;
 
     $template = Koha::Notice::Templates->find_effective_template( { %$key, lang => 'es-ES' } );
-    is( $template->lang, 'default',
+    is(
+        $template->lang, 'default',
         'TranslateNotices is on and es-ES is requested but does not exist, default is returned'
     );
 

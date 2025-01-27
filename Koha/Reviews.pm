@@ -17,7 +17,6 @@ package Koha::Reviews;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Review;
@@ -51,9 +50,10 @@ sub search_limited {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
         @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
     }
+
     # TODO This 'borrowernumber' relation name is confusing and needs to be renamed
     $params->{'borrowernumber.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
-    $attributes->{join} = 'borrowernumber';
+    $attributes->{join}                    = 'borrowernumber';
     return $self->search( $params, $attributes );
 }
 

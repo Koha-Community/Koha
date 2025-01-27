@@ -123,8 +123,8 @@ subtest 'Z3950SearchAuth' => sub {
         {
             source => 'Z3950server',
             value  => {
-                recordtype => 'authority', servertype => 'zed', host => 'marc8test', servername => 'MARC8 server',
-                syntax => 'USMARC', encoding => 'MARC-8', attributes => undef
+                recordtype => 'authority', servertype => 'zed',    host => 'marc8test', servername => 'MARC8 server',
+                syntax     => 'USMARC',    encoding   => 'MARC-8', attributes => undef
             },
         }
     );
@@ -161,7 +161,7 @@ subtest 'Z3950SearchAuth' => sub {
     init_mock_data( { result_counts => [1], results => [ $marc8_record->as_usmarc ] } );
     C4::Breeding::Z3950SearchAuth( { srchany => 'a', id => [ $marc8_server->{id} ] }, $template );
     $output = $mock_data->{template_params};
-    is( @{ $output->{breeding_loop} }, 1, 'One result in breedingloop' );
+    is( @{ $output->{breeding_loop} },            1,               'One result in breedingloop' );
     is( $output->{breeding_loop}->[0]->{heading}, 'Cooper, Susan', 'Check heading' );
     my $import_record = Koha::Import::Records->find( $output->{breeding_loop}->[0]->{breedingid} );
     ok( $import_record, 'import record found' );

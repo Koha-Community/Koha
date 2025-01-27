@@ -61,19 +61,21 @@ subtest 'ExpandCodedFields tests' => sub {
         MARC::Field->new( '590', '', '', a => $av->authorised_value ),
     );
 
-    my $mss = Koha::MarcSubfieldStructures->find({tagfield => "590", tagsubfield => "a", frameworkcode => $biblio->frameworkcode });
+    my $mss = Koha::MarcSubfieldStructures->find(
+        { tagfield => "590", tagsubfield => "a", frameworkcode => $biblio->frameworkcode } );
     $mss->update( { authorised_value => $av->category } );
 
     my $cache = Koha::Caches->get_instance;
     $cache->clear_from_cache("MarcCodedFields-");
+
     # Clear GetAuthorisedValueDesc-generated cache
     $cache->clear_from_cache("libraries:name");
     $cache->clear_from_cache("itemtype:description:en");
     $cache->clear_from_cache("cn_sources:description");
-    $cache->clear_from_cache("AV_descriptions:" . $av->category);
+    $cache->clear_from_cache( "AV_descriptions:" . $av->category );
 
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
-    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
     $record = $biblio->metadata->record;
 
     # Embed an item to test for branchcode and itemtype expansions
@@ -86,11 +88,16 @@ subtest 'ExpandCodedFields tests' => sub {
         ),
     );
 
-
     is( $record->field('590')->subfield('a'), $av->authorised_value, 'Record prior to filtering contains AV Code' );
     is( $record->field('942')->subfield('n'), 1, 'Record suppression is numeric prior to filtering' );
-    is( $record->field('952')->subfield('a'), $homebranch->branchcode, 'Record prior to filtering contains homebranch branchcode' );
-    is( $record->field('952')->subfield('b'), $holdingbranch->branchcode, 'Record prior to filtering contains holdingbranch branchcode' );
+    is(
+        $record->field('952')->subfield('a'), $homebranch->branchcode,
+        'Record prior to filtering contains homebranch branchcode'
+    );
+    is(
+        $record->field('952')->subfield('b'), $holdingbranch->branchcode,
+        'Record prior to filtering contains holdingbranch branchcode'
+    );
     is( $record->field('952')->subfield('y'), $itemtype->itemtype, 'Record prior to filtering contains itemtype code' );
 
     my $processor = Koha::RecordProcessor->new(
@@ -101,13 +108,22 @@ subtest 'ExpandCodedFields tests' => sub {
     );
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor with ExpandCodedFields filter' );
 
-    my $result = $processor->process( $record );
+    my $result = $processor->process($record);
     is( ref($result), 'MARC::Record', 'It returns a reference to a MARC::Record object' );
-    is( $result->field('590')->subfield('a'), $av->lib_opac, 'Returned record contains AV OPAC description (interface defaults to opac)' );
-    is( $record->field('590')->subfield('a'), $av->lib_opac, 'Original record now contains AV OPAC description (interface defaults to opac)' );
+    is(
+        $result->field('590')->subfield('a'), $av->lib_opac,
+        'Returned record contains AV OPAC description (interface defaults to opac)'
+    );
+    is(
+        $record->field('590')->subfield('a'), $av->lib_opac,
+        'Original record now contains AV OPAC description (interface defaults to opac)'
+    );
     is( $record->field('942')->subfield('n'), 1, 'Record suppression is still numeric after filtering' );
     is( $record->field('952')->subfield('a'), $homebranch->branchname, 'Record now contains homebranch branchname' );
-    is( $record->field('952')->subfield('b'), $holdingbranch->branchname, 'Record now contains holdingbranch branchname' );
+    is(
+        $record->field('952')->subfield('b'), $holdingbranch->branchname,
+        'Record now contains holdingbranch branchname'
+    );
     is( $record->field('952')->subfield('y'), $itemtype->description, 'Record now contains itemtype description' );
 
     # reset record for next test
@@ -115,9 +131,12 @@ subtest 'ExpandCodedFields tests' => sub {
     is( $record->field('590')->subfield('a'), $av->authorised_value, 'Record reset contains AV Code' );
 
     # set interface
-    $processor->options({ interface => 'intranet' });
-    $result = $processor->process( $record );
-    is( $record->field('590')->subfield('a'), $av->lib, 'Original record now contains AV description (interface set to intranet)' );
+    $processor->options( { interface => 'intranet' } );
+    $result = $processor->process($record);
+    is(
+        $record->field('590')->subfield('a'), $av->lib,
+        'Original record now contains AV description (interface set to intranet)'
+    );
     is( $record->field('942')->subfield('n'), 1, 'Item suppression field remains numeric after filtering' );
 
     $schema->storage->txn_rollback();

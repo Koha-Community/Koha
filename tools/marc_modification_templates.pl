@@ -20,8 +20,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth                      qw( get_template_and_user );
+use C4::Output                    qw( output_html_with_http_headers );
 use C4::MarcModificationTemplates qw(
     AddModificationTemplate
     AddModificationTemplateAction
@@ -35,46 +35,47 @@ use C4::MarcModificationTemplates qw(
 
 my $cgi = CGI->new;
 
-my $op = $cgi->param('op') || q{};
+my $op          = $cgi->param('op') || q{};
 my $template_id = $cgi->param('template_id');
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({
-            template_name => "tools/marc_modification_templates.tt",
-            query => $cgi,
-            type => "intranet",
-            flagsrequired => { tools => 'marc_modification_templates' },
-    });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "tools/marc_modification_templates.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { tools => 'marc_modification_templates' },
+    }
+);
 
 if ( $op eq "cud-create_template" ) {
-  $template_id = '' unless $cgi->param('duplicate_current_template');
-  $template_id = AddModificationTemplate( scalar $cgi->param('template_name'), $template_id );
+    $template_id = '' unless $cgi->param('duplicate_current_template');
+    $template_id = AddModificationTemplate( scalar $cgi->param('template_name'), $template_id );
 
 } elsif ( $op eq "cud-delete_template" ) {
 
-  DelModificationTemplate( $template_id );
-  $template_id = '';
+    DelModificationTemplate($template_id);
+    $template_id = '';
 
 } elsif ( $op eq "cud-add_action" ) {
 
-  my $mmta_id = $cgi->param('mmta_id');
-  my $action = $cgi->param('action');
-  my $field_number = $cgi->param('field_number');
-  my $from_field = $cgi->param('from_field');
-  my $from_subfield = $cgi->param('from_subfield');
-  my $field_value = $cgi->param('field_value');
-  my $to_field = $cgi->param('to_field');
-  my $to_subfield = $cgi->param('to_subfield');
-  my $to_regex_search = $cgi->param('to_regex_search');
-  my $to_regex_replace = $cgi->param('to_regex_replace');
-  my $to_regex_modifiers = $cgi->param('to_regex_modifiers');
-  my $conditional = $cgi->param('conditional');
-  my $conditional_field = $cgi->param('conditional_field');
-  my $conditional_subfield = $cgi->param('conditional_subfield');
-  my $conditional_comparison = $cgi->param('conditional_comparison');
-  my $conditional_value = $cgi->param('conditional_value');
-  my $conditional_regex = ( $cgi->param('conditional_regex') eq 'on' ) ? 1 : 0;
-  my $description = $cgi->param('description');
+    my $mmta_id                = $cgi->param('mmta_id');
+    my $action                 = $cgi->param('action');
+    my $field_number           = $cgi->param('field_number');
+    my $from_field             = $cgi->param('from_field');
+    my $from_subfield          = $cgi->param('from_subfield');
+    my $field_value            = $cgi->param('field_value');
+    my $to_field               = $cgi->param('to_field');
+    my $to_subfield            = $cgi->param('to_subfield');
+    my $to_regex_search        = $cgi->param('to_regex_search');
+    my $to_regex_replace       = $cgi->param('to_regex_replace');
+    my $to_regex_modifiers     = $cgi->param('to_regex_modifiers');
+    my $conditional            = $cgi->param('conditional');
+    my $conditional_field      = $cgi->param('conditional_field');
+    my $conditional_subfield   = $cgi->param('conditional_subfield');
+    my $conditional_comparison = $cgi->param('conditional_comparison');
+    my $conditional_value      = $cgi->param('conditional_value');
+    my $conditional_regex      = ( $cgi->param('conditional_regex') eq 'on' ) ? 1 : 0;
+    my $description            = $cgi->param('description');
 
     if ($from_field) {
         unless ($mmta_id) {
@@ -89,8 +90,7 @@ if ( $op eq "cud-create_template" ) {
                 $conditional_comparison, $conditional_value,
                 $conditional_regex,      $description
             );
-        }
-        else {
+        } else {
             ModModificationTemplateAction(
                 $mmta_id,                $action,
                 $field_number,           $from_field,
@@ -103,49 +103,48 @@ if ( $op eq "cud-create_template" ) {
                 $conditional_regex,      $description
             );
         }
-    }
-    else {
+    } else {
         $template->param( error => 'no_from_field' );
     }
 
 } elsif ( $op eq "cud-delete_action" ) {
-  DelModificationTemplateAction( scalar $cgi->param('mmta_id') );
+    DelModificationTemplateAction( scalar $cgi->param('mmta_id') );
 
 } elsif ( $op eq "move_action" ) {
 
-  MoveModificationTemplateAction( scalar $cgi->param('mmta_id'), scalar $cgi->param('where') );
+    MoveModificationTemplateAction( scalar $cgi->param('mmta_id'), scalar $cgi->param('where') );
 
 }
 
-my @templates = GetModificationTemplates( $template_id );
+my @templates = GetModificationTemplates($template_id);
 
-my @actions = GetModificationTemplateActions( $template_id );
-foreach my $action ( @actions ) {
-  $action->{'action_delete_field'} = ( $action->{'action'} eq 'delete_field' );
-  $action->{'action_add_field'} = ( $action->{'action'} eq 'add_field' );
-  $action->{'action_update_field'} = ( $action->{'action'} eq 'update_field' );
-  $action->{'action_move_field'} = ( $action->{'action'} eq 'move_field' );
-  $action->{'action_copy_field'} = ( $action->{'action'} eq 'copy_field' );
-  $action->{'action_copy_and_replace_field'} = ( $action->{'action'} eq 'copy_and_replace_field' );
+my @actions = GetModificationTemplateActions($template_id);
+foreach my $action (@actions) {
+    $action->{'action_delete_field'}           = ( $action->{'action'} eq 'delete_field' );
+    $action->{'action_add_field'}              = ( $action->{'action'} eq 'add_field' );
+    $action->{'action_update_field'}           = ( $action->{'action'} eq 'update_field' );
+    $action->{'action_move_field'}             = ( $action->{'action'} eq 'move_field' );
+    $action->{'action_copy_field'}             = ( $action->{'action'} eq 'copy_field' );
+    $action->{'action_copy_and_replace_field'} = ( $action->{'action'} eq 'copy_and_replace_field' );
 
-  if( defined $action->{'conditional'} ){
-      $action->{'conditional_if'} = ( $action->{'conditional'} eq 'if' );
-      $action->{'conditional_unless'} = ( $action->{'conditional'} eq 'unless' );
-  }
+    if ( defined $action->{'conditional'} ) {
+        $action->{'conditional_if'}     = ( $action->{'conditional'} eq 'if' );
+        $action->{'conditional_unless'} = ( $action->{'conditional'} eq 'unless' );
+    }
 
-  if( defined $action->{'conditional_comparison'} ){
-      $action->{'conditional_comparison_exists'} = ( $action->{'conditional_comparison'} eq 'exists' );
-      $action->{'conditional_comparison_not_exists'} = ( $action->{'conditional_comparison'} eq 'not_exists' );
-      $action->{'conditional_comparison_equals'} = ( $action->{'conditional_comparison'} eq 'equals' );
-      $action->{'conditional_comparison_not_equals'} = ( $action->{'conditional_comparison'} eq 'not_equals' );
-  }
+    if ( defined $action->{'conditional_comparison'} ) {
+        $action->{'conditional_comparison_exists'}     = ( $action->{'conditional_comparison'} eq 'exists' );
+        $action->{'conditional_comparison_not_exists'} = ( $action->{'conditional_comparison'} eq 'not_exists' );
+        $action->{'conditional_comparison_equals'}     = ( $action->{'conditional_comparison'} eq 'equals' );
+        $action->{'conditional_comparison_not_equals'} = ( $action->{'conditional_comparison'} eq 'not_equals' );
+    }
 }
 
 $template->param(
-  TemplatesLoop => \@templates,
-  ActionsLoop => \@actions,
+    TemplatesLoop => \@templates,
+    ActionsLoop   => \@actions,
 
-  template_id => $template_id,
+    template_id => $template_id,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -18,13 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
-use CGI qw( :standard -oldstyle_urls -utf8 );
+use CGI  qw( :standard -oldstyle_urls -utf8 );
 use vars qw( $GZIP );
 use C4::Context;
 use Koha::OAI::Server::Repository;
-
 
 BEGIN {
     eval { require PerlIO::gzip };
@@ -32,11 +30,10 @@ BEGIN {
 }
 
 unless ( C4::Context->preference('OAI-PMH') ) {
-    print
-        header(
-            -type       => 'text/plain; charset=utf-8',
-            -charset    => 'utf-8',
-            -status     => '404 OAI-PMH service is disabled',
+    print header(
+        -type    => 'text/plain; charset=utf-8',
+        -charset => 'utf-8',
+        -status  => '404 OAI-PMH service is disabled',
         ),
         "OAI-PMH service is disabled";
     exit;
@@ -45,16 +42,15 @@ unless ( C4::Context->preference('OAI-PMH') ) {
 my @encodings = http('HTTP_ACCEPT_ENCODING');
 if ( $GZIP && grep { defined($_) && $_ eq 'gzip' } @encodings ) {
     print header(
-        -type               => 'text/xml; charset=utf-8',
-        -charset            => 'utf-8',
-        -Content-Encoding   => 'gzip',
+        -type             => 'text/xml; charset=utf-8',
+        -charset          => 'utf-8',
+        -Content-Encoding => 'gzip',
     );
     binmode( STDOUT, ":gzip" );
-}
-else {
+} else {
     print header(
-        -type       => 'text/xml; charset=utf-8',
-        -charset    => 'utf-8',
+        -type    => 'text/xml; charset=utf-8',
+        -charset => 'utf-8',
     );
 }
 

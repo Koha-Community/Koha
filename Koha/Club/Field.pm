@@ -19,7 +19,6 @@ package Koha::Club::Field;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Club::Template::Fields;
@@ -43,7 +42,7 @@ Represents the value set at creation time for a Koha::Club::Template::Field
 =cut
 
 sub club_template_field {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::Club::Template::Fields->find( $self->club_template_field_id );
 }

@@ -30,8 +30,8 @@ Allows librarian to edit and/or manage borrowers' discharges
 use Modern::Perl;
 use Carp qw( carp );
 
-use CGI qw( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Members;
 use C4::Reserves;
@@ -39,41 +39,43 @@ use C4::Letters;
 use Koha::Patron::Discharge;
 use Koha::Patrons;
 
-
 my $input = CGI->new;
 
-my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
-    template_name   => 'members/discharge.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'borrowers' => 'edit_borrowers' },
-});
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'members/discharge.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'borrowers' => 'edit_borrowers' },
+    }
+);
 
-my $op = $input->param('op') // q{};
+my $op             = $input->param('op') // q{};
 my $borrowernumber = $input->param('borrowernumber');
 
 unless ( C4::Context->preference('useDischarge') ) {
-   print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber&nopermission=1");
-   exit;
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber&nopermission=1");
+    exit;
 }
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
-my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({
-    borrowernumber => $borrowernumber
-});
+my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $borrowernumber } );
 
 # Generating discharge if needed
 if ( $op eq 'cud-discharge' && $input->param('discharge') and $can_be_discharged ) {
-    my $is_discharged = Koha::Patron::Discharge::is_discharged({
-        borrowernumber => $borrowernumber,
-    });
+    my $is_discharged = Koha::Patron::Discharge::is_discharged(
+        {
+            borrowernumber => $borrowernumber,
+        }
+    );
     unless ($is_discharged) {
-        Koha::Patron::Discharge::discharge({
-            borrowernumber => $borrowernumber
-        });
+        Koha::Patron::Discharge::discharge( { borrowernumber => $borrowernumber } );
     }
     eval {
         my $pdf_path = Koha::Patron::Discharge::generate_as_pdf(
@@ -90,23 +92,26 @@ if ( $op eq 'cud-discharge' && $input->param('discharge') and $can_be_discharged
         close $fh;
         print @lines;
     };
-    if ( $@ ) {
+    if ($@) {
         carp $@;
-        $template->param( messages => [ {type => 'error', code => 'unable_to_generate_pdf'} ] );
+        $template->param( messages => [ { type => 'error', code => 'unable_to_generate_pdf' } ] );
     } else {
+
         # no error, pdf is sent, so stop sending data to browser
         exit;
     }
 }
 
 # Already generated discharges
-my @validated_discharges = Koha::Patron::Discharge::get_validated({
-    borrowernumber => $borrowernumber,
-});
+my @validated_discharges = Koha::Patron::Discharge::get_validated(
+    {
+        borrowernumber => $borrowernumber,
+    }
+);
 
 $template->param(
-    patron => $patron,
-    can_be_discharged => $can_be_discharged,
+    patron               => $patron,
+    can_be_discharged    => $can_be_discharged,
     validated_discharges => \@validated_discharges,
 );
 

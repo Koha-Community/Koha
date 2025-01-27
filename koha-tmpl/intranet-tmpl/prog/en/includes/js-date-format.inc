@@ -11,7 +11,6 @@
     dayjs.extend(window.dayjs_plugin_timezone);
     dayjs.extend(window.dayjs_plugin_customParseFormat);
 </script>
-
 <!-- js-date-format.inc -->
 <script>
     (function() {

@@ -18,8 +18,8 @@ package Koha::SearchEngine::Zebra::Indexer;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Biblio qw( ModZebra ); # FIXME This is terrible, we should move the indexation code outside of C4::Biblio
-use base qw(Class::Accessor);
+use C4::Biblio qw( ModZebra );        # FIXME This is terrible, we should move the indexation code outside of C4::Biblio
+use base       qw(Class::Accessor);
 
 =head1 NAME
 
@@ -42,7 +42,7 @@ Koha::SearchEngine::Elasticsearch::Indexer - handles adding new records to the i
 
 sub new {
     my $class = shift @_;
-    my $self = $class->SUPER::new(@_);
+    my $self  = $class->SUPER::new(@_);
 }
 
 =head2 index_records($record_numbers, $op, $server, $records)
@@ -57,7 +57,7 @@ sub new {
 sub index_records {
     my ( $self, $record_numbers, $op, $server, $records ) = @_;
     $record_numbers = [$record_numbers] if ref $record_numbers ne 'ARRAY' && defined $record_numbers;
-    foreach my $record_number ( @$record_numbers ){
+    foreach my $record_number (@$record_numbers) {
         ModZebra( $record_number, $op, $server );
     }
 }

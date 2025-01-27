@@ -15,7 +15,6 @@ package Koha::Plugins::Tab;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 
 use Koha::Exceptions;
@@ -52,13 +51,13 @@ Returns a Koha::Plugins::Tab object representing a plugin-generated tab.
 
 sub new {
 
-    my ( $class, $params )  = @_;
+    my ( $class, $params ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw( "Mandatory parameter 'title' missing" )
-        unless defined $params->{ title };
+    Koha::Exceptions::MissingParameter->throw("Mandatory parameter 'title' missing")
+        unless defined $params->{title};
 
-    Koha::Exceptions::MissingParameter->throw( "Mandatory parameter 'content' missing")
-      unless defined $params->{content};
+    Koha::Exceptions::MissingParameter->throw("Mandatory parameter 'content' missing")
+        unless defined $params->{content};
 
     my $self = {
         title   => $params->{title},

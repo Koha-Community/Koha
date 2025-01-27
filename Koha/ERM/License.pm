@@ -44,7 +44,7 @@ Returns the user roles for this license
 sub user_roles {
     my ( $self, $user_roles ) = @_;
 
-    if ( $user_roles ) {
+    if ($user_roles) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
@@ -69,7 +69,7 @@ Returns or updates the documents for this license
 sub documents {
     my ( $self, $documents ) = @_;
     if ($documents) {
-        $self->documents->replace_with($documents, $self);
+        $self->documents->replace_with( $documents, $self );
     }
     my $documents_rs = $self->_result->erm_documents;
     return Koha::ERM::Documents->_new_from_dbic($documents_rs);
@@ -82,7 +82,7 @@ Return the vendor for this license
 =cut
 
 sub vendor {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $vendor_rs = $self->_result->vendor;
     return unless $vendor_rs;
     return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);

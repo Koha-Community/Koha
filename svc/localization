@@ -9,41 +9,49 @@ use Koha::Localizations;
 our ( $query, $response ) = C4::Service->init( parameters => 'manage_itemtypes' );
 
 sub get_translations {
-    my $rs = Koha::Localizations->search({ entity => $query->param('entity'), code => $query->param('code') });
+    my $rs = Koha::Localizations->search( { entity => $query->param('entity'), code => $query->param('code') } );
     my @translations;
     while ( my $s = $rs->next ) {
         push @translations, {
-              id          => $s->localization_id,
-              entity      => $s->entity,
-              code        => $s->code,
-              lang        => $s->lang,
-              translation => $s->translation,
-        }
+            id          => $s->localization_id,
+            entity      => $s->entity,
+            code        => $s->code,
+            lang        => $s->lang,
+            translation => $s->translation,
+        };
     }
     $response->param( translations => \@translations );
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 sub update_translation {
-    my $id = $query->param('id');
+    my $id          = $query->param('id');
     my $translation = $query->param('translation');
-    my $lang = $query->param('lang');
+    my $lang        = $query->param('lang');
 
-    my $localization = Koha::Localizations->find( $id );
+    my $localization = Koha::Localizations->find($id);
     if ( defined $lang and $localization->lang ne $lang ) {
-        $localization->lang( $lang )
+        $localization->lang($lang);
     }
     if ( defined $translation and $localization->translation ne $translation ) {
-        $localization->translation( $translation )
+        $localization->translation($translation);
     }
     my %params;
     my $is_changed;
     if ( $localization->is_changed ) {
         $is_changed = 1;
-        unless ( Koha::Localizations->search( { entity => $localization->entity, code => $localization->code, lang => $lang, localization_id => { '!=' => $localization->localization_id }, } )->count ) {
+        unless (
+            Koha::Localizations->search(
+                {
+                    entity          => $localization->entity, code => $localization->code, lang => $lang,
+                    localization_id => { '!=' => $localization->localization_id },
+                }
+            )->count
+            )
+        {
             $localization->store;
         } else {
-            $params{error} = 1;
+            $params{error}      = 1;
             $params{error_code} = 'already_exists';
         }
     }
@@ -56,21 +64,21 @@ sub update_translation {
         translation => $localization->translation,
         is_changed  => $is_changed,
     );
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 sub add_translation {
-    my $entity = $query->param('entity');
-    my $code = $query->param('code');
-    my $lang = $query->param('lang');
+    my $entity      = $query->param('entity');
+    my $code        = $query->param('code');
+    my $lang        = $query->param('lang');
     my $translation = $query->param('translation');
 
-    unless ( Koha::Localizations->search({entity => $entity, code => $code, lang => $lang, })->count ) {
+    unless ( Koha::Localizations->search( { entity => $entity, code => $code, lang => $lang, } )->count ) {
         my $localization = Koha::Localization->new(
             {
-                entity => $entity,
-                code => $code,
-                lang => $lang,
+                entity      => $entity,
+                code        => $code,
+                lang        => $lang,
                 translation => $translation,
             }
         );
@@ -86,19 +94,19 @@ sub add_translation {
     } else {
         $response->param( error => 1, error_code => 'already_exists', );
     }
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 sub delete_translation {
     my $id = $query->param('id');
     Koha::Localizations->find($id)->delete;
     $response->param( id => $id );
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 C4::Service->dispatch(
-    [ 'GET /', [ 'id' ], \&get_translations ],
-    [ 'PUT /', [ 'id' ], \&update_translation ],
-    [ 'POST /', [ 'entity', 'code', 'lang', 'translation' ], \&add_translation ],
-    [ 'DELETE /', ['id'],  \&delete_translation ],
+    [ 'GET /',    ['id'],                                      \&get_translations ],
+    [ 'PUT /',    ['id'],                                      \&update_translation ],
+    [ 'POST /',   [ 'entity', 'code', 'lang', 'translation' ], \&add_translation ],
+    [ 'DELETE /', ['id'],                                      \&delete_translation ],
 );

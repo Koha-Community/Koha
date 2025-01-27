@@ -23,7 +23,7 @@ use Koha::REST::V1::ERM::EHoldings::Resources::Local;
 use Koha::REST::V1::ERM::EHoldings::Resources::EBSCO;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 

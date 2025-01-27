@@ -18,18 +18,19 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 
-my $patron = $builder->build({ source => 'Borrower' });
-my $profile = $builder->build({
-    source => 'HouseboundProfile',
-    value  => {
-        borrowernumber => $patron->{borrowernumber},
-    },
-});
+my $patron  = $builder->build( { source => 'Borrower' } );
+my $profile = $builder->build(
+    {
+        source => 'HouseboundProfile',
+        value  => {
+            borrowernumber => $patron->{borrowernumber},
+        },
+    }
+);
 
 # Test housebound_profile
 is(
-    Koha::Patrons->find($patron->{borrowernumber})
-          ->housebound_profile->frequency,
+    Koha::Patrons->find( $patron->{borrowernumber} )->housebound_profile->frequency,
     $profile->{frequency},
     "Fetch housebound_profile."
 );

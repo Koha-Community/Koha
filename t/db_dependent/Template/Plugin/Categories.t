@@ -30,15 +30,17 @@ use Koha::Template::Plugin::Categories;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder       = t::lib::TestBuilder->new;
 my $nb_categories = Koha::Patron::Categories->count;
 
 # Create sample categories
-my $category_1 = $builder->build_object( { class => 'Koha::Patron::Categories', value => { description => 'ZZZZZZ' } } );
+my $category_1 =
+    $builder->build_object( { class => 'Koha::Patron::Categories', value => { description => 'ZZZZZZ' } } );
 my @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 1 + $nb_categories, '->all returns all defined categories' );
 
-my $category_2 = $builder->build_object( { class => 'Koha::Patron::Categories', value => { description => 'AAAAAA' } } );
+my $category_2 =
+    $builder->build_object( { class => 'Koha::Patron::Categories', value => { description => 'AAAAAA' } } );
 @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 2 + $nb_categories, '->all returns all defined categories' );
 
@@ -55,9 +57,8 @@ for ( my $i = 0 ; $i < scalar(@categories) ; $i++ ) {
 }
 ok( $category_1_pos > $category_2_pos, 'Categories are sorted by description' );
 
-is( Koha::Template::Plugin::Categories->GetName(
-        $category_1->categorycode
-    ),
+is(
+    Koha::Template::Plugin::Categories->GetName( $category_1->categorycode ),
     $category_1->description,
     '->GetName returns the right description'
 );
@@ -68,10 +69,14 @@ $category_1->library_limits( [ $library_1->branchcode ] );
 $category_2->library_limits( [ $library_2->branchcode ] );
 t::lib::Mocks::mock_userenv( { branchcode => $library_1->branchcode } );
 my $limited = Koha::Template::Plugin::Categories->limited;
-is( $limited->search( { 'me.categorycode' => $category_1->categorycode } )->count,
-    1, 'Category 1 is available from library 1' );
-is( $limited->search( { 'me.categorycode' => $category_2->categorycode } )->count,
-    0, 'Category 2 is not available from library 1' );
+is(
+    $limited->search( { 'me.categorycode' => $category_1->categorycode } )->count,
+    1, 'Category 1 is available from library 1'
+);
+is(
+    $limited->search( { 'me.categorycode' => $category_2->categorycode } )->count,
+    0, 'Category 2 is not available from library 1'
+);
 
 $schema->storage->txn_rollback;
 
@@ -82,17 +87,20 @@ subtest 'can_any_reset_password() tests' => sub {
     $schema->storage->txn_begin;
 
     # Make sure all existing categories have reset_password set to 0
-    Koha::Patron::Categories->search->update({ reset_password => 0 });
+    Koha::Patron::Categories->search->update( { reset_password => 0 } );
 
     ok( !Koha::Template::Plugin::Categories->new->can_any_reset_password, 'No category is allowed to reset password' );
 
     t::lib::Mocks::mock_preference( 'OpacResetPassword', 0 );
 
-    my $category = $builder->build_object({ class => 'Koha::Patron::Categories', value => { reset_password => 1 } });
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => { reset_password => 1 } } );
 
-    ok( Koha::Template::Plugin::Categories->new->can_any_reset_password, 'There\'s at least a category that is allowed to reset password' );
+    ok(
+        Koha::Template::Plugin::Categories->new->can_any_reset_password,
+        'There\'s at least a category that is allowed to reset password'
+    );
 
-    $category->reset_password( undef )->store;
+    $category->reset_password(undef)->store;
 
     ok( !Koha::Template::Plugin::Categories->new->can_any_reset_password, 'No category is allowed to reset password' );
 

@@ -9,11 +9,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Holds to pull") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Holds to pull") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -39,267 +40,254 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-        [% FOR m IN messages %]
-            <div class="alert alert-[% m.type | html %]">
-                [% SWITCH m.code %]
-                [% CASE 'letter_enqueued' %]
-                    <span>The notice has been correctly enqueued.</span>
-                [% CASE 'no_email_address' %]
-                    <span>The patron does not have an email address defined.</span>
-                [% CASE 'no_template_notice' %]
-                    <span>There is no notice template with a code 'CANCEL_HOLD_ON_LOST' defined in your system.</span>
-                [% CASE 'hold_cancelled' %]
-                    <span>The hold has been correctly cancelled.</span>
-                [% CASE 'hold_placed_at_biblio_level' %]
-                    <span>The hold has been placed at the bibliographic record level. It is not possible to determine the item to mark as lost.</span>
-                [% CASE %]
-                    [% m.code | html %]
-                [% END %]
-            </div>
-        [% END %]
-
-<h1>Holds to pull placed between [% from | $KohaDates %] and [% to | $KohaDates %]</h1>
-<h3>Reported on [% todaysdate | $KohaDates %]</h3>
-<p>The following holds have not been filled. Please retrieve them and check them in.</p>
-<div id="searchresults">
-    [% IF holds_info %]
-    <table id="holdst">
-    <thead>
-        <tr>
-        <th>Pull this many items</th>
-        <th>Items available</th>
-        <th>Patrons with holds</th>
-        <th>First patron</th>
-        <th class="anti-the">Title</th>
-        <th class="string-sort">Libraries</th>
-        <th>Available barcodes</th>
-        <th>Available call numbers</th>
-        <th>Available copy numbers</th>
-        <th>Available enumeration</th>
-        <th class="string-sort">Available item types</th>
-        <th class="string-sort">Available locations</th>
-        <th class="string-sort">Available collections</th>
-        <th>Earliest hold date</th>
-        <th>Hold notes</th>
-        <th class="string-sort">Pickup location</th>
-        <th class="NoSort">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        [% FOREACH hold_info IN holds_info %]
-        <tr>
-        [% SET patron = hold_info.patron %]
-        [% SET item = hold_info.item %]
-        [% SET hold = hold_info.hold %]
-        [% IF patron %]
-            [% SET biblio = hold_info.biblio %]
-            <td><p><strong>[% hold_info.pull_count | html %]</strong></p></td>
-            <td>[% hold_info.items_count | html %]</td>
-            <td>[% hold_info.patrons_count | html %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a></td>
-            <td>
-                <p>
-                    [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %]
-                </p>
-                [% IF ( biblio.author ) %]<p> by [% biblio.author | html %]</p>[% END %]
-                [% IF ( biblio.biblioitem.editionstatement ) %]<p>[% biblio.biblioitem.editionstatement | html %]</p>[% END %]
-                [% IF ( Koha.Preference('marcflavour') == 'MARC21' ) %]
-                    [% IF ( biblio.copyrightdate ) %]<p>[% biblio.copyrightdate | html %]</p>[% END %]
-                [% ELSE %]
-                    [% IF ( biblio.biblioitem.publicationyear ) %]<p>[% biblio.biblioitem.publicationyear | html %]</p>[% END %]
-                [% END %]
-            </td>
-        [% ELSE %]
-            <td>"</td>
-            <td>"</td>
-            <td>"</td>
-            <td>"</td>
-            <td>"</td>
-        [% END %]
-        <td>
-            [% IF ( hold_info.holdingbranches.size ) %]
-            <ul>
-                [% FOREACH holdingbranch IN hold_info.holdingbranches %]
-                    <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
-                [% END %]
-            </ul>
-            [% END %]
-        </td>
-        <td>
-            [% IF ( hold_info.barcodes.size ) %]
-                [% SET barcode = hold_info.barcodes.first %]
-                [% IF ( hold_info.item ) %]
-                    <span>Only [% barcode | html %]</span>
-                [% ELSE %]
-                    <span>[% barcode | html %] or
-                        [% IF hold_info.item_group %]
-                            any available from item group <em>[% hold_info.item_group.description | html %]</em>.
-                        [% ELSE %]
-                            any available.
+                [% FOR m IN messages %]
+                    <div class="alert alert-[% m.type | html %]">
+                        [% SWITCH m.code %]
+                        [% CASE 'letter_enqueued' %]
+                            <span>The notice has been correctly enqueued.</span>
+                        [% CASE 'no_email_address' %]
+                            <span>The patron does not have an email address defined.</span>
+                        [% CASE 'no_template_notice' %]
+                            <span>There is no notice template with a code 'CANCEL_HOLD_ON_LOST' defined in your system.</span>
+                        [% CASE 'hold_cancelled' %]
+                            <span>The hold has been correctly cancelled.</span>
+                        [% CASE 'hold_placed_at_biblio_level' %]
+                            <span>The hold has been placed at the bibliographic record level. It is not possible to determine the item to mark as lost.</span>
+                        [% CASE %]
+                            [% m.code | html %]
                         [% END %]
-                    </span>
-                [% END %]
-            [% ELSIF hold_info.item_group %]
-                Any available from item group <em>[% hold_info.item_group.description | html %]</em>.
-            [% END %]
-        </td>
-        <td>
-            [% IF ( hold_info.callnumbers.size ) %]
-                <ul>
-                    [% FOREACH callnumber IN hold_info.callnumbers %]
-                        <li>
-                            [% callnumber | html %]
-                        </li>
-                    [% END %]
-                </ul>
-            [% END %]
-        </td>
-        <td>
-            [% IF ( hold_info.copynumbers.size ) %]
-                <ul>
-                    [% FOREACH copyno IN hold_info.copynumbers %]
-                        <li>
-                            [% copyno | html %]
-                        </li>
-                    [% END %]
-                </ul>
-            [% END %]
-        </td>
-        <td>
-            [% IF ( hold_info.enumchrons.size ) %]
-                <ul>
-                    [% FOREACH enumchron IN hold_info.enumchrons %]
-                        <li>
-                            [% enumchron | html %]
-                        </li>
-                    [% END %]
-                </ul>
-            [% END %]
-        </td>
-        <td>
-            <ul>
-            [% FOREACH type IN hold_info.itemtypes %]
-                <li>[% ItemTypes.GetDescription( type ) | html %]</li>
-            [% END %]
-            </ul>
-        </td>
-        <td>
-            <ul>
-            [% FOREACH loc IN hold_info.locations %]
-                <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loc ) | html %]</li>
-            [% END %]
-            </ul>
-        </td>
-        <td>
-            <ul>
-            [% FOREACH ccode IN hold_info.collections %]
-                <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ccode ) | html %]</li>
-            [% END %]
-            </ul>
-        </td>
-        <td data-order="[% hold.reservedate | html %]">
-            [% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %]
-        </td>
-        <td>[% hold.reservenotes | html %]</td>
-        <td>
-            [% Branches.GetName ( hold.branchcode ) | html %]
-        </td>
-        <td>
-            <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op" value="cud-cancel_reserve" />
-                <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
-
-                [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                [% IF hold_cancellation.count %]
-                    <div class="form-group">
-                        <label for="cancellation-reason">Cancellation reason:</label>
-                        <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">
-                            <option value="">No reason given</option>
-                            [% FOREACH reason IN hold_cancellation %]
-                                <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                            [% END %]
-                        </select>
                     </div>
                 [% END %]
 
-                [% IF item.holdingbranch != item.homebranch %]
-                    <input class="btn btn-default" type="submit" value="Cancel hold and return to : [% Branches.GetName( item.homebranch ) | html %]" />
-                [% ELSE %]
-                    <input class="btn btn-default" type="submit" value="Cancel hold" />
-                [% END %]
-            </form>
+                <h1>Holds to pull placed between [% from | $KohaDates %] and [% to | $KohaDates %]</h1>
+                <h3>Reported on [% todaysdate | $KohaDates %]</h3>
+                <p>The following holds have not been filled. Please retrieve them and check them in.</p>
+                <div id="searchresults">
+                    [% IF holds_info %]
+                        <table id="holdst">
+                            <thead>
+                                <tr>
+                                    <th>Pull this many items</th>
+                                    <th>Items available</th>
+                                    <th>Patrons with holds</th>
+                                    <th>First patron</th>
+                                    <th class="anti-the">Title</th>
+                                    <th class="string-sort">Libraries</th>
+                                    <th>Available barcodes</th>
+                                    <th>Available call numbers</th>
+                                    <th>Available copy numbers</th>
+                                    <th>Available enumeration</th>
+                                    <th class="string-sort">Available item types</th>
+                                    <th class="string-sort">Available locations</th>
+                                    <th class="string-sort">Available collections</th>
+                                    <th>Earliest hold date</th>
+                                    <th>Hold notes</th>
+                                    <th class="string-sort">Pickup location</th>
+                                    <th class="NoSort">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH hold_info IN holds_info %]
+                                    <tr>
+                                        [% SET patron = hold_info.patron %]
+                                        [% SET item = hold_info.item %]
+                                        [% SET hold = hold_info.hold %]
+                                        [% IF patron %]
+                                            [% SET biblio = hold_info.biblio %]
+                                            <td
+                                                ><p><strong>[% hold_info.pull_count | html %]</strong></p></td
+                                            >
+                                            <td>[% hold_info.items_count | html %]</td>
+                                            <td>[% hold_info.patrons_count | html %]</td>
+                                            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a></td>
+                                            <td>
+                                                <p> [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %] </p>
+                                                [% IF ( biblio.author ) %]<p> by [% biblio.author | html %]</p>[% END %]
+                                                [% IF ( biblio.biblioitem.editionstatement ) %]<p>[% biblio.biblioitem.editionstatement | html %]</p>[% END %]
+                                                [% IF ( Koha.Preference('marcflavour') == 'MARC21' ) %]
+                                                    [% IF ( biblio.copyrightdate ) %]<p>[% biblio.copyrightdate | html %]</p>[% END %]
+                                                [% ELSE %]
+                                                    [% IF ( biblio.biblioitem.publicationyear ) %]<p>[% biblio.biblioitem.publicationyear | html %]</p>[% END %]
+                                                [% END %]
+                                            </td>
+                                        [% ELSE %]
+                                            <td>"</td>
+                                            <td>"</td>
+                                            <td>"</td>
+                                            <td>"</td>
+                                            <td>"</td>
+                                        [% END %]
+                                        <td>
+                                            [% IF ( hold_info.holdingbranches.size ) %]
+                                                <ul>
+                                                    [% FOREACH holdingbranch IN hold_info.holdingbranches %]
+                                                        <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
+                                                    [% END %]
+                                                </ul>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ( hold_info.barcodes.size ) %]
+                                                [% SET barcode = hold_info.barcodes.first %]
+                                                [% IF ( hold_info.item ) %]
+                                                    <span>Only [% barcode | html %]</span>
+                                                [% ELSE %]
+                                                    <span
+                                                        >[% barcode | html %] or
+                                                        [% IF hold_info.item_group %]
+                                                            any available from item group <em>[% hold_info.item_group.description | html %]</em>.
+                                                        [% ELSE %]
+                                                            any available.
+                                                        [% END %]
+                                                    </span>
+                                                [% END %]
+                                            [% ELSIF hold_info.item_group %]
+                                                Any available from item group <em>[% hold_info.item_group.description | html %]</em>.
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ( hold_info.callnumbers.size ) %]
+                                                <ul>
+                                                    [% FOREACH callnumber IN hold_info.callnumbers %]
+                                                        <li> [% callnumber | html %] </li>
+                                                    [% END %]
+                                                </ul>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ( hold_info.copynumbers.size ) %]
+                                                <ul>
+                                                    [% FOREACH copyno IN hold_info.copynumbers %]
+                                                        <li> [% copyno | html %] </li>
+                                                    [% END %]
+                                                </ul>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ( hold_info.enumchrons.size ) %]
+                                                <ul>
+                                                    [% FOREACH enumchron IN hold_info.enumchrons %]
+                                                        <li> [% enumchron | html %] </li>
+                                                    [% END %]
+                                                </ul>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH type IN hold_info.itemtypes %]
+                                                    <li>[% ItemTypes.GetDescription( type ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH loc IN hold_info.locations %]
+                                                    <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loc ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH ccode IN hold_info.collections %]
+                                                    <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ccode ) | html %]</li>
+                                                [% END %]
+                                            </ul>
+                                        </td>
+                                        <td data-order="[% hold.reservedate | html %]"> [% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %] </td>
+                                        <td>[% hold.reservenotes | html %]</td>
+                                        <td> [% Branches.GetName ( hold.branchcode ) | html %] </td>
+                                        <td>
+                                            <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-cancel_reserve" />
+                                                <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
 
-        [% IF Koha.Preference('CanMarkHoldsToPullAsLost') != 'do_not_allow' %]
-            [% IF hold.itemnumber %]
-                <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
-                    [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
-                        <input type="hidden" name="op" value="cud-mark_as_lost" />
-                        <input type="submit" class="btn btn-primary" value="Mark item as lost" />
-                    [% ELSIF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow_and_notify' %]
-                        <input type="hidden" name="op" value="cud-mark_as_lost_and_notify" />
-                        <input type="submit" class="btn btn-primary" value="Mark lost and notify patron" />
+                                                [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                                                [% IF hold_cancellation.count %]
+                                                    <div class="form-group">
+                                                        <label for="cancellation-reason">Cancellation reason:</label>
+                                                        <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">
+                                                            <option value="">No reason given</option>
+                                                            [% FOREACH reason IN hold_cancellation %]
+                                                                <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                                            [% END %]
+                                                        </select>
+                                                    </div>
+                                                [% END %]
+
+                                                [% IF item.holdingbranch != item.homebranch %]
+                                                    <input class="btn btn-default" type="submit" value="Cancel hold and return to : [% Branches.GetName( item.homebranch ) | html %]" />
+                                                [% ELSE %]
+                                                    <input class="btn btn-default" type="submit" value="Cancel hold" />
+                                                [% END %]
+                                            </form>
+
+                                            [% IF Koha.Preference('CanMarkHoldsToPullAsLost') != 'do_not_allow' %]
+                                                [% IF hold.itemnumber %]
+                                                    <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
+                                                        [% INCLUDE 'csrf-token.inc' %]
+                                                        <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
+                                                        [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
+                                                            <input type="hidden" name="op" value="cud-mark_as_lost" />
+                                                            <input type="submit" class="btn btn-primary" value="Mark item as lost" />
+                                                        [% ELSIF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow_and_notify' %]
+                                                            <input type="hidden" name="op" value="cud-mark_as_lost_and_notify" />
+                                                            <input type="submit" class="btn btn-primary" value="Mark lost and notify patron" />
+                                                        [% END %]
+                                                    </form>
+                                                [% ELSE %]
+                                                    <span>Biblio level hold.</span>
+                                                [% END %]
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    [% ELSE %]
+                        <strong>No items found.</strong>
                     [% END %]
-                </form>
-            [% ELSE %]
-                <span>Biblio level hold.</span>
-            [% END %]
-        [% END %]
-            </td>
-        </tr>
-        [% END %]
-    </tbody>
-    </table>
-    [% ELSE %]
-        <strong>No items found.</strong>
-    [% END %]
-</div>
-
-
+                </div>
             </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
+                <div id="filters">
+                    <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="get">
+                        <fieldset class="brief">
+                            <h4>Refine results</h4>
+                            <ol>
+                                <li>
+                                    <label for="from"> Start date: </label>
+                                    <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to" />
+                                </li>
+                                <li
+                                    ><label for="to"> End date: </label>
+                                    <input type="text" size="10" id="to" name="to" value="[% to | html %]" class="flatpickr" />
+                                </li>
+                            </ol>
 
-<div id="filters">
+                            [% IF ( HoldsToPullEndDate ) %]
+                                <p><em>(Inclusive, default is [% HoldsToPullStartDate | html %] days ago to [% HoldsToPullEndDate | html %] days ahead. Set other date ranges as needed.)</em></p>
+                            [% ELSE %]
+                                <p><em>(Inclusive, default is [% HoldsToPullStartDate | html %] days ago to today. Set other date ranges as needed.)</em></p>
+                            [% END %]
+                        </fieldset>
 
-<form action="/cgi-bin/koha/circ/pendingreserves.pl" method="get" >
-<fieldset class="brief">
-<h4>Refine results</h4>
-<ol>
-<li>
-<label for="from">
-    Start date:
-</label>
-<input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to" />
-</li>
-<li><label for="to">
-    End date:
-</label>
-<input type="text" size="10" id="to" name="to" value="[% to | html %]" class="flatpickr" />
-</li>
-</ol>
-
-[% IF ( HoldsToPullEndDate ) %]
-    <p><em>(Inclusive, default is [% HoldsToPullStartDate | html %] days ago to [% HoldsToPullEndDate | html %] days ahead. Set other date ranges as needed.)</em></p>
-[% ELSE %]
-    <p><em>(Inclusive, default is [% HoldsToPullStartDate | html %] days ago to today. Set other date ranges as needed.)</em></p>
-[% END %]
-</fieldset>
-
-    <fieldset class="action">
-        <input type="submit" name="run_report" value="Submit" class="btn btn-primary" />
-    </fieldset>
-</form>
-
-</div>
+                        <fieldset class="action">
+                            <input type="submit" name="run_report" value="Submit" class="btn btn-primary" />
+                        </fieldset>
+                    </form>
+                </div>
             </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

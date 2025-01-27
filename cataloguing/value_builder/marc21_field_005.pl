@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -32,14 +32,16 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $function_name = $params->{id};
 
     # find today's date
-    my @a= (localtime) [5,4,3,2,1,0]; $a[0]+=1900; $a[1]++;
-    my $date = sprintf("%4d%02d%02d%02d%02d%04.1f",@a);
+    my @a = (localtime)[ 5, 4, 3, 2, 1, 0 ];
+    $a[0] += 1900;
+    $a[1]++;
+    my $date = sprintf( "%4d%02d%02d%02d%02d%04.1f", @a );
 
-    my $res  = "
+    my $res = "
 <script>
 
 function Focus$function_name(event) {

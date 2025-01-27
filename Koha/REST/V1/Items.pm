@@ -24,7 +24,7 @@ use C4::Circulation qw( barcodedecode );
 use Koha::Items;
 
 use List::MoreUtils qw( any );
-use Try::Tiny qw( catch try );
+use Try::Tiny       qw( catch try );
 
 =head1 NAME
 
@@ -47,13 +47,12 @@ sub list {
 
     return try {
         my $items_set = Koha::Items->new;
-        my $items     = $c->objects->search( $items_set );
+        my $items     = $c->objects->search($items_set);
         return $c->render(
             status  => 200,
             openapi => $items
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -70,16 +69,14 @@ sub list_public {
     return try {
         my $patron = $c->stash('koha.user');
 
-        my $items_set =
-          Koha::Items->filter_by_visible_in_opac( { patron => $patron } );
-        my $items = $c->objects->search($items_set);
+        my $items_set = Koha::Items->filter_by_visible_in_opac( { patron => $patron } );
+        my $items     = $c->objects->search($items_set);
 
         return $c->render(
             status  => 200,
             openapi => $items
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -95,14 +92,13 @@ sub get {
 
     try {
         my $items_rs = Koha::Items->new;
-        my $item = $c->objects->find($items_rs, $c->param('item_id'));
+        my $item     = $c->objects->find( $items_rs, $c->param('item_id') );
 
         return $c->render_resource_not_found("Item")
             unless $item;
 
         return $c->render( status => 200, openapi => $item );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -117,7 +113,7 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $item = Koha::Items->find($c->param('item_id'));
+        my $item = Koha::Items->find( $c->param('item_id') );
 
         return $c->render_resource_not_found("Item")
             unless $item;
@@ -127,18 +123,23 @@ sub delete {
         if ( !$safe_to_delete ) {
 
             # Pick the first error, if any
-            my ( $error ) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
+            my ($error) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
 
-            unless ( $error ) {
+            unless ($error) {
                 Koha::Exception->throw('Koha::Item->safe_to_delete returned false but carried no error message');
             }
 
             my $errors = {
-                book_on_loan       => { code => 'checked_out',        description => 'The item is checked out' },
-                book_reserved      => { code => 'found_hold',         description => 'Waiting or in-transit hold for the item' },
-                last_item_for_hold => { code => 'last_item_for_hold', description => 'The item is the last one on a record on which a biblio-level hold is placed' },
-                linked_analytics   => { code => 'linked_analytics',   description => 'The item has linked analytic records' },
-                not_same_branch    => { code => 'not_same_branch',    description => 'The item is blocked by independent branches' },
+                book_on_loan  => { code => 'checked_out', description => 'The item is checked out' },
+                book_reserved => { code => 'found_hold',  description => 'Waiting or in-transit hold for the item' },
+                last_item_for_hold => {
+                    code        => 'last_item_for_hold',
+                    description => 'The item is the last one on a record on which a biblio-level hold is placed'
+                },
+                linked_analytics =>
+                    { code => 'linked_analytics', description => 'The item has linked analytic records' },
+                not_same_branch =>
+                    { code => 'not_same_branch', description => 'The item is blocked by independent branches' },
             };
 
             if ( any { $error->message eq $_ } keys %{$errors} ) {
@@ -148,19 +149,19 @@ sub delete {
                 return $c->render(
                     status  => 409,
                     openapi => {
-                        error      => $errors->{ $code }->{description},
-                        error_code => $errors->{ $code }->{code},
+                        error      => $errors->{$code}->{description},
+                        error_code => $errors->{$code}->{code},
                     }
                 );
             } else {
-                Koha::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
+                Koha::Exception->throw(
+                    'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
             }
         }
 
         $item->safe_delete;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -203,13 +204,13 @@ sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
     my $item_id = $c->param('item_id');
-    my $item = Koha::Items->find( $item_id );
+    my $item    = Koha::Items->find($item_id);
 
     return $c->render_resource_not_found("Item")
         unless $item;
 
     my $patron_id = $c->param('patron_id');
-    my $patron    = Koha::Patrons->find( $patron_id );
+    my $patron    = Koha::Patrons->find($patron_id);
 
     $c->req->params->remove('patron_id');
 
@@ -232,16 +233,13 @@ sub pickup_locations {
 
             @response = map {
                 my $library = $_;
-                $library->{needs_override} = (
-                    any { $_->branchcode eq $library->{library_id} }
-                    @{ $pl_set->as_list }
-                  )
-                  ? Mojo::JSON->false
-                  : Mojo::JSON->true;
+                $library->{needs_override} =
+                    ( any { $_->branchcode eq $library->{library_id} } @{ $pl_set->as_list } )
+                    ? Mojo::JSON->false
+                    : Mojo::JSON->true;
                 $library;
             } @{$libraries};
-        }
-        else {
+        } else {
 
             my $pickup_locations = $c->objects->search($pl_set);
             @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
@@ -251,8 +249,7 @@ sub pickup_locations {
             status  => 200,
             openapi => \@response
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -267,7 +264,7 @@ sub bundled_items {
     my $c = shift->openapi->valid_input or return;
 
     my $item_id = $c->param('item_id');
-    my $item = Koha::Items->find( $item_id );
+    my $item    = Koha::Items->find($item_id);
 
     return $c->render_resource_not_found("Item")
         unless $item;
@@ -286,12 +283,10 @@ sub bundled_items {
             status  => 200,
             openapi => $items
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 add_to_bundle
 
@@ -398,7 +393,7 @@ sub remove_from_bundle {
     my $c = shift->openapi->valid_input or return;
 
     my $item_id = $c->param('item_id');
-    my $item = Koha::Items->find( $item_id );
+    my $item    = Koha::Items->find($item_id);
 
     return $c->render_resource_not_found("Item")
         unless $item;

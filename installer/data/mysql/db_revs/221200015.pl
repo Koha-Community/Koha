@@ -1,13 +1,14 @@
 use Modern::Perl;
 
 return {
-    bug_number => "3150",
+    bug_number  => "3150",
     description => "Add LIST and CART notices",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(q{ INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang) VALUES
+        $dbh->do(
+            q{ INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang) VALUES
 ('catalogue','LIST','','Send list',1,'Your list: [% listname | html %]',"[%- USE Branches -%]
 [%- USE AuthorisedValues -%]
 [%- USE Koha -%]
@@ -65,7 +66,8 @@ Please note that the attached file is a MARC bibliographic records file which ca
 [% IF ( item.location ) %], [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %][% END %]
 [% IF item.itemcallnumber %]([% item.itemcallnumber | html %])[% END %]
 [% item.barcode | html %]</li>[% END %]</ul>[% END %]
-<hr></li>[% END %]</ol>",'email','default') });
+<hr></li>[% END %]</ol>",'email','default') }
+        );
 
         say $out "Added new letter 'LIST' (email)";
         say $out "Added new letter 'CART' (email)";

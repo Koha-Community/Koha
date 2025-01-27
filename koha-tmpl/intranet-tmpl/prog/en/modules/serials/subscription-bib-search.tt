@@ -1,11 +1,12 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Catalog search") | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Catalog search") | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ser_subscription-bib-search" class="ser">
@@ -13,54 +14,51 @@
 <div class="main container-fluid">
     [% INCLUDE 'messages.inc' %]
 
-<h1>Catalog search</h1>
-[% IF ( no_query ) %]
-    <div class="warning">You must enter a term to search on </div>
-[% END %]
-<form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="get">
-    <input type="hidden" name="op" value="do_search" />
-    <input type="hidden" name="type" value="intranet" />
-    <fieldset class="brief">
-    <ol>
-        <li>
-            <label for="q">Keyword: </label>
-            <input type="text" id="q" name="q" autofocus="autofocus" />
-        </li>
-        <li>
-            <label for="itemtypelimit">Limit item type to: </label>
-            <select name="itemtypelimit" id="itemtypelimit">
-                <option value="">All</option>
-                [%- FOREACH itemtypeloo IN itemtypeloop %]
-                <option value="[% itemtypeloo.code | html %]">
-                    [% itemtypeloo.description | html %]
-                </option>
+    <h1>Catalog search</h1>
+    [% IF ( no_query ) %]
+        <div class="warning">You must enter a term to search on </div>
+    [% END %]
+    <form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="get">
+        <input type="hidden" name="op" value="do_search" />
+        <input type="hidden" name="type" value="intranet" />
+        <fieldset class="brief">
+            <ol>
+                <li>
+                    <label for="q">Keyword: </label>
+                    <input type="text" id="q" name="q" autofocus="autofocus" />
+                </li>
+                <li>
+                    <label for="itemtypelimit">Limit item type to: </label>
+                    <select name="itemtypelimit" id="itemtypelimit">
+                        <option value="">All</option>
+                        [%- FOREACH itemtypeloo IN itemtypeloop %]
+                            <option value="[% itemtypeloo.code | html %]"> [% itemtypeloo.description | html %] </option>
+                        [%- END %]
+                    </select>
+                </li>
+                [%- IF ccodeloop %]
+                    <li>
+                        <label for="ccodelimit">Limit collection code to: </label>
+                        <select name="ccodelimit" id="ccodelimit">
+                            <option value="">All</option>
+                            [%- FOREACH ccodeloo IN ccodeloop %]
+                                <option value="[% ccodeloo.code | html %]"> [% ccodeloo.description | html %] </option>
+                            [%- END %]
+                        </select>
+                    </li>
                 [%- END %]
-            </select>
-        </li>
-        [%- IF ccodeloop %]
-        <li>
-            <label for="ccodelimit">Limit collection code to: </label>
-            <select name="ccodelimit" id="ccodelimit">
-                <option value="">All</option>
-                [%- FOREACH ccodeloo IN ccodeloop %]
-                <option value="[% ccodeloo.code | html %]">
-                    [% ccodeloo.description | html %]
-                </option>
-                [%- END %]
-            </select>
-        </li>
-        [%- END %]
-    </ol>
-    </fieldset>
-    <nav class="navbar navbar-default fixed-bottom">
-        <div class="container-fluid">
-            <fieldset class="action">
-                <input type="submit" class="btn btn-primary" value="Search" />
-                <button type="button" class="btn btn-default close_window">Close window</button>
-            </fieldset>
-        </div>
-    </nav>
-</form>
-</div> <!-- /.main.container-fluid -->
+            </ol>
+        </fieldset>
+        <nav class="navbar navbar-default fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                    <button type="button" class="btn btn-default close_window">Close window</button>
+                </fieldset>
+            </div>
+        </nav>
+    </form>
+</div>
+<!-- /.main.container-fluid -->
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

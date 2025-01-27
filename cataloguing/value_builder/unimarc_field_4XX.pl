@@ -17,15 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use strict;
+
 #use warnings; FIXME - Bug 2505
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Search qw( new_record_from_zebra );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::Biblio qw( TransformMarcToKoha );
@@ -79,17 +79,16 @@ sub plugin {
 
     if ( $op eq "fillinput" ) {
         my $biblionumber = $query->param('biblionumber');
-        my $index  = $query->param('index');
+        my $index        = $query->param('index');
         my $marcrecord;
 
         # open template
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             {
-                template_name =>
-                  "cataloguing/value_builder/unimarc_field_4XX.tt",
-                query           => $query,
-                type            => "intranet",
-                flagsrequired   => { editcatalogue => '*' },
+                template_name => "cataloguing/value_builder/unimarc_field_4XX.tt",
+                query         => $query,
+                type          => "intranet",
+                flagsrequired => { editcatalogue => '*' },
             }
         );
 
@@ -100,131 +99,119 @@ sub plugin {
         my $subfield_value_9 = $biblionumber;
         my $subfield_value_0;
         $subfield_value_0 = $marcrecord->field('001')->data
-          if $marcrecord->field('001');
+            if $marcrecord->field('001');
         my $subfield_value_a;
         if ( $marcrecord->field('700') ) {
             $subfield_value_a = $marcrecord->field('700')->subfield("a");
             $subfield_value_a .= ", " . $marcrecord->subfield( '700', "b" )
-              if $marcrecord->subfield( '700', 'b' );
+                if $marcrecord->subfield( '700', 'b' );
             $subfield_value_a .= " " . $marcrecord->subfield( '700', "d" )
-              if $marcrecord->subfield( '700', 'd' );
-            $subfield_value_a .=
-              " (" . $marcrecord->subfield( '700', 'c' )
-              if $marcrecord->subfield( '700',     'c' );
-            $subfield_value_a .=  " ; "
-              if $marcrecord->subfield( '700',     'c' )
-                and $marcrecord->subfield( '700',     'f' );
+                if $marcrecord->subfield( '700', 'd' );
+            $subfield_value_a .= " (" . $marcrecord->subfield( '700', 'c' )
+                if $marcrecord->subfield( '700', 'c' );
+            $subfield_value_a .= " ; "
+                if $marcrecord->subfield( '700', 'c' )
+                and $marcrecord->subfield( '700', 'f' );
             $subfield_value_a .= " ("
-              if ( $marcrecord->subfield( '700', 'f' )
+                if ( $marcrecord->subfield( '700', 'f' )
                 and not( $marcrecord->subfield( '700', 'c' ) ) );
             $subfield_value_a .= $marcrecord->subfield( '700', 'f' )
-              if ( $marcrecord->subfield( '700', 'f' ) );
+                if ( $marcrecord->subfield( '700', 'f' ) );
             $subfield_value_a .= ")"
-              if ( $marcrecord->subfield( '700', 'f' )
+                if ( $marcrecord->subfield( '700', 'f' )
                 or $marcrecord->subfield( '700', 'c' ) );
-        }
-        elsif ( $marcrecord->field('702') ) {
+        } elsif ( $marcrecord->field('702') ) {
             $subfield_value_a = $marcrecord->subfield( '702', 'a' );
             $subfield_value_a .= ", " . $marcrecord->subfield( '702', 'b' )
-              if $marcrecord->subfield( '702', 'b' );
+                if $marcrecord->subfield( '702', 'b' );
             $subfield_value_a .= " " . $marcrecord->subfield( '702', 'd' )
-              if $marcrecord->subfield( '702', 'd' );
-            $subfield_value_a .=
-              " (" . $marcrecord->subfield( '702', 'c' )
-              if $marcrecord->subfield( '702',     'c' );
-            $subfield_value_a .=  " ; "
-              if $marcrecord->subfield( '702',     'c' )
-                and $marcrecord->subfield( '702',     'f' );
+                if $marcrecord->subfield( '702', 'd' );
+            $subfield_value_a .= " (" . $marcrecord->subfield( '702', 'c' )
+                if $marcrecord->subfield( '702', 'c' );
+            $subfield_value_a .= " ; "
+                if $marcrecord->subfield( '702', 'c' )
+                and $marcrecord->subfield( '702', 'f' );
             $subfield_value_a .= " ("
-              if $marcrecord->subfield( '702', 'f' )
-              and not $marcrecord->subfield( '702', 'c' );
+                if $marcrecord->subfield( '702', 'f' )
+                and not $marcrecord->subfield( '702', 'c' );
             $subfield_value_a .= $marcrecord->subfield( '702', 'f' )
-              if $marcrecord->subfield( '702', 'f' );
+                if $marcrecord->subfield( '702', 'f' );
             $subfield_value_a .= ")"
-              if $marcrecord->subfield( '702', 'f' )
-              or $marcrecord->subfield( '702', 'c' );
-        }
-        elsif ( $marcrecord->field('710') ) {
+                if $marcrecord->subfield( '702', 'f' )
+                or $marcrecord->subfield( '702', 'c' );
+        } elsif ( $marcrecord->field('710') ) {
             $subfield_value_a = $marcrecord->subfield( '710', 'd' ) . " "
-              if $marcrecord->subfield( '710', 'd' );
+                if $marcrecord->subfield( '710', 'd' );
             $subfield_value_a .= $marcrecord->subfield( '710', 'a' )
-              if $marcrecord->subfield( '710', 'a' );
+                if $marcrecord->subfield( '710', 'a' );
             $subfield_value_a .= ", " . $marcrecord->subfield( '710', 'b' )
-              if $marcrecord->subfield('710');
-            $subfield_value_a .=
-              " (" . $marcrecord->subfield( '710', 'f' ) . " - "
-              if $marcrecord->subfield( '710',     'f' );
+                if $marcrecord->subfield('710');
+            $subfield_value_a .= " (" . $marcrecord->subfield( '710', 'f' ) . " - "
+                if $marcrecord->subfield( '710', 'f' );
             $subfield_value_a .= " ("
-              if $marcrecord->subfield( '710', 'e' )
-              and not $marcrecord->subfield( '710', 'f' );
+                if $marcrecord->subfield( '710', 'e' )
+                and not $marcrecord->subfield( '710', 'f' );
             $subfield_value_a .= $marcrecord->subfield( '710', 'e' )
-              if $marcrecord->subfield( '710', 'e' );
+                if $marcrecord->subfield( '710', 'e' );
             $subfield_value_a .= ")"
-              if $marcrecord->subfield( '710', 'e' )
-              or $marcrecord->subfield( '710', 'f' );
-        }
-        elsif ( $marcrecord->field('701') ) {
+                if $marcrecord->subfield( '710', 'e' )
+                or $marcrecord->subfield( '710', 'f' );
+        } elsif ( $marcrecord->field('701') ) {
             $subfield_value_a = $marcrecord->subfield( '701', 'a' );
             $subfield_value_a .= ", " . $marcrecord->subfield( '701', 'b' )
-              if $marcrecord->subfield( '701', 'b' );
+                if $marcrecord->subfield( '701', 'b' );
             $subfield_value_a .= " " . $marcrecord->subfield( '701', 'd', )
-              if $marcrecord->subfield( '701', 'd' );
-            $subfield_value_a .=
-              " (" . $marcrecord->subfield( '701', 'c' ) . " - "
-              if $marcrecord->subfield( '701',     'c' );
+                if $marcrecord->subfield( '701', 'd' );
+            $subfield_value_a .= " (" . $marcrecord->subfield( '701', 'c' ) . " - "
+                if $marcrecord->subfield( '701', 'c' );
             $subfield_value_a .= " ("
-              if $marcrecord->subfield( '701', 'f' )
-              and not( $marcrecord->subfield( '701', 'c' ) );
+                if $marcrecord->subfield( '701', 'f' )
+                and not( $marcrecord->subfield( '701', 'c' ) );
             $subfield_value_a .= $marcrecord->subfield( '701', 'f' )
-              if $marcrecord->subfield( '701', 'f' );
+                if $marcrecord->subfield( '701', 'f' );
             $subfield_value_a .= ")"
-              if $marcrecord->subfield( '701', 'f' )
-              or $marcrecord->subfield( '701', 'c' );
-        }
-        elsif ( $marcrecord->field('712') ) {
+                if $marcrecord->subfield( '701', 'f' )
+                or $marcrecord->subfield( '701', 'c' );
+        } elsif ( $marcrecord->field('712') ) {
             $subfield_value_a = $marcrecord->subfield( '712', 'd' ) . " "
-              if $marcrecord->subfield( '712', 'd' );
+                if $marcrecord->subfield( '712', 'd' );
             $subfield_value_a .= $marcrecord->subfield( '712', 'a' )
-              if $marcrecord->subfield( '712', 'a' );
+                if $marcrecord->subfield( '712', 'a' );
             $subfield_value_a .= ", " . $marcrecord->subfield( '712', 'b' )
-              if $marcrecord->subfield( '712', 'b' );
-            $subfield_value_a .=
-              " (" . $marcrecord->subfield( '712', 'f' ) . " - "
-              if $marcrecord->subfield( '712',     'f' );
+                if $marcrecord->subfield( '712', 'b' );
+            $subfield_value_a .= " (" . $marcrecord->subfield( '712', 'f' ) . " - "
+                if $marcrecord->subfield( '712', 'f' );
             $subfield_value_a .= " ("
-              if $marcrecord->subfield( '712', "e" )
-              and not $marcrecord->subfield( '712', 'f' );
+                if $marcrecord->subfield( '712', "e" )
+                and not $marcrecord->subfield( '712', 'f' );
             $subfield_value_a .= $marcrecord->subfield( '712', 'e' )
-              if $marcrecord->subfield( '712', 'e' );
+                if $marcrecord->subfield( '712', 'e' );
             $subfield_value_a .= ")"
-              if $marcrecord->subfield( '712', 'e' )
-              or $marcrecord->subfield( '712', 'f' );
-        }
-        elsif ( $marcrecord->field('200') ) {
+                if $marcrecord->subfield( '712', 'e' )
+                or $marcrecord->subfield( '712', 'f' );
+        } elsif ( $marcrecord->field('200') ) {
             $subfield_value_a = $marcrecord->subfield( '200', 'f' );
         }
-	my $subfield_value_c;
-	my $subfield_value_d;
-	my $subfield_value_e;
+        my $subfield_value_c;
+        my $subfield_value_d;
+        my $subfield_value_e;
         $subfield_value_c = $marcrecord->field('210')->subfield("a")
-          if ( $marcrecord->field('210') );
+            if ( $marcrecord->field('210') );
         $subfield_value_d = $marcrecord->field('210')->subfield("d")
-          if ( $marcrecord->field('210') );
-	$subfield_value_e = $marcrecord->field('205')->subfield("a")
-          if ( $marcrecord->field('205') );
+            if ( $marcrecord->field('210') );
+        $subfield_value_e = $marcrecord->field('205')->subfield("a")
+            if ( $marcrecord->field('205') );
 
         my $subfield_value_h;
         if (   ( $marcrecord->field('200') )
             && ( $marcrecord->field('200')->subfield("h") ) )
         {
             $subfield_value_h = $marcrecord->field('200')->subfield("h");
-        }
-        elsif (( $marcrecord->field('225') )
+        } elsif ( ( $marcrecord->field('225') )
             && ( $marcrecord->field('225')->subfield("h") ) )
         {
             $subfield_value_h = $marcrecord->field('225')->subfield("h");
-        }
-        elsif (( $marcrecord->field('500') )
+        } elsif ( ( $marcrecord->field('500') )
             && ( $marcrecord->field('500')->subfield("h") ) )
         {
             $subfield_value_h = $marcrecord->field('500')->subfield("h");
@@ -235,13 +222,11 @@ sub plugin {
             && ( $marcrecord->field('200')->subfield("i") ) )
         {
             $subfield_value_i = $marcrecord->field('200')->subfield("i");
-        }
-        elsif (( $marcrecord->field('225') )
+        } elsif ( ( $marcrecord->field('225') )
             && ( $marcrecord->field('225')->subfield("i") ) )
         {
             $subfield_value_i = $marcrecord->field('225')->subfield("i");
-        }
-        elsif (( $marcrecord->field('500') )
+        } elsif ( ( $marcrecord->field('500') )
             && ( $marcrecord->field('500')->subfield("i") ) )
         {
             $subfield_value_i = $marcrecord->field('500')->subfield("i");
@@ -260,21 +245,19 @@ sub plugin {
             if ( $marcrecord->field('200') );
 
         my $subfield_value_p;
-	$subfield_value_p = $marcrecord->field('215')->subfield("a")
-          if ( $marcrecord->field('215') );
+        $subfield_value_p = $marcrecord->field('215')->subfield("a")
+            if ( $marcrecord->field('215') );
 
         my $subfield_value_t;
         if (   ( $marcrecord->field('200') )
             && ( $marcrecord->field('200')->subfield("a") ) )
         {
             $subfield_value_t = $marcrecord->field('200')->subfield("a");
-        }
-        elsif (( $marcrecord->field('225') )
+        } elsif ( ( $marcrecord->field('225') )
             && ( $marcrecord->field('225')->subfield("a") ) )
         {
             $subfield_value_t = $marcrecord->field('225')->subfield("a");
-        }
-        elsif (( $marcrecord->field('500') )
+        } elsif ( ( $marcrecord->field('500') )
             && ( $marcrecord->field('500')->subfield("a") ) )
         {
             $subfield_value_t = $marcrecord->field('500')->subfield("a");
@@ -290,8 +273,7 @@ sub plugin {
             && ( $marcrecord->field('225')->subfield("v") ) )
         {
             $subfield_value_v = $marcrecord->field('225')->subfield("v");
-        }
-        elsif (( $marcrecord->field('200') )
+        } elsif ( ( $marcrecord->field('200') )
             && ( $marcrecord->field('200')->subfield("h") ) )
         {
             $subfield_value_v = $marcrecord->field('200')->subfield("h");
@@ -300,14 +282,16 @@ sub plugin {
         if (
             $marcrecord->field('011')
             and not( ( $marcrecord->field('011')->subfield("y") )
-                or ( $marcrecord->field('011')->subfield("z") ) ) ) {
-             $subfield_value_x = $marcrecord->field('011')->subfield("a");
+                or ( $marcrecord->field('011')->subfield("z") ) )
+            )
+        {
+            $subfield_value_x = $marcrecord->field('011')->subfield("a");
         }
         my $subfield_value_y;
-          if ( $marcrecord->field('013') ) {
-             $subfield_value_y = $marcrecord->field('013')->subfield("a");
+        if ( $marcrecord->field('013') ) {
+            $subfield_value_y = $marcrecord->field('013')->subfield("a");
         }
-        if   ( $marcrecord->field('010') ) {
+        if ( $marcrecord->field('010') ) {
             $subfield_value_y = $marcrecord->field('010')->subfield("a");
         }
         $template->param(
@@ -333,18 +317,19 @@ sub plugin {
             subfield_value_y => "$subfield_value_y",
         );
 ###############################################################
-    }
-    elsif ( $op eq "do_search" ) {
+    } elsif ( $op eq "do_search" ) {
         my $search         = $query->param('search');
         my $itype          = $query->param('itype');
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
         my $op = 'AND';
-        $search = 'kw:'.$search." $op mc-itemtype:".$itype if $itype;
-        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat($search, $startfrom * $resultsperpage, $resultsperpage );
-        if (defined $errors ) {
+        $search = 'kw:' . $search . " $op mc-itemtype:" . $itype if $itype;
+        my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+        my ( $errors, $results, $total_hits ) =
+            $searcher->simple_search_compat( $search, $startfrom * $resultsperpage, $resultsperpage );
+
+        if ( defined $errors ) {
             $results = [];
         }
         my $total = @{$results};
@@ -353,10 +338,9 @@ sub plugin {
 
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             {
-                template_name =>
-                  "cataloguing/value_builder/unimarc_field_4XX.tt",
-                query           => $query,
-                type            => 'intranet',
+                template_name => "cataloguing/value_builder/unimarc_field_4XX.tt",
+                query         => $query,
+                type          => 'intranet',
             }
         );
 
@@ -364,31 +348,25 @@ sub plugin {
         my $displaynext = 0;
         my $displayprev = $startfrom;
 
-        if( ( $total_hits - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
+        if ( ( $total_hits - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
             $displaynext = 1;
         }
         my @arrayresults;
         my @field_data = ($search);
-         for (
-             my $i = 0 ;
-             $i < $total && $i < $resultsperpage ;
-             $i++
-           )
-         {
+        for ( my $i = 0 ; $i < $total && $i < $resultsperpage ; $i++ ) {
             my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
             next unless $record;
-            my $rechash = TransformMarcToKoha({ record => $record });
+            my $rechash = TransformMarcToKoha( { record => $record } );
             if ( my $f = $record->field('200') ) {
                 $rechash->{fulltitle} =
-                    join(', ', map { $_->[1] } grep { $_->[0] =~ /[aehi]/ } $f->subfields() );
-            }
-            else {
+                    join( ', ', map { $_->[1] } grep { $_->[0] =~ /[aehi]/ } $f->subfields() );
+            } else {
                 $rechash->{fulltitle} = $rechash->{title};
             }
             my $pos;
             my $countitems;
             if ( $rechash->{itemnumber} ) {
-                $countitems=1;
+                $countitems = 1;
             }
             while ( index( $rechash->{itemnumber}, '|', $pos ) > 0 ) {
                 $countitems += 1;
@@ -399,22 +377,21 @@ sub plugin {
             my @itemcallnumbers = split /\|/, $rechash->{itemcallnumber};
             my $CN;
             for ( my $i = 0 ; $i < @holdingbranches ; $i++ ) {
-                $CN .=
-                  $holdingbranches[$i] . " ( " . $itemcallnumbers[$i] . " ) |";
+                $CN .= $holdingbranches[$i] . " ( " . $itemcallnumbers[$i] . " ) |";
             }
             $CN =~ s/ \|$//;
             $rechash->{CN} = $CN;
             push @arrayresults, $rechash;
-         }
+        }
 
-   #         for(my $i = 0 ; $i <= $#marclist ; $i++)
-   #         {
-   #             push @field_data, { term => "marclist", val=>$marclist[$i] };
-   #             push @field_data, { term => "and_or", val=>$and_or[$i] };
-   #             push @field_data, { term => "excluding", val=>$excluding[$i] };
-   #             push @field_data, { term => "operator", val=>$operator[$i] };
-   #             push @field_data, { term => "value", val=>$value[$i] };
-   #         }
+        #         for(my $i = 0 ; $i <= $#marclist ; $i++)
+        #         {
+        #             push @field_data, { term => "marclist", val=>$marclist[$i] };
+        #             push @field_data, { term => "and_or", val=>$and_or[$i] };
+        #             push @field_data, { term => "excluding", val=>$excluding[$i] };
+        #             push @field_data, { term => "operator", val=>$operator[$i] };
+        #             push @field_data, { term => "value", val=>$value[$i] };
+        #         }
 
         my @numbers = ();
 
@@ -424,12 +401,12 @@ sub plugin {
                     my $highlight = 0;
                     ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );
                     push @numbers,
-                      {
+                        {
                         number     => $i,
                         highlight  => $highlight,
                         searchdata => \@field_data,
                         startfrom  => ( $i - 1 )
-                      };
+                        };
                 }
             }
         }
@@ -439,21 +416,22 @@ sub plugin {
 
         if ( $total_hits < $from + $resultsperpage ) {
             $to = $total_hits;
-        }else{
-            $to = $from + $resultsperpage ;
+        } else {
+            $to = $from + $resultsperpage;
         }
-#         my $link="/cgi-bin/koha/cataloguing/value_builder/unimarc4XX.pl?op=do_search&q=$search_desc&resultsperpage=$resultsperpage&startfrom=$startfrom&search=$search";
-#           foreach my $sort (@sort_by){
-#             $link.="&sort_by=".$sort."&";
-#           }
-#           $template->param(
-#             pagination_bar => pagination_bar(
-#                     $link,
-#                     getnbpages($hits, $results_per_page),
-#                     $page,
-#                     'page'
-#             ),
-#           );
+
+        #         my $link="/cgi-bin/koha/cataloguing/value_builder/unimarc4XX.pl?op=do_search&q=$search_desc&resultsperpage=$resultsperpage&startfrom=$startfrom&search=$search";
+        #           foreach my $sort (@sort_by){
+        #             $link.="&sort_by=".$sort."&";
+        #           }
+        #           $template->param(
+        #             pagination_bar => pagination_bar(
+        #                     $link,
+        #                     getnbpages($hits, $results_per_page),
+        #                     $page,
+        #                     'page'
+        #             ),
+        #           );
         $template->param(
             result         => \@arrayresults,
             index          => scalar $query->param('index') . "",
@@ -473,23 +451,21 @@ sub plugin {
             Search         => 0
         );
 
-    }
-    else {
+    } else {
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             {
-                template_name =>
-                  "cataloguing/value_builder/unimarc_field_4XX.tt",
-                query           => $query,
-                type            => "intranet",
+                template_name => "cataloguing/value_builder/unimarc_field_4XX.tt",
+                query         => $query,
+                type          => "intranet",
             }
         );
 
         my @itemtypes = Koha::ItemTypes->search->as_list;
 
         $template->param(    #classlist => $classlist,
-            itypeloop    => \@itemtypes,
-            index        => scalar $query->param('index'),
-            Search       => 1,
+            itypeloop => \@itemtypes,
+            index     => scalar $query->param('index'),
+            Search    => 1,
         );
     }
     output_html_with_http_headers $query, $cookie, $template->output;

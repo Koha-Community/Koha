@@ -4,16 +4,16 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF( op ) %]
-        [% t("New routing list") | html %]
-    [% ELSE %]
-        [% t("Modify routing list") | html %]
-    [% END %] &rsaquo;
-    [% title | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF( op ) %]
+            [% t("New routing list") | html %]
+        [% ELSE %]
+            [% t("Modify routing list") | html %]
+        [% END %]
+        &rsaquo; [% title | html %] &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ser_routing" class="ser">
@@ -43,134 +43,133 @@
 
 [% WRAPPER 'main-container.inc' aside='serials-menu' %]
 
-[% IF ( op ) %]
-    <h1>New routing list for <em>[% title | html %]</em></h1>
-[% ELSE %]
-    <h1>Modify routing list for <em>[% title | html %]</em></h1>
-[% END %]
+    [% IF ( op ) %]
+        <h1>New routing list for <em>[% title | html %]</em></h1>
+    [% ELSE %]
+        <h1>Modify routing list for <em>[% title | html %]</em></h1>
+    [% END %]
 
-<fieldset class="rows">
-	<ol>
-		<li><label for="date_selected_top">Issue: </label>
-<select name="date_selected_top" id="date_selected_top" class="date_selected_top">
-    [% FOREACH date IN dates %]
-        [% IF ( date.selected ) %]
-            <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])" selected="selected">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
-        [% ELSE %]
-            <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
-        [% END %]
-[% END %]
-</select> [% issue | html %]</li>
-
-<li>
-    <span class="label">Recipients:</span>
-    [% IF memberloop %]
-        <table style="clear:none;margin:0;">
-            <tr><th>Name</th>
-                <th>Rank</th>
-                <th>Delete</th>
-            </tr>
-            [% USE m_loop = iterator(memberloop) %]
-            [% FOREACH member IN m_loop %]
-            <tr><td>[% member.name | html %]</td>
-                <td>
-                    <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid | html %]" data-routingid="[% member.routingid | html %]">
-                    [% rankings = [1 .. m_loop.size] %]
-                    [% SET cur_rank = loop.count() %]
-                    [% FOREACH r IN rankings %]
-                        [% IF r == cur_rank %]
-                          <option selected="selected" value="[% r | html %]">[% r | html %]</option>
+    <fieldset class="rows">
+        <ol>
+            <li
+                ><label for="date_selected_top">Issue: </label>
+                <select name="date_selected_top" id="date_selected_top" class="date_selected_top">
+                    [% FOREACH date IN dates %]
+                        [% IF ( date.selected ) %]
+                            <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])" selected="selected">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
                         [% ELSE %]
-                          <option value="[% r | html %]">[% r | html %]</option>
+                            <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
                         [% END %]
                     [% END %]
-                    </select>
-                </td>
-                <td>
-                    <form method="post" action="routing.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-delete" />
-                        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-                        <input type="hidden" name="routingid" value="[% member.routingid | html %]" />
-                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
-                    </form>
-                </td>
-            </tr>
-            [% END %]
-        </table>
-    [% END %]
-    <input type="hidden" id="new_recipients" name="new_recipients" value="">
+                </select>
+                [% issue | html %]</li
+            >
 
-    <form method="post" action="routing.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-delete" />
-        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-        <p style="margin-left:10em;">
-            <a href="#patron_search_modal" id="add_recipients" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add recipients</a>
-            [% IF memberloop %]
-                <button type="submit" class="btn"><i class="fa fa-trash-can"></i> Delete all</button>
-            [% END %]
-        </p>
-    </form>
-</li>
+            <li>
+                <span class="label">Recipients:</span>
+                [% IF memberloop %]
+                    <table style="clear:none;margin:0;">
+                        <tr
+                            ><th>Name</th>
+                            <th>Rank</th>
+                            <th>Delete</th>
+                        </tr>
+                        [% USE m_loop = iterator(memberloop) %]
+                        [% FOREACH member IN m_loop %]
+                            <tr
+                                ><td>[% member.name | html %]</td>
+                                <td>
+                                    <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid | html %]" data-routingid="[% member.routingid | html %]">
+                                        [% rankings = [1 .. m_loop.size] %]
+                                        [% SET cur_rank = loop.count() %]
+                                        [% FOREACH r IN rankings %]
+                                            [% IF r == cur_rank %]
+                                                <option selected="selected" value="[% r | html %]">[% r | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% r | html %]">[% r | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </td>
+                                <td>
+                                    <form method="post" action="routing.pl">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-delete" />
+                                        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                                        <input type="hidden" name="routingid" value="[% member.routingid | html %]" />
+                                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </table>
+                [% END %]
+                <input type="hidden" id="new_recipients" name="new_recipients" value="" />
 
-<li>
-    <form method="post" action="routing.pl" id="save_note_form">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-save" />
-        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-        <input type="hidden" id="date_selected" name="date_selected" value="" />
+                <form method="post" action="routing.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-delete" />
+                    <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                    <p style="margin-left:10em;">
+                        <a href="#patron_search_modal" id="add_recipients" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add recipients</a>
+                        [% IF memberloop %]
+                            <button type="submit" class="btn"><i class="fa fa-trash-can"></i> Delete all</button>
+                        [% END %]
+                    </p>
+                </form>
+            </li>
 
-        <label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea>
-    </form>
-</li>
-</ol>
+            <li>
+                <form method="post" action="routing.pl" id="save_note_form">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-save" />
+                    <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                    <input type="hidden" id="date_selected" name="date_selected" value="" />
 
-
-</fieldset>
-<fieldset class="action"><input type="submit" id="submit_save_note_form" name="submit" class="btn btn-primary" value="Save" /></fieldset>
-
+                    <label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea>
+                </form>
+            </li>
+        </ol>
+    </fieldset>
+    <fieldset class="action"><input type="submit" id="submit_save_note_form" name="submit" class="btn btn-primary" value="Save" /></fieldset>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
-            $(".itemrank").on("change",function(){
+        $(document).ready(function () {
+            $(".itemrank").on("change", function () {
                 var subscriptionid = $(this).data("subscriptionid");
                 var routingid = $(this).data("routingid");
-                reorder_item( subscriptionid, routingid, $(this).val());
+                reorder_item(subscriptionid, routingid, $(this).val());
             });
-            $("#date_selected").val( $("#date_selected_top").find("option:selected").val() );
-            $(".date_selected_top").on("change",function(){
-                $("#date_selected").val( $(this).val() );
+            $("#date_selected").val($("#date_selected_top").find("option:selected").val());
+            $(".date_selected_top").on("change", function () {
+                $("#date_selected").val($(this).val());
             });
 
-            $("#submit_save_note_form").on("click", function(e){
+            $("#submit_save_note_form").on("click", function (e) {
                 e.preventDefault();
                 return $("#save_note_form").submit();
             });
         });
-        function reorder_item(sid,rid,rank){
-            var mylocation = 'reorder_members.pl?subscriptionid='+sid+'&routingid='+rid+'&rank='+rank;
-            window.location.href=mylocation;
+        function reorder_item(sid, rid, rank) {
+            var mylocation = "reorder_members.pl?subscriptionid=" + sid + "&routingid=" + rid + "&rank=" + rank;
+            window.location.href = mylocation;
         }
 
         function add_user(borrowernumber) {
-            let users = $("#new_recipients").val().split(':');
-            if ( !users.includes(borrowernumber) ) {
+            let users = $("#new_recipients").val().split(":");
+            if (!users.includes(borrowernumber)) {
                 users.push(borrowernumber);
             }
             users = [...new Set(users)]; // unique
-            $("#new_recipients").val(users.filter(Number).join(':')); // remove empty and join
+            $("#new_recipients").val(users.filter(Number).join(":")); // remove empty and join
         }
-
     </script>
-
     [% INCLUDE 'select2.inc' %]
     [% SET columns = ['cardnumber','name','category','branch','action'] %]
     [% PROCESS patron_search_modal columns => columns, modal_title => t("Add recipients") %]
     [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
-
     <script>
         $(document).on(
             "hidden.bs.modal",

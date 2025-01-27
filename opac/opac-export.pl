@@ -34,10 +34,10 @@ use Koha::RecordProcessor;
 
 use List::MoreUtils qw(none any);
 
-my $query = CGI->new;
-my $op=$query->param("op")||''; #op=export is currently the only use
-my $format=$query->param("format")||'utf8';
-my $biblionumber = $query->param("bib")||0;
+my $query        = CGI->new;
+my $op           = $query->param("op")     || '';       #op=export is currently the only use
+my $format       = $query->param("format") || 'utf8';
+my $biblionumber = $query->param("bib")    || 0;
 $biblionumber = int($biblionumber);
 my $error = q{};
 
@@ -45,11 +45,13 @@ my @dc_subtypes   = qw(rdfdc oaidc srwdc);
 my @valid_formats = split( ',', C4::Context->preference('OpacExportOptions') // '' );
 
 if ( any { $_ eq 'dc' } @valid_formats ) {
+
     # DC enabled, add @dc_subtypes to @valid_formats
     @valid_formats = ( @valid_formats, @dc_subtypes );
 }
 
 if ( !scalar @valid_formats || none { $format eq $_ } @valid_formats ) {
+
     # bad request: either the feature is disabled, or requested a format the
     # library hasn't made available
     print $query->redirect("/cgi-bin/koha/errors/400.pl");
@@ -63,30 +65,30 @@ my $patron;
 if ($userenv) {
     my $borrowernumber = $userenv->{'number'};
     if ($borrowernumber) {
-        $patron = Koha::Patrons->find( $borrowernumber );
+        $patron = Koha::Patrons->find($borrowernumber);
     }
 }
 
-my $include_items = ($format =~ /bibtex/) ? 0 : 1;
-my $biblio = Koha::Biblios->find($biblionumber);
-my $marc = $biblio
-  ? $biblio->metadata_record(
+my $include_items = ( $format =~ /bibtex/ ) ? 0 : 1;
+my $biblio        = Koha::Biblios->find($biblionumber);
+my $marc          = $biblio
+    ? $biblio->metadata_record(
     {
         embed_items => 1,
         interface   => 'opac',
         patron      => $patron,
     }
-  )
-  : undef;
+    )
+    : undef;
 
-if(!$marc) {
+if ( !$marc ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 my $metadata_extractor = $biblio->metadata_extractor;
 
-my $file_id = $biblionumber;
+my $file_id  = $biblionumber;
 my $file_pre = "bib-";
 if ( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ) {
     my $control_number = $metadata_extractor->get_control_number();
@@ -96,100 +98,93 @@ if ( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ) {
     }
 }
 
-my $framework = $biblio->frameworkcode;
-my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
-    options => {
-        interface => 'opac',
-        frameworkcode => $framework
+my $framework        = $biblio->frameworkcode;
+my $record_processor = Koha::RecordProcessor->new(
+    {
+        filters => 'ViewPolicy',
+        options => {
+            interface     => 'opac',
+            frameworkcode => $framework
+        }
     }
-});
+);
 $record_processor->process($marc);
 
-if ($format =~ /endnote/) {
-    $marc = marc2endnote($marc);
+if ( $format =~ /endnote/ ) {
+    $marc   = marc2endnote($marc);
     $format = 'endnote';
-}
-elsif ($format =~ /marcxml/) {
-    $marc = marc2marcxml($marc);
+} elsif ( $format =~ /marcxml/ ) {
+    $marc   = marc2marcxml($marc);
     $format = 'marcxml';
-}
-elsif ($format=~ /mods/) {
-    $marc = marc2modsxml($marc);
+} elsif ( $format =~ /mods/ ) {
+    $marc   = marc2modsxml($marc);
     $format = 'mods';
-}
-elsif ($format =~ /ris/) {
-    $marc = marc2ris($marc);
+} elsif ( $format =~ /ris/ ) {
+    $marc   = marc2ris($marc);
     $format = 'ris';
-}
-elsif ($format =~ /bibtex/) {
-    $marc = marc2bibtex($marc,$biblionumber);
+} elsif ( $format =~ /bibtex/ ) {
+    $marc   = marc2bibtex( $marc, $biblionumber );
     $format = 'bibtex';
-}
-elsif ($format =~ /^(dc|oaidc|srwdc|rdfdc)$/i ) {
+} elsif ( $format =~ /^(dc|oaidc|srwdc|rdfdc)$/i ) {
+
     # TODO: Dublin Core leaks fields marked hidden by framework.
-    $marc = marc2dcxml($marc, undef, $biblionumber, $format);
+    $marc   = marc2dcxml( $marc, undef, $biblionumber, $format );
     $format = "dublin-core.xml";
-}
-elsif ($format =~ /marc8/) {
-    ($error,$marc) = changeEncoding($marc,"MARC","MARC21","MARC-8");
-    $marc = $marc->as_usmarc() unless $error;
+} elsif ( $format =~ /marc8/ ) {
+    ( $error, $marc ) = changeEncoding( $marc, "MARC", "MARC21", "MARC-8" );
+    $marc   = $marc->as_usmarc() unless $error;
     $format = 'marc8';
-}
-elsif ($format =~ /utf8/) {
-    C4::Charset::SetUTF8Flag($marc,1);
-    $marc = $marc->as_usmarc();
+} elsif ( $format =~ /utf8/ ) {
+    C4::Charset::SetUTF8Flag( $marc, 1 );
+    $marc   = $marc->as_usmarc();
     $format = 'utf8';
-}
-elsif ($format =~ /marcstd/) {
-    C4::Charset::SetUTF8Flag($marc,1);
-    ($error,$marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
+} elsif ( $format =~ /marcstd/ ) {
+    C4::Charset::SetUTF8Flag( $marc, 1 );
+    ( $error, $marc ) = marc2marc( $marc, 'marcstd', C4::Context->preference('marcflavour') );
     $format = 'marcstd';
-}
-elsif ( $format =~ /isbd/ ) {
-    $marc   = GetISBDView({
-        'record'    => $marc,
-        'template'  => 'opac',
-        'framework' => $framework,
-    });
+} elsif ( $format =~ /isbd/ ) {
+    $marc = GetISBDView(
+        {
+            'record'    => $marc,
+            'template'  => 'opac',
+            'framework' => $framework,
+        }
+    );
     $format = 'isbd';
-}
-else {
-    $error= "Format $format is not supported.";
+} else {
+    $error = "Format $format is not supported.";
 }
 
-if ($error){
+if ($error) {
     print $query->header();
     print $query->start_html();
     print "<h1>An error occurred </h1>";
     print $query->escapeHTML("$error");
     print $query->end_html();
-}
-else {
-    if ($format eq 'marc8'){
+} else {
+    if ( $format eq 'marc8' ) {
         print $query->header(
-            -type => 'application/marc',
-            -charset=>'ISO-2022',
-            -attachment=>"$file_pre$file_id.$format");
-    }
-    elsif ( $format eq 'isbd' ) {
+            -type       => 'application/marc',
+            -charset    => 'ISO-2022',
+            -attachment => "$file_pre$file_id.$format"
+        );
+    } elsif ( $format eq 'isbd' ) {
         print $query->header(
             -type       => 'text/plain',
             -charset    => 'utf-8',
-            -attachment =>  "$file_pre$file_id.txt"
+            -attachment => "$file_pre$file_id.txt"
         );
-    }
-    elsif ( $format eq 'ris' ) {
+    } elsif ( $format eq 'ris' ) {
         print $query->header(
-            -type => 'text/plain',
-            -charset => 'utf-8',
+            -type       => 'text/plain',
+            -charset    => 'utf-8',
             -attachment => "$file_pre$file_id.$format"
         );
     } else {
         binmode STDOUT, ':encoding(UTF-8)';
         print $query->header(
-            -type => 'application/octet-stream',
-            -charset => 'utf-8',
+            -type       => 'application/octet-stream',
+            -charset    => 'utf-8',
             -attachment => "$file_pre$file_id.$format"
         );
     }

@@ -19,7 +19,7 @@
                     <th title="Last time a library used this pattern">Last import</th>
                     <th> Comments </th>
                     [% UNLESS search_only %]
-                      <th class="NoSort noExport">Actions</th>
+                        <th class="NoSort noExport">Actions</th>
                     [% END %]
                 </tr>
             </thead>
@@ -28,18 +28,22 @@
                     [% UNLESS subscription.cannotdisplay %]
                         [% SET tr_class = '' %]
                         [% SET tr_warning = '' %]
-                        [% IF subscription.nbofcomment > highWarned  %]
+                        [% IF subscription.nbofcomment > highWarned %]
                             [% SET tr_class = 'high-warned-row' %]
                             [% SET tr_warning = highWarned %]
-                        [% ELSIF subscription.nbofcomment > warned  %]
+                        [% ELSIF subscription.nbofcomment > warned %]
                             [% SET tr_class = 'warned-row' %]
                             [% SET tr_warning = warned %]
-                        [% ELSIF subscription.nbofcomment > lowWarned  %]
+                        [% ELSIF subscription.nbofcomment > lowWarned %]
                             [% SET tr_class = 'highlighted-row' %]
                             [% SET tr_warning = lowWarned %]
                         [% END %]
-                        <tr id="row[% subscription.id | html %]" [% IF tr_class %]class="[% tr_class | html %]"[% END %] [% IF tr_warning %]title="This resource has been reported more than [% tr_warning | html %] times, take care!"[% END %]>
-                        <input type="hidden" hidden class="rowid" value="[% subscription.id | html %]" />
+                        <tr
+                            id="row[% subscription.id | html %]"
+                            [% IF tr_class %]class="[% tr_class | html %]"[% END %]
+                            [% IF tr_warning %]title="This resource has been reported more than [% tr_warning | html %] times, take care!"[% END %]
+                        >
+                            <input type="hidden" hidden class="rowid" value="[% subscription.id | html %]" />
                             <td>[% IF ( subscription.issn ) %][% subscription.issn | html %][% END %]</td>
                             <td>[% subscription.title | html %]</td>
                             <td>[% IF ( subscription.publishercode ) %][% subscription.publishercode | html %][% END %]</td>
@@ -49,22 +53,25 @@
                             <td data-order="[% subscription.lastimport | html %]">[% subscription.lastimport | $KohaDates %]</td>
                             <td>
                                 [% FOREACH comment IN subscription.comments %]
-                                    [% comment.message | html %] ([% comment.nb | html %])<br />
+                                    [% comment.message | html %]
+                                    ([% comment.nb | html %])<br />
                                 [% END %]
                             </td>
                             [% UNLESS search_only %]
                                 <td class="actions">
                                     <button class="btn btn-default btn-xs mana-use" data-subscription_id="[% subscription.id | html %]" id="mana-use-[% subscription.id | html %]"><i class="fa fa-download"></i> Import</button>
                                     <div class="dropup">
-                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Report
-                                        </button>
+                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Report </button>
                                         <ul class="dropdown-menu dropdown-menu-end mana-actions" id="mana-actions-[% subscription.id | html %]">
                                             [% IF ( subscription.comments.size ) %]
                                                 [% FOREACH comment IN subscription.comments %]
-                                                    <li><a class="dropdown-item" data-commentid="[% comment.id | html %]" data-resourceid="[% subscription.id | html %]" href="#">[% comment.message | html %] ([% comment.nb | html %])</a></li>
+                                                    <li
+                                                        ><a class="dropdown-item" data-commentid="[% comment.id | html %]" data-resourceid="[% subscription.id | html %]" href="#"
+                                                            >[% comment.message | html %] ([% comment.nb | html %])</a
+                                                        ></li
+                                                    >
                                                 [% END %]
-                                                <li><hr class="dropdown-divider"></li>
+                                                <li><hr class="dropdown-divider" /></li>
                                             [% END %]
                                             <li><a class="dropdown-item" data-commentid="other" data-resourceid="[% subscription.id | html %]" href="#">New comment</a></li>
                                         </ul>

@@ -7,11 +7,12 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Record sources") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Record sources") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -23,14 +24,14 @@
 <div id="record-source"></div>
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'calendar.inc' %] <!-- FIXME: this shouldn't be needed -->
+    [% INCLUDE 'calendar.inc' %]
+    <!-- FIXME: this shouldn't be needed -->
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
 
     [% Asset.js("js/vue/dist/admin/record_sources.js") | $raw %]
-
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

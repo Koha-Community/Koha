@@ -23,7 +23,7 @@ Return the Koha::AdditionalField object for this AdditionalFieldValue
 =cut
 
 sub field {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::AdditionalField->_new_from_dbic( $self->_result()->field() );
 }

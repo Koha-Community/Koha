@@ -23,7 +23,7 @@ use Koha::Database;
 use Koha::ArticleRequests;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 

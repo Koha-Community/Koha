@@ -69,7 +69,7 @@ sub get_suggestions {
     my @result = ();
 
     push @result, { search => 'book', label => 'Book!', relevance => 1 }
-      if ( $param->{'search'} eq 'books' );
+        if ( $param->{'search'} eq 'books' );
 
     return \@result;
 }

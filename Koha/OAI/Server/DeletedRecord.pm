@@ -25,16 +25,18 @@ use HTTP::OAI::Metadata::OAI_DC;
 use base ("HTTP::OAI::Record");
 
 sub new {
-    my ($class, $timestamp, $setSpecs, %args) = @_;
+    my ( $class, $timestamp, $setSpecs, %args ) = @_;
 
     my $self = $class->SUPER::new(%args);
 
     $timestamp =~ s/ /T/, $timestamp .= 'Z';
-    $self->header( HTTP::OAI::Header->new(
-        status      => 'deleted',
-        identifier  => $args{identifier},
-        datestamp   => $timestamp,
-    ) );
+    $self->header(
+        HTTP::OAI::Header->new(
+            status     => 'deleted',
+            identifier => $args{identifier},
+            datestamp  => $timestamp,
+        )
+    );
 
     foreach my $setSpec (@$setSpecs) {
         $self->header->setSpec($setSpec);

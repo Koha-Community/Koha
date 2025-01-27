@@ -34,13 +34,13 @@ my $issuingrule = Koha::CirculationRules->set_rules(
 ok( $issuingrule, 'Issuing rule created' );
 
 my $period_start = dt_from_string('2000-01-01');
-my $period_end = dt_from_string('2000-01-05');
+my $period_end   = dt_from_string('2000-01-05');
 
-my ( $fine ) = CalcFine( {}, q{}, q{}, $period_start, $period_end  );
+my ($fine) = CalcFine( {}, q{}, q{}, $period_start, $period_end );
 is( $fine, 0, '4 days overdue, charge period 7 days, charge at end of interval gives fine of $0' );
 
 $period_end = dt_from_string('2000-01-10');
-( $fine ) = CalcFine( {}, q{}, q{}, $period_start, $period_end  );
+($fine) = CalcFine( {}, q{}, q{}, $period_start, $period_end );
 is( $fine, 1, '9 days overdue, charge period 7 days, charge at end of interval gives fine of $1' );
 
 # Test charging fine at the *beginning* of each charge period
@@ -56,9 +56,9 @@ $issuingrule = Koha::CirculationRules->set_rules(
 );
 
 $period_end = dt_from_string('2000-01-05');
-( $fine ) = CalcFine( {}, q{}, q{}, $period_start, $period_end  );
+($fine) = CalcFine( {}, q{}, q{}, $period_start, $period_end );
 is( $fine, 1, '4 days overdue, charge period 7 days, charge at start of interval gives fine of $1' );
 
 $period_end = dt_from_string('2000-01-10');
-( $fine ) = CalcFine( {}, q{}, q{}, $period_start, $period_end  );
+($fine) = CalcFine( {}, q{}, q{}, $period_start, $period_end );
 is( $fine, 2, '9 days overdue, charge period 7 days, charge at start of interval gives fine of $2' );

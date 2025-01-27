@@ -9,73 +9,74 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( invoice ) %]
-        [% tx("Receipt summary for {vendor}, invoice {invoice_number}", { vendor = name, invoice_number = invoice }) | html %]
-    [% ELSE %]
-        [% tx("Receipt summary for {vendor}", { vendor = name }) | html %]
-    [% END %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( invoice ) %]
+            [% tx("Receipt summary for {vendor}, invoice {invoice_number}", { vendor = name, invoice_number = invoice }) | html %]
+        [% ELSE %]
+            [% tx("Receipt summary for {vendor}", { vendor = name }) | html %]
+        [% END %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-    <style>
-        @media (min-width: 1200px) {
-            #receive-modal, #receive-modal {
-                width: 98%;
-            }
+<style>
+    @media (min-width: 1200px) {
+        #receive-modal,
+        #receive-modal {
+            width: 98%;
         }
-        #receive-modal .modal-body {
-            background-color: #F3F4F4;
-        }
+    }
+    #receive-modal .modal-body {
+        background-color: #f3f4f4;
+    }
 
-        .lbl {
-            font-weight: 700;
-            text-align: right;
-        }
-        .modal-body ol {
-            list-style-type: none;
-        }
+    .lbl {
+        font-weight: 700;
+        text-align: right;
+    }
+    .modal-body ol {
+        list-style-type: none;
+    }
 
-        .modal-body ol li {
-            list-style-type: none;
-            padding-bottom: 1em;
-            width: 100%;
-        }
+    .modal-body ol li {
+        list-style-type: none;
+        padding-bottom: 1em;
+        width: 100%;
+    }
 
-        .modal-body h4 {
-            margin-left: 1em;
-            padding: .2em .5em;
-            margin-bottom: 17px;
-        }
+    .modal-body h4 {
+        margin-left: 1em;
+        padding: 0.2em 0.5em;
+        margin-bottom: 17px;
+    }
 
-        .modal-body label {
-            margin-right: 1em;
-            text-align: right;
-            width: 11em;
-            display: inline-block;
-            font-weight: 700;
-        }
+    .modal-body label {
+        margin-right: 1em;
+        text-align: right;
+        width: 11em;
+        display: inline-block;
+        font-weight: 700;
+    }
 
-        .modal-body textarea {
-            vertical-align: text-top;
-        }
+    .modal-body textarea {
+        vertical-align: text-top;
+    }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-        }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+    }
 
-        .modal-header::before,
-        .modal-header::after {
-            content: none;
-        }
+    .modal-header::before,
+    .modal-header::after {
+        content: none;
+    }
 
-        #top_itemfieldset {
-            padding: 0px;
-        }
-
-    </style>
+    #top_itemfieldset {
+        padding: 0px;
+    }
+</style>
 </head>
 
 <body id="acq_orderreceive" class="acq">
@@ -102,121 +103,153 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
+    <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]][% END %] (order #[% multiple_orders | html %])</h1>
+    [% SET only_one_order = ( multiple_orders.split(',').size == 1 ) %]
+    [% IF multiple_orders %]
+        <table id="multiple_orders" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>[% tp('noun', 'Order') | html %]</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Date received</th>
+                    <th>Fund</th>
+                    <th>Quantity</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
 
-<h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% multiple_orders | html %])</h1>
-[% SET only_one_order = ( multiple_orders.split(',').size == 1 ) %]
-[% IF multiple_orders %]
-    <table id="multiple_orders" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>[% tp('noun', 'Order') | html %]</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>ISBN</th>
-                <th>Date received</th>
-                <th>Fund</th>
-                <th>Quantity</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-    </table>
-
-    <div class="col">
-        <fieldset class="action">
-            <button class="save btn btn-primary" disabled>Confirm</button>
-            <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
-        </fieldset>
-        <div id="jobpanel">
-            <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+        <div class="col">
+            <fieldset class="action">
+                <button class="save btn btn-primary" disabled>Confirm</button>
+                <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
+            </fieldset>
+            <div id="jobpanel">
+                <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+            </div>
         </div>
-    </div>
 
-    <div class="modal" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
-        <div id="receive-modal" class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="col-md-10 modal-title"></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div style="display:none" id="loading">Loading ...</div>
-                    <div id="modal-order-main" class="row">
-                        <!--ul>
+        <div class="modal" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
+            <div id="receive-modal" class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="col-md-10 modal-title"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display:none" id="loading">Loading ...</div>
+                        <div id="modal-order-main" class="row">
+                            <!--ul>
                             <li><a href="#info-panel">Info</a></li>
                             <li><a href="#accounting-panel">Accounting</a></li>
                             <li><a href="#history-panel">Receipt history</a></li>
                             <li><a href="#items-panel">Items</a></li>
                         </ul-->
 
-                        <div class="col-md-12 col-lg-6">
-                            <div id="info-panel" class="page-section">
-                                <div>
-                                    <h4>Catalog details</h4>
+                            <div class="col-md-12 col-lg-6">
+                                <div id="info-panel" class="page-section">
+                                    <div>
+                                        <h4>Catalog details</h4>
 
-                                    <div class="row"> <span class="lbl col-sm-4">Title: </span><span class="col-sm-8" id="biblio_title"></span></div>
-                                    <div class="row"> <span class="lbl col-sm-4">Author: </span><span class="col-sm-8" id="biblio_author"></span></div>
-                                    <div class="row"> <span class="lbl col-sm-4">Copyright: </span><span class="col-sm-8" id="biblio_copyright_date"></span></div>
-                                    <div class="row"> <span class="lbl col-sm-4">ISBN: </span><span class="col-sm-8" id="biblio_isbn"></span></div>
-                                    <div class="row"> <span class="lbl col-sm-4">Series: </span><span class="col-sm-8" id="biblio_series_title"></span></div>
-
-                                </div>
-                                <div id="suggestion_fieldset">
-                                    <h4>Suggestion</h4>
-                                    <div class="row">
-                                        <span class="lbl col-sm-4">Suggested by: </span> <span class="col-sm-8" id="biblio_suggestion_suggester"></span>
+                                        <div class="row"> <span class="lbl col-sm-4">Title: </span><span class="col-sm-8" id="biblio_title"></span></div>
+                                        <div class="row"> <span class="lbl col-sm-4">Author: </span><span class="col-sm-8" id="biblio_author"></span></div>
+                                        <div class="row"> <span class="lbl col-sm-4">Copyright: </span><span class="col-sm-8" id="biblio_copyright_date"></span></div>
+                                        <div class="row"> <span class="lbl col-sm-4">ISBN: </span><span class="col-sm-8" id="biblio_isbn"></span></div>
+                                        <div class="row"> <span class="lbl col-sm-4">Series: </span><span class="col-sm-8" id="biblio_series_title"></span></div>
                                     </div>
-                                    <div class="row" id="suggestion_reason">
-                                        <span class="lbl col-sm-4">Reason:</span>
-                                        <div class="col-sm-8">
-                                            [% SET suggestion_reasons = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
-                                            <select class="select-reason" id="reason" name="reason">
-                                                <option value=""> -- Choose a reason -- </option>
-                                                [% FOREACH reason IN suggestion_reasons %]
-                                                <option value="[% reason.lib | html %]">[% reason.lib | html %]</option>
-                                                [% END %]
-                                                <option value="other">Others...</option>
-                                            </select>
+                                    <div id="suggestion_fieldset">
+                                        <h4>Suggestion</h4>
+                                        <div class="row"> <span class="lbl col-sm-4">Suggested by: </span> <span class="col-sm-8" id="biblio_suggestion_suggester"></span> </div>
+                                        <div class="row" id="suggestion_reason">
+                                            <span class="lbl col-sm-4">Reason:</span>
+                                            <div class="col-sm-8">
+                                                [% SET suggestion_reasons = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
+                                                <select class="select-reason" id="reason" name="reason">
+                                                    <option value=""> -- Choose a reason -- </option>
+                                                    [% FOREACH reason IN suggestion_reasons %]
+                                                        <option value="[% reason.lib | html %]">[% reason.lib | html %]</option>
+                                                    [% END %]
+                                                    <option value="other">Others...</option>
+                                                </select>
 
-                                            <span id="other_reason" name="other_reason">
-                                                <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
-                                                <a href="#back">Cancel</a>
-                                            </span>
+                                                <span id="other_reason" name="other_reason">
+                                                    <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
+                                                    <a href="#back">Cancel</a>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="history-panel" class="page-section">
-                                <div id="child_orders">
-                                    <h4>Receipt history for this subscription</h4>
-                                    <table id="child_orders_table">
-                                        <thead>
-                                            <tr>
-                                                <th>Invoice</th>
-                                                <th>Order number</th>
-                                                <th>Creation date</th>
-                                                <th>Receive date</th>
-                                                <th>Quantity received</th>
-                                                <th>Status</th>
-                                                <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
-                                                <th>Internal note</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                <div id="history-panel" class="page-section">
+                                    <div id="child_orders">
+                                        <h4>Receipt history for this subscription</h4>
+                                        <table id="child_orders_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Invoice</th>
+                                                    <th>Order number</th>
+                                                    <th>Creation date</th>
+                                                    <th>Receive date</th>
+                                                    <th>Quantity received</th>
+                                                    <th>Status</th>
+                                                    <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
+                                                    <th>Internal note</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                            <fieldset class="rows" id="top_itemfieldset">
-                                <div id="items-panel" class="page-section">
-                                    <div id="acq-create-receiving">
-                                        <div id="items_list" style="display: none">
-                                            <h4>Items list</h4>
-                                            <div style="width:100%;overflow:auto;">
+                                <fieldset class="rows" id="top_itemfieldset">
+                                    <div id="items-panel" class="page-section">
+                                        <div id="acq-create-receiving">
+                                            <div id="items_list" style="display: none">
+                                                <h4>Items list</h4>
+                                                <div style="width:100%;overflow:auto;">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Actions</th>
+                                                                <th>Barcode</th>
+                                                                <th>Home library</th>
+                                                                <th>Holding library</th>
+                                                                <th>Not for loan</th>
+                                                                <th>Restricted</th>
+                                                                <th>Location</th>
+                                                                <th>Call number</th>
+                                                                <th>Copy number</th>
+                                                                <th>Inventory number</th>
+                                                                <th>Collection</th>
+                                                                <th>Item type</th>
+                                                                <th>Materials</th>
+                                                                <th>Notes</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody> </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div id="itemfieldset">
+                                                <h4>Item</h4>
+                                                [% IF ( NoACQframework ) %]
+                                                    <p class="required"> No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used </p>
+                                                [% END %]
+                                                <div id="outeritemblock"></div>
+                                            </div>
+                                        </div>
+                                        <div id="acq-create-ordering">
+                                            <h4>Items</h4>
+                                            <div style="width:100%;overflow:auto">
                                                 <table>
                                                     <thead>
                                                         <tr>
-                                                            <th>Actions</th>
+                                                            <th>Receive?</th>
+                                                            <th>&nbsp;</th>
                                                             <th>Barcode</th>
                                                             <th>Home library</th>
-                                                            <th>Holding library</th>
+                                                            <th>Current library</th>
                                                             <th>Not for loan</th>
                                                             <th>Restricted</th>
                                                             <th>Location</th>
@@ -229,223 +262,186 @@
                                                             <th>Notes</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                    </tbody>
+                                                    <tbody> </tbody>
                                                 </table>
                                             </div>
                                         </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12 col-lg-6">
+                                <div id="accounting-panel" class="page-section">
+                                    <h4>Accounting details</h4>
+                                    <form method="get" action="/cgi-bin/koha/acqui/orderreceive.pl" class="validated">
+                                        <ol>
+                                            <li>
+                                                <label for="datereceived">Date received: </label>
+                                                <input type="text" size="10" id="datereceived" name="datereceived" class="flatpickr" />
+                                            </li>
+                                            <li>
+                                                <label for="bookfund" class="required">Fund: </label>
+                                                <select id="bookfund" name="bookfund">
+                                                    <optgroup label="Current">
+                                                        <option id="selected_bookfund" selected="selected"></option>
+                                                    </optgroup>
+                                                    [% FOREACH budget_period_id IN budget_loops.keys %]
+                                                        [% SET budget_period = budget_loops.$budget_period_id %]
+                                                        [% SET optgroup_class = "" %]
+                                                        [% SET optgroup_label = budget_period.description %]
+                                                        [% IF budget_period.active %]
+                                                            [% SET optgroup_class = "inactive_budget" %]
+                                                            [% SET optgroup_label = t("{budget_description} (Inactive)", {budget_description = budget_period.description}) %]
+                                                        [% END %]
 
-                                        <div id="itemfieldset">
-                                            <h4>Item</h4>
-                                            [% IF ( NoACQframework ) %]
-                                                <p class="required">
-                                                    No ACQ framework, using default. You should create a
-                                                    framework with code ACQ, the items framework would be
-                                                    used
-                                                </p>
+                                                        <optgroup class="inactive_budget" label="[% optgroup_label | html %]">
+                                                            [% FOREACH budget_loo IN budget_period.funds %]
+                                                                [% level_indent_cnt = 0 %]
+                                                                [% level_indent = "" %]
+                                                                [% WHILE level_indent_cnt < budget_loo.b_level %]
+                                                                    [% level_indent = level_indent _ " -- " %]
+                                                                    [% level_indent_cnt = level_indent_cnt +1 %]
+                                                                [% END %]
+
+                                                                [% SET bdgclass = "" %]
+                                                                [% IF ( budget_loo.b_sel ) %]
+                                                                    [% active_count = 0 #select no other fund %]
+                                                                [% ELSIF active_count==1 && budget_loo.b_active %]
+
+                                                                [% ELSE %]
+                                                                    [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
+                                                                [% END %]
+
+                                                                <option
+                                                                    value="[% budget_loo.b_id | html %]"
+                                                                    class="[% bdgclass | html %]"
+                                                                    data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]"
+                                                                    data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                                                >
+                                                                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %](inactive)[% END %]
+                                                                </option>
+                                                            [% END %]
+                                                        </optgroup>
+                                                    [% END %]
+                                                </select>
+                                                <span class="required">Required</span>
+                                            </li>
+                                            <li>
+                                                <label>&nbsp;</label>
+                                                <span id="current-fund" class="hint"></span>
+                                            </li>
+                                            <li>
+                                                <label for="showallbudgets">&nbsp;Show inactive:</label>
+                                                <input type="checkbox" id="showallbudgets" />
+                                            </li>
+                                            <li>
+                                                <label for="creator">Ordered by: </label>
+                                                <span id="creator"></span>
+                                            </li>
+                                            <li>
+                                                <label for="quantity_to_receive">Quantity ordered: </label>
+                                                <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" />
+                                            </li>
+                                            <li>
+                                                <label for="quantity">Quantity received: </label>
+                                                <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" />
+                                                <div id="qtyrecerror" style="display:none">
+                                                    <p class="error">Warning, you have entered more items than expected. Items will not be created.</p>
+                                                </div>
+                                            </li>
+
+                                            [% IF ( gst_values ) %]
+                                                <li>
+                                                    <label for="tax_rate">Tax rate: </label>
+                                                    <select name="tax_rate" id="tax_rate">
+                                                        [% FOREACH gst IN gst_values %]
+                                                            <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
+                                                        [% END %]
+                                                    </select>
+                                                </li>
                                             [% END %]
-                                            <div id="outeritemblock"></div>
-                                        </div>
-                                    </div>
-                                    <div id="acq-create-ordering">
-                                        <h4>Items</h4>
-                                        <div style="width:100%;overflow:auto">
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Receive?</th>
-                                                        <th>&nbsp;</th>
-                                                        <th>Barcode</th>
-                                                        <th>Home library</th>
-                                                        <th>Current library</th>
-                                                        <th>Not for loan</th>
-                                                        <th>Restricted</th>
-                                                        <th>Location</th>
-                                                        <th>Call number</th>
-                                                        <th>Copy number</th>
-                                                        <th>Inventory number</th>
-                                                        <th>Collection</th>
-                                                        <th>Item type</th>
-                                                        <th>Materials</th>
-                                                        <th>Notes</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+
+                                            <li>
+                                                <label for="rrp">Retail price: </label>
+                                                <span id="rrp"></span> </li
+                                            ><li>
+                                                <label for="replacementprice">Replacement price:</label>
+                                                <input class="decimal" type="text" size="20" name="replacementprice" id="replacementprice" />
+                                            </li>
+                                            <li>
+                                                <label for="ecost">Budgeted cost: </label>
+                                                <span id="ecost"></span>
+                                            </li>
+                                            <li>
+                                                <label for="unitprice">Actual cost:</label>
+                                                <input class="decimal" type="text" size="20" name="unitprice" id="unitprice" />
+                                                <span id="unitprice_hint" class="hint"></span>
+                                            </li>
+                                            <li>
+                                                <label style="margin-left: 12em; text-align: left; font-weight: inherit; float:none;"><input type="checkbox" id="change_currency" name="change_currency" />Change currency</label>
+                                            </li>
+                                            <li id="select_currency">
+                                                <label for="invoice_unitprice"></label>
+                                                <input class="decimal" type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
+                                                [% IF currencies.count %]
+                                                    <select name="invoice_currency" id="invoice_currency">
+                                                        <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected
+                                                            >[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option
+                                                        >
+                                                        [% FOR currency IN currencies %]
+                                                            <option value="[% currency.currency | html %]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                                                        [% END %]
+                                                    </select>
+                                                [% END %]
+                                            </li>
+                                            <li>
+                                                <label for="order_internalnote">Internal note: </label>
+                                                <textarea name="order_internalnote" id="order_internalnote" width="40" rows="8"></textarea>
+                                            </li>
+                                            <li>
+                                                <label for="order_vendornote">Vendor note: </label>
+                                                <span id="order_vendornote"></span>
+                                            </li>
+                                        </ol>
+                                    </form>
                                 </div>
-                            </fieldset>
-                        </div>
-                        <div class="col-md-12 col-lg-6">
-                            <div id="accounting-panel" class="page-section">
-                                <h4>Accounting details</h4>
-                                <form method="get" action="/cgi-bin/koha/acqui/orderreceive.pl" class="validated">
-                                    <ol>
-                                        <li>
-                                            <label for="datereceived">Date received: </label>
-                                            <input type="text" size="10" id="datereceived" name="datereceived" class="flatpickr" />
-                                        </li>
-                                        <li>
-                                            <label for="bookfund" class="required">Fund: </label>
-                                            <select id="bookfund" name="bookfund">
-                                                <optgroup label="Current">
-                                                    <option id="selected_bookfund" selected="selected"></option>
-                                                </optgroup>
-                                            [% FOREACH budget_period_id IN budget_loops.keys %]
-                                                [% SET budget_period = budget_loops.$budget_period_id %]
-                                                [% SET optgroup_class = "" %]
-                                                [% SET optgroup_label = budget_period.description %]
-                                                [% IF budget_period.active %]
-                                                    [% SET optgroup_class = "inactive_budget" %]
-                                                    [% SET optgroup_label = t("{budget_description} (Inactive)", {budget_description = budget_period.description}) %]
-                                                [% END %]
-
-                                                <optgroup class="inactive_budget" label="[% optgroup_label | html %]">
-
-                                                [% FOREACH budget_loo IN budget_period.funds %]
-                                                [% level_indent_cnt = 0 %]
-                                                    [% level_indent = "" %]
-                                                    [% WHILE level_indent_cnt < budget_loo.b_level %]
-                                                        [% level_indent = level_indent _ " -- " %]
-                                                        [% level_indent_cnt = level_indent_cnt +1 %]
-                                                    [% END %]
-
-                                                    [% SET bdgclass = "" %]
-                                                    [% IF ( budget_loo.b_sel ) %]
-                                                        [% active_count = 0 #select no other fund %]
-                                                    [% ELSIF active_count==1 && budget_loo.b_active %]
-                                                    [% ELSE %]
-                                                        [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
-                                                    [% END %]
-
-                                                    <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
-                                                        [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
-                                                    </option>
-                                                [% END %]
-                                                </optgroup>
-                                            [% END %]
-                                            </select>
-                                            <span class="required">Required</span>
-                                        </li>
-                                        <li>
-                                            <label>&nbsp;</label>
-                                            <span id="current-fund" class="hint"></span>
-                                        </li>
-                                        <li>
-                                            <label for="showallbudgets">&nbsp;Show inactive:</label>
-                                            <input type="checkbox" id="showallbudgets" />
-                                        </li>
-                                        <li>
-                                            <label for="creator">Ordered by: </label>
-                                            <span id="creator"></span>
-                                        </li>
-                                        <li>
-                                            <label for="quantity_to_receive">Quantity ordered: </label>
-                                            <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" />
-                                        </li>
-                                        <li>
-                                            <label for="quantity">Quantity received: </label>
-                                            <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" />
-                                            <div id="qtyrecerror" style="display:none">
-                                                <p class="error">Warning, you have entered more items than expected.
-                                                Items will not be created.</p>
-                                            </div>
-                                        </li>
-
-                                        [% IF ( gst_values ) %]
-                                        <li>
-                                            <label for="tax_rate">Tax rate: </label>
-                                            <select name="tax_rate" id="tax_rate">
-                                            [% FOREACH gst IN gst_values %]
-                                                <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
-                                            [% END %]
-                                            </select>
-                                        </li>
-                                        [% END %]
-
-                                        <li>
-                                            <label for="rrp">Retail price: </label>
-                                            <span id="rrp"></span>
-                                        <li>
-                                            <label for="replacementprice">Replacement price:</label>
-                                            <input class="decimal" type="text" size="20" name="replacementprice" id="replacementprice" />
-                                        </li>
-                                        <li>
-                                            <label for="ecost">Budgeted cost: </label>
-                                            <span id="ecost"></span>
-                                        </li>
-                                        <li>
-                                            <label for="unitprice">Actual cost:</label>
-                                            <input class="decimal" type="text" size="20" name="unitprice" id="unitprice" />
-                                            <span id="unitprice_hint" class="hint"></span>
-                                        </li>
-                                        <li>
-                                            <label style="margin-left: 12em; text-align: left; font-weight: inherit; float:none;"><input type="checkbox" id="change_currency" name="change_currency">Change currency</label>
-                                        </li>
-                                        <li id="select_currency">
-                                            <label for="invoice_unitprice"></label>
-                                            <input class="decimal" type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
-                                            [% IF currencies.count %]
-                                            <select name="invoice_currency" id="invoice_currency">
-                                                <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected>[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
-                                                [% FOR currency IN currencies %]
-                                                <option value="[% currency.currency | html %]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
-                                                [% END %]
-                                            </select>
-                                            [% END %]
-                                        </li>
-                                        <li>
-                                            <label for="order_internalnote">Internal note: </label>
-                                            <textarea name="order_internalnote" id="order_internalnote" width="40" rows="8" ></textarea>
-                                        </li>
-                                        <li>
-                                            <label for="order_vendornote">Vendor note: </label>
-                                            <span id="order_vendornote"></span>
-                                        </li>
-                                    </ol>
-                                </form>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                [% IF only_one_order %]
-                    <button type="button" class="btn btn-primary modal-save" disabled>Confirm</button>
-                    <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
-                [% ELSE %]
-                    <button type="button" class="btn btn-default modal-prev"><i class="fa fa-arrow-left"></i> Previous order</button>
-                    <button type="button" class="btn btn-default modal-next">Next order <i class="fa fa-arrow-right"></i> </button>
-                    <button type="button" class="btn btn-primary modal-save">Save changes</button>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                [% END %]
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="modal_messages" tabindex="-1" role="dialog" aria-labelledby="Order edit">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="col-md-11 modal-title"></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul></ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary accept">Accept</button>
-                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                    <div class="modal-footer">
+                        [% IF only_one_order %]
+                            <button type="button" class="btn btn-primary modal-save" disabled>Confirm</button>
+                            <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
+                        [% ELSE %]
+                            <button type="button" class="btn btn-default modal-prev"><i class="fa fa-arrow-left"></i> Previous order</button>
+                            <button type="button" class="btn btn-default modal-next">Next order <i class="fa fa-arrow-right"></i> </button>
+                            <button type="button" class="btn btn-primary modal-save">Save changes</button>
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        [% END %]
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-[% ELSE %]
-    This ordernumber does not exist.
-[% END %]
 
+        <div class="modal" id="modal_messages" tabindex="-1" role="dialog" aria-labelledby="Order edit">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="col-md-11 modal-title"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary accept">Accept</button>
+                        <button type="button" class="btn btn-default cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    [% ELSE %]
+        This ordernumber does not exist.
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

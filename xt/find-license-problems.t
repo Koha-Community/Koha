@@ -30,27 +30,30 @@ use File::Spec;
 use File::Find;
 
 my @files;
+
 sub wanted {
     my $name = $File::Find::name;
     push @files, $name
-        unless $name =~ /\/(\.git|koha-tmpl|node_modules|swagger-ui)(\/.*)?$/ ||
-               $name =~ /\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip|patch)$/ ||
-               $name =~ m[(xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json)] ||
-               ! -f $name;
+        unless $name =~ /\/(\.git|koha-tmpl|node_modules|swagger-ui)(\/.*)?$/
+        || $name     =~ /\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip|patch)$/
+        || $name     =~ m[(xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json)]
+        || !-f $name;
 }
 
-find({ wanted => \&wanted, no_chdir => 1 }, File::Spec->curdir());
+find( { wanted => \&wanted, no_chdir => 1 }, File::Spec->curdir() );
 
 foreach my $name (@files) {
     open( my $fh, '<', $name ) || die "cannot open file $name $!";
-    my ( $hascopyright, $hasgpl, $hasv3, $hasorlater, $haslinktolicense,
-        $hasfranklinst, $is_not_us ) = (0)x7;
+    my (
+        $hascopyright,  $hasgpl, $hasv3, $hasorlater, $haslinktolicense,
+        $hasfranklinst, $is_not_us
+    ) = (0) x 7;
     while ( my $line = <$fh> ) {
         $hascopyright = 1 if ( $line =~ /^(#|--)?\s*Copyright.*\d\d/ );
         $hasgpl       = 1 if ( $line =~ /GNU General Public License/ );
         $hasv3        = 1 if ( $line =~ /either version 3/ );
         $hasorlater   = 1
-          if ( $line =~ /any later version/
+            if ( $line =~ /any later version/
             || $line =~ /at your option/ );
         $haslinktolicense = 1 if $line =~ m|http://www\.gnu\.org/licenses|;
         $hasfranklinst    = 1 if ( $line =~ /51 Franklin Street/ );
@@ -59,10 +62,11 @@ foreach my $name (@files) {
     close $fh;
     next unless $hascopyright;
     next if $is_not_us;
-    is(    $hasgpl
-        && $hasv3
-        && $hasorlater
-        && $haslinktolicense
-        && !$hasfranklinst,  1 ) or diag(sprintf "File %s has wrong copyright: hasgpl=%s, hasv3=%s, hasorlater=%s, haslinktolicense=%s, hasfranklinst=%s", $name, $hasgpl, $hasv3, $hasorlater, $haslinktolicense, $hasfranklinst);
+    is( $hasgpl && $hasv3 && $hasorlater && $haslinktolicense && !$hasfranklinst, 1 )
+        or diag(
+        sprintf
+            "File %s has wrong copyright: hasgpl=%s, hasv3=%s, hasorlater=%s, haslinktolicense=%s, hasfranklinst=%s",
+        $name, $hasgpl, $hasv3, $hasorlater, $haslinktolicense, $hasfranklinst
+        );
 }
 done_testing;

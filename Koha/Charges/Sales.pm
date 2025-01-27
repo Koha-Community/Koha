@@ -57,16 +57,14 @@ Koha::Charges::Sale - Module for collecting sales in Koha
 sub new {
     my ( $class, $params ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: cash_register")
-      unless $params->{cash_register};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: cash_register")
+        unless $params->{cash_register};
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: staff_id")
-      unless $params->{staff_id};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: staff_id")
+        unless $params->{staff_id};
 
     Carp::confess("Key 'cash_register' is not a Koha::Cash::Register object!")
-      unless $params->{cash_register}->isa('Koha::Cash::Register');
+        unless $params->{cash_register}->isa('Koha::Cash::Register');
 
     return bless( $params, $class );
 }
@@ -83,9 +81,8 @@ sub payment_type {
     my ( $self, $payment_type ) = @_;
 
     if ($payment_type) {
-        Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Type of payment not recognised' )
-          unless ( exists( $self->_get_valid_payments->{$payment_type} ) );
+        Koha::Exceptions::Account::UnrecognisedType->throw( error => 'Type of payment not recognised' )
+            unless ( exists( $self->_get_valid_payments->{$payment_type} ) );
 
         $self->{payment_type} = $payment_type;
     }
@@ -106,11 +103,9 @@ sub _get_valid_payments {
 
     $self->{valid_payments} //= {
         map { $_ => 1 } Koha::AuthorisedValues->search_with_library_limits(
-            {
-                category => 'PAYMENT_TYPE'
-            },
+            { category => 'PAYMENT_TYPE' },
             {},
-            $self->{cash_register}->branch # filter by cash_register branch
+            $self->{cash_register}->branch    # filter by cash_register branch
         )->get_column('authorised_value')
     };
 
@@ -127,21 +122,17 @@ sub _get_valid_payments {
 sub add_item {
     my ( $self, $item ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: code")
-      unless $item->{code};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: code")
+        unless $item->{code};
 
-    Koha::Exceptions::Account::UnrecognisedType->throw(
-        error => 'Type of debit not recognised' )
-      unless ( exists( $self->_get_valid_items->{ $item->{code} } ) );
+    Koha::Exceptions::Account::UnrecognisedType->throw( error => 'Type of debit not recognised' )
+        unless ( exists( $self->_get_valid_items->{ $item->{code} } ) );
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: price")
-      unless $item->{price};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: price")
+        unless $item->{price};
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: quantity")
-      unless $item->{quantity};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: quantity")
+        unless $item->{quantity};
 
     push @{ $self->{items} }, $item;
     return $self;
@@ -159,9 +150,10 @@ sub _get_valid_items {
     my $self = shift;
 
     $self->{valid_items} //= {
-        map { $_ => 1 }
-          Koha::Account::DebitTypes->search_with_library_limits( {}, {},
-            $self->{cash_register}->branch )->get_column('code')
+        map { $_ => 1 } Koha::Account::DebitTypes->search_with_library_limits(
+            {}, {},
+            $self->{cash_register}->branch
+        )->get_column('code')
     };
 
     return $self->{valid_items};
@@ -177,21 +169,17 @@ sub purchase {
     my ( $self, $params ) = @_;
 
     if ( $params->{payment_type} ) {
-        Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Type of payment not recognised' )
-          unless (
-            exists( $self->_get_valid_payments->{ $params->{payment_type} } ) );
+        Koha::Exceptions::Account::UnrecognisedType->throw( error => 'Type of payment not recognised' )
+            unless ( exists( $self->_get_valid_payments->{ $params->{payment_type} } ) );
 
         $self->{payment_type} = $params->{payment_type};
     }
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: payment_type")
-      unless $self->{payment_type};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: payment_type")
+        unless $self->{payment_type};
 
-    Koha::Exceptions::NoChanges->throw(
-        "Cannot purchase before calling add_item")
-      unless $self->{items};
+    Koha::Exceptions::NoChanges->throw("Cannot purchase before calling add_item")
+        unless $self->{items};
 
     my $schema     = Koha::Database->new->schema;
     my $dt         = dt_from_string();

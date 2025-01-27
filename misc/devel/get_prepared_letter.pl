@@ -70,14 +70,16 @@ documentation of GetPreparedLetter for more informations.
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use JSON qw( decode_json );
-use Pod::Usage qw( pod2usage );
+use JSON         qw( decode_json );
+use Pod::Usage   qw( pod2usage );
 
 use C4::Letters qw( GetPreparedLetter );
 
 my $help;
-my ( $module, $letter_code, $branchcode, $message_transport_type, $lang,
-    $repeat, $tables, $loops );
+my (
+    $module, $letter_code, $branchcode, $message_transport_type, $lang,
+    $repeat, $tables,      $loops
+);
 
 GetOptions(
     'help'                     => \$help,

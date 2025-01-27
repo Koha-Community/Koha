@@ -108,17 +108,15 @@ subtest 'filter_by_active() tests' => sub {
                 $order_6->ordernumber,
             ]
         },
-        {
-            order_by => 'ordernumber'
-        }
+        { order_by => 'ordernumber' }
     );
 
     my $rs = $this_orders_rs->filter_by_active;
 
-    is( $rs->count, 3, 'Only new (basket is standing), ordered and partial orders are returned' );
-    is( $rs->next->ordernumber, $order_3->ordernumber , 'Expected order in resultset' );
-    is( $rs->next->ordernumber, $order_4->ordernumber , 'Expected order in resultset' );
-    is( $rs->next->ordernumber, $order_5->ordernumber , 'Expected order in resultset' );
+    is( $rs->count,             3, 'Only new (basket is standing), ordered and partial orders are returned' );
+    is( $rs->next->ordernumber, $order_3->ordernumber, 'Expected order in resultset' );
+    is( $rs->next->ordernumber, $order_4->ordernumber, 'Expected order in resultset' );
+    is( $rs->next->ordernumber, $order_5->ordernumber, 'Expected order in resultset' );
 
     # If we change quantities on order_5 (partial), we should no longer see it
     $order_5->quantityreceived(2)->store;
@@ -133,9 +131,9 @@ subtest 'filter_by_id_including_transfers() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $order_1 = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
-    my $order_2 = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
-    my $order_3 = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
+    my $order_1 = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
+    my $order_2 = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
+    my $order_3 = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
 
     $builder->build(
         {
@@ -148,20 +146,22 @@ subtest 'filter_by_id_including_transfers() tests' => sub {
     );
 
     my $orders_rs = Koha::Acquisition::Orders->search;
-    my $count = $orders_rs->count;
+    my $count     = $orders_rs->count;
 
-    throws_ok
-        { $orders_rs->filter_by_id_including_transfers() }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $orders_rs->filter_by_id_including_transfers() }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown correctly';
 
-    $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_1->ordernumber });
+    $orders_rs = $orders_rs->filter_by_id_including_transfers( { ordernumber => $order_1->ordernumber } );
 
-    is_deeply( [ sort { $a <=> $b } $orders_rs->get_column('ordernumber') ], [$order_1->ordernumber, $order_2->ordernumber ], 'The 2 orders are returned' );
+    is_deeply(
+        [ sort { $a <=> $b } $orders_rs->get_column('ordernumber') ],
+        [ $order_1->ordernumber, $order_2->ordernumber ], 'The 2 orders are returned'
+    );
 
-    $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_2->ordernumber });
+    $orders_rs = $orders_rs->filter_by_id_including_transfers( { ordernumber => $order_2->ordernumber } );
 
-    is( $orders_rs->count, 1, 'Only one order related to the specified ordernumber' );
+    is( $orders_rs->count,             1,                     'Only one order related to the specified ordernumber' );
     is( $orders_rs->next->ordernumber, $order_2->ordernumber, 'The right order is returned' );
 
     $schema->storage->txn_rollback;

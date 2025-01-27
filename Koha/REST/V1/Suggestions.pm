@@ -47,8 +47,7 @@ sub list {
             status  => 200,
             openapi => $suggestions
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -72,8 +71,7 @@ sub get {
             status  => 200,
             openapi => $suggestion
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -98,21 +96,20 @@ sub add {
             if (   C4::Context->preference('MaxTotalSuggestions') ne ''
                 && C4::Context->preference('NumberOfSuggestionDays') ne '' )
             {
-                my $max_total = C4::Context->preference('MaxTotalSuggestions');
+                my $max_total  = C4::Context->preference('MaxTotalSuggestions');
                 my $days_range = C4::Context->preference('NumberOfSuggestionDays');
 
                 if ( $max_total and $days_range ) {
 
-                    my $total = Koha::Suggestions->search({ suggestedby => $body->{suggested_by} })
-                                                 ->filter_by_suggested_days_range( $days_range )
-                                                 ->count;
+                    my $total = Koha::Suggestions->search( { suggestedby => $body->{suggested_by} } )
+                        ->filter_by_suggested_days_range($days_range)->count;
 
                     if ( $total >= $max_total ) {
                         return $c->render(
                             status  => 400,
                             openapi => {
-                                error       => "Reached the maximum suggestions limit",
-                                error_code  => 'max_total_reached'
+                                error      => "Reached the maximum suggestions limit",
+                                error_code => 'max_total_reached'
                             }
                         );
                     }
@@ -122,15 +119,14 @@ sub add {
 
         unless ( $overrides->{max_pending} ) {
             if ( C4::Context->preference('MaxOpenSuggestions') ne '' ) {
-                my $total_pending = Koha::Suggestions->search({ suggestedby => $body->{suggested_by} })
-                                                  ->filter_by_pending
-                                                  ->count;
+                my $total_pending =
+                    Koha::Suggestions->search( { suggestedby => $body->{suggested_by} } )->filter_by_pending->count;
                 if ( $total_pending >= C4::Context->preference('MaxOpenSuggestions') ) {
                     return $c->render(
                         status  => 400,
                         openapi => {
-                            error       => "Reached the maximum pending suggestions limit",
-                            error_code  => 'max_pending_reached'
+                            error      => "Reached the maximum pending suggestions limit",
+                            error_code => 'max_pending_reached'
                         }
                     );
                 }
@@ -139,7 +135,7 @@ sub add {
     }
 
     return try {
-        my $suggestion = Koha::Suggestion->new_from_api( $body )->store;
+        my $suggestion = Koha::Suggestion->new_from_api($body)->store;
         $suggestion->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $suggestion->suggestionid );
 
@@ -147,8 +143,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($suggestion),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -171,15 +166,14 @@ sub update {
 
         my $body = $c->req->json;
 
-        $suggestion->set_from_api( $body )->store;
+        $suggestion->set_from_api($body)->store;
         $suggestion->discard_changes;
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($suggestion),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -219,14 +213,13 @@ sub list_managers {
     return try {
 
         my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('suggestions.suggestions_manage');
-        my $patrons    = $c->objects->search( $patrons_rs );
+        my $patrons    = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

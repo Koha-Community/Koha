@@ -38,17 +38,18 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use Koha::KeyboardShortcuts;
 
-my $input            = CGI->new;
-my $op               = $input->param('op') || 'list';
+my $input = CGI->new;
+my $op    = $input->param('op') || 'list';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/adveditorshortcuts.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_keyboard_shortcuts' },
+    {
+        template_name => "admin/adveditorshortcuts.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_keyboard_shortcuts' },
     }
 );
 
@@ -60,15 +61,14 @@ if ( $op eq 'cud-save' ) {
     my %updated_shortcuts;
     @updated_shortcuts{@shortcut_names} = @shortcut_keys;
 
-    while ( my $shortcut = $shortcuts->next() ){
-        $shortcut->shortcut_keys( $updated_shortcuts{$shortcut->shortcut_name} );
+    while ( my $shortcut = $shortcuts->next() ) {
+        $shortcut->shortcut_keys( $updated_shortcuts{ $shortcut->shortcut_name } );
         $shortcut->store();
     }
 }
 
-
 $template->param(
-    shortcuts  => $shortcuts,
+    shortcuts => $shortcuts,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

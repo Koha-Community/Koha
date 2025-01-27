@@ -59,10 +59,9 @@ sub search_with_library_limits {
 
     return $self->search( $params, $attributes ) unless $library_id;
 
-    my $library_limits = $self->object_class()->_library_limits;
-    my $library_limits_table
-        = Koha::Database->new->schema->resultset( $library_limits->{class} )->result_source->name;
-    my $library_field = $library_limits->{library};
+    my $library_limits       = $self->object_class()->_library_limits;
+    my $library_limits_table = Koha::Database->new->schema->resultset( $library_limits->{class} )->result_source->name;
+    my $library_field        = $library_limits->{library};
 
     my $where = {
         '-or' => [
@@ -71,17 +70,15 @@ sub search_with_library_limits {
         ]
     };
 
-    $params //= {};
+    $params     //= {};
     $attributes //= {};
     if ( exists $attributes->{join} ) {
         if ( ref $attributes->{join} eq 'ARRAY' ) {
             push @{ $attributes->{join} }, "$library_limits_table";
-        }
-        else {
+        } else {
             $attributes->{join} = [ $attributes->{join}, "$library_limits_table" ];
         }
-    }
-    else {
+    } else {
         $attributes->{join} = $library_limits_table;
     }
 

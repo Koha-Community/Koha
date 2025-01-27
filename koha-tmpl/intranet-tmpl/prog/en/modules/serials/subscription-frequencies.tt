@@ -3,18 +3,20 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF (new or modify) %]
-        [% IF (new) %]
-            [% t("New frequency") | html %]
-        [% ELSE %]
-            [% tx("Modify frequency '{description}'", { description = description }) | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% t("Frequencies") | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF (new or modify) %]
+            [% IF (new) %]
+                [% t("New frequency") | html %]
+            [% ELSE %]
+                [% tx("Modify frequency '{description}'", { description = description }) | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% t("Frequencies") | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -24,12 +26,16 @@
 [% END %]
 
 [% BLOCK translate_frequnit %]
-[%  SWITCH frequnit %]
-[%   CASE 'day'   %]<span> day</span>
-[%   CASE 'week'  %]<span> week</span>
-[%   CASE 'month' %]<span> month</span>
-[%   CASE 'year'  %]<span> year</span>
-[%  END %]
+    [% SWITCH frequnit %]
+    [% CASE 'day' %]
+        <span> day</span>
+    [% CASE 'week' %]
+        <span> week</span>
+    [% CASE 'month' %]
+        <span> month</span>
+    [% CASE 'year' %]
+        <span> year</span>
+    [% END %]
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
@@ -60,68 +66,65 @@
 
 [% WRAPPER 'main-container.inc' aside='serials-menu' %]
 
-      [% IF (new or modify) %]
+    [% IF (new or modify) %]
         [% IF (new) %]
-          <h1>New frequency</h1>
+            <h1>New frequency</h1>
         [% ELSE %]
-          <h1>[% tx("Modify frequency '{description}'", { description = description }) | html %]</h1>
+            <h1>[% tx("Modify frequency '{description}'", { description = description }) | html %]</h1>
         [% END %]
         <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" id="add_frequency_form" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-          [% IF (modify) %]
-            <input type="hidden" name="id" value="[% id | html %]" />
-            <input type="hidden" name="op" value="cud-savemod" />
-          [% ELSE %]
-            <input type="hidden" name="op" value="cud-savenew" />
-          [% END %]
-          <fieldset class="rows">
-            <ol>
-              <li>
-                <label class="required" for="description">Description: </label>
-                <input type="text" id="description" name="description" value="[% description | html %]" class="required" required="required" /> <span class="required">Required</span>
-              </li>
-              <li>
-                <label for="unit">Unit: </label>
-                <select id="unit" name="unit">
-                  <option value="">None</option>
-                  [% FOREACH unit IN units_loop %]
-                    <option value="[% unit.val | html %]" [% IF unit.selected %]selected="selected"[% END %]>
-                      [% PROCESS translate_frequnit frequnit=unit.val %]
-                    </option>
-                  [% END %]
-                </select>
-              </li>
-              <li><span class="hint">Note: one of the two following fields must be equal to 1</span></li>
-              <li>
-                <label for="issuesperunit">Issues per unit: </label>
-                [% IF (new) %]
-                  <input type="text" id="issuesperunit" name="issuesperunit" value="1" size="3" />
-                [% ELSE %]
-                  <input type="text" id="issuesperunit" name="issuesperunit" value="[% issuesperunit | html %]" size="3" />
-                [% END %]
-              </li>
-              <li>
-                <label for="unitsperissue">Units per issue: </label>
-                [% IF (new) %]
-                  <input type="text" id="unitsperissue" name="unitsperissue" value="1" size="3" />
-                [% ELSE %]
-                  <input type="text" id="unitsperissue" name="unitsperissue" value="[% unitsperissue | html %]" size="3" />
-                [% END %]
-              </li>
-              <li>
-                <label for="displayorder">Display order: </label>
-                <input type="text" inputmode="numeric" pattern="\d*" id="displayorder" name="displayorder" value="[% displayorder | html %]" size="3" />
-                <span class="hint">Only numeric characters are allowed</span>
-              </li>
-            </ol>
-          </fieldset>
-          <fieldset class="action">
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <a href="/cgi-bin/koha/serials/subscription-frequencies.pl" class="cancel">Cancel</a>
-          </fieldset>
+            [% IF (modify) %]
+                <input type="hidden" name="id" value="[% id | html %]" />
+                <input type="hidden" name="op" value="cud-savemod" />
+            [% ELSE %]
+                <input type="hidden" name="op" value="cud-savenew" />
+            [% END %]
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label class="required" for="description">Description: </label>
+                        <input type="text" id="description" name="description" value="[% description | html %]" class="required" required="required" /> <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="unit">Unit: </label>
+                        <select id="unit" name="unit">
+                            <option value="">None</option>
+                            [% FOREACH unit IN units_loop %]
+                                <option value="[% unit.val | html %]" [% IF unit.selected %]selected="selected"[% END %]> [% PROCESS translate_frequnit frequnit=unit.val %] </option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li><span class="hint">Note: one of the two following fields must be equal to 1</span></li>
+                    <li>
+                        <label for="issuesperunit">Issues per unit: </label>
+                        [% IF (new) %]
+                            <input type="text" id="issuesperunit" name="issuesperunit" value="1" size="3" />
+                        [% ELSE %]
+                            <input type="text" id="issuesperunit" name="issuesperunit" value="[% issuesperunit | html %]" size="3" />
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="unitsperissue">Units per issue: </label>
+                        [% IF (new) %]
+                            <input type="text" id="unitsperissue" name="unitsperissue" value="1" size="3" />
+                        [% ELSE %]
+                            <input type="text" id="unitsperissue" name="unitsperissue" value="[% unitsperissue | html %]" size="3" />
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="displayorder">Display order: </label>
+                        <input type="text" inputmode="numeric" pattern="\d*" id="displayorder" name="displayorder" value="[% displayorder | html %]" size="3" />
+                        <span class="hint">Only numeric characters are allowed</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/cgi-bin/koha/serials/subscription-frequencies.pl" class="cancel">Cancel</a>
+            </fieldset>
         </form>
-      [% ELSE %]
-
+    [% ELSE %]
         <div id="toolbar" class="btn-toolbar">
             <a class="btn btn-default" id="newfrequency" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=new"><i class="fa fa-plus"></i> New frequency</a>
         </div>
@@ -129,10 +132,7 @@
         <h1>Frequencies</h1>
         [% IF still_used %]
             <div class="alert alert-warning">
-                <p>
-                    This frequency is still used by [% subscriptions.size | html %]
-                    subscription(s). Do you still want to delete it?
-                </p>
+                <p> This frequency is still used by [% subscriptions.size | html %] subscription(s). Do you still want to delete it? </p>
                 <p><a href="#" id="show_blocking_subs">Show subscriptions</a></p>
                 <ul id="blocking_subs" style="display:none">
                     [% FOREACH sub IN subscriptions %]
@@ -189,12 +189,12 @@
                         [% END %]
                     </tbody>
                 </table>
-            </div> <!-- /.page-section -->
+            </div>
+            <!-- /.page-section -->
         [% ELSE %]
             <p>There is no defined frequency.</p>
         [% END %]
-      [% END %]
-
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -211,28 +211,26 @@
             var alert_msg = _("Some fields are not valid:") + "\n";
             var errors = 0;
 
-            if(description.length == 0) {
+            if (description.length == 0) {
                 alert_msg += "\t - " + _("Description is required");
-                errors ++;
+                errors++;
             }
-            if(unit.length > 0) {
-                if(isNaN(issuesperunit) || issuesperunit == 0) {
-                    alert_msg += "\n\t - " + _("Issues per unit is required")
-                        + " " + _("(must be a number greater than 0)");
-                    errors ++;
+            if (unit.length > 0) {
+                if (isNaN(issuesperunit) || issuesperunit == 0) {
+                    alert_msg += "\n\t - " + _("Issues per unit is required") + " " + _("(must be a number greater than 0)");
+                    errors++;
                 }
-                if(isNaN(unitsperissue) || unitsperissue == 0) {
-                    alert_msg += "\n\t - " + _("Units per issue is required")
-                        + " " + _("(must be a number greater than 0)");
-                    errors ++;
+                if (isNaN(unitsperissue) || unitsperissue == 0) {
+                    alert_msg += "\n\t - " + _("Units per issue is required") + " " + _("(must be a number greater than 0)");
+                    errors++;
                 }
-                if(issuesperunit > 1 && unitsperissue > 1) {
+                if (issuesperunit > 1 && unitsperissue > 1) {
                     alert_msg += "\n\t - " + _("One of 'issues per unit' and 'units per issue' must be equal to 1");
-                    errors ++;
+                    errors++;
                 }
             }
 
-            if(errors == 0) {
+            if (errors == 0) {
                 return true;
             }
 
@@ -240,26 +238,26 @@
             return false;
         }
 
-        $(document).ready(function() {
-            $("#issuesperunit").change(function() {
+        $(document).ready(function () {
+            $("#issuesperunit").change(function () {
                 var value = $(this).val();
-                if(!isNaN(value) && value > 1) {
+                if (!isNaN(value) && value > 1) {
                     $("#unitsperissue").val(1);
                 }
             });
-            $("#unitsperissue").change(function() {
+            $("#unitsperissue").change(function () {
                 var value = $(this).val();
-                if(!isNaN(value) && value > 1) {
+                if (!isNaN(value) && value > 1) {
                     $("#issuesperunit").val(1);
                 }
             });
-            $(".delete_frequency").on("click",function(){
+            $(".delete_frequency").on("click", function () {
                 return confirmDelete();
             });
-            $("#add_frequency_form").on("submit",function(){
+            $("#add_frequency_form").on("submit", function () {
                 return check_form();
             });
-            $("#show_blocking_subs").on("click",function(e){
+            $("#show_blocking_subs").on("click", function (e) {
                 e.preventDefault();
                 $("#blocking_subs").show();
             });

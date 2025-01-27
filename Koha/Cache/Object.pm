@@ -56,8 +56,7 @@ use warnings;
 use base qw(Class::Accessor);
 
 __PACKAGE__->mk_ro_accessors(
-    qw( allowupdate arguments cache cache_type constructor destructor inprocess key lastupdate timeout unset value )
-);
+    qw( allowupdate arguments cache cache_type constructor destructor inprocess key lastupdate timeout unset value ));
 
 # General/SCALAR routines
 
@@ -69,8 +68,10 @@ sub TIESCALAR {
     if ( defined $self->{'preload'} ) {
         $self->{'value'} = &{ $self->{'preload'} }( @{ $self->{'arguments'} } );
         if ( defined( $self->{'cache'} ) ) {
-            $self->{'cache'}->set_in_cache( $self->{'key'}, $self->{'value'},
-                { expiry => $self->{'timeout'} } );
+            $self->{'cache'}->set_in_cache(
+                $self->{'key'}, $self->{'value'},
+                { expiry => $self->{'timeout'} }
+            );
         }
         $self->{'lastupdate'} = time;
     }
@@ -85,7 +86,7 @@ sub FETCH {
     if ( !( $self->{'inprocess'} && defined( $self->{'value'} ) )
         && $self->{'cache'} )
     {
-        $self->{'value'} = $self->{'cache'}->get_from_cache( $self->{'key'} );
+        $self->{'value'}      = $self->{'cache'}->get_from_cache( $self->{'key'} );
         $self->{'lastupdate'} = $now;
     }
 
@@ -94,12 +95,15 @@ sub FETCH {
         || !defined $self->{'lastupdate'}
         || ( $now - $self->{'lastupdate'} > $self->{'timeout'} ) )
     {
-        $self->{'value'} =
-          &{ $self->{'constructor'} }( @{ $self->{'arguments'} },
-            $self->{'value'}, $index );
+        $self->{'value'} = &{ $self->{'constructor'} }(
+            @{ $self->{'arguments'} },
+            $self->{'value'}, $index
+        );
         if ( defined( $self->{'cache'} ) ) {
-            $self->{'cache'}->set_in_cache( $self->{'key'}, $self->{'value'},
-                { expiry => $self->{'timeout'} } );
+            $self->{'cache'}->set_in_cache(
+                $self->{'key'}, $self->{'value'},
+                { expiry => $self->{'timeout'} }
+            );
         }
         $self->{'lastupdate'} = $now;
     }
@@ -115,15 +119,15 @@ sub STORE {
 
     if ( $self->{'datatype'} eq 'HASH' && defined($index) ) {
         $self->{'value'}->{$index} = $value;
-    }
-    else {
+    } else {
         $self->{'value'} = $value;
     }
     if (   defined( $self->{'allowupdate'} )
         && $self->{'allowupdate'}
         && defined( $self->{'cache'} ) )
     {
-        $self->{'cache'}->set_in_cache( $self->{'key'}, $self->{'value'},
+        $self->{'cache'}->set_in_cache(
+            $self->{'key'}, $self->{'value'},
             { expiry => $self->{'timeout'} },
         );
     }
@@ -186,7 +190,7 @@ sub SCALAR {
     my ($self) = @_;
     $self->FETCH;
     return scalar %{ $self->{'value'} }
-      if ( ref( $self->{'value'} ) eq 'HASH' );
+        if ( ref( $self->{'value'} ) eq 'HASH' );
     return;
 }
 

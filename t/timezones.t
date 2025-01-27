@@ -10,8 +10,10 @@ use t::lib::Mocks;
 $ENV{TZ} = q{};
 t::lib::Mocks::mock_config( 'timezone', q{} );
 my $config = Koha::Config->get_instance;
-is( $config->timezone, 'local',
-    'Got local timezone with no env or config timezone set' );
+is(
+    $config->timezone, 'local',
+    'Got local timezone with no env or config timezone set'
+);
 
 $ENV{TZ} = 'Antarctica/Macquarie';
 is(
@@ -29,6 +31,7 @@ is(
 
 t::lib::Mocks::mock_config( 'timezone', 'Your/Timezone' );
 warning_is {
-    is( $config->timezone, 'local', 'Invalid timezone falls back to local' ); }
-    'Invalid timezone in koha-conf.xml (Your/Timezone)',
+    is( $config->timezone, 'local', 'Invalid timezone falls back to local' );
+}
+'Invalid timezone in koha-conf.xml (Your/Timezone)',
     'Invalid timezone raises a warning';

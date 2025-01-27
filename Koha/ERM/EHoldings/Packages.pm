@@ -17,7 +17,6 @@ package Koha::ERM::EHoldings::Packages;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::ERM::EHoldings::Package;

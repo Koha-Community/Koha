@@ -37,7 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $borrowernumber = $input->param('borrowernumber');
-my $op = $input->param('op');
+my $op             = $input->param('op');
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 my $patron         = Koha::Patrons->find($borrowernumber);

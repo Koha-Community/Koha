@@ -38,9 +38,7 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return {
-        id => 'profile_id'
-    };
+    return { id => 'profile_id' };
 }
 
 =head3 _type

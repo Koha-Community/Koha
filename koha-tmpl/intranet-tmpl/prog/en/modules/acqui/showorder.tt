@@ -1,41 +1,42 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Order details") | html %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Order details") | html %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body id="acq_showorder" class="acq">
-    <div id="main">
-        <h1>Order details</h1>
-        [% IF order %]
-            <fieldset class="rows">
-                <ol>
-                    <li>
-                        <span class="label">Creation date: </span>
-                        [% order.entrydate | html %]
-                    </li>
-                    <li>
-                        <span class="label">Ordered by: </span>
-                        [% INCLUDE 'patron-title.inc' patron = creator %]
-                    </li>
-                    <li>
-                        <span class="label">Claims count: </span>
-                        [% order.claims.count | html %]
-                    </li>
-                    <li>
-                        <span class="label">Last claim date: </span>
-                        [% order.claims.last.claimed_on | html %]
-                    </li>
+<div id="main">
+    <h1>Order details</h1>
+    [% IF order %]
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <span class="label">Creation date: </span>
+                    [% order.entrydate | html %]
+                </li>
+                <li>
+                    <span class="label">Ordered by: </span>
+                    [% INCLUDE 'patron-title.inc' patron = creator %]
+                </li>
+                <li>
+                    <span class="label">Claims count: </span>
+                    [% order.claims.count | html %]
+                </li>
+                <li>
+                    <span class="label">Last claim date: </span>
+                    [% order.claims.last.claimed_on | html %]
+                </li>
             </ol>
-          </fieldset>
-        [% ELSE %]
-            No order found
-        [% END %]
-    </div>
+        </fieldset>
+    [% ELSE %]
+        No order found
+    [% END %]
+</div>
 </body>
 <!-- prettier-ignore-start -->
 </html>

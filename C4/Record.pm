@@ -22,45 +22,44 @@ package C4::Record;
 use Modern::Perl;
 
 # please specify in which methods a given module is used
-use MARC::Record; # marc2marcxml, marcxml2marc, changeEncoding
-use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
+use MARC::Record;                                # marc2marcxml, marcxml2marc, changeEncoding
+use MARC::File::XML;                             # marc2marcxml, marcxml2marc, changeEncoding
 use Biblio::EndnoteStyle;
-use Unicode::Normalize qw( NFC ); # _entity_encode
-use C4::Biblio qw( GetFrameworkCode );
-use C4::Koha; #marc2csv
+use Unicode::Normalize qw( NFC );                # _entity_encode
+use C4::Biblio         qw( GetFrameworkCode );
+use C4::Koha;                                    #marc2csv
 use C4::XSLT;
-use YAML::XS; #marcrecords2csv
+use YAML::XS;                                    #marcrecords2csv
 use Encode;
 use Template;
-use Text::CSV::Encoded; #marc2csv
+use Text::CSV::Encoded;                          #marc2csv
 use Koha::Items;
 use Koha::SimpleMARC qw( read_field );
 use Koha::XSLT::Base;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
 use Koha::TemplateUtils qw( process_tt );
-use Carp qw( carp croak );
+use Carp                qw( carp croak );
 
 use vars qw(@ISA @EXPORT);
-
 
 @ISA = qw(Exporter);
 
 # only export API methods
 
 @EXPORT = qw(
-  marc2endnote
-  marc2marc
-  marc2marcxml
-  marcxml2marc
-  marc2dcxml
-  marc2modsxml
-  marc2madsxml
-  marc2bibtex
-  marc2csv
-  marc2cites
-  marcrecord2csv
-  changeEncoding
+    marc2endnote
+    marc2marc
+    marc2marcxml
+    marcxml2marc
+    marc2dcxml
+    marc2modsxml
+    marc2madsxml
+    marc2bibtex
+    marc2csv
+    marc2cites
+    marcrecord2csv
+    changeEncoding
 );
 
 =head1 NAME
@@ -82,25 +81,27 @@ Returns an ISO-2709 scalar
 =cut
 
 sub marc2marc {
-	my ($marc,$to_flavour,$from_flavour,$encoding) = @_;
-	my $error;
-    if ($to_flavour && $to_flavour =~ m/marcstd/) {
+    my ( $marc, $to_flavour, $from_flavour, $encoding ) = @_;
+    my $error;
+    if ( $to_flavour && $to_flavour =~ m/marcstd/ ) {
         my $marc_record_obj;
-        if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
+        if ( $marc =~ /^MARC::Record/ ) {    # it's already a MARC::Record object
             $marc_record_obj = $marc;
-        } else { # it's not a MARC::Record object, make it one
-            eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) }; # handle exceptions
+        } else {                             # it's not a MARC::Record object, make it one
+            eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) };    # handle exceptions
 
-# conversion to MARC::Record object failed, populate $error
-                if ($@) { $error .="\nCreation of MARC::Record object failed: ".$MARC::File::ERROR };
+            # conversion to MARC::Record object failed, populate $error
+            if ($@) { $error .= "\nCreation of MARC::Record object failed: " . $MARC::File::ERROR }
         }
         unless ($error) {
             my @privatefields;
-            foreach my $field ($marc_record_obj->fields()) {
-                if ($field->tag() =~ m/9/ && ($field->tag() != '490' || C4::Context->preference("marcflavour") eq 'UNIMARC')) {
+            foreach my $field ( $marc_record_obj->fields() ) {
+                if ( $field->tag() =~ m/9/
+                    && ( $field->tag() != '490' || C4::Context->preference("marcflavour") eq 'UNIMARC' ) )
+                {
                     push @privatefields, $field;
-                } elsif (! ($field->is_control_field())) {
-                    $field->delete_subfield(code => '9') if ($field->subfield('9'));
+                } elsif ( !( $field->is_control_field() ) ) {
+                    $field->delete_subfield( code => '9' ) if ( $field->subfield('9') );
                 }
             }
             $marc_record_obj->delete_field($_) for @privatefields;
@@ -109,7 +110,7 @@ sub marc2marc {
     } else {
         $error = "Feature not yet implemented\n";
     }
-	return ($error,$marc);
+    return ( $error, $marc );
 }
 
 =head2 marc2marcxml - Convert from ISO-2709 to MARCXML
@@ -129,65 +130,71 @@ C<$dont_entity_encode> - a flag that instructs marc2marcxml not to entity encode
 =cut
 
 sub marc2marcxml {
-	my ($marc,$encoding,$flavour,$dont_entity_encode) = @_;
-	my $error; # the error string
-	my $marcxml; # the final MARCXML scalar
+    my ( $marc, $encoding, $flavour, $dont_entity_encode ) = @_;
+    my $error;      # the error string
+    my $marcxml;    # the final MARCXML scalar
 
-	# test if it's already a MARC::Record object, if not, make it one
-	my $marc_record_obj;
-	if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
-		$marc_record_obj = $marc;
-	} else { # it's not a MARC::Record object, make it one
-		eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) }; # handle exceptions
+    # test if it's already a MARC::Record object, if not, make it one
+    my $marc_record_obj;
+    if ( $marc =~ /^MARC::Record/ ) {    # it's already a MARC::Record object
+        $marc_record_obj = $marc;
+    } else {                             # it's not a MARC::Record object, make it one
+        eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) };    # handle exceptions
 
-		# conversion to MARC::Record object failed, populate $error
-		if ($@) { $error .="\nCreation of MARC::Record object failed: ".$MARC::File::ERROR };
-	}
-	# only proceed if no errors so far
-	unless ($error) {
+        # conversion to MARC::Record object failed, populate $error
+        if ($@) { $error .= "\nCreation of MARC::Record object failed: " . $MARC::File::ERROR }
+    }
 
-		# check the record for warnings
-		my @warnings = $marc_record_obj->warnings();
-		if (@warnings) {
-			warn "\nWarnings encountered while processing ISO-2709 record with title \"".$marc_record_obj->title()."\":\n";
-			foreach my $warn (@warnings) { warn "\t".$warn };
-		}
-		unless($encoding) {$encoding = "UTF-8"}; # set default encoding
-		unless($flavour) {$flavour = C4::Context->preference("marcflavour")}; # set default MARC flavour
+    # only proceed if no errors so far
+    unless ($error) {
 
-		# attempt to convert the record to MARCXML
-		eval { $marcxml = $marc_record_obj->as_xml_record($flavour) }; #handle exceptions
+        # check the record for warnings
+        my @warnings = $marc_record_obj->warnings();
+        if (@warnings) {
+            warn "\nWarnings encountered while processing ISO-2709 record with title \""
+                . $marc_record_obj->title() . "\":\n";
+            foreach my $warn (@warnings) { warn "\t" . $warn }
+        }
+        unless ($encoding) { $encoding = "UTF-8" }
+        ;    # set default encoding
+        unless ($flavour) { $flavour = C4::Context->preference("marcflavour") }
+        ;    # set default MARC flavour
 
-		# record creation failed, populate $error
-		if ($@) {
-			$error .= "Creation of MARCXML failed:".$MARC::File::ERROR;
-			$error .= "Additional information:\n";
-			my @warnings = $@->warnings();
-			foreach my $warn (@warnings) { $error.=$warn."\n" };
+        # attempt to convert the record to MARCXML
+        eval { $marcxml = $marc_record_obj->as_xml_record($flavour) };    #handle exceptions
 
-		# record creation was successful
-    	} else {
+        # record creation failed, populate $error
+        if ($@) {
+            $error .= "Creation of MARCXML failed:" . $MARC::File::ERROR;
+            $error .= "Additional information:\n";
+            my @warnings = $@->warnings();
+            foreach my $warn (@warnings) { $error .= $warn . "\n" }
 
-			# check the record for warning flags again (warnings() will be cleared already if there was an error, see above block
-			@warnings = $marc_record_obj->warnings();
-			if (@warnings) {
-				warn "\nWarnings encountered while processing ISO-2709 record with title \"".$marc_record_obj->title()."\":\n";
-				foreach my $warn (@warnings) { warn "\t".$warn };
-			}
-		}
+            # record creation was successful
+        } else {
 
-		# only proceed if no errors so far
-		unless ($error) {
+            # check the record for warning flags again (warnings() will be cleared already if there was an error, see above block
+            @warnings = $marc_record_obj->warnings();
+            if (@warnings) {
+                warn "\nWarnings encountered while processing ISO-2709 record with title \""
+                    . $marc_record_obj->title() . "\":\n";
+                foreach my $warn (@warnings) { warn "\t" . $warn }
+            }
+        }
 
-			# entity encode the XML unless instructed not to
-    		unless ($dont_entity_encode) {
-        		my ($marcxml_entity_encoded) = _entity_encode($marcxml);
-        		$marcxml = $marcxml_entity_encoded;
-    		}
-		}
-	}
-	# return result to calling program
-	return ($error,$marcxml);
+        # only proceed if no errors so far
+        unless ($error) {
+
+            # entity encode the XML unless instructed not to
+            unless ($dont_entity_encode) {
+                my ($marcxml_entity_encoded) = _entity_encode($marcxml);
+                $marcxml = $marcxml_entity_encoded;
+            }
+        }
+    }
+
+    # return result to calling program
+    return ( $error, $marcxml );
 }
 
 =head2 marcxml2marc - Convert from MARCXML to ISO-2709
@@ -205,21 +212,25 @@ C<$flavour> - MARC21 or UNIMARC
 =cut
 
 sub marcxml2marc {
-    my ($marcxml,$encoding,$flavour) = @_;
-	my $error; # the error string
-	my $marc; # the final ISO-2709 scalar
-	unless($encoding) {$encoding = "UTF-8"}; # set the default encoding
-	unless($flavour) {$flavour = C4::Context->preference("marcflavour")}; # set the default MARC flavour
+    my ( $marcxml, $encoding, $flavour ) = @_;
+    my $error;    # the error string
+    my $marc;     # the final ISO-2709 scalar
+    unless ($encoding) { $encoding = "UTF-8" }
+    ;             # set the default encoding
+    unless ($flavour) { $flavour = C4::Context->preference("marcflavour") }
+    ;             # set the default MARC flavour
 
-	# attempt to do the conversion
-	eval { $marc = MARC::Record->new_from_xml($marcxml,$encoding,$flavour) }; # handle exceptions
+    # attempt to do the conversion
+    eval { $marc = MARC::Record->new_from_xml( $marcxml, $encoding, $flavour ) };    # handle exceptions
 
-	# record creation failed, populate $error
-	if ($@) {$error .="\nCreation of MARCXML Record failed: ".$@;
-		$error.=$MARC::File::ERROR if ($MARC::File::ERROR);
-		};
-	# return result to calling program
-	return ($error,$marc);
+    # record creation failed, populate $error
+    if ($@) {
+        $error .= "\nCreation of MARCXML Record failed: " . $@;
+        $error .= $MARC::File::ERROR if ($MARC::File::ERROR);
+    }
+
+    # return result to calling program
+    return ( $error, $marc );
 }
 
 =head2 marc2dcxml - Convert from ISO-2709 to Dublin Core
@@ -254,45 +265,51 @@ sub marc2dcxml {
 
     # set the default path for intranet xslts
     # differents xslts to process (OAIDC, SRWDC and RDFDC)
-    my $xsl = C4::Context->config('intrahtdocs') . '/prog/en/xslt/' .
-              C4::Context->preference('marcflavour') . 'slim2' . uc ( $format ) . '.xsl';
+    my $xsl =
+          C4::Context->config('intrahtdocs')
+        . '/prog/en/xslt/'
+        . C4::Context->preference('marcflavour') . 'slim2'
+        . uc($format) . '.xsl';
 
     if ( defined $marc ) {
+
         # no need to catch errors or warnings marc2marcxml do it instead
-        $marcxml = C4::Record::marc2marcxml( $marc );
+        $marcxml = C4::Record::marc2marcxml($marc);
     } elsif ( not defined $xml and defined $biblionumber ) {
+
         # get MARCXML biblio directly without item information
-        $marcxml = C4::Biblio::GetXmlBiblio( $biblionumber );
+        $marcxml = C4::Biblio::GetXmlBiblio($biblionumber);
     } else {
         $marcxml = $xml;
     }
 
-    eval { $record = MARC::Record->new_from_xml(
-                     $marcxml,
-                     'UTF-8',
-                     C4::Context->preference('marcflavour')
-           );
+    eval {
+        $record = MARC::Record->new_from_xml(
+            $marcxml,
+            'UTF-8',
+            C4::Context->preference('marcflavour')
+        );
     };
 
     # conversion to MARC::Record object failed
-    if ( $@ ) {
+    if ($@) {
         croak "Creation of MARC::Record object failed.";
     } elsif ( $record->warnings() ) {
         carp "Warnings encountered while processing ISO-2709 record.\n";
         my @warnings = $record->warnings();
         foreach my $warn (@warnings) {
-            carp "\t". $warn;
-        };
-    } elsif ( $record =~ /^MARC::Record/ ) { # if OK makes xslt transformation
+            carp "\t" . $warn;
+        }
+    } elsif ( $record =~ /^MARC::Record/ ) {    # if OK makes xslt transformation
         my $xslt_engine = Koha::XSLT::Base->new;
         if ( $format =~ /^(dc|oaidc|srwdc|rdfdc)$/i ) {
             $output = $xslt_engine->transform( $marcxml, $xsl );
         } else {
-            croak "The format argument ($format) not accepted.\n" .
-                  "Please pass a valid format (oaidc, srwdc, or rdfdc)\n";
+            croak "The format argument ($format) not accepted.\n"
+                . "Please pass a valid format (oaidc, srwdc, or rdfdc)\n";
         }
-        my $err = $xslt_engine->err; # error code
-        if ( $err ) {
+        my $err = $xslt_engine->err;    # error code
+        if ($err) {
             croak "Error $err while processing\n";
         } else {
             return $output;
@@ -310,7 +327,7 @@ Returns a MODS scalar
 
 sub marc2modsxml {
     my ($marc) = @_;
-    return _transformWithStylesheet($marc, "/prog/en/xslt/MARC21slim2MODS3-1.xsl");
+    return _transformWithStylesheet( $marc, "/prog/en/xslt/MARC21slim2MODS3-1.xsl" );
 }
 
 =head2 marc2madsxml - Convert from ISO-2709 to MADS
@@ -323,7 +340,7 @@ Returns a MADS scalar
 
 sub marc2madsxml {
     my ($marc) = @_;
-    return _transformWithStylesheet($marc, "/prog/en/xslt/MARC21slim2MADS.xsl");
+    return _transformWithStylesheet( $marc, "/prog/en/xslt/MARC21slim2MADS.xsl" );
 }
 
 =head2 _transformWithStylesheet - Transform a MARC record with a stylesheet
@@ -336,16 +353,17 @@ contain the path to a stylesheet under intrahtdocs.
 =cut
 
 sub _transformWithStylesheet {
-    my ($marc, $stylesheet) = @_;
+    my ( $marc, $stylesheet ) = @_;
+
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $xmlrecord = marc2marcxml($marc);
-    my $xslfile = C4::Context->config('intrahtdocs') . $stylesheet;
-    return C4::XSLT::engine->transform($xmlrecord, $xslfile);
+    my $xslfile   = C4::Context->config('intrahtdocs') . $stylesheet;
+    return C4::XSLT::engine->transform( $xmlrecord, $xslfile );
 }
 
 sub marc2endnote {
     my ($marc) = @_;
-	my $marc_rec_obj =  MARC::Record->new_from_usmarc($marc);
+    my $marc_rec_obj = MARC::Record->new_from_usmarc($marc);
     my ( $abstract, $f260a, $f710a );
     my $f260 = $marc_rec_obj->field('260');
     if ($f260) {
@@ -360,24 +378,24 @@ sub marc2endnote {
         $abstract = $f500->subfield('a');
     }
     my $fields = {
-        DB => C4::Context->preference("LibraryName"),
-        Title => $marc_rec_obj->title(),
-        Author => $marc_rec_obj->author(),
+        DB        => C4::Context->preference("LibraryName"),
+        Title     => $marc_rec_obj->title(),
+        Author    => $marc_rec_obj->author(),
         Publisher => $f710a,
-        City => $f260a,
-        Year => $marc_rec_obj->publication_date,
-        Abstract => $abstract,
+        City      => $f260a,
+        Year      => $marc_rec_obj->publication_date,
+        Abstract  => $abstract,
     };
     my $style = Biblio::EndnoteStyle->new();
     my $template;
-    $template.= "DB - DB\n" if C4::Context->preference("LibraryName");
-    $template.="T1 - Title\n" if $marc_rec_obj->title();
-    $template.="A1 - Author\n" if $marc_rec_obj->author();
-    $template.="PB - Publisher\n" if  $f710a;
-    $template.="CY - City\n" if $f260a;
-    $template.="Y1 - Year\n" if $marc_rec_obj->publication_date;
-    $template.="AB - Abstract\n" if $abstract;
-    my ($text, $errmsg) = $style->format($template, $fields);
+    $template .= "DB - DB\n"        if C4::Context->preference("LibraryName");
+    $template .= "T1 - Title\n"     if $marc_rec_obj->title();
+    $template .= "A1 - Author\n"    if $marc_rec_obj->author();
+    $template .= "PB - Publisher\n" if $f710a;
+    $template .= "CY - City\n"      if $f260a;
+    $template .= "Y1 - Year\n"      if $marc_rec_obj->publication_date;
+    $template .= "AB - Abstract\n"  if $abstract;
+    my ( $text, $errmsg ) = $style->format( $template, $fields );
     return ($text);
 
 }
@@ -399,25 +417,25 @@ C<$itemnumbers> - a list of itemnumbers to export
 =cut
 
 sub marc2csv {
-    my ($biblios, $id, $itemnumbers) = @_;
+    my ( $biblios, $id, $itemnumbers ) = @_;
     $itemnumbers ||= [];
     my $output;
     my $csv = Text::CSV::Encoded->new( { formula => "empty" } );
 
     # Getting yaml file
     my $configfile = "../tools/csv-profiles/$id.yaml";
-    my ($preprocess, $postprocess, $fieldprocessing);
-    if (-e $configfile){
-        ($preprocess,$postprocess, $fieldprocessing) = YAML::XS::LoadFile($configfile);
+    my ( $preprocess, $postprocess, $fieldprocessing );
+    if ( -e $configfile ) {
+        ( $preprocess, $postprocess, $fieldprocessing ) = YAML::XS::LoadFile($configfile);
     }
 
     # Preprocessing
-    eval $preprocess if ($preprocess); ## no critic (StringyEval)
+    eval $preprocess if ($preprocess);    ## no critic (StringyEval)
 
     my $firstpass = 1;
-    if ( @$itemnumbers ) {
-        for my $itemnumber ( @$itemnumbers) {
-            my $item = Koha::Items->find( $itemnumber );
+    if (@$itemnumbers) {
+        for my $itemnumber (@$itemnumbers) {
+            my $item         = Koha::Items->find($itemnumber);
             my $biblionumber = $item->biblio->biblionumber;
             $output .= marcrecord2csv( $biblionumber, $id, $firstpass, $csv, $fieldprocessing, [$itemnumber] ) // '';
             $firstpass = 0;
@@ -430,7 +448,7 @@ sub marc2csv {
     }
 
     # Postprocessing
-    eval $postprocess if ($postprocess); ## no critic (StringyEval)
+    eval $postprocess if ($postprocess);    ## no critic (StringyEval)
 
     return $output;
 }
@@ -456,7 +474,7 @@ C<$itemnumbers> a list of itemnumbers to export
 =cut
 
 sub marcrecord2csv {
-    my ($biblionumber, $id, $header, $csv, $fieldprocessing, $itemnumbers) = @_;
+    my ( $biblionumber, $id, $header, $csv, $fieldprocessing, $itemnumbers ) = @_;
     my $output;
 
     # Getting the record
@@ -472,46 +490,48 @@ sub marcrecord2csv {
     my $profile = Koha::CsvProfiles->find($id);
 
     # Getting output encoding
-    my $encoding          = $profile->encoding || 'utf8';
+    my $encoding = $profile->encoding || 'utf8';
+
     # Getting separators
     my $csvseparator      = $profile->csv_separator      || ',';
     my $fieldseparator    = $profile->field_separator    || '#';
     my $subfieldseparator = $profile->subfield_separator || '|';
 
     # TODO: Be more generic (in case we have to handle other protected chars or more separators)
-    if ($csvseparator eq '\t') { $csvseparator = "\t" }
-    if ($fieldseparator eq '\t') { $fieldseparator = "\t" }
-    if ($subfieldseparator eq '\t') { $subfieldseparator = "\t" }
-    if ($csvseparator eq '\n') { $csvseparator = "\n" }
-    if ($fieldseparator eq '\n') { $fieldseparator = "\n" }
-    if ($subfieldseparator eq '\n') { $subfieldseparator = "\n" }
+    if ( $csvseparator eq '\t' )      { $csvseparator      = "\t" }
+    if ( $fieldseparator eq '\t' )    { $fieldseparator    = "\t" }
+    if ( $subfieldseparator eq '\t' ) { $subfieldseparator = "\t" }
+    if ( $csvseparator eq '\n' )      { $csvseparator      = "\n" }
+    if ( $fieldseparator eq '\n' )    { $fieldseparator    = "\n" }
+    if ( $subfieldseparator eq '\n' ) { $subfieldseparator = "\n" }
 
-    $csv = $csv->encoding_out($encoding) ;
+    $csv = $csv->encoding_out($encoding);
     $csv->sep_char($csvseparator);
 
     # Getting the marcfields
     my $marcfieldslist = $profile->content;
 
     # Getting the marcfields as an array
-    my @marcfieldsarray = split('\|', $marcfieldslist);
+    my @marcfieldsarray = split( '\|', $marcfieldslist );
 
-   # Separating the marcfields from the user-supplied headers
+    # Separating the marcfields from the user-supplied headers
     my @csv_structures;
     foreach (@marcfieldsarray) {
-        my @result = split('=', $_, 2);
-        my $content = ( @result == 2 )
+        my @result = split( '=', $_, 2 );
+        my $content =
+            ( @result == 2 )
             ? $result[1]
             : $result[0];
         my @fields;
         while ( $content =~ m|(\d{3})\$?(.)?|g ) {
-            my $fieldtag = $1;
+            my $fieldtag    = $1;
             my $subfieldtag = $2;
             push @fields, { fieldtag => $fieldtag, subfieldtag => $subfieldtag };
         }
-        if ( @result == 2) {
-           push @csv_structures, { header => $result[0], content => $content, fields => \@fields };
+        if ( @result == 2 ) {
+            push @csv_structures, { header => $result[0], content => $content, fields => \@fields };
         } else {
-           push @csv_structures, { content => $content, fields => \@fields }
+            push @csv_structures, { content => $content, fields => \@fields };
         }
     }
 
@@ -529,33 +549,36 @@ sub marcrecord2csv {
             $values->{indicator}{2} = $field->indicator(2);
             for my $subfield ( $field->subfields ) {
                 my $subfieldtag = $subfield->[0];
-                my $value = $subfield->[1];
+                my $value       = $subfield->[1];
                 push @{ $values->{$subfieldtag} }, $value;
             }
         }
+
         # We force the key as an integer (trick for 00X and OXX fields)
-        push @{ $field_list->{fields}{0+$fieldtag} }, $values;
+        push @{ $field_list->{fields}{ 0 + $fieldtag } }, $values;
     }
 
     # For each field or subfield
     foreach my $csv_structure (@csv_structures) {
         my @field_values;
-        my $tags = $csv_structure->{fields};
+        my $tags    = $csv_structure->{fields};
         my $content = $csv_structure->{content};
 
-        if ( $header ) {
+        if ($header) {
+
             # If we have a user-supplied header, we use it
             if ( exists $csv_structure->{header} ) {
                 push @marcfieldsheaders, $csv_structure->{header};
             } else {
+
                 # If not, we get the matching tag name from koha
                 my $tag = $tags->[0];
-                if (defined $tag->{subfieldtag} ) {
-                    my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
+                if ( defined $tag->{subfieldtag} ) {
+                    my $query   = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
                     my @results = $dbh->selectrow_array( $query, {}, $tag->{fieldtag}, $tag->{subfieldtag} );
                     push @marcfieldsheaders, $results[0];
                 } else {
-                    my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
+                    my $query   = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
                     my @results = $dbh->selectrow_array( $query, {}, $tag->{fieldtag} );
                     push @marcfieldsheaders, $results[0];
                 }
@@ -564,43 +587,53 @@ sub marcrecord2csv {
 
         # TT tags exist
         if ( $content =~ m|\[\%.*\%\]| ) {
+
             # Replace 00X and 0XX with X or XX
             $content =~ s|fields.00(\d)|fields.$1|g;
             $content =~ s|fields.0(\d{2})|fields.$1|g;
             my $tt_output = process_tt( $content, $field_list );
             push @csv_rows, $tt_output;
         } else {
-            for my $tag ( @$tags ) {
+            for my $tag (@$tags) {
                 my @fields = $record->field( $tag->{fieldtag} );
+
                 # If it is a subfield
                 my @loop_values;
-                if (defined $tag->{subfieldtag} ) {
+                if ( defined $tag->{subfieldtag} ) {
                     my $av_description_mapping = Koha::AuthorisedValues->get_descriptions_by_marc_field(
                         {
                             frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag},
                             tagsubfield   => $tag->{subfieldtag},
                         }
                     );
+
                     # For each field
                     foreach my $field (@fields) {
                         my @subfields = $field->subfield( $tag->{subfieldtag} );
                         foreach my $subfield (@subfields) {
-                            push @loop_values, (defined $av_description_mapping->{$subfield}) ? $av_description_mapping->{$subfield} : $subfield;
+                            push @loop_values,
+                                ( defined $av_description_mapping->{$subfield} )
+                                ? $av_description_mapping->{$subfield}
+                                : $subfield;
                         }
                     }
 
-                # Or a field
+                    # Or a field
                 } else {
 
-                    foreach my $field ( @fields ) {
+                    foreach my $field (@fields) {
                         my $value;
 
                         # If it is a control field
-                        if ($field->is_control_field) {
+                        if ( $field->is_control_field ) {
                             my $authvalues = Koha::AuthorisedValues->get_descriptions_by_marc_field(
                                 { frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, } );
-                            $value = defined $authvalues->{$field->as_string} ? $authvalues->{$field->as_string} : $field->as_string;
+                            $value =
+                                defined $authvalues->{ $field->as_string }
+                                ? $authvalues->{ $field->as_string }
+                                : $field->as_string;
                         } else {
+
                             # If it is a field, we gather all subfields, joined by the subfield separator
                             my @subvaluesarray;
                             my @subfields = $field->subfields;
@@ -611,27 +644,32 @@ sub marcrecord2csv {
                                         tagsubfield   => $subfield->[0],
                                     }
                                 );
-                                push (@subvaluesarray, defined $authvalues->{$subfield->[1]} ? $authvalues->{$subfield->[1]} : $subfield->[1]);
+                                push(
+                                    @subvaluesarray,
+                                    defined $authvalues->{ $subfield->[1] }
+                                    ? $authvalues->{ $subfield->[1] }
+                                    : $subfield->[1]
+                                );
                             }
-                            $value = join ($subfieldseparator, @subvaluesarray);
+                            $value = join( $subfieldseparator, @subvaluesarray );
                         }
 
                         # Field processing
-                        my $marcfield = $tag->{fieldtag}; # This line fixes a retrocompatibility concern
-                                                          # The "processing" could be based on the $marcfield variable.
-                        eval $fieldprocessing if ($fieldprocessing); ## no critic (StringyEval)
+                        my $marcfield = $tag->{fieldtag};  # This line fixes a retrocompatibility concern
+                                                           # The "processing" could be based on the $marcfield variable.
+                        eval $fieldprocessing if ($fieldprocessing);    ## no critic (StringyEval)
 
                         push @loop_values, $value;
                     }
 
                 }
                 push @field_values, {
-                    fieldtag => $tag->{fieldtag},
+                    fieldtag    => $tag->{fieldtag},
                     subfieldtag => $tag->{subfieldtag},
-                    values => \@loop_values,
+                    values      => \@loop_values,
                 };
             }
-            for my $field_value ( @field_values ) {
+            for my $field_value (@field_values) {
                 if ( $field_value->{subfieldtag} ) {
                     push @csv_rows, join( $subfieldseparator, @{ $field_value->{values} } );
                 } else {
@@ -641,8 +679,7 @@ sub marcrecord2csv {
         }
     }
 
-
-    if ( $header ) {
+    if ($header) {
         $csv->combine(@marcfieldsheaders);
         $output = $csv->string() . "\n";
     }
@@ -652,7 +689,6 @@ sub marcrecord2csv {
     return $output;
 
 }
-
 
 =head2 changeEncoding - Change the encoding of a record
 
@@ -679,34 +715,35 @@ FIXME: shouldn't have to convert to and from xml/marc just to change encoding so
 =cut
 
 sub changeEncoding {
-	my ($record,$format,$flavour,$to_encoding,$from_encoding) = @_;
-	my $newrecord;
-	my $error;
-	unless($flavour) {$flavour = C4::Context->preference("marcflavour")};
-	unless($to_encoding) {$to_encoding = "UTF-8"};
+    my ( $record, $format, $flavour, $to_encoding, $from_encoding ) = @_;
+    my $newrecord;
+    my $error;
+    unless ($flavour)     { $flavour     = C4::Context->preference("marcflavour") }
+    unless ($to_encoding) { $to_encoding = "UTF-8" }
 
-	# ISO-2709 Record (MARC21 or UNIMARC)
-	if (lc($format) =~ /^marc$/o) {
-		# if we're converting encoding of an ISO2709 file, we need to roundtrip through XML
-		# 	because MARC::Record doesn't directly provide us with an encoding method
-		# 	It's definitely less than idea and should be fixed eventually - kados
-		my $marcxml; # temporary storage of MARCXML scalar
-		($error,$marcxml) = marc2marcxml($record,$to_encoding,$flavour);
-		unless ($error) {
-			($error,$newrecord) = marcxml2marc($marcxml,$to_encoding,$flavour);
-		}
+    # ISO-2709 Record (MARC21 or UNIMARC)
+    if ( lc($format) =~ /^marc$/o ) {
 
-	# MARCXML Record
-	} elsif (lc($format) =~ /^marcxml$/o) { # MARCXML Record
-		my $marc;
-		($error,$marc) = marcxml2marc($record,$to_encoding,$flavour);
-		unless ($error) {
-			($error,$newrecord) = marc2marcxml($record,$to_encoding,$flavour);
-		}
-	} else {
-		$error.="Unsupported record format:".$format;
-	}
-	return ($error,$newrecord);
+        # if we're converting encoding of an ISO2709 file, we need to roundtrip through XML
+        # 	because MARC::Record doesn't directly provide us with an encoding method
+        # 	It's definitely less than idea and should be fixed eventually - kados
+        my $marcxml;    # temporary storage of MARCXML scalar
+        ( $error, $marcxml ) = marc2marcxml( $record, $to_encoding, $flavour );
+        unless ($error) {
+            ( $error, $newrecord ) = marcxml2marc( $marcxml, $to_encoding, $flavour );
+        }
+
+        # MARCXML Record
+    } elsif ( lc($format) =~ /^marcxml$/o ) {    # MARCXML Record
+        my $marc;
+        ( $error, $marc ) = marcxml2marc( $record, $to_encoding, $flavour );
+        unless ($error) {
+            ( $error, $newrecord ) = marc2marcxml( $record, $to_encoding, $flavour );
+        }
+    } else {
+        $error .= "Unsupported record format:" . $format;
+    }
+    return ( $error, $newrecord );
 }
 
 =head2 marc2bibtex - Convert from MARC21 and UNIMARC to BibTex
@@ -721,28 +758,28 @@ C<$id> - an id for the BibTex record (might be the biblionumber)
 
 =cut
 
-
 sub marc2bibtex {
-    my ($record, $id) = @_;
+    my ( $record, $id ) = @_;
     my $tex;
     my $marcflavour = C4::Context->preference("marcflavour");
 
     # Authors
     my $author;
     my @texauthors;
-    my @authorFields = ('100','110','111','700','710','711');
-    @authorFields = ('700','701','702','710','711','721') if ( $marcflavour eq "UNIMARC" );
+    my @authorFields = ( '100', '110', '111', '700', '710', '711' );
+    @authorFields = ( '700', '701', '702', '710', '711', '721' ) if ( $marcflavour eq "UNIMARC" );
 
-    foreach my $field ( @authorFields ) {
+    foreach my $field (@authorFields) {
+
         # author formatted surname, firstname
         my $texauthor = '';
         if ( $marcflavour eq "UNIMARC" ) {
-           $texauthor = join ', ',
-           ( $record->subfield($field,"a"), $record->subfield($field,"b") );
-       } else {
-           $texauthor = $record->subfield($field,"a");
-       }
-       push @texauthors, $texauthor if $texauthor;
+            $texauthor = join ', ',
+                ( $record->subfield( $field, "a" ), $record->subfield( $field, "b" ) );
+        } else {
+            $texauthor = $record->subfield( $field, "a" );
+        }
+        push @texauthors, $texauthor if $texauthor;
     }
     $author = join ' and ', @texauthors;
 
@@ -758,18 +795,18 @@ sub marc2bibtex {
 
             # Mandatory
             author    => $author,
-            title     => $record->subfield("200", "a") || "",
-            editor    => $record->subfield("210", "g") || "",
-            publisher => $record->subfield("210", "c") || "",
-            year      => $record->subfield("210", "d") || $record->subfield("210", "h") || "",
+            title     => $record->subfield( "200", "a" ) || "",
+            editor    => $record->subfield( "210", "g" ) || "",
+            publisher => $record->subfield( "210", "c" ) || "",
+            year      => $record->subfield( "210", "d" ) || $record->subfield( "210", "h" ) || "",
 
             # Optional
-            volume  =>  $record->subfield("200", "v") || "",
-            series  =>  $record->subfield("225", "a") || "",
-            address =>  $record->subfield("210", "a") || "",
-            edition =>  $record->subfield("205", "a") || "",
-            note    =>  $record->subfield("300", "a") || "",
-            url     =>  $record->subfield("856", "u") || ""
+            volume  => $record->subfield( "200", "v" ) || "",
+            series  => $record->subfield( "225", "a" ) || "",
+            address => $record->subfield( "210", "a" ) || "",
+            edition => $record->subfield( "205", "a" ) || "",
+            note    => $record->subfield( "300", "a" ) || "",
+            url     => $record->subfield( "856", "u" ) || ""
         );
     } else {
 
@@ -778,18 +815,21 @@ sub marc2bibtex {
 
             # Mandatory
             author    => $author,
-            title     => $record->subfield("245", "a") || "",
-            editor    => $record->subfield("260", "f") || "",
-            publisher => $record->subfield("264", "b") || $record->subfield("260", "b") || "",
-            year      => $record->subfield("264", "c") || $record->subfield("260", "c") || $record->subfield("260", "g") || "",
+            title     => $record->subfield( "245", "a" ) || "",
+            editor    => $record->subfield( "260", "f" ) || "",
+            publisher => $record->subfield( "264", "b" ) || $record->subfield( "260", "b" ) || "",
+            year      => $record->subfield( "264", "c" )
+                || $record->subfield( "260", "c" )
+                || $record->subfield( "260", "g" )
+                || "",
 
             # Optional
             # unimarc to marc21 specification says not to convert 200$v to marc21
-            series  =>  $record->subfield("490", "a") || "",
-            address =>  $record->subfield("264", "a") || $record->subfield("260", "a") || "",
-            edition =>  $record->subfield("250", "a") || "",
-            note    =>  $record->subfield("500", "a") || "",
-            url     =>  $record->subfield("856", "u") || ""
+            series  => $record->subfield( "490", "a" ) || "",
+            address => $record->subfield( "264", "a" ) || $record->subfield( "260", "a" ) || "",
+            edition => $record->subfield( "250", "a" ) || "",
+            note    => $record->subfield( "500", "a" ) || "",
+            url     => $record->subfield( "856", "u" ) || ""
         );
     }
 
@@ -797,25 +837,23 @@ sub marc2bibtex {
 
     if ( $additional_fields && $additional_fields->{'@'} ) {
         my ( $f, $sf ) = split( /\$/, $additional_fields->{'@'} );
-        my ( $type ) = read_field( { record => $record, field => $f, subfield => $sf, field_numbers => [1] } );
+        my ($type) = read_field( { record => $record, field => $f, subfield => $sf, field_numbers => [1] } );
 
         if ($type) {
             $tex .= '@' . $type . '{';
-        }
-        else {
+        } else {
             $tex .= "\@book{";
         }
-    }
-    else {
+    } else {
         $tex .= "\@book{";
     }
 
     my @elt;
-    for ( my $i = 0 ; $i < scalar( @bh ) ; $i = $i + 2 ) {
-        next unless $bh[$i+1];
+    for ( my $i = 0 ; $i < scalar(@bh) ; $i = $i + 2 ) {
+        next unless $bh[ $i + 1 ];
         push @elt, qq|\t$bh[$i] = {$bh[$i+1]}|;
     }
-    $tex .= join(",\n", $id, @elt);
+    $tex .= join( ",\n", $id, @elt );
 
     if ($additional_fields) {
         $tex .= ",\n";
@@ -823,9 +861,9 @@ sub marc2bibtex {
             next if $bibtex_tag eq '@';
 
             my @fields =
-              ref( $additional_fields->{$bibtex_tag} ) eq 'ARRAY'
-              ? @{ $additional_fields->{$bibtex_tag} }
-              : $additional_fields->{$bibtex_tag};
+                ref( $additional_fields->{$bibtex_tag} ) eq 'ARRAY'
+                ? @{ $additional_fields->{$bibtex_tag} }
+                : $additional_fields->{$bibtex_tag};
 
             for my $tag (@fields) {
                 my ( $f, $sf ) = split( /\$/, $tag );
@@ -835,8 +873,7 @@ sub marc2bibtex {
                 }
             }
         }
-    }
-    else {
+    } else {
         $tex .= "\n";
     }
 
@@ -844,7 +881,6 @@ sub marc2bibtex {
 
     return $tex;
 }
-
 
 =head2 marc2cites - Convert from MARC21 and UNIMARC to citations
 
@@ -957,7 +993,6 @@ sub marc2cites {
     return \%cites;
 }
 
-
 =head1 INTERNAL FUNCTIONS
 
 =head2 _entity_encode - Entity-encode an array of strings
@@ -973,17 +1008,17 @@ Entity-encode an array of strings
 =cut
 
 sub _entity_encode {
-	my @strings = @_;
-	my @strings_entity_encoded;
-	foreach my $string (@strings) {
-		my $nfc_string = NFC($string);
-		$nfc_string =~ s/([\x{0080}-\x{fffd}])/sprintf('&#x%X;',ord($1))/sgoe;
-		push @strings_entity_encoded, $nfc_string;
-	}
-	return @strings_entity_encoded;
+    my @strings = @_;
+    my @strings_entity_encoded;
+    foreach my $string (@strings) {
+        my $nfc_string = NFC($string);
+        $nfc_string =~ s/([\x{0080}-\x{fffd}])/sprintf('&#x%X;',ord($1))/sgoe;
+        push @strings_entity_encoded, $nfc_string;
+    }
+    return @strings_entity_encoded;
 }
 
-END { }       # module clean-up code here (global destructor)
+END { }    # module clean-up code here (global destructor)
 1;
 __END__
 

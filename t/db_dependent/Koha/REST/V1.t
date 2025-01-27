@@ -32,11 +32,12 @@ subtest 'Type definition tests' => sub {
     $t = Test::Mojo->new('Koha::REST::V1');
     my $types = $t->app->types;
 
-    is( $types->type('json'),
+    is(
+        $types->type('json'),
         'application/json; charset=utf8',
         'application/json gets charset added'
     );
-    is( $types->type('marcxml'), 'application/marcxml+xml', 'application/marcxml+xml is defined' );
-    is( $types->type('mij'),  'application/marc-in-json', 'application/marc-in-json is defined' );
-    is( $types->type('marc'), 'application/marc',         'application/marc is defined' );
+    is( $types->type('marcxml'), 'application/marcxml+xml',  'application/marcxml+xml is defined' );
+    is( $types->type('mij'),     'application/marc-in-json', 'application/marc-in-json is defined' );
+    is( $types->type('marc'),    'application/marc',         'application/marc is defined' );
 };

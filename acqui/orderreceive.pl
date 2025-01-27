@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 #script to receive orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -63,11 +62,11 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Acquisition qw( GetInvoice );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Budgets qw( GetBudget GetBudgetPeriods GetBudgetPeriod GetBudgetHierarchy CanUserUseBudget );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Budgets     qw( GetBudget GetBudgetPeriods GetBudgetPeriod GetBudgetHierarchy CanUserUseBudget );
 use C4::Members;
-use C4::Biblio qw( GetMarcStructure );
+use C4::Biblio      qw( GetMarcStructure );
 use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 
 use Koha::Acquisition::Booksellers;
@@ -77,25 +76,25 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
 use Koha::Patrons;
 
-my $input      = CGI->new;
+my $input = CGI->new;
 
-my $dbh          = C4::Context->dbh;
-my $invoiceid    = $input->param('invoiceid');
-my $invoice      = GetInvoice($invoiceid);
-my $booksellerid   = $invoice->{booksellerid};
-my $freight      = $invoice->{shipmentcost};
-my $ordernumber  = $input->param('ordernumber');
+my $dbh             = C4::Context->dbh;
+my $invoiceid       = $input->param('invoiceid');
+my $invoice         = GetInvoice($invoiceid);
+my $booksellerid    = $invoice->{booksellerid};
+my $freight         = $invoice->{shipmentcost};
+my $ordernumber     = $input->param('ordernumber');
 my $multiple_orders = $input->param('multiple_orders');
 
-my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
-my $order = Koha::Acquisition::Orders->find( $ordernumber );
+my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
+my $order      = Koha::Acquisition::Orders->find($ordernumber);
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
-        template_name   => "acqui/orderreceive.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {acquisition => 'order_receive'},
+        template_name => "acqui/orderreceive.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_receive' },
     }
 );
 
@@ -154,19 +153,17 @@ if ($multiple_orders) {
     $template->param( multiple_orders => $multiple_orders );
 }
 
-my $currencies = Koha::Acquisition::Currencies->search;
+my $currencies      = Koha::Acquisition::Currencies->search;
 my $active_currency = $currencies->get_active;
 
 # Check if ACQ framework exists
 my $acq_fw = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
-unless($acq_fw) {
-    $template->param('NoACQframework' => 1);
+unless ($acq_fw) {
+    $template->param( 'NoACQframework' => 1 );
 }
 
 # get option values for TaxRates syspref
-my @gst_values = map {
-    option => $_ + 0.0
-}, split( '\|', C4::Context->preference("TaxRates") );
+my @gst_values = map { option => $_ + 0.0 }, split( '\|', C4::Context->preference("TaxRates") );
 
 $template->param(
     freight          => $freight,
@@ -181,29 +178,29 @@ $template->param(
     UniqueItemFields => C4::Context->preference('UniqueItemFields'),
 );
 
-my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
+my $patron = Koha::Patrons->find($loggedinuser)->unblessed;
 my %budget_loops;
 my $budgets = GetBudgetHierarchy( undef, undef, undef, 1 );
-foreach my $budget (@{$budgets}) {
-    next unless (CanUserUseBudget($patron, $budget, $userflags));
-    unless ( defined $budget_loops{$budget->{budget_period_id}} ){
-        $budget_loops{$budget->{budget_period_id}}->{description} = $budget->{budget_period_description};
-        $budget_loops{$budget->{budget_period_id}}->{active} = $budget->{budget_period_active};
-        $budget_loops{$budget->{budget_period_id}}->{funds} = [];
+foreach my $budget ( @{$budgets} ) {
+    next unless ( CanUserUseBudget( $patron, $budget, $userflags ) );
+    unless ( defined $budget_loops{ $budget->{budget_period_id} } ) {
+        $budget_loops{ $budget->{budget_period_id} }->{description} = $budget->{budget_period_description};
+        $budget_loops{ $budget->{budget_period_id} }->{active}      = $budget->{budget_period_active};
+        $budget_loops{ $budget->{budget_period_id} }->{funds}       = [];
     }
-    push @{$budget_loops{$budget->{budget_period_id}}->{funds}}, {
-        b_id  => $budget->{budget_id},
-        b_txt => $budget->{budget_name},
+    push @{ $budget_loops{ $budget->{budget_period_id} }->{funds} }, {
+        b_id            => $budget->{budget_id},
+        b_txt           => $budget->{budget_name},
         b_sort1_authcat => $budget->{'sort1_authcat'},
         b_sort2_authcat => $budget->{'sort2_authcat'},
-        b_active => $budget->{budget_period_active},
-        b_level => $budget->{budget_level},
+        b_active        => $budget->{budget_period_active},
+        b_level         => $budget->{budget_level},
     };
 }
 $template->{'VARS'}->{'budget_loops'} = \%budget_loops;
 
 my $op = $input->param('op');
-if ($op and $op eq 'cud-edit'){
-    $template->param(edit   =>   1);
+if ( $op and $op eq 'cud-edit' ) {
+    $template->param( edit => 1 );
 }
 output_html_with_http_headers $input, $cookie, $template->output;

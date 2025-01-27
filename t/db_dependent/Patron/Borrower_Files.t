@@ -32,28 +32,31 @@ use_ok('Koha::Patron::Files');
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
-my $dbh = C4::Context->dbh;
+my $dbh     = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM borrower_files|);
 
-my $library = $builder->build({
-    source => 'Branch',
-});
+my $library = $builder->build(
+    {
+        source => 'Branch',
+    }
+);
 
-my $patron_category = $builder->build({ source => 'Category' });
-my $borrowernumber = Koha::Patron->new({
-    firstname =>  'my firstname',
-    surname => 'my surname',
-    categorycode => $patron_category->{categorycode},
-    branchcode => $library->{branchcode},
-})->store->borrowernumber;
+my $patron_category = $builder->build( { source => 'Category' } );
+my $borrowernumber  = Koha::Patron->new(
+    {
+        firstname    => 'my firstname',
+        surname      => 'my surname',
+        categorycode => $patron_category->{categorycode},
+        branchcode   => $library->{branchcode},
+    }
+)->store->borrowernumber;
 
 my $bf = Koha::Patron::Files->new(
     borrowernumber => $borrowernumber,
 );
-
 
 my $addFile = $bf->AddFile(
     name => 'my filename',
@@ -64,39 +67,37 @@ my $files = $bf->GetFilesInfo();
 is( @$files, 0, 'AddFile does not add a file without the parameter content' );
 
 $addFile = $bf->AddFile(
-    type => 'text/plain',
+    type    => 'text/plain',
     content => 'my filecontent',
 );
 is( $addFile, undef, 'AddFile without the required parameter name returns undef' );
 $files = $bf->GetFilesInfo();
 is( @$files, 0, 'AddFile does not add a file without the parameter name' );
 
-
 my $file1 = {
-    name => 'my filename1',
-    type => 'text/plain',
+    name    => 'my filename1',
+    type    => 'text/plain',
     content => 'my filecontent1',
 };
 $addFile = $bf->AddFile(%$file1);
 is( $addFile, 1, 'AddFile with the required parameters returns 1' );
 $files = $bf->GetFilesInfo();
-is( @$files, 1, 'GetFilesInfo returns 1 file' );
+is( @$files,                  1,              'GetFilesInfo returns 1 file' );
 is( $files->[0]->{file_name}, $file1->{name}, 'Correctly stored name' );
 is( $files->[0]->{file_type}, $file1->{type}, 'Correctly stored type' );
 
-
 my $file2 = {
-    name => 'my filename2',
-    type => 'text/html',
+    name        => 'my filename2',
+    type        => 'text/html',
     description => 'my filedescription2',
-    content => 'my filecontent2',
+    content     => 'my filecontent2',
 };
 $addFile = $bf->AddFile(%$file2);
 is( $addFile, 1, 'AddFile with the required parameters returns 1' );
 $files = $bf->GetFilesInfo();
-is( @$files, 2, "GetFilesInfo returns 2 files" );
-is( $files->[1]->{file_name}, $file2->{name}, 'Correctly stored name' );
-is( $files->[1]->{file_type}, $file2->{type}, 'Correctly stored type' );
+is( @$files,                         2,                     "GetFilesInfo returns 2 files" );
+is( $files->[1]->{file_name},        $file2->{name},        'Correctly stored name' );
+is( $files->[1]->{file_type},        $file2->{type},        'Correctly stored type' );
 is( $files->[1]->{file_description}, $file2->{description}, 'Correctly stored description' );
 
 my $file = $bf->GetFile();
@@ -105,10 +106,9 @@ is( $file, undef, 'GetFile without parameters returns undef' );
 $file = $bf->GetFile(
     id => $files->[1]->{file_id},
 );
-is( $file->{file_name}, $files->[1]->{file_name}, 'GetFile returns the correct name' );
-is( $file->{file_type}, $files->[1]->{file_type}, 'GetFile returns the correct type' );
+is( $file->{file_name},        $files->[1]->{file_name},        'GetFile returns the correct name' );
+is( $file->{file_type},        $files->[1]->{file_type},        'GetFile returns the correct type' );
 is( $file->{file_description}, $files->[1]->{file_description}, 'GetFile returns the correct description' );
-
 
 $bf->DelFile();
 $files = $bf->GetFilesInfo();
@@ -118,7 +118,7 @@ $bf->DelFile(
     id => $files->[1]->{file_id},
 );
 $files = $bf->GetFilesInfo();
-is( @$files, 1, 'DelFile delete a file' );
+is( @$files,                  1,              'DelFile delete a file' );
 is( $files->[0]->{file_name}, $file1->{name}, 'DelFile delete the correct entry' );
 is( $files->[0]->{file_type}, $file1->{type}, 'DelFile delete the correct entry' );
 

@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( catch try );
 
 use C4::Auth qw( get_template_and_user );
@@ -42,10 +42,11 @@ my $op           = $input->param('op') || 'list';
 my @messages;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/branches.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_libraries' },
+    {
+        template_name => "admin/branches.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_libraries' },
     }
 );
 
@@ -57,40 +58,41 @@ if ( $op eq 'add_form' ) {
 } elsif ( $branchcode && $op eq 'view' ) {
     my $library = Koha::Libraries->find($branchcode);
     $template->param(
-        library      => $library,
+        library => $library,
     );
 } elsif ( $op eq 'cud-add_validate' ) {
     my @fields = qw(
-      branchname
-      branchaddress1
-      branchaddress2
-      branchaddress3
-      branchzip
-      branchcity
-      branchstate
-      branchcountry
-      branchphone
-      branchfax
-      branchemail
-      branchillemail
-      branchreplyto
-      branchreturnpath
-      branchurl
-      issuing
-      branchip
-      branchnotes
-      marcorgcode
-      pickup_location
-      public
-      opacuserjs
-      opacusercss
+        branchname
+        branchaddress1
+        branchaddress2
+        branchaddress3
+        branchzip
+        branchcity
+        branchstate
+        branchcountry
+        branchphone
+        branchfax
+        branchemail
+        branchillemail
+        branchreplyto
+        branchreturnpath
+        branchurl
+        issuing
+        branchip
+        branchnotes
+        marcorgcode
+        pickup_location
+        public
+        opacuserjs
+        opacusercss
     );
     my $is_a_modif = $input->param('is_a_modif');
 
     if ($is_a_modif) {
         my $library = Koha::Libraries->find($branchcode);
         for my $field (@fields) {
-            if( $field =~ /^(pickup_location|public)$/  ) {
+            if ( $field =~ /^(pickup_location|public)$/ ) {
+
                 # Don't fallback to undef/NULL, default is 1 in DB
                 $library->$field( scalar $input->param($field) );
             } else {
@@ -149,8 +151,7 @@ if ( $op eq 'add_form' ) {
                     push @messages, { type => 'message', code => 'success_on_update' };
                 }
             );
-        }
-        catch {
+        } catch {
             push @messages, { type => 'alert', code => 'error_on_update' };
         };
     } else {
@@ -160,9 +161,9 @@ if ( $op eq 'add_form' ) {
                 branchcode => $branchcode,
                 (
                     map {
-                        /^(pickup_location|public)$/ # Don't fallback to undef for those fields
-                          ? ( $_ => scalar $input->param($_) )
-                          : ( $_ => scalar $input->param($_) || undef )
+                        /^(pickup_location|public)$/    # Don't fallback to undef for those fields
+                            ? ( $_ => scalar $input->param($_) )
+                            : ( $_ => scalar $input->param($_) || undef )
                     } @fields
                 )
             }
@@ -211,16 +212,16 @@ if ( $op eq 'add_form' ) {
                     push @messages, { type => 'message', code => 'success_on_insert' };
                 }
             );
-        }
-        catch {
+        } catch {
             push @messages, { type => 'alert', code => 'error_on_insert' };
         };
     }
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
-    my $library       = Koha::Libraries->find($branchcode);
+    my $library     = Koha::Libraries->find($branchcode);
     my $items_count = Koha::Items->search(
-        {   -or => {
+        {
+            -or => {
                 holdingbranch => $branchcode,
                 homebranch    => $branchcode
             },
@@ -230,13 +231,14 @@ if ( $op eq 'add_form' ) {
 
     if ( $items_count or $patrons_count ) {
         push @messages,
-          { type => 'alert',
+            {
+            type => 'alert',
             code => 'cannot_delete_library',
             data => {
                 items_count   => $items_count,
                 patrons_count => $patrons_count,
             },
-          };
+            };
         $op = 'list';
     } else {
         $template->param(

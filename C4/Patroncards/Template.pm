@@ -7,7 +7,6 @@ use base qw(C4::Creators::Template);
 
 use autouse 'Data::Dumper' => qw(Dumper);
 
-
 use constant TEMPLATE_TABLE => 'creator_templates';
 
 __PACKAGE__ =~ m/^C4::(.+)::.+$/;

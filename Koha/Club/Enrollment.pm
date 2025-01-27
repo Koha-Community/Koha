@@ -19,7 +19,6 @@ package Koha::Club::Enrollment;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Clubs;
 use Koha::Patrons;
@@ -47,7 +46,7 @@ for statistical purposes.
 =cut
 
 sub cancel {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->_result()->update( { date_canceled => \'NOW()' } );
 
@@ -59,7 +58,7 @@ sub cancel {
 =cut
 
 sub club {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Clubs->find( $self->club_id() );
 }
 
@@ -68,7 +67,7 @@ sub club {
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Patrons->find( $self->borrowernumber() );
 }
 
@@ -79,13 +78,13 @@ Determines if enrollment is canceled
 =cut
 
 sub is_canceled {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return 0 unless $self->date_canceled;
-    my $today = dt_from_string;
+    my $today         = dt_from_string;
     my $date_canceled = dt_from_string( $self->date_canceled );
 
-    return DateTime->compare($date_canceled, $today) < 1;
+    return DateTime->compare( $date_canceled, $today ) < 1;
 }
 
 =head3 type

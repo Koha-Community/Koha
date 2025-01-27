@@ -38,8 +38,8 @@ Returns a hashref containing the callbacks Net::OAuth2::AuthorizationServer requ
 
 sub config {
     return {
-        verify_client_cb => \&_verify_client_cb,
-        store_access_token_cb => \&_store_access_token_cb,
+        verify_client_cb       => \&_verify_client_cb,
+        store_access_token_cb  => \&_store_access_token_cb,
         verify_access_token_cb => \&_verify_access_token_cb
     };
 }
@@ -54,20 +54,20 @@ and allowed to get authorization.
 sub _verify_client_cb {
     my (%args) = @_;
 
-    my ($client_id, $client_secret) = @args{ qw/ client_id client_secret / };
+    my ( $client_id, $client_secret ) = @args{qw/ client_id client_secret /};
 
     my $api_key;
 
     if ($client_id) {
-        $api_key = Koha::ApiKeys->find( $client_id );
+        $api_key = Koha::ApiKeys->find($client_id);
     }
 
     # client_id mandatory and exists on the DB
-    return (0, 'unauthorized_client') unless $api_key && $api_key->active;
+    return ( 0, 'unauthorized_client' ) unless $api_key && $api_key->active;
 
-    return (0, 'access_denied') unless $api_key->validate_secret( $client_secret );
+    return ( 0, 'access_denied' ) unless $api_key->validate_secret($client_secret);
 
-    return (1, undef, []);
+    return ( 1, undef, [] );
 }
 
 =head3 _store_access_token_cb
@@ -77,16 +77,17 @@ A callback to store the generated access tokens.
 =cut
 
 sub _store_access_token_cb {
-    my ( %args ) = @_;
+    my (%args) = @_;
 
-    my ( $client_id, $access_token, $expires_in )
-        = @args{ qw/ client_id access_token expires_in / };
+    my ( $client_id, $access_token, $expires_in ) = @args{qw/ client_id access_token expires_in /};
 
-    my $at = Koha::OAuthAccessToken->new({
-        access_token  => $access_token,
-        expires       => time + $expires_in,
-        client_id     => $client_id,
-    });
+    my $at = Koha::OAuthAccessToken->new(
+        {
+            access_token => $access_token,
+            expires      => time + $expires_in,
+            client_id    => $client_id,
+        }
+    );
     $at->store;
 
     return;
@@ -106,16 +107,17 @@ sub _verify_access_token_cb {
     my $at = Koha::OAuthAccessTokens->find($access_token);
     if ($at) {
         if ( $at->expires <= time ) {
+
             # need to revoke the access token
             $at->delete;
 
-            return (0, 'invalid_grant')
+            return ( 0, 'invalid_grant' );
         }
 
         return $at->unblessed;
     }
 
-    return (0, 'invalid_grant')
-};
+    return ( 0, 'invalid_grant' );
+}
 
 1;

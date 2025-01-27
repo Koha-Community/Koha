@@ -1,77 +1,87 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Create a new item type") | html %] &rsaquo;
-    [% t("Web installer") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Create a new item type") | html %]
+        &rsaquo; [% t("Web installer") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
 <body id="installer" class="installer">
-    <div class="main container-fluid">
-        <div class="row">
-            <div id="onboarding-step4" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
-                <div id="logo"><a href="#">Koha</a></div>
-                <h1>Web installer &rsaquo; Create a new item type</h1>
+<div class="main container-fluid">
+    <div class="row">
+        <div id="onboarding-step4" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+            <div id="logo"><a href="#">Koha</a></div>
+            <h1>Web installer &rsaquo; Create a new item type</h1>
 
-                [% INCLUDE 'onboarding_messages.inc' %]
+            [% INCLUDE 'onboarding_messages.inc' %]
 
-                <div id="steps">
+            <div id="steps">
+                <ol>
+                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
+                    <li class="current open"
+                        ><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a library</li>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a patron category</li>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create Koha administrator patron</li>
+                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new item type</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new circulation rule</li>
+                        </ol>
+                    </li>
+                </ol>
+            </div>
+
+            <!--Create a item type screen 1-->
+
+            <p> Item types are used to group related items. Examples of item types might be books, CDs, or DVDs.</p>
+            <p> When adding to your institution's catalog you will create an item of a particular item type.</p>
+            <p>
+                Important: Item types are what you apply circulation rules to. Circulation rules govern how your institution will lend its items: Checkout length, renewal policy, hold policy, etc. For example a circulation rule applied to
+                the DVD item type may enforce a payment of $1.00 for checking out any DVD.</p
+            >
+
+            <form id="createitemform" method="post" action="onboarding.pl">
+                [% INCLUDE 'csrf-token.inc' %]
+                <fieldset class="rows">
+                    <input type="hidden" name="step" value="4" />
+                    <input type="hidden" name="op" value="cud-add_validate_itemtype" />
                     <ol>
-                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
-                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding
-                            <ol>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a library</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a patron category</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create Koha administrator patron</li>
-                                <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new item type</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new circulation rule</li>
-                            </ol>
+                        <li>
+                            <label for="itemtype" class="required">Item type code: </label>
+                            <input type="text" name="itemtype" pattern="[0-9A-Za-z]{1,10}" id="itemtype" size="10" maxlength="10" class="required" required="required" value="[% itemtype.itemtype | html %]" />
+                            <span class="required">Required</span>
+                        </li>
+
+                        <li>
+                            <label for="description" class="required">Description: </label>
+                            <input type="text" name="description" id="description" size="42" value="[% itemtype.description | html %]" class="required" required="required" />
+                            <span class="required">Required</span>
                         </li>
                     </ol>
-                </div>
 
-                <!--Create a item type screen 1-->
-
-                    <p> Item types are used to group related items. Examples of item types might be books, CDs, or DVDs.</p>
-                    <p> When adding to your institution's catalog you will create an item of a particular item type.</p>
-                    <p> Important: Item types are what you apply circulation rules to. Circulation rules govern how your institution will lend its items: Checkout length, renewal policy, hold policy, etc. For example a circulation rule applied to the DVD item type may enforce a payment of $1.00 for checking out any DVD.</p>
-
-                    <form id="createitemform" method="post" action="onboarding.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                    <fieldset class="rows">
-                        <input type="hidden" name="step" value="4" />
-                        <input type="hidden" name="op" value="cud-add_validate_itemtype" />
-                        <ol>
-                            <li>
-                                <label for="itemtype" class="required">Item type code: </label>
-                                <input type="text" name="itemtype" pattern="[0-9A-Za-z]{1,10}" id="itemtype" size="10" maxlength="10"  class="required" required="required" value="[% itemtype.itemtype | html %]" />
-                                <span class="required">Required</span>
-                            </li>
-
-                            <li>
-                                <label for="description" class="required">Description: </label>
-                                <input type="text" name="description" id="description" size="42" value="[% itemtype.description | html %]" class="required" required="required">
-                                <span class="required">Required</span>
-                            </li>
-                        </ol>
-
-                        <p> To create another item type later and for more settings go to:
-                            <span class="breadcrumbs"> Administration &rsaquo; Item types </span>
-                        </p>
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </fieldset>
-                </form>
-            </div> <!-- / #onboarding-step4 -->
-        </div> <!-- / .row -->
-    </div> <!-- /.main.container-fluid -->
+                    <p>
+                        To create another item type later and for more settings go to:
+                        <span class="breadcrumbs"> Administration &rsaquo; Item types </span>
+                    </p>
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                </fieldset>
+            </form>
+        </div>
+        <!-- / #onboarding-step4 -->
+    </div>
+    <!-- / .row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'validator-strings.inc' %]
     [% INCLUDE 'installer-strings.inc' %]
-    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
+    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js">
+</script>
 [% END %]
 
 [% INCLUDE 'installer-intranet-bottom.inc' %]

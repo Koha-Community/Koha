@@ -5,15 +5,16 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( unknownauthid ) %]
-        [% t("Unknown authority record") | html %]
-    [% ELSE %]
-        [% tx("Details for authority #{authid} ({authtypetext})", { authid = authid, authtypetext = authtypetext }) | html %]
-    [% END %] &rsaquo;
-    [% t("Authorities") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( unknownauthid ) %]
+            [% t("Unknown authority record") | html %]
+        [% ELSE %]
+            [% tx("Details for authority #{authid} ({authtypetext})", { authid = authid, authtypetext = authtypetext }) | html %]
+        [% END %]
+        &rsaquo; [% t("Authorities") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% IF ( displayhierarchy ) %]
@@ -43,94 +44,93 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-            [% INCLUDE 'authorities-toolbar.inc' %]
-            <form action="/cgi-bin/koha/authorities/authorities-home.pl" class="form_delete" method="post">
-                  [% INCLUDE 'csrf-token.inc' %]
-                  <input type="hidden" name="op" value="cud-delete"/>
-                  <input type="hidden" name="authid" value="[% authid | html %]"/>
-            </form>
+    [% INCLUDE 'authorities-toolbar.inc' %]
+    <form action="/cgi-bin/koha/authorities/authorities-home.pl" class="form_delete" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-delete" />
+        <input type="hidden" name="authid" value="[% authid | html %]" />
+    </form>
 
-            [% IF ( displayhierarchy ) %]
-                <div id="hierarchies">
-                    [% PROCESS showhierarchy trees = loophierarchies %]
-                </div>
-            [% END %]
+    [% IF ( displayhierarchy ) %]
+        <div id="hierarchies"> [% PROCESS showhierarchy trees = loophierarchies %] </div>
+    [% END %]
 
+    [% IF ( unknownauthid ) %]
+        <h1>Authority does not exist</h1>
+        <div class="alert alert-info">The authority record you requested does not exist ([% errauthid | html %]).</div>
+    [% ELSE %]
+        <h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
 
-            [% IF ( unknownauthid ) %]
-                <h1>Authority does not exist</h1>
-                <div class="alert alert-info">The authority record you requested does not exist ([% errauthid | html %]).</div>
+        <div id="action">
+            [% IF count %]
+                Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an:[% authid | uri %]">[% count | html %] record(s)</a>
             [% ELSE %]
+                This authority is not used in any records.
+            [% END %]
+        </div>
 
-                <h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
+        [% IF html %]
+            [% html | $raw %]
+        [% ELSE %]
 
-                <div id="action">
-                    [% IF count %]
-                        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an:[% authid | uri %]">[% count | html %] record(s)</a>
-                    [% ELSE %]
-                        This authority is not used in any records.
+            [% WRAPPER tabs id= "authoritiestabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% FOREACH BIG_LOO IN BIG_LOOP %]
+                        [% WRAPPER tab_item tabname= "tab${ BIG_LOO.number }XX" %]
+                            [% BIG_LOO.number | html %]
+                        [% END %]
                     [% END %]
-                </div>
+                [% END # /WRAPPER tabs_nav %]
 
-                [% IF html %]
-                    [% html | $raw %]
-                [% ELSE %]
+                [% WRAPPER tab_panels %]
+                    [% FOREACH BIG_LOO IN BIG_LOOP %]
+                        [% WRAPPER tab_panel tabname="tab${ BIG_LOO.number }XX" %]
+                            [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                                <div class="tag">
+                                    [% IF ( innerloo.tag_number ) %]
+                                        <div class="tag_title">
+                                            <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
+                                            [% IF (innerloo.defined("ind1") ) %]
+                                                <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
+                                            [% END %]
+                                            [% IF (innerloo.tag_desc) %]
+                                                <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
+                                            [% END %]
+                                        </div>
+                                        <!-- /.tag_title -->
+                                    [% END # /IF ( innerloo.tag_number ) %]
 
-                    [% WRAPPER tabs id= "authoritiestabs" %]
-                        [% WRAPPER tabs_nav %]
-                            [% FOREACH BIG_LOO IN BIG_LOOP %]
-                                [% WRAPPER tab_item tabname= "tab${ BIG_LOO.number }XX" %]
-                                    [% BIG_LOO.number | html %]
-                                [% END %]
-                            [% END %]
-                        [% END # /WRAPPER tabs_nav %]
-
-                        [% WRAPPER tab_panels %]
-                            [% FOREACH BIG_LOO IN BIG_LOOP %]
-                                [% WRAPPER tab_panel tabname="tab${ BIG_LOO.number }XX" %]
-                                    [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                                        <div class="tag">
-                                            [% IF ( innerloo.tag_number ) %]
-                                                <div class="tag_title">
-                                                    <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
-                                                    [% IF (innerloo.defined("ind1") ) %]
-                                                        <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
+                                    [% FOREACH subfiel IN innerloo.subfield %]
+                                        <div class="auth_subfield">
+                                            <div class="subfield_info marc_field">
+                                                [% UNLESS ( subfiel.hide_marc ) %]
+                                                    <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
+                                                [% END %]
+                                                <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
+                                            </div>
+                                            <!-- /.subfield_info.marc_field -->
+                                            <div class="subfield_content marc_field">
+                                                <span class="subfield_value">
+                                                    [% IF ( subfiel.is_url ) %]
+                                                        <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
+                                                    [% ELSE %]
+                                                        [% subfiel.marc_value | html %]
                                                     [% END %]
-                                                    [% IF (innerloo.tag_desc) %]
-                                                        <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
-                                                    [% END %]
-                                                </div> <!-- /.tag_title -->
-                                            [% END # /IF ( innerloo.tag_number ) %]
-
-                                            [% FOREACH subfiel IN innerloo.subfield %]
-                                                <div class="auth_subfield">
-                                                    <div class="subfield_info marc_field">
-                                                        [% UNLESS ( subfiel.hide_marc ) %]
-                                                            <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
-                                                        [% END %]
-                                                        <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
-                                                    </div> <!-- /.subfield_info.marc_field -->
-                                                    <div class="subfield_content marc_field">
-                                                        <span class="subfield_value">
-                                                            [% IF ( subfiel.is_url ) %]
-                                                                <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
-                                                            [% ELSE %]
-                                                                [% subfiel.marc_value | html %]
-                                                            [% END %]
-                                                        </span>
-                                                    </div> <!-- /.subfield_content.marc_field -->
-                                                </div> <!-- /.auth_subfield -->
-                                            [% END #/FOREACH subfiel %]
-                                        </div> <!-- /.tag -->
-                                    [% END # /FOREACH innerloo %]
-                                [% END # /tab_panel#tab${ BIG_LOO.number }XX  %]
-                            [% END # /FOREACH BIG_LOO %]
-                        [% END # /WRAPPER tab_panels %]
-                    [% END # /WRAPPER tabs %]
-
-                [% END # /IF html %]
-
-            [% END # /IF ( unknownauthid ) %]
+                                                </span>
+                                            </div>
+                                            <!-- /.subfield_content.marc_field -->
+                                        </div>
+                                        <!-- /.auth_subfield -->
+                                    [% END #/FOREACH subfiel %]
+                                </div>
+                                <!-- /.tag -->
+                            [% END # /FOREACH innerloo %]
+                        [% END # /tab_panel#tab${ BIG_LOO.number }XX %]
+                    [% END # /FOREACH BIG_LOO %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
+        [% END # /IF html %]
+    [% END # /IF ( unknownauthid ) %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -140,49 +140,49 @@
     [% END %]
     <script>
         $(document).ready(function() {
-            if( $("#authoritiestabs .tab-pane.active").length < 1 ){
-                let tab_object = [];
+           if( $("#authoritiestabs .tab-pane.active").length < 1 ){
+               let tab_object = [];
 
-                [% SET DefaultAuthorityTab = Koha.Preference('DefaultAuthorityTab') %]
-                [% IF DefaultAuthorityTab %]
-                    tab_object = $("#authoritiestabs #tab[% DefaultAuthorityTab | html %]XX-tab");
-                [% END %]
+               [% SET DefaultAuthorityTab = Koha.Preference('DefaultAuthorityTab') %]
+               [% IF DefaultAuthorityTab %]
+                   tab_object = $("#authoritiestabs #tab[% DefaultAuthorityTab | html %]XX-tab");
+               [% END %]
 
-                if( tab_object.length > 0 ){
-                    tab_object.tab("show");
-                } else {
-                    $("#authoritiestabs a:first").tab("show");
-                }
-            }
+               if( tab_object.length > 0 ){
+                   tab_object.tab("show");
+               } else {
+                   $("#authoritiestabs a:first").tab("show");
+               }
+           }
 
-            var editAuth = $("#editAuth");
-            var editAuthLink = editAuth.attr("href");
+           var editAuth = $("#editAuth");
+           var editAuthLink = editAuth.attr("href");
 
-            $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-                var newTabId = $(this).attr("href");
-                editAuth.attr("href", editAuthLink + newTabId );
-            });
+           $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
+               var newTabId = $(this).attr("href");
+               editAuth.attr("href", editAuthLink + newTabId );
+           });
 
-            [% IF ( displayhierarchy ) %]
-                $('#hierarchies').jstree({
-                    "types" : {
-                        "default" : {
-                            "icon" : "fa-solid fa-file"
-                        }
-                    },
-                    "plugins" : [ "types" ]
-                }).on('ready.jstree', function(){
-                    $(this).jstree('open_all');
-                    $("#hier"+[% authid | html %]+"_anchor").on("click",
-                        function(e){e.preventDefault(); return false;}
-                    ).css("text-decoration", "none").css("color", "#333");
-                    $(".currentauth").css("text-decoration", "none").css("color", "#333");
-                }).bind("select_node.jstree", function (e, data) {
-                    e.preventDefault();
-                    document.location.href = data.node.a_attr.href;
-                });
-            [% END # /IF ( displayhierarchy ) %]
-         });
+           [% IF ( displayhierarchy ) %]
+               $('#hierarchies').jstree({
+                   "types" : {
+                       "default" : {
+                           "icon" : "fa-solid fa-file"
+                       }
+                   },
+                   "plugins" : [ "types" ]
+               }).on('ready.jstree', function(){
+                   $(this).jstree('open_all');
+                   $("#hier"+[% authid | html %]+"_anchor").on("click",
+                       function(e){e.preventDefault(); return false;}
+                   ).css("text-decoration", "none").css("color", "#333");
+                   $(".currentauth").css("text-decoration", "none").css("color", "#333");
+               }).bind("select_node.jstree", function (e, data) {
+                   e.preventDefault();
+                   document.location.href = data.node.a_attr.href;
+               });
+           [% END # /IF ( displayhierarchy ) %]
+        });
     </script>
 [% END %]
 

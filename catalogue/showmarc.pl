@@ -29,67 +29,64 @@ use Encode;
 # Koha modules used
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw( GetXmlBiblio );
 use C4::XSLT;
 
 use Koha::Biblios;
 use Koha::Import::Records;
 
-my $input= CGI->new;
+my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-  {
-    template_name   => "catalogue/showmarc.tt",
-    query           => $input,
-    type            => "intranet",
-    flagsrequired   => { catalogue => 1  },
-  }
+    {
+        template_name => "catalogue/showmarc.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
+    }
 );
 
-my $biblionumber= $input->param('id');
-my $importid= $input->param('importid');
-my $view= $input->param('viewas')||'';
+my $biblionumber = $input->param('id');
+my $importid     = $input->param('importid');
+my $view         = $input->param('viewas') || '';
 
 my $marcflavour = C4::Context->preference('marcflavour');
 
 my $record;
 my $record_type = 'biblio';
-my $format = $marcflavour eq 'UNIMARC' ? 'UNIMARC' : 'USMARC';
+my $format      = $marcflavour eq 'UNIMARC' ? 'UNIMARC' : 'USMARC';
 if ($importid) {
     my $import_record = Koha::Import::Records->find($importid);
     if ($import_record) {
-        if ($marcflavour eq 'UNIMARC' && $import_record->record_type eq 'auth') {
+        if ( $marcflavour eq 'UNIMARC' && $import_record->record_type eq 'auth' ) {
             $format = 'UNIMARCAUTH';
         }
 
         $record = $import_record->get_marc_record();
     }
-}
-else {
+} else {
     my $biblio = Koha::Biblios->find($biblionumber);
     $record = $biblio->metadata->record;
 }
-if(!ref $record) {
+if ( !ref $record ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
-if($view eq 'card' || $view eq 'html') {
-    my $xml = $importid ? $record->as_xml($format): GetXmlBiblio($biblionumber);
+if ( $view eq 'card' || $view eq 'html' ) {
+    my $xml = $importid ? $record->as_xml($format) : GetXmlBiblio($biblionumber);
     my $xsl;
-    if ( $view eq 'card' ){
+    if ( $view eq 'card' ) {
         $xsl = $marcflavour eq 'UNIMARC' ? 'UNIMARC_compact.xsl' : 'compact.xsl';
-    }
-    else {
+    } else {
         $xsl = 'plainMARC.xsl';
     }
     my $htdocs = C4::Context->config('intrahtdocs');
-    my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'intranet', $input);
+    my ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $xsl, 'intranet', $input );
     $xsl = "$htdocs/$theme/$lang/xslt/$xsl";
-    print $input->header(-charset => 'UTF-8'),
-          Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
-}
-else {
+    print $input->header( -charset => 'UTF-8' ),
+        Encode::encode_utf8( C4::XSLT::engine->transform( $xml, $xsl ) );
+} else {
     $template->param( MARC_FORMATTED => $record->as_formatted );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

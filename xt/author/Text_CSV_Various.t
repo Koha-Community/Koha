@@ -21,7 +21,7 @@
 #necessary to test your Koha installation.
 
 use Modern::Perl;
-use open OUT=>':encoding(UTF-8)', ':std';
+use open OUT => ':encoding(UTF-8)', ':std';
 use utf8;
 
 use Test::More tests => 21;
@@ -29,56 +29,64 @@ use Text::CSV;
 use Text::CSV_XS;
 
 sub pretty_line {
-	my $max = 54;
-	(@_) or return "#" x $max . "\n";
-	my $phrase = "  " . shift() . "  ";
-	my $half = "#" x (($max - length($phrase))/2);
-	return $half . $phrase . $half . "\n";
+    my $max = 54;
+    (@_) or return "#" x $max . "\n";
+    my $phrase = "  " . shift() . "  ";
+    my $half   = "#" x ( ( $max - length($phrase) ) / 2 );
+    return $half . $phrase . $half . "\n";
 }
 
-my ($csv, $bin, %parsers);
+my ( $csv, $bin, %parsers );
 
-foreach( qw( Text::CSV Text::CSV_XS )) {
-    ok($csv = $_->new(),            $_ . '->new()');
-    ok($bin = $_->new({binary=>1}), $_ . '->new({binary=>1})');
+foreach (qw( Text::CSV Text::CSV_XS )) {
+    ok( $csv = $_->new(),                  $_ . '->new()' );
+    ok( $bin = $_->new( { binary => 1 } ), $_ . '->new({binary=>1})' );
     $csv and $parsers{$_} = $csv;
-    $bin and $parsers{$_ . " (binary)"} = $bin;
+    $bin and $parsers{ $_ . " (binary)" } = $bin;
 }
 
 my $lines = [
-    {description=>"010D: LATIN SMALL LETTER C WITH CARON",     character=>'č', line=>'field1,second field,field3,do_we_have_a_č_problem?, f!fth field ,lastfield'},
-    {description=>"0117: LATIN SMALL LETTER E WITH DOT ABOVE", character=>'ė', line=>'field1,second field,field3,do_we_have_a_ė_problem?, f!fth field ,lastfield'},
+    {
+        description => "010D: LATIN SMALL LETTER C WITH CARON", character => 'č',
+        line        => 'field1,second field,field3,do_we_have_a_č_problem?, f!fth field ,lastfield'
+    },
+    {
+        description => "0117: LATIN SMALL LETTER E WITH DOT ABOVE", character => 'ė',
+        line        => 'field1,second field,field3,do_we_have_a_ė_problem?, f!fth field ,lastfield'
+    },
 ];
 
-ok( scalar(keys %parsers)>0 && scalar(@$lines)>0,
+ok(
+    scalar( keys %parsers ) > 0 && scalar(@$lines) > 0,
     sprintf "Testing %d lines with  %d parsers.",
-         scalar(@$lines), scalar(keys %parsers) );
+    scalar(@$lines), scalar( keys %parsers )
+);
 
-foreach my $key (sort keys %parsers) {
+foreach my $key ( sort keys %parsers ) {
     my $parser = $parsers{$key};
-    print "Testing parser $key version " . ($parser->version||'?') . "\n";
+    print "Testing parser $key version " . ( $parser->version || '?' ) . "\n";
 }
 
 my $i = 0;
 foreach my $line (@$lines) {
-    print pretty_line("Line " . ++$i);
-    print pretty_line($line->{description} . ': ' . $line->{character});
-    foreach my $key (sort keys %parsers) {
+    print pretty_line( "Line " . ++$i );
+    print pretty_line( $line->{description} . ': ' . $line->{character} );
+    foreach my $key ( sort keys %parsers ) {
         my $parser = $parsers{$key};
-        my ($status, $count, @fields);
+        my ( $status, $count, @fields );
         $status = $parser->parse( $line->{line} );
-        if( $status ) {
-            ok($status, "parse ($key)");
+        if ($status) {
+            ok( $status, "parse ($key)" );
             @fields = $parser->fields;
-            $count = scalar(@fields);
-            is( $count, 6, "Number of fields ($count of 6)");
+            $count  = scalar(@fields);
+            is( $count, 6, "Number of fields ($count of 6)" );
             my $j = 0;
             foreach my $f (@fields) {
                 $j++;
                 print "\t field $j: $f\n";
             }
         } else {
-            ok(! $status, "parse ($key) fails as expected"); #FIXME We never hit this line
+            ok( !$status, "parse ($key) fails as expected" );    #FIXME We never hit this line
         }
     }
 }

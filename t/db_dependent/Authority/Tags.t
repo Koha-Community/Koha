@@ -30,17 +30,20 @@ $schema->storage->txn_begin;
 
 subtest "Some supertrivial tests for Tag" => sub {
     plan tests => 3;
-    my $authtype = t::lib::TestBuilder->new->build({
-        source => 'AuthType'
-    });
-    my $cnt =  Koha::Authority::Tags->count;
-    my $rec = Koha::Authority::Tag->new({
-        authtypecode => $authtype->{authtypecode},
-        tagfield     => '100',
-    })->store;
+    my $authtype = t::lib::TestBuilder->new->build( { source => 'AuthType' } );
+    my $cnt      = Koha::Authority::Tags->count;
+    my $rec      = Koha::Authority::Tag->new(
+        {
+            authtypecode => $authtype->{authtypecode},
+            tagfield     => '100',
+        }
+    )->store;
     is( Koha::Authority::Tags->count, $cnt + 1, 'One record added' );
-    $rec->update({ liblibrarian => 'another intelligent idea' });
-    is( Koha::Authority::Tags->find( $authtype->{authtypecode}, '100' )->liblibrarian, 'another intelligent idea', 'Found record' );
+    $rec->update( { liblibrarian => 'another intelligent idea' } );
+    is(
+        Koha::Authority::Tags->find( $authtype->{authtypecode}, '100' )->liblibrarian, 'another intelligent idea',
+        'Found record'
+    );
     $rec->delete;
     is( Koha::Authority::Tags->count, $cnt, 'One record deleted' );
 };

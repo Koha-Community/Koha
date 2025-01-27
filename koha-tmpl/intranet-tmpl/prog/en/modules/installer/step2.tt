@@ -2,100 +2,104 @@
 [% USE HtmlTags %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Database settings") | html %] &rsaquo;
-    [% t("Web installer") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Database settings") | html %]
+        &rsaquo; [% t("Web installer") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
 <body id="installer" class="installer">
-    <div class="container-fluid">
-        <div class="row">
-            <div id="installer-step2" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+<div class="container-fluid">
+    <div class="row">
+        <div id="installer-step2" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+            <div id="logo"><a href="#">Koha</a></div>
+            <h1>Web installer &rsaquo; Database settings</h1>
 
+            <div id="steps">
+                <ol>
+                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
+                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
+                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                </ol>
+            </div>
 
-                <div id="logo"><a href="#">Koha</a></div>
-                <h1>Web installer &rsaquo; Database settings</h1>
+            <h3>Database settings:</h3>
+            <ul>
+                <li><em>Database type: </em> [%- dbms | $HtmlTags tag=>'code' -%]</li>
+                <li><em>Database name: </em> [%- dbname | $HtmlTags tag=>'code' -%]</li>
+                <li><em>Database host: </em> [%- hostname | $HtmlTags tag=>'code' -%]</li>
+                <li><em>Database port: </em> [%- port| $HtmlTags tag=>'code' -%] (probably okay if blank)</li>
+                <li><em>Database user: </em> [%- user | $HtmlTags tag=>'code' -%]</li>
+            </ul>
 
-                <div id="steps">
-                    <ol>
-                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
-                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
-                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                    </ol>
-                </div>
-
-                <h3>Database settings:</h3>
-                <ul>
-                    <li><em>Database type: </em> [%- dbms | $HtmlTags tag=>'code' -%]</li>
-                    <li><em>Database name: </em> [%- dbname | $HtmlTags tag=>'code' -%]</li>
-                    <li><em>Database host: </em> [%- hostname | $HtmlTags tag=>'code' -%]</li>
-                    <li><em>Database port: </em> [%- port| $HtmlTags tag=>'code' -%] (probably okay if blank)</li>
-                    <li><em>Database user: </em> [%- user | $HtmlTags tag=>'code' -%]</li>
-                </ul>
-
-                [% IF ( dbconnection ) %]
-                    <form name="checkdbparameters" action="install.pl" method="get">
-                        [% IF ( checkdatabaseaccess ) %]
-                            <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
-                            [% IF ( checkdatabasecreated ) %]
-                                [% IF ( checkgrantaccess ) %]
-                                    <ul>
-                                        <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
-                                        <li>User [% user | $HtmlTags tag=>'code' %]  has all required privileges on database [% dbname | $HtmlTags tag=>'code' %].</li>
-                                    </ul>
-                                [% ELSE %]
-                                    <ul>
-                                        <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
-                                    </ul>
-                                    <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' %].</p>
-                                    <p class="hint">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
-                                    <p>Need help? For help with granting permissions, please search online for "[% dbms | $HtmlTags tag=>'code' %] manual grant permissions"
-                                    </p>
-                                [% END %]
-                                [% IF ( warnDbRowFormat ) %]
-                                    <div class="alert alert-danger" role="alert">
-                                        <p>Database tables with a row format other than 'DYNAMIC': [% warnDbRowFormat | html %]</p>
-                                        <p>You may experience problems upgrading to newer versions of Koha unless you update the row format for your database tables.</p>
-                                        <p>To know how to avoid this problem see the related wiki page:
-                                            <a href="https://wiki.koha-community.org/wiki/Database_row_format">Database row format</a>
-                                        </p>
-                                    </div>
-                                [% END %]
+            [% IF ( dbconnection ) %]
+                <form name="checkdbparameters" action="install.pl" method="get">
+                    [% IF ( checkdatabaseaccess ) %]
+                        <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
+                        [% IF ( checkdatabasecreated ) %]
+                            [% IF ( checkgrantaccess ) %]
+                                <ul>
+                                    <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
+                                    <li>User [% user | $HtmlTags tag=>'code' %] has all required privileges on database [% dbname | $HtmlTags tag=>'code' %].</li>
+                                </ul>
                             [% ELSE %]
-                                <div class="alert alert-danger" role="alert"><p>No database named [% dbname | $HtmlTags tag=>'code' %] detected.</p></div>
-                                <p>Please create the database before continuing.</p>
+                                <ul>
+                                    <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
+                                </ul>
+                                <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' %].</p>
+                                <p class="hint"
+                                    >Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database
+                                    [% dbname | $HtmlTags tag=>'code' %].</p
+                                >
+                                <p>Need help? For help with granting permissions, please search online for "[% dbms | $HtmlTags tag=>'code' %] manual grant permissions" </p>
+                            [% END %]
+                            [% IF ( warnDbRowFormat ) %]
+                                <div class="alert alert-danger" role="alert">
+                                    <p>Database tables with a row format other than 'DYNAMIC': [% warnDbRowFormat | html %]</p>
+                                    <p>You may experience problems upgrading to newer versions of Koha unless you update the row format for your database tables.</p>
+                                    <p
+                                        >To know how to avoid this problem see the related wiki page:
+                                        <a href="https://wiki.koha-community.org/wiki/Database_row_format">Database row format</a>
+                                    </p>
+                                </div>
                             [% END %]
                         [% ELSE %]
-                            <div class="alert alert-warning" role="alert">[% error | html %] : [% message | html %]</div>
-                            <div class="hint">
-                                <ul>
-                                    <li>Check that your database is running.</li>
-                                    <li>Check your database settings in [% 'koha-conf.xml' | $HtmlTags Tag=>'code' %].</li>
-                                    <li>Check the hostname setting in [% INCLUDE txt_kohaconf_xml %]. Some database servers require [% '127.0.0.1' | $HtmlTags tag=>'code' %] rather than [% 'localhost' | $HtmlTags tag=>'code' %].</li>
-                                </ul>
-                            </div>
-                            <p>Please correct these errors. <a href="/cgi-bin/koha/installer/install.pl">Then start the installer again.</a>
+                            <div class="alert alert-danger" role="alert"><p>No database named [% dbname | $HtmlTags tag=>'code' %] detected.</p></div>
+                            <p>Please create the database before continuing.</p>
                         [% END %]
-                        [% UNLESS ( error ) %]
-                            <input type="hidden" name="step" value="3" />
-                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
-                        [% END %]
-                    </form>
-                [% ELSE %]
-                    <form name="checkinformation" action="install.pl" method="get">
-                        <input type="hidden" name="step" value="2" />
-                        <input type="hidden" name="checkdb" value="1" />
-                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
-                    </form>
-                [% END # / IF dbconnection %]
-            </div> <!-- / #installer-step2 -->
-        </div> <!-- / .row -->
-    </div><!-- / .container-fluid -->
+                    [% ELSE %]
+                        <div class="alert alert-warning" role="alert">[% error | html %] : [% message | html %]</div>
+                        <div class="hint">
+                            <ul>
+                                <li>Check that your database is running.</li>
+                                <li>Check your database settings in [% 'koha-conf.xml' | $HtmlTags Tag=>'code' %].</li>
+                                <li>Check the hostname setting in [% INCLUDE txt_kohaconf_xml %]. Some database servers require [% '127.0.0.1' | $HtmlTags tag=>'code' %] rather than [% 'localhost' | $HtmlTags tag=>'code' %].</li>
+                            </ul>
+                        </div>
+                        <p>Please correct these errors. <a href="/cgi-bin/koha/installer/install.pl">Then start the installer again.</a> </p>
+                    [% END %]
+                    [% UNLESS ( error ) %]
+                        <input type="hidden" name="step" value="3" />
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                    [% END %]
+                </form>
+            [% ELSE %]
+                <form name="checkinformation" action="install.pl" method="get">
+                    <input type="hidden" name="step" value="2" />
+                    <input type="hidden" name="checkdb" value="1" />
+                    <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                </form>
+            [% END # / IF dbconnection %]
+        </div>
+        <!-- / #installer-step2 -->
+    </div>
+    <!-- / .row --> </div
+><!-- / .container-fluid -->
 
 [% INCLUDE 'installer-intranet-bottom.inc' %]

@@ -67,7 +67,6 @@ sub new {
     return $self;
 }
 
-
 =head2 get_from_authid
 
     my $auth = Koha::MetadataRecord::Authority->get_from_authid($authid);
@@ -80,23 +79,35 @@ unfortunate but unavoidable fact.
 =cut
 
 sub get_from_authid {
-    my $class = shift;
-    my $authid = shift;
+    my $class       = shift;
+    my $authid      = shift;
     my $marcflavour = lc C4::Context->preference("marcflavour");
 
-    my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("select authtypecode, marcxml from auth_header where authid=?");
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("select authtypecode, marcxml from auth_header where authid=?");
     $sth->execute($authid);
-    my ($authtypecode, $marcxml) = $sth->fetchrow;
-    my $record=eval {MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
-        (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")))};
+    my ( $authtypecode, $marcxml ) = $sth->fetchrow;
+    my $record = eval {
+        MARC::Record->new_from_xml(
+            StripNonXmlChars($marcxml), 'UTF-8',
+            (
+                C4::Context->preference("marcflavour") eq "UNIMARC"
+                ? "UNIMARCAUTH"
+                : C4::Context->preference("marcflavour")
+            )
+        );
+    };
     return if ($@);
     $record->encoding('UTF-8');
 
-    my $self = $class->SUPER::new( { authid => $authid,
-                                     authtypecode => $authtypecode,
-                                     schema => $marcflavour,
-                                     record => $record });
+    my $self = $class->SUPER::new(
+        {
+            authid       => $authid,
+            authtypecode => $authtypecode,
+            schema       => $marcflavour,
+            record       => $record
+        }
+    );
 
     bless $self, $class;
     return $self;
@@ -111,16 +122,24 @@ Create the Koha::MetadataRecord::Authority object associated with the provided a
 =cut
 
 sub get_from_breeding {
-    my $class = shift;
+    my $class            = shift;
     my $import_record_id = shift;
-    my $marcflavour = lc C4::Context->preference("marcflavour");
+    my $marcflavour      = lc C4::Context->preference("marcflavour");
 
-    my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("select marcxml from import_records where import_record_id=? and record_type='auth';");
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("select marcxml from import_records where import_record_id=? and record_type='auth';");
     $sth->execute($import_record_id);
     my $marcxml = $sth->fetchrow;
-    my $record=eval {MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
-        (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")))};
+    my $record  = eval {
+        MARC::Record->new_from_xml(
+            StripNonXmlChars($marcxml), 'UTF-8',
+            (
+                C4::Context->preference("marcflavour") eq "UNIMARC"
+                ? "UNIMARCAUTH"
+                : C4::Context->preference("marcflavour")
+            )
+        );
+    };
     return if ($@);
     $record->encoding('UTF-8');
 
@@ -131,10 +150,13 @@ sub get_from_breeding {
     require C4::AuthoritiesMarc;
     my $authtypecode = C4::AuthoritiesMarc::GuessAuthTypeCode($record);
 
-    my $self = $class->SUPER::new( {
-                                     schema => $marcflavour,
-                                     authtypecode => $authtypecode,
-                                     record => $record });
+    my $self = $class->SUPER::new(
+        {
+            schema       => $marcflavour,
+            authtypecode => $authtypecode,
+            record       => $record
+        }
+    );
 
     bless $self, $class;
     return $self;
@@ -142,8 +164,8 @@ sub get_from_breeding {
 
 sub authorized_heading {
     my ($self) = @_;
-    if ($self->schema =~ m/marc/) {
-        return Koha::Util::MARC::getAuthorityAuthorizedHeading($self->record, $self->schema);
+    if ( $self->schema =~ m/marc/ ) {
+        return Koha::Util::MARC::getAuthorityAuthorizedHeading( $self->record, $self->schema );
     }
     return;
 }
@@ -173,14 +195,12 @@ records instead of all.
 =cut
 
 sub get_all_authorities_iterator {
-    my ($self, %options) = @_;
+    my ( $self, %options ) = @_;
 
-    my $search_terms = {
-        marcxml => { '!=', undef }
-    };
-    my ($slice_modulo, $slice_count);
-    if ($options{slice}) {
-        $slice_count = $options{slice}->{count};
+    my $search_terms = { marcxml => { '!=', undef } };
+    my ( $slice_modulo, $slice_count );
+    if ( $options{slice} ) {
+        $slice_count  = $options{slice}->{count};
         $slice_modulo = $options{slice}->{index};
         $search_terms = {
             '-and' => [
@@ -191,29 +211,30 @@ sub get_all_authorities_iterator {
     }
 
     my $search_options->{columns} = [qw/ authid /];
-    if ($options{desc}) {
+    if ( $options{desc} ) {
         $search_options->{order_by} = { -desc => 'authid' };
     }
 
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
-    my $rs =
-      $schema->resultset('AuthHeader')->search(
+    my $rs       = $schema->resultset('AuthHeader')->search(
         $search_terms,
-        $search_options);
+        $search_options
+    );
 
     if ( my $sql = $options{where} ) {
         $rs = $rs->search( \[$sql] );
     }
 
     my $next_func = sub {
+
         # Warn and skip bad records, otherwise we break the loop
         while (1) {
             my $row = $rs->next();
             return if !$row;
 
-            my $auth = __PACKAGE__->get_from_authid($row->authid);
-            if (!$auth) {
+            my $auth = __PACKAGE__->get_from_authid( $row->authid );
+            if ( !$auth ) {
                 warn "Something went wrong reading record for authority " . $row->authid . ": $@\n";
                 next;
             }

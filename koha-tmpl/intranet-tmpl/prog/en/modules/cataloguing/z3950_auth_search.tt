@@ -4,244 +4,275 @@
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( opsearch ) %]
-        [% t("Z39.50 authority search points") | html %] &rsaquo;
-    [% ELSE %]
-        [% t("Z39.50 authority search results") | html %] &rsaquo;
-    [% END %]
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( opsearch ) %]
+            [% t("Z39.50 authority search points") | html %]
+            &rsaquo;
+        [% ELSE %]
+            [% t("Z39.50 authority search results") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <body id="cat_z3950_auth_search" class="cat">
-    <div class="main container-fluid">
-
+<div class="main container-fluid">
     [% IF ( opsearch ) %]
         <h1>Z39.50 authority search points</h1>
         <form method="post" action="z3950_auth_search.pl" name="f" class="checkboxed">
             [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" id="op" value="cud-do_search" />
-        <input type="hidden" name="authid" value="[% authid | html %]" />
-        <input type="hidden" name="index" value="[% index | html %]" />
+            <input type="hidden" name="op" id="op" value="cud-do_search" />
+            <input type="hidden" name="authid" value="[% authid | html %]" />
+            <input type="hidden" name="index" value="[% index | html %]" />
             <div class="row">
-            <div class="col-6">
-                <fieldset class="rows">
-                <ol>
-                    <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="[% srchany | html %]" /></li>
-                    <li><label for="controlnumber">Control number: </label> <input type="text" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" /></li>
-                    <li><label for="nameany">Name (any): </label> <input type="text" id="nameany" name="nameany" value="[% nameany | html %]" /></li>
-                    <li><label for="authorany">Author (any): </label> <input type="text" id="authorany" name="authorany" value="[% authorany | html %]" /></li>
-                    <li><label for="authorpersonal">Author (personal): </label> <input type="text" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" /></li>
-                    <li><label for="authorcorp">Author (corporate): </label> <input type="text" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" /></li>
-                    <li><label for="authormeetingcon">Author (meeting / conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" /></li>
-                </ol>
-                </fieldset>
-            </div>
-            <div class="col-6">
-                <div class="row">
+                <div class="col-6">
                     <fieldset class="rows">
-                    <ol>
-                        <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="[% subject | html %]" /></li>
-                        <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" /></li>
-                        <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
-                        <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" /></li>
-                        <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash-can"></i> Clear search form</a></li>
-                    </ol>
+                        <ol>
+                            <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="[% srchany | html %]" /></li>
+                            <li><label for="controlnumber">Control number: </label> <input type="text" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" /></li>
+                            <li><label for="nameany">Name (any): </label> <input type="text" id="nameany" name="nameany" value="[% nameany | html %]" /></li>
+                            <li><label for="authorany">Author (any): </label> <input type="text" id="authorany" name="authorany" value="[% authorany | html %]" /></li>
+                            <li><label for="authorpersonal">Author (personal): </label> <input type="text" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" /></li>
+                            <li><label for="authorcorp">Author (corporate): </label> <input type="text" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" /></li>
+                            <li><label for="authormeetingcon">Author (meeting / conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" /></li>
+                        </ol>
                     </fieldset>
                 </div>
+                <div class="col-6">
+                    <div class="row">
+                        <fieldset class="rows">
+                            <ol>
+                                <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="[% subject | html %]" /></li>
+                                <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" /></li>
+                                <li><label for="title">Title (any): </label> <input type="text" id="title" name="title" value="[% title | html %]" /></li>
+                                <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle" name="uniformtitle" value="[% uniformtitle | html %]" /></li>
+                                <li
+                                    ><a id="resetZ3950Search" href="#"><i class="fa fa-trash-can"></i> Clear search form</a></li
+                                >
+                            </ol>
+                        </fieldset>
+                    </div>
 
-                <div class="row">
-                    <h2>Search targets</h2>
-                    <div id="z3950_search_targets_auth">
-                        <span class="z3950checks"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span></span>
-                    [% FOREACH serverloo IN serverloop %]
-                        <p>
-                        [% IF ( serverloo.checked ) %]
-                            <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" checked="checked" />
-                        [% ELSE %]
-                            <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" />
-                        [% END %]
-                        <label for="z3950_[% serverloo.id | html %]">[% serverloo.servername | html %]</label>
-                        </p>
-                    [% END %]
+                    <div class="row">
+                        <h2>Search targets</h2>
+                        <div id="z3950_search_targets_auth">
+                            <span class="z3950checks"
+                                ><span class="checkall"
+                                    ><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span
+                                >
+                                |
+                                <span class="clearall"
+                                    ><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span
+                                ></span
+                            >
+                            [% FOREACH serverloo IN serverloop %]
+                                <p>
+                                    [% IF ( serverloo.checked ) %]
+                                        <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" checked="checked" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" />
+                                    [% END %]
+                                    <label for="z3950_[% serverloo.id | html %]">[% serverloo.servername | html %]</label>
+                                </p>
+                            [% END %]
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
             <nav class="navbar navbar-default fixed-bottom">
                 <div class="container-fluid">
-                     <fieldset class="action"><input type="submit" id="submit_z3950_search" class="btn btn-primary" value="Search" />
-                     <a class="btn btn-default close" href="#">Cancel</a></fieldset>
+                    <fieldset class="action"><input type="submit" id="submit_z3950_search" class="btn btn-primary" value="Search" /> <a class="btn btn-default close" href="#">Cancel</a></fieldset>
                 </div>
             </nav>
         </form>
-[% ELSE %]
-    <h1>Results for authority records</h1>
-    [% IF ( breeding_loop ) %]
-    <table id="resultst">
-<thead>    <tr>
-        <th>Server</th>
-        <th>Heading</th>
-        <th>Authority type</th>
-        [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') %]
-            <th>Additional fields</th>
-        [% END %]
-        <th class="noExport">Actions</th>
-    </tr></thead>
-    <tbody>[% FOREACH breeding_loo IN breeding_loop %]
-        [% IF ( breeding_loo.breedingid ) %]
-        <tr id="row[% breeding_loo.breedingid | html %]">
-            <td>[% breeding_loo.server | html %]</td>
-            <td>[% breeding_loo.heading | html %]</td>
-            <td>[% breeding_loo.heading_code | html %]</td>
-            [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') != '' %]
-                <td>
-                   <dl>
-                      [% FOREACH addnumberfield IN breeding_loo.row.addnumberfields %]
-                        [% FOREACH string IN breeding_loo.row.$addnumberfield %]
-                            <dt>[% addnumberfield | html %]:</dt>
-                            <dd>[% string | html %]</dd>
+    [% ELSE %]
+        <h1>Results for authority records</h1>
+        [% IF ( breeding_loop ) %]
+            <table id="resultst">
+                <thead>
+                    <tr>
+                        <th>Server</th>
+                        <th>Heading</th>
+                        <th>Authority type</th>
+                        [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') %]
+                            <th>Additional fields</th>
                         [% END %]
-                      [% END %]
-                   </dl>
-                </td>
-            [% END %]
-            <td class="actions">
-                <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a>
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData dropdown-item" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
-                        <li><a href="/cgi-bin/koha/authorities/authorities.pl?breedingid=[% breeding_loo.breedingid | uri %]&authtypecode=[% breeding_loo.heading_code | uri %]&authid=[% breeding_loo.authid | uri %]&index=[% index | uri %]" class="chosen dropdown-item" title="Import" data-action="import"><i class="fa fa-download"></i> Import</a></li>
+                        <th class="noExport">Actions</th>
+                    </tr></thead
+                >
+                <tbody
+                    >[% FOREACH breeding_loo IN breeding_loop %]
+                        [% IF ( breeding_loo.breedingid ) %]
+                            <tr id="row[% breeding_loo.breedingid | html %]">
+                                <td>[% breeding_loo.server | html %]</td>
+                                <td>[% breeding_loo.heading | html %]</td>
+                                <td>[% breeding_loo.heading_code | html %]</td>
+                                [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') != '' %]
+                                    <td>
+                                        <dl>
+                                            [% FOREACH addnumberfield IN breeding_loo.row.addnumberfields %]
+                                                [% FOREACH string IN breeding_loo.row.$addnumberfield %]
+                                                    <dt>[% addnumberfield | html %]:</dt>
+                                                    <dd>[% string | html %]</dd>
+                                                [% END %]
+                                            [% END %]
+                                        </dl>
+                                    </td>
+                                [% END %]
+                                <td class="actions">
+                                    <div class="btn-group dropup">
+                                        <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a>
+                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="visually-hidden">Toggle dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
+                                            <li
+                                                ><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData dropdown-item" data-action="show_marc"
+                                                    ><i class="fa-solid fa-eye"></i> MARC preview</a
+                                                ></li
+                                            >
+                                            <li
+                                                ><a
+                                                    href="/cgi-bin/koha/authorities/authorities.pl?breedingid=[% breeding_loo.breedingid | uri %]&authtypecode=[% breeding_loo.heading_code | uri %]&authid=[% breeding_loo.authid | uri %]&index=[% index | uri %]"
+                                                    class="chosen dropdown-item"
+                                                    title="Import"
+                                                    data-action="import"
+                                                    ><i class="fa fa-download"></i> Import</a
+                                                ></li
+                                            >
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        [% END %]
+                    [% END %]</tbody
+                >
+            </table>
+
+            <div id="dataPreview" class="modal" tabindex="-1" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title" id="dataPreviewLabel">MARC preview</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" action="z3950_auth_search.pl" id="page_form" name="page_form" class="checkboxed">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" id="op" value="cud-do_search" />
+                <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
+                <input type="hidden" id="nameany" name="nameany" value="[% nameany | html %]" />
+                <input type="hidden" id="authorany" name="authorany" value="[% authorany | html %]" />
+                <input type="hidden" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" />
+                <input type="hidden" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" />
+                <input type="hidden" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" />
+                <input type="hidden" id="title" name="title" value="[% title | html %]" />
+                <input type="hidden" id="uniformtitle" name="uniformtitle" value="[% uniformtitle | html %]" />
+                <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+                <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
+                <input type="hidden" id="heading" name="heading" value="[% heading | html %]" />
+                <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+                <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
+                <input type="hidden" name="authid" value="[% authid | html %]" />
+
+                [% FOREACH server IN servers %]
+                    <input type="hidden" name="id" id="z3950_[% server.id | html %]" value="[% server.id | html %]" />
+                [% END %]
+
+                [% IF ( show_prevbutton ) %]
+                    <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page | html %]" />
+                [% END %]
+                Page [% current_page | html %] / [% total_pages | html %]
+                [% IF ( show_nextbutton ) %]
+                    <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
+                [% END %]
+                <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
+            </form>
+
+            <div>
+                <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
+                    <input type="hidden" id="nameany" name="nameany" value="[% nameany | html %]" />
+                    <input type="hidden" id="authorany" name="authorany" value="[% authorany | html %]" />
+                    <input type="hidden" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" />
+                    <input type="hidden" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" />
+                    <input type="hidden" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" />
+                    <input type="hidden" id="title" name="title" value="[% title | html %]" />
+                    <input type="hidden" id="uniformtitle" name="uniformtitle" value="[% uniformtitle | html %]" />
+                    <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+                    <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
+                    <input type="hidden" id="heading" name="heading" value="[% heading | html %]" />
+                    <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+                    <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
+                    <input type="hidden" name="authid" value="[% authid | html %]" />
+                    <input type="submit" class="btn btn-primary" value="Try another search" />
+                </form>
+            </div>
+        [% ELSE %]
+            [% IF ( errconn ) %]
+                <div class="alert alert-warning">
+                    <ul>
+                        [% FOREACH errcon IN errconn %]
+                            [% IF ( errcon.error == '10000' ) %]
+                                <li>Connection failed to [% errcon.server | html %]</li>
+                            [% ELSIF ( errcon.error == '10007' ) %]
+                                <li>Connection timeout to [% errcon.server | html %]</li>
+                            [% END %]
+                        [% END %]
                     </ul>
                 </div>
-            </td>
-        </tr>
-        [% END %]
-    [% END %]</tbody>
-</table>
-
-    <div id="dataPreview" class="modal" tabindex="-1" aria-labelledby="dataPreviewLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="dataPreviewLabel">MARC preview</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div>
+            [% END %]
+            <div class="alert alert-info">Nothing found.</div>
+            <div>
+                <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
+                    <input type="hidden" id="nameany" name="nameany" value="[% nameany | html %]" />
+                    <input type="hidden" id="authorany" name="authorany" value="[% authorany | html %]" />
+                    <input type="hidden" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" />
+                    <input type="hidden" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" />
+                    <input type="hidden" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" />
+                    <input type="hidden" id="title" name="title" value="[% title | html %]" />
+                    <input type="hidden" id="uniformtitle" name="uniformtitle" value="[% uniformtitle | html %]" />
+                    <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+                    <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
+                    <input type="hidden" id="heading" name="heading" value="[% heading | html %]" />
+                    <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+                    <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
+                    <input type="hidden" name="authid" value="[% authid | html %]" />
+                    <input type="submit" class="btn btn-primary" value="Try another search" />
+                </form>
             </div>
-        </div>
-    </div>
-
-    <form method="post" action="z3950_auth_search.pl" id="page_form" name="page_form" class="checkboxed">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" id="op" value="cud-do_search" />
-        <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
-        <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
-        <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
-        <input type="hidden" id="authorcorp"  name="authorcorp" value="[% authorcorp | html %]" />
-        <input type="hidden" id="authorpersonal"  name="authorpersonal" value="[% authorpersonal | html %]" />
-        <input type="hidden" id="authormeetingcon"  name="authormeetingcon" value="[% authormeetingcon | html %]" />
-        <input type="hidden" id="title"  name="title" value="[% title | html %]" />
-        <input type="hidden" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" />
-        <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
-        <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
-        <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
-        <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
-        <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
-        <input type="hidden" name="authid" value="[% authid | html %]" />
-
-        [% FOREACH server IN servers %]
-        <input type="hidden" name="id" id="z3950_[% server.id | html %]" value="[% server.id | html %]" />
         [% END %]
-
-        [% IF ( show_prevbutton ) %]
-            <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page | html %]" />
-        [% END %]
-        Page [% current_page | html %] / [% total_pages | html %]
-        [% IF ( show_nextbutton ) %]
-            <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
-        [% END %]
-        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
-    </form>
-
-    <div>
-        <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
-            <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
-            <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
-            <input type="hidden" id="authorcorp"  name="authorcorp" value="[% authorcorp | html %]" />
-            <input type="hidden" id="authorpersonal"  name="authorpersonal" value="[% authorpersonal | html %]" />
-            <input type="hidden" id="authormeetingcon"  name="authormeetingcon" value="[% authormeetingcon | html %]" />
-            <input type="hidden" id="title"  name="title" value="[% title | html %]" />
-            <input type="hidden" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" />
-            <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
-            <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
-            <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
-            <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
-            <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
-            <input type="hidden" name="authid" value="[% authid | html %]" />
-            <input type="submit" class="btn btn-primary" value="Try another search" />
-        </form>
-    </div>
-    [% ELSE %]
-        [% IF ( errconn ) %]
-            <div class="alert alert-warning">
-                <ul>
-                [% FOREACH errcon IN errconn %]
-                    [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server | html %]</li>
-                    [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server | html %]</li>[% END %]
-                [% END %]
-                </ul>
-            </div>
-         [% END %]
-   <div class="alert alert-info">Nothing found.</div>
-    <div>
-        <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
-            <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
-            <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
-            <input type="hidden" id="authorcorp"  name="authorcorp" value="[% authorcorp | html %]" />
-            <input type="hidden" id="authorpersonal"  name="authorpersonal" value="[% authorpersonal | html %]" />
-            <input type="hidden" id="authormeetingcon"  name="authormeetingcon" value="[% authormeetingcon | html %]" />
-            <input type="hidden" id="title"  name="title" value="[% title | html %]" />
-            <input type="hidden" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" />
-            <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
-            <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
-            <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
-            <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
-            <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
-            <input type="hidden" name="authid" value="[% authid | html %]" />
-            <input type="submit" class="btn btn-primary" value="Try another search" />
-        </form>
-    </div>
     [% END %]
 
-[% END %]
-
-[% IF ( numberpending ) %]<h3 align="center">Still [% numberpending | html %] servers to search</h3>[% END %]
-</div> <!-- /.main.container-fluid -->
+    [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending | html %] servers to search</h3>[% END %]
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'z3950_search.inc' %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
-        $(document).ready(function(){
-            $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ],
-                "order": [[ 1, "asc" ]],
-                "paginate": false
-            }));
+        $(document).ready(function () {
+            $("#resultst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    dom: "t",
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                    order: [[1, "asc"]],
+                    paginate: false,
+                })
+            );
             InitLastAction();
         });
     </script>

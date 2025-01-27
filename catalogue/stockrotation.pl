@@ -27,9 +27,9 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Search qw( enabled_staff_search_views );
+use C4::Auth    qw( get_template_and_user );
+use C4::Output  qw( output_html_with_http_headers );
+use C4::Search  qw( enabled_staff_search_views );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
 
 use Koha::Biblio;
@@ -40,7 +40,8 @@ use Koha::Util::StockRotation qw( get_stages get_branches toggle_indemand remove
 
 my $input = CGI->new;
 
-unless (C4::Context->preference('StockRotation')) {
+unless ( C4::Context->preference('StockRotation') ) {
+
     # redirect to Intranet home if self-check is not enabled
     print $input->redirect("/cgi-bin/koha/mainpage.pl");
     exit;
@@ -52,19 +53,19 @@ my $op = $params{op};
 
 my $biblionumber = $input->param('biblionumber');
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'catalogue/stockrotation.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => {
-            catalogue => 1,
+        template_name => 'catalogue/stockrotation.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => {
+            catalogue     => 1,
             stockrotation => 'manage_rota_items',
         },
     }
 );
 
-if (!defined $op) {
+if ( !defined $op ) {
 
     # List all items along with their associated rotas
     my $biblio = Koha::Biblios->find($biblionumber);
@@ -73,9 +74,7 @@ if (!defined $op) {
 
     # Get only rotas with stages
     my $rotas = Koha::StockRotationRotas->search(
-        {
-            'stockrotationstages.stage_id' => { '!=', undef }
-        },
+        { 'stockrotationstages.stage_id' => { '!=', undef } },
         {
             join     => 'stockrotationstages',
             collapse => 1,
@@ -86,16 +85,14 @@ if (!defined $op) {
     # Construct a model to pass to the view
     my @item_data = ();
 
-    while (my $item = $items->next) {
+    while ( my $item = $items->next ) {
 
-        my $item_hashref = {
-            bib_item   => $item
-        };
+        my $item_hashref = { bib_item => $item };
 
         my $stockrotationitem = $item->stockrotationitem;
 
         # If this item is on a rota
-        if ($stockrotationitem != 0) {
+        if ( $stockrotationitem != 0 ) {
 
             # This item's rota
             my $rota = $stockrotationitem->stage->rota;
@@ -116,56 +113,56 @@ if (!defined $op) {
     }
 
     $template->param(
-        no_op_set         => 1,
-        rotas             => $rotas,
-        items             => \@item_data,
-        branches          => get_branches(),
-        biblio            => $biblio,
-        biblionumber      => $biblio->biblionumber,
-        stockrotationview => 1,
+        no_op_set           => 1,
+        rotas               => $rotas,
+        items               => \@item_data,
+        branches            => get_branches(),
+        biblio              => $biblio,
+        biblionumber        => $biblio->biblionumber,
+        stockrotationview   => 1,
         subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
         C4::Search::enabled_staff_search_views
     );
 
-} elsif ($op eq "cud-toggle_in_demand") {
+} elsif ( $op eq "cud-toggle_in_demand" ) {
 
     # Toggle in demand
-    toggle_indemand($params{item_id}, $params{stage_id});
+    toggle_indemand( $params{item_id}, $params{stage_id} );
 
     # Return to items list
     print $input->redirect("?biblionumber=$biblionumber");
 
-} elsif ($op eq "cud-remove_item_from_stage") {
+} elsif ( $op eq "cud-remove_item_from_stage" ) {
 
     # Remove from the stage
-    remove_from_stage($params{item_id}, $params{stage_id});
+    remove_from_stage( $params{item_id}, $params{stage_id} );
 
     # Return to items list
     print $input->redirect("?biblionumber=$biblionumber");
 
-} elsif ($op eq "cud-move_to_next_stage") {
+} elsif ( $op eq "cud-move_to_next_stage" ) {
 
-    move_to_next_stage($params{item_id}, $params{stage_id});
+    move_to_next_stage( $params{item_id}, $params{stage_id} );
 
     # Return to items list
-    print $input->redirect("?biblionumber=" . $params{biblionumber});
+    print $input->redirect( "?biblionumber=" . $params{biblionumber} );
 
-} elsif ($op eq "cud-add_item_to_rota") {
+} elsif ( $op eq "cud-add_item_to_rota" ) {
 
-    my $item = Koha::Items->find($params{item_id});
+    my $item = Koha::Items->find( $params{item_id} );
 
-    $item->add_to_rota($params{rota_id});
+    $item->add_to_rota( $params{rota_id} );
 
-    print $input->redirect("?biblionumber=" . $params{biblionumber});
+    print $input->redirect( "?biblionumber=" . $params{biblionumber} );
 
-} elsif ($op eq "confirm_remove_from_rota") {
+} elsif ( $op eq "confirm_remove_from_rota" ) {
 
     $template->param(
-        op                => $params{op},
-        stage_id          => $params{stage_id},
-        item_id           => $params{item_id},
-        biblionumber      => $params{biblionumber},
-        stockrotationview => 1,
+        op                  => $params{op},
+        stage_id            => $params{stage_id},
+        item_id             => $params{item_id},
+        biblionumber        => $params{biblionumber},
+        stockrotationview   => 1,
         subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
         C4::Search::enabled_staff_search_views
     );

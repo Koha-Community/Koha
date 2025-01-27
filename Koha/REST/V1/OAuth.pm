@@ -41,17 +41,15 @@ sub token {
 
     my $c = shift->openapi->valid_input or return;
 
-    if ( Module::Load::Conditional::can_load(
-                modules => {'Net::OAuth2::AuthorizationServer' => undef} )) {
+    if ( Module::Load::Conditional::can_load( modules => { 'Net::OAuth2::AuthorizationServer' => undef } ) ) {
         require Net::OAuth2::AuthorizationServer;
-    }
-    else {
+    } else {
         return $c->render( status => 400, openapi => { error => 'Unimplemented grant type' } );
     }
 
     my $grant_type = $c->param('grant_type');
     unless ( $grant_type eq 'client_credentials' and C4::Context->preference('RESTOAuth2ClientCredentials') ) {
-        return $c->render(status => 400, openapi => {error => 'Unimplemented grant type'});
+        return $c->render( status => 400, openapi => { error => 'Unimplemented grant type' } );
     }
 
     my $client_id;
@@ -66,17 +64,16 @@ sub token {
             Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
         }
 
-        my $decoded_credentials = decode_base64( $credentials );
+        my $decoded_credentials = decode_base64($credentials);
         ( $client_id, $client_secret ) = split( /:/, $decoded_credentials, 2 );
-    }
-    else {
-        $client_id = $c->param('client_id');
+    } else {
+        $client_id     = $c->param('client_id');
         $client_secret = $c->param('client_secret');
     }
 
-    my $cb = "${grant_type}_grant";
+    my $cb     = "${grant_type}_grant";
     my $server = Net::OAuth2::AuthorizationServer->new;
-    my $grant = $server->$cb(Koha::OAuth::config);
+    my $grant  = $server->$cb(Koha::OAuth::config);
 
     # verify a client against known clients
     my ( $is_valid, $error ) = $grant->verify_client(
@@ -85,7 +82,7 @@ sub token {
     );
 
     unless ($is_valid) {
-        return $c->render(status => 403, openapi => {error => $error});
+        return $c->render( status => 403, openapi => { error => $error } );
     }
 
     # generate a token
@@ -104,11 +101,11 @@ sub token {
 
     my $response = {
         access_token => $token,
-        token_type => 'Bearer',
-        expires_in => $expires_in,
+        token_type   => 'Bearer',
+        expires_in   => $expires_in,
     };
 
-    return $c->render(status => 200, openapi => $response);
+    return $c->render( status => 200, openapi => $response );
 }
 
 1;

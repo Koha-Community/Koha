@@ -17,25 +17,35 @@ my $schema;
 ok( $schema = $database->schema(), 'Get a schema' );
 my $dbh;
 ok( $dbh = $schema->storage->dbh(), 'Get an old fashioned DBI dbh handle' );
-ok( $schema->storage->connected(), 'Check our db connection is active' );
+ok( $schema->storage->connected(),  'Check our db connection is active' );
 is( ref($schema), 'Koha::Schema', 'Koha::Database->new->schema should return a Koha::Schema' );
 my $another_schema = $database->schema();
-is( $another_schema->storage->_conn_pid, $schema->storage->_conn_pid, 'Getting another schema should return the same one, it has correctly been cached' );
+is(
+    $another_schema->storage->_conn_pid, $schema->storage->_conn_pid,
+    'Getting another schema should return the same one, it has correctly been cached'
+);
 $another_schema = Koha::Database->new->schema();
-is( $another_schema->storage->_conn_pid, $schema->storage->_conn_pid, 'Getting another schema should return the same one, it has correctly been cached' );
+is(
+    $another_schema->storage->_conn_pid, $schema->storage->_conn_pid,
+    'Getting another schema should return the same one, it has correctly been cached'
+);
 
 # run in a transaction
 $schema->storage->txn_begin();
 
 # clear the way
-$schema->resultset('Category')->search({ categorycode => 'GIFT-RUS' })->delete;
+$schema->resultset('Category')->search( { categorycode => 'GIFT-RUS' } )->delete;
 my $gift = 'подарок';
-$schema->resultset('Category')->create({
-    categorycode => 'GIFT-RUS',
-    description  => $gift,
-});
-my $desc = $schema->resultset('Category')->search({
-    categorycode => 'GIFT-RUS',
-})->single->get_column('description');
-is($desc, $gift, 'stored and retrieved UTF8 string');
+$schema->resultset('Category')->create(
+    {
+        categorycode => 'GIFT-RUS',
+        description  => $gift,
+    }
+);
+my $desc = $schema->resultset('Category')->search(
+    {
+        categorycode => 'GIFT-RUS',
+    }
+)->single->get_column('description');
+is( $desc, $gift, 'stored and retrieved UTF8 string' );
 $schema->storage->txn_rollback();

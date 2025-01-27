@@ -52,14 +52,13 @@ Marks the article as requested. Send a notification if appropriate.
 sub request {
     my ($self) = @_;
 
-    Koha::Exceptions::ArticleRequest::LimitReached->throw(
-        error => 'Patron cannot request more articles for today'
-    ) unless $self->borrower->can_request_article;
+    Koha::Exceptions::ArticleRequest::LimitReached->throw( error => 'Patron cannot request more articles for today' )
+        unless $self->borrower->can_request_article;
 
     $self->status(Koha::ArticleRequest::Status::Requested);
 
     # Handle possible fees
-    my $debit = $self->borrower->add_article_request_fee_if_needed({ item_id => $self->itemnumber });
+    my $debit = $self->borrower->add_article_request_fee_if_needed( { item_id => $self->itemnumber } );
     $self->debit_id( $debit->id )
         if $debit;
 
@@ -132,38 +131,41 @@ sub cancel {
     my ( $self, $params ) = @_;
 
     my $cancellation_reason = $params->{cancellation_reason};
-    my $notes = $params->{notes};
+    my $notes               = $params->{notes};
 
     $self->status(Koha::ArticleRequest::Status::Canceled);
     $self->cancellation_reason($cancellation_reason) if $cancellation_reason;
-    $self->notes($notes) if $notes;
+    $self->notes($notes)                             if $notes;
     $self->store();
     $self->notify();
 
     my $debit = $self->debit;
 
-    if ( $debit ) {
+    if ($debit) {
+
         # fees found, refund
         my $account = $self->borrower->account;
 
         my $total_reversible = $debit->debit_offsets->filter_by_reversible->total;
-        if ( $total_reversible ) {
+        if ($total_reversible) {
 
             $account->add_credit(
                 {
-                    amount       => abs $total_reversible,
-                    interface    => C4::Context->interface,
-                    type         => 'REFUND',
+                    amount    => abs $total_reversible,
+                    interface => C4::Context->interface,
+                    type      => 'REFUND',
                 }
             );
         }
 
         if ( $debit->amountoutstanding ) {
-            $debit->reduce({
-                reduction_type => 'REFUND',
-                amount         => $debit->amountoutstanding,
-                interface      => C4::Context->interface,
-            })->discard_changes;
+            $debit->reduce(
+                {
+                    reduction_type => 'REFUND',
+                    amount         => $debit->amountoutstanding,
+                    interface      => C4::Context->interface,
+                }
+            )->discard_changes;
         }
     }
 
@@ -198,7 +200,7 @@ sub debit {
     my $debit_rs = $self->_result->debit;
     return unless $debit_rs;
 
-    return Koha::Account::Line->_new_from_dbic( $debit_rs );
+    return Koha::Account::Line->_new_from_dbic($debit_rs);
 }
 
 =head3 item
@@ -289,8 +291,8 @@ sub notify {
     if ( !defined $reason && $self->cancellation_reason ) {
         my $av = Koha::AuthorisedValues->search(
             {
-                category            => 'AR_CANCELLATION',
-                authorised_value    => $self->cancellation_reason
+                category         => 'AR_CANCELLATION',
+                authorised_value => $self->cancellation_reason
             }
         )->next;
         $reason = $av->lib_opac ? $av->lib_opac : $av->lib if $av;
@@ -315,7 +317,7 @@ sub notify {
                 reason => $reason,
             },
         )
-      )
+        )
     {
         C4::Letters::EnqueueLetter(
             {

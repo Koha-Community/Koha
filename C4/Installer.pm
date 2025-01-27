@@ -33,11 +33,13 @@ use Koha::Installer;
 use Koha::Installer::Output qw ( say_failure );
 
 use vars qw(@ISA @EXPORT);
+
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion SetVersion sanitize_zero_date update get_db_entries get_atomic_updates run_atomic_updates has_non_dynamic_row_format );
-};
+    push @EXPORT,
+        qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion SetVersion sanitize_zero_date update get_db_entries get_atomic_updates run_atomic_updates has_non_dynamic_row_format );
+}
 
 =head1 NAME
 
@@ -81,22 +83,32 @@ sub new {
     $self->{'port'}     = C4::Context->config("port");
     $self->{'user'}     = C4::Context->config("user");
     $self->{'password'} = C4::Context->config("pass");
-    $self->{'tls'} = C4::Context->config("tls");
-    if( $self->{'tls'} && $self->{'tls'} eq 'yes' ) {
-        $self->{'ca'} = C4::Context->config('ca');
+    $self->{'tls'}      = C4::Context->config("tls");
+
+    if ( $self->{'tls'} && $self->{'tls'} eq 'yes' ) {
+        $self->{'ca'}   = C4::Context->config('ca');
         $self->{'cert'} = C4::Context->config('cert');
-        $self->{'key'} = C4::Context->config('key');
-        $self->{'tlsoptions'} = ";mysql_ssl=1;mysql_ssl_client_key=".$self->{key}.";mysql_ssl_client_cert=".$self->{cert}.";mysql_ssl_ca_file=".$self->{ca};
-        $self->{'tlscmdline'} =  " --ssl-cert ". $self->{cert} . " --ssl-key " . $self->{key} . " --ssl-ca ".$self->{ca}." "
+        $self->{'key'}  = C4::Context->config('key');
+        $self->{'tlsoptions'} =
+              ";mysql_ssl=1;mysql_ssl_client_key="
+            . $self->{key}
+            . ";mysql_ssl_client_cert="
+            . $self->{cert}
+            . ";mysql_ssl_ca_file="
+            . $self->{ca};
+        $self->{'tlscmdline'} =
+            " --ssl-cert " . $self->{cert} . " --ssl-key " . $self->{key} . " --ssl-ca " . $self->{ca} . " ";
     }
-    $self->{'dbh'} = DBI->connect("DBI:$self->{dbms}:dbname=$self->{dbname};host=$self->{hostname}" .
-                                  ( $self->{port} ? ";port=$self->{port}" : "" ).
-                                  ( $self->{tlsoptions} ? $self->{tlsoptions} : ""),
-                                  $self->{'user'}, $self->{'password'});
-    $self->{'language'} = undef;
+    $self->{'dbh'} = DBI->connect(
+              "DBI:$self->{dbms}:dbname=$self->{dbname};host=$self->{hostname}"
+            . ( $self->{port}       ? ";port=$self->{port}" : "" )
+            . ( $self->{tlsoptions} ? $self->{tlsoptions}   : "" ),
+        $self->{'user'}, $self->{'password'}
+    );
+    $self->{'language'}    = undef;
     $self->{'marcflavour'} = undef;
-	$self->{'dbh'}->do('set NAMES "utf8"');
-    $self->{'dbh'}->{'mysql_enable_utf8'}=1;
+    $self->{'dbh'}->do('set NAMES "utf8"');
+    $self->{'dbh'}->{'mysql_enable_utf8'} = 1;
 
     bless $self, $class;
     return $self;
@@ -117,23 +129,26 @@ for language C<$lang> and the 'en' ones are returned.
 =cut
 
 sub marc_framework_sql_list {
-    my $self = shift;
-    my $lang = shift;
+    my $self        = shift;
+    my $lang        = shift;
     my $marcflavour = shift;
 
     my $defaulted_to_en = 0;
 
     undef $/;
-    my $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang/marcflavour/".lc($marcflavour);
+    my $dir =
+        C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang/marcflavour/" . lc($marcflavour);
     my $dir_h;
-    unless (opendir( $dir_h, $dir )) {
-        if ($lang eq 'en') {
+    unless ( opendir( $dir_h, $dir ) ) {
+        if ( $lang eq 'en' ) {
             warn "cannot open MARC frameworks directory $dir";
         } else {
+
             # if no translated MARC framework is available,
             # default to English
-            $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/en/marcflavour/".lc($marcflavour);
-            opendir($dir_h, $dir) or warn "cannot open English MARC frameworks directory $dir";
+            $dir =
+                C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/en/marcflavour/" . lc($marcflavour);
+            opendir( $dir_h, $dir ) or warn "cannot open English MARC frameworks directory $dir";
             $defaulted_to_en = 1;
         }
     }
@@ -144,7 +159,7 @@ sub marc_framework_sql_list {
     my $request = $self->{'dbh'}->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
     $request->execute;
     my ($frameworksloaded) = $request->fetchrow;
-    $frameworksloaded = '' unless defined $frameworksloaded; # avoid warning
+    $frameworksloaded = '' unless defined $frameworksloaded;    # avoid warning
     my %frameworksloaded;
     foreach ( split( /\|/, $frameworksloaded ) ) {
         $frameworksloaded{$_} = 1;
@@ -166,29 +181,29 @@ sub marc_framework_sql_list {
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
                 my $line = <$fh>;
-                $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
+                $line  = Encode::encode( 'UTF-8', $line ) unless ( Encode::is_utf8($line) );
                 @lines = split /\n/, $line;
             }
-            my $mandatory = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i);
+            my $mandatory = ( $requirelevel =~ /(mandatory|requi|oblig|necess)/i );
             push @frameworklist,
-              {
+                {
                 'fwkname'        => $name,
                 'fwkfile'        => "$dir/$requirelevel/$_",
                 'fwkdescription' => \@lines,
                 'checked'        => ( ( $frameworksloaded{$_} || $mandatory ) ? 1 : 0 ),
                 'mandatory'      => $mandatory,
-              };
+                };
         } @listname;
         my @fwks =
-          sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
+            sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
 
         $cell{"frameworks"} = \@fwks;
-        $cell{"label"}      = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i)?'mandatory':'optional';
+        $cell{"label"}      = ( $requirelevel =~ /(mandatory|requi|oblig|necess)/i ) ? 'mandatory' : 'optional';
         $cell{"code"}       = lc($requirelevel);
         push @fwklist, \%cell;
     }
 
-    return ($defaulted_to_en, \@fwklist);
+    return ( $defaulted_to_en, \@fwklist );
 }
 
 =head2 sample_data_sql_list
@@ -211,14 +226,15 @@ sub sample_data_sql_list {
     undef $/;
     my $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang";
     my $dir_h;
-    unless (opendir( $dir_h, $dir )) {
-        if ($lang eq 'en') {
+    unless ( opendir( $dir_h, $dir ) ) {
+        if ( $lang eq 'en' ) {
             warn "cannot open sample data directory $dir";
         } else {
+
             # if no sample data is available,
             # default to English
             $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/en";
-            opendir($dir_h, $dir) or warn "cannot open English sample data directory $dir";
+            opendir( $dir_h, $dir ) or warn "cannot open English sample data directory $dir";
             $defaulted_to_en = 1;
         }
     }
@@ -229,7 +245,7 @@ sub sample_data_sql_list {
     my $request = $self->{'dbh'}->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
     $request->execute;
     my ($frameworksloaded) = $request->fetchrow;
-    $frameworksloaded = '' unless defined $frameworksloaded; # avoid warning
+    $frameworksloaded = '' unless defined $frameworksloaded;    # avoid warning
     my %frameworksloaded;
     foreach ( split( /\|/, $frameworksloaded ) ) {
         $frameworksloaded{$_} = 1;
@@ -251,28 +267,28 @@ sub sample_data_sql_list {
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
                 my $line = <$fh>;
-                $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
+                $line  = Encode::encode( 'UTF-8', $line ) unless ( Encode::is_utf8($line) );
                 @lines = split /\n/, $line;
             }
-            my $mandatory = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i);
+            my $mandatory = ( $requirelevel =~ /(mandatory|requi|oblig|necess)/i );
             push @frameworklist,
-              {
+                {
                 'fwkname'        => $name,
                 'fwkfile'        => "$dir/$requirelevel/$_",
                 'fwkdescription' => \@lines,
                 'checked'        => ( ( $frameworksloaded{$_} || $mandatory ) ? 1 : 0 ),
                 'mandatory'      => $mandatory,
-              };
+                };
         } @listname;
         my @fwks = sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
 
         $cell{"frameworks"} = \@fwks;
-        $cell{"label"}      = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i)?'mandatory':'optional';
+        $cell{"label"}      = ( $requirelevel =~ /(mandatory|requi|oblig|necess)/i ) ? 'mandatory' : 'optional';
         $cell{"code"}       = lc($requirelevel);
         push @levellist, \%cell;
     }
 
-    return ($defaulted_to_en, \@levellist);
+    return ( $defaulted_to_en, \@levellist );
 }
 
 =head2 load_db_schema
@@ -338,10 +354,10 @@ moved to a different method.
 =cut
 
 sub load_sql_in_order {
-    my $self = shift;
-    my $langchoice = shift;
+    my $self          = shift;
+    my $langchoice    = shift;
     my $all_languages = shift;
-    my @sql_list = @_;
+    my @sql_list      = @_;
 
     my $lang;
     my %hashlevel;
@@ -350,15 +366,16 @@ sub load_sql_in_order {
         my @bb = split /\/|\\/, ($b);
         $aa[-1] cmp $bb[-1]
     } @sql_list;
-    my $request = $self->{'dbh'}->prepare( "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'" );
+    my $request = $self->{'dbh'}->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
     $request->execute;
     my ($systempreference) = $request->fetchrow;
-    $systempreference = '' unless defined $systempreference; # avoid warning
+    $systempreference = '' unless defined $systempreference;    # avoid warning
 
     my $global_mandatory_dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory";
 
     # Make sure some stuffs are loaded first
-    unshift(@fnames,
+    unshift(
+        @fnames,
         "$global_mandatory_dir/sysprefs.sql",
         "$global_mandatory_dir/subtag_registry.sql",
         "$global_mandatory_dir/auth_val_cat.sql",
@@ -369,29 +386,30 @@ sub load_sql_in_order {
     );
 
     push @fnames, "$global_mandatory_dir/userflags.sql",
-                  "$global_mandatory_dir/userpermissions.sql",
-                  "$global_mandatory_dir/audio_alerts.sql",
-                  ;
-    my $localization_file = C4::Context->config('intranetdir') .
-                            "/installer/data/$self->{dbms}/localization/$langchoice/custom.sql";
+        "$global_mandatory_dir/userpermissions.sql",
+        "$global_mandatory_dir/audio_alerts.sql",
+        ;
+    my $localization_file =
+        C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/localization/$langchoice/custom.sql";
     if ( -f $localization_file ) {
         push @fnames, $localization_file;
     }
     foreach my $file (@fnames) {
+
         #      warn $file;
         undef $/;
         my $error = $self->load_sql($file);
-        my @file = split qr(\/|\\), $file;
+        my @file  = split qr(\/|\\), $file;
         $lang = $file[ scalar(@file) - 3 ] unless ($lang);
         my $level = ( $file =~ /(localization)/ ) ? $1 : $file[ scalar(@file) - 2 ];
         unless ($error) {
             $systempreference .= "$file[scalar(@file)-1]|"
-              unless ( index( $systempreference, $file[ scalar(@file) - 1 ] ) >= 0 );
+                unless ( index( $systempreference, $file[ scalar(@file) - 1 ] ) >= 0 );
         }
 
         #Bulding here a hierarchy to display files by level.
         push @{ $hashlevel{$level} },
-          { "fwkname" => $file[ scalar(@file) - 1 ], "error" => $error };
+            { "fwkname" => $file[ scalar(@file) - 1 ], "error" => $error };
     }
 
     #systempreference contains an ending |
@@ -408,9 +426,8 @@ sub load_sql_in_order {
         }
     }
     my $updateflag =
-      $self->{'dbh'}->do(
-        "UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'"
-      );
+        $self->{'dbh'}
+        ->do("UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'");
 
     unless ( $updateflag == 1 ) {
         my $string =
@@ -418,7 +435,7 @@ sub load_sql_in_order {
         my $rq = $self->{'dbh'}->prepare($string);
         $rq->execute;
     }
-    return ($fwk_language, \@list);
+    return ( $fwk_language, \@list );
 }
 
 =head2 set_marcflavour_syspref
@@ -436,7 +453,7 @@ MARC21 or UNIMARC.
 =cut
 
 sub set_marcflavour_syspref {
-    my $self = shift;
+    my $self        = shift;
     my $marcflavour = shift;
 
     # we can have some variants of marc flavour, by having different directories, like : unimarc_small and unimarc_full, for small and complete unimarc frameworks.
@@ -445,7 +462,7 @@ sub set_marcflavour_syspref {
     $marc_cleaned = 'UNIMARC' if $marcflavour =~ /unimarc/i;
     my $request =
         $self->{'dbh'}->prepare(
-          "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
+        "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
         );
     $request->execute;
 }
@@ -463,15 +480,19 @@ sub set_version_syspref {
     my $self = shift;
 
     my $kohaversion = Koha::version();
+
     # remove the 3 last . to have a Perl number
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-    if (C4::Context->preference('Version')) {
+    if ( C4::Context->preference('Version') ) {
         warn "UPDATE Version";
-        my $finish=$self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+        my $finish = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
         $finish->execute($kohaversion);
     } else {
         warn "INSERT Version";
-        my $finish=$self->{'dbh'}->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
+        my $finish =
+            $self->{'dbh'}->prepare(
+            "INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')"
+            );
         $finish->execute($kohaversion);
     }
     C4::Context->clear_syspref_cache();
@@ -493,9 +514,11 @@ sub set_languages_syspref {
     return if ( not $language or $language eq 'en' );
 
     warn "UPDATE Languages";
+
     # intranet
     my $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='StaffInterfaceLanguages'");
     $pref->execute("en,$language");
+
     # opac
     $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='OPACLanguages'");
     $pref->execute("en,$language");
@@ -513,22 +536,25 @@ Returns the values required to build an insert statement.
 =cut
 
 sub process_yml_table {
-    my ($table) = @_;
-    my $table_name   = ( keys %$table )[0];                          # table name
-    my @rows         = @{ $table->{$table_name}->{rows} };           #
-    my @columns      = ( sort keys %{$rows[0]} );                    # column names
-    my $fields       = join ",", map{sprintf("`%s`", $_)} @columns;  # idem, joined
+    my ($table)      = @_;
+    my $table_name   = ( keys %$table )[0];                                 # table name
+    my @rows         = @{ $table->{$table_name}->{rows} };                  #
+    my @columns      = ( sort keys %{ $rows[0] } );                         # column names
+    my $fields       = join ",", map { sprintf( "`%s`", $_ ) } @columns;    # idem, joined
     my $query        = "INSERT INTO $table_name ( $fields ) VALUES ";
-    my @multiline    = @{ $table->{$table_name}->{'multiline'} };    # to check multiline values;
-    my $placeholders = '(' . join ( ",", map { "?" } @columns ) . ')'; # '(?,..,?)' string
+    my @multiline    = @{ $table->{$table_name}->{'multiline'} };           # to check multiline values;
+    my $placeholders = '(' . join( ",", map { "?" } @columns ) . ')';       # '(?,..,?)' string
     my @values;
-    foreach my $row ( @rows ) {
-        push @values, [ map {
-                        my $col = $_;
-                        ( @multiline and grep { $_ eq $col } @multiline )
-                        ? join "\r\n", @{$row->{$col}}                # join multiline values
-                        : $row->{$col};
-                     } @columns ];
+
+    foreach my $row (@rows) {
+        push @values, [
+            map {
+                my $col = $_;
+                ( @multiline and grep { $_ eq $col } @multiline )
+                    ? join "\r\n", @{ $row->{$col} }    # join multiline values
+                    : $row->{$col};
+            } @columns
+        ];
     }
     return { query => $query, placeholders => $placeholders, values => \@values };
 }
@@ -546,49 +572,50 @@ error.
 =cut
 
 sub load_sql {
-    my $self = shift;
+    my $self     = shift;
     my $filename = shift;
     my $error;
 
-    my $dbh = $self->{ dbh };
+    my $dbh = $self->{dbh};
 
     my $dup_stderr;
     do {
         local *STDERR;
         open STDERR, ">>", \$dup_stderr;
 
-        if ( $filename =~ /sql$/ ) {                                                        # SQL files
+        if ( $filename =~ /sql$/ ) {    # SQL files
             eval {
                 DBIx::RunSQL->run_sql_file(
-                    dbh     => $dbh,
-                    sql     => $filename,
+                    dbh => $dbh,
+                    sql => $filename,
                 );
             };
-        }
-        else {                                                                       # YAML files
+        } else {                        # YAML files
             eval {
-                my $yaml         = YAML::XS::LoadFile( $filename );                            # Load YAML
+                my $yaml = YAML::XS::LoadFile($filename);    # Load YAML
                 for my $table ( @{ $yaml->{'tables'} } ) {
                     my $query_info   = process_yml_table($table);
                     my $query        = $query_info->{query};
                     my $placeholders = $query_info->{placeholders};
                     my $values       = $query_info->{values};
+
                     # Doing only 1 INSERT query for the whole table
                     my @all_rows_values = map { @$_ } @$values;
-                    $query .= join ', ', ( $placeholders ) x scalar @$values;
+                    $query .= join ', ', ($placeholders) x scalar @$values;
                     $dbh->do( $query, undef, @all_rows_values );
                 }
-                for my $statement ( @{ $yaml->{'sql_statements'} } ) {               # extra SQL statements
+                for my $statement ( @{ $yaml->{'sql_statements'} } ) {    # extra SQL statements
                     $dbh->do($statement);
                 }
             };
         }
-        if ($@){
+        if ($@) {
             warn "Something went wrong loading file $filename ($@)";
         }
     };
+
     #   errors thrown while loading installer data should be logged
-    if( $dup_stderr ) {
+    if ($dup_stderr) {
         warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
         $error = $dup_stderr;
     }
@@ -609,17 +636,18 @@ returns undef if no match was found.
 =cut
 
 sub get_file_path_from_name {
-    my $self = shift;
+    my $self        = shift;
     my $partialname = shift;
 
-    my $lang = 'en'; # FIXME: how do I know what language I want?
+    my $lang = 'en';    # FIXME: how do I know what language I want?
 
-    my ($defaulted_to_en, $list) = $self->sample_data_sql_list($lang);
+    my ( $defaulted_to_en, $list ) = $self->sample_data_sql_list($lang);
+
     # warn( Data::Dumper->Dump( [ $list ], [ 'list' ] ) );
 
     my @found;
-    foreach my $frameworklist ( @$list ) {
-        push @found, grep { $_->{'fwkfile'} =~ /$partialname$/ } @{$frameworklist->{'frameworks'}};
+    foreach my $frameworklist (@$list) {
+        push @found, grep { $_->{'fwkfile'} =~ /$partialname$/ } @{ $frameworklist->{'frameworks'} };
     }
 
     # warn( Data::Dumper->Dump( [ \@found ], [ 'found' ] ) );
@@ -639,7 +667,7 @@ sub primary_key_exists {
     my $dbh = C4::Context->dbh;
     my $sql = qq| SHOW INDEX FROM $table_name WHERE key_name='PRIMARY' |;
     my $exists;
-    if( $key_name ){
+    if ($key_name) {
         $sql .= 'AND column_name = ? ' if $key_name;
         ($exists) = $dbh->selectrow_array( $sql, undef, $key_name );
     } else {
@@ -652,14 +680,14 @@ sub primary_key_exists {
 sub foreign_key_exists {
     my ( $table_name, $constraint_name ) = @_;
     my $dbh = C4::Context->dbh;
-    my (undef, $infos) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
+    my ( undef, $infos ) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
     return $infos =~ m|CONSTRAINT `$constraint_name` FOREIGN KEY|;
 }
 
 sub unique_key_exists {
     my ( $table_name, $constraint_name ) = @_;
     my $dbh = C4::Context->dbh;
-    my (undef, $infos) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
+    my ( undef, $infos ) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
     return $infos =~ m|UNIQUE KEY `$constraint_name`|;
 }
 
@@ -688,14 +716,14 @@ sub column_exists {
     return $exists;
 }
 
-sub TableExists { # Could be renamed table_exists for consistency
+sub TableExists {    # Could be renamed table_exists for consistency
     my $table = shift;
     eval {
-                my $dbh = C4::Context->dbh;
-                local $dbh->{PrintError} = 0;
-                local $dbh->{RaiseError} = 1;
-                $dbh->do(qq{SELECT * FROM $table WHERE 1 = 0 });
-            };
+        my $dbh = C4::Context->dbh;
+        local $dbh->{PrintError} = 0;
+        local $dbh->{RaiseError} = 1;
+        $dbh->do(qq{SELECT * FROM $table WHERE 1 = 0 });
+    };
     return 1 unless $@;
     return 0;
 }
@@ -709,17 +737,17 @@ sub version_from_file {
 sub get_db_entries {
     my $db_revs_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/db_revs';
     opendir my $dh, $db_revs_dir or die "Cannot open $db_revs_dir dir ($!)";
-    my @files = sort grep { m|\.pl$| && ! m|skeleton\.pl$| } readdir $dh;
+    my @files = sort grep { m|\.pl$| && !m|skeleton\.pl$| } readdir $dh;
     my @need_update;
-    for my $file ( @files ) {
-        my $version = version_from_file( $file );
+    for my $file (@files) {
+        my $version = version_from_file($file);
 
-        unless ( $version ) {
+        unless ($version) {
             warn "Invalid db_rev found: " . $file;
-            next
+            next;
         }
 
-        next unless CheckVersion( $version );
+        next unless CheckVersion($version);
 
         push @need_update, sprintf( "%s/%s", $db_revs_dir, $file );
     }
@@ -741,8 +769,7 @@ sub run_db_rev {
                 $db_rev->{up}->( { dbh => $schema->storage->dbh, out => $outfh } );
             }
         );
-    }
-    catch {
+    } catch {
         $error = $_;
         say_failure( $outfh, "ERROR: " . $error );
     };
@@ -759,7 +786,7 @@ sub run_db_rev {
         time        => POSIX::strftime( "%H:%M:%S", localtime ),
         error       => $error
     };
-    $db_entry->{output} = generate_output_db_entry($db_entry, $out);
+    $db_entry->{output} = generate_output_db_entry( $db_entry, $out );
     return $db_entry;
 }
 
@@ -769,24 +796,25 @@ sub update {
     my $force = $params->{force} || 0;
 
     my ( @done, @errors );
-    for my $file ( @$files ) {
+    for my $file (@$files) {
 
         my $db_entry = run_db_rev($file);
 
         if ( $db_entry->{error} ) {
             push @errors, $db_entry;
-            $force ? next : last ;
-                # We stop the update if an error occurred!
+            $force ? next : last;
+
+            # We stop the update if an error occurred!
         }
 
-        SetVersion($db_entry->{version});
+        SetVersion( $db_entry->{version} );
         push @done, $db_entry;
     }
     return { success => \@done, error => \@errors };
 }
 
 sub generate_output_db_entry {
-    my ( $db_entry ) = @_;
+    my ($db_entry) = @_;
 
     my $description = $db_entry->{description};
     my $output      = $db_entry->{output};
@@ -794,30 +822,36 @@ sub generate_output_db_entry {
     my $bug_number  = $db_entry->{bug_number};
     my $time        = $db_entry->{time};
     my $exec_output = $db_entry->{exec_output};
-    my $done        = defined $db_entry->{done}
-                       ? $db_entry->{done}
-                           ? " done"
-                           : " failed"
-                       : ""; # For old versions, we don't know if we succeed or failed
+    my $done =
+          defined $db_entry->{done}
+        ? $db_entry->{done}
+            ? " done"
+            : " failed"
+        : "";    # For old versions, we don't know if we succeed or failed
 
     my @output;
 
-    if ( $DBversion ) {
+    if ($DBversion) {
         if ($bug_number) {
-            push @output, sprintf('Upgrade to %s %s [%s]: Bug %5s - %s', $DBversion, $done, $time, $bug_number, $description);
+            push @output,
+                sprintf( 'Upgrade to %s %s [%s]: Bug %5s - %s', $DBversion, $done, $time, $bug_number, $description );
         } else {
-            push @output, sprintf('Upgrade to %s %s [%s]: %s', $DBversion, $done, $time, $description);
+            push @output, sprintf( 'Upgrade to %s %s [%s]: %s', $DBversion, $done, $time, $description );
         }
-    } else { # Atomic update
+    } else {     # Atomic update
         if ($bug_number) {
-            push @output, sprintf('DEV atomic update %s %s [%s]: Bug %5s - %s', $db_entry->{filepath}, $done, $time, $bug_number, $description);
-        } else { # Old atomic update syntax
-            push @output, sprintf('DEV atomic update %s %s [%s]', $db_entry->{filepath}, $done, $time);
+            push @output,
+                sprintf(
+                'DEV atomic update %s %s [%s]: Bug %5s - %s', $db_entry->{filepath}, $done, $time,
+                $bug_number, $description
+                );
+        } else {    # Old atomic update syntax
+            push @output, sprintf( 'DEV atomic update %s %s [%s]', $db_entry->{filepath}, $done, $time );
         }
     }
 
     if ($exec_output) {
-        foreach my $line (split /\n/, $exec_output) {
+        foreach my $line ( split /\n/, $exec_output ) {
             push @output, sprintf "\t%s", $line;
         }
     }
@@ -831,24 +865,24 @@ sub get_atomic_updates {
 }
 
 sub run_atomic_updates {
-    my ( $files ) = @_;
+    my ($files) = @_;
 
     my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
     my ( @done, @errors );
-    for my $file ( @$files ) {
+    for my $file (@$files) {
         my $filepath = $update_dir . $file;
 
         my $atomic_update;
         if ( $file =~ m{\.perl$} ) {
-            my $code = read_file( $filepath );
-            my ( $out, $err ) = ('', '');
+            my $code = read_file($filepath);
+            my ( $out, $err ) = ( '', '' );
             {
                 open my $oldout, qw{>&}, "STDOUT";
                 close STDOUT;
-                open STDOUT,'>:encoding(utf8)', \$out;
-                my $DBversion = Koha::version; # We need $DBversion and $dbh for the eval
-                my $dbh = C4::Context->dbh;
-                eval $code; ## no critic (StringyEval)
+                open STDOUT, '>:encoding(utf8)', \$out;
+                my $DBversion = Koha::version;      # We need $DBversion and $dbh for the eval
+                my $dbh       = C4::Context->dbh;
+                eval $code;                         ## no critic (StringyEval)
                 $err = $@;
                 warn $err if $err;
                 close STDOUT;
@@ -862,11 +896,10 @@ sub run_atomic_updates {
                 time        => POSIX::strftime( "%H:%M:%S", localtime ),
             };
 
-
             $atomic_update->{output} =
-              $out
-              ? [ split "\n", $out ]
-              : generate_output_db_entry($atomic_update); # There wad an error, we didn't reach NewVersion)
+                $out
+                ? [ split "\n", $out ]
+                : generate_output_db_entry($atomic_update);    # There wad an error, we didn't reach NewVersion)
 
             $atomic_update->{error} = $err if $err;
         } elsif ( $file =~ m{\.pl$} ) {
@@ -893,26 +926,30 @@ Drop all foreign keys of the table $table
 
 sub DropAllForeignKeys {
     my ($table) = @_;
+
     # get the table description
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SHOW CREATE TABLE $table");
     $sth->execute;
     my $vsc_structure = $sth->fetchrow;
+
     # split on CONSTRAINT keyword
-    my @fks = split /CONSTRAINT /,$vsc_structure;
+    my @fks = split /CONSTRAINT /, $vsc_structure;
+
     # parse each entry
     foreach (@fks) {
+
         # isolate what is before FOREIGN KEY, if there is something, it's a foreign key to drop
         $_ = /(.*) FOREIGN KEY.*/;
         my $id = $1;
         if ($id) {
+
             # we have found 1 foreign, drop it
             $dbh->do("ALTER TABLE $table DROP FOREIGN KEY $id");
-            $id="";
+            $id = "";
         }
     }
 }
-
 
 =head2 TransformToNum
 
@@ -934,18 +971,21 @@ set the DBversion in the systempreferences
 =cut
 
 sub SetVersion {
-    return if $_[0]=~ /XXX$/;
-      #you are testing a patch with a db revision; do not change version
-    my $kohaversion = TransformToNum($_[0]);
-    my $dbh = C4::Context->dbh;
-    if (C4::Context->preference('Version')) {
-      my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
-      $finish->execute($kohaversion);
+    return if $_[0] =~ /XXX$/;
+
+    #you are testing a patch with a db revision; do not change version
+    my $kohaversion = TransformToNum( $_[0] );
+    my $dbh         = C4::Context->dbh;
+    if ( C4::Context->preference('Version') ) {
+        my $finish = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+        $finish->execute($kohaversion);
     } else {
-      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
-      $finish->execute($kohaversion);
+        my $finish = $dbh->prepare(
+            "INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')"
+        );
+        $finish->execute($kohaversion);
     }
-    C4::Context::clear_syspref_cache(); # invalidate cached preferences
+    C4::Context::clear_syspref_cache();    # invalidate cached preferences
 }
 
 # DEPRECATED Don't use it!
@@ -959,18 +999,19 @@ sub NewVersion {
     if ( ref($descriptions) ) {
         $description = shift @$descriptions;
         $report      = join( "\n", @{$descriptions} );
-    }
-    else {
+    } else {
         $description = $descriptions;
     }
 
-    my $output = generate_output_db_entry( {
+    my $output = generate_output_db_entry(
+        {
             bug_number  => $bug_number,
             description => $description,
             report      => $report,
             version     => $DBversion,
             time        => POSIX::strftime( "%H:%M:%S", localtime ),
-    });
+        }
+    );
 
     say join "\n", @$output;
 
@@ -995,7 +1036,7 @@ sub CheckVersion {
     return 1 if ( $proposed_version =~ m/XXX/ );
 
     if ( C4::Context->preference("Version") < $version_number
-        && $version_number <= TransformToNum( $Koha::VERSION ) )
+        && $version_number <= TransformToNum($Koha::VERSION) )
     {
         return 1;
     }
@@ -1008,21 +1049,27 @@ sub sanitize_zero_date {
 
     my $dbh = C4::Context->dbh;
 
-    my (undef, $datatype) = $dbh->selectrow_array(qq|
-        SHOW COLUMNS FROM $table_name WHERE Field = ?|, undef, $column_name);
+    my ( undef, $datatype ) = $dbh->selectrow_array(
+        qq|
+        SHOW COLUMNS FROM $table_name WHERE Field = ?|, undef, $column_name
+    );
 
     if ( $datatype eq 'date' ) {
-        $dbh->do(qq|
+        $dbh->do(
+            qq|
             UPDATE $table_name
             SET $column_name = NULL
             WHERE CAST($column_name AS CHAR(10)) = '0000-00-00';
-        |);
+        |
+        );
     } else {
-        $dbh->do(qq|
+        $dbh->do(
+            qq|
             UPDATE $table_name
             SET $column_name = NULL
             WHERE CAST($column_name AS CHAR(19)) = '0000-00-00 00:00:00';
-        |);
+        |
+        );
     }
 }
 
@@ -1033,10 +1080,10 @@ Return the number of tables with row_format that is not Dynamic
 =cut
 
 sub has_non_dynamic_row_format {
-    my ($class) = @_;
+    my ($class)  = @_;
     my $database = C4::Context->config('database');
-    my $count = 0;
-    if ($database){
+    my $count    = 0;
+    if ($database) {
         my $dbh = C4::Context->dbh;
         my $sql = q#
             SELECT count(table_name)
@@ -1045,7 +1092,7 @@ sub has_non_dynamic_row_format {
                 table_schema = ?
                 AND row_format != "Dynamic"
         #;
-        ( $count ) = $dbh->selectrow_array($sql, undef, $database);
+        ($count) = $dbh->selectrow_array( $sql, undef, $database );
     }
     return $count;
 }

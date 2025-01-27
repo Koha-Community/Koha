@@ -83,9 +83,9 @@
 [% BLOCK 'alt-address-style_B_address' %]
     [% UNLESS noB_address %]
         <li>
-            <label for="B_address"[% IF mandatoryB_address %]class="required"[% END %]>Address: </label>
+            <label for="B_address" [% IF mandatoryB_address %]class="required"[% END %]>Address: </label>
             <input type="text" id="B_address" name="B_address" size="40" value="[% patron.B_address | html %]" />
-          [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
+            [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
 [% END %]
@@ -115,7 +115,7 @@
         <li>
             <label for="B_zipcode" [% IF mandatoryB_zipcode %]class="required"[% END %]>ZIP/Postal code: </label>
             <input type="text" id="B_zipcode" name="B_zipcode" maxlength="10" size="10" value="[% patron.B_zipcode | html %]" />
-              [% IF ( mandatoryB_zipcode ) %]<span class="required">Required</span>[% END %]
+            [% IF ( mandatoryB_zipcode ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
 [% END %]
@@ -133,9 +133,7 @@
                         [% IF c.city_name == patron.B_city && c.city_state == patron.B_state && c.city_zipcode == patron.B_zipcode %]
                             [% option_selected = 1 %]
                         [% END %]
-                        <option value="[% option_value | html %]" [% IF option_selected %]selected="selected"[% END %]>
-                            [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %]
-                        </option>
+                        <option value="[% option_value | html %]" [% IF option_selected %]selected="selected"[% END %]> [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %] </option>
                     [% END %]
                 </select>
                 <span class="hint">or enter</span>
@@ -181,9 +179,9 @@
         <li>
             <label for="B_email" [% IF mandatoryB_email %]class="required"[% END %]>Email: </label>
             [% IF ( NoUpdateEmail ) %]
-            <input type="text" id="B_email" name="B_email" size="45" value="[% patron.B_email | html %]" disabled="disabled"/>
+                <input type="text" id="B_email" name="B_email" size="45" value="[% patron.B_email | html %]" disabled="disabled" />
             [% ELSE %]
-            <input type="text" id="B_email" name="B_email" size="45" value="[% patron.B_email | html %]" />
+                <input type="text" id="B_email" name="B_email" size="45" value="[% patron.B_email | html %]" />
             [% END %]
             [% IF ( mandatoryB_email ) %]<span class="required">Required</span>[% END %]
         </li>

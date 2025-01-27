@@ -60,8 +60,9 @@ sub effective_BlockExpiredPatronOpacActions_contains {
         C4::Context->preference('BlockExpiredPatronOpacActions')
     };
 
-    return $blocked_actions->{$action} if $self->BlockExpiredPatronOpacActions_contains('follow_syspref_BlockExpiredPatronOpacActions');
-    return $self->BlockExpiredPatronOpacActions_contains($action)
+    return $blocked_actions->{$action}
+        if $self->BlockExpiredPatronOpacActions_contains('follow_syspref_BlockExpiredPatronOpacActions');
+    return $self->BlockExpiredPatronOpacActions_contains($action);
 }
 
 =head3 BlockExpiredPatronOpacActions_contains
@@ -100,15 +101,15 @@ sub store {
     my ($self) = @_;
 
     $self->dateofbirthrequired(undef)
-      if not defined $self->dateofbirthrequired
-      or $self->dateofbirthrequired eq '';
+        if not defined $self->dateofbirthrequired
+        or $self->dateofbirthrequired eq '';
 
     $self->upperagelimit(undef)
-      if not defined $self->upperagelimit
-      or $self->upperagelimit eq '';
+        if not defined $self->upperagelimit
+        or $self->upperagelimit eq '';
 
     $self->checkprevcheckout('inherit')
-      unless defined $self->checkprevcheckout;
+        unless defined $self->checkprevcheckout;
 
     return $self->SUPER::store;
 }
@@ -120,7 +121,7 @@ my $messaging = $category->default_messaging();
 =cut
 
 sub default_messaging {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
     my @messaging;
     foreach my $option (@$messaging_options) {
@@ -145,10 +146,10 @@ sub default_messaging {
 }
 
 sub get_expiry_date {
-    my ($self, $date ) = @_;
+    my ( $self, $date ) = @_;
     if ( $self->enrolmentperiod ) {
         $date ||= dt_from_string;
-        $date = ref $date ? $date->clone() : dt_from_string( $date );
+        $date = ref $date ? $date->clone() : dt_from_string($date);
         return $date->add( months => $self->enrolmentperiod, end_of_month => 'limit' );
     } else {
         return $self->enrolmentperioddate;
@@ -165,10 +166,10 @@ my $expiry_date = $category->get_password_expiry_date();
 =cut
 
 sub get_password_expiry_date {
-    my ($self, $date ) = @_;
+    my ( $self, $date ) = @_;
     if ( $self->password_expiry_days ) {
         $date ||= dt_from_string;
-        $date = ref $date ? $date->clone() : dt_from_string( $date );
+        $date = ref $date ? $date->clone() : dt_from_string($date);
         return $date->add( days => $self->password_expiry_days )->ymd;
     } else {
         return;
@@ -244,7 +245,6 @@ sub effective_force_password_reset_when_set_by_staff {
     return $self->force_password_reset_when_set_by_staff // C4::Context->preference('ForcePasswordResetWhenSetByStaff');
 }
 
-
 =head3 override_hidden_items
 
     if ( $patron->category->override_hidden_items ) {
@@ -260,7 +260,7 @@ TODO: Remove on bug 22547
 sub override_hidden_items {
     my ($self) = @_;
     return any { $_ eq $self->categorycode }
-    split( ',', C4::Context->preference('OpacHiddenItemsExceptions') );
+        split( ',', C4::Context->preference('OpacHiddenItemsExceptions') );
 }
 
 =head3 can_make_suggestions
@@ -275,13 +275,13 @@ Returns if the OPAC logged-in user is allowed to make OPAC purchase suggestions.
 =cut
 
 sub can_make_suggestions {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     if ( C4::Context->preference('suggestion') ) {
 
         my @patron_categories = split ',', C4::Context->preference('suggestionPatronCategoryExceptions') // q{};
 
-        return !any {$_ eq $self->categorycode } @patron_categories;
+        return !any { $_ eq $self->categorycode } @patron_categories;
     }
 
     return 0;
@@ -334,8 +334,8 @@ sub to_api_mapping {
 
 sub _library_limits {
     return {
-        class => "CategoriesBranch",
-        id => "categorycode",
+        class   => "CategoriesBranch",
+        id      => "categorycode",
         library => "branchcode",
     };
 }

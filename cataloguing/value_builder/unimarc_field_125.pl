@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,7 +20,7 @@
 use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
@@ -34,9 +33,9 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 =cut
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number) = @_;
-my $function_name= $field_number;
-my $res="
+    my ( $dbh, $record, $tagslib, $field_number ) = @_;
+    my $function_name = $field_number;
+    my $res           = "
 <script>
 function Clic$function_name(event) {
     event.preventDefault();
@@ -47,30 +46,34 @@ function Clic$function_name(event) {
 </script>
 ";
 
-return ($function_name,$res);
+    return ( $function_name, $res );
 }
+
 sub plugin {
-my ($input) = @_;
-	my $index= $input->param('index');
-	my $result= $input->param('result');
+    my ($input) = @_;
+    my $index   = $input->param('index');
+    my $result  = $input->param('result');
 
+    my $dbh = C4::Context->dbh;
 
-	my $dbh = C4::Context->dbh;
-
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_100.tt",
-			     query => $input,
-			     type => "intranet",
-			     flagsrequired => {editcatalogue => '*'},
-			     });
-	my $f1 = substr($result,0,8);
-	my $f2 = substr($result,8,1);
-	my $f3 = substr($result,9,4);
-	my $f4 = substr($result,13,4);
-	$template->param(index => $index,
-							f1 => $f1,
-							f3 => $f3,
-							"f2$f2" => 1,
-							f4 => $f4);
-        output_html_with_http_headers $input, $cookie, $template->output;
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_100.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
+    my $f1 = substr( $result, 0,  8 );
+    my $f2 = substr( $result, 8,  1 );
+    my $f3 = substr( $result, 9,  4 );
+    my $f4 = substr( $result, 13, 4 );
+    $template->param(
+        index   => $index,
+        f1      => $f1,
+        f3      => $f3,
+        "f2$f2" => 1,
+        f4      => $f4
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }

@@ -256,8 +256,8 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $booking_id =
         $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is( 201, 'REST3.2.1' )
-        ->header_like( Location => qr|^\/api\/v1\/bookings/\d*|, 'REST3.4.1' )
-        ->json_is( '/biblio_id' => $biblio->id )->tx->res->json->{booking_id};
+        ->header_like( Location => qr|^\/api\/v1\/bookings/\d*|, 'REST3.4.1' )->json_is( '/biblio_id' => $biblio->id )
+        ->tx->res->json->{booking_id};
 
     # Authorized attempt to create with null id
     $booking->{booking_id} = undef;

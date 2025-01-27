@@ -42,18 +42,18 @@ subtest "Check MARC field length calculation" => sub {
         MARC::Field->new( '100', '', '', a => 'My title' ),
     );
 
-    is( $record->leader, ' 'x24, 'No leader lengths' );
+    is( $record->leader, ' ' x 24, 'No leader lengths' );
     C4::Biblio::ModBiblioMarc( $record, $biblio->biblionumber );
     my $savedrec = $biblio->metadata->record;
-    like( substr($savedrec->leader,0,5), qr/^\d{5}$/, 'Record length found' );
-    like( substr($savedrec->leader,12,5), qr/^\d{5}$/, 'Base address found' );
+    like( substr( $savedrec->leader, 0,  5 ), qr/^\d{5}$/, 'Record length found' );
+    like( substr( $savedrec->leader, 12, 5 ), qr/^\d{5}$/, 'Base address found' );
 };
 
 subtest "StripWhitespaceChars tests" => sub {
     plan tests => 4;
 
-    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    t::lib::Mocks::mock_preference('StripWhitespaceChars', 0);
+    t::lib::Mocks::mock_preference( 'marcflavour',          'MARC21' );
+    t::lib::Mocks::mock_preference( 'StripWhitespaceChars', 0 );
 
     my $biblio = t::lib::TestBuilder->new->build_sample_biblio;
     my $record = MARC::Record->new;
@@ -67,15 +67,18 @@ subtest "StripWhitespaceChars tests" => sub {
 
     C4::Biblio::ModBiblioMarc( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
-    my $savedrec = $biblio->metadata->record;
+    my $savedrec   = $biblio->metadata->record;
     my $savedtitle = $savedrec->title;
-    is( $savedtitle, "  My\ntitle\n", "Title still has whitespace characters because StripWhitespaceChars is disabled" );
+    is(
+        $savedtitle, "  My\ntitle\n",
+        "Title still has whitespace characters because StripWhitespaceChars is disabled"
+    );
 
-    t::lib::Mocks::mock_preference('StripWhitespaceChars', 1);
+    t::lib::Mocks::mock_preference( 'StripWhitespaceChars', 1 );
 
     C4::Biblio::ModBiblioMarc( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
-    my $amendedrec = $biblio->metadata->record;
+    my $amendedrec   = $biblio->metadata->record;
     my $amendedtitle = $amendedrec->title;
     is( $amendedtitle, "My title", "Whitespace characters removed from title because StripWhitespaceChars is enabled" );
 

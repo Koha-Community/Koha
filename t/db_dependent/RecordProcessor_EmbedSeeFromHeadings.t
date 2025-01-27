@@ -28,42 +28,44 @@ use Test::MockModule;
 use Test::MockObject;
 
 BEGIN {
-        use_ok('Koha::RecordProcessor');
+    use_ok('Koha::RecordProcessor');
 }
 
 my $module = Test::MockModule->new('MARC::Record');
-$module->mock('new_from_xml', sub {
-    my $record = MARC::Record->new;
+$module->mock(
+    'new_from_xml',
+    sub {
+        my $record = MARC::Record->new;
 
-    $record->add_fields(
-        [ '001', '1234' ],
-        [ '150', ' ', ' ', a => 'Cooking' ],
-        [ '450', ' ', ' ', a => 'Cookery' ],
+        $record->add_fields(
+            [ '001', '1234' ],
+            [ '150', ' ', ' ', a => 'Cooking' ],
+            [ '450', ' ', ' ', a => 'Cookery' ],
         );
 
-    return $record;
-});
+        return $record;
+    }
+);
 
 my $bib = MARC::Record->new;
 $bib->add_fields(
     [ '245', '0', '4', a => 'The Ifrane cookbook' ],
     [ '650', ' ', ' ', a => 'Cooking', 9 => '1234' ]
-    );
+);
 
 my $resultbib = MARC::Record->new;
 $resultbib->add_fields(
     [ '245', '0', '4', a => 'The Ifrane cookbook' ],
     [ '650', ' ', ' ', a => 'Cooking', 9 => '1234' ],
     [ '650', 'z', ' ', a => 'Cookery' ]
-    );
+);
 
-my $processor = Koha::RecordProcessor->new( { filters => ( 'EmbedSeeFromHeadings' ) } );
-is(ref($processor), 'Koha::RecordProcessor', 'Created record processor');
+my $processor = Koha::RecordProcessor->new( { filters => ('EmbedSeeFromHeadings') } );
+is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
 my $result = $processor->process($bib);
 
-is_deeply($result, $resultbib, 'Inserted see-from heading to record');
-
+is_deeply( $result, $resultbib, 'Inserted see-from heading to record' );
 
 subtest "EmbedSeeFromHeadings should skip holdings fields" => sub {
 
@@ -81,34 +83,34 @@ subtest "EmbedSeeFromHeadings should skip holdings fields" => sub {
         [ '952', ' ', ' ', a => 'Cooking', 9 => '1234' ]
     );
 
-
     my $koha_authority = Test::MockModule->new('Koha::MetadataRecord::Authority');
-    $koha_authority->mock( 'get_from_authid', sub {
+    $koha_authority->mock(
+        'get_from_authid',
+        sub {
 
-        my $auth_record = MARC::Record->new;
+            my $auth_record = MARC::Record->new;
 
-        $auth_record->add_fields(
-            [ '001', '1234' ],
-            [ '150', ' ', ' ', a => 'Cooking' ],
-            [ '450', ' ', ' ', a => 'Cookery' ],
-        );
+            $auth_record->add_fields(
+                [ '001', '1234' ],
+                [ '150', ' ', ' ', a => 'Cooking' ],
+                [ '450', ' ', ' ', a => 'Cookery' ],
+            );
 
-        my $authority_object = Test::MockObject->new();
-        $authority_object->mock( 'authid',   sub { return '1234'; });
-        $authority_object->mock( 'authtype', sub { return 'TOPIC_TERM'; });
-        $authority_object->mock( 'schema',   sub { return 'marc21'; });
-        $authority_object->mock( 'record',   sub { return $auth_record; });
+            my $authority_object = Test::MockObject->new();
+            $authority_object->mock( 'authid',   sub { return '1234'; } );
+            $authority_object->mock( 'authtype', sub { return 'TOPIC_TERM'; } );
+            $authority_object->mock( 'schema',   sub { return 'marc21'; } );
+            $authority_object->mock( 'record',   sub { return $auth_record; } );
 
-        return $authority_object;
-    });
+            return $authority_object;
+        }
+    );
 
-    my $processor = Koha::RecordProcessor->new({
-            filters => ( 'EmbedSeeFromHeadings' )
-    });
+    my $processor = Koha::RecordProcessor->new( { filters => ('EmbedSeeFromHeadings') } );
 
     my $result = $processor->process($biblio_record);
 
-    is_deeply($result, $record_copy, 'Holdings fields not processed to introduce See-from heading');
+    is_deeply( $result, $record_copy, 'Holdings fields not processed to introduce See-from heading' );
 };
 
 done_testing();

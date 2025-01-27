@@ -27,7 +27,7 @@ use C4::Context;
 use Koha;
 
 sub AudioAlerts {
-    my $dbh = C4::Context->dbh;
+    my $dbh          = C4::Context->dbh;
     my $audio_alerts = $dbh->selectall_arrayref( 'SELECT * FROM audio_alerts ORDER BY precedence', { Slice => {} } );
     return encode_json($audio_alerts);
 }

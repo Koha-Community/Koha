@@ -45,7 +45,7 @@ Return the package for this resource
 =cut
 
 sub package {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $package_rs = $self->_result->package;
     return Koha::ERM::EHoldings::Package->_new_from_dbic($package_rs);
 }
@@ -57,7 +57,7 @@ Return the title for this resource
 =cut
 
 sub title {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $title_rs = $self->_result->title;
     return Koha::ERM::EHoldings::Title->_new_from_dbic($title_rs);
 }
@@ -69,12 +69,11 @@ Return the vendor for this resource
 =cut
 
 sub vendor {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $vendor_rs = $self->_result->vendor;
     return unless $vendor_rs;
     return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);
 }
-
 
 =head2 Internal methods
 

@@ -47,7 +47,7 @@ to multipage gestion.
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
@@ -60,16 +60,15 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
 my $input = CGI->new;
-my $op = $input->param('op') || q{};
-my $dbh = C4::Context->dbh;
+my $op    = $input->param('op') || q{};
+my $dbh   = C4::Context->dbh;
 
 my $startfrom = $input->param('startfrom');
 $startfrom = 0 unless $startfrom;
 my ( $template, $loggedinuser, $cookie );
 my $resultsperpage;
 
-my $itype_or_itemtype =
-  ( C4::Context->preference("item-level_itypes") ) ? 'itype' : 'itemtype';
+my $itype_or_itemtype = ( C4::Context->preference("item-level_itypes") ) ? 'itype' : 'itemtype';
 
 my $query = $input->param('q');
 
@@ -78,25 +77,25 @@ if ( $op eq "do_search" && $query ) {
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "serials/result.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { catalogue => 1, serials => '*' },
+            template_name => "serials/result.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { catalogue => 1, serials => '*' },
         }
     );
 
     # add the limits if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     my $ccodelimit    = $input->param('ccodelimit');
-    my $op = 'AND';
+    my $op            = 'AND';
     $query .= " $op $itype_or_itemtype:$itemtypelimit" if $itemtypelimit;
-    $query .= " $op ccode:$ccodelimit" if $ccodelimit;
+    $query .= " $op ccode:$ccodelimit"                 if $ccodelimit;
     $resultsperpage = $input->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
 
-    my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my ( $error, $marcrecords, $total_hits ) =
-      $searcher->simple_search_compat( $query, $startfrom * $resultsperpage, $resultsperpage );
+        $searcher->simple_search_compat( $query, $startfrom * $resultsperpage, $resultsperpage );
     my $total = 0;
     if ( defined $marcrecords ) {
         $total = scalar @{$marcrecords};
@@ -113,20 +112,21 @@ if ( $op eq "do_search" && $query ) {
     for ( my $i = 0 ; $i < $total ; $i++ ) {
         my %resultsloop;
         my $marcrecord = C4::Search::new_record_from_zebra( 'biblioserver', $marcrecords->[$i] );
-        my $biblio = TransformMarcToKoha({ record => $marcrecord });
+        my $biblio     = TransformMarcToKoha( { record => $marcrecord } );
 
         #build the hash for the template.
-        $resultsloop{highlight}       = ( $i % 2 ) ? (1) : (0);
-        $resultsloop{title}           = $biblio->{'title'};
-        $resultsloop{subtitle}        = $biblio->{'subtitle'};
-        $resultsloop{medium}          = $biblio->{'medium'};
-        $resultsloop{part_number}     = $biblio->{'part_number'};
-        $resultsloop{part_name}       = $biblio->{'part_name'};
-        $resultsloop{biblionumber}    = $biblio->{'biblionumber'};
-        $resultsloop{author}          = $biblio->{'author'};
-        $resultsloop{publishercode}   = $biblio->{'publishercode'};
-        $resultsloop{publicationyear} = $biblio->{'publicationyear'} ? $biblio->{'publicationyear'} : $biblio->{'copyrightdate'};
-        $resultsloop{issn}            = $biblio->{'issn'};
+        $resultsloop{highlight}     = ( $i % 2 ) ? (1) : (0);
+        $resultsloop{title}         = $biblio->{'title'};
+        $resultsloop{subtitle}      = $biblio->{'subtitle'};
+        $resultsloop{medium}        = $biblio->{'medium'};
+        $resultsloop{part_number}   = $biblio->{'part_number'};
+        $resultsloop{part_name}     = $biblio->{'part_name'};
+        $resultsloop{biblionumber}  = $biblio->{'biblionumber'};
+        $resultsloop{author}        = $biblio->{'author'};
+        $resultsloop{publishercode} = $biblio->{'publishercode'};
+        $resultsloop{publicationyear} =
+            $biblio->{'publicationyear'} ? $biblio->{'publicationyear'} : $biblio->{'copyrightdate'};
+        $resultsloop{issn} = $biblio->{'issn'};
 
         push @results, \%resultsloop;
     }
@@ -146,12 +146,12 @@ if ( $op eq "do_search" && $query ) {
                 my $highlight = 0;
                 ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );
                 push @numbers,
-                  {
+                    {
                     number     => $i,
                     highlight  => $highlight,
                     searchdata => \@results,
                     startfrom  => ( $i - 1 )
-                  };
+                    };
             }
         }
     }
@@ -162,8 +162,7 @@ if ( $op eq "do_search" && $query ) {
 
     if ( $total_hits < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
         $to = $total;
-    }
-    else {
+    } else {
         $to = ( ( $startfrom + 1 ) * $resultsperpage );
     }
     $template->param(
@@ -184,24 +183,23 @@ if ( $op eq "do_search" && $query ) {
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "serials/subscription-bib-search.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { catalogue => 1, serials => '*' },
+            template_name => "serials/subscription-bib-search.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { catalogue => 1, serials => '*' },
         }
     );
 
     # load the itemtypes
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     my @itemtypesloop;
+
     # FIXME This is uselessly complex, the iterator should be send to the template
     # FIXME The translated_description should be used
     foreach my $thisitemtype (
-        sort {
-            $itemtypes->{$a}->{'description'}
-              cmp $itemtypes->{$b}->{'description'}
-        } keys %$itemtypes
-      )
+        sort { $itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} }
+        keys %$itemtypes
+        )
     {
         my %row = (
             code        => $thisitemtype,
@@ -213,8 +211,7 @@ else {
     # load Collection Codes
     my $authvalues = GetAuthorisedValues('CCODE');
     my @ccodesloop;
-    for my $thisauthvalue ( sort { $a->{'lib'} cmp $b->{'lib'} } @$authvalues )
-    {
+    for my $thisauthvalue ( sort { $a->{'lib'} cmp $b->{'lib'} } @$authvalues ) {
         my %row = (
             code        => $thisauthvalue->{'authorised_value'},
             description => $thisauthvalue->{'lib'},

@@ -7,13 +7,11 @@
 [% SET footerjs = 1 %]
 [%- BLOCK action_menu %]
     <div class="btn-group dropup">
-        <a class="btn btn-default btn-xs dropdown-toggle" id="budgetmenu_[% block_budget.budget_period_id | html %]" role="button" data-bs-toggle="dropdown" href="#">
-           Actions
-        </a>
+        <a class="btn btn-default btn-xs dropdown-toggle" id="budgetmenu_[% block_budget.budget_period_id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
         <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
-              <li>
-                  <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-              </li>
+            <li>
+                <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+            </li>
             [% IF block_budget.count %]
                 <li data-bs-toggle="tooltip" data-bs-placement="left" title="[% block_budget.count | html %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget.">
                     <a class="dropdown-item disabled" aria-disabled="true" href="#"><i class="fa fa-trash-can"></i> Delete</a>
@@ -23,12 +21,12 @@
                     <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                 </li>
             [% END %]
-              <li>
-                  <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
-              </li>
-              <li>
-                  <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
-              </li>
+            <li>
+                <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
+            </li>
             [% IF ( block_budget.budget_period_locked ) %]
                 <li data-bs-toggle="tooltip" data-bs-placement="left" title="Budget is locked">
                     <a class="dropdown-item disabled" aria-disabled="true" href="#"><i class="fa fa-plus"></i> Add fund</a>
@@ -48,34 +46,41 @@
     [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 [% END %]
 
-<title>[% FILTER collapse %]
-    [% IF ( add_form ) %]
-        [% IF ( budget_period_id ) %]
-            [% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
-        [% ELSE %]
-            [% t("New budget") | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% IF ( duplicate_form ) %]
-        [% t("Duplicate budget") | html %] &rsaquo;
-    [% END %]
-    [% IF ( delete_confirm ) %]
-        [% IF ( total || funds_exist ) %]
-            [% tx("Cannot delete budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %] &rsaquo;
-        [% ELSE %]
-            [% tx("Confirm deletion of budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+<title
+    >[% FILTER collapse %]
+        [% IF ( add_form ) %]
+            [% IF ( budget_period_id ) %]
+                [% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
+            [% ELSE %]
+                [% t("New budget") | html %]
+            [% END %]
+            &rsaquo;
         [% END %]
-    [% END %]
-    [% IF close_form %]
-        [% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %] &rsaquo;
-    [% END %]
-    [% IF closed %]
-        [% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %] &rsaquo;
-    [% END %]
-    [% t("Budgets") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+        [% IF ( duplicate_form ) %]
+            [% t("Duplicate budget") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( delete_confirm ) %]
+            [% IF ( total || funds_exist ) %]
+                [% tx("Cannot delete budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
+                &rsaquo;
+            [% ELSE %]
+                [% tx("Confirm deletion of budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
+                &rsaquo;
+            [% END %]
+        [% END %]
+        [% IF close_form %]
+            [% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
+            &rsaquo;
+        [% END %]
+        [% IF closed %]
+            [% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Budgets") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 </head>
 
 <body id="admin_aqbudgetperiods" class="admin">
@@ -124,11 +129,11 @@
             [% END %]
         [% END %]
 
-            [% IF ( duplicate_form ) %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Duplicate budget</span>
-                [% END %]
+        [% IF ( duplicate_form ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Duplicate budget</span>
             [% END %]
+        [% END %]
 
         [% IF close_form %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -144,403 +149,409 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% UNLESS close_form OR closed OR duplicate_form %]
-  [% INCLUDE 'budgets-admin-toolbar.inc' %]
-[% END %]
-
-[% IF ( duplicate_form ) %]
-<h1>Duplicate budget</h1>
-<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-    <fieldset class="rows">
-    <input type="hidden" name="op" value="cud-duplicate_budget" />
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-
-    <ol>
-
-    <li>
-    <label class="required" for="from">Start date: </label>
-    <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
-        <span class="required">Required</span>
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-    <li>
-
-    <label class="required" for="to">End date: </label>
-    <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
-        <span class="required">Required</span>
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-
-    <li>
-    <label class="required" for="budget_period_description">Description</label>
-    <input type="text" id="budget_period_description" name="budget_period_description" value="[% budgetperiod.budget_period_description | html %]" />
-        <span class="required">Required</span>
-    </li>
-
-    <li>
-      <label for="amount_change_percentage">Change amounts by</label>
-      <input type="text" id="amount_change_percentage" name="amount_change_percentage" /> %
-      <div class="hint">(can be positive or negative)</div>
-    </li>
-
-    <li>
-      <label for="amount_change_round_increment">If amounts changed, round to a multiple of</label>
-      <input type="text" id="amount_change_round_increment" name="amount_change_round_increment" />
-      <div class="hint">(amounts will be rounded down)</div>
-    </li>
-
-    <li>
-      <label for="mark_as_inactive">Mark the original budget as inactive</label>
-      <input type="checkbox" id="mark_as_inactive" name="mark_original_budget_as_inactive" />
-    </li>
-
-    <li>
-      <label for="reset_all_budgets">Set all funds to zero</label>
-      <input type="checkbox" id="reset_all_budgets" name="reset_all_budgets" />
-    </li>
-
-    </ol>
-    </fieldset>
-
-    <fieldset class="action">
-        <input type="submit" class="btn btn-primary" value="Save" />
-        <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">Cancel</a>
-    </fieldset>
-
-</form>
-
-[% END %]
-
-[% IF ( add_form ) %]
-    <!--  add or modify a budget period   -->
-
-    [% IF ( budget_period_id ) %]
-        <h1>[% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
-    [% ELSE %]
-        <h1>New budget</h1>
-	[% END %]
-<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-    <fieldset class="rows">
-    <!-- ################################################################################# -->
-    <!-- display information about the budget period that must be added or modified -->
-    <!-- ################################################################################# -->
-    <input type="hidden" name="op" value="cud-add_validate" />
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-    <ol>
-    <li>
-    <label class="required" for="from">Start date: </label>
-    <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
-        <span class="required">Required</span>
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-    <li>
-
-    <label class="required" for="to">End date: </label>
-    <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
-        <span class="required">Required</span>
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-
-    <li>
-        <!-- DESCRIPTION -->
-        <!-- ############################## -->
-        <label class="required" for="budget_period_description">Description: </label>
-        <input type="text" id="budget_period_description" name="budget_period_description"
-        size="48" maxlength="80" value="[% budget_period_description | html %]" />
-            <span class="required">Required</span>
-    </li>
-
-    <li>
-        <!-- TOTAL -->
-        <!-- ############################## -->
-        <label for="budget_period_total">Total amount: </label>
-        <input type="text" id="budget_period_total" name="budget_period_total"
-        size="10" maxlength="80" value="[% budget_period_total | $Price on_editing => 1 %]" />
-    </li>
-
-    <li>
-        <!-- ACTIVE -->
-        <!-- ############################## -->
-        <label for="budget_period_active">Make budget active: </label>
-        [% IF ( budget_period_active ) %]<input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"/> [% END %]
-    </li>
-
-    <li>
-        <!-- LOCK  -->
-        <!-- ############################## -->
-        <label for="budget_period_locked">Lock budget: </label>
-        [% IF ( budget_period_locked ) %]<input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"/> [% END %]
-    </li>
-    </ol>
-    </fieldset>
-
-    <fieldset class="action">
-        <!-- "save changes" button -->
-        <!-- ###################################### -->
-        <input type="submit" class="btn btn-primary" value="Save" />
-        [% IF ( budget_period_id ) %]
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]" class="cancel">Cancel</a>
-        [% ELSE %]
-            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="cancel">Cancel</a>
-        [% END %]
-    </fieldset>
-
-</form>
-
-[% END %]
-
-<!-- ####################################################################### -->
-<!-- delete a budget period -->
-<!-- ####################################################################### -->
-
-[% IF ( delete_confirm ) %]
-    [% SET div_class="alert alert-info" %]
-    [% IF !total || !funds_exist %]
-        [% div_class="alert alert-warning" %]
+    [% UNLESS close_form OR closed OR duplicate_form %]
+        [% INCLUDE 'budgets-admin-toolbar.inc' %]
     [% END %]
 
-    <div class="[% div_class | html %]">
-    [% IF ( total ) %]
-        <h1>Cannot delete budget</h1>
-        <p><strong>This record is used [% total | html %] times</strong>.
-        Deletion is not possible.</p>
-    [% ELSIF ( funds_exist ) %]
-        <h1>Cannot delete budget</h1>
-        <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
-    [% ELSE %]
-        <h1>[% tx("Confirm deletion of budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %]</h1>
-
-    <!-- ############################################################# -->
-    <!-- "delete" and "cancel" buttons    -->
-    <!-- ############################################################# -->
-
-    <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-delete_confirmed" />
-        <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-        <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
-    </form>
-    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</a>
-    [% END %]
-
-    </div>
-[% END %]
-
-[% IF close_form %]
-<h1>[% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
-    [% IF budget_periods.size == 0 %]
-        <div class="alert alert-warning">
-            <p>You cannot move funds of this budget, there is no active budget.</p>
-            <p>Please create a new active budget and retry.</p>
-            <a class="btn btn-default" href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
-        </div>
-    [% ELSIF number_of_unreceived_orders == 0 %]
-        <div class="alert alert-info">
-            <h2>Cannot close budget</h2>
-            <p>There are no unreceived orders for this budget.</p>
-            <a class="btn btn-default"  href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
-        </div>
-    [% ELSE %]
-    <div class="page-section">
-        <h3>The unreceived orders from the following funds will be moved</h3>
-          Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a>:
-        <table id="budgeth">
-          <thead>
-            <tr>
-                <th>Fund ID</th>
-                <th>Fund code</th>
-                <th>Fund name</th>
-                <th>Unreceived orders</th>
-            </tr>
-          </thead>
-          <tbody>
-            [% FOREACH budget IN budgets_to_move %]
-              <tr>
-                <td>[% budget.budget_id | html %]</td>
-                <td>[% budget.budget_code | html %]</td>
-                <td>[% budget.budget_name | html %]</td>
-                <td>[% budget.unreceived_orders.size | html %]</td>
-              </tr>
-            [% END %]
-          </tbody>
-        </table>
-        <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
+    [% IF ( duplicate_form ) %]
+        <h1>Duplicate budget</h1>
+        <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-          <fieldset class="rows">
-            <ol>
-              <li>
-                <label class="required" for="to_budget_period_id">Select a budget</label>
-                <select name="to_budget_period_id" id="to_budget_period_id" required="required">
-                  <option value=""></option>
-                  [% FOR budget_period IN budget_periods %]
-                    <option value="[% budget_period.budget_period_id | html %]">[% budget_period.budget_period_description | html %]</option>
-                  [% END %]
-                </select>
-              </li>
-              <li>
-              <label for="move_remaining_unspent">Move remaining unspent funds</label>
-                <input type="checkbox" name="move_remaining_unspent" id="move_remaining_unspent" />
-              </li>
-            </ol>
-          </fieldset>
-          <fieldset class="action">
-              <input type="hidden" name="op" value="cud-close_confirmed" />
-              <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-              <input type="submit" class="btn btn-primary" value="Move unreceived orders" />
-              <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>
-          </fieldset>
+            <fieldset class="rows">
+                <input type="hidden" name="op" value="cud-duplicate_budget" />
+                <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+
+                <ol>
+                    <li>
+                        <label class="required" for="from">Start date: </label>
+                        <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
+                        <span class="required">Required</span>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                    <li>
+                        <label class="required" for="to">End date: </label>
+                        <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
+                        <span class="required">Required</span>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+
+                    <li>
+                        <label class="required" for="budget_period_description">Description</label>
+                        <input type="text" id="budget_period_description" name="budget_period_description" value="[% budgetperiod.budget_period_description | html %]" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="amount_change_percentage">Change amounts by</label>
+                        <input type="text" id="amount_change_percentage" name="amount_change_percentage" /> %
+                        <div class="hint">(can be positive or negative)</div>
+                    </li>
+
+                    <li>
+                        <label for="amount_change_round_increment">If amounts changed, round to a multiple of</label>
+                        <input type="text" id="amount_change_round_increment" name="amount_change_round_increment" />
+                        <div class="hint">(amounts will be rounded down)</div>
+                    </li>
+
+                    <li>
+                        <label for="mark_as_inactive">Mark the original budget as inactive</label>
+                        <input type="checkbox" id="mark_as_inactive" name="mark_original_budget_as_inactive" />
+                    </li>
+
+                    <li>
+                        <label for="reset_all_budgets">Set all funds to zero</label>
+                        <input type="checkbox" id="reset_all_budgets" name="reset_all_budgets" />
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">Cancel</a>
+            </fieldset>
         </form>
-    </div><!-- /.page-section -->
-  [% END %]
-[% ELSIF closed %]
-    <h1>[% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %]</h1>
-
-    <div class="page-section">
-        <h3>Report after moving unreceived orders from budget [% from_budget_period.budget_period_description | html %] ([% from_budget_period.budget_period_startdate | $KohaDates %] - [% from_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description | html %] ([% to_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates%])</h3>
-
-        <table id="closed_report">
-        <thead>
-          <tr>
-            <td>Budget id</td>
-            <td>Basket</td>
-            <td>Ordernumber</td>
-            <td>Details</td>
-          </tr>
-        </thead>
-        <tbody>
-          [% FOR r IN report %]
-              [% IF r.moved %]
-                [% IF r.orders_moved.size > 0 %]
-                  [% FOR order IN r.orders_moved %]
-                    <tr>
-                      <td>[% r.budget.budget_name | html %] (id=[% r.budget.budget_id | html %]) Amount=[% r.budget.budget_amount | $Price %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
-                      <td>[% order.basketname | html %]</td>
-                      <td>[% order.ordernumber | html %]</td>
-                      <td>Moved!</td>
-                    </tr>
-                  [% END %]
-                [% ELSE %]
-                  <tr>
-                    <td>[% r.budget.budget_name | html %] (id=[% r.budget.budget_id | html %])</td>
-                    <td></td>
-                    <td></td>
-                    <td>There were no unreceived orders for this fund.</td>
-                  </tr>
-                [% END %]
-              [% ELSE %]
-                [% IF r.error == 'budget_code_not_exists' %]
-                  <tr>
-                    <td>[% r.budget.budget_id | html %] [% r.budget.budget_amount | $Price %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
-                    <td></td>
-                    <td></td>
-                    <td>This fund code does not exist in the destination budget.</td>
-                  </tr>
-                [% END %]
-              [% END %]
-          [% END %]
-        </tbody>
-        </table>
-        <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
-    </div>
-[% END %]
-
-<!--  DEFAULT  display budget periods list -->
-[% IF ( else ) %]
-  <h1>Budgets</h1>
-
-    [% IF ( failed_delete_funds_exist ) %]
-        <div class="alert alert-info">Failed to delete budget because funds exist.</div>
     [% END %]
 
-    [% INCLUDE 'budgets-active-currency.inc' %]
+    [% IF ( add_form ) %]
+        <!--  add or modify a budget period   -->
 
-    [% WRAPPER tabs id= "budgetsTabs" %]
+        [% IF ( budget_period_id ) %]
+            <h1>[% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
+        [% ELSE %]
+            <h1>New budget</h1>
+        [% END %]
+        <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows">
+                <!-- ################################################################################# -->
+                <!-- display information about the budget period that must be added or modified -->
+                <!-- ################################################################################# -->
+                <input type="hidden" name="op" value="cud-add_validate" />
+                <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+                <ol>
+                    <li>
+                        <label class="required" for="from">Start date: </label>
+                        <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
+                        <span class="required">Required</span>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                    <li>
+                        <label class="required" for="to">End date: </label>
+                        <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
+                        <span class="required">Required</span>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
 
-        [% WRAPPER tabs_nav %]
-            [% WRAPPER tab_item tabname= "active" bt_active= 1 %] <span>Active budgets</span> [% END %]
-            [% WRAPPER tab_item tabname= "inactive" %] <span>Inactive budgets</span> [% END %]
-        [% END # /WRAPPER tabs_nav %]
+                    <li>
+                        <!-- DESCRIPTION -->
+                        <!-- ############################## -->
+                        <label class="required" for="budget_period_description">Description: </label>
+                        <input type="text" id="budget_period_description" name="budget_period_description" size="48" maxlength="80" value="[% budget_period_description | html %]" />
+                        <span class="required">Required</span>
+                    </li>
 
-        [% WRAPPER tab_panels %]
-            [% WRAPPER tab_panel tabname="active" bt_active= 1 %]
-                [% IF ( period_active_loop ) %]
-                    <table id="activeperiodst">
-                        <thead>
-                            <tr>
-                                <th>Budget name</th>
-                                <th>Start date</th>
-                                <th>End date</th>
-                                <th>Locked</th>
-                                <th>Total</th>
-                                <th class="noExport">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH period_active IN period_active_loop %]
-                                <tr>
-                                    <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_active.budget_period_id | uri %]" title="View funds for [% period_active.budget_period_description | html %]">[% period_active.budget_period_description | html %]</a></td>
-                                    <td data-order="[% period_active.budget_period_startdate | html %]">[% period_active.budget_period_startdate | $KohaDates %]</td>
-                                    <td data-order="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</td>
-                                    <td>
-                                        [% IF ( period_active.budget_period_locked ) %]
-                                            <span><i class="fa fa-lock"></i> Locked</span>
-                                        [% END %]
-                                    </td>
-                                    <td class="data">[% period_active.budget_period_total | $Price %]</td>
-                                    <td>
-                                        [% PROCESS action_menu block_budget=period_active %]
-                                    </td>
-                                </tr>
-                            [% END # /FOREACH period_active %]
-                        </tbody>
-                    </table> <!-- /#activeperiodst -->
+                    <li>
+                        <!-- TOTAL -->
+                        <!-- ############################## -->
+                        <label for="budget_period_total">Total amount: </label>
+                        <input type="text" id="budget_period_total" name="budget_period_total" size="10" maxlength="80" value="[% budget_period_total | $Price on_editing => 1 %]" />
+                    </li>
+
+                    <li>
+                        <!-- ACTIVE -->
+                        <!-- ############################## -->
+                        <label for="budget_period_active">Make budget active: </label>
+                        [% IF ( budget_period_active ) %]
+                            <input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1" />
+                        [% END %]
+                    </li>
+
+                    <li>
+                        <!-- LOCK  -->
+                        <!-- ############################## -->
+                        <label for="budget_period_locked">Lock budget: </label>
+                        [% IF ( budget_period_locked ) %]
+                            <input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1" />
+                        [% END %]
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <!-- "save changes" button -->
+                <!-- ###################################### -->
+                <input type="submit" class="btn btn-primary" value="Save" />
+                [% IF ( budget_period_id ) %]
+                    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]" class="cancel">Cancel</a>
                 [% ELSE %]
-                    <span>No active budgets</span>
-                [% END # /IF period_active_loop %]
-            [% END # /WRAPPER tab_panel#active %]
+                    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="cancel">Cancel</a>
+                [% END %]
+            </fieldset>
+        </form>
+    [% END %]
 
-            [% WRAPPER tab_panel tabname="inactive" %]
-                [% IF ( period_inactive_loop ) %]
-                    <table id="inactiveperiodst">
-                        <thead>
+    <!-- ####################################################################### -->
+    <!-- delete a budget period -->
+    <!-- ####################################################################### -->
+
+    [% IF ( delete_confirm ) %]
+        [% SET div_class="alert alert-info" %]
+        [% IF !total || !funds_exist %]
+            [% div_class="alert alert-warning" %]
+        [% END %]
+
+        <div class="[% div_class | html %]">
+            [% IF ( total ) %]
+                <h1>Cannot delete budget</h1>
+                <p><strong>This record is used [% total | html %] times</strong>. Deletion is not possible.</p>
+            [% ELSIF ( funds_exist ) %]
+                <h1>Cannot delete budget</h1>
+                <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
+            [% ELSE %]
+                <h1>[% tx("Confirm deletion of budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %]</h1>
+
+                <!-- ############################################################# -->
+                <!-- "delete" and "cancel" buttons    -->
+                <!-- ############################################################# -->
+
+                <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-delete_confirmed" />
+                    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+                    <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                </form>
+                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</a>
+            [% END %]
+        </div>
+    [% END %]
+
+    [% IF close_form %]
+        <h1>[% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
+        [% IF budget_periods.size == 0 %]
+            <div class="alert alert-warning">
+                <p>You cannot move funds of this budget, there is no active budget.</p>
+                <p>Please create a new active budget and retry.</p>
+                <a class="btn btn-default" href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
+            </div>
+        [% ELSIF number_of_unreceived_orders == 0 %]
+            <div class="alert alert-info">
+                <h2>Cannot close budget</h2>
+                <p>There are no unreceived orders for this budget.</p>
+                <a class="btn btn-default" href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
+            </div>
+        [% ELSE %]
+            <div class="page-section">
+                <h3>The unreceived orders from the following funds will be moved</h3>
+                Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a>:
+                <table id="budgeth">
+                    <thead>
+                        <tr>
+                            <th>Fund ID</th>
+                            <th>Fund code</th>
+                            <th>Fund name</th>
+                            <th>Unreceived orders</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH budget IN budgets_to_move %]
                             <tr>
-                                <th>Budget name</th>
-                                <th>Start date</th>
-                                <th>End date</th>
-                                <th>Locked</th>
-                                <th>Total</th>
-                                <th class="noExport">Actions</th>
+                                <td>[% budget.budget_id | html %]</td>
+                                <td>[% budget.budget_code | html %]</td>
+                                <td>[% budget.budget_name | html %]</td>
+                                <td>[% budget.unreceived_orders.size | html %]</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH period_loo IN period_inactive_loop %]
+                        [% END %]
+                    </tbody>
+                </table>
+                <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label class="required" for="to_budget_period_id">Select a budget</label>
+                                <select name="to_budget_period_id" id="to_budget_period_id" required="required">
+                                    <option value=""></option>
+                                    [% FOR budget_period IN budget_periods %]
+                                        <option value="[% budget_period.budget_period_id | html %]">[% budget_period.budget_period_description | html %]</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="move_remaining_unspent">Move remaining unspent funds</label>
+                                <input type="checkbox" name="move_remaining_unspent" id="move_remaining_unspent" />
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <input type="hidden" name="op" value="cud-close_confirmed" />
+                        <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+                        <input type="submit" class="btn btn-primary" value="Move unreceived orders" />
+                        <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>
+                    </fieldset>
+                </form> </div
+            ><!-- /.page-section -->
+        [% END %]
+    [% ELSIF closed %]
+        <h1>[% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %]</h1>
+
+        <div class="page-section">
+            <h3
+                >Report after moving unreceived orders from budget [% from_budget_period.budget_period_description | html %] ([% from_budget_period.budget_period_startdate | $KohaDates %] -
+                [% from_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description | html %] ([% to_budget_period.budget_period_startdate | $KohaDates %] -
+                [% to_budget_period.budget_period_enddate | $KohaDates %])</h3
+            >
+
+            <table id="closed_report">
+                <thead>
+                    <tr>
+                        <td>Budget id</td>
+                        <td>Basket</td>
+                        <td>Ordernumber</td>
+                        <td>Details</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOR r IN report %]
+                        [% IF r.moved %]
+                            [% IF r.orders_moved.size > 0 %]
+                                [% FOR order IN r.orders_moved %]
+                                    <tr>
+                                        <td
+                                            >[% r.budget.budget_name | html %] (id=[% r.budget.budget_id | html %])
+                                            Amount=[% r.budget.budget_amount | $Price %][% IF r.unspent_moved %]([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td
+                                        >
+                                        <td>[% order.basketname | html %]</td>
+                                        <td>[% order.ordernumber | html %]</td>
+                                        <td>Moved!</td>
+                                    </tr>
+                                [% END %]
+                            [% ELSE %]
                                 <tr>
-                                    <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id | uri %]" title="View funds for [% period_loo.budget_period_description | html %]">[% period_loo.budget_period_description | html %]</a></td>
-                                    <td data-order="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</td>
-                                    <td data-order="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</td>
-                                    <td>[% IF ( period_loo.budget_period_locked ) %]<i class="fa fa-lock"></i> Locked[% END %]</td>
-                                    <td class="data">[% period_loo.budget_period_total | $Price %]</td>
-                                    <td>
-                                            [% PROCESS action_menu block_budget=period_loo %]
-                                    </td>
+                                    <td>[% r.budget.budget_name | html %] (id=[% r.budget.budget_id | html %])</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>There were no unreceived orders for this fund.</td>
                                 </tr>
-                            [% END # /FOREACH period_loo %]
-                        </tbody>
-                    </table> <!-- /#inactiveperiodst -->
-                [% ELSE %]
-                    <span>No inactive budgets</span>
-                [% END # /IF inactiveperiodst %]
-            [% END # /WRAPPER tab_panel#inactive %]
-        [% END # /WRAPPER tab_panels %]
-    [% END # /WRAPPER tabs %]
+                            [% END %]
+                        [% ELSE %]
+                            [% IF r.error == 'budget_code_not_exists' %]
+                                <tr>
+                                    <td>[% r.budget.budget_id | html %] [% r.budget.budget_amount | $Price %][% IF r.unspent_moved %]([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>This fund code does not exist in the destination budget.</td>
+                                </tr>
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                </tbody>
+            </table>
+            <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
+        </div>
+    [% END %]
 
-[% END # /IF else %]
+    <!--  DEFAULT  display budget periods list -->
+    [% IF ( else ) %]
+        <h1>Budgets</h1>
 
+        [% IF ( failed_delete_funds_exist ) %]
+            <div class="alert alert-info">Failed to delete budget because funds exist.</div>
+        [% END %]
+
+        [% INCLUDE 'budgets-active-currency.inc' %]
+
+        [% WRAPPER tabs id= "budgetsTabs" %]
+
+            [% WRAPPER tabs_nav %]
+                [% WRAPPER tab_item tabname= "active" bt_active= 1 %]<span>Active budgets</span>[% END %]
+                [% WRAPPER tab_item tabname= "inactive" %]<span>Inactive budgets</span>[% END %]
+            [% END # /WRAPPER tabs_nav %]
+
+            [% WRAPPER tab_panels %]
+                [% WRAPPER tab_panel tabname="active" bt_active= 1 %]
+                    [% IF ( period_active_loop ) %]
+                        <table id="activeperiodst">
+                            <thead>
+                                <tr>
+                                    <th>Budget name</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
+                                    <th>Locked</th>
+                                    <th>Total</th>
+                                    <th class="noExport">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH period_active IN period_active_loop %]
+                                    <tr>
+                                        <td
+                                            ><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_active.budget_period_id | uri %]" title="View funds for [% period_active.budget_period_description | html %]"
+                                                >[% period_active.budget_period_description | html %]</a
+                                            ></td
+                                        >
+                                        <td data-order="[% period_active.budget_period_startdate | html %]">[% period_active.budget_period_startdate | $KohaDates %]</td>
+                                        <td data-order="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</td>
+                                        <td>
+                                            [% IF ( period_active.budget_period_locked ) %]
+                                                <span><i class="fa fa-lock"></i> Locked</span>
+                                            [% END %]
+                                        </td>
+                                        <td class="data">[% period_active.budget_period_total | $Price %]</td>
+                                        <td> [% PROCESS action_menu block_budget=period_active %] </td>
+                                    </tr>
+                                [% END # /FOREACH period_active %]
+                            </tbody>
+                        </table>
+                        <!-- /#activeperiodst -->
+                    [% ELSE %]
+                        <span>No active budgets</span>
+                    [% END # /IF period_active_loop %]
+                [% END # /WRAPPER tab_panel#active %]
+
+                [% WRAPPER tab_panel tabname="inactive" %]
+                    [% IF ( period_inactive_loop ) %]
+                        <table id="inactiveperiodst">
+                            <thead>
+                                <tr>
+                                    <th>Budget name</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
+                                    <th>Locked</th>
+                                    <th>Total</th>
+                                    <th class="noExport">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH period_loo IN period_inactive_loop %]
+                                    <tr>
+                                        <td
+                                            ><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id | uri %]" title="View funds for [% period_loo.budget_period_description | html %]"
+                                                >[% period_loo.budget_period_description | html %]</a
+                                            ></td
+                                        >
+                                        <td data-order="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</td>
+                                        <td data-order="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</td>
+                                        <td>[% IF ( period_loo.budget_period_locked ) %]<i class="fa fa-lock"></i> Locked[% END %]</td>
+                                        <td class="data">[% period_loo.budget_period_total | $Price %]</td>
+                                        <td> [% PROCESS action_menu block_budget=period_loo %] </td>
+                                    </tr>
+                                [% END # /FOREACH period_loo %]
+                            </tbody>
+                        </table>
+                        <!-- /#inactiveperiodst -->
+                    [% ELSE %]
+                        <span>No inactive budgets</span>
+                    [% END # /IF inactiveperiodst %]
+                [% END # /WRAPPER tab_panel#inactive %]
+            [% END # /WRAPPER tab_panels %]
+        [% END # /WRAPPER tabs %]
+    [% END # /IF else %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

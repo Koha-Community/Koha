@@ -35,12 +35,16 @@ subtest 'get_default() tests' => sub {
 
     t::lib::Mocks::mock_config( 'smtp_server', undef );
 
-    my $server  = Koha::SMTP::Servers->get_default;
-    is( ref($server), 'Koha::SMTP::Server',
-        'An object of the right type is returned' );
+    my $server = Koha::SMTP::Servers->get_default;
+    is(
+        ref($server), 'Koha::SMTP::Server',
+        'An object of the right type is returned'
+    );
 
-    ok( !$server->in_storage,
-        'The default server is correctly retrieved' );
+    ok(
+        !$server->in_storage,
+        'The default server is correctly retrieved'
+    );
 
     my $unblessed_server = $server->unblessed;
     delete $unblessed_server->{id};
@@ -66,8 +70,10 @@ subtest 'get_default() tests' => sub {
     my $smtp_config = C4::Context->config('smtp_server');
 
     $server = Koha::SMTP::Servers->get_default;
-    is( ref($server), 'Koha::SMTP::Server',
-        'An object of the right type is returned' );
+    is(
+        ref($server), 'Koha::SMTP::Server',
+        'An object of the right type is returned'
+    );
 
     $unblessed_server = $server->unblessed;
     delete $unblessed_server->{id};

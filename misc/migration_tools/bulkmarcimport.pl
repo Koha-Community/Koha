@@ -356,6 +356,7 @@ RECORD: while () {
                 next;
             }
         }
+
         # transcode the record to UTF8 if needed & applicable.
         if ( $record->encoding() eq 'MARC-8' and not $skip_marc8_conversion ) {
             my ( $guessed_charset, $charset_errors );

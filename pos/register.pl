@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 
@@ -40,7 +40,7 @@ my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
     }
 );
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
-my $schema = Koha::Database->new->schema;
+my $schema         = Koha::Database->new->schema;
 
 my $library_id = C4::Context->userenv->{'branch'};
 my $registerid = $input->param('registerid') // C4::Context->userenv->{'register_id'};
@@ -51,11 +51,9 @@ my $registers  = Koha::Cash::Registers->search(
 
 if ( !$registers->count ) {
     $template->param( error_registers => 1 );
-}
-else {
+} else {
     if ( !$registerid ) {
-        my $default_register = Koha::Cash::Registers->find(
-            { branch => $library_id, branch_default => 1 } );
+        my $default_register = Koha::Cash::Registers->find( { branch => $library_id, branch_default => 1 } );
         $registerid = $default_register->id if $default_register;
     }
     $registerid = $registers->next->id if !$registerid;
@@ -66,7 +64,7 @@ else {
     );
 
     my $cash_register = Koha::Cash::Registers->find( { id => $registerid } );
-    my $accountlines = $cash_register->outstanding_accountlines();
+    my $accountlines  = $cash_register->outstanding_accountlines();
     $template->param(
         register     => $cash_register,
         accountlines => $accountlines
@@ -75,9 +73,9 @@ else {
     my $transactions_range_from = $input->param('trange_f');
     my $last_cashup             = $cash_register->last_cashup;
     my $transactions_range_to =
-        $input->param('trange_t') ? $input->param('trange_t')
-      : $last_cashup              ? $last_cashup->timestamp
-      :                             '';
+          $input->param('trange_t') ? $input->param('trange_t')
+        : $last_cashup              ? $last_cashup->timestamp
+        :                             '';
     my $end = dt_from_string($transactions_range_to);
     $end = $end->set( { hour => 23, minute => 59, second => 59 } );    # To should be 'inclusive'
 
@@ -112,17 +110,15 @@ else {
                     amount     => $cash_register->outstanding_accountlines->total
                 }
             );
-        }
-        else {
+        } else {
             $template->param( error_cashup_permission => 1 );
         }
-    }
-    elsif ( $op eq 'cud-refund' ) {
+    } elsif ( $op eq 'cud-refund' ) {
         if ( $logged_in_user->has_permission( { cash_management => 'anonymous_refund' } ) ) {
-            my $amount           = $input->param('amount');
-            my $quantity         = $input->param('quantity');
-            my $accountline_id   = $input->param('accountline');
-            my $refund_type      = $input->param('refund_type');
+            my $amount         = $input->param('amount');
+            my $quantity       = $input->param('quantity');
+            my $accountline_id = $input->param('accountline');
+            my $refund_type    = $input->param('refund_type');
 
             my $accountline = Koha::Account::Lines->find($accountline_id);
             $schema->txn_do(
@@ -150,8 +146,7 @@ else {
 
                 }
             );
-        }
-        else {
+        } else {
             $template->param( error_refund_permission => 1 );
         }
     }

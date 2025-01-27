@@ -31,21 +31,29 @@ use Koha::DateUtils qw/dt_from_string/;
 use Koha::Patron::Consents;
 
 our $builder = t::lib::TestBuilder->new;
-our $schema = Koha::Database->new->schema;
+our $schema  = Koha::Database->new->schema;
 
 subtest 'Basic tests for Koha::Patron::Consent' => sub {
     plan tests => 2;
     $schema->storage->txn_begin;
 
-    my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $consent1 = Koha::Patron::Consent->new({
-        borrowernumber => $patron1->borrowernumber,
-        type => 'GDPR_PROCESSING',
-        given_on => dt_from_string,
-    })->store;
-    is( Koha::Patron::Consents->search({ borrowernumber => $patron1->borrowernumber })->count, 1, 'One consent for new borrower' );
+    my $patron1  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $consent1 = Koha::Patron::Consent->new(
+        {
+            borrowernumber => $patron1->borrowernumber,
+            type           => 'GDPR_PROCESSING',
+            given_on       => dt_from_string,
+        }
+    )->store;
+    is(
+        Koha::Patron::Consents->search( { borrowernumber => $patron1->borrowernumber } )->count, 1,
+        'One consent for new borrower'
+    );
     $consent1->delete;
-    is( Koha::Patron::Consents->search({ borrowernumber => $patron1->borrowernumber })->count, 0, 'No consents left for new borrower' );
+    is(
+        Koha::Patron::Consents->search( { borrowernumber => $patron1->borrowernumber } )->count, 0,
+        'No consents left for new borrower'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -8,7 +8,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your routing lists &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-account' bodyclass='scrollto' %]
@@ -27,13 +28,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="user-routing-lists" class="maincontent">
-
                     <h1>Routing lists</h1>
 
                     [% SET routinglists = logged_in_user.get_routing_lists %]
@@ -49,26 +47,28 @@
                             </thead>
 
                             <tbody>
-                            [% FOREACH routinglist IN routinglists %]
-                                <tr>
-                                    <td>
-                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber | uri %]">
-                                            [% routinglist.subscription.biblio.title | html %]
-                                        </a>
-                                    </td>
-                                </tr>
-                            [% END %]
+                                [% FOREACH routinglist IN routinglists %]
+                                    <tr>
+                                        <td>
+                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber | uri %]"> [% routinglist.subscription.biblio.title | html %] </a>
+                                        </td>
+                                    </tr>
+                                [% END %]
                             </tbody>
                         </table>
                     [% ELSE %]
                         <p>You are currently not listed on any routing lists.</p>
                     [% END %]
-                </div> <!-- /#user-routing-lists.maincontent -->
-
-            </div> <!-- / .col-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- /#user-routing-lists.maincontent -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

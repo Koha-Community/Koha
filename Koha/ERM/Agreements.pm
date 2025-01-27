@@ -41,19 +41,19 @@ Koha::ERM::Agreements- Koha ErmAgreement Object set class
 =cut
 
 sub filter_by_expired {
-    my ($self, $max_expiration_date) = @_;
+    my ( $self, $max_expiration_date ) = @_;
 
     $max_expiration_date =
-      $max_expiration_date
-      ? dt_from_string( $max_expiration_date, 'iso' )
-      : dt_from_string;
+        $max_expiration_date
+        ? dt_from_string( $max_expiration_date, 'iso' )
+        : dt_from_string;
 
     my $periods = Koha::ERM::Agreement::Periods->search(
         { agreement_id => [ $self->get_column('agreement_id') ] },
         {
             select => [
                 'agreement_id',
-                \do {"CASE WHEN MAX(me.ended_on IS NULL) = 0 THEN max(me.ended_on) END"}
+                \do { "CASE WHEN MAX(me.ended_on IS NULL) = 0 THEN max(me.ended_on) END" }
             ],
             as       => [ 'agreement_id', 'max_ended_on' ],
             group_by => ['agreement_id'],
@@ -62,6 +62,7 @@ sub filter_by_expired {
 
     my @expired_agreement_ids;
     while ( my $p = $periods->next ) {
+
         # FIXME Can this be moved in the HAVING clause of the previous query?
         my $max_ended_on = $p->get_column('max_ended_on');
         next unless $max_ended_on;

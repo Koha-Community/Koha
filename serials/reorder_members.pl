@@ -19,8 +19,8 @@
 # where the hierarchical order can be changed on the fly and a routing list can be
 # printed out
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( checkauth );
+use CGI         qw ( -utf8 );
+use C4::Auth    qw( checkauth );
 use C4::Serials qw( reorder_members );
 
 my $query          = CGI->new;
@@ -32,6 +32,5 @@ checkauth( $query, 0, { serials => 'routing' }, 'intranet' );
 
 reorder_members( $subscriptionid, $routingid, $rank );
 
-print $query->redirect(
-    "/cgi-bin/koha/serials/routing.pl?subscriptionid=$subscriptionid");
+print $query->redirect("/cgi-bin/koha/serials/routing.pl?subscriptionid=$subscriptionid");
 

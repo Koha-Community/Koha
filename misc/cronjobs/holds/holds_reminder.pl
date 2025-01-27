@@ -18,13 +18,13 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use DateTime;
 use DateTime::Duration;
 
 use C4::Context;
 use C4::Letters;
-use C4::Log qw( cronlogaction );
+use C4::Log         qw( cronlogaction );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar;
 use Koha::Libraries;
@@ -162,22 +162,22 @@ holds waiting for 2 weeks for the MAIN library. Use lettercode 'LATE_HOLDS'
 
 # These variables are set by command line options.
 # They are initially set to default values.
-my $dbh = C4::Context->dbh();
+my $dbh     = C4::Context->dbh();
 my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
-my $confirm  = 0;
-my $days    ;
-my $triggered  = 0;
+my $confirm = 0;
+my $days;
+my $triggered = 0;
 my $lettercode;
-my @branchcodes; # Branch(es) passed as parameter
+my @branchcodes;    # Branch(es) passed as parameter
 my $use_calendar = 0;
 my $date_input;
 my $opt_out = 0;
 my @mtts;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help|?'       => \$help,
@@ -192,43 +192,39 @@ GetOptions(
     'holidays'     => \$use_calendar,
     'mtt=s'        => \@mtts
 );
-pod2usage(1) if $help;
+pod2usage(1)               if $help;
 pod2usage( -verbose => 2 ) if $man;
 
 $lettercode ||= 'HOLD_REMINDER';
 
 # Unless a delay is specified by the user we target all waiting holds
-unless (defined $days) {
-    $days=0;
+unless ( defined $days ) {
+    $days = 0;
 }
 
 # Unless one ore more branchcodes are passed we use all the branches
-if (scalar @branchcodes > 0) {
+if ( scalar @branchcodes > 0 ) {
     my $branchcodes_word = scalar @branchcodes > 1 ? 'branches' : 'branch';
     $verbose and warn "$branchcodes_word @branchcodes passed on parameter\n";
-}
-else {
+} else {
     @branchcodes = Koha::Libraries->search()->get_column('branchcode');
 }
 
 # If provided we run the report as if it had run on a specified date
 my $date_to_run;
-if ( $date_input ){
-    eval {
-        $date_to_run = dt_from_string( $date_input, 'iso' );
-    };
+if ($date_input) {
+    eval { $date_to_run = dt_from_string( $date_input, 'iso' ); };
     die "$date_input is not a valid date, aborting! Use a date in format YYYY-MM-DD."
         if $@ or not $date_to_run;
-}
-else {
+} else {
     $date_to_run = dt_from_string();
 }
 
 my $waiting_date_static = $date_to_run->clone->subtract( days => $days );
 
 # Loop through each branch
-foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
-    # Check that this branch has the letter code specified or skip this branch
+foreach my $branchcode (@branchcodes) {    #BEGIN BRANCH LOOP
+                                           # Check that this branch has the letter code specified or skip this branch
 
     # FIXME What if we don't want to default if the translated template does not exist?
     my $template_exists = Koha::Notice::Templates->find_effective_template(
@@ -246,26 +242,29 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
 
     # If respecting calendar get the correct waiting since date
     my $waiting_date;
-    if( $use_calendar ){
+    if ($use_calendar) {
         my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
         my $duration = DateTime::Duration->new( days => -$days );
-        $waiting_date = $calendar->addDays($date_to_run,$duration); #Add negative of days
+        $waiting_date = $calendar->addDays( $date_to_run, $duration );    #Add negative of days
     } else {
         $waiting_date = $waiting_date_static;
     }
 
     # Find all the holds waiting since this date for the current branch
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $waiting_since = $dtf->format_date( $waiting_date );
-    my $comparator = $triggered ? '=' : '<=';
-    my $reserves = Koha::Holds->search({
-        waitingdate => {$comparator => $waiting_since },
-        'me.branchcode'  => $branchcode,
-        '-or' => [ expirationdate => undef, expirationdate => { '>' => \'CURDATE()' } ]
-    },{ prefetch => 'patron' });
+    my $dtf           = Koha::Database->new->schema->storage->datetime_parser;
+    my $waiting_since = $dtf->format_date($waiting_date);
+    my $comparator    = $triggered ? '=' : '<=';
+    my $reserves      = Koha::Holds->search(
+        {
+            waitingdate     => { $comparator => $waiting_since },
+            'me.branchcode' => $branchcode,
+            '-or'           => [ expirationdate => undef, expirationdate => { '>' => \'CURDATE()' } ]
+        },
+        { prefetch => 'patron' }
+    );
 
     $verbose and warn "No reserves found for $branchcode\n" unless $reserves->count;
-    next unless $reserves->count;
+    next                                                    unless $reserves->count;
     $verbose and warn $reserves->count . " reserves waiting since $waiting_since for $branchcode\n";
 
     # We only want to send one notice per patron per branch - this variable will hold the completed borrowers
@@ -275,44 +274,58 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     # for the 'Hold_Reminder' notice
     my $sending_params = @mtts ? { message_transports => \@mtts } : { message_name => "Hold_Reminder" };
 
-
     my %patrons;
     while ( my $reserve = $reserves->next ) {
-        $patrons{$reserve->borrowernumber}->{patron} = $reserve->patron unless exists $patrons{$reserve->borrowernumber};
-        push @{$patrons{$reserve->borrowernumber}->{reserves}}, $reserve->reserve_id;
+        $patrons{ $reserve->borrowernumber }->{patron} = $reserve->patron
+            unless exists $patrons{ $reserve->borrowernumber };
+        push @{ $patrons{ $reserve->borrowernumber }->{reserves} }, $reserve->reserve_id;
     }
 
-    foreach my $borrowernumber (keys %patrons){
+    foreach my $borrowernumber ( keys %patrons ) {
 
         my $patron = $patrons{$borrowernumber}->{patron};
-        $verbose and print "  borrower " . $patron->surname . ", " . $patron->firstname . " has " . scalar @{$patrons{$borrowernumber}->{reserves}}  . " holds triggering notice.\n";
+        $verbose
+            and print "  borrower "
+            . $patron->surname . ", "
+            . $patron->firstname . " has "
+            . scalar @{ $patrons{$borrowernumber}->{reserves} }
+            . " holds triggering notice.\n";
 
         # Setup the notice information
         my $letter_params = {
-            module          => 'reserves',
-            letter_code     => $lettercode,
-            borrowernumber  => $patron->borrowernumber,
-            branchcode      => $branchcode,
-            tables          => {
-                 borrowers  => $patron->borrowernumber,
-                 branches   => $branchcode,
+            module         => 'reserves',
+            letter_code    => $lettercode,
+            borrowernumber => $patron->borrowernumber,
+            branchcode     => $branchcode,
+            tables         => {
+                borrowers => $patron->borrowernumber,
+                branches  => $branchcode,
             },
-            loops           => {
-                reserves    => $patrons{$borrowernumber}->{reserves}
-            },
+            loops => { reserves => $patrons{$borrowernumber}->{reserves} },
         };
         $sending_params->{letter_params} = $letter_params;
-        $sending_params->{test_mode} = !$confirm;
+        $sending_params->{test_mode}     = !$confirm;
         my $result_text = $confirm ? "was sent" : "would have been sent";
+
         # queue_notice queues the notices, falling back to print for email or SMS, and ignores phone (they are handled by Itiva)
-        my $result = $patron->queue_notice( $sending_params );
-        $verbose and print "   borrower " . $patron->surname . ", " . $patron->firstname . " $result_text notices via: @{$result->{sent}}\n" if defined $result->{sent};
-        $verbose and print "   borrower " . $patron->surname . ", " . $patron->firstname . " $result_text print fallback for: @{$result->{fallback}}\n" if defined $result->{fallback};
+        my $result = $patron->queue_notice($sending_params);
+        $verbose
+            and print "   borrower "
+            . $patron->surname . ", "
+            . $patron->firstname
+            . " $result_text notices via: @{$result->{sent}}\n"
+            if defined $result->{sent};
+        $verbose
+            and print "   borrower "
+            . $patron->surname . ", "
+            . $patron->firstname
+            . " $result_text print fallback for: @{$result->{fallback}}\n"
+            if defined $result->{fallback};
+
         # Mark this borrower as completed
-        $done{$patron->borrowernumber} = 1;
+        $done{ $patron->borrowernumber } = 1;
     }
 
+}    #END BRANCH LOOP
 
-} #END BRANCH LOOP
-
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

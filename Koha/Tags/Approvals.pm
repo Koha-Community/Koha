@@ -17,7 +17,6 @@ package Koha::Tags::Approvals;
 
 use Modern::Perl;
 
-
 use Koha::Tags::Approval;
 
 use base qw(Koha::Objects);

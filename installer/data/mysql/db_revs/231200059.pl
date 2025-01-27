@@ -11,9 +11,7 @@ return {
         my $affected = $dbh->do(q{UPDATE creator_layouts SET scale_width = '0.800000' WHERE scale_width = '0.080000';});
 
         if ($affected) {
-            say_warning(
-                $out, "Changed the barcode width in patron card creator default layout from 8% to 80%."
-            );
+            say_warning( $out, "Changed the barcode width in patron card creator default layout from 8% to 80%." );
         } else {
             say_info( $out, "No patron card creator layouts found with 8% width, no changes required." );
         }

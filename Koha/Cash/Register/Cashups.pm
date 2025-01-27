@@ -17,7 +17,6 @@ package Koha::Cash::Register::Cashups;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Cash::Register::Cashup;
 
@@ -44,10 +43,10 @@ sub search {
 
     unless ( exists $attr->{order_by} ) {
         $attr->{order_by} =
-          [ { '-asc' => 'register_id' }, { '-desc' => 'timestamp' } ];
+            [ { '-asc' => 'register_id' }, { '-desc' => 'timestamp' } ];
     }
 
-    my $rs = $self->SUPER::search({ code => 'CASHUP' });
+    my $rs = $self->SUPER::search( { code => 'CASHUP' } );
     return $rs->SUPER::search( $where, $attr );
 }
 

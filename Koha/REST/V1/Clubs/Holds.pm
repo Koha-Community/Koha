@@ -28,7 +28,7 @@ use Koha::Clubs;
 use Koha::Club::Hold;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -49,43 +49,36 @@ sub add {
 
         my $biblio;
 
-        my $biblio_id         = $body->{biblio_id};
-        my $pickup_library_id = $body->{pickup_library_id};
-        my $item_id           = $body->{item_id};
-        my $item_type         = $body->{item_type};
-        my $expiration_date   = $body->{expiration_date};
-        my $notes             = $body->{notes};
+        my $biblio_id           = $body->{biblio_id};
+        my $pickup_library_id   = $body->{pickup_library_id};
+        my $item_id             = $body->{item_id};
+        my $item_type           = $body->{item_type};
+        my $expiration_date     = $body->{expiration_date};
+        my $notes               = $body->{notes};
         my $default_patron_home = $body->{default_patron_home};
 
         if ( $item_id and $biblio_id ) {
 
             # check they are consistent
-            unless ( Koha::Items->search( { itemnumber => $item_id, biblionumber => $biblio_id } )
-                ->count > 0 )
-            {
+            unless ( Koha::Items->search( { itemnumber => $item_id, biblionumber => $biblio_id } )->count > 0 ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "Item $item_id doesn't belong to biblio $biblio_id" }
                 );
-            }
-            else {
+            } else {
                 $biblio = Koha::Biblios->find($biblio_id);
             }
-        }
-        elsif ($item_id) {
+        } elsif ($item_id) {
             my $item = Koha::Items->find($item_id);
 
             unless ($item) {
                 return $c->render_resource_not_found("Item");
-            }
-            else {
+            } else {
                 $biblio = $item->biblio;
             }
-        }
-        elsif ($biblio_id) {
+        } elsif ($biblio_id) {
             $biblio = Koha::Biblios->find($biblio_id);
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 400,
                 openapi => { error => "At least one of biblio_id, item_id should be given" }
@@ -114,10 +107,9 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($club_hold),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
-            if ($_->isa('Koha::Exceptions::ClubHold::NoPatrons')) {
+            if ( $_->isa('Koha::Exceptions::ClubHold::NoPatrons') ) {
                 return $c->render(
                     status  => 409,
                     openapi => { error => $_->description }

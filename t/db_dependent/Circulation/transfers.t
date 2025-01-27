@@ -18,8 +18,8 @@
 use Modern::Perl;
 use C4::Context;
 use C4::Circulation qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfersFromTo TransferSlip );
-use C4::Biblio qw( AddBiblio );
-use C4::Items qw( ModItemTransfer );
+use C4::Biblio      qw( AddBiblio );
+use C4::Items       qw( ModItemTransfer );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use DateTime::Duration;
@@ -31,15 +31,18 @@ use Test::More tests => 19;
 use Test::Deep;
 
 BEGIN {
-    use_ok('C4::Circulation', qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfersFromTo TransferSlip ));
+    use_ok(
+        'C4::Circulation',
+        qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfersFromTo TransferSlip )
+    );
 }
 can_ok(
     'C4::Circulation',
     qw(
-      CreateBranchTransferLimit
-      DeleteBranchTransferLimits
-      GetTransfersFromTo
-      )
+        CreateBranchTransferLimit
+        DeleteBranchTransferLimits
+        GetTransfersFromTo
+    )
 );
 
 my $schema = Koha::Database->schema;
@@ -58,13 +61,13 @@ $dbh->do(q|DELETE FROM branchtransfers|);
 # Add branches
 my $branchcode_1 = $builder->build( { source => 'Branch', } )->{branchcode};
 my $branchcode_2 = $builder->build( { source => 'Branch', } )->{branchcode};
+
 # Add itemtype
 my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
 #Add biblio and items
 my $record = MARC::Record->new();
-$record->append_fields(
-    MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
+$record->append_fields( MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '', );
 
 my $item_id1 = Koha::Item->new(
@@ -117,8 +120,8 @@ ModItemTransfer(
     $trigger
 );
 
-my $item_obj = Koha::Items->find({ itemnumber => $item_id1 });
-is( $item_obj->holdingbranch, $branchcode_1, "Item should be held at branch that initiates transfer");
+my $item_obj = Koha::Items->find( { itemnumber => $item_id1 } );
+is( $item_obj->holdingbranch, $branchcode_1, "Item should be held at branch that initiates transfer" );
 
 ModItemTransfer(
     $item_id2,
@@ -134,8 +137,8 @@ ModItemTransfer(
     $branchcode_2,
     $trigger
 );
-my $transfer_requested = Koha::Item::Transfers->search( { itemnumber => $item_id3 }, { rows => 1 })->single;
-$transfer_requested->set({ daterequested => dt_from_string, datesent => undef })->store;
+my $transfer_requested = Koha::Item::Transfers->search( { itemnumber => $item_id3 }, { rows => 1 } )->single;
+$transfer_requested->set( { daterequested => dt_from_string, datesent => undef } )->store;
 
 # Add a "cancelled" transfer for tests
 ModItemTransfer(
@@ -144,8 +147,9 @@ ModItemTransfer(
     $branchcode_2,
     $trigger
 );
-my $transfer_cancelled = Koha::Item::Transfers->search( { itemnumber => $item_id4 }, { rows => 1 })->single;
-$transfer_cancelled->set( { daterequested => dt_from_string, datesent => undef, datecancelled => dt_from_string } )->store;
+my $transfer_cancelled = Koha::Item::Transfers->search( { itemnumber => $item_id4 }, { rows => 1 } )->single;
+$transfer_cancelled->set( { daterequested => dt_from_string, datesent => undef, datecancelled => dt_from_string } )
+    ->store;
 
 #Begin Tests
 #Test CreateBranchTransferLimit
@@ -157,19 +161,28 @@ is(
     1,
     "A Branch TransferLimit has been added"
 );
-is(CreateBranchTransferLimit(),undef,
-    "Without parameters CreateBranchTransferLimit returns undef");
-is(CreateBranchTransferLimit($branchcode_2),undef,
-    "With only tobranch CreateBranchTransferLimit returns undef");
-is(CreateBranchTransferLimit(undef,$branchcode_2),undef,
-    "With only frombranch CreateBranchTransferLimit returns undef");
+is(
+    CreateBranchTransferLimit(), undef,
+    "Without parameters CreateBranchTransferLimit returns undef"
+);
+is(
+    CreateBranchTransferLimit($branchcode_2), undef,
+    "With only tobranch CreateBranchTransferLimit returns undef"
+);
+is(
+    CreateBranchTransferLimit( undef, $branchcode_2 ), undef,
+    "With only frombranch CreateBranchTransferLimit returns undef"
+);
+
 #FIXME: Currently, we can add a transferlimit even to nonexistent branches because in the database,
 #branch_transfer_limits.toBranch and branch_transfer_limits.fromBranch aren't foreign keys
 #is(CreateBranchTransferLimit(-1,-1,'CODE'),0,"With wrong CreateBranchTransferLimit returns 0 - No transfertlimit added");
 
 #Test GetTransfersFromTo
-my @transferfrom1to2 = GetTransfersFromTo( $branchcode_1,
-    $branchcode_2 );
+my @transferfrom1to2 = GetTransfersFromTo(
+    $branchcode_1,
+    $branchcode_2
+);
 cmp_deeply(
     \@transferfrom1to2,
     [
@@ -189,34 +202,47 @@ cmp_deeply(
     "Item1 and Item2 has been transferred from branch1 to branch2"
 );
 my @transferto = GetTransfersFromTo( undef, $branchcode_2 );
-is_deeply( \@transferto, [],
-    "GetTransfersfromTo without frombranch returns an empty array" );
-my @transferfrom = GetTransfersFromTo( $branchcode_1 );
-is_deeply( \@transferfrom, [],
-    "GetTransfersfromTo without tobranch returns an empty array" );
+is_deeply(
+    \@transferto, [],
+    "GetTransfersfromTo without frombranch returns an empty array"
+);
+my @transferfrom = GetTransfersFromTo($branchcode_1);
+is_deeply(
+    \@transferfrom, [],
+    "GetTransfersfromTo without tobranch returns an empty array"
+);
 @transferfrom = GetTransfersFromTo();
-is_deeply( \@transferfrom, [],
-    "GetTransfersfromTo without params returns an empty array" );
+is_deeply(
+    \@transferfrom, [],
+    "GetTransfersfromTo without params returns an empty array"
+);
 
 #Test DeleteBranchTransferLimits
 is(
-    C4::Circulation::DeleteBranchTransferLimits( $branchcode_1 ),
+    C4::Circulation::DeleteBranchTransferLimits($branchcode_1),
     1,
     "A Branch TransferLimit has been deleted"
 );
-is(C4::Circulation::DeleteBranchTransferLimits(),undef,"Without parameters DeleteBranchTransferLimit returns undef");
-is(C4::Circulation::DeleteBranchTransferLimits('B'),'0E0',"With a wrong id DeleteBranchTransferLimit returns 0E0");
+is(
+    C4::Circulation::DeleteBranchTransferLimits(), undef,
+    "Without parameters DeleteBranchTransferLimit returns undef"
+);
+is( C4::Circulation::DeleteBranchTransferLimits('B'), '0E0', "With a wrong id DeleteBranchTransferLimit returns 0E0" );
 
 #Test TransferSlip
-is( C4::Circulation::TransferSlip($branchcode_1, undef, 5, $branchcode_2),
-    undef, "No tranferslip if invalid or undef itemnumber or barcode" );
-is( C4::Circulation::TransferSlip($branchcode_1, $item_id1, 1, $branchcode_2)->{'code'},
-    'TRANSFERSLIP', "Get a transferslip on valid itemnumber and/or barcode" );
+is(
+    C4::Circulation::TransferSlip( $branchcode_1, undef, 5, $branchcode_2 ),
+    undef, "No tranferslip if invalid or undef itemnumber or barcode"
+);
+is(
+    C4::Circulation::TransferSlip( $branchcode_1, $item_id1, 1, $branchcode_2 )->{'code'},
+    'TRANSFERSLIP', "Get a transferslip on valid itemnumber and/or barcode"
+);
 cmp_deeply(
-    C4::Circulation::TransferSlip($branchcode_1, $item_id1, undef, $branchcode_2),
-    C4::Circulation::TransferSlip($branchcode_1, undef, 1, $branchcode_2),
+    C4::Circulation::TransferSlip( $branchcode_1, $item_id1, undef, $branchcode_2 ),
+    C4::Circulation::TransferSlip( $branchcode_1, undef,     1,     $branchcode_2 ),
     "Barcode and itemnumber for same item both generate same TransferSlip"
-    );
+);
 
 $dbh->do("DELETE FROM branchtransfers");
 ModItemTransfer(

@@ -8,11 +8,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Holds awaiting pickup") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Holds awaiting pickup") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -34,155 +35,154 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-
-                        <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
-                        <h2>
-                            [% IF ( all_branches_link ) %]
-                                <span><a href="[% all_branches_link | url %]">
-                                View all libraries</a></span>
-                            [% END %]
-                        </h2>
-                        [% IF reject_result_error %]
-                            <div class="error message">
-                                [% IF reject_result_error.invalid_status %]
-                                    <p>There was a problem rejecting the cancellation request. Cannot reject an already completed cancellation request.</p>
-                                [% ELSE %]
-                                    <p>Some error occurred while rejecting the cancellation request. Please check the logs</p>
-                                [% END %]
-                            </div>
-                        [% END %]
-                        [% IF ( cancel_result ) %]
-                            [% FOREACH cancel_result %]
-                                [% IF ( messagetransfert ) %]
-                                    <div class="alert alert-info">
-                                        <h2>This item is on hold for pick-up at [% Branches.GetName( branchname ) | html %]</h2>
-                                        <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
-                                        Please retain this item and check it in to process the hold.
-                                        </p>
-                                        <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="get">
-                                            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
-                                        </form>
-                                    </div>
-                                [% END # /IF messagetransfert%]
-                                [% IF ( waiting ) %]
-                                    <div class="alert alert-info">
-                                        <h2>This item is on hold for pick-up at your library</h2>
-                                        <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong>[% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
-                                        Please retain this item and check it in to process the hold.
-                                        </p>
-                                        <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="get">
-                                            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
-                                        </form>
-                                    </div>
-                                [% END # /IF waiting %]
-                            [% END # /FOREACH cancel_result %]
-                        [% ELSE %]
-                            [% IF enqueued %]
-                                <div class="alert alert-info">
-                                    <p>The job has been enqueued! It will be processed as soon as possible.</p>
-                                    <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
-                                </div>
-                            [% END %]
-
-                            [% WRAPPER tabs id= "resultlist" %]
-                                [% WRAPPER tabs_nav %]
-                                    [% WRAPPER tab_item tabname= "holdswaiting" bt_active= 1 %]
-                                        <span>Holds waiting:</span> [% reservecount | html %]
-                                    [% END %]
-                                    [% WRAPPER tab_item tabname= "holdsover" %]
-                                        <span>Holds waiting past their expiration date:</span> [% overcount | html %]
-                                    [% END %]
-                                    [% WRAPPER tab_item tabname= "holdscancelled" %]
-                                        <span>Holds with cancellation requests:</span> [% cancel_reqs_count | html %]
-                                    [% END %]
-                                [% END # /WRAPPER tabs_nav %]
-
-                                [% WRAPPER tab_panels %]
-                                    [% WRAPPER tab_panel tabname="holdswaiting" bt_active= 1 %]
-                                        [% IF ( reserveloop ) %]
-                                            <div id="toolbar" class="btn-toolbar">
-                                                <button class="btn cancel_selected_holds" data-bulk="true"></button>
-                                            </div>
-                                            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
-                                        [% ELSE %]
-                                            <div class="alert alert-info">No holds found.</div>
-                                        [% END %]
-                                    [% END # /tab_panel#holdswaiting %]
-
-                                    [% WRAPPER tab_panel tabname="holdsover" %]
-                                        [% IF ( overloop ) %]
-                                            <div id="toolbar" class="btn-toolbar">
-                                                <button class="btn cancel_selected_holds" data-bulk="true"></button>
-                                                <div class="btn-group">
-                                                    <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
-                                                        [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="cud-cancelall" />
-                                                        <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
-                                                        <input type="hidden" name="tab" value="holdsover">
-                                                        [% IF TransferWhenCancelAllWaitingHolds %]
-                                                            <input type="submit" class="btn btn-primary" value="Cancel and transfer all" />
-                                                        [% ELSE %]
-                                                            <input type="submit" class="btn btn-primary" value="Cancel all" />
-                                                        [% END %]
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            [% UNLESS TransferWhenCancelAllWaitingHolds %]
-                                                <div class="hint">Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)</div>
-                                            [% END %]
-                                            [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
-                                        [% ELSE %]
-                                            <div class="alert alert-info">No holds found.</div>
-                                        [% END # /IF( overloop ) %]
-                                    [% END # /tab_panel#holdsover %]
-
-                                    [% WRAPPER tab_panel tabname="holdscancelled" %]
-                                        [% IF cancel_reqs_count %]
-                                            <div id="toolbar" class="btn-toolbar">
-                                                <button class="btn cancel_selected_holds" data-bulk="true"></button>
-                                            </div>
-                                            [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
-                                        [% ELSE %]
-                                            <div class="alert alert-info">No holds found.</div>
-                                        [% END %]
-                                    [% END # /tab_panel#holdscancelled %]
-                                [% END # /WRAPPER tab_panels %]
-                            [% END # /WRAPPER tabs %]
-
-                        [% END # /IF ( cancel_result ) %]
+    <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
+    <h2>
+        [% IF ( all_branches_link ) %]
+            <span><a href="[% all_branches_link | url %]"> View all libraries</a></span>
+        [% END %]
+    </h2>
+    [% IF reject_result_error %]
+        <div class="error message">
+            [% IF reject_result_error.invalid_status %]
+                <p>There was a problem rejecting the cancellation request. Cannot reject an already completed cancellation request.</p>
+            [% ELSE %]
+                <p>Some error occurred while rejecting the cancellation request. Please check the logs</p>
+            [% END %]
+        </div>
     [% END %]
-    <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title">Confirm cancellation</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    [% IF ( cancel_result ) %]
+        [% FOREACH cancel_result %]
+            [% IF ( messagetransfert ) %]
+                <div class="alert alert-info">
+                    <h2>This item is on hold for pick-up at [% Branches.GetName( branchname ) | html %]</h2>
+                    <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>. Please retain this item and check it in to process the hold. </p>
+                    <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="get">
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
+                    </form>
                 </div>
+            [% END # /IF messagetransfert %]
+            [% IF ( waiting ) %]
+                <div class="alert alert-info">
+                    <h2>This item is on hold for pick-up at your library</h2>
+                    <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong>[% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>. Please retain this item and check it in to process the hold. </p>
+                    <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="get">
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
+                    </form>
+                </div>
+            [% END # /IF waiting %]
+        [% END # /FOREACH cancel_result %]
+    [% ELSE %]
+        [% IF enqueued %]
+            <div class="alert alert-info">
+                <p>The job has been enqueued! It will be processed as soon as possible.</p>
+                <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
+            </div>
+        [% END %]
 
-                <div class="modal-body">
-                    <p>Are you sure you want to cancel this hold?</p>
+        [% WRAPPER tabs id= "resultlist" %]
+            [% WRAPPER tabs_nav %]
+                [% WRAPPER tab_item tabname= "holdswaiting" bt_active= 1 %]
+                    <span>Holds waiting:</span> [% reservecount | html %]
+                [% END %]
+                [% WRAPPER tab_item tabname= "holdsover" %]
+                    <span>Holds waiting past their expiration date:</span> [% overcount | html %]
+                [% END %]
+                [% WRAPPER tab_item tabname= "holdscancelled" %]
+                    <span>Holds with cancellation requests:</span> [% cancel_reqs_count | html %]
+                [% END %]
+            [% END # /WRAPPER tabs_nav %]
 
-                    <fieldset class="action">
-                        [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                        [% IF hold_cancellation.count %]
-                            <label for="modal-cancellation-reason">Cancellation reason: </label>
-                            <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
-                                <option value="">No reason given</option>
-                                [% FOREACH reason IN hold_cancellation %]
-                                    <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                                [% END %]
-                            </select>
+            [% WRAPPER tab_panels %]
+                [% WRAPPER tab_panel tabname="holdswaiting" bt_active= 1 %]
+                    [% IF ( reserveloop ) %]
+                        <div id="toolbar" class="btn-toolbar">
+                            <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                        </div>
+                        [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
+                    [% ELSE %]
+                        <div class="alert alert-info">No holds found.</div>
+                    [% END %]
+                [% END # /tab_panel#holdswaiting %]
+
+                [% WRAPPER tab_panel tabname="holdsover" %]
+                    [% IF ( overloop ) %]
+                        <div id="toolbar" class="btn-toolbar">
+                            <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                            <div class="btn-group">
+                                <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-cancelall" />
+                                    <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
+                                    <input type="hidden" name="tab" value="holdsover" />
+                                    [% IF TransferWhenCancelAllWaitingHolds %]
+                                        <input type="submit" class="btn btn-primary" value="Cancel and transfer all" />
+                                    [% ELSE %]
+                                        <input type="submit" class="btn btn-primary" value="Cancel all" />
+                                    [% END %]
+                                </form>
+                            </div>
+                        </div>
+                        [% UNLESS TransferWhenCancelAllWaitingHolds %]
+                            <div class="hint">Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)</div>
                         [% END %]
-                    </fieldset> <!-- /.action -->
-                </div> <!-- /.modal-body -->
+                        [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
+                    [% ELSE %]
+                        <div class="alert alert-info">No holds found.</div>
+                    [% END # /IF( overloop ) %]
+                [% END # /tab_panel#holdsover %]
 
-                <div class="modal-footer">
-                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger">Confirm cancellation</button>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div> <!-- /.modal-footer -->
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#cancelModal -->
+                [% WRAPPER tab_panel tabname="holdscancelled" %]
+                    [% IF cancel_reqs_count %]
+                        <div id="toolbar" class="btn-toolbar">
+                            <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                        </div>
+                        [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
+                    [% ELSE %]
+                        <div class="alert alert-info">No holds found.</div>
+                    [% END %]
+                [% END # /tab_panel#holdscancelled %]
+            [% END # /WRAPPER tab_panels %]
+        [% END # /WRAPPER tabs %]
+    [% END # /IF ( cancel_result ) %]
+[% END %]
+<div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Confirm cancellation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this hold?</p>
+
+                <fieldset class="action">
+                    [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                    [% IF hold_cancellation.count %]
+                        <label for="modal-cancellation-reason">Cancellation reason: </label>
+                        <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
+                            <option value="">No reason given</option>
+                            [% FOREACH reason IN hold_cancellation %]
+                                <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                            [% END %]
+                        </select>
+                    [% END %]
+                </fieldset>
+                <!-- /.action -->
+            </div>
+            <!-- /.modal-body -->
+
+            <div class="modal-footer">
+                <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger">Confirm cancellation</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+            <!-- /.modal-footer -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#cancelModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

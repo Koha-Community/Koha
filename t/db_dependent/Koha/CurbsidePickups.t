@@ -53,22 +53,22 @@ my $patron = $builder->build_object(
 
 my $policy = Koha::CurbsidePickupPolicy->new(
     {
-        branchcode              => $library->branchcode,
-        enabled                 => 1,
+        branchcode                => $library->branchcode,
+        enabled                   => 1,
         enable_waiting_holds_only => 0,
-        pickup_interval         => 15,
-        patrons_per_interval    => 2,
-        patron_scheduled_pickup => 1
+        pickup_interval           => 15,
+        patrons_per_interval      => 2,
+        patron_scheduled_pickup   => 1
     }
 )->store;
 my $policy_disabled = Koha::CurbsidePickupPolicy->new(
     {
-        branchcode              => $library_disabled->branchcode,
-        enabled                 => 0,
+        branchcode                => $library_disabled->branchcode,
+        enabled                   => 0,
         enable_waiting_holds_only => 0,
-        pickup_interval         => 30,
-        patrons_per_interval    => 2,
-        patron_scheduled_pickup => 1
+        pickup_interval           => 30,
+        patrons_per_interval      => 2,
+        patron_scheduled_pickup   => 1
     }
 )->store;
 
@@ -81,32 +81,30 @@ subtest 'Create a pickup' => sub {
     plan tests => 10;
 
     # Day and datetime are ok
-    my $next_monday =
-      $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
+    my $next_monday = $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
     my $schedule_dt =
-      $next_monday->set_hour(15)->set_minute(00)->set_second(00);
-    my $params =
-        {
-            branchcode                => $library->branchcode,
-            borrowernumber            => $patron->borrowernumber,
-            scheduled_pickup_datetime => $schedule_dt,
-            notes                     => 'just a note'
-        };
+        $next_monday->set_hour(15)->set_minute(00)->set_second(00);
+    my $params = {
+        branchcode                => $library->branchcode,
+        borrowernumber            => $patron->borrowernumber,
+        scheduled_pickup_datetime => $schedule_dt,
+        notes                     => 'just a note'
+    };
 
     throws_ok {
-        Koha::CurbsidePickup->new({%$params, branchcode => $library_disabled->branchcode})->store;
+        Koha::CurbsidePickup->new( { %$params, branchcode => $library_disabled->branchcode } )->store;
     }
     'Koha::Exceptions::CurbsidePickup::NotEnabled',
-      'Cannot create pickup if the policy does not allow it';
+        'Cannot create pickup if the policy does not allow it';
 
-   $policy->enabled(1)->store;
+    $policy->enabled(1)->store;
 
-   $policy->enable_waiting_holds_only(1)->store;
+    $policy->enable_waiting_holds_only(1)->store;
     throws_ok {
         Koha::CurbsidePickup->new($params)->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoWaitingHolds',
-      'Cannot create pickup for a patron without waiting hold if flag is set';
+        'Cannot create pickup for a patron without waiting hold if flag is set';
 
     $policy->enable_waiting_holds_only(0)->store;
     my $cp = Koha::CurbsidePickup->new($params)->store;
@@ -117,7 +115,7 @@ subtest 'Create a pickup' => sub {
         Koha::CurbsidePickup->new($params)->store
     }
     'Koha::Exceptions::CurbsidePickup::TooManyPickups',
-      'Cannot create 2 pickups for the same patron';
+        'Cannot create 2 pickups for the same patron';
 
     $cp->delete;
 
@@ -127,30 +125,29 @@ subtest 'Create a pickup' => sub {
     $cp->delete;
 
     # Day is not ok
-    my $next_tuesday =
-      $today->clone->add( days => ( 2 - $today->day_of_week ) % 7 );
+    my $next_tuesday = $today->clone->add( days => ( 2 - $today->day_of_week ) % 7 );
     $schedule_dt = $next_tuesday->set_hour(15)->set_minute(00)->set_second(00);
     throws_ok {
-        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
+        Koha::CurbsidePickup->new( { %$params, scheduled_pickup_datetime => $schedule_dt } )->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
-      'Cannot create a pickup on a day without opening slots defined';
+        'Cannot create a pickup on a day without opening slots defined';
 
     # Day ok but datetime not ok
     $schedule_dt = $next_monday->set_hour(19)->set_minute(00)->set_second(00);
     throws_ok {
-        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
+        Koha::CurbsidePickup->new( { %$params, scheduled_pickup_datetime => $schedule_dt } )->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
-      'Cannot create a pickup on a time without opening slots defined';
+        'Cannot create a pickup on a time without opening slots defined';
 
     # Day ok, datetime inside the opening slot, but wrong (15:07 for instance)
     $schedule_dt = $next_monday->set_hour(15)->set_minute(7)->set_second(0);
     throws_ok {
-        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
+        Koha::CurbsidePickup->new( { %$params, scheduled_pickup_datetime => $schedule_dt } )->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
-'Cannot create a pickup on a time that is not matching the start of an interval';
+        'Cannot create a pickup on a time that is not matching the start of an interval';
 
     # Day is a holiday
     Koha::Caches->get_instance->flush_all;
@@ -161,10 +158,10 @@ subtest 'Create a pickup' => sub {
     );
     my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
     throws_ok {
-        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
+        Koha::CurbsidePickup->new( { %$params, scheduled_pickup_datetime => $schedule_dt } )->store;
     }
     'Koha::Exceptions::CurbsidePickup::LibraryIsClosed',
-      'Cannot create a pickup on a holiday';
+        'Cannot create a pickup on a holiday';
 
     C4::Context->dbh->do(q{DELETE FROM repeatable_holidays});
     Koha::Caches->get_instance->flush_all;
@@ -173,13 +170,11 @@ subtest 'Create a pickup' => sub {
 subtest 'workflow' => sub {
     plan tests => 11;
 
-    my $pickups =
-      Koha::CurbsidePickups->search( { branchcode => $library->branchcode } );
+    my $pickups = Koha::CurbsidePickups->search( { branchcode => $library->branchcode } );
 
-    my $next_monday =
-      $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
+    my $next_monday = $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
     my $schedule_dt =
-      $next_monday->set_hour(15)->set_minute(00)->set_second(00);
+        $next_monday->set_hour(15)->set_minute(00)->set_second(00);
     my $cp = Koha::CurbsidePickup->new(
         {
             branchcode                => $library->branchcode,
@@ -188,11 +183,11 @@ subtest 'workflow' => sub {
             notes                     => 'just a note'
         }
     )->store;
-    is( $cp->status, 'to-be-staged' );
+    is( $cp->status,                             'to-be-staged' );
     is( $pickups->filter_by_to_be_staged->count, 1 );
 
     $cp->mark_as_staged;
-    is( $cp->status, 'staged-and-ready' );
+    is( $cp->status,                                 'staged-and-ready' );
     is( $pickups->filter_by_staged_and_ready->count, 1 );
 
     $cp->mark_as_unstaged;
@@ -201,15 +196,15 @@ subtest 'workflow' => sub {
     $cp->mark_as_staged;
 
     $cp->mark_patron_has_arrived;
-    is( $cp->status, 'patron-is-outside' );
+    is( $cp->status,                               'patron-is-outside' );
     is( $pickups->filter_by_patron_outside->count, 1 );
 
     $cp->mark_as_delivered;
-    is( $cp->status, 'delivered' );
+    is( $cp->status,                          'delivered' );
     is( $pickups->filter_by_delivered->count, 1 );
 
     is( $pickups->filter_by_scheduled_today->count, 1 );
-    $cp->scheduled_pickup_datetime($today->clone->subtract(days => 1))->store;
+    $cp->scheduled_pickup_datetime( $today->clone->subtract( days => 1 ) )->store;
     is( $pickups->filter_by_scheduled_today->count, 0 );
 
     $cp->delete;
@@ -218,7 +213,7 @@ subtest 'workflow' => sub {
 subtest 'mark_as_delivered' => sub {
     plan tests => 3;
 
-    my $item = $builder->build_sample_item({ library => $library->branchcode });
+    my $item       = $builder->build_sample_item( { library => $library->branchcode } );
     my $reserve_id = C4::Reserves::AddReserve(
         {
             branchcode     => $library->branchcode,
@@ -231,10 +226,9 @@ subtest 'mark_as_delivered' => sub {
     my $hold = Koha::Holds->find($reserve_id);
     $hold->set_waiting;
 
-    my $next_monday =
-      $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
+    my $next_monday = $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
     my $schedule_dt =
-      $next_monday->set_hour(15)->set_minute(00)->set_second(00);
+        $next_monday->set_hour(15)->set_minute(00)->set_second(00);
     my $cp = Koha::CurbsidePickup->new(
         {
             branchcode                => $library->branchcode,
@@ -246,10 +240,10 @@ subtest 'mark_as_delivered' => sub {
 
     $cp->mark_as_delivered;
     $cp->discard_changes;
-    is( t::lib::Dates::compare( $cp->arrival_datetime, dt_from_string), 0, 'Arrival time has been set to now' );
+    is( t::lib::Dates::compare( $cp->arrival_datetime, dt_from_string ), 0, 'Arrival time has been set to now' );
 
     is( $hold->get_from_storage, undef, 'Hold has been filled' );
-    my $checkout = Koha::Checkouts->find({ itemnumber => $item->itemnumber });
+    my $checkout = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     is( $checkout->borrowernumber, $patron->borrowernumber, 'Item has correctly been checked out' );
 
     $cp->delete;
@@ -258,8 +252,7 @@ subtest 'mark_as_delivered' => sub {
 subtest 'notify_new_pickup' => sub {
     plan tests => 2;
 
-    my $item =
-      $builder->build_sample_item( { library => $library->branchcode } );
+    my $item       = $builder->build_sample_item( { library => $library->branchcode } );
     my $reserve_id = C4::Reserves::AddReserve(
         {
             branchcode     => $library->branchcode,
@@ -272,10 +265,9 @@ subtest 'notify_new_pickup' => sub {
     my $hold = Koha::Holds->find($reserve_id);
     $hold->set_waiting;
 
-    my $next_monday =
-      $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
+    my $next_monday = $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
     my $schedule_dt =
-      $next_monday->set_hour(15)->set_minute(00)->set_second(00);
+        $next_monday->set_hour(15)->set_minute(00)->set_second(00);
     my $cp = Koha::CurbsidePickup->new(
         {
             branchcode                => $library->branchcode,
@@ -287,11 +279,11 @@ subtest 'notify_new_pickup' => sub {
 
     $patron->set( { email => 'test@example.org' } )->store;
     my $dbh = C4::Context->dbh;
-    $dbh->do( q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ?)|,
+    $dbh->do(
+        q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ?)|,
         undef, $patron->borrowernumber, 4
     );
-    my $borrower_message_preference_id =
-      $dbh->last_insert_id( undef, undef, "borrower_message_preferences", undef );
+    my $borrower_message_preference_id = $dbh->last_insert_id( undef, undef, "borrower_message_preferences", undef );
     $dbh->do(
         q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|,
         undef, $borrower_message_preference_id, 'email'
@@ -299,16 +291,17 @@ subtest 'notify_new_pickup' => sub {
 
     $cp->notify_new_pickup;
 
-    my $messages = C4::Letters::GetQueuedMessages(
-        { borrowernumber => $patron->borrowernumber } );
+    my $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $patron->borrowernumber } );
     is(
         $messages->[0]->{subject},
-        sprintf ("You have scheduled a curbside pickup for %s", $library->branchname),
+        sprintf( "You have scheduled a curbside pickup for %s", $library->branchname ),
         "Notice correctly generated"
     );
     my $biblio_title = $item->biblio->title;
-    like( $messages->[0]->{content},
-        qr{$biblio_title}, "Content contains the list of waiting holds" );
+    like(
+        $messages->[0]->{content},
+        qr{$biblio_title}, "Content contains the list of waiting holds"
+    );
 };
 
 $schema->storage->txn_rollback;

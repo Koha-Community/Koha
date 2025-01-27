@@ -25,11 +25,11 @@ use HTTP::OAI;
 use base qw(HTTP::OAI::ListRecords Koha::OAI::Server::ListBase);
 
 sub new {
-    my ($class, $repository, %args) = @_;
+    my ( $class, $repository, %args ) = @_;
 
     my $self = HTTP::OAI::ListRecords->new(%args);
 
-    my $count = $class->GetRecords($self, $repository, 1, %args);
+    my $count = $class->GetRecords( $self, $repository, 1, %args );
 
     # Return error if no results
     unless ($count) {

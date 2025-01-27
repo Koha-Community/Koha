@@ -23,7 +23,6 @@ use warnings;
 use MARC::Field;
 use C4::Context;
 
-
 =head1 NAME
 
 C4::Heading::UNIMARC
@@ -102,12 +101,12 @@ sub valid_heading_tag {
 =cut
 
 sub valid_heading_subfield {
-    my $self          = shift;
-    my $tag           = shift;
-    my $subfield      = shift;
+    my $self     = shift;
+    my $tag      = shift;
+    my $subfield = shift;
 
     if ( exists $bib_heading_fields->{$tag} ) {
-        return 1 if ($bib_heading_fields->{$tag}->{subfields} =~ /$subfield/);
+        return 1 if ( $bib_heading_fields->{$tag}->{subfields} =~ /$subfield/ );
     }
     return 0;
 }
@@ -119,13 +118,11 @@ sub valid_heading_subfield {
 sub parse_heading {
     my ( $self, $field ) = @_;
 
-    my $tag        = $field->tag;
-    my $field_info = $bib_heading_fields->{$tag};
-    my $auth_type  = $field_info->{'auth_type'};
-    my $search_heading =
-      _get_search_heading( $field, $field_info->{'subfields'} );
-    my $display_heading =
-      _get_display_heading( $field, $field_info->{'subfields'} );
+    my $tag             = $field->tag;
+    my $field_info      = $bib_heading_fields->{$tag};
+    my $auth_type       = $field_info->{'auth_type'};
+    my $search_heading  = _get_search_heading( $field, $field_info->{'subfields'} );
+    my $display_heading = _get_display_heading( $field, $field_info->{'subfields'} );
 
     return ( $auth_type, undef, $search_heading, $display_heading, 'exact' );
 }
@@ -166,12 +163,10 @@ sub _get_search_heading {
         if ($first) {
             $first   = 0;
             $heading = $value;
-        }
-        else {
+        } else {
             if ( exists $subdivisions{$code} ) {
                 $heading .= " $subdivisions{$code} $value";
-            }
-            else {
+            } else {
                 $heading .= " $value";
             }
         }
@@ -202,12 +197,10 @@ sub _get_display_heading {
         if ($first) {
             $first   = 0;
             $heading = $value;
-        }
-        else {
+        } else {
             if ( exists $subdivisions{$code} ) {
                 $heading .= "--$value";
-            }
-            else {
+            } else {
                 $heading .= " $value";
             }
         }

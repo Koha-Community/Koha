@@ -6,7 +6,7 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Context;
 use CGI qw ( -utf8 );
@@ -24,10 +24,10 @@ my $theme = $input->param('theme') || "default";
 
 my ( $template, $loggedinuser, $cookie, $staffflags ) = get_template_and_user(
     {
-        template_name   => "members/member-password.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+        template_name => "members/member-password.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
@@ -40,15 +40,18 @@ my $new_user_id  = $input->param('newuserid');
 
 my @errors;
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron = Koha::Patrons->find( $patron_id );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($patron_id);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 my $category_type = $patron->category->category_type;
 
 if ( ( $patron_id ne $loggedinuser ) && ( $category_type eq 'S' ) ) {
     push( @errors, 'NOPERMISSION' )
-      unless ( $staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
+        unless ( $staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
 
     # need superlibrarian for koha-conf.xml fakeuser.
 }
@@ -59,32 +62,26 @@ if ( $op eq 'cud-update' && defined($newpassword) and not @errors ) {
 
     try {
         if ( $newpassword ne '' ) {
-            $patron->set_password({ password => $newpassword });
+            $patron->set_password( { password => $newpassword } );
             $template->param( newpassword => $newpassword );
         }
         $patron->userid($new_user_id)->store
             if $new_user_id and $new_user_id ne $patron->userid;
         if ( $destination eq 'circ' ) {
-            print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=" . $patron->cardnumber);
-        }
-        else {
+            print $input->redirect( "/cgi-bin/koha/circ/circulation.pl?findborrower=" . $patron->cardnumber );
+        } else {
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$patron_id");
         }
-    }
-    catch {
+    } catch {
         if ( $_->isa('Koha::Exceptions::Password::TooShort') ) {
             push @errors, 'ERROR_password_too_short';
-        }
-        elsif ( $_->isa('Koha::Exceptions::Password::WhitespaceCharacters') ) {
+        } elsif ( $_->isa('Koha::Exceptions::Password::WhitespaceCharacters') ) {
             push @errors, 'ERROR_password_has_whitespaces';
-        }
-        elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
+        } elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
             push @errors, 'ERROR_password_too_weak';
-        }
-        elsif ( $_->isa('Koha::Exceptions::Password::Plugin') ) {
+        } elsif ( $_->isa('Koha::Exceptions::Password::Plugin') ) {
             push @errors, 'ERROR_from_plugin';
-        }
-        else {
+        } else {
             push( @errors, 'BADUSERID' );
         }
     };

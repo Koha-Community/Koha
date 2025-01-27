@@ -6,7 +6,11 @@
             <ul class="pagination">
                 [% IF ( displayprev ) %]
                     <li class="page-item">
-                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]"><i class="fa fa-arrow-left"></i> Previous</a>
+                        <a
+                            class="page-link"
+                            href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]"
+                            ><i class="fa fa-arrow-left"></i> Previous</a
+                        >
                     </li>
                 [% END %]
                 [% FOREACH number IN numbers %]
@@ -16,13 +20,21 @@
                         </li>
                     [% ELSE %]
                         <li class="page-item">
-                            <a class="page-link" href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]">[% number.number | html %]</a>
+                            <a
+                                class="page-link"
+                                href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]"
+                                >[% number.number | html %]</a
+                            >
                         </li>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
                     <li class="page-item">
-                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]">Next <i class="fa fa-arrow-right"></i></a>
+                        <a
+                            class="page-link"
+                            href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]"
+                            >Next <i class="fa fa-arrow-right"></i
+                        ></a>
                     </li>
                 [% END %]
             </ul>
@@ -31,96 +43,103 @@
 [% END %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% t("Search results") | html %] &rsaquo;
-        [% t("Labels") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Search results") | html %]
+        &rsaquo; [% t("Labels") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="labels_result" class="tools labels">
-    <div class="main container-fluid">
-        [% INCLUDE 'messages.inc' %]
-        <h1>Search results</h1>
-        [% IF ( results ) %]
-            <h3>Results [% from | html %] through [% to | html %] [% IF ( total ) %] of [% total | html %][% END %]</h3>
-        [% ELSE %]
-            <h3>No results found</h3>
-        [% END %]
-        <div class="results">
-            [% PROCESS pagination %]
+<div class="main container-fluid">
+    [% INCLUDE 'messages.inc' %]
+    <h1>Search results</h1>
+    [% IF ( results ) %]
+        <h3>Results [% from | html %] through [% to | html %] [% IF ( total ) %]of [% total | html %][% END %]</h3>
+    [% ELSE %]
+        <h3>No results found</h3>
+    [% END %]
+    <div class="results">
+        [% PROCESS pagination %]
 
-            <form method="get" name="resultform" action="" style="display:block">
-
+        <form method="get" name="resultform" action="" style="display:block">
             <div id="selection_ops">
                 <a id="CheckAll" class="btn btn-link" href="#"><i class="fa fa-check"></i> Select all</a>
                 <a id="CheckNone" class="btn btn-link" href="#"><i class="fa fa-times"></i> Clear all</a>
             </div>
 
-                <div id="label-search-results" class="page-section">
-            [% FOREACH result_se IN result_set %]
-            <div style="border-bottom:1px solid #CCC;padding:1em 0;">
-                    <h4>[% result_se.title | html %]</h4>
-                            <p>[% IF ( result_se.author ) %]by [% result_se.author | html %][% END %]
-                            [[% result_se.itemtype | html %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode | html %] [% END %][% IF ( result_se.place ) %][% result_se.place | html %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate | html %], [% END %][% IF ( result_se.pages ) %][% result_se.pages | html %][% END %][% IF ( result_se.isbn ) %], <strong>ISBN: </strong>[% result_se.isbn | html %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes | html %][% END %]</p>
+            <div id="label-search-results" class="page-section">
+                [% FOREACH result_se IN result_set %]
+                    <div style="border-bottom:1px solid #CCC;padding:1em 0;">
+                        <h4>[% result_se.title | html %]</h4>
+                        <p
+                            >[% IF ( result_se.author ) %]by [% result_se.author | html %][% END %] [[% result_se.itemtype | html %]],
+                            [% IF ( result_se.publishercode ) %][% result_se.publishercode | html %][% END %][% IF ( result_se.place ) %][% result_se.place | html %][% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate | html %],[% END %][% IF ( result_se.pages ) %][% result_se.pages | html %][% END %][% IF ( result_se.isbn ) %]
+                                , <strong>ISBN: </strong>[% result_se.isbn | html %]
+                            [% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes | html %][% END %]</p
+                        >
 
-                    <table>
-                    [% FOREACH item_tabl IN result_se.item_table %]
-                    [% IF ( item_tabl.header_fields ) %]
-                        <thead>
-                            <tr>
-                                [% FOREACH header_field IN item_tabl.header_fields %]
-                                    [% SWITCH header_field.field_label -%]
-                                        [% CASE "Add Item" -%]
-                                            <th>Add item</th>
-                                        [% CASE "Call Number" -%]
-                                            <th>Call number</th>
-                                        [% CASE "Accession Date" %]
-                                            <th>Accession date</th>
-                                        [% CASE "Barcode" %]
-                                            <th>Barcode</th>
-                                        [% CASE "Select" -%]
-                                            <th>Select</th>
-                                        [% CASE %]
-                                            <th>[% header_field.field_label | html %]</th>
-                                    [% END -%]
+                        <table>
+                            [% FOREACH item_tabl IN result_se.item_table %]
+                                [% IF ( item_tabl.header_fields ) %]
+                                    <thead>
+                                        <tr>
+                                            [% FOREACH header_field IN item_tabl.header_fields %]
+                                                [% SWITCH header_field.field_label -%]
+                                                [% CASE "Add Item" -%]
+                                                    <th>Add item</th>
+                                                [% CASE "Call Number" -%]
+                                                    <th>Call number</th>
+                                                [% CASE "Accession Date" %]
+                                                    <th>Accession date</th>
+                                                [% CASE "Barcode" %]
+                                                    <th>Barcode</th>
+                                                [% CASE "Select" -%]
+                                                    <th>Select</th>
+                                                [% CASE %]
+                                                    <th>[% header_field.field_label | html %]</th>
+                                                [% END -%]
+                                            [% END %]
+                                        </tr>
+                                    </thead>
+                                [% ELSE %]
+                                    <tr>
+                                        [% FOREACH text_field IN item_tabl.text_fields %]
+                                            [% IF ( text_field.select_field ) %]
+                                                <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
+                                            [% ELSIF ( text_field.link_field ) %]
+                                                <td>
+                                                    <a class="btn btn-default btn-xs select_item" data-item-number="[% text_field.field_value | html %]" data-batch-id="[% batch_id | html %]" data-field-type="[% text_field.type | html %]"
+                                                        ><i class="fa fa-plus"></i> Add</a
+                                                    >
+                                                </td>
+                                            [% ELSE %]
+                                                <td>[% text_field.field_value | html %]</td>
+                                            [% END %]
+                                        [% END %]
+                                    </tr>
                                 [% END %]
-                            </tr>
-                        </thead>
-                    [% ELSE %]
-                    <tr>
-                    [% FOREACH text_field IN item_tabl.text_fields %]
-                    [% IF ( text_field.select_field ) %]
-                        <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]"></td>
-                    [% ELSIF ( text_field.link_field ) %]
-                        <td>
-                            <a class="btn btn-default btn-xs select_item" data-item-number="[% text_field.field_value | html %]" data-batch-id="[% batch_id | html %]" data-field-type="[% text_field.type | html %]"><i class="fa fa-plus"></i> Add</a>
-                        </td>
-                    [% ELSE %]
-                        <td>[% text_field.field_value | html %]</td>
-                    [% END %]
-                    [% END %]
-                    </tr>
-                    [% END %]
-                    [% END %]
-                    </table>
+                            [% END %]
+                        </table>
                     </div>
-            [% END %]
-                </div>
-            </form>
-        </div>
-        [% PROCESS pagination %]
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <button type="button" class="btn btn-primary" id="add_items"><i class="fa fa-plus"></i> Add checked</button>
-                    <a href="#" class="btn btn-default close_window">Done</a>
-                </fieldset>
+                [% END %]
             </div>
-        </nav>
-    </div> <!-- /.main.container-fluid -->
+        </form>
+    </div>
+    [% PROCESS pagination %]
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <button type="button" class="btn btn-primary" id="add_items"><i class="fa fa-plus"></i> Add checked</button>
+                <a href="#" class="btn btn-default close_window">Done</a>
+            </fieldset>
+        </div>
+    </nav>
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

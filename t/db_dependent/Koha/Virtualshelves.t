@@ -38,9 +38,9 @@ subtest 'disown_or_delete() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
-        my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-        my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+        my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
 
         my $public_list = $builder->build_object(
             {
@@ -67,14 +67,16 @@ subtest 'disown_or_delete() tests' => sub {
         $builder->build_object(
             {
                 class => 'Koha::Virtualshelfshares',
-                value => { shelfnumber => $private_list_shared->id, invitekey => undef, borrowernumber => $patron_3->id }
+                value =>
+                    { shelfnumber => $private_list_shared->id, invitekey => undef, borrowernumber => $patron_3->id }
             }
         );
 
         t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer' );
-        t::lib::Mocks::mock_preference( 'ListOwnerDesignated', $patron_2->id );
+        t::lib::Mocks::mock_preference( 'ListOwnerDesignated',             $patron_2->id );
 
-        my $rs = Koha::Virtualshelves->search( { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
+        my $rs = Koha::Virtualshelves->search(
+            { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
 
         my $result = $rs->disown_or_delete;
         is( ref($result), 'Koha::Virtualshelves', 'Return type is correct' );
@@ -82,11 +84,11 @@ subtest 'disown_or_delete() tests' => sub {
 
         is( $rs->count, 2, 'The private/non-shared list was deleted' );
         my $first = $rs->next;
-        is( $first->id, $public_list->id );
+        is( $first->id,    $public_list->id );
         is( $first->owner, $patron_2->id );
 
         my $second = $rs->next;
-        is( $second->id, $private_list_shared->id );
+        is( $second->id,    $private_list_shared->id );
         is( $second->owner, $patron_2->id );
 
         $schema->storage->txn_rollback;
@@ -98,9 +100,9 @@ subtest 'disown_or_delete() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
-        my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-        my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+        my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
 
         my $public_list = $builder->build_object(
             {
@@ -127,12 +129,13 @@ subtest 'disown_or_delete() tests' => sub {
         $builder->build_object(
             {
                 class => 'Koha::Virtualshelfshares',
-                value => { shelfnumber => $private_list_shared->id, invitekey => undef, borrowernumber => $patron_2->id }
+                value =>
+                    { shelfnumber => $private_list_shared->id, invitekey => undef, borrowernumber => $patron_2->id }
             }
         );
 
         t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer' );
-        t::lib::Mocks::mock_preference( 'ListOwnerDesignated', undef );
+        t::lib::Mocks::mock_preference( 'ListOwnerDesignated',             undef );
 
         my $public_list_to_delete = $builder->build_object(
             {
@@ -141,27 +144,28 @@ subtest 'disown_or_delete() tests' => sub {
             }
         );
 
-        my $rs = Koha::Virtualshelves->search({ shelfnumber => $public_list_to_delete->id });
+        my $rs     = Koha::Virtualshelves->search( { shelfnumber => $public_list_to_delete->id } );
         my $result = $rs->disown_or_delete;
         is( ref($result), 'Koha::Virtualshelves', 'Return type is correct' );
         $rs->reset;
 
         is( $rs->count, 0, 'ListOwnerDesignated and userenv not set yield deletion' );
 
-        t::lib::Mocks::mock_userenv({ patron => $patron_3 });
+        t::lib::Mocks::mock_userenv( { patron => $patron_3 } );
 
-        $rs = Koha::Virtualshelves->search( { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
+        $rs = Koha::Virtualshelves->search(
+            { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
 
         $rs->disown_or_delete;
         $rs->reset;
 
         is( $rs->count, 2, 'The private/non-shared list was deleted' );
         my $first = $rs->next;
-        is( $first->id, $public_list->id );
+        is( $first->id,    $public_list->id );
         is( $first->owner, $patron_3->id );
 
         my $second = $rs->next;
-        is( $second->id, $private_list_shared->id );
+        is( $second->id,    $private_list_shared->id );
         is( $second->owner, $patron_3->id );
 
         $schema->storage->txn_rollback;
@@ -173,9 +177,9 @@ subtest 'disown_or_delete() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
-        my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-        my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+        my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
 
         my $public_list = $builder->build_object(
             {
@@ -202,13 +206,15 @@ subtest 'disown_or_delete() tests' => sub {
         $builder->build_object(
             {
                 class => 'Koha::Virtualshelfshares',
-                value => { shelfnumber => $private_list_shared->id, invitekey => undef, borrowernumber => $patron_2->id }
+                value =>
+                    { shelfnumber => $private_list_shared->id, invitekey => undef, borrowernumber => $patron_2->id }
             }
         );
 
         t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'delete' );
 
-        my $rs = Koha::Virtualshelves->search( { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
+        my $rs = Koha::Virtualshelves->search(
+            { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
 
         my $result = $rs->disown_or_delete;
         is( ref($result), 'Koha::Virtualshelves', 'Return type is correct' );

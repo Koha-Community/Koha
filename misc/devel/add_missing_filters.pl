@@ -2,16 +2,16 @@
 
 use Modern::Perl;
 
-use File::Slurp qw( read_file write_file );
-use Pod::Usage qw( pod2usage );
+use File::Slurp  qw( read_file write_file );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use t::lib::QA::TemplateFilters;
 
 my ( $help, $verbose, @files );
 GetOptions(
-    'h|help'                 => \$help,
-    'v|verbose'              => \$verbose,
+    'h|help'    => \$help,
+    'v|verbose' => \$verbose,
 ) || pod2usage(1);
 
 @files = @ARGV;
@@ -19,25 +19,24 @@ GetOptions(
 pod2usage(1) if $help or not @files;
 
 my $i;
-my $total = scalar @files;
+my $total     = scalar @files;
 my $num_width = length $total;
-for my $file ( @ARGV ) {
-    if ( $verbose ) {
+for my $file (@ARGV) {
+    if ($verbose) {
         print sprintf "|%-25s| %${num_width}s / %s (%.2f%%)\r",
-            '=' x (24*$i++/$total). '>',
-            $i, $total, 100*$i/+$total;
+            '=' x ( 24 * $i++ / $total ) . '>',
+            $i, $total, 100 * $i / +$total;
         flush STDOUT;
     }
 
-    my $content = read_file( $file );
+    my $content     = read_file($file);
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($content);
     $new_content .= "\n";
     if ( $content ne $new_content ) {
         say "$file -- Modified";
-        write_file($file, $new_content);
+        write_file( $file, $new_content );
     }
 }
-
 
 =head1 NAME
 

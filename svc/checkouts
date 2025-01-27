@@ -22,9 +22,9 @@ use Modern::Perl;
 use CGI;
 use JSON qw(to_json);
 
-use C4::Auth qw(check_cookie_auth haspermission);
+use C4::Auth        qw(check_cookie_auth haspermission);
 use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount );
-use C4::Overdues qw(GetFine);
+use C4::Overdues    qw(GetFine);
 use C4::Context;
 
 use Koha::AuthorisedValues;
@@ -34,16 +34,17 @@ use Koha::ItemTypes;
 
 my $input = CGI->new;
 
-my ( $auth_status, $session ) = check_cookie_auth( $input->cookie('CGISESSID'));
-if( $auth_status ne 'ok' ) {
+my ( $auth_status, $session ) = check_cookie_auth( $input->cookie('CGISESSID') );
+if ( $auth_status ne 'ok' ) {
     print CGI::header( '-status' => '401' );
     exit 0;
 }
 
-my $userid   = $session->param('id');
+my $userid = $session->param('id');
 
-unless (haspermission($userid, { circulate => 'circulate_remaining_permissions' })
-    || haspermission($userid, { borrowers => 'edit_borrowers' })) {
+unless ( haspermission( $userid, { circulate => 'circulate_remaining_permissions' } )
+    || haspermission( $userid, { borrowers => 'edit_borrowers' } ) )
+{
     exit 0;
 }
 
@@ -133,8 +134,7 @@ my $sql = '
 
 if ( @borrowernumber == 1 ) {
     $sql .= '= ?';
-}
-else {
+} else {
     $sql .= ' IN (' . join( ',', ('?') x @borrowernumber ) . ') ';
 }
 push( @parameters, @borrowernumber );
@@ -145,11 +145,12 @@ my $dbh = C4::Context->dbh();
 my $sth = $dbh->prepare($sql);
 $sth->execute(@parameters);
 
-my $item_level_itypes = C4::Context->preference('item-level_itypes');
+my $item_level_itypes          = C4::Context->preference('item-level_itypes');
 my $claims_returned_lost_value = C4::Context->preference('ClaimReturnedLostValue');
-my $confirm_parts_required = C4::Context->preference("CircConfirmItemParts");
+my $confirm_parts_required     = C4::Context->preference("CircConfirmItemParts");
 
-my $itemtypes = { map { $_->{itemtype} => $_->{translated_description} } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+my $itemtypes = { map { $_->{itemtype} => $_->{translated_description} }
+        @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
 my @checkouts_today;
 my @checkouts_previous;
@@ -158,17 +159,15 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my $fine = GetFine( $c->{itemnumber}, $c->{borrowernumber} );
 
     my $checkout_obj = Koha::Checkouts->find( $c->{issue_id} );
-    my ( $can_renew, $can_renew_error, $info ) =
-      CanBookBeRenewed( $checkout_obj->patron, $checkout_obj );
-    my $can_renew_date =
-      $can_renew_error && $can_renew_error eq 'too_soon'
-      ? output_pref(
+    my ( $can_renew, $can_renew_error, $info ) = CanBookBeRenewed( $checkout_obj->patron, $checkout_obj );
+    my $can_renew_date = $can_renew_error && $can_renew_error eq 'too_soon'
+        ? output_pref(
         {
-            dt => $info->{soonest_renew_date},
+            dt          => $info->{soonest_renew_date},
             as_due_date => 1
         }
-      )
-      : undef;
+        )
+        : undef;
 
     my (
         $renewals_count,
@@ -177,8 +176,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         $unseen_count,
         $unseen_allowed,
         $unseen_remaining
-    ) =
-      GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
+    ) = GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
 
     my ( $itemtype, $recordtype, $type_for_stat );
     $itemtype      = $itemtypes->{ $c->{itype} }    if $c->{itype};
@@ -213,25 +211,28 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     }
     my $materials;
     if ( $c->{materials} && $confirm_parts_required ) {
-        my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $c->{materials} });
+        my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
+            { frameworkcode => '', kohafield => 'items.materials', authorised_value => $c->{materials} } );
         $materials = $descriptions->{lib} // $c->{materials};
     }
-    my @subtitles = split(/ \| /, $c->{'subtitle'} // '' );
+    my @subtitles = split( / \| /, $c->{'subtitle'} // '' );
 
     my $recalled = 0;
     if ( C4::Context->preference('UseRecalls') ) {
-        my $item = Koha::Items->find( $c->{itemnumber} );
+        my $item   = Koha::Items->find( $c->{itemnumber} );
         my $recall = undef;
         $recall = $item->check_recalls if $item->can_be_waiting_recall;
         if ( defined $recall ) {
             if ( $recall->item_level ) {
                 if ( $recall->item_id == $c->{itemnumber} ) {
+
                     # item-level recall on this item
                     $recalled = 1;
                 } else {
                     $recalled = 0;
                 }
             } else {
+
                 # biblio-level recall, but don't want to mark recalled if the recall has been allocated a different item
                 if ( !$recall->waiting ) {
                     $recalled = 1;
@@ -244,14 +245,14 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         DT_RowId               => $c->{itemnumber} . '-' . $c->{borrowernumber},
         title                  => $c->{title},
         subtitle               => \@subtitles,
-        medium                 => $c->{medium} // '',
+        medium                 => $c->{medium}      // '',
         part_number            => $c->{part_number} // '',
-        part_name              => $c->{part_name} // '',
+        part_name              => $c->{part_name}   // '',
         author                 => $c->{author},
         barcode                => $c->{barcode},
         type_for_stat          => $type_for_stat || q{},
-        itemtype_description   => $itemtype || q{},
-        recordtype_description => $recordtype || q{},
+        itemtype_description   => $itemtype      || q{},
+        recordtype_description => $recordtype    || q{},
         collection             => $collection,
         location               => $location,
         homebranch             => $c->{homebranch},
@@ -260,7 +261,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         branchcode             => $c->{branchcode},
         branchname             => $c->{branchname},
         itemcallnumber         => $c->{itemcallnumber} || q{},
-        copynumber             => $c->{copynumber} || q{},
+        copynumber             => $c->{copynumber}     || q{},
         charge                 => $charge,
         fine                   => $fine,
         price                  => $c->{replacementprice} || q{},
@@ -273,7 +274,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         issuedate              => $c->{issuedate},
         date_due               => $c->{date_due},
         date_due_overdue       => $c->{date_due_overdue} ? JSON::true : JSON::false,
-        date_due_today         => $c->{date_due_today} ? JSON::true : JSON::false,
+        date_due_today         => $c->{date_due_today}   ? JSON::true : JSON::false,
         timestamp              => $c->{timestamp},
         auto_renew             => $c->{auto_renew},
         onsite_checkout        => $c->{onsite_checkout},
@@ -311,28 +312,25 @@ while ( my $c = $sth->fetchrow_hashref() ) {
 
     if ( $c->{not_issued_today} ) {
         push( @checkouts_previous, $checkout );
-    }
-    else {
+    } else {
         push( @checkouts_today, $checkout );
     }
 }
 
-
 @checkouts_today = sort { $a->{timestamp} cmp $b->{timestamp} } @checkouts_today;    # latest to earliest
 @checkouts_today = reverse(@checkouts_today)
-  if ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );      # earliest to latest
+    if ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );        # earliest to latest
 
 @checkouts_previous =
-  sort { $a->{date_due} cmp $b->{date_due} || $a->{timestamp} cmp $b->{timestamp} }
-  @checkouts_previous;                                                               # latest to earliest
+    sort { $a->{date_due} cmp $b->{date_due} || $a->{timestamp} cmp $b->{timestamp} }
+    @checkouts_previous;                                                             # latest to earliest
 @checkouts_previous = reverse(@checkouts_previous)
-  if ( C4::Context->preference('previousIssuesDefaultSortOrder') eq 'desc' );    # earliest to latest
+    if ( C4::Context->preference('previousIssuesDefaultSortOrder') eq 'desc' );      # earliest to latest
 
 my @checkouts = ( @checkouts_today, @checkouts_previous );
 
 my $i = 1;
 map { $_->{sort_order} = $i++ } @checkouts;
-
 
 my $data;
 $data->{'iTotalRecords'}        = scalar @checkouts;

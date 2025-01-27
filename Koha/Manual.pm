@@ -8,31 +8,35 @@ sub _get_help_version {
     my $help_version = C4::Context->preference("Version");
     if ( $help_version =~ m|^(\d+)\.(\d{2}).*$| ) {
         my $version = $1;
-        my $major = $2;
-        unless ( $major % 2 ) { $major-- };
-        $major = sprintf("%02d", $major);
+        my $major   = $2;
+        unless ( $major % 2 ) { $major-- }
+        $major        = sprintf( "%02d", $major );
         $help_version = "$version.$major";
     }
     return $help_version;
 }
 
 sub _get_base_url {
-    my ( $preferred_language ) = @_;
+    my ($preferred_language) = @_;
 
     my @available_languages = qw( en ar cs es fr it pt_BR tz zh_TW );
 
-    my ( $language ) = grep {
+    my ($language) = grep {
         my $preferred_short = substr $preferred_language, 0, 2;
-        my $avail_short = substr $_, 0, 2;
+        my $avail_short     = substr $_,                  0, 2;
         $preferred_short eq $avail_short ? $_ : ()
     } @available_languages;
 
     my $KohaManualLanguage = $language || C4::Context->preference('KohaManualLanguage') || 'en';
-    my $KohaManualBaseURL = C4::Context->preference('KohaManualBaseURL') || 'https://koha-community.org/manual';
+    my $KohaManualBaseURL  = C4::Context->preference('KohaManualBaseURL') || 'https://koha-community.org/manual';
     if ( $KohaManualBaseURL =~ m|^/| ) {
         $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
     }
-    return $KohaManualBaseURL . '/' . _get_help_version . '/' . $KohaManualLanguage . '/html'; # TODO html could be a KohaManualFormat with pdf, html, epub
+    return
+          $KohaManualBaseURL . '/'
+        . _get_help_version . '/'
+        . $KohaManualLanguage
+        . '/html';    # TODO html could be a KohaManualFormat with pdf, html, epub
 }
 
 our $mapping = {
@@ -290,21 +294,21 @@ our $mapping = {
     'tools/holidays'                           => '/tools.html#calendar',
     'tools/import_borrowers'                   => '/tools.html#patron-import',
     'tools/inventory'                          => '/cataloging.html#inventory',
-    'tools/additional-contents'                => '/tools.html#news', # FIXME Needs a change to the manual
-    'tools/letter'                             => '/tools.html#notices-slips',
-    'tools/manage-marc-import'                 => '/cataloging.html#managing-staged-records',
-    'tools/marc_modification_templates'        => '/cataloging.html#marc-modification-templates',
-    'tools/modborrowers'                       => '/tools.html#batch-patron-modification',
-    'tools/overduerules'                       => '/tools.html#overdue-notice-status-triggers',
-    'tools/picture-upload'                     => '/tools.html#upload-patron-images',
-    'tools/quotes-upload'                      => '/tools.html#import-quotes',
-    'tools/quotes'                             => '/tools.html#quote-of-the-day-(qotd)-editor',
-    'tools/scheduler'                          => '/tools.html#task-scheduler',
-    'tools/stage-marc-import'                  => '/cataloging.html#staging-records-for-import',
-    'tools/tools-home'                         => '/tools.html',
-    'tools/upload-cover-image'                 => '/cataloging.html#adding-cover-images',
-    'tools/viewlog'                            => '/tools.html#log-viewer',
-    'virtualshelves/shelves'                   => '/lists.html#lists',
+    'tools/additional-contents' => '/tools.html#news',                           # FIXME Needs a change to the manual
+    'tools/letter'              => '/tools.html#notices-slips',
+    'tools/manage-marc-import'  => '/cataloging.html#managing-staged-records',
+    'tools/marc_modification_templates' => '/cataloging.html#marc-modification-templates',
+    'tools/modborrowers'                => '/tools.html#batch-patron-modification',
+    'tools/overduerules'                => '/tools.html#overdue-notice-status-triggers',
+    'tools/picture-upload'              => '/tools.html#upload-patron-images',
+    'tools/quotes-upload'               => '/tools.html#import-quotes',
+    'tools/quotes'                      => '/tools.html#quote-of-the-day-(qotd)-editor',
+    'tools/scheduler'                   => '/tools.html#task-scheduler',
+    'tools/stage-marc-import'           => '/cataloging.html#staging-records-for-import',
+    'tools/tools-home'                  => '/tools.html',
+    'tools/upload-cover-image'          => '/cataloging.html#adding-cover-images',
+    'tools/viewlog'                     => '/tools.html#log-viewer',
+    'virtualshelves/shelves'            => '/lists.html#lists',
 };
 
 sub get_url {
@@ -328,11 +332,11 @@ sub get_url {
 
     my $base_url = _get_base_url($preferred_language);
     return $base_url
-      . (
+        . (
           exists $mapping->{$view} ? $mapping->{$view}
         : exists $mapping->{$file} ? $mapping->{$file}
         :                            $mapping->{mainpage}
-      );
+        );
 }
 
 1;

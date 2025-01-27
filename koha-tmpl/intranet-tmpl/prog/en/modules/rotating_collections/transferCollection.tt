@@ -5,13 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Transfer collection") | html %] &rsaquo;
-    [% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %] &rsaquo;
-    [% t("Rotating collections") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Transfer collection") | html %]
+        &rsaquo; [% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %] &rsaquo; [% t("Rotating collections") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rcoll_transferCollection" class="tools rcoll">
@@ -37,57 +36,56 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
-                <h1>[% tx("Transfer collection '{collection_title}'", { collection_title = colTitle }) | html %]</h1>
+    <h1>[% tx("Transfer collection '{collection_title}'", { collection_title = colTitle }) | html %]</h1>
 
-                [% IF ( messages ) %]
-                    [% FOREACH message IN messages %]
-                        <div class="alert alert-[% m.type | html %]">
-                        [%- SWITCH message.code -%]
-                        [%- CASE 'limits' %]
-                            <p>Cannot transfer item [% message.item.itemnumber | html %] due to transfer limits</p>
-                        [%- CASE 'enqueued' -%]
-                            <p>Item [% message.item.itemnumber | html %] queued behind [% message.found_transfer.reason | html %] transfer to [% Branches.GetName(message.found_transfer.tobranch) | html %]</p>
-                        [% END %]
-                        </div>
-                    [% END %]
+    [% IF ( messages ) %]
+        [% FOREACH message IN messages %]
+            <div class="alert alert-[% m.type | html %]">
+                [%- SWITCH message.code -%]
+
+                [%- CASE 'limits' %]
+                    <p>Cannot transfer item [% message.item.itemnumber | html %] due to transfer limits</p>
+                [%- CASE 'enqueued' -%]
+                    <p>Item [% message.item.itemnumber | html %] queued behind [% message.found_transfer.reason | html %] transfer to [% Branches.GetName(message.found_transfer.tobranch) | html %]</p>
                 [% END %]
+            </div>
+        [% END %]
+    [% END %]
 
-                [% IF ( transferSuccess ) %]
-                    <div class="alert alert-info">
-                        <p>Collection transferred successfully</p>
-                        <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
-                    </div>
-                [% ELSIF ( transferFailure ) %]
-                    <div class="alert alert-warning">
-                        <p>Failed to transfer collection</p>
-                        <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
-                    </div>
-                [% END %]
+    [% IF ( transferSuccess ) %]
+        <div class="alert alert-info">
+            <p>Collection transferred successfully</p>
+            <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+        </div>
+    [% ELSIF ( transferFailure ) %]
+        <div class="alert alert-warning">
+            <p>Failed to transfer collection</p>
+            <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+        </div>
+    [% END %]
 
-                [% IF ( transferSuccess ) %]
-                [% ELSE %]
-                    <div>
-                        <form action="transferCollection.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="colId" value="[% colId | html %]" />
-                            <input type="hidden" name="op" value="cud-transfer">
-                            <fieldset class="rows">
-                                <ol>
-                                    <li>
-                                        <label for="toBranch">Choose your library:</label>
-                                        <select id="toBranch" name="toBranch">
-                                            [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
-                                        </select>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="submit" class="btn btn-primary" value="Transfer collection" /> <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl" class="cancel">Cancel</a>
-                            </fieldset>
-                        </form>
-                    </div>
-                [% END %]
+    [% IF ( transferSuccess ) %]
 
+    [% ELSE %]
+        <div>
+            <form action="transferCollection.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="colId" value="[% colId | html %]" />
+                <input type="hidden" name="op" value="cud-transfer" />
+                <fieldset class="rows">
+                    <ol>
+                        <li>
+                            <label for="toBranch">Choose your library:</label>
+                            <select id="toBranch" name="toBranch">
+                                [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
+                            </select>
+                        </li>
+                    </ol>
+                </fieldset>
+                <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Transfer collection" /> <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl" class="cancel">Cancel</a> </fieldset>
+            </form>
+        </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -21,8 +21,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth           qw( get_template_and_user );
+use C4::Output         qw( output_html_with_http_headers );
 use Koha::List::Patron qw( AddPatronList GetPatronLists ModPatronList );
 
 my $cgi = CGI->new;
@@ -30,15 +30,15 @@ my $op  = $cgi->param('op') // q{};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patron_lists/add-modify.tt",
-        query           => $cgi,
-        type            => "intranet",
+        template_name => "patron_lists/add-modify.tt",
+        query         => $cgi,
+        type          => "intranet",
         flagsrequired => { tools => 'manage_patron_lists' },
     }
 );
 
-my $id   = $cgi->param('patron_list_id');
-my $name = $cgi->param('name');
+my $id     = $cgi->param('patron_list_id');
+my $name   = $cgi->param('name');
 my $shared = $cgi->param('shared') ? 1 : 0;
 
 if ($id) {
@@ -50,11 +50,9 @@ if ( $op eq 'cud-add_modify' && $name ) {
     if ($id) {
         ModPatronList( { patron_list_id => $id, name => $name, shared => $shared } );
         print $cgi->redirect('lists.pl');
-    }
-    else {
+    } else {
         my $list = AddPatronList( { name => $name, shared => $shared } );
-        print $cgi->redirect(
-            "list.pl?patron_list_id=" . $list->patron_list_id() );
+        print $cgi->redirect( "list.pl?patron_list_id=" . $list->patron_list_id() );
     }
 
     exit;

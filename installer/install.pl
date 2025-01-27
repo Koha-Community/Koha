@@ -21,7 +21,7 @@ use Modern::Perl;
 use diagnostics;
 
 use C4::InstallAuth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use POSIX;
 use HTML::FromANSI::Tiny::Bootstrap;
 
@@ -70,19 +70,26 @@ $info{'hostname'} = C4::Context->config("hostname");
 $info{'port'}     = C4::Context->config("port");
 $info{'user'}     = C4::Context->config("user");
 $info{'password'} = C4::Context->config("pass");
-$info{'tls'} = C4::Context->config("tls");
-    if ($info{'tls'} && $info{'tls'} eq 'yes'){
-        $info{'ca'} = C4::Context->config('ca');
-        $info{'cert'} = C4::Context->config('cert');
-        $info{'key'} = C4::Context->config('key');
-        $info{'tlsoptions'} = ";mysql_ssl=1;mysql_ssl_client_key=".$info{key}.";mysql_ssl_client_cert=".$info{cert}.";mysql_ssl_ca_file=".$info{ca};
-        $info{'tlscmdline'} =  " --ssl-cert ". $info{cert} . " --ssl-key " . $info{key} . " --ssl-ca ".$info{ca}." "
-    }
+$info{'tls'}      = C4::Context->config("tls");
+
+if ( $info{'tls'} && $info{'tls'} eq 'yes' ) {
+    $info{'ca'}   = C4::Context->config('ca');
+    $info{'cert'} = C4::Context->config('cert');
+    $info{'key'}  = C4::Context->config('key');
+    $info{'tlsoptions'} =
+          ";mysql_ssl=1;mysql_ssl_client_key="
+        . $info{key}
+        . ";mysql_ssl_client_cert="
+        . $info{cert}
+        . ";mysql_ssl_ca_file="
+        . $info{ca};
+    $info{'tlscmdline'} = " --ssl-cert " . $info{cert} . " --ssl-key " . $info{key} . " --ssl-ca " . $info{ca} . " ";
+}
 
 my $dbh = DBI->connect(
-    "DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
-      . ( $info{port} ? ";port=$info{port}" : "" )
-      . ( $info{tlsoptions} ? $info{tlsoptions} : "" ),
+          "DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
+        . ( $info{port}       ? ";port=$info{port}" : "" )
+        . ( $info{tlsoptions} ? $info{tlsoptions}   : "" ),
     $info{'user'}, $info{'password'}
 );
 
@@ -92,10 +99,10 @@ if ( $step && $step == 1 ) {
     #First Step (for both fresh installations and upgrades)
     #Checking ALL perl Modules and services needed are installed.
     #Whenever there is an error, adding a report to the page
-    $template->param( language      => 1 );
+    $template->param( language => 1 );
     my $checkmodule = 1;
     $template->param( 'checkmodule' => 1 )
-      ; # we start with the assumption that there are no problems and set this to 0 if there are
+        ;    # we start with the assumption that there are no problems and set this to 0 if there are
 
     unless ( $] >= 5.010000 ) {    # Bug 7375
         $template->param( problems => 1, perlversion => 1, checkmodule => 0 );
@@ -108,7 +115,7 @@ if ( $step && $step == 1 ) {
     my $missing_modules = $perl_modules->get_attr('missing_pm');
     my $upgrade_modules = $perl_modules->get_attr('upgrade_pm');
     if ( scalar(@$missing_modules) || scalar(@$upgrade_modules) ) {
-        my @missing  = ();
+        my @missing = ();
         my @upgrade = ();
         foreach (@$missing_modules) {
             my ( $module, $stats ) = each %$_;
@@ -116,10 +123,10 @@ if ( $step && $step == 1 ) {
             push(
                 @missing,
                 {
-                    name    => $module,
+                    name        => $module,
                     min_version => $stats->{'min_ver'},
                     max_version => $stats->{'max_ver'},
-                    require => $stats->{'required'}
+                    require     => $stats->{'required'}
                 }
             );
         }
@@ -129,10 +136,10 @@ if ( $step && $step == 1 ) {
             push(
                 @upgrade,
                 {
-                    name    => $module,
+                    name        => $module,
                     min_version => $stats->{'min_ver'},
                     max_version => $stats->{'max_ver'},
-                    require => $stats->{'required'}
+                    require     => $stats->{'required'}
                 }
             );
         }
@@ -144,8 +151,7 @@ if ( $step && $step == 1 ) {
             checkmodule     => $checkmodule,
         );
     }
-}
-elsif ( $step && $step == 2 ) {
+} elsif ( $step && $step == 2 ) {
 
     #STEP 2 Check Database connection and access
 
@@ -178,7 +184,7 @@ elsif ( $step && $step == 2 ) {
                         || index( $line, '*.*' ) > 0 )
                     {
                         $grantaccess = 1
-                          if (
+                            if (
                             index( $line, 'ALL PRIVILEGES' ) > 0
                             || (   ( index( $line, 'SELECT' ) > 0 )
                                 && ( index( $line, 'INSERT' ) > 0 )
@@ -186,14 +192,14 @@ elsif ( $step && $step == 2 ) {
                                 && ( index( $line, 'DELETE' ) > 0 )
                                 && ( index( $line, 'CREATE' ) > 0 )
                                 && ( index( $line, 'DROP' ) > 0 ) )
-                          );
+                            );
                     }
                 }
                 $template->param( "checkgrantaccess" => $grantaccess );
 
                 if ( my $count = $installer->has_non_dynamic_row_format ) {
                     $template->param( warnDbRowFormat => $count );
-                    $template->param( error => "InnoDB row format" );
+                    $template->param( error           => "InnoDB row format" );
                 }
 
             }    # End mysql connect check...
@@ -201,9 +207,7 @@ elsif ( $step && $step == 2 ) {
             elsif ( $info{dbms} eq "Pg" ) {
 
                 # Check if database has been created...
-                my $rv = $dbh->do(
-"SELECT * FROM pg_catalog.pg_database WHERE datname = \'$info{dbname}\';"
-                );
+                my $rv = $dbh->do("SELECT * FROM pg_catalog.pg_database WHERE datname = \'$info{dbname}\';");
                 if ( $rv == 1 ) {
                     $template->param( 'checkdatabasecreated' => 1 );
                 }
@@ -218,39 +222,41 @@ elsif ( $step && $step == 2 ) {
                     $template->param( "checkgrantaccess" => 1 );
                 }
             }    # End Pg connect check...
-        }
-        else {
+        } else {
             $template->param( "error" => DBI::err, "message" => DBI::errstr );
         }
     }
-}
-elsif ( $step && $step == 3 ) {
+} elsif ( $step && $step == 3 ) {
 
     # STEP 3 : database setup
 
     if ( $op eq 'finished' ) {
+
         # Remove the HandleError set at the beginning of the installer process
         C4::Context->dbh->disconnect;
 
         my $cookie_mgr = Koha::CookieManager->new;
+
         # Remove cookie of the installer session
         my $cookies = [];
         if ( !ref $cookie ) {
             push( @$cookies, $cookie );
         }
-        $cookies = $cookie_mgr->replace_in_list( $cookies, $query->cookie(
-            -name     => 'CGISESSID',
-            -value    => '',
-            -HttpOnly => 1,
-            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-            -sameSite => 'Lax',
-        ));
+        $cookies = $cookie_mgr->replace_in_list(
+            $cookies,
+            $query->cookie(
+                -name     => 'CGISESSID',
+                -value    => '',
+                -HttpOnly => 1,
+                -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax',
+            )
+        );
 
         # we have finished, just redirect to mainpage.
         print $query->redirect( -uri => "/cgi-bin/koha/mainpage.pl", -cookie => $cookies );
         exit;
-    }
-    elsif ( $op eq 'cud-finish' ) {
+    } elsif ( $op eq 'cud-finish' ) {
         $installer->set_version_syspref();
 
         my $langchoice = $query->param('fwklanguage');
@@ -258,47 +264,46 @@ elsif ( $step && $step == 3 ) {
         $langchoice =~ s/[^a-zA-Z_-]*//g;
         $installer->set_languages_syspref($langchoice);
 
-# Installation is finished.
-# We just deny anybody access to install
-# And we redirect people to mainpage.
-# The installer will have to relogin since we do not pass cookie to redirection.
-    }
+        # Installation is finished.
+        # We just deny anybody access to install
+        # And we redirect people to mainpage.
+        # The installer will have to relogin since we do not pass cookie to redirection.
 
-    elsif ( $op eq 'cud-addframeworks' ) {
+    } elsif ( $op eq 'cud-addframeworks' ) {
 
         # 1ST install, 3rd sub-step : insert the SQL files the user has selected
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         $langchoice =~ s/[^a-zA-Z_-]*//g;
 
-        my ( $fwk_language, $list ) =
-          $installer->load_sql_in_order( $langchoice, $all_languages,
-            $query->multi_param('framework') );
+        my ( $fwk_language, $list ) = $installer->load_sql_in_order(
+            $langchoice, $all_languages,
+            $query->multi_param('framework')
+        );
         $template->param(
             "fwklanguage" => $fwk_language,
             "list"        => $list
         );
         use Koha::SearchEngine::Elasticsearch;
         Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
-    }
-    elsif ( $op eq 'cud-selectframeworks' ) {
-#
-#
-# 1ST install, 2nd sub-step : show the user the sql datas they can insert in the database.
-#
-#
-# (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
+    } elsif ( $op eq 'cud-selectframeworks' ) {
+        #
+        #
+        # 1ST install, 2nd sub-step : show the user the sql datas they can insert in the database.
+        #
+        #
+        # (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
 
-#Framework Selection
-#sql data for import are supposed to be located in installer/data/<language>/<level>
-# Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
-# Where <level> is a category of requirement : required, recommended optional
-# level should contain :
-#   SQL File for import With a readable name.
-#   txt File that explains what this SQL File is meant for.
-# Could be VERY useful to have A Big file for a kind of library.
-# But could also be useful to have some Authorised values data set prepared here.
-# Framework Selection is achieved through checking boxes.
+        #Framework Selection
+        #sql data for import are supposed to be located in installer/data/<language>/<level>
+        # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
+        # Where <level> is a category of requirement : required, recommended optional
+        # level should contain :
+        #   SQL File for import With a readable name.
+        #   txt File that explains what this SQL File is meant for.
+        # Could be VERY useful to have A Big file for a kind of library.
+        # But could also be useful to have some Authorised values data set prepared here.
+        # Framework Selection is achieved through checking boxes.
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         $langchoice =~ s/[^a-zA-Z_-]*//g;
@@ -307,59 +312,53 @@ elsif ( $step && $step == 3 ) {
             $installer->set_marcflavour_syspref($marcflavour);
         }
         $marcflavour = C4::Context->preference('marcflavour')
-          unless ($marcflavour);
+            unless ($marcflavour);
 
         #Insert into database the selected marcflavour
         undef $/;
-        my ( $marc_defaulted_to_en, $fwklist ) =
-          $installer->marc_framework_sql_list( $langchoice, $marcflavour );
+        my ( $marc_defaulted_to_en, $fwklist ) = $installer->marc_framework_sql_list( $langchoice, $marcflavour );
         $template->param( 'en_marc_frameworks' => $marc_defaulted_to_en );
         $template->param( "frameworksloop"     => $fwklist );
         $template->param( "marcflavour"        => ucfirst($marcflavour) );
 
-        my ( $sample_defaulted_to_en, $levellist ) =
-          $installer->sample_data_sql_list($langchoice);
+        my ( $sample_defaulted_to_en, $levellist ) = $installer->sample_data_sql_list($langchoice);
         $template->param( "en_sample_data" => $sample_defaulted_to_en );
         $template->param( "levelloop"      => $levellist );
 
-    }
-    elsif ( $op eq 'cud-choosemarc' ) {
+    } elsif ( $op eq 'cud-choosemarc' ) {
         #
         #
         # 1ST install, 2nd sub-step : show the user the marcflavour available.
         #
         #
 
-#Choose Marc Flavour
-#sql data are supposed to be located in installer/data/<dbms>/<language>/marcflavour/marcflavourname
-# Where <dbms> is database type according to DBD syntax
-# Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
-# Where <level> is a category of requirement : required, recommended optional
-# level should contain :
-#   SQL File for import With a readable name.
-#   txt File that explains what this SQL File is meant for.
-# Could be VERY useful to have A Big file for a kind of library.
-# But could also be useful to have some Authorised values data set prepared here.
-# Marcflavour Selection is achieved through radiobuttons.
+        #Choose Marc Flavour
+        #sql data are supposed to be located in installer/data/<dbms>/<language>/marcflavour/marcflavourname
+        # Where <dbms> is database type according to DBD syntax
+        # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
+        # Where <level> is a category of requirement : required, recommended optional
+        # level should contain :
+        #   SQL File for import With a readable name.
+        #   txt File that explains what this SQL File is meant for.
+        # Could be VERY useful to have A Big file for a kind of library.
+        # But could also be useful to have some Authorised values data set prepared here.
+        # Marcflavour Selection is achieved through radiobuttons.
         my $langchoice = $query->param('fwklanguage');
 
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         $langchoice =~ s/[^a-zA-Z_-]*//g;
-        my $dir =
-          C4::Context->config('intranetdir')
-          . "/installer/data/$info{dbms}/$langchoice/marcflavour";
+        my $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour";
         my $dir_h;
         unless ( opendir( $dir_h, $dir ) ) {
             if ( $langchoice eq 'en' ) {
                 warn "cannot open MARC frameworks directory $dir";
-            }
-            else {
+            } else {
+
                 # if no translated MARC framework is available,
                 # default to English
-                $dir = C4::Context->config('intranetdir')
-                  . "/installer/data/$info{dbms}/en/marcflavour";
+                $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/en/marcflavour";
                 opendir( $dir_h, $dir )
-                  or warn "cannot open English MARC frameworks directory $dir";
+                    or warn "cannot open English MARC frameworks directory $dir";
             }
         }
         my @listdir = grep { !/^\./ && -d "$dir/$_" } readdir($dir_h);
@@ -367,16 +366,17 @@ elsif ( $step && $step == 3 ) {
         my $marcflavour = C4::Context->preference("marcflavour");
         my @flavourlist;
         foreach my $marc (@listdir) {
-             my %cell=(
-                 "label"=> ucfirst($marc),
-                  "code"=>uc($marc),
-               "checked"=> defined($marcflavour) ? uc($marc) eq $marcflavour : 0);
-#             $cell{"description"}= do { local $/ = undef; open INPUT "<$dir/$marc.txt"||"";<INPUT> };
-             push @flavourlist, \%cell;
+            my %cell = (
+                "label"   => ucfirst($marc),
+                "code"    => uc($marc),
+                "checked" => defined($marcflavour) ? uc($marc) eq $marcflavour : 0
+            );
+
+            #             $cell{"description"}= do { local $/ = undef; open INPUT "<$dir/$marc.txt"||"";<INPUT> };
+            push @flavourlist, \%cell;
         }
         $template->param( "flavourloop" => \@flavourlist );
-    }
-    elsif ( $op eq 'cud-importdatastructure' ) {
+    } elsif ( $op eq 'cud-importdatastructure' ) {
         #
         #
         # 1st install, 1st "sub-step" : import kohastructure
@@ -386,8 +386,7 @@ elsif ( $step && $step == 3 ) {
         $template->param(
             "error" => $error,
         );
-    }
-    elsif ( $op eq 'cud-updatestructure' ) {
+    } elsif ( $op eq 'cud-updatestructure' ) {
         #
         # Not 1st install, the only sub-step : update database
         #
@@ -414,49 +413,44 @@ elsif ( $step && $step == 3 ) {
         );
 
         my $cmd = C4::Context->config("intranetdir")
-          . "/installer/data/$info{dbms}/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
+            . "/installer/data/$info{dbms}/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
 
-        system( $cmd );
+        system($cmd );
 
         my $fh;
         open( $fh, "<:encoding(utf-8)", $logfilepath )
-          or die "Cannot open log file $logfilepath: $!";
+            or die "Cannot open log file $logfilepath: $!";
 
         my @report = <$fh>;
         close $fh;
         if (@report) {
-            $template->param( update_report =>
-                  [ map { { line => $_ =~ s/\t/&emsp;&emsp;/gr } } split( /\n/, join( '', @report ) ) ]
+            $template->param(
+                update_report => [ map { { line => $_ =~ s/\t/&emsp;&emsp;/gr } } split( /\n/, join( '', @report ) ) ]
             );
             $template->param( has_update_succeeds => 1 );
-        }
-        else {
+        } else {
             eval { `rm $logfilepath` };
         }
         open( $fh, "<:encoding(utf-8)", $logfilepath_errors )
-          or die "Cannot open log file $logfilepath_errors: $!";
+            or die "Cannot open log file $logfilepath_errors: $!";
         @report = <$fh>;
         close $fh;
         my $update_errors;
         if (@report) {
-            $template->param( update_errors =>
-                  [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ]
-            );
+            $template->param( update_errors => [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ] );
             $update_errors = 1;
             $template->param( has_update_errors => 1 );
-            warn
-"The following errors were returned while attempting to run the updatedatabase.pl script:\n";
+            warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n";
             foreach my $line (@report) { warn "$line\n"; }
-        }
-        else {
+        } else {
             eval { `rm $logfilepath_errors` };
         }
 
-        unless ( $update_errors ) {
-            my $db_entries = get_db_entries();
-            my $report = update( $db_entries );
-            my $atomic_update_files = get_atomic_updates;
-            my $atomic_update_report = run_atomic_updates( $atomic_update_files );
+        unless ($update_errors) {
+            my $db_entries           = get_db_entries();
+            my $report               = update($db_entries);
+            my $atomic_update_files  = get_atomic_updates;
+            my $atomic_update_report = run_atomic_updates($atomic_update_files);
 
             colorize($report);
             colorize($atomic_update_report);
@@ -469,22 +463,21 @@ elsif ( $step && $step == 3 ) {
                 }
             );
         }
-    }
-    else {
-#
-# check whether it's a 1st install or an update
-#
-#Check if there are enough tables.
-# Paul has cleaned up tables so reduced the count
-#I put it there because it implied a data import if condition was not satisfied.
+    } else {
+        #
+        # check whether it's a 1st install or an update
+        #
+        #Check if there are enough tables.
+        # Paul has cleaned up tables so reduced the count
+        #I put it there because it implied a data import if condition was not satisfied.
         my $dbh = DBI->connect(
-    		"DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
-		. ( $info{port} ? ";port=$info{port}" : "" )
-                . ( $info{tlsoptions} ? $info{tlsoptions} : "" ),
-            	$info{'user'}, $info{'password'}
+                  "DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
+                . ( $info{port}       ? ";port=$info{port}" : "" )
+                . ( $info{tlsoptions} ? $info{tlsoptions}   : "" ),
+            $info{'user'}, $info{'password'}
         );
         my $rq;
-        if ( $info{dbms} eq 'mysql' ) { $rq = $dbh->prepare("SHOW TABLES"); }
+        if    ( $info{dbms} eq 'mysql' ) { $rq = $dbh->prepare("SHOW TABLES"); }
         elsif ( $info{dbms} eq 'Pg' ) {
             $rq = $dbh->prepare(
                 "SELECT *
@@ -493,24 +486,23 @@ elsif ( $step && $step == 3 ) {
             );
         }
         $rq->execute;
-        my $data = $rq->fetchall_arrayref( {} );
+        my $data  = $rq->fetchall_arrayref( {} );
         my $count = scalar(@$data);
         #
         # we don't have tables, propose DB import
         #
         if ( $count < 70 ) {
             $template->param( "count" => $count, "proposeimport" => 1 );
-        }
-        else {
-           #
-           # we have tables, propose to select files to upload or updatedatabase
-           #
+        } else {
+            #
+            # we have tables, propose to select files to upload or updatedatabase
+            #
             $template->param( "count" => $count, "default" => 1 );
-     #
-     # 1st part of step 3 : check if there is a databaseversion systempreference
-     # if there is, then we just need to upgrade
-     # if there is none, then we need to install the database
-     #
+            #
+            # 1st part of step 3 : check if there is a databaseversion systempreference
+            # if there is, then we just need to upgrade
+            # if there is none, then we need to install the database
+            #
             if ( C4::Context->preference('Version') ) {
                 my $dbversion = C4::Context->preference('Version');
                 $dbversion =~ /(.*)\.(..)(..)(...)/;
@@ -523,22 +515,18 @@ elsif ( $step && $step == 3 ) {
             }
         }
     }
-}
-else {
+} else {
 
     # LANGUAGE SELECTION page by default
     # using opendir + language Hash
     my $languages_loop = getTranslatedLanguages('intranet');
     $template->param( installer_languages_loop => $languages_loop );
     if ($dbh) {
-        my $rq =
-          $dbh->prepare(
-            "SELECT * from systempreferences WHERE variable='Version'");
+        my $rq = $dbh->prepare("SELECT * from systempreferences WHERE variable='Version'");
         if ( $rq->execute ) {
             my ($version) = $rq->fetchrow;
             if ($version) {
-                print $query->redirect(
-                    "/cgi-bin/koha/installer/install.pl?step=3");
+                print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
                 exit;
             }
         }
@@ -558,8 +546,7 @@ sub chk_log {    #returns a logfile in $dir or - if that failed - in temp dir
     if ( !open my $fh, '>', $fn ) {
         $name .= '_XXXX';
         require File::Temp;
-        ( $fh, $fn ) =
-          File::Temp::tempfile( $name, TMPDIR => 1, SUFFIX => '.log' );
+        ( $fh, $fn ) = File::Temp::tempfile( $name, TMPDIR => 1, SUFFIX => '.log' );
 
         #if this should not work, let croak take over
     }

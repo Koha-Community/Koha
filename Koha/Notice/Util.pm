@@ -37,16 +37,19 @@ Koha::Notice::Util - Utility class related to Koha notice messages
 =cut
 
 sub load_domain_limits {
-    my ( $class ) = @_;
+    my ($class) = @_;
 
     my $domain_limits;
     my $entry = C4::Context->config('message_domain_limits');
-    if( ref($entry) eq 'HASH' ) {
-        if( exists $entry->{domain} ) {
+    if ( ref($entry) eq 'HASH' ) {
+        if ( exists $entry->{domain} ) {
+
             # Turn single hash entry into array
-            $domain_limits = ref($entry->{domain}) eq 'HASH'
+            $domain_limits =
+                ref( $entry->{domain} ) eq 'HASH'
                 ? [ $entry->{domain} ]
                 : $entry->{domain};
+
             # Convert to hash structure by domain name
             $domain_limits = { map { _init_domain_entry($_); } @$domain_limits };
         }
@@ -55,13 +58,14 @@ sub load_domain_limits {
 }
 
 sub _init_domain_entry {
-    my ( $config_entry ) = @_;
+    my ($config_entry) = @_;
+
     # Return either a hash like ( name => { limit => , unit =>, count => } ) for regular entries
     # or return a hash like ( name => { belongs_to => } ) for a domain that is part of a group
 
     return if ref($config_entry) ne 'HASH' || !exists $config_entry->{name};
     my $elements;
-    if( $config_entry->{belongs_to} ) {
+    if ( $config_entry->{belongs_to} ) {
         $elements = { belongs_to => lc $config_entry->{belongs_to} };
     } else {
         $elements = { limit => $config_entry->{limit}, unit => $config_entry->{unit}, count => undef };
@@ -77,9 +81,9 @@ sub _init_domain_entry {
 
 sub exceeds_limit {
     my ( $class, $params ) = @_;
-    my $domain_limits = $params->{limits} or return 0; # no limits at all
-    my $to_address = $params->{to} or return 0; # no address, no limit exceeded
-    my $incr = $params->{incr} // 1; # by default we increment
+    my $domain_limits = $params->{limits} or return 0;    # no limits at all
+    my $to_address    = $params->{to}     or return 0;    # no address, no limit exceeded
+    my $incr          = $params->{incr} // 1;             # by default we increment
 
     my $domain = q{};
     $domain = lc $1 if $to_address && $to_address =~ /@(\H+)/;
@@ -90,10 +94,11 @@ sub exceeds_limit {
     _get_domain_count( $domain, $group, $domain_limits ) if !defined $domain_limits->{$group}->{count};
     return 1 if $domain_limits->{$group}->{count} >= $domain_limits->{$group}->{limit};
 
-    if( $incr ) {
+    if ($incr) {
         $domain_limits->{$group}->{count}++;
-        warn "Sending messages: domain $group reached limit of ".
-          $domain_limits->{$group}->{limit}. '/'. $domain_limits->{$group}->{unit}
+        warn "Sending messages: domain $group reached limit of "
+            . $domain_limits->{$group}->{limit} . '/'
+            . $domain_limits->{$group}->{unit}
             if $domain_limits->{$group}->{count} == $domain_limits->{$group}->{limit};
     }
     return 0;
@@ -109,15 +114,14 @@ sub _get_domain_count {
     # Check if there are group members too
     my @domains;
     push @domains, $domain if $domain eq $group;
-    push @domains, map
-    {
+    push @domains, map {
         my $belongs = $limits->{$_}->{belongs_to} // q{};
         $belongs eq $group ? $_ : ();
     } keys %$limits;
 
-    my $sum = 0;
+    my $sum      = 0;
     my $start_dt = _convert_unit( undef, $limits->{$group}->{unit} );
-    foreach my $domain ( @domains ) {
+    foreach my $domain (@domains) {
         $sum += Koha::Notice::Messages->search(
             {
                 message_transport_type => 'email',
@@ -129,12 +133,12 @@ sub _get_domain_count {
     $limits->{$group}->{count} = $sum;
 }
 
-sub _convert_unit { # unit should be like \d+(m|h|d)
+sub _convert_unit {    # unit should be like \d+(m|h|d)
     my ( $dt, $unit ) = @_;
     $dt //= dt_from_string();
-    if( $unit && $unit =~ /(\d+)([mhd])/ ) {
+    if ( $unit && $unit =~ /(\d+)([mhd])/ ) {
         my $abbrev = { m => 'minutes', h => 'hours', d => 'days' };
-        foreach my $h ( 0, 1 ) { # try hour before too when subtract fails (like: change to summertime)
+        foreach my $h ( 0, 1 ) {    # try hour before too when subtract fails (like: change to summertime)
             eval { $dt->subtract( hours => $h )->subtract( $abbrev->{$2} => $1 ) } and last;
         }
     }

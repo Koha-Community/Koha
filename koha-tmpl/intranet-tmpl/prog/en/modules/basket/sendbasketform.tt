@@ -1,65 +1,68 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Sending your cart") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Sending your cart") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cart_sendbasketform" class="cart">
-<div class="container">[% IF ( email_add ) %]
+<div class="container"
+    >[% IF ( email_add ) %]
 
-	[% IF ( SENT ) %]
-        <div class="alert alert-info">
-            <h1>Message sent</h1>
-            <p>The cart was sent to: [% email_add | html %]</p>
-        </div>
-	[% END %]
-	[% IF ( error ) %]
-        <div class="alert alert-warning">Problem sending the cart...</div>
-	[% END %]
+        [% IF ( SENT ) %]
+            <div class="alert alert-info">
+                <h1>Message sent</h1>
+                <p>The cart was sent to: [% email_add | html %]</p>
+            </div>
+        [% END %]
+        [% IF ( error ) %]
+            <div class="alert alert-warning">Problem sending the cart...</div>
+        [% END %]
 
-    <nav class="navbar navbar-default fixed-bottom">
-        <div class="container-fluid">
-            <fieldset class="action">
-                <button type="button" class="btn btn-default close_window focus">Close window</button>
+        <nav class="navbar navbar-default fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <button type="button" class="btn btn-default close_window focus">Close window</button>
+                </fieldset>
+            </div>
+        </nav>
+    [% ELSE %]
+
+        [% INCLUDE 'blocking_errors.inc' %]
+        <form action="/cgi-bin/koha/basket/sendbasket.pl" method="post">
+            <h1>Sending your cart</h1>
+            <fieldset class="rows">
+                <legend class="sr-only">Enter message details</legend>
+                <ol>
+                    <li>
+                        <label for="email_add">Email address:</label>
+                        <input type="text" id="email_add" name="email_add" size="43" class="focus" />
+                    </li>
+                    <li>
+                        <label for="comment">Comment:</label>
+                        <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+                    </li>
+                </ol>
             </fieldset>
-        </div>
-    </nav>
+            <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
+            [% INCLUDE 'csrf-token.inc' %]
 
-[% ELSE %]
-
-[% INCLUDE 'blocking_errors.inc' %]
-<form action="/cgi-bin/koha/basket/sendbasket.pl" method="post">
-<h1>Sending your cart</h1>
-<fieldset class="rows"> 
-<legend class="sr-only">Enter message details</legend>
-<ol>   <li>
-        <label for="email_add">Email address:</label>
-        <input type="text" id="email_add" name="email_add" size="43" class="focus" />
-    </li>
-    <li>
-            <label for="comment">Comment:</label>
-            <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
-    </li>
-    </ol>
-    </fieldset>
-    <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
-    [% INCLUDE 'csrf-token.inc' %]
-
-    <nav class="navbar navbar-default fixed-bottom">
-        <div class="container-fluid">
-            <fieldset class="action">
-                <input type="hidden" name="op" value="cud-send" />
-                <input type="submit" class="btn btn-primary" value="Send" />
-                <button type="button" class="btn btn-default close_window">Cancel</button>
-            </fieldset>
-        </div>
-    </nav>
-</form>
-
-[% END %]</div>
+            <nav class="navbar navbar-default fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input type="hidden" name="op" value="cud-send" />
+                        <input type="submit" class="btn btn-primary" value="Send" />
+                        <button type="button" class="btn btn-default close_window">Cancel</button>
+                    </fieldset>
+                </div>
+            </nav>
+        </form>
+    [% END %]</div
+>
 </body>
 <!-- prettier-ignore-start -->
 </html>

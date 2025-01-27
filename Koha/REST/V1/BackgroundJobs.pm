@@ -70,8 +70,7 @@ sub get {
         my $job_id = $c->param('job_id');
         my $patron = $c->stash('koha.user');
 
-        my $can_manage_background_jobs =
-          $patron->has_permission( { parameters => 'manage_background_jobs' } );
+        my $can_manage_background_jobs = $patron->has_permission( { parameters => 'manage_background_jobs' } );
 
         my $job = Koha::BackgroundJobs->find($job_id);
 
@@ -81,16 +80,15 @@ sub get {
         return $c->render(
             status  => 403,
             openapi => { error => "Cannot see background job info" }
-          )
-          if !$can_manage_background_jobs
-          && $job->borrowernumber != $patron->borrowernumber;
+            )
+            if !$can_manage_background_jobs
+            && $job->borrowernumber != $patron->borrowernumber;
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($job),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

@@ -23,6 +23,7 @@ use Koha::Exceptions;
 use Koha::DateTime::Format::RFC3339;
 
 use vars qw(@ISA @EXPORT_OK);
+
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
@@ -62,7 +63,7 @@ sub dt_from_string {
     return if $date_string and $date_string =~ m|^0000-0|;
 
     my $do_fallback = defined($date_format) ? 0 : 1;
-    my $server_tz = C4::Context->tz;
+    my $server_tz   = C4::Context->tz;
     $tz = C4::Context->tz unless $tz;
 
     return DateTime->now( time_zone => $tz ) unless $date_string;
@@ -73,7 +74,7 @@ sub dt_from_string {
         return $date_string->clone();
     }
 
-    if ($date_format eq 'rfc3339') {
+    if ( $date_format eq 'rfc3339' ) {
         return Koha::DateTime::Format::RFC3339->parse_datetime($date_string);
     }
 
@@ -89,6 +90,7 @@ sub dt_from_string {
     |xms;
 
     if ( $date_format eq 'metric' ) {
+
         # metric format is "dd/mm/yyyy[ hh:mm:ss]"
         $regex = qr|
             (?<day>\d{2})
@@ -97,8 +99,8 @@ sub dt_from_string {
             /
             (?<year>\d{4})
         |xms;
-    }
-    elsif ( $date_format eq 'dmydot' ) {
+    } elsif ( $date_format eq 'dmydot' ) {
+
         # dmydot format is "dd.mm.yyyy[ hh:mm:ss]"
         $regex = qr|
             (?<day>\d{2})
@@ -107,8 +109,8 @@ sub dt_from_string {
             .
             (?<year>\d{4})
         |xms;
-    }
-    elsif ( $date_format eq 'us' ) {
+    } elsif ( $date_format eq 'us' ) {
+
         # us format is "mm/dd/yyyy[ hh:mm:ss]"
         $regex = qr|
             (?<month>\d{2})
@@ -117,12 +119,11 @@ sub dt_from_string {
             /
             (?<year>\d{4})
         |xms;
-    }
-    elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
+    } elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
+
         # iso or sql format are yyyy-dd-mm[ hh:mm:ss]"
         $regex = $fallback_re;
-    }
-    else {
+    } else {
         die "Invalid dateformat parameter ($date_format)";
     }
 
@@ -147,11 +148,11 @@ sub dt_from_string {
                 )?
             )?
     }xms;
-    $regex .= $time_re;
+    $regex       .= $time_re;
     $fallback_re .= $time_re;
 
     # Ensure we only accept date strings and not other characters.
-    $regex = '^' . $regex . '$';
+    $regex       = '^' . $regex . '$';
     $fallback_re = '^' . $fallback_re . '$';
 
     my %dt_params;
@@ -170,6 +171,7 @@ sub dt_from_string {
             $tz = DateTime::TimeZone->new( name => 'UTC' );
         }
         if ( $+{offset} ) {
+
             # If offset given, set inbound timezone using it.
             $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . ( $+{minutes} || '00' ) );
         }
@@ -183,8 +185,7 @@ sub dt_from_string {
             second => $+{second},
         );
         $ampm = $+{ampm};
-    }
-    else {
+    } else {
         die "The given date ($date_string) does not match the date format ($date_format)";
     }
 
@@ -192,35 +193,36 @@ sub dt_from_string {
     $dt_params{day} = '01' if $dt_params{day} eq '00';
 
     # Set default hh:mm:ss to 00:00:00
-    my $date_only = ( !defined( $dt_params{hour} )
-        && !defined( $dt_params{minute} )
-        && !defined( $dt_params{second} ) );
+    my $date_only =
+        ( !defined( $dt_params{hour} ) && !defined( $dt_params{minute} ) && !defined( $dt_params{second} ) );
     $dt_params{hour}   = 00 unless defined $dt_params{hour};
     $dt_params{minute} = 00 unless defined $dt_params{minute};
     $dt_params{second} = 00 unless defined $dt_params{second};
 
-    if ( $ampm ) {
+    if ($ampm) {
         if ( $ampm eq 'AM' ) {
             $dt_params{hour} = 00 if $dt_params{hour} == 12;
-        } elsif ( $dt_params{hour} != 12 ) { # PM
+        } elsif ( $dt_params{hour} != 12 ) {    # PM
             $dt_params{hour} += 12;
             $dt_params{hour} = 00 if $dt_params{hour} == 24;
         }
     }
 
     my $floating = 0;
-    my $dt = eval {
+    my $dt       = eval {
         DateTime->new(
             %dt_params,
+
             # No TZ for dates 'infinite' => see bug 13242
             ( $dt_params{year} < 9999 ? ( time_zone => $tz ) : () ),
         );
     };
     if ($@) {
-        $tz = DateTime::TimeZone->new( name => 'floating' );
+        $tz       = DateTime::TimeZone->new( name => 'floating' );
         $floating = 1;
-        $dt = DateTime->new(
+        $dt       = DateTime->new(
             %dt_params,
+
             # No TZ for dates 'infinite' => see bug 13242
             ( $dt_params{year} < 9999 ? ( time_zone => $tz ) : () ),
         );
@@ -253,75 +255,77 @@ sub output_pref {
     my $params = shift;
     my ( $dt, $str, $force_pref, $force_time, $dateonly, $as_due_date );
     if ( ref $params eq 'HASH' ) {
-        $dt         = $params->{dt};
-        $str        = $params->{str};
-        $force_pref = $params->{dateformat};         # if testing we want to override Context
-        $force_time = $params->{timeformat};
-        $dateonly   = $params->{dateonly} || 0;    # if you don't want the hours and minutes
-        $as_due_date = $params->{as_due_date} || 0; # don't display the hours and minutes if eq to 23:59 or 11:59 (depending the TimeFormat value)
+        $dt          = $params->{dt};
+        $str         = $params->{str};
+        $force_pref  = $params->{dateformat};       # if testing we want to override Context
+        $force_time  = $params->{timeformat};
+        $dateonly    = $params->{dateonly} || 0;    # if you don't want the hours and minutes
+        $as_due_date = $params->{as_due_date}
+            || 0;    # don't display the hours and minutes if eq to 23:59 or 11:59 (depending the TimeFormat value)
     } else {
         $dt = $params;
     }
 
-    Koha::Exceptions::WrongParameter->throw( 'output_pref should not be called with both dt and str parameter' ) if $dt and $str;
+    Koha::Exceptions::WrongParameter->throw('output_pref should not be called with both dt and str parameter')
+        if $dt and $str;
 
-    if ( $str ) {
+    if ($str) {
         local $@;
-        $dt = eval { dt_from_string( $str ) };
-        Koha::Exceptions::WrongParameter->throw("Invalid date '$str' passed to output_pref" ) if $@;
+        $dt = eval { dt_from_string($str) };
+        Koha::Exceptions::WrongParameter->throw("Invalid date '$str' passed to output_pref") if $@;
     }
 
-    return if !defined $dt; # NULL date
-    Koha::Exceptions::WrongParameter->throw( "output_pref is called with '$dt' (ref ". ( ref($dt) ? ref($dt):'SCALAR')."), not a DateTime object")  if ref($dt) ne 'DateTime';
+    return if !defined $dt;    # NULL date
+    Koha::Exceptions::WrongParameter->throw(
+        "output_pref is called with '$dt' (ref " . ( ref($dt) ? ref($dt) : 'SCALAR' ) . "), not a DateTime object" )
+        if ref($dt) ne 'DateTime';
 
     # FIXME: see bug 13242 => no TZ for dates 'infinite'
     if ( $dt->ymd !~ /^9999/ ) {
-        my $tz = $dateonly ? DateTime::TimeZone->new(name => 'floating') : C4::Context->tz;
-        eval { $dt->set_time_zone( $tz ); }
+        my $tz = $dateonly ? DateTime::TimeZone->new( name => 'floating' ) : C4::Context->tz;
+        eval { $dt->set_time_zone($tz); }
     }
 
-    my $pref =
-      defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
+    my $pref = defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
 
     my $time_format = $force_time || C4::Context->preference('TimeFormat') || q{};
-    my $time = ( $time_format eq '12hr' ) ? '%I:%M %p' : '%H:%M';
+    my $time        = ( $time_format eq '12hr' ) ? '%I:%M %p' : '%H:%M';
     my $date;
     if ( $pref =~ m/^iso/ ) {
-        $date = $dateonly
-          ? $dt->strftime("%Y-%m-%d")
-          : $dt->strftime("%Y-%m-%d $time");
-    }
-    elsif ( $pref =~ m/^rfc3339/ ) {
-        if (!$dateonly) {
+        $date =
+              $dateonly
+            ? $dt->strftime("%Y-%m-%d")
+            : $dt->strftime("%Y-%m-%d $time");
+    } elsif ( $pref =~ m/^rfc3339/ ) {
+        if ( !$dateonly ) {
             $date = Koha::DateTime::Format::RFC3339->format_datetime($dt);
-        }
-        else {
+        } else {
             $date = $dt->strftime("%Y-%m-%d");
         }
-    }
-    elsif ( $pref =~ m/^metric/ ) {
-        $date = $dateonly
-          ? $dt->strftime("%d/%m/%Y")
-          : $dt->strftime("%d/%m/%Y $time");
-    }
-    elsif ( $pref =~ m/^dmydot/ ) {
-        $date = $dateonly
-          ? $dt->strftime("%d.%m.%Y")
-          : $dt->strftime("%d.%m.%Y $time");
+    } elsif ( $pref =~ m/^metric/ ) {
+        $date =
+              $dateonly
+            ? $dt->strftime("%d/%m/%Y")
+            : $dt->strftime("%d/%m/%Y $time");
+    } elsif ( $pref =~ m/^dmydot/ ) {
+        $date =
+              $dateonly
+            ? $dt->strftime("%d.%m.%Y")
+            : $dt->strftime("%d.%m.%Y $time");
+
+    } elsif ( $pref =~ m/^us/ ) {
+        $date =
+              $dateonly
+            ? $dt->strftime("%m/%d/%Y")
+            : $dt->strftime("%m/%d/%Y $time");
+    } else {
+        $date =
+              $dateonly
+            ? $dt->strftime("%Y-%m-%d")
+            : $dt->strftime("%Y-%m-%d $time");
     }
 
-    elsif ( $pref =~ m/^us/ ) {
-        $date = $dateonly
-          ? $dt->strftime("%m/%d/%Y")
-          : $dt->strftime("%m/%d/%Y $time");
-    }
-    else {
-        $date = $dateonly
-          ? $dt->strftime("%Y-%m-%d")
-          : $dt->strftime("%Y-%m-%d $time");
-    }
-
-    if ( $as_due_date ) {
+    if ($as_due_date) {
         $time_format eq '12hr'
             ? $date =~ s| 11:59 PM$||
             : $date =~ s| 23:59$||;
@@ -349,12 +353,14 @@ sub format_sqldatetime {
         my $dt = dt_from_string( $str, 'sql' );
         return q{} unless $dt;
         $dt->truncate( to => 'minute' );
-        return output_pref({
-            dt => $dt,
-            dateformat => $force_pref,
-            timeformat => $force_time,
-            dateonly => $dateonly
-        });
+        return output_pref(
+            {
+                dt         => $dt,
+                dateformat => $force_pref,
+                timeformat => $force_time,
+                dateonly   => $dateonly
+            }
+        );
     }
     return q{};
 }

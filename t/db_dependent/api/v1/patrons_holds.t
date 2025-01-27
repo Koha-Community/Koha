@@ -39,17 +39,18 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 4 } # 'borrowers' flag == 4
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**4 }    # 'borrowers' flag == 4
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds')
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( [] );
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds' )->status_is( 200, 'REST3.2.2' )
+        ->json_is( [] );
 
     my $hold_1 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
     my $hold_2 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
@@ -79,14 +80,14 @@ subtest 'list() tests' => sub {
         'Old holds even after item and library removed'
         );
 
-    my $non_existent_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $non_existent_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $non_existent_patron_id = $non_existent_patron->id;
+
     # get rid of the patron
     $non_existent_patron->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/holds')
-      ->status_is( 404 )
-      ->json_is( '/error' => 'Patron not found' );
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/holds' )->status_is(404)
+        ->json_is( '/error' => 'Patron not found' );
 
     $schema->storage->txn_rollback;
 };

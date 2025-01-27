@@ -17,7 +17,6 @@ package Koha::Authority::Type;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -33,7 +32,7 @@ Koha::Authority::Type - Koha Authority Type Object class
 =cut
 
 sub auth_tag_structures {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->_result->auth_tag_structures;
 }
 

@@ -27,14 +27,14 @@ use Koha::Report;
 use CGI;
 use JSON;
 
-
 my $input = CGI->new;
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'application/json', -charset => 'UTF-8' );
 
-my ( $auth_status ) =
-  check_cookie_auth( $input->cookie('CGISESSID'),
-    { serials => 'create_subscription' } );
+my ($auth_status) = check_cookie_auth(
+    $input->cookie('CGISESSID'),
+    { serials => 'create_subscription' }
+);
 
 if ( $auth_status ne "ok" || $input->request_method ne "POST" ) {
     exit 0;
@@ -44,13 +44,12 @@ my $result = Koha::SharedContent::get_entity_by_id(
     scalar $input->param('resource'),
     scalar $input->param('id')
 );
-my $package = "Koha::".ucfirst($input->param('resource'));
+my $package = "Koha::" . ucfirst( $input->param('resource') );
 my $resource;
 
-if ( $input->param( 'saveinbase' )) {
-    $resource = { id => $package->new_from_mana($result->{data})->id };
-}
-else{
+if ( $input->param('saveinbase') ) {
+    $resource = { id => $package->new_from_mana( $result->{data} )->id };
+} else {
     $resource = $result->{data};
 }
-print(to_json($resource));
+print( to_json($resource) );

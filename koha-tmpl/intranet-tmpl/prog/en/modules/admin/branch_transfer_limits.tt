@@ -5,13 +5,21 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>td { text-align: center; } .sorted { min-width: 50%; }</style>
+<style>
+    td {
+        text-align: center;
+    }
+    .sorted {
+        min-width: 50%;
+    }
+</style>
 </head>
 
 <body id="admin_branch_transfer_limits" class="admin">
@@ -31,10 +39,7 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-
-    <h1>
-        [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %]
-    </h1>
+    <h1> [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %] </h1>
     <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
         <label for="branchselect">Select a library :</label>
         <select name="branchcode" id="branchselect">
@@ -42,125 +47,142 @@
         </select>
     </form>
 
-<p class="help">Check the boxes for the libraries you allow your items to be transferred to.</p>
-<fieldset>
-    [% IF ( limitType == 'ccode' ) %]<strong>For all collection codes: </strong>[% ELSE %]<strong>For all item types: </strong>[% END %]
-    <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a>
-    |
-    <a id="UncheckAll" href="#"><i class="fa fa-times"></i> Clear all</a>
-    |
-    <a href="/cgi-bin/koha/admin/transfer_limits.pl">Switch to advanced editor</a>
-</fieldset>
+    <p class="help">Check the boxes for the libraries you allow your items to be transferred to.</p>
+    <fieldset>
+        [% IF ( limitType == 'ccode' ) %]<strong>For all collection codes: </strong>[% ELSE %]<strong>For all item types: </strong>[% END %]
+        <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a>
+        |
+        <a id="UncheckAll" href="#"><i class="fa fa-times"></i> Clear all</a>
+        |
+        <a href="/cgi-bin/koha/admin/transfer_limits.pl">Switch to advanced editor</a>
+    </fieldset>
 
-[% WRAPPER tabs id = "transferlimit_tabs" %]
-    [% WRAPPER tabs_nav %]
-        [% FOREACH codes_loo IN codes_loop %]
-            [% WRAPPER tab_item tabname=codes_loo.code %]
-                [% codes_loo.code | html %]
+    [% WRAPPER tabs id = "transferlimit_tabs" %]
+        [% WRAPPER tabs_nav %]
+            [% FOREACH codes_loo IN codes_loop %]
+                [% WRAPPER tab_item tabname=codes_loo.code %]
+                    [% codes_loo.code | html %]
+                [% END %]
             [% END %]
         [% END %]
-    [% END %]
 
-    <form method="post" action="branch_transfer_limits.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-update" />
-        [% WRAPPER tab_panels %]
-            [% FOREACH codes_loo IN codes_loop %]
-                [% WRAPPER tab_panel tabname=codes_loo.code %]
-                    <h4>Policy for [% codes_loo.limit_phrase | html %]: [% codes_loo.code | html %]</h4>
+        <form method="post" action="branch_transfer_limits.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-update" />
+            [% WRAPPER tab_panels %]
+                [% FOREACH codes_loo IN codes_loop %]
+                    [% WRAPPER tab_panel tabname=codes_loo.code %]
+                        <h4>Policy for [% codes_loo.limit_phrase | html %]: [% codes_loo.code | html %]</h4>
 
-                    <p><a id="CheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="uncheckall" href="#"><i class="fa fa-times"></i> Clear all</a></p>
+                        <p
+                            ><a id="CheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> |
+                            <a id="UncheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="uncheckall" href="#"><i class="fa fa-times"></i> Clear all</a></p
+                        >
 
-                    <table id="[% codes_loo.code | html %]table" class="sorted">
-                        <thead>
-                            <tr>
-                                <th>Library</th>
-                                <th>Allow transfer?</th>
-                            </tr>
-                        </thead>
+                        <table id="[% codes_loo.code | html %]table" class="sorted">
+                            <thead>
+                                <tr>
+                                    <th>Library</th>
+                                    <th>Allow transfer?</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
+                            <tbody>
                                 [% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
                                     <tr>
-                                        <td><label style="min-width:400px;" for="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row">[% to_branch_loo.toBranch | html %] - [% Branches.GetName( to_branch_loo.toBranch ) | html %]</label></td>
+                                        <td
+                                            ><label style="min-width:400px;" for="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row"
+                                                >[% to_branch_loo.toBranch | html %] - [% Branches.GetName( to_branch_loo.toBranch ) | html %]</label
+                                            ></td
+                                        >
                                         <td>
-                                        [% IF ( to_branch_loo.isChecked ) %]
-                                            <input type="checkbox" class="cb cb[% codes_loo.code | html %]" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" checked="checked" />
-                                        [% ELSE %]
-                                            <input type="checkbox" class="cb cb[% codes_loo.code | html %]" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" />
-                                        [% END %]
+                                            [% IF ( to_branch_loo.isChecked ) %]
+                                                <input
+                                                    type="checkbox"
+                                                    class="cb cb[% codes_loo.code | html %]"
+                                                    id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row"
+                                                    name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]"
+                                                    checked="checked"
+                                                />
+                                            [% ELSE %]
+                                                <input
+                                                    type="checkbox"
+                                                    class="cb cb[% codes_loo.code | html %]"
+                                                    id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row"
+                                                    name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]"
+                                                />
+                                            [% END %]
                                         </td>
                                     </tr>
                                 [% END %]
-                        </tbody>
-                    </table>
-                [% END #/WRAPPER tab_panel %]
-            [% END # /FOREACH codes_loo %]
-        [% END # /WRAPPER tab_panels %]
+                            </tbody>
+                        </table>
+                    [% END #/WRAPPER tab_panel %]
+                [% END # /FOREACH codes_loo %]
+            [% END # /WRAPPER tab_panels %]
 
-        <fieldset class="action">
-            <input type="hidden" name="updateLimits" value="1" />
-            <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <a class="cancel" href="/cgi-bin/koha/admin/admin-home.pl">Cancel</a>
-        </fieldset>
-    </form>
-[% END # /WRAPPER tabs %]
-
+            <fieldset class="action">
+                <input type="hidden" name="updateLimits" value="1" />
+                <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a class="cancel" href="/cgi-bin/koha/admin/admin-home.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END # /WRAPPER tabs %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function(){
-            $("#CheckAll").on("click", function(e){
+        $(document).ready(function () {
+            $("#CheckAll").on("click", function (e) {
                 e.preventDefault();
-                $(".cb").each(function(){
+                $(".cb").each(function () {
                     $(this).prop("checked", true);
                 });
             });
 
-            $("#UncheckAll").on("click", function(e){
+            $("#UncheckAll").on("click", function (e) {
                 e.preventDefault();
-                $(".cb").each(function(){
+                $(".cb").each(function () {
                     $(this).prop("checked", false);
                 });
             });
 
-            if( $("#transferlimit_tabs .tab-pane.active").length < 1 ){
-                  $("#transferlimit_tabs a:first").tab("show");
+            if ($("#transferlimit_tabs .tab-pane.active").length < 1) {
+                $("#transferlimit_tabs a:first").tab("show");
             }
 
-             $('#branchselect').change(function() {
-                $('#selectlibrary').submit();
-             });
+            $("#branchselect").change(function () {
+                $("#selectlibrary").submit();
+            });
 
             var checkall = $(".checkall");
             var uncheckall = $(".uncheckall");
 
-            $(checkall).on("click", function(e){
+            $(checkall).on("click", function (e) {
                 e.preventDefault();
                 var tid = $(this).data("cb");
-                $(".cb" + tid ).each(function(){
+                $(".cb" + tid).each(function () {
                     $(this).prop("checked", true);
-                })
+                });
             });
 
-            $(uncheckall).on("click", function(e){
+            $(uncheckall).on("click", function (e) {
                 e.preventDefault();
                 var tid = $(this).data("cb");
-                $(".cb" + tid ).each(function(){
+                $(".cb" + tid).each(function () {
                     $(this).prop("checked", false);
-                })
+                });
             });
 
-            $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ],
-                "paginate": false
-            }));
+            $(".sorted").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                    paginate: false,
+                })
+            );
         });
     </script>
 [% END %]

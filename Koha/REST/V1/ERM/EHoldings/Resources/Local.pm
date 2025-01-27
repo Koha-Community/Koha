@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ERM::EHoldings::Resources;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -38,13 +38,12 @@ sub list {
     return try {
         my $package_id = $c->param('package_id');
         my $resources_set =
-          $package_id
-          ? Koha::ERM::EHoldings::Resources->search( { package_id => $package_id } )
-          : Koha::ERM::EHoldings::Resources->new;
-        my $resources = $c->objects->search( $resources_set );
+            $package_id
+            ? Koha::ERM::EHoldings::Resources->search( { package_id => $package_id } )
+            : Koha::ERM::EHoldings::Resources->new;
+        my $resources = $c->objects->search($resources_set);
         return $c->render( status => 200, openapi => $resources );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -61,7 +60,7 @@ sub get {
 
     return try {
         my $resource_id = $c->param('resource_id');
-        my $resource = $c->objects->find( Koha::ERM::EHoldings::Resources->search, $resource_id );
+        my $resource    = $c->objects->find( Koha::ERM::EHoldings::Resources->search, $resource_id );
 
         return $c->render_resource_not_found("eHolding resource")
             unless $resource;
@@ -70,8 +69,7 @@ sub get {
             status  => 200,
             openapi => $resource,
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

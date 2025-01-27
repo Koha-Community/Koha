@@ -4,25 +4,28 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ean_form %]
-        [% IF ean %]
-            [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
-        [% ELSE %]
-            [% t("New library EAN") | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% IF delete_confirm %]
-        [% IF ( ean.branch.branchname ) %]
-            [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
-        [% ELSE %]
-            [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% t("Library EANs") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ean_form %]
+            [% IF ean %]
+                [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
+            [% ELSE %]
+                [% t("New library EAN") | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% IF delete_confirm %]
+            [% IF ( ean.branch.branchname ) %]
+                [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
+            [% ELSE %]
+                [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% t("Library EANs") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_edi_ean" class="admin">
@@ -40,28 +43,26 @@
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ean %]
                     [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
                 [% ELSE %]
                     <span>New library EAN</span>
                 [% END %]
             [% END %]
-
         [% ELSIF delete_confirm %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( ean.branch.branchname ) %]
                     [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
                 [% ELSE %]
                     [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
                 [% END %]
             [% END %]
-
         [% ELSE %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Library EANs</span>
             [% END %]
         [% END %]
@@ -70,148 +71,143 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% IF display %]
-    <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default" id="newediean" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form">
-         <i class="fa fa-plus"></i>
-         New EAN
-    </a>
-    </div>
-[% END %]
+    [% IF display %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="newediean" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form">
+                <i class="fa fa-plus"></i>
+                New EAN
+            </a>
+        </div>
+    [% END %]
 
-[% IF ean_form %]
-<form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" name="Eanform" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="cud-save" />
-  [% IF ean %]
-      <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode | html %]" />
-      <input type="hidden" name="id" value="[% ean.id | html %]" />
-  [% END %]
+    [% IF ean_form %]
+        <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" name="Eanform" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-save" />
+            [% IF ean %]
+                <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode | html %]" />
+                <input type="hidden" name="id" value="[% ean.id | html %]" />
+            [% END %]
 
-    <h1>
-        [% IF ean %]
-            [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
-        [% ELSE %]
-            <span>New EAN</span>
-        [% END %]
-    </h1>
-
-  <fieldset class="rows">
-      <legend class="sr-only">EAN details</legend>
-
-      <ol>
-          <li>
-             <label for="branchcode">Library: </label>
-             <select name="branchcode" id="branchcode">
-                <option value="">All libraries</option>
-                [% FOREACH branch IN branches %]
-                    [% IF branch.branchcode == ean.branch.branchcode %]
-                       <option value="[% branch.branchcode | html %]" selected="selected">[% branch.branchname | html %]</option>
-                    [% ELSE %]
-                       <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                    [% END %]
-                [% END %]
-              </select>
-          </li>
-          <li>
-             <label for="description">Description: </label>
-             <input type="text" name="description" id="description" size="30" maxlength="128" value="[% ean.description | html %]" />
-          </li>
-          <li>
-             <label for="ean">EAN: </label>
-             <input type="text" name="ean" id="ean" size="20" maxlength="15" value="[% ean.ean | html %]" />
-          </li>
-          <li>
-             <label for="id_code_qualifier">Qualifier: </label>
-             <select name="id_code_qualifier" id="id_code_qualifier">
-                 [% FOREACH qualifier IN code_qualifiers %]
-                    [% IF qualifier.code == ean.id_code_qualifier %]
-                       <option value="[% qualifier.code | html %]" selected="selected">
-                           [% qualifier.description | html %] ([% qualifier.code | html %])
-                       </option>
-                    [% ELSE %]
-                       <option value="[% qualifier.code | html %]">
-                          [% qualifier.description | html %] ([% qualifier.code | html %])
-                       </option>
-                    [% END %]
-                 [% END %]
-             </select>
-          </li>
-      </ol>
-  </fieldset>
-
-  <fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Submit" />
-    <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl" class="cancel">Cancel</a>
-  </fieldset>
-</form>
-[% END %]
-
-[% IF delete_confirm %]
-<div class="alert alert-warning">
-    <h1>
-        [% IF ( ean.branch.branchname ) %]
-            [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
-        [% ELSE %]
-            [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
-        [% END %]
-    </h1>
-
-<form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="op" value="cud-delete_confirmed" />
-    <input type="hidden" name="id" value="[% ean.id | html %]" />
-    <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
-</form>
-<form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="get">
-    <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
-</form>
-</div>
-[% END %]
-
-[% IF display %]
-    <h1>Library EANs</h1>
-[% IF ( eans ) %]
-    <div class="page-section">
-    <table>
-        <tr>
-            <th>Library</th>
-            <th>Description</th>
-            <th>EAN</th>
-            <th>Qualifier</th>
-            <th class="noExport">Actions</th>
-        </tr>
-        [% FOREACH ean IN eans %]
-            <tr>
-                [% IF ean.branch %]
-                <td>[% ean.branch.branchname | html %]</td>
+            <h1>
+                [% IF ean %]
+                    [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
                 [% ELSE %]
-                <td>All libraries</td>
+                    <span>New EAN</span>
                 [% END %]
-                <td>[% ean.description | html %]</td>
-                <td>[% ean.ean | html %]</td>
-                <td>
-                 [% FOREACH qualifier IN code_qualifiers %]
-                    [% IF qualifier.code == ean.id_code_qualifier %]
-                        [% qualifier.description | html %] ([% qualifier.code | html %])
-                    [% END %]
-                 [% END %]
-                </td>
-                <td class="actions">
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&id=[% ean.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&id=[% ean.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                </td>
-            </tr>
-        [% END %]
-    </table>
-    </div> <!-- /.page-section -->
-[% ELSE %]
-    <div class="alert alert-info">
-        There are no library EANs.
-    </div>
-[% END %]
-[% END %]
+            </h1>
 
+            <fieldset class="rows">
+                <legend class="sr-only">EAN details</legend>
+
+                <ol>
+                    <li>
+                        <label for="branchcode">Library: </label>
+                        <select name="branchcode" id="branchcode">
+                            <option value="">All libraries</option>
+                            [% FOREACH branch IN branches %]
+                                [% IF branch.branchcode == ean.branch.branchcode %]
+                                    <option value="[% branch.branchcode | html %]" selected="selected">[% branch.branchname | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="description">Description: </label>
+                        <input type="text" name="description" id="description" size="30" maxlength="128" value="[% ean.description | html %]" />
+                    </li>
+                    <li>
+                        <label for="ean">EAN: </label>
+                        <input type="text" name="ean" id="ean" size="20" maxlength="15" value="[% ean.ean | html %]" />
+                    </li>
+                    <li>
+                        <label for="id_code_qualifier">Qualifier: </label>
+                        <select name="id_code_qualifier" id="id_code_qualifier">
+                            [% FOREACH qualifier IN code_qualifiers %]
+                                [% IF qualifier.code == ean.id_code_qualifier %]
+                                    <option value="[% qualifier.code | html %]" selected="selected"> [% qualifier.description | html %] ([% qualifier.code | html %]) </option>
+                                [% ELSE %]
+                                    <option value="[% qualifier.code | html %]"> [% qualifier.description | html %] ([% qualifier.code | html %]) </option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl" class="cancel">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF delete_confirm %]
+        <div class="alert alert-warning">
+            <h1>
+                [% IF ( ean.branch.branchname ) %]
+                    [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
+                [% ELSE %]
+                    [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
+                [% END %]
+            </h1>
+
+            <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
+                <input type="hidden" name="id" value="[% ean.id | html %]" />
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+            </form>
+            <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="get">
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            </form>
+        </div>
+    [% END %]
+
+    [% IF display %]
+        <h1>Library EANs</h1>
+        [% IF ( eans ) %]
+            <div class="page-section">
+                <table>
+                    <tr>
+                        <th>Library</th>
+                        <th>Description</th>
+                        <th>EAN</th>
+                        <th>Qualifier</th>
+                        <th class="noExport">Actions</th>
+                    </tr>
+                    [% FOREACH ean IN eans %]
+                        <tr>
+                            [% IF ean.branch %]
+                                <td>[% ean.branch.branchname | html %]</td>
+                            [% ELSE %]
+                                <td>All libraries</td>
+                            [% END %]
+                            <td>[% ean.description | html %]</td>
+                            <td>[% ean.ean | html %]</td>
+                            <td>
+                                [% FOREACH qualifier IN code_qualifiers %]
+                                    [% IF qualifier.code == ean.id_code_qualifier %]
+                                        [% qualifier.description | html %]
+                                        ([% qualifier.code | html %])
+                                    [% END %]
+                                [% END %]
+                            </td>
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&id=[% ean.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&id=[% ean.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                            </td>
+                        </tr>
+                    [% END %]
+                </table>
+            </div>
+            <!-- /.page-section -->
+        [% ELSE %]
+            <div class="alert alert-info"> There are no library EANs. </div>
+        [% END %]
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

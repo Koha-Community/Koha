@@ -1,7 +1,7 @@
 package C4::AuthoritiesMarc::MARC21;
 
 # Copyright (C) 2007 LibLime
-# 
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -64,7 +64,7 @@ this defaults to 942$a.
 =cut
 
 sub default_auth_type_location {
-    return ('942', 'a');
+    return ( '942', 'a' );
 }
 
 =head2 fix_marc21_auth_type_location 
@@ -91,15 +91,15 @@ FIXME: This function should be removed once it's determined
 =cut
 
 sub fix_marc21_auth_type_location {
-    my ($auth_marc, $auth_type_tag, $auth_type_subfield) = @_;
+    my ( $auth_marc, $auth_type_tag, $auth_type_subfield ) = @_;
 
     my $auth_type_code;
-    return unless $auth_type_code = $auth_marc->subfield('152', 'b');
-    $auth_marc->delete_field($auth_marc->field('152'));
-    unless ($auth_marc->field($auth_type_tag) && $auth_marc->subfield($auth_type_tag, $auth_type_subfield)) {
-        $auth_marc->add_fields($auth_type_tag,'','', $auth_type_subfield=>$auth_type_code); 
+    return unless $auth_type_code = $auth_marc->subfield( '152', 'b' );
+    $auth_marc->delete_field( $auth_marc->field('152') );
+    unless ( $auth_marc->field($auth_type_tag) && $auth_marc->subfield( $auth_type_tag, $auth_type_subfield ) ) {
+        $auth_marc->add_fields( $auth_type_tag, '', '', $auth_type_subfield => $auth_type_code );
     }
-    
+
 }
 
 =head1 AUTHOR

@@ -17,14 +17,14 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::I18N;
 
 my $builder = sub {
     my $params = shift;
-    my $id = $params->{id};
+    my $id     = $params->{id};
 
     return qq|
 <script>
@@ -41,13 +41,15 @@ function Click$id(event) {
 
 my $launcher = sub {
     my $params = shift;
-    my $cgi = $params->{cgi};
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name => "cataloguing/value_builder/unimarc_field_146a.tt",
-        query => $cgi,
-        type => 'intranet',
-        flagsrequired => { editcatalogue => '*' },
-    });
+    my $cgi    = $params->{cgi};
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_146a.tt",
+            query         => $cgi,
+            type          => 'intranet',
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
     my @options = (
         { value => 'a', label => __('vocal a cappella music') },
@@ -60,8 +62,8 @@ my $launcher = sub {
     );
 
     $template->param(
-        id => scalar $cgi->param('id'),
-        value => scalar $cgi->param('value'),
+        id      => scalar $cgi->param('id'),
+        value   => scalar $cgi->param('value'),
         options => \@options,
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -48,15 +48,13 @@ sub elem {
                 if ( $component_number < @{$e} ) {
                     return $e->[$component_number];
                 }
-            }
-            elsif ( $component_number == 0 ) {
+            } elsif ( $component_number == 0 ) {
 
                 # a string could be an element with a single component
                 return $e;
             }
             return;
-        }
-        else {
+        } else {
             return $e;
         }
     }
@@ -77,8 +75,7 @@ sub as_string {
         $string .= q|+|;
         if ( ref $e eq 'ARRAY' ) {
             $string .= join q{:}, @{$e};
-        }
-        else {
+        } else {
             $string .= $e;
         }
     }
@@ -90,7 +87,7 @@ sub as_string {
 sub _parse_seg {
     my $s = shift;
     my $e = {
-        tag      => substr( $s,                0, 3 ),
+        tag      => substr( $s, 0, 3 ),
         elem_arr => _get_elements( substr( $s, 3 ) ),
     };
     return $e;
@@ -111,7 +108,7 @@ sub _get_elements {
 
 sub _components {
     my $element = shift;
-    my @c = split /(?<![?])[:]/, $element;
+    my @c       = split /(?<![?])[:]/, $element;
     if ( @c == 1 ) {     # single element return a string
         return de_escape( $c[0] );
     }

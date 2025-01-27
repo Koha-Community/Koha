@@ -41,7 +41,7 @@ Return the license
 =cut
 
 sub license {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $license_rs = $self->_result->license;
     return Koha::ERM::License->_new_from_dbic($license_rs);
 }
@@ -53,7 +53,7 @@ Return the agreement
 =cut
 
 sub agreement {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $agreement_rs = $self->_result->agreement;
     return Koha::ERM::Agreement->_new_from_dbic($agreement_rs);
 }

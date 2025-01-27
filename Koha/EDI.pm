@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use base qw(Exporter);
 use utf8;
-use Carp qw( carp );
+use Carp    qw( carp );
 use English qw{ -no_match_vars };
 use Business::ISBN;
 use DateTime;
@@ -30,7 +30,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use C4::Acquisition qw( ModOrder NewBasket );
 use C4::Suggestions qw( ModSuggestion );
-use C4::Biblio qw(
+use C4::Biblio      qw(
     AddBiblio
     GetFrameworkCode
     GetMarcFromKohaField
@@ -38,10 +38,10 @@ use C4::Biblio qw(
 );
 use Koha::Edifact::Order;
 use Koha::Edifact;
-use C4::Log qw( logaction );
+use C4::Log         qw( logaction );
 use Text::Unidecode qw( unidecode );
 use Koha::Logger;
-use Koha::Plugins; # Adds plugin dirs to @INC
+use Koha::Plugins;    # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
@@ -49,18 +49,19 @@ use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our $VERSION = 1.1;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      process_quote
-      process_invoice
-      process_ordrsp
-      create_edi_order
-      get_edifact_ean
+        process_quote
+        process_invoice
+        process_ordrsp
+        create_edi_order
+        get_edifact_ean
     );
-};
+}
 
 sub create_edi_order {
     my $parameters = shift;
@@ -97,8 +98,7 @@ sub create_edi_order {
     if ($branchcode) {
         $ean_search_keys->{branchcode} = $branchcode;
     }
-    my $ean_obj =
-      $schema->resultset('EdifactEan')->search($ean_search_keys)->single;
+    my $ean_obj = $schema->resultset('EdifactEan')->search($ean_search_keys)->single;
 
     # If no branch specific each can be found, look for a default ean
     unless ($ean_obj) {
@@ -112,7 +112,7 @@ sub create_edi_order {
 
     my $dbh     = C4::Context->dbh;
     my $arr_ref = $dbh->selectcol_arrayref(
-'select id from edifact_messages where basketno = ? and message_type = \'QUOTE\'',
+        'select id from edifact_messages where basketno = ? and message_type = \'QUOTE\'',
         {}, $basketno
     );
     my $response = @{$arr_ref} ? 1 : 0;
@@ -135,8 +135,7 @@ sub create_edi_order {
                 }
             }
         );
-    }
-    else {
+    } else {
         $edifact = Koha::Edifact::Order->new($edifact_order_params);
     }
 
@@ -146,8 +145,8 @@ sub create_edi_order {
 
     # ingest result
     if ($order_file) {
-        my $m = unidecode($order_file);  # remove diacritics and non-latin chars
-        if ($noingest) {                 # allows scripts to produce test files
+        my $m = unidecode($order_file);    # remove diacritics and non-latin chars
+        if ($noingest) {                   # allows scripts to produce test files
             return $m;
         }
         my $order = {
@@ -175,8 +174,7 @@ sub process_ordrsp {
     my $schema = Koha::Database->new()->schema();
     my $logger = Koha::Logger->get( { interface => 'edi' } );
     my $vendor_acct;
-    my $edi =
-      Koha::Edifact->new( { transmission => $response_message->raw_msg, } );
+    my $edi      = Koha::Edifact->new( { transmission => $response_message->raw_msg, } );
     my $messages = $edi->message_array();
 
     if ( @{$messages} ) {
@@ -185,7 +183,7 @@ sub process_ordrsp {
             foreach my $line ( @{$lines} ) {
                 my $ordernumber = $line->ordernumber();
 
-       # action cancelled:change_requested:no_action:accepted:not_found:recorded
+                # action cancelled:change_requested:no_action:accepted:not_found:recorded
                 my $action = $line->action_notification();
                 if ( $action eq 'cancelled' ) {
                     my $reason = $line->coded_orderline_text();
@@ -197,8 +195,7 @@ sub process_ordrsp {
                             datecancellationprinted => dt_from_string()->ymd(),
                         }
                     );
-                }
-                else {    # record order as due with possible further info
+                } else {    # record order as due with possible further info
 
                     my $report     = $line->coded_orderline_text();
                     my $date_avail = $line->availability_date();
@@ -233,8 +230,9 @@ sub process_invoice {
     my $plugin_class = $invoice_message->edi_acct()->plugin();
 
     # Plugin has its own invoice processor, only run it and not the standard invoice processor below
-    if ( $plugin_class ) {
-        eval "require $plugin_class"; # Import the class, eval is needed because requiring a string doesn't work like requiring a bareword
+    if ($plugin_class) {
+        eval "require $plugin_class"
+            ;    # Import the class, eval is needed because requiring a string doesn't work like requiring a bareword
         my $plugin = $plugin_class->new();
         if ( $plugin->can('edifact_process_invoice') ) {
             Koha::Plugins::Handler->run(
@@ -251,21 +249,21 @@ sub process_invoice {
     }
 
     my $edi_plugin;
-    if ( $plugin_class ) {
+    if ($plugin_class) {
         $edi_plugin = Koha::Plugins::Handler->run(
             {
                 class  => $plugin_class,
                 method => 'edifact',
                 params => {
                     invoice_message => $invoice_message,
-                    transmission => $invoice_message->raw_msg,
+                    transmission    => $invoice_message->raw_msg,
                 }
             }
         );
     }
 
-    my $edi = $edi_plugin ||
-      Koha::Edifact->new( { transmission => $invoice_message->raw_msg, } );
+    my $edi = $edi_plugin
+        || Koha::Edifact->new( { transmission => $invoice_message->raw_msg, } );
 
     my $messages = $edi->message_array();
 
@@ -290,7 +288,8 @@ sub process_invoice {
                 )->single;
             }
             if ( !$vendor_acct ) {
-                carp "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in ".$invoice_message->filename;
+                carp "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in "
+                    . $invoice_message->filename;
                 next;
             }
             $invoice_message->edi_acct( $vendor_acct->id );
@@ -441,7 +440,7 @@ sub _get_invoiced_price {
 
 sub receipt_items {
     my ( $schema, $inv_line, $ordernumber, $quantity ) = @_;
-    my $logger   = Koha::Logger->get( { interface => 'edi' } );
+    my $logger = Koha::Logger->get( { interface => 'edi' } );
 
     # itemnumber is not a foreign key ??? makes this a bit cumbersome
     my @item_links = $schema->resultset('AqordersItem')->search(
@@ -454,8 +453,7 @@ sub receipt_items {
         my $item = $schema->resultset('Item')->find( $ilink->itemnumber );
         if ( !$item ) {
             my $i = $ilink->itemnumber;
-            $logger->warn(
-                "Cannot find aqorder item for $i :Order:$ordernumber");
+            $logger->warn("Cannot find aqorder item for $i :Order:$ordernumber");
             next;
         }
         my $b = $item->get_column('homebranch');
@@ -471,7 +469,7 @@ sub receipt_items {
     my $itemfield;
     if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
         @affects = split q{\|},
-          C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
+            C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
         if (@affects) {
             my $order = Koha::Acquisition::Orders->find($ordernumber);
             $biblionumber = $order->biblionumber;
@@ -483,7 +481,7 @@ sub receipt_items {
     my $gir_occurrence = 0;
     while ( $gir_occurrence < $quantity ) {
         my $branch = $inv_line->girfield( 'branch', $gir_occurrence );
-        my $item = shift @{ $branch_map{$branch} };
+        my $item   = shift @{ $branch_map{$branch} };
         if ($item) {
             my $barcode = $inv_line->girfield( 'barcode', $gir_occurrence );
             if ( $barcode && !$item->barcode ) {
@@ -494,8 +492,7 @@ sub receipt_items {
                 );
                 if ( $rs->count > 0 ) {
                     $logger->warn("Barcode $barcode is a duplicate");
-                }
-                else {
+                } else {
 
                     $logger->trace("Adding barcode $barcode");
                     $item->barcode($barcode);
@@ -515,8 +512,7 @@ sub receipt_items {
             }
 
             $item->update;
-        }
-        else {
+        } else {
             $logger->warn("Unmatched item at branch:$branch");
         }
         ++$gir_occurrence;
@@ -529,14 +525,13 @@ sub transfer_items {
     my ( $schema, $inv_line, $order_from, $order_to, $quantity ) = @_;
 
     # Transfer x items from the orig order to a completed partial order
-    my $gocc     = 0;
+    my $gocc = 0;
     my %mapped_by_branch;
     while ( $gocc < $quantity ) {
         my $branch = $inv_line->girfield( 'branch', $gocc );
         if ( !exists $mapped_by_branch{$branch} ) {
             $mapped_by_branch{$branch} = 1;
-        }
-        else {
+        } else {
             $mapped_by_branch{$branch}++;
         }
         ++$gocc;
@@ -562,10 +557,9 @@ sub transfer_items {
             $ilink->update;
             --$quantity;
             --$mapped_by_branch{$i_branch};
-            $logger->warn("Transferred item " . $item->itemnumber);
-        }
-        else {
-            $logger->warn("Skipped item " . $item->itemnumber);
+            $logger->warn( "Transferred item " . $item->itemnumber );
+        } else {
+            $logger->warn( "Skipped item " . $item->itemnumber );
         }
         if ( $quantity < 1 ) {
             last;
@@ -593,9 +587,10 @@ sub process_quote {
     if ( @{$messages} && $quote->vendor_id ) {
         foreach my $msg ( @{$messages} ) {
             ++$message_count;
-            my $basketno =
-              NewBasket( $quote->vendor_id, 0, $quote->filename, q{},
-                q{} . q{} );
+            my $basketno = NewBasket(
+                $quote->vendor_id, 0, $quote->filename, q{},
+                q{} . q{}
+            );
             push @added_baskets, $basketno;
             if ( $message_count > 1 ) {
                 my $m_filename = $quote->filename;
@@ -612,8 +607,7 @@ sub process_quote {
                         filename      => $m_filename,
                     }
                 );
-            }
-            else {
+            } else {
                 $quote->basketno($basketno);
             }
             $logger->trace("Created basket :$basketno");
@@ -649,19 +643,19 @@ sub process_quote {
                 }
             );
             Koha::Acquisition::Baskets->find($b)->close;
+
             # Log the approval
-            if (C4::Context->preference("AcquisitionLog")) {
-                my $approved = Koha::Acquisition::Baskets->find( $b );
+            if ( C4::Context->preference("AcquisitionLog") ) {
+                my $approved = Koha::Acquisition::Baskets->find($b);
                 logaction(
                     'ACQUISITIONS',
                     'APPROVE_BASKET',
                     $b,
-                    to_json($approved->unblessed)
+                    to_json( $approved->unblessed )
                 );
             }
         }
     }
-
 
     return;
 }
@@ -674,8 +668,8 @@ sub quote_item {
 
     # $basketno is the return from AddBasket in the calling routine
     # So this call should not fail unless that has
-    my $basket = Koha::Acquisition::Baskets->find( $basketno );
-    unless ( $basket ) {
+    my $basket = Koha::Acquisition::Baskets->find($basketno);
+    unless ($basket) {
         $logger->error('Skipping order creation no valid basketno');
         return;
     }
@@ -689,10 +683,9 @@ sub quote_item {
         $bib_record = _handle_008_field($bib_record);
 
         ( $bib->{biblionumber}, $bib->{biblioitemnumber} ) =
-          AddBiblio( $bib_record, q{} );
+            AddBiblio( $bib_record, q{} );
         $logger->trace("New biblio added $bib->{biblionumber}");
-    }
-    else {
+    } else {
         $logger->trace("Match found: $bib->{biblionumber}");
     }
 
@@ -704,14 +697,14 @@ sub quote_item {
     $order_quantity ||= 1;    # quantity not necessarily present
     if ( $gir_count > 1 ) {
         if ( $gir_count != $order_quantity ) {
-            $logger->error(
-                "Order for $order_quantity items, $gir_count segments present");
+            $logger->error("Order for $order_quantity items, $gir_count segments present");
         }
         $order_quantity = 1;    # attempts to create an orderline for each gir
     }
-    my $price  = $item->price_info;
+    my $price = $item->price_info;
+
     # Howells do not send an info price but do have a gross price
-    if (!$price) {
+    if ( !$price ) {
         $price = $item->price_gross;
     }
     my $vendor = Koha::Acquisition::Booksellers->find( $quote->vendor_id );
@@ -746,10 +739,8 @@ sub quote_item {
     if ( $item->reference() ) {
         $order_hash->{suppliers_reference_number}    = $item->reference;
         $order_hash->{suppliers_reference_qualifier} = 'QLI';
-    }
-    elsif ( $item->orderline_reference_number() ) {
-        $order_hash->{suppliers_reference_number} =
-          $item->orderline_reference_number;
+    } elsif ( $item->orderline_reference_number() ) {
+        $order_hash->{suppliers_reference_number}    = $item->orderline_reference_number;
         $order_hash->{suppliers_reference_qualifier} = 'SLI';
     }
     if ( $item->item_number_id ) {    # suppliers ean
@@ -787,8 +778,7 @@ sub quote_item {
             carp 'Skipping line with no budget info';
             $logger->trace('girfield skipped for invalid budget');
             $skip++;
-        }
-        else {
+        } else {
             carp 'Skipping line with no budget info';
             $logger->trace('orderline skipped for invalid budget');
             return;
@@ -820,9 +810,9 @@ sub quote_item {
 
             my $created = 0;
             while ( $created < $order_quantity ) {
-                $item_hash->{biblionumber} = $bib->{biblionumber};
+                $item_hash->{biblionumber}     = $bib->{biblionumber};
                 $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
-                my $kitem = Koha::Item->new( $item_hash )->store;
+                my $kitem      = Koha::Item->new($item_hash)->store;
                 my $itemnumber = $kitem->itemnumber;
                 $logger->trace("Added item:$itemnumber");
                 $schema->resultset('AqordersItem')->create(
@@ -855,15 +845,15 @@ sub quote_item {
         while ( $occurrence < $item->quantity ) {
 
             # check budget code
-            $budget = _get_budget( $schema,
-                $item->girfield( 'fund_allocation', $occurrence ) );
+            $budget = _get_budget(
+                $schema,
+                $item->girfield( 'fund_allocation', $occurrence )
+            );
 
             if ( !$budget ) {
-                my $bad_budget =
-                  $item->girfield( 'fund_allocation', $occurrence );
+                my $bad_budget = $item->girfield( 'fund_allocation', $occurrence );
                 carp 'Skipping line with no budget info';
-                $logger->trace(
-                    "girfield skipped for invalid budget:$bad_budget");
+                $logger->trace("girfield skipped for invalid budget:$bad_budget");
                 ++$occurrence;    ## lets look at the next one not this one again
                 next;
             }
@@ -876,9 +866,8 @@ sub quote_item {
 
                 $order_hash->{budget_id} = $budget->budget_id;
 
-                my $new_order =
-                  $schema->resultset('Aqorder')->create($order_hash);
-                my $o = $new_order->ordernumber();
+                my $new_order = $schema->resultset('Aqorder')->create($order_hash);
+                my $o         = $new_order->ordernumber();
                 $logger->trace("Order created :$o");
 
                 # should be done by database settings
@@ -896,15 +885,12 @@ sub quote_item {
                         $item_hash = _create_item_from_quote( $item, $quote );
                     }
                     my $new_item = {
-                        itype =>
-                          $item->girfield( 'stock_category', $occurrence ),
-                        itemcallnumber =>
-                          $item->girfield( 'shelfmark', $occurrence )
-                          || $item->girfield( 'classification', $occurrence )
-                          || title_level_class($item),
-                        holdingbranch =>
-                          $item->girfield( 'branch', $occurrence ),
-                        homebranch => $item->girfield( 'branch', $occurrence ),
+                        itype          => $item->girfield( 'stock_category', $occurrence ),
+                        itemcallnumber => $item->girfield( 'shelfmark',      $occurrence )
+                            || $item->girfield( 'classification', $occurrence )
+                            || title_level_class($item),
+                        holdingbranch => $item->girfield( 'branch', $occurrence ),
+                        homebranch    => $item->girfield( 'branch', $occurrence ),
                     };
 
                     my $lsq_field = C4::Context->preference('EdifactLSQ');
@@ -917,20 +903,18 @@ sub quote_item {
                         $item_hash->{$lsq_field} = $new_item->{$lsq_field};
                     }
                     if ( $new_item->{itemcallnumber} ) {
-                        $item_hash->{itemcallnumber} =
-                          $new_item->{itemcallnumber};
+                        $item_hash->{itemcallnumber} = $new_item->{itemcallnumber};
                     }
                     if ( $new_item->{holdingbranch} ) {
-                        $item_hash->{holdingbranch} =
-                          $new_item->{holdingbranch};
+                        $item_hash->{holdingbranch} = $new_item->{holdingbranch};
                     }
                     if ( $new_item->{homebranch} ) {
                         $item_hash->{homebranch} = $new_item->{homebranch};
                     }
 
-                    $item_hash->{biblionumber} = $bib->{biblionumber};
+                    $item_hash->{biblionumber}     = $bib->{biblionumber};
                     $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
-                    my $kitem = Koha::Item->new( $item_hash )->store;
+                    my $kitem      = Koha::Item->new($item_hash)->store;
                     my $itemnumber = $kitem->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
@@ -940,19 +924,17 @@ sub quote_item {
                         }
                     );
 
-                    my $lrp =
-                      $item->girfield( 'library_rotation_plan', $occurrence );
+                    my $lrp = $item->girfield( 'library_rotation_plan', $occurrence );
                     if ($lrp) {
-                        my $rota =
-                          Koha::StockRotationRotas->find( { title => $lrp },
-                            { key => 'stockrotationrotas_title' } );
+                        my $rota = Koha::StockRotationRotas->find(
+                            { title => $lrp },
+                            { key   => 'stockrotationrotas_title' }
+                        );
                         if ($rota) {
                             $rota->add_item($itemnumber);
                             $logger->trace("Item added to rota $rota->id");
-                        }
-                        else {
-                            $logger->error(
-                                "No rota found matching $lrp in orderline");
+                        } else {
+                            $logger->error("No rota found matching $lrp in orderline");
                         }
                     }
                 }
@@ -962,11 +944,7 @@ sub quote_item {
 
             # increment quantity in orderline for EXISTING budget in $budgets
             else {
-                my $row = $schema->resultset('Aqorder')->find(
-                    {
-                        ordernumber => $ordernumber{ $budget->budget_id }
-                    }
-                );
+                my $row = $schema->resultset('Aqorder')->find( { ordernumber => $ordernumber{ $budget->budget_id } } );
                 if ($row) {
                     my $qty = $row->quantity;
                     $qty++;
@@ -986,21 +964,18 @@ sub quote_item {
                         cn_source        => 'ddc',
                         price            => $price,
                         replacementprice => $price,
-                        itype =>
-                          $item->girfield( 'stock_category', $occurrence ),
-                        itemcallnumber =>
-                          $item->girfield( 'shelfmark', $occurrence )
-                          || $item->girfield( 'classification', $occurrence )
-                          || $item_hash->{itemcallnumber},
-                        holdingbranch =>
-                          $item->girfield( 'branch', $occurrence ),
-                        homebranch => $item->girfield( 'branch', $occurrence ),
+                        itype            => $item->girfield( 'stock_category', $occurrence ),
+                        itemcallnumber   => $item->girfield( 'shelfmark',      $occurrence )
+                            || $item->girfield( 'classification', $occurrence )
+                            || $item_hash->{itemcallnumber},
+                        holdingbranch => $item->girfield( 'branch', $occurrence ),
+                        homebranch    => $item->girfield( 'branch', $occurrence ),
                     };
                     my $lsq_field = C4::Context->preference('EdifactLSQ');
-                    $new_item->{$lsq_field} = $item->girfield( 'sequence_code', $occurrence );
-                    $new_item->{biblionumber} = $bib->{biblionumber};
+                    $new_item->{$lsq_field}       = $item->girfield( 'sequence_code', $occurrence );
+                    $new_item->{biblionumber}     = $bib->{biblionumber};
                     $new_item->{biblioitemnumber} = $bib->{biblioitemnumber};
-                    my $kitem = Koha::Item->new( $new_item )->store;
+                    my $kitem      = Koha::Item->new($new_item)->store;
                     my $itemnumber = $kitem->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
@@ -1010,19 +985,17 @@ sub quote_item {
                         }
                     );
 
-                    my $lrp =
-                      $item->girfield( 'library_rotation_plan', $occurrence );
+                    my $lrp = $item->girfield( 'library_rotation_plan', $occurrence );
                     if ($lrp) {
-                        my $rota =
-                          Koha::StockRotationRotas->find( { title => $lrp },
-                            { key => 'stockrotationrotas_title' } );
+                        my $rota = Koha::StockRotationRotas->find(
+                            { title => $lrp },
+                            { key   => 'stockrotationrotas_title' }
+                        );
                         if ($rota) {
                             $rota->add_item($itemnumber);
                             $logger->trace("Item added to rota $rota->id");
-                        }
-                        else {
-                            $logger->error(
-                                "No rota found matching $lrp in orderline");
+                        } else {
+                            $logger->error("No rota found matching $lrp in orderline");
                         }
                     }
                 }
@@ -1047,10 +1020,10 @@ sub get_edifact_ean {
 # We should not need to have a routine to do this here
 sub _discounted_price {
     my ( $discount, $price, $discounted_price ) = @_;
-    if (defined $discounted_price) {
+    if ( defined $discounted_price ) {
         return $discounted_price;
     }
-    if (!$price) {
+    if ( !$price ) {
         return 0;
     }
     return $price - ( ( $discount * $price ) / 100 );
@@ -1064,24 +1037,23 @@ sub _check_for_existing_bib {
     $search_isbn =~ s/\s*$/%/xms;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-'select biblionumber, biblioitemnumber from biblioitems where isbn like ?',
+        'select biblionumber, biblioitemnumber from biblioitems where isbn like ?',
     );
     my $tuple_arr =
-      $dbh->selectall_arrayref( $sth, { Slice => {} }, $search_isbn );
+        $dbh->selectall_arrayref( $sth, { Slice => {} }, $search_isbn );
+
     if ( @{$tuple_arr} ) {
         return $tuple_arr->[0];
-    }
-    elsif ( length($isbn) == 13 && $isbn !~ /^97[89]/ ) {
+    } elsif ( length($isbn) == 13 && $isbn !~ /^97[89]/ ) {
         my $tarr = $dbh->selectall_arrayref(
-'select biblionumber, biblioitemnumber from biblioitems where ean = ?',
+            'select biblionumber, biblioitemnumber from biblioitems where ean = ?',
             { Slice => {} },
             $isbn
         );
         if ( @{$tarr} ) {
             return $tarr->[0];
         }
-    }
-    else {
+    } else {
         undef $search_isbn;
         $isbn =~ s/\-//xmsg;
         if ( $isbn =~ m/(\d{13})/xms ) {
@@ -1090,8 +1062,7 @@ sub _check_for_existing_bib {
                 $search_isbn = $b_isbn->as_isbn10->as_string( [] );
             }
 
-        }
-        elsif ( $isbn =~ m/(\d{9}[xX]|\d{10})/xms ) {
+        } elsif ( $isbn =~ m/(\d{9}[xX]|\d{10})/xms ) {
             my $b_isbn = Business::ISBN->new($1);
             if ( $b_isbn && $b_isbn->is_valid ) {
                 $search_isbn = $b_isbn->as_isbn13->as_string( [] );
@@ -1101,7 +1072,7 @@ sub _check_for_existing_bib {
         if ($search_isbn) {
             $search_isbn = "%$search_isbn%";
             $tuple_arr =
-              $dbh->selectall_arrayref( $sth, { Slice => {} }, $search_isbn );
+                $dbh->selectall_arrayref( $sth, { Slice => {} }, $search_isbn );
             if ( @{$tuple_arr} ) {
                 return $tuple_arr->[0];
             }
@@ -1123,9 +1094,8 @@ sub _get_budget {
     # db does not ensure budget code is unque
     return $schema->resultset('Aqbudget')->single(
         {
-            budget_code => $budget_code,
-            budget_period_id =>
-              { -in => $period_rs->get_column('budget_period_id')->as_query },
+            budget_code      => $budget_code,
+            budget_period_id => { -in => $period_rs->get_column('budget_period_id')->as_query },
         }
     );
 }
@@ -1137,15 +1107,14 @@ sub title_level_class {
     my $default_scheme = C4::Context->preference('DefaultClassificationSource');
     if ( $default_scheme eq 'ddc' ) {
         $class = $item->dewey_class();
-    }
-    elsif ( $default_scheme eq 'lcc' ) {
+    } elsif ( $default_scheme eq 'lcc' ) {
         $class = $item->lc_class();
     }
     if ( !$class ) {
         $class =
-             $item->girfield('shelfmark')
-          || $item->girfield('classification')
-          || q{};
+               $item->girfield('shelfmark')
+            || $item->girfield('classification')
+            || q{};
     }
     return $class;
 }
@@ -1155,10 +1124,9 @@ sub _create_bib_from_quote {
     #TBD we should flag this for updating from an external source
     #As biblio (&biblioitems) has no candidates flag in order
     my ( $item, $quote ) = @_;
-    my $itemid = $item->item_number_id;
-    my $defalt_classification_source =
-      C4::Context->preference('DefaultClassificationSource');
-    my $bib_hash = {
+    my $itemid                       = $item->item_number_id;
+    my $defalt_classification_source = C4::Context->preference('DefaultClassificationSource');
+    my $bib_hash                     = {
         'biblioitems.cn_source' => $defalt_classification_source,
         'items.cn_source'       => $defalt_classification_source,
         'items.notforloan'      => -1,
@@ -1166,9 +1134,8 @@ sub _create_bib_from_quote {
     };
     $bib_hash->{'biblio.seriestitle'} = $item->series;
 
-    $bib_hash->{'biblioitems.publishercode'} = $item->publisher;
-    $bib_hash->{'biblioitems.publicationyear'} =
-      $bib_hash->{'biblio.copyrightdate'} = $item->publication_date;
+    $bib_hash->{'biblioitems.publishercode'}   = $item->publisher;
+    $bib_hash->{'biblioitems.publicationyear'} = $bib_hash->{'biblio.copyrightdate'} = $item->publication_date;
 
     $bib_hash->{'biblio.title'}         = $item->title;
     $bib_hash->{'biblio.author'}        = $item->author;
@@ -1194,9 +1161,8 @@ sub _create_bib_from_quote {
 
 sub _create_item_from_quote {
     my ( $item, $quote ) = @_;
-    my $defalt_classification_source =
-      C4::Context->preference('DefaultClassificationSource');
-    my $item_hash = {
+    my $defalt_classification_source = C4::Context->preference('DefaultClassificationSource');
+    my $item_hash                    = {
         cn_source  => $defalt_classification_source,
         notforloan => -1,
         cn_sort    => q{},
@@ -1205,14 +1171,14 @@ sub _create_item_from_quote {
     $item_hash->{price}        = $item_hash->{replacementprice} = $item->price;
     $item_hash->{itype}        = $item->girfield('stock_category');
     my $lsq_field = C4::Context->preference('EdifactLSQ');
-    $item_hash->{$lsq_field}     = $item->girfield('sequence_code');
+    $item_hash->{$lsq_field} = $item->girfield('sequence_code');
 
     my $note = {};
 
     $item_hash->{itemcallnumber} =
-         $item->girfield('shelfmark')
-      || $item->girfield('classification')
-      || title_level_class($item);
+           $item->girfield('shelfmark')
+        || $item->girfield('classification')
+        || title_level_class($item);
 
     my $branch = $item->girfield('branch');
     $item_hash->{holdingbranch} = $item_hash->{homebranch} = $branch;

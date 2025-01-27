@@ -31,9 +31,10 @@ use Koha::Items;
 
 my $input = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $input->cookie('CGISESSID'),
-    { circulate => 'circulate_remaining_permissions' } );
+my ($auth_status) = check_cookie_auth(
+    $input->cookie('CGISESSID'),
+    { circulate => 'circulate_remaining_permissions' }
+);
 
 my $op = $input->param('op') || q{};
 if ( $auth_status ne "ok" || $op ne "cud-checkin" ) {
@@ -48,7 +49,7 @@ my $borrowernumber = $input->param('borrowernumber');
 my $override_limit = $input->param('override_limit');
 my $exempt_fine    = $input->param('exempt_fine');
 my $branchcode     = $input->param('branchcode')
-  || C4::Context->userenv->{'branch'};
+    || C4::Context->userenv->{'branch'};
 
 # Expect these inputs to come in as JSON boolean values
 $override_limit = $override_limit ? $override_limit eq 'true' : undef;
@@ -56,14 +57,14 @@ $exempt_fine    = $exempt_fine    ? $exempt_fine eq 'true'    : undef;
 
 my $item = Koha::Items->find($itemnumber);
 
-my $barcode = $item ? $item->barcode : undef; # We certainly will want to return an error code
+my $barcode = $item ? $item->barcode : undef;    # We certainly will want to return an error code
 
 my $data;
 $data->{itemnumber}     = $itemnumber;
 $data->{borrowernumber} = $borrowernumber;
 $data->{branchcode}     = $branchcode;
 
-my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
+my $checkout = Koha::Checkouts->find( { itemnumber => $itemnumber } );
 $data->{patronnote} = $checkout ? $checkout->note : q||;
 
 ( $data->{returned} ) = AddReturn( $barcode, $branchcode, $exempt_fine );

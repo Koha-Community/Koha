@@ -25,7 +25,7 @@ use Test::More tests => 15;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Reserves qw( AddReserve );
+use C4::Reserves    qw( AddReserve );
 use C4::Circulation qw( AddIssue );
 use Koha::CirculationRules;
 use Koha::Database;
@@ -40,10 +40,10 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
 
-my $class = 'C4::SIP::ILS';
+my $class       = 'C4::SIP::ILS';
 my $institution = { id => 'CPL', };
 
-my $ils = $class->new( $institution );
+my $ils = $class->new($institution);
 
 isa_ok( $ils, $class );
 
@@ -62,14 +62,20 @@ is( $ils->institution_id(), 'CPL', 'institution_id method returns id' );
 
 is( $ils->supports('checkout'), 1, 'checkout supported' );
 
-is( $ils->supports('security_inhibit'),
-    q{}, 'unsupported feature returns false' );
+is(
+    $ils->supports('security_inhibit'),
+    q{}, 'unsupported feature returns false'
+);
 
-is( $ils->test_cardnumber_compare( 'A1234', 'a1234' ),
-    1, 'borrower bc test is case insensitive' );
+is(
+    $ils->test_cardnumber_compare( 'A1234', 'a1234' ),
+    1, 'borrower bc test is case insensitive'
+);
 
-is( $ils->test_cardnumber_compare( 'A1234', 'b1234' ),
-    q{}, 'borrower bc test identifies difference' );
+is(
+    $ils->test_cardnumber_compare( 'A1234', 'b1234' ),
+    q{}, 'borrower bc test identifies difference'
+);
 
 subtest add_hold => sub {
     plan tests => 4;
@@ -77,9 +83,7 @@ subtest add_hold => sub {
     my $library = $builder->build_object(
         {
             class => 'Koha::Libraries',
-            value => {
-                pickup_location => 1
-            }
+            value => { pickup_location => 1 }
         }
     );
     my $patron = $builder->build_object(
@@ -90,8 +94,7 @@ subtest add_hold => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv(
-        { branchcode => $library->branchcode, flags => 1 } );
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
 
     my $item = $builder->build_sample_item(
         {
@@ -123,17 +126,18 @@ subtest add_hold => sub {
         'Invalid patron password.',
         "Empty password succeeds"
     );
-    ok( $transaction->{ok}, "Transaction returned success");
-    is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
+    ok( $transaction->{ok}, "Transaction returned success" );
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib" );
+
     # FIXME: Should we not allow for item-level holds when we're passed an item barcode...
-    is( $item->holds->count(),0,"Hold was placed at bib level");
+    is( $item->holds->count(), 0, "Hold was placed at bib level" );
 };
 
 subtest cancel_hold => sub {
     plan tests => 6;
 
-    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object(
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
@@ -141,11 +145,13 @@ subtest cancel_hold => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
 
-    my $item = $builder->build_sample_item({
-        library       => $library->branchcode,
-    });
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
 
     Koha::CirculationRules->set_rules(
         {
@@ -170,25 +176,25 @@ subtest cancel_hold => sub {
             itemnumber     => $item->itemnumber,
         }
     );
-    is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
-    is( $item->holds->count(),1,"Hold was placed on specific item");
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib" );
+    is( $item->holds->count(),         1, "Hold was placed on specific item" );
 
-    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
-    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    my $transaction = $ils->cancel_hold($patron->cardnumber,"",$item->barcode,undef);
+    my $ils         = C4::SIP::ILS->new( { id => $library->branchcode } );
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $transaction = $ils->cancel_hold( $patron->cardnumber, "", $item->barcode, undef );
 
     isnt( $transaction->{screen_msg}, 'Invalid patron password.', "Empty password succeeds" );
-    is( $transaction->{screen_msg},"Hold Cancelled.","We get a success message when hold cancelled");
+    is( $transaction->{screen_msg}, "Hold Cancelled.", "We get a success message when hold cancelled" );
 
-    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
-    is( $item->holds->count(), 0,  "Item has 0 holds remaining");
+    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining" );
+    is( $item->holds->count(),         0, "Item has 0 holds remaining" );
 };
 
 subtest cancel_waiting_hold => sub {
     plan tests => 7;
 
-    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object(
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
@@ -196,11 +202,13 @@ subtest cancel_waiting_hold => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
 
-    my $item = $builder->build_sample_item({
-        library => $library->branchcode,
-    });
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
 
     Koha::CirculationRules->set_rules(
         {
@@ -225,31 +233,31 @@ subtest cancel_waiting_hold => sub {
             itemnumber     => $item->itemnumber,
         }
     );
-    is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
-    is( $item->holds->count(),1,"Hold was placed on specific item");
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib" );
+    is( $item->holds->count(),         1, "Hold was placed on specific item" );
 
-    my $hold = Koha::Holds->find( $reserve_id );
+    my $hold = Koha::Holds->find($reserve_id);
     ok( $hold, 'Get hold object' );
-    $hold->update({ found => 'W' });
+    $hold->update( { found => 'W' } );
     $hold->get_from_storage;
 
     is( $hold->found, 'W', "Hold was correctly set to waiting." );
 
-    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
-    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    my $transaction = $ils->cancel_hold($patron->cardnumber,undef,$item->barcode,undef);
+    my $ils         = C4::SIP::ILS->new( { id => $library->branchcode } );
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $transaction = $ils->cancel_hold( $patron->cardnumber, undef, $item->barcode, undef );
 
-    is( $transaction->{screen_msg},"Hold Cancelled.","We get a success message when hold cancelled");
+    is( $transaction->{screen_msg}, "Hold Cancelled.", "We get a success message when hold cancelled" );
 
-    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
-    is( $item->holds->count(), 0,  "Item has 0 holds remaining");
+    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining" );
+    is( $item->holds->count(),         0, "Item has 0 holds remaining" );
 };
 
 subtest checkout => sub {
     plan tests => 4;
 
-    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object(
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
@@ -257,11 +265,13 @@ subtest checkout => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
 
-    my $item = $builder->build_sample_item({
-        library => $library->branchcode,
-    });
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
 
     Koha::CirculationRules->set_rules(
         {
@@ -281,24 +291,27 @@ subtest checkout => sub {
 
     AddIssue( $patron, $item->barcode, undef, 0 );
     my $checkout = $item->checkout;
-    ok( defined($checkout), "Checkout added");
-    is( $checkout->renewals_count, 0, "Correct renewals");
+    ok( defined($checkout), "Checkout added" );
+    is( $checkout->renewals_count, 0, "Correct renewals" );
 
-    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
-    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    my $transaction = $ils->checkout($patron->cardnumber, $item->barcode);
+    my $ils         = C4::SIP::ILS->new( { id => $library->branchcode } );
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $transaction = $ils->checkout( $patron->cardnumber, $item->barcode );
 
-    is( $transaction->{screen_msg},"Item already checked out to you: renewing item.", "We get a success message when issue is renewed");
+    is(
+        $transaction->{screen_msg}, "Item already checked out to you: renewing item.",
+        "We get a success message when issue is renewed"
+    );
 
     $checkout->discard_changes();
-    is( $checkout->renewals_count, 1, "Renewals has been reduced");
+    is( $checkout->renewals_count, 1, "Renewals has been reduced" );
 };
 
 subtest renew_all => sub {
     plan tests => 1;
 
-    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object(
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
@@ -306,9 +319,9 @@ subtest renew_all => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
 
-    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
+    my $ils = C4::SIP::ILS->new( { id => $library->branchcode } );
 
     # Send empty AD segments (i.e. empty string for patron_pwd)
     my $transaction = $ils->renew_all( $patron->cardnumber, "", undef );

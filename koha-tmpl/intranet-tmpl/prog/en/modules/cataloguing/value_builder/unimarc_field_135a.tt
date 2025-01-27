@@ -2,461 +2,471 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 135a builder") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 135a builder") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_135a" class="cat value_builder">
-    <h1>UNIMARC field 135a builder</h1>
-    <form method="get" name="f_pop" action="">
-        <div class="page-section">
-            <table>
-                <tr>
-                    <td><label for="f1">Type of electronic resource:</label></td>
-                    <td>
-                        <select name="f1" id="f1">
+<h1>UNIMARC field 135a builder</h1>
+<form method="get" name="f_pop" action="">
+    <div class="page-section">
+        <table>
+            <tr>
+                <td><label for="f1">Type of electronic resource:</label></td>
+                <td>
+                    <select name="f1" id="f1">
+                        [% IF ( f1space ) %]
+                            <option value=" " selected="selected">non required value</option>
+                        [% ELSE %]
+                            <option value=" ">non required value</option>
+                        [% END %]
+                        [% IF ( f1a ) %]
+                            <option value="a" selected="selected">numeric</option>
+                        [% ELSE %]
+                            <option value="a">numeric</option>
+                        [% END %]
+                        [% IF ( f1b ) %]
+                            <option value="b" selected="selected">computer program(s)</option>
+                        [% ELSE %]
+                            <option value="b">computer program(s)</option>
+                        [% END %]
+                        [% IF ( f1c ) %]
+                            <option value="c" selected="selected">representational</option>
+                        [% ELSE %]
+                            <option value="c">representational</option>
+                        [% END %]
+                        [% IF ( f1d ) %]
+                            <option value="d" selected="selected">text</option>
+                        [% ELSE %]
+                            <option value="d">text</option>
+                        [% END %]
+                        [% IF ( f1e ) %]
+                            <option value="e" selected="selected">données bibliographiques</option>
+                        [% ELSE %]
+                            <option value="e">données bibliographiques</option>
+                        [% END %]
+                        [% IF ( f1f ) %]
+                            <option value="f" selected="selected">polices de caractères</option>
+                        [% ELSE %]
+                            <option value="f">polices de caractères</option>
+                        [% END %]
+                        [% IF ( f1g ) %]
+                            <option value="g" selected="selected">jeu</option>
+                        [% ELSE %]
+                            <option value="g">jeu</option>
+                        [% END %]
+                        [% IF ( f1h ) %]
+                            <option value="h" selected="selected">son</option>
+                        [% ELSE %]
+                            <option value="h">son</option>
+                        [% END %]
+                        [% IF ( f1i ) %]
+                            <option value="i" selected="selected">multimédia interactif</option>
+                        [% ELSE %]
+                            <option value="i">multimédia interactif</option>
+                        [% END %]
+                        [% IF ( f1j ) %]
+                            <option value="j" selected="selected">système ou service en ligne</option>
+                        [% ELSE %]
+                            <option value="j">système ou service en ligne</option>
+                        [% END %]
+                        [% IF ( f1u ) %]
+                            <option value="u" selected="selected">unknown</option>
+                        [% ELSE %]
+                            <option value="u">unknown</option>
+                        [% END %]
+                        [% IF ( f1v ) %]
+                            <option value="v" selected="selected">combination</option>
+                        [% ELSE %]
+                            <option value="v">combination</option>
+                        [% END %]
+                        [% IF ( f1z ) %]
+                            <option value="z" selected="selected">other</option>
+                        [% ELSE %]
+                            <option value="z">other</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f2">Determinant of material specificity:</label></td>
+                <td>
+                    <select name="f2" id="f2">
+                        [% IF ( f2a ) %]
+                            <option value="a" selected="selected">a- magnetic tape</option>
+                        [% ELSE %]
+                            <option value="a">a- magnetic tape</option>
+                        [% END %]
+                        [% IF ( f2b ) %]
+                            <option value="b" selected="selected">b- computer chip in the cartidge</option>
+                        [% ELSE %]
+                            <option value="b">b- computer chip in the cartidge</option>
+                        [% END %]
+                        [% IF ( f2c ) %]
+                            <option value="c" selected="selected">c- computer optical disc in a cassete</option>
+                        [% ELSE %]
+                            <option value="c">c- computer optical disc in a cassete</option>
+                        [% END %]
+                        [% IF ( f2d ) %]
+                            <option value="d" selected="selected">d- computer disk, type not defined</option>
+                        [% ELSE %]
+                            <option value="d">d- computer disk, type not defined</option>
+                        [% END %]
+                        [% IF ( f2e ) %]
+                            <option value="e" selected="selected">e- cassette with computer disk, type not defined</option>
+                        [% ELSE %]
+                            <option value="e">e- cassete with computer disk, type not defined</option>
+                        [% END %]
+                        [% IF ( f2f ) %]
+                            <option value="f" selected="selected">f- computer magnetic tape in a cassette</option>
+                        [% ELSE %]
+                            <option value="f">f- computer magnetic tape in a cassette</option>
+                        [% END %]
+                        [% IF ( f2j ) %]
+                            <option value="j" selected="selected">j- computer floppy disk</option>
+                        [% ELSE %]
+                            <option value="j">j- computer floppy disk</option>
+                        [% END %]
+                        [% IF ( f2k ) %]
+                            <option value="k" selected="selected">k- computer card</option>
+                        [% ELSE %]
+                            <option value="k">k- computer card</option>
+                        [% END %]
+                        [% IF ( f2m ) %]
+                            <option value="m" selected="selected">m- computer magneto-optical disk</option>
+                        [% ELSE %]
+                            <option value="m">m- computer magneto-optical disk</option>
+                        [% END %]
+                        [% IF ( f2o ) %]
+                            <option value="o" selected="selected">o- computer optical disk</option>
+                        [% ELSE %]
+                            <option value="o">o- computer optical disk</option>
+                        [% END %]
+                        [% IF ( f2r ) %]
+                            <option value="r" selected="selected">r- online</option>
+                        [% ELSE %]
+                            <option value="r">r- online</option>
+                        [% END %]
+                        [% IF ( f2s ) %]
+                            <option value="s" selected="selected">s- standalone device</option>
+                        [% ELSE %]
+                            <option value="s">s- standalone device</option>
+                        [% END %]
+                        [% IF ( f2u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                        [% IF ( f2z ) %]
+                            <option value="z" selected="selected">z- others</option>
+                        [% ELSE %]
+                            <option value="z">z- others</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f3">Color:</label></td>
+                <td>
+                    <select name="f3" id="f3">
+                        [% IF ( f3a ) %]
+                            <option value="a" selected="selected">a- monochrome</option>
+                        [% ELSE %]
+                            <option value="a">a- monochrome</option>
+                        [% END %]
+                        [% IF ( f3b ) %]
+                            <option value="b" selected="selected">b- black and white</option>
+                        [% ELSE %]
+                            <option value="b">b- black and white</option>
+                        [% END %]
+                        [% IF ( f3c ) %]
+                            <option value="c" selected="selected">c- multicolored</option>
+                        [% ELSE %]
+                            <option value="c">c- multicolored</option>
+                        [% END %]
+                        [% IF ( f3g ) %]
+                            <option value="g" selected="selected">g- gray scale</option>
+                        [% ELSE %]
+                            <option value="g">g- gray scaled</option>
+                        [% END %]
+                        [% IF ( f3m ) %]
+                            <option value="m" selected="selected">m- mixed</option>
+                        [% ELSE %]
+                            <option value="m">m- mixed</option>
+                        [% END %]
+                        [% IF ( f3n ) %]
+                            <option value="n" selected="selected">n- not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- not applicable</option>
+                        [% END %]
+                        [% IF ( f3u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                        [% IF ( f3z ) %]
+                            <option value="z" selected="selected">z- others</option>
+                        [% ELSE %]
+                            <option value="z">z- others</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f4">Geometric dimensions:</label></td>
+                <td>
+                    <select name="f4" id="f4">
+                        [% IF ( f4a ) %]
+                            <option value="a" selected="selected">a- 3.5 inches</option>
+                        [% ELSE %]
+                            <option value="a">a- 3.5 inches</option>
+                        [% END %]
+                        [% IF ( f4e ) %]
+                            <option value="e" selected="selected">e- 12 inches</option>
+                        [% ELSE %]
+                            <option value="e">e- 12 inches</option>
+                        [% END %]
+                        [% IF ( f4g ) %]
+                            <option value="g" selected="selected">g- 4.7 inches or 12 cm</option>
+                        [% ELSE %]
+                            <option value="g">g- 4.7 inches or 12 cm</option>
+                        [% END %]
+                        [% IF ( f4i ) %]
+                            <option value="i" selected="selected">i- 1 1/8 x 2 3/8 inches</option>
+                        [% ELSE %]
+                            <option value="i">i- 1 1/8 x 2 3/8 inches</option>
+                        [% END %]
+                        [% IF ( f4j ) %]
+                            <option value="j" selected="selected">j- 3 7/8 x 2 1/2 inches</option>
+                        [% ELSE %]
+                            <option value="j">j- 3 7/8 x 2 1/2 inches</option>
+                        [% END %]
+                        [% IF ( f4n ) %]
+                            <option value="n" selected="selected">n- not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- not applicable</option>
+                        [% END %]
+                        [% IF ( f4o ) %]
+                            <option value="o" selected="selected">o- 5.25 inches</option>
+                        [% ELSE %]
+                            <option value="o">o- 5.25 inches</option>
+                        [% END %]
+                        [% IF ( f4u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                        [% IF ( f4v ) %]
+                            <option value="v" selected="selected">v- 8 inches</option>
+                        [% ELSE %]
+                            <option value="v">v- 8 inches</option>
+                        [% END %]
+                        [% IF ( f4z ) %]
+                            <option value="z" selected="selected">z- others</option>
+                        [% ELSE %]
+                            <option value="z">z- others</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f5">Sound:</label></td>
+                <td>
+                    <select name="f5" id="f5">
+                        [% IF ( f5space ) %]
+                            <option value=" " selected="selected">no sound</option>
+                        [% ELSE %]
+                            <option value=" ">no sound</option>
+                        [% END %]
+                        [% IF ( f5a ) %]
+                            <option value="a" selected="selected">a- with sound</option>
+                        [% ELSE %]
+                            <option value="a">a- with sound</option>
+                        [% END %]
+                        [% IF ( f5u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f6">Image depth (in bits):</label></td>
+                <td> <input type="text" value="[% f6 | html %]" name="f6" id="f6" maxlength="3" size="4" /> </td
+            ></tr>
+            <tr>
+                <td><label for="f7">The number of file formats in the electronic resource:</label></td>
+                <td>
+                    <select name="f7" id="f7">
+                        [% IF ( f7a ) %]
+                            <option value="a" selected="selected">a- one file format</option>
+                        [% ELSE %]
+                            <option value="a">a- one file format</option>
+                        [% END %]
+                        [% IF ( f7m ) %]
+                            <option value="m" selected="selected">m- many file formats</option>
+                        [% ELSE %]
+                            <option value="m">m- many file formats</option>
+                        [% END %]
+                        [% IF ( f7u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f8">Quality Assurance Indicators:</label></td>
+                <td>
+                    <select name="f8" id="f8">
+                        [% IF ( f8a ) %]
+                            <option value="a" selected="selected">a- missing</option>
+                        [% ELSE %]
+                            <option value="a">a- missing</option>
+                        [% END %]
+                        [% IF ( f8n ) %]
+                            <option value="n" selected="selected">n- not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- not applicable</option>
+                        [% END %]
+                        [% IF ( f8p ) %]
+                            <option value="p" selected="selected">p- available</option>
+                        [% ELSE %]
+                            <option value="p">p- available</option>
+                        [% END %]
+                        [% IF ( f8u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f9">Antecedent / Source:</label></td>
+                <td>
+                    <select name="f9" id="f9">
+                        [% IF ( f9a ) %]
+                            <option value="a" selected="selected">a- the file is played from the original</option>
+                        [% ELSE %]
+                            <option value="a">a- the file is played from the original</option>
+                        [% END %]
+                        [% IF ( f9b ) %]
+                            <option value="b" selected="selected">b- the file is played from a microform</option>
+                        [% ELSE %]
+                            <option value="b">b- the file is played from a microform</option>
+                        [% END %]
+                        [% IF ( f9c ) %]
+                            <option value="c" selected="selected">c- the file is played from an electronic resource</option>
+                        [% ELSE %]
+                            <option value="c">c- the file is played from an electronic resource</option>
+                        [% END %]
+                        [% IF ( f9d ) %]
+                            <option value="d" selected="selected">d- the file is played from an intermediate source other than the microform</option>
+                        [% ELSE %]
+                            <option value="d">d- the file is played from an intermediate source other than the microform</option>
+                        [% END %]
+                        [% IF ( f9m ) %]
+                            <option value="m" selected="selected">m- mixed</option>
+                        [% ELSE %]
+                            <option value="m">m- mixed</option>
+                        [% END %]
+                        [% IF ( f9n ) %]
+                            <option value="n" selected="selected">n- not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- not applicable</option>
+                        [% END %]
+                        [% IF ( f9u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f10">Compression level:</label></td>
+                <td>
+                    <select name="f10" id="f10">
+                        [% IF ( f10a ) %]
+                            <option value="a" selected="selected">a- not compressed</option>
+                        [% ELSE %]
+                            <option value="a">a- not compressed</option>
+                        [% END %]
+                        [% IF ( f10b ) %]
+                            <option value="b" selected="selected">b- compressed without losses</option>
+                        [% ELSE %]
+                            <option value="b">b- compressed without losses</option>
+                        [% END %]
+                        [% IF ( f10d ) %]
+                            <option value="d" selected="selected">d- compressed with losses</option>
+                        [% ELSE %]
+                            <option value="d">d- compressed with losses</option>
+                        [% END %]
+                        [% IF ( f10m ) %]
+                            <option value="m" selected="selected">m- mixed</option>
+                        [% ELSE %]
+                            <option value="m">m- mixed</option>
+                        [% END %]
+                        [% IF ( f10u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+            <tr>
+                <td><label for="f11">Quality and purpose of the electronic resource:</label></td>
+                <td>
+                    <select name="f11" id="f11">
+                        [% IF ( f11a ) %]
+                            <option value="a" selected="selected">a- access</option>
+                        [% ELSE %]
+                            <option value="a">a- access</option>
+                        [% END %]
+                        [% IF ( f11n ) %]
+                            <option value="n" selected="selected">n- not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- not applicable</option>
+                        [% END %]
+                        [% IF ( f11p ) %]
+                            <option value="p" selected="selected">p- preservation</option>
+                        [% ELSE %]
+                            <option value="p">p- preservation</option>
+                        [% END %]
+                        [% IF ( f11r ) %]
+                            <option value="r" selected="selected">r- substitute</option>
+                        [% ELSE %]
+                            <option value="r">r- substitute</option>
+                        [% END %]
+                        [% IF ( f11u ) %]
+                            <option value="u" selected="selected">u- unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- unknown</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+        </table>
+    </div>
+    <!-- /.page-section -->
 
-                            [% IF ( f1space ) %]
-                                <option value=" " selected="selected">non required value</option>
-                            [% ELSE %]
-                                <option value=" ">non required value</option>
-                            [% END %]
-                            [% IF ( f1a ) %]
-                                <option value="a" selected="selected">numeric</option>
-                            [% ELSE %]
-                                <option value="a">numeric</option>
-                            [% END %]
-                            [% IF ( f1b ) %]
-                                <option value="b" selected="selected">computer program(s)</option>
-                            [% ELSE %]
-                                <option value="b">computer program(s)</option>
-                            [% END %]
-                            [% IF ( f1c ) %]
-                                <option value="c" selected="selected">representational</option>
-                            [% ELSE %]
-                                <option value="c">representational</option>
-                            [% END %]
-                            [% IF ( f1d ) %]
-                                <option value="d" selected="selected">text</option>
-                            [% ELSE %]
-                                <option value="d">text</option>
-                            [% END %]
-                            [% IF ( f1e ) %]
-                                <option value="e" selected="selected">données bibliographiques</option>
-                            [% ELSE %]
-                                <option value="e">données bibliographiques</option>
-                            [% END %]
-                            [% IF ( f1f ) %]
-                                <option value="f" selected="selected">polices de caractères</option>
-                            [% ELSE %]
-                                <option value="f">polices de caractères</option>
-                            [% END %]
-                            [% IF ( f1g ) %]
-                                <option value="g" selected="selected">jeu</option>
-                            [% ELSE %]
-                                <option value="g">jeu</option>
-                            [% END %]
-                            [% IF ( f1h ) %]
-                                <option value="h" selected="selected">son</option>
-                            [% ELSE %]
-                                <option value="h">son</option>
-                            [% END %]
-                            [% IF ( f1i ) %]
-                                <option value="i" selected="selected">multimédia interactif</option>
-                            [% ELSE %]
-                                <option value="i">multimédia interactif</option>
-                            [% END %]
-                            [% IF ( f1j ) %]
-                                <option value="j" selected="selected">système ou service en ligne</option>
-                            [% ELSE %]
-                                <option value="j">système ou service en ligne</option>
-                            [% END %]
-                            [% IF ( f1u ) %]
-                                <option value="u" selected="selected">unknown</option>
-                            [% ELSE %]
-                                <option value="u">unknown</option>
-                            [% END %]
-                            [% IF ( f1v ) %]
-                                <option value="v" selected="selected">combination</option>
-                            [% ELSE %]
-                                <option value="v">combination</option>
-                            [% END %]
-                            [% IF ( f1z ) %]
-                                <option value="z" selected="selected">other</option>
-                            [% ELSE %]
-                                <option value="z">other</option>
-                            [% END %]
-                        </select>
-                    </td></tr>
-                         <tr>
-                            <td><label for="f2">Determinant of material specificity:</label></td>
-                            <td>
-                                <select name="f2" id="f2">
-                                [% IF ( f2a ) %]
-                                    <option value="a" selected="selected">a- magnetic tape</option>
-                                [% ELSE %]
-                                    <option value="a">a- magnetic tape</option>
-                                [% END %]
-                                [% IF ( f2b ) %]
-                                    <option value="b" selected="selected">b- computer chip in the cartidge</option>
-                                [% ELSE %]
-                                    <option value="b">b- computer chip in the cartidge</option>
-                                [% END %]
-                                [% IF ( f2c ) %]
-                                    <option value="c" selected="selected">c- computer optical disc in a cassete</option>
-                                [% ELSE %]
-                                    <option value="c">c- computer optical disc in a cassete</option>
-                                [% END %]
-                                [% IF ( f2d ) %]
-                                    <option value="d" selected="selected">d- computer disk, type not defined</option>
-                                [% ELSE %]
-                                    <option value="d">d- computer disk, type not defined</option>
-                                [% END %]
-                                [% IF ( f2e ) %]
-                                    <option value="e" selected="selected">e- cassette with computer disk, type not defined</option>
-                                [% ELSE %]
-                                    <option value="e">e- cassete with computer disk, type not defined</option>
-                                [% END %]
-                                [% IF ( f2f ) %]
-                                    <option value="f" selected="selected">f- computer magnetic tape in a cassette</option>
-                                [% ELSE %]
-                                    <option value="f">f- computer magnetic tape in a cassette</option>
-                                [% END %]
-                                [% IF ( f2j ) %]
-                                    <option value="j" selected="selected">j- computer floppy disk</option>
-                                [% ELSE %]
-                                    <option value="j">j- computer floppy disk</option>
-                                [% END %]
-                                [% IF ( f2k ) %]
-                                    <option value="k" selected="selected">k- computer card</option>
-                                [% ELSE %]
-                                    <option value="k">k- computer card</option>
-                                [% END %]
-                                [% IF ( f2m ) %]
-                                    <option value="m" selected="selected">m- computer magneto-optical disk</option>
-                                [% ELSE %]
-                                    <option value="m">m- computer magneto-optical disk</option>
-                                [% END %]
-                                [% IF ( f2o ) %]
-                                    <option value="o" selected="selected">o- computer optical disk</option>
-                                [% ELSE %]
-                                    <option value="o">o- computer optical disk</option>
-                                [% END %]
-                                [% IF ( f2r ) %]
-                                    <option value="r" selected="selected">r- online</option>
-                                [% ELSE %]
-                                    <option value="r">r- online</option>
-                                [% END %]
-                                [% IF ( f2s ) %]
-                                    <option value="s" selected="selected">s- standalone device</option>
-                                [% ELSE %]
-                                    <option value="s">s- standalone device</option>
-                                [% END %]
-                                [% IF ( f2u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                                [% IF ( f2z ) %]
-                                    <option value="z" selected="selected">z- others</option>
-                                [% ELSE %]
-                                    <option value="z">z- others</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                        <tr>
-                            <td><label for="f3">Color:</label></td>
-                            <td>
-                                <select name="f3" id="f3">
-                                [% IF ( f3a ) %]
-                                    <option value="a" selected="selected">a- monochrome</option>
-                                [% ELSE %]
-                                    <option value="a">a- monochrome</option>
-                                [% END %]
-                                [% IF ( f3b ) %]
-                                    <option value="b" selected="selected">b- black and white</option>
-                                [% ELSE %]
-                                    <option value="b">b- black and white</option>
-                                [% END %]
-                                [% IF ( f3c ) %]
-                                    <option value="c" selected="selected">c- multicolored</option>
-                                [% ELSE %]
-                                    <option value="c">c- multicolored</option>
-                                [% END %]
-                                [% IF ( f3g ) %]
-                                    <option value="g" selected="selected">g- gray scale</option>
-                                [% ELSE %]
-                                    <option value="g">g- gray scaled</option>
-                                [% END %]
-                                [% IF ( f3m ) %]
-                                    <option value="m" selected="selected">m- mixed</option>
-                                [% ELSE %]
-                                    <option value="m">m- mixed</option>
-                                [% END %]
-                                [% IF ( f3n ) %]
-                                    <option value="n" selected="selected">n- not applicable</option>
-                                [% ELSE %]
-                                    <option value="n">n- not applicable</option>
-                                [% END %]
-                                [% IF ( f3u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                                [% IF ( f3z ) %]
-                                    <option value="z" selected="selected">z- others</option>
-                                [% ELSE %]
-                                    <option value="z">z- others</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                        <tr>
-                            <td><label for="f4">Geometric dimensions:</label></td>
-                            <td>
-                                <select name="f4" id="f4">
-                                [% IF ( f4a ) %]
-                                    <option value="a" selected="selected">a- 3.5 inches</option>
-                                [% ELSE %]
-                                    <option value="a">a- 3.5 inches</option>
-                                [% END %]
-                                [% IF ( f4e ) %]
-                                    <option value="e" selected="selected">e- 12 inches</option>
-                                [% ELSE %]
-                                    <option value="e">e- 12 inches</option>
-                                [% END %]
-                                [% IF ( f4g ) %]
-                                    <option value="g" selected="selected">g- 4.7 inches or 12 cm</option>
-                                [% ELSE %]
-                                    <option value="g">g- 4.7 inches or 12 cm</option>
-                                [% END %]
-                                [% IF ( f4i ) %]
-                                    <option value="i" selected="selected">i- 1 1/8 x 2 3/8 inches</option>
-                                [% ELSE %]
-                                    <option value="i">i- 1 1/8 x 2 3/8 inches</option>
-                                [% END %]
-                                [% IF ( f4j ) %]
-                                    <option value="j" selected="selected">j- 3 7/8 x 2 1/2 inches</option>
-                                [% ELSE %]
-                                    <option value="j">j- 3 7/8 x 2 1/2 inches</option>
-                                [% END %]
-                                [% IF ( f4n ) %]
-                                    <option value="n" selected="selected">n- not applicable</option>
-                                [% ELSE %]
-                                    <option value="n">n- not applicable</option>
-                                [% END %]
-                                [% IF ( f4o ) %]
-                                    <option value="o" selected="selected">o- 5.25 inches</option>
-                                [% ELSE %]
-                                    <option value="o">o- 5.25 inches</option>
-                                [% END %]
-                                [% IF ( f4u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                                [% IF ( f4v ) %]
-                                    <option value="v" selected="selected">v- 8 inches</option>
-                                [% ELSE %]
-                                    <option value="v">v- 8 inches</option>
-                                [% END %]
-                                [% IF ( f4z ) %]
-                                    <option value="z" selected="selected">z- others</option>
-                                [% ELSE %]
-                                    <option value="z">z- others</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                         <tr>
-                            <td><label for="f5">Sound:</label></td>
-                            <td>
-                                <select name="f5" id="f5">
-                                [% IF ( f5space ) %]
-                                    <option value=" " selected="selected">no sound</option>
-                                [% ELSE %]
-                                    <option value=" ">no sound</option>
-                                [% END %]
-                                [% IF ( f5a ) %]
-                                    <option value="a" selected="selected">a- with sound</option>
-                                [% ELSE %]
-                                    <option value="a">a- with sound</option>
-                                [% END %]
-                                [% IF ( f5u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                         <tr>
-                            <td><label for="f6">Image depth (in bits):</label></td>
-                            <td>
-                              <input type="text" value="[% f6 | html %]" name="f6" id="f6" maxlength="3" size="4">
-                            </td></tr>
-                         <tr>
-                            <td><label for="f7">The number of file formats in the electronic resource:</label></td>
-                            <td>
-                                <select name="f7" id="f7">
-                                [% IF ( f7a ) %]
-                                    <option value="a" selected="selected">a- one file format</option>
-                                [% ELSE %]
-                                    <option value="a">a- one file format</option>
-                                [% END %]
-                                [% IF ( f7m ) %]
-                                    <option value="m" selected="selected">m- many file formats</option>
-                                [% ELSE %]
-                                    <option value="m">m- many file formats</option>
-                                [% END %]
-                                [% IF ( f7u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                         <tr>
-                            <td><label for="f8">Quality Assurance Indicators:</label></td>
-                            <td>
-                                <select name="f8" id="f8">
-                                [% IF ( f8a ) %]
-                                    <option value="a" selected="selected">a- missing</option>
-                                [% ELSE %]
-                                    <option value="a">a- missing</option>
-                                [% END %]
-                                [% IF ( f8n ) %]
-                                    <option value="n" selected="selected">n- not applicable</option>
-                                [% ELSE %]
-                                    <option value="n">n- not applicable</option>
-                                [% END %]
-                                [% IF ( f8p ) %]
-                                    <option value="p" selected="selected">p- available</option>
-                                [% ELSE %]
-                                    <option value="p">p- available</option>
-                                [% END %]
-                                [% IF ( f8u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                         <tr>
-                            <td><label for="f9">Antecedent / Source:</label></td>
-                            <td>
-                                <select name="f9" id="f9">
-                                [% IF ( f9a ) %]
-                                    <option value="a" selected="selected">a- the file is played from the original</option>
-                                [% ELSE %]
-                                    <option value="a">a- the file is played from the original</option>
-                                [% END %]
-                                [% IF ( f9b ) %]
-                                    <option value="b" selected="selected">b- the file is played from a microform</option>
-                                [% ELSE %]
-                                    <option value="b">b- the file is played from a microform</option>
-                                [% END %]
-                                [% IF ( f9c ) %]
-                                    <option value="c" selected="selected">c- the file is played from an electronic resource</option>
-                                [% ELSE %]
-                                    <option value="c">c- the file is played from an electronic resource</option>
-                                [% END %]
-                                [% IF ( f9d ) %]
-                                    <option value="d" selected="selected">d- the file is played from an intermediate source other than the microform</option>
-                                [% ELSE %]
-                                    <option value="d">d- the file is played from an intermediate source other than the microform</option>
-                                [% END %]
-                                [% IF ( f9m ) %]
-                                    <option value="m" selected="selected">m- mixed</option>
-                                [% ELSE %]
-                                    <option value="m">m- mixed</option>
-                                [% END %]
-                                [% IF ( f9n ) %]
-                                    <option value="n" selected="selected">n- not applicable</option>
-                                [% ELSE %]
-                                    <option value="n">n- not applicable</option>
-                                [% END %]
-                                [% IF ( f9u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                         <tr>
-                            <td><label for="f10">Compression level:</label></td>
-                            <td>
-                                <select name="f10" id="f10">
-                                [% IF ( f10a ) %]
-                                    <option value="a" selected="selected">a- not compressed</option>
-                                [% ELSE %]
-                                    <option value="a">a- not compressed</option>
-                                [% END %]
-                                [% IF ( f10b ) %]
-                                    <option value="b" selected="selected">b- compressed without losses</option>
-                                [% ELSE %]
-                                    <option value="b">b- compressed without losses</option>
-                                [% END %]
-                                [% IF ( f10d ) %]
-                                    <option value="d" selected="selected">d- compressed with losses</option>
-                                [% ELSE %]
-                                    <option value="d">d- compressed with losses</option>
-                                [% END %]
-                                [% IF ( f10m ) %]
-                                    <option value="m" selected="selected">m- mixed</option>
-                                [% ELSE %]
-                                    <option value="m">m- mixed</option>
-                                [% END %]
-                                [% IF ( f10u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-                         <tr>
-                            <td><label for="f11">Quality and purpose of the electronic resource:</label></td>
-                            <td>
-                                <select name="f11" id="f11">
-                                [% IF ( f11a ) %]
-                                    <option value="a" selected="selected">a- access</option>
-                                [% ELSE %]
-                                    <option value="a">a- access</option>
-                                [% END %]
-                                [% IF ( f11n ) %]
-                                    <option value="n" selected="selected">n- not applicable</option>
-                                [% ELSE %]
-                                    <option value="n">n- not applicable</option>
-                                [% END %]
-                                [% IF ( f11p ) %]
-                                    <option value="p" selected="selected">p- preservation</option>
-                                [% ELSE %]
-                                    <option value="p">p- preservation</option>
-                                [% END %]
-                                [% IF ( f11r ) %]
-                                    <option value="r" selected="selected">r- substitute</option>
-                                [% ELSE %]
-                                    <option value="r">r- substitute</option>
-                                [% END %]
-                                [% IF ( f11u ) %]
-                                    <option value="u" selected="selected">u- unknown</option>
-                                [% ELSE %]
-                                    <option value="u">u- unknown</option>
-                                [% END %]
-                              </select>
-                            </td></tr>
-            </table>
-        </div> <!-- /.page-section -->
-
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
-                    <button class="btn btn-default close_window">Cancel</button>
-                </fieldset>
-            </div>
-        </nav>
-
-    </form>
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
+</form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

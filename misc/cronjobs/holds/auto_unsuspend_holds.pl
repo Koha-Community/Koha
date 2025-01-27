@@ -24,11 +24,11 @@ use warnings;
 
 use Koha::Script -cron;
 use C4::Reserves qw(AutoUnsuspendReserves);
-use C4::Log qw( cronlogaction );
+use C4::Log      qw( cronlogaction );
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 AutoUnsuspendReserves();
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

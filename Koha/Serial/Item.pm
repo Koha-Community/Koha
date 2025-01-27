@@ -19,7 +19,6 @@ package Koha::Serial::Item;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);

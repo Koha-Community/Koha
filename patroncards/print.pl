@@ -22,127 +22,141 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use autouse 'Data::Dumper' => qw(Dumper);
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth     qw( get_template_and_user );
+use C4::Output   qw( output_html_with_http_headers );
 use C4::Creators qw( get_all_layouts get_all_templates get_output_formats );
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patroncards/print.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { tools => 'label_creator' },
+        template_name => "patroncards/print.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { tools => 'label_creator' },
     }
 );
 
-my $op = $cgi->param('op') || 'none';
-my @label_ids = $cgi->multi_param('label_id');   # this will handle individual card printing; we use label_id to maintain consistency with the column names in the creator_batches table
-my @batch_ids = $cgi->multi_param('batch_id');
-my $patronlist_id = $cgi->param('patronlist_id') || undef;
-my $layout_id = $cgi->param('layout_id') || undef;
-my $layout_back_id = $cgi->param('layout_back_id') || undef;
-my $template_id = $cgi->param('template_id') || undef;
-my $start_card = $cgi->param('start_card') || 1;
+my $op        = $cgi->param('op') || 'none';
+my @label_ids = $cgi->multi_param('label_id')
+    ; # this will handle individual card printing; we use label_id to maintain consistency with the column names in the creator_batches table
+my @batch_ids        = $cgi->multi_param('batch_id');
+my $patronlist_id    = $cgi->param('patronlist_id')  || undef;
+my $layout_id        = $cgi->param('layout_id')      || undef;
+my $layout_back_id   = $cgi->param('layout_back_id') || undef;
+my $template_id      = $cgi->param('template_id')    || undef;
+my $start_card       = $cgi->param('start_card')     || 1;
 my @borrower_numbers = $cgi->multi_param('borrower_number');
-my $output_format = $cgi->param('output_format') || 'pdf';
-my $referer = $cgi->param('referer') || undef;
-my $order_by = $cgi->param('order_by') || undef;
+my $output_format    = $cgi->param('output_format') || 'pdf';
+my $referer          = $cgi->param('referer')       || undef;
+my $order_by         = $cgi->param('order_by')      || undef;
 
-my $layouts = undef;
-my $templates = undef;
-my $output_formats = undef;
-my @batches = ();
+my $layouts           = undef;
+my $templates         = undef;
+my $output_formats    = undef;
+my @batches           = ();
 my $multi_batch_count = scalar(@batch_ids);
-my $card_count = scalar(@label_ids);
-my $borrower_count = scalar(@borrower_numbers);
+my $card_count        = scalar(@label_ids);
+my $borrower_count    = scalar(@borrower_numbers);
 
-if ($op eq 'export') {
+if ( $op eq 'export' ) {
     if (@label_ids) {
         my $label_id_param = '&label_id=';
-        $label_id_param .= join ('&label_id=',@label_ids);
-        push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),    #FIXME csv not supported, no script?
-                         batch_id        => $batch_ids[0],
-                         template_id     => $template_id,
-                         layout_id       => $layout_id,
-                         layout_back_id  => $layout_back_id,
-                         start_card      => $start_card,
-                         label_ids       => $label_id_param,
-                         card_count      => scalar(@label_ids),
-                        });
+        $label_id_param .= join( '&label_id=', @label_ids );
+        push(
+            @batches,
+            {
+                create_script => ( $output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl' )
+                ,    #FIXME csv not supported, no script?
+                batch_id       => $batch_ids[0],
+                template_id    => $template_id,
+                layout_id      => $layout_id,
+                layout_back_id => $layout_back_id,
+                start_card     => $start_card,
+                label_ids      => $label_id_param,
+                card_count     => scalar(@label_ids),
+            }
+        );
         $template->param(
-                        batches     => \@batches,
-                        referer     => $referer,
-                        order_by    => $order_by,
-                        );
-    }
-    elsif (@borrower_numbers) {
+            batches  => \@batches,
+            referer  => $referer,
+            order_by => $order_by,
+        );
+    } elsif (@borrower_numbers) {
         my $borrower_number_param = '&borrower_number=';
-        $borrower_number_param .= join ('&borrower_number=',@borrower_numbers);
-        push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),    #FIXME csv not supported, no script?
-                         template_id     => $template_id,
-                         layout_id       => $layout_id,
-                         layout_back_id  => $layout_back_id,
-                         start_card      => $start_card,
-                         borrower_numbers    => $borrower_number_param,
-                         card_count      => scalar(@borrower_numbers),
-                        });
+        $borrower_number_param .= join( '&borrower_number=', @borrower_numbers );
+        push(
+            @batches,
+            {
+                create_script => ( $output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl' )
+                ,    #FIXME csv not supported, no script?
+                template_id      => $template_id,
+                layout_id        => $layout_id,
+                layout_back_id   => $layout_back_id,
+                start_card       => $start_card,
+                borrower_numbers => $borrower_number_param,
+                card_count       => scalar(@borrower_numbers),
+            }
+        );
         $template->param(
-                        batches     => \@batches,
-                        referer     => $referer,
-                        order_by    => $order_by,
-                        );
-    }
-    elsif (@batch_ids) {
+            batches  => \@batches,
+            referer  => $referer,
+            order_by => $order_by,
+        );
+    } elsif (@batch_ids) {
         foreach my $batch_id (@batch_ids) {
-           push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),    #FIXME csv not supported, no script?
-                            batch_id        => $batch_id,
-                            template_id     => $template_id,
-                            layout_id       => $layout_id,
-                            layout_back_id  => $layout_back_id,
-                            start_card      => $start_card,
-                            });
+            push(
+                @batches,
+                {
+                    create_script => ( $output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl' )
+                    ,    #FIXME csv not supported, no script?
+                    batch_id       => $batch_id,
+                    template_id    => $template_id,
+                    layout_id      => $layout_id,
+                    layout_back_id => $layout_back_id,
+                    start_card     => $start_card,
+                }
+            );
         }
         $template->param(
-                        batches     => \@batches,
-                        referer     => $referer,
-                        order_by    => $order_by,
-                        );
-    }
-    elsif ($patronlist_id ) {
+            batches  => \@batches,
+            referer  => $referer,
+            order_by => $order_by,
+        );
+    } elsif ($patronlist_id) {
         $template->param(
-                         patronlist_id   => $patronlist_id,
-                         template_id     => $template_id,
-                         layout_id       => $layout_id,
-                         layout_back_id  => $layout_back_id,
-                         start_card      => $start_card,
-                         referer         => $referer,
-                         order_by        => $order_by,
-                        );
+            patronlist_id  => $patronlist_id,
+            template_id    => $template_id,
+            layout_id      => $layout_id,
+            layout_back_id => $layout_back_id,
+            start_card     => $start_card,
+            referer        => $referer,
+            order_by       => $order_by,
+        );
     }
-}
-elsif ($op eq 'none') {
+} elsif ( $op eq 'none' ) {
+
     # setup select menus for selecting layout and template for this run...
     $referer = $ENV{'HTTP_REFERER'};
     $referer =~ s/^.*?:\/\/.*?(\/.*)$/$1/m;
-    @batch_ids = map { {batch_id => $_} } @batch_ids;
-    @label_ids = map { {label_id => $_} } @label_ids;
-    @borrower_numbers = map { {borrower_number => $_} } @borrower_numbers;
-    $templates = get_all_templates( { fields => [qw( template_id template_code ) ], filters => { creator => "Patroncards" } });
-    $layouts = get_all_layouts({ fields => [ qw( layout_id layout_name ) ], filters => { creator => "Patroncards" } });
+    @batch_ids        = map { { batch_id        => $_ } } @batch_ids;
+    @label_ids        = map { { label_id        => $_ } } @label_ids;
+    @borrower_numbers = map { { borrower_number => $_ } } @borrower_numbers;
+    $templates =
+        get_all_templates( { fields => [qw( template_id template_code )], filters => { creator => "Patroncards" } } );
+    $layouts = get_all_layouts( { fields => [qw( layout_id layout_name )], filters => { creator => "Patroncards" } } );
     $output_formats = get_output_formats();
     $template->param(
-                    batch_ids                   => \@batch_ids,
-                    label_ids                   => \@label_ids,
-                    borrower_numbers            => \@borrower_numbers,
-                    patronlist_id               => $patronlist_id,
-                    templates                   => $templates,
-                    layouts                     => $layouts,
-                    output_formats              => $output_formats,
-                    multi_batch_count           => $multi_batch_count,
-                    card_count                  => $card_count,
-                    borrower_count              => $borrower_count,
-                    referer                     => $referer,
-                    );
+        batch_ids         => \@batch_ids,
+        label_ids         => \@label_ids,
+        borrower_numbers  => \@borrower_numbers,
+        patronlist_id     => $patronlist_id,
+        templates         => $templates,
+        layouts           => $layouts,
+        output_formats    => $output_formats,
+        multi_batch_count => $multi_batch_count,
+        card_count        => $card_count,
+        borrower_count    => $borrower_count,
+        referer           => $referer,
+    );
 }
 output_html_with_http_headers $cgi, $cookie, $template->output;

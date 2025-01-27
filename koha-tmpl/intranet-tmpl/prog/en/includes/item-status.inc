@@ -29,8 +29,7 @@
 [% transfer = item.get_transfer %]
 [% IF ( transfer.in_transit ) %]
     [% SET itemavailable = 0 %]
-    <span class="item-status intransit">In transit from [% Branches.GetName( transfer.frombranch ) | html %]
-    to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.datesent | $KohaDates %]</span>
+    <span class="item-status intransit">In transit from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.datesent | $KohaDates %]</span>
 [% END %]
 
 [% IF ( item.withdrawn ) %]
@@ -70,15 +69,15 @@
 
 [% hold = item.holds.next %]
 [% IF hold %]
-        [% IF hold.waitingdate %]
-            [% SET itemavailable = 0 %]
-            <span class="item-status holdwaiting">Waiting at [% Branches.GetName(hold.get_column('branchcode')) | html %] since [% hold.waitingdate | $KohaDates %].</span>
-        [% ELSE %]
-            <span class="item-status itemhold">Item-level hold (placed [% hold.reservedate | $KohaDates %]) for delivery at [% Branches.GetName(hold.get_column('branchcode')) | html %].</span>
-        [% END %]
-        [% IF Koha.Preference('canreservefromotherbranches') %]
-            <span class="item-status holdfor">Hold for: [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]</span>
-        [% END %]
+    [% IF hold.waitingdate %]
+        [% SET itemavailable = 0 %]
+        <span class="item-status holdwaiting">Waiting at [% Branches.GetName(hold.get_column('branchcode')) | html %] since [% hold.waitingdate | $KohaDates %].</span>
+    [% ELSE %]
+        <span class="item-status itemhold">Item-level hold (placed [% hold.reservedate | $KohaDates %]) for delivery at [% Branches.GetName(hold.get_column('branchcode')) | html %].</span>
+    [% END %]
+    [% IF Koha.Preference('canreservefromotherbranches') %]
+        <span class="item-status holdfor">Hold for: [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]</span>
+    [% END %]
 [% END %]
 
 [% IF ( itemavailable ) %]

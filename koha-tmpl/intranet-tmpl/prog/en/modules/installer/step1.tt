@@ -1,157 +1,81 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% UNLESS ( language ) %] Choose your language [% END %]
-    [% IF ( language ) %]
-        [% UNLESS ( checkmodule ) %]
-            [% IF ( missing_modules ) %]
-                [% t("Perl modules missing") | html %]
+<title
+    >[% FILTER collapse %]
+        [% UNLESS ( language ) %]Choose your language[% END %]
+        [% IF ( language ) %]
+            [% UNLESS ( checkmodule ) %]
+                [% IF ( missing_modules ) %]
+                    [% t("Perl modules missing") | html %]
+                [% END %]
+                [% IF ( problems ) %]
+                    [% t("Perl version obsolete") | html %]
+                [% END %]
             [% END %]
-            [% IF ( problems ) %]
-                [% t("Perl version obsolete") | html %]
-            [% END %]
+            [% t("Check Perl dependencies") | html %]
         [% END %]
-        [% t("Check Perl dependencies") | html %]
-    [% END %] &rsaquo;
-    [% t("Web installer") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+        &rsaquo; [% t("Web installer") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
-
 <body id="installer" class="installer">
-    <div class="container-fluid">
-        <div class="row">
-            <div id="installer-step1" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+<div class="container-fluid">
+    <div class="row">
+        <div id="installer-step1" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+            <div id="logo"><a href="#">Koha</a></div>
 
-                <div id="logo"><a href="#">Koha</a></div>
+            [% UNLESS ( language ) %]
+                <h1>Web installer &rsaquo; Choose your language</h1>
 
-                [% UNLESS ( language ) %]
-                    <h1>Web installer &rsaquo; Choose your language</h1>
+                <div id="steps">
+                    <ol>
+                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Choose your language</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
 
-                    <div id="steps">
-                        <ol>
-                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Choose your language</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                        </ol>
-                    </div>
+                <p>Please pick your language from the following list. If your language is not listed, please inform your system administrator.</p>
 
-                    <p>Please pick your language from the following list. If your language is not listed, please inform your system administrator.</p>
-
-                    <form name="language" action="install.pl" method="get">
-                        <div class="form-group">
-                            <label for="language">Select a language: </label>
-                            <select id="language" name="language">
-                                [% IF ( installer_languages_loop ) %]
-                                    [% FOREACH installer_languages_loo IN installer_languages_loop %]
-                                        [% IF ( installer_languages_loo.plural ) %]
-                                            <optgroup label="[% installer_languages_loo.language | html %]">
-                                                [% FOREACH sublanguages_loo IN installer_languages_loo.sublanguages_loop %]
-                                                    <option value="[% sublanguages_loo.rfc4646_subtag | html %]">[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description | html %][% ELSE %][% sublanguages_loo.rfc4646_subtag | html %][% END %]</option>
-                                                [% END %]
-                                            </optgroup>
-                                        [% ELSE %]
-                                            <option value="[% installer_languages_loo.rfc4646_subtag | html %]">[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description | html %][% ELSE %][% installer_languages_loo.rfc4646_subtag | html %][% END %]</option>
-                                        [% END %]
+                <form name="language" action="install.pl" method="get">
+                    <div class="form-group">
+                        <label for="language">Select a language: </label>
+                        <select id="language" name="language">
+                            [% IF ( installer_languages_loop ) %]
+                                [% FOREACH installer_languages_loo IN installer_languages_loop %]
+                                    [% IF ( installer_languages_loo.plural ) %]
+                                        <optgroup label="[% installer_languages_loo.language | html %]">
+                                            [% FOREACH sublanguages_loo IN installer_languages_loo.sublanguages_loop %]
+                                                <option value="[% sublanguages_loo.rfc4646_subtag | html %]"
+                                                    >[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description | html %][% ELSE %][% sublanguages_loo.rfc4646_subtag | html %][% END %]</option
+                                                >
+                                            [% END %]
+                                        </optgroup>
+                                    [% ELSE %]
+                                        <option value="[% installer_languages_loo.rfc4646_subtag | html %]"
+                                            >[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description | html %][% ELSE %][% installer_languages_loo.rfc4646_subtag | html %][% END %]</option
+                                        >
                                     [% END %]
                                 [% END %]
-                            </select>
-                        </div>
-                        <div class="form-group mt-2">
-                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
-                        </div>
-                    </form>
-                [% END %]
+                            [% END %]
+                        </select>
+                    </div>
+                    <div class="form-group mt-2">
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                    </div>
+                </form>
+            [% END %]
 
-                [% IF ( language ) %]
-                    [% UNLESS ( checkmodule ) %]
-                        [% IF ( missing_modules ) %]
-                            <h1>Web installer &rsaquo; Perl modules missing</h1>
-
-                            <div id="steps">
-                                <ol>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                                </ol>
-                            </div>
-
-                            <p>Some Perl modules are missing. <span class="badge text-bg-danger">Important: </span>Required modules must be installed before you may continue.<br />
-                            <ul>
-                                [% FOREACH missing_module IN missing_modules %]
-                                    <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="badge text-bg-danger">Required</span>[% END %]
-                                        <br /> Version: [% missing_module.min_version | html %]
-                                    </li>
-                                [% END %]
-                            </ul>
-                        [% END %]
-
-                        [% IF ( upgrade_modules ) %]
-                            <h1>Web installer &rsaquo; Perl modules due for upgrade</h1>
-
-                            <div id="steps">
-                                <ol>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                                </ol>
-                            </div>
-
-                            <p>Some Perl modules require upgrade. <span class="badge text-bg-danger">Important: </span>Required modules must be installed at the correct version before you may continue.<br />
-                            <ul>
-                                [% FOREACH upgrade_module IN upgrade_modules %]
-                                    <li><strong>[% upgrade_module.name | html %]</strong> [% IF ( upgrade_module.require ) %]<span class="badge text-bg-danger">Required</span>[% END %]
-                                        <br /> Installed version: [% upgrade_module.version | html %]
-                                        <br /> Minimum version: [% upgrade_module.min_version | html %]
-                                        <br /> Maximum version: [% upgrade_module.max_version | html %]
-                                    </li>
-                                [% END %]
-                            </ul>
-                        [% END %]
-
-                        [% IF ( problems ) %]
-                            <h1>Web installer &rsaquo; Perl version too old</h1>
-
-                            <div id="steps">
-                                <ol>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                                </ol>
-                            </div>
-
-                            <p>I encountered some problems.</p>
-                            <ul>
-                                [% IF ( perlversion ) %]
-                                    <li>Your Perl version is out of date. Please upgrade to a newer version of Perl (at least version 5.10).</li>
-                                [% END %]
-                            </ul>
-                        [% END %]
-
-                        <form method="get" name="checkmodules" action="install.pl">
-                            <div class="form-group mt-2">
-                                <input type="hidden" name="step" value="1" />
-                                <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
-                            </div>
-                        </form>
-
-                    [% ELSE # IF checkmodule %]
-                        <h1>Web installer &rsaquo; Check Perl dependencies</h1>
+            [% IF ( language ) %]
+                [% UNLESS ( checkmodule ) %]
+                    [% IF ( missing_modules ) %]
+                        <h1>Web installer &rsaquo; Perl modules missing</h1>
 
                         <div id="steps">
                             <ol>
@@ -164,19 +88,101 @@
                             </ol>
                         </div>
 
-                        <p>All required Perl modules appear to be installed.</p>
-                        <p> All dependencies installed.</p>
+                        <p>Some Perl modules are missing. <span class="badge text-bg-danger">Important: </span>Required modules must be installed before you may continue.<br /> </p
+                        ><ul>
+                            [% FOREACH missing_module IN missing_modules %]
+                                <li
+                                    ><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="badge text-bg-danger">Required</span>[% END %] <br />
+                                    Version: [% missing_module.min_version | html %]
+                                </li>
+                            [% END %]
+                        </ul>
+                    [% END %]
 
-                        <form method="get" name="checkmodules" role="form" action="install.pl">
-                            <div class="form-group mt-2">
-                                <input type="hidden" name="step" value="2" />
-                                <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
-                            </div>
-                        </form>
-                    [% END # IF checkmodule%]
-                [% END # IF language %]
-            </div> <!-- / #installer-step1 -->
-        </div> <!-- / .row -->
-    </div><!-- / .container-fluid -->
+                    [% IF ( upgrade_modules ) %]
+                        <h1>Web installer &rsaquo; Perl modules due for upgrade</h1>
+
+                        <div id="steps">
+                            <ol>
+                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                                <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                            </ol>
+                        </div>
+
+                        <p>Some Perl modules require upgrade. <span class="badge text-bg-danger">Important: </span>Required modules must be installed at the correct version before you may continue.<br /> </p
+                        ><ul>
+                            [% FOREACH upgrade_module IN upgrade_modules %]
+                                <li
+                                    ><strong>[% upgrade_module.name | html %]</strong> [% IF ( upgrade_module.require ) %]<span class="badge text-bg-danger">Required</span>[% END %] <br />
+                                    Installed version: [% upgrade_module.version | html %] <br />
+                                    Minimum version: [% upgrade_module.min_version | html %] <br />
+                                    Maximum version: [% upgrade_module.max_version | html %]
+                                </li>
+                            [% END %]
+                        </ul>
+                    [% END %]
+
+                    [% IF ( problems ) %]
+                        <h1>Web installer &rsaquo; Perl version too old</h1>
+
+                        <div id="steps">
+                            <ol>
+                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                                <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                            </ol>
+                        </div>
+
+                        <p>I encountered some problems.</p>
+                        <ul>
+                            [% IF ( perlversion ) %]
+                                <li>Your Perl version is out of date. Please upgrade to a newer version of Perl (at least version 5.10).</li>
+                            [% END %]
+                        </ul>
+                    [% END %]
+
+                    <form method="get" name="checkmodules" action="install.pl">
+                        <div class="form-group mt-2">
+                            <input type="hidden" name="step" value="1" />
+                            <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
+                        </div>
+                    </form>
+                [% ELSE # IF checkmodule %]
+                    <h1>Web installer &rsaquo; Check Perl dependencies</h1>
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Database settings</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
+
+                    <p>All required Perl modules appear to be installed.</p>
+                    <p> All dependencies installed.</p>
+
+                    <form method="get" name="checkmodules" role="form" action="install.pl">
+                        <div class="form-group mt-2">
+                            <input type="hidden" name="step" value="2" />
+                            <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                        </div>
+                    </form>
+                [% END # IF checkmodule %]
+            [% END # IF language %]
+        </div>
+        <!-- / #installer-step1 -->
+    </div>
+    <!-- / .row --> </div
+><!-- / .container-fluid -->
 
 [% INCLUDE 'installer-intranet-bottom.inc' %]

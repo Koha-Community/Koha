@@ -5,11 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("OPAC problem reports") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("OPAC problem reports") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -31,154 +32,161 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
-            <h1>OPAC problem reports</h1>
+    <h1>OPAC problem reports</h1>
 
-            <div class="alert alert-warning" id="error" style="display:none;"></div>
+    <div class="alert alert-warning" id="error" style="display:none;"></div>
 
-            [% IF ( selected_count ) %]
-                <div class="alert alert-info">
-                    [% IF ( action == 'cud-mark_selected-viewed' ) %]
-                        <span>[% selected_count | html %] problem report(s) marked as viewed.</span>
-                    [% ELSIF ( action == 'cud-mark_selected-closed' ) %]
-                        <span>[% selected_count | html %] problem report(s) marked as closed.</span>
-                    [% ELSIF ( action == 'cud-mark_selected-new' ) %]
-                        <span>[% selected_count | html %] problem report(s) marked as new.</span>
-                    [% ELSE %]
-                        <span>Failed to change the status of [% selected_count | html %] problem report(s).</span>
-                    [% END %]
-                </div>
-            [% END %]
-
-            [% IF ( problem_reports.count ) %]
-                <form id="mark_selected" method="post" action="/cgi-bin/koha/tools/problem-reports.pl">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <div id="toolbar" class="btn-toolbar">
-                        <button type="submit" class="btn btn-default markviewed" name="op" value="cud-mark_selected-viewed" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark viewed</button>
-                        <button type="submit" class="btn btn-default markclosed" name="op" value="cud-mark_selected-closed" disabled="disabled"><i class="fa fa-times-circle"></i> Mark closed</button>
-                        <button type="submit" class="btn btn-default marknew" name="op" value="cud-mark_selected-new" disabled="disabled"><i class="fa fa-star"></i> Mark new</button>
-                    </div>
-
-                    <div class="btn-toolbar selections-toolbar">
-                        <a class="SelectAll"><i class="fa fa-check"></i> Select all</a>
-                        | <a class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
-                        | <a class="HideViewed"><i class="fa fa-minus-square"></i> Hide viewed</a>
-                        | <a class="HideClosed"><i class="fa fa-minus-square"></i> Hide closed</a>
-                        | <a class="HideNew"><i class="fa fa-minus-square"></i> Hide new</a>
-                        | <a class="ShowAll"><i class="fa fa-bars"></i> Show all</a>
-                    </div>
-
-                    <table id="problemreportstable">
-                        <thead>
-                            <tr>
-                                <th class="NoSort">&nbsp;</th>
-                                <th class="anti-the">Message</th>
-                                <th>Problem page</th>
-                                <th>Sent to</th>
-                                <th>Created on</th>
-                                <th>Set by</th>
-                                <th>Status</th>
-                                <th class="NoSort noExport">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH report IN problem_reports %]
-                                <tr>
-                                    <td><input type="checkbox" name="report_ids" value="[% report.reportid | html %]"></td>
-                                    <td>
-                                        <strong>[% report.title | html %]</strong><br>
-                                        [% report.content | html %]
-                                    </td>
-                                    <td><a href="[% OPACBaseURL | url %][% report.problempage | url %]">[% OPACBaseURL | url %][% report.problempage | html %]</a></td>
-                                    <td>
-                                        [% SWITCH report.recipient %]
-                                        [% CASE 'admin' %]<span>Koha administrator</span>
-                                        [% CASE 'library' %]<span>A librarian</span>
-                                        [% END %]
-                                    </td>
-                                    <td data-order="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</td>
-                                    <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
-                                    <td class="status[% report.status | html %]" name="status">
-                                        <span id="status_[% report.reportid | html %]">
-                                            [% SWITCH report.status %]
-                                            [% CASE 'New' %]<span>New</span>
-                                            [% CASE 'Closed' %]<span>Closed</span>
-                                            [% CASE 'Viewed' %]<span>Viewed</span>
-                                            [% CASE %]<span>Unknown status ([% report.status | html %])</span>
-                                            [% END %]
-                                        </span>
-                                    </td>
-                                    <td class="actions">
-                                        [% IF ( report.status == 'New' ) %]
-                                            <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" disabled="disabled" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
-                                        [% ELSIF ( report.status == 'Viewed' ) %]
-                                            <button name="viewed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
-                                        [% ELSE %]
-                                            <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark viewed</button> <button name="closed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
-                                        [% END %]
-                                    </td>
-                                </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
-
-                </form>
-
+    [% IF ( selected_count ) %]
+        <div class="alert alert-info">
+            [% IF ( action == 'cud-mark_selected-viewed' ) %]
+                <span>[% selected_count | html %] problem report(s) marked as viewed.</span>
+            [% ELSIF ( action == 'cud-mark_selected-closed' ) %]
+                <span>[% selected_count | html %] problem report(s) marked as closed.</span>
+            [% ELSIF ( action == 'cud-mark_selected-new' ) %]
+                <span>[% selected_count | html %] problem report(s) marked as new.</span>
             [% ELSE %]
-                <div class="alert alert-info">There are currently no problem reports.</div>
-            [% END %] <!-- problem reports -->
+                <span>Failed to change the status of [% selected_count | html %] problem report(s).</span>
+            [% END %]
+        </div>
+    [% END %]
 
+    [% IF ( problem_reports.count ) %]
+        <form id="mark_selected" method="post" action="/cgi-bin/koha/tools/problem-reports.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <div id="toolbar" class="btn-toolbar">
+                <button type="submit" class="btn btn-default markviewed" name="op" value="cud-mark_selected-viewed" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark viewed</button>
+                <button type="submit" class="btn btn-default markclosed" name="op" value="cud-mark_selected-closed" disabled="disabled"><i class="fa fa-times-circle"></i> Mark closed</button>
+                <button type="submit" class="btn btn-default marknew" name="op" value="cud-mark_selected-new" disabled="disabled"><i class="fa fa-star"></i> Mark new</button>
+            </div>
+
+            <div class="btn-toolbar selections-toolbar">
+                <a class="SelectAll"><i class="fa fa-check"></i> Select all</a>
+                | <a class="ClearAll"><i class="fa fa-times"></i> Clear all</a> | <a class="HideViewed"><i class="fa fa-minus-square"></i> Hide viewed</a> | <a class="HideClosed"><i class="fa fa-minus-square"></i> Hide closed</a> |
+                <a class="HideNew"><i class="fa fa-minus-square"></i> Hide new</a> | <a class="ShowAll"><i class="fa fa-bars"></i> Show all</a>
+            </div>
+
+            <table id="problemreportstable">
+                <thead>
+                    <tr>
+                        <th class="NoSort">&nbsp;</th>
+                        <th class="anti-the">Message</th>
+                        <th>Problem page</th>
+                        <th>Sent to</th>
+                        <th>Created on</th>
+                        <th>Set by</th>
+                        <th>Status</th>
+                        <th class="NoSort noExport">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH report IN problem_reports %]
+                        <tr>
+                            <td><input type="checkbox" name="report_ids" value="[% report.reportid | html %]" /></td>
+                            <td>
+                                <strong>[% report.title | html %]</strong><br />
+                                [% report.content | html %]
+                            </td>
+                            <td><a href="[% OPACBaseURL | url %][% report.problempage | url %]">[% OPACBaseURL | url %][% report.problempage | html %]</a></td>
+                            <td>
+                                [% SWITCH report.recipient %]
+                                [% CASE 'admin' %]
+                                    <span>Koha administrator</span>
+                                [% CASE 'library' %]
+                                    <span>A librarian</span>
+                                [% END %]
+                            </td>
+                            <td data-order="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</td>
+                            <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
+                            <td class="status[% report.status | html %]" name="status">
+                                <span id="status_[% report.reportid | html %]">
+                                    [% SWITCH report.status %]
+                                    [% CASE 'New' %]
+                                        <span>New</span>
+                                    [% CASE 'Closed' %]
+                                        <span>Closed</span>
+                                    [% CASE 'Viewed' %]
+                                        <span>Viewed</span>
+                                    [% CASE %]
+                                        <span>Unknown status ([% report.status | html %])</span>
+                                    [% END %]
+                                </span>
+                            </td>
+                            <td class="actions">
+                                [% IF ( report.status == 'New' ) %]
+                                    <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark viewed</button>
+                                    <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button>
+                                    <button name="new" disabled="disabled" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
+                                [% ELSIF ( report.status == 'Viewed' ) %]
+                                    <button name="viewed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark viewed</button>
+                                    <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button>
+                                    <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
+                                [% ELSE %]
+                                    <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark viewed</button>
+                                    <button name="closed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button>
+                                    <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </form>
+    [% ELSE %]
+        <div class="alert alert-info">There are currently no problem reports.</div>
+    [% END %]
+    <!-- problem reports -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function(){
-            $("#problemreportstable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "order": [[ 1, "asc" ]],
-                "columnDefs": [
-                    { "orderable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                    { "type": "anti-the", "targets": [ "anti-the" ] }
-                ],
-                "pagingType": "full"
-            }));
+        $(document).ready(function () {
+            $("#problemreportstable").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    order: [[1, "asc"]],
+                    columnDefs: [
+                        { orderable: false, searchable: false, targets: ["NoSort"] },
+                        { type: "anti-the", targets: ["anti-the"] },
+                    ],
+                    pagingType: "full",
+                })
+            );
 
-            $(".SelectAll").on("click", function(){
+            $(".SelectAll").on("click", function () {
                 $("input[name='report_ids'][type='checkbox']").prop("checked", true);
                 $(".markviewed").prop("disabled", false);
                 $(".markclosed").prop("disabled", false);
                 $(".marknew").prop("disabled", false);
             });
 
-            $(".ClearAll").on("click", function(){
+            $(".ClearAll").on("click", function () {
                 $("input[name='report_ids'][type='checkbox']").prop("checked", false);
                 $(".markviewed").prop("disabled", true);
                 $(".markclosed").prop("disabled", true);
                 $(".marknew").prop("disabled", true);
             });
 
-
-
-            $(".HideViewed").on("click", function(){
+            $(".HideViewed").on("click", function () {
                 $(".statusViewed").parent().hide();
             });
 
-            $(".HideClosed").on("click", function(){
+            $(".HideClosed").on("click", function () {
                 $(".statusClosed").parent().hide();
             });
 
-            $(".HideNew").on("click", function(){
+            $(".HideNew").on("click", function () {
                 $(".statusNew").parent().hide();
             });
 
-            $(".ShowAll").on("click", function(){
+            $(".ShowAll").on("click", function () {
                 $("tr").show();
             });
 
             $("#error").hide();
 
-            $("#problemreportstable").on("change", "input[type='checkbox']", function(){
-                if ( $("input[type='checkbox']").is(":checked") ) {
+            $("#problemreportstable").on("change", "input[type='checkbox']", function () {
+                if ($("input[type='checkbox']").is(":checked")) {
                     $(".markviewed").prop("disabled", false);
                     $(".markclosed").prop("disabled", false);
                     $(".marknew").prop("disabled", false);
@@ -189,19 +197,18 @@
                 }
             });
 
-
-            function show_error(){
+            function show_error() {
                 // FIXME Can be improved by displaying meaningful error.
                 $("#error").text(_("Unable to change status of problem report.")).show();
             }
 
-            $("#problemreportstable").on("click", "button.viewed, button.closed, button.new", function(event){
+            $("#problemreportstable").on("click", "button.viewed, button.closed, button.new", function (event) {
                 event.preventDefault(); // prevent form submission
                 var op = $(this).attr("name");
-                var report_id = $(this).data('report_id');
+                var report_id = $(this).data("report_id");
 
                 const client = APIClient.ticket;
-                if ( op == 'viewed' ) {
+                if (op == "viewed") {
                     client.tickets.mark_as_viewed(report_id).then(
                         success => {
                             $("#status_" + report_id).text(_("Viewed"));
@@ -215,7 +222,7 @@
                             show_error();
                         }
                     );
-                } else if ( op == "closed" ) {
+                } else if (op == "closed") {
                     client.tickets.mark_as_closed(report_id).then(
                         success => {
                             $("#status_" + report_id).text(_("Closed"));

@@ -4,28 +4,28 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Images") | html %] &rsaquo;
-    [% INCLUDE 'biblio-title-head.inc' %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Images") | html %]
+        &rsaquo; [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-#largeCover {
-    background: transparent url("[% interface | html %]/[% theme | html %]/img/spinner-small.gif") center center no-repeat;
-}
-#largeCoverImg {
-    border : 1px solid #CCCCCC;
-    display : block;
-    margin : auto;
-    padding : 1em;
-}
+    #largeCover {
+        background: transparent url("[% interface | html %]/[% theme | html %]/img/spinner-small.gif") center center no-repeat;
+    }
+    #largeCoverImg {
+        border: 1px solid #cccccc;
+        display: block;
+        margin: auto;
+        padding: 1em;
+    }
 
-.thumbnails img.selected {
-    cursor : default;
-    opacity:0.4;
-}
+    .thumbnails img.selected {
+        cursor: default;
+        opacity: 0.4;
+    }
 </style>
 </head>
 
@@ -50,90 +50,92 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
-[% INCLUDE 'cat-toolbar.inc' %]
+    [% INCLUDE 'cat-toolbar.inc' %]
 
-<h1>Images for <em>[% INCLUDE 'biblio-title.inc' %]</em></h1>
-<h4>[% biblio.author | html %]</h4>
+    <h1>Images for <em>[% INCLUDE 'biblio-title.inc' %]</em></h1>
+    <h4>[% biblio.author | html %]</h4>
 
-[% IF ( LocalCoverImages == 1 ) %]
-    [% IF images.size %]
-        <div class="row">
-            <div class="col-md-8">
-                <div id="largeCover">
-                    <img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber | html %]" />
-                </div>
-                [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-                    <hr />
-                    <p>
-                        [% IF itemnumber %]
-                            <span>Upload an image file for this item</span>:
-                            [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
-                        [% ELSE %]
-                            <span>Upload an image file for this bibliographic record</span>:
-                            [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
-                        [% END %]
-                        <a class="btn btn-default btn-xs" href="[% upload_link | url %]">
-                        <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
-                    </p>
-                [% END %]
-            </div>
-
-            <div class="col-md-4">
-                <ul class="thumbnails">
-                    [% FOREACH image IN images %]
-                            <li id="imagenumber-[% image.imagenumber | html %]" data-itemnumber="[% image.itemnumber | html %]" data-biblionumber="[% image.biblionumber | html %]" class="thumbnail">
-                            <a class="show_cover" data-coverimg="[% image.imagenumber | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]">
-                                [% IF image.imagenumber == imagenumber %]
-                                    <img class="selected" id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
-                                [% ELSE %]
-                                    <img id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
-                                [% END %]
-                            </a>
-                            [% IF CAN_user_tools_upload_local_cover_images %]
-                                <a href="#" class="remove" data-coverimg="[% image.imagenumber | html %]"><i class="fa fa-trash-can"></i> Delete image</a>
+    [% IF ( LocalCoverImages == 1 ) %]
+        [% IF images.size %]
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="largeCover">
+                        <img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber | html %]" />
+                    </div>
+                    [% IF ( CAN_user_tools_upload_local_cover_images ) %]
+                        <hr />
+                        <p>
+                            [% IF itemnumber %]
+                                <span>Upload an image file for this item</span>: [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
+                            [% ELSE %]
+                                <span>Upload an image file for this bibliographic record</span>: [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
                             [% END %]
-                        </li>
-                    [% END # /FOREACH img %]
-                </ul> <!-- /ul.thumbnails -->
-            </div> <!-- /.col-md-4 -->
-        </div> <!-- /.row -->
-    [% ELSE %]
-        [% IF itemnumber %]
-            <div class="alert alert-info">There are no images for this item.</div>
+                            <a class="btn btn-default btn-xs" href="[% upload_link | url %]"> <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                        </p>
+                    [% END %]
+                </div>
+
+                <div class="col-md-4">
+                    <ul class="thumbnails">
+                        [% FOREACH image IN images %]
+                            <li id="imagenumber-[% image.imagenumber | html %]" data-itemnumber="[% image.itemnumber | html %]" data-biblionumber="[% image.biblionumber | html %]" class="thumbnail">
+                                <a class="show_cover" data-coverimg="[% image.imagenumber | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]">
+                                    [% IF image.imagenumber == imagenumber %]
+                                        <img class="selected" id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
+                                    [% ELSE %]
+                                        <img id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
+                                    [% END %]
+                                </a>
+                                [% IF CAN_user_tools_upload_local_cover_images %]
+                                    <a href="#" class="remove" data-coverimg="[% image.imagenumber | html %]"><i class="fa fa-trash-can"></i> Delete image</a>
+                                [% END %]
+                            </li>
+                        [% END # /FOREACH img %]
+                    </ul>
+                    <!-- /ul.thumbnails -->
+                </div>
+                <!-- /.col-md-4 -->
+            </div>
+            <!-- /.row -->
         [% ELSE %]
-            <div class="alert alert-info">There are no images for this record.</div>
+            [% IF itemnumber %]
+                <div class="alert alert-info">There are no images for this item.</div>
+            [% ELSE %]
+                <div class="alert alert-info">There are no images for this record.</div>
+            [% END %]
+            [% IF ( CAN_user_tools_upload_local_cover_images ) %]
+                <hr />
+                <p>
+                    <span>Upload an image file</span>:
+                    [% IF itemnumber %]
+                        [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
+                    [% ELSE %]
+                        [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
+                    [% END %]
+                    <a class="btn btn-default btn-xs" href="[% upload_link | url %]"> <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                </p>
+            [% END %]
         [% END %]
-        [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-            <hr />
-            <p>
-                <span>Upload an image file</span>:
-                [% IF itemnumber %]
-                    [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
-                [% ELSE %]
-                    [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
-                [% END %]
-                <a class="btn btn-default btn-xs" href="[% upload_link | url %]">
-                <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
-            </p>
-        [% END %]
+    [% ELSE %]
+        <div class="alert alert-info">Local images have not been enabled by your system administrator.</div>
     [% END %]
-[% ELSE %]
-    <div class="alert alert-info">Local images have not been enabled by your system administrator.</div>
 [% END %]
 
-[% END %]
-
-    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+[% IF ( Koha.Preference('CatalogConcerns') ) %]
     [% INCLUDE 'modals/add_catalog_concern.inc' %]
-    [% END %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+    </script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+    </script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]

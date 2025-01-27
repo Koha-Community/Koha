@@ -43,15 +43,14 @@ Returns the default I<Koha::SMTP::Server> object.
 sub get_default {
     my ($self) = @_;
 
-    my $default = $self->search({ is_default => 1 }, { rows => 1 })->single;
+    my $default = $self->search( { is_default => 1 }, { rows => 1 } )->single;
 
-    unless ($default) { # no database default
+    unless ($default) {    # no database default
         my $smtp_config = C4::Context->config('smtp_server');
 
-        if ( $smtp_config ) { # use koha-conf.xml
-            $default = Koha::SMTP::Server->new( $smtp_config );
-        }
-        else {
+        if ($smtp_config) {    # use koha-conf.xml
+            $default = Koha::SMTP::Server->new($smtp_config);
+        } else {
             $default = Koha::SMTP::Server->new( $self->default_setting );
         }
 
@@ -84,14 +83,14 @@ SMTP server is provided
 
 sub default_setting {
     return {
-        name       => 'localhost',
-        host       => 'localhost',
-        port       => 25,
-        timeout    => 120,
+        name      => 'localhost',
+        host      => 'localhost',
+        port      => 25,
+        timeout   => 120,
         ssl_mode  => 'disabled',
-        user_name  => undef,
-        password   => undef,
-        debug      => 0
+        user_name => undef,
+        password  => undef,
+        debug     => 0
     };
 }
 

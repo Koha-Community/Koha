@@ -39,10 +39,13 @@ use Koha::Plugins;
 use t::lib::TestBuilder;
 
 my $logger = Test::MockModule->new('Koha::Logger');
-$logger->mock('error', sub {
-    shift;
-    warn @_;
-});
+$logger->mock(
+    'error',
+    sub {
+        shift;
+        warn @_;
+    }
+);
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -70,18 +73,20 @@ subtest 'Bad plugins tests' => sub {
 
     # initialize Koha::REST::V1 after mocking
     my $t;
-    warning_like
-        { $t = Test::Mojo->new('Koha::REST::V1'); }
-        [qr{Could not load REST API spec bundle: /paths/~0001contrib~0001badass},
+    warning_like { $t = Test::Mojo->new('Koha::REST::V1'); }
+    [
+        qr{Could not load REST API spec bundle: /paths/~0001contrib~0001badass},
         qr{bother_wrong/put/parameters/0: /oneOf/1 Properties not allowed:},
-        qr{Plugin Koha::Plugin::BadAPIRoute route injection failed: The resulting spec is invalid. Skipping Bad API Route Plugin},],
+        qr{Plugin Koha::Plugin::BadAPIRoute route injection failed: The resulting spec is invalid. Skipping Bad API Route Plugin},
+    ],
         'Bad plugins raise warning';
 
     my $routes = get_defined_routes($t);
+
     # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
     # TODO: remove () if minimum version is bumped to at least 1.28.
     ok( !exists $routes->{'/contrib/badass/patrons/bother_wrong'}, 'Route doesn\'t exist' );
-    ok( exists $routes->{'/contrib/testplugin/patrons/bother'}, 'Route exists' );
+    ok( exists $routes->{'/contrib/testplugin/patrons/bother'},    'Route exists' );
 
     $schema->storage->txn_rollback;
 };
@@ -111,10 +116,13 @@ subtest 'Disabled plugins tests' => sub {
     my $t = Test::Mojo->new('Koha::REST::V1');
 
     my $routes = get_defined_routes($t);
+
     # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
     # TODO: remove () if minimum version is bumped to at least 1.28.
-    ok( !exists $routes->{'/contrib/testplugin/patrons/bother'},
-        'Plugin disabled, route not defined' );
+    ok(
+        !exists $routes->{'/contrib/testplugin/patrons/bother'},
+        'Plugin disabled, route not defined'
+    );
 
     $good_plugin->enable;
 
@@ -123,8 +131,10 @@ subtest 'Disabled plugins tests' => sub {
 
     # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
     # TODO: remove () if minimum version is bumped to at least 1.28.
-    ok( exists $routes->{'/contrib/testplugin/patrons/bother'},
-        'Plugin enabled, route defined' );
+    ok(
+        exists $routes->{'/contrib/testplugin/patrons/bother'},
+        'Plugin enabled, route defined'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -137,6 +147,7 @@ subtest 'Permissions and access to plugin routes tests' => sub {
 
     # enable plugins
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
     # enable BASIC auth
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
@@ -156,31 +167,32 @@ subtest 'Permissions and access to plugin routes tests' => sub {
 
     # initialize Koha::REST::V1 after mocking
     my $t;
-    warning_like
-        { $t = Test::Mojo->new('Koha::REST::V1'); }
-        [qr{Could not load REST API spec bundle: /paths/~0001contrib~0001badass},
+    warning_like { $t = Test::Mojo->new('Koha::REST::V1'); }
+    [
+        qr{Could not load REST API spec bundle: /paths/~0001contrib~0001badass},
         qr{bother_wrong/put/parameters/0: /oneOf/1 Properties not allowed:},
-        qr{Plugin Koha::Plugin::BadAPIRoute route injection failed: The resulting spec is invalid. Skipping Bad API Route Plugin},],
+        qr{Plugin Koha::Plugin::BadAPIRoute route injection failed: The resulting spec is invalid. Skipping Bad API Route Plugin},
+    ],
         'Bad plugins raise warning';
 
     my $routes = get_defined_routes($t);
-    ok( exists $routes->{'/contrib/testplugin/patrons/bother'}, 'Route exists' );
+    ok( exists $routes->{'/contrib/testplugin/patrons/bother'},        'Route exists' );
     ok( exists $routes->{'/contrib/testplugin/public/patrons/bother'}, 'Route exists' );
 
     C4::Context->set_preference( 'RESTPublicAnonymousRequests', 0 );
 
     $t->get_ok('/api/v1/contrib/testplugin/public/patrons/bother')
-      ->status_is(200, 'Plugin routes not affected by RESTPublicAnonymousRequests')
-      ->json_is( { bothered => Mojo::JSON->true } );
+        ->status_is( 200, 'Plugin routes not affected by RESTPublicAnonymousRequests' )
+        ->json_is( { bothered => Mojo::JSON->true } );
 
     C4::Context->set_preference( 'RESTPublicAnonymousRequests', 1 );
 
     $t->get_ok('/api/v1/contrib/testplugin/public/patrons/bother')
-      ->status_is(200, 'Plugin routes not affected by RESTPublicAnonymousRequests')
-      ->json_is( { bothered => Mojo::JSON->true } );
+        ->status_is( 200, 'Plugin routes not affected by RESTPublicAnonymousRequests' )
+        ->json_is( { bothered => Mojo::JSON->true } );
 
     $t->get_ok('/api/v1/contrib/testplugin/patrons/bother')
-      ->status_is(401, 'Plugin routes honour permissions, anonymous access denied');
+        ->status_is( 401, 'Plugin routes honour permissions, anonymous access denied' );
 
     # Create a patron with permissions, but the wrong ones: 3 => parameters
     my $librarian = $builder->build_object(
@@ -194,14 +206,14 @@ subtest 'Permissions and access to plugin routes tests' => sub {
     my $userid = $librarian->userid;
 
     $t->get_ok("//$userid:$password@/api/v1/contrib/testplugin/patrons/bother")
-      ->status_is(403, 'Plugin routes honour permissions, wrong permissions, access denied');
+        ->status_is( 403, 'Plugin routes honour permissions, wrong permissions, access denied' );
 
     # Set the patron permissions to the right ones: 4 => borrowers
-    $librarian->set({ flags => 2 ** 4 })->store->discard_changes;
+    $librarian->set( { flags => 2**4 } )->store->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/contrib/testplugin/patrons/bother")
-      ->status_is(200, 'Plugin routes honour permissions, right permissions, access granted')
-      ->json_is( { bothered => Mojo::JSON->true } );
+        ->status_is( 200, 'Plugin routes honour permissions, right permissions, access granted' )
+        ->json_is( { bothered => Mojo::JSON->true } );
 
     $schema->storage->txn_rollback;
 };
@@ -221,7 +233,8 @@ subtest 'needs_install use case tests' => sub {
     $plugins->InstallPlugins;
 
     # mock Version before initializing the API class
-    t::lib::Mocks::mock_preference('Version', undef);
+    t::lib::Mocks::mock_preference( 'Version', undef );
+
     # initialize Koha::REST::V1 after mocking
 
     my $t      = Test::Mojo->new('Koha::REST::V1');
@@ -234,7 +247,7 @@ subtest 'needs_install use case tests' => sub {
         'Plugin enabled, route not defined as C4::Context->needs_install is true'
     );
 
-    t::lib::Mocks::mock_preference('Version', '3.0.0');
+    t::lib::Mocks::mock_preference( 'Version', '3.0.0' );
 
     Koha::Plugins->RemovePlugins( { destructive => 1 } );    # FIXME destructive seems not to be needed here
     $plugins->InstallPlugins;
@@ -269,7 +282,7 @@ sub traverse_routes {
 
     # Methods
     my $methods = $route->methods // [];
-    my $verb = !$methods ? '*' : uc join ',', @$methods;
+    my $verb    = !$methods ? '*' : uc join ',', @$methods;
     $routes->{$path}->{$verb} = 1;
 
     $depth++;

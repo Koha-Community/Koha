@@ -42,8 +42,7 @@ say "Testing file: $file";
 eval { YAML::XS::LoadFile($file); };
 if ($@) {
     print "KO!\n$@\n";
-}
-else {
+} else {
     print "Loading and Syntax OK\n";
 }
 

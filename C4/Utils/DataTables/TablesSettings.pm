@@ -19,13 +19,13 @@ C4::Utils::DataTables::TablesSettings - Koha DataTables Settings
 
 sub get_yaml {
     my $yml_path = C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
-    my $cache = Koha::Caches->get_instance();
-    my $yaml  = $cache->get_from_cache('TablesSettingsYaml');
+    my $cache    = Koha::Caches->get_instance();
+    my $yaml     = $cache->get_from_cache('TablesSettingsYaml');
 
     unless ($yaml) {
         $yaml = eval { YAML::XS::LoadFile($yml_path) };
         warn "ERROR: the yaml file for DT::TablesSettings is not correctly formatted: $@"
-          if $@;
+            if $@;
         $cache->set_in_cache( 'TablesSettingsYaml', $yaml, { expiry => 3600 } );
     }
 
@@ -49,7 +49,7 @@ sub get_columns {
 
     while ( my $c = $rs->next ) {
         my $column = first { $c->columnname eq $_->{columnname} }
-        @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename }{ columns } };
+            @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename }{columns} };
         $column->{is_hidden}         = $c->is_hidden;
         $column->{cannot_be_toggled} = $c->cannot_be_toggled;
     }
@@ -104,21 +104,17 @@ sub get_table_settings {
     my $table_settings = $list->{modules}->{$module}->{$page}->{$tablename};
     return {
         default_display_length => $rs
-            ? $rs->default_display_length
-            : $table_settings->{default_display_length},
+        ? $rs->default_display_length
+        : $table_settings->{default_display_length},
         default_sort_order => $rs
-            ? $rs->default_sort_order
-            : $table_settings->{default_sort_order},
-        default_save_state => $rs
-            ? $rs->default_save_state
-            : exists $table_settings->{default_save_state}
-                ? $table_settings->{default_save_state}
-                : 1,
-        default_save_state_search => $rs
-            ? $rs->default_save_state_search
-            : exists $table_settings->{default_save_state_search}
-                ? $table_settings->{default_save_state_search}
-                : 0,
+        ? $rs->default_sort_order
+        : $table_settings->{default_sort_order},
+        default_save_state => $rs ? $rs->default_save_state
+        : exists $table_settings->{default_save_state} ? $table_settings->{default_save_state}
+        : 1,
+        default_save_state_search => $rs ? $rs->default_save_state_search
+        : exists $table_settings->{default_save_state_search} ? $table_settings->{default_save_state_search}
+        : 0,
     };
 }
 
@@ -130,9 +126,9 @@ sub get_modules {
 
     while ( my $c = $rs->next ) {
         my $column = first { $c->columnname eq $_->{columnname} }
-        @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename }{columns} };
-        $column->{is_hidden}         = $c->is_hidden;
-        $column->{cannot_be_toggled} = $c->cannot_be_toggled;
+            @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename }{columns} };
+        $column->{is_hidden}          = $c->is_hidden;
+        $column->{cannot_be_toggled}  = $c->cannot_be_toggled;
         $column->{cannot_be_modified} = 0
             unless exists $column->{cannot_be_modified};
     }
@@ -152,10 +148,10 @@ sub update_columns {
 
         $schema->resultset('ColumnsSetting')->update_or_create(
             {
-                module     => $c->{module},
-                page       => $c->{page},
-                tablename  => $c->{tablename},
-                columnname => $c->{columnname},
+                module            => $c->{module},
+                page              => $c->{page},
+                tablename         => $c->{tablename},
+                columnname        => $c->{columnname},
                 is_hidden         => $c->{is_hidden},
                 cannot_be_toggled => $c->{cannot_be_toggled},
             }

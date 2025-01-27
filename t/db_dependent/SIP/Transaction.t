@@ -928,8 +928,7 @@ subtest do_checkout_with_noblock => sub {
         }
     );
 
-    t::lib::Mocks::mock_userenv(
-        { branchcode => $library->branchcode, flags => 1 } );
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
 
     my $item = $builder->build_sample_item(
         {
@@ -940,12 +939,15 @@ subtest do_checkout_with_noblock => sub {
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
     my $sip_item   = C4::SIP::ILS::Item->new( $item->barcode );
 
-    my $circ =
-      $ils->checkout( $patron->cardnumber, $item->barcode, undef, undef,
-        $server->{account}, '19990102    030405' );
+    my $circ = $ils->checkout(
+        $patron->cardnumber, $item->barcode, undef, undef,
+        $server->{account},  '19990102    030405'
+    );
 
-    is( $patron->checkouts->count,
-        1, 'No Block checkout was performed for debarred patron' );
+    is(
+        $patron->checkouts->count,
+        1, 'No Block checkout was performed for debarred patron'
+    );
 };
 
 subtest do_checkout_with_holds => sub {
@@ -1148,7 +1150,7 @@ RULES
     my $item_dvd = $builder->build_sample_item(
         {
             library => $library2->branchcode,
-            itype  => 'DVD'
+            itype   => 'DVD'
         }
     );
 

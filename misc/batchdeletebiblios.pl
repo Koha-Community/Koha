@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script;
 use C4::Biblio qw( DelBiblio );
@@ -14,12 +14,12 @@ GetOptions(
 
 pod2usage(1) if $help or not @ARGV;
 
-for my $file ( @ARGV ) {
+for my $file (@ARGV) {
     say "Find biblionumber in file $file";
     my $fh;
-    open($fh, '<', $file) or say "Error: '$file' $!" and next;
+    open( $fh, '<', $file ) or say "Error: '$file' $!" and next;
 
-    while ( <$fh> ) {
+    while (<$fh>) {
         my $biblionumber = $_;
         $biblionumber =~ s/$1/\n/g if $biblionumber =~ m/(\r\n?|\n\r?)/;
         chomp $biblionumber;
@@ -27,10 +27,9 @@ for my $file ( @ARGV ) {
         next if not $biblionumber =~ /^\d*$/;
         print "Delete biblionumber $biblionumber ";
         my $error;
-        eval {
-            $error = DelBiblio $biblionumber;
-        };
-        if ( $@ or $error) {
+        eval { $error = DelBiblio $biblionumber; };
+
+        if ( $@ or $error ) {
             say "KO $@ ($! | $error)";
         } else {
             say "OK";

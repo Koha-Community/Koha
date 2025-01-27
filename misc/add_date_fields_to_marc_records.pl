@@ -20,7 +20,7 @@ use Modern::Perl;
 use Koha::Script;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use MARC::Field;
 
 use C4::Biblio;
@@ -31,12 +31,12 @@ my ( $verbose, $help, $confirm, $where, @fields, $date_field, $unless_exists_fie
 my $dbh = C4::Context->dbh;
 
 GetOptions(
-    'help|h'    => \$help,
-    'verbose|v' => \$verbose,
-    'confirm|c' => \$confirm,
-    'where=s'   => \$where,
-    'field=s@'  => \@fields,
-    'date-field=s' => \$date_field,
+    'help|h'          => \$help,
+    'verbose|v'       => \$verbose,
+    'confirm|c'       => \$confirm,
+    'where=s'         => \$where,
+    'field=s@'        => \@fields,
+    'date-field=s'    => \$date_field,
     'unless-exists=s' => \$unless_exists_field,
 ) || podusage(1);
 
@@ -46,13 +46,13 @@ pod2usage("Parameter field is mandatory") unless @fields;
 say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
 
 my @fields_to_add;
-unless ( $date_field ) {
+unless ($date_field) {
     my $dt = dt_from_string;
     for my $field (@fields) {
         my ( $f_sf, $value )    = split '=',  $field;
         my ( $tag,  $subfield ) = split '\$', $f_sf;
         push @fields_to_add,
-          MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
+            MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
     }
 
     if ($verbose) {
@@ -62,22 +62,21 @@ unless ( $date_field ) {
 }
 
 $where = $where ? "WHERE $where" : '';
-my $sth =
-  $dbh->prepare("SELECT biblionumber, frameworkcode FROM biblio $where");
+my $sth = $dbh->prepare("SELECT biblionumber, frameworkcode FROM biblio $where");
 $sth->execute();
 
 while ( my ( $biblionumber, $frameworkcode ) = $sth->fetchrow_array ) {
-    my $biblio = Koha::Biblios->find($biblionumber);
+    my $biblio      = Koha::Biblios->find($biblionumber);
     my $marc_record = $biblio->metadata->record;
     next unless $marc_record;
-    if ( $unless_exists_field ) {
-        my ( $tag,  $subfield ) = split '\$', $unless_exists_field;
-        next if $marc_record->subfield($tag, $subfield);
+    if ($unless_exists_field) {
+        my ( $tag, $subfield ) = split '\$', $unless_exists_field;
+        next if $marc_record->subfield( $tag, $subfield );
     }
-    if ( $date_field ) {
+    if ($date_field) {
         @fields_to_add = ();
-        my ( $tag,  $subfield ) = split '\$', $date_field;
-        my $date = $marc_record->subfield($tag, $subfield);
+        my ( $tag, $subfield ) = split '\$', $date_field;
+        my $date = $marc_record->subfield( $tag, $subfield );
         next unless $date;
         warn $date;
         my $dt = dt_from_string($date);
@@ -85,7 +84,7 @@ while ( my ( $biblionumber, $frameworkcode ) = $sth->fetchrow_array ) {
             my ( $f_sf, $value )    = split '=',  $field;
             my ( $tag,  $subfield ) = split '\$', $f_sf;
             push @fields_to_add,
-              MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
+                MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
         }
         if ($verbose) {
             say sprintf "The following MARC fields will be added to record %s:", $biblionumber;
@@ -96,12 +95,10 @@ while ( my ( $biblionumber, $frameworkcode ) = $sth->fetchrow_array ) {
     $marc_record->append_fields(@fields_to_add);
 
     if ($confirm) {
-        my $modified =
-          C4::Biblio::ModBiblio( $marc_record, $biblionumber, $frameworkcode );
+        my $modified = C4::Biblio::ModBiblio( $marc_record, $biblionumber, $frameworkcode );
         say "Bibliographic record $biblionumber has been modified"
-          if $verbose and $modified;
-    }
-    elsif ($verbose) {
+            if $verbose and $modified;
+    } elsif ($verbose) {
         say "Bibliographic record $biblionumber would have been modified";
     }
 }

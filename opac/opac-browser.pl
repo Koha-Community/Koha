@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 opac-browser.pl
 
 TODO :: Description here
@@ -29,7 +28,7 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 
 my $query = CGI->new;
 
@@ -46,19 +45,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # the level of browser to display
-my $level = $query->param('level') || 0;
+my $level  = $query->param('level') || 0;
 my $filter = $query->param('cud-filter');
 $filter = '' unless defined $filter;
-$level++; # the level passed is the level of the PREVIOUS list, not the current one. Thus the ++
+$level++;    # the level passed is the level of the PREVIOUS list, not the current one. Thus the ++
 
 # build this level loop
 my $sth = $dbh->prepare("SELECT * FROM browser WHERE level=? and classification like ? ORDER BY classification");
-$sth->execute($level,$filter."%");
+$sth->execute( $level, $filter . "%" );
 my @level_loop;
-my $i=0;
-while (my $line = $sth->fetchrow_hashref) {
+my $i = 0;
+while ( my $line = $sth->fetchrow_hashref ) {
     $line->{description} =~ s/\((.*)\)//g;
-    push @level_loop,$line;
+    push @level_loop, $line;
 }
 
 my $have_hierarchy = 0;
@@ -66,28 +65,29 @@ my $have_hierarchy = 0;
 # now rebuild hierarchy loop
 $filter =~ s/\.//g;
 my @hierarchy_loop;
-if ($filter eq '' and $level == 1) {
+if ( $filter eq '' and $level == 1 ) {
+
     # we're starting from the top
     $have_hierarchy = 1 if @level_loop;
     unless (@level_loop) {
-        $sth->execute(1, "%");
-        while (my $line = $sth->fetchrow_hashref) {
+        $sth->execute( 1, "%" );
+        while ( my $line = $sth->fetchrow_hashref ) {
             $line->{description} =~ s/\((.*)\)//g;
-            push @level_loop,$line;
+            push @level_loop, $line;
         }
     }
 } else {
     $sth = $dbh->prepare("SELECT * FROM browser where classification=?");
-    for (my $i=1;$i <=length($filter);$i++) {
-        $sth->execute(substr($filter,0,$i));
+    for ( my $i = 1 ; $i <= length($filter) ; $i++ ) {
+        $sth->execute( substr( $filter, 0, $i ) );
         my $line = $sth->fetchrow_hashref;
-        push @hierarchy_loop,$line;
+        push @hierarchy_loop, $line;
     }
     $have_hierarchy = 1 if @hierarchy_loop;
 }
 
 $template->param(
-    LEVEL_LOOP => \@level_loop,
+    LEVEL_LOOP     => \@level_loop,
     HIERARCHY_LOOP => \@hierarchy_loop,
     have_hierarchy => $have_hierarchy,
 );

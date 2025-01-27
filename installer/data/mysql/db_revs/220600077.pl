@@ -1,11 +1,11 @@
 use Modern::Perl;
 
 return {
-    bug_number => "31713",
+    bug_number  => "31713",
     description => "Add ACCOUNTS_SUMMARY slip notice",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         my $slip_content = <<~'END_CONTENT';
 [% USE Branches %]
@@ -108,10 +108,12 @@ return {
 </table>
 END_CONTENT
 
-        $dbh->do(qq{
+        $dbh->do(
+            qq{
            INSERT IGNORE INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
            VALUES ( 'members', 'ACCOUNTS_SUMMARY', '', 'Account balance slip', 1, 'Account summary for [% borrower.firstname %] [% borrower.surname %]', "$slip_content", 'print', 'default' )
-        });
+        }
+        );
 
         say $out "Added new letter 'ACCOUNTS_SUMMARY' (print)";
     },

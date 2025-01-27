@@ -2,11 +2,12 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("EDIFACT message display") | html %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("EDIFACT message display") | html %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="acq_edifactmsgs" class="acq">
@@ -26,17 +27,17 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
-            <h1>EDIFACT message display</h1>
-                <div id="edimsg">
-                    [% IF no_message %]
-                        <div class="alert alert-info">The requested message cannot be displayed</div>
-                    [% ELSE %]
-                        <ul>
-                            [% FOREACH seg IN segments %]
-                                <li>[% seg | html %]</li>
-                            [% END %]
-                        </ul>
-                    [% END %]
-                </div>
+    <h1>EDIFACT message display</h1>
+    <div id="edimsg">
+        [% IF no_message %]
+            <div class="alert alert-info">The requested message cannot be displayed</div>
+        [% ELSE %]
+            <ul>
+                [% FOREACH seg IN segments %]
+                    <li>[% seg | html %]</li>
+                [% END %]
+            </ul>
+        [% END %]
+    </div>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

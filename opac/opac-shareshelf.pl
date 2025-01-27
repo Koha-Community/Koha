@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use constant KEYLENGTH     => 10;
+use constant KEYLENGTH   => 10;
 use constant SHELVES_URL => '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 
 use CGI qw ( -utf8 );
@@ -36,7 +36,7 @@ use Koha::Virtualshelfshares;
 
 # if virtualshelves is disabled, leave immediately
 our $query = CGI->new;
-if ( ! C4::Context->preference('virtualshelves') ) {
+if ( !C4::Context->preference('virtualshelves') ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -50,9 +50,9 @@ my $pvar = _init();
 
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'opac-shareshelf.tt',
-        query           => $query,
-        type            => "opac",
+        template_name => 'opac-shareshelf.tt',
+        query         => $query,
+        type          => "opac",
     }
 );
 
@@ -70,9 +70,9 @@ output_html_with_http_headers $query, $cookie, $template->output, undef, { force
 
 sub _init {
     my $param = {};
-    $param->{shelfnumber} = $query->param('shelfnumber') || 0;
+    $param->{shelfnumber} = $query->param('shelfnumber')    || 0;
     $param->{addrlist}    = $query->param('invite_address') || '';
-    $param->{key}         = $query->param('key') || '';
+    $param->{key}         = $query->param('key')            || '';
     $param->{appr_addr}   = [];
     $param->{fail_addr}   = [];
     $param->{errcode}     = check_common_errors($param);
@@ -86,10 +86,10 @@ sub _init {
     #get some list details
     my $shelf;
     my $shelfnumber = $param->{shelfnumber};
-    $shelf = Koha::Virtualshelves->find( $shelfnumber ) unless $param->{errcode};
+    $shelf              = Koha::Virtualshelves->find($shelfnumber) unless $param->{errcode};
     $param->{shelfname} = $shelf ? $shelf->shelfname : q||;
-    $param->{owner}     = $shelf ? $shelf->owner : -1;
-    $param->{public}    = $shelf ? $shelf->public : 0;
+    $param->{owner}     = $shelf ? $shelf->owner     : -1;
+    $param->{public}    = $shelf ? $shelf->public    : 0;
 
     return $param;
 }
@@ -120,8 +120,7 @@ sub confirm_invite {
     if ( @{ $param->{appr_addr} } ) {
         send_invitekey($param);
         $op = 'invited';
-    }
-    else {
+    } else {
         $param->{errcode} = 6;    #not one valid address
     }
 }
@@ -132,11 +131,13 @@ sub show_accept {
 
     # Main reason for checking the key here is not to expose shelfname
     # to people who dont have the key
-    my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
-    my $shared_shelves = Koha::Virtualshelfshares->search({
-        shelfnumber => $param->{shelfnumber},
-        invitekey => $key,
-    });
+    my $key            = keytostring( stringtokey( $param->{key}, 0 ), 1 );
+    my $shared_shelves = Koha::Virtualshelfshares->search(
+        {
+            shelfnumber => $param->{shelfnumber},
+            invitekey   => $key,
+        }
+    );
     return if $shared_shelves->count;
     $param->{errcode} = 7;    # not accepted: key invalid or expired
 }
@@ -145,31 +146,35 @@ sub handle_accept {
     my ($param) = @_;
 
     my $shelfnumber = $param->{shelfnumber};
-    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+    my $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
     # The key for accepting is checked later in Koha::Virtualshelfshare
     # You must not be the owner and the list must be private
-    if( !$shelf ) {
+    if ( !$shelf ) {
         $param->{errcode} = 2;
-    } elsif( $shelf->public ) {
+    } elsif ( $shelf->public ) {
         $param->{errcode} = 5;
-    } elsif( $shelf->owner == $loggedinuser ) {
+    } elsif ( $shelf->owner == $loggedinuser ) {
         $param->{errcode} = 8;
     }
     return if $param->{errcode};
 
     # Look for shelfnumber and invitekey in shares, expiration check later
-    my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
-    my $shared_shelves = Koha::Virtualshelfshares->search({
-        shelfnumber => $param->{shelfnumber},
-        invitekey => $key,
-    });
-    my $shared_shelf = $shared_shelves ? $shared_shelves->next : undef; # we pick the first, but there should only be one
+    my $key            = keytostring( stringtokey( $param->{key}, 0 ), 1 );
+    my $shared_shelves = Koha::Virtualshelfshares->search(
+        {
+            shelfnumber => $param->{shelfnumber},
+            invitekey   => $key,
+        }
+    );
+    my $shared_shelf =
+        $shared_shelves ? $shared_shelves->next : undef;    # we pick the first, but there should only be one
 
-    if ( $shared_shelf ) {
+    if ($shared_shelf) {
         my $is_accepted = eval { $shared_shelf->accept( $key, $loggedinuser ) };
-        if( $is_accepted ) {
+        if ($is_accepted) {
             notify_owner($param);
+
             #redirect to view of this shared list
             print $query->redirect(
                 -uri    => SHELVES_URL . $param->{shelfnumber},
@@ -178,7 +183,7 @@ sub handle_accept {
             exit;
         }
     }
-    $param->{errcode} = 7; # not accepted: key invalid or expired
+    $param->{errcode} = 7;    # not accepted: key invalid or expired
 }
 
 sub notify_owner {
@@ -196,7 +201,7 @@ sub notify_owner {
         branchcode  => C4::Context->userenv->{"branch"},
         lang        => $patron->lang,
         tables      => { borrowers => $loggedinuser, },
-        substitute  => { listname => $param->{shelfname}, },
+        substitute  => { listname  => $param->{shelfname}, },
     );
 
     #send letter to queue
@@ -204,15 +209,15 @@ sub notify_owner {
         {
             letter                 => $letter,
             message_transport_type => 'email',
-            from_address => C4::Context->preference('KohaAdminEmailAddress'),
-            to_address   => $toaddr,
+            from_address           => C4::Context->preference('KohaAdminEmailAddress'),
+            to_address             => $toaddr,
         }
     );
 }
 
 sub process_addrlist {
     my ($param) = @_;
-    my @temp = split /[,:;]/, $param->{addrlist};
+    my @temp    = split /[,:;]/, $param->{addrlist};
     my @appr_addr;
     my @fail_addr;
     foreach my $a (@temp) {
@@ -220,8 +225,7 @@ sub process_addrlist {
         $a =~ s/\s+$//;
         if ( Koha::Email->is_valid($a) ) {
             push @appr_addr, $a;
-        }
-        else {
+        } else {
             push @fail_addr, $a;
         }
     }
@@ -233,10 +237,10 @@ sub send_invitekey {
     my ($param) = @_;
     my $fromaddr = C4::Context->preference('KohaAdminEmailAddress');
     my $url =
-        C4::Context->preference('OPACBaseURL')
-      . "/cgi-bin/koha/opac-shareshelf.pl?shelfnumber="
-      . $param->{shelfnumber}
-      . "&op=accept&key=";
+          C4::Context->preference('OPACBaseURL')
+        . "/cgi-bin/koha/opac-shareshelf.pl?shelfnumber="
+        . $param->{shelfnumber}
+        . "&op=accept&key=";
 
     #TODO Waiting for the right http or https solution (BZ 8952 a.o.)
 
@@ -245,9 +249,10 @@ sub send_invitekey {
         my @newkey = randomlist( KEYLENGTH, 64 );    #generate a new key
 
         #add a preliminary share record
-        my $shelf = Koha::Virtualshelves->find( $param->{shelfnumber} );
-        my $key = keytostring( \@newkey, 1 );
-        my $is_shared = eval { $shelf->share( $key ); };
+        my $shelf     = Koha::Virtualshelves->find( $param->{shelfnumber} );
+        my $key       = keytostring( \@newkey, 1 );
+        my $is_shared = eval { $shelf->share($key); };
+
         # TODO Better error handling, catch the exceptions
         if ( $@ or not $is_shared ) {
             push @{ $param->{fail_addr} }, $a;
@@ -260,7 +265,7 @@ sub send_invitekey {
             module      => 'lists',
             letter_code => 'SHARE_INVITE',
             branchcode  => C4::Context->userenv->{"branch"},
-            lang        => 'default', # Not sure how we could use something more useful else here
+            lang        => 'default',                        # Not sure how we could use something more useful else here
             tables      => { borrowers => $loggedinuser, },
             substitute  => {
                 listname => $param->{shelfname},
@@ -293,8 +298,8 @@ sub check_owner_category {
 
 sub load_template_vars {
     my ($param) = @_;
-    my $appr = join '; ', @{ $param->{appr_addr} };
-    my $fail = join '; ', @{ $param->{fail_addr} };
+    my $appr    = join '; ', @{ $param->{appr_addr} };
+    my $fail    = join '; ', @{ $param->{fail_addr} };
     $template->param(
         op              => $op,
         errcode         => $param->{errcode},

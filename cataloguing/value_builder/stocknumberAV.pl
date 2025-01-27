@@ -22,7 +22,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::AuthorisedValues;
 
@@ -44,7 +44,7 @@ PREFIX containing letters, a space separator and 10 digits with leading
 =cut
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $res = qq{
     <script>
         function Click$params->{id}(ev) {
@@ -73,32 +73,36 @@ my $builder = sub {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $code = $input->param('code');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $code     = $input->param('code');
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "cataloguing/value_builder/ajax.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { editcatalogue => '*' },
+        {
+            template_name => "cataloguing/value_builder/ajax.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
         }
     );
 
     # If a prefix is submited, we look for the highest stocknumber with this prefix, and return it incremented
     $code =~ s/ *$//g;
     if ( $code =~ m/^[a-zA-Z]+$/ ) {
-        my $av = Koha::AuthorisedValues->find({
-            'category' => 'INVENTORY',
-            'authorised_value' => $code
-        });
-        if ( $av ) {
-            $av->lib($av->lib + 1);
+        my $av = Koha::AuthorisedValues->find(
+            {
+                'category'         => 'INVENTORY',
+                'authorised_value' => $code
+            }
+        );
+        if ($av) {
+            $av->lib( $av->lib + 1 );
             $av->store;
             $template->param( return => $code . ' ' . sprintf( '%010s', ( $av->lib ) ), );
         } else {
-            $template->param( return => "There is no defined value for $code");
+            $template->param( return => "There is no defined value for $code" );
         }
+
         # The user entered a custom value, we don't touch it, this could be handled in js
     } else {
         $template->param( return => $code, );

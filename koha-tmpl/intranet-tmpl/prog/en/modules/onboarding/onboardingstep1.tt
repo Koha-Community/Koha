@@ -2,63 +2,68 @@
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% FILTER collapse %]
-    [% t("Create a library") | html %] &rsaquo;
-    [% t("Web installer") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Create a library") | html %]
+        &rsaquo; [% t("Web installer") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
 <body id="installer" class="installer">
-    <div class="container-fluid">
-        <div class="row">
-            <div id="onboarding-step1" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
-                <div id="logo"><a href="#">Koha</a></div>
-                <h1>Web installer &rsaquo; Create a library</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div id="onboarding-step1" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+            <div id="logo"><a href="#">Koha</a></div>
+            <h1>Web installer &rsaquo; Create a library</h1>
 
-                [% INCLUDE 'onboarding_messages.inc' %]
+            [% INCLUDE 'onboarding_messages.inc' %]
 
-                <div id="steps">
+            <div id="steps">
+                <ol>
+                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
+                    <li class="current open"
+                        ><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding
+                        <ol>
+                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a library</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a patron category</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create Koha administrator patron</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new item type</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new circulation rule</li>
+                        </ol>
+                    </li>
+                </ol>
+            </div>
+
+            <form name="LibraryCreation" method="post" action="onboarding.pl">
+                [% INCLUDE 'csrf-token.inc' %]
+                <fieldset class="rows">
+                    <input type="hidden" name="step" value="1" />
+                    <input type="hidden" name="op" value="cud-add_validate_library" />
                     <ol>
-                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
-                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding
-                            <ol>
-                                <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a library</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a patron category</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create Koha administrator patron</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new item type</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new circulation rule</li>
-                            </ol>
+                        <li>
+                            <label for="branchcode" class="required">Library code: </label>
+                            <input type="text" pattern="[0-9A-Za-z]{1,10}" name="branchcode" id="branchcode" size="10" maxlength="10" value="" class="required" required="required" />
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="branchname" class="required">Name: </label>
+                            <input type="text" name="branchname" id="branchname" size="42" class="required" required="required" />
+                            <span class="required">Required</span>
                         </li>
                     </ol>
-                </div>
-
-                <form name="LibraryCreation" method="post" action="onboarding.pl">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <fieldset class="rows" >
-                        <input type="hidden" name="step" value="1"/>
-                        <input type="hidden" name="op" value="cud-add_validate_library"/>
-                        <ol>
-                            <li>
-                                <label for="branchcode" class="required">Library code: </label>
-                                <input type="text"  pattern="[0-9A-Za-z]{1,10}" name="branchcode" id="branchcode" size="10" maxlength="10" value="" class="required" required="required" />
-                                <span class="required">Required</span>
-                            </li>
-                            <li>
-                                <label for="branchname" class="required">Name: </label>
-                                <input type="text" name="branchname" id="branchname" size="42" class="required" required="required">
-                                <span class="required">Required</span>
-                            </li>
-                        </ol>
-                        <p>To add another library and for more settings, go to:
-                            <span class="breadcrumbs"> Administration <strong>&rsaquo;</strong> Libraries and groups </span>
-                        </p>
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </fieldset>
-                </form>
-            </div> <!-- / #onboarding-step1 -->
-        </div> <!-- / .row -->
-    </div><!-- / .container-fluid -->
+                    <p
+                        >To add another library and for more settings, go to:
+                        <span class="breadcrumbs"> Administration <strong>&rsaquo;</strong> Libraries and groups </span>
+                    </p>
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                </fieldset>
+            </form>
+        </div>
+        <!-- / #onboarding-step1 -->
+    </div>
+    <!-- / .row --> </div
+><!-- / .container-fluid -->
 
 [% INCLUDE 'installer-intranet-bottom.inc' %]

@@ -21,7 +21,7 @@ use Modern::Perl;
 use Test::More tests => 1;
 use LWP::Simple;
 use JSON;
-my $content  = get("https://openlibrary.org/search.json?q=9780201038095");
+my $content = get("https://openlibrary.org/search.json?q=9780201038095");
 
 SKIP: {
     skip "json has not been retrieved from openlibrary.org", 1 unless defined $content;

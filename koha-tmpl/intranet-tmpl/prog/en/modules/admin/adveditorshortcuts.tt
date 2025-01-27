@@ -4,18 +4,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Advanced editor shortcuts") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Advanced editor shortcuts") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="adveditor_shortcuts" class="admin">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'prefs-admin-search.inc' %]
 [% END %]
-    [% PROCESS 'keyboard_shortcuts.inc' %]
+[% PROCESS 'keyboard_shortcuts.inc' %]
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
@@ -29,45 +30,45 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-                <h1>Advanced editor keyboard shortcuts</h1>
-                [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
-                    <ul>
-                        <li>Separate keys using a hyphen "-"</li>
-                        <li>Control key is "Ctrl"</li>
-                        <li>Alt key is "Alt"</li>
-                        <li>Shift is "Shift"</li>
-                        <li>If combining multiple keys they must be in specified order: Shift-Cmd-Ctrl-Alt</li>
-                        <li><a href="https://codemirror.net/doc/manual.html#keymaps">More documentation on defining key maps</a></li>
-                    </ul>
+    <h1>Advanced editor keyboard shortcuts</h1>
+    [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
+        <ul>
+            <li>Separate keys using a hyphen "-"</li>
+            <li>Control key is "Ctrl"</li>
+            <li>Alt key is "Alt"</li>
+            <li>Shift is "Shift"</li>
+            <li>If combining multiple keys they must be in specified order: Shift-Cmd-Ctrl-Alt</li>
+            <li><a href="https://codemirror.net/doc/manual.html#keymaps">More documentation on defining key maps</a></li>
+        </ul>
 
-                    <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/admin/adveditorshortcuts.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <fieldset>
-                        <input type=hidden name="op" value="cud-save" />
+        <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/admin/adveditorshortcuts.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset>
+                <input type="hidden" name="op" value="cud-save" />
 
-                        <table id="adv_editor_keyboard_shortcuts">
-                            <thead>
-                                <th>Description</th>
-                                <th>Shortcut keys</th>
-                            </thead>
-                            <tbody>
-                               [% FOREACH shortcut IN shortcuts %]
+                <table id="adv_editor_keyboard_shortcuts">
+                    <thead>
+                        <th>Description</th>
+                        <th>Shortcut keys</th>
+                    </thead>
+                    <tbody>
+                        [% FOREACH shortcut IN shortcuts %]
                             <tr>
                                 <td><label for="shortcut_keys">[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</label></td>
                                 <td>
-                                    <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name | html %]">
-                                    <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys | html %]">
-                               </td>
+                                    <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name | html %]" />
+                                    <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys | html %]" />
+                                </td>
                             </tr>
-                       [% END %]
-                       </table>
-                       </fieldset>
-                       <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save shortcuts"></fieldset>
-                   </form>
-               [% ELSE %]
-                   <p>Enable the advanced cataloging editor ( EnableAdvancedCatalogingEditor system preference) to define keyboard shortcuts</p>
-               [% END %]
-
+                        [% END %]
+                    </tbody></table
+                >
+            </fieldset>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save shortcuts" /></fieldset>
+        </form>
+    [% ELSE %]
+        <p>Enable the advanced cataloging editor ( EnableAdvancedCatalogingEditor system preference) to define keyboard shortcuts</p>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

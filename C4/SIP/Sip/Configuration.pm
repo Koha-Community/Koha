@@ -8,7 +8,7 @@ package C4::SIP::Sip::Configuration;
 
 use strict;
 use warnings;
-use XML::Simple qw(:strict);
+use XML::Simple     qw(:strict);
 use List::MoreUtils qw(uniq);
 
 use C4::SIP::Sip qw(siplog);
@@ -49,10 +49,13 @@ sub new {
     }
     $cfg->{listeners} = \%listeners;
 
-    my @branchcodes = Koha::Libraries->search()->get_column('branchcode');
+    my @branchcodes  = Koha::Libraries->search()->get_column('branchcode');
     my @institutions = uniq( keys %{ $cfg->{institutions} } );
-    foreach my $i ( @institutions ) {
-        siplog("LOG_ERR", "ERROR: Institution $i does does not match a branchcode. This can cause unexpected behavior.") unless grep( /^$i$/, @branchcodes );
+    foreach my $i (@institutions) {
+        siplog(
+            "LOG_ERR",
+            "ERROR: Institution $i does does not match a branchcode. This can cause unexpected behavior."
+        ) unless grep( /^$i$/, @branchcodes );
     }
 
     return bless $cfg, $class;
@@ -73,8 +76,10 @@ sub find_service {
     my $portstr;
     foreach my $addr ( '', '*:', "$sockaddr:", "[$sockaddr]:" ) {
         $portstr = sprintf( "%s%s/%s", $addr, $port, lc $proto );
-        siplog( "LOG_DEBUG",
-            "Configuration::find_service: Trying $portstr" );
+        siplog(
+            "LOG_DEBUG",
+            "Configuration::find_service: Trying $portstr"
+        );
         last if ( exists( ( $self->{listeners} )->{$portstr} ) );
         $portstr .= '/ipv4';    # lc, see ->new
         last if ( exists( ( $self->{listeners} )->{$portstr} ) );

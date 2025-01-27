@@ -74,9 +74,7 @@ DELETESQL
     my $message_attribute = $builder->build(
         {
             source => 'MessageAttribute',
-            value  => {
-                message_name => 'Advance_Notice'
-            }
+            value  => { message_name => 'Advance_Notice' }
         }
     );
 
@@ -98,11 +96,10 @@ DELETESQL
         {
             source => 'BorrowerMessagePreference',
             value  => {
-                borrowernumber  => $borrower->{borrowernumber},
-                wants_digest    => 1,
-                days_in_advance => 1,
-                message_attribute_id =>
-                  $message_attribute->{message_attribute_id}
+                borrowernumber       => $borrower->{borrowernumber},
+                wants_digest         => 1,
+                days_in_advance      => 1,
+                message_attribute_id => $message_attribute->{message_attribute_id}
             }
         }
     );
@@ -111,9 +108,8 @@ DELETESQL
         {
             source => 'BorrowerMessageTransportPreference',
             value  => {
-                borrower_message_preference_id => $borrower_message_preference
-                  ->{borrower_message_preference_id},
-                message_transport_type => 'email'
+                borrower_message_preference_id => $borrower_message_preference->{borrower_message_preference_id},
+                message_transport_type         => 'email'
             }
         }
     );
@@ -122,16 +118,24 @@ DELETESQL
         {
             source => 'BorrowerMessageTransportPreference',
             value  => {
-                borrower_message_preference_id => $borrower_message_preference
-                  ->{borrower_message_preference_id},
-                message_transport_type => 'phone'
+                borrower_message_preference_id => $borrower_message_preference->{borrower_message_preference_id},
+                message_transport_type         => 'phone'
             }
         }
     );
 
     my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
 
-    is( $patron->has_messaging_preference({ message_name => 'Advance_Notice', message_transport_type => 'email' }), 1, "Patron has Advance_Notice email preference" );
-    is( $patron->has_messaging_preference({ message_name => 'Advance_Notice', message_transport_type => 'phone' }), 1, "Patron has Advance_Notice phone preference" );
-    is( $patron->has_messaging_preference({ message_name => 'Advance_Notice', message_transport_type => 'sms' }), 0, "Patron has no Advance_Notice sms preference" );
+    is(
+        $patron->has_messaging_preference( { message_name => 'Advance_Notice', message_transport_type => 'email' } ),
+        1, "Patron has Advance_Notice email preference"
+    );
+    is(
+        $patron->has_messaging_preference( { message_name => 'Advance_Notice', message_transport_type => 'phone' } ),
+        1, "Patron has Advance_Notice phone preference"
+    );
+    is(
+        $patron->has_messaging_preference( { message_name => 'Advance_Notice', message_transport_type => 'sms' } ), 0,
+        "Patron has no Advance_Notice sms preference"
+    );
 };

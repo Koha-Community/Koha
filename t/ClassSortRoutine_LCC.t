@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!  
+# This Koha test module is a stub!
 # Add more tests here!!!
 
 use strict;
@@ -9,22 +9,22 @@ use warnings;
 use Test::More tests => 10;
 
 BEGIN {
-        use_ok('C4::ClassSortRoutine::LCC', qw( get_class_sort_key ));
+    use_ok( 'C4::ClassSortRoutine::LCC', qw( get_class_sort_key ) );
 }
 
 #Obvious cases
-is(C4::ClassSortRoutine::LCC::get_class_sort_key(), "", "No arguments returns an empty string");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('a','b'), "A B", "Arguments 'a','b' return 'A B'");
+is( C4::ClassSortRoutine::LCC::get_class_sort_key(),           "",    "No arguments returns an empty string" );
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( 'a', 'b' ), "A B", "Arguments 'a','b' return 'A B'" );
 
 #spaces in arguements
-is(C4::ClassSortRoutine::LCC::get_class_sort_key(' ','b'), "B", "Arguments ' ','b' return 'B'");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('a',' '), "A", "Arguments 'a',' ' return 'A'");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key(' ','    '), "", "Arguments ' ','    ' return ''");
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( ' ', 'b' ),    "B", "Arguments ' ','b' return 'B'" );
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( 'a', ' ' ),    "A", "Arguments 'a',' ' return 'A'" );
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( ' ', '    ' ), "",  "Arguments ' ','    ' return ''" );
 
 #'funky cases' based on regex in code
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('.','b'), "", "Arguments '.','b' return ''");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('....','........'), "", "Arguments '....','........' return ''");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('.','.'), "", "Arguments '.','.' return ''");
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( '.',    'b' ),        "", "Arguments '.','b' return ''" );
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( '....', '........' ), "", "Arguments '....','........' return ''" );
+is( C4::ClassSortRoutine::LCC::get_class_sort_key( '.',    '.' ),        "", "Arguments '.','.' return ''" );
 
 # list of example call numbers -- these
 # are intentionally in the _reverse_ of
@@ -39,7 +39,6 @@ my @call_numbers = (
 );
 
 my @sorted_call_numbers = map { $_->{call_number} }
-                          sort { $a->{sortkey} cmp $b->{sortkey} }
-                          map { { call_number => $_, sortkey => C4::ClassSortRoutine::LCC::get_class_sort_key($_, '') } }
-                          @call_numbers;
-is_deeply(\@sorted_call_numbers, [ reverse @call_numbers ], 'LC call numbers sorted in correct order');
+    sort { $a->{sortkey} cmp $b->{sortkey} }
+    map { { call_number => $_, sortkey => C4::ClassSortRoutine::LCC::get_class_sort_key( $_, '' ) } } @call_numbers;
+is_deeply( \@sorted_call_numbers, [ reverse @call_numbers ], 'LC call numbers sorted in correct order' );

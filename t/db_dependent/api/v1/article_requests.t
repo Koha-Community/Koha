@@ -40,22 +40,19 @@ subtest 'cancel() tests' => sub {
     my $authorized_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2 ** 1 } # circulate flag = 1
+            value => { flags => 2**1 }    # circulate flag = 1
         }
     );
     my $password = 'thePassword123';
-    $authorized_patron->set_password(
-        { password => $password, skip_validation => 1 } );
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $authorized_patron->userid;
 
-    my $deleted_article_request =
-      $builder->build_object( { class => 'Koha::ArticleRequests' } );
+    my $deleted_article_request    = $builder->build_object( { class => 'Koha::ArticleRequests' } );
     my $deleted_article_request_id = $deleted_article_request->id;
     $deleted_article_request->delete;
 
-    $t->delete_ok(
-"//$userid:$password@/api/v1/article_requests/$deleted_article_request_id"
-    )->status_is(404)->json_is( '/error_code' => 'not_found' );
+    $t->delete_ok("//$userid:$password@/api/v1/article_requests/$deleted_article_request_id")->status_is(404)
+        ->json_is( '/error_code' => 'not_found' );
 
     my $article_request = $builder->build_object(
         {
@@ -68,15 +65,17 @@ subtest 'cancel() tests' => sub {
     my $notes  = 'Some notes';
 
     $t->delete_ok( "//$userid:$password@/api/v1/article_requests/"
-          . $article_request->id
-          . "?cancellation_reason=$reason&notes=$notes" )
-      ->status_is( 204, 'REST3.2.4' )->content_is( q{}, 'REST3.2.4' );
+            . $article_request->id
+            . "?cancellation_reason=$reason&notes=$notes" )->status_is( 204, 'REST3.2.4' )
+        ->content_is( q{}, 'REST3.2.4' );
 
     # refresh object
     $article_request->discard_changes;
 
-    is( $article_request->cancellation_reason,
-        $reason, 'Reason stored correctly' );
+    is(
+        $article_request->cancellation_reason,
+        $reason, 'Reason stored correctly'
+    );
     is( $article_request->notes, $notes, 'Notes stored correctly' );
 
     $schema->storage->txn_rollback;
@@ -102,24 +101,25 @@ subtest 'patron_cancel() tests' => sub {
     my $userid    = $patron->userid;
     my $patron_id = $patron->borrowernumber;
 
-    my $deleted_article_request = $builder->build_object( { class => 'Koha::ArticleRequests', value => { borrowernumber => $patron_id } } );
+    my $deleted_article_request =
+        $builder->build_object( { class => 'Koha::ArticleRequests', value => { borrowernumber => $patron_id } } );
     my $deleted_article_request_id = $deleted_article_request->id;
     $deleted_article_request->delete;
 
     # delete non existent article request
     $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/$deleted_article_request_id")
-      ->status_is(404)
-      ->json_is( '/error_code' => 'not_found' );
+        ->status_is(404)->json_is( '/error_code' => 'not_found' );
 
-    my $another_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $another_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $another_patron_id = $another_patron->id;
 
-    my $article_request_2 = $builder->build_object({ class => 'Koha::ArticleRequests', value => { borrowernumber => $another_patron_id } });
+    my $article_request_2 = $builder->build_object(
+        { class => 'Koha::ArticleRequests', value => { borrowernumber => $another_patron_id } } );
 
     # delete another patron's request
-    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/" . $article_request_2->id)
-      ->status_is(403)
-      ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/" . $article_request_2->id )
+        ->status_is(403)->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     my $another_article_request = $builder->build_object(
         {
@@ -128,9 +128,9 @@ subtest 'patron_cancel() tests' => sub {
         }
     );
 
-    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/" . $another_article_request->id)
-      ->status_is(404)
-      ->json_is( '/error_code' => 'not_found' );
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/" . $another_article_request->id )
+        ->status_is(404)->json_is( '/error_code' => 'not_found' );
 
     my $article_request = $builder->build_object(
         {
@@ -142,18 +142,16 @@ subtest 'patron_cancel() tests' => sub {
     my $reason = 'A reason';
     my $notes  = 'Some notes';
 
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/"
-          . $article_request->id
-          . "?cancellation_reason=$reason&notes=$notes" )
-      ->status_is( 204, 'REST3.2.4' )
-      ->content_is( q{}, 'REST3.2.4' );
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/"
+            . $article_request->id
+            . "?cancellation_reason=$reason&notes=$notes" )->status_is( 204, 'REST3.2.4' )
+        ->content_is( q{}, 'REST3.2.4' );
 
     # refresh object
     $article_request->discard_changes;
 
     is( $article_request->cancellation_reason, $reason, 'Reason stored correctly' );
-    is( $article_request->notes, $notes, 'Notes stored correctly' );
+    is( $article_request->notes,               $notes,  'Notes stored correctly' );
 
     $schema->storage->txn_rollback;
 };

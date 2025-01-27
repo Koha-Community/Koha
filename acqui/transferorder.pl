@@ -22,7 +22,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Acquisition qw( GetOrder GetBasket TransferOrder GetBasketsByBookseller SearchOrders );
@@ -30,62 +30,65 @@ use Koha::Acquisition::Booksellers;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "acqui/transferorder.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => 'order_manage' },
+    {
+        template_name => "acqui/transferorder.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
     }
 );
 
 my $dbh = C4::Context->dbh;
 
-my $bookselleridfrom    = $input->param('bookselleridfrom');
-my $ordernumber     = $input->param('ordernumber');
-my $bookselleridto  = $input->param('bookselleridto');
-my $basketno        = $input->param('basketno');
-my $op              = $input->param('op');
-my $query           = $input->param('query');
+my $bookselleridfrom = $input->param('bookselleridfrom');
+my $ordernumber      = $input->param('ordernumber');
+my $bookselleridto   = $input->param('bookselleridto');
+my $basketno         = $input->param('basketno');
+my $op               = $input->param('op');
+my $query            = $input->param('query');
 
-my $order = GetOrder($ordernumber);
+my $order          = GetOrder($ordernumber);
 my $basketfromname = '';
-if($order) {
-    my $basket = GetBasket($order->{basketno});
-    $basketfromname = $basket->{basketname};
+if ($order) {
+    my $basket = GetBasket( $order->{basketno} );
+    $basketfromname   = $basket->{basketname};
     $bookselleridfrom = $basket->{booksellerid} if $basket;
 }
 
-my $booksellerfrom = Koha::Acquisition::Booksellers->find( $bookselleridfrom );
+my $booksellerfrom = Koha::Acquisition::Booksellers->find($bookselleridfrom);
 my $booksellerfromname;
-if($booksellerfrom){
+if ($booksellerfrom) {
     $booksellerfromname = $booksellerfrom->name;
 }
-my $booksellerto = Koha::Acquisition::Booksellers->find( $bookselleridto );
+my $booksellerto = Koha::Acquisition::Booksellers->find($bookselleridto);
 my $booksellertoname;
-if($booksellerto){
+if ($booksellerto) {
     $booksellertoname = $booksellerto->name;
 }
 
+if ( $basketno && $ordernumber ) {
 
-if( $basketno && $ordernumber) {
     # Transfer order and exit
-    my $order = GetOrder( $ordernumber );
-    my $basket = GetBasket($order->{basketno});
-    my $booksellerfrom = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
+    my $order            = GetOrder($ordernumber);
+    my $basket           = GetBasket( $order->{basketno} );
+    my $booksellerfrom   = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
     my $bookselleridfrom = $booksellerfrom->id;
 
-    TransferOrder($ordernumber, $basketno);
+    TransferOrder( $ordernumber, $basketno );
 
-    $template->param(transferred => 1)
-} elsif ( $bookselleridto && $ordernumber) {
+    $template->param( transferred => 1 );
+} elsif ( $bookselleridto && $ordernumber ) {
+
     # Show open baskets for this bookseller
-    my $order = GetOrder( $ordernumber );
-    my $basketfrom = GetBasket( $order->{basketno} );
+    my $order          = GetOrder($ordernumber);
+    my $basketfrom     = GetBasket( $order->{basketno} );
     my $booksellerfrom = Koha::Acquisition::Booksellers->find( $basketfrom->{booksellerid} );
     $booksellerfromname = $booksellerfrom->name;
-    my $baskets = GetBasketsByBookseller( $bookselleridto );
+    my $baskets      = GetBasketsByBookseller($bookselleridto);
     my $basketscount = scalar @$baskets;
-    my @basketsloop = ();
-    for( my $i = 0 ; $i < $basketscount ; $i++ ){
+    my @basketsloop  = ();
+
+    for ( my $i = 0 ; $i < $basketscount ; $i++ ) {
         my %line;
         %line = %{ $baskets->[$i] };
         my $createdby = Koha::Patrons->find( $line{authorisedby} );
@@ -93,50 +96,55 @@ if( $basketno && $ordernumber) {
         push @basketsloop, \%line unless $line{closedate};
     }
     $template->param(
-        show_baskets => 1,
+        show_baskets   => 1,
         query          => $query,
-        basketsloop => \@basketsloop,
+        basketsloop    => \@basketsloop,
         basketfromname => $basketfrom->{basketname},
     );
-} elsif ( $bookselleridfrom && !defined $ordernumber) {
+} elsif ( $bookselleridfrom && !defined $ordernumber ) {
+
     # Show pending orders
-    my $pendingorders = SearchOrders({
-        booksellerid => $bookselleridfrom,
-        pending      => 1,
-    });
+    my $pendingorders = SearchOrders(
+        {
+            booksellerid => $bookselleridfrom,
+            pending      => 1,
+        }
+    );
     my $orderscount = scalar @$pendingorders;
-    my @ordersloop = ();
-    for( my $i = 0 ; $i < $orderscount ; $i++ ){
+    my @ordersloop  = ();
+    for ( my $i = 0 ; $i < $orderscount ; $i++ ) {
         my %line;
         %line = %{ $pendingorders->[$i] };
         push @ordersloop, \%line;
     }
     $template->param(
-        ordersloop  => \@ordersloop,
+        ordersloop => \@ordersloop,
     );
 } else {
+
     # Search for booksellers to transfer from/to
     $op = '' unless $op;
-    if( $op eq "do_search" ) {
+    if ( $op eq "do_search" ) {
         my $booksellers = Koha::Acquisition::Booksellers->search(
-                            { name     => { -like => "%$query%" } },
-                            { order_by => { -asc => 'name' } } );
+            { name     => { -like => "%$query%" } },
+            { order_by => { -asc  => 'name' } }
+        );
         $template->param(
-            query => $query,
-            do_search => 1,
+            query       => $query,
+            do_search   => 1,
             booksellers => $booksellers,
         );
     }
 }
 
 $template->param(
-    bookselleridfrom    => $bookselleridfrom,
-    booksellerfromname  => $booksellerfromname,
-    bookselleridto      => $bookselleridto,
-    booksellertoname    => $booksellertoname,
-    ordernumber         => $ordernumber,
-    basketno            => $basketno,
-    basketfromname      => $basketfromname,
+    bookselleridfrom   => $bookselleridfrom,
+    booksellerfromname => $booksellerfromname,
+    bookselleridto     => $bookselleridto,
+    booksellertoname   => $booksellertoname,
+    ordernumber        => $ordernumber,
+    basketno           => $basketno,
+    basketfromname     => $basketfromname,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

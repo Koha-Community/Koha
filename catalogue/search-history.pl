@@ -27,20 +27,23 @@ use C4::Output qw( output_html_with_http_headers );
 
 my $cgi = CGI->new;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name   => 'catalogue/search-history.tt',
-    query           => $cgi,
-    type            => "intranet",
-    flagsrequired   => {catalogue => 1},
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => 'catalogue/search-history.tt',
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
+    }
+);
 
-my $type = $cgi->param('type');
-my $op = $cgi->param('op') || q{list};
+my $type     = $cgi->param('type');
+my $op       = $cgi->param('op') || q{list};
 my $previous = $cgi->param('previous');
 
 # Deleting search history
 if ( $op eq 'cud-delete' ) {
-    my $sessionid = defined $previous
+    my $sessionid =
+        defined $previous
         ? $cgi->cookie("CGISESSID")
         : q{};
     C4::Search::History::delete(
@@ -49,48 +52,43 @@ if ( $op eq 'cud-delete' ) {
             id     => [ $cgi->param('id') ],
         }
     );
+
     # Redirecting to this same url so the user won't see the search history link in the header
     print $cgi->redirect('/cgi-bin/koha/catalogue/search-history.pl');
 
-# Showing search history
+    # Showing search history
 } else {
-    my $current_searches = C4::Search::History::get({
-        userid => $loggedinuser,
-        sessionid => $cgi->cookie("CGISESSID")
-    });
-    my @current_biblio_searches = map {
-        $_->{type} eq 'biblio' ? $_ : ()
-    } @$current_searches;
+    my $current_searches = C4::Search::History::get(
+        {
+            userid    => $loggedinuser,
+            sessionid => $cgi->cookie("CGISESSID")
+        }
+    );
+    my @current_biblio_searches = map { $_->{type} eq 'biblio' ? $_ : () } @$current_searches;
 
-    my @current_authority_searches = map {
-        $_->{type} eq 'authority' ? $_ : ()
-    } @$current_searches;
+    my @current_authority_searches = map { $_->{type} eq 'authority' ? $_ : () } @$current_searches;
 
-    my $previous_searches = C4::Search::History::get({
-        userid => $loggedinuser,
-        sessionid => $cgi->cookie("CGISESSID"),
-        previous => 1
-    });
+    my $previous_searches = C4::Search::History::get(
+        {
+            userid    => $loggedinuser,
+            sessionid => $cgi->cookie("CGISESSID"),
+            previous  => 1
+        }
+    );
 
-    my @previous_biblio_searches = map {
-        $_->{type} eq 'biblio' ? $_ : ()
-    } @$previous_searches;
+    my @previous_biblio_searches = map { $_->{type} eq 'biblio' ? $_ : () } @$previous_searches;
 
-    my @previous_authority_searches = map {
-        $_->{type} eq 'authority' ? $_ : ()
-    } @$previous_searches;
+    my @previous_authority_searches = map { $_->{type} eq 'authority' ? $_ : () } @$previous_searches;
 
     $template->param(
-        current_biblio_searches => \@current_biblio_searches,
-        current_authority_searches => \@current_authority_searches,
-        previous_biblio_searches => \@previous_biblio_searches,
+        current_biblio_searches     => \@current_biblio_searches,
+        current_authority_searches  => \@current_authority_searches,
+        previous_biblio_searches    => \@previous_biblio_searches,
         previous_authority_searches => \@previous_authority_searches,
 
     );
 }
 
-
-$template->param(
-);
+$template->param();
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

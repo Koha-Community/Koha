@@ -23,7 +23,7 @@ use strict;
 use LWP::UserAgent;
 use File::Slurp qw( read_file write_file );
 
-if ( $#ARGV >= 3 && ! caller ) { # process command-line params only if not called as module!
+if ( $#ARGV >= 3 && !caller ) {    # process command-line params only if not called as module!
     my ( $url, $user, $password, $biblionumber, $file ) = @ARGV;
 
     my $svc = Koha::SVC->new(
@@ -33,9 +33,9 @@ if ( $#ARGV >= 3 && ! caller ) { # process command-line params only if not calle
         debug    => 0,
     );
 
-    if ( ! $file ) {
-        my $marcxml = $svc->get( $biblionumber );
-        my $file = "bib-$biblionumber.xml";
+    if ( !$file ) {
+        my $marcxml = $svc->get($biblionumber);
+        my $file    = "bib-$biblionumber.xml";
         write_file $file , $marcxml;
         print "saved $file ", -s $file, " bytes\n";
         print $marcxml;
@@ -133,11 +133,11 @@ sub new {
 =cut
 
 sub get {
-    my ($self,$biblionumber) = @_;
+    my ( $self, $biblionumber ) = @_;
 
     my $url = $self->{url};
     warn "# get $url/bib/$biblionumber\n" if $self->{debug};
-    my $resp = $self->{ua}->get( "$url/bib/$biblionumber" );
+    my $resp = $self->{ua}->get("$url/bib/$biblionumber");
     die $resp->status_line unless $resp->is_success;
     return $resp->decoded_content;
 }

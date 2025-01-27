@@ -27,7 +27,7 @@ use Koha::Template::Plugin::AdditionalContents;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-my $schema = Koha::Database->schema;
+my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
 $schema->storage->txn_begin;

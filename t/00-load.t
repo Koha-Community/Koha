@@ -32,20 +32,23 @@ use English qw( -no_match_vars );
 
 # Loop through the C4:: modules
 my $lib = File::Spec->rel2abs('C4');
-find({
-    bydepth => 1,
-    no_chdir => 1,
-    wanted => sub {
-        my $m = $_;
-        return unless $m =~ s/[.]pm$//;
+find(
+    {
+        bydepth  => 1,
+        no_chdir => 1,
+        wanted   => sub {
+            my $m = $_;
+            return unless $m =~ s/[.]pm$//;
 
-        $m =~ s{^.*/C4/}{C4/};
-        $m =~ s{/}{::}g;
-        return if $m =~ /Auth_with_ldap/; # Dont test this, it will fail on use
-        return if $m =~ /SIPServer/; # SIP Server module has old package usage
-        use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
+            $m =~ s{^.*/C4/}{C4/};
+            $m =~ s{/}{::}g;
+            return if $m =~ /Auth_with_ldap/;    # Dont test this, it will fail on use
+            return if $m =~ /SIPServer/;         # SIP Server module has old package usage
+            use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
+        },
     },
-}, $lib);
+    $lib
+);
 
 # Loop through the Koha:: modules
 $lib = File::Spec->rel2abs('Koha');
@@ -56,8 +59,8 @@ find(
         wanted   => sub {
             my $m = $_;
             return unless $m =~ s/[.]pm$//;
-            $m =~ s{^.*/Koha/}{Koha/};
-            $m =~ s{/}{::}g;
+            $m               =~ s{^.*/Koha/}{Koha/};
+            $m               =~ s{/}{::}g;
             if ( is_testable($m) ) {
                 use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
             }
@@ -76,16 +79,13 @@ sub is_testable {
     my @needed_module_names;
     my $return_value = 1;
     if ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Indexer/xsm ) {
-        @needed_module_names = ( 'Search::Elasticsearch' );
-    }
-    elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Search/xsm ) {
-        @needed_module_names = ( 'Search::Elasticsearch' );
-    }
-    elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch/xsm ) {
-        @needed_module_names = ( 'Search::Elasticsearch' );
-    }
-    elsif ( $module_name =~ /^Koha::ExternalContent/xsm ) {
-        @needed_module_names = ( 'WebService::ILS' );
+        @needed_module_names = ('Search::Elasticsearch');
+    } elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Search/xsm ) {
+        @needed_module_names = ('Search::Elasticsearch');
+    } elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch/xsm ) {
+        @needed_module_names = ('Search::Elasticsearch');
+    } elsif ( $module_name =~ /^Koha::ExternalContent/xsm ) {
+        @needed_module_names = ('WebService::ILS');
     }
     foreach my $current_name (@needed_module_names) {
         my $relative_pathname = $current_name;
@@ -93,9 +93,7 @@ sub is_testable {
         $relative_pathname .= '.pm';
         my $check_result = eval { require "$relative_pathname"; 1; };
         if ($EVAL_ERROR) {
-            diag(
-"Skipping testing of $module_name, because $current_name is not installed."
-            );
+            diag("Skipping testing of $module_name, because $current_name is not installed.");
             $return_value = 0;
         }
     }

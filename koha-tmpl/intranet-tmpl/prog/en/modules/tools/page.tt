@@ -4,15 +4,16 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( page ) %]
-        [% page.title | html %]
-    [% ELSE %]
-        [% t("Page error") | html %]
-    [% END %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( page ) %]
+            [% page.title | html %]
+        [% ELSE %]
+            [% t("Page error") | html %]
+        [% END %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -37,21 +38,13 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
-                    [% IF page %]
+    [% IF page %]
+        <h1>[% page.title | html %]</h1>
 
-                    <h1>[% page.title | html %]</h1>
-
-                    <div class="page">
-                        [% page.content | $raw %]
-                    </div>
-
-                    [% ELSE %]
-
-                    <div class="alert alert-warning">
-                        This page does not exist.
-                    </div>
-
-                    [% END %]
+        <div class="page"> [% page.content | $raw %] </div>
+    [% ELSE %]
+        <div class="alert alert-warning"> This page does not exist. </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

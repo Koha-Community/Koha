@@ -17,7 +17,6 @@ package Koha::Patron::Message;
 
 use Modern::Perl;
 
-
 use C4::Context;
 use C4::Log;
 
@@ -43,10 +42,11 @@ sub store {
     my ($self) = @_;
 
     # This should be done at the DB level
-    return unless $self->borrowernumber
-              and $self->message
-              and $self->message_type
-              and $self->branchcode;
+    return
+            unless $self->borrowernumber
+        and $self->message
+        and $self->message_type
+        and $self->branchcode;
 
     unless ( defined $self->manager_id ) {
         my $userenv = C4::Context->userenv;
@@ -55,9 +55,9 @@ sub store {
 
     if ( C4::Context->preference("BorrowersLog") ) {
         if ( $self->in_storage ) {
-            C4::Log::logaction( "MEMBERS", "MODCIRCMESSAGE", $self->borrowernumber, $self->message )
+            C4::Log::logaction( "MEMBERS", "MODCIRCMESSAGE", $self->borrowernumber, $self->message );
         } else {
-            C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message )
+            C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message );
         }
     }
 
@@ -71,7 +71,7 @@ sub store {
 sub delete {
     my ($self) = @_;
 
-    C4::Log::logaction("MEMBERS", "DELCIRCMESSAGE", $self->borrowernumber, $self->message)
+    C4::Log::logaction( "MEMBERS", "DELCIRCMESSAGE", $self->borrowernumber, $self->message )
         if C4::Context->preference("BorrowersLog");
 
     return $self->SUPER::delete($self);

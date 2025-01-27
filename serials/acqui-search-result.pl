@@ -20,7 +20,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 NAME
 
 acqui-search-result.pl
@@ -39,36 +38,40 @@ acqui-search-result.pl
 
 =cut
 
-
 use Modern::Perl;
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use CGI             qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
 use Koha::DateUtils qw( output_pref );
 
 use Koha::Acquisition::Booksellers;
 
-my $query=CGI->new;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "serials/acqui-search-result.tt",
-                 query => $query,
-                 type => "intranet",
-                 flagsrequired => {serials => '*'},
-                 });
+my $query = CGI->new;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "serials/acqui-search-result.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { serials => '*' },
+    }
+);
 
-my $supplier=$query->param('supplier');
+my $supplier  = $query->param('supplier');
 my @suppliers = Koha::Acquisition::Booksellers->search(
-                    { name     => { -like => "%$supplier%" } },
-                    { order_by => { -asc => 'name' } } )->as_list;
+    { name     => { -like => "%$supplier%" } },
+    { order_by => { -asc  => 'name' } }
+)->as_list;
 
 #build result page
 my $loop_suppliers = [];
 for my $s (@suppliers) {
-    my $orders = SearchOrders({
-        booksellerid => $s->id,
-        pending => 1
-    });
+    my $orders = SearchOrders(
+        {
+            booksellerid => $s->id,
+            pending      => 1
+        }
+    );
 
     my $loop_basket = [];
     for my $ord ( @{$orders} ) {
@@ -81,15 +84,17 @@ for my $s (@suppliers) {
         };
     }
     push @{$loop_suppliers}, {
-        loop_basket => $loop_basket,
+        loop_basket    => $loop_basket,
         aqbooksellerid => $s->id,
-        name => $s->name,
-        active => $s->active,
+        name           => $s->name,
+        active         => $s->active,
     };
 }
 
-$template->param(loop_suppliers => $loop_suppliers,
-                        supplier => $supplier,
-                        count => scalar @suppliers);
+$template->param(
+    loop_suppliers => $loop_suppliers,
+    supplier       => $supplier,
+    count          => scalar @suppliers
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

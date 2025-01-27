@@ -2,43 +2,44 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 225a builder") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 225a builder") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_225a" class="cat value_builder">
-    <h1>UNIMARC field 225a builder</h1>
-        <form method="get" name="f_pop" onsubmit="report()" action="">
-            <div id="mainbloc" class="page-section">
-                <h2 class="authority">Collection</h2>
-                <p><label>Select a collection</label>
-                    <select name="f1" id="f1">
-                    [% FOREACH value IN collection.values %]
+<h1>UNIMARC field 225a builder</h1>
+<form method="get" name="f_pop" onsubmit="report()" action="">
+    <div id="mainbloc" class="page-section">
+        <h2 class="authority">Collection</h2>
+        <p
+            ><label>Select a collection</label>
+            <select name="f1" id="f1">
+                [% FOREACH value IN collection.values %]
                     [% IF ( value == collection.default ) %]
                         <option value="[% value | html %]" selected="selected">[% value | html %]</option>
                     [% ELSE %]
                         <option value="[% value | html %]">[% value | html %]</option>
                     [% END %]
-                    [% END %]
-                    </select>
-                </p>
-                OR new collection: <input type="text" value="" name="f2"/>
-                <br/>
-            </div>
+                [% END %]
+            </select>
+        </p>
+        OR new collection: <input type="text" value="" name="f2" />
+        <br />
+    </div>
 
-            <nav class="navbar navbar-default fixed-bottom">
-                <div class="container-fluid">
-                    <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="Save" />
-                        <button class="btn btn-default close_window">Cancel</button>
-                    </fieldset>
-                </div>
-            </nav>
-
-        </form>
-
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
+</form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

@@ -21,98 +21,102 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Breeding qw( Z3950Search );
 
-my $input        = CGI->new;
-my $error         = $input->param('error');
-my $biblionumber  = $input->param('biblionumber') || 0;
-my $frameworkcode = $input->param('frameworkcode');
-my $title         = $input->param('title');
-my $author        = $input->param('author');
-my $isbn          = $input->param('isbn');
-my $issn          = $input->param('issn');
-my $lccn          = $input->param('lccn');
-my $lccall        = $input->param('lccall');
-my $subject       = $input->param('subject');
-my $dewey         = $input->param('dewey');
-my $controlnumber = $input->param('controlnumber');
-my $stdid         = $input->param('stdid');
-my $srchany       = $input->param('srchany');
+my $input           = CGI->new;
+my $error           = $input->param('error');
+my $biblionumber    = $input->param('biblionumber') || 0;
+my $frameworkcode   = $input->param('frameworkcode');
+my $title           = $input->param('title');
+my $author          = $input->param('author');
+my $isbn            = $input->param('isbn');
+my $issn            = $input->param('issn');
+my $lccn            = $input->param('lccn');
+my $lccall          = $input->param('lccall');
+my $subject         = $input->param('subject');
+my $dewey           = $input->param('dewey');
+my $controlnumber   = $input->param('controlnumber');
+my $stdid           = $input->param('stdid');
+my $srchany         = $input->param('srchany');
 my $publicationyear = $input->param('publicationyear');
-my $op            = $input->param('op')||'';
+my $op              = $input->param('op') || '';
 
-my $page            = $input->param('current_page') || 1;
+my $page = $input->param('current_page') || 1;
 $page = $input->param('goto_page') if $input->param('changepage_goto');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "cataloguing/z3950_search.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "cataloguing/z3950_search.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
+    }
+);
 
 $template->param(
-    frameworkcode => $frameworkcode,
-    isbn         => $isbn,
-    issn         => $issn,
-    lccn         => $lccn,
-    lccall       => $lccall,
-    title        => $title,
-    author       => $author,
-    controlnumber=> $controlnumber,
-    stdid        => $stdid,
-    srchany      => $srchany,
-    biblionumber => $biblionumber,
-    dewey        => $dewey,
-    subject      => $subject,
+    frameworkcode   => $frameworkcode,
+    isbn            => $isbn,
+    issn            => $issn,
+    lccn            => $lccn,
+    lccall          => $lccall,
+    title           => $title,
+    author          => $author,
+    controlnumber   => $controlnumber,
+    stdid           => $stdid,
+    srchany         => $srchany,
+    biblionumber    => $biblionumber,
+    dewey           => $dewey,
+    subject         => $subject,
     publicationyear => $publicationyear,
 );
 
 if ( $op ne "cud-do_search" ) {
     my $schema = Koha::Database->new()->schema();
-    my $rs = $schema->resultset('Z3950server')->search(
+    my $rs     = $schema->resultset('Z3950server')->search(
         {
             recordtype => 'biblio',
-            servertype => ['zed', 'sru'],
+            servertype => [ 'zed', 'sru' ],
         },
-        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-            order_by     => ['rank', 'servername'],
+        {
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+            order_by     => [ 'rank', 'servername' ],
         },
     );
     $template->param(
-        serverloop   => [ $rs->all ],
-        opsearch     => "cud-search",
+        serverloop => [ $rs->all ],
+        opsearch   => "cud-search",
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
 my @id = $input->multi_param('id');
-if ( @id==0 ) {
-        # empty server list -> report and exit
-        $template->param( emptyserverlist => 1 );
-        output_html_with_http_headers $input, $cookie, $template->output;
-        exit;
+if ( @id == 0 ) {
+
+    # empty server list -> report and exit
+    $template->param( emptyserverlist => 1 );
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
 
-my $pars= {
-        biblionumber => $biblionumber,
-        page => $page,
-        id => \@id,
-        isbn => $isbn,
-        issn => $issn,
-        title => $title,
-        author => $author,
-        dewey => $dewey,
-        subject => $subject,
-        lccall => $lccall,
-        controlnumber => $controlnumber,
-        stdid => $stdid,
-        srchany => $srchany,
-        publicationyear => $publicationyear,
+my $pars = {
+    biblionumber    => $biblionumber,
+    page            => $page,
+    id              => \@id,
+    isbn            => $isbn,
+    issn            => $issn,
+    title           => $title,
+    author          => $author,
+    dewey           => $dewey,
+    subject         => $subject,
+    lccall          => $lccall,
+    controlnumber   => $controlnumber,
+    stdid           => $stdid,
+    srchany         => $srchany,
+    publicationyear => $publicationyear,
 };
-Z3950Search($pars, $template);
+Z3950Search( $pars, $template );
 output_html_with_http_headers $input, $cookie, $template->output;

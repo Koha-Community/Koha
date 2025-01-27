@@ -1,15 +1,17 @@
 use Modern::Perl;
 
 return {
-    bug_number => "29137",
+    bug_number  => "29137",
     description => "Add system preference CreateAVFromCataloguing",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do( q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES ('CreateAVFromCataloguing', '1', '', 'Ability to create authorized values from the cataloguing module', 'YesNo')
-        });
+        }
+        );
     },
-}
+    }

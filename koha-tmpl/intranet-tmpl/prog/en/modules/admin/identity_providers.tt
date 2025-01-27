@@ -6,16 +6,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF op == 'add_form' %]
-        [% t("New identity provider") | html %] &rsaquo;
-    [% ELSIF op == 'edit_form' %]
-        [% tx("Modify identity provider '{id_provider}'", {id_provider = identity_provider.code}) | html %] &rsaquo;
-    [% END %]
-    [% t("Identity providers") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op == 'add_form' %]
+            [% t("New identity provider") | html %]
+            &rsaquo;
+        [% ELSIF op == 'edit_form' %]
+            [% tx("Modify identity provider '{id_provider}'", {id_provider = identity_provider.code}) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Identity providers") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -36,7 +39,6 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>New identity provider</span>
             [% END %]
-
         [% ELSIF op == 'edit_form' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/identity_providers.pl">Identity providers</a>
@@ -44,7 +46,6 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("Modify identity provider '{id_provider}'", {id_provider = identity_provider.code}) | html %]
             [% END %]
-
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Identity providers</span>
@@ -55,29 +56,29 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% FOREACH m IN messages %]
-    <div class="alert alert-[% m.type | html %]" id="identity_provider_action_result_dialog">
-        [% SWITCH m.code %]
-        [% CASE 'error_on_update' %]
-            <span>An error occurred trying to open the identity provider for editing. The passed ID is invalid.</span>
-        [% CASE 'error_on_insert' %]
-            <span>An error occurred when adding a new identity provider. Check the logs for details.</span>
-        [% CASE 'success_on_update' %]
-            <span>Identity provider updated successfully.</span>
-        [% CASE 'success_on_insert' %]
-            <div>Identity provider added successfully.</div>
-            <div>You will need to restart Koha for the provider to work.</div>
-        [% CASE %]
-            <span>[% m.code | html %]</span>
-        [% END %]
-    </div>
-[% END %]
+    [% FOREACH m IN messages %]
+        <div class="alert alert-[% m.type | html %]" id="identity_provider_action_result_dialog">
+            [% SWITCH m.code %]
+            [% CASE 'error_on_update' %]
+                <span>An error occurred trying to open the identity provider for editing. The passed ID is invalid.</span>
+            [% CASE 'error_on_insert' %]
+                <span>An error occurred when adding a new identity provider. Check the logs for details.</span>
+            [% CASE 'success_on_update' %]
+                <span>Identity provider updated successfully.</span>
+            [% CASE 'success_on_insert' %]
+                <div>Identity provider added successfully.</div>
+                <div>You will need to restart Koha for the provider to work.</div>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
 
     <div class="alert alert-info" id="identity_provider_delete_success" style="display: none;"></div>
-    <div class="alert alert-warning"   id="identity_provider_delete_error"   style="display: none;"></div>
+    <div class="alert alert-warning" id="identity_provider_delete_error" style="display: none;"></div>
 
-[% IF op == 'add_form' %]
-    <h1>New identity provider</h1>
+    [% IF op == 'add_form' %]
+        <h1>New identity provider</h1>
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
@@ -119,7 +120,9 @@
                         <label for="config" class="required json">Configuration: </label>
                         <textarea name="config" id="config" class="required" cols="75" rows="10"></textarea>
                         <span class="required">Required</span>
-                        <div class="hint">Provider's main configuration. <button class="more btn btn-light" data-target="config"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint"
+                            >Provider's main configuration. <button class="more btn btn-light" data-target="config"><i class="fa fa-caret-down"></i> More</button></div
+                        >
                         <div class="hint more-config" style="display: none">
                             <div>This configuration differs for each protocol.</div>
                             <div>It is recommended to add the default configuration, and then replace with appropriate values</div>
@@ -132,7 +135,9 @@
                         <label for="mapping" class="required json">Mapping: </label>
                         <textarea name="mapping" id="mapping" class="required" cols="75" rows="10"></textarea>
                         <span class="required">Required</span>
-                        <div class="hint">Map provider's result to Koha patron's fields. <button class="more btn btn-light" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint"
+                            >Map provider's result to Koha patron's fields. <button class="more btn btn-light" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div
+                        >
                         <div class="hint more-mapping" style="display: none">
                             <div>It is recommended to add the default mapping, and then modify to suit this provider's response</div>
                             <div>Keys represent Koha's fields, and values represent the keys in provider's result</div>
@@ -220,7 +225,8 @@
                             <option value="0" selected="selected">No</option>
                         </select>
                         <div class="hint">Update user data on login.</div>
-                </ol>
+                    </li></ol
+                >
             </fieldset>
 
             <fieldset class="action">
@@ -228,11 +234,10 @@
                 <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>
             </fieldset>
         </form>
+    [% END %]
 
-[% END %]
-
-[% IF op == 'edit_form' %]
-    <h1>[% tx("Modify identity provider '{id_provider}'", {id_provider = identity_provider.code}) | html %]</h1>
+    [% IF op == 'edit_form' %]
+        <h1>[% tx("Modify identity provider '{id_provider}'", {id_provider = identity_provider.code}) | html %]</h1>
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
@@ -243,34 +248,34 @@
                 <ol>
                     <li>
                         <label for="code" class="required">Code: </label>
-                        <input type="text" name="code" id="code" size="60" class="required" required="required" value="[%- identity_provider.code | html -%]"/>
+                        <input type="text" name="code" id="code" size="60" class="required" required="required" value="[%- identity_provider.code | html -%]" />
                         <span class="required">Required</span>
                         <div class="hint">Code that identifies this provider. Only alphanumeric and "_" characters are allowed</div>
                     </li>
                     <li>
                         <label for="description" class="required">Description: </label>
-                        <input type="text" name="description" id="description" size="60" class="required" required="required" value="[%- identity_provider.description | html -%]"/>
+                        <input type="text" name="description" id="description" size="60" class="required" required="required" value="[%- identity_provider.description | html -%]" />
                         <span class="required">Required</span>
                         <div class="hint">User friendly name of this provider</div>
                     </li>
                     <li>
                         <label for="protocol">Protocol: </label>
                         <select name="protocol" id="protocol">
-                        [% IF identity_provider.protocol == 'OAuth' %]
-                            <option value="OAuth" selected="selected">OAuth</option>
-                            <option value="OIDC">OIDC</option>
-                            <!-- Not implemented yet
+                            [% IF identity_provider.protocol == 'OAuth' %]
+                                <option value="OAuth" selected="selected">OAuth</option>
+                                <option value="OIDC">OIDC</option>
+                                <!-- Not implemented yet
                             <option value="LDAP">LDAP</option>
                             <option value="CAS">CAS</option>
                             -->
-                        [% ELSE %]
-                            <option value="OAuth">OAuth</option>
-                            <option value="OIDC" selected="selected">OIDC</option>
-                            <!-- Not implemented yet
+                            [% ELSE %]
+                                <option value="OAuth">OAuth</option>
+                                <option value="OIDC" selected="selected">OIDC</option>
+                                <!-- Not implemented yet
                             <option value="LDAP">LDAP</option>
                             <option value="CAS">CAS</option>
                             -->
-                        [% END %]
+                            [% END %]
                         </select>
                         <div class="hint">Choose the protocol this external identity provider uses</div>
                     </li>
@@ -284,7 +289,9 @@
                         <label for="config" class="required json">Configuration: </label>
                         <textarea name="config" id="config" class="required" cols="75" rows="10">[%- identity_provider.config | html -%]</textarea>
                         <span class="required">Required</span>
-                        <div class="hint">Provider's main configuration. <button class="more btn btn-light" data-target="config"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint"
+                            >Provider's main configuration. <button class="more btn btn-light" data-target="config"><i class="fa fa-caret-down"></i> More</button></div
+                        >
                         <div class="hint more-config" style="display: none">
                             <div>This configuration differs for each protocol.</div>
                             <div>It is recommended to add the default configuration, and then replace with appropriate values</div>
@@ -297,7 +304,9 @@
                         <label for="mapping" class="required json">Mapping: </label>
                         <textarea name="mapping" id="mapping" class="required" cols="75" rows="10">[%- identity_provider.mapping | html -%]</textarea>
                         <span class="required">Required</span>
-                        <div class="hint">Map provider's result to Koha patron's fields. <button class="more btn btn-light" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint"
+                            >Map provider's result to Koha patron's fields. <button class="more btn btn-light" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div
+                        >
                         <div class="hint more-mapping" style="display: none">
                             <div>It is recommended to add the default mapping, and then modify to suit this provider's response</div>
                             <div>Keys represent Koha's fields, and values represent the keys in provider's result</div>
@@ -312,12 +321,12 @@
                     <li>
                         <label for="matchpoint">Matchpoint: </label>
                         <select name="matchpoint" id="matchpoint">
-                            [%- IF identity_provider.matchpoint == 'email'      -%]
+                            [%- IF identity_provider.matchpoint == 'email' -%]
                                 <option value="email" selected="selected">Email</option>
                             [%- ELSE -%]
                                 <option value="email">Email</option>
                             [%- END -%]
-                            [%- IF identity_provider.matchpoint == 'userid'     -%]
+                            [%- IF identity_provider.matchpoint == 'userid' -%]
                                 <option value="userid" selected="selected">User id</option>
                             [%- ELSE -%]
                                 <option value="userid">User id</option>
@@ -333,7 +342,7 @@
                     </li>
                     <li>
                         <label for="icon_url">Icon URL: </label>
-                        <input type="text" name="icon_url" id="icon_url" size="60"  value="[%- identity_provider.icon_url | html -%]"/>
+                        <input type="text" name="icon_url" id="icon_url" size="60" value="[%- identity_provider.icon_url | html -%]" />
                     </li>
                 </ol>
             </fieldset>
@@ -342,174 +351,201 @@
                 <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>
             </fieldset>
         </form>
+    [% END %]
 
-[% END %]
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="new_identity_provider" href="/cgi-bin/koha/admin/identity_providers.pl?op=add_form"><i class="fa fa-plus"></i> New identity provider</a>
+        </div>
 
-[% IF op == 'list' %]
+        <h1>Identity providers</h1>
+        <div class="page-section">
+            <table id="identity_providers">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>Protocol</th>
+                        <th data-class-name="actions noExport">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    [% END %]
 
-    <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" id="new_identity_provider" href="/cgi-bin/koha/admin/identity_providers.pl?op=add_form"><i class="fa fa-plus"></i> New identity provider</a>
+    <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="delete_confirm_modal_label">Confirm deletion of identity provider</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="delete_confirm_dialog"></div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger" id="delete_confirm_modal_button" role="button" data-bs-toggle="modal">Delete</a>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
-
-    <h1>Identity providers</h1>
-    <div class="page-section">
-        <table id="identity_providers">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Protocol</th>
-                    <th data-class-name="actions noExport">Actions</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-[% END %]
-
-            <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title" id="delete_confirm_modal_label">Confirm deletion of identity provider</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="delete_confirm_dialog"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="#" class="btn btn-danger" id="delete_confirm_modal_button" role="button" data-bs-toggle="modal">Delete</a>
-                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div> <!-- /.modal-content -->
-                </div> <!-- /.modal-dialog -->
-            </div> <!-- #delete_confirm_modal -->
-
+    <!-- #delete_confirm_modal -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-
-            var identity_providers_url = '/api/v1/auth/identity_providers';
+        $(document).ready(function () {
+            var identity_providers_url = "/api/v1/auth/identity_providers";
             window.identity_providers = $("#identity_providers").kohaTable({
-                "ajax": {
-                    "url": identity_providers_url
+                ajax: {
+                    url: identity_providers_url,
                 },
-                'language': {
-                    'emptyTable': '<div class="alert alert-info">'+_("There are no identity providers defined.")+'</div>'
+                language: {
+                    emptyTable: '<div class="alert alert-info">' + _("There are no identity providers defined.") + "</div>",
                 },
-                "columnDefs": [ {
-                    "targets": [0,1,2],
-                    "render": function (data, type, row, meta) {
-                        if ( type == 'display' ) {
-                            if ( data != null ) {
-                                return data.escapeHtml();
+                columnDefs: [
+                    {
+                        targets: [0, 1, 2],
+                        render: function (data, type, row, meta) {
+                            if (type == "display") {
+                                if (data != null) {
+                                    return data.escapeHtml();
+                                } else {
+                                    return "Default";
+                                }
                             }
-                            else {
-                                return "Default";
-                            }
-                        }
-                        return data;
-                    }
-                } ],
-                "columns": [
+                            return data;
+                        },
+                    },
+                ],
+                columns: [
                     {
-                        "data": "code",
-                        "searchable": true,
-                        "orderable": true
+                        data: "code",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": "description",
-                        "searchable": true,
-                        "orderable": true
+                        data: "description",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": "protocol",
-                        "searchable": true,
-                        "orderable": true
+                        data: "protocol",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": function( row, type, val, meta ) {
-                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?op=edit_form&amp;identity_provider_id='+ encodeURIComponent(row.identity_provider_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                            result += '<a class="btn btn-default btn-xs delete_identity_provider" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-auth-provider-id="'+ encodeURIComponent(row.identity_provider_id) +'" data-auth-provider-code="'+ encodeURIComponent(row.code.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>'+"\n";
-                            result += '<a class="btn btn-default btn-xs edit_domains" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id='+ encodeURIComponent(row.identity_provider_id) +'"><i class="fa fa-cog" aria-hidden="true"></i> '+_("Manage domains")+'</a>';
+                        data: function (row, type, val, meta) {
+                            var result =
+                                '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?op=edit_form&amp;identity_provider_id=' +
+                                encodeURIComponent(row.identity_provider_id) +
+                                '"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' +
+                                _("Edit") +
+                                "</a>" +
+                                "\n";
+                            result +=
+                                '<a class="btn btn-default btn-xs delete_identity_provider" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-auth-provider-id="' +
+                                encodeURIComponent(row.identity_provider_id) +
+                                '" data-auth-provider-code="' +
+                                encodeURIComponent(row.code.escapeHtml()) +
+                                '"><i class="fa fa-trash-can" aria-hidden="true"></i> ' +
+                                _("Delete") +
+                                "</a>" +
+                                "\n";
+                            result +=
+                                '<a class="btn btn-default btn-xs edit_domains" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=' +
+                                encodeURIComponent(row.identity_provider_id) +
+                                '"><i class="fa fa-cog" aria-hidden="true"></i> ' +
+                                _("Manage domains") +
+                                "</a>";
                             return result;
                         },
-                        "searchable": false,
-                        "orderable": false
-                    }
+                        searchable: false,
+                        orderable: false,
+                    },
                 ],
                 createdRow: function (row, data, dataIndex) {
-                    if ( data.debug ) {
-                        $(row).addClass('debug');
+                    if (data.debug) {
+                        $(row).addClass("debug");
                     }
                 },
             });
 
-            $('#identity_providers').on( "click", '.delete_identity_provider', function () {
-                var identity_provider_id   = $(this).data('auth-provider-id');
-                var identity_provider_code = decodeURIComponent($(this).data('auth-provider-code'));
+            $("#identity_providers").on("click", ".delete_identity_provider", function () {
+                var identity_provider_id = $(this).data("auth-provider-id");
+                var identity_provider_code = decodeURIComponent($(this).data("auth-provider-code"));
 
-                $("#delete_confirm_dialog").html(
-                    _("You are about to delete the '%s' identity provider.").format(identity_provider_code)
-                );
-                $("#delete_confirm_modal_button").data('auth-provider-id', identity_provider_id);
-                $("#delete_confirm_modal_button").data('auth-provider-code', identity_provider_code);
+                $("#delete_confirm_dialog").html(_("You are about to delete the '%s' identity provider.").format(identity_provider_code));
+                $("#delete_confirm_modal_button").data("auth-provider-id", identity_provider_id);
+                $("#delete_confirm_modal_button").data("auth-provider-code", identity_provider_code);
             });
 
-            $("#delete_confirm_modal_button").on( "click", function () {
-
-                var identity_provider_id   = $(this).data('auth-provider-id');
-                var identity_provider_code = $(this).data('auth-provider-code');
+            $("#delete_confirm_modal_button").on("click", function () {
+                var identity_provider_id = $(this).data("auth-provider-id");
+                var identity_provider_code = $(this).data("auth-provider-code");
 
                 $.ajax({
                     method: "DELETE",
-                    url: identity_providers_url+"/"+identity_provider_id
-                }).success(function() {
-                    window.identity_providers.api().ajax.reload(function (data) {
-                        $("#identity_provider_action_result_dialog").hide();
-                        $("#identity_provider_delete_success").html(_("Server '%s' deleted successfully.").format(identity_provider_code)).show();
+                    url: identity_providers_url + "/" + identity_provider_id,
+                })
+                    .success(function () {
+                        window.identity_providers.api().ajax.reload(function (data) {
+                            $("#identity_provider_action_result_dialog").hide();
+                            $("#identity_provider_delete_success").html(_("Server '%s' deleted successfully.").format(identity_provider_code)).show();
+                        });
+                    })
+                    .fail(function () {
+                        $("#identity_provider_delete_error").html(_("Error deleting server '%s'. Check the logs for details.").format(identity_provider_code)).show();
+                    })
+                    .done(function () {
+                        $("#delete_confirm_modal").modal("hide");
                     });
-                }).fail(function () {
-                    $("#identity_provider_delete_error").html(_("Error deleting server '%s'. Check the logs for details.").format(identity_provider_code)).show();
-                }).done(function () {
-                    $("#delete_confirm_modal").modal('hide');
-                });
             });
 
-            $.validator.addMethod('json', function(value, element) {
-                if (this.optional(element) && value === '') return true;
-                try {
-                    JSON.parse(value)
-                } catch (error) {
-                    return false;
-                }
-                return true;
-            }, _("Not a valid JSON"));
+            $.validator.addMethod(
+                "json",
+                function (value, element) {
+                    if (this.optional(element) && value === "") return true;
+                    try {
+                        JSON.parse(value);
+                    } catch (error) {
+                        return false;
+                    }
+                    return true;
+                },
+                _("Not a valid JSON")
+            );
 
-            $.validator.addMethod('alphanum', function(value, element) {
-                if (this.optional(element) && value === '') return true;
-                return /^[a-zA-Z0-9_]+$/.test(value);
-            }, _("Value must have alphanumeric characters or '_'"));
+            $.validator.addMethod(
+                "alphanum",
+                function (value, element) {
+                    if (this.optional(element) && value === "") return true;
+                    return /^[a-zA-Z0-9_]+$/.test(value);
+                },
+                _("Value must have alphanumeric characters or '_'")
+            );
 
-            $('#config, #mapping').each(function() {
-                $(this).rules('add', {
+            $("#config, #mapping").each(function () {
+                $(this).rules("add", {
                     required: true,
-                    json: true
+                    json: true,
                 });
             });
 
-            $('button.more').on('click', function(event) {
+            $("button.more").on("click", function (event) {
                 event.preventDefault();
-                var target = $(this).hide().data('target');
-                $('.more-' + target).show();
+                var target = $(this).hide().data("target");
+                $(".more-" + target).show();
             });
 
-            $('#code').rules('add', {
+            $("#code").rules("add", {
                 alphanum: true,
-                required: true
+                required: true,
             });
 
             var defaults = {
@@ -518,13 +554,13 @@
                         key: "<enter client id>",
                         secret: "<enter client secret>",
                         well_known_url: "<enter openid configuration endpoint>",
-                        scope: "openid email"
+                        scope: "openid email",
                     },
                     mapping: {
                         email: "email",
                         firstname: "given_name",
-                        surname: "family_name"
-                    }
+                        surname: "family_name",
+                    },
                 },
                 OAuth: {
                     config: {
@@ -533,31 +569,31 @@
                         authorize_url: "<enter authorization endpoint>",
                         token_url: "<enter token endpoint>",
                         userinfo_url: "<enter user info endpoint (optional)>",
-                        scope: "email"
+                        scope: "email",
                     },
                     mapping: {
                         email: "email",
                         firstname: "given_name",
-                        surname: "family_name"
-                    }
-                }
+                        surname: "family_name",
+                    },
+                },
             };
 
-            $('#protocol').on('change', function() {
+            $("#protocol").on("change", function () {
                 var protocol = $(this).val();
-                $('#default-config').html(_("Add default %s configuration").format(protocol));
-                $('#default-mapping').html(_("Add default %s mapping").format(protocol));
+                $("#default-config").html(_("Add default %s configuration").format(protocol));
+                $("#default-mapping").html(_("Add default %s mapping").format(protocol));
             });
 
-            $('button.defaults').on('click', function(event) {
+            $("button.defaults").on("click", function (event) {
                 event.preventDefault();
-                var target = $(this).data('defaultTarget');
-                if($('#'+target).val() !== '' && !confirm(_("Are you sure you want to replace current %s contents?").format(target))) {
+                var target = $(this).data("defaultTarget");
+                if ($("#" + target).val() !== "" && !confirm(_("Are you sure you want to replace current %s contents?").format(target))) {
                     return;
                 }
-                var protocol = $('#protocol').val();
-                $('#'+target).val(JSON.stringify(defaults[protocol][target], null, 2));
-            })
+                var protocol = $("#protocol").val();
+                $("#" + target).val(JSON.stringify(defaults[protocol][target], null, 2));
+            });
         });
     </script>
 [% END %]

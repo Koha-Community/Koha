@@ -29,19 +29,18 @@ sub get_link {
     my $heading     = shift;
     my $behavior    = shift || 'default';
     my $search_form = $heading->search_form();
-    my $auth_type = $heading->auth_type();
+    my $auth_type   = $heading->auth_type();
     my $thesaurus   = $heading->{thesaurus} || 'notdefined';
     $thesaurus = 'notconsidered' unless C4::Context->preference('LinkerConsiderThesaurus');
     my $authid;
     my $fuzzy = 0;
     my $match_count;
 
-    if ( $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} ) {
-        $authid = $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'authid'};
-        $fuzzy  = $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'fuzzy'};
-        $match_count = $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'match_count'};
-    }
-    else {
+    if ( $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'cached'} ) {
+        $authid      = $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'authid'};
+        $fuzzy       = $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'fuzzy'};
+        $match_count = $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'match_count'};
+    } else {
 
         # look for matching authorities
         my $authorities = $heading->authorities(1);    # $skipmetadata = true
@@ -49,12 +48,10 @@ sub get_link {
 
         if ( $behavior eq 'default' && $#{$authorities} == 0 ) {
             $authid = $authorities->[0]->{'authid'};
-        }
-        elsif ( $behavior eq 'first' && $#{$authorities} >= 0 ) {
+        } elsif ( $behavior eq 'first' && $#{$authorities} >= 0 ) {
             $authid = $authorities->[0]->{'authid'};
             $fuzzy  = $#{$authorities} > 0;
-        }
-        elsif ( $behavior eq 'last' && $#{$authorities} >= 0 ) {
+        } elsif ( $behavior eq 'last' && $#{$authorities} >= 0 ) {
             $authid = $authorities->[ $#{$authorities} ]->{'authid'};
             $fuzzy  = $#{$authorities} > 0;
         }
@@ -64,23 +61,23 @@ sub get_link {
             my @subfields = grep { $_->[0] ne '9' } $field->subfields();
             if ( scalar @subfields > 1 ) {
                 pop @subfields;
-                $field =
-                    MARC::Field->new(
-                        $field->tag,
-                        $field->indicator(1),
-                        $field->indicator(2),
-                        map { $_->[0] => $_->[1] } @subfields
-                    );
-                ( $authid, $fuzzy ) =
-                  $self->get_link( C4::Heading->new_from_field($field),
-                    $behavior );
+                $field = MARC::Field->new(
+                    $field->tag,
+                    $field->indicator(1),
+                    $field->indicator(2),
+                    map { $_->[0] => $_->[1] } @subfields
+                );
+                ( $authid, $fuzzy ) = $self->get_link(
+                    C4::Heading->new_from_field($field),
+                    $behavior
+                );
             }
         }
 
-        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} = 1;
-        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'authid'} = $authid;
-        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'fuzzy'}  = $fuzzy;
-        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'match_count'} = $match_count;
+        $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'cached'}      = 1;
+        $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'authid'}      = $authid;
+        $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'fuzzy'}       = $fuzzy;
+        $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'match_count'} = $match_count;
     }
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy, $match_count;
 }
@@ -90,14 +87,14 @@ sub update_cache {
     my $heading     = shift;
     my $authid      = shift;
     my $search_form = $heading->search_form();
-    my $auth_type = $heading->auth_type();
+    my $auth_type   = $heading->auth_type();
     my $thesaurus   = $heading->{thesaurus} || 'notdefined';
     $thesaurus = 'notconsidered' unless C4::Context->preference('LinkerConsiderThesaurus');
     my $fuzzy = 0;
 
-    $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} = 1;
-    $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'authid'} = $authid;
-    $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'fuzzy'}  = $fuzzy;
+    $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'cached'} = 1;
+    $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'authid'} = $authid;
+    $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'fuzzy'}  = $fuzzy;
 }
 
 sub flip_heading {

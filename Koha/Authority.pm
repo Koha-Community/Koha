@@ -43,8 +43,8 @@ Koha::Authority - Koha Authority Object class
 =cut
 
 sub get_usage_count {
-    my ( $self ) = @_;
-    return Koha::Authorities->get_usage_count({ authid => $self->authid });
+    my ($self) = @_;
+    return Koha::Authorities->get_usage_count( { authid => $self->authid } );
 }
 
 =head3 linked_biblionumbers
@@ -60,7 +60,7 @@ sub get_usage_count {
 sub linked_biblionumbers {
     my ( $self, $params ) = @_;
     $params->{authid} = $self->authid;
-    return Koha::Authorities->linked_biblionumbers( $params );
+    return Koha::Authorities->linked_biblionumbers($params);
 }
 
 =head3 heading_object
@@ -116,29 +116,32 @@ sub heading_object {
 
 sub controlled_indicators {
     my ( $self, $params ) = @_;
-    my $tag = $params->{biblio_tag} // q{};
+    my $tag    = $params->{biblio_tag} // q{};
     my $record = $params->{record};
 
-    my $flavour = C4::Context->preference('marcflavour') eq 'UNIMARC'
+    my $flavour =
+        C4::Context->preference('marcflavour') eq 'UNIMARC'
         ? 'UNIMARCAUTH'
         : 'MARC21';
-    if( !$record ) {
+    if ( !$record ) {
         $record = $self->record;
     }
 
-    if( !$self->{_report_tag} ) {
+    if ( !$self->{_report_tag} ) {
         my $authtype = Koha::Authority::Types->find( $self->authtypecode );
-        return {} if !$authtype; # very exceptional
+        return {} if !$authtype;    # very exceptional
         $self->{_report_tag} = $authtype->auth_tag_to_report;
     }
 
     $self->{_ControlledInds} //= Koha::Authority::ControlledIndicators->new;
-    return $self->{_ControlledInds}->get({
-        auth_record => $record,
-        report_tag  => $self->{_report_tag},
-        biblio_tag  => $tag,
-        flavour     => $flavour,
-    });
+    return $self->{_ControlledInds}->get(
+        {
+            auth_record => $record,
+            report_tag  => $self->{_report_tag},
+            biblio_tag  => $tag,
+            flavour     => $flavour,
+        }
+    );
 }
 
 =head3 get_identifiers_and_information
@@ -255,7 +258,6 @@ sub get_identifiers_and_information {
     return $information;
 }
 
-
 =head3 record
 
     my $record = $authority->record()
@@ -265,7 +267,7 @@ Return the MARC::Record for this authority
 =cut
 
 sub record {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $flavour = $self->record_schema;
     return MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $flavour );
@@ -280,11 +282,11 @@ Returns the record schema (MARC21 or UNIMARCAUTH).
 =cut
 
 sub record_schema {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return C4::Context->preference('marcflavour') eq 'UNIMARC'
-      ? 'UNIMARCAUTH'
-      : 'MARC21';
+        ? 'UNIMARCAUTH'
+        : 'MARC21';
 }
 
 =head3 to_api_mapping

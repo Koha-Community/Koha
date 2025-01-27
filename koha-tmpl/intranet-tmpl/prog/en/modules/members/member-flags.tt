@@ -6,11 +6,13 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Set permissions for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Set permissions for") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -34,86 +36,90 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
-[% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-<form id="flag_form" method="post" action="/cgi-bin/koha/members/member-flags.pl">
-    [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-    <input type="hidden" name="op" value="cud-newflags" />
-    <h1>Set permissions for [% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
+    <form id="flag_form" method="post" action="/cgi-bin/koha/members/member-flags.pl">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+        <input type="hidden" name="op" value="cud-newflags" />
+        <h1>Set permissions for [% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
 
-    <div id="permissionstree">
-        <div id="permissions_toolbar" class="btn-toolbar sticky">
-            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
-            <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-times"></i> Cancel</a>
-            <a class="toggleall toggleall_on btn btn-link" href="#"><i class="fa-solid fa-square-plus"></i> Show all</a>
-            <a class="toggleall toggleall_off btn btn-link" href="#"><i class="fa-solid fa-square-minus"></i> Hide all</a>
-            <a id="CheckAllFlags" class="btn btn-link" href="#">
-                <i class="fa fa-check"></i> Select all
-            </a>
-            <a id="UncheckAllFlags" class="btn btn-link" href="#">
-                <i class="fa fa-times"></i> Clear all
-            </a>
+        <div id="permissionstree">
+            <div id="permissions_toolbar" class="btn-toolbar sticky">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-times"></i> Cancel</a>
+                <a class="toggleall toggleall_on btn btn-link" href="#"><i class="fa-solid fa-square-plus"></i> Show all</a>
+                <a class="toggleall toggleall_off btn btn-link" href="#"><i class="fa-solid fa-square-minus"></i> Hide all</a>
+                <a id="CheckAllFlags" class="btn btn-link" href="#"> <i class="fa fa-check"></i> Select all </a>
+                <a id="UncheckAllFlags" class="btn btn-link" href="#"> <i class="fa fa-times"></i> Clear all </a>
 
-            <div class="btn-group">
-                <button id="copyPermissions" class="btn btn-link"><i class="fa fa-copy"></i> Copy settings</button>
-                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"><span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a id="clearCopied" href="#">Forget copied permissions</a></li>
-                </ul>
+                <div class="btn-group">
+                    <button id="copyPermissions" class="btn btn-link"><i class="fa fa-copy"></i> Copy settings</button>
+                    <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a id="clearCopied" href="#">Forget copied permissions</a></li>
+                    </ul>
+                </div>
+
+                <a href="#" id="pastePermissions" class="btn btn-link disabled"><i class="fa fa-paste"></i> Paste permissions</a>
+                <div class="toolbar-filter-form">
+                    <label for="permissions_filter">Filter:</label> <input type="text" name="permissions_filter" id="permissions_filter" size="20" />
+                    <a href="#" id="clear_filter" style="display:none"><i class="fa fa-times"></i></a>
+                </div>
             </div>
-
-            <a href="#" id="pastePermissions" class="btn btn-link disabled"><i class="fa fa-paste"></i> Paste permissions</a>
-            <div class="toolbar-filter-form">
-                <label for="permissions_filter">Filter:</label> <input type="text" name="permissions_filter" id="permissions_filter" size="20" />
-                <a href="#" id="clear_filter" style="display:none"><i class="fa fa-times"></i></a>
-            </div>
-        </div>
-        <div class="permissions page-section">
-            [% FOREACH loo IN loop %]
-                <div id="parent-flag-[% loo.flag | html %]" class="[% IF loo.expand %]open[% END %] parent">
-                [% IF ( loo.checked ) %]
-                    [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-                        <input type="checkbox" disabled="disabled" data-bit="0" id="flag-0" class="parent flag superlib" name="flag" value="[% loo.flag | html %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
-                        <input type="hidden" id="flag-0" name="flag" value="[% loo.flag | html %]" >
-                    [% ELSE %]
-                          <input type="checkbox" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]" class="parent flag" name="flag" value="[% loo.flag | html %]" checked="checked" />
-                    [% END %]
-                [% ELSE %]
-                    [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-                        <input type="checkbox" disabled="disabled" class="flag parent" data-bit="0" id="flag-0" name="flag" value="[% loo.flag | html %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
-                    [% ELSE %]
-                        <input type="checkbox" class="flag parent" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" />
-                    [% END %]
-                [% END # /IF loo.checked %]
-                    <label class="permissiondesc" for="flag-[% loo.bit | html %]">
-                        [% PROCESS main_permissions name=loo.flag %]
-                    </label>
-                    [% IF ( loo.flag == "superlibrarian" ) %]<div class="hint superlibrarian-hint">This permission grants access to all areas. If selected, specific sub-permissions cannot be selected.</div>[% END %]
-                [% IF ( loo.sub_perm_loop ) %]
-                    <a class="toggle-[% loo.bit | html %] togglechildren_off" href="#" data-bit="[% loo.bit | html %]"><i class="fa-solid fa-square-minus"></i> Hide details</a>
-                    <a class="toggle-[% loo.bit | html %] togglechildren_on" href="#" data-bit="[% loo.bit | html %]"><i class="fa-solid fa-square-plus"></i> Show details</a>
-                    <div class="children" id="flag-[% loo.bit | html %]-children">
-                        [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
-                            <div class="child-flags">
-                                [% IF ( sub_perm_loo.checked ) %]
-                                    <input type="checkbox" id="[% sub_perm_loo.id | html %]" class="child flag" name="flag" value="[% sub_perm_loo.perm | html %]" checked="checked" />
-                                [% ELSE %]
-                                    <input type="checkbox" id="[% sub_perm_loo.id | html %]" class="child flag" name="flag" value="[% sub_perm_loo.perm | html %]" />
+            <div class="permissions page-section">
+                [% FOREACH loo IN loop %]
+                    <div id="parent-flag-[% loo.flag | html %]" class="[% IF loo.expand %]open[% END %] parent">
+                        [% IF ( loo.checked ) %]
+                            [% IF disable_superlibrarian_privs && loo.bit == 0 %]
+                                <input
+                                    type="checkbox"
+                                    disabled="disabled"
+                                    data-bit="0"
+                                    id="flag-0"
+                                    class="parent flag superlib"
+                                    name="flag"
+                                    value="[% loo.flag | html %]"
+                                    checked="checked"
+                                    title="The system preference ProtectSuperlibrarianPrivileges is enabled"
+                                />
+                                <input type="hidden" id="flag-0" name="flag" value="[% loo.flag | html %]" />
+                            [% ELSE %]
+                                <input type="checkbox" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]" class="parent flag" name="flag" value="[% loo.flag | html %]" checked="checked" />
+                            [% END %]
+                        [% ELSE %]
+                            [% IF disable_superlibrarian_privs && loo.bit == 0 %]
+                                <input type="checkbox" disabled="disabled" class="flag parent" data-bit="0" id="flag-0" name="flag" value="[% loo.flag | html %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
+                            [% ELSE %]
+                                <input type="checkbox" class="flag parent" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" />
+                            [% END %]
+                        [% END # /IF loo.checked %]
+                        <label class="permissiondesc" for="flag-[% loo.bit | html %]"> [% PROCESS main_permissions name=loo.flag %] </label>
+                        [% IF ( loo.flag == "superlibrarian" ) %]<div class="hint superlibrarian-hint">This permission grants access to all areas. If selected, specific sub-permissions cannot be selected.</div>[% END %]
+                        [% IF ( loo.sub_perm_loop ) %]
+                            <a class="toggle-[% loo.bit | html %] togglechildren_off" href="#" data-bit="[% loo.bit | html %]"><i class="fa-solid fa-square-minus"></i> Hide details</a>
+                            <a class="toggle-[% loo.bit | html %] togglechildren_on" href="#" data-bit="[% loo.bit | html %]"><i class="fa-solid fa-square-plus"></i> Show details</a>
+                            <div class="children" id="flag-[% loo.bit | html %]-children">
+                                [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
+                                    <div class="child-flags">
+                                        [% IF ( sub_perm_loo.checked ) %]
+                                            <input type="checkbox" id="[% sub_perm_loo.id | html %]" class="child flag" name="flag" value="[% sub_perm_loo.perm | html %]" checked="checked" />
+                                        [% ELSE %]
+                                            <input type="checkbox" id="[% sub_perm_loo.id | html %]" class="child flag" name="flag" value="[% sub_perm_loo.perm | html %]" />
+                                        [% END %]
+                                        <label class="permissiondesc" for="[% sub_perm_loo.id | html %]"> [% PROCESS sub_permissions name=sub_perm_loo.code %] </label>
+                                    </div>
                                 [% END %]
-                                <label class="permissiondesc" for="[% sub_perm_loo.id | html %]">
-                                    [% PROCESS sub_permissions name=sub_perm_loo.code %]
-                                </label>
                             </div>
-                        [% END %]
-                    </div> <!-- /#flag-[% loo.bit | html %]-children -->
-                [% END # /IF loo.sub_perm_loop %]
-                </div> <!-- /.parent -->
-            [% END # /FOREACH loo %]
+                            <!-- /#flag-[% loo.bit | html %]-children -->
+                        [% END # /IF loo.sub_perm_loop %]
+                    </div>
+                    <!-- /.parent -->
+                [% END # /FOREACH loo %]
+            </div>
         </div>
-    </div> <!-- /#permissionstree -->
-</form>
-
+        <!-- /#permissionstree -->
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -317,7 +323,6 @@
                 }
             });
         }
-
     </script>
 [% END %]
 

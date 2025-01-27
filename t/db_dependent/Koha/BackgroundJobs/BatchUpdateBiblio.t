@@ -38,8 +38,10 @@ subtest "Exceptions must be stringified" => sub {
     $schema->storage->txn_begin;
 
     my $C4_biblio_module = Test::MockModule->new('C4::Biblio');
-    $C4_biblio_module->mock( 'ModBiblio',
-        sub { Koha::Exception->throw("It didn't work"); } );
+    $C4_biblio_module->mock(
+        'ModBiblio',
+        sub { Koha::Exception->throw("It didn't work"); }
+    );
 
     my $biblio = $builder->build_sample_biblio;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -51,11 +53,10 @@ subtest "Exceptions must be stringified" => sub {
             type           => 'batch_biblio_record_modification',
         }
     );
-    my $data = $job->json->encode({ record_ids => [ $biblio->biblionumber ] });
-    $job->data( $data )->store;
+    my $data = $job->json->encode( { record_ids => [ $biblio->biblionumber ] } );
+    $job->data($data)->store;
     $job = Koha::BackgroundJobs->find( $job->id );
-    $job->process(
-        { job_id => $job->id, record_ids => [ $biblio->biblionumber ] } );
+    $job->process( { job_id => $job->id, record_ids => [ $biblio->biblionumber ] } );
 
     $data = $job->json->decode( $job->get_from_storage->data );
     is_deeply(

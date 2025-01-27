@@ -25,10 +25,12 @@ use C4::Context;
 use C4::Biblio;
 use Koha::Biblios;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
-my ( $help, $verbose, $confirm, $biblionumbers, $reindex, $filename,
-    $auto_search, $fix_ampersand );
+my (
+    $help,        $verbose, $confirm, $biblionumbers, $reindex, $filename,
+    $auto_search, $fix_ampersand
+);
 my $result = GetOptions(
     'h|help'          => \$help,
     'v|verbose'       => \$verbose,
@@ -51,13 +53,12 @@ if ($help) {
 unless ( $filename or $biblionumbers or $auto_search ) {
     pod2usage(
         -exitval => 1,
-        -message =>
-          qq{\n\tAt least one record number source should be provided.\n}
+        -message => qq{\n\tAt least one record number source should be provided.\n}
     );
 }
 
 if (   $filename and $biblionumbers
-    or $filename and $auto_search
+    or $filename      and $auto_search
     or $biblionumbers and $auto_search )
 {
     pod2usage(
@@ -72,8 +73,7 @@ my @biblionumbers;
 #or if we want to use findAmp() sub
 if ($auto_search) {
     @biblionumbers = biblios_to_sanitize();
-}
-elsif ($filename) {
+} elsif ($filename) {
     if ( -e $filename ) {
         open( my $fh, '<', $filename ) || die("Can't open $filename ($!)");
         while (<$fh>) {
@@ -82,16 +82,13 @@ elsif ($filename) {
             push @biblionumbers, split( " |,", $line );
         }
         close $fh;
-    }
-    else {
+    } else {
         pod2usage(
             -exitval => 1,
-            -message =>
-qq{\n\tThis filename does not exist. Please verify the path is correct.\n}
+            -message => qq{\n\tThis filename does not exist. Please verify the path is correct.\n}
         );
     }
-}
-else {
+} else {
     @biblionumbers = split m|,|, $biblionumbers if $biblionumbers;
 }
 
@@ -111,7 +108,7 @@ for my $biblionumber (@biblionumbers) {
         next;
     }
     my $biblio = Koha::Biblios->find($biblionumber);
-    unless ( $biblio ) {
+    unless ($biblio) {
         say " skipping. ERROR: biblionumber not found." if $verbose;
         next;
     }
@@ -121,8 +118,7 @@ for my $biblionumber (@biblionumbers) {
         next;
     }
 
-    my ( $cleaned_record, $has_been_modified ) =
-      C4::Charset::SanitizeRecord( $record, $biblionumber );
+    my ( $cleaned_record, $has_been_modified ) = C4::Charset::SanitizeRecord( $record, $biblionumber );
     if ($has_been_modified) {
         my $frameworkcode = C4::Biblio::GetFrameworkCode($record);
 
@@ -130,17 +126,13 @@ for my $biblionumber (@biblionumbers) {
             if $confirm;
         push @changes, $biblionumber;
         say " Done!" if $verbose;
-    }
-    else {
+    } else {
         say " Nothing to do." if $verbose;
     }
 }
 
 if ($verbose) {
-    say "Total: "
-      . @changes
-      . " records "
-      . ( $confirm ? "cleaned!" : "to clean." );
+    say "Total: " . @changes . " records " . ( $confirm ? "cleaned!" : "to clean." );
 }
 
 if ( $reindex and $confirm and @changes ) {
@@ -148,7 +140,7 @@ if ( $reindex and $confirm and @changes ) {
     my $kohapath = C4::Context->config('intranetdir');
     my $cmd      = qq|
         $kohapath/misc/migration_tools/rebuild_zebra.pl -b -v -where "biblionumber IN ( |
-      . join( ',', @changes ) . q| )"
+        . join( ',', @changes ) . q| )"
     |;
     system($cmd);
 }

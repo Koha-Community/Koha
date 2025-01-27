@@ -48,19 +48,19 @@ Embed not on loan items count into the specified record(s) and return the result
 =cut
 
 sub filter {
-    my $self = shift;
+    my $self   = shift;
     my $record = shift;
     my $newrecord;
 
     return unless defined $record;
 
-    if (ref $record eq 'ARRAY') {
+    if ( ref $record eq 'ARRAY' ) {
         my @recarray;
         foreach my $thisrec (@$record) {
             push @recarray, _processrecord($thisrec);
         }
         $newrecord = \@recarray;
-    } elsif (ref $record eq 'MARC::Record') {
+    } elsif ( ref $record eq 'MARC::Record' ) {
         $newrecord = _processrecord($record);
     }
 
@@ -71,23 +71,27 @@ sub _processrecord {
 
     my $record = shift;
 
-    my ($biblionumber_field, $biblionumber_subfield) = GetMarcFromKohaField( "biblio.biblionumber" );
-    my $biblionumber  = ( $biblionumber_field > 9 )
-                      ? $record->field($biblionumber_field)->subfield($biblionumber_subfield)
-                      : $record->field($biblionumber_field)->data();
+    my ( $biblionumber_field, $biblionumber_subfield ) = GetMarcFromKohaField("biblio.biblionumber");
+    my $biblionumber =
+        ( $biblionumber_field > 9 )
+        ? $record->field($biblionumber_field)->subfield($biblionumber_subfield)
+        : $record->field($biblionumber_field)->data();
 
-    my $not_onloan_items = Koha::Items->search({
-        biblionumber => $biblionumber,
-        onloan => undef,
-    })->count;
+    my $not_onloan_items = Koha::Items->search(
+        {
+            biblionumber => $biblionumber,
+            onloan       => undef,
+        }
+    )->count;
 
     # check for field 999
     my $destination_field = $record->field('999');
-    if (defined $destination_field) {
+    if ( defined $destination_field ) {
+
         # we have a field, add what we need
         $destination_field->update( x => $not_onloan_items );
-    }
-    else {
+    } else {
+
         # no field, create one
         $destination_field = MARC::Field->new( '999', '', '', x => $not_onloan_items );
         $record->append_fields($destination_field);

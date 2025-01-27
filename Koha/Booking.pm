@@ -148,6 +148,7 @@ sub store {
                     booking_id => $self->in_storage ? $self->booking_id : undef
                 }
                 );
+
             # FIXME: We should be able to combine the above two functions into one
 
             # Assign item at booking time

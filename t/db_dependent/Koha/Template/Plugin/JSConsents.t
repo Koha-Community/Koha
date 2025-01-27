@@ -28,7 +28,7 @@ subtest "all" => sub {
             {
                 'name'       => 'test',
                 'cookiePath' => '/',
-                'code' =>
+                'code'       =>
                     'KGZ1bmN0aW9uKCkgeyAKICAgIGNvbnNvbGUubG9nKCdIZWxsbyBmcm9tIHRlc3QxJyk7IAogICAgZG9jdW1lbnQuY29va2llID0gInRlc3QxPXRlc3Rpbmc7IGRvbWFpbj1sb2NhbGhvc3Q7IHBhdGg9LzsgU2FtZVNpdGU9Tm9uZTsgU2VjdXJlIjsgCn0pKCk7',
                 'staffConsent' => 1,
                 'matchPattern' => 'test1',

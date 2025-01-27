@@ -36,44 +36,45 @@ use t::lib::Mocks;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
-t::lib::Mocks::mock_preference('MARCOverlayRules', '1');
+t::lib::Mocks::mock_preference( 'MARCOverlayRules', '1' );
 
 Koha::MarcOverlayRules->search->delete;
 
 sub build_record {
-    my ( $fields ) = @_;
+    my ($fields) = @_;
     my $record = MARC::Record->new;
     my @marc_fields;
-    for my $f ( @$fields ) {
+    for my $f (@$fields) {
         my $tag = $f->[0];
         my @subfields;
-        for my $i ( 1 .. (scalar(@$f) / 2) ) {
-            my $ii = floor($i*2);
-            push @subfields, $f->[$ii - 1], $f->[$ii];
+        for my $i ( 1 .. ( scalar(@$f) / 2 ) ) {
+            my $ii = floor( $i * 2 );
+            push @subfields, $f->[ $ii - 1 ], $f->[$ii];
         }
-        push @marc_fields, MARC::Field->new($tag, '','', @subfields);
+        push @marc_fields, MARC::Field->new( $tag, '', '', @subfields );
     }
 
     $record->append_fields(@marc_fields);
     return $record;
 }
 
-
 # Create a record
-my $orig_record = build_record([
-    [ '250', 'a', '250 bottles of beer on the wall' ],
-    [ '250', 'a', '256 bottles of beer on the wall' ],
-    [ '500', 'a', 'One bottle of beer in the fridge' ],
-]);
+my $orig_record = build_record(
+    [
+        [ '250', 'a', '250 bottles of beer on the wall' ],
+        [ '250', 'a', '256 bottles of beer on the wall' ],
+        [ '500', 'a', 'One bottle of beer in the fridge' ],
+    ]
+);
 
 my $incoming_record = build_record(
     [
-        [ '250', 'a', '256 bottles of beer on the wall' ],        # Unchanged
-        [ '250', 'a', '251 bottles of beer on the wall' ],        # Appended
-      # ['250', 'a', '250 bottles of beer on the wall'],          # Removed
-      # ['500', 'a', 'One bottle of beer in the fridge'],         # Deleted
-        [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # Added
-        [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # Added
+        [ '250', 'a', '256 bottles of beer on the wall' ],    # Unchanged
+        [ '250', 'a', '251 bottles of beer on the wall' ],    # Appended
+            # ['250', 'a', '250 bottles of beer on the wall'],          # Removed
+            # ['500', 'a', 'One bottle of beer in the fridge'],         # Deleted
+        [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # Added
+        [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # Added
     ]
 );
 
@@ -81,7 +82,7 @@ my $incoming_record = build_record(
 subtest 'No rule defined' => sub {
     plan tests => 1;
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -91,20 +92,22 @@ subtest 'No rule defined' => sub {
 
 };
 
-my $rule =  Koha::MarcOverlayRules->find_or_create({
-    tag => '*',
-    module => 'source',
-    filter => '*',
-    add => 0,
-    append => 0,
-    remove => 0,
-    delete => 0
-});
+my $rule = Koha::MarcOverlayRules->find_or_create(
+    {
+        tag    => '*',
+        module => 'source',
+        filter => '*',
+        add    => 0,
+        append => 0,
+        remove => 0,
+        delete => 0
+    }
+);
 
 subtest 'Record fields has been protected when matched merge all rule operations are set to "0"' => sub {
     plan tests => 1;
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -119,22 +122,24 @@ subtest '"Add new" - Only new fields has been added when add = 1, append = 0, re
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 0,
             'remove' => 0,
             'delete' => 0,
         }
     )->store();
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
-    my $expected_record = build_record([
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+    my $expected_record = build_record(
+        [
+            [ '250', 'a', '250 bottles of beer on the wall' ],           # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # original
+            [ '500', 'a', 'One bottle of beer in the fridge' ],          # original
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
     is(
         $merged_record->as_formatted,
         $expected_record->as_formatted,
@@ -148,23 +153,25 @@ subtest 'Only appended fields has been added when add = 0, append = 1, remove = 
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 1,
             'remove' => 0,
             'delete' => 0,
         }
     )->store;
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
-    my $expected_record = build_record([
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
-            # "251" field has been appended
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-    ]);
+    my $expected_record = build_record(
+        [
+            [ '250', 'a', '250 bottles of beer on the wall' ],     # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],     # original
+                                                                   # "251" field has been appended
+            [ '250', 'a', '251 bottles of beer on the wall' ],     # incoming
+                                                                   # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],    # original
+        ]
+    );
 
     is(
         $merged_record->as_formatted,
@@ -179,26 +186,28 @@ subtest '"Add and append" - add = 1, append = 1, remove = 0, delete = 0' => sub 
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 1,
             'remove' => 0,
             'delete' => 0,
         }
     )->store;
 
-    my $expected_record = build_record([
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
-            # "251" field has been appended
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+    my $expected_record = build_record(
+        [
+            [ '250', 'a', '250 bottles of beer on the wall' ],           # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # original
+                                                                         # "251" field has been appended
+            [ '250', 'a', '251 bottles of beer on the wall' ],           # incoming
+                                                                         # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],          # original
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -213,7 +222,7 @@ subtest 'Record fields has been only removed when add = 0, append = 0, remove = 
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 0,
             'remove' => 1,
             'delete' => 0,
@@ -221,14 +230,16 @@ subtest 'Record fields has been only removed when add = 0, append = 0, remove = 
     )->store;
 
     # Warning - not obvious as the 500 is untouched
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been removed
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],     # original and incoming
+                                                                   # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],    # original
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -243,24 +254,26 @@ subtest 'Record fields has been added and removed when add = 1, append = 0, remo
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 0,
             'remove' => 1,
             'delete' => 0,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been removed
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # original and incoming
+                                                                         # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],          # original
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -275,22 +288,24 @@ subtest 'Record fields has been appended and removed when add = 0, append = 1, r
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 1,
             'remove' => 1,
             'delete' => 0,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended and removed
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],     # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],     # incoming
+                                                                   # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],    # original
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -305,25 +320,27 @@ subtest 'Record fields has been added, appended and removed when add = 0, append
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 1,
             'remove' => 1,
             'delete' => 0,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended and removed
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],           # incoming
+                                                                         # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],          # original
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -338,7 +355,7 @@ subtest 'Record fields has been deleted when add = 0, append = 0, remove = 0, de
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 0,
             'remove' => 0,
             'delete' => 1,
@@ -348,13 +365,15 @@ subtest 'Record fields has been deleted when add = 0, append = 0, remove = 0, de
     # FIXME the tooltip for delete is saying
     # "If the original record has fields matching the rule tag, but no fields with this are found in the incoming record"
     # But it does not seem to do that
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" fields have retained their original value
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
-    ]);
+            [ '250', 'a', '250 bottles of beer on the wall' ],    # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],    # original
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -369,7 +388,7 @@ subtest 'Record fields has been added and deleted when add = 1, append = 0, remo
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 0,
             'remove' => 0,
             'delete' => 1,
@@ -377,17 +396,19 @@ subtest 'Record fields has been added and deleted when add = 1, append = 0, remo
     )->store();
 
     # Warning - is there a use case in real-life for this combinaison?
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field have retained their original value
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
-            # "500" field has been removed
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+            [ '250', 'a', '250 bottles of beer on the wall' ],           # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # original
+                                                                         # "500" field has been removed
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -402,22 +423,24 @@ subtest 'Record fields has been appended and deleted when add = 0, append = 1, r
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 1,
             'remove' => 0,
             'delete' => 1,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has been removed
-    ]);
+            [ '250', 'a', '250 bottles of beer on the wall' ],    # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],    # original and incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],    # incoming
+                                                                  # "500" field has been removed
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -432,25 +455,27 @@ subtest 'Record fields has been added, appended and deleted when add = 1, append
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 1,
             'remove' => 0,
             'delete' => 1,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended
-            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has been removed
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+            [ '250', 'a', '250 bottles of beer on the wall' ],           # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # original and incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],           # incoming
+                                                                         # "500" field has been removed
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -465,20 +490,22 @@ subtest 'Record fields has been removed and deleted when add = 0, append = 0, re
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 0,
             'remove' => 1,
             'delete' => 1,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been removed
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
-            # "500" field has been removed
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],    # original and incoming
+                                                                  # "500" field has been removed
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -493,23 +520,25 @@ subtest 'Record fields has been added, removed and deleted when add = 1, append 
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 0,
             'remove' => 1,
             'delete' => 1,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
-            # "500" field has been removed
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # original and incoming
+                                                                         # "500" field has been removed
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -524,21 +553,23 @@ subtest 'Record fields has been appended, removed and deleted when add = 0, appe
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 1,
             'remove' => 1,
             'delete' => 1,
         }
     )->store();
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended and removed
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has been removed
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],    # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],    # incoming
+                                                                  # "500" field has been removed
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -553,14 +584,14 @@ subtest 'Record fields has been overwritten when add = 1, append = 1, remove = 1
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 1,
             'remove' => 1,
             'delete' => 1,
         }
     )->store();
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -575,7 +606,7 @@ subtest 'subfields order' => sub {
 
     $rule->set(
         {
-            'add' => 0,
+            'add'    => 0,
             'append' => 0,
             'remove' => 0,
             'delete' => 0,
@@ -590,7 +621,7 @@ subtest 'subfields order' => sub {
         ]
     );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -600,14 +631,14 @@ subtest 'subfields order' => sub {
 
     $rule->set(
         {
-            'add' => 1,
+            'add'    => 1,
             'append' => 1,
             'remove' => 1,
             'delete' => 1,
         }
     )->store();
 
-    $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -620,31 +651,37 @@ subtest 'subfields order' => sub {
 # Test rule tag specificity
 
 # Protect field 500 with more specific tag value
-my $skip_all_rule = Koha::MarcOverlayRules->find_or_create({
-    tag => '500',
-    module => 'source',
-    filter => '*',
-    add => 0,
-    append => 0,
-    remove => 0,
-    delete => 0
-});
+my $skip_all_rule = Koha::MarcOverlayRules->find_or_create(
+    {
+        tag    => '500',
+        module => 'source',
+        filter => '*',
+        add    => 0,
+        append => 0,
+        remove => 0,
+        delete => 0
+    }
+);
 
-subtest '"500" field has been protected when rule matching on tag "500" is add = 0, append = 0, remove = 0, delete = 0' => sub {
+subtest
+    '"500" field has been protected when rule matching on tag "500" is add = 0, append = 0, remove = 0, delete = 0' =>
+    sub {
     plan tests => 1;
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-            # "501" fields have been added
-            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
-            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],           # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],           # incoming
+                                                                         # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],          # original
+                                                                         # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],     # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ],    # incoming
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -652,10 +689,12 @@ subtest '"500" field has been protected when rule matching on tag "500" is add =
         'All fields are erased by incoming record but 500 is protected'
     );
 
-};
+    };
 
 # Test regexp matching
-subtest '"5XX" fields has been protected when rule matching on regexp "5\d{2}" is add = 0, append = 0, remove = 0, delete = 0' => sub {
+subtest
+    '"5XX" fields has been protected when rule matching on regexp "5\d{2}" is add = 0, append = 0, remove = 0, delete = 0'
+    => sub {
     plan tests => 1;
 
     $skip_all_rule->set(
@@ -664,15 +703,17 @@ subtest '"5XX" fields has been protected when rule matching on regexp "5\d{2}" i
         }
     )->store;
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended
-            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
-            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
-            # "500" field has retained its original value
-            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
-    ]);
+            [ '250', 'a', '256 bottles of beer on the wall' ],     # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],     # incoming
+                                                                   # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],    # original
+        ]
+    );
 
-    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records( $orig_record, $incoming_record, { 'source' => 'test' } );
 
     is(
         $merged_record->as_formatted,
@@ -680,7 +721,7 @@ subtest '"5XX" fields has been protected when rule matching on regexp "5\d{2}" i
         'Fields are erased by incoming record but 500 is protected and 501 is not added'
     );
 
-};
+    };
 
 $skip_all_rule->delete();
 
@@ -933,73 +974,76 @@ subtest 'Module filter precedence tests' => sub {
 subtest 'An exception is thrown when append = 1, remove = 0 is set for control field rule' => sub {
     plan tests => 2;
     my $exception = try {
-        Koha::MarcOverlayRules->validate({
-            'tag' => '008',
-            'append' => 1,
-            'remove' => 0,
-        });
-    }
-    catch {
+        Koha::MarcOverlayRules->validate(
+            {
+                'tag'    => '008',
+                'append' => 1,
+                'remove' => 0,
+            }
+        );
+    } catch {
         return $_;
     };
-    ok(defined $exception, "Exception was caught");
-    ok($exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions'), "Exception is of correct class");
+    ok( defined $exception, "Exception was caught" );
+    ok(
+        $exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions'),
+        "Exception is of correct class"
+    );
 };
 
 subtest 'An exception is thrown when rule tag is set to invalid regexp' => sub {
     plan tests => 2;
 
     my $exception = try {
-        Koha::MarcOverlayRules->validate({
-            'tag' => '**'
-        });
-    }
-    catch {
+        Koha::MarcOverlayRules->validate( { 'tag' => '**' } );
+    } catch {
         return $_;
     };
-    ok(defined $exception, "Exception was caught");
-    ok($exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp'), "Exception is of correct class");
+    ok( defined $exception,                                                     "Exception was caught" );
+    ok( $exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp'), "Exception is of correct class" );
 };
-
 
 subtest 'context option in ModBiblio is handled correctly' => sub {
     plan tests => 2;
 
     $rule->set(
         {
-            tag => '250',
-            module => 'source',
-            filter => '*',
-            'add' => 0,
+            tag      => '250',
+            module   => 'source',
+            filter   => '*',
+            'add'    => 0,
             'append' => 0,
             'remove' => 0,
             'delete' => 0,
         }
     )->store();
 
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($orig_record, '');
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $orig_record, '' );
 
     # Since marc merc rules are not run on save, only update
     # saved record should be identical to orig_record
-    my $biblio = Koha::Biblios->find($biblionumber);
+    my $biblio       = Koha::Biblios->find($biblionumber);
     my $saved_record = $biblio->metadata->record;
 
     my @all_fields = $saved_record->fields();
+
     # Koha also adds 999c field, therefore 4 not 3
 
-    my $expected_record = build_record([
+    my $expected_record = build_record(
+        [
             # "250" field has been appended
             [ '250', 'a', '250 bottles of beer on the wall' ],        # original
             [ '250', 'a', '256 bottles of beer on the wall' ],        # original
             [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
             [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
-    ]);
+        ]
+    );
 
     # Remove timestamp from saved record when comparing
     $saved_record->delete_fields( $saved_record->field('005') );
 
     # Make sure leader is equal after AddBiblio
-    $expected_record->leader($saved_record->leader());
+    $expected_record->leader( $saved_record->leader() );
 
     is(
         $saved_record->as_formatted,
@@ -1007,29 +1051,32 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
     );
 
     $saved_record->append_fields(
-        MARC::Field->new('250', '', '', 'a' => '251 bottles of beer on the wall'), # Appended
-        MARC::Field->new('500', '', '', 'a' => 'One cold bottle of beer in the fridge'), # Appended
+        MARC::Field->new( '250', '', '', 'a' => '251 bottles of beer on the wall' ),          # Appended
+        MARC::Field->new( '500', '', '', 'a' => 'One cold bottle of beer in the fridge' ),    # Appended
     );
 
-    ModBiblio($saved_record, $biblionumber, '', { overlay_context => { 'source' => 'test' } });
+    ModBiblio( $saved_record, $biblionumber, '', { overlay_context => { 'source' => 'test' } } );
 
     my $updated_record = $biblio->get_from_storage->metadata->record;
 
-    $expected_record = build_record([
+    $expected_record = build_record(
+        [
             # "250" field has been protected
             [ '250', 'a', '250 bottles of beer on the wall' ],
             [ '250', 'a', '256 bottles of beer on the wall' ],
             [ '500', 'a', 'One bottle of beer in the fridge' ],
+
             # "500" field has been appended
             [ '500', 'a', 'One cold bottle of beer in the fridge' ],
             [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
-    ]);
+        ]
+    );
 
     # Remove timestamp from saved record when comparing
     $updated_record->delete_fields( $updated_record->field('005') );
 
     # Make sure leader is equal after ModBiblio
-    $expected_record->leader($updated_record->leader());
+    $expected_record->leader( $updated_record->leader() );
 
     is(
         $updated_record->as_formatted,

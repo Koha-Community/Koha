@@ -4,7 +4,6 @@ use Modern::Perl;
 
 use base qw( Koha::Object );
 
-
 sub _type {
     return 'Aqcontact';
 }

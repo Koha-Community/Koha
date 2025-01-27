@@ -19,13 +19,13 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth        qw( get_template_and_user );
 use C4::Circulation qw( AddReturn );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output      qw( output_html_with_http_headers );
 use Koha::Items;
 
 use List::MoreUtils qw( uniq );
-use Try::Tiny qw( catch try );
+use Try::Tiny       qw( catch try );
 
 my $cgi = CGI->new;
 
@@ -40,10 +40,10 @@ $cgi->param( -name => 'sci_user_login', -values => [1] );
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "sci/sci-main.tt",
-        flagsrequired   => { self_check => 'self_checkin_module' },
-        query           => $cgi,
-        type            => "opac"
+        template_name => "sci/sci-main.tt",
+        flagsrequired => { self_check => 'self_checkin_module' },
+        query         => $cgi,
+        type          => "opac"
     }
 );
 
@@ -66,7 +66,7 @@ if ( $op eq 'cud-check_in' ) {
     foreach my $barcode (@barcodes) {
         try {
             my ( $success, $messages, $checkout, $patron );
-            my $item = Koha::Items->find( { barcode => $barcode } );
+            my $item           = Koha::Items->find( { barcode => $barcode } );
             my $human_required = 0;
             if (   C4::Context->preference("CircConfirmItemParts")
                 && defined($item)
@@ -77,28 +77,25 @@ if ( $op eq 'cud-check_in' ) {
                 $messages->{additional_materials} = 1;
             }
 
-            ( $success, $messages, $checkout, $patron ) =
-              AddReturn( $barcode, $library ) unless $human_required;
+            ( $success, $messages, $checkout, $patron ) = AddReturn( $barcode, $library ) unless $human_required;
             if ($success) {
                 push @success,
-                  {
+                    {
                     barcode  => $barcode,
                     messages => $messages,
                     checkout => $checkout,
                     patron   => $patron
-                  };
-            }
-            else {
+                    };
+            } else {
                 push @errors,
-                  {
+                    {
                     barcode  => $barcode,
                     messages => $messages,
                     checkout => $checkout,
                     patron   => $patron
-                  };
+                    };
             }
-        }
-        catch {
+        } catch {
             push @errors, { barcode => $barcode, messages => 'unknown_error' };
         };
     }

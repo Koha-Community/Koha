@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use C4::Context;
@@ -31,9 +31,8 @@ sub usage {
     exit;
 }
 
-die
-  "TalkingTechItivaPhoneNotification system preference not activated... dying\n"
-  unless ( C4::Context->preference("TalkingTechItivaPhoneNotification") );
+die "TalkingTechItivaPhoneNotification system preference not activated... dying\n"
+    unless ( C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 # Database handle
 my $dbh = C4::Context->dbh;
@@ -70,8 +69,7 @@ if ( defined $infile ) {
         $total++;
     }
     close($IN);
-}
-else {
+} else {
     die pod2usage( -verbose => 1 );
 }
 
@@ -113,18 +111,15 @@ sub update_notice {
 
     if ( $status =~ m/SUCCESS/i ) {
         $status = 'sent';
-    }
-    elsif ( $status =~ m/FAIL/i ) {
+    } elsif ( $status =~ m/FAIL/i ) {
         $status = 'failed';
-    }
-    else {
+    } else {
         warn "unexpected status $status for message ID $message_id\n";
         return 0;
     }
 
-    my $query =
-"UPDATE message_queue SET status = ? WHERE message_id = ? and status = 'pending'";
-    my $sth = $dbh->prepare($query);
+    my $query = "UPDATE message_queue SET status = ? WHERE message_id = ? and status = 'pending'";
+    my $sth   = $dbh->prepare($query);
 
     my $result = $sth->execute( $status, $message_id );
     return $result;

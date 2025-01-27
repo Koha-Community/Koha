@@ -75,12 +75,10 @@ sub get {
                 status  => 200,
                 openapi => $item_group
             );
-        }
-        else {
+        } else {
             return $c->render_resource_not_found("Item group");
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -101,6 +99,7 @@ sub add {
             unless $biblio;
 
         my $item_group_data = $c->req->json;
+
         # biblio_id comes from the path
         $item_group_data->{biblio_id} = $biblio->id;
 
@@ -113,8 +112,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($item_group),
         );
-    }
-    catch {
+    } catch {
         if ( blessed($_) ) {
             my $to_api_mapping = Koha::Biblio::ItemGroup->new->to_api_mapping;
 
@@ -142,30 +140,27 @@ sub update {
         my $item_group_id = $c->param('item_group_id');
         my $biblio_id     = $c->param('biblio_id');
 
-        my $item_group = Koha::Biblio::ItemGroups->find( $item_group_id );
+        my $item_group = Koha::Biblio::ItemGroups->find($item_group_id);
 
         unless ( $item_group && $item_group->biblio_id eq $biblio_id ) {
             return $c->render_resource_not_found("Item group");
         }
 
         my $item_group_data = $c->req->json;
-        $item_group->set_from_api( $item_group_data )->store->discard_changes();
+        $item_group->set_from_api($item_group_data)->store->discard_changes();
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($item_group),
         );
-    }
-    catch {
+    } catch {
         if ( blessed($_) ) {
             my $to_api_mapping = Koha::Biblio::ItemGroup->new->to_api_mapping;
 
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 409,
-                    openapi => {
-                        error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
             }
         }

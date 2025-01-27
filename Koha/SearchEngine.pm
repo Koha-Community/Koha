@@ -1,4 +1,5 @@
 package Koha::SearchEngine;
+
 # This handles generic search-engine related functions
 
 # Copyright 2015 Catalyst IT

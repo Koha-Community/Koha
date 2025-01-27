@@ -60,8 +60,6 @@ use warnings;
 use C4::Context;
 use File::Spec;
 
-
-
 =head1 METHODS
 
 =cut
@@ -75,16 +73,18 @@ use File::Spec;
 =cut
 
 sub send_sms {
-    my $self = shift;
-    my $params= shift;
+    my $self   = shift;
+    my $params = shift;
 
-    foreach my $required_parameter ( qw( message destination ) ) {
+    foreach my $required_parameter (qw( message destination )) {
+
         # Should I warn in some way?
-        return unless defined $params->{ $required_parameter };
+        return unless defined $params->{$required_parameter};
     }
 
     eval { require SMS::Send; };
-    if ( $@ ) {
+    if ($@) {
+
         # we apparently don't have SMS::Send. Return a failure.
         return;
     }
@@ -93,14 +93,15 @@ sub send_sms {
     my $driver = exists $params->{'driver'} ? $params->{'driver'} : $self->driver();
     return ( undef, 'SMS_SEND_DRIVER_MISSING' ) unless $driver;
 
-    my ($sent, $sender);
+    my ( $sent, $sender );
 
     my $subpath = $driver;
     $subpath =~ s|::|/|g;
 
     # Extract additional SMS::Send arguments from file
     my $sms_send_config = C4::Context->config('sms_send_config');
-    my $conf_file = defined $sms_send_config
+    my $conf_file =
+        defined $sms_send_config
         ? File::Spec->catfile( $sms_send_config, $subpath )
         : $subpath;
     $conf_file .= q{.yaml};
@@ -108,7 +109,7 @@ sub send_sms {
     my %args = ();
     if ( -f $conf_file ) {
         require YAML::XS;
-        my $conf = YAML::XS::LoadFile( $conf_file );
+        my $conf = YAML::XS::LoadFile($conf_file);
         %args = map { q{_} . $_ => $conf->{$_} } keys %$conf;
     }
 
@@ -141,6 +142,7 @@ sub send_sms {
         warn $@;
         return ( undef, $@ );
     }
+
     # warn 'failure' unless $sent;
     return $sent;
 }

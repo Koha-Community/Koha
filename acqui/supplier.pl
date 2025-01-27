@@ -41,10 +41,10 @@ To know the bookseller this script has to display details.
 =cut
 
 use Modern::Perl;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth     qw( get_template_and_user );
 use C4::Contract qw( GetContracts GetContract );
-use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use C4::Output   qw( output_html_with_http_headers );
+use CGI          qw ( -utf8 );
 
 use C4::Budgets;
 
@@ -52,24 +52,25 @@ use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 
-my $query    = CGI->new;
-my $op = $query->param('op') || 'display';
+my $query = CGI->new;
+my $op    = $query->param('op') || 'display';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => 'acqui/supplier.tt',
-        query           => $query,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => '*' },
+    {
+        template_name => 'acqui/supplier.tt',
+        query         => $query,
+        type          => 'intranet',
+        flagsrequired => { acquisition => '*' },
     }
 );
-my $booksellerid       = $query->param('booksellerid');
+my $booksellerid = $query->param('booksellerid');
 my $supplier;
 if ($booksellerid) {
-    $supplier = Koha::Acquisition::Booksellers->find( $booksellerid );
+    $supplier = Koha::Acquisition::Booksellers->find($booksellerid);
     my $supplier_hashref = $supplier->unblessed;
     foreach ( keys %{$supplier_hashref} ) {
         $template->{'VARS'}->{$_} = $supplier->$_;
     }
-    $template->{VARS}->{contacts} = $supplier->contacts if $supplier->contacts->count;
+    $template->{VARS}->{contacts}         = $supplier->contacts if $supplier->contacts->count;
     $template->{'VARS'}->{'booksellerid'} = $booksellerid;
 }
 
@@ -79,19 +80,20 @@ if ( $op eq 'display' ) {
     my $contracts = GetContracts( { booksellerid => $booksellerid } );
 
     $template->param(
-        active        => $supplier->active,
-        tax_rate      => $supplier->tax_rate + 0.0,
-        invoiceprice  => $supplier->invoiceprice,
-        listprice     => $supplier->listprice,
-        basketcount   => $supplier->baskets->count,
+        active            => $supplier->active,
+        tax_rate          => $supplier->tax_rate + 0.0,
+        invoiceprice      => $supplier->invoiceprice,
+        listprice         => $supplier->listprice,
+        basketcount       => $supplier->baskets->count,
         subscriptioncount => $supplier->subscriptions->count,
-        vendor        => $supplier,
-        contracts     => $contracts,
+        vendor            => $supplier,
+        contracts         => $contracts,
     );
 } elsif ( $op eq 'cud-delete' ) {
+
     # no further message needed for the user
     # the DELETE button only appears in the template if basketcount == 0 AND subscriptioncount == 0
-    if ( $supplier->baskets->count == 0 && $supplier->subscriptions->count == 0) {
+    if ( $supplier->baskets->count == 0 && $supplier->subscriptions->count == 0 ) {
         Koha::Acquisition::Booksellers->find($booksellerid)->delete;
     }
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
@@ -99,18 +101,17 @@ if ( $op eq 'display' ) {
 } else {
 
     # get option values from TaxRates syspref
-    my @gst_values = map {
-        option => $_ + 0.0
-    }, split( '\|', C4::Context->preference("TaxRates") );
+    my @gst_values = map { option => $_ + 0.0 }, split( '\|', C4::Context->preference("TaxRates") );
 
     $template->param(
+
         # set active ON by default for supplier add (id empty for add)
         active     => $supplier ? $supplier->active         : 1,
         tax_rate   => $supplier ? $supplier->tax_rate + 0.0 : 0,
-        vendor        => $supplier,
-        gst_values    => \@gst_values,
-        currencies    => Koha::Acquisition::Currencies->search,
-        enter         => 1,
+        vendor     => $supplier,
+        gst_values => \@gst_values,
+        currencies => Koha::Acquisition::Currencies->search,
+        enter      => 1,
     );
 }
 

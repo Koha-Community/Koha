@@ -30,15 +30,15 @@ use warnings;
 
 use Koha::Script -cron;
 use C4::Items qw( CartToShelf );
-use C4::Log qw( cronlogaction );
+use C4::Log   qw( cronlogaction );
 
 use C4::Context;
 use Getopt::Long qw( GetOptions );
 
 my $hours = 0;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions( 'h|hours=s' => \$hours, );
 
@@ -62,10 +62,10 @@ unless ($hours) {
 }
 
 my $query = "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
-my $sth = C4::Context->dbh->prepare($query);
+my $sth   = C4::Context->dbh->prepare($query);
 $sth->execute($hours);
-while (my ($itemnumber) = $sth->fetchrow_array) {
+while ( my ($itemnumber) = $sth->fetchrow_array ) {
     CartToShelf($itemnumber);
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

@@ -19,16 +19,15 @@ package Koha::Patron::Modification;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Exceptions::Patron::Modification;
 use Koha::Patron::Attribute;
 use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
 
-use JSON qw( from_json );
+use JSON            qw( from_json );
 use List::MoreUtils qw( any uniq );
-use Try::Tiny qw( catch try );
+use Try::Tiny       qw( catch try );
 
 use base qw(Koha::Object);
 
@@ -48,11 +47,7 @@ sub store {
     my ($self) = @_;
 
     if ( $self->verification_token ) {
-        if (Koha::Patron::Modifications->search(
-                { verification_token => $self->verification_token }
-            )->count()
-            )
-        {
+        if ( Koha::Patron::Modifications->search( { verification_token => $self->verification_token } )->count() ) {
             Koha::Exceptions::Patron::Modification::DuplicateVerificationToken->throw(
                 "Duplicate verification token " . $self->verification_token );
         }
@@ -62,8 +57,7 @@ sub store {
         try {
             my $json_parser = JSON->new;
             $json_parser->decode( $self->extended_attributes );
-        }
-        catch {
+        } catch {
             Koha::Exceptions::Patron::Modification::InvalidData->throw(
                 'The passed extended_attributes is not valid JSON');
         };
@@ -97,9 +91,9 @@ sub approve {
     return unless $patron;
 
     my @keep_keys = split /,/, $changed_fields;
-    my @all_keys = keys %$data;
-    foreach my $key ( @all_keys ) {
-        next if (any { $_ eq $key } @keep_keys);
+    my @all_keys  = keys %$data;
+    foreach my $key (@all_keys) {
+        next if ( any { $_ eq $key } @keep_keys );
         delete $data->{$key};
     }
 
@@ -123,11 +117,11 @@ sub approve {
                 $patron->store();
 
                 # Deal with attributes
-                my @codes
-                    = uniq( map { $_->{code} } @{$extended_attributes} );
+                my @codes = uniq( map { $_->{code} } @{$extended_attributes} );
                 foreach my $code (@codes) {
                     map { $_->delete } Koha::Patron::Attributes->search(
-                        {   borrowernumber => $patron->borrowernumber,
+                        {
+                            borrowernumber => $patron->borrowernumber,
                             code           => $code
                         }
                     )->as_list;
@@ -135,24 +129,23 @@ sub approve {
                 foreach my $attr ( @{$extended_attributes} ) {
                     $attr->{attribute} = exists $attr->{attribute} ? $attr->{attribute} : $attr->{value};
                     Koha::Patron::Attribute->new(
-                        {   borrowernumber => $patron->borrowernumber,
+                        {
+                            borrowernumber => $patron->borrowernumber,
                             code           => $attr->{code},
                             attribute      => $attr->{attribute},
                         }
-                    )->store
-                        if $attr->{attribute} # there's a value
-                           or
-                          (    defined $attr->{attribute} # there's a value that is 0, and not
-                            && $attr->{attribute} ne ""   # the empty string which means delete
-                            && $attr->{attribute} == 0
-                          );
+                        )->store
+                        if $attr->{attribute}    # there's a value
+                        or (
+                        defined $attr->{attribute}     # there's a value that is 0, and not
+                        && $attr->{attribute} ne ""    # the empty string which means delete
+                        && $attr->{attribute} == 0
+                        );
                 }
-            }
-            catch {
+            } catch {
                 if ( $_->isa('DBIx::Class::Exception') ) {
                     Koha::Exceptions::Patron::Modification->throw( $_->{msg} );
-                }
-                else {
+                } else {
                     Koha::Exceptions::Patron::Modification->throw($_);
                 }
             };

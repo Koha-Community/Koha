@@ -19,7 +19,7 @@ package Koha::Auth::Client::OAuth;
 
 use Modern::Perl;
 
-use JSON qw( decode_json );
+use JSON         qw( decode_json );
 use MIME::Base64 qw{ decode_base64url };
 use Koha::Patrons;
 use Mojo::UserAgent;
@@ -58,7 +58,7 @@ sub _get_data_and_patron {
     my $patron;
     my $mapped_data;
 
-    my $mapping = decode_json( $provider->mapping );
+    my $mapping    = decode_json( $provider->mapping );
     my $matchpoint = $provider->matchpoint;
 
     if ( $data->{id_token} ) {
@@ -69,7 +69,7 @@ sub _get_data_and_patron {
         foreach my $key ( keys %$mapping ) {
             my $pkey = $mapping->{$key};
             $mapped_data->{$key} = $claim->{$pkey}
-              if defined $claim->{$pkey};
+                if defined $claim->{$pkey};
         }
 
         my $value = $mapped_data->{$matchpoint};
@@ -89,15 +89,15 @@ sub _get_data_and_patron {
 
         return if $code ne '200';
         my $claim =
-            $tx->res->headers->content_type =~ m!^(application/json|text/javascript)(;\s*charset=\S+)?$!
-          ? $tx->res->json
-          : Mojo::Parameters->new( $tx->res->body )->to_hash;
+              $tx->res->headers->content_type =~ m!^(application/json|text/javascript)(;\s*charset=\S+)?$!
+            ? $tx->res->json
+            : Mojo::Parameters->new( $tx->res->body )->to_hash;
 
         foreach my $key ( keys %$mapping ) {
             my $pkey  = $mapping->{$key};
             my $value = $self->_traverse_hash( { base => $claim, keys => $pkey } );
             $mapped_data->{$key} = $value
-              if defined $value;
+                if defined $value;
         }
 
         unless ($patron) {

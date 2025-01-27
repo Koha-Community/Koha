@@ -18,7 +18,7 @@ package Koha::Patron::Relationship;
 use Modern::Perl;
 
 use List::MoreUtils qw( any );
-use Try::Tiny qw( catch try );
+use Try::Tiny       qw( catch try );
 
 use Koha::Database;
 use Koha::Exceptions::Patron::Relationship;
@@ -45,23 +45,20 @@ Overloaded method that makes some checks before storing on the DB
 =cut
 
 sub store {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my @valid_relationships = split /\|/, C4::Context->preference('borrowerRelationship'), -1;
     @valid_relationships = ('') unless @valid_relationships;
 
-    Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw(
-        no_relationship => 1 )
+    Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( no_relationship => 1 )
         unless defined $self->relationship;
 
-    Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw(
-        relationship => $self->relationship )
+    Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( relationship => $self->relationship )
         unless any { $_ eq $self->relationship } @valid_relationships;
 
     return try {
         $self->SUPER::store;
-    }
-    catch {
+    } catch {
         if ( ref($_) eq 'Koha::Exceptions::Object::DuplicateID' ) {
             Koha::Exceptions::Patron::Relationship::DuplicateRelationship->throw(
                 guarantee_id => $self->guarantee_id,
@@ -78,7 +75,7 @@ Returns the Koha::Patron object for the guarantor
 =cut
 
 sub guarantor {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Patrons->find( $self->guarantor_id );
 }
 
@@ -89,7 +86,7 @@ Returns the Koha::Patron object for the guarantee
 =cut
 
 sub guarantee {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Patrons->find( $self->guarantee_id );
 }
 

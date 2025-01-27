@@ -1,6 +1,12 @@
 [% USE raw %]
 <div class="bookcover">
-    <div class="cover-slider cover-slides itemtype_[% SEARCH_RESULT.itemtype | html %]" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" data-title="[% SEARCH_RESULT.title | html %]" data-isbn="[% SEARCH_RESULT.normalized_isbn | html %]" data-isbn="[% To.json(SEARCH_RESULT.normalized_isbn) | $raw %]">
+    <div
+        class="cover-slider cover-slides itemtype_[% SEARCH_RESULT.itemtype | html %]"
+        data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]"
+        data-title="[% SEARCH_RESULT.title | html %]"
+        data-isbn="[% SEARCH_RESULT.normalized_isbn | html %]"
+        data-isbn="[% To.json(SEARCH_RESULT.normalized_isbn) | $raw %]"
+    >
         [% IF ( OPACLocalCoverImages && SEARCH_RESULT.has_local_cover_image ) %]
             <div class="cover-image local-coverimg">
                 <a href="/cgi-bin/koha/opac-image.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
@@ -13,7 +19,12 @@
         [% IF ( OPACAmazonCoverImages && SEARCH_RESULT.normalized_isbn) %]
             <div class="cover-image amazon-coverimg">
                 <a href="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | uri %].01.LZZZZZZZ.jpg">
-                    <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | uri %].01.MZZZZZZZ.jpg" alt="Amazon cover image" id="amazon-thumbnail-[% SEARCH_RESULT.biblionumber | html %]" data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% SEARCH_RESULT.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link"/>
+                    <img
+                        src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | uri %].01.MZZZZZZZ.jpg"
+                        alt="Amazon cover image"
+                        id="amazon-thumbnail-[% SEARCH_RESULT.biblionumber | html %]"
+                        data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% SEARCH_RESULT.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link"
+                    />
                 </a>
                 <div class="hint">Image from Amazon.com</div>
             </div>
@@ -22,8 +33,14 @@
         [% IF ( SyndeticsCoverImages ) %]
             [% IF ( SEARCH_RESULT.normalized_isbn ) %]
                 <div class="cover-image syndetics-coverimg">
-                    <a href="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]">
-                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" id="syndetics-thumbnail-[% SEARCH_RESULT.biblionumber | html %]" alt="Syndetics cover image" />
+                    <a
+                        href="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]"
+                    >
+                        <img
+                            src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]"
+                            id="syndetics-thumbnail-[% SEARCH_RESULT.biblionumber | html %]"
+                            alt="Syndetics cover image"
+                        />
                     </a>
                     <div class="hint">Image from Syndetics</div>
                 </div>
@@ -62,7 +79,7 @@
                         <img alt="See Baker &amp; Taylor" id="bakertaylor-thumbnail-[% SEARCH_RESULT.biblionumber | html %]" src="[% BakerTaylorImageURL | url %][% bt_id | uri %]" />
                     </a>
                 [% ELSE %]
-                    <a href="[% BakerTaylorImageURL | url %][% bt_id | uri%]">
+                    <a href="[% BakerTaylorImageURL | url %][% bt_id | uri %]">
                         <img alt="See Baker &amp; Taylor" id="bakertaylor-thumbnail-[% SEARCH_RESULT.biblionumber | html %]" src="[% BakerTaylorImageURL | url %][% bt_id | uri %]" />
                     </a>
                 [% END %]
@@ -81,6 +98,6 @@
                 </div>
             [% END %]
         [% END %]
-    </div> <!-- /.cover-slider -->
-
-</div><!-- / .bookcover -->
+    </div>
+    <!-- /.cover-slider --> </div
+><!-- / .bookcover -->

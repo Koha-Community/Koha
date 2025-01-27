@@ -20,45 +20,44 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw/check_cookie_auth/;
 use Koha::CoverImages;
 use JSON qw/to_json/;
 
 my $input = CGI->new;
 
-my ( $auth_status ) =
-        check_cookie_auth(
-            $input->cookie('CGISESSID'),
-            { tools => 'upload_local_cover_images' } );
+my ($auth_status) = check_cookie_auth(
+    $input->cookie('CGISESSID'),
+    { tools => 'upload_local_cover_images' }
+);
 
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-my $op           = $input->param('op') || q{};
+my $op          = $input->param('op') || q{};
 my $imagenumber = $input->param('imagenumber');
 
 my $response = q{};
 
 if ( $op eq "cud-delete" ) {
 
-    eval {
-        Koha::CoverImages->find($imagenumber)->delete;
-    };
-    if ( $@ ) {
+    eval { Koha::CoverImages->find($imagenumber)->delete; };
+    if ($@) {
         $response = {
             imagenumber => $imagenumber,
-            deleted => 0,
-            error => "MSG_INVALID_IMAGENUMBER"
+            deleted     => 0,
+            error       => "MSG_INVALID_IMAGENUMBER"
         };
     } else {
         $response = {
             imagenumber => $imagenumber,
-            deleted => 1
+            deleted     => 1
         };
     }
 } else {
+
     # FIXME be nicer!
     # invalid op
     exit 0;
@@ -66,8 +65,8 @@ if ( $op eq "cud-delete" ) {
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header(
-    -type => 'application/json',
+    -type    => 'application/json',
     -charset => 'UTF-8'
 );
 
-print to_json( $response );
+print to_json($response);

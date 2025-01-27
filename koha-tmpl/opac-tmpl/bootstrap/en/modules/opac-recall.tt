@@ -8,7 +8,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Recall &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 <body id="opac-recall" class="scrollto">
 [% INCLUDE 'masthead.inc' %]
@@ -26,9 +27,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-md-12 col-lg-10 order-1 order-lg-2">
                 <div id="recall" class="maincontent">
@@ -60,33 +59,33 @@
                             <p>All borrowable material is subject to recall if checked out and needed by someone else. We will ask the person who has checked out this item to return it so you may use it.</p>
                             [% IF logged_in_user %]
                                 <div class="dialog">
-
                                     <form id="recallform" action="/cgi-bin/koha/opac-recall.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <fieldset class="rows" id="options">
                                             <legend>Place a recall on <b>[% biblio.title | html %]</b> ([% biblio.author | html %])?</legend>
                                             <ul>
+                                                [% UNLESS ( single_branch_mode ) %]
+                                                    <li>
+                                                        <label for="pickup">Pick up location:</label>
+                                                        <select name="pickup" id="pickup">
+                                                            [% FOREACH branch IN branches %]
+                                                                [% IF branch.branchcode == logged_in_user.branchcode %]
+                                                                    <option value="[% branch.branchcode | html %]" selected>[% Branches.GetName( branch.branchcode ) | html %]</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% branch.branchcode | html %]">[% Branches.GetName( branch.branchcode ) | html %]</option>
+                                                                [% END %]
+                                                            [% END %]
+                                                        </select>
+                                                    </li>
+                                                [% END %]
 
-                                            [% UNLESS ( single_branch_mode ) %]<li>
-                                                <label for="pickup">Pick up location:</label>
-                                                <select name="pickup" id="pickup">
-                                                    [% FOREACH branch IN branches %]
-                                                        [% IF branch.branchcode == logged_in_user.branchcode %]
-                                                            <option value="[% branch.branchcode | html %]" selected>[% Branches.GetName( branch.branchcode ) | html %]</option>
-                                                        [% ELSE %]
-                                                            <option value="[% branch.branchcode | html %]">[% Branches.GetName( branch.branchcode ) | html %]</option>
-                                                        [% END %]
-                                                    [% END %]
-                                                </select>
-                                            </li>[% END %]
-
-                                            <li>
-                                                <label for="expirationdate">Recall not needed after:</label>
-                                                <input type="text" name="expirationdate" id="expirationdate" size="20" class="flatpickr futuredate" />
-                                                <span id="expiration-hint">[% INCLUDE 'date-format.inc' %]</span>
-                                            </li>
-                                            <li class="level-option" style="display:none;"><label for="bibliolevel">Recall next available item</label> <input type="radio" name="type" id="bibliolevel" value="bibliolevel" checked></li>
-                                            <li class="level-option" style="display:none;"><label for="itemlevel">Recall a specific item</label> <input type="radio" name="type" id="itemlevel" value="itemlevel"></li>
+                                                <li>
+                                                    <label for="expirationdate">Recall not needed after:</label>
+                                                    <input type="text" name="expirationdate" id="expirationdate" size="20" class="flatpickr futuredate" />
+                                                    <span id="expiration-hint">[% INCLUDE 'date-format.inc' %]</span>
+                                                </li>
+                                                <li class="level-option" style="display:none;"><label for="bibliolevel">Recall next available item</label> <input type="radio" name="type" id="bibliolevel" value="bibliolevel" checked /></li>
+                                                <li class="level-option" style="display:none;"><label for="itemlevel">Recall a specific item</label> <input type="radio" name="type" id="itemlevel" value="itemlevel" /></li>
                                             </ul>
 
                                             <table class="table table-bordered table-striped" id="items">
@@ -105,98 +104,105 @@
                                                     <th>Vol info</th>
                                                     <th>Information</th>
                                                 </tr>
-                                                [% FOREACH item IN items %]<tr>
-                                                <td>
-                                                    [% IF item.can_be_recalled( patron => logged_in_user ) %]
-                                                        <input type="radio" class="itemnumber" name="itemnumber" value="[% item.itemnumber | html %]">
-                                                    [% ELSE %]
-                                                        <input disabled="disabled" type="radio" class="itemnumber" name="itemnumber" value="[% item.itemnumber | html %]" style="display:none;" />
-                                                        <img src="[% interface | html %]/lib/famfamfam/cross.png" alt="Cannot be recalled" title="Cannot be recalled" />
-                                                    [% END %]
-                                                    </td>
-                                                    <td>[% ItemTypes.GetDescription( item.effective_itemtype ) | html %]</td>
-                                                    <td>[% item.barcode | html %]</td>
-                                                    [% UNLESS ( single_branch_mode ) %]
-                                                        <td>[% Branches.GetName( item.homebranch ) | html %]</td>
-                                                        <td>[% Branches.GetName( item.holdingbranch) | html %]</td>
-                                                    [% END %]
-                                                    <td>[% AuthorisedValues.GetByCode( 'CCODE', item.ccode, 1 ) | html %]</td>
-                                                    <td>[% item.itemcallnumber | html %]</td>
-                                                    <td>[% item.copynumber | html %]</td>
-                                                    <td>[% item.enumchron | html %]</td>
-                                                    <td>
-                                                        [% IF ( item.checkout ) %]
-                                                            <span class="checkedout">Due [% item.checkout.date_due | $KohaDates as_due_date => 1 %]</span>
-                                                        [% ELSIF ( item.get_transfer ) %]
-                                                            <span class="intransit">In transit from [% Branches.GetName( item.get_transfer.frombranch ) | html %] to [% Branches.GetName( item.get_transfer.tobranch ) | html %] since [% item.get_transfer.datesent | $KohaDates %]</span>
-                                                        [% END %]
-                                                        [% IF ( item.itemlost || item.withdrawn ) %]
-                                                            <span class="lost">Unavailable (lost or missing)</span>
-                                                        [% END %]
-                                                        [% IF ( item.notforloan ) %]
-                                                            <span class="notforloan">Not for loan ([% item.notforloan | html %])</span>
-                                                        [% END %]
-                                                        [% hold = item.current_holds.next %]
-                                                        [% IF ( item.recall ) %]
-                                                            <span class="waiting">
-                                                            [% IF ( item.recall.waiting_date ) %]
-                                                                <span>Waiting for patron at [% Branches.GetName( item.recall.pickup_library_id ) | html %]</span> <span>since</span> [% item.recall.waiting_date | $KohaDates %].
+                                                [% FOREACH item IN items %]
+                                                    <tr>
+                                                        <td>
+                                                            [% IF item.can_be_recalled( patron => logged_in_user ) %]
+                                                                <input type="radio" class="itemnumber" name="itemnumber" value="[% item.itemnumber | html %]" />
                                                             [% ELSE %]
-                                                                <span>Recalled by patron expected at [% Branches.GetName( item.recall.pickup_library_id ) | html %]</span> <span>since</span> [% item.recall.created_date | $KohaDates %].
+                                                                <input disabled="disabled" type="radio" class="itemnumber" name="itemnumber" value="[% item.itemnumber | html %]" style="display:none;" />
+                                                                <img src="[% interface | html %]/lib/famfamfam/cross.png" alt="Cannot be recalled" title="Cannot be recalled" />
                                                             [% END %]
-                                                            </span>
-                                                        [% ELSIF ( hold.waitingdate ) %]
-                                                            <span class="waiting">
-                                                                Waiting for patron at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %].
-                                                            </span>
-                                                        [% ELSIF ( hold.borrowernumber == logged_in_user.borrowernumber ) %]
-                                                            <span class="waiting">
-                                                                You have already placed a <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">reserve</a> on this item.
-                                                            </span>
-                                                        [% END # / IF ( item.recall or hold ) %]
-                                                    </td>
-                                                </tr>[% END %]
+                                                        </td>
+                                                        <td>[% ItemTypes.GetDescription( item.effective_itemtype ) | html %]</td>
+                                                        <td>[% item.barcode | html %]</td>
+                                                        [% UNLESS ( single_branch_mode ) %]
+                                                            <td>[% Branches.GetName( item.homebranch ) | html %]</td>
+                                                            <td>[% Branches.GetName( item.holdingbranch) | html %]</td>
+                                                        [% END %]
+                                                        <td>[% AuthorisedValues.GetByCode( 'CCODE', item.ccode, 1 ) | html %]</td>
+                                                        <td>[% item.itemcallnumber | html %]</td>
+                                                        <td>[% item.copynumber | html %]</td>
+                                                        <td>[% item.enumchron | html %]</td>
+                                                        <td>
+                                                            [% IF ( item.checkout ) %]
+                                                                <span class="checkedout">Due [% item.checkout.date_due | $KohaDates as_due_date => 1 %]</span>
+                                                            [% ELSIF ( item.get_transfer ) %]
+                                                                <span class="intransit"
+                                                                    >In transit from [% Branches.GetName( item.get_transfer.frombranch ) | html %] to [% Branches.GetName( item.get_transfer.tobranch ) | html %] since
+                                                                    [% item.get_transfer.datesent | $KohaDates %]</span
+                                                                >
+                                                            [% END %]
+                                                            [% IF ( item.itemlost || item.withdrawn ) %]
+                                                                <span class="lost">Unavailable (lost or missing)</span>
+                                                            [% END %]
+                                                            [% IF ( item.notforloan ) %]
+                                                                <span class="notforloan">Not for loan ([% item.notforloan | html %])</span>
+                                                            [% END %]
+                                                            [% hold = item.current_holds.next %]
+                                                            [% IF ( item.recall ) %]
+                                                                <span class="waiting">
+                                                                    [% IF ( item.recall.waiting_date ) %]
+                                                                        <span>Waiting for patron at [% Branches.GetName( item.recall.pickup_library_id ) | html %]</span> <span>since</span> [% item.recall.waiting_date | $KohaDates %].
+                                                                    [% ELSE %]
+                                                                        <span>Recalled by patron expected at [% Branches.GetName( item.recall.pickup_library_id ) | html %]</span>
+                                                                        <span>since</span> [% item.recall.created_date | $KohaDates %].
+                                                                    [% END %]
+                                                                </span>
+                                                            [% ELSIF ( hold.waitingdate ) %]
+                                                                <span class="waiting"> Waiting for patron at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %]. </span>
+                                                            [% ELSIF ( hold.borrowernumber == logged_in_user.borrowernumber ) %]
+                                                                <span class="waiting"> You have already placed a <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">reserve</a> on this item. </span>
+                                                            [% END # / IF ( item.recall or hold ) %]
+                                                        </td>
+                                                    </tr>
+                                                [% END %]
                                             </table>
                                         </fieldset>
                                         <fieldset class="action">
-                                            <input type="hidden" name="op" value="cud-request">
-                                            <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
-                                            <input type="submit" class="btn btn-primary" value="Confirm">
+                                            <input type="hidden" name="op" value="cud-request" />
+                                            <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
+                                            <input type="submit" class="btn btn-primary" value="Confirm" />
                                             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]" class="cancel">Cancel</a>
                                         </fieldset>
                                     </form>
-
                                 </div>
                             [% ELSE %]
                                 <div class="alert alert-warning">You must be logged in to place a recall.</div>
                             [% END %]
                         [% END %]
-                    [% END %] <!-- norecalls -->
-                </div> <!-- / #recall -->
-            </div> <!-- / .col-md-12 -->
-        </div> <!-- / .row -->
-    </div>  <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                    [% END %]
+                    <!-- norecalls -->
+                </div>
+                <!-- / #recall -->
+            </div>
+            <!-- / .col-md-12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'calendar.inc' %]
-<script>
-    $(document).ready(function(){
-        $(".level-option").show();
-        $("#items").hide();
-        $("#expiration-hint").hide();
-        $("#itemlevel").click(function(){
-            if ( $("#itemlevel").is(':checked') ){
-                $("#items").show();
-                $("input:radio[name='itemnumber']:not(:disabled)").first().attr("checked", "checked"); // selects first item in table
-            }
+    [% INCLUDE 'calendar.inc' %]
+    <script>
+        $(document).ready(function () {
+            $(".level-option").show();
+            $("#items").hide();
+            $("#expiration-hint").hide();
+            $("#itemlevel").click(function () {
+                if ($("#itemlevel").is(":checked")) {
+                    $("#items").show();
+                    $("input:radio[name='itemnumber']:not(:disabled)").first().attr("checked", "checked"); // selects first item in table
+                }
+            });
+            $("#bibliolevel").click(function () {
+                if ($("#bibliolevel").is(":checked")) {
+                    $("#items").hide();
+                }
+            });
         });
-        $("#bibliolevel").click(function(){
-            if ( $("#bibliolevel").is(':checked') ){
-                $("#items").hide();
-            }
-        });
-    });
-</script>
+    </script>
 [% END %]

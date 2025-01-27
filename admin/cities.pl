@@ -21,22 +21,23 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Cities;
 
-my $input       = CGI->new;
+my $input            = CGI->new;
 my $city_name_filter = $input->param('city_name_filter') // q||;
-my $cityid      = $input->param('cityid');
-my $op          = $input->param('op') || 'list';
+my $cityid           = $input->param('cityid');
+my $op               = $input->param('op') || 'list';
 my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/cities.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_cities' },
+    {
+        template_name => "admin/cities.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_cities' },
     }
 );
 
@@ -68,7 +69,8 @@ if ( $op eq 'add_form' ) {
         }
     } else {
         my $city = Koha::City->new(
-            {   city_name    => $city_name,
+            {
+                city_name    => $city_name,
                 city_state   => $city_state,
                 city_zipcode => $city_zipcode,
                 city_country => $city_country,
@@ -87,7 +89,7 @@ if ( $op eq 'add_form' ) {
     my $city = Koha::Cities->find($cityid);
     $template->param( city => $city, );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
-    my $city = Koha::Cities->find($cityid);
+    my $city    = Koha::Cities->find($cityid);
     my $deleted = eval { $city->delete; };
 
     if ( $@ or not $deleted ) {
@@ -103,10 +105,10 @@ if ( $op eq 'list' ) {
 }
 
 $template->param(
-    cityid      => $cityid,
+    cityid           => $cityid,
     city_name_filter => $city_name_filter,
-    messages    => \@messages,
-    op          => $op,
+    messages         => \@messages,
+    op               => $op,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

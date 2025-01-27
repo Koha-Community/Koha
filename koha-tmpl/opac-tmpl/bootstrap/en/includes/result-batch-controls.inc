@@ -23,9 +23,7 @@
 
         [% IF ( CartEnabled ) %]
             <div class="btn-group">
-                <button id="addtocart" class="btn btn-link btn-xs">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart
-                </button>
+                <button id="addtocart" class="btn btn-link btn-xs"> <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart </button>
             </div>
         [% END %]
 
@@ -65,17 +63,12 @@
                 </div>
             </div>
             [% IF loggedinusername && can_remove_biblios %]
-                <button class="btn btn-link btn-sm disabled removeitems tag_hides">
-                    <i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list
-                </button>
+                <button class="btn btn-link btn-sm disabled removeitems tag_hides"> <i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list </button>
             [% END %]
-
         [% END # /IF virtualshelves %]
 
         [% IF ( MultiHolds ) %]
-            <button class="btn btn-link btn-sm hold disabled" type="button">
-                <i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold
-            </button>
+            <button class="btn btn-link btn-sm hold disabled" type="button"> <i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold </button>
         [% END %]
 
         [% IF ( TagsInputEnabled ) %]
@@ -83,7 +76,8 @@
                 <button id="tagsel_tag" class="btn btn-link btn-sm disabled" type="submit" style="display:none"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</button>
             </span>
         [% END %]
-    </div> <!-- / .links -->
+    </div>
+    <!-- / .links -->
     [% IF ( TagsInputEnabled ) %]
         <div id="tagsel_form" style="display:none">
             <label for="tagsel_new">New tag:</label>
@@ -91,8 +85,7 @@
             <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-sm btn-primary" title="Add" type="submit" value="Add" />
             <a href="#" id="tagsel_cancel">(done)</a>
         </div>
-        <div id="tagsel_status" class="tagsel_tatus" style="display:none;">
-            Tag status here.
-        </div>
+        <div id="tagsel_status" class="tagsel_tatus" style="display:none;"> Tag status here. </div>
     [% END %]
-</div> <!-- / .selections-toolbar -->
+</div>
+<!-- / .selections-toolbar -->

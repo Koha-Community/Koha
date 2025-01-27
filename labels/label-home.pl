@@ -4,7 +4,7 @@
 # Parts Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
@@ -22,16 +22,16 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "labels/label-home.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "labels/label-home.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 

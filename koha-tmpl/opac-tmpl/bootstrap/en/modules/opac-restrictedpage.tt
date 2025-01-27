@@ -6,7 +6,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF RestrictedPageTitle %]
-        [% RestrictedPageTitle | html %] &rsaquo;
+        [% RestrictedPageTitle | html %]
+        &rsaquo;
     [% END %]
     [% IF ( LibraryNameTitle ) %]
         [% LibraryNameTitle | html %]
@@ -16,7 +17,8 @@
     catalog
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 <body id="opac-account" class="scrollto">
 [% INCLUDE 'masthead.inc' %]
@@ -35,9 +37,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
             </div>
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="restrictedcontent" class="maincontent">
@@ -46,10 +46,15 @@
                     [% END %]
                     [% Koha.Preference('RestrictedPageContent') | $raw %]
                 </div>
-            </div> <!-- / .col-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

@@ -41,35 +41,35 @@ their structure,...
 sub BuildReport {
     my $report;
     my @libraries;
-    if( C4::Context->preference('UsageStatsLibrariesInfo') ) {
+    if ( C4::Context->preference('UsageStatsLibrariesInfo') ) {
         my $libraries = Koha::Libraries->search;
         while ( my $library = $libraries->next ) {
-            push @libraries, { name => $library->branchname, url => $library->branchurl, country => $library->branchcountry, geolocation => $library->geolocation, };
+            push @libraries,
+                {
+                name        => $library->branchname, url => $library->branchurl, country => $library->branchcountry,
+                geolocation => $library->geolocation,
+                };
         }
     }
     $report = {
         installation => {
-            koha_id => C4::Context->preference('UsageStatsID')          || 0,
-            name    => C4::Context->preference('UsageStatsLibraryName') || q||,
-            url     => C4::Context->preference('UsageStatsLibraryUrl')  || q||,
-            type    => C4::Context->preference('UsageStatsLibraryType') || q||,
-            country => C4::Context->preference('UsageStatsCountry')     || q||,
+            koha_id     => C4::Context->preference('UsageStatsID')          || 0,
+            name        => C4::Context->preference('UsageStatsLibraryName') || q||,
+            url         => C4::Context->preference('UsageStatsLibraryUrl')  || q||,
+            type        => C4::Context->preference('UsageStatsLibraryType') || q||,
+            country     => C4::Context->preference('UsageStatsCountry')     || q||,
             geolocation => C4::Context->preference('UsageStatsGeolocation') || q||,
         },
         libraries => \@libraries,
     };
 
     # Get database volumetry.
-    foreach (
-        qw/biblio items auth_header old_issues old_reserves borrowers aqorders subscription/
-      )
-    {
+    foreach (qw/biblio items auth_header old_issues old_reserves borrowers aqorders subscription/) {
         $report->{volumetry}{$_} = _count($_);
     }
 
     # Get systempreferences.
-    foreach ( @{ _shared_preferences() } )
-    {
+    foreach ( @{ _shared_preferences() } ) {
         $report->{systempreferences}{$_} = C4::Context->preference($_);
     }
     return $report;
@@ -88,11 +88,11 @@ sub ReportToCommunity {
     my $json = encode_json($data);
 
     my $url = "https://hea.koha-community.org/upload.pl";
-    my $ua = LWP::UserAgent->new;
+    my $ua  = LWP::UserAgent->new;
     my $res = $ua->post(
         $url,
         'Content-type' => 'application/json;charset=utf-8',
-        Content => $json,
+        Content        => $json,
     );
     my $content = decode_json( $res->decoded_content );
     if ( $content->{koha_id} ) {

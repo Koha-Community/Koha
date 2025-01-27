@@ -20,19 +20,19 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw/check_api_auth get_session/;
 use XML::Simple;
 
 my $query = CGI->new;
 
-# The authentication strategy for the biblios web 
+# The authentication strategy for the biblios web
 # services is as follows.
-# 
+#
 # 1. biblios POSTs to the authenticate API with URL-encoded
 # form parameters 'userid' and 'password'.  If the credentials
 # belong to a valid user with the 'editcatalogue' privilege,
-# a session cookie is returned and a Koha session created.  Otherwise, an 
+# a session cookie is returned and a Koha session created.  Otherwise, an
 # appropriate error is returned.
 # 2. For subsequent calls to the biblios APIs, the user agent
 # should submit the same session cookie.  If the cookie is

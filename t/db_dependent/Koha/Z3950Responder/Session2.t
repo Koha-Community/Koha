@@ -27,29 +27,33 @@ subtest 'add_item_status' => sub {
 
     # This time we are sustituting some values
 
-    my $available = Koha::AuthorisedValues->find({ category => 'Z3950_STATUS', authorised_value => 'AVAILABLE' });
-    unless( $available ){
-        $available = $builder->build_object({
-            class => 'Koha::AuthorisedValues',
-            value => {
-                category => 'Z3950_STATUS',
-                authorised_value => 'AVAILABLE',
-                lib => "Free as a bird"
+    my $available = Koha::AuthorisedValues->find( { category => 'Z3950_STATUS', authorised_value => 'AVAILABLE' } );
+    unless ($available) {
+        $available = $builder->build_object(
+            {
+                class => 'Koha::AuthorisedValues',
+                value => {
+                    category         => 'Z3950_STATUS',
+                    authorised_value => 'AVAILABLE',
+                    lib              => "Free as a bird"
+                }
             }
-        });
+        );
     }
     my $available_status = $available->lib;
 
-    my $damaged = Koha::AuthorisedValues->find({ category => 'Z3950_STATUS', authorised_value => 'DAMAGED' });
-    unless( $damaged ){
-        $damaged = $builder->build_object({
-            class => 'Koha::AuthorisedValues',
-            value => {
-                category => 'Z3950_STATUS',
-                authorised_value => 'DAMAGED',
-                lib => "Borked completely"
+    my $damaged = Koha::AuthorisedValues->find( { category => 'Z3950_STATUS', authorised_value => 'DAMAGED' } );
+    unless ($damaged) {
+        $damaged = $builder->build_object(
+            {
+                class => 'Koha::AuthorisedValues',
+                value => {
+                    category         => 'Z3950_STATUS',
+                    authorised_value => 'DAMAGED',
+                    lib              => "Borked completely"
+                }
             }
-        });
+        );
     }
     my $damaged_status = $damaged->lib;
 
@@ -63,9 +67,9 @@ subtest 'add_item_status' => sub {
             withdrawn  => 1,
         }
     );
-    my $item_marc_1 = C4::Items::GetMarcItem( $item_1->biblionumber, $item_1->itemnumber );
+    my $item_marc_1  = C4::Items::GetMarcItem( $item_1->biblionumber, $item_1->itemnumber );
     my $item_field_1 = scalar $item_marc_1->field('952');
-    $builder->build({ source => 'Reserve', value=> { itemnumber => $item_1->itemnumber } });
+    $builder->build( { source => 'Reserve', value => { itemnumber => $item_1->itemnumber } } );
     $builder->build(
         {
             source => 'Branchtransfer',
@@ -80,21 +84,28 @@ subtest 'add_item_status' => sub {
     ## END FIRST ITEM ##
 
     ## SECOND ITEM HAS NO STATUSES ##
-    my $item_2 = $builder->build_sample_item;
-    my $item_marc_2 = C4::Items::GetMarcItem( $item_2->biblionumber, $item_2->itemnumber );
+    my $item_2       = $builder->build_sample_item;
+    my $item_marc_2  = C4::Items::GetMarcItem( $item_2->biblionumber, $item_2->itemnumber );
     my $item_field_2 = scalar $item_marc_2->field('952');
     ## END SECOND ITEM ##
 
     # Create the responder
-    my $args={ PEER_NAME => 'PEER'};
-    my $zR = Koha::Z3950Responder->new({add_item_status_subfield => 'k'});
+    my $args = { PEER_NAME => 'PEER' };
+    my $zR   = Koha::Z3950Responder->new( { add_item_status_subfield => 'k' } );
     $zR->init_handler($args);
 
     $args->{HANDLE}->add_item_status($item_field_1);
-    is($item_field_1->subfield('k'),"Checked Out, Lost, Not for Loan, $damaged_status, Withdrawn, In Transit, On Hold","All statuses added in one field as expected");
+    is(
+        $item_field_1->subfield('k'),
+        "Checked Out, Lost, Not for Loan, $damaged_status, Withdrawn, In Transit, On Hold",
+        "All statuses added in one field as expected"
+    );
 
     $args->{HANDLE}->add_item_status($item_field_2);
-    is($item_field_2->subfield('k'),"$available_status","Available status is '$available_status' added as expected");
+    is(
+        $item_field_2->subfield('k'), "$available_status",
+        "Available status is '$available_status' added as expected"
+    );
 
 };
 

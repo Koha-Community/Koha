@@ -4,36 +4,39 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF op == 'add_source' %]
-        [% IF class_source %]
-            [% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]
-        [% ELSE %]
-            [% t("New classification source") | html %]
-        [% END %] &rsaquo;
-    [% ELSIF op == 'add_sort_rule' %]
-        [% IF sort_rule %]
-            [% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]
-        [% ELSE %]
-            [% t("New filing rule") | html %]
-        [% END %] &rsaquo;
-    [% ELSIF op == 'add_split_rule' %]
-        [% IF split_rule %]
-            [% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]
-        [% ELSE %]
-            [% t("New splitting rule") | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% t("Classification configuration") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op == 'add_source' %]
+            [% IF class_source %]
+                [% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]
+            [% ELSE %]
+                [% t("New classification source") | html %]
+            [% END %]
+            &rsaquo;
+        [% ELSIF op == 'add_sort_rule' %]
+            [% IF sort_rule %]
+                [% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]
+            [% ELSE %]
+                [% t("New filing rule") | html %]
+            [% END %]
+            &rsaquo;
+        [% ELSIF op == 'add_split_rule' %]
+            [% IF split_rule %]
+                [% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]
+            [% ELSE %]
+                [% t("New splitting rule") | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% t("Classification configuration") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #button_add,
     .split_regex,
-    .split_callnumber
-    {
+    .split_callnumber {
         padding-left: 10em;
     }
 </style>
@@ -68,7 +71,6 @@
                     <span>New classification source</span>
                 [% END %]
             [% END %]
-
         [% ELSIF op == 'add_sort_rule' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF sort_rule %]
@@ -77,7 +79,6 @@
                     <span>New filing rule</span>
                 [% END %]
             [% END %]
-
         [% ELSIF op == 'add_split_rule' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF split_rule %]
@@ -86,366 +87,371 @@
                     <span>New splitting rule</span>
                 [% END %]
             [% END %]
-
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% FOR m IN messages %]
-    <div class="alert alert-[% m.type | html %]">
-        [% SWITCH m.code %]
-        [% CASE 'error_on_update_source' %]
-            <span>An error occurred when updating this classification source. Check the logs for details.</span>
-        [% CASE 'success_on_update_source' %]
-            <span>Classification source updated successfully.</span>
-        [% CASE 'error_on_insert_source' %]
-            <span>An error occurred when adding this classification source. Perhaps the code already exists?</span>
-        [% CASE 'success_on_insert_source' %]
-            <span>Classification source added successfully.</span>
-        [% CASE 'error_on_delete_source' %]
-            <span>An error occurred when deleting this classification source.</span>
-        [% CASE 'success_on_delete_source' %]
-            <span>Classification source deleted successfully.</span>
-        [% CASE 'error_on_update_sort_rule' %]
-            <span>An error occurred when updating this filing rule. Check the logs for details.</span>
-        [% CASE 'success_on_update_sort_rule' %]
-            <span>Filing rule updated successfully.</span>
-        [% CASE 'error_on_insert_sort_rule' %]
-            <span>An error occurred when adding this filing rule. Perhaps the code already exists?</span>
-        [% CASE 'success_on_insert_sort_rule' %]
-            <span>Filing rule added successfully.</span>
-        [% CASE 'error_on_delete_sort_rule' %]
-            <span>An error occurred when deleting this filing rule. Perhaps it is used by at least one classification source?</span>
-        [% CASE 'success_on_delete_sort_rule' %]
-            <span>Filing rule deleted successfully.</span>
-        [% CASE 'error_on_update_split_rule' %]
-            <span>An error occurred when updating this splitting rule. Check the logs for details.</span>
-        [% CASE 'success_on_update_split_rule' %]
-            <span>Splitting rule updated successfully.</span>
-        [% CASE 'error_on_insert_split_rule' %]
-            <span>An error occurred when adding this splitting rule. Perhaps the code already exists?</span>
-        [% CASE 'success_on_insert_split_rule' %]
-            <span>Splitting rule added successfully.</span>
-        [% CASE 'error_on_delete_split_rule' %]
-            <span>An error occurred when deleting this splitting rule. Perhaps it is used by at least one classification source?</span>
-        [% CASE 'success_on_delete_split_rule' %]
-            <span>Splitting rule deleted successfully.</span>
-        [% CASE %]
-            <span>[% m.code | html %]</span>
-        [% END %]
-    </div>
-[% END %]
-
-
-[% IF op == 'add_source' %]
-  [% IF class_source %]
-<h1>[% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]</h1>
-  [% ELSE %]
-<h1>New classification source</h1>
-  [% END %]
-<form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="cud-add_source_validate" />
-  <fieldset class="rows">
-    <ol>
-      <li>
-          [% IF class_source %]
-            <span class="label">Classification source code: </span>
-            <input type="hidden" name="cn_source" value="[% class_source.cn_source | html %]" />
-            [% class_source.cn_source | html %]
-          [% ELSE %]
-              <label class="required" for="class_source">Classification source code: </label>
-              <input class="required focus" required="required" type="text" id="class_source" name="cn_source"  size="10" maxlength="10" />
-              <span class="required">Required</span>
-          [% END %]
-       </li>
-       <li><label class="required" for="description">Description: </label>
-           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% class_source.description | html %]" />
-           <span class="required">Required</span>
-       </li>
-       <li><label for="used">Source in use?</label>
-           [% IF ( class_source.used ) %]<input type="checkbox" id="used" name="used" value="used" checked="checked" />[% ELSE %]
-           <input type="checkbox" id="used" name="used" value="used" />[% END %]
-       </li>
-        <li>
-            <label class="required" for="class_sort_rule">Filing rule: </label>
-            <select class="required" required="required" id="class_sort_rule" name="class_sort_rule">
-                [% FOREACH r IN sort_rules %]
-                    [% IF class_source.class_sort_rule == r.class_sort_rule %]
-                        <option value="[% r.class_sort_rule | html %]" selected="selected">[% r.description | html %] ([% r.class_sort_rule | html %])</option>
-                    [% ELSE %]
-                        <option value="[% r.class_sort_rule | html %]">[% r.description | html %] ([% r.class_sort_rule | html %])</option>
-                    [% END %]
-                [% END %]
-            </select>
-            <span class="required">Required</span>
-        </li>
-        <li>
-            <label class="required" for="class_split_rule">Splitting rule: </label>
-            <select class="required" required="required" id="split_rule" name="class_split_rule">
-                [% FOREACH r IN split_rules %]
-                    [% IF class_source.class_split_rule == r.class_split_rule %]
-                        <option value="[% r.class_split_rule | html %]" selected="selected">[% r.description | html %] ([% r.class_split_rule | html %])</option>
-                    [% ELSE %]
-                        <option value="[% r.class_split_rule | html %]">[% r.description | html %] ([% r.class_split_rule | html %])</option>
-                    [% END %]
-                [% END %]
-            </select>
-            <span class="required">Required</span>
-        </li>
-    </ol>
-  </fieldset>
-  <fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Save" />
-    <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
-  </fieldset>
-</form>
-[% END %]
-
-[% IF op == 'add_sort_rule' %]
-  [% IF sort_rule %]
-<h1>[% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]</h1>
-  [% ELSE %]
-<h1>New filing rule</h1>
-  [% END %]
-<form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="cud-add_sort_rule_validate" />
-  <fieldset class="rows">
-    <ol>
-      <li>
-          [% IF sort_rule %]
-          <span class="label">Filing rule code: </span>
-            <input type="hidden" name="class_sort_rule" value="[% sort_rule.class_sort_rule | html %]" />
-            [% sort_rule.class_sort_rule | html %]
-          [% ELSE %]
-              <label for="class_sort_rule" class="required">Filing rule code: </label>
-              <input class="required focus" required="required" type="text" id="class_sort_rule" name="class_sort_rule"  size="10" maxlength="10" />
-              <span class="required">Required</span>
-          [% END %]
-       </li>
-       <li><label for="description" class="required">Description: </label>
-           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% sort_rule.description | html %]" />
-           <span class="required">Required</span>
-       </li>
-       <li><label for="sort_routine" class="required">Filing routine: </label>
-           <select class="required" required="required" id="sort_routine" name="sort_routine">
-           [% FOREACH routine_name IN sort_routines %]
-             [% IF routine_name == sort_rule.sort_routine %]
-                 <option value="[% routine_name | html %]" selected="selected">[% routine_name | html %]</option>
-             [% ELSE %]
-                 <option value="[% routine_name | html %]">[% routine_name | html %]</option>
-             [% END %]
-           [% END %]
-           </select>
-           <span class="required">Required</span>
-       </li>
-    </ol>
-  </fieldset>
-    <fieldset class="action">
-        <input type="submit" class="btn btn-primary" value="Save" />
-        <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
-    </fieldset>
-</form>
-[% END %]
-
-[% IF op == 'add_split_rule' %]
-  [% IF split_rule %]
-<h1>[% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]</h1>
-  [% ELSE %]
-<h1>New splitting rule</h1>
-  [% END %]
-<form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="cud-add_split_rule_validate" />
-  <fieldset class="rows">
-    <ol>
-      <li>
-          [% IF split_rule %]
-            <span class="label">Splitting rule code: </span>
-            <input type="hidden" name="class_split_rule" value="[% split_rule.class_split_rule | html %]" />
-            [% split_rule.class_split_rule | html %]
-          [% ELSE %]
-              <label for="class_split_rule" class="required">Splitting rule code: </label>
-              <input class="required focus" required="required" type="text" id="class_split_rule" name="class_split_rule"  size="10" maxlength="10" />
-              <span class="required">Required</span>
-          [% END %]
-       </li>
-       <li><label for="description" class="required">Description: </label>
-           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% split_rule.description | html %]" />
-           <span class="required">Required</span>
-       </li>
-       <li><label for="split_routine" class="required">Splitting routine: </label>
-           <select class="required" required="required" id="split_routine" name="split_routine">
-            [% FOREACH routine_name IN split_routines %]
-                [% IF routine_name == split_rule.split_routine %]
-                    <option value="[% routine_name | html %]" selected="selected">[% routine_name | html %]</option>
-                [% ELSE %]
-                    <option value="[% routine_name | html %]">[% routine_name | html %]</option>
-                [% END %]
+    [% FOR m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'error_on_update_source' %]
+                <span>An error occurred when updating this classification source. Check the logs for details.</span>
+            [% CASE 'success_on_update_source' %]
+                <span>Classification source updated successfully.</span>
+            [% CASE 'error_on_insert_source' %]
+                <span>An error occurred when adding this classification source. Perhaps the code already exists?</span>
+            [% CASE 'success_on_insert_source' %]
+                <span>Classification source added successfully.</span>
+            [% CASE 'error_on_delete_source' %]
+                <span>An error occurred when deleting this classification source.</span>
+            [% CASE 'success_on_delete_source' %]
+                <span>Classification source deleted successfully.</span>
+            [% CASE 'error_on_update_sort_rule' %]
+                <span>An error occurred when updating this filing rule. Check the logs for details.</span>
+            [% CASE 'success_on_update_sort_rule' %]
+                <span>Filing rule updated successfully.</span>
+            [% CASE 'error_on_insert_sort_rule' %]
+                <span>An error occurred when adding this filing rule. Perhaps the code already exists?</span>
+            [% CASE 'success_on_insert_sort_rule' %]
+                <span>Filing rule added successfully.</span>
+            [% CASE 'error_on_delete_sort_rule' %]
+                <span>An error occurred when deleting this filing rule. Perhaps it is used by at least one classification source?</span>
+            [% CASE 'success_on_delete_sort_rule' %]
+                <span>Filing rule deleted successfully.</span>
+            [% CASE 'error_on_update_split_rule' %]
+                <span>An error occurred when updating this splitting rule. Check the logs for details.</span>
+            [% CASE 'success_on_update_split_rule' %]
+                <span>Splitting rule updated successfully.</span>
+            [% CASE 'error_on_insert_split_rule' %]
+                <span>An error occurred when adding this splitting rule. Perhaps the code already exists?</span>
+            [% CASE 'success_on_insert_split_rule' %]
+                <span>Splitting rule added successfully.</span>
+            [% CASE 'error_on_delete_split_rule' %]
+                <span>An error occurred when deleting this splitting rule. Perhaps it is used by at least one classification source?</span>
+            [% CASE 'success_on_delete_split_rule' %]
+                <span>Splitting rule deleted successfully.</span>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
             [% END %]
-           </select>
-           <span class="required">Required</span>
-       </li>
-        <li id="regex_block">
-            <label for="split_regex" class="required">Regular expression: </label>
-            <div>
-                [% IF split_rule AND split_rule.regexs.size %]
-                    [% FOR re IN split_rule.regexs %]
-                        <div class="split_regex">
-                            <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
-                            <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
+        </div>
+    [% END %]
+
+    [% IF op == 'add_source' %]
+        [% IF class_source %]
+            <h1>[% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]</h1>
+        [% ELSE %]
+            <h1>New classification source</h1>
+        [% END %]
+        <form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-add_source_validate" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        [% IF class_source %]
+                            <span class="label">Classification source code: </span>
+                            <input type="hidden" name="cn_source" value="[% class_source.cn_source | html %]" />
+                            [% class_source.cn_source | html %]
+                        [% ELSE %]
+                            <label class="required" for="class_source">Classification source code: </label>
+                            <input class="required focus" required="required" type="text" id="class_source" name="cn_source" size="10" maxlength="10" />
+                            <span class="required">Required</span>
+                        [% END %]
+                    </li>
+                    <li
+                        ><label class="required" for="description">Description: </label>
+                        <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% class_source.description | html %]" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li
+                        ><label for="used">Source in use?</label>
+                        [% IF ( class_source.used ) %]
+                            <input type="checkbox" id="used" name="used" value="used" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" id="used" name="used" value="used" />
+                        [% END %]
+                    </li>
+                    <li>
+                        <label class="required" for="class_sort_rule">Filing rule: </label>
+                        <select class="required" required="required" id="class_sort_rule" name="class_sort_rule">
+                            [% FOREACH r IN sort_rules %]
+                                [% IF class_source.class_sort_rule == r.class_sort_rule %]
+                                    <option value="[% r.class_sort_rule | html %]" selected="selected">[% r.description | html %] ([% r.class_sort_rule | html %])</option>
+                                [% ELSE %]
+                                    <option value="[% r.class_sort_rule | html %]">[% r.description | html %] ([% r.class_sort_rule | html %])</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label class="required" for="class_split_rule">Splitting rule: </label>
+                        <select class="required" required="required" id="split_rule" name="class_split_rule">
+                            [% FOREACH r IN split_rules %]
+                                [% IF class_source.class_split_rule == r.class_split_rule %]
+                                    <option value="[% r.class_split_rule | html %]" selected="selected">[% r.description | html %] ([% r.class_split_rule | html %])</option>
+                                [% ELSE %]
+                                    <option value="[% r.class_split_rule | html %]">[% r.description | html %] ([% r.class_split_rule | html %])</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'add_sort_rule' %]
+        [% IF sort_rule %]
+            <h1>[% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]</h1>
+        [% ELSE %]
+            <h1>New filing rule</h1>
+        [% END %]
+        <form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-add_sort_rule_validate" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        [% IF sort_rule %]
+                            <span class="label">Filing rule code: </span>
+                            <input type="hidden" name="class_sort_rule" value="[% sort_rule.class_sort_rule | html %]" />
+                            [% sort_rule.class_sort_rule | html %]
+                        [% ELSE %]
+                            <label for="class_sort_rule" class="required">Filing rule code: </label>
+                            <input class="required focus" required="required" type="text" id="class_sort_rule" name="class_sort_rule" size="10" maxlength="10" />
+                            <span class="required">Required</span>
+                        [% END %]
+                    </li>
+                    <li
+                        ><label for="description" class="required">Description: </label>
+                        <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% sort_rule.description | html %]" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li
+                        ><label for="sort_routine" class="required">Filing routine: </label>
+                        <select class="required" required="required" id="sort_routine" name="sort_routine">
+                            [% FOREACH routine_name IN sort_routines %]
+                                [% IF routine_name == sort_rule.sort_routine %]
+                                    <option value="[% routine_name | html %]" selected="selected">[% routine_name | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% routine_name | html %]">[% routine_name | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'add_split_rule' %]
+        [% IF split_rule %]
+            <h1>[% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]</h1>
+        [% ELSE %]
+            <h1>New splitting rule</h1>
+        [% END %]
+        <form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-add_split_rule_validate" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        [% IF split_rule %]
+                            <span class="label">Splitting rule code: </span>
+                            <input type="hidden" name="class_split_rule" value="[% split_rule.class_split_rule | html %]" />
+                            [% split_rule.class_split_rule | html %]
+                        [% ELSE %]
+                            <label for="class_split_rule" class="required">Splitting rule code: </label>
+                            <input class="required focus" required="required" type="text" id="class_split_rule" name="class_split_rule" size="10" maxlength="10" />
+                            <span class="required">Required</span>
+                        [% END %]
+                    </li>
+                    <li
+                        ><label for="description" class="required">Description: </label>
+                        <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% split_rule.description | html %]" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li
+                        ><label for="split_routine" class="required">Splitting routine: </label>
+                        <select class="required" required="required" id="split_routine" name="split_routine">
+                            [% FOREACH routine_name IN split_routines %]
+                                [% IF routine_name == split_rule.split_routine %]
+                                    <option value="[% routine_name | html %]" selected="selected">[% routine_name | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% routine_name | html %]">[% routine_name | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li id="regex_block">
+                        <label for="split_regex" class="required">Regular expression: </label>
+                        <div>
+                            [% IF split_rule AND split_rule.regexs.size %]
+                                [% FOR re IN split_rule.regexs %]
+                                    <div class="split_regex">
+                                        <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
+                                        <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
+                                    </div>
+                                [% END %]
+                            [% ELSE %]
+                                <div class="split_regex">
+                                    <input type="text" name="split_regex" id="split_regex" value="" />
+                                    <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
+                                </div>
+                            [% END %]
                         </div>
-                    [% END %]
-                [% ELSE %]
-                    <div class="split_regex">
-                        <input type="text" name="split_regex" id="split_regex" value="" />
-                        <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
-                    </div>
+                        <div id="button_add">
+                            <a href="#" class="add_regex" title="Add a new regular expression"><i class="fa fa-fw fa-plus"></i> New</a>
+                            <span class="required">Required</span>
+                        </div>
+                        <label for="callnumbers">Test the regular expressions:</label>
+                        <div id="test_split">
+                            <textarea name="callnumbers"></textarea>
+                            <button name="test_split_cns">Test</button>
+                            <div id="result_split_callnumbers"></div>
+                        </div>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="newsource" href="/cgi-bin/koha/admin/classsources.pl?op=add_source"><i class="fa fa-plus"></i> New classification source</a>
+            <a class="btn btn-default" id="newrule" href="/cgi-bin/koha/admin/classsources.pl?op=add_sort_rule"><i class="fa fa-plus"></i> New filing rule</a>
+            <a class="btn btn-default" id="newrule" href="/cgi-bin/koha/admin/classsources.pl?op=add_split_rule"><i class="fa fa-plus"></i> New splitting rule</a>
+        </div>
+        <h1>Classification configuration</h1>
+        <div class="page-section">
+            <h2>Classification sources</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>In use</th>
+                    <th>Filing rule</th>
+                    <th>Splitting rule</th>
+                    <th class="noExport">Actions</th>
+                </tr>
+                [% FOREACH class_source IN class_sources %]
+                    <tr>
+                        <td>[% class_source.cn_source | html %]</td>
+                        <td>[% class_source.description |html | html %]</td>
+                        <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
+                        <td>[% class_source.class_sort_rule | html %]</td>
+                        <td>[% class_source.class_split_rule | html %]</td>
+                        <td class="actions">
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/classsources.pl?op=add_source&amp;cn_source=[% class_source.cn_source | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <form action="/cgi-bin/koha/admin/classsources.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_source_confirmed" />
+                                <input type="hidden" name="cn_source" value="[% class_source.cn_source | uri %]" />
+                                <button class="btn btn-default btn-xs delete_class_source"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 [% END %]
-            </div>
-            <div id="button_add">
-                <a href="#" class="add_regex" title="Add a new regular expression"><i class="fa fa-fw fa-plus"></i> New</a>
-                <span class="required">Required</span>
-            </div>
-            <label for="callnumbers">Test the regular expressions:</label>
-            <div id="test_split">
-                <textarea name="callnumbers"></textarea>
-                <button name="test_split_cns">Test</button>
-                <div id="result_split_callnumbers"></div>
-            </div>
-        </li>
-    </ol>
-  </fieldset>
-    <fieldset class="action">
-        <input type="submit" class="btn btn-primary" value="Save" />
-        <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
-    </fieldset>
-</form>
-[% END %]
+            </table>
+        </div>
+        <!-- /.page-section -->
 
-[% IF op == 'list' %]
+        <div class="page-section">
+            <h2>Classification filing rules</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Sorting routine</th>
+                    <th class="noExport">Actions</th>
+                </tr>
+                [% FOREACH rule IN sort_rules %]
+                    <tr>
+                        <td>[% rule.class_sort_rule | html %]</td>
+                        <td>[% rule.description |html | html %]</td>
+                        <td>[% rule.sort_routine | html %]</td>
+                        <td class="actions">
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/classsources.pl?op=add_sort_rule&amp;class_sort_rule=[% rule.class_sort_rule |url %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <form action="/cgi-bin/koha/admin/classsources.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_sort_rule" />
+                                <input type="hidden" name="class_sort_rule" value="[% rule.class_sort_rule |url %]" />
+                                <button class="btn btn-default btn-xs delete_class_source"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                [% END %]
+            </table>
+        </div>
+        <!-- /.page-section -->
 
-<div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default" id="newsource" href="/cgi-bin/koha/admin/classsources.pl?op=add_source"><i class="fa fa-plus"></i> New classification source</a>
-    <a class="btn btn-default" id="newrule" href="/cgi-bin/koha/admin/classsources.pl?op=add_sort_rule"><i class="fa fa-plus"></i> New filing rule</a>
-    <a class="btn btn-default" id="newrule" href="/cgi-bin/koha/admin/classsources.pl?op=add_split_rule"><i class="fa fa-plus"></i> New splitting rule</a>
-</div>
-<h1>Classification configuration</h1>
-<div class="page-section">
-<h2>Classification sources</h2>
-<table>
-  <tr>
-    <th>Code</th>
-    <th>Description</th>
-    <th>In use</th>
-    <th>Filing rule</th>
-    <th>Splitting rule</th>
-    <th class="noExport">Actions</th>
-  </tr>
-  [% FOREACH class_source IN class_sources %]
-  <tr>
-    <td>[% class_source.cn_source | html %]</td>
-    <td>[% class_source.description |html | html %]</td>
-    <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
-    <td>[% class_source.class_sort_rule | html %]</td>
-    <td>[% class_source.class_split_rule | html %]</td>
-    <td class="actions">
-      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/classsources.pl?op=add_source&amp;cn_source=[% class_source.cn_source | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-        <form action="/cgi-bin/koha/admin/classsources.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete_source_confirmed" />
-            <input type="hidden" name="cn_source" value="[% class_source.cn_source | uri%]" />
-            <button class="btn btn-default btn-xs delete_class_source"><i class="fa fa-trash-can"></i> Delete</button>
-        </form>
-    </td>
-  </tr>
-  [% END %]
-</table>
-</div> <!-- /.page-section -->
-
-<div class="page-section">
-<h2>Classification filing rules</h2>
-<table>
-  <tr>
-    <th>Code</th>
-    <th>Description</th>
-    <th>Sorting routine</th>
-    <th class="noExport">Actions</th>
-  </tr>
-  [% FOREACH rule IN sort_rules %]
-  <tr>
-    <td>[% rule.class_sort_rule | html %]</td>
-    <td>[% rule.description |html | html %]</td>
-    <td>[% rule.sort_routine | html %]</td>
-    <td class="actions">
-      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/classsources.pl?op=add_sort_rule&amp;class_sort_rule=[% rule.class_sort_rule |url %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-        <form action="/cgi-bin/koha/admin/classsources.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete_sort_rule" />
-            <input type="hidden" name="class_sort_rule" value="[% rule.class_sort_rule |url %]" />
-            <button class="btn btn-default btn-xs delete_class_source"><i class="fa fa-trash-can"></i> Delete</button>
-        </form>
-    </td>
-  </tr>
-  [% END %]
-</table>
-</div> <!-- /.page-section -->
-
-<div class="page-section">
-<h2>Classification splitting rules</h2>
-<table>
-  <tr>
-    <th>Code</th>
-    <th>Description</th>
-    <th>Splitting routine</th>
-    <th class="noExport">Actions</th>
-  </tr>
-  [% FOREACH rule IN split_rules %]
-  <tr>
-    <td>[% rule.class_split_rule | html %]</td>
-    <td>[% rule.description | html %]</td>
-    <td>[% rule.split_routine | html %]</td>
-    <td class="actions">
-      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/classsources.pl?op=add_split_rule&amp;class_split_rule=[% rule.class_split_rule | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-        <form action="/cgi-bin/koha/admin/classsources.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete_split_rule" />
-            <input type="hidden" name="class_split_rule" value="[% rule.class_split_rule | html %]" />
-            <input type="hidden" name="op" value="cud-delete_split_rule" />
-            <button class="btn btn-default btn-xs delete_split_rule"><i class="fa fa-trash-can"></i> Delete</button>
-        </form>
-    </td>
-  </tr>
-  [% END %]
-</table>
-</div> <!-- /.page-section -->
-
-
-[% END %]
-
+        <div class="page-section">
+            <h2>Classification splitting rules</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Splitting routine</th>
+                    <th class="noExport">Actions</th>
+                </tr>
+                [% FOREACH rule IN split_rules %]
+                    <tr>
+                        <td>[% rule.class_split_rule | html %]</td>
+                        <td>[% rule.description | html %]</td>
+                        <td>[% rule.split_routine | html %]</td>
+                        <td class="actions">
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/classsources.pl?op=add_split_rule&amp;class_split_rule=[% rule.class_split_rule | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <form action="/cgi-bin/koha/admin/classsources.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_split_rule" />
+                                <input type="hidden" name="class_split_rule" value="[% rule.class_split_rule | html %]" />
+                                <input type="hidden" name="op" value="cud-delete_split_rule" />
+                                <button class="btn btn-default btn-xs delete_split_rule"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                [% END %]
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-
     <script>
-        function update_regex_block(){
-            if ( $("#split_routine option:selected").val() == 'RegEx' ) {
+        function update_regex_block() {
+            if ($("#split_routine option:selected").val() == "RegEx") {
                 $("#regex_block").show();
-                $("#split_regex").attr('required', 'required');
+                $("#split_regex").attr("required", "required");
             } else {
                 $("#regex_block").hide();
-                $("#split_regex").removeAttr('required');
+                $("#split_regex").removeAttr("required");
             }
-        };
+        }
         function update_delete_links_visibility() {
-            if( $("div.split_regex").length > 1 ) {
-                $("div.split_regex").find('a.del_regex').show();
+            if ($("div.split_regex").length > 1) {
+                $("div.split_regex").find("a.del_regex").show();
             } else {
-                $("div.split_regex").find('a.del_regex').hide();
+                $("div.split_regex").find("a.del_regex").hide();
             }
         }
 
@@ -457,57 +463,58 @@
             update_delete_links_visibility();
         }
         function del_regex(a_node) {
-            $(a_node).parent('div').remove();
+            $(a_node).parent("div").remove();
             update_delete_links_visibility();
         }
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             update_regex_block();
             update_delete_links_visibility();
-            $("#split_routine").on("change", function(){
+            $("#split_routine").on("change", function () {
                 update_regex_block();
             });
 
-            $(".delete_class_source").on("click", function(e){
+            $(".delete_class_source").on("click", function (e) {
                 return confirm(_("Are you sure you want to delete this class source?"));
             });
-            $(".delete_sort_rule").on("click", function(e){
+            $(".delete_sort_rule").on("click", function (e) {
                 return confirm(_("Are you sure you want to delete this filing rule?"));
             });
-            $(".delete_split_rule").on("click", function(e){
+            $(".delete_split_rule").on("click", function (e) {
                 return confirm(_("Are you sure you want to delete this splitting rule?"));
             });
 
-            $(".add_regex").on("click", function(e){
+            $(".add_regex").on("click", function (e) {
                 e.preventDefault();
                 add_regex();
             });
-            $(".del_regex").on("click", function(e){
+            $(".del_regex").on("click", function (e) {
                 e.preventDefault();
                 del_regex(this);
             });
 
-            $("button[name='test_split_cns']").on("click", function(e){
+            $("button[name='test_split_cns']").on("click", function (e) {
                 e.preventDefault();
                 var regexs = [];
-                $("input[name='split_regex']").each(function(){
+                $("input[name='split_regex']").each(function () {
                     regexs.push($(this).val());
                 });
                 var callnumbers = $("textarea[name='callnumbers']").val();
-                $.getJSON('/cgi-bin/koha/svc/split_callnumbers', {regexs: JSON.stringify(regexs), callnumbers: callnumbers}, function(answer){
-                    var callnumbers = answer['split_callnumbers'];
-                    $("#result_split_callnumbers").html('');
-                    var list_node = $('<ol></ol>');
-                    $(callnumbers).each(function(){
-                        var split_cn = this['split'].join('<br/>');
-                        var li_node = $('<li><label>'+this['inline']+'</label><div class="split_callnumber">'+split_cn+'</div></li>');
+                $.getJSON("/cgi-bin/koha/svc/split_callnumbers", { regexs: JSON.stringify(regexs), callnumbers: callnumbers }, function (answer) {
+                    var callnumbers = answer["split_callnumbers"];
+                    $("#result_split_callnumbers").html("");
+                    var list_node = $("<ol></ol>");
+                    $(callnumbers).each(function () {
+                        var split_cn = this["split"].join("<br/>");
+                        var li_node = $("<li><label>" + this["inline"] + '</label><div class="split_callnumber">' + split_cn + "</div></li>");
                         $(list_node).append(li_node);
                     });
                     $("#result_split_callnumbers").append(list_node);
-                }).fail(function(){alert("Something went wrong.")});
+                }).fail(function () {
+                    alert("Something went wrong.");
+                });
             });
         });
-
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -41,52 +41,54 @@ my $opac_dir  = 'koha-tmpl/opac-tmpl';
 my $staff_dir = 'koha-tmpl/intranet-tmpl';
 
 # Find OPAC themes
-opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
+opendir( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
 my @opac_themes = grep { not /^\.|lib|js|xslt/ } readdir($dh);
 close $dh;
 
 # Find STAFF themes
-opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
+opendir( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
 my @staff_themes = grep { not /^\.|lib|js/ } readdir($dh);
 close $dh;
 
 # Check existence of OPAC icon dirs
-for my $theme ( @opac_themes ) {
+for my $theme (@opac_themes) {
     my $test_dir = "$opac_dir/$theme/itemtypeimg";
     ok( -d $test_dir, "opac_icon_directory: $test_dir exists" );
 }
 
 # Check existence of STAFF icon dirs
-for my $theme ( @staff_themes ) {
+for my $theme (@staff_themes) {
     my $test_dir = "$staff_dir/$theme/img/itemtypeimg";
     ok( -d $test_dir, "staff_icon_directory: $test_dir exists" );
 }
 
 # Check for same contents on STAFF and OPAC icondirs
 # foreach STAFF theme
-for my $staff_theme ( @staff_themes ) {
-    my $staff_icons; # hashref of filenames to sizes
+for my $staff_theme (@staff_themes) {
+    my $staff_icons;    # hashref of filenames to sizes
     my $staff_icon_directory = "$staff_dir/$staff_theme/img/itemtypeimg";
-    my $staff_wanted = sub {
+    my $staff_wanted         = sub {
         my $file = $File::Find::name;
         $file =~ s/^$staff_icon_directory//;
-        $staff_icons->{ $file } = -s $_;
+        $staff_icons->{$file} = -s $_;
     };
     find( { wanted => $staff_wanted }, $staff_icon_directory );
 
     # foreach OPAC theme
-    for my $opac_theme ( @opac_themes ) {
-        next if ( $opac_theme =~ /ccsr/ );  # FIXME: skip CCSR opac theme, it fails and there is no point to fix it
-        my $opac_icons; # hashref of filenames to sizes
-        my $opac_icon_directory  = "$opac_dir/$opac_theme/itemtypeimg";
-        my $opac_wanted  = sub {
+    for my $opac_theme (@opac_themes) {
+        next if ( $opac_theme =~ /ccsr/ );    # FIXME: skip CCSR opac theme, it fails and there is no point to fix it
+        my $opac_icons;                       # hashref of filenames to sizes
+        my $opac_icon_directory = "$opac_dir/$opac_theme/itemtypeimg";
+        my $opac_wanted         = sub {
             my $file = $File::Find::name;
             $file =~ s/^$opac_icon_directory//;
-            $opac_icons->{ $file } = -s $_;
+            $opac_icons->{$file} = -s $_;
         };
         find( { wanted => $opac_wanted }, $opac_icon_directory );
 
-        is_deeply( $opac_icons, $staff_icons, "STAFF $staff_theme and OPAC $opac_theme icon directories have same contents" )
-            or diag( Data::Dumper->Dump( [ $opac_icons ], [ 'opac_icons' ] ) );
+        is_deeply(
+            $opac_icons, $staff_icons,
+            "STAFF $staff_theme and OPAC $opac_theme icon directories have same contents"
+        ) or diag( Data::Dumper->Dump( [$opac_icons], ['opac_icons'] ) );
     }
 }

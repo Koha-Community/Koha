@@ -18,7 +18,6 @@ package C4::Languages;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use strict;
 use warnings;
 
@@ -30,17 +29,19 @@ use Koha::Caches;
 use Koha::Cache::Memory::Lite;
 use Koha::Language;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA    = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
         getFrameworkLanguages
         getTranslatedLanguages
         getLanguages
         getAllLanguages
     );
-    push @EXPORT_OK, qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage get_rfc4646_from_iso639);
+    push @EXPORT_OK,
+        qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage get_rfc4646_from_iso639);
 }
 
 =head1 NAME
@@ -71,26 +72,28 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getFrameworkLanguages {
+
     # get a hash with all language codes, names, and locale names
     my $all_languages = getAllLanguages();
     my @languages;
-    
+
     # find the available directory names
-    my $dir=C4::Context->config('intranetdir')."/installer/data/";
+    my $dir = C4::Context->config('intranetdir') . "/installer/data/";
     my $dir_h;
-    opendir ($dir_h,$dir);
-    my @listdir= grep { !/^\.|CVS/ && -d "$dir/$_"} readdir($dir_h);
+    opendir( $dir_h, $dir );
+    my @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir($dir_h);
     closedir $dir_h;
 
     # pull out all data for the dir names that exist
     for my $dirname (@listdir) {
         for my $language_set (@$all_languages) {
 
-            if ($dirname eq $language_set->{language_code}) {
+            if ( $dirname eq $language_set->{language_code} ) {
                 push @languages, {
-                    'language_code'=>$dirname, 
-                    'language_description'=>$language_set->{language_description}, 
-                    'native_descrition'=>$language_set->{language_native_description} }
+                    'language_code'        => $dirname,
+                    'language_description' => $language_set->{language_description},
+                    'native_descrition'    => $language_set->{language_native_description}
+                };
             }
         }
     }
@@ -112,54 +115,52 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getTranslatedLanguages {
-    my ($interface, $theme, $current_language) = @_;
+    my ( $interface, $theme, $current_language ) = @_;
     $interface //= q{};
     $theme     //= q{};
     my @languages;
 
     my @enabled_languages;
     if ($interface) {
-        if ($interface eq 'intranet') {
+        if ( $interface eq 'intranet' ) {
             @enabled_languages = split ",", C4::Context->preference('StaffInterfaceLanguages');
-        } elsif ($interface eq 'opac') {
+        } elsif ( $interface eq 'opac' ) {
             @enabled_languages = split ",", C4::Context->preference('OPACLanguages');
         }
     }
 
-    my $cache = Koha::Caches->get_instance;
+    my $cache     = Koha::Caches->get_instance;
     my $cache_key = "languages_${interface}_${theme}";
-    if ($interface && $interface eq 'opac' ) {
+    if ( $interface && $interface eq 'opac' ) {
         my $htdocs = C4::Context->config('opachtdocs');
         my $cached = $cache->get_from_cache($cache_key);
-        if ( $cached ) {
+        if ($cached) {
             @languages = @{$cached};
         } else {
             @languages = _get_opac_language_dirs( $htdocs, $theme );
-            $cache->set_in_cache($cache_key, \@languages );
+            $cache->set_in_cache( $cache_key, \@languages );
         }
-    }
-    elsif ($interface && $interface eq 'intranet' ) {
+    } elsif ( $interface && $interface eq 'intranet' ) {
         my $htdocs = C4::Context->config('intrahtdocs');
         my $cached = $cache->get_from_cache($cache_key);
-        if ( $cached ) {
+        if ($cached) {
             @languages = @{$cached};
         } else {
             @languages = _get_intranet_language_dirs( $htdocs, $theme );
-            $cache->set_in_cache($cache_key, \@languages );
+            $cache->set_in_cache( $cache_key, \@languages );
         }
-    }
-    else {
+    } else {
         my $htdocs = C4::Context->config('intrahtdocs');
-        push @languages, _get_intranet_language_dirs( $htdocs );
+        push @languages, _get_intranet_language_dirs($htdocs);
 
         $htdocs = C4::Context->config('opachtdocs');
-        push @languages, _get_opac_language_dirs( $htdocs );
+        push @languages, _get_opac_language_dirs($htdocs);
 
         my %seen;
         $seen{$_}++ for @languages;
         @languages = keys %seen;
     }
-    return _build_languages_arrayref(\@languages,$current_language,\@enabled_languages);
+    return _build_languages_arrayref( \@languages, $current_language, \@enabled_languages );
 }
 
 =head2 getAllLanguages
@@ -196,7 +197,7 @@ Returns a reference to an array of hashes of languages.
 =cut
 
 sub getLanguages {
-    my $lang = shift;
+    my $lang       = shift;
     my $isFiltered = shift;
 
     my $dbh = C4::Context->dbh;
@@ -207,10 +208,10 @@ sub getLanguages {
         $current_language = regex_lang_subtags($lang)->{'language'};
     }
 
-    my $language_list = $isFiltered ? C4::Context->preference("AdvancedSearchLanguages") : undef;
+    my $language_list      = $isFiltered    ? C4::Context->preference("AdvancedSearchLanguages")             : undef;
     my $language_list_cond = $language_list ? 'AND FIND_IN_SET(language_rfc4646_to_iso639.iso639_2_code, ?)' : '';
 
-    my $sth = $dbh->prepare("
+    my $sth = $dbh->prepare( "
     SELECT
     language_subtag_registry.*,
     language_rfc4646_to_iso639.iso639_2_code,
@@ -259,16 +260,16 @@ sub getLanguages {
     AND native_language_descriptions.type = 'language'
 
     WHERE language_subtag_registry.type = 'language'
-    ${language_list_cond}");
+    ${language_list_cond}" );
 
     if ($language_list) {
-        $sth->execute($current_language, join ',' => split(/,|\|/, $language_list));
+        $sth->execute( $current_language, join ',' => split( /,|\|/, $language_list ) );
     } else {
         $sth->execute($current_language);
     }
 
     my @languages_list;
-    while (my $row = $sth->fetchrow_hashref) {
+    while ( my $row = $sth->fetchrow_hashref ) {
         push @languages_list, $row;
     }
     return \@languages_list;
@@ -279,27 +280,24 @@ sub _get_opac_language_dirs {
 
     my @languages;
     if ( $theme and -d "$htdocs/$theme" ) {
-        (@languages) = _get_language_dirs($htdocs,$theme);
-    }
-    else {
+        (@languages) = _get_language_dirs( $htdocs, $theme );
+    } else {
         for my $theme ( _get_themes('opac') ) {
-            push @languages, _get_language_dirs($htdocs,$theme);
+            push @languages, _get_language_dirs( $htdocs, $theme );
         }
     }
     return @languages;
 }
-
 
 sub _get_intranet_language_dirs {
     my ( $htdocs, $theme ) = @_;
 
     my @languages;
     if ( $theme and -d "$htdocs/$theme" ) {
-        @languages = _get_language_dirs($htdocs,$theme);
-    }
-    else {
+        @languages = _get_language_dirs( $htdocs, $theme );
+    } else {
         foreach my $theme ( _get_themes('intranet') ) {
-            push @languages, _get_language_dirs($htdocs,$theme);
+            push @languages, _get_language_dirs( $htdocs, $theme );
         }
     }
     return @languages;
@@ -320,14 +318,14 @@ sub _get_themes {
     my @themes;
     if ( $interface && $interface eq 'intranet' ) {
         $htdocs = C4::Context->config('intrahtdocs');
-    }
-    else {
+    } else {
         $htdocs = C4::Context->config('opachtdocs');
     }
     my $dir_h;
     opendir $dir_h, "$htdocs";
     my @dirlist = readdir $dir_h;
     foreach my $directory (@dirlist) {
+
         # if there's an en dir, it's a valid theme
         -d "$htdocs/$directory/en" and push @themes, $directory;
     }
@@ -342,21 +340,21 @@ Internal function, returns an array of directory names, excluding non-language d
 =cut
 
 sub _get_language_dirs {
-    my ($htdocs,$theme) = @_;
+    my ( $htdocs, $theme ) = @_;
     $htdocs //= '';
-    $theme //= '';
+    $theme  //= '';
     my @lang_strings;
     my $dir_h;
     opendir $dir_h, "$htdocs/$theme";
     for my $lang_string ( sort readdir $dir_h ) {
-        next if $lang_string =~/^\./;
+        next if $lang_string =~ /^\./;
         next if $lang_string eq 'all';
-        next if $lang_string =~/png$/;
-        next if $lang_string =~/js$/;
-        next if $lang_string =~/css$/;
-        next if $lang_string =~/CVS$/;
-        next if $lang_string =~/\.txt$/i;     #Don't read the readme.txt !
-        next if $lang_string =~/img|images|famfam|js|less|lib|sound|pdf/;
+        next if $lang_string =~ /png$/;
+        next if $lang_string =~ /js$/;
+        next if $lang_string =~ /css$/;
+        next if $lang_string =~ /CVS$/;
+        next if $lang_string =~ /\.txt$/i;                                   #Don't read the readme.txt !
+        next if $lang_string =~ /img|images|famfam|js|less|lib|sound|pdf/;
         push @lang_strings, $lang_string;
     }
     close $dir_h;
@@ -372,114 +370,131 @@ FIXME: this could be rewritten and simplified using map
 =cut
 
 sub _build_languages_arrayref {
-        my ($translated_languages,$current_language,$enabled_languages) = @_;
-        $current_language //= '';
-        my @translated_languages = @$translated_languages;
-        my @languages_loop; # the final reference to an array of hashrefs
-        my @enabled_languages = @$enabled_languages;
-        # how many languages are enabled, if one, take note, some contexts won't need to display it
-        my $language_groups;
-        my $track_language_groups;
-        my $current_language_regex = regex_lang_subtags($current_language);
-        # Loop through the translated languages
-        for my $translated_language (@translated_languages) {
-            # separate the language string into its subtag types
-            my $language_subtags_hashref = regex_lang_subtags($translated_language);
+    my ( $translated_languages, $current_language, $enabled_languages ) = @_;
+    $current_language //= '';
+    my @translated_languages = @$translated_languages;
+    my @languages_loop;    # the final reference to an array of hashrefs
+    my @enabled_languages = @$enabled_languages;
 
-            # is this language string 'enabled'?
-            for my $enabled_language (@enabled_languages) {
-                #warn "Checking out if $translated_language eq $enabled_language";
-                $language_subtags_hashref->{'enabled'} = 1 if $translated_language eq $enabled_language;
-            }
-            
-            # group this language, key by langtag
-            $language_subtags_hashref->{'sublanguage_current'} = 1 if $translated_language eq $current_language;
-            $language_subtags_hashref->{'rfc4646_subtag'} = $translated_language;
-            $language_subtags_hashref->{'native_description'} = language_get_description($language_subtags_hashref->{language},$language_subtags_hashref->{language},'language');
-            $language_subtags_hashref->{'script_description'} = language_get_description($language_subtags_hashref->{script},$language_subtags_hashref->{'language'},'script');
-            $language_subtags_hashref->{'region_description'} = language_get_description($language_subtags_hashref->{region},$language_subtags_hashref->{'language'},'region');
-            $language_subtags_hashref->{'variant_description'} = language_get_description($language_subtags_hashref->{variant},$language_subtags_hashref->{'language'},'variant');
-            $track_language_groups->{$language_subtags_hashref->{'language'}}++;
-            push ( @{ $language_groups->{$language_subtags_hashref->{language}} }, $language_subtags_hashref );
+    # how many languages are enabled, if one, take note, some contexts won't need to display it
+    my $language_groups;
+    my $track_language_groups;
+    my $current_language_regex = regex_lang_subtags($current_language);
+
+    # Loop through the translated languages
+    for my $translated_language (@translated_languages) {
+
+        # separate the language string into its subtag types
+        my $language_subtags_hashref = regex_lang_subtags($translated_language);
+
+        # is this language string 'enabled'?
+        for my $enabled_language (@enabled_languages) {
+
+            #warn "Checking out if $translated_language eq $enabled_language";
+            $language_subtags_hashref->{'enabled'} = 1 if $translated_language eq $enabled_language;
         }
-        # $key is a language subtag like 'en'
 
-        my %idx = map { $enabled_languages->[$_] => $_ } reverse 0 .. @$enabled_languages-1;
-        my @ordered_keys = sort {
-            my $aa     = '';
-            my $bb     = '';
-            my $acount = @{ $language_groups->{$a} };
-            my $bcount = @{ $language_groups->{$b} };
-            if ( $language_groups->{$a}->[0]->{enabled} ) {
-                $aa = $language_groups->{$a}->[0]->{rfc4646_subtag};
-            }
-            elsif ( $acount > 1 ) {
-                for ( my $i = 1 ; $i < $acount ; $i++ ) {
-                    if ( $language_groups->{$a}->[$i]->{enabled} ) {
-                        $aa = $language_groups->{$a}->[$i]->{rfc4646_subtag};
-                        last;
-                    }
+        # group this language, key by langtag
+        $language_subtags_hashref->{'sublanguage_current'} = 1 if $translated_language eq $current_language;
+        $language_subtags_hashref->{'rfc4646_subtag'}      = $translated_language;
+        $language_subtags_hashref->{'native_description'}  = language_get_description(
+            $language_subtags_hashref->{language}, $language_subtags_hashref->{language},
+            'language'
+        );
+        $language_subtags_hashref->{'script_description'} = language_get_description(
+            $language_subtags_hashref->{script}, $language_subtags_hashref->{'language'},
+            'script'
+        );
+        $language_subtags_hashref->{'region_description'} = language_get_description(
+            $language_subtags_hashref->{region}, $language_subtags_hashref->{'language'},
+            'region'
+        );
+        $language_subtags_hashref->{'variant_description'} = language_get_description(
+            $language_subtags_hashref->{variant}, $language_subtags_hashref->{'language'},
+            'variant'
+        );
+        $track_language_groups->{ $language_subtags_hashref->{'language'} }++;
+        push( @{ $language_groups->{ $language_subtags_hashref->{language} } }, $language_subtags_hashref );
+    }
+
+    # $key is a language subtag like 'en'
+
+    my %idx          = map { $enabled_languages->[$_] => $_ } reverse 0 .. @$enabled_languages - 1;
+    my @ordered_keys = sort {
+        my $aa     = '';
+        my $bb     = '';
+        my $acount = @{ $language_groups->{$a} };
+        my $bcount = @{ $language_groups->{$b} };
+        if ( $language_groups->{$a}->[0]->{enabled} ) {
+            $aa = $language_groups->{$a}->[0]->{rfc4646_subtag};
+        } elsif ( $acount > 1 ) {
+            for ( my $i = 1 ; $i < $acount ; $i++ ) {
+                if ( $language_groups->{$a}->[$i]->{enabled} ) {
+                    $aa = $language_groups->{$a}->[$i]->{rfc4646_subtag};
+                    last;
                 }
             }
-            if ( $language_groups->{$b}->[0]->{enabled} ) {
-                $bb = $language_groups->{$b}->[0]->{rfc4646_subtag};
-            }
-            elsif ( $bcount > 1 ) {
-                for ( my $i = 1 ; $i < $bcount ; $i++ ) {
-                    if ( $language_groups->{$b}->[$i]->{enabled} ) {
-                        $bb = $language_groups->{$b}->[$i]->{rfc4646_subtag};
-                        last;
-                    }
+        }
+        if ( $language_groups->{$b}->[0]->{enabled} ) {
+            $bb = $language_groups->{$b}->[0]->{rfc4646_subtag};
+        } elsif ( $bcount > 1 ) {
+            for ( my $i = 1 ; $i < $bcount ; $i++ ) {
+                if ( $language_groups->{$b}->[$i]->{enabled} ) {
+                    $bb = $language_groups->{$b}->[$i]->{rfc4646_subtag};
+                    last;
                 }
             }
-            (         exists $idx{$aa}
-                  and exists $idx{$bb}
-                  and ( $idx{$aa} cmp $idx{$bb} ) )
-              || ( exists $idx{$aa} and exists $idx{$bb} )
-              || exists $idx{$bb}
-        } keys %$language_groups;
-
-        for my $key ( @ordered_keys ) {
-            my $value = $language_groups->{$key};
-            # is this language group enabled? are any of the languages within it enabled?
-            my $enabled;
-            for my $enabled_language (@enabled_languages) {
-                my $regex_enabled_language = regex_lang_subtags($enabled_language);
-                $enabled = 1 if $key eq ($regex_enabled_language->{language} // '');
-            }
-            push @languages_loop,  {
-                            # this is only use if there is one
-                            rfc4646_subtag => @$value[0]->{rfc4646_subtag},
-                            native_description => language_get_description($key,$key,'language'),
-                            language => $key,
-                            sublanguages_loop => $value,
-                            plural => $track_language_groups->{$key} >1 ? 1 : 0,
-                            current => ($current_language_regex->{language} // '') eq $key ? 1 : 0,
-                            group_enabled => $enabled,
-                           };
         }
-        return \@languages_loop;
+        ( exists $idx{$aa} and exists $idx{$bb} and ( $idx{$aa} cmp $idx{$bb} ) )
+            || ( exists $idx{$aa} and exists $idx{$bb} )
+            || exists $idx{$bb}
+    } keys %$language_groups;
+
+    for my $key (@ordered_keys) {
+        my $value = $language_groups->{$key};
+
+        # is this language group enabled? are any of the languages within it enabled?
+        my $enabled;
+        for my $enabled_language (@enabled_languages) {
+            my $regex_enabled_language = regex_lang_subtags($enabled_language);
+            $enabled = 1 if $key eq ( $regex_enabled_language->{language} // '' );
+        }
+        push @languages_loop, {
+
+            # this is only use if there is one
+            rfc4646_subtag     => @$value[0]->{rfc4646_subtag},
+            native_description => language_get_description( $key, $key, 'language' ),
+            language           => $key,
+            sublanguages_loop  => $value,
+            plural             => $track_language_groups->{$key} > 1                    ? 1 : 0,
+            current            => ( $current_language_regex->{language} // '' ) eq $key ? 1 : 0,
+            group_enabled      => $enabled,
+        };
+    }
+    return \@languages_loop;
 }
 
 sub language_get_description {
-    my ($script,$lang,$type) = @_;
+    my ( $script, $lang, $type ) = @_;
     my $dbh = C4::Context->dbh;
     my $desc;
     my $sth = $dbh->prepare("SELECT description FROM language_descriptions WHERE subtag=? AND lang=? AND type=?");
+
     #warn "QUERY: SELECT description FROM language_descriptions WHERE subtag=$script AND lang=$lang AND type=$type";
-    $sth->execute($script,$lang,$type);
-    while (my $descriptions = $sth->fetchrow_hashref) {
+    $sth->execute( $script, $lang, $type );
+    while ( my $descriptions = $sth->fetchrow_hashref ) {
         $desc = $descriptions->{'description'};
     }
     unless ($desc) {
         $sth = $dbh->prepare("SELECT description FROM language_descriptions WHERE subtag=? AND lang=? AND type=?");
-        $sth->execute($script,'en',$type);
-        while (my $descriptions = $sth->fetchrow_hashref) {
+        $sth->execute( $script, 'en', $type );
+        while ( my $descriptions = $sth->fetchrow_hashref ) {
             $desc = $descriptions->{'description'};
         }
     }
     return $desc;
 }
+
 =head2 regex_lang_subtags
 
 This internal sub takes a string composed according to RFC 4646 as
@@ -500,31 +515,32 @@ sub regex_lang_subtags {
     #
     # Note: the tool requires that any real "=" or "#" or ";" in the regex be escaped.
 
-    my $alpha   = qr/[a-zA-Z]/ ;    # ALPHA
-    my $digit   = qr/[0-9]/ ;   # DIGIT
-    my $alphanum    = qr/[a-zA-Z0-9]/ ; # ALPHA / DIGIT
-    my $x   = qr/[xX]/ ;    # private use singleton
-    my $singleton = qr/[a-w y-z A-W Y-Z]/ ; # other singleton
-    my $s   = qr/[-]/ ; # separator -- lenient parsers will use [-_]
+    my $alpha     = qr/[a-zA-Z]/;             # ALPHA
+    my $digit     = qr/[0-9]/;                # DIGIT
+    my $alphanum  = qr/[a-zA-Z0-9]/;          # ALPHA / DIGIT
+    my $x         = qr/[xX]/;                 # private use singleton
+    my $singleton = qr/[a-w y-z A-W Y-Z]/;    # other singleton
+    my $s         = qr/[-]/;                  # separator -- lenient parsers will use [-_]
 
     # Now do the components. The structure is slightly different to allow for capturing the right components.
     # The notation (?:....) is a non-capturing version of (...): so the "?:" can be deleted if someone doesn't care about capturing.
 
-    my $extlang = qr{(?: $s $alpha{3} )}x ; # *3("-" 3ALPHA)
-    my $language    = qr{(?: $alpha{2,3} | $alpha{4,8} )}x ;
+    my $extlang  = qr{(?: $s $alpha{3} )}x;                # *3("-" 3ALPHA)
+    my $language = qr{(?: $alpha{2,3} | $alpha{4,8} )}x;
+
     #my $language   = qr{(?: $alpha{2,3}$extlang{0,3} | $alpha{4,8} )}x ;   # (2*3ALPHA [ extlang ]) / 4ALPHA / 5*8ALPHA
 
-    my $script  = qr{(?: $alpha{4} )}x ;    # 4ALPHA 
+    my $script = qr{(?: $alpha{4} )}x;                     # 4ALPHA
 
-    my $region  = qr{(?: $alpha{2} | $digit{3} )}x ;     # 2ALPHA / 3DIGIT
+    my $region = qr{(?: $alpha{2} | $digit{3} )}x;         # 2ALPHA / 3DIGIT
 
-    my $variantSub  = qr{(?: $digit$alphanum{3} | $alphanum{5,8} )}x ;  # *("-" variant), 5*8alphanum / (DIGIT 3alphanum)
-    my $variant = qr{(?: $variantSub (?: $s$variantSub )* )}x ; # *("-" variant), 5*8alphanum / (DIGIT 3alphanum)
+    my $variantSub = qr{(?: $digit$alphanum{3} | $alphanum{5,8} )}x;   # *("-" variant), 5*8alphanum / (DIGIT 3alphanum)
+    my $variant    = qr{(?: $variantSub (?: $s$variantSub )* )}x;      # *("-" variant), 5*8alphanum / (DIGIT 3alphanum)
 
-    my $extensionSub    = qr{(?: $singleton (?: $s$alphanum{2,8} )+ )}x ;   # singleton 1*("-" (2*8alphanum))
-    my $extension   = qr{(?: $extensionSub (?: $s$extensionSub )* )}x ; # singleton 1*("-" (2*8alphanum))
+    my $extensionSub = qr{(?: $singleton (?: $s$alphanum{2,8} )+ )}x;      # singleton 1*("-" (2*8alphanum))
+    my $extension    = qr{(?: $extensionSub (?: $s$extensionSub )* )}x;    # singleton 1*("-" (2*8alphanum))
 
-    my $privateuse  = qr{(?: $x (?: $s$alphanum{1,8} )+ )}x ;   # ("x"/"X") 1*("-" (1*8alphanum))
+    my $privateuse = qr{(?: $x (?: $s$alphanum{1,8} )+ )}x;                # ("x"/"X") 1*("-" (1*8alphanum))
 
     # Define certain grandfathered codes, since otherwise the regex is pretty useless.
     # Since these are limited, this is safe even later changes to the registry --
@@ -533,7 +549,7 @@ sub regex_lang_subtags {
     # http://www.iana.org/assignments/language-subtag-registry
     # Note that these have to be compared case insensitively, requiring (?i) below.
 
-    my $grandfathered   = qr{(?: (?i)
+    my $grandfathered = qr{(?: (?i)
         en $s GB $s oed
     |   i $s (?: ami | bnn | default | enochian | hak | klingon | lux | mingo | navajo | pwn | tao | tay | tsu )
     |   sgn $s (?: BE $s fr | BE $s nl | CH $s de)
@@ -552,15 +568,17 @@ sub regex_lang_subtags {
 
     #my $root = qr{(?: ($language) (?: $s ($script) )? 40% (?: $s ($region) )? 40% (?: $s ($variant) )? 10% (?: $s ($extension) )? 5% (?: $s ($privateuse) )? 5% ) 90% | ($grandfathered) 5% | ($privateuse) 5% };
 
-    $string =~  qr{^ (?:($language)) (?:$s($script))? (?:$s($region))?  (?:$s($variant))?  (?:$s($extension))?  (?:$s($privateuse))? $}xi;  # |($grandfathered) | ($privateuse) $}xi;
+    $string =~
+        qr{^ (?:($language)) (?:$s($script))? (?:$s($region))?  (?:$s($variant))?  (?:$s($extension))?  (?:$s($privateuse))? $}xi
+        ;    # |($grandfathered) | ($privateuse) $}xi;
     my %subtag = (
         'rfc4646_subtag' => $string,
-        'language' => $1,
-        'script' => $2,
-        'region' => $3,
-        'variant' => $4,
-        'extension' => $5,
-        'privateuse' => $6,
+        'language'       => $1,
+        'script'         => $2,
+        'region'         => $3,
+        'variant'        => $4,
+        'extension'      => $5,
+        'privateuse'     => $6,
     );
     return \%subtag;
 }
@@ -568,49 +586,61 @@ sub regex_lang_subtags {
 # Script Direction Resources:
 # http://www.w3.org/International/questions/qa-scripts
 sub get_bidi {
-    my ($language_script)= @_;
+    my ($language_script) = @_;
     my $dbh = C4::Context->dbh;
     my $bidi;
     my $sth = $dbh->prepare('SELECT bidi FROM language_script_bidi WHERE rfc4646_subtag=?');
     $sth->execute($language_script);
-    while (my $result = $sth->fetchrow_hashref) {
+    while ( my $result = $sth->fetchrow_hashref ) {
         $bidi = $result->{'bidi'};
     }
     return $bidi;
-};
+}
 
 sub accept_language {
+
     # referenced http://search.cpan.org/src/CGILMORE/I18N-AcceptLanguage-1.04/lib/I18N/AcceptLanguage.pm
-    my ($clientPreferences,$supportedLanguages) = @_;
+    my ( $clientPreferences, $supportedLanguages ) = @_;
     my @languages = ();
     if ($clientPreferences) {
+
         # There should be no whitespace anways, but a cleanliness/sanity check
         $clientPreferences =~ s/\s//g;
+
         # Prepare the list of client-acceptable languages
-        foreach my $tag (split(/,/, $clientPreferences)) {
-            my ($language, $quality) = split(/\;/, $tag);
+        foreach my $tag ( split( /,/, $clientPreferences ) ) {
+            my ( $language, $quality ) = split( /\;/, $tag );
             $quality =~ s/^q=//i if $quality;
             $quality = 1 unless $quality;
             next if $quality <= 0;
+
             # We want to force the wildcard to be last
-            $quality = 0 if ($language eq '*');
+            $quality = 0 if ( $language eq '*' );
+
             # Pushing lowercase language here saves processing later
-            push(@languages, { quality => $quality,
-               language => $language,
-               lclanguage => lc($language) });
+            push(
+                @languages,
+                {
+                    quality    => $quality,
+                    language   => $language,
+                    lclanguage => lc($language)
+                }
+            );
         }
     } else {
         carp "accept_language(x,y) called with no clientPreferences (x).";
     }
+
     # Prepare the list of server-supported languages
     my %supportedLanguages = ();
     my %secondaryLanguages = ();
     foreach my $language (@$supportedLanguages) {
+
         # warn "Language supported: " . $language->{language};
         my $subtag = $language->{rfc4646_subtag};
-        $supportedLanguages{lc($subtag)} = $subtag;
+        $supportedLanguages{ lc($subtag) } = $subtag;
         if ( $subtag =~ /^([^-]+)-?/ ) {
-            $secondaryLanguages{lc($1)} = $subtag;
+            $secondaryLanguages{ lc($1) } = $subtag;
         }
     }
 
@@ -618,32 +648,38 @@ sub accept_language {
     @languages = sort { $b->{quality} <=> $a->{quality} } @languages;
     my $secondaryMatch = '';
     foreach my $tag (@languages) {
-        if (exists($supportedLanguages{$tag->{lclanguage}})) {
+        if ( exists( $supportedLanguages{ $tag->{lclanguage} } ) ) {
+
             # Client en-us eq server en-us
-            return $supportedLanguages{$tag->{language}} if exists($supportedLanguages{$tag->{language}});
-            return $supportedLanguages{$tag->{lclanguage}};
-        } elsif (exists($secondaryLanguages{$tag->{lclanguage}})) {
+            return $supportedLanguages{ $tag->{language} } if exists( $supportedLanguages{ $tag->{language} } );
+            return $supportedLanguages{ $tag->{lclanguage} };
+        } elsif ( exists( $secondaryLanguages{ $tag->{lclanguage} } ) ) {
+
             # Client en eq server en-us
-            return $secondaryLanguages{$tag->{language}} if exists($secondaryLanguages{$tag->{language}});
-            return $supportedLanguages{$tag->{lclanguage}};
-        } elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+            return $secondaryLanguages{ $tag->{language} } if exists( $secondaryLanguages{ $tag->{language} } );
+            return $supportedLanguages{ $tag->{lclanguage} };
+        } elsif ( $tag->{lclanguage} =~ /^([^-]+)-/ && exists( $secondaryLanguages{$1} ) && $secondaryMatch eq '' ) {
+
             # Client en-gb eq server en-us
             $secondaryMatch = $secondaryLanguages{$1};
-        } elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+        } elsif ( $tag->{lclanguage} =~ /^([^-]+)-/ && exists( $secondaryLanguages{$1} ) && $secondaryMatch eq '' ) {
+
             # FIXME: We just checked the exact same conditional!
             # Client en-us eq server en
             $secondaryMatch = $supportedLanguages{$1};
-        } elsif ($tag->{lclanguage} eq '*') {
-        # * matches every language not already specified.
-        # It doesn't care which we pick, so let's pick the default,
-        # if available, then the first in the array.
-        #return $acceptor->defaultLanguage() if $acceptor->defaultLanguage();
-        return $supportedLanguages->[0];
+        } elsif ( $tag->{lclanguage} eq '*' ) {
+
+            # * matches every language not already specified.
+            # It doesn't care which we pick, so let's pick the default,
+            # if available, then the first in the array.
+            #return $acceptor->defaultLanguage() if $acceptor->defaultLanguage();
+            return $supportedLanguages->[0];
         }
     }
+
     # No primary matches. Secondary? (ie, en-us requested and en supported)
     return $secondaryMatch if $secondaryMatch;
-    return;   # else, we got nothing.
+    return;    # else, we got nothing.
 }
 
 =head2 getlanguage
@@ -675,23 +711,23 @@ sub getlanguage {
     my ($cgi) = @_;
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
-    my $cache_key = "getlanguage";
+    my $cache_key    = "getlanguage";
     unless ( $cgi and $cgi->param('language') ) {
         my $cached = $memory_cache->get_from_cache($cache_key);
         return $cached if $cached;
     }
 
     my $interface = C4::Context->interface;
-    my $theme = '';
+    my $theme     = '';
     my $language;
     my @languages;
 
-    if ($interface eq 'opac' || $interface eq 'intranet') {
+    if ( $interface eq 'opac' || $interface eq 'intranet' ) {
         $cgi //= CGI->new;
         $theme = C4::Context->preference( ( $interface eq 'opac' ) ? 'opacthemes' : 'template' );
 
-        my $preference_to_check =
-          $interface eq 'intranet' ? 'StaffInterfaceLanguages' : 'OPACLanguages';
+        my $preference_to_check = $interface eq 'intranet' ? 'StaffInterfaceLanguages' : 'OPACLanguages';
+
         # Get the available/valid languages list
         my $preference_value = C4::Context->preference($preference_to_check);
         if ($preference_value) {
@@ -699,24 +735,26 @@ sub getlanguage {
         }
 
         # Choose language from the URL
-        my $cgi_param_language = $cgi->param( 'language' );
-        if ( defined $cgi_param_language && any { $_ eq $cgi_param_language } @languages) {
+        my $cgi_param_language = $cgi->param('language');
+        if ( defined $cgi_param_language && any { $_ eq $cgi_param_language } @languages ) {
             $language = $cgi_param_language;
         }
 
         # cookie
-        if (not $language and my $cgi_cookie_language = $cgi->cookie('KohaOpacLanguage') ) {
-            ( $language = $cgi_cookie_language ) =~ s/[^a-zA-Z_-]*//; # sanitize cookie
+        if ( not $language and my $cgi_cookie_language = $cgi->cookie('KohaOpacLanguage') ) {
+            ( $language = $cgi_cookie_language ) =~ s/[^a-zA-Z_-]*//;    # sanitize cookie
         }
     } else {
-        @languages = map { $_->{rfc4646_subtag} } @{ getTranslatedLanguages($interface, $theme) };
-        $language = Koha::Language->get_requested_language();
+        @languages = map { $_->{rfc4646_subtag} } @{ getTranslatedLanguages( $interface, $theme ) };
+        $language  = Koha::Language->get_requested_language();
     }
 
     # HTTP_ACCEPT_LANGUAGE
     if ( !$language && $ENV{HTTP_ACCEPT_LANGUAGE} ) {
-        $language = accept_language( $ENV{HTTP_ACCEPT_LANGUAGE},
-            getTranslatedLanguages( $interface, $theme ) );
+        $language = accept_language(
+            $ENV{HTTP_ACCEPT_LANGUAGE},
+            getTranslatedLanguages( $interface, $theme )
+        );
     }
 
     # Ignore a lang not selected in sysprefs
@@ -743,8 +781,9 @@ sub getlanguage {
 sub get_rfc4646_from_iso639 {
 
     my $iso_code = shift;
-    my $rfc_subtag = Koha::Database->new()->schema->resultset('LanguageRfc4646ToIso639')->find({iso639_2_code=>$iso_code});
-    if ( $rfc_subtag ) {
+    my $rfc_subtag =
+        Koha::Database->new()->schema->resultset('LanguageRfc4646ToIso639')->find( { iso639_2_code => $iso_code } );
+    if ($rfc_subtag) {
         return $rfc_subtag->rfc4646_subtag;
     } else {
         return;

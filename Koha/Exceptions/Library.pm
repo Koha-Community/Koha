@@ -11,7 +11,7 @@ use Exception::Class (
     },
 
     'Koha::Exceptions::Library::NotFound' => {
-        isa => 'Koha::Exceptions::Library::Exception',
+        isa         => 'Koha::Exceptions::Library::Exception',
         description => 'Library not found',
     },
 );

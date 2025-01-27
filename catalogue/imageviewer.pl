@@ -19,8 +19,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Search qw( enabled_staff_search_views );
 
@@ -31,18 +31,19 @@ use Koha::Patrons;
 my $query = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "catalogue/imageviewer.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "catalogue/imageviewer.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
-my $itemnumber  = $query->param('itemnumber');
-my $biblionumber = $query->param('biblionumber') || $query->param('bib') || Koha::Items->find($itemnumber)->biblionumber;
+my $itemnumber = $query->param('itemnumber');
+my $biblionumber =
+    $query->param('biblionumber') || $query->param('bib') || Koha::Items->find($itemnumber)->biblionumber;
 my $imagenumber = $query->param('imagenumber');
-my $biblio = Koha::Biblios->find( $biblionumber );
-my $itemcount = $biblio ? $biblio->items->count : 0;
+my $biblio      = Koha::Biblios->find($biblionumber);
+my $itemcount   = $biblio ? $biblio->items->count : 0;
 
 if ( $query->cookie("holdfor") ) {
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
@@ -52,7 +53,7 @@ if ( $query->cookie("holdfor") ) {
     );
 }
 
-if( $query->cookie("searchToOrder") ){
+if ( $query->cookie("searchToOrder") ) {
     my ( $basketno, $vendorid ) = split( /\//, $query->cookie("searchToOrder") );
     $template->param(
         searchtoorder_basketno => $basketno,
@@ -62,7 +63,7 @@ if( $query->cookie("searchToOrder") ){
 
 if ( C4::Context->preference("LocalCoverImages") ) {
     my $images;
-    if ( $itemnumber ) {
+    if ($itemnumber) {
         my $item = Koha::Items->find($itemnumber);
         $images = $item->cover_images->as_list;
     } else {
@@ -75,13 +76,13 @@ if ( C4::Context->preference("LocalCoverImages") ) {
         imagenumber      => ( $imagenumber || ( @$images ? $images->[0]->imagenumber : undef ) ),
     );
 }
-$template->{VARS}->{'count'}        = $itemcount;
+$template->{VARS}->{'count'} = $itemcount;
 $template->param(C4::Search::enabled_staff_search_views);
 $template->{VARS}->{'biblio'} = $biblio;
 
 $template->param(
     biblionumber => $biblionumber,
-    itemnumber => $itemnumber,
+    itemnumber   => $itemnumber,
 );
 
 my $hold_count = $biblio ? $biblio->holds->count : 0;

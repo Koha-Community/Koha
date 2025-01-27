@@ -25,9 +25,10 @@ use Modern::Perl;
 use constant DEFAULT_008_POS_6_39 => 'b        |||||||| |||| 00| 0 eng d';
 
 our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA = qw( Exporter );
+    @ISA       = qw( Exporter );
     @EXPORT_OK = qw( wrapper date_entered biblio_008 );
 }
 
@@ -45,11 +46,11 @@ Koha::Util::FrameworkPlugin - utility class with routines for framework plugins
 =cut
 
 sub wrapper {
-    my ( $str ) = @_;
-    return "space" if $str eq " ";
+    my ($str) = @_;
+    return "space"    if $str eq " ";
     return "dblspace" if $str eq "  ";
-    return "pipe" if $str eq "|";
-    return "dblpipe" if $str eq "||";
+    return "pipe"     if $str eq "|";
+    return "dblpipe"  if $str eq "||";
     return $str;
 }
 
@@ -60,11 +61,12 @@ sub wrapper {
 =cut
 
 sub date_entered {
+
     # find today's date
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-    $year +=1900;
-    $mon +=1;
-    return substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) = localtime(time);
+    $year += 1900;
+    $mon  += 1;
+    return substr( $year, 2, 2 ) . sprintf( "%0.2d", $mon ) . sprintf( "%0.2d", $mday );
 }
 
 =head2 biblio_008
@@ -76,11 +78,11 @@ sub date_entered {
 
 sub biblio_008 {
     my $result = date_entered() . DEFAULT_008_POS_6_39;
-    if( C4::Context->preference('DefaultCountryField008') ) {
+    if ( C4::Context->preference('DefaultCountryField008') ) {
         substr( $result, 15, 3 ) = pack( "A3", C4::Context->preference('DefaultCountryField008') );
     }
-    if( C4::Context->preference('DefaultLanguageField008') ) {
-        substr( $result, 35, 3 ) = pack( "A3", C4::Context->preference('DefaultLanguageField008' ) );
+    if ( C4::Context->preference('DefaultLanguageField008') ) {
+        substr( $result, 35, 3 ) = pack( "A3", C4::Context->preference('DefaultLanguageField008') );
     }
     return $result;
 }

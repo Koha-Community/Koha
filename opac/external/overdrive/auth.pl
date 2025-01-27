@@ -25,31 +25,29 @@ use URI::Escape qw( uri_escape );
 use Koha::Logger;
 use Koha::ExternalContent::OverDrive;
 
-my $logger = Koha::Logger->get({ interface => 'opac' });
-my $cgi = CGI->new;
+my $logger = Koha::Logger->get( { interface => 'opac' } );
+my $cgi    = CGI->new;
 
 my ( $user, $cookie, $sessionID, $flags ) = checkauth( $cgi, 1, {}, 'opac' );
-my ($redirect_page, $error);
-if ($user && $sessionID) {
-    my $od = Koha::ExternalContent::OverDrive->new({ koha_session_id => $sessionID });
+my ( $redirect_page, $error );
+if ( $user && $sessionID ) {
+    my $od = Koha::ExternalContent::OverDrive->new( { koha_session_id => $sessionID } );
     if ( my $auth_code = $cgi->param('code') ) {
-        my $base_url = $cgi->url(-base => 1);
+        my $base_url = $cgi->url( -base => 1 );
         local $@;
-        $redirect_page = eval { $od->auth_by_code($auth_code, $base_url) };
+        $redirect_page = eval { $od->auth_by_code( $auth_code, $base_url ) };
         if ($@) {
             $logger->error($@);
             $error = $od->error_message($@);
         }
-    }
-    else {
+    } else {
         $error = "Missing OverDrive auth code";
     }
     $redirect_page ||= $od->get_return_page_from_koha_session;
-}
-else {
+} else {
     $error = "User not logged in";
 }
 $redirect_page ||= "/cgi-bin/koha/opac-user.pl";
 my $uri = URI->new($redirect_page);
-$uri->query_form( $uri->query_form, overdrive_tab => 1, overdrive_error => uri_escape($error || "") );
+$uri->query_form( $uri->query_form, overdrive_tab => 1, overdrive_error => uri_escape( $error || "" ) );
 print $cgi->redirect($redirect_page);

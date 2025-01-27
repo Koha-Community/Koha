@@ -33,7 +33,7 @@ use C4::Heading;
 use C4::AuthoritiesMarc qw( GuessAuthTypeCode );
 use C4::Biblio;
 
-use Carp qw( carp croak );
+use Carp  qw( carp croak );
 use Clone qw( clone );
 use Modern::Perl;
 use Readonly qw( Readonly );
@@ -44,7 +44,7 @@ use YAML::XS;
 use List::Util qw( sum0 );
 use MARC::File::XML;
 use MIME::Base64 qw( encode_base64 );
-use Encode qw( encode );
+use Encode       qw( encode );
 use Business::ISBN;
 use Scalar::Util qw( looks_like_number );
 
@@ -102,10 +102,8 @@ instance level and will be reused if method is called multiple times.
 
 sub get_elasticsearch {
     my $self = shift @_;
-    unless (defined $self->{elasticsearch}) {
-        $self->{elasticsearch} = Search::Elasticsearch->new(
-            $self->get_elasticsearch_params()
-        );
+    unless ( defined $self->{elasticsearch} ) {
+        $self->{elasticsearch} = Search::Elasticsearch->new( $self->get_elasticsearch_params() );
     }
     return $self->{elasticsearch};
 }
@@ -140,11 +138,11 @@ sub get_elasticsearch_params {
         $conf = _read_configuration();
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Config::MissingEntry' ) {
-            croak($_->message);
+            croak( $_->message );
         }
     };
 
-    return $conf
+    return $conf;
 }
 
 =head2 get_elasticsearch_settings
@@ -163,10 +161,10 @@ sub get_elasticsearch_settings {
 
     # Use state to speed up repeated calls
     state $settings = undef;
-    if (!defined $settings) {
+    if ( !defined $settings ) {
         my $config_file = C4::Context->config('elasticsearch_index_config');
         $config_file ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/index_config.yaml';
-        $settings = YAML::XS::LoadFile( $config_file );
+        $settings = YAML::XS::LoadFile($config_file);
     }
 
     return $settings;
@@ -188,67 +186,71 @@ sub get_elasticsearch_mappings {
     state %all_mappings;
     state %sort_fields;
 
-    if (!defined $all_mappings{$self->index}) {
-        $sort_fields{$self->index} = {};
+    if ( !defined $all_mappings{ $self->index } ) {
+        $sort_fields{ $self->index } = {};
+
         # Clone the general mapping to break ties with the original hash
-        my $mappings = clone(_get_elasticsearch_field_config('general', ''));
+        my $mappings    = clone( _get_elasticsearch_field_config( 'general', '' ) );
         my $marcflavour = lc C4::Context->preference('marcflavour');
         $self->_foreach_mapping(
             sub {
                 my ( $name, $type, $facet, $suggestible, $sort, $search, $filter, $marc_type ) = @_;
                 return if $marc_type ne $marcflavour;
+
                 # TODO if this gets any sort of complexity to it, it should
                 # be broken out into its own function.
 
                 # TODO be aware of date formats, but this requires pre-parsing
                 # as ES will simply reject anything with an invalid date.
                 my $es_type = 'text';
-                if ($type eq 'boolean') {
+                if ( $type eq 'boolean' ) {
                     $es_type = 'boolean';
-                } elsif ($type eq 'number' || $type eq 'sum') {
+                } elsif ( $type eq 'number' || $type eq 'sum' ) {
                     $es_type = 'integer';
-                } elsif ($type eq 'isbn' || $type eq 'stdno') {
+                } elsif ( $type eq 'isbn' || $type eq 'stdno' ) {
                     $es_type = 'stdno';
-                } elsif ($type eq 'year') {
+                } elsif ( $type eq 'year' ) {
                     $es_type = 'year';
-                } elsif ($type eq 'callnumber') {
+                } elsif ( $type eq 'callnumber' ) {
                     $es_type = 'cn_sort';
-                } elsif ($type eq 'geo_point') {
+                } elsif ( $type eq 'geo_point' ) {
                     $es_type = 'geo_point';
                 }
 
-                if ($type eq 'geo_point') {
+                if ( $type eq 'geo_point' ) {
                     $name =~ s/_(lat|lon)$//;
                 }
 
                 if ($search) {
-                    $mappings->{properties}{$name} = _get_elasticsearch_field_config('search', $es_type);
+                    $mappings->{properties}{$name} = _get_elasticsearch_field_config( 'search', $es_type );
                 }
 
                 if ($facet) {
-                    $mappings->{properties}{ $name . '__facet' } = _get_elasticsearch_field_config('facet', $es_type);
+                    $mappings->{properties}{ $name . '__facet' } = _get_elasticsearch_field_config( 'facet', $es_type );
                 }
                 if ($suggestible) {
-                    $mappings->{properties}{ $name . '__suggestion' } = _get_elasticsearch_field_config('suggestible', $es_type);
+                    $mappings->{properties}{ $name . '__suggestion' } =
+                        _get_elasticsearch_field_config( 'suggestible', $es_type );
                 }
+
                 # Sort should be defined in mappings as 1 (Yes) or 0 (No)
                 # Previously, we also supported ~ (Undef) in the file
                 # "undef" means to do the default thing, which is make it sortable.
                 # This is preserved in order to not cause breakages for existing installs
-                if (!defined $sort || $sort) {
-                    $mappings->{properties}{ $name . '__sort' } = _get_elasticsearch_field_config('sort', $es_type);
-                    $sort_fields{$self->index}{$name} = 1;
+                if ( !defined $sort || $sort ) {
+                    $mappings->{properties}{ $name . '__sort' } = _get_elasticsearch_field_config( 'sort', $es_type );
+                    $sort_fields{ $self->index }{$name} = 1;
                 }
             }
         );
-        if( $self->index eq 'authorities' ){
-            $mappings->{properties}{ 'match-heading' } = _get_elasticsearch_field_config('search', 'text');
-            $mappings->{properties}{ 'subject-heading-thesaurus' } = _get_elasticsearch_field_config('search', 'text');
+        if ( $self->index eq 'authorities' ) {
+            $mappings->{properties}{'match-heading'}             = _get_elasticsearch_field_config( 'search', 'text' );
+            $mappings->{properties}{'subject-heading-thesaurus'} = _get_elasticsearch_field_config( 'search', 'text' );
         }
-        $all_mappings{$self->index} = $mappings;
+        $all_mappings{ $self->index } = $mappings;
     }
-    $self->sort_fields(\%{$sort_fields{$self->index}});
-    return $all_mappings{$self->index};
+    $self->sort_fields( \%{ $sort_fields{ $self->index } } );
+    return $all_mappings{ $self->index };
 }
 
 =head2 raw_elasticsearch_mappings
@@ -261,11 +263,11 @@ $raw_mappings = raw_elasticsearch_mappings( $marc_type )
 =cut
 
 sub raw_elasticsearch_mappings {
-    my ( $marc_type ) = @_;
+    my ($marc_type) = @_;
 
     my $schema = Koha::Database->new()->schema();
 
-    my $search_fields = Koha::SearchFields->search({}, { order_by => { -asc => 'name' } });
+    my $search_fields = Koha::SearchFields->search( {}, { order_by => { -asc => 'name' } } );
 
     my $mappings = {};
     while ( my $search_field = $search_fields->next ) {
@@ -274,7 +276,7 @@ sub raw_elasticsearch_mappings {
             { search_field_id => $search_field->id },
             {
                 join     => 'search_marc_map',
-                order_by => { -asc => ['search_marc_map.marc_type','search_marc_map.marc_field'] }
+                order_by => { -asc => [ 'search_marc_map.marc_type', 'search_marc_map.marc_field' ] }
             }
         );
 
@@ -284,26 +286,32 @@ sub raw_elasticsearch_mappings {
 
             next if $marc_type && $marc_map->marc_type ne $marc_type;
 
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{label} = $search_field->label;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{mandatory} = $search_field->mandatory;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order if defined $search_field->facet_order;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{label}       = $search_field->label;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{type}        = $search_field->type;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{mandatory}   = $search_field->mandatory;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order
+                if defined $search_field->facet_order;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{authorised_value_category} =
                 $search_field->authorised_value_category
                 if defined $search_field->authorised_value_category;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight if defined $search_field->weight;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{opac} = $search_field->opac if defined $search_field->opac;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{staff_client} = $search_field->staff_client if defined $search_field->staff_client;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight
+                if defined $search_field->weight;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{opac} = $search_field->opac
+                if defined $search_field->opac;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{staff_client} = $search_field->staff_client
+                if defined $search_field->staff_client;
 
-            push (@{ $mappings->{ $marc_map->index_name }{ $search_field->name }{mappings} },
+            push(
+                @{ $mappings->{ $marc_map->index_name }{ $search_field->name }{mappings} },
                 {
-                    facet   => $marc_to_field->facet || '',
-                    marc_type => $marc_map->marc_type,
-                    marc_field => $marc_map->marc_field,
+                    facet       => $marc_to_field->facet || '',
+                    marc_type   => $marc_map->marc_type,
+                    marc_field  => $marc_map->marc_field,
                     sort        => $marc_to_field->sort,
                     suggestible => $marc_to_field->suggestible || '',
-                    filter => $marc_to_field->filter || ''
-                });
+                    filter      => $marc_to_field->filter      || ''
+                }
+            );
 
         }
     }
@@ -325,23 +333,23 @@ sub _get_elasticsearch_field_config {
 
     # Use state to speed up repeated calls
     state $settings = undef;
-    if (!defined $settings) {
+    if ( !defined $settings ) {
         my $config_file = C4::Context->config('elasticsearch_field_config');
         $config_file ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/field_config.yaml';
         local $YAML::XS::Boolean = 'JSON::PP';
-        $settings = YAML::XS::LoadFile( $config_file );
+        $settings = YAML::XS::LoadFile($config_file);
     }
 
-    if (!defined $settings->{$purpose}) {
+    if ( !defined $settings->{$purpose} ) {
         die "Field purpose $purpose not defined in field config";
     }
-    if ($type eq '') {
+    if ( $type eq '' ) {
         return $settings->{$purpose};
     }
-    if (defined $settings->{$purpose}{$type}) {
+    if ( defined $settings->{$purpose}{$type} ) {
         return $settings->{$purpose}{$type};
     }
-    if (defined $settings->{$purpose}{'default'}) {
+    if ( defined $settings->{$purpose}{'default'} ) {
         return $settings->{$purpose}{'default'};
     }
     return;
@@ -358,11 +366,11 @@ $indexes = _load_elasticsearch_mappings();
 sub _load_elasticsearch_mappings {
     my $mappings_yaml = C4::Context->config('elasticsearch_index_mappings');
     $mappings_yaml ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
-    return YAML::XS::LoadFile( $mappings_yaml );
+    return YAML::XS::LoadFile($mappings_yaml);
 }
 
 sub reset_elasticsearch_mappings {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $indexes = $self->_load_elasticsearch_mappings();
 
     Koha::SearchMarcMaps->delete;
@@ -371,30 +379,38 @@ sub reset_elasticsearch_mappings {
     while ( my ( $index_name, $fields ) = each %$indexes ) {
         while ( my ( $field_name, $data ) = each %$fields ) {
 
-            my %sf_params = map { $_ => $data->{$_} } grep { exists $data->{$_} } qw/ type label weight staff_client opac facet_order authorised_value_category mandatory/;
+            my %sf_params =
+                map  { $_ => $data->{$_} }
+                grep { exists $data->{$_} }
+                qw/ type label weight staff_client opac facet_order authorised_value_category mandatory/;
 
             # Set default values
             $sf_params{staff_client} //= 1;
-            $sf_params{opac} //= 1;
+            $sf_params{opac}         //= 1;
 
             $sf_params{name} = $field_name;
 
             my $search_field = Koha::SearchFields->find_or_create( \%sf_params, { key => 'name' } );
 
             my $mappings = $data->{mappings};
-            for my $mapping ( @$mappings ) {
-                my $marc_field = Koha::SearchMarcMaps->find_or_create({
-                    index_name => $index_name,
-                    marc_type => $mapping->{marc_type},
-                    marc_field => $mapping->{marc_field}
-                });
-                $search_field->add_to_search_marc_maps($marc_field, {
-                    facet => $mapping->{facet} || 0,
-                    suggestible => $mapping->{suggestible} || 0,
-                    sort => $mapping->{sort} // 1,
-                    search => $mapping->{search} // 1,
-                    filter => $mapping->{filter} // ''
-                });
+            for my $mapping (@$mappings) {
+                my $marc_field = Koha::SearchMarcMaps->find_or_create(
+                    {
+                        index_name => $index_name,
+                        marc_type  => $mapping->{marc_type},
+                        marc_field => $mapping->{marc_field}
+                    }
+                );
+                $search_field->add_to_search_marc_maps(
+                    $marc_field,
+                    {
+                        facet       => $mapping->{facet}       || 0,
+                        suggestible => $mapping->{suggestible} || 0,
+                        sort        => $mapping->{sort}   // 1,
+                        search      => $mapping->{search} // 1,
+                        filter      => $mapping->{filter} // ''
+                    }
+                );
             }
         }
     }
@@ -477,13 +493,13 @@ C<field>: The original C<MARC::Record> object.
 =cut
 
 sub _process_mappings {
-    my ($_self, $mappings, $data, $record_document, $meta) = @_;
-    foreach my $mapping (@{$mappings}) {
-        my ($target, $options) = @{$mapping};
+    my ( $_self, $mappings, $data, $record_document, $meta ) = @_;
+    foreach my $mapping ( @{$mappings} ) {
+        my ( $target, $options ) = @{$mapping};
 
         # Don't process sort fields for alternate scripts
         my $sort = $target =~ /__sort$/;
-        if ($sort && $meta->{altscript}) {
+        if ( $sort && $meta->{altscript} ) {
             next;
         }
 
@@ -491,8 +507,8 @@ sub _process_mappings {
         # with differing options for (possibly) mutating data
         # so need a different copy for each
         my $data_copy = $data;
-        if (defined $options->{substr}) {
-            my ($start, $length) = @{$options->{substr}};
+        if ( defined $options->{substr} ) {
+            my ( $start, $length ) = @{ $options->{substr} };
             $data_copy = length($data) > $start ? substr $data_copy, $start, $length : '';
         }
 
@@ -502,8 +518,9 @@ sub _process_mappings {
         # Value callbacks takes subfield data (or values from previous
         # callbacks) as argument, and returns a possibly different list of values.
         # Note that the returned list may also be empty.
-        if (defined $options->{value_callbacks}) {
-            foreach my $callback (@{$options->{value_callbacks}}) {
+        if ( defined $options->{value_callbacks} ) {
+            foreach my $callback ( @{ $options->{value_callbacks} } ) {
+
                 # Pass each value to current callback which returns a list
                 # (scalar is fine too) resulting either in a list or
                 # a list of lists that will be flattened by perl.
@@ -515,12 +532,18 @@ sub _process_mappings {
         # Skip mapping if all values has been removed
         next unless @{$values};
 
-        if (defined $options->{property}) {
-            $values = [ map { { $options->{property} => $_ } if $_} @{$values} ];
+        if ( defined $options->{property} ) {
+            $values = [
+                map {
+                    { $options->{property} => $_ }
+                    if $_
+                } @{$values}
+            ];
         }
-        if (defined $options->{nonfiling_characters_indicator}) {
-            my $nonfiling_chars = $meta->{field}->indicator($options->{nonfiling_characters_indicator});
+        if ( defined $options->{nonfiling_characters_indicator} ) {
+            my $nonfiling_chars = $meta->{field}->indicator( $options->{nonfiling_characters_indicator} );
             $nonfiling_chars = looks_like_number($nonfiling_chars) ? int($nonfiling_chars) : 0;
+
             # Nonfiling chars does not make sense for multiple values
             # Only apply on first element
             if ( $nonfiling_chars > 0 ) {
@@ -532,7 +555,7 @@ sub _process_mappings {
             }
         }
 
-        $values = [ grep(!/^$/, @{$values}) ];
+        $values = [ grep( !/^$/, @{$values} ) ];
 
         # 4 bytes is the max size of a UTF-8 char.
         # 32766 bytes is the max size of the data ES can add to an index
@@ -544,6 +567,7 @@ sub _process_mappings {
         foreach my $value ( @{$values} ) {
             while ( length($value) > $MAX_SIZE ) {
                 $value =~ s/^\s*//;
+
                 # Match up to MAX_SIZE characters, stopping at the last full word before MAX_SIZE
                 if ( $value =~ /\G(.{1,$MAX_SIZE})(?:\s|$)/g ) {
                     push @chunks, $1;
@@ -583,31 +607,32 @@ Reference to array of C<MARC::Record> objects to be converted to Elasticsearch d
 =cut
 
 sub marc_records_to_documents {
-    my ($self, $records) = @_;
-    my $rules = $self->_get_marc_mapping_rules();
+    my ( $self, $records ) = @_;
+    my $rules                = $self->_get_marc_mapping_rules();
     my $control_fields_rules = $rules->{control_fields};
-    my $data_fields_rules = $rules->{data_fields};
-    my $marcflavour = lc C4::Context->preference('marcflavour');
-    my $use_array = C4::Context->preference('ElasticsearchMARCFormat') eq 'ARRAY';
+    my $data_fields_rules    = $rules->{data_fields};
+    my $marcflavour          = lc C4::Context->preference('marcflavour');
+    my $use_array            = C4::Context->preference('ElasticsearchMARCFormat') eq 'ARRAY';
 
     my @record_documents;
 
     my %auth_match_headings;
-    if( $self->index eq 'authorities' ){
+    if ( $self->index eq 'authorities' ) {
         my @auth_types = Koha::Authority::Types->search->as_list;
         %auth_match_headings = map { $_->authtypecode => $_->auth_tag_to_report } @auth_types;
     }
 
-    foreach my $record (@{$records}) {
+    foreach my $record ( @{$records} ) {
         my $record_document = {};
 
-        if ( $self->index eq 'authorities' ){
-            my $authtypecode = GuessAuthTypeCode( $record );
-            if( $authtypecode ){
-                if( $authtypecode !~ m/_SUBD/ ){ #Subdivision records will not be used for linking and so don't require match-heading to be built
-                    my $field = $record->field( $auth_match_headings{ $authtypecode } );
-                    my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
-                    push @{$record_document->{'match-heading'}}, $heading->search_form if $heading;
+        if ( $self->index eq 'authorities' ) {
+            my $authtypecode = GuessAuthTypeCode($record);
+            if ($authtypecode) {
+                if ( $authtypecode !~ m/_SUBD/ )
+                {    #Subdivision records will not be used for linking and so don't require match-heading to be built
+                    my $field   = $record->field( $auth_match_headings{$authtypecode} );
+                    my $heading = C4::Heading->new_from_field( $field, undef, 1 );         #new auth heading
+                    push @{ $record_document->{'match-heading'} }, $heading->search_form if $heading;
                 }
             } else {
                 warn "Cannot determine authority type for record: " . $record->field('001')->as_string;
@@ -616,32 +641,40 @@ sub marc_records_to_documents {
 
         my $mappings = $rules->{leader};
         if ($mappings) {
-            $self->_process_mappings($mappings, $record->leader(), $record_document, {
-                    altscript => 0,
+            $self->_process_mappings(
+                $mappings,
+                $record->leader(),
+                $record_document,
+                {
+                    altscript   => 0,
                     data_source => 'leader'
                 }
             );
         }
-        foreach my $field ($record->fields()) {
-            if ($field->is_control_field()) {
-                my $mappings = $control_fields_rules->{$field->tag()};
+        foreach my $field ( $record->fields() ) {
+            if ( $field->is_control_field() ) {
+                my $mappings = $control_fields_rules->{ $field->tag() };
                 if ($mappings) {
-                    $self->_process_mappings($mappings, $field->data(), $record_document, {
-                            altscript => 0,
+                    $self->_process_mappings(
+                        $mappings,
+                        $field->data(),
+                        $record_document,
+                        {
+                            altscript   => 0,
                             data_source => 'control_field',
-                            field => $field
+                            field       => $field
                         }
                     );
                 }
-            }
-            else {
+            } else {
                 my $tag = $field->tag();
+
                 # Handle alternate scripts in MARC 21
                 my $altscript = 0;
-                if ($marcflavour eq 'marc21' && $tag eq '880') {
+                if ( $marcflavour eq 'marc21' && $tag eq '880' ) {
                     my $sub6 = $field->subfield('6');
-                    if ($sub6 && $sub6 =~ /^(...)-\d+/) {
-                        $tag = $1;
+                    if ( $sub6 && $sub6 =~ /^(...)-\d+/ ) {
+                        $tag       = $1;
                         $altscript = 1;
                     }
                 }
@@ -649,19 +682,23 @@ sub marc_records_to_documents {
                 my $data_field_rules = $data_fields_rules->{$tag};
                 if ($data_field_rules) {
                     my $subfields_mappings = $data_field_rules->{subfields};
-                    my $wildcard_mappings = $subfields_mappings->{'*'};
-                    foreach my $subfield ($field->subfields()) {
-                        my ($code, $data) = @{$subfield};
+                    my $wildcard_mappings  = $subfields_mappings->{'*'};
+                    foreach my $subfield ( $field->subfields() ) {
+                        my ( $code, $data ) = @{$subfield};
                         my $mappings = $subfields_mappings->{$code} // [];
                         if ($wildcard_mappings) {
-                            $mappings = [@{$mappings}, @{$wildcard_mappings}];
+                            $mappings = [ @{$mappings}, @{$wildcard_mappings} ];
                         }
-                        if (@{$mappings}) {
-                            $self->_process_mappings($mappings, $data, $record_document, {
-                                    altscript => $altscript,
+                        if ( @{$mappings} ) {
+                            $self->_process_mappings(
+                                $mappings,
+                                $data,
+                                $record_document,
+                                {
+                                    altscript   => $altscript,
                                     data_source => 'subfield',
-                                    code => $code,
-                                    field => $field
+                                    code        => $code,
+                                    field       => $field
                                 }
                             );
                         }
@@ -669,16 +706,22 @@ sub marc_records_to_documents {
 
                     my $subfields_join_mappings = $data_field_rules->{subfields_join};
                     if ($subfields_join_mappings) {
-                        foreach my $subfields_group (keys %{$subfields_join_mappings}) {
-                            my $data_field = $field->clone; #copy field to preserve for alt scripts
-                            $data_field->delete_subfield(match => qr/^$/); #remove empty subfields, otherwise they are printed as a space
-                            my $data = $data_field->as_string( $subfields_group ); #get values for subfields as a combined string, preserving record order
+                        foreach my $subfields_group ( keys %{$subfields_join_mappings} ) {
+                            my $data_field = $field->clone;    #copy field to preserve for alt scripts
+                            $data_field->delete_subfield( match => qr/^$/ )
+                                ;    #remove empty subfields, otherwise they are printed as a space
+                            my $data = $data_field->as_string($subfields_group)
+                                ;    #get values for subfields as a combined string, preserving record order
                             if ($data) {
-                                $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document, {
-                                        altscript => $altscript,
+                                $self->_process_mappings(
+                                    $subfields_join_mappings->{$subfields_group},
+                                    $data,
+                                    $record_document,
+                                    {
+                                        altscript   => $altscript,
                                         data_source => 'subfields_group',
-                                        codes => $subfields_group,
-                                        field => $field
+                                        codes       => $subfields_group,
+                                        field       => $field
                                     }
                                 );
                             }
@@ -760,26 +803,29 @@ sub marc_records_to_documents {
             }
         }
 
-        foreach my $field (keys %{$rules->{defaults}}) {
-            unless (defined $record_document->{$field}) {
+        foreach my $field ( keys %{ $rules->{defaults} } ) {
+            unless ( defined $record_document->{$field} ) {
                 $record_document->{$field} = $rules->{defaults}->{$field};
             }
         }
-        foreach my $field (@{$rules->{sum}}) {
-            if (defined $record_document->{$field}) {
+        foreach my $field ( @{ $rules->{sum} } ) {
+            if ( defined $record_document->{$field} ) {
+
                 # TODO: validate numeric? filter?
                 # TODO: Or should only accept fields without nested values?
                 # TODO: Quick and dirty, improve if needed
-                $record_document->{$field} = sum0(grep { !ref($_) && m/\d+(\.\d+)?/} @{$record_document->{$field}});
+                $record_document->{$field} =
+                    sum0( grep { !ref($_) && m/\d+(\.\d+)?/ } @{ $record_document->{$field} } );
             }
         }
+
         # Index all applicable ISBN forms (ISBN-10 and ISBN-13 with and without dashes)
-        foreach my $field (@{$rules->{isbn}}) {
-            if (defined $record_document->{$field}) {
+        foreach my $field ( @{ $rules->{isbn} } ) {
+            if ( defined $record_document->{$field} ) {
                 my @isbns = ();
-                foreach my $input_isbn (@{$record_document->{$field}}) {
+                foreach my $input_isbn ( @{ $record_document->{$field} } ) {
                     my $isbn = Business::ISBN->new($input_isbn);
-                    if (defined $isbn && $isbn->is_valid) {
+                    if ( defined $isbn && $isbn->is_valid ) {
                         my $isbn13 = $isbn->as_isbn13->as_string;
                         push @isbns, $isbn13;
                         $isbn13 =~ s/\-//g;
@@ -814,15 +860,17 @@ sub marc_records_to_documents {
         }
 
         # Remove duplicate values and collapse sort fields
-        foreach my $field (keys %{$record_document}) {
-            if (ref($record_document->{$field}) eq 'ARRAY') {
-                @{$record_document->{$field}} = do {
+        foreach my $field ( keys %{$record_document} ) {
+            if ( ref( $record_document->{$field} ) eq 'ARRAY' ) {
+                @{ $record_document->{$field} } = do {
                     my %seen;
-                    grep { !$seen{ref($_) eq 'HASH' && defined $_->{input} ? $_->{input} : $_}++ } @{$record_document->{$field}};
+                    grep { !$seen{ ref($_) eq 'HASH' && defined $_->{input} ? $_->{input} : $_ }++ }
+                        @{ $record_document->{$field} };
                 };
-                if ($field =~ /__sort$/) {
+                if ( $field =~ /__sort$/ ) {
+
                     # Make sure to keep the sort field length sensible. 255 was chosen as a nice round value.
-                    $record_document->{$field} = [substr(join(' ', @{$record_document->{$field}}), 0, 255)];
+                    $record_document->{$field} = [ substr( join( ' ', @{ $record_document->{$field} } ), 0, 255 ) ];
                 }
             }
         }
@@ -831,7 +879,7 @@ sub marc_records_to_documents {
         $record->encoding('UTF-8');
         if ($use_array) {
             $record_document->{'marc_data_array'} = $self->_marc_to_array($record);
-            $record_document->{'marc_format'} = 'ARRAY';
+            $record_document->{'marc_format'}     = 'ARRAY';
         } else {
             my @warnings;
             {
@@ -856,31 +904,33 @@ sub marc_records_to_documents {
                 $record_document->{'marc_data'} = $marc_data;
             }
             if (@warnings) {
+
                 # Suppress warnings if record length exceeded
-                unless (substr($record->leader(), 0, 5) eq '99999') {
+                unless ( substr( $record->leader(), 0, 5 ) eq '99999' ) {
                     foreach my $warning (@warnings) {
                         carp $warning;
                     }
                 }
-                $record_document->{'marc_data'} = $record->as_xml_record($marcflavour);
+                $record_document->{'marc_data'}   = $record->as_xml_record($marcflavour);
                 $record_document->{'marc_format'} = 'MARCXML';
-            }
-            else {
+            } else {
                 $record_document->{'marc_format'} = 'base64ISO2709';
             }
         }
 
         # Check if there is at least one available item
-        if ($self->index eq $BIBLIOS_INDEX) {
-            my ($tag, $code) = C4::Biblio::GetMarcFromKohaField('biblio.biblionumber');
+        if ( $self->index eq $BIBLIOS_INDEX ) {
+            my ( $tag, $code ) = C4::Biblio::GetMarcFromKohaField('biblio.biblionumber');
             my $field = $record->field($tag);
             if ($field) {
                 my $biblionumber = $field->is_control_field ? $field->data : $field->subfield($code);
-                my $avail_items = Koha::Items->search({
-                    biblionumber => $biblionumber,
-                    onloan       => undef,
-                    itemlost     => 0,
-                })->count;
+                my $avail_items  = Koha::Items->search(
+                    {
+                        biblionumber => $biblionumber,
+                        onloan       => undef,
+                        itemlost     => 0,
+                    }
+                )->count;
 
                 $record_document->{available} = $avail_items ? \1 : \0;
             }
@@ -909,26 +959,26 @@ A MARC::Record object
 =cut
 
 sub _marc_to_array {
-    my ($self, $record) = @_;
+    my ( $self, $record ) = @_;
 
     my $data = {
         leader => $record->leader(),
         fields => []
     };
-    for my $field ($record->fields()) {
+    for my $field ( $record->fields() ) {
         my $tag = $field->tag();
-        if ($field->is_control_field()) {
-            push @{$data->{fields}}, {$tag => $field->data()};
+        if ( $field->is_control_field() ) {
+            push @{ $data->{fields} }, { $tag => $field->data() };
         } else {
             my $subfields = ();
-            foreach my $subfield ($field->subfields()) {
-                my ($code, $contents) = @{$subfield};
-                push @{$subfields}, {$code => $contents};
+            foreach my $subfield ( $field->subfields() ) {
+                my ( $code, $contents ) = @{$subfield};
+                push @{$subfields}, { $code => $contents };
             }
-            push @{$data->{fields}}, {
+            push @{ $data->{fields} }, {
                 $tag => {
-                    ind1 => $field->indicator(1),
-                    ind2 => $field->indicator(2),
+                    ind1      => $field->indicator(1),
+                    ind2      => $field->indicator(2),
                     subfields => $subfields
                 }
             };
@@ -955,29 +1005,29 @@ An array modeled after MARC-in-JSON
 =cut
 
 sub _array_to_marc {
-    my ($self, $data) = @_;
+    my ( $self, $data ) = @_;
 
     my $record = MARC::Record->new();
 
-    $record->leader($data->{leader});
-    for my $field (@{$data->{fields}}) {
-        my $tag = (keys %{$field})[0];
+    $record->leader( $data->{leader} );
+    for my $field ( @{ $data->{fields} } ) {
+        my $tag = ( keys %{$field} )[0];
         $field = $field->{$tag};
         my $marc_field;
-        if (ref($field) eq 'HASH') {
+        if ( ref($field) eq 'HASH' ) {
             my @subfields;
-            foreach my $subfield (@{$field->{subfields}}) {
-                my $code = (keys %{$subfield})[0];
+            foreach my $subfield ( @{ $field->{subfields} } ) {
+                my $code = ( keys %{$subfield} )[0];
                 push @subfields, $code;
                 push @subfields, $subfield->{$code};
             }
-            $marc_field = MARC::Field->new($tag, $field->{ind1}, $field->{ind2}, @subfields);
+            $marc_field = MARC::Field->new( $tag, $field->{ind1}, $field->{ind2}, @subfields );
         } else {
-            $marc_field = MARC::Field->new($tag, $field)
+            $marc_field = MARC::Field->new( $tag, $field );
         }
         $record->append_fields($marc_field);
     }
-;
+
     return $record;
 }
 
@@ -1046,11 +1096,12 @@ sub _field_mappings {
     my @mappings;
 
     my $substr_args = undef;
-    if (defined $range) {
+    if ( defined $range ) {
+
         # TODO: use value_callback instead?
-        my ($start, $end) = map(int, split /-/, $range, 2);
+        my ( $start, $end ) = map( int, split /-/, $range, 2 );
         $substr_args = [$start];
-        push @{$substr_args}, (defined $end ? $end - $start + 1 : 1);
+        push @{$substr_args}, ( defined $end ? $end - $start + 1 : 1 );
     }
     my $default_options = {};
     if ($substr_args) {
@@ -1059,20 +1110,22 @@ sub _field_mappings {
 
     # TODO: Should probably have per type value callback/hook
     # but hard code for now
-    if ($target_type eq 'boolean') {
+    if ( $target_type eq 'boolean' ) {
         $default_options->{value_callbacks} //= [];
-        push @{$default_options->{value_callbacks}}, sub {
+        push @{ $default_options->{value_callbacks} }, sub {
             my ($value) = @_;
+
             # Trim whitespace at both ends
             $value =~ s/^\s+|\s+$//g;
             return $value ? 'true' : 'false';
         };
-    }
-    elsif ($target_type eq 'year') {
+    } elsif ( $target_type eq 'year' ) {
         $default_options->{value_callbacks} //= [];
+
         # Only accept years containing digits and "u"
-        push @{$default_options->{value_callbacks}}, sub {
+        push @{ $default_options->{value_callbacks} }, sub {
             my ($value) = @_;
+
             # Replace "u" with "0" for sorting
             return map { s/[u\s]/0/gr } ( $value =~ /[0-9u\s]{4}/g );
         };
@@ -1091,30 +1144,31 @@ sub _field_mappings {
     }
 
     if ($search) {
-        my $mapping = [$target_name, $default_options];
+        my $mapping = [ $target_name, $default_options ];
         push @mappings, $mapping;
     }
 
     my @suffixes = ();
-    push @suffixes, 'facet' if $facet;
+    push @suffixes, 'facet'      if $facet;
     push @suffixes, 'suggestion' if $suggestible;
-    push @suffixes, 'sort' if !defined $sort || $sort;
+    push @suffixes, 'sort'       if !defined $sort || $sort;
 
     foreach my $suffix (@suffixes) {
         my $mapping = ["${target_name}__$suffix"];
+
         # TODO: Hack, fix later in less hideous manner
-        if ($suffix eq 'suggestion') {
-            push @{$mapping}, {%{$default_options}, property => 'input'};
-        }
-        else {
+        if ( $suffix eq 'suggestion' ) {
+            push @{$mapping}, { %{$default_options}, property => 'input' };
+        } else {
+
             # Important! Make shallow clone, or we end up with the same hashref
             # shared by all mappings
-            push @{$mapping}, {%{$default_options}};
+            push @{$mapping}, { %{$default_options} };
         }
         push @mappings, $mapping;
     }
     return @mappings;
-};
+}
 
 =head2 _get_marc_mapping_rules
 
@@ -1138,137 +1192,132 @@ which is terribly slow.
 # would probably be marginal, but to do this could be a further improvement.
 
 sub _get_marc_mapping_rules {
-    my ($self) = @_;
-    my $marcflavour = lc C4::Context->preference('marcflavour');
+    my ($self)            = @_;
+    my $marcflavour       = lc C4::Context->preference('marcflavour');
     my $field_spec_regexp = qr/^([0-9]{3})([()0-9a-zA-Z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
-    my $leader_regexp = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
-    my $rules = {
-        'leader' => [],
+    my $leader_regexp     = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
+    my $rules             = {
+        'leader'         => [],
         'control_fields' => {},
-        'data_fields' => {},
-        'sum' => [],
-        'isbn' => [],
-        'defaults' => {}
+        'data_fields'    => {},
+        'sum'            => [],
+        'isbn'           => [],
+        'defaults'       => {}
     };
 
-    $self->_foreach_mapping(sub {
-        my ($name, $type, $facet, $suggestible, $sort, $search, $filter, $marc_type, $marc_field) = @_;
-        return if $marc_type ne $marcflavour;
+    $self->_foreach_mapping(
+        sub {
+            my ( $name, $type, $facet, $suggestible, $sort, $search, $filter, $marc_type, $marc_field ) = @_;
+            return if $marc_type ne $marcflavour;
 
-        if ($type eq 'sum') {
-            push @{$rules->{sum}}, $name;
-            push @{$rules->{sum}}, $name."__sort" if $sort;
-        }
-        elsif ($type eq 'isbn') {
-            push @{$rules->{isbn}}, $name;
-        }
-        elsif ($type eq 'geo_point') {
-            push @{$rules->{geo_point}}, $name;
-        }
-        elsif ($type eq 'boolean') {
-            # boolean gets special handling, if value doesn't exist for a field,
-            # it is set to false
-            $rules->{defaults}->{$name} = 'false';
-        }
+            if ( $type eq 'sum' ) {
+                push @{ $rules->{sum} }, $name;
+                push @{ $rules->{sum} }, $name . "__sort" if $sort;
+            } elsif ( $type eq 'isbn' ) {
+                push @{ $rules->{isbn} }, $name;
+            } elsif ( $type eq 'geo_point' ) {
+                push @{ $rules->{geo_point} }, $name;
+            } elsif ( $type eq 'boolean' ) {
 
-        if ($marc_field =~ $field_spec_regexp) {
-            my $field_tag = $1;
+                # boolean gets special handling, if value doesn't exist for a field,
+                # it is set to false
+                $rules->{defaults}->{$name} = 'false';
+            }
 
-            my @subfields;
-            my @subfield_groups;
-            # Parse and separate subfields form subfield groups
-            if (defined $2) {
-                my $subfield_group = '';
-                my $open_group = 0;
+            if ( $marc_field =~ $field_spec_regexp ) {
+                my $field_tag = $1;
 
-                foreach my $token (split //, $2) {
-                    if ($token eq "(") {
-                        if ($open_group) {
-                            Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
-                                "Unmatched opening parenthesis for $marc_field"
-                            );
-                        }
-                        else {
-                            $open_group = 1;
-                        }
-                    }
-                    elsif ($token eq ")") {
-                        if ($open_group) {
-                            if ($subfield_group) {
-                                push @subfield_groups, $subfield_group;
-                                $subfield_group = '';
+                my @subfields;
+                my @subfield_groups;
+
+                # Parse and separate subfields form subfield groups
+                if ( defined $2 ) {
+                    my $subfield_group = '';
+                    my $open_group     = 0;
+
+                    foreach my $token ( split //, $2 ) {
+                        if ( $token eq "(" ) {
+                            if ($open_group) {
+                                Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
+                                    "Unmatched opening parenthesis for $marc_field");
+                            } else {
+                                $open_group = 1;
                             }
-                            $open_group = 0;
+                        } elsif ( $token eq ")" ) {
+                            if ($open_group) {
+                                if ($subfield_group) {
+                                    push @subfield_groups, $subfield_group;
+                                    $subfield_group = '';
+                                }
+                                $open_group = 0;
+                            } else {
+                                Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
+                                    "Unmatched closing parenthesis for $marc_field");
+                            }
+                        } elsif ($open_group) {
+                            $subfield_group .= $token;
+                        } else {
+                            push @subfields, $token;
                         }
-                        else {
-                            Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
-                                "Unmatched closing parenthesis for $marc_field"
-                            );
-                        }
                     }
-                    elsif ($open_group) {
-                        $subfield_group .= $token;
-                    }
-                    else {
-                        push @subfields, $token;
-                    }
+                } else {
+                    push @subfields, '*';
                 }
-            }
-            else {
-                push @subfields, '*';
-            }
 
-            my $range = defined $3 ? $3 : undef;
-            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $filter, $name, $type, $range);
-            if ($field_tag < 10) {
-                $rules->{control_fields}->{$field_tag} //= [];
-                push @{$rules->{control_fields}->{$field_tag}}, @{clone(\@mappings)};
-            }
-            else {
-                $rules->{data_fields}->{$field_tag} //= {};
-                foreach my $subfield (@subfields) {
-                    $rules->{data_fields}->{$field_tag}->{subfields}->{$subfield} //= [];
-                    push @{$rules->{data_fields}->{$field_tag}->{subfields}->{$subfield}}, @{clone(\@mappings)};
+                my $range = defined $3 ? $3 : undef;
+                my @mappings =
+                    $self->_field_mappings( $facet, $suggestible, $sort, $search, $filter, $name, $type, $range );
+                if ( $field_tag < 10 ) {
+                    $rules->{control_fields}->{$field_tag} //= [];
+                    push @{ $rules->{control_fields}->{$field_tag} }, @{ clone( \@mappings ) };
+                } else {
+                    $rules->{data_fields}->{$field_tag} //= {};
+                    foreach my $subfield (@subfields) {
+                        $rules->{data_fields}->{$field_tag}->{subfields}->{$subfield} //= [];
+                        push @{ $rules->{data_fields}->{$field_tag}->{subfields}->{$subfield} },
+                            @{ clone( \@mappings ) };
+                    }
+                    foreach my $subfield_group (@subfield_groups) {
+                        $rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group} //= [];
+                        push @{ $rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group} },
+                            @{ clone( \@mappings ) };
+                    }
                 }
-                foreach my $subfield_group (@subfield_groups) {
-                    $rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group} //= [];
-                    push @{$rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group}}, @{clone(\@mappings)};
-                }
+            } elsif ( $marc_field =~ $leader_regexp ) {
+                my $range = defined $1 ? $1 : undef;
+                my @mappings =
+                    $self->_field_mappings( $facet, $suggestible, $sort, $search, $filter, $name, $type, $range );
+                push @{ $rules->{leader} }, @{ clone( \@mappings ) };
+            } else {
+                Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
+                    "Invalid MARC field expression: $marc_field");
             }
         }
-        elsif ($marc_field =~ $leader_regexp) {
-            my $range = defined $1 ? $1 : undef;
-            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $filter, $name, $type, $range);
-            push @{$rules->{leader}}, @{clone(\@mappings)};
-        }
-        else {
-            Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
-                "Invalid MARC field expression: $marc_field"
-            );
-        }
-    });
+    );
 
     # Marc-flavour specific rule tweaks, could/should also provide hook for this
-    if ($marcflavour eq 'marc21') {
+    if ( $marcflavour eq 'marc21' ) {
+
         # Nonfiling characters processing for sort fields
         my %title_fields;
-        if ($self->index eq $Koha::SearchEngine::BIBLIOS_INDEX) {
+        if ( $self->index eq $Koha::SearchEngine::BIBLIOS_INDEX ) {
+
             # Format is: nonfiling characters indicator => field names list
             %title_fields = (
-                1 => [130, 630, 730, 740],
-                2 => [222, 240, 242, 243, 245, 440, 830]
+                1 => [ 130, 630, 730, 740 ],
+                2 => [ 222, 240, 242, 243, 245, 440, 830 ]
             );
-        }
-        elsif ($self->index eq $Koha::SearchEngine::AUTHORITIES_INDEX) {
+        } elsif ( $self->index eq $Koha::SearchEngine::AUTHORITIES_INDEX ) {
             %title_fields = (
                 1 => [730],
-                2 => [130, 430, 530]
+                2 => [ 130, 430, 530 ]
             );
         }
-        foreach my $indicator (keys %title_fields) {
-            foreach my $field_tag (@{$title_fields{$indicator}}) {
+        foreach my $indicator ( keys %title_fields ) {
+            foreach my $field_tag ( @{ $title_fields{$indicator} } ) {
                 my $mappings = $rules->{data_fields}->{$field_tag}->{subfields}->{a} // [];
                 foreach my $mapping ( @{$mappings} ) {
+
                     # Mark this as to be processed for nonfiling characters indicator
                     # later on in _process_mappings
                     $mapping->[1]->{nonfiling_characters_indicator} = $indicator;
@@ -1277,9 +1326,9 @@ sub _get_marc_mapping_rules {
         }
     }
 
-    if( $self->index eq 'authorities' ){
-        push @{$rules->{control_fields}->{'008'}}, ['subject-heading-thesaurus', { 'substr' => [ 11, 1 ] } ];
-        push @{$rules->{data_fields}->{'040'}->{subfields}->{f}}, ['subject-heading-thesaurus', { } ];
+    if ( $self->index eq 'authorities' ) {
+        push @{ $rules->{control_fields}->{'008'} }, [ 'subject-heading-thesaurus', { 'substr' => [ 11, 1 ] } ];
+        push @{ $rules->{data_fields}->{'040'}->{subfields}->{f} }, [ 'subject-heading-thesaurus', {} ];
     }
 
     return $rules;
@@ -1355,7 +1404,8 @@ sub _foreach_mapping {
         {
             'search_marc_map.index_name' => $self->index,
         },
-        {   join => { search_marc_to_fields => 'search_marc_map' },
+        {
+            join      => { search_marc_to_fields => 'search_marc_map' },
             '+select' => [
                 'search_marc_to_fields.facet',
                 'search_marc_to_fields.suggestible',
@@ -1365,7 +1415,7 @@ sub _foreach_mapping {
                 'search_marc_map.marc_type',
                 'search_marc_map.marc_field',
             ],
-            '+as'     => [
+            '+as' => [
                 'facet',
                 'suggestible',
                 'sort',
@@ -1381,7 +1431,7 @@ sub _foreach_mapping {
         $sub->(
             # Force lower case on indexed field names for case insensitive
             # field name searches
-            lc($search_field->name),
+            lc( $search_field->name ),
             $search_field->type,
             $search_field->get_column('facet'),
             $search_field->get_column('suggestible'),
@@ -1408,12 +1458,13 @@ will happen eventually by some method or other.
 =cut
 
 sub process_error {
-    my ($self, $msg) = @_;
+    my ( $self, $msg ) = @_;
 
-    warn $msg; # simple logging
+    warn $msg;    # simple logging
 
     # This is super-primitive
-    return "Unable to understand your search query, please rephrase and try again.\n" if $msg =~ /ParseException|parse_exception/;
+    return "Unable to understand your search query, please rephrase and try again.\n"
+        if $msg =~ /ParseException|parse_exception/;
 
     return "Unable to perform your search. Please try again.\n";
 }
@@ -1449,15 +1500,11 @@ sub _read_configuration {
 
     my $conf = C4::Context->config('elasticsearch');
     unless ( defined $conf ) {
-        Koha::Exceptions::Config::MissingEntry->throw(
-            "Missing <elasticsearch> entry in koha-conf.xml"
-        );
+        Koha::Exceptions::Config::MissingEntry->throw("Missing <elasticsearch> entry in koha-conf.xml");
     }
 
     unless ( exists $conf->{server} ) {
-        Koha::Exceptions::Config::MissingEntry->throw(
-            "Missing <elasticsearch>/<server> entry in koha-conf.xml"
-        );
+        Koha::Exceptions::Config::MissingEntry->throw("Missing <elasticsearch>/<server> entry in koha-conf.xml");
     }
 
     unless ( exists $conf->{index_name} ) {
@@ -1470,8 +1517,7 @@ sub _read_configuration {
         if ( $var eq 'server' ) {
             if ( ref($val) eq 'ARRAY' ) {
                 $configuration->{nodes} = $val;
-            }
-            else {
+            } else {
                 $configuration->{nodes} = [$val];
             }
         } else {

@@ -45,9 +45,9 @@ Koha::Import::Record::Matches - Koha Import Record Matches Object set class
 
 sub filter_by_chosen {
 
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $chosen = $self->search({ chosen => 1 });
+    my $chosen = $self->search( { chosen => 1 } );
 
     return $chosen;
 

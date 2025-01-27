@@ -57,7 +57,6 @@ the requested object including any embeds specified in the request.
         }
     );
 
-
 =head3 objects.find_rs
 
     my $patrons_rs = Koha::Patrons->new;
@@ -183,12 +182,11 @@ controller, and thus shouldn't be called twice in it.
             );
 
             # If no pagination parameters are passed, default
-            $reserved_params->{_per_page} //=
-              C4::Context->preference('RESTdefaultPageSize') // 20;
-            $reserved_params->{_page} //= 1;
+            $reserved_params->{_per_page} //= C4::Context->preference('RESTdefaultPageSize') // 20;
+            $reserved_params->{_page}     //= 1;
 
-            $c->stash('koha.pagination.page'     => $reserved_params->{_page});
-            $c->stash('koha.pagination.per_page' => $reserved_params->{_per_page});
+            $c->stash( 'koha.pagination.page'     => $reserved_params->{_page} );
+            $c->stash( 'koha.pagination.per_page' => $reserved_params->{_per_page} );
 
             unless ( $reserved_params->{_per_page} == -1 ) {
 
@@ -229,48 +227,45 @@ controller, and thus shouldn't be called twice in it.
 
                 if ( ref( $reserved_params->{q} ) eq 'ARRAY' ) {
 
-                   # q is defined as multi => JSON::Validator generates an array
+                    # q is defined as multi => JSON::Validator generates an array
                     foreach my $q ( @{ $reserved_params->{q} } ) {
-                        if ( $q ) { # skip if exists but is empty
-                            foreach my $qf (@{$query_fixers}) {
+                        if ($q) {    # skip if exists but is empty
+                            foreach my $qf ( @{$query_fixers} ) {
                                 $q = $qf->($q);
                             }
                             push @query_params_array, $json->decode($q);
                         }
                     }
-                }
-                else {
+                } else {
+
                     # objects.search called outside OpenAPI context
                     # might be a hashref
                     if ( $reserved_params->{q} ) {
                         my $q = $reserved_params->{q};
-                        foreach my $qf (@{$query_fixers}) {
+                        foreach my $qf ( @{$query_fixers} ) {
                             $q = $qf->($q);
                         }
-                        push @query_params_array, $json->decode( $q );
+                        push @query_params_array, $json->decode($q);
                     }
                 }
 
                 if ( scalar(@query_params_array) > 1 ) {
                     $query_params = { '-and' => \@query_params_array };
-                }
-                else {
+                } else {
                     $query_params = $query_params_array[0];
                 }
             }
 
             # request sequence id (i.e. 'draw' Datatables parameter)
-            $c->res->headers->add(
-                'x-koha-request-id' => $reserved_params->{'x-koha-request-id'} )
-              if $reserved_params->{'x-koha-request-id'};
+            $c->res->headers->add( 'x-koha-request-id' => $reserved_params->{'x-koha-request-id'} )
+                if $reserved_params->{'x-koha-request-id'};
 
             # If search_limited exists, use it
             $result_set = $result_set->search_limited,
-              if $result_set->can('search_limited');
+                if $result_set->can('search_limited');
 
-            $c->stash('koha.pagination.base_total'   => $result_set->count);
-            $c->stash('koha.pagination.query_params' => $args);
-
+            $c->stash( 'koha.pagination.base_total'   => $result_set->count );
+            $c->stash( 'koha.pagination.query_params' => $args );
 
             # Apply the mapping function to the passed params
             if ( defined $filtered_params ) {
@@ -292,8 +287,13 @@ controller, and thus shouldn't be called twice in it.
 
             # Generate the resultset
             my $objects_rs = $result_set->search( $filtered_params, $attributes );
+
             # Stash the page total if requires, total otherwise
-            $c->stash('koha.pagination.total' => $objects_rs->is_paged ? $objects_rs->pager->total_entries : $objects_rs->count);
+            $c->stash(
+                'koha.pagination.total' => $objects_rs->is_paged
+                ? $objects_rs->pager->total_entries
+                : $objects_rs->count
+            );
 
             return $objects_rs;
         }

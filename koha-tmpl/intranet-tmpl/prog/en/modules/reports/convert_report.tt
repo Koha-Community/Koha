@@ -1,33 +1,34 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% t("Convert report") | html %] &rsaquo;
-        [% t("Reports") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    </head>
-    <body id="rep_report_convert" class="rep">
-        <h1>Convert report</h1>
-        <div>
-            [% IF msg == 'no_report' %]
-                There is no valid report for this id.
-            [% ELSIF msg == 'can_be_updated' %]
-                <div id="col1">
-                    <h3>Existing SQL</h3>
-                    <span class="show_sql">[% current_sql | html_entity %]</span>
-                </div>
-
-                <div id="col2">
-                    <h3>Updated SQL</h3>
-                    <span class="show_sql">[% updated_sql | html_entity %]</span>
-                </div>
-            [% ELSE %]
-                Something went wrong.
-            [% END %]
+<title
+    >[% FILTER collapse %]
+        [% t("Convert report") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body id="rep_report_convert" class="rep">
+<h1>Convert report</h1>
+<div>
+    [% IF msg == 'no_report' %]
+        There is no valid report for this id.
+    [% ELSIF msg == 'can_be_updated' %]
+        <div id="col1">
+            <h3>Existing SQL</h3>
+            <span class="show_sql">[% current_sql | html_entity %]</span>
         </div>
-    </body>
+
+        <div id="col2">
+            <h3>Updated SQL</h3>
+            <span class="show_sql">[% updated_sql | html_entity %]</span>
+        </div>
+    [% ELSE %]
+        Something went wrong.
+    [% END %]
+</div>
+</body>
 <!-- prettier-ignore-start -->
 </html>
 <!-- prettier-ignore-end -->

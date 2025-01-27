@@ -67,20 +67,14 @@ subtest 'list() tests' => sub {
     my $non_existent_cr_id      = $cash_register_to_delete->id;
     $cash_register_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$non_existent_cr_id/cashups")
-      ->status_is(404)->json_is( '/error' => 'Register not found' );
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$non_existent_cr_id/cashups")->status_is(404)
+        ->json_is( '/error' => 'Register not found' );
 
-    my $register = $builder->build_object(
-        {
-            class => 'Koha::Cash::Registers'
-        }
-    );
+    my $register    = $builder->build_object( { class => 'Koha::Cash::Registers' } );
     my $register_id = $register->id;
 
     # No cashups, so empty array should be returned
-    $t->get_ok(
-        "//$userid:$password@/api/v1/cash_registers/$register_id/cashups")
-      ->status_is(200)->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")->status_is(200)->json_is( [] );
 
     my $cashup = $builder->build_object(
         {
@@ -94,9 +88,8 @@ subtest 'list() tests' => sub {
     );
 
     # One cashup created, should get returned
-    $t->get_ok(
-        "//$userid:$password@/api/v1/cash_registers/$register_id/cashups")
-      ->status_is(200)->json_is( [ $cashup->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")->status_is(200)
+        ->json_is( [ $cashup->to_api ] );
 
     my $another_cashup = $builder->build_object(
         {
@@ -110,27 +103,22 @@ subtest 'list() tests' => sub {
     );
 
     # One more cashup created, both should be returned
-    $t->get_ok(
-        "//$userid:$password@/api/v1/cash_registers/$register_id/cashups")
-      ->status_is(200)
-      ->json_is( [ $another_cashup->to_api, $cashup->to_api, ] );
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")->status_is(200)
+        ->json_is( [ $another_cashup->to_api, $cashup->to_api, ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok(
-"//$userid:$password@/api/v1/cash_registers/$register_id/cashups?cashup_blah=blah"
-    )->status_is(400)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups?cashup_blah=blah")->status_is(400)
+        ->json_is(
         [
             {
                 path    => '/query/cashup_blah',
                 message => 'Malformed query string'
             }
         ]
-    );
+        );
 
     # Unauthorized access
-    $t->get_ok(
-        "//$unauth_userid:$password@/api/v1/cash_registers/$register_id/cashups"
-    )->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/cash_registers/$register_id/cashups")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -141,8 +129,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $cashup =
-      $builder->build_object( { class => 'Koha::Cash::Register::Cashups' } );
+    my $cashup    = $builder->build_object( { class => 'Koha::Cash::Register::Cashups' } );
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -163,19 +150,16 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/cashups/" . $cashup->id )
-      ->status_is(200)->json_is( $cashup->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/cashups/" . $cashup->id )->status_is(200)->json_is( $cashup->to_api );
 
-    $t->get_ok( "//$unauth_userid:$password@/api/v1/cashups/" . $cashup->id )
-      ->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/cashups/" . $cashup->id )->status_is(403);
 
-    my $cashup_to_delete =
-      $builder->build_object( { class => 'Koha::Cash::Register::Cashups' } );
-    my $non_existent_id = $cashup_to_delete->id;
+    my $cashup_to_delete = $builder->build_object( { class => 'Koha::Cash::Register::Cashups' } );
+    my $non_existent_id  = $cashup_to_delete->id;
     $cashup_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/cashups/$non_existent_id")
-      ->status_is(404)->json_is( '/error' => 'Cashup not found' );
+    $t->get_ok("//$userid:$password@/api/v1/cashups/$non_existent_id")->status_is(404)
+        ->json_is( '/error' => 'Cashup not found' );
 
     $schema->storage->txn_rollback;
 };

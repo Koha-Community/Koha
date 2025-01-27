@@ -7,12 +7,12 @@
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
     <script>
-       if (self === top) {
-           var antiClickjack = document.getElementById("antiClickjack");
-           antiClickjack.parentNode.removeChild(antiClickjack);
-       } else {
-           top.location = self.location;
-       }
+        if (self === top) {
+            var antiClickjack = document.getElementById("antiClickjack");
+            antiClickjack.parentNode.removeChild(antiClickjack);
+        } else {
+            top.location = self.location;
+        }
     </script>
 [% END %]
 
@@ -34,7 +34,7 @@
 [% IF ( IntranetUserJS ) %]
     <!-- js_includes.inc: IntranetUserJS -->
     <script>
-    [% IntranetUserJS | $raw %]
+        [% IntranetUserJS | $raw %]
     </script>
     <!-- / js_includes.inc: IntranetUserJS -->
 [% END %]
@@ -67,7 +67,6 @@
         });
     </script>
 [% END %]
-
 <script>
     var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname|preferred_name|middle_name|surname|othernames|cardnumber|userid' | html %]";
     var defaultPatronSearchMethod = "[% Koha.Preference('DefaultPatronSearchMethod') || 'contains' | html %]";
@@ -77,18 +76,18 @@
 </script>
 [% IF ( PatronAutoComplete ) %]
     <script>
-    // PatronAutoComplete
-    var loggedInClass = "";
-    $(document).ready(function(){
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-            if ( $("#findborrower").length ) {
-                patron_autocomplete($("#findborrower"), { 'link-to': 'circ' });
+        // PatronAutoComplete
+        var loggedInClass = "";
+        $(document).ready(function(){
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+                if ( $("#findborrower").length ) {
+                    patron_autocomplete($("#findborrower"), { 'link-to': 'circ' });
+                }
+            [% END %]
+            if ( $("#searchmember").length ) {
+                patron_autocomplete($("#searchmember"), { 'link-to': 'patron' });
             }
-        [% END %]
-        if ( $("#searchmember").length ) {
-            patron_autocomplete($("#searchmember"), { 'link-to': 'patron' });
-        }
-    });
+        });
     </script>
 [% END %]
 

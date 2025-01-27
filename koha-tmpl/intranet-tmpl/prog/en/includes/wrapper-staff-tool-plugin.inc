@@ -5,18 +5,22 @@
 [% IF ( ! method ) %]
     [% method = 'tool'; %]
 [% END %]
-<title>[% FILTER collapse %]
-    [% IF ( plugin_title ) %]
-        [% plugin_title | html %] &rsaquo;
-    [% END %]
-    [% t("Plugins") | html %] &rsaquo;
-    [% IF ( method == 'tool' ) %]
-        [% t("Tools") | html %]
-    [% ELSE %]
-        [% t("Administration") | html %]
-    [% END %] &rsaquo;
-    [% t("Koha") | html %]
- [% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( plugin_title ) %]
+            [% plugin_title | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Plugins") | html %]
+        &rsaquo;
+        [% IF ( method == 'tool' ) %]
+            [% t("Tools") | html %]
+        [% ELSE %]
+            [% t("Administration") | html %]
+        [% END %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -46,10 +50,9 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-            [% content | $raw %]
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
+            <main> [% content | $raw %] </main>
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
@@ -59,7 +62,10 @@
                     [% INCLUDE 'admin-menu.inc' %]
                 [% END %]
             </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
+    </div>
+    <!-- /.row -->
 
-[% INCLUDE 'intranet-bottom.inc' %]
+    [% INCLUDE 'intranet-bottom.inc' %]
+</div>

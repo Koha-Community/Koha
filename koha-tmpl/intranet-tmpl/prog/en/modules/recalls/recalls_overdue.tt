@@ -5,11 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Overdue recalls") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Overdue recalls") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_overdue_recalls" class="circ">
@@ -30,26 +31,27 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-        <h1>Overdue recalls</h1>
-        [% IF Koha.Preference('UseRecalls') %]
-            [% IF recalls.count %]
-                <div class="page-section">
-                    <form method="post" action="/cgi-bin/koha/recalls/recalls_overdue.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-cancel_multiple_recalls">
-                        <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
-                        [% INCLUDE 'recalls.inc' %]
-                        <fieldset class="action">
-                            <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
-                        </fieldset>
-                    </form>
-                </div> <!-- /.page-section -->
-            [% ELSE %]
-                <div class="alert alert-info">There are no recalls to show.</div>
-            [% END %]
+    <h1>Overdue recalls</h1>
+    [% IF Koha.Preference('UseRecalls') %]
+        [% IF recalls.count %]
+            <div class="page-section">
+                <form method="post" action="/cgi-bin/koha/recalls/recalls_overdue.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-cancel_multiple_recalls" />
+                    <input type="checkbox" id="select_all" /> <span id="select_all_text">Select all</span>
+                    [% INCLUDE 'recalls.inc' %]
+                    <fieldset class="action">
+                        <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
+                    </fieldset>
+                </form>
+            </div>
+            <!-- /.page-section -->
         [% ELSE %]
-            <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+            <div class="alert alert-info">There are no recalls to show.</div>
         [% END %]
+    [% ELSE %]
+        <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

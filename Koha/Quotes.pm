@@ -49,26 +49,25 @@ noop        When no option is passed in, this sub will return the quote timestam
 # at least for default option
 
 sub get_daily_quote {
-    my ($self, %opts) = @_;
+    my ( $self, %opts ) = @_;
 
-    my $qotdPref = C4::Context->preference('QuoteOfTheDay');
+    my $qotdPref  = C4::Context->preference('QuoteOfTheDay');
     my $interface = C4::Context->interface();
 
-    my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
-    unless ($qotdPref =~ /$interface/) {
+    unless ( $qotdPref =~ /$interface/ ) {
         return;
     }
 
     my $quote = undef;
 
-    if ($opts{'id'}) {
-        $quote = $self->find({ id => $opts{'id'} });
-    }
-    elsif ($opts{'random'}) {
+    if ( $opts{'id'} ) {
+        $quote = $self->find( { id => $opts{'id'} } );
+    } elsif ( $opts{'random'} ) {
+
         # Fall through... we also return a random quote as a catch-all if all else fails
-    }
-    else {
+    } else {
         my $dt = $dtf->format_date(dt_from_string);
         $quote = $self->search(
             {
@@ -76,19 +75,19 @@ sub get_daily_quote {
             },
             {
                 order_by => { -desc => 'timestamp' },
-                rows => 1,
+                rows     => 1,
             }
         )->single;
     }
-    unless ($quote) {        # if there are not matches, choose a random quote
-        my $range = $self->search->count;
-        my $offset = int(rand($range));
+    unless ($quote) {    # if there are not matches, choose a random quote
+        my $range  = $self->search->count;
+        my $offset = int( rand($range) );
         $quote = $self->search(
             {},
             {
                 order_by => 'id',
-                rows => 1,
-                offset => $offset,
+                rows     => 1,
+                offset   => $offset,
             }
         )->single;
     }
@@ -96,7 +95,7 @@ sub get_daily_quote {
     return unless $quote;
 
     # update the timestamp for that quote
-    $quote->update({timestamp => dt_from_string})->discard_changes;
+    $quote->update( { timestamp => dt_from_string } )->discard_changes;
 
     return $quote;
 }

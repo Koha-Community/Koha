@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("MARC bibliographic framework test") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("MARC bibliographic framework test") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_checkmarc" class="admin">
@@ -28,271 +29,291 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <h1>MARC bibliographic framework test</h1>
 
-<h1>MARC bibliographic framework test</h1>
+    [% IF ( total ) %]
+        <div class="alert alert-warning">
+            <h2>Configuration errors found</h2>
+            You have [% total | html %] error(s) in your MARC configuration. Please fix them before using Koha
+        </div>
+    [% ELSE %]
+        <div class="alert alert-info"> <h2>Configuration okay</h2> You don't have errors in your MARC configuration </div>
+    [% END %]
 
-[% IF ( total ) %]
-    <div class="alert alert-warning">
-        <h2>Configuration errors found</h2>
-        You have [% total | html %] error(s) in your MARC configuration. Please fix them before using Koha
+    <div class="page-section">
+        <table>
+            <tr>
+                <th>Test</th>
+                <th>Result</th>
+            </tr>
+            <!-- -->
+            [% IF ( itemnum ) %]
+                <tr>
+                    <td>itemnumber</td>
+                    <td
+                        ><ul
+                            ><li>The field itemnumber MUST be mapped </li>
+                            <li>The corresponding subfield MUST be in with -1 (ignore) tab</li></ul
+                        ></td
+                    >
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>itemnumber : the field itemnumber is mapped to a field in tab -1</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( itemfields ) %]
+                <tr>
+                    <td>item fields</td>
+                    <td
+                        >ALL items fields MUST :<br />
+                        <ul
+                            ><li>be mapped to the same tag,</li>
+                            <li>and they must all be in the 10 (items) tab</li></ul
+                        ></td
+                    >
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>All item fields are in the same tag and in item tab</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( itemtags ) %]
+                <tr>
+                    <td>Item tag</td>
+                    <td>There is more than 1 MARC tag related to items tab (10) : [% itemtags | html %]</td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>Only 1 MARC tag mapped to items</td>
+                </tr>
+            [% END %]
+            <!--  -->
+            [% IF ( itemtype ) %]
+                <tr>
+                    <td>itemtype NOT mapped</td>
+                    <td
+                        >the biblioitems.itemtype field MUST :<br />
+                        <ul
+                            ><li>be mapped to a MARC subfield, </li>
+                            <li>the corresponding subfield MUST have "Authorized value" set to "itemtype"</li></ul
+                        ></td
+                    >
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>biblioitems.itemtype defined</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( branch ) %]
+                <tr>
+                    <td>homebranch NOT mapped</td>
+                    <td
+                        >the items.homebranch field MUST :<br />
+                        <ul
+                            ><li>be mapped to a MARC subfield,</li>
+                            <li>the corresponding subfield MUST have "Authorized value" set to "branches"</li></ul
+                        ></td
+                    >
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>homebranch defined</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( holdingbranch ) %]
+                <tr>
+                    <td>holdingbranch NOT mapped</td>
+                    <td
+                        >the items.holdingbranch field MUST :<br />
+                        <ul
+                            ><li>be mapped to a MARC subfield, </li>
+                            <li>the corresponding subfield MUST have "Authorized value" set to "branches"</li></ul
+                        ></td
+                    >
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>holdingbranch defined</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( itemtypes_empty ) %]
+                <tr>
+                    <td>item type not defined</td>
+                    <td>at least 1 item type must be defined</td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>at least 1 item type defined</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( branches_empty ) %]
+                <tr>
+                    <td>library not defined</td>
+                    <td>at least 1 library must be defined</td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>at least 1 library defined</td>
+                </tr>
+            [% END %]
+            <!-- -->
+            [% IF ( biblionumber ) %]
+                <tr>
+                    <td>biblio and biblionumber</td>
+                    <td>The biblio.biblionumber and biblioitems.biblioitemnumber fields be mapped to a MARC subfield,</td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>biblionumber and biblioitemnumber mapped correctly</td>
+                </tr>
+            [% END %]
+
+            [% IF ( frameworknull ) %]
+                <tr>
+                    <td>framework values</td>
+                    <td
+                        >there is a null value in a frameworkcode. Check the following tables<br />
+                        <li>select * from marc_subfield_structure where frameworkcode is NULL</li>
+                        <li>select * from marc_tag_structure where frameworkcode is NULL</li>
+                    </td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>no NULL value in frameworkcode</td>
+                </tr>
+            [% END %]
+
+            [% IF ( inconsistent_tabs ) %]
+                <tr>
+                    <td style="vertical-align:top;">subfields not in same tabs</td>
+                    <td
+                        >Not all subfields for the following tags are in the same tab (or marked 'ignored').
+                        <table>
+                            <tr>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Tag</th>
+                                <th>Tabs in use</th>
+                            </tr>
+                            [% FOREACH tab_inf IN tab_info %]
+                                <tr>
+                                    <td>[% tab_inf.frameworkcode | html %]</td>
+                                    [% IF ( tab_inf.frameworkcode ) %]
+                                        <td>[% tab_inf.frameworktext | html %]</td>
+                                    [% ELSE %]
+                                        <td>Default framework</td>
+                                    [% END %]
+                                    <td>[% tab_inf.tagfield | html %]</td>
+                                    <td>[% tab_inf.tabs | html %]</td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    </td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>all subfields for each tag are in the same tab (or ignored)</td>
+                </tr>
+            [% END %]
+
+            [% IF ( invalid_authtypecodes ) %]
+                <tr>
+                    <td style="vertical-align:top;">invalid authority types</td>
+                    <td
+                        >Not all authority types referred to by the frameworks are defined.
+                        <table>
+                            <tr>
+                                <th>Framework code</th>
+                                <th>Framework description</th>
+                                <th>Tag</th>
+                                <th>Subfield</th>
+                                <th>Invalid authority type</th>
+                            </tr>
+                            [% FOREACH authtypecode_inf IN authtypecode_info %]
+                                <tr>
+                                    <td>[% authtypecode_inf.frameworkcode | html %]</td>
+                                    [% IF ( authtypecode_inf.frameworkcode ) %]
+                                        <td>[% authtypecode_inf.frameworktext | html %]</td>
+                                    [% ELSE %]
+                                        <td>Default framework</td>
+                                    [% END %]
+                                    <td>[% authtypecode_inf.tagfield | html %]</td>
+                                    <td>[% authtypecode_inf.tagsubfield | html %]</td>
+                                    <td>[% authtypecode_inf.authtypecode | html %]</td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    </td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>all authority types used in the frameworks are defined</td>
+                </tr>
+            [% END %]
+
+            [% IF ( permanent_location_mapped ) %]
+                <tr>
+                    <td style="vertical-align:top;">items.permanent_location mapped</td>
+                    <td
+                        >The following mappings exist for items.permanent_location, and they shouldn't.
+                        <table>
+                            <tr>
+                                <th>Framework code</th>
+                                <th>Framework description</th>
+                                <th>Tag</th>
+                                <th>Subfield</th>
+                            </tr>
+                            [% FOREACH mapped_perm_loc IN mapped_permanent_location %]
+                                <tr>
+                                    <td>[% mapped_perm_loc.frameworkcode | html %]</td>
+                                    [% IF ( mapped_perm_loc.frameworkcode ) %]
+                                        <td>[% mapped_perm_loc.frameworktext | html %]</td>
+                                    [% ELSE %]
+                                        <td>Default framework</td>
+                                    [% END %]
+                                    <td>[% mapped_perm_loc.tagfield | html %]</td>
+                                    <td>[% mapped_perm_loc.tagsubfield | html %]</td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    </td>
+                </tr>
+            [% ELSE %]
+                <tr>
+                    <td>OK</td>
+                    <td>items.permanent_location is not mapped on the frameworks</td>
+                </tr>
+            [% END %]
+
+            <!-- -->
+            [% IF ( total ) %]
+                <tr>
+                    <td>TOTAL</td>
+                    <td>You have [% total | html %] error(s) in your MARC configuration. Please fix them before using Koha</td>
+                </tr>
+            [% END %]
+        </table>
     </div>
-[% ELSE %]
-    <div class="alert alert-info">
-        <h2>Configuration okay</h2> You don't have errors in your MARC configuration
-    </div>
-[% END %]
-
-<div class="page-section">
-<table>
-    <tr>
-        <th>Test</th>
-        <th>Result</th>
-    </tr>
-<!-- -->
-[% IF ( itemnum ) %]
-    <tr>
-        <td>itemnumber</td>
-        <td><ul><li>The field itemnumber MUST be mapped </li>
-            <li>The corresponding subfield MUST be in with -1 (ignore) tab</li></ul></td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>itemnumber : the field itemnumber is mapped to a field in tab -1</td>
-    </tr>
-[% END %]
-<!-- -->
-[% IF ( itemfields ) %]
-    <tr>
-        <td>item fields</td>
-        <td>ALL items fields MUST :<br />
-            <ul><li>be mapped to the same tag,</li>
-            <li>and they must all be in the 10 (items) tab</li></ul></td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>All item fields are in the same tag and in item tab</td>
-    </tr>
-[% END %]
-<!-- -->
-    [% IF ( itemtags ) %]
-        <tr>
-            <td>Item tag</td>
-            <td>There is more than 1 MARC tag related to items tab (10) : [% itemtags | html %]</td>
-        </tr>
-    [% ELSE %]
-        <tr>
-            <td>OK</td>
-            <td>Only 1 MARC tag mapped to items</td>
-        </tr>
-    [% END %]
-    <!--  -->
-[% IF ( itemtype ) %]
-    <tr>
-        <td>itemtype NOT mapped</td>
-        <td>the biblioitems.itemtype field MUST :<br />
-            <ul><li>be mapped to a MARC subfield, </li>
-            <li>the corresponding subfield MUST have "Authorized value" set to "itemtype"</li></ul></td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>biblioitems.itemtype defined</td>
-    </tr>
-[% END %]
-<!-- -->
-[% IF ( branch ) %]
-    <tr>
-        <td>homebranch NOT mapped</td>
-        <td>the items.homebranch field MUST :<br />
-            <ul><li>be mapped to a MARC subfield,</li>
-            <li>the corresponding subfield MUST have "Authorized value" set to "branches"</li></ul></td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>homebranch defined</td>
-    </tr>
-[% END %]
-<!-- -->
-[% IF ( holdingbranch ) %]
-    <tr>
-        <td>holdingbranch NOT mapped</td>
-        <td>the items.holdingbranch field MUST :<br />
-            <ul><li>be mapped to a MARC subfield, </li>
-            <li>the corresponding subfield MUST have "Authorized value" set to "branches"</li></ul></td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>holdingbranch defined</td>
-    </tr>
-[% END %]
-<!-- -->
-[% IF ( itemtypes_empty ) %]
-    <tr>
-        <td>item type not defined</td>
-        <td>at least 1 item type must be defined</td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>at least 1 item type defined</td>
-    </tr>
-[% END %]
-<!-- -->
-[% IF ( branches_empty ) %]
-    <tr>
-        <td>library not defined</td>
-        <td>at least 1 library must be defined</td>
-    </tr>
-[% ELSE %] 
-    <tr>
-        <td>OK</td>             
-        <td>at least 1 library defined</td>
-    </tr>                                       
-[% END %]
-<!-- -->
-[% IF ( biblionumber ) %]
-    <tr>
-        <td>biblio and biblionumber</td>
-        <td>The biblio.biblionumber and biblioitems.biblioitemnumber fields be mapped to a MARC subfield,</td>
-    </tr>
-[% ELSE %]
-    <tr>
-        <td>OK</td>
-        <td>biblionumber and biblioitemnumber mapped correctly</td>
-    </tr>
-[% END %]
-
-    [% IF ( frameworknull ) %]
-        <tr>
-            <td>framework values</td>
-            <td>there is a null value in a frameworkcode. Check the following tables<br />
-                <li>select * from marc_subfield_structure where frameworkcode is NULL</li>
-                <li>select * from marc_tag_structure where frameworkcode is NULL</li>
-            </td>
-        </tr>
-    [% ELSE %]
-        <tr>
-            <td>OK</td>
-            <td>no NULL value in frameworkcode</td>
-        </tr>
-    [% END %]
-
-    [% IF ( inconsistent_tabs ) %]
-        <tr>
-            <td style="vertical-align:top;">subfields not in same tabs</td>
-            <td>Not all subfields for the following tags are in the same tab (or marked 'ignored').
-                <table>
-                    <tr>
-                        <th>Code</th>
-                        <th>Description</th>
-                        <th>Tag</th>
-                        <th>Tabs in use</th>
-                    </tr>
-                    [% FOREACH tab_inf IN tab_info %]
-                        <tr>
-                            <td>[% tab_inf.frameworkcode | html %]</td>
-                            [% IF ( tab_inf.frameworkcode ) %]
-                                <td>[% tab_inf.frameworktext | html %]</td>
-                            [% ELSE %]
-                                <td>Default framework</td>
-                            [% END %]
-                            <td>[% tab_inf.tagfield | html %]</td>
-                            <td>[% tab_inf.tabs | html %]</td>
-                        </tr>
-                    [% END %]
-                </table>
-            </td>
-        </tr>
-    [% ELSE %]
-        <tr>
-            <td>OK</td>
-            <td>all subfields for each tag are in the same tab (or ignored)</td>
-        </tr>
-    [% END %]
-
-    [% IF ( invalid_authtypecodes ) %]
-        <tr>
-            <td style="vertical-align:top;">invalid authority types</td>
-            <td>Not all authority types referred to by the frameworks are defined.
-                <table>
-                    <tr>
-                        <th>Framework code</th>
-                        <th>Framework description</th>
-                        <th>Tag</th>
-                        <th>Subfield</th>
-                        <th>Invalid authority type</th>
-                    </tr>
-                    [% FOREACH authtypecode_inf IN authtypecode_info %]
-                        <tr>
-                            <td>[% authtypecode_inf.frameworkcode | html %]</td>
-                            [% IF ( authtypecode_inf.frameworkcode ) %]
-                                <td>[% authtypecode_inf.frameworktext | html %]</td>
-                            [% ELSE %]
-                                <td>Default framework</td>
-                            [% END %]
-                            <td>[% authtypecode_inf.tagfield | html %]</td>
-                            <td>[% authtypecode_inf.tagsubfield | html %]</td>
-                            <td>[% authtypecode_inf.authtypecode | html %]</td>
-                        </tr>
-                    [% END %]
-                </table>
-            </td>
-        </tr>
-    [% ELSE %]
-        <tr>
-            <td>OK</td>
-            <td>all authority types used in the frameworks are defined</td>
-        </tr>
-    [% END %]
-
-    [% IF ( permanent_location_mapped ) %]
-        <tr>
-            <td style="vertical-align:top;">items.permanent_location mapped</td>
-            <td>The following mappings exist for items.permanent_location, and they shouldn't.
-                <table>
-                    <tr>
-                        <th>Framework code</th>
-                        <th>Framework description</th>
-                        <th>Tag</th>
-                        <th>Subfield</th>
-                    </tr>
-                    [% FOREACH mapped_perm_loc IN mapped_permanent_location %]
-                        <tr>
-                            <td>[% mapped_perm_loc.frameworkcode | html %]</td>
-                            [% IF ( mapped_perm_loc.frameworkcode ) %]
-                                <td>[% mapped_perm_loc.frameworktext | html %]</td>
-                            [% ELSE %]
-                                <td>Default framework</td>
-                            [% END %]
-                            <td>[% mapped_perm_loc.tagfield | html %]</td>
-                            <td>[% mapped_perm_loc.tagsubfield | html %]</td>
-                        </tr>
-                    [% END %]
-                </table>
-            </td>
-        </tr>
-    [% ELSE %]
-        <tr>
-            <td>OK</td>
-            <td>items.permanent_location is not mapped on the frameworks</td>
-        </tr>
-    [% END %]
-
-<!-- -->
-[% IF ( total ) %]
-    <tr>
-        <td>TOTAL</td>
-        <td>You have [% total | html %] error(s) in your MARC configuration. Please fix them before using Koha</td>
-    </tr>
-[% END %]
-
-    </table>
-    </div> <!-- /.page-section -->
-
+    <!-- /.page-section -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -37,28 +37,33 @@ isa_ok( $update, 'Koha::ILL::Request::SupplierUpdate' );
 my $processor = Test::MockObject->new;
 $processor->set_isa('Koha::ILL::Request::Processor');
 $processor->{name} = 'Test processor';
-$processor->mock('run', sub {
-    my ( $self, $update, $options, $result ) = @_;
-    push @{$result->{success}}, 'Hello';
-});
+$processor->mock(
+    'run',
+    sub {
+        my ( $self, $update, $options, $result ) = @_;
+        push @{ $result->{success} }, 'Hello';
+    }
+);
 
 # attach_processor
 $update->attach_processor($processor);
 is(
-    scalar @{$update->{processors}},
+    scalar @{ $update->{processors} },
     1,
     'attach_processors works'
 );
 
 # run_processors
 is_deeply(
-    $update->run_processors({}),
-    [{
-        name => 'Test processor',
-        result => {
-            success => ['Hello'],
-            error => []
+    $update->run_processors( {} ),
+    [
+        {
+            name   => 'Test processor',
+            result => {
+                success => ['Hello'],
+                error   => []
+            }
         }
-    }],
+    ],
     'run_processors calls attached processors'
 );

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script;
 
@@ -32,15 +32,16 @@ GetOptions( 'help|?' => \$help );
 pod2usage(1) if $help;
 
 unless ( C4::Context->config("enable_plugins") ) {
-    print
-"The plugin system must be enabled for one to be able to install plugins\n";
+    print "The plugin system must be enabled for one to be able to install plugins\n";
     exit 1;
 }
 
-my @existing_plugins = Koha::Plugins->new()->GetPlugins({
-    all     => 1,
-    verbose => 1,    # warns about plugins failing to load
-});
+my @existing_plugins = Koha::Plugins->new()->GetPlugins(
+    {
+        all     => 1,
+        verbose => 1,    # warns about plugins failing to load
+    }
+);
 my $existing_plugins;
 for my $existing_plugin (@existing_plugins) {
     $existing_plugins->{ $existing_plugin->{metadata}->{name} } = $existing_plugin->{metadata}->{version};
@@ -52,31 +53,26 @@ unless (@installed_plugins) {
     if ( ref($plugins_dir) eq 'ARRAY' ) {
         print "No plugins found\n";
         print "pluginsdir contains: \n" . join( "\n", @{$plugins_dir} ) . "\n";
-    }
-    else {
+    } else {
         print "No plugins found at $plugins_dir\n";
     }
     exit 0;
 }
 
 for my $installed_plugin (@installed_plugins) {
-    if ( !exists( $existing_plugins->{ $installed_plugin->{metadata}->{name} } )
-      )
-    {
+    if ( !exists( $existing_plugins->{ $installed_plugin->{metadata}->{name} } ) ) {
         print "Installed "
-          . $installed_plugin->{metadata}->{name}
-          . " version "
-          . $installed_plugin->{metadata}->{version} . "\n";
-    }
-    elsif ( $existing_plugins->{ $installed_plugin->{metadata}->{name} } ne
-        $installed_plugin->{metadata}->{version} )
+            . $installed_plugin->{metadata}->{name}
+            . " version "
+            . $installed_plugin->{metadata}->{version} . "\n";
+    } elsif ( $existing_plugins->{ $installed_plugin->{metadata}->{name} } ne $installed_plugin->{metadata}->{version} )
     {
         print "Upgraded "
-          . $installed_plugin->{metadata}->{name}
-          . " from version "
-          . $existing_plugins->{ $installed_plugin->{metadata}->{name} }
-          . " to version "
-          . $installed_plugin->{metadata}->{version} . "\n";
+            . $installed_plugin->{metadata}->{name}
+            . " from version "
+            . $existing_plugins->{ $installed_plugin->{metadata}->{name} }
+            . " to version "
+            . $installed_plugin->{metadata}->{version} . "\n";
     }
 }
 print "All plugins successfully re-initialised\n";

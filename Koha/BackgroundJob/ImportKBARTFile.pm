@@ -85,8 +85,8 @@ sub process {
 
         if ( scalar( @{$rows} ) == 0 ) {
             push @messages, {
-                code          => 'no_rows',
-                type          => 'error',
+                code => 'no_rows',
+                type => 'error',
             };
             $self->status('failed')->store;
         }
@@ -114,10 +114,10 @@ sub process {
                     my $formatted_title = format_title($new_title);
                     if ( !$formatted_title->{publication_title} ) {
                         push @messages, {
-                            code          => 'no_title_found',
-                            type          => 'error',
-                            title         => '(Unknown)',
-                            title_id      => $formatted_title->{external_id}
+                            code     => 'no_title_found',
+                            type     => 'error',
+                            title    => '(Unknown)',
+                            title_id => $formatted_title->{external_id}
                         };
                         $failed_imports++;
                     } else {
@@ -243,7 +243,7 @@ sub read_file {
     my $lines            = $csv->getline_all( $fh, 0 );
     close($fh);
 
-    unless($csv->eof()) {
+    unless ( $csv->eof() ) {
         my ( $cde, $str, $pos ) = $csv->error_diag();
         my $error = $cde ? "$cde, $str, $pos" : "";
         warn $error if $error;

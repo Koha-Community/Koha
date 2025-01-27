@@ -20,7 +20,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::Calendar;
@@ -29,102 +29,115 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 my $input = CGI->new;
 
 my $dbh = C4::Context->dbh();
+
 # Get the template to use
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/holidays.tt",
-                             type => "intranet",
-                             query => $input,
-                             flagsrequired => {tools => 'edit_calendar'},
-                           });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "tools/holidays.tt",
+        type          => "intranet",
+        query         => $input,
+        flagsrequired => { tools => 'edit_calendar' },
+    }
+);
 
 # calendardate - date passed in url for human readability (syspref)
 # if the url has an invalid date default to 'now.'
 # FIXME There is something to improve in the date handling here
 my $calendarinput_dt = eval { dt_from_string( scalar $input->param('calendardate') ); } || dt_from_string;
-my $calendardate = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
+my $calendardate     = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
 
 # keydate - date passed to calendar.js.  calendar.js does not process dashes within a date.
 my $keydate = output_pref( { dt => $calendarinput_dt, dateonly => 1, dateformat => 'iso' } );
 $keydate =~ s/-/\//g;
 
-my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
+my $branch = $input->param('branch') || C4::Context->userenv->{'branch'};
 
 # Get all the holidays
 
-my $calendar = C4::Calendar->new(branchcode => $branch);
+my $calendar           = C4::Calendar->new( branchcode => $branch );
 my $week_days_holidays = $calendar->get_week_days_holidays();
 my @week_days;
-foreach my $weekday (keys %$week_days_holidays) {
-# warn "WEEK DAY : $weekday";
+foreach my $weekday ( keys %$week_days_holidays ) {
+
+    # warn "WEEK DAY : $weekday";
     my %week_day;
-    %week_day = (KEY => $weekday,
-                 TITLE => $week_days_holidays->{$weekday}{title},
-                 DESCRIPTION => $week_days_holidays->{$weekday}{description});
+    %week_day = (
+        KEY         => $weekday,
+        TITLE       => $week_days_holidays->{$weekday}{title},
+        DESCRIPTION => $week_days_holidays->{$weekday}{description}
+    );
     push @week_days, \%week_day;
 }
 
 my $day_month_holidays = $calendar->get_day_month_holidays();
 my @day_month_holidays;
-foreach my $monthDay (keys %$day_month_holidays) {
+foreach my $monthDay ( keys %$day_month_holidays ) {
+
     # Determine date format on month and day.
     my $day_monthdate;
     my $day_monthdate_sort;
-    if (C4::Context->preference("dateformat") eq "metric") {
-      $day_monthdate_sort = "$day_month_holidays->{$monthDay}{month}-$day_month_holidays->{$monthDay}{day}";
-      $day_monthdate = "$day_month_holidays->{$monthDay}{day}/$day_month_holidays->{$monthDay}{month}";
-    } elsif (C4::Context->preference("dateformat") eq "dmydot") {
-      $day_monthdate_sort = "$day_month_holidays->{$monthDay}{month}.$day_month_holidays->{$monthDay}{day}";
-      $day_monthdate = "$day_month_holidays->{$monthDay}{day}.$day_month_holidays->{$monthDay}{month}";
-    }elsif (C4::Context->preference("dateformat") eq "us") {
-      $day_monthdate = "$day_month_holidays->{$monthDay}{month}/$day_month_holidays->{$monthDay}{day}";
-      $day_monthdate_sort = $day_monthdate;
+    if ( C4::Context->preference("dateformat") eq "metric" ) {
+        $day_monthdate_sort = "$day_month_holidays->{$monthDay}{month}-$day_month_holidays->{$monthDay}{day}";
+        $day_monthdate      = "$day_month_holidays->{$monthDay}{day}/$day_month_holidays->{$monthDay}{month}";
+    } elsif ( C4::Context->preference("dateformat") eq "dmydot" ) {
+        $day_monthdate_sort = "$day_month_holidays->{$monthDay}{month}.$day_month_holidays->{$monthDay}{day}";
+        $day_monthdate      = "$day_month_holidays->{$monthDay}{day}.$day_month_holidays->{$monthDay}{month}";
+    } elsif ( C4::Context->preference("dateformat") eq "us" ) {
+        $day_monthdate      = "$day_month_holidays->{$monthDay}{month}/$day_month_holidays->{$monthDay}{day}";
+        $day_monthdate_sort = $day_monthdate;
     } else {
-      $day_monthdate = "$day_month_holidays->{$monthDay}{month}-$day_month_holidays->{$monthDay}{day}";
-      $day_monthdate_sort = $day_monthdate;
+        $day_monthdate      = "$day_month_holidays->{$monthDay}{month}-$day_month_holidays->{$monthDay}{day}";
+        $day_monthdate_sort = $day_monthdate;
     }
     my %day_month;
-    %day_month = (KEY => $monthDay,
-                  DATE_SORT => $day_monthdate_sort,
-                  DATE => $day_monthdate,
-                  TITLE => $day_month_holidays->{$monthDay}{title},
-                  DESCRIPTION => $day_month_holidays->{$monthDay}{description});
+    %day_month = (
+        KEY         => $monthDay,
+        DATE_SORT   => $day_monthdate_sort,
+        DATE        => $day_monthdate,
+        TITLE       => $day_month_holidays->{$monthDay}{title},
+        DESCRIPTION => $day_month_holidays->{$monthDay}{description}
+    );
     push @day_month_holidays, \%day_month;
 }
 
 my $exception_holidays = $calendar->get_exception_holidays();
 my @exception_holidays;
-foreach my $yearMonthDay (keys %$exception_holidays) {
+foreach my $yearMonthDay ( keys %$exception_holidays ) {
     my $exceptiondate = eval { dt_from_string( $exception_holidays->{$yearMonthDay}{date} ) };
     my %exception_holiday;
-    %exception_holiday = (KEY => $yearMonthDay,
-                          DATE_SORT => $exception_holidays->{$yearMonthDay}{date},
-                          DATE => output_pref( { dt => $exceptiondate, dateonly => 1 } ),
-                          TITLE => $exception_holidays->{$yearMonthDay}{title},
-                          DESCRIPTION => $exception_holidays->{$yearMonthDay}{description});
+    %exception_holiday = (
+        KEY         => $yearMonthDay,
+        DATE_SORT   => $exception_holidays->{$yearMonthDay}{date},
+        DATE        => output_pref( { dt => $exceptiondate, dateonly => 1 } ),
+        TITLE       => $exception_holidays->{$yearMonthDay}{title},
+        DESCRIPTION => $exception_holidays->{$yearMonthDay}{description}
+    );
     push @exception_holidays, \%exception_holiday;
 }
 
 my $single_holidays = $calendar->get_single_holidays();
 my @holidays;
-foreach my $yearMonthDay (keys %$single_holidays) {
+foreach my $yearMonthDay ( keys %$single_holidays ) {
     my $holidaydate_dt = eval { dt_from_string( $single_holidays->{$yearMonthDay}{date} ) };
     my %holiday;
-    %holiday = (KEY => $yearMonthDay,
-                DATE_SORT => $single_holidays->{$yearMonthDay}{date},
-                DATE => output_pref( { dt => $holidaydate_dt, dateonly => 1 } ),
-                TITLE => $single_holidays->{$yearMonthDay}{title},
-                DESCRIPTION => $single_holidays->{$yearMonthDay}{description});
+    %holiday = (
+        KEY         => $yearMonthDay,
+        DATE_SORT   => $single_holidays->{$yearMonthDay}{date},
+        DATE        => output_pref( { dt => $holidaydate_dt, dateonly => 1 } ),
+        TITLE       => $single_holidays->{$yearMonthDay}{title},
+        DESCRIPTION => $single_holidays->{$yearMonthDay}{description}
+    );
     push @holidays, \%holiday;
 }
 
 $template->param(
-    WEEK_DAYS_LOOP           => \@week_days,
-    HOLIDAYS_LOOP            => \@holidays,
-    EXCEPTION_HOLIDAYS_LOOP  => \@exception_holidays,
-    DAY_MONTH_HOLIDAYS_LOOP  => \@day_month_holidays,
-    calendardate             => $calendardate,
-    keydate                  => $keydate,
-    branch                   => $branch,
+    WEEK_DAYS_LOOP          => \@week_days,
+    HOLIDAYS_LOOP           => \@holidays,
+    EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays,
+    DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
+    calendardate            => $calendardate,
+    keydate                 => $keydate,
+    branch                  => $branch,
 );
 
 # Shows the template with the real values replaced

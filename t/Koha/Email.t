@@ -68,18 +68,18 @@ subtest 'create() tests' => sub {
 
     $email = Koha::Email->create(
         {
-            from        => 'from@8.8.8.8',
-            to          => 'to@example.com',
-            bcc         => 'root@localhost',
+            from => 'from@8.8.8.8',
+            to   => 'to@example.com',
+            bcc  => 'root@localhost',
         }
     );
 
-    is( $email->email->header('Bcc'), 'root@localhost', 'Non-FQDN (@localhost) supported' );
-    is( $email->email->header('From'), 'from@8.8.8.8', 'IPs supported' );
+    is( $email->email->header('Bcc'),  'root@localhost', 'Non-FQDN (@localhost) supported' );
+    is( $email->email->header('From'), 'from@8.8.8.8',   'IPs supported' );
 
-    t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'catchall@example.com' );
-    t::lib::Mocks::mock_preference( 'ReplytoDefault', 'replytodefault@example.com' );
-    t::lib::Mocks::mock_preference( 'ReturnpathDefault', 'returnpathdefault@example.com' );
+    t::lib::Mocks::mock_preference( 'SendAllEmailsTo',       'catchall@example.com' );
+    t::lib::Mocks::mock_preference( 'ReplytoDefault',        'replytodefault@example.com' );
+    t::lib::Mocks::mock_preference( 'ReturnpathDefault',     'returnpathdefault@example.com' );
     t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'kohaadminemailaddress@example.com' );
 
     $email = Koha::Email->create(
@@ -91,102 +91,111 @@ subtest 'create() tests' => sub {
         }
     );
 
-    is( $email->email->header('From'), 'kohaadminemailaddress@example.com', 'KohaAdminEmailAddress is picked when no from passed' );
-    is( $email->email->header('To'), 'catchall@example.com', 'SendAllEmailsTo overloads any address' );
-    is( $email->email->header('Cc'), undef, 'SendAllEmailsTo overloads any address' );
-    is( $email->email->header('Bcc'), undef, 'SendAllEmailsTo overloads any address' );
-    is( $email->email->header('Reply-To'), 'replytodefault@example.com', 'ReplytoDefault picked when replyto not passed' );
-    is( $email->email->header('Sender'), 'returnpathdefault@example.com', 'ReturnpathDefault picked when sender not passed' );
-    is( $email->email->header('Subject'), '', 'No subject passed, empty string' );
-    is( $email->email->body, $text_body, "Body set correctly" );
-    like( $email->email->content_type, qr|text/plain|, "Content type set correctly");
-    like( $email->email->content_type, qr|charset="?utf-8"?|, "Charset set correctly");
+    is(
+        $email->email->header('From'), 'kohaadminemailaddress@example.com',
+        'KohaAdminEmailAddress is picked when no from passed'
+    );
+    is( $email->email->header('To'),  'catchall@example.com', 'SendAllEmailsTo overloads any address' );
+    is( $email->email->header('Cc'),  undef,                  'SendAllEmailsTo overloads any address' );
+    is( $email->email->header('Bcc'), undef,                  'SendAllEmailsTo overloads any address' );
+    is(
+        $email->email->header('Reply-To'), 'replytodefault@example.com',
+        'ReplytoDefault picked when replyto not passed'
+    );
+    is(
+        $email->email->header('Sender'), 'returnpathdefault@example.com',
+        'ReturnpathDefault picked when sender not passed'
+    );
+    is( $email->email->header('Subject'), '',         'No subject passed, empty string' );
+    is( $email->email->body,              $text_body, "Body set correctly" );
+    like( $email->email->content_type, qr|text/plain|,        "Content type set correctly" );
+    like( $email->email->content_type, qr|charset="?utf-8"?|, "Charset set correctly" );
 
     subtest 'exception cases' => sub {
 
         plan tests => 16;
 
-        throws_ok
-            { Koha::Email->create({ from => 'not_an_email' }); }
-            'Koha::Exceptions::BadParameter',
+        throws_ok { Koha::Email->create( { from => 'not_an_email' } ); }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'from' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'not_an_email' );
 
-        throws_ok
-            { Koha::Email->create({  }); }
-            'Koha::Exceptions::BadParameter',
+        throws_ok { Koha::Email->create( {} ); }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'from' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'tomasito@mail.com' );
-        t::lib::Mocks::mock_preference( 'SendAllEmailsTo', undef );
+        t::lib::Mocks::mock_preference( 'SendAllEmailsTo',       undef );
 
-        throws_ok
-            { Koha::Email->create({ to => 'not_an_email' }); }
-            'Koha::Exceptions::BadParameter',
+        throws_ok { Koha::Email->create( { to => 'not_an_email' } ); }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'to' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'not_an_email' );
 
-        throws_ok
-            { Koha::Email->create({  }); }
-            'Koha::Exceptions::BadParameter',
+        throws_ok { Koha::Email->create( {} ); }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'to' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'SendAllEmailsTo', undef );
 
-        throws_ok
-            { Koha::Email->create(
+        throws_ok {
+            Koha::Email->create(
                 {
                     to       => 'tomasito@mail.com',
                     reply_to => 'not_an_email'
                 }
-              ); }
-            'Koha::Exceptions::BadParameter',
+            );
+        }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'reply_to' parameter: not_an_email/, 'Exception message correct' );
 
-        throws_ok
-            { Koha::Email->create(
+        throws_ok {
+            Koha::Email->create(
                 {
                     to     => 'tomasito@mail.com',
                     sender => 'not_an_email'
                 }
-              ); }
-            'Koha::Exceptions::BadParameter',
+            );
+        }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'sender' parameter: not_an_email/, 'Exception message correct' );
 
-        throws_ok
-            { Koha::Email->create(
+        throws_ok {
+            Koha::Email->create(
                 {
                     to => 'tomasito@mail.com',
                     cc => 'not_an_email'
                 }
-              ); }
-            'Koha::Exceptions::BadParameter',
+            );
+        }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'cc' parameter: not_an_email/, 'Exception message correct' );
 
-        throws_ok
-            { Koha::Email->create(
+        throws_ok {
+            Koha::Email->create(
                 {
                     to  => 'tomasito@mail.com',
                     bcc => 'not_an_email'
                 }
-              ); }
-            'Koha::Exceptions::BadParameter',
+            );
+        }
+        'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
         like( "$@", qr/Invalid 'bcc' parameter: not_an_email/, 'Exception message correct' );
@@ -235,11 +244,12 @@ subtest 'send_or_die() tests' => sub {
         'Bcc header set correctly'
     );
 
-    $THE_email->send_or_die(
-        { transport => $transport, to => ['tomasito@mail.com'], from => 'returns@example.com' } );
-    is_deeply( $args->{to}, ['tomasito@mail.com'],
-        'If explicitly passed, "to" is preserved' );
-    is( $args->{from}, 'returns@example.com', 'If explicitly pass, "from" is preserved');
+    $THE_email->send_or_die( { transport => $transport, to => ['tomasito@mail.com'], from => 'returns@example.com' } );
+    is_deeply(
+        $args->{to}, ['tomasito@mail.com'],
+        'If explicitly passed, "to" is preserved'
+    );
+    is( $args->{from}, 'returns@example.com', 'If explicitly pass, "from" is preserved' );
 
     $THE_email->send_or_die( { transport => $transport } );
     my @to = sort @{ $args->{to} };
@@ -253,22 +263,23 @@ subtest 'send_or_die() tests' => sub {
     );
     is( $email->header_str('Bcc'), undef, 'The Bcc header is unset' );
     my $from = $args->{from};
-    is( $from, 'sender@example.com', 'If "from" is not explicitly passed, extract from Sender header' );
+    is( $from, 'sender@example.com',         'If "from" is not explicitly passed, extract from Sender header' );
     is( $email->header_str('Sender'), undef, 'The Sender header is unset' );
 };
 
 subtest 'is_valid' => sub {
     plan tests => 8;
 
-    is(Koha::Email->is_valid('Fróm <from@example.com>'), 1);
-    is(Koha::Email->is_valid('from@example.com'), 1);
-    is(Koha::Email->is_valid('<from@example.com>'), 1);
-    is(Koha::Email->is_valid('root@localhost'), 1); # See bug 28017
+    is( Koha::Email->is_valid('Fróm <from@example.com>'), 1 );
+    is( Koha::Email->is_valid('from@example.com'),        1 );
+    is( Koha::Email->is_valid('<from@example.com>'),      1 );
+    is( Koha::Email->is_valid('root@localhost'),          1 );    # See bug 28017
 
-    is(Koha::Email->is_valid('<from@fróm.com>'), 0); # "In accordance with RFC 822 and its descendants, this module demands that email addresses be ASCII only"
-    isnt(Koha::Email->is_valid('@example.com'), 1);
-    isnt(Koha::Email->is_valid('example.com'), 1);
-    isnt(Koha::Email->is_valid('from'), 1);
+    is( Koha::Email->is_valid('<from@fróm.com>'), 0 )
+        ;    # "In accordance with RFC 822 and its descendants, this module demands that email addresses be ASCII only"
+    isnt( Koha::Email->is_valid('@example.com'), 1 );
+    isnt( Koha::Email->is_valid('example.com'),  1 );
+    isnt( Koha::Email->is_valid('from'),         1 );
 };
 
 subtest 'new_from_string() tests' => sub {
@@ -276,7 +287,7 @@ subtest 'new_from_string() tests' => sub {
     plan tests => 1;
 
     my $html_body = '<h1>Title</h1><p>Message</p>';
-    my $email_1 = Koha::Email->create(
+    my $email_1   = Koha::Email->create(
         {
             from        => 'Fróm <from@example.com>',
             to          => 'Tö <to@example.com>',
@@ -290,8 +301,8 @@ subtest 'new_from_string() tests' => sub {
         }
     );
 
-    my $string = $email_1->as_string;
-    my $email_2 = Koha::Email->new_from_string( $string );
+    my $string  = $email_1->as_string;
+    my $email_2 = Koha::Email->new_from_string($string);
 
     is( $email_1->as_string, $email_2->as_string, 'Emails match' );
 };

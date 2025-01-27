@@ -20,39 +20,39 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
-use Try::Tiny qw( catch try );
+use Pod::Usage   qw( pod2usage );
+use Try::Tiny    qw( catch try );
 use Koha::Script;
 use C4::Context;
 
-
-my ($doit, $alterengine, $help);
+my ( $doit, $alterengine, $help );
 my $result = GetOptions(
     'doit'        => \$doit,
     'alterengine' => \$alterengine,
     'help|h'      => \$help,
 );
 
-
 sub usage {
     pod2usage( -verbose => 2 );
     exit;
 }
-
 
 sub fix_mysql_constraints {
     my ($doit) = @_;
 
     # Get all current DB constraints
     my $dbh = C4::Context->dbh;
-    $dbh->{RaiseError} = 1;
+    $dbh->{RaiseError}         = 1;
     $dbh->{ShowErrorStatement} = 1;
-    my $database = C4::Context->config('database');
-    my %db_constraint = map { $_->[0] => undef } @{$dbh->selectall_arrayref(
-        "SELECT CONSTRAINT_NAME
+    my $database      = C4::Context->config('database');
+    my %db_constraint = map { $_->[0] => undef } @{
+        $dbh->selectall_arrayref(
+            "SELECT CONSTRAINT_NAME
            FROM information_schema.table_constraints
           WHERE constraint_schema = '$database'
-            AND CONSTRAINT_TYPE != 'PRIMARY KEY' ")};
+            AND CONSTRAINT_TYPE != 'PRIMARY KEY' "
+        )
+    };
 
     my $base_dir = C4::Context->config('intranetdir');
     open my $fh, "<", "$base_dir/installer/data/mysql/kohastructure.sql"
@@ -60,17 +60,18 @@ sub fix_mysql_constraints {
 
     my $table_name;
     my $engine_altered;
+
     # FIXME: This hide problem. But if you run this script, it means that you
     # have already identified issues with your Koha DB integrity, and will fix
     # any necessary tables requiring records deleting.
     $dbh->do("SET FOREIGN_KEY_CHECKS=0");
     my $line = <$fh>;
-    while ( $line ) {
+    while ($line) {
         if ( $line =~ /CREATE TABLE (.*?) / ) {
             $table_name = $1;
             $table_name =~ s/\`//g;
             $engine_altered = 0;
-            $line = <$fh>;
+            $line           = <$fh>;
             next;
         }
         unless ( $line =~ /CONSTRAINT /i ) {
@@ -78,7 +79,7 @@ sub fix_mysql_constraints {
             next;
         }
         my $constraint = $line;
-        CONTRAINT_LOOP:
+    CONTRAINT_LOOP:
         while ( $constraint !~ /,/ ) {
             $line = <$fh>;
             last CONTRAINT_LOOP if $line =~ /ENGINE/i;
@@ -91,11 +92,11 @@ sub fix_mysql_constraints {
         $constraint =~ s/,$//;
         my ($name) = $constraint =~ /CONSTRAINT (.*?) /;
         $name =~ s/\`//g;
-        unless ( exists($db_constraint{$name}) ) {
+        unless ( exists( $db_constraint{$name} ) ) {
             if ( $alterengine && !$engine_altered ) {
                 my $sql = "ALTER TABLE $table_name ENGINE = 'InnoDB'";
                 say $sql;
-                if ( $doit ) {
+                if ($doit) {
                     try {
                         $dbh->do($sql) if $doit;
                         $engine_altered = 1;
@@ -106,7 +107,7 @@ sub fix_mysql_constraints {
             }
             my $sql = "ALTER TABLE $table_name ADD $constraint";
             say $sql;
-            if ( $doit ) {
+            if ($doit) {
                 try {
                     $dbh->do($sql) if $doit;
                 } catch {
@@ -117,7 +118,6 @@ sub fix_mysql_constraints {
         $line = <$fh> if $line =~ /CONSTRAINT/i;
     }
 }
-
 
 usage() if $help;
 

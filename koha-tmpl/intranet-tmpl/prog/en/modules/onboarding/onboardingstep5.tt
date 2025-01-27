@@ -1,186 +1,188 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF all_done %]
-        [% t("Onboarding complete") | html %]
-    [% ELSE %]
-        [% t("Create circulation rule") | html %]
-    [% END %] &rsaquo;
-    [% t("Web installer") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF all_done %]
+            [% t("Onboarding complete") | html %]
+        [% ELSE %]
+            [% t("Create circulation rule") | html %]
+        [% END %]
+        &rsaquo; [% t("Web installer") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
 <body id="installer" class="installer">
-    <div class="main container-fluid">
-        <div class="row">
-            <div id="onboarding-step5" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
-                <div id="logo"><a href="#">Koha</a></div>
+<div class="main container-fluid">
+    <div class="row">
+        <div id="onboarding-step5" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+            <div id="logo"><a href="#">Koha</a></div>
 
-                [% IF all_done %]
+            [% IF all_done %]
+                <h1>Web installer &rsaquo; Complete</h1>
+                [% INCLUDE 'onboarding_messages.inc' %]
 
-                    <h1>Web installer &rsaquo; Complete</h1>
-                    [% INCLUDE 'onboarding_messages.inc' %]
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
 
-                    <div id="steps">
+                <h3>Congratulations you have finished and are ready to use Koha</h3>
+                <a class="btn btn-success" href="/cgi-bin/koha/mainpage.pl">Start using Koha</a>
+            [% ELSE %]
+                <h2>Web installer &rsaquo; Create a new circulation rule </h2>
+
+                [% INCLUDE 'onboarding_messages.inc' %]
+
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
+                        <li class="current open"
+                            ><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding
+                            <ol>
+                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a library</li>
+                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a patron category</li>
+                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create Koha administrator patron</li>
+                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a new item type</li>
+                                <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new circulation rule</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+
+                <form name="createcirculationrule" method="post" action="onboarding.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <fieldset class="rows">
+                        <input type="hidden" name="step" value="5" />
+                        <input type="hidden" name="op" value="cud-add_validate_circ_rule" />
                         <ol>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Onboarding</li>
-                        </ol>
-                    </div>
+                            <li>
+                                <label for="branchname" class="required"> Library branch</label>
+                                <select name="branch" id="branchname" required="required">
+                                    <option value=""> Choose</option>
+                                    <option value="*" selected="selected">All</option>
+                                    [% FOREACH library IN libraries %]
+                                        <option value="[% library.branchcode | html %]"> [% library.branchname | html %]</option>
+                                    [% END %]
+                                </select>
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="categorycode" class="required">Patron category: </label>
+                                <select name="categorycode" id="categorycode" required="required">
+                                    <option value=""> Choose</option>
+                                    <option value="*" selected="selected">All</option>
+                                    [% FOREACH category IN categories %]
+                                        <option value="[% category.categorycode | html %]"> [% category.description | html %]</option>
+                                    [% END %]
+                                </select>
+                                <span class="required">Required</span>
+                            </li>
 
-                    <h3>Congratulations you have finished and are ready to use Koha</h3>
-                    <a class="btn btn-success" href="/cgi-bin/koha/mainpage.pl">Start using Koha</a>
+                            <li>
+                                <label for="itemtype" class="required">Item type: </label>
+                                <select id="itemtype" name="itemtype" required="required">
+                                    <option value=""> Choose </option>
+                                    <option value="*" selected="selected">All</option>
+                                    [% FOREACH item IN itemtypes %]
+                                        <option value="[% item.itemtype | html %]"> [% item.itemtype | html %] </option>
+                                    [% END %]
+                                </select>
+                                <span class="required"> Required</span>
+                            </li>
+                            <li>
+                                <label for="maxissueqty" class="required">Current checkouts allowed: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="maxissueqty" id="maxissueqty" size="10" value="50" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
 
-                [% ELSE %]
+                            <li>
+                                <label for="issuelength" class="required">Loan period: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="issuelength" id="issuelength" size="10" value="14" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="lengthunit" class="required">Units: </label>
+                                <select name="lengthunit" id="lengthunit" required="required">
+                                    <option value=""> Choose </option>
+                                    [% SET units = 'days' %]
+                                    [% IF category %]
+                                        [% SET default_privacy = category.default_privacy %]
+                                    [% END %]
 
-                    <h2>Web installer &rsaquo; Create a new circulation rule </h2>
+                                    [% SWITCH units %]
+                                    [% CASE 'days' %]
+                                        <option value="days" selected="selected">Days</option>
+                                        <option value="hours">Hours</option>
+                                    [% CASE 'hours' %]
+                                        <option value="days">Days</option>
+                                        <option value="hours" selected="selected">Hours</option>
+                                    [% END %]
+                                </select>
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="renewalsallowed" class="required">Renewals allowed: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="renewalsallowed" id="renewalsallowed" size="10" value="10" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
 
-                    [% INCLUDE 'onboarding_messages.inc' %]
+                            <li>
+                                <label for="renewalperiod" class="required">Renewals period: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="renewalperiod" id="renewalperiod" size="10" value="14" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
 
-                    <div id="steps">
-                        <ol>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Installation</li>
-                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding
-                                <ol>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a library</li>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a patron category</li>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create Koha administrator patron</li>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Create a new item type</li>
-                                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Create a new circulation rule</li>
-                                </ol>
+                            <li>
+                                <label for="reservesallowed">Holds allowed (total): </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="reservesallowed" id="reservesallowed" size="10" value="10" />
+                            </li>
+
+                            <li>
+                                <label for="holds_per_day">Holds allowed (daily): </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="holds_per_day" id="holds_per_day" size="10" value="10" />
+                            </li>
+
+                            <li>
+                                <label for="holds_per_record">Holds per record (count): </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="holds_per_record" id="holds_per_record" size="10" value="1" />
+                            </li>
+
+                            <li>
+                                <label for="onshelfholds">On shelf holds allowed: </label>
+                                <select name="onshelfholds" id="onshelfholds" required="required">
+                                    <option value="">Choose</option>
+                                    <option value="1" selected="selected">Yes</option>
+                                    <option value="0">If any unavailable</option>
+                                    <option value="2">If all unavailable</option>
+                                </select>
                             </li>
                         </ol>
-                    </div>
+                        <p>
+                            To create circulation rule, go to:
+                            <span class="breadcrumbs">Administration &rsaquo; Circulation and fine rules </span>
+                        </p>
+                    </fieldset>
 
-                    <form name="createcirculationrule" method="post" action="onboarding.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <fieldset class="rows">
-                            <input type="hidden" name="step" value="5"/>
-                            <input type="hidden" name="op" value="cud-add_validate_circ_rule" />
-                            <ol>
-                                <li>
-                                    <label for="branchname" class="required"> Library branch</label>
-                                    <select name="branch" id="branchname" required="required">
-                                        <option value=""> Choose</option>
-                                        <option value="*" selected="selected">All</option>
-                                        [% FOREACH library IN libraries %]
-                                            <option value="[% library.branchcode | html %]"> [% library.branchname | html %]</option>
-                                        [% END %]
-                                    </select>
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="categorycode" class="required">Patron category: </label>
-                                    <select name="categorycode" id="categorycode" required="required">
-                                        <option value=""> Choose</option>
-                                        <option value="*" selected="selected">All</option>
-                                        [% FOREACH category IN categories %]
-                                            <option value = "[% category.categorycode | html %]"> [% category.description | html %]</option>
-                                        [%END%]
-                                    </select>
-                                    <span class="required">Required</span>
-                                </li>
-
-                                <li>
-                                    <label for="itemtype" class="required">Item type: </label>
-                                    <select id="itemtype" name="itemtype" required="required">
-                                        <option value=""> Choose </option>
-                                        <option value="*" selected="selected">All</option>
-                                        [% FOREACH item IN itemtypes %]
-                                            <option value = "[% item.itemtype | html %]"> [% item.itemtype | html %]
-                                        [%END%]
-                                    </select>
-                                    <span class="required"> Required</span>
-                                </li>
-                                <li>
-                                    <label for="maxissueqty" class="required">Current checkouts allowed: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="maxissueqty" id="maxissueqty" size="10" value="50" class="required" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-
-                                <li>
-                                    <label for="issuelength" class="required">Loan period: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="issuelength" id="issuelength" size="10" value="14" class="required" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="lengthunit" class="required">Units: </label>
-                                    <select name="lengthunit" id="lengthunit" required="required">
-                                        <option value=""> Choose </option>
-                                        [% SET units = 'days' %]
-                                        [% IF category %]
-                                            [% SET default_privacy = category.default_privacy %]
-                                        [% END %]
-
-                                        [% SWITCH units %]
-                                        [% CASE 'days' %]
-                                            <option value="days" selected="selected">Days</option>
-                                            <option value="hours">Hours</option>
-                                        [% CASE 'hours' %]
-                                            <option value="days">Days</option>
-                                            <option value="hours" selected="selected">Hours</option>
-                                        [% END %]
-                                    </select>
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="renewalsallowed" class="required">Renewals allowed: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="renewalsallowed" id="renewalsallowed" size="10" value="10" class="required" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-
-                                <li>
-                                    <label for="renewalperiod" class="required">Renewals period: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="renewalperiod" id="renewalperiod" size="10" value="14" class="required" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-
-                                <li>
-                                    <label for="reservesallowed">Holds allowed (total): </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="reservesallowed" id="reservesallowed" size="10" value="10" />
-                                </li>
-
-                                <li>
-                                    <label for="holds_per_day">Holds allowed (daily): </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="holds_per_day" id="holds_per_day" size="10" value="10" />
-                                </li>
-
-                                <li>
-                                    <label for="holds_per_record">Holds per record (count): </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="holds_per_record" id="holds_per_record" size="10" value="1" />
-                                </li>
-
-                                <li>
-                                    <label for="onshelfholds">On shelf holds allowed: </label>
-                                    <select name="onshelfholds" id="onshelfholds" required="required">
-                                        <option value="">Choose</option>
-                                        <option value="1" selected="selected">Yes</option>
-                                        <option value="0">If any unavailable</option>
-                                        <option value="2">If all unavailable</option>
-                                    </select>
-                                </li>
-                            </ol>
-                            <p>
-                                To create circulation rule, go to:
-                                <span class="breadcrumbs">Administration &rsaquo; Circulation and fine rules </span>
-                            </p>
-
-                        </fieldset>
-
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </form>
-                [% END %]
-            </div> <!-- / #onboarding-step5 -->
-        </div> <!-- / .row -->
-    </div> <!-- /.main.container-fluid -->
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                </form>
+            [% END %]
+        </div>
+        <!-- / #onboarding-step5 -->
+    </div>
+    <!-- / .row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'validator-strings.inc' %]
     [% INCLUDE 'installer-strings.inc' %]
-    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
+    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js">
+</script>
 [% END %]
 
 [% INCLUDE 'installer-intranet-bottom.inc' %]

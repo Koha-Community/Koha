@@ -60,7 +60,7 @@ sub GetLoggedInBranchname {
 sub GetURL {
     my ( $self, $branchcode ) = @_;
 
-    unless (exists $self->{libraries}->{$branchcode} ){
+    unless ( exists $self->{libraries}->{$branchcode} ) {
         my $l = Koha::Libraries->find($branchcode);
         $self->{libraries}->{$branchcode} = $l if $l;
     }
@@ -119,7 +119,7 @@ sub all {
 }
 
 sub InIndependentBranchesMode {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return ( not C4::Context->preference("IndependentBranches") or C4::Context::IsSuperLibrarian );
 }
 
@@ -140,27 +140,25 @@ sub pickup_locations {
 
         if ($item) {
             $item = Koha::Items->find($item)
-              unless ref($item) eq 'Koha::Item';
+                unless ref($item) eq 'Koha::Item';
             @libraries = $item->pickup_locations( { patron => $patron } )->as_list
-              if defined $item;
+                if defined $item;
         } elsif ($biblio) {
             $biblio = Koha::Biblios->find($biblio)
-              unless ref($biblio) eq 'Koha::Biblio';
+                unless ref($biblio) eq 'Koha::Biblio';
             @libraries = $biblio->pickup_locations( { patron => $patron } )->as_list
-              if defined $biblio;
+                if defined $biblio;
         }
     } else {
         @libraries = Koha::Libraries->search( { pickup_location => 1 }, { order_by => ['branchname'] } )->as_list
-          unless @libraries;
+            unless @libraries;
     }
 
     @libraries = map { $_->unblessed } @libraries;
 
     for my $l (@libraries) {
         if ( defined $selected and $l->{branchcode} eq $selected
-            or not defined $selected
-            and C4::Context->userenv
-            and $l->{branchcode} eq C4::Context->userenv->{branch} )
+            or not defined $selected and C4::Context->userenv and $l->{branchcode} eq C4::Context->userenv->{branch} )
         {
             $l->{selected} = 1;
         }

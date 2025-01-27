@@ -29,7 +29,7 @@ use Try::Tiny qw( catch try );
 
 use C4::Context;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use Koha::Patrons;
 use Koha::Token;
 use Koha::Patron::Categories;
@@ -38,7 +38,8 @@ use Koha::Suggestions;
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name => "members/deletemem.tt",
+    {
+        template_name => "members/deletemem.tt",
         query         => $input,
         type          => "intranet",
         flagsrequired => { borrowers => 'delete_borrowers' },
@@ -46,60 +47,65 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 #print $input->header;
-my $member       = $input->param('member');
+my $member = $input->param('member');
 
 #Do not delete yourself...
 if ( $loggedinuser == $member ) {
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_YOURSELF");
-    exit 0; # Exit without error
+    exit 0;    # Exit without error
 }
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $member );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($member);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
-my $debits = $patron->account->outstanding_debits->total_outstanding;
-my $credits = abs $patron->account->outstanding_credits->total_outstanding;
+my $debits      = $patron->account->outstanding_debits->total_outstanding;
+my $credits     = abs $patron->account->outstanding_credits->total_outstanding;
 my $countissues = $patron->checkouts->count;
-my $userenv = C4::Context->userenv;
+my $userenv     = C4::Context->userenv;
 
-if ($patron->category->category_type eq "S") {
-    unless(C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) {
+if ( $patron->category->category_type eq "S" ) {
+    unless ( C4::Auth::haspermission( $userenv->{'id'}, { 'staffaccess' => 1 } ) ) {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_STAFF");
-        exit 0; # Exit without error
+        exit 0;    # Exit without error
     }
 } else {
-    unless(C4::Auth::haspermission($userenv->{'id'},{'borrowers'=>'delete_borrowers'})) {
-	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
-        exit 0; # Exit without error
+    unless ( C4::Auth::haspermission( $userenv->{'id'}, { 'borrowers' => 'delete_borrowers' } ) ) {
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
+        exit 0;    # Exit without error
     }
 }
 
-if (C4::Context->preference("IndependentBranches")) {
+if ( C4::Context->preference("IndependentBranches") ) {
     my $userenv = C4::Context->userenv;
-    if ( !C4::Context->IsSuperLibrarian() && $patron->branchcode){
-        unless ($userenv->{branch} eq $patron->branchcode){
-            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
-            exit 0; # Exit without error
+    if ( !C4::Context->IsSuperLibrarian() && $patron->branchcode ) {
+        unless ( $userenv->{branch} eq $patron->branchcode ) {
+            print $input->redirect(
+                "/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
+            exit 0;    # Exit without error
         }
     }
 }
 
 if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
     if ( $patron->id eq $anonymous_patron ) {
-        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_ANONYMOUS_PATRON");
+        print $input->redirect(
+            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_ANONYMOUS_PATRON");
         exit 0;    # Exit without error
     }
 }
 
-my $op = $input->param('op') || 'delete_confirm';
-my $dbh = C4::Context->dbh;
+my $op           = $input->param('op') || 'delete_confirm';
+my $dbh          = C4::Context->dbh;
 my $is_guarantor = $patron->guarantee_relationships->count;
-my $countholds = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE borrowernumber=?", undef, $member);
+my $countholds   = $dbh->selectrow_array( "SELECT COUNT(*) FROM reserves WHERE borrowernumber=?", undef, $member );
 
 # Add warning if patron has pending suggestions
 $template->param(
-    pending_suggestions => Koha::Suggestions->search({ suggestedby => $member, STATUS => 'ASKED' })->count,
+    pending_suggestions => Koha::Suggestions->search( { suggestedby => $member, STATUS => 'ASKED' } )->count,
 );
 
 $template->param(
@@ -113,12 +119,12 @@ $template->param(
 
 if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
     $template->param(
-        op         => 'delete_confirm',
+        op => 'delete_confirm',
     );
 
 } elsif ( $op eq 'cud-delete_confirmed' ) {
 
-    my $patron = Koha::Patrons->find( $member );
+    my $patron = Koha::Patrons->find($member);
 
     try {
         my $schema = Koha::Database->new->schema;
@@ -126,20 +132,20 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
             sub {
                 $patron->move_to_deleted;
                 $patron->delete;
-                print $input->redirect( "/cgi-bin/koha/members/members-home.pl" );
+                print $input->redirect("/cgi-bin/koha/members/members-home.pl");
             }
         );
-    }
-    catch {
+    } catch {
         if ( $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
-            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_ANONYMOUS_PATRON");
-        }
-        else {
+            print $input->redirect(
+                "/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_ANONYMOUS_PATRON");
+        } else {
             $_->rethrow;
         }
     };
+
     # TODO Tell the user everything went ok
-    exit 0; # Exit without error
+    exit 0;    # Exit without error
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

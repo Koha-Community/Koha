@@ -24,1171 +24,1232 @@
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( unknownbiblionumber ) %]
-        [% t("Unknown record") | html %]
-    [% ELSE %]
-        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
-        [% tx("Details for {title}", { title = title_in_title }) | html %]
-    [% END %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( unknownbiblionumber ) %]
+            [% t("Unknown record") | html %]
+        [% ELSE %]
+            [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+            [% tx("Details for {title}", { title = title_in_title }) | html %]
+        [% END %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 
 [% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 [% BLOCK acq_status %]
-    <span title="The status 'Unlinked' means: no linked orders. Cancelled means that all orders are cancelled. Processing implies any active or new order lines. Status 'acquired' implies any completely received lines (with remaining lines cancelled).">
-    [% SWITCH myvar %]
-        [% CASE 'unlinked'   %]<b>Unlinked</b>
-        [% CASE 'acquired'   %]<b>Acquired</b>
-        [% CASE 'processing' %]<b>Processing</b>
-        [% CASE 'cancelled'  %]<b>Cancelled</b>
-    [% END %]
+    <span
+        title="The status 'Unlinked' means: no linked orders. Cancelled means that all orders are cancelled. Processing implies any active or new order lines. Status 'acquired' implies any completely received lines (with remaining lines cancelled)."
+    >
+        [% SWITCH myvar %]
+        [% CASE 'unlinked' %]
+            <b>Unlinked</b>
+        [% CASE 'acquired' %]
+            <b>Acquired</b>
+        [% CASE 'processing' %]
+            <b>Processing</b>
+        [% CASE 'cancelled' %]
+            <b>Cancelled</b>
+        [% END %]
     </span>
 [% END %]
 
 <body id="catalog_detail" class="catalog">
-    [% WRAPPER 'header.inc' %]
-        [% INCLUDE 'cat-search.inc' %]
-    [% END %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        [% END %]
+
+        [% IF ( unknownbiblionumber ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Unknown record</span>
+            [% END %]
+        [% ELSE %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+                [% INCLUDE 'biblio-title.inc' link = 1 %]
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Details</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
+    <div class="row">
+        <div class="col">
+            [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
+            [% CoceProviders   = Koha.Preference('CoceProviders') %]
+            [% CoceHost        = Koha.Preference('CoceHost') %]
+            [% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
+
+            [% INCLUDE 'cat-toolbar.inc' %]
+            [% IF ( ocoins ) %]
+                <!-- COinS / OpenURL -->
+                <span class="Z3988" title="[% ocoins | html %]"></span>
+            [% END %]
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div id="catalogue_detail_biblio" class="col">
+            [% IF decoding_error || analytics_error %]
+                <div class="page-section bg-danger">
+                    <h1>Errors found</h1>
+                    [% IF decoding_error %]
+                        <h2>Encoding errors</h2>
+                        <p class="biberror">There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
+                        <pre class="error">[% decoding_error | html %]</pre>
+                    [% END %]
+                    [% IF analytics_error %]
+                        <h2>Analytics errors</h2>
+                        <p class="analytics_error">There was an error searching for analytic records, please see the logs for details.</p>
+                    [% END %]
+                </div>
             [% END %]
 
-            [% IF ( unknownbiblionumber ) %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Unknown record</span>
-                [% END %]
-            [% ELSE %]
-                [% WRAPPER breadcrumb_item %]
-                    [% INCLUDE 'biblio-title.inc' link = 1 %]
-                [% END %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Details</span>
-                [% END %]
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
+            <div class="page-section">
+                [% XSLTBloc | $raw %]
 
-    [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
-                        <div class="row">
-                                <div class="col">
-                                    [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
-                                    [% CoceProviders   = Koha.Preference('CoceProviders') %]
-                                    [% CoceHost        = Koha.Preference('CoceHost') %]
-                                    [% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
+                [% IF shelves.count %]
+                    <span class="results_summary"
+                        ><span class="label">Lists that include this title: </span>
+                        [% FOREACH s IN shelves %]
+                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a>
+                            [% IF ( loop.last ) %][% ELSE %]|[% END %]
+                        [% END %]
+                    </span>
+                [% END %]
 
-                                    [% INCLUDE 'cat-toolbar.inc' %]
-                                    [% IF ( ocoins ) %]
-                                        <!-- COinS / OpenURL -->
-                                        <span class="Z3988" title="[% ocoins | html %]"></span>
-                                    [% END %]
-                                </div> <!-- /.col -->
-                    </div> <!-- /.row -->
-                    <div class="row">
-                        <div id="catalogue_detail_biblio" class="col">
+                [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
+                    <span class="results_summary"
+                        ><span class="label">Tags:</span>
+                        [% FOREACH TagLoo IN TagLoop %]
+                            [% IF ( CAN_user_tools_moderate_tags ) %]
+                                <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |uri %]">[% TagLoo.term | html %]</a>
+                            [% ELSE %]
+                                [% TagLoo.term | html %]
+                            [% END %]
+                            <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %],[% END %]
+                        [% END %]
+                    </span>
+                [% END %]
 
-                        [% IF decoding_error || analytics_error %]
-                            <div class="page-section bg-danger">
-                                <h1>Errors found</h1>
-                                [% IF decoding_error %]
-                                    <h2>Encoding errors</h2>
-                                    <p class="biberror">There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
-                                    <pre class="error">[% decoding_error | html %]</pre>
-                                [% END %]
-                                [% IF analytics_error %]
-                                    <h2>Analytics errors</h2>
-                                    <p class="analytics_error">There was an error searching for analytic records, please see the logs for details.</p>
-                                [% END %]
+                <span id="catalogue_detail_marc_preview" class="results_summary">
+                    <span class="label">MARC preview:</span>
+                    <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a>
+                </span>
+                <span id="catalogue_detail_framework" class="results_summary">
+                    <span class="label">MARC framework:</span>
+                    <span class="frameworkcode">[% Frameworks.GetName(biblio.frameworkcode) | html %]</span>
+                </span>
+                [% IF !item_level_itypes || Koha.Preference("BiblioItemtypeInfo") %]
+                    <span class="results_summary itemtype">
+                        <span class="label">Itemtype:</span>
+                        [% IF ( !noItemTypeImages && imageurl ) %]
+                            <img class="itemtype-image" src="[% imageurl | html %]" alt="" />
+                        [% END %]
+                        [% IF ( description ) %]
+                            <span class="itypetext">[% description | html %]</span>
+                        [% ELSE %]
+                            <span class="itypetext">[% itemtype | html %]</span>
+                        [% END %]
+                    </span>
+                [% END %]
+
+                [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
+                    <span id="catalogue_detail_elastic_record" class="results_summary">
+                        <span class="label">Elasticsearch record:</span>
+                        <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="Elasticsearch record" class="previewElastic">Show</a>
+                    </span>
+                [% END %]
+
+                [% SET record_source = biblio.metadata.record_source %]
+                [% IF ( record_source ) %]
+                    <span id="catalogue_detail_record_source" class="results_summary">
+                        <span class="label">Record source:</span>
+                        [% IF record_source.can_be_edited %]
+                            [% record_source.name | html %]
+                        [% ELSE %]
+                            [% record_source.name | html %] <i class="fa fa-lock"></i>
+                        [% END %]
+                    </span>
+                [% END %]
+
+                [% IF ( holdcount ) %]
+                    <span class="results_summary">
+                        <span class="label">Holds:</span>
+                        <span class="badge text-bg-info">
+                            [% IF CAN_user_reserveforothers_place_holds %]
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
+                            [% ELSE %]
+                                <span>[% holdcount | html %]</span>
+                            [% END %]
+                        </span>
+                    </span>
+                [% END %]
+
+                [% IF illrequests.count %]
+                    <span class="results_summary">
+                        <span class="label">ILL requests:</span>
+                        [% IF CAN_user_ill %]
+                            [% FOREACH ill IN illrequests %]
+                                <a href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=[% ill.illrequest_id | uri %]">Request [% ill.illrequest_id | html %]</a>[% IF ! loop.last %],[% END %]
+                            [% END %]
+                        [% ELSE %]
+                            [% FOREACH ill IN illrequests %]
+                                <span>Request [% ill.illrequest_id | html %]</span>[% IF ! loop.last %],[% END %]
+                            [% END %]
+                        [% END %]
+                    </span>
+                [% END %]
+
+                [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
+                    <span class="results_summary">
+                        <span class="label">Article requests:</span>
+                        <span class="badge text-bg-info">
+                            <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
+                        </span>
+                    </span>
+                [% END %]
+
+                [% IF course_reserves %]
+                    <span class="results_summary"
+                        ><span class="label">Courses that have reserved this title: </span>
+                        [% FOREACH c IN course_reserves %]
+                            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% c.course_id | uri %]">[% c.course.course_name | html %]</a>
+                            [% IF ( loop.last ) %][% ELSE %]|[% END %]
+                        [% END %]
+                    </span>
+                [% END %]
+            </div>
+            [%# .page-section %]
+        </div>
+        <!-- /.col-xs-* -->
+
+        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+            <div class="col-sm-3 bookcoverimg">
+                <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
+                    [% IF ( LocalCoverImages ) %]
+                        [% IF localimages.count %]
+                            [% FOREACH image IN localimages %]
+                                <div class="cover-image local-coverimg">
+                                    <a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                        <img
+                                            src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]"
+                                            alt="Local cover image"
+                                            data-link="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]"
+                                        />
+                                    </a>
+                                    <div class="hint">Local cover image</div>
+                                </div>
+                            [% END %]
+                        [% END %]
+                    [% END %]
+
+                    [% IF ( AmazonCoverImages && normalized_isbn) %]
+                        <div class="cover-image" id="amazon-bookcoverimg">
+                            <a href="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.LZZZZZZZ.jpg" title="Amazon cover image">
+                                <img
+                                    src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.MZZZZZZZ.jpg"
+                                    alt="Amazon cover image"
+                                    data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"
+                                />
+                            </a>
+                            <div class="hint">Image from Amazon.com</div>
+                        </div>
+                    [% END %]
+
+                    [% IF ( IntranetCoce && CoceProviders && normalized_isbn ) %]
+                        [% coce_id = normalized_ean || normalized_isbn %]
+                        <div class="cover-image coce-coverimg">
+                            [% IF ( coce_id ) %]
+                                <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
+                            [% ELSE %]
+                                <span class="no-image">No cover image available</span>
+                            [% END %]
+                            <div class="hint">Image from Coce</div>
+                        </div>
+                    [% END %]
+
+                    [% IF ( SyndeticsCovers ) %]
+                        [% IF ( content_identifier_exists ) %]
+                            <div class="cover-image" id="syndetics-bookcoverimg">
+                                <a
+                                    href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]"
+                                    title="Syndetics cover image"
+                                >
+                                    <img
+                                        src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/[% Koha.Preference('SyndeticsCoverImageSize') | url %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]"
+                                        alt=""
+                                        class="thumbnail"
+                                    />
+                                </a>
+                                <div class="hint">Image from Syndetics</div>
+                            </div>
+                        [% ELSE %]
+                            <span class="no-image">No cover image available</span>
+                        [% END %]
+                    [% END %]
+
+                    [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
+                        [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
+                        [% IF custom_cover_image_url %]
+                            <div class="cover-image" id="custom-coverimg">
+                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" title="Custom cover image">
+                                    <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
+                                </a>
+                                <div class="hint">Custom cover image</div>
                             </div>
                         [% END %]
+                    [% END %]
+                </div>
+                <!-- /.cover-slider -->
+            </div>
+            <!-- /.bookcoverimg.col-xs-3 -->
+        [% END # /IF ( AmazonCoverImages, etc ) %]
+    </div>
 
-                        <div class="page-section">
+    [% WRAPPER tabs id= "bibliodetails" %]
+        [% WRAPPER tabs_nav %]
+            [% IF Koha.Preference('SeparateHoldings') %]
+                [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
+                    [% WRAPPER tab_item tabname= "holdings" %]
+                        <span>[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</span>
+                    [% END %]
+                [% END %]
+                [% IF other_holdings_count %]
+                    [% WRAPPER tab_item tabname= "otherholdings" %]
+                        <span>Other holdings ([% other_holdings_count || 0 | html %])</span>
+                    [% END %]
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER tab_item tabname= "holdings" %]
+                    <span>Holdings ([% items_to_display_count || 0 | html %])</span>
+                [% END %]
+            [% END %]
+            [% IF Koha.Preference('EnableItemGroups') %]
+                [% WRAPPER tab_item tabname= "item_groups" %]
+                    <span>Item groups</span>
+                [% END %]
+            [% END %]
 
-                            [% XSLTBloc | $raw %]
+            [% IF ( MARCNOTES || notes ) %]
+                [% WRAPPER tab_item tabname= "description" %]
+                    <span>Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</span>
+                [% END %]
+            [% END %]
+            [% IF ComponentParts && ComponentParts.size %]
+                [% WRAPPER tab_item tabname= "components" %]
+                    <span>Components ([% ComponentParts.size | html %])</span>
+                [% END %]
+            [% END %]
 
-                            [% IF shelves.count %]
-                                <span class="results_summary"><span class="label">Lists that include this title: </span>
-                                [% FOREACH s IN shelves %]
-                                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a>
-                                    [% IF ( loop.last ) %][% ELSE %]|[% END %]
-                                [% END %]
-                                </span>
-                            [% END %]
+            [% IF ( subscriptionsnumber ) %]
+                [% WRAPPER tab_item tabname= "subscriptions" %]
+                    <span>Subscriptions</span>
+                [% END %]
+            [% END %]
 
-                            [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
-                                <span class="results_summary"><span class="label">Tags:</span>
-                                    [% FOREACH TagLoo IN TagLoop %]
-                                        [% IF ( CAN_user_tools_moderate_tags ) %]
-                                            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |uri %]">[% TagLoo.term | html %]</a>
-                                        [% ELSE %]
-                                            [% TagLoo.term | html %]
-                                        [% END %]
-                                        <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
-                                    [% END %]
-                                </span>
-                            [% END %]
+            [% IF Koha.Preference('AcquisitionDetails') %]
+                [% WRAPPER tab_item tabname= "acq_details" %]
+                    <span>Acquisition details</span>
+                [% END %]
+            [% END %]
 
-                            <span id="catalogue_detail_marc_preview" class="results_summary">
-                                <span class="label">MARC preview:</span>
-                                <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a>
-                            </span>
-                            <span id="catalogue_detail_framework" class="results_summary">
-                                <span class="label">MARC framework:</span>
-                                <span class="frameworkcode">[% Frameworks.GetName(biblio.frameworkcode) | html %]</span>
-                            </span>
-                            [% IF !item_level_itypes || Koha.Preference("BiblioItemtypeInfo") %]
-                                <span class="results_summary itemtype">
-                                    <span class="label">Itemtype:</span>
-                                    [% IF ( !noItemTypeImages && imageurl ) %]
-                                        <img class="itemtype-image" src="[% imageurl | html %]" alt="" />
-                                    [% END %]
-                                    [% IF ( description ) %]
-                                        <span class="itypetext">[% description | html %]</span>
-                                    [% ELSE %]
-                                        <span class="itypetext">[% itemtype | html %]</span>
-                                    [% END %]
-                                </span>
-                            [% END %]
+            [% IF suggestions.count %]
+                [% WRAPPER tab_item tabname= "suggestion_details" %]
+                    <span>Suggestion details</span>
+                [% END %]
+            [% END %]
 
-                            [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
-                                <span id="catalogue_detail_elastic_record" class="results_summary">
-                                    <span class="label">Elasticsearch record:</span>
-                                    <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="Elasticsearch record" class="previewElastic">Show</a>
-                                </span>
-                            [% END %]
+            [% IF ( FRBRizeEditions ) %]
+                [% IF ( XISBNS ) %]
+                    [% WRAPPER tab_item tabname= "editions" %]
+                        <span>Editions</span>
+                    [% END %]
+                [% END %]
+            [% END %]
 
-                            [% SET record_source = biblio.metadata.record_source %]
-                            [% IF ( record_source ) %]
-                                <span id="catalogue_detail_record_source" class="results_summary">
-                                    <span class="label">Record source:</span>
-                                    [% IF record_source.can_be_edited %]
-                                        [% record_source.name | html %]
-                                    [% ELSE %]
-                                        [% record_source.name | html %] <i class="fa fa-lock"></i>
-                                    [% END %]
-                                </span>
-                            [% END %]
+            [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+                [% WRAPPER tab_item tabname= "concerns" %]
+                    <span>Concerns ([% biblio.tickets.count | html %])</span>
+                [% END %]
+            [% END %]
 
-                            [% IF ( holdcount ) %]
-                                <span class="results_summary">
-                                    <span class="label">Holds:</span>
-                                    <span class="badge text-bg-info">
-                                        [% IF CAN_user_reserveforothers_place_holds %]
-                                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
-                                        [% ELSE %]
-                                            <span>[% holdcount | html %]</span>
-                                        [% END %]
-                                    </span>
-                                </span>
-                            [% END %]
+            [% IF ( LocalCoverImages ) %]
+                [% WRAPPER tab_item tabname= "images" %]
+                    <span>Images ([% localimages.count || 0 | html %])</span>
+                [% END %]
+            [% END %]
 
-                            [% IF illrequests.count %]
-                                <span class="results_summary">
-                                    <span class="label">ILL requests:</span>
-                                    [% IF CAN_user_ill %]
-                                        [% FOREACH ill IN illrequests %]
-                                            <a href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=[% ill.illrequest_id | uri %]">Request [% ill.illrequest_id | html %]</a>[% IF ! loop.last %], [% END %]
-                                        [% END %]
-                                    [% ELSE %]
-                                        [% FOREACH ill IN illrequests %]
-                                            <span>Request [% ill.illrequest_id | html %]</span>[% IF ! loop.last %], [% END %]
-                                        [% END %]
-                                    [% END %]
-                                </span>
-                            [% END %]
+            [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
+                [% WRAPPER tab_item tabname= "html5media" %]
+                    <span>Play media</span>
+                [% END %]
+            [% END %]
 
-                            [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
-                                <span class="results_summary">
-                                    <span class="label">Article requests:</span>
-                                    <span class="badge text-bg-info">
-                                        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
-                                    </span>
-                                </span>
-                            [% END %]
+            [% IF ( reviews ) %]
+                [% WRAPPER tab_item tabname= "comments" %]
+                    <span>Comments [% ' ( ' _ ( reviews.size ) _ ' )' | html %]</span>
+                [% END %]
+            [% END %]
 
-                            [% IF course_reserves %]
-                                <span class="results_summary"><span class="label">Courses that have reserved this title: </span>
-                                [% FOREACH c IN course_reserves %]
-                                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% c.course_id | uri %]">[% c.course.course_name | html %]</a>
-                                    [% IF ( loop.last ) %][% ELSE %]|[% END %]
-                                [% END %]
-                                </span>
-                            [% END %]
-                        </div> [%# .page-section %]
+            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+                [% WRAPPER tab_item tabname= "NovelistSelect" %]
+                    <span>NoveList Select</span>
+                [% END %]
+            [% END %]
 
-                        </div> <!-- /.col-xs-* -->
+            [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+                [% WRAPPER tab_item tabname= "${ plugins_intranet_catalog_biblio_tab.id }" %]
+                    <span>[% plugins_intranet_catalog_biblio_tab.title | html %]</span>
+                [% END %]
+            [% END %]
+        [% END # /WRAPPER tabs_nav %]
 
-                        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-                            <div class="col-sm-3 bookcoverimg">
-                                <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
-                                    [% IF ( LocalCoverImages ) %]
-                                        [% IF localimages.count %]
-                                            [% FOREACH image IN localimages %]
-                                                <div class="cover-image local-coverimg">
-                                                    <a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
-                                                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" />
-                                                    </a>
-                                                    <div class="hint">Local cover image</div>
-                                                </div>
-                                            [% END %]
-                                        [% END %]
-                                    [% END %]
+        [% WRAPPER tab_panels %]
+            [% WRAPPER tab_panel tabname="item_groups" %]
+                [% IF Koha.Preference('EnableItemGroups') %]
+                    [% IF CAN_user_editcatalogue_manage_item_groups %]
+                        <div class="item_groups_table_table_controls">
+                            <a href="#" class="item-group-create btn btn-default btn-xs"><i class="fa fa-plus"></i> New item group</a>
+                        </div>
+                    [% END %]
+                    <table class="items-group-table" id="items-group-table">
+                        <thead>
+                            <tr>
+                                <th>Display order</th>
+                                <th>Description</th>
+                                <th class="NoSort">&nbsp;</th>
+                            </tr>
+                        </thead>
+                    </table>
+                [% END # /IF EnableItemGroups %]
+            [% END # /tab_panel %]
 
-                                    [% IF ( AmazonCoverImages && normalized_isbn) %]
-                                        <div class="cover-image" id="amazon-bookcoverimg">
-                                            <a href="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.LZZZZZZZ.jpg" title="Amazon cover image">
-                                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.MZZZZZZZ.jpg" alt="Amazon cover image" data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"/>
-                                            </a>
-                                            <div class="hint">Image from Amazon.com</div>
-                                        </div>
-                                    [% END %]
+            [% WRAPPER tab_panel tabname="holdings" %]
+                [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
+                    <span class="results_summary NovelistSelect" style="display:none;">
+                        <span class="label">Novelist Select: </span>
+                        <div data-novelist-novelistselect="[% normalized_isbn | html %]"></div>
+                    </span>
+                [% END %]
 
-                                    [% IF ( IntranetCoce && CoceProviders && normalized_isbn ) %]
-                                        [% coce_id = normalized_ean || normalized_isbn %]
-                                        <div class="cover-image coce-coverimg">
-                                            [% IF ( coce_id ) %]
-                                                <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
-                                            [% ELSE %]
-                                                <span class="no-image">No cover image available</span>
-                                            [% END %]
-                                            <div class="hint">Image from Coce</div>
-                                        </div>
-                                    [% END %]
+                [% SET hidden_count = all_items_count - items_to_display_count %]
+                [% IF all_items_count %]
+                    [% PROCESS items_table tab="holdings" %]
 
-                                    [% IF ( SyndeticsCovers ) %]
-                                        [% IF ( content_identifier_exists ) %]
-                                        <div class="cover-image" id="syndetics-bookcoverimg">
-                                            <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" title="Syndetics cover image">
-                                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/[% Koha.Preference('SyndeticsCoverImageSize') | url %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" alt="" class="thumbnail" />
-                                            </a>
-                                            <div class="hint">Image from Syndetics</div>
-                                        </div>
-                                            [% ELSE %]
-                                                <span class="no-image">No cover image available</span>
-                                            [% END %]
-                                    [% END %]
+                    [% IF hidden_count %]
+                        [%# FIXME We could deal with that in JS and prevent a full refresh %]
+                        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hidden_count | html %] hidden)</a></p>
+                    [% END %]
+                [% ELSE %]
+                    [% IF ( ALTERNATEHOLDINGS ) %]
+                        [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
+                            <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding | html %]</div>
+                        [% END %]
+                    [% ELSE %]
+                        <div id="noitems">No physical items for this record</div>
+                    [% END %]
+                [% END # /IF all_items_count %]
 
-                                    [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
-                                        [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
-                                        [% IF custom_cover_image_url %]
-                                            <div class="cover-image" id="custom-coverimg">
-                                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" title="Custom cover image">
-                                                    <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
-                                                </a>
-                                                <div class="hint">Custom cover image</div>
-                                            </div>
-                                        [% END %]
-                                    [% END %]
-                                </div> <!-- /.cover-slider -->
-                            </div> <!-- /.bookcoverimg.col-xs-3 -->
-                        [% END # /IF ( AmazonCoverImages, etc ) %]
-                    </div>
+                [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
+                    <span class="results_summary NovelistSelect" style="display:none;">
+                        <span class="label">Novelist Select: </span>
+                        <div data-novelist-novelistselect="[% normalized_isbn | html %]"></div>
+                    </span>
+                [% END %]
+            [% END # /tab_panel %]
 
-                    [% WRAPPER tabs id= "bibliodetails" %]
-                        [% WRAPPER tabs_nav %]
-                            [% IF Koha.Preference('SeparateHoldings') %]
-                                [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
-                                    [% WRAPPER tab_item tabname= "holdings" %]
-                                        <span>[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</span>
-                                    [% END %]
-                                [% END %]
-                                [% IF other_holdings_count %]
-                                    [% WRAPPER tab_item tabname= "otherholdings" %]
-                                        <span>Other holdings ([% other_holdings_count || 0 | html %])</span>
-                                    [% END %]
-                                [% END %]
-                            [% ELSE %]
-                                [% WRAPPER tab_item tabname= "holdings" %]
-                                    <span>Holdings ([% items_to_display_count || 0 | html %])</span>
-                                [% END %]
-                            [% END %]
-                            [% IF Koha.Preference('EnableItemGroups') %]
-                                [% WRAPPER tab_item tabname= "item_groups" %]
-                                    <span>Item groups</span>
-                                [% END %]
-                            [% END %]
+            [% IF Koha.Preference('SeparateHoldings') %]
+                [% WRAPPER tab_panel tabname="otherholdings" %]
+                    [% PROCESS items_table tab="otherholdings" %]
+                [% END # /tab_panel %]
+            [% END %]
 
-                            [% IF ( MARCNOTES || notes ) %]
-                                [% WRAPPER tab_item tabname= "description" %]
-                                    <span>Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</span>
-                                [% END %]
-                            [% END %]
-                            [% IF ComponentParts && ComponentParts.size %]
-                                [% WRAPPER tab_item tabname= "components" %]
-                                    <span>Components ([% ComponentParts.size | html %])</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( subscriptionsnumber ) %]
-                                [% WRAPPER tab_item tabname= "subscriptions" %]
-                                    <span>Subscriptions</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF Koha.Preference('AcquisitionDetails') %]
-                                [% WRAPPER tab_item tabname= "acq_details" %]
-                                    <span>Acquisition details</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF suggestions.count %]
-                                [% WRAPPER tab_item tabname= "suggestion_details" %]
-                                    <span>Suggestion details</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( FRBRizeEditions ) %]
-                                [% IF ( XISBNS ) %]
-                                    [% WRAPPER tab_item tabname= "editions" %]
-                                        <span>Editions</span>
-                                    [% END %]
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-                                [% WRAPPER tab_item tabname= "concerns" %]
-                                    <span>Concerns ([% biblio.tickets.count | html %])</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( LocalCoverImages ) %]
-                                [% WRAPPER tab_item tabname= "images" %]
-                                    <span>Images ([% localimages.count || 0 | html %])</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
-                                [% WRAPPER tab_item tabname= "html5media" %]
-                                    <span>Play media</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( reviews ) %]
-                                [% WRAPPER tab_item tabname= "comments" %]
-                                    <span>Comments [% ' ( ' _ ( reviews.size ) _ ' )' | html %]</span>
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-                                [% WRAPPER tab_item tabname= "NovelistSelect" %]
-                                    <span>NoveList Select</span>
-                                [% END %]
-                            [% END %]
-
-                            [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-                                [% WRAPPER tab_item tabname= "${ plugins_intranet_catalog_biblio_tab.id }" %]
-                                   <span>[% plugins_intranet_catalog_biblio_tab.title | html %]</span>
-                               [% END %]
-                            [% END %]
-                        [% END # /WRAPPER tabs_nav %]
-
-                        [% WRAPPER tab_panels %]
-                            [% WRAPPER tab_panel tabname="item_groups" %]
-                                [% IF Koha.Preference('EnableItemGroups') %]
-                                    [% IF CAN_user_editcatalogue_manage_item_groups %]
-                                        <div class="item_groups_table_table_controls">
-                                            <a href="#" class="item-group-create btn btn-default btn-xs"><i class="fa fa-plus"></i> New item group</a>
-                                        </div>
-                                    [% END %]
-                                    <table class="items-group-table" id="items-group-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Display order</th>
-                                                <th>Description</th>
-                                                <th class="NoSort">&nbsp;</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                [% END # /IF EnableItemGroups %]
-                            [% END # /tab_panel %]
-
-                            [% WRAPPER tab_panel tabname="holdings" %]
-                                [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
-                                    <span class="results_summary NovelistSelect" style="display:none;">
-                                        <span class="label">Novelist Select: </span>
-                                        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-                                    </span>
-                                [% END %]
-
-                                [% SET hidden_count = all_items_count - items_to_display_count %]
-                                [% IF all_items_count %]
-                                    [% PROCESS items_table tab="holdings" %]
-
-                                    [% IF hidden_count %]
-                                        [%# FIXME We could deal with that in JS and prevent a full refresh %]
-                                        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hidden_count | html %] hidden)</a></p>
-                                    [% END %]
+            [% IF ( MARCNOTES ) %]
+                [% WRAPPER tab_panel tabname="description" %]
+                    <div class="content_set">
+                        [% FOREACH MARCNOTE IN MARCNOTES %]
+                            <p class="marcnote marcnote-[% MARCNOTE.tag | html %]" id="marcnote-[% MARCNOTE.tag | html %]-[% loop.count | html %]">
+                                [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                    <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
                                 [% ELSE %]
-                                    [% IF ( ALTERNATEHOLDINGS ) %]
-                                        [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
-                                            <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding | html %]</div>
-                                        [% END %]
-                                    [% ELSE %]
-                                        <div id="noitems">No physical items for this record</div>
-                                    [% END %]
-                                [% END # /IF all_items_count %]
-
-                                [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
-                                    <span class="results_summary NovelistSelect" style="display:none;">
-                                        <span class="label">Novelist Select: </span>
-                                        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-                                    </span>
+                                    [% MARCNOTE.marcnote | html | html_line_break %]
                                 [% END %]
-                            [% END # /tab_panel %]
+                            </p>
+                        [% END %]
+                    </div>
+                [% END # /tab_panel %]
+            [% END %]
 
-                            [% IF Koha.Preference('SeparateHoldings') %]
-                                [% WRAPPER tab_panel tabname="otherholdings" %]
-                                    [% PROCESS items_table tab="otherholdings" %]
-                                [% END # /tab_panel %]
+            [% IF ComponentParts && ComponentParts.size %]
+                [% WRAPPER tab_panel tabname="components" %]
+                    <div class="content_set">
+                        <table>
+                            [% FOR PART IN ComponentParts %]
+                                <tr>
+                                    <td> [% PART | $raw %] </td>
+                                </tr>
                             [% END %]
+                        </table>
+                        [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords') %]
+                            <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | url %]">show all component parts</a></p>
+                        [% END %]
+                    </div>
+                    <!-- /.content_set -->
+                [% END # /tab_panel %]
+            [% END %]
 
-                            [% IF ( MARCNOTES ) %]
-                                [% WRAPPER tab_panel tabname="description" %]
-                                    <div class="content_set">
-                                        [% FOREACH MARCNOTE IN MARCNOTES %]
-                                            <p class="marcnote marcnote-[% MARCNOTE.tag | html %]" id="marcnote-[% MARCNOTE.tag | html %]-[% loop.count | html %]">
-                                                [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                    <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+            [% IF ( subscriptionsnumber ) %]
+                [% WRAPPER tab_panel tabname="subscriptions" %]
+                    <div id="catalogue_detail_subscriptions">
+                        <h2>This is a serial subscription</h2>
+                        <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p>
+                        [% FOREACH subscription IN subscriptions %]
+                            [% IF subscription.branchcode %]
+                                <h3>At library: [% Branches.GetName(subscription.branchcode) || subscription.branchcode | html %]</h3>
+                            [% END %]
+                            [% IF ( subscription.closed ) %]
+                                <p>This subscription is closed.</p>
+                            [% END %]
+                            [% IF ( subscription.location ) %]
+                                <p class="subscription_location">Location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]</p>
+                            [% END %]
+                            [% IF ( subscription.callnumber ) %]
+                                <p>Callnumber: [% subscription.callnumber | html %] </p>
+                            [% END %]
+                            [% IF ( subscription.subscriptionnotes ) %]
+                                <p>[% subscription.subscriptionnotes | html | html_line_break %] </p>
+                            [% END %]
+                            [% IF ( subscription.missinglist ) %]
+                                <p>Missing issues: [% subscription.missinglist | html %] </p>
+                            [% END %]
+                            [% IF ( subscription.librariannote ) %]
+                                <p>([% subscription.librariannote | html %])</p>
+                            [% END %]
+                            [% IF ( subscription.latestserials ) %]
+                                <p> The [% subscription.staffdisplaycount | html %] latest issues related to this subscription:</p>
+                                <table>
+                                    <tr>
+                                        <th>Issue #</th>
+                                        <th>Date arrived</th>
+                                        <th>Date published</th>
+                                        <th>Date published (text)</th>
+                                        <th>Status</th>
+                                        <th>Note</th>
+                                    </tr>
+                                    [% FOREACH latestserial IN subscription.latestserials %]
+                                        <tr>
+                                            <td>[% latestserial.serialseq | html %]</td>
+                                            <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
+                                            <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                                            <td>[% latestserial.publisheddatetext | html %]</td>
+                                            <td> [% INCLUDE 'serial-status.inc' serial = latestserial %] </td>
+                                            <td>[% latestserial.notes | html %]</td>
+                                        </tr>
+                                    [% END %]
+                                </table>
+                            [% END # /IF subscription.latestserials %]
+                            [% IF ( CAN_user_serials ) %]
+                                <p>
+                                    <a class="btn btn-link" href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list" aria-hidden="true"></i> Subscription details</a>
+                                </p>
+                            [% END %]
+                        [% END # /FOREACH subscription %]
+                    </div>
+                    <!-- /#catalogue_detail_subscriptions -->
+                [% END # /tab_panel %]
+            [% END # IF subscriptionsnumber %]
+
+            [% IF Koha.Preference('AcquisitionDetails') %]
+                [% WRAPPER tab_panel tabname="acq_details" %]
+                    <p class="acqstatus_[% acq_status | html %]">This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %] </p>
+                    [% IF orders.count %]
+                        <table id="orders">
+                            <thead>
+                                <tr>
+                                    <th>Vendor</th>
+                                    <th>Invoice</th>
+                                    <th>Basket group</th>
+                                    <th>Basket</th>
+                                    <th>Order number</th>
+                                    <th>Creation date</th>
+                                    <th>Receive date</th>
+                                    <th>Status</th>
+                                    <th>Quantity</th>
+                                    <th title="Estimated cost tax incl. while pending, actual cost tax incl. once received">Price</th>
+                                    <th>Internal note</th>
+                                    <th>Subscription</th>
+                                    <th>Subscription call number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOR order IN orders %]
+                                    [% SET basket = order.basket %]
+                                    [% SET vendor = basket.bookseller %]
+                                    <tr>
+                                        <td>
+                                            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
+                                        </td>
+                                        <td>
+                                            [% IF order.invoiceid %]
+                                                [% IF CAN_user_acquisition %]
+                                                    <div><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page"> [% order.invoice.invoicenumber | html %]</a></div>
                                                 [% ELSE %]
-                                                    [% MARCNOTE.marcnote | html | html_line_break %]
+                                                    <div>[% order.invoice.invoicenumber | html %]</div>
                                                 [% END %]
-                                            </p>
-                                        [% END %]
-                                    </div>
-                                [% END # /tab_panel %]
-                            [% END %]
 
-                            [% IF ComponentParts && ComponentParts.size %]
-                                [% WRAPPER tab_panel tabname="components" %]
-                                    <div class="content_set">
-                                        <table>
-                                            [% FOR PART IN ComponentParts %]
-                                            <tr>
-                                                <td>
-                                                    [% PART | $raw %]
-                                                </td>
-                                            </tr>
-                                            [% END %]
-                                        </table>
-                                        [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
-                                            <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | url %]">show all component parts</a></p>
-                                        [% END %]
-                                    </div> <!-- /.content_set -->
-                                [% END # /tab_panel %]
-                            [% END %]
-
-                            [% IF ( subscriptionsnumber ) %]
-                                [% WRAPPER tab_panel tabname="subscriptions" %]
-                                    <div id="catalogue_detail_subscriptions">
-                                        <h2>This is a serial subscription</h2>
-                                        <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p>
-                                        [% FOREACH subscription IN subscriptions %]
-                                            [% IF subscription.branchcode %]
-                                                <h3>At library: [% Branches.GetName(subscription.branchcode) || subscription.branchcode | html %]</h3>
-                                            [% END %]
-                                            [% IF ( subscription.closed ) %]
-                                                <p>This subscription is closed.</p>
-                                            [% END %]
-                                            [% IF ( subscription.location ) %]
-                                                <p class="subscription_location">Location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]</p>
-                                            [% END %]
-                                            [% IF ( subscription.callnumber ) %]
-                                                <p>Callnumber: [% subscription.callnumber | html %] </p>
-                                            [% END %]
-                                            [% IF ( subscription.subscriptionnotes ) %]
-                                                <p>[% subscription.subscriptionnotes | html | html_line_break %] </p>
-                                            [% END %]
-                                            [% IF ( subscription.missinglist ) %]
-                                                <p>Missing issues: [% subscription.missinglist | html %] </p>
-                                            [% END %]
-                                            [% IF ( subscription.librariannote ) %]
-                                                <p>([% subscription.librariannote | html %])</p>
-                                            [% END %]
-                                            [% IF ( subscription.latestserials ) %]
-                                                <p> The [% subscription.staffdisplaycount | html %] latest issues related to this subscription:</p>
-                                                <table>
-                                                    <tr>
-                                                        <th>Issue #</th>
-                                                        <th>Date arrived</th>
-                                                        <th>Date published</th>
-                                                        <th>Date published (text)</th>
-                                                        <th>Status</th>
-                                                        <th>Note</th>
-                                                    </tr>
-                                                    [% FOREACH latestserial IN subscription.latestserials %]
-                                                        <tr>
-                                                            <td>[% latestserial.serialseq | html %]</td>
-                                                            <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
-                                                            <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
-                                                            <td>[% latestserial.publisheddatetext | html %]</td>
-                                                            <td>
-                                                                [% INCLUDE 'serial-status.inc' serial = latestserial %]
-                                                            </td>
-                                                            <td>[% latestserial.notes | html %]</td>
-                                                        </tr>
-                                                    [% END %]
-                                                </table>
-                                            [% END # /IF subscription.latestserials %]
-                                            [% IF ( CAN_user_serials ) %]
-                                                <p>
-                                                    <a class="btn btn-link" href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list" aria-hidden="true"></i> Subscription details</a>
-                                                </p>
-                                            [% END %]
-                                        [% END # /FOREACH subscription %]
-                                    </div> <!-- /#catalogue_detail_subscriptions -->
-                                [% END # /tab_panel %]
-                            [% END # IF subscriptionsnumber %]
-
-                            [% IF Koha.Preference('AcquisitionDetails') %]
-                                [% WRAPPER tab_panel tabname="acq_details" %]
-                                    <p class="acqstatus_[% acq_status | html %]">This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %]
-                                    </p>
-                                    [% IF orders.count %]
-                                        <table id="orders">
-                                            <thead>
-                                                <tr>
-                                                    <th>Vendor</th>
-                                                    <th>Invoice</th>
-                                                    <th>Basket group</th>
-                                                    <th>Basket</th>
-                                                    <th>Order number</th>
-                                                    <th>Creation date</th>
-                                                    <th>Receive date</th>
-                                                    <th>Status</th>
-                                                    <th>Quantity</th>
-                                                    <th title="Estimated cost tax incl. while pending, actual cost tax incl. once received">Price</th>
-                                                    <th>Internal note</th>
-                                                    <th>Subscription</th>
-                                                    <th>Subscription call number</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                [% FOR order IN orders %]
-                                                    [% SET basket = order.basket %]
-                                                    [% SET vendor = basket.bookseller %]
-                                                    <tr>
-                                                        <td>
-                                                            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
-                                                        </td>
-                                                        <td>
-                                                            [% IF order.invoiceid %]
-                                                                [% IF CAN_user_acquisition %]
-                                                                    <div><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]"
-                                                                    title="Invoice detail page">
-                                                                    [% order.invoice.invoicenumber | html %]</a></div>
-                                                                [% ELSE %]
-                                                                    <div>[% order.invoice.invoicenumber | html %]</div>
-                                                                [% END %]
-
-                                                                [% IF ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage && order.invoice.message_id ) %]
-                                                                    <div><a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a></div>
-                                                                [% END %]
-                                                            [% END %]
-                                                        </td>
-                                                        <td>
-                                                            [% IF basket.basketgroupid %]
-                                                                [% SET basket_group = basket.basket_group %]
-                                                                [% IF CAN_user_acquisition_group_manage %]
-                                                                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% vendor.id | uri %]&basketgroupid=[% basket_group.id | uri %]">[% basket_group.name | html%] ([% basket_group.id | html %])</a>
-                                                                [% ELSE %]
-                                                                    [% basket_group.name | html %] ([% basket_group.id | html %])
-                                                                [% END %]
-                                                            [% END %]
-                                                        </td>
-                                                        <td>
-                                                            [% IF CAN_user_acquisition_order_manage %]
-                                                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %] ([% basket.basketno | html %])</a>
-                                                            [% ELSE %]
-                                                                [% basket.basketname | html %] ([% basket.basketno | html %])
-                                                            [% END %]
-                                                        </td>
-                                                        <td>[% order.ordernumber | html %]</td>
-                                                        <td data-order="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates%]</td>
-                                                        <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</td>
-                                                        <td>
-                                                            [% SWITCH order.orderstatus %]
-                                                                [% CASE 'new' %]<span>New</span>
-                                                                [% CASE 'ordered' %]<span>Ordered</span>
-                                                                [% CASE 'partial' %]<span>Partial</span>
-                                                                [% CASE 'complete' %]<span>Complete</span>
-                                                                [% CASE 'cancelled' %]<span>Cancelled</span>
-                                                            [% END %]
-                                                        </td>
-                                                        <td>[% order.quantity | html %]</td>
-                                                        <td>
-                                                            [% IF ( order.orderstatus == "complete" ) %]
-                                                                [% order.unitprice_tax_included | $Price %]
-                                                            [% ELSE %]
-                                                                [% order.ecost_tax_included | $Price %]
-                                                            [% END %]
-                                                        <td>[% order.order_internalnote | html %]</td>
-                                                        <td>
-                                                            [% IF order.subscriptionid %]
-                                                                <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% order.subscriptionid | uri %]">[% order.subscriptionid | html %]</a>
-                                                            [% END %]
-                                                        </td>
-                                                        <td>
-                                                            [% IF order.subscriptionid %]
-                                                                [% order.subscription.callnumber | html %]
-                                                            [% END %]
-                                                        </td>
-                                                    </tr>
+                                                [% IF ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage && order.invoice.message_id ) %]
+                                                    <div><a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a></div>
                                                 [% END %]
-                                            </tbody>
-                                        </table> <!-- /#orders -->
-                                    [% ELSE %]
-                                        <span class="noorder">There is no order for this bibliographic record.</span>
-                                    [% END # /IF orders.count %]
-                                [% END # /tab_panel %]
-                            [% END # /IF AcquisitionDetails %]
-
-                            [% IF suggestions.count %]
-                                [% WRAPPER tab_panel tabname="suggestion_details" %]
-                                    [% IF nb_archived_suggestions > 0 %]
-                                        <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw  %]
-                                    [% END %]
-                                    <table id="suggestions" class="sorted">
-                                        <thead>
-                                            <tr>
-                                                <th class="NoSort">&nbsp;</th>
-                                                <th class="anti-the">Suggestion</th>
-                                                <th>Suggested by - on</th>
-                                                <th>Managed by - on</th>
-                                                <th>Last modification by - on</th>
-                                                <th>Library</th>
-                                                <th>Fund</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            [% FOREACH suggestion IN suggestions %]
-                                                <tr>
-                                                    <td>[% suggestion.suggestionid | html %]</td>
-                                                    <td>
-                                                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show" title="suggestion" >
-                                                            [% suggestion.title | html %][% IF ( suggestion.author ) %], by [% suggestion.author | html %][% END %]</a>
-                                                        <br />
-                                                        [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
-                                                        [% IF ( suggestion.volumedesc ) %]; Volume:<em>[% suggestion.volumedesc | html %]</em> [% END %]
-                                                        [% IF ( suggestion.isbn ) %]; ISBN:<em>[% suggestion.isbn | html %]</em> [% END %]
-                                                        [% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %]
-                                                        [% IF ( suggestion.publicationyear ) %] in <em>[% suggestion.publicationyear | html %]</em> [% END %]
-                                                        [% IF ( suggestion.place ) %] in <em>[% suggestion.place | html %]</em> [% END %]
-                                                        [% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %]
-                                                        [% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />
-                                                        [% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
-                                                    </td>
-                                                    <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>
-                                                        [% IF suggestion.suggesteddate %] - [% suggestion.suggesteddate | $KohaDates %][% END %]
-                                                    </td>
-                                                    <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.managedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</a>
-                                                        [% IF suggestion.manageddate %] - [% suggestion.manageddate | $KohaDates %][% END %]
-                                                    </td>
-                                                    <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.lastmodificationby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.last_modifier %]</a>
-                                                        [% IF suggestion.lastmodificationdate %] - [% suggestion.lastmodificationdate | $KohaDates %][% END %]
-                                                    </td>
-                                                    <td>
-                                                        [% Branches.GetName( suggestion.branchcode ) | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% suggestion.fund.budget_name | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% IF    suggestion.STATUS == 'ASKED'     %]<span>Pending</span>
-                                                        [% ELSIF suggestion.STATUS == 'ACCEPTED'  %]<span>Accepted</span>
-                                                        [% ELSIF suggestion.STATUS == 'ORDERED'   %]<span>Ordered</span>
-                                                        [% ELSIF suggestion.STATUS == 'REJECTED'  %]<span>Rejected</span>
-                                                        [% ELSIF suggestion.STATUS == 'CHECKED'   %]<span>Checked</span>
-                                                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]<span>Available</span>
-                                                        [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) %]
-                                                            [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) | html %]
-                                                        [% ELSE %]<span>Status unknown</span>
-                                                        [% END %]
-                                                        [% IF suggestion.reason %]
-                                                            <br />([% suggestion.reason | html %])
-                                                        [% END %]
-                                                    </td>
-                                                </tr>
-                                            [% END # /FOREACH suggestion %]
-                                        </tbody>
-                                    </table> <!-- /#suggestions -->
-                                [% END # /tab_panel %]
-                            [% END # /IF suggestions.count %]
-
-                            [% IF ( FRBRizeEditions ) %]
-                                [% IF ( XISBNS ) %]
-                                    [% WRAPPER tab_panel tabname="editions" %]
-                                        <h4>Editions</h4>
-                                        <table>
-                                            [% FOREACH XISBN IN XISBNS %]
-                                                <tr>
-                                                    [% IF ( AmazonCoverImages ) %]
-                                                        <td>
-                                                            <a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a>
-                                                        </td>
-                                                    [% END %]
-                                                    [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
-                                                        <td>
-                                                            [% IF ( noItemTypeImages ) %]
-                                                                <span class="itypetext">[% XISBN.description | html %]</span>
-                                                            [% ELSE %]
-                                                                <img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">
-                                                            [% END %]
-                                                        </td>
-                                                    [% END %]
-                                                    <td>
-                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> <span>by</span> [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
-                                                        [% IF ( XISBN.publishercode ) %]
-                                                            [% XISBN.publishercode | html %]
-                                                            [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
-                                                            [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %]
-                                                            [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %]
-                                                            [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]
-                                                        [% END %]
-                                                        [% IF ( XISBN.pages ) %] [% END %][% XISBN.pages | html %]
-                                                        [% IF ( XISBN.illus ) %][% XISBN.illus | html %][% END %]
-                                                        [% IF ( XISBN.size ) %], [% END %][% XISBN.size | html %]
-                                                    </td>
-
-                                            [% END # /FOREACH XISBN %]
-                                        </table>
-                                    [% END # /tab_panel %]
-                                [% END # /IF XISBNS %]
-                            [% END # /IF FRBRizeEditions %]
-
-                            [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-                                [% WRAPPER tab_panel tabname="concerns" %]
-                                    <fieldset class="action" style="cursor:pointer;">
-                                        <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
-                                        | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
-                                        <input type="checkbox" id="hide_resolved_concerns" name="hide_resolved_concerns" style="display:none;" />
-                                    </fieldset>
-
-                                    <table id="table_concerns" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Reported</th>
-                                                <th>Details</th>
-                                                <th>Title</th>
-                                                <th>Status</th>
-                                                <th data-class-name="actions noExport">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                [% END # /tab_panel %]
-                            [% END # /IF CatalogConcerns %]
-
-                            [% IF ( LocalCoverImages ) %]
-                                [% WRAPPER tab_panel tabname="images" %]
-                                    [% IF localimages.count %]
-                                        <p>Click on an image to view it in the image viewer</p>
-                                        <ul class="thumbnails">
-                                            [% FOREACH image IN localimages %]
-                                                [% IF image %]
-                                                    <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
-                                                        <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
-                                                            <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" />
-                                                        </a>
-                                                        [% IF CAN_user_tools_upload_local_cover_images %]
-                                                            <a href="#" class="remove"><i class="fa fa-trash-can"></i> Delete image</a>
-                                                        [% END %]
-                                                    </li>
-                                                [% END # /IF image %]
-                                            [% END # /FOREACH image %]
-                                        </ul> <!-- /.thumbnails -->
-                                    [% ELSE # - No image passed JavaScript takes care %]
-                                        <span class="noimagesuploaded">No images have been uploaded for this bibliographic record yet.</span>
-                                    [% END %]
-                                    [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-                                        <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
-                                        </p>
-                                    [% END %]
-                                [% END # /tab_panel %]
-                            [% END # /IF LocalCoverImages %]
-
-                            [% IF ( HTML5MediaEnabled ) %]
-                                [% WRAPPER tab_panel tabname="html5media" %]
-                                    [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
-                                        <p>
-                                            [% IF HTML5MediaSet.is_youtube %]
-                                                <iframe id="player" width="640" height="360" src="[% HTML5MediaSet.srcblock | url %]"></iframe>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF basket.basketgroupid %]
+                                                [% SET basket_group = basket.basket_group %]
+                                                [% IF CAN_user_acquisition_group_manage %]
+                                                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% vendor.id | uri %]&basketgroupid=[% basket_group.id | uri %]"
+                                                        >[% basket_group.name | html %] ([% basket_group.id | html %])</a
+                                                    >
+                                                [% ELSE %]
+                                                    [% basket_group.name | html %]
+                                                    ([% basket_group.id | html %])
+                                                [% END %]
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF CAN_user_acquisition_order_manage %]
+                                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %] ([% basket.basketno | html %])</a>
                                             [% ELSE %]
-                                                <!-- prettier-ignore-start -->
+                                                [% basket.basketname | html %]
+                                                ([% basket.basketno | html %])
+                                            [% END %]
+                                        </td>
+                                        <td>[% order.ordernumber | html %]</td>
+                                        <td data-order="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates %]</td>
+                                        <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</td>
+                                        <td>
+                                            [% SWITCH order.orderstatus %]
+                                            [% CASE 'new' %]
+                                                <span>New</span>
+                                            [% CASE 'ordered' %]
+                                                <span>Ordered</span>
+                                            [% CASE 'partial' %]
+                                                <span>Partial</span>
+                                            [% CASE 'complete' %]
+                                                <span>Complete</span>
+                                            [% CASE 'cancelled' %]
+                                                <span>Cancelled</span>
+                                            [% END %]
+                                        </td>
+                                        <td>[% order.quantity | html %]</td>
+                                        <td>
+                                            [% IF ( order.orderstatus == "complete" ) %]
+                                                [% order.unitprice_tax_included | $Price %]
+                                            [% ELSE %]
+                                                [% order.ecost_tax_included | $Price %]
+                                            [% END %] </td
+                                        ><td>[% order.order_internalnote | html %]</td>
+                                        <td>
+                                            [% IF order.subscriptionid %]
+                                                <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% order.subscriptionid | uri %]">[% order.subscriptionid | html %]</a>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF order.subscriptionid %]
+                                                [% order.subscription.callnumber | html %]
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                        <!-- /#orders -->
+                    [% ELSE %]
+                        <span class="noorder">There is no order for this bibliographic record.</span>
+                    [% END # /IF orders.count %]
+                [% END # /tab_panel %]
+            [% END # /IF AcquisitionDetails %]
+
+            [% IF suggestions.count %]
+                [% WRAPPER tab_panel tabname="suggestion_details" %]
+                    [% IF nb_archived_suggestions > 0 %]
+                        <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw %] </p>
+                    [% END %]
+                    <table id="suggestions" class="sorted">
+                        <thead>
+                            <tr>
+                                <th class="NoSort">&nbsp;</th>
+                                <th class="anti-the">Suggestion</th>
+                                <th>Suggested by - on</th>
+                                <th>Managed by - on</th>
+                                <th>Last modification by - on</th>
+                                <th>Library</th>
+                                <th>Fund</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH suggestion IN suggestions %]
+                                <tr>
+                                    <td>[% suggestion.suggestionid | html %]</td>
+                                    <td>
+                                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show" title="suggestion">
+                                            [% suggestion.title | html %][% IF ( suggestion.author ) %], by [% suggestion.author | html %][% END %]</a
+                                        >
+                                        <br />
+                                        [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %][% END %]
+                                        [% IF ( suggestion.volumedesc ) %]; Volume:<em>[% suggestion.volumedesc | html %]</em>[% END %]
+                                        [% IF ( suggestion.isbn ) %]; ISBN:<em>[% suggestion.isbn | html %]</em>[% END %]
+                                        [% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %][% END %]
+                                        [% IF ( suggestion.publicationyear ) %]in <em>[% suggestion.publicationyear | html %]</em>[% END %]
+                                        [% IF ( suggestion.place ) %]in <em>[% suggestion.place | html %]</em>[% END %]
+                                        [% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %][% END %]
+                                        [% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %][% END %]<br />
+                                        [% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
+                                    </td>
+                                    <td>
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>
+                                        [% IF suggestion.suggesteddate %]- [% suggestion.suggesteddate | $KohaDates %][% END %]
+                                    </td>
+                                    <td>
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.managedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</a>
+                                        [% IF suggestion.manageddate %]- [% suggestion.manageddate | $KohaDates %][% END %]
+                                    </td>
+                                    <td>
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.lastmodificationby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.last_modifier %]</a>
+                                        [% IF suggestion.lastmodificationdate %]- [% suggestion.lastmodificationdate | $KohaDates %][% END %]
+                                    </td>
+                                    <td> [% Branches.GetName( suggestion.branchcode ) | html %] </td>
+                                    <td> [% suggestion.fund.budget_name | html %] </td>
+                                    <td>
+                                        [% IF    suggestion.STATUS == 'ASKED' %]
+                                            <span>Pending</span>
+                                        [% ELSIF suggestion.STATUS == 'ACCEPTED' %]
+                                            <span>Accepted</span>
+                                        [% ELSIF suggestion.STATUS == 'ORDERED' %]
+                                            <span>Ordered</span>
+                                        [% ELSIF suggestion.STATUS == 'REJECTED' %]
+                                            <span>Rejected</span>
+                                        [% ELSIF suggestion.STATUS == 'CHECKED' %]
+                                            <span>Checked</span>
+                                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]
+                                            <span>Available</span>
+                                        [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) %]
+                                            [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) | html %]
+                                        [% ELSE %]
+                                            <span>Status unknown</span>
+                                        [% END %]
+                                        [% IF suggestion.reason %]
+                                            <br />([% suggestion.reason | html %])
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END # /FOREACH suggestion %]
+                        </tbody>
+                    </table>
+                    <!-- /#suggestions -->
+                [% END # /tab_panel %]
+            [% END # /IF suggestions.count %]
+
+            [% IF ( FRBRizeEditions ) %]
+                [% IF ( XISBNS ) %]
+                    [% WRAPPER tab_panel tabname="editions" %]
+                        <h4>Editions</h4>
+                        <table>
+                            [% FOREACH XISBN IN XISBNS %]
+                                <tr>
+                                    [% IF ( AmazonCoverImages ) %]
+                                        <td>
+                                            <a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"
+                                                ><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg"
+                                            /></a>
+                                        </td>
+                                    [% END %]
+                                    [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
+                                        <td>
+                                            [% IF ( noItemTypeImages ) %]
+                                                <span class="itypetext">[% XISBN.description | html %]</span>
+                                            [% ELSE %]
+                                                <img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]" />
+                                            [% END %]
+                                        </td>
+                                    [% END %]
+                                    <td>
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> <span>by</span> [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
+                                        [% IF ( XISBN.publishercode ) %]
+                                            [% XISBN.publishercode | html %]
+                                            [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
+                                            [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %]
+                                            [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %]
+                                            [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]
+                                        [% END %]
+                                        [% IF ( XISBN.pages ) %]
+                                        [% END %][% XISBN.pages | html %]
+                                        [% IF ( XISBN.illus ) %][% XISBN.illus | html %][% END %]
+                                        [% IF ( XISBN.size ) %],[% END %][% XISBN.size | html %]
+                                    </td>
+                                </tr>
+                            [% END # /FOREACH XISBN %]
+                        </table>
+                    [% END # /tab_panel %]
+                [% END # /IF XISBNS %]
+            [% END # /IF FRBRizeEditions %]
+
+            [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+                [% WRAPPER tab_panel tabname="concerns" %]
+                    <fieldset class="action" style="cursor:pointer;">
+                        <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
+                        | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
+                        <input type="checkbox" id="hide_resolved_concerns" name="hide_resolved_concerns" style="display:none;" />
+                    </fieldset>
+
+                    <table id="table_concerns" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Reported</th>
+                                <th>Details</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th data-class-name="actions noExport">Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                [% END # /tab_panel %]
+            [% END # /IF CatalogConcerns %]
+
+            [% IF ( LocalCoverImages ) %]
+                [% WRAPPER tab_panel tabname="images" %]
+                    [% IF localimages.count %]
+                        <p>Click on an image to view it in the image viewer</p>
+                        <ul class="thumbnails">
+                            [% FOREACH image IN localimages %]
+                                [% IF image %]
+                                    <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
+                                        <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
+                                            <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" />
+                                        </a>
+                                        [% IF CAN_user_tools_upload_local_cover_images %]
+                                            <a href="#" class="remove"><i class="fa fa-trash-can"></i> Delete image</a>
+                                        [% END %]
+                                    </li>
+                                [% END # /IF image %]
+                            [% END # /FOREACH image %]
+                        </ul>
+                        <!-- /.thumbnails -->
+                    [% ELSE # - No image passed JavaScript takes care %]
+                        <span class="noimagesuploaded">No images have been uploaded for this bibliographic record yet.</span>
+                    [% END %]
+                    [% IF ( CAN_user_tools_upload_local_cover_images ) %]
+                        <p
+                            >Upload an image file:
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                        </p>
+                    [% END %]
+                [% END # /tab_panel %]
+            [% END # /IF LocalCoverImages %]
+
+            [% IF ( HTML5MediaEnabled ) %]
+                [% WRAPPER tab_panel tabname="html5media" %]
+                    [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
+                        <p>
+                            [% IF HTML5MediaSet.is_youtube %]
+                                <iframe id="player" width="640" height="360" src="[% HTML5MediaSet.srcblock | url %]"></iframe>
+                            [% ELSE %]
+                                <!-- prettier-ignore-start -->
                                                 <[% HTML5MediaParent | html %] controls preload=none>
                                                     <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
                                                     [[% HTML5MediaParent | html %] tag not supported by your browser.]
                                                 </[% HTML5MediaParent | html %]>
                                                 <!-- prettier-ignore-end -->
-                                            [% END %]
-                                        </p>
-                                    [% END %]
-                                [% END # /tab_panel %]
-                            [% END # /IF HTML5MediaEnabled %]
-
-                            [% IF ( reviews ) %]
-                                [% WRAPPER tab_panel tabname="comments" %]
-                                    [% SET ShowReviewerPhoto = Koha.Preference( "ShowReviewerPhoto" ) %]
-                                    <table id="comments_table">
-                                        <thead>
-                                            <tr>
-                                                <th>Commenter</th>
-                                                <th>Date</th>
-                                                <th>Status</th>
-                                                <th>Comment</th>
-                                                <th class="NoSort">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            [% FOREACH review IN reviews %]
-                                                <tr id="comment[% review.reviewid | html %]">
-                                                    <td>
-                                                        [% IF ( review.patron ) %]
-                                                            [% IF ( review.avatarurl ) %]
-                                                                <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
-                                                            [% END %]
-                                                            [% INCLUDE 'patron-title.inc' patron=review.patron hide_patron_infos_if_needed=1 %]
-                                                        [% ELSE %]
-                                                            <em>Patron deleted<em>
-                                                        [% END %]
-                                                    </td>
-                                                    <td data-order="[% review.datereviewed | html %]">
-                                                        [% review.datereviewed | $KohaDates %]
-                                                    </td>
-                                                    <td>
-                                                        [% IF ( review.approved ) %]
-                                                            <em>Approved</em>
-                                                        [% ELSE %]
-                                                            <em>Unapproved</em>
-                                                        [% END %]
-                                                    </td>
-                                                    <td>
-                                                        [% FILTER html_break %]
-                                                            [% review.review | html %]
-                                                        [% END %]
-                                                    </td>
-                                                    [% IF ( CAN_user_tools_moderate_comments ) %]
-                                                        <td class="actions">
-                                                            [% IF ( review.approved ) %]
-                                                                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
-                                                                    [% INCLUDE 'csrf-token.inc' %]
-                                                                    <input type="hidden" name="op" value="cud-unapprove" />
-                                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                                                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
-                                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Unapprove</button>
-                                                                </form>
-                                                            [% ELSE %]
-                                                                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
-                                                                    [% INCLUDE 'csrf-token.inc' %]
-                                                                    <input type="hidden" name="op" value="cud-approve" />
-                                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                                                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
-                                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
-                                                                </form>
-                                                            [% END %]
-                                                            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
-                                                                [% INCLUDE 'csrf-token.inc' %]
-                                                                <input type="hidden" name="op" value="cud-delete" />
-                                                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                                                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
-                                                                <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
-                                                            </form>
-                                                        </td>
-                                                    [% END # /IF CAN_user_tools_moderate_comments %]
-                                                </tr>
-                                            [% END # / FOREACH reviews %]
-                                        </tbody>
-                                    </table>
-                                [% END %]
-                            [% END # /IF reviews %]
-
-                            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-                                [% WRAPPER tab_panel tabname="NovelistSelect" %]
-                                    <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-                                [% END # /tab_panel %]
                             [% END %]
+                        </p>
+                    [% END %]
+                [% END # /tab_panel %]
+            [% END # /IF HTML5MediaEnabled %]
 
-                            [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-                                [% WRAPPER tab_panel tabname="${ plugins_intranet_catalog_biblio_tab.id }" %]
-                                    [% plugins_intranet_catalog_biblio_tab.content | $raw %]
-                                [% END # /tab_panel %]
-                            [% END # /WRAPPER comments %]
-                        [% END # /WRAPPER tab_panels %]
-                    [% END # /WRAPPER tabs %]
-
-                    <div id="export" style="margin-top: 1em;">
-                        <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
-                            <table>
-                                <tr>
-                                    <th>Save record</th>
-                                </tr>
-                                <tr>
+            [% IF ( reviews ) %]
+                [% WRAPPER tab_panel tabname="comments" %]
+                    [% SET ShowReviewerPhoto = Koha.Preference( "ShowReviewerPhoto" ) %]
+                    <table id="comments_table">
+                        <thead>
+                            <tr>
+                                <th>Commenter</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Comment</th>
+                                <th class="NoSort">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH review IN reviews %]
+                                <tr id="comment[% review.reviewid | html %]">
                                     <td>
-                                        Select download format:
-                                        <select name="format">
-                                            <option value="mods">MODS (XML)</option>
-                                            <option data-bs-toggle="modal" data-bs-target="#exportModal_">Dublin Core</option>
-                                            <option value="marcxml">MARCXML</option>
-                                            <option value="marc8">MARC (non-Unicode/MARC-8)</option>
-                                            <option value="utf8">MARC (Unicode/UTF-8)</option>
-                                        </select>
-                                        <input type="submit" name="save" class="btn btn-primary" value="Download record" />
+                                        [% IF ( review.patron ) %]
+                                            [% IF ( review.avatarurl ) %]
+                                                <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
+                                            [% END %]
+                                            [% INCLUDE 'patron-title.inc' patron=review.patron hide_patron_infos_if_needed=1 %]
+                                        [% ELSE %]
+                                            <em>Patron deleted<em> </em></em>
+                                        [% END %]
                                     </td>
-                                </tr>
-                                <tr>
+                                    <td data-order="[% review.datereviewed | html %]"> [% review.datereviewed | $KohaDates %] </td>
                                     <td>
-                                        <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber | html %]" />
+                                        [% IF ( review.approved ) %]
+                                            <em>Approved</em>
+                                        [% ELSE %]
+                                            <em>Unapproved</em>
+                                        [% END %]
                                     </td>
+                                    <td>
+                                        [% FILTER html_break %]
+                                            [% review.review | html %]
+                                        [% END %]
+                                    </td>
+                                    [% IF ( CAN_user_tools_moderate_comments ) %]
+                                        <td class="actions">
+                                            [% IF ( review.approved ) %]
+                                                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-unapprove" />
+                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Unapprove</button>
+                                                </form>
+                                            [% ELSE %]
+                                                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-approve" />
+                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+                                                </form>
+                                            [% END %]
+                                            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-delete" />
+                                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
+                                            </form>
+                                        </td>
+                                    [% END # /IF CAN_user_tools_moderate_comments %]
                                 </tr>
-                            </table>
-                        </form>
-                    </div> <!-- /#export -->
+                            [% END # / FOREACH reviews %]
+                        </tbody>
+                    </table>
+                [% END %]
+            [% END # /IF reviews %]
 
-                    <div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title" id="marcPreviewLabel">MARC preview</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- /#marcPreview.modal -->
+            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+                [% WRAPPER tab_panel tabname="NovelistSelect" %]
+                    <div data-novelist-novelistselect="[% normalized_isbn | html %]"></div>
+                [% END # /tab_panel %]
+            [% END %]
 
-                    <div id="elasticPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="elasticPreviewLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title" id="elasticPreviewLabel">Elasticsearch record</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- /#elasticPreview.modal -->
-    [% END %]
+            [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+                [% WRAPPER tab_panel tabname="${ plugins_intranet_catalog_biblio_tab.id }" %]
+                    [% plugins_intranet_catalog_biblio_tab.content | $raw %]
+                [% END # /tab_panel %]
+            [% END # /WRAPPER comments %]
+        [% END # /WRAPPER tab_panels %]
+    [% END # /WRAPPER tabs %]
 
-    <div class="modal" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
-        <div class="modal-dialog">
+    <div id="export" style="margin-top: 1em;">
+        <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
+            <table>
+                <tr>
+                    <th>Save record</th>
+                </tr>
+                <tr>
+                    <td>
+                        Select download format:
+                        <select name="format">
+                            <option value="mods">MODS (XML)</option>
+                            <option data-bs-toggle="modal" data-bs-target="#exportModal_">Dublin Core</option>
+                            <option value="marcxml">MARCXML</option>
+                            <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+                            <option value="utf8">MARC (Unicode/UTF-8)</option>
+                        </select>
+                        <input type="submit" name="save" class="btn btn-primary" value="Download record" />
+                    </td>
+                </tr>
+                <tr>
+                    <td> <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber | html %]" /> </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!-- /#export -->
+
+    <div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title" id="modal-item-group-create-label">Create a new item group</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="get" id="modal-item-group-create-form" class="validated">
-                    <div class="modal-body">
-                        <fieldset>
-                            <p>
-                                <label for="modal-item-group-create-form-description" class="required">Name: </label>
-                                <input name="description" id="modal-item-group-create-form-description" type="text" size="30" required="required" class="required" />
-                                <span class="required">Required</span>
-                            </p>
-                            <p>
-                                <label for="modal-item-group-create-form-display_order" class="required">Display order: </label>
-                                <input name="display_order" id="modal-item-group-create-form-display_order" value="0" size="5" required="required" class="required" />
-                                <span class="required">Required</span>
-                                <br/>
-                                <span class="hint">Numbers only, item groups will be displayed in counting order</span>
-                            </p>
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="modal-item-group-create-submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form> <!-- /#modal-item-group-create-form -->
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#modal-item-group-create.modal -->
-
-    <div class="modal" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="modal-item-group-edit-label">Edit item group</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="get" id="modal-item-group-edit-form" class="validated">
-                    <div class="modal-body">
-                        <fieldset>
-                            <p>
-                                <label for="modal-item-group-edit-form-description" class="required">Name: </label>
-                                <input name="description" id="modal-item-group-edit-form-description" type="text" size="30" required="required" class="required" />
-                                <span class="required">Required</span>
-                            </p>
-                            <p>
-                                <label for="modal-item-group-edit-form-display_order" class="required">Sort order: </label>
-                                <input name="display_order" id="modal-item-group-edit-form-display_order" size="5" />
-                                <span class="hint">Numbers only, item groups will be displayed in counting order</span>
-                            </p>
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="modal-item-group-edit-submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#modal-item-group-edit.modal -->
-
-    <div class="modal" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="modal-item-group-delete-label">Delete item group</h1>
+                    <h1 class="modal-title" id="marcPreviewLabel">MARC preview</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this item group?
+                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-item-group-delete-submit" class="btn btn-danger">Delete</button>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 </div>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#modal-item-group-delete.modal -->
+            </div>
+        </div>
+    </div>
+    <!-- /#marcPreview.modal -->
 
-    <div class="modal" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
-        <div class="modal-dialog">
+    <div id="elasticPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="elasticPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title" id="modal-item-group-set-label">Set item group for items</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="get" id="modal-item-group-set-form" class="validated">
-                    <div class="modal-body">
-                        <fieldset>
-                            <p>
-                                <label for="item-group-add-form-select" class="required">Item group: </label>
-                                <select name="item_group" id="item-group-add-form-select">
-                                    [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
-                                        <option value="[% ig.id | html %]">[% ig.description | html %]</option>
-                                    [% END %]
-                                </select>
-                                <span class="required">Required</span>
-                            </p>
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="modal-item-group-set-submit" class="btn btn-primary">Set item group</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#modal-item-group-set.modal -->
-
-    <div class="modal" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="modal-item-group-unset-label">Remove item from item group</h1>
+                    <h1 class="modal-title" id="elasticPreviewLabel">Elasticsearch record</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to remove these item(s) from their item group(s)?
+                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-item-group-unset-submit" class="btn btn-danger">Remove</button>
+                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#elasticPreview.modal -->
+[% END %]
+
+<div class="modal" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="modal-item-group-create-label">Create a new item group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="get" id="modal-item-group-create-form" class="validated">
+                <div class="modal-body">
+                    <fieldset>
+                        <p>
+                            <label for="modal-item-group-create-form-description" class="required">Name: </label>
+                            <input name="description" id="modal-item-group-create-form-description" type="text" size="30" required="required" class="required" />
+                            <span class="required">Required</span>
+                        </p>
+                        <p>
+                            <label for="modal-item-group-create-form-display_order" class="required">Display order: </label>
+                            <input name="display_order" id="modal-item-group-create-form-display_order" value="0" size="5" required="required" class="required" />
+                            <span class="required">Required</span>
+                            <br />
+                            <span class="hint">Numbers only, item groups will be displayed in counting order</span>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-create-submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#.modal -->
+            </form>
+            <!-- /#modal-item-group-create-form -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#modal-item-group-create.modal -->
 
-    [% IF bundlesEnabled %]
-        <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form method="get" id="addToBundleForm" action="">
-                        <div class="modal-header">
-                            <h1 class="modal-title" id="addToBundleLabel">Add to bundle</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="addResult"></div>
-                            <fieldset class="rows">
-                                <ol>
-                                    <li>
-                                        <label class="required" for="external_id">Item barcode: </label>
-                                        <input type="text" id="external_id" name="external_id" required="required">
-                                        <span class="required">Required</span>
-                                    </li>
-                                    <li id="add_marc_link">
-                                        <label for="bundle_link">Add MARC link: </label>
-                                        <input type="checkbox" name="bundle_link"/>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <button class="btn btn-default" type="button" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div> <!-- /.modal-content -->
-            </div> <!-- /.modal-dialog -->
-        </div> <!-- /#addToBundleModal.modal -->
+<div class="modal" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="modal-item-group-edit-label">Edit item group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="get" id="modal-item-group-edit-form" class="validated">
+                <div class="modal-body">
+                    <fieldset>
+                        <p>
+                            <label for="modal-item-group-edit-form-description" class="required">Name: </label>
+                            <input name="description" id="modal-item-group-edit-form-description" type="text" size="30" required="required" class="required" />
+                            <span class="required">Required</span>
+                        </p>
+                        <p>
+                            <label for="modal-item-group-edit-form-display_order" class="required">Sort order: </label>
+                            <input name="display_order" id="modal-item-group-edit-form-display_order" size="5" />
+                            <span class="hint">Numbers only, item groups will be displayed in counting order</span>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-edit-submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#modal-item-group-edit.modal -->
 
-        <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form method="get" id="removeFromBundleForm" action="">
-                        <div class="modal-header">
-                            <h1 class="modal-title" id="removeFromBundleLabel">Remove from bundle</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="removeResult"></div>
-                            <fieldset class="rows">
-                                <ol>
-                                    <li>
-                                        <label class="required" for="external_id">Item barcode: </label>
-                                        <input type="text" id="rm_external_id" name="external_id" required="required">
-                                        <span class="required">Required</span>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#removeFromBundleModal.modal -->
-    [% END %]
+<div class="modal" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="modal-item-group-delete-label">Delete item group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> Are you sure you want to delete this item group? </div>
+            <div class="modal-footer">
+                <button id="modal-item-group-delete-submit" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#modal-item-group-delete.modal -->
 
-    [% IF ( Koha.Preference('CatalogConcerns') ) %]
-        [% INCLUDE 'modals/add_catalog_concern.inc' %]
-    [% END %]
+<div class="modal" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="modal-item-group-set-label">Set item group for items</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="get" id="modal-item-group-set-form" class="validated">
+                <div class="modal-body">
+                    <fieldset>
+                        <p>
+                            <label for="item-group-add-form-select" class="required">Item group: </label>
+                            <select name="item_group" id="item-group-add-form-select">
+                                [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
+                                    <option value="[% ig.id | html %]">[% ig.description | html %]</option>
+                                [% END %]
+                            </select>
+                            <span class="required">Required</span>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-set-submit" class="btn btn-primary">Set item group</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#modal-item-group-set.modal -->
 
-    [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-        [% INCLUDE 'modals/display_ticket.inc' %]
-    [% END %]
+<div class="modal" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="modal-item-group-unset-label">Remove item from item group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> Are you sure you want to remove these item(s) from their item group(s)? </div>
+            <div class="modal-footer">
+                <button id="modal-item-group-unset-submit" class="btn btn-danger">Remove</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#.modal -->
+
+[% IF bundlesEnabled %]
+    <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="get" id="addToBundleForm" action="">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="addToBundleLabel">Add to bundle</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="addResult"></div>
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label class="required" for="external_id">Item barcode: </label>
+                                    <input type="text" id="external_id" name="external_id" required="required" />
+                                    <span class="required">Required</span>
+                                </li>
+                                <li id="add_marc_link">
+                                    <label for="bundle_link">Add MARC link: </label>
+                                    <input type="checkbox" name="bundle_link" />
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button class="btn btn-default" type="button" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /#addToBundleModal.modal -->
+
+    <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="get" id="removeFromBundleForm" action="">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="removeFromBundleLabel">Remove from bundle</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="removeResult"></div>
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label class="required" for="external_id">Item barcode: </label>
+                                    <input type="text" id="rm_external_id" name="external_id" required="required" />
+                                    <span class="required">Required</span>
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /#removeFromBundleModal.modal -->
+[% END %]
+
+[% IF ( Koha.Preference('CatalogConcerns') ) %]
+    [% INCLUDE 'modals/add_catalog_concern.inc' %]
+[% END %]
+
+[% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+    [% INCLUDE 'modals/display_ticket.inc' %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
@@ -1205,9 +1266,9 @@
             var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
         </script>
         [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
-     [% END %]
-     [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-         <script>
+    [% END %]
+    [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+        <script>
             $(document).ready(function() {
                 $("#bibliodetails a:first").tab("show");
                 var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
@@ -1635,15 +1696,20 @@
         [% END # /IF IntranetCoce %]
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
-        <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
+        <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js">
+</script>
     [% END %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+    </script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+    </script>
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
@@ -2287,9 +2353,7 @@
         $(".delete-comment").on("click", function(){
             return confirm( _("Are you sure you want to delete this comment?") );
         });
-
     </script>
-
     [%# The following PROCESS needs: %]
     [%# can_edit_items_from item_type_image_locations %]
     [% PROCESS build_items_table_js biblio => biblio %]

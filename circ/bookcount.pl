@@ -24,7 +24,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_and_exit output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use Koha::Biblios;
 use Koha::Libraries;
 
@@ -32,22 +32,21 @@ my $input        = CGI->new;
 my $itm          = $input->param('itm');
 my $biblionumber = $input->param('biblionumber');
 
-my $biblio = Koha::Biblios->find( $biblionumber );
-my $item   = Koha::Items->find( $itm );
-
+my $biblio = Koha::Biblios->find($biblionumber);
+my $item   = Koha::Items->find($itm);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/bookcount.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "circ/bookcount.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
-output_and_exit( $input, $cookie, $template, 'unknown_biblio')
+output_and_exit( $input, $cookie, $template, 'unknown_biblio' )
     unless $biblio;
-output_and_exit( $input, $cookie, $template, 'unknown_item')
+output_and_exit( $input, $cookie, $template, 'unknown_item' )
     unless $item;
 
 my $lastdate;
@@ -57,27 +56,27 @@ if ( not $lastmove ) {
     $count = issuessince( $itm, 0 );
 } else {
     $lastdate = $lastmove->{'datearrived'};
-    $count = issuessince( $itm, $lastdate );
+    $count    = issuessince( $itm, $lastdate );
 }
 
-my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;
-for my $library ( @$libraries ) {
+my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+for my $library (@$libraries) {
     $library->{selected} = 1 if $library->{branchcode} eq C4::Context->userenv->{branch};
-    $library->{issues}     = issuesat($itm, $library->{branchcode});
-    $library->{seen}       = lastseenat( $itm, $library->{branchcode} ) || undef;
+    $library->{issues}   = issuesat( $itm, $library->{branchcode} );
+    $library->{seen}     = lastseenat( $itm, $library->{branchcode} ) || undef;
 }
 
 $template->param(
-    biblio                  => $biblio,
-    biblionumber            => $biblionumber,
-    title                   => $biblio->title,
-    author                  => $biblio->author,
-    barcode                 => $item->barcode,
-    homebranch              => $item->homebranch,
-    holdingbranch           => $item->holdingbranch,
-    lastdate                => $lastdate ? $lastdate : 0,
-    count                   => $count,
-    libraries               => $libraries,
+    biblio        => $biblio,
+    biblionumber  => $biblionumber,
+    title         => $biblio->title,
+    author        => $biblio->author,
+    barcode       => $item->barcode,
+    homebranch    => $item->homebranch,
+    holdingbranch => $item->holdingbranch,
+    lastdate      => $lastdate ? $lastdate : 0,
+    count         => $count,
+    libraries     => $libraries,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -85,16 +84,14 @@ exit;
 
 sub lastmove {
     my ($itemnumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-"SELECT max(branchtransfers.datearrived) FROM branchtransfers WHERE branchtransfers.itemnumber=?"
-    );
+    my $dbh          = C4::Context->dbh;
+    my $sth          = $dbh->prepare(
+        "SELECT max(branchtransfers.datearrived) FROM branchtransfers WHERE branchtransfers.itemnumber=?");
     $sth->execute($itemnumber);
     my ($date) = $sth->fetchrow_array;
     return 0 unless $date;
     $sth = $dbh->prepare(
-"SELECT * FROM branchtransfers WHERE branchtransfers.itemnumber=? and branchtransfers.datearrived=?"
-    );
+        "SELECT * FROM branchtransfers WHERE branchtransfers.itemnumber=? and branchtransfers.datearrived=?");
     $sth->execute( $itemnumber, $date );
     my ($data) = $sth->fetchrow_hashref;
     return 0 unless $data;
@@ -104,12 +101,13 @@ sub lastmove {
 sub issuessince {
     my ( $itemnumber, $date ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare("SELECT SUM(count) FROM (
+    my $sth = $dbh->prepare(
+        "SELECT SUM(count) FROM (
                         SELECT COUNT(*) AS count FROM issues WHERE itemnumber = ? and timestamp > ?
                         UNION ALL
                         SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? and timestamp > ?
-                     ) tmp");
+                     ) tmp"
+    );
     $sth->execute( $itemnumber, $date, $itemnumber, $date );
     return $sth->fetchrow_arrayref->[0];
 }
@@ -118,7 +116,7 @@ sub issuesat {
     my ( $itemnumber, $brcd ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-    "SELECT SUM(count) FROM (
+        "SELECT SUM(count) FROM (
         SELECT COUNT(*) AS count FROM     issues WHERE itemnumber = ? AND branchcode = ?
         UNION ALL
         SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? AND branchcode = ?
@@ -132,7 +130,7 @@ sub lastseenat {
     my ( $itm, $brc ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-    "SELECT MAX(tstamp) FROM (
+        "SELECT MAX(tstamp) FROM (
         SELECT MAX(timestamp) AS tstamp FROM     issues WHERE itemnumber = ? AND branchcode = ?
         UNION ALL
         SELECT MAX(timestamp) AS tstamp FROM old_issues WHERE itemnumber = ? AND branchcode = ?
@@ -141,7 +139,7 @@ sub lastseenat {
     $sth->execute( $itm, $brc, $itm, $brc );
     my ($date1) = $sth->fetchrow_array;
     $sth = $dbh->prepare(
-    "SELECT MAX(transfer) FROM (SELECT max(datearrived) AS transfer FROM branchtransfers WHERE itemnumber=? AND tobranch = ?
+        "SELECT MAX(transfer) FROM (SELECT max(datearrived) AS transfer FROM branchtransfers WHERE itemnumber=? AND tobranch = ?
      UNION ALL
      SELECT max(datesent) AS transfer FROM branchtransfers WHERE itemnumber=? AND frombranch = ?
     ) tmp"
@@ -149,6 +147,6 @@ sub lastseenat {
     $sth->execute( $itm, $brc, $itm, $brc );
     my ($date2) = $sth->fetchrow_array;
 
-    my $date = ( $date1 lt $date2 ) ? $date2 : $date1 ;
+    my $date = ( $date1 lt $date2 ) ? $date2 : $date1;
     return ($date);
 }

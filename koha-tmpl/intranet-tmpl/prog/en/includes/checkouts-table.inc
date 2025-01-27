@@ -8,10 +8,10 @@
             <a id="issues-table-load-now-button" href="#" class="btn btn-default"><i class="fa fa-book"></i> Show checkouts</a>
             [% SET LoadCheckoutsTableDelay = Koha.Preference('LoadCheckoutsTableDelay') %]
             [% IF LoadCheckoutsTableDelay && patronpage == 'circ' %]
-            <span id="issues-table-load-delay">
-                <i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i>
-                <span id="issues-table-load-delay-message">Checkouts table will show automatically in [% LoadCheckoutsTableDelay | html %] seconds...</span>
-            </span>
+                <span id="issues-table-load-delay">
+                    <i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i>
+                    <span id="issues-table-load-delay-message">Checkouts table will show automatically in [% LoadCheckoutsTableDelay | html %] seconds...</span>
+                </span>
             [% END %]
         </p>
     </div>
@@ -38,10 +38,16 @@
                     <th scope="col">Charge</th>
                     <th scope="col">Fine</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllRenewals">select all</a> | <a href="#" id="UncheckAllRenewals">none</a></p></th>
-                    <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllCheckins">select all</a> | <a href="#" id="UncheckAllCheckins">none</a></p></th>
+                    <th scope="col"
+                        >Renew <p class="column-tool"><a href="#" id="CheckAllRenewals">select all</a> | <a href="#" id="UncheckAllRenewals">none</a></p></th
+                    >
+                    <th scope="col"
+                        >Check in <p class="column-tool"><a href="#" id="CheckAllCheckins">select all</a> | <a href="#" id="UncheckAllCheckins">none</a></p></th
+                    >
                     <th scope="col">Return claims</th>
-                    <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllExports">select all</a> | <a href="#" id="UncheckAllExports">none</a></p></th>
+                    <th scope="col"
+                        >Export <p class="column-tool"><a href="#" id="CheckAllExports">select all</a> | <a href="#" id="UncheckAllExports">none</a></p></th
+                    >
                 </tr>
             </thead>
             [% INCLUDE 'checkouts-table-footer.inc' %]
@@ -88,8 +94,9 @@
                             [% END %]
                         </select>
                     [% END %]
-                    <label for="export_items_bundle_contents">Export items bundle contents</label> <input type="checkbox" name="export_items_bundle_contents" id="export_items_bundle_contents">
-                    <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') | html %]" title="Use for MARC exports" />
+                    <label for="export_items_bundle_contents">Export items bundle contents</label> <input type="checkbox" name="export_items_bundle_contents" id="export_items_bundle_contents" />
+                    <label for="export_remove_fields">Don't export fields:</label>
+                    <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') | html %]" title="Use for MARC exports" />
                     <input type="hidden" name="op" value="cud-export" />
                     <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                     <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />

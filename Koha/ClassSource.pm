@@ -45,8 +45,7 @@ sub store {
 
     if ( !$self->in_storage ) {
         $flush = 1;
-    }
-    else {
+    } else {
         my $self_from_storage = $self->get_from_storage;
         $flush = 1 if ( $self_from_storage->description ne $self->description );
     }

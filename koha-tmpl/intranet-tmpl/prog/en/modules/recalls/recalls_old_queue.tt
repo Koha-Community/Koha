@@ -5,11 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Old recalls") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Old recalls") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_recalls_old_queue" class="circ">
@@ -30,14 +31,13 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-        <h1>Old recalls</h1>
-        [% IF Koha.Preference('UseRecalls') %]
-            <div class="page-section">
-                [% INCLUDE 'recalls.inc' %]
-            </div> <!-- /.page-section -->
-        [% ELSE %]
-            <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
-        [% END %]
+    <h1>Old recalls</h1>
+    [% IF Koha.Preference('UseRecalls') %]
+        <div class="page-section"> [% INCLUDE 'recalls.inc' %] </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -6,11 +6,12 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% FILTER collapse %]
-    [% tx("Renew {title}", { title = title }) | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Renew {title}", { title = title }) | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -33,214 +34,209 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-                [% IF error %]
-                    <div class="alert alert-warning">
-                        <h1>Cannot renew:</h1>
+    [% IF error %]
+        <div class="alert alert-warning">
+            <h1>Cannot renew:</h1>
 
-                            [% IF error == "no_item" %]
+            [% IF error == "no_item" %]
+                <p>No item matches this barcode</p>
+            [% ELSIF error == "no_checkout" %]
+                <p
+                    >[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] (
+                    <a
+                        href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]"
+                        >[% item.barcode | html %]</a
+                    >
+                    ) is not checked out to a patron.</p
+                >
+            [% ELSIF error == "too_many" %]
+                <p
+                    >[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been renewed the maximum number of times by [% borrower.firstname | html %] [% borrower.surname | html %] (
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> )</p
+                >
 
-                                <p>No item matches this barcode</p>
-
-                            [% ELSIF error == "no_checkout" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a> ) is not checked out to a patron.</p>
-
-                            [% ELSIF error == "too_many" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been renewed the maximum number of times by [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> )</p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
-                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "too_unseen" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio %] ( [% item.barcode | html %] ) has been renewed the maximum number of consecutive times without being seen by the library )</p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "too_soon" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "auto_too_soon" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal and cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "auto_too_late" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal and cannot be renewed anymore since [% latestautorenewdate | $KohaDates %]. </p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <input type="submit" class="btn btn-default approve" value="Override and renew" />
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "auto_account_expired" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal and cannot be renewed because the patron's account is expired</p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <input type="submit" class="btn btn-default approve" value="Override and renew" />
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "auto_renew" or error == "auto_too_much_oweing" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal. </p>
-
-                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
-                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                        <input type="hidden" name="override_limit" value="1" />
-                                        <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
-                                    </form>
-                                [% END %]
-
-                            [% ELSIF error == "on_reserve" %]
-
-                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ): This item is on hold for another patron.</p>
-
-                                <form method="post" action="/cgi-bin/koha/circ/renew.pl">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
-                                    <input type="hidden" name="override_limit" value="1" />
-                                    <input type="hidden" name="override_holds" value="1" />
-                                    <div>
-                                        <label for="renewonholdduedate">Renewal due date:</label>
-                                        <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" class="flatpickr" data-flatpickr-enable-time="true" />
-                                    </div>
-                                    <input type="hidden" name="op" value="cud-renew" />
-                                    <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
-                                </form>
-
-                            [% ELSIF error == "patron_restricted" %]
-
-                                <p>[% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> ) is currently restricted.</p>
-
-                            [% ELSIF error == "item_denied_renewal" %]
-
-                                <p>Item is not allowed renewal.</p>
-
-                            [% ELSIF error == "onsite_checkout" %]
-                                <p>Item cannot be renewed because it's an onsite checkout</p>
-
-                            [% ELSIF error == 'recalled' %]
-                                <p>This item has been recalled.</p>
-
-                            [% ELSE %]
-
-                                [% error | html %]
-
-                            [% END %]
-
-                                <form method="get" action="/cgi-bin/koha/circ/renew.pl">
-                                    <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
-                                    <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> Continue without renewing</button>
-                                </form>
-                    </div>
-                [% END %]
-
-                [% IF date_due %]
-                    <div class="alert alert-info">
-                        <h1>Item renewed:</h1>
-                        <p>
-                            [% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %]
-                            ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a> )
-                            renewed for
-                            [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> )
-                            now due on [% date_due | $KohaDates as_due_date => 1 %]
-                        </p>
-                    </div>
-                [% END %]
-
-            [% UNLESS error %]
-                <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off" >
-                    [% INCLUDE 'csrf-token.inc' %]
-
-                    <fieldset>
-                        <h1>Renew</h1>
-
-                        [% IF Koha.Preference('UnseenRenewals') %]
-                            <div class="renew_formfield">
-                                <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
-                            </div>
-                            <div class="renew_formfield">
-                                <label for="unseen" class="hint">Record renewal as unseen if appropriate: </label>
-                                <input value="1" name="unseen" id="unseen" type="checkbox" />
-                            </div>
-                        [% ELSE %]
-                            <input name="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
-
-                        [% END %]
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
                         <input type="hidden" name="op" value="cud-renew" />
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                    </form>
+                [% END %]
+            [% ELSIF error == "too_unseen" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio %] ( [% item.barcode | html %] ) has been renewed the maximum number of consecutive times without being seen by the library )</p>
 
-                        <div class="circ-settings show">
-                            <div class="date-select" id="renew_date_override_fields">
-                                <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | html %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-enable-time="true" placeholder="Renewal due date [% INCLUDE 'date-format.inc' %]" />
-                            </div> <!-- /.date-select -->
-                        </div>
-                    </fieldset>
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
+                        <input type="hidden" name="op" value="cud-renew" />
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                    </form>
+                [% END %]
+            [% ELSIF error == "too_soon" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
 
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
+                        <input type="hidden" name="op" value="cud-renew" />
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
+                    </form>
+                [% END %]
+            [% ELSIF error == "auto_too_soon" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal and cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
 
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
+                        <input type="hidden" name="op" value="cud-renew" />
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
+                    </form>
+                [% END %]
+            [% ELSIF error == "auto_too_late" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal and cannot be renewed anymore since [% latestautorenewdate | $KohaDates %]. </p>
+
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
+                        <input type="hidden" name="op" value="cud-renew" />
+                        <input type="submit" class="btn btn-default approve" value="Override and renew" />
+                    </form>
+                [% END %]
+            [% ELSIF error == "auto_account_expired" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal and cannot be renewed because the patron's account is expired</p>
+
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
+                        <input type="hidden" name="op" value="cud-renew" />
+                        <input type="submit" class="btn btn-default approve" value="Override and renew" />
+                    </form>
+                [% END %]
+            [% ELSIF error == "auto_renew" or error == "auto_too_much_oweing" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) has been scheduled for automatic renewal. </p>
+
+                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                        <input type="hidden" name="override_limit" value="1" />
+                        <input type="hidden" name="op" value="cud-renew" />
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                    </form>
+                [% END %]
+            [% ELSIF error == "on_reserve" %]
+                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ): This item is on hold for another patron.</p>
+
+                <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                    <input type="hidden" name="override_limit" value="1" />
+                    <input type="hidden" name="override_holds" value="1" />
+                    <div>
+                        <label for="renewonholdduedate">Renewal due date:</label>
+                        <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" class="flatpickr" data-flatpickr-enable-time="true" />
+                    </div>
+                    <input type="hidden" name="op" value="cud-renew" />
+                    <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
                 </form>
+            [% ELSIF error == "patron_restricted" %]
+                <p
+                    >[% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> ) is currently
+                    restricted.</p
+                >
+            [% ELSIF error == "item_denied_renewal" %]
+                <p>Item is not allowed renewal.</p>
+            [% ELSIF error == "onsite_checkout" %]
+                <p>Item cannot be renewed because it's an onsite checkout</p>
+            [% ELSIF error == 'recalled' %]
+                <p>This item has been recalled.</p>
+            [% ELSE %]
+
+                [% error | html %]
             [% END %]
 
+            <form method="get" action="/cgi-bin/koha/circ/renew.pl">
+                <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> Continue without renewing</button>
+            </form>
+        </div>
+    [% END %]
+
+    [% IF date_due %]
+        <div class="alert alert-info">
+            <h1>Item renewed:</h1>
+            <p>
+                [% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] (
+                <a
+                    href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]"
+                    >[% item.barcode | html %]</a
+                >
+                ) renewed for [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> ) now due
+                on [% date_due | $KohaDates as_due_date => 1 %]
+            </p>
+        </div>
+    [% END %]
+
+    [% UNLESS error %]
+        <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+            [% INCLUDE 'csrf-token.inc' %]
+
+            <fieldset>
+                <h1>Renew</h1>
+
+                [% IF Koha.Preference('UnseenRenewals') %]
+                    <div class="renew_formfield">
+                        <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
+                    </div>
+                    <div class="renew_formfield">
+                        <label for="unseen" class="hint">Record renewal as unseen if appropriate: </label>
+                        <input value="1" name="unseen" id="unseen" type="checkbox" />
+                    </div>
+                [% ELSE %]
+                    <input name="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
+                [% END %]
+                <input type="hidden" name="op" value="cud-renew" />
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+                <div class="circ-settings show">
+                    <div class="date-select" id="renew_date_override_fields">
+                        <input
+                            type="text"
+                            size="20"
+                            id="hard_due_date"
+                            name="hard_due_date"
+                            value="[% hard_due_date | html %]"
+                            class="flatpickr"
+                            data-flatpickr-futuredate="true"
+                            data-flatpickr-enable-time="true"
+                            placeholder="Renewal due date [% INCLUDE 'date-format.inc' %]"
+                        />
+                    </div>
+                    <!-- /.date-select -->
+                </div>
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% IF error %]
         <script>
-            $( document ).ready(function() {
+            $(document).ready(function () {
                 removeFocus();
             });
         </script>

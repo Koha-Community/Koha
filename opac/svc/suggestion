@@ -56,7 +56,7 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use JSON;
 use Koha::SuggestionEngine;
 
@@ -81,28 +81,26 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my @plugins = ();
 
-my $pluginsconfig = from_json(C4::Context->preference('OPACdidyoumean') || '[]');
+my $pluginsconfig = from_json( C4::Context->preference('OPACdidyoumean') || '[]' );
 
 foreach my $plugin (@$pluginsconfig) {
-    push @plugins, $plugin->{name} if ($plugin->{enabled});
+    push @plugins, $plugin->{name} if ( $plugin->{enabled} );
 }
 
-unless ( @plugins ) {
+unless (@plugins) {
     print $query->header;
     exit;
 }
 
 my $suggestor = Koha::SuggestionEngine->new( { plugins => \@plugins } );
 
-my $suggestions =
-  $suggestor->get_suggestions( { search => $search, count => $count } );
+my $suggestions = $suggestor->get_suggestions( { search => $search, count => $count } );
 
 if ($render) {
-    $template->{VARS}->{render} = $render;
+    $template->{VARS}->{render}      = $render;
     $template->{VARS}->{suggestions} = $suggestions if $suggestions;
     output_html_with_http_headers $query, $cookie, $template->output;
-}
-else {
+} else {
     print $query->header;
     print to_json($suggestions);
 }

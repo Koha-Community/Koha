@@ -30,13 +30,13 @@ use Getopt::Long qw( GetOptions );
 
 use Koha::SearchEngine::Search;
 
-my ( $help, $confirm, $zebraqueue, $silent,$stealth );
+my ( $help, $confirm, $zebraqueue, $silent, $stealth );
 
 GetOptions(
-    'c' => \$confirm,
-    'h' => \$help,
-    'z' => \$zebraqueue,
-    's' => \$silent,
+    'c'  => \$confirm,
+    'h'  => \$help,
+    'z'  => \$zebraqueue,
+    's'  => \$silent,
     'st' => \$stealth
 );
 
@@ -45,39 +45,41 @@ if ( $help || ( !$confirm ) ) {
     exit 0;
 }
 
-my $dbh = C4::Context->dbh;
-my $i = 0;
+my $dbh   = C4::Context->dbh;
+my $i     = 0;
 my $count = 0;
 
 # flushes output
 $| = 1;
 
-my $sth = $dbh->prepare("SELECT biblionumber FROM biblio");
-my $sth_insert = $dbh->prepare("INSERT INTO zebraqueue (biblio_auth_number,operation,server,done) VALUES (?,'specialUpdate','biblioserver',0)");
+my $sth        = $dbh->prepare("SELECT biblionumber FROM biblio");
+my $sth_insert = $dbh->prepare(
+    "INSERT INTO zebraqueue (biblio_auth_number,operation,server,done) VALUES (?,'specialUpdate','biblioserver',0)");
 
-my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
+my $searcher = Koha::SearchEngine::Search->new( { index => 'biblios' } );
 
 # We get all biblios
 $sth->execute;
 my ($nbhits);
+
 # We check for each biblio
 while ( my ($biblionumber) = $sth->fetchrow ) {
-    (undef,undef,$nbhits) = $searcher->simple_search_compat("Local-number=$biblionumber");
+    ( undef, undef, $nbhits ) = $searcher->simple_search_compat("Local-number=$biblionumber");
     print "biblionumber $biblionumber not indexed\n" unless $nbhits || $stealth;
-# If -z option we put the biblio in zebraqueue
-    if ($zebraqueue && !$nbhits){
+
+    # If -z option we put the biblio in zebraqueue
+    if ( $zebraqueue && !$nbhits ) {
         $sth_insert->execute($biblionumber);
         print "$biblionumber inserted in zebraqueue\n" unless $stealth;
     }
     $i++;
     print "$i done\n" unless $i % 1000 || $silent || $stealth;
-    $count++ unless $nbhits;
+    $count++          unless $nbhits;
 }
 
-if ($count > 0 && $zebraqueue){
+if ( $count > 0 && $zebraqueue ) {
     print "\t$count bibliorecords not indexed and inserted in zebraqueue\n";
-}
-else{
+} else {
     print "\t$count bibliorecords not indexed\n";
 }
 

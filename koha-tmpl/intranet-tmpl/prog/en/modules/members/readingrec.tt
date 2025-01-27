@@ -8,11 +8,14 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Circulation history for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %]
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Circulation history for") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        [% t("Patrons") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -37,22 +40,22 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-[% INCLUDE 'members-toolbar.inc' %]
-<h1>Circulation history</h1>
+    [% INCLUDE 'members-toolbar.inc' %]
+    <h1>Circulation history</h1>
 
-[% UNLESS checkouts %][% checkouts = [] %][% END %]
-[% UNLESS old_checkouts %][% old_checkouts = [] %][% END %]
-[% SET all_checkouts = checkouts.merge(old_checkouts) %]
-[% UNLESS Koha.Preference('intranetreadinghistory') %]
-    <div class="alert alert-warning">Staff members are not allowed to access patron's checkout history</div>
-[% ELSIF is_anonymous %]
-    <div class="alert alert-warning">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
-[% ELSIF ( patron.privacy == 2)  %]
-    <div class="alert alert-info">This patron has set the privacy rules to never keeping a circulation history.</div>
-[% ELSIF ( !all_checkouts.size ) %]
-    <div class="alert alert-info">This patron has no circulation history.</div>
-[% ELSE %]
-    <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
+    [% UNLESS checkouts %][% checkouts = [] %][% END %]
+    [% UNLESS old_checkouts %][% old_checkouts = [] %][% END %]
+    [% SET all_checkouts = checkouts.merge(old_checkouts) %]
+    [% UNLESS Koha.Preference('intranetreadinghistory') %]
+        <div class="alert alert-warning">Staff members are not allowed to access patron's checkout history</div>
+    [% ELSIF is_anonymous %]
+        <div class="alert alert-warning">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
+    [% ELSIF ( patron.privacy == 2) %]
+        <div class="alert alert-info">This patron has set the privacy rules to never keeping a circulation history.</div>
+    [% ELSIF ( !all_checkouts.size ) %]
+        <div class="alert alert-info">This patron has no circulation history.</div>
+    [% ELSE %]
+        <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
         [% BLOCK table_readingrec %]
             <table id="table_readingrec">
@@ -81,23 +84,19 @@
                         [% SET biblio = item.biblio %]
                         <tr [% IF checkout.returndate %]class="onissue"[% END %]>
                             <td>
-                                [% IF checkout.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
-                                [% ELSE %][% issuetype = 'standard_checkout' | html %]
+                                [% IF checkout.onsite_checkout %]
+                                    [% issuetype = 'onsite_checkout' | html %]
+                                [% ELSE %]
+                                    [% issuetype = 'standard_checkout' | html %]
                                 [% END %]
                                 [% issuetype | html %]
                             </td>
-                            <td data-order="[% checkout.timestamp | html %]">
-                                [% checkout.timestamp | $KohaDates with_hours => 1 %]
-                            </td>
-                            <td>
-                                [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %]
-                            </td>
+                            <td data-order="[% checkout.timestamp | html %]"> [% checkout.timestamp | $KohaDates with_hours => 1 %] </td>
+                            <td> [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %] </td>
 
                             <td>[% biblio.author | html %]</td>
 
-                            <td>
-                                [% item.itemcallnumber | html %]
-                            </td>
+                            <td> [% item.itemcallnumber | html %] </td>
 
                             <td>
                                 [% IF item.enumchron %]
@@ -105,31 +104,30 @@
                                 [% END %]
                             </td>
 
-                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
+                            <td
+                                ><a
+                                    href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]"
+                                    >[% item.barcode | html %]</a
+                                ></td
+                            >
                             <td>
                                 [% checkout.renewals_count | html %]
                                 [% IF checkout.renewals_count > 0 %]
                                     [ <a class="checkout_renewals_view" data-renewals="[% checkout.renewals_count | html %]" data-issueid="[% checkout.issue_id | html %]" href="#">View</a> ]
                                 [% END %]
                             </td>
-                            <td data-order="[% checkout.issuedate | html %]">
-                                [% checkout.issuedate | $KohaDates with_hours => 1 %]
-                            </td>
+                            <td data-order="[% checkout.issuedate | html %]"> [% checkout.issuedate | $KohaDates with_hours => 1 %] </td>
                             <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
                             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                                 [% SET issuer = checkout.issuer %]
                                 <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issuer.borrowernumber | uri %]">[% issuer.firstname | html %] [% issuer.surname | html %]</a></td>
                             [% END %]
-                            <td data-order="[% checkout.date_due | html %]">
-                                [% checkout.date_due | $KohaDates as_due_date => 1 %]
-                            </td>
+                            <td data-order="[% checkout.date_due | html %]"> [% checkout.date_due | $KohaDates as_due_date => 1 %] </td>
                             [% IF checkout.returndate %]
-                                <td data-order="[% checkout.returndate | html %]">
-                                [% checkout.returndate | $KohaDates with_hours => 1 %]
-                                </td>
+                                <td data-order="[% checkout.returndate | html %]"> [% checkout.returndate | $KohaDates with_hours => 1 %] </td>
                             [% ELSE %]
                                 <td data-order="checked out">
-                                <span class="checked-out-badge badge bg-warning text-dark">Checked out</span>
+                                    <span class="checked-out-badge badge bg-warning text-dark">Checked out</span>
                                 </td>
                             [% END %]
                         </tr>
@@ -141,9 +139,9 @@
         [% IF Koha.Preference('OnSiteCheckouts') %]
             [% WRAPPER tabs id= "tabs" %]
                 [% WRAPPER tabs_nav %]
-                    [% WRAPPER tab_item tabname= "tab_all" bt_active= 1 %] <span>All</span> [% END %]
-                    [% WRAPPER tab_item tabname= "tab_checkout" %] <span>Checkouts</span> [% END %]
-                    [% WRAPPER tab_item tabname= "tab_onsite_checkout" %] <span>On-site checkouts</span> [% END %]
+                    [% WRAPPER tab_item tabname= "tab_all" bt_active= 1 %]<span>All</span>[% END %]
+                    [% WRAPPER tab_item tabname= "tab_checkout" %]<span>Checkouts</span>[% END %]
+                    [% WRAPPER tab_item tabname= "tab_onsite_checkout" %]<span>On-site checkouts</span>[% END %]
                 [% END # /WRAPPER tabs_nav %]
                 [% WRAPPER tab_panels %]
                     [% WRAPPER tab_panel tabname="readingrec" bt_active= 1 %]
@@ -152,12 +150,10 @@
                 [% END # /WRAPPER tab_panels %]
             [% END # /WRAPPER tabs %]
         [% ELSE %]
-            <div class="page-section">
-                [% INCLUDE table_readingrec %]
-            </div> <!-- /.page-section -->
+            <div class="page-section"> [% INCLUDE table_readingrec %] </div>
+            <!-- /.page-section -->
         [% END # /IF Koha.Preference('OnSiteCheckouts') %]
-[% END %]
-
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

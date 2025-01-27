@@ -2,193 +2,155 @@
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% FILTER collapse %]
-    [% IF ( proposeimport ) %]
-        [% t("Set up database") | html %]
-    [% END %]
-    [% IF ( importdatastructure ) %]
-        [% IF ( error ) %]
-            [% t("Error creating database tables") | html %]
-        [% ELSE %]
-            [% t("Database tables created") | html %]
+<title
+    >[% FILTER collapse %]
+        [% IF ( proposeimport ) %]
+            [% t("Set up database") | html %]
         [% END %]
-    [% END %]
-    [% IF ( default ) %]
-       [% IF ( upgrading ) %]
-            [% t("Update database") | html %]
-       [% ELSE %]
-            [% t("Install basic configuration settings") | html %]
-       [% END %]
-    [% END %]
-    [% IF ( updatestructure ) %]
-        [% t("Updating database structure") | html %]
-    [% END %]
-    [% IF ( choosemarc ) %]
-        [% t("Select your MARC flavor") | html %]
-    [% END %]
-    [% IF ( selectframeworks ) %]
-        [% t("Selecting default settings") | html %]
-    [% END %]
-    [% IF ( addframeworks ) %]
-        [% t("Default data loaded") | html %]
-    [% END %]
-    [% IF ( finish ) %]
-        [% t("Installation complete") | html %]
-    [% END %] &rsaquo;
-    [% t("Web installer") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+        [% IF ( importdatastructure ) %]
+            [% IF ( error ) %]
+                [% t("Error creating database tables") | html %]
+            [% ELSE %]
+                [% t("Database tables created") | html %]
+            [% END %]
+        [% END %]
+        [% IF ( default ) %]
+            [% IF ( upgrading ) %]
+                [% t("Update database") | html %]
+            [% ELSE %]
+                [% t("Install basic configuration settings") | html %]
+            [% END %]
+        [% END %]
+        [% IF ( updatestructure ) %]
+            [% t("Updating database structure") | html %]
+        [% END %]
+        [% IF ( choosemarc ) %]
+            [% t("Select your MARC flavor") | html %]
+        [% END %]
+        [% IF ( selectframeworks ) %]
+            [% t("Selecting default settings") | html %]
+        [% END %]
+        [% IF ( addframeworks ) %]
+            [% t("Default data loaded") | html %]
+        [% END %]
+        [% IF ( finish ) %]
+            [% t("Installation complete") | html %]
+        [% END %]
+        &rsaquo; [% t("Web installer") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
 <body id="installer" class="installer">
-    <div class="main container-fluid">
-        <div class="row">
-            <div id="installer-step3" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
-                <div id="logo"><a href="#">Koha</a></div>
-                [% IF ( finish ) %]
-                    <h1>Web installer &rsaquo; Installation complete</h1>
+<div class="main container-fluid">
+    <div class="row">
+        <div id="installer-step3" class="installer-main col-sm-10 col-md-8 offset-sm-1 offset-md-2">
+            <div id="logo"><a href="#">Koha</a></div>
+            [% IF ( finish ) %]
+                <h1>Web installer &rsaquo; Installation complete</h1>
 
-                    <div id="steps">
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
+
+                <h3>Congratulations, installation complete</h3>
+                <p><a class="btn btn-primary" href="/cgi-bin/koha/installer/onboarding.pl">Begin the onboarding process</a></p>
+            [% END %]
+
+            [% IF ( choosemarc ) %]
+                <h2>Select your MARC flavor</h2>
+
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
+                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
                         <ol>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Select your MARC flavor</li>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Selecting default settings</li>
                         </ol>
-                    </div>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
 
-                    <h3>Congratulations, installation complete</h3>
-                    <p><a class="btn btn-primary" href="/cgi-bin/koha/installer/onboarding.pl">Begin the onboarding process</a></p>
-                [% END %]
+                <form name="frameworkselection" method="post" action="/cgi-bin/koha/installer/install.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="step" value="3" />
+                    <input type="hidden" name="op" value="cud-selectframeworks" />
 
-                [% IF ( choosemarc ) %]
-                    <h2>Select your MARC flavor</h2>
+                    <p>MARC stands for Machine Readable Cataloging. A MARC record contains bibliographic record information about an item. MARC21 is used globally, UNIMARC tends to be used in a few European countries. </p>
 
-                    <div id="steps">
-                        <ol>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                <ol>
-                                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Select your MARC flavor</li>
-                                    <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Selecting default settings</li>
-                                </ol>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                        </ol>
-                    </div>
-
-                    <form name="frameworkselection" method="post" action="/cgi-bin/koha/installer/install.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="step" value="3" />
-                        <input type="hidden" name="op" value="cud-selectframeworks" />
-
-                        <p>MARC stands for Machine Readable Cataloging. A MARC record contains bibliographic record information about an item. MARC21 is used globally, UNIMARC tends to be used in a few European countries. </p>
-
-                        [% FOREACH flavourloo IN flavourloop %]
-                            [% IF ( flavourloo.label == "Unimarc") %]
-                                 <p>
-                                     <label><input type="radio" name="marcflavour" id="marcflavour" value="[% flavourloo.code | html %]" /> [% flavourloo.label | html %]</label>
-                                 </p>
-                            [% ELSE %]
-                                 <p>
-                                     <label><input type="radio" name="marcflavour" id="marcflavour" value="[% flavourloo.code | html %]" checked="checked" /> [% flavourloo.label | html %]</label>
-                                 </p>
-                            [% END %]
+                    [% FOREACH flavourloo IN flavourloop %]
+                        [% IF ( flavourloo.label == "Unimarc") %]
+                            <p>
+                                <label><input type="radio" name="marcflavour" id="marcflavour" value="[% flavourloo.code | html %]" /> [% flavourloo.label | html %]</label>
+                            </p>
+                        [% ELSE %]
+                            <p>
+                                <label><input type="radio" name="marcflavour" id="marcflavour" value="[% flavourloo.code | html %]" checked="checked" /> [% flavourloo.label | html %]</label>
+                            </p>
                         [% END %]
-                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
-                    </form>
-                [% END # / IF choosemarc %]
+                    [% END %]
+                    <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                </form>
+            [% END # / IF choosemarc %]
 
-                [% IF ( selectframeworks ) %]
-                    <h1>Web installer &rsaquo; Selecting default settings</h1>
+            [% IF ( selectframeworks ) %]
+                <h1>Web installer &rsaquo; Selecting default settings</h1>
 
-                    <div id="steps">
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
+                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
                         <ol>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                <ol>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Select your MARC flavor</li>
-                                    <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Selecting default settings</li>
-                                </ol>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Select your MARC flavor</li>
+                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Selecting default settings</li>
                         </ol>
-                    </div>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
 
-                    <form name="frameworkselection" method="post" action="/cgi-bin/koha/installer/install.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="step" value="3" />
-                        <input type="hidden" name="op" value="cud-addframeworks" />
-                        [% IF ( frameworksloop ) %]
-                            <h3>MARC frameworks: [% marcflavour | html %]</h3>
-                            [% IF ( en_marc_frameworks ) %]
-                                <h4><span class="error">No MARC frameworks are available for your language.
-                                Defaulting to the frameworks supplied for English (en)</span></h4>
-                            [% END %]
-                            [% FOREACH frameworksloo IN frameworksloop %]
-                                [%- SWITCH frameworksloo.label -%]
-                                  [%- CASE 'mandatory' -%]<h4>Mandatory</h4>
-                                  [%- CASE 'optional'  -%]<h4>Optional</h4>
-                                [%- END -%]
-
-                                <div class="checkboxes">
-
-                                    <p>
-                                        <a class="selectall [% frameworksloo.label FILTER lower | html %]" href="#">Select all</a>
-                                        <a class="deselectall [% frameworksloo.label FILTER lower | html %]" href="#">Select none</a>
-                                    </p>
-
-                                    [% FOREACH framework IN frameworksloo.frameworks %]
-                                        <div class="checkbox">
-                                            <label>
-                                                [% IF ( framework.checked ) %]
-                                                    <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id ="[% framework.fwkname | html %]" checked="checked" />
-                                                [% ELSE %]
-                                                    <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id ="[% framework.fwkname | html %]" />
-                                                [% END %]
-                                                [% FOREACH description IN framework.fwkdescription %]
-                                                    [% description | html %]<br />
-                                                [% END %]
-                                                <em>([% framework.fwkname | html %])</em>
-                                            </label>
-                                        </div>
-                                        <hr />
-                                    [% END # / FOREACH framework %]
-                                </div>
-                            [% END # / FOREACH frameworksloo %]
-                        [% END # / IF frameworkdsloop %]
-
-                        <h3>Other data</h3>
-
-                        [% IF ( en_sample_data ) %]
-                            <h4><span class="error">No sample data and settings are available for your language.
-                            Defaulting to the samples supplied for English (en)</span></h4>
+                <form name="frameworkselection" method="post" action="/cgi-bin/koha/installer/install.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="step" value="3" />
+                    <input type="hidden" name="op" value="cud-addframeworks" />
+                    [% IF ( frameworksloop ) %]
+                        <h3>MARC frameworks: [% marcflavour | html %]</h3>
+                        [% IF ( en_marc_frameworks ) %]
+                            <h4><span class="error">No MARC frameworks are available for your language. Defaulting to the frameworks supplied for English (en)</span></h4>
                         [% END %]
+                        [% FOREACH frameworksloo IN frameworksloop %]
+                            [%- SWITCH frameworksloo.label -%]
 
-                        [% FOREACH levelloo IN levelloop %]
-                            [%- SWITCH levelloo.label -%]
-                              [%- CASE 'mandatory' -%]<h4>Mandatory</h4>
-                              [%- CASE 'optional'  -%]<h4>Optional</h4>
+                            [%- CASE 'mandatory' -%]
+                                <h4>Mandatory</h4>
+                            [%- CASE 'optional' -%]
+                                <h4>Optional</h4>
                             [%- END -%]
 
                             <div class="checkboxes">
-
                                 <p>
-                                    <a class="selectall [% levelloo.label FILTER lower | html %]" href="#">Select all</a>
-                                    <a class="deselectall [% levelloo.label FILTER lower | html %]" href="#">Select none</a>
+                                    <a class="selectall [% frameworksloo.label FILTER lower | html %]" href="#">Select all</a>
+                                    <a class="deselectall [% frameworksloo.label FILTER lower | html %]" href="#">Select none</a>
                                 </p>
 
-                                [% FOREACH framework IN levelloo.frameworks %]
+                                [% FOREACH framework IN frameworksloo.frameworks %]
                                     <div class="checkbox">
-                                        <label for="[% framework.fwkname | html %]">
+                                        <label>
                                             [% IF ( framework.checked ) %]
                                                 <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id="[% framework.fwkname | html %]" checked="checked" />
                                             [% ELSE %]
@@ -197,20 +159,125 @@
                                             [% FOREACH description IN framework.fwkdescription %]
                                                 [% description | html %]<br />
                                             [% END %]
+                                            <em>([% framework.fwkname | html %])</em>
                                         </label>
-                                    </div> <!-- /div.checkbox -->
+                                    </div>
+                                    <hr />
                                 [% END # / FOREACH framework %]
                             </div>
-                        [% END # / FOREACH levelloo %]
+                        [% END # / FOREACH frameworksloo %]
+                    [% END # / IF frameworkdsloop %]
 
-                        <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete. Please be patient.</p>
+                    <h3>Other data</h3>
 
-                        <p><input type="submit" value="Import" class="btn btn-primary" /></p>
-                    </form>
-                [% END # / IF selectframeworks %]
+                    [% IF ( en_sample_data ) %]
+                        <h4><span class="error">No sample data and settings are available for your language. Defaulting to the samples supplied for English (en)</span></h4>
+                    [% END %]
 
-                [% IF ( addframeworks ) %]
-                    <h1>Web installer &rsaquo; Default data loaded</h1>
+                    [% FOREACH levelloo IN levelloop %]
+                        [%- SWITCH levelloo.label -%]
+
+                        [%- CASE 'mandatory' -%]
+                            <h4>Mandatory</h4>
+                        [%- CASE 'optional' -%]
+                            <h4>Optional</h4>
+                        [%- END -%]
+
+                        <div class="checkboxes">
+                            <p>
+                                <a class="selectall [% levelloo.label FILTER lower | html %]" href="#">Select all</a>
+                                <a class="deselectall [% levelloo.label FILTER lower | html %]" href="#">Select none</a>
+                            </p>
+
+                            [% FOREACH framework IN levelloo.frameworks %]
+                                <div class="checkbox">
+                                    <label for="[% framework.fwkname | html %]">
+                                        [% IF ( framework.checked ) %]
+                                            <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id="[% framework.fwkname | html %]" checked="checked" />
+                                        [% ELSE %]
+                                            <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id="[% framework.fwkname | html %]" />
+                                        [% END %]
+                                        [% FOREACH description IN framework.fwkdescription %]
+                                            [% description | html %]<br />
+                                        [% END %]
+                                    </label>
+                                </div>
+                                <!-- /div.checkbox -->
+                            [% END # / FOREACH framework %]
+                        </div>
+                    [% END # / FOREACH levelloo %]
+
+                    <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete. Please be patient.</p>
+
+                    <p><input type="submit" value="Import" class="btn btn-primary" /></p>
+                </form>
+            [% END # / IF selectframeworks %]
+
+            [% IF ( addframeworks ) %]
+                <h1>Web installer &rsaquo; Default data loaded</h1>
+
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Select your MARC flavor</li>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Selecting default settings</li>
+                        </ol>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
+
+                [% FOREACH lis IN list %]
+                    [% IF lis.level == 'mandatory' %]
+                        <h3>Mandatory data added</h3>
+                    [% ELSIF lis.level == 'optional' %]
+                        <h3>Optional data added</h3>
+                    [% ELSIF lis.level == 'mysql' %]
+                        <h3>MySQL data added</h3>
+                    [% ELSIF lis.level == 'localization' %]
+                        <h3>Localization data added</h3>
+                    [% ELSE %]
+                        <h3>[% lis.level FILTER ucfirst | html %] data added</h3>
+                    [% END %]
+                    <ul>
+                        [% FOREACH fwklis IN lis.fwklist %]
+                            <li>
+                                [% fwklis.fwkname | html %]
+                                [% IF ( fwklis.error ) %]<p class="bg-danger">[% fwklis.error | html %]</p>[% END %]
+                            </li>
+                        [% END %]
+                    </ul>
+                [% END %]
+
+                <h3>Basic installation complete.</h3>
+
+                <p>In the next steps you will be guided through some basic requirements like defining Koha user with all administrative privileges (superlibrarian).</p>
+
+                <form action="/cgi-bin/koha/installer/install.pl" method="post" name="finish">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <h4> You can help the Koha community by sharing your statistics with us. </h4>
+                    <p> If you wish to share some of your data, please enable the functionality in the "Share your usage statistics" section of the Administration module. </p>
+
+                    <input type="hidden" name="step" value="3" />
+                    <input type="hidden" name="op" value="cud-finish" />
+                    <p>
+                        <input value="Set up some of Koha's basic requirements" class="btn btn-primary" type="submit" />
+                    </p>
+                </form>
+            [% END # / IF addframeworks %]
+
+            [% IF ( importdatastructure ) %]
+                [% IF ( error ) %]
+                    <p>The following error occurred while importing the database structure:</p>
+                    <div class="alert alert-warning"><p>[% error | html %] </p></div>
+                    <p>Please contact your system administrator</p>
+                [% ELSE %]
+                    <h1>Web installer &rsaquo; Success</h1>
+                    <div class="alert alert-success"><p>Database tables created</p></div>
 
                     <div id="steps">
                         <ol>
@@ -218,296 +285,228 @@
                             <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
                             <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
                             <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                <ol>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Select your MARC flavor</li>
-                                    <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Selecting default settings</li>
-                                </ol>
+                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
                             <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
                         </ol>
                     </div>
 
-                    [% FOREACH lis IN list %]
-                        [% IF lis.level == 'mandatory' %]
-                            <h3>Mandatory data added</h3>
-                        [% ELSIF lis.level == 'optional' %]
-                            <h3>Optional data added</h3>
-                        [% ELSIF lis.level == 'mysql' %]
-                            <h3>MySQL data added</h3>
-                        [% ELSIF lis.level == 'localization' %]
-                            <h3>Localization data added</h3>
-                        [% ELSE %]
-                            <h3>[% lis.level FILTER ucfirst | html %] data added</h3>
-                        [% END %]
-                        <ul>
-                            [% FOREACH fwklis IN lis.fwklist %]
-                            <li>
-                                [% fwklis.fwkname | html %]
-                                [% IF ( fwklis.error ) %]<p class="bg-danger">[% fwklis.error | html %]</p>[% END %]
-                            </li>
-                            [% END %]
-                        </ul>
-                    [% END %]
-
-                    <h3>Basic installation complete.</h3>
-
-                    <p>In the next steps you will be guided through some basic requirements like defining Koha user with all administrative privileges (superlibrarian).</p>
-
-                    <form action="/cgi-bin/koha/installer/install.pl" method="post" name="finish">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <h4>
-                            You can help the Koha community by sharing your statistics with us.
-                        </h4>
-                        <p>
-                            If you wish to share some of your data, please enable the functionality in the "Share your usage statistics" section of the Administration module.
-                        </p>
-
+                    <form action="/cgi-bin/koha/installer/install.pl" method="get">
                         <input type="hidden" name="step" value="3" />
-                        <input type="hidden" name="op" value="cud-finish" />
-                        <p>
-                            <input value="Set up some of Koha's basic requirements" class="btn btn-primary" type="submit" />
-                        </p>
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                     </form>
+                [% END %]
+            [% END # / IF importdatastructure %]
 
-                [% END # / IF addframeworks %]
+            [% IF ( proposeimport ) %]
+                <h1>Web installer &rsaquo; Set up database</h1>
 
-                [% IF ( importdatastructure ) %]
-                    [% IF ( error ) %]
-                        <p>The following error occurred while importing the database structure:</p>
-                        <div class="alert alert-warning"><p>[% error | html %] </p></div>
-                        <p>Please contact your system administrator</p>
-                    [% ELSE %]
-                        <h1>Web installer &rsaquo; Success</h1>
-                        <div class="alert alert-success"><p>Database tables created</p></div>
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                        <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
+                        <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                        <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
+                    </ol>
+                </div>
 
-                        <div id="steps">
-                            <ol>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                            </ol>
-                        </div>
+                <p>Now we're ready to create the database tables and fill them with some default data.</p>
+                <form action="/cgi-bin/koha/installer/install.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="step" value="3" />
+                    <input type="hidden" name="op" value="cud-importdatastructure" />
+                    <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                </form>
+            [% END # / proposeimport %]
 
-                        <form action="/cgi-bin/koha/installer/install.pl" method="get">
-                            <input type="hidden" name="step" value="3" />
-                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
-                        </form>
-                    [% END %]
-                [% END # / IF importdatastructure %]
-
-                [% IF ( proposeimport ) %]
-                    <h1>Web installer &rsaquo; Set up database</h1>
+            [% IF ( default ) %]
+                [% IF ( upgrading ) %]
+                    <h1>Web installer &rsaquo; Update database</h1>
+                    <p>We are upgrading from Koha [% dbversion | html %] to [% kohaversion | html %]</p>
+                    <form action="/cgi-bin/koha/installer/install.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="step" value="3" />
+                        <input type="hidden" name="op" value="cud-updatestructure" />
+                        <p><input value="Update your database" class="btn btn-primary" type="submit" /></p>
+                    </form>
+                [% ELSE %]
+                    <h1>Web installer &rsaquo; Install basic configuration settings</h1>
 
                     <div id="steps">
                         <ol>
                             <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
                             <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
                             <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
-                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                            <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
+                            <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
                             <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
                         </ol>
                     </div>
 
-                    <p>Now we're ready to create the database tables and fill them with some default data.</p>
+                    <p>We are ready to do some basic configuration.</p>
                     <form action="/cgi-bin/koha/installer/install.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
-                        <input type="hidden" name="op" value="cud-importdatastructure" />
+                        <input type="hidden" name="op" value="cud-choosemarc" />
                         <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                     </form>
-                [% END # / proposeimport %]
+                [% END %]
+            [% END # / IF default %]
 
-                [% IF ( default ) %]
-                    [% IF ( upgrading ) %]
-                        <h1>Web installer &rsaquo; Update database</h1>
-                        <p>We are upgrading from Koha [% dbversion | html %] to [% kohaversion | html %]</p>
-                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="step" value="3" />
-                            <input type="hidden" name="op" value="cud-updatestructure" />
-                            <p><input value="Update your database" class="btn btn-primary" type="submit" /></p>
-                        </form>
-                    [% ELSE %]
-                        <h1>Web installer &rsaquo; Install basic configuration settings</h1>
+            [% IF ( updatestructure ) %]
+                <h1>Web installer &rsaquo; Updating database structure</h1>
+                [% IF has_update_succeeds || success %]
+                    <p>Update report:</p>
+                [% END %]
 
-                        <div id="steps">
-                            <ol>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Choose your language</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Database settings</li>
-                                <li class="complete"><i class="fa fa-check-square" aria-hidden="true"></i> Set up database</li>
-                                <li class="current open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                                <li class="open"><i class="fa-svg-icon checkbox-square" aria-hidden="true"></i> Onboarding</li>
-                            </ol>
-                        </div>
-
-                        <p>We are ready to do some basic configuration.</p>
-                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="step" value="3" />
-                            <input type="hidden" name="op" value="cud-choosemarc" />
-                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
-                        </form>
-                    [% END %]
-                [% END # / IF default %]
-
-                [% IF ( updatestructure ) %]
-                    <h1>Web installer &rsaquo; Updating database structure</h1>
-                    [% IF has_update_succeeds || success %]
-                        <p>Update report:</p>
-                    [% END %]
-
-                    [%# Success for old versions %]
-                    [% IF has_update_succeeds %]
-                        <ul>
-                            [% FOREACH l IN update_report %]
-                                [% SET line = l.line %]
-                                [% IF line.match('^Upgrade to') %]
-                                    <li>[% line | $raw %]</li>
-                                [% ELSE %]
-                                    [% line | $raw %]<br/>
-                                [% END %]
+                [%# Success for old versions %]
+                [% IF has_update_succeeds %]
+                    <ul>
+                        [% FOREACH l IN update_report %]
+                            [% SET line = l.line %]
+                            [% IF line.match('^Upgrade to') %]
+                                <li>[% line | $raw %]</li>
+                            [% ELSE %]
+                                [% line | $raw %]<br />
                             [% END %]
-                        </ul>
-                    [% END %]
-
-                    [%# Success for new versions %]
-                    [% IF success.size %]
-                        <ul>
-                            [% FOR s IN success %]
-                                [% NEXT IF s.output.size < 1 %]
-                                <li>[% s.output.0 | $raw %]</li>
-                                [% IF s.output.size > 2 %]
-                                    <ul>
-                                        [% FOR o IN s.output %]
-                                            [% NEXT IF loop.first %]
-                                            <li>[% o | $raw %]</li>
-                                        [% END %]
-                                    </ul>
-                                [% END %]
-                            [% END %]
-                        </ul>
-                    [% END %]
-
-                    [% IF atomic_updates.success.size %]
-                        <p>Atomic updates:</p>
-                        <ul>
-                            [% FOR s IN atomic_updates.success %]
-                                [% NEXT IF s.output.size < 1 %]
-                                <li>[% s.output.0 | $raw %]</li>
-                                [% IF s.output.size > 2 %]
-                                    <ul>
-                                        [% FOR o IN s.output %]
-                                            [% NEXT IF loop.first %]
-                                            <li>[% o | $raw %]</li>
-                                        [% END %]
-                                    </ul>
-                                [% END %]
-                            [% END %]
-                        </ul>
-                    [% END %]
-
-                    [% IF has_update_errors OR error.size %]
-                        <p>Update errors :</p>
-                        [%# Errors for old versions %]
-                        [% IF has_update_errors %]
-                            <ul>
-                                [% FOREACH update_error IN update_errors %]
-                                    <li class="update_error">[% update_error.line | html %]</li>
-                                [% END %]
-                            </ul>
                         [% END %]
+                    </ul>
+                [% END %]
 
-                        [%# Errors for new versions %]
-                        [% IF error.size %]
-                            <ul>
-                                [% FOR e IN error %]
-                                    [% NEXT IF e.output.size < 1 %]
-                                    [% e.output.0 | $raw %]<br />
-                                    [% IF e.output.size > 2 %]
-                                        <ul>
-                                        [% FOR o IN e.output %]
-                                            [% NEXT IF loop.first %]
-                                            [% o | $raw %]<br />
-                                        [% END %]
-                                        </ul>
+                [%# Success for new versions %]
+                [% IF success.size %]
+                    <ul>
+                        [% FOR s IN success %]
+                            [% NEXT IF s.output.size < 1 %]
+                            <li>[% s.output.0 | $raw %]</li>
+                            [% IF s.output.size > 2 %]
+                                <ul>
+                                    [% FOR o IN s.output %]
+                                        [% NEXT IF loop.first %]
+                                        <li>[% o | $raw %]</li>
                                     [% END %]
-                                    <li class="update_error">
-                                        ERROR: [% e.error | $raw %]
-                                    </li>
-                                [% END %]
-                            </ul>
+                                </ul>
+                            [% END %]
                         [% END %]
+                    </ul>
+                [% END %]
+
+                [% IF atomic_updates.success.size %]
+                    <p>Atomic updates:</p>
+                    <ul>
+                        [% FOR s IN atomic_updates.success %]
+                            [% NEXT IF s.output.size < 1 %]
+                            <li>[% s.output.0 | $raw %]</li>
+                            [% IF s.output.size > 2 %]
+                                <ul>
+                                    [% FOR o IN s.output %]
+                                        [% NEXT IF loop.first %]
+                                        <li>[% o | $raw %]</li>
+                                    [% END %]
+                                </ul>
+                            [% END %]
+                        [% END %]
+                    </ul>
+                [% END %]
+
+                [% IF has_update_errors OR error.size %]
+                    <p>Update errors :</p>
+                    [%# Errors for old versions %]
+                    [% IF has_update_errors %]
+                        <ul>
+                            [% FOREACH update_error IN update_errors %]
+                                <li class="update_error">[% update_error.line | html %]</li>
+                            [% END %]
+                        </ul>
                     [% END %]
 
-                    [% IF atomic_updates.error.size %]
-                        <p>Atomic update error :</p>
+                    [%# Errors for new versions %]
+                    [% IF error.size %]
                         <ul>
-                            [% FOR e IN atomic_updates.error %]
+                            [% FOR e IN error %]
                                 [% NEXT IF e.output.size < 1 %]
                                 [% e.output.0 | $raw %]<br />
                                 [% IF e.output.size > 2 %]
                                     <ul>
+                                        [% FOR o IN e.output %]
+                                            [% NEXT IF loop.first %]
+                                            [% o | $raw %]<br />
+                                        [% END %]
+                                    </ul>
+                                [% END %]
+                                <li class="update_error"> ERROR: [% e.error | $raw %] </li>
+                            [% END %]
+                        </ul>
+                    [% END %]
+                [% END %]
+
+                [% IF atomic_updates.error.size %]
+                    <p>Atomic update error :</p>
+                    <ul>
+                        [% FOR e IN atomic_updates.error %]
+                            [% NEXT IF e.output.size < 1 %]
+                            [% e.output.0 | $raw %]<br />
+                            [% IF e.output.size > 2 %]
+                                <ul>
                                     [% FOR o IN e.output %]
                                         [% NEXT IF loop.first %]
                                         [% o | $raw %]<br />
                                     [% END %]
-                                    </ul>
-                                [% END %]
-                                <li class="update_error">
-                                    ERROR: [% e.error | $raw %]
-                                </li>
+                                </ul>
                             [% END %]
-                        </ul>
-                    [% END %]
+                            <li class="update_error"> ERROR: [% e.error | $raw %] </li>
+                        [% END %]
+                    </ul>
+                [% END %]
 
-                    [% UNLESS error OR atomic_updates.error.size OR has_update_errors %]
-                        <p>Everything went okay. Update done.</p>
-                        <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
-                    [% ELSE %]
-                        <div>
-                            <form action="/cgi-bin/koha/installer/install.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="step" value="3" />
-                                <input type="hidden" name="op" value="cud-updatestructure" />
-                                <p><input value="Try again" class="btn btn-primary" type="submit" /></p>
-                            </form>
-                        </div>
-                    [% END %]
-               [% END # / IF updatestructure %]
-            </div> <!-- / #installer-step3 -->
-        </div> <!-- / .row -->
-    </div><!-- / .main.container-fluid -->
+                [% UNLESS error OR atomic_updates.error.size OR has_update_errors %]
+                    <p>Everything went okay. Update done.</p>
+                    <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
+                [% ELSE %]
+                    <div>
+                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="step" value="3" />
+                            <input type="hidden" name="op" value="cud-updatestructure" />
+                            <p><input value="Try again" class="btn btn-primary" type="submit" /></p>
+                        </form>
+                    </div>
+                [% END %]
+            [% END # / IF updatestructure %]
+        </div>
+        <!-- / #installer-step3 -->
+    </div>
+    <!-- / .row --> </div
+><!-- / .main.container-fluid -->
 
 [% IF ( selectframeworks ) %]
     [% MACRO jsinclude BLOCK %]
         <script>
-            $(document).ready(function(){
-                $(".selectall,.deselectall").on("click",function(e){
+            $(document).ready(function () {
+                $(".selectall,.deselectall").on("click", function (e) {
                     e.preventDefault();
                     var container = $(this).parent().parent();
-                    if( $(this).hasClass("selectall") ){
+                    if ($(this).hasClass("selectall")) {
                         var state = true;
                     } else {
                         var state = false;
                     }
-                    $( container ).find("input").prop("checked", state);
-                    $( container ).find(".selectall,.deselectall").toggle();
+                    $(container).find("input").prop("checked", state);
+                    $(container).find(".selectall,.deselectall").toggle();
                     update_sample_libraries_dependencies();
                 });
                 let required_text = _("(requires sample libraries)");
-                $("#sample_libraries_holidays, #sample_patrons").parent().after(" <span class='hint'>"+required_text+"</span>");
-                function update_sample_libraries_dependencies(){
+                $("#sample_libraries_holidays, #sample_patrons")
+                    .parent()
+                    .after(" <span class='hint'>" + required_text + "</span>");
+                function update_sample_libraries_dependencies() {
                     let checked = $("#sample_libraries").prop("checked");
                     $("#sample_libraries_holidays, #sample_patrons").prop("disabled", !checked);
                     if (!checked) {
                         $("#sample_libraries_holidays, #sample_patrons").prop("checked", false);
                     }
-                };
+                }
                 $("#sample_libraries").on("change", update_sample_libraries_dependencies);
                 $("#sample_libraries").change();
             });

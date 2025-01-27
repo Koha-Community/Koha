@@ -40,30 +40,22 @@ subtest 'list_managers() tests' => sub {
     $schema->storage->txn_begin;
 
     my $patron_with_permission =
-      $builder->build_object( { class => 'Koha::Patrons', value => { flags => 2**11 } } )
-      ;    ## 11 == acquisition
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 2**11 } } );    ## 11 == acquisition
     my $patron_without_permission =
-      $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
     my $superlibrarian =
-      $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
     my $password = 'thePassword123';
     $superlibrarian->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $superlibrarian->userid;
     $superlibrarian->discard_changes;
 
     my $api_filter = encode_json(
-        {   'me.patron_id' =>
-              [ $patron_with_permission->id, $patron_without_permission->id, $superlibrarian->id ]
-        }
-    );
+        { 'me.patron_id' => [ $patron_with_permission->id, $patron_without_permission->id, $superlibrarian->id ] } );
 
-    $t->get_ok(
-        "//$userid:$password@/api/v1/acquisitions/baskets/managers?q=$api_filter"
-    )->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets/managers?q=$api_filter")->status_is(200)->json_is(
         [
-            $patron_with_permission->to_api(
-                { user => $patron_with_permission }
-            ),
+            $patron_with_permission->to_api( { user => $patron_with_permission } ),
             $superlibrarian->to_api( { user => $superlibrarian } )
         ]
     );

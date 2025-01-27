@@ -1,25 +1,25 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Search for vendor") | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Search for vendor") | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="ser_acqui-search" class="ser">
 
 <div class="container-fluid">
-
-<h1>Serial subscription: search for vendor </h1>
+    <h1>Serial subscription: search for vendor </h1>
     <form action="/cgi-bin/koha/serials/acqui-search-result.pl" method="get">
         <fieldset class="rows">
             <ol>
                 <li>
                     <label for="text">Vendor name: </label>
-                    <input id="text" type="text"  size="25" name="supplier" autofocus="autofocus" />
+                    <input id="text" type="text" size="25" name="supplier" autofocus="autofocus" />
                 </li>
             </ol>
         </fieldset>
@@ -32,6 +32,7 @@
             </div>
         </nav>
     </form>
-</div> <!-- /.main.container-fluid -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

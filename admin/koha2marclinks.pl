@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use Koha::Database;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
 use Koha::Caches;
@@ -31,66 +31,71 @@ use Koha::MarcSubfieldStructures;
 my $input = CGI->new;
 my $op    = $input->param('op') // q{};
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/koha2marclinks.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_marc_frameworks' },
+        template_name => "admin/koha2marclinks.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_marc_frameworks' },
     }
 );
 
 my $schema = Koha::Database->new->schema;
-my $cache = Koha::Caches->get_instance();
+my $cache  = Koha::Caches->get_instance();
 
 # Update data before showing the form
 my $no_upd;
 
-if( $input->param('add_field') && $op eq 'cud-save' ) {
+if ( $input->param('add_field') && $op eq 'cud-save' ) {
+
     # add a mapping to all frameworks
-    my ($kohafield, $tag, $sub) = split /,/, $input->param('add_field'), 3;
-    my $rs = Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub });
-    if( $rs->count ) {
-        $rs->update({ kohafield => $kohafield });
+    my ( $kohafield, $tag, $sub ) = split /,/, $input->param('add_field'), 3;
+    my $rs = Koha::MarcSubfieldStructures->search( { tagfield => $tag, tagsubfield => $sub } );
+    if ( $rs->count ) {
+        $rs->update( { kohafield => $kohafield } );
     } else {
         $template->param( error_add => 1, error_info => "$tag, $sub" );
     }
 
-} elsif( $input->param('remove_field') && $op eq 'cud-save' ) {
+} elsif ( $input->param('remove_field') && $op eq 'cud-save' ) {
+
     # remove a mapping from all frameworks
-    my ($tag, $sub) = split /,/, $input->param('remove_field'), 2;
-    Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub })->update({ kohafield => undef });
+    my ( $tag, $sub ) = split /,/, $input->param('remove_field'), 2;
+    Koha::MarcSubfieldStructures->search( { tagfield => $tag, tagsubfield => $sub } )->update( { kohafield => undef } );
 
 } else {
     $no_upd = 1;
 }
 
 # Clear the cache when needed
-unless( $no_upd ) {
+unless ($no_upd) {
     $cache->clear_from_cache("MarcSubfieldStructure-");
 }
 
 # Build/Show the form
 my $dbix_map = {
+
     # Koha to MARC mappings are found in only three tables
-    biblio => 'Biblio',
+    biblio      => 'Biblio',
     biblioitems => 'Biblioitem',
-    items => 'Item',
+    items       => 'Item',
 };
 my @cols;
 foreach my $tbl ( sort keys %{$dbix_map} ) {
     push @cols,
         map { "$tbl.$_" } $schema->source( $dbix_map->{$tbl} )->columns;
 }
-my $kohafields = Koha::MarcSubfieldStructures->search({
-    frameworkcode => q{},
-    kohafield => { '>', '' },
-});
+my $kohafields = Koha::MarcSubfieldStructures->search(
+    {
+        frameworkcode => q{},
+        kohafield     => { '>', '' },
+    }
+);
 my @loop_data;
-foreach my $col ( @cols ) {
+foreach my $col (@cols) {
     my $found;
     my $readonly = $col =~ /\.(biblio|biblioitem|item)number$/;
-    foreach my $row ( $kohafields->search({ kohafield => $col })->as_list ) {
+    foreach my $row ( $kohafields->search( { kohafield => $col } )->as_list ) {
         $found = 1;
         push @loop_data, {
             kohafield    => $col,
@@ -101,13 +106,13 @@ foreach my $col ( @cols ) {
         };
     }
     push @loop_data, {
-            kohafield    => $col,
-            readonly     => $readonly,
+        kohafield => $col,
+        readonly  => $readonly,
     } if !$found;
 }
 
 $template->param(
-    loop       => \@loop_data,
+    loop => \@loop_data,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

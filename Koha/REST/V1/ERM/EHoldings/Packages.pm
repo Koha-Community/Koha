@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 use Koha::REST::V1::ERM::EHoldings::Packages::Local;
 use Koha::REST::V1::ERM::EHoldings::Packages::EBSCO;
@@ -93,7 +93,7 @@ sub update {
     } else {
         return Koha::REST::V1::ERM::EHoldings::Packages::Local::update($c);
     }
-};
+}
 
 =head3 delete
 

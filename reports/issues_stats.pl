@@ -23,8 +23,8 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Koha qw( GetAuthorisedValues );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Koha    qw( GetAuthorisedValues );
+use C4::Output  qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
 
 use Koha::AuthorisedValues;
@@ -41,55 +41,67 @@ Plugin that shows circulation stats
 
 =cut
 
-my $input = CGI->new;
+my $input          = CGI->new;
 my $fullreportname = "reports/issues_stats.tt";
-my $do_it    = $input->param('do_it');
-my $line     = $input->param("Line");
-my $column   = $input->param("Column");
-my @filters  = $input->multi_param("Filter");
-my $podsp    = $input->param("DisplayBy");
-my $type     = $input->param("PeriodTypeSel");
-my $daysel   = $input->param("PeriodDaySel");
-my $monthsel = $input->param("PeriodMonthSel");
-my $calc     = $input->param("Cellvalue");
-my $output   = $input->param("output");
-my $basename = $input->param("basename");
+my $do_it          = $input->param('do_it');
+my $line           = $input->param("Line");
+my $column         = $input->param("Column");
+my @filters        = $input->multi_param("Filter");
+my $podsp          = $input->param("DisplayBy");
+my $type           = $input->param("PeriodTypeSel");
+my $daysel         = $input->param("PeriodDaySel");
+my $monthsel       = $input->param("PeriodMonthSel");
+my $calc           = $input->param("Cellvalue");
+my $output         = $input->param("output");
+my $basename       = $input->param("basename");
 
 my $attribute_filters;
 my $vars = $input->Vars;
-foreach(keys %$vars) {
-    if(/^Filter_borrower_attributes\.(.*)/) {
+foreach ( keys %$vars ) {
+    if (/^Filter_borrower_attributes\.(.*)/) {
         $attribute_filters->{$1} = $vars->{$_};
     }
 }
 
-
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-	template_name => $fullreportname,
-	query => $input,
-	type => "intranet",
-	flagsrequired => {reports => '*'},
-});
-our $sep = C4::Context->csv_delimiter(scalar $input->param("sep"));
-$template->param(do_it => $do_it,
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
+our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
+$template->param(
+    do_it => $do_it,
 );
 
 our $itemtypes = Koha::ItemTypes->search_with_localization->unblessed;
 
-our @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']})->as_list;
+our @patron_categories =
+    Koha::Patron::Categories->search_with_library_limits( {}, { order_by => ['description'] } )->as_list;
 
-our $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
-our $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
+our $locations = {
+    map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field(
+        { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] }
+    )
+};
+our $ccodes = {
+    map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field(
+        { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] }
+    )
+};
 
 our $Bsort1 = GetAuthorisedValues("Bsort1");
 our $Bsort2 = GetAuthorisedValues("Bsort2");
-my ($hassort1,$hassort2);
-$hassort1=1 if $Bsort1;
-$hassort2=1 if $Bsort2;
+my ( $hassort1, $hassort2 );
+$hassort1 = 1 if $Bsort1;
+$hassort2 = 1 if $Bsort2;
 
 if ($do_it) {
+
     # Displaying results
-    my $results = calculate( $line, $column, $podsp, $type, $daysel, $monthsel, $calc, \@filters, $attribute_filters);
+    my $results = calculate( $line, $column, $podsp, $type, $daysel, $monthsel, $calc, \@filters, $attribute_filters );
     if ( $output eq "screen" ) {
 
         # Printing results to screen
@@ -127,56 +139,54 @@ if ($do_it) {
         # footer
         print "TOTAL";
         $cols = @$results[0]->{loopfooter};
-        print map {$sep.$_->{totalcol}} @$cols;
-        print $sep.@$results[0]->{total};
+        print map { $sep . $_->{totalcol} } @$cols;
+        print $sep. @$results[0]->{total};
     }
     exit;
 }
 
-
 my $dbh = C4::Context->dbh;
 
-    # location list
+# location list
 my @locations;
-foreach (sort keys %$locations) {
-	push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
+foreach ( sort keys %$locations ) {
+    push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
 }
-    
+
 my @ccodes;
-foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
-	push @ccodes, { code => $_, description => $ccodes->{$_} };
+foreach ( sort { $ccodes->{$a} cmp $ccodes->{$b} } keys %$ccodes ) {
+    push @ccodes, { code => $_, description => $ccodes->{$_} };
 }
 
-my $CGIextChoice = ( 'CSV' ); # FIXME translation
-my $CGIsepChoice=GetDelimiterChoices;
+my $CGIextChoice = ('CSV');               # FIXME translation
+my $CGIsepChoice = GetDelimiterChoices;
 
-my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
+my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
 my %attribute_types_by_class;
-while ( my ( $attribute_type ) = $attribute_types->next ) {
+while ( my ($attribute_type) = $attribute_types->next ) {
     $attribute_type = $attribute_type->unblessed;
-    if ($attribute_type->{authorised_value_category}) {
-        my $authorised_values = C4::Koha::GetAuthorisedValues(
-            $attribute_type->{authorised_value_category});
+    if ( $attribute_type->{authorised_value_category} ) {
+        my $authorised_values = C4::Koha::GetAuthorisedValues( $attribute_type->{authorised_value_category} );
 
         foreach my $authorised_value (@$authorised_values) {
             push @{ $attribute_type->{authorised_values} }, $authorised_value;
         }
     }
-    push @{ $attribute_types_by_class{$attribute_type->{class}} }, $attribute_type;
+    push @{ $attribute_types_by_class{ $attribute_type->{class} } }, $attribute_type;
 }
 
 $template->param(
-    categoryloop => \@patron_categories,
-    itemtypes    => $itemtypes,
-    locationloop => \@locations,
-    ccodeloop    => \@ccodes,
-    hassort1     => $hassort1,
-    hassort2     => $hassort2,
-    Bsort1       => $Bsort1,
-    Bsort2       => $Bsort2,
-    CGIextChoice => $CGIextChoice,
-    CGIsepChoice => $CGIsepChoice,
+    categoryloop             => \@patron_categories,
+    itemtypes                => $itemtypes,
+    locationloop             => \@locations,
+    ccodeloop                => \@ccodes,
+    hassort1                 => $hassort1,
+    hassort2                 => $hassort2,
+    Bsort1                   => $Bsort1,
+    Bsort2                   => $Bsort2,
+    CGIextChoice             => $CGIextChoice,
+    CGIsepChoice             => $CGIsepChoice,
     attribute_types_by_class => \%attribute_types_by_class,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -193,14 +203,14 @@ sub calculate {
     # extract parameters
     my $dbh = C4::Context->dbh;
 
-    my ($line_attribute_type, $column_attribute_type);
-    if($line =~ /^borrower_attributes\.(.*)/) {
+    my ( $line_attribute_type, $column_attribute_type );
+    if ( $line =~ /^borrower_attributes\.(.*)/ ) {
         $line_attribute_type = $1;
-        $line = "borrower_attributes.attribute";
+        $line                = "borrower_attributes.attribute";
     }
-    if($column =~ /^borrower_attributes\.(.*)/) {
+    if ( $column =~ /^borrower_attributes\.(.*)/ ) {
         $column_attribute_type = $1;
-        $column = "borrower_attributes.attribute";
+        $column                = "borrower_attributes.attribute";
     }
 
     # Filters
@@ -213,59 +223,60 @@ sub calculate {
         if ( ( $i == 1 ) and ( @$filters[ $i - 1 ] ) ) {
             $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
         }
-            # format the dates filters, otherwise just fill as is
+
+        # format the dates filters, otherwise just fill as is
         $cell{filter} = @$filters[$i];
-        $cell{crit} = $i;
+        $cell{crit}   = $i;
 
         push @loopfilter, \%cell;
     }
-    foreach (keys %$attribute_filters) {
+    foreach ( keys %$attribute_filters ) {
         next unless $attribute_filters->{$_};
         push @loopfilter, { crit => "$_ =", filter => $attribute_filters->{$_} };
     }
     push @loopfilter, { crit => "Event",        filter => $type };
-    push @loopfilter, { crit => "Display by",   filter => $dsp } if ($dsp);
-    push @loopfilter, { crit => "Select Day",   filter => $daysel } if ($daysel);
+    push @loopfilter, { crit => "Display by",   filter => $dsp }      if ($dsp);
+    push @loopfilter, { crit => "Select Day",   filter => $daysel }   if ($daysel);
     push @loopfilter, { crit => "Select Month", filter => $monthsel } if ($monthsel);
 
     my @linefilter;
-    my ( $colsource, $linesource ) = ('', '');
+    my ( $colsource, $linesource ) = ( '', '' );
     $linefilter[1] = @$filters[1] if ( $line =~ /datetime/ );
     $linefilter[0] =
-        ( $line =~ /datetime/ )     ? @$filters[0]
-      : ( $line =~ /category/ )     ? @$filters[2]
-      : ( $line =~ /itemtype/ )     ? @$filters[3]
-      : ( $line =~ /^branch/ )      ? @$filters[4]
-      : ( $line =~ /ccode/ )        ? @$filters[5]
-      : ( $line =~ /location/ )     ? @$filters[6]
-      : ( $line =~ /sort1/ )        ? @$filters[9]
-      : ( $line =~ /sort2/ )        ? @$filters[10]
-      : ( $line =~ /homebranch/)    ? @$filters[11]
-      : ( $line =~ /holdingbranch/) ? @$filters[12]
-      : ( $line =~ /borrowers.branchcode/ ) ? @$filters[13]
-      : ( $line_attribute_type )    ? $attribute_filters->{$line_attribute_type}
-      :                               undef;
+          ( $line =~ /datetime/ )             ? @$filters[0]
+        : ( $line =~ /category/ )             ? @$filters[2]
+        : ( $line =~ /itemtype/ )             ? @$filters[3]
+        : ( $line =~ /^branch/ )              ? @$filters[4]
+        : ( $line =~ /ccode/ )                ? @$filters[5]
+        : ( $line =~ /location/ )             ? @$filters[6]
+        : ( $line =~ /sort1/ )                ? @$filters[9]
+        : ( $line =~ /sort2/ )                ? @$filters[10]
+        : ( $line =~ /homebranch/ )           ? @$filters[11]
+        : ( $line =~ /holdingbranch/ )        ? @$filters[12]
+        : ( $line =~ /borrowers.branchcode/ ) ? @$filters[13]
+        : ($line_attribute_type)              ? $attribute_filters->{$line_attribute_type}
+        :                                       undef;
 
     if ( $line =~ /ccode/ or $line =~ /location/ or $line =~ /homebranch/ or $line =~ /holdingbranch/ ) {
-		$linesource = 'items';
-	}
+        $linesource = 'items';
+    }
 
-	my @colfilter;
-	$colfilter[1] = @$filters[1] if ($column =~ /datetime/);
-	$colfilter[0] = 
-        ( $column =~ /datetime/ ) ? @$filters[0]
-      : ( $column =~ /category/ ) ? @$filters[2]
-      : ( $column =~ /itemtype/ ) ? @$filters[3]
-      : ( $column =~ /^branch/ )   ? @$filters[4]
-      : ( $column =~ /ccode/ )    ? @$filters[5]
-      : ( $column =~ /location/ ) ? @$filters[6]
-      : ( $column =~ /sort1/ )    ? @$filters[9]
-      : ( $column =~ /sort1/ )    ? @$filters[10]
-      : ( $column =~ /homebranch/)    ? @$filters[11]
-      : ( $column =~ /holdingbranch/) ? @$filters[12]
-      : ( $column =~ /borrowers.branchcode/ ) ? @$filters[13]
-      : ( $column_attribute_type )    ? $attribute_filters->{$column_attribute_type}
-      :                                 undef;
+    my @colfilter;
+    $colfilter[1] = @$filters[1] if ( $column =~ /datetime/ );
+    $colfilter[0] =
+          ( $column =~ /datetime/ )             ? @$filters[0]
+        : ( $column =~ /category/ )             ? @$filters[2]
+        : ( $column =~ /itemtype/ )             ? @$filters[3]
+        : ( $column =~ /^branch/ )              ? @$filters[4]
+        : ( $column =~ /ccode/ )                ? @$filters[5]
+        : ( $column =~ /location/ )             ? @$filters[6]
+        : ( $column =~ /sort1/ )                ? @$filters[9]
+        : ( $column =~ /sort1/ )                ? @$filters[10]
+        : ( $column =~ /homebranch/ )           ? @$filters[11]
+        : ( $column =~ /holdingbranch/ )        ? @$filters[12]
+        : ( $column =~ /borrowers.branchcode/ ) ? @$filters[13]
+        : ($column_attribute_type)              ? $attribute_filters->{$column_attribute_type}
+        :                                         undef;
 
     if ( $column =~ /ccode/ or $column =~ /location/ or $column =~ /homebranch/ or $column =~ /holdingbranch/ ) {
         $colsource = 'items';
@@ -277,30 +288,30 @@ sub calculate {
 
         # by Day, Month, Year or Hour (1,2,3,4 respectively)
         $linefield =
-            ( $dsp == 1 ) ? "  dayname($line)"
-          : ( $dsp == 2 ) ? "monthname($line)"
-          : ( $dsp == 3 ) ? "     Year($line)"
-          : ( $dsp == 4 ) ? "extract(hour from $line)"
-          :                 'date_format(`datetime`,"%Y-%m-%d")';    # Probably should be left alone or passed through Koha::Dates
+              ( $dsp == 1 ) ? "  dayname($line)"
+            : ( $dsp == 2 ) ? "monthname($line)"
+            : ( $dsp == 3 ) ? "     Year($line)"
+            : ( $dsp == 4 ) ? "extract(hour from $line)"
+            :   'date_format(`datetime`,"%Y-%m-%d")';    # Probably should be left alone or passed through Koha::Dates
     } else {
         $linefield = $line;
     }
     my $lineorder =
-        ( $linefield =~ /dayname/ ) ? "weekday($line)"
-      : ( $linefield =~ /^month/ )  ? "  month($line)"
-      :                               $linefield;
+          ( $linefield =~ /dayname/ ) ? "weekday($line)"
+        : ( $linefield =~ /^month/ )  ? "  month($line)"
+        :                               $linefield;
 
     my $strsth;
-    if($line_attribute_type) {
+    if ($line_attribute_type) {
         $strsth = "SELECT attribute FROM borrower_attributes WHERE code = '$line_attribute_type' ";
     } else {
         $strsth = "SELECT distinctrow $linefield FROM statistics ";
 
         # get stats on items if ccode or location, otherwise borrowers.
         $strsth .=
-          ( $linesource eq 'items' )
-          ? " LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
-          : " LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
+            ( $linesource eq 'items' )
+            ? " LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
+            : " LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
         $strsth .= " WHERE $line IS NOT NULL ";
         $strsth .= " AND $line != '' " if $line ne "datetime";
     }
@@ -323,7 +334,7 @@ sub calculate {
     $strsth .= " group by $linefield order by $lineorder ";
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
     my $sth = $dbh->prepare($strsth);
-    if ( (@linefilter) and ($linefilter[0]) and ($linefilter[1]) ) {
+    if ( (@linefilter) and ( $linefilter[0] ) and ( $linefilter[1] ) ) {
         $sth->execute( $linefilter[0], $linefilter[1] . " 23:59:59" );
     } elsif ( $linefilter[1] ) {
         $sth->execute( $linefilter[1] . " 23:59:59" );
@@ -333,14 +344,15 @@ sub calculate {
         $sth->execute;
     }
 
-    my $itemtypes_map = { map { $_->{itemtype} => $_ } @{ $itemtypes } };
+    my $itemtypes_map = { map { $_->{itemtype} => $_ } @{$itemtypes} };
     while ( my ($celvalue) = $sth->fetchrow ) {
-        my %cell = ( rowtitle => $celvalue, totalrow => 0 );    # we leave 'rowtitle' as hash key (used when filling the table), and add coltitle_display
+        my %cell = ( rowtitle => $celvalue, totalrow => 0 )
+            ;    # we leave 'rowtitle' as hash key (used when filling the table), and add coltitle_display
         $cell{rowtitle_display} =
-            ( $line =~ /ccode/ )    ? $ccodes->{$celvalue}
-          : ( $line =~ /location/ ) ? $locations->{$celvalue}
-          : ( $line =~ /itemtype/ ) ? $itemtypes_map->{$celvalue}->{translated_description}
-          :                           $celvalue;                               # default fallback
+              ( $line =~ /ccode/ )    ? $ccodes->{$celvalue}
+            : ( $line =~ /location/ ) ? $locations->{$celvalue}
+            : ( $line =~ /itemtype/ ) ? $itemtypes_map->{$celvalue}->{translated_description}
+            :                           $celvalue;                                              # default fallback
         if ( $line =~ /sort1/ ) {
             foreach (@$Bsort1) {
                 ( $celvalue eq $_->{authorised_value} ) or next;
@@ -351,9 +363,9 @@ sub calculate {
                 ( $celvalue eq $_->{authorised_value} ) or next;
                 $cell{rowtitle_display} = $_->{lib} and last;
             }
-        } elsif ($line =~ /category/) {
-            foreach my $patron_category ( @patron_categories ) {
-                ($celvalue eq $patron_category->categorycode) or next;
+        } elsif ( $line =~ /category/ ) {
+            foreach my $patron_category (@patron_categories) {
+                ( $celvalue eq $patron_category->categorycode ) or next;
                 $cell{rowtitle_display} = $patron_category->description and last;
             }
         }
@@ -367,29 +379,29 @@ sub calculate {
 
         #Display by Day, Month or Year (1,2,3 respectively)
         $colfield =
-            ( $dsp == 1 ) ? "  dayname($column)"
-          : ( $dsp == 2 ) ? "monthname($column)"
-          : ( $dsp == 3 ) ? "     Year($column)"
-          : ( $dsp == 4 ) ? "extract(hour from $column)"
-          :                 'date_format(`datetime`,"%Y-%m-%d")';    # Probably should be left alone or passed through Koha::Dates
+              ( $dsp == 1 ) ? "  dayname($column)"
+            : ( $dsp == 2 ) ? "monthname($column)"
+            : ( $dsp == 3 ) ? "     Year($column)"
+            : ( $dsp == 4 ) ? "extract(hour from $column)"
+            :   'date_format(`datetime`,"%Y-%m-%d")';    # Probably should be left alone or passed through Koha::Dates
     } else {
         $colfield = $column;
     }
     $colorder =
-        ( $colfield =~ /dayname/ ) ? "weekday($column)"
-      : ( $colfield =~ /^month/ )  ? "  month($column)"
-      :                              $colfield;
+          ( $colfield =~ /dayname/ ) ? "weekday($column)"
+        : ( $colfield =~ /^month/ )  ? "  month($column)"
+        :                              $colfield;
     my $strsth2;
-    if($column_attribute_type) {
+    if ($column_attribute_type) {
         $strsth2 = "SELECT attribute FROM borrower_attributes WHERE code = '$column_attribute_type' ";
     } else {
         $strsth2 = "SELECT distinctrow $colfield FROM statistics ";
 
         # get stats on items if ccode or location, otherwise borrowers.
         $strsth2 .=
-          ( $colsource eq 'items' )
-          ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
-          : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
+            ( $colsource eq 'items' )
+            ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
+            : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
         $strsth2 .= " WHERE $column IS NOT NULL";
         $strsth2 .= " AND $column != '' " if $column ne "datetime";
     }
@@ -402,18 +414,18 @@ sub calculate {
         } elsif ( $colfilter[0] ) {
             $strsth2 .= " AND $column >= ? ";
         }
-        $strsth2 .= " AND                type ='". $type     ."' " if $type;
-        $strsth2 .= " AND   dayname(datetime) ='". $daysel   ."' " if $daysel;
-        $strsth2 .= " AND monthname(datetime) ='". $monthsel ."' " if $monthsel;
-    } elsif ($colfilter[0]) {
+        $strsth2 .= " AND                type ='" . $type . "' "     if $type;
+        $strsth2 .= " AND   dayname(datetime) ='" . $daysel . "' "   if $daysel;
+        $strsth2 .= " AND monthname(datetime) ='" . $monthsel . "' " if $monthsel;
+    } elsif ( $colfilter[0] ) {
         $colfilter[0] =~ s/\*/%/g;
-        $strsth2 .= " AND $column LIKE ? " ;
+        $strsth2 .= " AND $column LIKE ? ";
     }
 
     $strsth2 .= " group by $colfield order by $colorder ";
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
     my $sth2 = $dbh->prepare($strsth2);
-    if ( (@colfilter) and ($colfilter[0]) and ($colfilter[1]) ) {
+    if ( (@colfilter) and ( $colfilter[0] ) and ( $colfilter[1] ) ) {
         $sth2->execute( $colfilter[0], $colfilter[1] . " 23:59:59" );
     } elsif ( $colfilter[1] ) {
         $sth2->execute( $colfilter[1] . " 23:59:59" );
@@ -424,12 +436,13 @@ sub calculate {
     }
 
     while ( my ($celvalue) = $sth2->fetchrow ) {
-        my %cell = ( coltitle => $celvalue );    # we leave 'coltitle' as hash key (used when filling the table), and add coltitle_display
+        my %cell = ( coltitle => $celvalue )
+            ;    # we leave 'coltitle' as hash key (used when filling the table), and add coltitle_display
         $cell{coltitle_display} =
-            ( $column =~ /ccode/ )    ? $ccodes->{$celvalue}
-          : ( $column =~ /location/ ) ? $locations->{$celvalue}
-          : ( $column =~ /itemtype/ ) ? $itemtypes_map->{$celvalue}->{translated_description}
-          :                             $celvalue;                               # default fallback
+              ( $column =~ /ccode/ )    ? $ccodes->{$celvalue}
+            : ( $column =~ /location/ ) ? $locations->{$celvalue}
+            : ( $column =~ /itemtype/ ) ? $itemtypes_map->{$celvalue}->{translated_description}
+            :                             $celvalue;                                              # default fallback
         if ( $column =~ /sort1/ ) {
             foreach (@$Bsort1) {
                 ( $celvalue eq $_->{authorised_value} ) or next;
@@ -440,9 +453,9 @@ sub calculate {
                 ( $celvalue eq $_->{authorised_value} ) or next;
                 $cell{coltitle_display} = $_->{lib} and last;
             }
-        } elsif ($column =~ /category/) {
-            foreach my $patron_category ( @patron_categories ) {
-                ($celvalue eq $patron_category->categorycode) or next;
+        } elsif ( $column =~ /category/ ) {
+            foreach my $patron_category (@patron_categories) {
+                ( $celvalue eq $patron_category->categorycode ) or next;
                 $cell{coltitle_display} = $patron_category->description and last;
             }
         }
@@ -453,29 +466,29 @@ sub calculate {
     my %table;
     foreach my $row (@loopline) {
         foreach my $col (@loopcol) {
-            table_set(\%table, $row->{rowtitle}, $col->{coltitle}, 0);
+            table_set( \%table, $row->{rowtitle}, $col->{coltitle}, 0 );
         }
-        table_set(\%table, $row->{rowtitle}, 'totalrow', 0);
+        table_set( \%table, $row->{rowtitle}, 'totalrow', 0 );
     }
 
     # preparing calculation
     my $strcalc = "SELECT ";
-    if($line_attribute_type) {
+    if ($line_attribute_type) {
         $strcalc .= "TRIM(attribute_$line_attribute_type.attribute) AS line_attribute, ";
     } else {
         $strcalc .= "TRIM($linefield), ";
     }
-    if($column_attribute_type) {
+    if ($column_attribute_type) {
         $strcalc .= "TRIM(attribute_$column_attribute_type.attribute) AS column_attribute, ";
     } else {
         $strcalc .= "TRIM($colfield), ";
     }
     $strcalc .=
-        ( $process == 1 ) ? " COUNT(*) "
-      : ( $process == 2 ) ? "(COUNT(DISTINCT borrowers.borrowernumber))"
-      : ( $process == 3 ) ? "(COUNT(DISTINCT statistics.itemnumber))"
-      : ( $process == 5 ) ? "(COUNT(DISTINCT items.biblionumber))"
-      :                     '';
+          ( $process == 1 ) ? " COUNT(*) "
+        : ( $process == 2 ) ? "(COUNT(DISTINCT borrowers.borrowernumber))"
+        : ( $process == 3 ) ? "(COUNT(DISTINCT statistics.itemnumber))"
+        : ( $process == 5 ) ? "(COUNT(DISTINCT items.biblionumber))"
+        :                     '';
     if ( $process == 4 ) {
         my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
         $rqbookcount->execute;
@@ -486,65 +499,76 @@ sub calculate {
         FROM statistics
         LEFT JOIN borrowers ON statistics.borrowernumber=borrowers.borrowernumber
     ";
-    foreach (keys %$attribute_filters) {
-        if(
-            ($line_attribute_type and $line_attribute_type eq $_)
+    foreach ( keys %$attribute_filters ) {
+        if (   ( $line_attribute_type and $line_attribute_type eq $_ )
             or $column_attribute_type and $column_attribute_type eq $_
-            or $attribute_filters->{$_}
-        ) {
-            $strcalc .= " LEFT JOIN borrower_attributes AS attribute_$_ ON (statistics.borrowernumber = attribute_$_.borrowernumber AND attribute_$_.code = '$_') ";
+            or $attribute_filters->{$_} )
+        {
+            $strcalc .=
+                " LEFT JOIN borrower_attributes AS attribute_$_ ON (statistics.borrowernumber = attribute_$_.borrowernumber AND attribute_$_.code = '$_') ";
         }
     }
-    $strcalc .= "LEFT JOIN (SELECT * FROM items UNION SELECT * FROM deleteditems) items ON statistics.itemnumber=items.itemnumber "
-      if ( $linefield =~ /^items\./
+    $strcalc .=
+        "LEFT JOIN (SELECT * FROM items UNION SELECT * FROM deleteditems) items ON statistics.itemnumber=items.itemnumber "
+        if ( $linefield =~ /^items\./
         or $colfield =~ /^items\./
         or $process == 5
-        or ( $colsource eq 'items' ) || @$filters[5] || @$filters[6] || @$filters[7] || @$filters[8] || @$filters[9] || @$filters[10] || @$filters[11] || @$filters[12] || @$filters[13] );
+        or ( $colsource eq 'items' )
+        || @$filters[5]
+        || @$filters[6]
+        || @$filters[7]
+        || @$filters[8]
+        || @$filters[9]
+        || @$filters[10]
+        || @$filters[11]
+        || @$filters[12]
+        || @$filters[13] );
 
     $strcalc .= "WHERE 1=1 ";
     @$filters = map { my $f = $_; defined($f) and $f =~ s/\*/%/g; $f } @$filters;
-    $strcalc .= " AND statistics.datetime >= '" . @$filters[0] . "'"       if ( @$filters[0] );
-    $strcalc .= " AND statistics.datetime <= '" . @$filters[1] . " 23:59:59'"       if ( @$filters[1] );
-    $strcalc .= " AND borrowers.categorycode LIKE '" . @$filters[2] . "'" if ( @$filters[2] );
-    $strcalc .= " AND statistics.itemtype LIKE '" . @$filters[3] . "'"    if ( @$filters[3] );
-    $strcalc .= " AND statistics.branch LIKE '" . @$filters[4] . "'"      if ( @$filters[4] );
-    $strcalc .= " AND items.ccode LIKE '" . @$filters[5] . "'"            if ( @$filters[5] );
-    $strcalc .= " AND items.location LIKE '" . @$filters[6] . "'"         if ( @$filters[6] );
-    $strcalc .= " AND items.itemcallnumber >='" . @$filters[7] . "'"      if ( @$filters[7] );
-    $strcalc .= " AND items.itemcallnumber <'" . @$filters[8] . "'"       if ( @$filters[8] );
-    $strcalc .= " AND borrowers.sort1 LIKE '" . @$filters[9] . "'"        if ( @$filters[9] );
-    $strcalc .= " AND borrowers.sort2 LIKE '" . @$filters[10] . "'"       if ( @$filters[10] );
-    $strcalc .= " AND items.homebranch LIKE '" . @$filters[11] . "'"      if ( @$filters[11] );
-    $strcalc .= " AND items.holdingbranch LIKE '" . @$filters[12] . "'"   if ( @$filters[12] );
-    $strcalc .= " AND borrowers.branchcode LIKE '" . @$filters[13] . "'"  if ( @$filters[13] );
-    $strcalc .= " AND dayname(datetime) LIKE '" . $daysel . "'"           if ($daysel);
-    $strcalc .= " AND monthname(datetime) LIKE '" . $monthsel . "'"       if ($monthsel);
-    $strcalc .= " AND statistics.type LIKE '" . $type . "'"               if ($type);
-    foreach (keys %$attribute_filters) {
-        if($attribute_filters->{$_}) {
+    $strcalc .= " AND statistics.datetime >= '" . @$filters[0] . "'"          if ( @$filters[0] );
+    $strcalc .= " AND statistics.datetime <= '" . @$filters[1] . " 23:59:59'" if ( @$filters[1] );
+    $strcalc .= " AND borrowers.categorycode LIKE '" . @$filters[2] . "'"     if ( @$filters[2] );
+    $strcalc .= " AND statistics.itemtype LIKE '" . @$filters[3] . "'"        if ( @$filters[3] );
+    $strcalc .= " AND statistics.branch LIKE '" . @$filters[4] . "'"          if ( @$filters[4] );
+    $strcalc .= " AND items.ccode LIKE '" . @$filters[5] . "'"                if ( @$filters[5] );
+    $strcalc .= " AND items.location LIKE '" . @$filters[6] . "'"             if ( @$filters[6] );
+    $strcalc .= " AND items.itemcallnumber >='" . @$filters[7] . "'"          if ( @$filters[7] );
+    $strcalc .= " AND items.itemcallnumber <'" . @$filters[8] . "'"           if ( @$filters[8] );
+    $strcalc .= " AND borrowers.sort1 LIKE '" . @$filters[9] . "'"            if ( @$filters[9] );
+    $strcalc .= " AND borrowers.sort2 LIKE '" . @$filters[10] . "'"           if ( @$filters[10] );
+    $strcalc .= " AND items.homebranch LIKE '" . @$filters[11] . "'"          if ( @$filters[11] );
+    $strcalc .= " AND items.holdingbranch LIKE '" . @$filters[12] . "'"       if ( @$filters[12] );
+    $strcalc .= " AND borrowers.branchcode LIKE '" . @$filters[13] . "'"      if ( @$filters[13] );
+    $strcalc .= " AND dayname(datetime) LIKE '" . $daysel . "'"               if ($daysel);
+    $strcalc .= " AND monthname(datetime) LIKE '" . $monthsel . "'"           if ($monthsel);
+    $strcalc .= " AND statistics.type LIKE '" . $type . "'"                   if ($type);
+
+    foreach ( keys %$attribute_filters ) {
+        if ( $attribute_filters->{$_} ) {
             $strcalc .= " AND attribute_$_.attribute LIKE '" . $attribute_filters->{$_} . "'";
         }
     }
 
     $strcalc .= " GROUP BY ";
-    if($line_attribute_type) {
+    if ($line_attribute_type) {
         $strcalc .= " line_attribute, ";
     } else {
         $strcalc .= " $linefield, ";
     }
-    if($column_attribute_type) {
+    if ($column_attribute_type) {
         $strcalc .= " column_attribute ";
     } else {
         $strcalc .= " $colfield ";
     }
 
     $strcalc .= " ORDER BY ";
-    if($line_attribute_type) {
+    if ($line_attribute_type) {
         $strcalc .= " line_attribute, ";
     } else {
         $strcalc .= " $lineorder, ";
     }
-    if($column_attribute_type) {
+    if ($column_attribute_type) {
         $strcalc .= " column_attribute ";
     } else {
         $strcalc .= " $colorder ";
@@ -561,9 +585,9 @@ sub calculate {
         unless ( defined $row ) {
             $emptyrow = 1;
         }
-        table_inc(\%table, $row, $col, $value);
-        table_inc(\%table, $row, 'totalrow', $value);
-        $grantotal               += $value;
+        table_inc( \%table, $row, $col,       $value );
+        table_inc( \%table, $row, 'totalrow', $value );
+        $grantotal += $value;
     }
     push @loopcol,  { coltitle => "NULL", coltitle_display => 'NULL' } if ($emptycol);
     push @loopline, { rowtitle => "NULL", rowtitle_display => 'NULL' } if ($emptyrow);
@@ -574,20 +598,21 @@ sub calculate {
         #@loopcol ensures the order for columns is common with column titles
         # and the number matches the number of columns
         foreach my $col (@loopcol) {
-            my $value = table_get(\%table, $row->{rowtitle}, $col->{coltitle});
+            my $value = table_get( \%table, $row->{rowtitle}, $col->{coltitle} );
             push @loopcell, { value => $value };
         }
         push @looprow,
-          { 'rowtitle_display' => $row->{rowtitle_display},
+            {
+            'rowtitle_display' => $row->{rowtitle_display},
             'rowtitle'         => $row->{rowtitle},
             'loopcell'         => \@loopcell,
-            'totalrow'         => table_get(\%table, $row->{rowtitle}, 'totalrow'),
-          };
+            'totalrow'         => table_get( \%table, $row->{rowtitle}, 'totalrow' ),
+            };
     }
     for my $col (@loopcol) {
         my $total = 0;
         foreach my $row (@looprow) {
-            $total += table_get(\%table, $row->{rowtitle}, $col->{coltitle}) || 0;
+            $total += table_get( \%table, $row->{rowtitle}, $col->{coltitle} ) || 0;
         }
         push @loopfooter, { 'totalcol' => $total };
     }
@@ -602,7 +627,7 @@ sub calculate {
     # 	# the foot (totals by borrower type)
     $globalline{loopfooter} = \@loopfooter;
     $globalline{total}      = $grantotal;
-    $globalline{line}       = $line_attribute_type ? $line_attribute_type : $line;
+    $globalline{line}       = $line_attribute_type   ? $line_attribute_type   : $line;
     $globalline{column}     = $column_attribute_type ? $column_attribute_type : $column;
     return [ ( \%globalline ) ];
 }
@@ -610,7 +635,7 @@ sub calculate {
 sub null_to_zzempty {
     my $string = shift;
 
-    if (!defined($string) or $string eq '' or uc($string) eq 'NULL') {
+    if ( !defined($string) or $string eq '' or uc($string) eq 'NULL' ) {
         return 'zzEMPTY';
     }
 
@@ -618,7 +643,7 @@ sub null_to_zzempty {
 }
 
 sub table_set {
-    my ($table, $row, $col, $val) = @_;
+    my ( $table, $row, $col, $val ) = @_;
 
     $row = $row // '';
     $col = $col // '';
@@ -626,7 +651,7 @@ sub table_set {
 }
 
 sub table_get {
-    my ($table, $row, $col) = @_;
+    my ( $table, $row, $col ) = @_;
 
     $row = $row // '';
     $col = $col // '';
@@ -634,7 +659,7 @@ sub table_get {
 }
 
 sub table_inc {
-    my ($table, $row, $col, $inc) = @_;
+    my ( $table, $row, $col, $inc ) = @_;
 
     $row = $row // '';
     $col = $col // '';

@@ -40,18 +40,19 @@ DELETE /api/v1/import_batches/{import_batch_id}/records/{import_record_id}/match
 sub unset_chosen {
     my $c = shift->openapi->valid_input or return;
 
-    my $matches = Koha::Import::Record::Matches->search({
-        import_record_id => $c->param('import_record_id'),
-    });
+    my $matches = Koha::Import::Record::Matches->search(
+        {
+            import_record_id => $c->param('import_record_id'),
+        }
+    );
 
     return $c->render_resource_not_found("Matches")
         unless $matches;
 
     return try {
-        $matches->update({ chosen => 0 });
+        $matches->update( { chosen => 0 } );
         return $c->render( status => 204, openapi => $matches );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -69,29 +70,32 @@ Body should contain the condidate_match_id to chose
 sub set_chosen {
     my $c = shift->openapi->valid_input or return;
 
-    my $import_record_id = $c->param('import_record_id');
-    my $body = $c->req->json;
+    my $import_record_id   = $c->param('import_record_id');
+    my $body               = $c->req->json;
     my $candidate_match_id = $body->{'candidate_match_id'};
 
-    my $match = Koha::Import::Record::Matches->find({
-        import_record_id => $import_record_id,
-        candidate_match_id => $candidate_match_id
-    });
+    my $match = Koha::Import::Record::Matches->find(
+        {
+            import_record_id   => $import_record_id,
+            candidate_match_id => $candidate_match_id
+        }
+    );
 
     return $c->render_resource_not_found("Match")
         unless $match;
 
     return try {
-        my $matches = Koha::Import::Record::Matches->search({
-            import_record_id => $import_record_id,
-            chosen => 1
-        });
-        $matches->update({ chosen => 0}) if $matches;
-        $match->set_from_api({ chosen => JSON::true });
+        my $matches = Koha::Import::Record::Matches->search(
+            {
+                import_record_id => $import_record_id,
+                chosen           => 1
+            }
+        );
+        $matches->update( { chosen => 0 } ) if $matches;
+        $match->set_from_api( { chosen => JSON::true } );
         $match->store;
         return $c->render( status => 200, openapi => $match );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

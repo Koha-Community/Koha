@@ -18,7 +18,6 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
 =head1 orders_by_budget
 
 This script displays all orders associated to a selected budget.
@@ -27,10 +26,10 @@ This script displays all orders associated to a selected budget.
 
 use Modern::Perl;
 
-use CGI qw( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Budgets qw( GetBudgetsReport GetBudgetHierarchy );
+use CGI             qw( -utf8 );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Budgets     qw( GetBudgetsReport GetBudgetHierarchy );
 use C4::Acquisition qw( GetBasket get_rounded_price );
 use C4::Context;
 use Koha::Biblios;
@@ -38,52 +37,51 @@ use Koha::Biblios;
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "reports/orders_by_budget.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { reports => '*' },
+        template_name => "reports/orders_by_budget.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
     }
 );
 
-my $params = $query->Vars;
+my $params     = $query->Vars;
 my $get_orders = $params->{'get_orders'};
 
-if ( $get_orders ) {
-    my $budgetfilter     = $params->{'budgetfilter'}    || undef;
+if ($get_orders) {
+    my $budgetfilter   = $params->{'budgetfilter'} || undef;
     my $total_quantity = 0;
-    my $total_rrp = 0;
-    my $total_ecost = 0;
+    my $total_rrp      = 0;
+    my $total_ecost    = 0;
     my %budget_name;
 
     # Fetch the orders
     my @orders;
-    unless($budgetfilter) {
+    unless ($budgetfilter) {
+
         # If no budget filter was selected, get the orders of all budgets
         my @budgets = C4::Budgets::GetBudgetsReport();
         foreach my $budget (@budgets) {
-            push(@orders, $budget);
-            $budget_name{$budget->{'budget_id'}} = $budget->{'budget_name'};
+            push( @orders, $budget );
+            $budget_name{ $budget->{'budget_id'} } = $budget->{'budget_name'};
         }
-    }
-    else {
-        if ($budgetfilter eq 'activebudgets') {
-           # If all active budgets's option was selected, get the orders of all active budgets
-           my @active_budgets = C4::Budgets::GetBudgetsReport(1);
-           foreach my $active_budget (@active_budgets)
-           {
-               push(@orders, $active_budget);
-               $budget_name{$active_budget->{'budget_id'}} = $active_budget->{'budget_name'};
-           }
-        }
-        else {
+    } else {
+        if ( $budgetfilter eq 'activebudgets' ) {
+
+            # If all active budgets's option was selected, get the orders of all active budgets
+            my @active_budgets = C4::Budgets::GetBudgetsReport(1);
+            foreach my $active_budget (@active_budgets) {
+                push( @orders, $active_budget );
+                $budget_name{ $active_budget->{'budget_id'} } = $active_budget->{'budget_name'};
+            }
+        } else {
+
             # A budget filter was selected, only get the orders for the selected budget
             my @filtered_budgets = C4::Budgets::GetBudgetReport($budgetfilter);
-            foreach my $budget (@filtered_budgets)
-            {
-                push(@orders, $budget);
-                $budget_name{$budget->{'budget_id'}} = $budget->{'budget_name'};
+            foreach my $budget (@filtered_budgets) {
+                push( @orders, $budget );
+                $budget_name{ $budget->{'budget_id'} } = $budget->{'budget_name'};
             }
-            if ($filtered_budgets[0]) {
+            if ( $filtered_budgets[0] ) {
                 $template->param(
                     current_budget_name => $filtered_budgets[0]->{'budget_name'},
                 );
@@ -93,50 +91,52 @@ if ( $get_orders ) {
 
     # Format the order's informations
     foreach my $order (@orders) {
+
         # Get the title of the ordered item
         my $biblio = Koha::Biblios->find( $order->{biblionumber} );
-        my $basket = C4::Acquisition::GetBasket($order->{'basketno'});
+        my $basket = C4::Acquisition::GetBasket( $order->{'basketno'} );
 
-        $order->{'basketname'} = $basket->{'basketname'};
+        $order->{'basketname'}       = $basket->{'basketname'};
         $order->{'authorisedbyname'} = $basket->{'authorisedbyname'};
 
         $order->{title} = $biblio ? $biblio->title : '';
         $order->{title} ||= $order->{biblionumber};
 
-        $order->{'total_rrp'} = get_rounded_price($order->{'quantity'}) * $order->{'rrp'};
-        $order->{'total_ecost'} = get_rounded_price($order->{'quantity'}) * $order->{'ecost'};
+        $order->{'total_rrp'}   = get_rounded_price( $order->{'quantity'} ) * $order->{'rrp'};
+        $order->{'total_ecost'} = get_rounded_price( $order->{'quantity'} ) * $order->{'ecost'};
 
         # Format the currencies correctly
         $total_quantity += $order->{'quantity'};
-        $total_rrp += $order->{'total_rrp'};
-        $total_ecost += $order->{'total_ecost'};
+        $total_rrp      += $order->{'total_rrp'};
+        $total_ecost    += $order->{'total_ecost'};
 
         # Get the budget's name
-        $order->{'budget_name'} = $budget_name{$order->{'budget_id'}};
+        $order->{'budget_name'} = $budget_name{ $order->{'budget_id'} };
     }
 
     # If we are outputting to screen, output to the template.
-    if($params->{"output"} eq 'screen') {
+    if ( $params->{"output"} eq 'screen' ) {
         $template->param(
-            total       => scalar @orders,
-            ordersloop   => \@orders,
-            get_orders   => $get_orders,
+            total          => scalar @orders,
+            ordersloop     => \@orders,
+            get_orders     => $get_orders,
             total_quantity => $total_quantity,
-            total_rrp => $total_rrp,
-            total_ecost => $total_ecost,
+            total_rrp      => $total_rrp,
+            total_ecost    => $total_ecost,
         );
     }
+
     # If we are outputting to a file, create it and exit.
     else {
         my $basename = $params->{"basename"};
-        my $sep = C4::Context->csv_delimiter(scalar $params->{"sep"});
+        my $sep      = C4::Context->csv_delimiter( scalar $params->{"sep"} );
 
         # TODO Use Text::CSV to generate the CSV file
         print $query->header(
-           -type       => 'text/csv',
-           -encoding    => 'utf-8',
-           -attachment => "$basename.csv",
-           -name       => "$basename.csv"
+            -type       => 'text/csv',
+            -encoding   => 'utf-8',
+            -attachment => "$basename.csv",
+            -name       => "$basename.csv"
         );
 
         #binmode STDOUT, ":encoding(UTF-8)";
@@ -150,59 +150,60 @@ if ( $get_orders ) {
         my @rows;
         foreach my $order (@orders) {
             my @row;
-            push(@row, _surround($order->{'budget_name'}));
-            push(@row, _surround($order->{'basketno'}));
-            push(@row, _surround($order->{'basketname'}));
-            push(@row, _surround($order->{'authorisedbyname'}));
-            push(@row, _surround($order->{'biblionumber'}));
-            push(@row, _surround($order->{'title'}));
-            push(@row, _surround($order->{'currency'}));
-            push(@row, _surround($order->{'listprice'}));
-            push(@row, _surround($order->{'rrp'}));
-            push(@row, _surround($order->{'ecost'}));
-            push(@row, _surround($order->{'quantity'}));
-            push(@row, _surround($order->{'total_rrp'}));
-            push(@row, _surround($order->{'total_ecost'}));
-            push(@row, _surround($order->{'entrydate'}));
-            push(@row, _surround($order->{'datereceived'}));
-            push(@row, _surround($order->{'order_internalnote'}));
-            push(@row, _surround($order->{'order_vendornote'}));
-            push(@rows, \@row);
+            push( @row,  _surround( $order->{'budget_name'} ) );
+            push( @row,  _surround( $order->{'basketno'} ) );
+            push( @row,  _surround( $order->{'basketname'} ) );
+            push( @row,  _surround( $order->{'authorisedbyname'} ) );
+            push( @row,  _surround( $order->{'biblionumber'} ) );
+            push( @row,  _surround( $order->{'title'} ) );
+            push( @row,  _surround( $order->{'currency'} ) );
+            push( @row,  _surround( $order->{'listprice'} ) );
+            push( @row,  _surround( $order->{'rrp'} ) );
+            push( @row,  _surround( $order->{'ecost'} ) );
+            push( @row,  _surround( $order->{'quantity'} ) );
+            push( @row,  _surround( $order->{'total_rrp'} ) );
+            push( @row,  _surround( $order->{'total_ecost'} ) );
+            push( @row,  _surround( $order->{'entrydate'} ) );
+            push( @row,  _surround( $order->{'datereceived'} ) );
+            push( @row,  _surround( $order->{'order_internalnote'} ) );
+            push( @row,  _surround( $order->{'order_vendornote'} ) );
+            push( @rows, \@row );
         }
 
         my @totalrow;
-        for(1..9){push(@totalrow, "")};
-        push(@totalrow, _surround($total_quantity));
-        push(@totalrow, _surround($total_rrp));
-        push(@totalrow, _surround($total_ecost));
+        for ( 1 .. 9 ) { push( @totalrow, "" ) }
+        push( @totalrow, _surround($total_quantity) );
+        push( @totalrow, _surround($total_rrp) );
+        push( @totalrow, _surround($total_ecost) );
 
-        my $csvTemplate = C4::Templates::gettemplate('reports/csv/orders_by_budget.tt', 'intranet', $query);
-        $csvTemplate->param(sep => $sep, rows => \@rows, totalrow => \@totalrow);
+        my $csvTemplate = C4::Templates::gettemplate( 'reports/csv/orders_by_budget.tt', 'intranet', $query );
+        $csvTemplate->param( sep => $sep, rows => \@rows, totalrow => \@totalrow );
         print $csvTemplate->output;
 
         exit(0);
     }
-}
-else {
+} else {
+
     # Set file export choices
     my @outputFormats = ('CSV');
-    my @CSVdelimiters =(',','#',qw(; tabulation \\ /));
+    my @CSVdelimiters = ( ',', '#', qw(; tabulation \\ /) );
 
     # getting all budgets
-    my $budgets = GetBudgetHierarchy;
+    my $budgets    = GetBudgetHierarchy;
     my $budgetloop = [];
-    foreach my $budget  (@{$budgets}) {
-        push @{$budgetloop},{
-            value    => $budget->{budget_id},
-            description  => $budget->{budget_name},
-            period       => $budget->{budget_period_description},
-            active       => $budget->{budget_period_active},
+    foreach my $budget ( @{$budgets} ) {
+        push @{$budgetloop}, {
+            value       => $budget->{budget_id},
+            description => $budget->{budget_name},
+            period      => $budget->{budget_period_description},
+            active      => $budget->{budget_period_active},
         };
     }
-    @{$budgetloop} =sort { uc( $a->{description}) cmp uc( $b->{description}) } @{$budgetloop};
-    $template->param(   budgetsloop   => \@{$budgetloop},
-        outputFormatloop => \@outputFormats,
-        delimiterloop => \@CSVdelimiters,
+    @{$budgetloop} = sort { uc( $a->{description} ) cmp uc( $b->{description} ) } @{$budgetloop};
+    $template->param(
+        budgetsloop         => \@{$budgetloop},
+        outputFormatloop    => \@outputFormats,
+        delimiterloop       => \@CSVdelimiters,
         delimiterPreference => C4::Context->preference('CSVDelimiter')
     );
 }

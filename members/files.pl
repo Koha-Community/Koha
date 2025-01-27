@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Members;
 
@@ -33,27 +33,31 @@ my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/files.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+        template_name => "members/files.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 $template->param( 'borrower_files' => 1 );
 
 my $borrowernumber = $cgi->param('borrowernumber');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
 my $patron         = Koha::Patrons->find($borrowernumber);
-output_and_exit_if_error( $cgi, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+output_and_exit_if_error(
+    $cgi, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
-my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber ); # FIXME Should be $patron->get_files. Koha::Patron::Files needs to be Koha::Objects based first
+my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber )
+    ;    # FIXME Should be $patron->get_files. Koha::Patron::Files needs to be Koha::Objects based first
 
 my $op = $cgi->param('op') || '';
 
 if ( $op eq 'download' ) {
     my $file_id = $cgi->param('file_id');
-    my $file = $bf->GetFile( id => $file_id );
+    my $file    = $bf->GetFile( id => $file_id );
 
     print $cgi->header(
         -type       => $file->{'file_type'},
@@ -61,8 +65,7 @@ if ( $op eq 'download' ) {
         -attachment => $file->{'file_name'}
     );
     print $file->{'file_content'};
-}
-else {
+} else {
 
     my $patron_category = $patron->category;
     $template->param( patron => $patron );
@@ -80,23 +83,21 @@ else {
 
             if (%errors) {
                 $template->param( errors => %errors );
-            }
-            else {
+            } else {
                 my $file_content;
                 while (<$uploaded_file>) {
                     $file_content .= $_;
                 }
 
                 my $rv = $bf->AddFile(
-                    name    => $filename,
-                    type    => $mimetype,
-                    content => $file_content,
+                    name        => $filename,
+                    type        => $mimetype,
+                    content     => $file_content,
                     description => scalar $cgi->param('description'),
                 );
                 $errors{upload_failed} = 1 unless $rv;
             }
-        }
-        else {
+        } else {
             $errors{'no_file'} = 1;
         }
     } elsif ( $op eq 'cud-delete' ) {
@@ -104,7 +105,7 @@ else {
     }
 
     $template->param(
-        files => Koha::Patron::Files->new( borrowernumber => $borrowernumber )->GetFilesInfo(),
+        files  => Koha::Patron::Files->new( borrowernumber => $borrowernumber )->GetFilesInfo(),
         errors => \%errors,
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -49,31 +49,28 @@ if ( !$api ) {
             authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         }
     );
-   $template->param();
+    $template->param();
     output_html_with_http_headers $query, $cookie, $template->output;
 
-
-}
-elsif ( $api eq 'GetSuggestions' ) {
+} elsif ( $api eq 'GetSuggestions' ) {
     my $fuzzie = $query->param('fuzziness');
     my $prefix = $query->param('prefix');
     my $field  = $query->param('field');
 
-# Under a persistent environment, we should probably not reinit this every time.
+    # Under a persistent environment, we should probably not reinit this every time.
     my $browser = Koha::SearchEngine::Elasticsearch::Browse->new( { index => 'biblios' } );
-    my $res = $browser->browse( $prefix, $field, { fuzziness => $fuzzie } );
+    my $res     = $browser->browse( $prefix, $field, { fuzziness => $fuzzie } );
 
     my %seen;
     my @sorted =
-        grep { !$seen{$_->{text}}++ }
-        sort { lc($a->{text}) cmp lc($b->{text}) } @$res;
+        grep { !$seen{ $_->{text} }++ }
+        sort { lc( $a->{text} ) cmp lc( $b->{text} ) } @$res;
     print CGI::header(
         -type    => 'application/json',
         -charset => 'utf-8'
     );
     print to_json( \@sorted );
-}
-elsif ( $api eq 'GetResults' ) {
+} elsif ( $api eq 'GetResults' ) {
     my $term  = $query->param('term');
     my $field = $query->param('field');
 
@@ -81,9 +78,9 @@ elsif ( $api eq 'GetResults' ) {
     my $searcher = Koha::SearchEngine::Elasticsearch::Search->new(
         { index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX } );
 
-    my $query = { query => { term => { $field.".raw" => $term } } } ;
+    my $query   = { query => { term => { $field . ".raw" => $term } } };
     my $results = $searcher->search( $query, undef, 500 );
-    my @output = _filter_for_output( $results->{hits}->{hits} );
+    my @output  = _filter_for_output( $results->{hits}->{hits} );
     print CGI::header(
         -type    => 'application/json',
         -charset => 'utf-8'
@@ -98,16 +95,16 @@ sub _filter_for_output {
     my @output;
     foreach my $rec (@$records) {
         my $biblionumber = $rec->{_id};
-        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblio       = Koha::Biblios->find($biblionumber);
         next unless $biblio;
         push @output,
-          {
-            id => $biblionumber,
+            {
+            id       => $biblionumber,
             title    => $biblio->title,
             subtitle => $biblio->subtitle,
-            author  => $biblio->author,
-          };
-    };
-    my @sorted = sort { lc($a->{title}) cmp lc($b->{title}) } @output;
+            author   => $biblio->author,
+            };
+    }
+    my @sorted = sort { lc( $a->{title} ) cmp lc( $b->{title} ) } @output;
     return @sorted;
 }

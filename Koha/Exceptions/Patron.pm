@@ -30,7 +30,7 @@ use Exception::Class (
     'Koha::Exceptions::Patron::InvalidUserid' => {
         isa         => 'Koha::Exceptions::Patron',
         description => 'Field userid is not valid (probably not unique)',
-        fields      => [ 'userid' ],
+        fields      => ['userid'],
     },
     'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute' => {
         isa         => 'Koha::Exceptions::Patron',
@@ -38,7 +38,7 @@ use Exception::Class (
         fields      => ['type']
     },
     'Koha::Exceptions::Patron::NotFound' => {
-        isa => 'Koha::Exceptions::Patron',
+        isa         => 'Koha::Exceptions::Patron',
         description => "Patron not found"
     },
 );
@@ -48,9 +48,9 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute') ) {
-            $msg = sprintf("Missing mandatory extended attribute (type=%s)", $self->type );
+            $msg = sprintf( "Missing mandatory extended attribute (type=%s)", $self->type );
         }
     }
 

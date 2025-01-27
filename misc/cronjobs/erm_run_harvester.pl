@@ -119,7 +119,7 @@ my $options = GetOptions(
     'debug'        => \$debug
 );
 
-pod2usage(1) if $help;
+pod2usage(1)               if $help;
 pod2usage( -verbose => 2 ) if $man;
 
 my $udproviders = Koha::ERM::EUsage::UsageDataProviders->search( { active => 1 } );

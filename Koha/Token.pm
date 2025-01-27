@@ -60,9 +60,9 @@ use Koha::Exceptions::Token;
 use Koha::Session;
 
 use base qw(Class::Accessor);
-use constant HMAC_SHA1_LENGTH => 20;
-use constant CSRF_EXPIRY_HOURS => 8; # 8 hours instead of 7 days..
-use constant DEFA_SESSION_ID => 0;
+use constant HMAC_SHA1_LENGTH    => 20;
+use constant CSRF_EXPIRY_HOURS   => 8;             # 8 hours instead of 7 days..
+use constant DEFA_SESSION_ID     => 0;
 use constant DEFA_SESSION_USERID => 'anonymous';
 
 =head1 METHODS
@@ -74,7 +74,7 @@ use constant DEFA_SESSION_USERID => 'anonymous';
 =cut
 
 sub new {
-    my ( $class ) = @_;
+    my ($class) = @_;
     return $class->SUPER::new();
 }
 
@@ -108,12 +108,12 @@ sub new {
 
 sub generate {
     my ( $self, $params ) = @_;
-    if( $params->{type} && $params->{type} eq 'CSRF' ) {
-        $self->{lasttoken} = _gen_csrf( $params );
-    } elsif( $params->{type} && $params->{type} eq 'JWT' ) {
-        $self->{lasttoken} = _gen_jwt( $params );
+    if ( $params->{type} && $params->{type} eq 'CSRF' ) {
+        $self->{lasttoken} = _gen_csrf($params);
+    } elsif ( $params->{type} && $params->{type} eq 'JWT' ) {
+        $self->{lasttoken} = _gen_jwt($params);
     } else {
-        $self->{lasttoken} = _gen_rand( $params );
+        $self->{lasttoken} = _gen_rand($params);
     }
     return $self->{lasttoken};
 }
@@ -129,8 +129,8 @@ sub generate {
 sub generate_csrf {
     my ( $self, $params ) = @_;
     return if !$params->{session_id};
-    $params = _add_default_csrf_params( $params );
-    return $self->generate({ %$params, type => 'CSRF' });
+    $params = _add_default_csrf_params($params);
+    return $self->generate( { %$params, type => 'CSRF' } );
 }
 
 =head2 generate_jwt
@@ -144,8 +144,8 @@ sub generate_csrf {
 sub generate_jwt {
     my ( $self, $params ) = @_;
     return if !$params->{id};
-    $params = _add_default_jwt_params( $params );
-    return $self->generate({ %$params, type => 'JWT' });
+    $params = _add_default_jwt_params($params);
+    return $self->generate( { %$params, type => 'JWT' } );
 }
 
 =head2 check
@@ -161,11 +161,10 @@ sub generate_jwt {
 
 sub check {
     my ( $self, $params ) = @_;
-    if( $params->{type} && $params->{type} eq 'CSRF' ) {
-        return _chk_csrf( $params );
-    }
-    elsif( $params->{type} && $params->{type} eq 'JWT' ) {
-        return _chk_jwt( $params );
+    if ( $params->{type} && $params->{type} eq 'CSRF' ) {
+        return _chk_csrf($params);
+    } elsif ( $params->{type} && $params->{type} eq 'JWT' ) {
+        return _chk_jwt($params);
     }
     return;
 }
@@ -181,13 +180,14 @@ sub check {
 sub check_csrf {
     my ( $self, $params ) = @_;
     return if !$params->{session_id};
-    $params = _add_default_csrf_params( $params );
-    my $c = $self->check({ %$params, type => 'CSRF' });
+    $params = _add_default_csrf_params($params);
+    my $c = $self->check( { %$params, type => 'CSRF' } );
 
-    unless ( $c ) {
+    unless ($c) {
+
         # If the check failed we need to test with the "anonymous" in case the token was generating without the user being logged in yet.
         $params->{id} = DEFA_SESSION_USERID . '_' . $params->{session_id};
-        $c = $self->check({ %$params, type => 'CSRF' });
+        $c = $self->check( { %$params, type => 'CSRF' } );
     }
 
     return $c;
@@ -203,8 +203,8 @@ sub check_csrf {
 
 sub check_jwt {
     my ( $self, $params ) = @_;
-    $params = _add_default_jwt_params( $params );
-    return $self->check({ %$params, type => 'JWT' });
+    $params = _add_default_jwt_params($params);
+    return $self->check( { %$params, type => 'JWT' } );
 }
 
 =head2 decode_jwt
@@ -214,16 +214,17 @@ sub check_jwt {
     Will return the value of the id stored in the token.
 
 =cut
+
 sub decode_jwt {
     my ( $self, $params ) = @_;
-    $params = _add_default_jwt_params( $params );
-    return _decode_jwt( $params );
+    $params = _add_default_jwt_params($params);
+    return _decode_jwt($params);
 }
 
 # --- Internal routines ---
 
 sub _add_default_csrf_params {
-    my ( $params ) = @_;
+    my ($params) = @_;
     $params->{session_id} //= DEFA_SESSION_ID;
 
     my $id;
@@ -240,24 +241,24 @@ sub _add_default_csrf_params {
 
     my $pw = C4::Context->config('pass');
     $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
-    return $params;
+        return $params;
 }
 
 sub _gen_csrf {
 
-# Since WWW::CSRF::generate_csrf_token does not use the NonBlocking
-# parameter of Bytes::Random::Secure, we are passing random bytes from
-# a non blocking source to WWW::CSRF via its Random parameter.
+    # Since WWW::CSRF::generate_csrf_token does not use the NonBlocking
+    # parameter of Bytes::Random::Secure, we are passing random bytes from
+    # a non blocking source to WWW::CSRF via its Random parameter.
 
-    my ( $params ) = @_;
+    my ($params) = @_;
     return if !$params->{id} || !$params->{secret};
 
-
     my $randomizer = Bytes::Random::Secure->new( NonBlocking => 1 );
-        # this is most fundamental: do not use /dev/random since it is
-        # blocking, but use /dev/urandom !
-    my $random = $randomizer->bytes( HMAC_SHA1_LENGTH );
-    my $token = WWW::CSRF::generate_csrf_token(
+
+    # this is most fundamental: do not use /dev/random since it is
+    # blocking, but use /dev/urandom !
+    my $random = $randomizer->bytes(HMAC_SHA1_LENGTH);
+    my $token  = WWW::CSRF::generate_csrf_token(
         $params->{id}, $params->{secret}, { Random => $random },
     );
 
@@ -265,7 +266,7 @@ sub _gen_csrf {
 }
 
 sub _chk_csrf {
-    my ( $params ) = @_;
+    my ($params) = @_;
     return if !$params->{id} || !$params->{secret} || !$params->{token};
 
     my $csrf_status = WWW::CSRF::check_csrf_token(
@@ -278,28 +279,26 @@ sub _chk_csrf {
 }
 
 sub _gen_rand {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $length = $params->{length} || 1;
     $length = 1 unless $length > 0;
-    my $pattern = $params->{pattern} // '.{'.$length.'}'; # pattern overrides length parameter
+    my $pattern = $params->{pattern} // '.{' . $length . '}';    # pattern overrides length parameter
 
     my $token;
-    eval {
-        $token = String::Random::random_regex( $pattern );
-    };
+    eval { $token = String::Random::random_regex($pattern); };
     Koha::Exceptions::Token::BadPattern->throw($@) if $@;
     return $token;
 }
 
 sub _add_default_jwt_params {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $pw = C4::Context->config('pass');
     $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
-    return $params;
+        return $params;
 }
 
 sub _gen_jwt {
-    my ( $params ) = @_;
+    my ($params) = @_;
     return if !$params->{id} || !$params->{secret};
 
     return Mojo::JWT->new(
@@ -309,19 +308,19 @@ sub _gen_jwt {
 }
 
 sub _chk_jwt {
-    my ( $params ) = @_;
+    my ($params) = @_;
     return if !$params->{id} || !$params->{secret} || !$params->{token};
 
-    my $claims = Mojo::JWT->new(secret => $params->{secret})->decode($params->{token});
+    my $claims = Mojo::JWT->new( secret => $params->{secret} )->decode( $params->{token} );
 
     return 1 if exists $claims->{id} && $claims->{id} eq $params->{id};
 }
 
 sub _decode_jwt {
-    my ( $params ) = @_;
+    my ($params) = @_;
     return if !$params->{token} || !$params->{secret};
 
-    my $claims = Mojo::JWT->new(secret => $params->{secret})->decode($params->{token});
+    my $claims = Mojo::JWT->new( secret => $params->{secret} )->decode( $params->{token} );
 
     return $claims->{id};
 }

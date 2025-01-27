@@ -63,8 +63,7 @@ sub get_config {
 
     return try {
         return decode_json( Encode::encode_utf8( $self->config ) );
-    }
-    catch {
+    } catch {
         Koha::Exceptions::Object::BadValue->throw("Error reading JSON data: $_");
     };
 }
@@ -95,7 +94,7 @@ This method stores the passed config in JSON format.
 =cut
 
 sub set_config {
-    my ($self, $config) = @_;
+    my ( $self, $config ) = @_;
 
     my @mandatory = $self->mandatory_config_attributes;
 
@@ -128,8 +127,7 @@ sub get_mapping {
 
     return try {
         return decode_json( Encode::encode_utf8( $self->mapping ) );
-    }
-    catch {
+    } catch {
         Koha::Exceptions::Object::BadValue->throw("Error reading JSON data: $_");
     };
 }
@@ -143,13 +141,12 @@ This method stores the passed mappings in JSON format.
 =cut
 
 sub set_mapping {
-    my ($self, $mapping) = @_;
+    my ( $self, $mapping ) = @_;
 
     try {
-        my $encoded_mapping = encode_json( $mapping );
-        $self->mapping( $encoded_mapping );
-    }
-    catch {
+        my $encoded_mapping = encode_json($mapping);
+        $self->mapping($encoded_mapping);
+    } catch {
         Koha::Exceptions::Object::BadValue->throw("Error serializing data into JSON: $_");
     };
 
@@ -165,12 +162,12 @@ Returns a new instance of the object, with the right class.
 =cut
 
 sub upgrade_class {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $protocol = $self->protocol;
 
     my $class = $self->protocol_to_class_mapping->{$protocol};
 
-    Koha::Exception->throw($protocol . ' is not a valid protocol')
+    Koha::Exception->throw( $protocol . ' is not a valid protocol' )
         unless $class;
 
     eval "require $class";

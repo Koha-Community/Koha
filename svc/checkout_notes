@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use JSON qw( to_json );
 use CGI;
-use C4::Auth qw ( check_cookie_auth );
+use C4::Auth   qw ( check_cookie_auth );
 use C4::Output qw( is_ajax output_with_http_headers );
 use Koha::Checkouts;
 
@@ -34,22 +34,22 @@ svc/checkout_notes - Web service for managing patron notes set on issues
 =cut
 
 # AJAX requests
-my $is_ajax = is_ajax();
-my $query = CGI->new;
-my ( $auth_status ) = check_cookie_auth( $query->cookie('CGISESSID'), { circulate => 'manage_checkout_notes' } );
+my $is_ajax       = is_ajax();
+my $query         = CGI->new;
+my ($auth_status) = check_cookie_auth( $query->cookie('CGISESSID'), { circulate => 'manage_checkout_notes' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
 my $op = $query->param('op');
 if ($is_ajax) {
     my $issue_id = $query->param('issue_id');
-    my $issue = Koha::Checkouts->find($issue_id);
-    if ($op eq 'cud-seen'){
-        $issue->set({ noteseen => 1 })->store;
-    } elsif ($op eq 'cud-notseen'){
-        $issue->set({ noteseen => 0 })->store;
+    my $issue    = Koha::Checkouts->find($issue_id);
+    if ( $op eq 'cud-seen' ) {
+        $issue->set( { noteseen => 1 } )->store;
+    } elsif ( $op eq 'cud-notseen' ) {
+        $issue->set( { noteseen => 0 } )->store;
     }
-    my $json = to_json ( { seen => $issue->noteseen } );
+    my $json = to_json( { seen => $issue->noteseen } );
     output_with_http_headers $query, undef, $json, 'js';
     exit;
 }

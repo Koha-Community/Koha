@@ -6,11 +6,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Patron clubs") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Patron clubs") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 
 </head>
@@ -32,170 +33,164 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
+    <h1>Patron clubs</h1>
 
-                <h1>Patron clubs</h1>
+    [% IF club_template %]
+        <div class="alert alert-info">
+            [% IF stored == 'updated' %]
+                <p>Club template <em>[% club_template.name | html %]</em> was updated.</p>
+            [% ELSE %]
+                <p>Club template <em>[% club_template.name | html %]</em> was saved.</p>
+            [% END %]
+        </div>
+    [% ELSIF club %]
+        <div class="alert alert-info">
+            [% IF stored == 'updated' %]
+                <p>Club <em>[% club.name | html %]</em> was updated.</p>
+            [% ELSE %]
+                <p>Club <em>[% club.name | html %]</em> was saved.</p>
+            [% END %]
+        </div>
+    [% END %]
 
-                [% IF club_template %]
-                    <div class="alert alert-info">
-                        [% IF stored == 'updated' %]
-                            <p>Club template <em>[% club_template.name | html %]</em> was updated.</p>
-                        [% ELSE %]
-                            <p>Club template <em>[% club_template.name | html %]</em> was saved.</p>
-                        [% END %]
-                    </div>
-                [% ELSIF club %]
-                    <div class="alert alert-info">
-                        [% IF stored == 'updated' %]
-                            <p>Club <em>[% club.name | html %]</em> was updated.</p>
-                        [% ELSE %]
-                            <p>Club <em>[% club.name | html %]</em> was saved.</p>
-                        [% END %]
-                    </div>
-                [% END %]
+    <h3>Club templates</h3>
 
-                <h3>Club templates</h3>
+    [% IF CAN_user_clubs_edit_templates %]
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <a class="btn btn-default" href="templates-add-modify.pl"><i class="fa fa-plus"></i> New club template</a>
+            </div>
+        </div>
+    [% END %]
 
-                [% IF CAN_user_clubs_edit_templates %]
-                    <div class="btn-toolbar">
-                        <div class="btn-group">
-                            <a class="btn btn-default" href="templates-add-modify.pl"><i class="fa fa-plus"></i> New club template</a>
-                        </div>
-                    </div>
-                [% END %]
-
-                [% IF club_templates.count %]
-                    <div class="page-section">
-                        <table id="club-templates-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Public enrollment</th>
-                                    <th>Email required</th>
-                                    <th>Library</th>
-                                    <th class="noExport">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH t IN club_templates %]
-                                    <tr>
-                                        <td>[% t.name | html %]</td>
-                                        <td>[% t.description | html %]</td>
-                                        <td>
-                                            [% IF t.is_enrollable_from_opac %]
-                                                <span>Yes</span>
-                                            [% ELSE %]
-                                                <span>No</span>
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% IF t.is_email_required %]
-                                                <span>Yes</span>
-                                            [% ELSE %]
-                                                <span>No</span>
-                                            [% END %]
-                                        </td>
-                                        <td>[% Branches.GetName( t.branchcode ) | html %]</td>
-                                        <td class="actions">
-                                            [% IF CAN_user_clubs_edit_templates %]
-                                                <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]">
-                                                    <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
-                                                </a>
-                                                <a class="btn btn-xs btn-default delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]">
-                                                    <i class="fa fa-trash-can"></i> Delete
-                                                </a>
-                                            [% END %]
-                                        </td>
-                                    </tr>
+    [% IF club_templates.count %]
+        <div class="page-section">
+            <table id="club-templates-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Public enrollment</th>
+                        <th>Email required</th>
+                        <th>Library</th>
+                        <th class="noExport">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH t IN club_templates %]
+                        <tr>
+                            <td>[% t.name | html %]</td>
+                            <td>[% t.description | html %]</td>
+                            <td>
+                                [% IF t.is_enrollable_from_opac %]
+                                    <span>Yes</span>
+                                [% ELSE %]
+                                    <span>No</span>
                                 [% END %]
-                            </tbody>
-                        </table>
-                    </div> <!-- /.page-section -->
-                [% ELSE %]
-                    <div class="alert alert-info">No club templates defined.</div>
-                [% END %]
-
-                <h3>Clubs</h3>
-
-                [% IF CAN_user_clubs_edit_clubs %]
-                    <div class="btn-toolbar">
-                        <div class="btn-group">
-                            [% IF club_templates.count %]
-                                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New club</button>
-                            [% ELSE %]
-                                <button disabled="disabled" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New club</button>
-                            [% END %]
-                            <ul class="dropdown-menu">
-                                [% FOREACH t IN club_templates %]
-                                    <li><a class="dropdown-item" href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | uri %]">[% t.name | html %]</a></li>
+                            </td>
+                            <td>
+                                [% IF t.is_email_required %]
+                                    <span>Yes</span>
+                                [% ELSE %]
+                                    <span>No</span>
                                 [% END %]
-                            </ul>
-                        </div>
-                    </div>
-                [% END %]
-
-                [% IF clubs.count %]
-                    <div class="page-section">
-                        [% INCLUDE 'clubs-table.inc' %]
-                    </div> <!-- /.page-section -->
-                [% ELSE %]
-                    [% IF club_templates.count %]
-                        <div class="alert alert-info">No clubs defined.</div>
-                    [% ELSE %]
-                        <div class="alert alert-info">No clubs defined. A club template must be defined before a club can be defined.</div>
+                            </td>
+                            <td>[% Branches.GetName( t.branchcode ) | html %]</td>
+                            <td class="actions">
+                                [% IF CAN_user_clubs_edit_templates %]
+                                    <a class="btn btn-xs btn-default" style="white-space:nowrap" href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </a>
+                                    <a class="btn btn-xs btn-default delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]"> <i class="fa fa-trash-can"></i> Delete </a>
+                                [% END %]
+                            </td>
+                        </tr>
                     [% END %]
-                [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <div class="alert alert-info">No club templates defined.</div>
+    [% END %]
 
+    <h3>Clubs</h3>
+
+    [% IF CAN_user_clubs_edit_clubs %]
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                [% IF club_templates.count %]
+                    <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New club</button>
+                [% ELSE %]
+                    <button disabled="disabled" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New club</button>
+                [% END %]
+                <ul class="dropdown-menu">
+                    [% FOREACH t IN club_templates %]
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | uri %]">[% t.name | html %]</a></li>
+                    [% END %]
+                </ul>
+            </div>
+        </div>
+    [% END %]
+
+    [% IF clubs.count %]
+        <div class="page-section"> [% INCLUDE 'clubs-table.inc' %] </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        [% IF club_templates.count %]
+            <div class="alert alert-info">No clubs defined.</div>
+        [% ELSE %]
+            <div class="alert alert-info">No clubs defined. A club template must be defined before a club can be defined.</div>
+        [% END %]
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
-        $(document).ready(function() {
-            tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "pagingType": "full",
-                "dom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ]
-            } ));
+        $(document).ready(function () {
+            tTable = $("#club-templates-table").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    pagingType: "full",
+                    dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                })
+            );
 
-            cTable = $('#clubs-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "pagingType": "full",
-                "dom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ]
-            } ));
+            cTable = $("#clubs-table").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    pagingType: "full",
+                    dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                })
+            );
 
-            $("body").on("click", ".delete_club", function(e){
+            $("body").on("click", ".delete_club", function (e) {
                 e.preventDefault();
                 var club_id = $(this).data("id");
                 var club_name = $(this).data("name");
-                ConfirmDeleteClub( club_id, club_name );
+                ConfirmDeleteClub(club_id, club_name);
             });
 
-            $("body").on("click", ".delete_template", function(e){
+            $("body").on("click", ".delete_template", function (e) {
                 e.preventDefault();
                 var template_id = $(this).data("id");
                 var template_name = $(this).data("name");
-                ConfirmDeleteTemplate( template_id, template_name );
+                ConfirmDeleteTemplate(template_id, template_name);
             });
 
-            $("body").on("click", ".club_hold_search", function(e){
+            $("body").on("click", ".club_hold_search", function (e) {
                 e.preventDefault;
                 var club_id = $(this).data("id");
-                SearchToHold( club_id );
+                SearchToHold(club_id);
             });
         });
 
-        function ConfirmDeleteTemplate( id, name ) {
-            if ( confirm( _("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments" ).format(name) ) ) {
+        function ConfirmDeleteTemplate(id, name) {
+            if (confirm(_("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments").format(name))) {
                 const client = APIClient.club;
                 client.templates.delete(id).then(
                     success => {
-                        if ( success.success ) {
+                        if (success.success) {
                             location.reload();
                         } else {
                             alert(_("Unable to delete template!"));
@@ -209,12 +204,12 @@
             }
         }
 
-        function ConfirmDeleteClub( id, name ) {
-            if ( confirm( _("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club." ).format(name) ) ) {
+        function ConfirmDeleteClub(id, name) {
+            if (confirm(_("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club.").format(name))) {
                 const client = APIClient.club;
                 client.clubs.delete(id).then(
                     success => {
-                        if ( success.success ) {
+                        if (success.success) {
                             location.reload();
                         } else {
                             alert(_("Unable to delete club!"));
@@ -230,9 +225,9 @@
 
         function SearchToHold(club_id) {
             var date = new Date();
-            date.setTime(date.getTime() + (10 * 60 * 1000));
-            Cookies.set("holdforclub", club_id, { path: "/", expires: date, sameSite: 'Lax'  });
-            location.href="/cgi-bin/koha/catalogue/search.pl";
+            date.setTime(date.getTime() + 10 * 60 * 1000);
+            Cookies.set("holdforclub", club_id, { path: "/", expires: date, sameSite: "Lax" });
+            location.href = "/cgi-bin/koha/catalogue/search.pl";
         }
     </script>
 [% END %]

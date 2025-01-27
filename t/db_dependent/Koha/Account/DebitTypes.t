@@ -55,8 +55,7 @@ my $new_debit_type_2 = Koha::Account::DebitType->new(
 my $retrieved_debit_types_all = Koha::Account::DebitTypes->search();
 try {
     $retrieved_debit_types_all->delete;
-}
-catch {
+} catch {
     ok(
         $_->isa('Koha::Exceptions::CannotDeleteDefault'),
         'A system debit type cannot be deleted via the set'
@@ -68,14 +67,13 @@ is(
     'System debit types cannot be deleted as a set'
 );
 
-my $retrieved_debit_types_limited = Koha::Account::DebitTypes->search(
-    {
-        code => { 'in' => [ $new_debit_type_1->code, $new_debit_type_2->code ] }
-    }
-);
+my $retrieved_debit_types_limited =
+    Koha::Account::DebitTypes->search( { code => { 'in' => [ $new_debit_type_1->code, $new_debit_type_2->code ] } } );
 $retrieved_debit_types_limited->delete;
-is( Koha::Account::DebitTypes->search->count,
-    $number_of_debit_types, 'Non-system debit types can be deleted as a set' );
+is(
+    Koha::Account::DebitTypes->search->count,
+    $number_of_debit_types, 'Non-system debit types can be deleted as a set'
+);
 
 $schema->storage->txn_rollback;
 

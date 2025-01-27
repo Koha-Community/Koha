@@ -8,7 +8,7 @@ use English qw(-no_match_vars);
 
 eval { require Test::Perl::Critic; };
 
-if ( $EVAL_ERROR ) {
+if ($EVAL_ERROR) {
     my $msg = 'Test::Perl::Critic required to criticise code,';
     plan( skip_all => $msg );
 }

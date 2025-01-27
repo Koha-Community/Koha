@@ -17,7 +17,6 @@ package Koha::Account::Lines;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Account::Line;
 
@@ -44,18 +43,18 @@ empty it returns 0.
 sub total_outstanding {
     my ($self) = @_;
 
-    my $me = $self->_resultset()->current_source_alias . ".";
+    my $me    = $self->_resultset()->current_source_alias . ".";
     my $lines = $self->search(
         {},
         {
-            select => [ { sum => $me.'amountoutstanding' } ],
+            select => [ { sum => $me . 'amountoutstanding' } ],
             as     => ['total_amountoutstanding'],
         }
     );
 
     return $lines->count
-      ? $lines->next->get_column('total_amountoutstanding') + 0
-      : 0;
+        ? $lines->next->get_column('total_amountoutstanding') + 0
+        : 0;
 }
 
 =head3 total
@@ -72,11 +71,11 @@ sub total {
     my ( $self, $conditions ) = @_;
 
     $conditions //= {};
-    my $me = $self->_resultset()->current_source_alias . ".";
+    my $me    = $self->_resultset()->current_source_alias . ".";
     my $lines = $self->search(
         $conditions,
         {
-            select => [ { sum => $me.'amount' } ],
+            select => [ { sum => $me . 'amount' } ],
             as     => ['total']
         }
     );
@@ -96,15 +95,15 @@ empty it returns 0.
 sub credits_total {
     my ( $self, $conditions ) = @_;
 
-    my $me = $self->_resultset()->current_source_alias . ".";
-    my $local_conditions = { $me.'amount' => { '<' => 0 } };
+    my $me               = $self->_resultset()->current_source_alias . ".";
+    my $local_conditions = { $me . 'amount' => { '<' => 0 } };
     $conditions //= {};
     my $merged_conditions = { %{$conditions}, %{$local_conditions} };
 
     my $lines = $self->search(
         $merged_conditions,
         {
-            select => [ { sum => $me.'amount' } ],
+            select => [ { sum => $me . 'amount' } ],
             as     => ['total']
         }
     );
@@ -124,15 +123,15 @@ empty it returns 0.
 sub debits_total {
     my ( $self, $conditions ) = @_;
 
-    my $me = $self->_resultset()->current_source_alias . ".";
-    my $local_conditions = { $me.'amount' => { '>' => 0 } };
+    my $me               = $self->_resultset()->current_source_alias . ".";
+    my $local_conditions = { $me . 'amount' => { '>' => 0 } };
     $conditions //= {};
     my $merged_conditions = { %{$conditions}, %{$local_conditions} };
 
     my $lines = $self->search(
         $merged_conditions,
         {
-            select => [ { sum => $me.'amount' } ],
+            select => [ { sum => $me . 'amount' } ],
             as     => ['total']
         }
     );

@@ -62,6 +62,7 @@ if ( $op eq 'cud-batchedit' ) {
         internalnotes   => scalar $cgi->param('internalnotes'),
         serialsadditems => scalar $cgi->param('serialsadditems'),
     );
+
     # If we convert a blank string we get todays date, we should only convert enddate if it is not blank
     $params{'enddate'} = dt_from_string( scalar $cgi->param('enddate') ) if $cgi->param('enddate');
 
@@ -87,7 +88,7 @@ if ( $op eq 'cud-batchedit' ) {
             }
         }
 
-        $subscription->add_additional_fields($field_values, 'subscription');
+        $subscription->add_additional_fields( $field_values, 'subscription' );
 
         $subscription->store;
     }

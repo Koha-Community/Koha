@@ -6,7 +6,7 @@ use C4::Auth qw( get_session );
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
-use JSON qw( decode_json encode_json );
+use JSON        qw( decode_json encode_json );
 use URI::Escape qw( uri_escape uri_unescape );
 
 sub add {
@@ -30,30 +30,33 @@ sub add {
         )
     };
     my $sth = $dbh->prepare($query);
-    $sth->execute( $userid, $sessionid, $query_desc, $query_cgi, $type,
-        $total, ( $time ? $time : () ) );
+    $sth->execute(
+        $userid, $sessionid, $query_desc, $query_cgi, $type,
+        $total, ( $time ? $time : () )
+    );
 }
 
 sub add_to_session {
-    my ($params) = @_;
-    my $cgi = $params->{cgi};
+    my ($params)   = @_;
+    my $cgi        = $params->{cgi};
     my $query_desc = $params->{query_desc} || "unknown";
-    my $query_cgi  = $params->{query_cgi} || "unknown";
+    my $query_cgi  = $params->{query_cgi}  || "unknown";
     my $total      = $params->{total};
-    my $type       = $params->{type}                              || 'biblio';
+    my $type       = $params->{type} || 'biblio';
 
     # To a cookie (the user is not logged in)
     my $now = dt_from_string;
-    my $id = $now->year . $now->month . $now->day . $now->hour . $now->minute . $now->second . int(rand(100));
+    my $id  = $now->year . $now->month . $now->day . $now->hour . $now->minute . $now->second . int( rand(100) );
     my @recent_searches = get_from_session( { cgi => $cgi } );
     push @recent_searches, {
         query_desc => $query_desc,
         query_cgi  => $query_cgi,
         total      => "$total",
         type       => $type,
+
         # FIXME We shouldn't store the formatted date
-        time       => output_pref( { dt => $now, dateformat => 'iso', timeformat => '24hr' } ),
-        id         => $id,
+        time => output_pref( { dt => $now, dateformat => 'iso', timeformat => '24hr' } ),
+        id   => $id,
     };
 
     shift @recent_searches if ( @recent_searches > 15 );
@@ -69,8 +72,8 @@ sub delete {
     my $previous  = $params->{previous} || 0;
     my $interval  = $params->{interval} || 0;
 
-    unless ( ref( $id ) ) {
-        $id = $id ? [ $id ] : [];
+    unless ( ref($id) ) {
+        $id = $id ? [$id] : [];
     }
 
     unless ( $userid or @$id or $interval ) {
@@ -93,13 +96,13 @@ sub delete {
 
     if ($sessionid) {
         $query .=
-          $previous
-          ? q{ AND sessionid != ?}
-          : q{ AND sessionid = ?};
+            $previous
+            ? q{ AND sessionid != ?}
+            : q{ AND sessionid = ?};
     }
 
     $query .= q{ AND type = ?}
-      if $type;
+        if $type;
 
     # FIXME DATE_SUB is a Mysql-ism. Postgres uses: datefield - INTERVAL '6 months'
     $query .= q{ AND time < DATE_SUB( NOW(), INTERVAL ? DAY )}
@@ -107,8 +110,8 @@ sub delete {
 
     $dbh->do(
         $query, {},
-        ( @$id ? ( @$id ) : () ),
-        ( $userid ? $userid : () ),
+        ( @$id       ? (@$id)     : () ),
+        ( $userid    ? $userid    : () ),
         ( $sessionid ? $sessionid : () ),
         ( $type      ? $type      : () ),
         ( $interval  ? $interval  : () ),
@@ -122,16 +125,16 @@ sub delete_from_cookie {
 
     return unless $cookie;
 
-    unless ( ref( $id ) ) {
-        $id = $id ? [ $id ] : [];
+    unless ( ref($id) ) {
+        $id = $id ? [$id] : [];
     }
     return unless @$id;
 
     my @searches;
-    if ( $cookie ){
-        $cookie = uri_unescape( $cookie );
-        if (decode_json( $cookie )) {
-            @searches = @{decode_json( $cookie )}
+    if ($cookie) {
+        $cookie = uri_unescape($cookie);
+        if ( decode_json($cookie) ) {
+            @searches = @{ decode_json($cookie) };
         }
     }
 
@@ -152,8 +155,8 @@ sub get {
     my $type      = $params->{type};
     my $previous  = $params->{previous};
 
-    unless ( ref( $id ) ) {
-        $id = $id ? [ $id ] : [];
+    unless ( ref($id) ) {
+        $id = $id ? [$id] : [];
     }
 
     unless ( $userid or @$id ) {
@@ -176,19 +179,19 @@ sub get {
 
     if ($sessionid) {
         $query .=
-          $previous
-          ? q{ AND sessionid != ?}
-          : q{ AND sessionid = ?};
+            $previous
+            ? q{ AND sessionid != ?}
+            : q{ AND sessionid = ?};
     }
 
     $query .= q{ AND type = ?}
-      if $type;
+        if $type;
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        ( @$id ? ( @$id ) : () ),
-        ( $userid ? $userid : () ),
+        ( @$id       ? (@$id)     : () ),
+        ( $userid    ? $userid    : () ),
         ( $sessionid ? $sessionid : () ),
         ( $type      ? $type      : () )
     );
@@ -203,7 +206,7 @@ sub get_from_session {
     my $session = C4::Auth::get_session($sessionID);
     return () unless $session and $session->param('search_history');
     my $obj =
-      eval { decode_json( uri_unescape( $session->param('search_history') ) ) };
+        eval { decode_json( uri_unescape( $session->param('search_history') ) ) };
     return () unless defined $obj;
     return () unless ref $obj eq 'ARRAY';
     return @{$obj};
@@ -217,8 +220,10 @@ sub set_to_session {
     return () unless $sessionID;
     my $session = C4::Auth::get_session($sessionID);
     return () unless $session;
-    $session->param( 'search_history',
-        uri_escape( encode_json($search_history) ) );
+    $session->param(
+        'search_history',
+        uri_escape( encode_json($search_history) )
+    );
     $session->flush;
 }
 

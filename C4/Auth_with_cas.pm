@@ -29,26 +29,27 @@ use URI::Escape;
 
 use Koha::Logger;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
 
 BEGIN {
     require Exporter;
-    @ISA   = qw(Exporter);
-    @EXPORT_OK = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
+    @ISA = qw(Exporter);
+    @EXPORT_OK =
+        qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
 }
 my $defaultcasserver;
 my $casservers;
 my $yamlauthfile = C4::Context->config('intranetdir') . "/C4/Auth_cas_servers.yaml";
 
-
 # If there's a configuration for multiple cas servers, then we get it
-if (multipleAuth()) {
-    ($defaultcasserver, $casservers) = YAML::XS::LoadFile($yamlauthfile);
+if ( multipleAuth() ) {
+    ( $defaultcasserver, $casservers ) = YAML::XS::LoadFile($yamlauthfile);
     $defaultcasserver = $defaultcasserver->{'default'};
 } else {
-# Else, we fall back to casServerUrl syspref
+
+    # Else, we fall back to casServerUrl syspref
     $defaultcasserver = 'default';
-    $casservers = { 'default' => C4::Context->preference('casServerUrl') };
+    $casservers       = { 'default' => C4::Context->preference('casServerUrl') };
 }
 
 =head1 Subroutines
@@ -57,12 +58,12 @@ if (multipleAuth()) {
 
 # Is there a configuration file for multiple cas servers?
 sub multipleAuth {
-    return (-e qq($yamlauthfile));
+    return ( -e qq($yamlauthfile) );
 }
 
 # Returns configured CAS servers' list if multiple authentication is enabled
 sub getMultipleAuth {
-   return $casservers; 
+    return $casservers;
 }
 
 # Logout from CAS
@@ -76,17 +77,16 @@ sub logout_cas {
 
     my $logout_url = $cas->logout_url( url => $uri );
     $logout_url =~ s/url=/service=/
-      if C4::Context->preference('casServerVersion') eq '3';
+        if C4::Context->preference('casServerVersion') eq '3';
 
     print $query->redirect($logout_url);
 }
 
-
 # Login to CAS
 sub login_cas {
-    my ($query, $type) = @_;
-    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
-    print $query->redirect( $cas->login_url($uri));
+    my ( $query, $type ) = @_;
+    my ( $cas,   $uri )  = _get_cas_and_service( $query, undef, $type );
+    print $query->redirect( $cas->login_url($uri) );
 }
 
 # Returns CAS login URL with callback to the requesting URL
@@ -99,15 +99,15 @@ sub login_cas_url {
 # Checks for password correctness
 # In our case : is there a ticket, is it valid and does it match one of our users ?
 sub checkpw_cas {
-    my ($ticket, $query, $type) = @_;
+    my ( $ticket, $query, $type ) = @_;
     my $retnumber;
-    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
+    my ( $cas, $uri ) = _get_cas_and_service( $query, undef, $type );
 
     # If we got a ticket
     if ($ticket) {
 
         # We try to validate it
-        my $val = $cas->service_validate($uri, $ticket );
+        my $val = $cas->service_validate( $uri, $ticket );
 
         # If it's valid
         if ( $val->is_success() ) {
@@ -133,9 +133,9 @@ sub checkpw_cas {
         } else {
             my $logger = Koha::Logger->get;
             $logger->debug("Problem when validating ticket : $ticket");
-            $logger->debug("Authen::CAS::Client::Response::Error: " . $val->error()) if $val->is_error();
-            $logger->debug("Authen::CAS::Client::Response::Failure: " . $val->message()) if $val->is_failure();
-            $logger->debug(Data::Dumper::Dumper($@)) if $val->is_error() or $val->is_failure();
+            $logger->debug( "Authen::CAS::Client::Response::Error: " . $val->error() )     if $val->is_error();
+            $logger->debug( "Authen::CAS::Client::Response::Failure: " . $val->message() ) if $val->is_failure();
+            $logger->debug( Data::Dumper::Dumper($@) ) if $val->is_error() or $val->is_failure();
             return 0;
         }
     }
@@ -144,9 +144,9 @@ sub checkpw_cas {
 
 # Proxy CAS auth
 sub check_api_auth_cas {
-    my ($PT, $query, $type) = @_;
+    my ( $PT, $query, $type ) = @_;
     my $retnumber;
-    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
+    my ( $cas, $uri ) = _get_cas_and_service( $query, undef, $type );
 
     # If we have a Proxy Ticket
     if ($PT) {
@@ -193,11 +193,11 @@ sub _get_cas_and_service {
     my $key   = shift;    # optional
     my $type  = shift;
 
-    my $uri = _url_with_get_params($query, $type);
+    my $uri = _url_with_get_params( $query, $type );
 
     my $casparam = $defaultcasserver;
     $casparam = $query->param('cas') if defined $query->param('cas');
-    $casparam = $key if defined $key;
+    $casparam = $key                 if defined $key;
     my $cas = Authen::CAS::Client->new( $casservers->{$casparam} );
 
     return ( $cas, $uri );
@@ -207,23 +207,24 @@ sub _get_cas_and_service {
 # This method replaces $query->url() which will give both GET and POST params
 sub _url_with_get_params {
     my $query = shift;
-    my $type = shift;
+    my $type  = shift;
 
     my $uri_base_part =
-      ( $type eq 'opac' )
-      ? C4::Context->preference('OPACBaseURL')
-      : C4::Context->preference('staffClientBaseURL');
+        ( $type eq 'opac' )
+        ? C4::Context->preference('OPACBaseURL')
+        : C4::Context->preference('staffClientBaseURL');
     $uri_base_part .= get_script_name();
 
     my $uri_params_part = '';
     foreach my $param ( $query->url_param() ) {
+
         # url_param() always returns parameters that were deleted by delete()
         # This additional check ensure that parameter was not deleted.
         my $uriPiece = $query->param($param);
         if ($uriPiece) {
             $uri_params_part .= '&' if $uri_params_part;
             $uri_params_part .= $param . '=';
-            $uri_params_part .= URI::Escape::uri_escape( $uriPiece );
+            $uri_params_part .= URI::Escape::uri_escape($uriPiece);
         }
     }
     $uri_base_part .= '?' if $uri_params_part;
@@ -238,14 +239,16 @@ sub _url_with_get_params {
 =cut
 
 sub logout_if_required {
-    my ( $query ) = @_;
+    my ($query) = @_;
+
     # Check we havent been hit by a logout call
     my $xml = $query->param('logoutRequest');
     return 0 unless $xml;
 
-    my $dom = XML::LibXML->load_xml(string => $xml);
+    my $dom = XML::LibXML->load_xml( string => $xml );
     my $ticket;
-    foreach my $node ($dom->findnodes('/samlp:LogoutRequest')){
+    foreach my $node ( $dom->findnodes('/samlp:LogoutRequest') ) {
+
         # We got a cas single logout request from a cas server;
         $ticket = $node->findvalue('./samlp:SessionIndex');
     }
@@ -253,8 +256,8 @@ sub logout_if_required {
     return 0 unless $ticket;
 
     # We've been called as part of the single logout destroy the session associated with the cas ticket
-    my $params = C4::Auth::_get_session_params();
-    my $success = CGI::Session->find( $params->{dsn}, sub {delete_cas_session(@_, $ticket)}, $params->{dsn_args} );
+    my $params  = C4::Auth::_get_session_params();
+    my $success = CGI::Session->find( $params->{dsn}, sub { delete_cas_session( @_, $ticket ) }, $params->{dsn_args} );
 
     print $query->header;
     exit;
@@ -262,8 +265,8 @@ sub logout_if_required {
 
 sub delete_cas_session {
     my $session = shift;
-    my $ticket = shift;
-    if ($session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
+    my $ticket  = shift;
+    if ( $session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
         $session->delete;
         $session->flush;
     }

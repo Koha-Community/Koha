@@ -2,7 +2,8 @@
     [% SWITCH blocking_error %]
     [% CASE 'unknown_patron' %]
         <div class="alert alert-info">Patron not found. <a href="/cgi-bin/koha/members/members-home.pl">Return to search</a></div>
-    [% CASE 'cannot_see_patron_infos' %]This account cannot view requested patron information.
+    [% CASE 'cannot_see_patron_infos' %]
+        This account cannot view requested patron information.
     [% CASE 'unknown_biblio' %]
         <div class="alert alert-info">Bibliographic record not found.</div>
     [% CASE 'unknown_biblionumber' %]
@@ -34,5 +35,6 @@
     [% END %]
 
     [% INCLUDE 'intranet-bottom.inc' %]
-    [% STOP %] [%# Will stop gracefully without processing any more of the template document.%]
+    [% STOP %]
+    [%# Will stop gracefully without processing any more of the template document.%]
 [% END %]

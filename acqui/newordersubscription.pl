@@ -18,11 +18,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use C4::Acquisition qw( GetBasket );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth        qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output  qw( output_html_with_http_headers );
 use C4::Serials qw( SearchSubscriptions subscriptionCurrentlyOnOrder check_routing );
 
 use Koha::Acquisition::Booksellers;
@@ -42,27 +42,30 @@ my $basketno     = $query->param('basketno');
 my $booksellerid = $query->param('booksellerid');
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
-    {   template_name   => "acqui/newordersubscription.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { acquisition => 'order_manage' },
+    {
+        template_name => "acqui/newordersubscription.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
     }
 );
 
 my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
 
 my @subscriptions;
 if ($searched) {
-    @subscriptions = SearchSubscriptions({
-        title => $title,
-        issn => $ISSN,
-        ean => $EAN,
-        publisher => $publisher,
-        bookseller => $supplier,
-        branch => $branch
-    });
+    @subscriptions = SearchSubscriptions(
+        {
+            title      => $title,
+            issn       => $ISSN,
+            ean        => $EAN,
+            publisher  => $publisher,
+            bookseller => $supplier,
+            branch     => $branch
+        }
+    );
 }
 
 foreach my $sub (@subscriptions) {

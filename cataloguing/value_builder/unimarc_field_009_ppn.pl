@@ -23,13 +23,13 @@ use Modern::Perl;
 use LWP::Simple qw();
 use LWP::UserAgent;
 use JSON;
-use C4::Auth qw ( get_template_and_user );
+use C4::Auth   qw ( get_template_and_user );
 use C4::Output qw ( output_html_with_http_headers );
 
 my $res;
 my $builder = sub {
-    my ( $params ) = @_;
-    my $res= qq|
+    my ($params) = @_;
+    my $res = qq|
         <script>
             jQuery(document).ready(function () {
                 const input = document.getElementById('$params->{id}');
@@ -80,34 +80,36 @@ my $builder = sub {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $isbn = $input->param('isbn');
-    my $issn = $input->param('issn');
-    my $ean = $input->param('ean');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $isbn     = $input->param('isbn');
+    my $issn     = $input->param('issn');
+    my $ean      = $input->param('ean');
 
-    my ($template, $loggedinuser, $cookie) = get_template_and_user({
-        template_name   => "cataloguing/value_builder/ajax.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {editcatalogue => '*'},
-    });
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/ajax.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
     my $url;
-    if ( $isbn ) {
+    if ($isbn) {
         $url = "https://www.sudoc.fr/services/isbn2ppn/$isbn&format=text/json";
-    } elsif ( $issn ) {
+    } elsif ($issn) {
         $url = "https://www.sudoc.fr/services/issn2ppn/$issn&format=text/json";
-    } elsif ( $ean ) {
+    } elsif ($ean) {
         $url = "https://www.sudoc.fr/services/ean2ppn/$ean&format=text/json";
     }
 
     if ($url) {
         my $json = LWP::Simple::get($url);
-        if (defined $json) {
+        if ( defined $json ) {
             my $response = JSON->new->utf8->decode($json);
-            my $result = $response->{sudoc}->{query}->{result};
-            my $ppn = ref $result eq 'ARRAY' ? $result->[0]->{ppn} : $result->{ppn};
+            my $result   = $response->{sudoc}->{query}->{result};
+            my $ppn      = ref $result eq 'ARRAY' ? $result->[0]->{ppn} : $result->{ppn};
             $template->param( return => $ppn );
         }
     }

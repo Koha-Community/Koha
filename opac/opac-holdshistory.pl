@@ -15,12 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Patrons;
@@ -38,9 +37,9 @@ unless ( C4::Context->preference('OPACHoldsHistory') ) {
 
 my ( $template, $patron_id, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-holdshistory.tt",
-        query           => $query,
-        type            => "opac"
+        template_name => "opac-holdshistory.tt",
+        query         => $query,
+        type          => "opac"
     }
 );
 
@@ -50,38 +49,34 @@ my $sort = $query->param('sort');
 $sort = 'reservedate' unless $sort;
 
 my $unlimit = $query->param('unlimit');
-my $ops = {
-    prefetch => ['biblio', 'item'],
+my $ops     = {
+    prefetch => [ 'biblio', 'item' ],
     order_by => $sort
 };
 
 $ops->{rows} = 50 unless $unlimit;
 
-my $holds = Koha::Holds->search({
-    borrowernumber => $patron_id
-}, $ops);
+my $holds = Koha::Holds->search( { borrowernumber => $patron_id }, $ops );
 
-my $old_holds = Koha::Old::Holds->search({
-    borrowernumber => $patron_id
-}, $ops);
+my $old_holds = Koha::Old::Holds->search( { borrowernumber => $patron_id }, $ops );
 
-while (my $hold = $holds->next) {
+while ( my $hold = $holds->next ) {
     push @all_holds, $hold;
 }
 
-while (my $hold = $old_holds->next) {
+while ( my $hold = $old_holds->next ) {
     push @all_holds, $hold;
 }
 
-if($sort eq 'reservedate') {
-    @all_holds = sort {$b->$sort cmp $a->$sort} @all_holds;
+if ( $sort eq 'reservedate' ) {
+    @all_holds = sort { $b->$sort cmp $a->$sort } @all_holds;
 } else {
-    my ($obj, $col) = split /\./, $sort;
-    @all_holds = sort { ( $a->$obj && $a->$obj->$col || '' ) cmp ( $b->$obj && $b->$obj->$col || '' ) } @all_holds;
+    my ( $obj, $col ) = split /\./, $sort;
+    @all_holds = sort { ( $a->$obj && $a->$obj->$col || '' ) cmp( $b->$obj && $b->$obj->$col || '' ) } @all_holds;
 }
 
-unless($unlimit) {
-    @all_holds = splice(@all_holds, 0, 50);
+unless ($unlimit) {
+    @all_holds = splice( @all_holds, 0, 50 );
 }
 
 $template->param(

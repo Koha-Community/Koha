@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::CourseReserves qw( GetCourse GetCourseReserve GetCourseReserves );
@@ -30,7 +30,8 @@ use C4::CourseReserves qw( GetCourse GetCourseReserve GetCourseReserves );
 my $cgi = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "opac-course-details.tt",
+    {
+        template_name   => "opac-course-details.tt",
         query           => $cgi,
         type            => "opac",
         authnotrequired => 1,
@@ -41,7 +42,7 @@ my $course_id = $cgi->param('course_id');
 
 die("No course_id given") unless ($course_id);
 
-my $course = GetCourse($course_id);
+my $course          = GetCourse($course_id);
 my $course_reserves = GetCourseReserves( course_id => $course_id, include_items => 1, include_count => 1 );
 
 $template->param(

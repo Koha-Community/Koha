@@ -2,34 +2,33 @@
 </head>
 <body id="labels_label-bib-search" class="tools labels">
 <div id="main-compact">
+    <h1>Search</h1>
 
-<h1>Search</h1>
-
-<form name="f" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-	<input type="hidden" name="op" value="cud-do_search" />
-	<input type="hidden" name="type" value="intranet" />
-	<div class="details">
-		<h2>Search on</h2>
-		<p>
-			<label for="category">Name or ISSN: </label>
-			[% category | html %]
-		</p>
-		<p>
-			<label for="index">Search value: </label>
-			<input type="text" name="value" value="[% value | html %]" />
-			<input type="hidden" name="authtypecode" value="[% category | html %]" />
-			<input type="hidden" name="marclist" value="" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			<input type="hidden" id="index" name="index" value="[% index | html %]" />
-		</p>
-		<p>
-            <input type="submit" class="btn btn-primary" value="Start search" />
-		</p>
-	</div>
-</form>
+    <form name="f" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-do_search" />
+        <input type="hidden" name="type" value="intranet" />
+        <div class="details">
+            <h2>Search on</h2>
+            <p>
+                <label for="category">Name or ISSN: </label>
+                [% category | html %]
+            </p>
+            <p>
+                <label for="index">Search value: </label>
+                <input type="text" name="value" value="[% value | html %]" />
+                <input type="hidden" name="authtypecode" value="[% category | html %]" />
+                <input type="hidden" name="marclist" value="" />
+                <input type="hidden" name="and_or" value="and" />
+                <input type="hidden" name="excluding" value="" />
+                <input type="hidden" name="operator" value="contains" />
+                <input type="hidden" id="index" name="index" value="[% index | html %]" />
+            </p>
+            <p>
+                <input type="submit" class="btn btn-primary" value="Start search" />
+            </p>
+        </div>
+    </form>
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

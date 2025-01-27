@@ -32,11 +32,10 @@ my $builder = t::lib::TestBuilder->new;
 
 ########### Test HouseboundVisits
 
-my $visit = $builder->build({ source => 'HouseboundVisit' });
+my $visit = $builder->build( { source => 'HouseboundVisit' } );
 
 is(
-    Koha::Patron::HouseboundVisits
-          ->find($visit->{id})->id,
+    Koha::Patron::HouseboundVisits->find( $visit->{id} )->id,
     $visit->{id},
     "Find created visit."
 );
@@ -44,8 +43,7 @@ is(
 # Using our Prefetching search
 
 # Does it work implicitly?
-my @visits = Koha::Patron::HouseboundVisits
-    ->special_search({ borrowernumber => $visit->{borrowernumber} })->as_list;
+my @visits = Koha::Patron::HouseboundVisits->special_search( { borrowernumber => $visit->{borrowernumber} } )->as_list;
 my $found_visit = shift @visits;
 is(
     $found_visit->borrowernumber,
@@ -54,8 +52,8 @@ is(
 );
 
 # Does it work Explicitly?
-@visits = Koha::Patron::HouseboundVisits
-    ->special_search({ 'me.borrowernumber' => $visit->{borrowernumber} })->as_list;
+@visits =
+    Koha::Patron::HouseboundVisits->special_search( { 'me.borrowernumber' => $visit->{borrowernumber} } )->as_list;
 $found_visit = shift @visits;
 is(
     $found_visit->borrowernumber,
@@ -64,8 +62,9 @@ is(
 );
 
 # Does it work without prefetcing?
-@visits = Koha::Patron::HouseboundVisits
-    ->special_search({ borrowernumber => $visit->{borrowernumber} }, { prefetch => [] })->as_list;
+@visits =
+    Koha::Patron::HouseboundVisits->special_search( { borrowernumber => $visit->{borrowernumber} }, { prefetch => [] } )
+    ->as_list;
 $found_visit = shift @visits;
 is(
     $found_visit->borrowernumber,
@@ -75,14 +74,14 @@ is(
 
 ########### Test HouseboundVisit
 
-my $result = Koha::Patron::HouseboundVisits->find($visit->{id});
+my $result = Koha::Patron::HouseboundVisits->find( $visit->{id} );
 
 is( $result->deliverer->borrowernumber, $visit->{deliverer_brwnumber} );
 
 is( $result->chooser->borrowernumber, $visit->{chooser_brwnumber} );
 
-isa_ok( $result->deliverer, "Koha::Patron");
-isa_ok( $result->chooser, "Koha::Patron");
+isa_ok( $result->deliverer, "Koha::Patron" );
+isa_ok( $result->chooser,   "Koha::Patron" );
 
 $schema->storage->txn_rollback;
 

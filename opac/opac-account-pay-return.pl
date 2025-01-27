@@ -47,8 +47,7 @@ if ($can_handle_payment) {
             cgi    => $cgi,
         }
     );
-}
-else {
+} else {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }

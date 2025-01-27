@@ -2,19 +2,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 210c builder") | html %] &rsaquo;
-    [% t("Cataloguing") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 210c builder") | html %]
+        &rsaquo; [% t("Cataloguing") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_210c_bis" class="cat value_builder">
-    <div class="container-fluid">
-
-<h1>UNIMARC field 210c builder</h1>
-<div class="autocomplete">
+<div class="container-fluid">
+    <h1>UNIMARC field 210c builder</h1>
+    <div class="autocomplete">
         <form method="get" name="f_pop" onsubmit="javascript:report()" action="">
             <div id="fieldautocomplete" class="autocomplete">
                 <fieldset>
@@ -30,40 +30,39 @@
                     </fieldset>
                 </div>
             </nav>
-
         </form>
     </div>
 
-[% MACRO jsinclude BLOCK %]
-    <script>
-        function report() {
-            var doc   = opener.document;
-            var field = doc.getElementById("[% index | html %]");
-            field.value =  document.f_pop.findvalue.value;
+    [% MACRO jsinclude BLOCK %]
+        <script>
+            function report() {
+                var doc   = opener.document;
+                var field = doc.getElementById("[% index | html %]");
+                field.value =  document.f_pop.findvalue.value;
 
-            window.close();
-            return false;
-        }
+                window.close();
+                return false;
+            }
 
-        $(document).ready(function(){
-            $( "#findvalue" ).autocomplete({
-                source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=publishercode",
-                minLength: 3,
-                select: function( event, ui ) {
-                    $( "#findvalue" ).val( ui.item.fieldvalue );
-                    return false;
-                }
-            })
-            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li></li>" )
-                .data( "ui-autocomplete-item", item )
-                .append( "<a>" + item.fieldvalue + "</a>" )
-                .appendTo( ul );
-            };
+            $(document).ready(function(){
+                $( "#findvalue" ).autocomplete({
+                    source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=publishercode",
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        $( "#findvalue" ).val( ui.item.fieldvalue );
+                        return false;
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append( "<a>" + item.fieldvalue + "</a>" )
+                    .appendTo( ul );
+                };
 
-        });
+            });
+        </script>
+    [% END %]
 
-    </script>
-[% END %]
-
-[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
+    [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
+</div>

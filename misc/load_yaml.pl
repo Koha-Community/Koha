@@ -25,8 +25,8 @@ use C4::Context;
 use C4::Installer;
 
 sub print_usage {
-     ( my $basename = $0 ) =~ s|.*/||;
-     print <<USAGE;
+    ( my $basename = $0 ) =~ s|.*/||;
+    print <<USAGE;
 
 $basename
  Load file in YAML format into database.
@@ -45,19 +45,19 @@ USAGE
 my ( @files, $load, $help );
 
 GetOptions(
- 'help|h'        => \$help,
- 'load'          => \$load,
- 'file|f=s@'     => \@files,
+    'help|h'    => \$help,
+    'load'      => \$load,
+    'file|f=s@' => \@files,
 ) or print_usage, exit 1;
 
-if ($help or not @files or not $load) {
+if ( $help or not @files or not $load ) {
     print_usage;
     exit;
 }
 
 my $installer = C4::Installer->new;
-if ( $load ) {
-    for my $f ( @files ) {
+if ($load) {
+    for my $f (@files) {
         my $error = $installer->load_sql($f);
         say $error if $error;
     }

@@ -24,8 +24,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use List::MoreUtils qw( any uniq );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ActionLogs;
@@ -35,36 +35,43 @@ use Koha::Patron::Categories;
 
 my $input = CGI->new;
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tt",
-				query => $input,
-				type => "intranet",
-                flagsrequired => {borrowers => 'edit_borrowers'},
-				});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "members/readingrec.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
+    }
+);
 
 my $op = $input->param('op') || '';
 my $patron;
-if ($input->param('cardnumber')) {
+if ( $input->param('cardnumber') ) {
     my $cardnumber = $input->param('cardnumber');
     $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
 }
-if ($input->param('borrowernumber')) {
+if ( $input->param('borrowernumber') ) {
     my $borrowernumber = $input->param('borrowernumber');
-    $patron = Koha::Patrons->find( $borrowernumber );
+    $patron = Koha::Patrons->find($borrowernumber);
 }
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 #   barcode export
 if ( $op eq 'export_barcodes' ) {
+
     # FIXME This should be moved out of this script
-    if ( $patron->privacy < 2) {
+    if ( $patron->privacy < 2 ) {
         my @barcodes = $patron->old_checkouts->search( {}, { prefetch => 'item' } )
-          ->filter_by_todays_checkins->get_column('item.barcode');
+            ->filter_by_todays_checkins->get_column('item.barcode');
 
         my $borrowercardnumber = $patron->cardnumber;
-        my $delimiter = "\n";
-        my $today = dt_from_string->ymd;
+        my $delimiter          = "\n";
+        my $today              = dt_from_string->ymd;
         binmode( STDOUT, ":encoding(UTF-8)" );
         print $input->header(
             -type       => 'application/octet-stream',
@@ -79,7 +86,8 @@ if ( $op eq 'export_barcodes' ) {
 }
 
 # Do not request the old issues of anonymous patron
-if ( $patron->borrowernumber eq C4::Context->preference('AnonymousPatron') ){
+if ( $patron->borrowernumber eq C4::Context->preference('AnonymousPatron') ) {
+
     # use of 'eq' in the above comparison is intentional -- the
     # system preference value could be blank
     $template->param( is_anonymous => 1 );

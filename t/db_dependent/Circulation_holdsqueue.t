@@ -36,26 +36,29 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
-    my $item    = $builder->build_sample_item({ library => $library->id });
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->id } );
 
-    t::lib::Mocks::mock_userenv({ branchcode => $library->id });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->id } );
     t::lib::Mocks::mock_preference( 'UpdateTotalIssuesOnCirc', 1 );
-    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue',      1 );
 
     my $action;
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $mock->mock( 'enqueue', sub {
-        my ( $self, $args ) = @_;
-        my ($package, $filename, $line) = caller;
-        is_deeply(
-            $args->{biblio_ids},
-            [ $item->biblionumber ],
-            "$action triggers a holds queue update for the related biblio from $package at line $line"
-        );
-    } );
+    $mock->mock(
+        'enqueue',
+        sub {
+            my ( $self, $args ) = @_;
+            my ( $package, $filename, $line ) = caller;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $item->biblionumber ],
+                "$action triggers a holds queue update for the related biblio from $package at line $line"
+            );
+        }
+    );
 
     $action = 'AddIssue';
     AddIssue( $patron, $item->barcode, );

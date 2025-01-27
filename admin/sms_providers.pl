@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI;
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::SMS::Provider;
@@ -32,10 +32,10 @@ my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/sms_providers.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_sms_providers' },
+        template_name => "admin/sms_providers.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_sms_providers' },
     }
 );
 
@@ -49,15 +49,12 @@ if ( $op eq 'cud-add_update' ) {
         if ($id) {
             my $provider = Koha::SMS::Providers->find($id);
             $provider->set( { name => $name, domain => $domain } )->store()
-              if $provider;
-        }
-        else {
-            Koha::SMS::Provider->new( { name => $name, domain => $domain } )
-              ->store();
+                if $provider;
+        } else {
+            Koha::SMS::Provider->new( { name => $name, domain => $domain } )->store();
         }
     }
-}
-elsif ( $op eq 'cud-delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     my $provider = Koha::SMS::Providers->find($id);
     $provider->delete() if $provider;
 }

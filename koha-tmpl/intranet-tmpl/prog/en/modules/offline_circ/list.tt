@@ -4,17 +4,18 @@
 [% USE KohaDates %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-    [% INCLUDE "doc-head-open.inc" %]
-    <title>[% FILTER collapse %]
-        [% t("Offline circulation") | html %] &rsaquo;
-        [% t("Circulation") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE "doc-head-close.inc" %]
+[% INCLUDE "doc-head-open.inc" %]
+<title
+    >[% FILTER collapse %]
+        [% t("Offline circulation") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE "doc-head-close.inc" %]
 </head>
 
 <body id="ocirc_list" class="circ ocirc">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
 
@@ -30,15 +31,14 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-        <h1>Offline circulation</h1>
+    <h1>Offline circulation</h1>
 
-        [% IF ( pending_operations ) %]
-
-           <form method="get">
-                <p>
-                    <a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a>
-                    <a id="CheckNone" href="#"><i class="fa fa-times"></i> Uncheck all</a>
-                </p>
+    [% IF ( pending_operations ) %]
+        <form method="get">
+            <p>
+                <a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a>
+                <a id="CheckNone" href="#"><i class="fa fa-times"></i> Uncheck all</a>
+            </p>
 
             <div class="page-section">
                 <table id="operations">
@@ -61,14 +61,14 @@
                                 </td>
                                 <td>
                                     [% SWITCH ( operation.action ) -%]
-                                        [%   CASE "issue" -%]
-                                            <span>Check out</span>
-                                        [%   CASE "return" -%]
-                                            <span>Check in</span>
-                                        [%   CASE "payment" -%]
-                                            <span>Payment</span>
-                                        [%   CASE # default case -%]
-                                            <span>[% operation.action | html %]</span>
+                                    [% CASE "issue" -%]
+                                        <span>Check out</span>
+                                    [% CASE "return" -%]
+                                        <span>Check in</span>
+                                    [% CASE "payment" -%]
+                                        <span>Payment</span>
+                                    [% CASE # default case -%]
+                                        <span>[% operation.action | html %]</span>
                                     [% END -%]
                                 </td>
                                 <td>
@@ -92,70 +92,68 @@
                         [% END %]
                     </tbody>
                 </table>
-            </div> <!-- /.page-section -->
+            </div>
+            <!-- /.page-section -->
 
-            <p id="actions">For the selected operations:
-            <input type="button" id="process" value="Process" />
-            <input type="button" id="delete" value="Delete" /></p>
-
-            </form>
-
-        [% ELSE %]
-
-            <p>There are no pending offline operations.</p>
-
-        [% END %]
-
+            <p id="actions"
+                >For the selected operations:
+                <input type="button" id="process" value="Process" />
+                <input type="button" id="delete" value="Delete"
+            /></p>
+        </form>
+    [% ELSE %]
+        <p>There are no pending offline operations.</p>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function() {
-
-            $('#CheckNone').click(function(e) {
+        $(document).ready(function () {
+            $("#CheckNone").click(function (e) {
                 e.preventDefault();
-                $("#operations input:checkbox").prop("checked", false );
+                $("#operations input:checkbox").prop("checked", false);
             });
-            $('#CheckAll').click(function(e) {
+            $("#CheckAll").click(function (e) {
                 e.preventDefault();
-                $("#operations input:checkbox").prop("checked", true );
+                $("#operations input:checkbox").prop("checked", true);
             });
-            $('#process,#delete').click(function() {
+            $("#process,#delete").click(function () {
                 var op = $(this).attr("id");
-                $(":checkbox[name=operationid]:checked").each(function() {
+                $(":checkbox[name=operationid]:checked").each(function () {
                     var cb = $(this);
                     $.ajax({
                         url: "process.pl",
                         data: {
-                            'op': 'cud-' + op,
-                            'operationid': this.value,
-                            'csrf_token': $('meta[name="csrf-token"]').attr('content')
+                            op: "cud-" + op,
+                            operationid: this.value,
+                            csrf_token: $('meta[name="csrf-token"]').attr("content"),
                         },
                         async: false,
                         dataType: "text",
                         type: "POST",
-                        success: function(data) {
-                            if( data == "Added." ){
+                        success: function (data) {
+                            if (data == "Added.") {
                                 cb.replaceWith(_("Added."));
-                            } else if ( data == "Deleted."){
+                            } else if (data == "Deleted.") {
                                 cb.replaceWith(_("Deleted."));
-                            } else if ( data == "Success."){
+                            } else if (data == "Success.") {
                                 cb.replaceWith(_("Success."));
-                            } else if ( data == "Item not issued."){
+                            } else if (data == "Item not issued.") {
                                 cb.replaceWith(_("Item not checked out."));
-                            } else if ( data == "Item not found."){
+                            } else if (data == "Item not found.") {
                                 cb.replaceWith(_("Item not found."));
-                            } else if ( data == "Barcode not found."){
+                            } else if (data == "Barcode not found.") {
                                 cb.replaceWith(_("Item not found."));
-                            } else if ( data == "Borrower not found."){
+                            } else if (data == "Borrower not found.") {
                                 cb.replaceWith(_("Patron not found."));
                             } else {
                                 cb.replaceWith(data);
                             }
-                        }});
+                        },
+                    });
                 });
-                if( $('#operations tbody :checkbox').size() == 0 ) {
-                    $('#actions').hide();
+                if ($("#operations tbody :checkbox").size() == 0) {
+                    $("#actions").hide();
                 }
             });
         });

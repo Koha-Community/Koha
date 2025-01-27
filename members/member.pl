@@ -1,9 +1,7 @@
 #!/usr/bin/perl
 
-
 #script to do a borrower enquiry/bring up borrower details etc
 #written 20/12/99 by chris@katipo.co.nz
-
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2013 BibLibre
@@ -24,31 +22,33 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
-use CGI qw( -utf8 );
+use C4::Auth           qw( get_template_and_user );
+use C4::Output         qw( output_html_with_http_headers );
+use CGI                qw( -utf8 );
 use Koha::List::Patron qw( GetPatronLists );
 use Koha::Patrons;
 use Koha::Patron::Attribute::Types;
 
 my $input = CGI->new;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member.tt",
-                 query => $input,
-                 type => "intranet",
-                 flagsrequired => { borrowers => ['edit_borrowers', 'list_borrowers'] },
-                 });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "members/member.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => [ 'edit_borrowers', 'list_borrowers' ] },
+    }
+);
 
 my $theme = $input->param('theme') || "default";
 
 my $searchmember = $input->param('searchmember');
-my $quicksearch = $input->param('quicksearch') // 0;
-my $circsearch = $input->param('circsearch') // 0;
+my $quicksearch  = $input->param('quicksearch') // 0;
+my $circsearch   = $input->param('circsearch')  // 0;
 
 if ( $quicksearch and $searchmember && !$circsearch ) {
     my $branchcode;
-    if ( C4::Context::only_my_library ) {
+    if (C4::Context::only_my_library) {
         my $userenv = C4::Context->userenv;
         $branchcode = $userenv->{'branch'};
     }
@@ -57,7 +57,7 @@ if ( $quicksearch and $searchmember && !$circsearch ) {
         $patron
         and (  ( $branchcode and $patron->branchcode eq $branchcode )
             or ( not $branchcode ) )
-      )
+        )
     {
         print $input->redirect( "/cgi-bin/koha/members/moremember.pl?borrowernumber=" . $patron->borrowernumber );
         exit;
@@ -70,7 +70,7 @@ my $searchtype       = $input->param('searchtype');
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
 $template->param(
-    patron_lists => [ GetPatronLists() ],
+    patron_lists        => [ GetPatronLists() ],
     searchmember        => $searchmember,
     branchcode_filter   => scalar $input->param('branchcode_filter'),
     categorycode_filter => scalar $input->param('categorycode_filter'),

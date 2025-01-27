@@ -21,9 +21,9 @@ package C4::XISBN;
 use Modern::Perl;
 use XML::Simple;
 
-use C4::Biblio qw(TransformMarcToKoha);
-use C4::Koha qw( GetNormalizedISBN );
-use C4::Search qw( new_record_from_zebra );
+use C4::Biblio              qw(TransformMarcToKoha);
+use C4::Koha                qw( GetNormalizedISBN );
+use C4::Search              qw( new_record_from_zebra );
 use C4::External::Syndetics qw( get_syndetics_editions );
 use LWP::UserAgent;
 
@@ -31,12 +31,13 @@ use Koha::Biblios;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      get_xisbns
+        get_xisbns
     );
 }
 
@@ -52,20 +53,22 @@ This module provides facilities for retrieving ThingISBN and XISBN content in Ko
 
 sub _get_biblio_from_xisbn {
     my $xisbn = shift;
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
 
-    my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( "nb=$xisbn", 0, 1 );
     return unless ( !$errors && scalar @$results );
 
-    my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[0] );
-    my $biblionumber = C4::Biblio::TransformMarcToKoha({
-        kohafields => ['biblio.biblionumber'],
-        record => $record
-    })->{biblionumber};
+    my $record       = C4::Search::new_record_from_zebra( 'biblioserver', $results->[0] );
+    my $biblionumber = C4::Biblio::TransformMarcToKoha(
+        {
+            kohafields => ['biblio.biblionumber'],
+            record     => $record
+        }
+    )->{biblionumber};
     return unless $biblionumber;
 
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblio = Koha::Biblios->find($biblionumber);
     return unless $biblio;
     my $isbn = $biblio->biblioitem->isbn;
     $biblio = $biblio->unblessed;
@@ -81,57 +84,55 @@ sub _get_biblio_from_xisbn {
 
 sub get_xisbns {
     my ( $isbn, $biblionumber ) = @_;
-    my ($response,$thing_response,$syndetics_response,$errors);
+    my ( $response, $thing_response, $syndetics_response, $errors );
+
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
-        my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
-        $thing_response = _get_url($url,'thingisbn');
+        my $url = "http://www.librarything.com/api/thingISBN/" . $isbn;
+        $thing_response = _get_url( $url, 'thingisbn' );
     }
 
-	if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsEditions") ) {
-    	my $syndetics_preresponse = &get_syndetics_editions($isbn);
-		my @syndetics_response;
-		for my $response (@$syndetics_preresponse) {
-			push @syndetics_response, {content => $response->{a}};
-		}
-		$syndetics_response = {isbn => \@syndetics_response};
-	}
+    if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsEditions") ) {
+        my $syndetics_preresponse = &get_syndetics_editions($isbn);
+        my @syndetics_response;
+        for my $response (@$syndetics_preresponse) {
+            push @syndetics_response, { content => $response->{a} };
+        }
+        $syndetics_response = { isbn => \@syndetics_response };
+    }
 
     $response->{isbn} = [ @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] } ];
     my @xisbns;
-    my $unique_xisbns; # a hashref
+    my $unique_xisbns;    # a hashref
 
     # loop through each ISBN and scope to the local collection
-    for my $response_data( @{ $response->{ isbn } } ) {
+    for my $response_data ( @{ $response->{isbn} } ) {
         next if $unique_xisbns->{ $response_data->{content} };
         $unique_xisbns->{ $response_data->{content} }++;
-        my $xbiblio= _get_biblio_from_xisbn($response_data->{content});
+        my $xbiblio = _get_biblio_from_xisbn( $response_data->{content} );
         next unless $xbiblio;
         push @xisbns, $xbiblio if $xbiblio && $xbiblio->{biblionumber} ne $biblionumber;
     }
-    if ( wantarray ) {
-        return (\@xisbns, $errors);
-    }
-    else {
+    if (wantarray) {
+        return ( \@xisbns, $errors );
+    } else {
         return \@xisbns;
     }
 }
 
 sub _get_url {
-    my ($url,$service_type) = @_;
-    my $ua = LWP::UserAgent->new(
-        timeout => 2
-        );
+    my ( $url, $service_type ) = @_;
+    my $ua = LWP::UserAgent->new( timeout => 2 );
 
     my $response = $ua->get($url);
-    if ($response->is_success) {
+    if ( $response->is_success ) {
         warn "WARNING could not retrieve $service_type $url" unless $response;
         if ($response) {
             my $xmlsimple = XML::Simple->new();
-            my $content = $xmlsimple->XMLin(
-            $response->content,
-            ForceArray => [ qw(isbn) ],
-            ForceContent => 1,
+            my $content   = $xmlsimple->XMLin(
+                $response->content,
+                ForceArray   => [qw(isbn)],
+                ForceContent => 1,
             );
             return $content;
         }

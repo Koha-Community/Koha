@@ -7,25 +7,38 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF( modify ) %]
-        [% t("Modify subscription") | html %] &rsaquo;
-        [% bibliotitle | html %]
-    [% ELSE %]
-        [% t("New subscription") | html %]
-    [% END %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF( modify ) %]
+            [% t("Modify subscription") | html %]
+            &rsaquo; [% bibliotitle | html %]
+        [% ELSE %]
+            [% t("New subscription") | html %]
+        [% END %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
-#mana_comment_errortext { font-weight: bold; font-family: monospace;}
-/* Prevents Bootstrap menus from being hidden inside modal */
-#mana_search_result .modal { overflow: visible; }
-#mana_search_result .modal-body { overflow-y: visible; }
+    fieldset.rows li.radio {
+        width: 100%;
+    } /* override staff-global.css */
+    #mana_comment_errortext {
+        font-weight: bold;
+        font-family: monospace;
+    }
+    /* Prevents Bootstrap menus from being hidden inside modal */
+    #mana_search_result .modal {
+        overflow: visible;
+    }
+    #mana_search_result .modal-body {
+        overflow-y: visible;
+    }
 
-fieldset.rows table { clear: none; margin: 0; }
+    fieldset.rows table {
+        clear: none;
+        margin: 0;
+    }
 </style>
 </head>
 
@@ -34,532 +47,539 @@ fieldset.rows table { clear: none; margin: 0; }
     [% INCLUDE 'serials-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-            [% END %]
-            [% UNLESS ( blocking_error ) %]
-                [% IF ( modify ) %]
-                    [% WRAPPER breadcrumb_item %]
-                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a>
-                    [% END %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Modify subscription</span>
-                    [% END %]
-                [% ELSE %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>New subscription</span>
-                    [% END %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+        [% END %]
+        [% UNLESS ( blocking_error ) %]
+            [% IF ( modify ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Modify subscription</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>New subscription</span>
                 [% END %]
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             [% INCLUDE 'messages.inc' %]
-            <h1>[% IF ( modify ) %] Modify subscription for <em>[% bibliotitle | html %]</em>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            <h1>[% IF ( modify ) %]Modify subscription for <em>[% bibliotitle | html %]</em>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
         </div>
     </div>
     <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
-                <div class="row" id="page_1">
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-                        [% IF ( modify ) %]
-                            <input type="hidden" name="op" value="cud-modsubscription" />
-                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-                        [% ELSE %]
-                                <input type="hidden" name="op" value="cud-addsubscription" />
+        <div class="row" id="page_1">
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                [% IF ( modify ) %]
+                    <input type="hidden" name="op" value="cud-modsubscription" />
+                    <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                [% ELSE %]
+                    <input type="hidden" name="op" value="cud-addsubscription" />
+                [% END %]
+                <input type="hidden" name="user" value="[% logged_in_user.userid | html %]" />
+                <input type="hidden" name="irreg_check" value="0" />
+                <fieldset id="subscription_add_information" class="rows">
+                    <legend>Subscription details</legend>
+                    <ol>
+                        [% IF ( subscriptionid ) %]
+                            <li><span class="label">Subscription number: </span> [% subscriptionid | html %]</li>
                         [% END %]
-                        <input type="hidden" name="user" value="[% logged_in_user.userid | html %]" />
-                        <input type="hidden" name="irreg_check" value="0" />
-                        <fieldset id="subscription_add_information" class="rows">
-                            <legend>Subscription details</legend>
-                            <ol>
-                                [% IF ( subscriptionid ) %]
-                                    <li><span class="label">Subscription number: </span> [% subscriptionid | html %]</li>
+                        <li>
+                            <label for="aqbooksellerid">Vendor: </label>
+                            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid | html %]" size="8" /><input
+                                type="text"
+                                name="aqbooksellername"
+                                id="aqbooksellername"
+                                value="[% aqbooksellername | html %]"
+                                disabled="disabled"
+                                readonly="readonly"
+                            /><a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
+                        </li>
+                        <li>
+                            <label for="biblionumber" class="required">Record:</label>
+                            <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum | html %]" size="8" />
+                            <input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" /><span class="required" title="Subscriptions must be associated with a bibliographic record"
+                                >Required</span
+                            >
+                            <span id="error_bib_not_exist"></span>
+                            <div class="hint">Subscriptions must be associated with a bibliographic record</div>
+                            <div class="inputnote">
+                                <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
+                                [% IF ( CAN_user_editcatalogue ) %]
+                                    [% IF ( modify ) %]
+                                        | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a>
+                                    [% ELSE %]
+                                        | <a href="#" id="biblio_add_edit"><i class="fa fa-plus"></i> Create record</a>
+                                    [% END %]
                                 [% END %]
-                                <li>
-                                    <label for="aqbooksellerid">Vendor: </label>
-                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid | html %]" size="8" /><input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername | html %]" disabled="disabled" readonly="readonly" /><a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
-                                </li>
-                                <li>
-                                    <label for="biblionumber" class="required">Record:</label>
-                                    <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum | html %]" size="8" />
-                                    <input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" /><span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
-                                    <span id="error_bib_not_exist"></span>
-                                    <div class="hint">Subscriptions must be associated with a bibliographic record</div>
-                                    <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
-                                        [% IF ( CAN_user_editcatalogue ) %]
-                                            [% IF ( modify ) %]
-                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a>
-                                            [% ELSE %]
-                                            | <a href="#" id="biblio_add_edit"><i class="fa fa-plus"></i> Create record</a>
-                                            [% END %]
-                                        [% END %]
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="label">When receiving this serial:</span>
-                                    [% IF ( serialsadditems ) %]
-                                        <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" />
-                                        <label class="radio" for="serialsadditems-yes"> Create an item record</label>
-                                        <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" />
-                                        <label class="radio" for="serialsadditems-no"> Do not create an item record</label>
-                                    [% ELSE %]
-                                        <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/>
-                                        <label class="radio" for="serialsadditems-yes"> Create an item record</label>
-                                        <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" />
-                                        <label class="radio" for="serialsadditems-no"> Do not create an item record</label>
-                                    [% END %]
-                                </li>
-                                <li>
-                                <label for="irregular_issue">When there is an irregular issue:</label>
-                                  [% IF (skip_serialseq) %]
-                                      <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" checked="checked" />
-                                      <label class="radio" for="skip_serialseq_yes">Skip issue number</label>
-                                      <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" />
-                                      <label class="radio" for="skip_serialseq_no">Keep issue number</label>
-                                  [% ELSE %]
-                                      <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" />
-                                      <label class="radio" for="skip_serialseq_yes">Skip issue number</label>
-                                      <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" checked="checked" />
-                                      <label class="radio" for="skip_serialseq_no">Keep issue number</label>
-                                  [% END %]
-                                </li>
-                                <li>
-                                    <label for="manualhistory">Manual history:</label>
-                                    [% IF (manualhistory) %]
-                                        <input type="checkbox" id="manualhistory" name="manualhist" checked="checked" />
-                                    [% ELSE %]
-                                        <input type="checkbox" id="manualhistory" name="manualhist" />
-                                    [% END %]
-                                </li>
-                                <li>
-                                    <label for="callnumber">Call number:</label>
-                                    <input type="text" name="callnumber" id="callnumber" value="[% callnumber | html %]" size="20" />
-                                </li>
-                                <li>
-                                    <label for="branchcode">Library:</label>
-                                    <select name="branchcode" id="branchcode">
-                                        [% UNLESS ( Independentbranches ) %]
-                                            <option value="">None</option>
-                                        [% END %]
-                                        [% IF CAN_user_serials_superserials %]
-                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1 ) %]
-                                        [% ELSE %]
-                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
-                                        [% END %]
-                                    </select>
-                                </li>
-                                <li>
-                                    <label for="notes">Public note:</label>
-                                    <textarea name="notes" id="notes" cols="30" rows="2">[% notes | html %]</textarea>
-                                </li>
-                                <li>
-                                    <label for="internalnotes">Nonpublic note:</label>
-                                    <textarea name="internalnotes" id="internalnotes" cols="30" rows="2">[% internalnotes | html %]</textarea>
-                                </li>
-                                <li>
-                                    [% IF ( letterloop ) %]
-                                        <label for="letter">Patron notification: </label>
-                                        <select name="letter" id="letter">
-                                            <option value="">None</option>
-                                            [% FOREACH letterloo IN letterloop %]
-                                                [% IF ( letterloo.selected ) %]
-                                                    <option value="[% letterloo.value | html %]" selected="selected">[% letterloo.lettername | html %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% letterloo.value | html %]">[% letterloo.lettername | html %]</option>
-                                                [% END %]
-                                            [% END %]
-                                        </select>
-                                        <div class="hint">Selecting a notice will allow patrons to subscribe to notifications when a new issue is received.</div>
-                                    [% ELSE %]
-                                        <span class="label">Patron notification: </span>
-                                        <div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
-                                    [% END %]
-                                </li>
-                                <li>
-                                    <label for="location">Location:</label>
-                                    <select name="location" id="location">
-                                        <option value="">None</option>
-                                        [% FOREACH locations_loo IN locations_loop %]
-                                            [% IF locations_loo.authorised_value == location %]
-                                                <option value="[% locations_loo.authorised_value | html %]" selected="selected">[% locations_loo.lib | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% locations_loo.authorised_value | html %]">[% locations_loo.lib | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
-                                <li class="use_items" [% UNLESS serialsadditems %]style="display:none"[% END %]>
-                                    <label for="ccode">Collection:</label>
-                                    <select name="ccode" id="ccode">
-                                        <option value="">None</option>
-                                        [% FOREACH ccode_loo IN ccodes_loop %]
-                                            [% IF ccode_loo.authorised_value == ccode %]
-                                                <option value="[% ccode_loo.authorised_value | html %]" selected="selected">[% ccode_loo.lib | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% ccode_loo.authorised_value | html %]">[% ccode_loo.lib | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
-                                <li class="use_items" [% UNLESS serialsadditems %]style="display:none"[% END %]>
-                                    <label for="itemtype">Item type:</label>
-                                    <select name="itemtype" id="itemtype">
-                                        <option value=""></option>
-                                        [% FOREACH type IN typeloop %]
-                                            [% IF ( type.selected ) %]
-                                                <option value="[% type.code | html %]" selected="selected">[% type.value | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% type.code | html %]">[% type.value | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
-                                [%IF makePreviousSerialAvailable %]
-                                <li>
-                                    <label for="previousitemtype">item type for older issues:</label>
-                                    <select name="previousitemtype" id="previousitemtype">
-                                            <option value=""></option>
-                                        [% FOREACH previous IN previoustypeloop %]
-                                            [% IF ( previous.selected ) %]
-                                                <option value="[% previous.code | html %]" selected="selected">[% previous.value | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% previous.code | html %]">[% previous.value | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="label">When receiving this serial:</span>
+                            [% IF ( serialsadditems ) %]
+                                <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" />
+                                <label class="radio" for="serialsadditems-yes"> Create an item record</label>
+                                <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" />
+                                <label class="radio" for="serialsadditems-no"> Do not create an item record</label>
+                            [% ELSE %]
+                                <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" />
+                                <label class="radio" for="serialsadditems-yes"> Create an item record</label>
+                                <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" />
+                                <label class="radio" for="serialsadditems-no"> Do not create an item record</label>
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="irregular_issue">When there is an irregular issue:</label>
+                            [% IF (skip_serialseq) %]
+                                <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" checked="checked" />
+                                <label class="radio" for="skip_serialseq_yes">Skip issue number</label>
+                                <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" />
+                                <label class="radio" for="skip_serialseq_no">Keep issue number</label>
+                            [% ELSE %]
+                                <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" />
+                                <label class="radio" for="skip_serialseq_yes">Skip issue number</label>
+                                <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" checked="checked" />
+                                <label class="radio" for="skip_serialseq_no">Keep issue number</label>
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="manualhistory">Manual history:</label>
+                            [% IF (manualhistory) %]
+                                <input type="checkbox" id="manualhistory" name="manualhist" checked="checked" />
+                            [% ELSE %]
+                                <input type="checkbox" id="manualhistory" name="manualhist" />
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="callnumber">Call number:</label>
+                            <input type="text" name="callnumber" id="callnumber" value="[% callnumber | html %]" size="20" />
+                        </li>
+                        <li>
+                            <label for="branchcode">Library:</label>
+                            <select name="branchcode" id="branchcode">
+                                [% UNLESS ( Independentbranches ) %]
+                                    <option value="">None</option>
                                 [% END %]
-                                <li>
-                                    <label for="graceperiod">Grace period:</label>
-                                    <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod | html %]" size="5"/> day(s)
-                                </li>
-                                <li>
-                                     <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
-                                     <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*"  size="4"/>
-                                     <div class="hint">
-                                        Default:
-                                        [% Koha.Preference('StaffSerialIssueDisplayCount') | html %]
-                                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                            (<a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=StaffSerialIssueDisplayCount">StaffSerialIssueDisplayCount</a> system preference)
+                                [% IF CAN_user_serials_superserials %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1 ) %]
+                                [% ELSE %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                                [% END %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="notes">Public note:</label>
+                            <textarea name="notes" id="notes" cols="30" rows="2">[% notes | html %]</textarea>
+                        </li>
+                        <li>
+                            <label for="internalnotes">Nonpublic note:</label>
+                            <textarea name="internalnotes" id="internalnotes" cols="30" rows="2">[% internalnotes | html %]</textarea>
+                        </li>
+                        <li>
+                            [% IF ( letterloop ) %]
+                                <label for="letter">Patron notification: </label>
+                                <select name="letter" id="letter">
+                                    <option value="">None</option>
+                                    [% FOREACH letterloo IN letterloop %]
+                                        [% IF ( letterloo.selected ) %]
+                                            <option value="[% letterloo.value | html %]" selected="selected">[% letterloo.lettername | html %]</option>
                                         [% ELSE %]
-                                            (StaffSerialIssueDisplayCount system preference)
+                                            <option value="[% letterloo.value | html %]">[% letterloo.lettername | html %]</option>
                                         [% END %]
-                                    </div>
-                                 </li>
-                                 <li>
-                                    <label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
-                                    <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*"  size="4"/>
-                                    <div class="hint">
-                                        Default:
-                                        [% Koha.Preference('OPACSerialIssueDisplayCount') | html %]
-                                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                            (<a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=OPACSerialIssueDisplayCount">OPACSerialIssueDisplayCount</a>  system preference)
+                                    [% END %]
+                                </select>
+                                <div class="hint">Selecting a notice will allow patrons to subscribe to notifications when a new issue is received.</div>
+                            [% ELSE %]
+                                <span class="label">Patron notification: </span>
+                                <div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="location">Location:</label>
+                            <select name="location" id="location">
+                                <option value="">None</option>
+                                [% FOREACH locations_loo IN locations_loop %]
+                                    [% IF locations_loo.authorised_value == location %]
+                                        <option value="[% locations_loo.authorised_value | html %]" selected="selected">[% locations_loo.lib | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% locations_loo.authorised_value | html %]">[% locations_loo.lib | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                        <li class="use_items" [% UNLESS serialsadditems %]style="display:none"[% END %]>
+                            <label for="ccode">Collection:</label>
+                            <select name="ccode" id="ccode">
+                                <option value="">None</option>
+                                [% FOREACH ccode_loo IN ccodes_loop %]
+                                    [% IF ccode_loo.authorised_value == ccode %]
+                                        <option value="[% ccode_loo.authorised_value | html %]" selected="selected">[% ccode_loo.lib | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% ccode_loo.authorised_value | html %]">[% ccode_loo.lib | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                        <li class="use_items" [% UNLESS serialsadditems %]style="display:none"[% END %]>
+                            <label for="itemtype">Item type:</label>
+                            <select name="itemtype" id="itemtype">
+                                <option value=""></option>
+                                [% FOREACH type IN typeloop %]
+                                    [% IF ( type.selected ) %]
+                                        <option value="[% type.code | html %]" selected="selected">[% type.value | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% type.code | html %]">[% type.value | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                        [% IF makePreviousSerialAvailable %]
+                            <li>
+                                <label for="previousitemtype">item type for older issues:</label>
+                                <select name="previousitemtype" id="previousitemtype">
+                                    <option value=""></option>
+                                    [% FOREACH previous IN previoustypeloop %]
+                                        [% IF ( previous.selected ) %]
+                                            <option value="[% previous.code | html %]" selected="selected">[% previous.value | html %]</option>
                                         [% ELSE %]
-                                            (OPACSerialIssueDisplayCount system preference)
+                                            <option value="[% previous.code | html %]">[% previous.value | html %]</option>
                                         [% END %]
-                                    </div>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <button type="button" class="btn btn-primary" id="subscription_add_next" style="float:right;">Next <i class="fa-solid fa-right-long"></i></button>
-                        </fieldset>
-                    </div> <!-- /.col-md-10 offset-md-1 col-lg-8 offset-lg-2 -->
-                </div> <!-- /.row#page_1 -->
-                <div class="row" id="page_2">
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                                    [% END %]
+                                </select>
+                            </li>
+                        [% END %]
+                        <li>
+                            <label for="graceperiod">Grace period:</label>
+                            <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod | html %]" size="5" /> day(s)
+                        </li>
+                        <li>
+                            <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
+                            <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*" size="4" />
+                            <div class="hint">
+                                Default: [% Koha.Preference('StaffSerialIssueDisplayCount') | html %]
+                                [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                    (<a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=StaffSerialIssueDisplayCount">StaffSerialIssueDisplayCount</a> system preference)
+                                [% ELSE %]
+                                    (StaffSerialIssueDisplayCount system preference)
+                                [% END %]
+                            </div>
+                        </li>
+                        <li>
+                            <label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
+                            <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*" size="4" />
+                            <div class="hint">
+                                Default: [% Koha.Preference('OPACSerialIssueDisplayCount') | html %]
+                                [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                    (<a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=OPACSerialIssueDisplayCount">OPACSerialIssueDisplayCount</a> system preference)
+                                [% ELSE %]
+                                    (OPACSerialIssueDisplayCount system preference)
+                                [% END %]
+                            </div>
+                        </li>
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <button type="button" class="btn btn-primary" id="subscription_add_next" style="float:right;">Next <i class="fa-solid fa-right-long"></i></button>
+                </fieldset>
+            </div>
+            <!-- /.col-md-10 offset-md-1 col-lg-8 offset-lg-2 -->
+        </div>
+        <!-- /.row#page_1 -->
+        <div class="row" id="page_2">
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
                     <fieldset>
-                        <p style="text-align: center;">The Mana Knowledge Base can be used to import subscription patterns submitted by other libraries and save you extra work. Ask your system administrator to configure this service and complete the configuration, or remove this message by disabling the system preference
-                        <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice">here</a></p>
+                        <p style="text-align: center;"
+                            >The Mana Knowledge Base can be used to import subscription patterns submitted by other libraries and save you extra work. Ask your system administrator to configure this service and complete the configuration,
+                            or remove this message by disabling the system preference <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice">here</a></p
+                        >
                     </fieldset>
                 [% END %]
-                        <div style="display:none" id="mana_search" class="alert alert-info">
-                        </div>
-                        <div id="subscription_form_planning">
-                            <fieldset class="rows">
-                                <legend>Serials planning</legend>
-                                <ol>
-                                    <li>
-                                        <label for="acqui_date" class="required">First issue publication date:</label>
-                                        [% UNLESS (more_than_one_serial) %]
-                                          <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | html %]" class="flatpickr required" required="required" />
-                                        [% ELSE %]
-                                          [% firstacquidate | $KohaDates %]
-                                          <input type="hidden" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates dateformat => 'iso' %]"/>
-                                        [% END %]
-                                        <span class="required">Required</span>
-                                    </li>
-                                    [% IF (more_than_one_serial) %]
-                                      <li>
-                                        <label for="nextacquidate">Next issue publication date:</label>
-                                        <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | html %]" class="flatpickr" />
-                                      </li>
-                                    [% END %]
-                                    <li>
-                                        <label for="frequency" class="required">Frequency:</label>
-                                        <select name="frequency" id="frequency" class="required" required="required">
-                                            <option value="">-- please choose --</option>
-                                            [% FOREACH frequency IN frequencies %]
-                                                <option value="[% frequency.id | html %]" [% IF frequency.selected %]selected="selected"[% END %]>
-                                                    [% frequency.label | html %]
-                                                </option>
-                                            [% END %]
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="subtype">Subscription length:</label>
-                                        <select name="subtype" id="subtype">
-                                            [% FOREACH st IN subtypes %]
-                                                [% SWITCH st %]
-                                                    [% CASE 'numberlength' %]
-                                                        [% IF st == subtype %]
-                                                            <option value="issues" selected="selected">issues</option>
-                                                        [% ELSE %]
-                                                            <option value="issues">issues</option>
-                                                        [% END %]
-                                                    [% CASE 'weeklength' %]
-                                                        [% IF st == subtype %]
-                                                            <option value="weeks" selected="selected">weeks</option>
-                                                        [% ELSE %]
-                                                            <option value="weeks">weeks</option>
-                                                        [% END %]
-                                                    [% CASE 'monthlength' %]
-                                                        [% IF st == subtype %]
-                                                            <option value="months" selected="selected">months</option>
-                                                        [% ELSE %]
-                                                            <option value="months">months</option>
-                                                        [% END %]
-                                                    [% CASE %][% st | html %]
-                                                [% END %]
-                                            [% END %]
-                                        </select>
-                                        <input type="text" name="sublength" id="sublength" value="[% sublength | html %]" size="3" /> (enter amount in numerals)
-                                        <input type="hidden" name="issuelengthcount">
-                                    </li>
-                                    <li>
-                                        <label for="from" class="required"> Subscription start date:</label>
-                                        <input type="text" size="10" id="from" name="startdate" value="[% startdate | html %]" class="flatpickr required" data-date_to="to" required="required" />
-                                    </li>
-                                    <li>
-                                        <label for="to">Subscription end date:</label>
-                                        <input type="text" size="10" id="to" name="enddate" value="[% enddate | html %]" class="flatpickr" />
-                                    </li>
-                                    <li>
-                                        <label for="numberpattern" class="required">Numbering pattern:</label>
-                                        <select name="numbering_pattern" id="numberpattern" class="required" required="required">
-                                            <option value="">-- please choose --</option>
-                                            [% FOREACH numberpattern IN numberpatterns %]
-                                                <option value="[% numberpattern.id | html %]" [% IF numberpattern.selected %]selected="selected"[% END %]>
-                                                    [% numberpattern.label | html %]
-                                                </option>
-                                            [% END %]
-                                        </select>
-                                        <span class="required">Required</span>
-                                    </li>
-                                    <li>
-                                        <label for="published_on_template">Publication date template:</label>
-                                        <textarea id="published_on_template" name="published_on_template">[% published_on_template | html %]</textarea>
-                                    </li>
-                                    <li>
-                                        <label for="locale">Locale:</label>
-                                        <select id="locale" name="locale">
-                                            <option value=""></option>
-                                            [% FOREACH l IN locales %]
-                                                [% IF l.language == locale %]
-                                                    <option value="[% l.language | html %]" selected="selected">[% l.description | html %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% l.language | html %]">[% l.description | html %]</option>
-                                                [% END %]
-                                            [% END %]
-                                        </select>
-                                        <div class="hint">If empty, English is used</div>
-                                    </li>
-                                    <li id="more_options">
-                                        <span class="label">&nbsp;</span>
-                                        <table id="moreoptionst">
-                                            <thead>
-                                                <tr>
-                                                    <th>&nbsp;</th>
-                                                    <th id="headerX">&nbsp;</th>
-                                                    <th id="headerY">&nbsp;</th>
-                                                    <th id="headerZ">&nbsp;</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">
-                                                      [% IF (more_than_one_serial) %]
-                                                        Last value:
-                                                      [% ELSE %]
-                                                        Begins with:
-                                                      [% END %]
-                                                    </th>
-                                                    <td id="beginsX"><input type="text" id="lastvaluetemp1" name="lastvaluetemp1" value="[% lastvalue1 | html %]" /></td>
-                                                    <td id="beginsY"><input type="text" id="lastvaluetemp2" name="lastvaluetemp2" value="[% lastvalue2 | html %]" /></td>
-                                                    <td id="beginsZ"><input type="text" id="lastvaluetemp3" name="lastvaluetemp3" value="[% lastvalue3 | html %]" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Inner counter:</th>
-                                                    <td id="innerX"><input type="text" id="innerlooptemp1" name="innerlooptemp1" value="[% innerloop1 | html %]" /></td>
-                                                    <td id="innerY"><input type="text" id="innerlooptemp2" name="innerlooptemp2" value="[% innerloop2 | html %]" /></td>
-                                                    <td id="innerZ"><input type="text" id="innerlooptemp3" name="innerlooptemp3" value="[% innerloop3 | html %]" /></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </li>
-                                    <li>
-                                        <span class="label">&nbsp;</span>
-                                        <a href="#" class="toggle_advanced_pattern show_advanced_pattern"><i class="fa fa-plus-square"></i> Show advanced pattern</a>
-                                        <a href="#" style="display:none;" class="toggle_advanced_pattern hide_advanced_pattern"><i class="fa fa-minus-square"></i> Hide advanced pattern</a>
-                                    </li>
-                                </ol>
-
-                                    <div id="advancedpredictionpattern" style="display:none">
-                                        <ol>
-                                      <li>
-                                        <label for="patternname" class="required">Pattern name:</label>
-                                        <input id="patternname" name="patternname" type="text" readonly="readonly" class="required" required="required" />
-                                        <span class="required">Required</span>
-                                      </li>
-                                      <li>
-                                        <label for="numberingmethod">Numbering formula:</label>
-                                        <input readonly="readonly" type="text" name="numberingmethod" id="numberingmethod" size="50" value="[% numberingmethod | html %]" />
-                                      </li>
-                                      <li>
-                                        <span class="label">Advanced prediction pattern: </span>
-                                        <table id="advancedpredictionpatternt">
-                                            <thead>
-                                                <tr>
-                                                    <th>&nbsp;</th>
-                                                    <th>X</th>
-                                                    <th>Y</th>
-                                                    <th>Z</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">Label: </th>
-                                                    <td><input type="text" readonly="readonly" id="label1" name="label1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="label2" name="label2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="label3" name="label3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Begins with: </th>
-                                                    <td><input type="text" readonly="readonly" id="lastvalue1" name="lastvalue1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="lastvalue2" name="lastvalue2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="lastvalue3" name="lastvalue3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Add: </th>
-                                                    <td><input type="text" readonly="readonly" id="add1" name="add1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="add2" name="add2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="add3" name="add3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Every: </th>
-                                                    <td><input type="text" readonly="readonly" id="every1" name="every1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="every2" name="every2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="every3" name="every3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Set back to: </th>
-                                                    <td><input type="text" readonly="readonly" id="setto1" name="setto1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="setto2" name="setto2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="setto3" name="setto3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">When more than: </th>
-                                                    <td><input type="text" readonly="readonly" id="whenmorethan1" name="whenmorethan1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="whenmorethan2" name="whenmorethan2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="whenmorethan3" name="whenmorethan3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Inner counter: </th>
-                                                    <td><input type="text" readonly="readonly" id="innerloop1" name="innerloop1" /></td>
-                                                    <td><input type="text" readonly="readonly" id="innerloop2" name="innerloop2" /></td>
-                                                    <td><input type="text" readonly="readonly" id="innerloop3" name="innerloop3" /></td>
-                                                </tr>
-                                                <tr>
-                                                    [% BLOCK numbering_select %]
-                                                        <select disabled="disabled" id="[% name | html %]" name="[% name | html %]">
-                                                            <option value=""></option>
-                                                            <option value="dayname">Name of day</option>
-                                                            <option value="dayabrv">Name of day (abbreviated)</option>
-                                                            <option value="monthname">Name of month</option>
-                                                            <option value="monthabrv">Name of month (abbreviated)</option>
-                                                            <option value="season">Name of season</option>
-                                                            <option value="seasonabrv">Name of season (abbreviated)</option>
-                                                        </select>
-                                                    [% END %]
-                                                    <th scope="row">Formatting:</th>
-                                                    <td>[% PROCESS numbering_select name="numbering1" %]</td>
-                                                    <td>[% PROCESS numbering_select name="numbering2" %]</td>
-                                                    <td>[% PROCESS numbering_select name="numbering3" %]</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </li>
-                                    <li>
-                                        <span class="label">&nbsp;</span>
-                                        <a href="#" id="modifyadvancedpatternbutton"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Modify pattern</a>
-                                        <button type="button" class="btn btn-default btn-xs" id="saveadvancedpatternbutton" style="display:none"><i class="fa fa-save"></i> Save as new pattern</button>
-                                        <a class="cancel" href="#" id="restoreadvancedpatternbutton" style="display:none">Cancel modifications</a>
-                                    </li>
-                                    </ol>
-                                </div> <!-- /#advancedpredictionpattern -->
-                                <fieldset class="action">
-                                    <button type="button" id="testpatternbutton" class="btn btn-default btn-sm"><i class="fa fa-play"></i> Test prediction pattern</button>
-                                </fieldset>
-                            </fieldset>
-
-                            [% IF additional_fields %]
-                                <div id="subscription_additional_fields">
-                                    [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values %]
-                                </div>
+                <div style="display:none" id="mana_search" class="alert alert-info"> </div>
+                <div id="subscription_form_planning">
+                    <fieldset class="rows">
+                        <legend>Serials planning</legend>
+                        <ol>
+                            <li>
+                                <label for="acqui_date" class="required">First issue publication date:</label>
+                                [% UNLESS (more_than_one_serial) %]
+                                    <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | html %]" class="flatpickr required" required="required" />
+                                [% ELSE %]
+                                    [% firstacquidate | $KohaDates %]
+                                    <input type="hidden" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates dateformat => 'iso' %]" />
+                                [% END %]
+                                <span class="required">Required</span>
+                            </li>
+                            [% IF (more_than_one_serial) %]
+                                <li>
+                                    <label for="nextacquidate">Next issue publication date:</label>
+                                    <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | html %]" class="flatpickr" />
+                                </li>
                             [% END %]
+                            <li>
+                                <label for="frequency" class="required">Frequency:</label>
+                                <select name="frequency" id="frequency" class="required" required="required">
+                                    <option value="">-- please choose --</option>
+                                    [% FOREACH frequency IN frequencies %]
+                                        <option value="[% frequency.id | html %]" [% IF frequency.selected %]selected="selected"[% END %]> [% frequency.label | html %] </option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="subtype">Subscription length:</label>
+                                <select name="subtype" id="subtype">
+                                    [% FOREACH st IN subtypes %]
+                                        [% SWITCH st %]
+                                        [% CASE 'numberlength' %]
+                                            [% IF st == subtype %]
+                                                <option value="issues" selected="selected">issues</option>
+                                            [% ELSE %]
+                                                <option value="issues">issues</option>
+                                            [% END %]
+                                        [% CASE 'weeklength' %]
+                                            [% IF st == subtype %]
+                                                <option value="weeks" selected="selected">weeks</option>
+                                            [% ELSE %]
+                                                <option value="weeks">weeks</option>
+                                            [% END %]
+                                        [% CASE 'monthlength' %]
+                                            [% IF st == subtype %]
+                                                <option value="months" selected="selected">months</option>
+                                            [% ELSE %]
+                                                <option value="months">months</option>
+                                            [% END %]
+                                        [% CASE %]
+                                            [% st | html %]
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                                <input type="text" name="sublength" id="sublength" value="[% sublength | html %]" size="3" /> (enter amount in numerals)
+                                <input type="hidden" name="issuelengthcount" />
+                            </li>
+                            <li>
+                                <label for="from" class="required"> Subscription start date:</label>
+                                <input type="text" size="10" id="from" name="startdate" value="[% startdate | html %]" class="flatpickr required" data-date_to="to" required="required" />
+                            </li>
+                            <li>
+                                <label for="to">Subscription end date:</label>
+                                <input type="text" size="10" id="to" name="enddate" value="[% enddate | html %]" class="flatpickr" />
+                            </li>
+                            <li>
+                                <label for="numberpattern" class="required">Numbering pattern:</label>
+                                <select name="numbering_pattern" id="numberpattern" class="required" required="required">
+                                    <option value="">-- please choose --</option>
+                                    [% FOREACH numberpattern IN numberpatterns %]
+                                        <option value="[% numberpattern.id | html %]" [% IF numberpattern.selected %]selected="selected"[% END %]> [% numberpattern.label | html %] </option>
+                                    [% END %]
+                                </select>
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="published_on_template">Publication date template:</label>
+                                <textarea id="published_on_template" name="published_on_template">[% published_on_template | html %]</textarea>
+                            </li>
+                            <li>
+                                <label for="locale">Locale:</label>
+                                <select id="locale" name="locale">
+                                    <option value=""></option>
+                                    [% FOREACH l IN locales %]
+                                        [% IF l.language == locale %]
+                                            <option value="[% l.language | html %]" selected="selected">[% l.description | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% l.language | html %]">[% l.description | html %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                                <div class="hint">If empty, English is used</div>
+                            </li>
+                            <li id="more_options">
+                                <span class="label">&nbsp;</span>
+                                <table id="moreoptionst">
+                                    <thead>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th id="headerX">&nbsp;</th>
+                                            <th id="headerY">&nbsp;</th>
+                                            <th id="headerZ">&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                [% IF (more_than_one_serial) %]
+                                                    Last value:
+                                                [% ELSE %]
+                                                    Begins with:
+                                                [% END %]
+                                            </th>
+                                            <td id="beginsX"><input type="text" id="lastvaluetemp1" name="lastvaluetemp1" value="[% lastvalue1 | html %]" /></td>
+                                            <td id="beginsY"><input type="text" id="lastvaluetemp2" name="lastvaluetemp2" value="[% lastvalue2 | html %]" /></td>
+                                            <td id="beginsZ"><input type="text" id="lastvaluetemp3" name="lastvaluetemp3" value="[% lastvalue3 | html %]" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Inner counter:</th>
+                                            <td id="innerX"><input type="text" id="innerlooptemp1" name="innerlooptemp1" value="[% innerloop1 | html %]" /></td>
+                                            <td id="innerY"><input type="text" id="innerlooptemp2" name="innerlooptemp2" value="[% innerloop2 | html %]" /></td>
+                                            <td id="innerZ"><input type="text" id="innerlooptemp3" name="innerlooptemp3" value="[% innerloop3 | html %]" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </li>
+                            <li>
+                                <span class="label">&nbsp;</span>
+                                <a href="#" class="toggle_advanced_pattern show_advanced_pattern"><i class="fa fa-plus-square"></i> Show advanced pattern</a>
+                                <a href="#" style="display:none;" class="toggle_advanced_pattern hide_advanced_pattern"><i class="fa fa-minus-square"></i> Hide advanced pattern</a>
+                            </li>
+                        </ol>
 
-                            <input type="hidden" id="mana_id"  name="mana_id" value=""/>
-                            <input type="hidden" id="sndescription"  name="sndescription" value=""/>
-                            <input type="hidden" id="sfdescription"  name="sfdescription" value=""/>
-                            <input type="hidden" id="unit"  name="unit" value=""/>
-                            <input type="hidden" id="unitsperissue"  name="unitsperissue" value=""/>
-                            <input type="hidden" id="issuesperunit"  name="issuesperunit" value=""/>
-                            <fieldset class="action">
-                                <button type="button" class="btn btn-default" id="subscription_add_previous" style="float:left"><i class="fa-solid fa-left-long"></i> Previous</button>
-                                <input id="save-subscription" class="btn btn-primary" type="submit" value="Save subscription" style="float:right;" accesskey="w"/>
-                            </fieldset>
+                        <div id="advancedpredictionpattern" style="display:none">
+                            <ol>
+                                <li>
+                                    <label for="patternname" class="required">Pattern name:</label>
+                                    <input id="patternname" name="patternname" type="text" readonly="readonly" class="required" required="required" />
+                                    <span class="required">Required</span>
+                                </li>
+                                <li>
+                                    <label for="numberingmethod">Numbering formula:</label>
+                                    <input readonly="readonly" type="text" name="numberingmethod" id="numberingmethod" size="50" value="[% numberingmethod | html %]" />
+                                </li>
+                                <li>
+                                    <span class="label">Advanced prediction pattern: </span>
+                                    <table id="advancedpredictionpatternt">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>X</th>
+                                                <th>Y</th>
+                                                <th>Z</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Label: </th>
+                                                <td><input type="text" readonly="readonly" id="label1" name="label1" /></td>
+                                                <td><input type="text" readonly="readonly" id="label2" name="label2" /></td>
+                                                <td><input type="text" readonly="readonly" id="label3" name="label3" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Begins with: </th>
+                                                <td><input type="text" readonly="readonly" id="lastvalue1" name="lastvalue1" /></td>
+                                                <td><input type="text" readonly="readonly" id="lastvalue2" name="lastvalue2" /></td>
+                                                <td><input type="text" readonly="readonly" id="lastvalue3" name="lastvalue3" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Add: </th>
+                                                <td><input type="text" readonly="readonly" id="add1" name="add1" /></td>
+                                                <td><input type="text" readonly="readonly" id="add2" name="add2" /></td>
+                                                <td><input type="text" readonly="readonly" id="add3" name="add3" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Every: </th>
+                                                <td><input type="text" readonly="readonly" id="every1" name="every1" /></td>
+                                                <td><input type="text" readonly="readonly" id="every2" name="every2" /></td>
+                                                <td><input type="text" readonly="readonly" id="every3" name="every3" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Set back to: </th>
+                                                <td><input type="text" readonly="readonly" id="setto1" name="setto1" /></td>
+                                                <td><input type="text" readonly="readonly" id="setto2" name="setto2" /></td>
+                                                <td><input type="text" readonly="readonly" id="setto3" name="setto3" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">When more than: </th>
+                                                <td><input type="text" readonly="readonly" id="whenmorethan1" name="whenmorethan1" /></td>
+                                                <td><input type="text" readonly="readonly" id="whenmorethan2" name="whenmorethan2" /></td>
+                                                <td><input type="text" readonly="readonly" id="whenmorethan3" name="whenmorethan3" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Inner counter: </th>
+                                                <td><input type="text" readonly="readonly" id="innerloop1" name="innerloop1" /></td>
+                                                <td><input type="text" readonly="readonly" id="innerloop2" name="innerloop2" /></td>
+                                                <td><input type="text" readonly="readonly" id="innerloop3" name="innerloop3" /></td>
+                                            </tr>
+                                            <tr>
+                                                [% BLOCK numbering_select %]
+                                                    <select disabled="disabled" id="[% name | html %]" name="[% name | html %]">
+                                                        <option value=""></option>
+                                                        <option value="dayname">Name of day</option>
+                                                        <option value="dayabrv">Name of day (abbreviated)</option>
+                                                        <option value="monthname">Name of month</option>
+                                                        <option value="monthabrv">Name of month (abbreviated)</option>
+                                                        <option value="season">Name of season</option>
+                                                        <option value="seasonabrv">Name of season (abbreviated)</option>
+                                                    </select>
+                                                [% END %]
+                                                <th scope="row">Formatting:</th>
+                                                <td>[% PROCESS numbering_select name="numbering1" %]</td>
+                                                <td>[% PROCESS numbering_select name="numbering2" %]</td>
+                                                <td>[% PROCESS numbering_select name="numbering3" %]</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                                <li>
+                                    <span class="label">&nbsp;</span>
+                                    <a href="#" id="modifyadvancedpatternbutton"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Modify pattern</a>
+                                    <button type="button" class="btn btn-default btn-xs" id="saveadvancedpatternbutton" style="display:none"><i class="fa fa-save"></i> Save as new pattern</button>
+                                    <a class="cancel" href="#" id="restoreadvancedpatternbutton" style="display:none">Cancel modifications</a>
+                                </li>
+                            </ol>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <fieldset id="displayexample"></fieldset>
-                    </div>
-                </div> <!-- /.row#page_2 -->
-            </form>
-        </div><!-- /.main -->
+                        <!-- /#advancedpredictionpattern -->
+                        <fieldset class="action">
+                            <button type="button" id="testpatternbutton" class="btn btn-default btn-sm"><i class="fa fa-play"></i> Test prediction pattern</button>
+                        </fieldset>
+                    </fieldset>
 
-        <!-- Mana Search Result Modal -->
-        <div class="modal" id="mana_search_result" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="mana_search_result_label">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                    </div>
+                    [% IF additional_fields %]
+                        <div id="subscription_additional_fields"> [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values %] </div>
+                    [% END %]
+
+                    <input type="hidden" id="mana_id" name="mana_id" value="" />
+                    <input type="hidden" id="sndescription" name="sndescription" value="" />
+                    <input type="hidden" id="sfdescription" name="sfdescription" value="" />
+                    <input type="hidden" id="unit" name="unit" value="" />
+                    <input type="hidden" id="unitsperissue" name="unitsperissue" value="" />
+                    <input type="hidden" id="issuesperunit" name="issuesperunit" value="" />
+                    <fieldset class="action">
+                        <button type="button" class="btn btn-default" id="subscription_add_previous" style="float:left"><i class="fa-solid fa-left-long"></i> Previous</button>
+                        <input id="save-subscription" class="btn btn-primary" type="submit" value="Save subscription" style="float:right;" accesskey="w" />
+                    </fieldset>
                 </div>
-             </div>
-         </div>
+            </div>
+            <div class="col-md-6">
+                <fieldset id="displayexample"></fieldset>
+            </div>
+        </div>
+        <!-- /.row#page_2 -->
+    </form> </div
+><!-- /.main -->
+
+<!-- Mana Search Result Modal -->
+<div class="modal" id="mana_search_result" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="mana_search_result_label">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

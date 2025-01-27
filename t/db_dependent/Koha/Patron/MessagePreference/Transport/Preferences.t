@@ -47,65 +47,89 @@ subtest 'Test Koha::Patron::MessagePreference::Transport::Preferences' => sub {
 
     $schema->storage->txn_begin;
 
-    my $attribute = $builder->build_object({ class => 'Koha::Patron::MessagePreference::Attributes' });
-    my $mtt       = $builder->build_object({ class => 'Koha::Patron::MessagePreference::Transport::Types' });
-    my $letter    = build_a_test_letter({
-        mtt => $mtt->message_transport_type
-    });
-    Koha::Patron::MessagePreference::Transport->new({
-        message_attribute_id   => $attribute->message_attribute_id,
-        message_transport_type => $mtt->message_transport_type,
-        is_digest              => 0,
-        letter_module          => $letter->module,
-        letter_code            => $letter->code,
-    })->store;
+    my $attribute = $builder->build_object( { class => 'Koha::Patron::MessagePreference::Attributes' } );
+    my $mtt       = $builder->build_object( { class => 'Koha::Patron::MessagePreference::Transport::Types' } );
+    my $letter    = build_a_test_letter( { mtt => $mtt->message_transport_type } );
+    Koha::Patron::MessagePreference::Transport->new(
+        {
+            message_attribute_id   => $attribute->message_attribute_id,
+            message_transport_type => $mtt->message_transport_type,
+            is_digest              => 0,
+            letter_module          => $letter->module,
+            letter_code            => $letter->code,
+        }
+    )->store;
 
     subtest 'For a patron' => sub {
-        my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
-        my $preference = Koha::Patron::MessagePreference->new({
-            borrowernumber       => $patron->borrowernumber,
-            message_attribute_id => $attribute->message_attribute_id,
-            wants_digest         => 0,
-            days_in_advance      => undef,
-        })->store;
+        my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $preference = Koha::Patron::MessagePreference->new(
+            {
+                borrowernumber       => $patron->borrowernumber,
+                message_attribute_id => $attribute->message_attribute_id,
+                wants_digest         => 0,
+                days_in_advance      => undef,
+            }
+        )->store;
 
-        my $pref_id = $preference->borrower_message_preference_id;
-        my $transport_pref = Koha::Patron::MessagePreference::Transport::Preference->new({
-            borrower_message_preference_id => $pref_id,
-            message_transport_type => $mtt->message_transport_type,
-        })->store;
-        is(ref($transport_pref), 'Koha::Patron::MessagePreference::Transport::Preference',
-           'Added a new messaging transport preference for patron.');
+        my $pref_id        = $preference->borrower_message_preference_id;
+        my $transport_pref = Koha::Patron::MessagePreference::Transport::Preference->new(
+            {
+                borrower_message_preference_id => $pref_id,
+                message_transport_type         => $mtt->message_transport_type,
+            }
+        )->store;
+        is(
+            ref($transport_pref), 'Koha::Patron::MessagePreference::Transport::Preference',
+            'Added a new messaging transport preference for patron.'
+        );
 
         $transport_pref->delete;
-        is(Koha::Patron::MessagePreference::Transport::Preferences->search({
-            borrower_message_preference_id => $pref_id,
-            message_transport_type => $mtt->message_transport_type,
-        })->count, 0, 'Deleted the messaging transport preference.');
+        is(
+            Koha::Patron::MessagePreference::Transport::Preferences->search(
+                {
+                    borrower_message_preference_id => $pref_id,
+                    message_transport_type         => $mtt->message_transport_type,
+                }
+            )->count,
+            0,
+            'Deleted the messaging transport preference.'
+        );
     };
 
     subtest 'For a category' => sub {
-        my $category   = $builder->build_object({ class => 'Koha::Patron::Categories' });
-        my $preference = Koha::Patron::MessagePreference->new({
-            categorycode         => $category->categorycode,
-            message_attribute_id => $attribute->message_attribute_id,
-            wants_digest         => 0,
-            days_in_advance      => undef,
-        })->store;
+        my $category   = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+        my $preference = Koha::Patron::MessagePreference->new(
+            {
+                categorycode         => $category->categorycode,
+                message_attribute_id => $attribute->message_attribute_id,
+                wants_digest         => 0,
+                days_in_advance      => undef,
+            }
+        )->store;
 
-        my $pref_id = $preference->borrower_message_preference_id;
-        my $transport_pref = Koha::Patron::MessagePreference::Transport::Preference->new({
-            borrower_message_preference_id => $pref_id,
-            message_transport_type => $mtt->message_transport_type,
-        })->store;
-        is(ref($transport_pref), 'Koha::Patron::MessagePreference::Transport::Preference',
-           'Added a new messaging transport preference for category.');
+        my $pref_id        = $preference->borrower_message_preference_id;
+        my $transport_pref = Koha::Patron::MessagePreference::Transport::Preference->new(
+            {
+                borrower_message_preference_id => $pref_id,
+                message_transport_type         => $mtt->message_transport_type,
+            }
+        )->store;
+        is(
+            ref($transport_pref), 'Koha::Patron::MessagePreference::Transport::Preference',
+            'Added a new messaging transport preference for category.'
+        );
 
         $transport_pref->delete;
-        is(Koha::Patron::MessagePreference::Transport::Preferences->search({
-            borrower_message_preference_id => $pref_id,
-            message_transport_type => $mtt->message_transport_type,
-        })->count, 0, 'Deleted the messaging transport preference.');
+        is(
+            Koha::Patron::MessagePreference::Transport::Preferences->search(
+                {
+                    borrower_message_preference_id => $pref_id,
+                    message_transport_type         => $mtt->message_transport_type,
+                }
+            )->count,
+            0,
+            'Deleted the messaging transport preference.'
+        );
     };
 
     $schema->storage->txn_rollback;
@@ -114,23 +138,26 @@ subtest 'Test Koha::Patron::MessagePreference::Transport::Preferences' => sub {
 sub build_a_test_letter {
     my ($params) = @_;
 
-    my $mtt = $params->{mtt} ? $params->{mtt} : 'email';
-    my $branchcode     = $builder->build({
-        source => 'Branch' })->{branchcode};
-    my $letter = $builder->build({
-        source => 'Letter',
-        value => {
-            branchcode => '',
-            is_html => 0,
-            message_transport_type => $mtt
+    my $mtt        = $params->{mtt} ? $params->{mtt} : 'email';
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $letter     = $builder->build(
+        {
+            source => 'Letter',
+            value  => {
+                branchcode             => '',
+                is_html                => 0,
+                message_transport_type => $mtt
+            }
         }
-    });
+    );
 
-    return Koha::Notice::Templates->find({
-        module => $letter->{module},
-        code   => $letter->{code},
-        branchcode => $letter->{branchcode},
-    });
+    return Koha::Notice::Templates->find(
+        {
+            module     => $letter->{module},
+            code       => $letter->{code},
+            branchcode => $letter->{branchcode},
+        }
+    );
 }
 
 1;

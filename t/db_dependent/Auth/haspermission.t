@@ -55,7 +55,7 @@ my $borr3 = $builder->build(
         source => 'Borrower',
         value  => {
             surname => 'Bor2',
-            flags   => 2**13,    # top level tools
+            flags   => 2**13,            # top level tools
         },
     }
 );
@@ -85,7 +85,7 @@ subtest 'undef top level tests' => sub {
     plan tests => 1;
 
     my $pass = haspermission( $borr2->{userid} );
-    ok($pass, "let through undef privs");
+    ok( $pass, "let through undef privs" );
 
     #throws_ok { my $r = haspermission( $borr1->{userid} ); }
     #'Koha::Exceptions::WrongParameter',
@@ -115,7 +115,7 @@ subtest 'hashref top level AND tests' => sub {
 
     # Check top level permission for superlibrarian
     my $r =
-      haspermission( $borr1->{userid}, { circulate => 1 } );
+        haspermission( $borr1->{userid}, { circulate => 1 } );
     is( ref($r), 'HASH', 'Superlibrarian/circulate' );
 
     # Check specific top level permission(s) for borr2
@@ -145,8 +145,10 @@ subtest 'hashref top level AND tests' => sub {
     is( ref($r), 'HASH', 'Superlibrarian/tools edit_additional_contents' );
     $r = haspermission( $borr2->{userid}, { acquisition => 'budget_manage' } );
     is( ref($r), 'HASH', 'Borrower2/acq budget_manage' );
-    $r = haspermission( $borr2->{userid},
-        { acquisition => 'budget_manage', tools => 'edit_additional_contents' } );
+    $r = haspermission(
+        $borr2->{userid},
+        { acquisition => 'budget_manage', tools => 'edit_additional_contents' }
+    );
     is( $r, 0, 'Borrower2 (/acquisition|budget_manage AND /tools|edit_additional_contents) should fail' );
     $r = haspermission(
         $borr2->{userid},
@@ -172,8 +174,8 @@ subtest 'hashref top level AND tests' => sub {
         $borr2->{userid},
         {
             tools => {
-                'upload_local_cover_images'  => 1,
-                'edit_additional_contents' => 1
+                'upload_local_cover_images' => 1,
+                'edit_additional_contents'  => 1
             },
         }
     );
@@ -181,7 +183,7 @@ subtest 'hashref top level AND tests' => sub {
     $r = haspermission(
         $borr2->{userid},
         {
-            tools => [ 'upload_local_cover_images', 'edit_additional_contents'],
+            tools => [ 'upload_local_cover_images', 'edit_additional_contents' ],
         }
     );
     is( ref($r), 'HASH', 'Borrower2 (/tools|upload_local_cover_image OR /tools|edit_additional_contents) granular' );
@@ -193,19 +195,19 @@ subtest 'arrayref top level OR tests' => sub {
 
     # Check top level permission for superlibrarian
     my $r =
-      haspermission( $borr1->{userid}, [ 'circulate', 'editcatalogue' ] );
+        haspermission( $borr1->{userid}, [ 'circulate', 'editcatalogue' ] );
     is( ref($r), 'HASH', 'Superlibrarian/circulate' );
 
     # Check specific top level permission(s) for borr2
     $r = haspermission( $borr2->{userid}, [ 'circulate', 'updatecharges' ] );
     is( ref($r), 'HASH', 'Borrower2/circulate OR Borrower2/updatecharges' );
-    $r = haspermission( $borr2->{userid}, ['updatecharges', 'serials' ] );
+    $r = haspermission( $borr2->{userid}, [ 'updatecharges', 'serials' ] );
     is( $r, 0, 'Borrower2/updatecharges OR Borrower2/serials should fail' );
 
     # Check granular permission with 1: means all subpermissions
-    $r = haspermission( $borr1->{userid}, [ 'tools' ] );
+    $r = haspermission( $borr1->{userid}, ['tools'] );
     is( ref($r), 'HASH', 'Superlibrarian/tools granular all' );
-    $r = haspermission( $borr2->{userid}, [ 'tools' ] );
+    $r = haspermission( $borr2->{userid}, ['tools'] );
     is( $r, 0, 'Borrower2/tools granular all should fail' );
 
     # Check granular permission with *: means at least one subpermission
@@ -222,10 +224,12 @@ subtest 'arrayref top level OR tests' => sub {
     $r = haspermission( $borr1->{userid}, [ { tools => 'edit_additional_contents' } ] );
     is( ref($r), 'HASH', 'Superlibrarian/tools edit_additional_contents' );
     $r =
-      haspermission( $borr2->{userid}, [ { acquisition => 'budget_manage' } ] );
+        haspermission( $borr2->{userid}, [ { acquisition => 'budget_manage' } ] );
     is( ref($r), 'HASH', 'Borrower2/acq budget_manage' );
-    $r = haspermission( $borr2->{userid},
-        [ { acquisition => 'budget_manage'}, { tools => 'edit_additional_contents' } ] );
+    $r = haspermission(
+        $borr2->{userid},
+        [ { acquisition => 'budget_manage' }, { tools => 'edit_additional_contents' } ]
+    );
     is( ref($r), 'HASH', 'Borrower2/two granular OR should pass' );
     $r = haspermission(
         $borr2->{userid},

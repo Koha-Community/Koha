@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use base qw(Class::Accessor);
 
-use C4::Search qw( getRecords ); # :(
+use C4::Search qw( getRecords );    # :(
 use C4::AuthoritiesMarc;
 use Koha::SearchEngine::Search;
 
@@ -36,18 +36,19 @@ Koha::SearchEngine::Zebra::Search - Search implementation for Zebra
 =cut
 
 sub search {
-    my ($self,$query_string) = @_;
+    my ( $self, $query_string ) = @_;
 
-     my $query = Data::SearchEngine::Query->new(
-       count => 10,
-       page => 1,
-       query => $query_string,
-     );
+    my $query = Data::SearchEngine::Query->new(
+        count => 10,
+        page  => 1,
+        query => $query_string,
+    );
 
     my $results = $self->searchengine->search($query);
 
-    foreach my $item (@{ $results->items }) {
+    foreach my $item ( @{ $results->items } ) {
         my $title = $item->get_value('ste_title');
+
         #utf8::encode($title);
         print "$title\n";
     }
@@ -76,7 +77,6 @@ This passes straight through to C4::Search::SimpleSearch.
 
 =cut
 
-
 sub simple_search_compat {
     shift;
     return C4::Search::SimpleSearch(@_);
@@ -95,7 +95,7 @@ Returns the biblionumber from the search result record.
 sub extract_biblionumber {
     my ( $self, $searchresultrecord ) = @_;
     my $record = C4::Search::new_record_from_zebra( 'biblioserver', $searchresultrecord );
-    return Koha::SearchEngine::Search::extract_biblionumber( $record );
+    return Koha::SearchEngine::Search::extract_biblionumber($record);
 }
 
 =head2 search_auth_compat

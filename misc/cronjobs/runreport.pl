@@ -30,12 +30,12 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::SMTP::Servers;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Text::CSV::Encoded;
-use CGI qw ( -utf8 );
-use Carp qw( carp );
-use Encode qw( decode );
-use JSON qw( to_json );
+use CGI       qw ( -utf8 );
+use Carp      qw( carp );
+use Encode    qw( decode );
+use JSON      qw( to_json );
 use Try::Tiny qw( catch try );
 
 =head1 NAME
@@ -202,34 +202,34 @@ my $csv_quote     = "";
 
 my $username = undef;
 my $password = undef;
-my $method = 'LOGIN';
+my $method   = 'LOGIN';
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'help|?'            => \$help,
-    'man'               => \$man,
-    'verbose'           => \$verbose,
-    'format=s'          => \$format,
-    'separator=s'       => \$csv_separator,
-    'quote=s'           => \$csv_quote,
-    'to=s'              => \$to,
-    'from=s'            => \$from,
-    'subject=s'         => \$subject,
-    'param=s'           => \@params,
-    'email'             => \$send_email,
-    'send_empty'        => \$send_empty,
-    'a|attachment'      => \$attachment,
-    'username:s'        => \$username,
-    'password:s'        => \$password,
-    'method:s'          => \$method,
-    'store-results'     => \$store_results,
-    'csv-header'        => \$csv_header,
+    'help|?'        => \$help,
+    'man'           => \$man,
+    'verbose'       => \$verbose,
+    'format=s'      => \$format,
+    'separator=s'   => \$csv_separator,
+    'quote=s'       => \$csv_quote,
+    'to=s'          => \$to,
+    'from=s'        => \$from,
+    'subject=s'     => \$subject,
+    'param=s'       => \@params,
+    'email'         => \$send_email,
+    'send_empty'    => \$send_empty,
+    'a|attachment'  => \$attachment,
+    'username:s'    => \$username,
+    'password:s'    => \$password,
+    'method:s'      => \$method,
+    'store-results' => \$store_results,
+    'csv-header'    => \$csv_header,
 
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
-pod2usage( -verbose => 2 ) if ($help and $verbose);
+pod2usage( -verbose => 2 ) if ( $help and $verbose );
 pod2usage(1) if $help;
 
 unless ($format) {
@@ -253,28 +253,28 @@ if ($csv_quote) {
     }
 }
 
-if ($format eq 'tsv' || $format eq 'text') {
-    $format = 'csv';
+if ( $format eq 'tsv' || $format eq 'text' ) {
+    $format    = 'csv';
     $separator = "\t";
 }
 
-if ($to or $from or $send_email) {
+if ( $to or $from or $send_email ) {
     $send_email = 1;
     $from or $from = C4::Context->preference('KohaAdminEmailAddress');
     $to   or $to   = C4::Context->preference('KohaAdminEmailAddress');
 }
 
-unless (scalar(@ARGV)) {
+unless ( scalar(@ARGV) ) {
     print STDERR "ERROR: No reportID(s) specified\n";
     pod2usage(1);
 }
-($verbose) and print scalar(@ARGV), " argument(s) after options: " . join(" ", @ARGV) . "\n";
+($verbose) and print scalar(@ARGV), " argument(s) after options: " . join( " ", @ARGV ) . "\n";
 
 my $today = dt_from_string();
-my $date = $today->ymd();
+my $date  = $today->ymd();
 
 foreach my $report_id (@ARGV) {
-    my $report = Koha::Reports->find( $report_id );
+    my $report = Koha::Reports->find($report_id);
     unless ($report) {
         warn "ERROR: No saved report $report_id found";
         next;
@@ -284,21 +284,18 @@ foreach my $report_id (@ARGV) {
     my $type        = $report->type;
 
     $verbose and print "SQL: $sql\n\n";
-    if ( $subject eq "" )
-    {
-        if ( defined($report_name) and $report_name ne "")
-        {
-            $subject = $report_name ;
-        }
-        else
-        {
+    if ( $subject eq "" ) {
+        if ( defined($report_name) and $report_name ne "" ) {
+            $subject = $report_name;
+        } else {
             $subject = 'Koha Saved Report';
         }
     }
 
     # convert SQL parameters to placeholders
     my $params_needed = ( $sql =~ s/(<<[^>]+>>)/\?/g );
-    die("You supplied ". scalar @params . " parameter(s) and $params_needed are required by the report") if scalar @params != $params_needed;
+    die( "You supplied " . scalar @params . " parameter(s) and $params_needed are required by the report" )
+        if scalar @params != $params_needed;
 
     my ($sth) = execute_query(
         {
@@ -307,8 +304,8 @@ foreach my $report_id (@ARGV) {
             report_id  => $report_id,
         }
     );
-    my $count = scalar($sth->rows);
-    unless ($count || $send_empty ) {
+    my $count = scalar( $sth->rows );
+    unless ( $count || $send_empty ) {
         print "NO OUTPUT: 0 results from execute_query\n";
         next;
     }
@@ -316,18 +313,18 @@ foreach my $report_id (@ARGV) {
 
     my $message;
     my @rows_to_store;
-    if( !$count ){
+    if ( !$count ) {
         $message = "No results were returned for the report\n";
-    } elsif ($format eq 'html') {
+    } elsif ( $format eq 'html' ) {
         my $cgi = CGI->new();
         my @rows;
-        while (my $line = $sth->fetchrow_arrayref) {
+        while ( my $line = $sth->fetchrow_arrayref ) {
             foreach (@$line) { defined($_) or $_ = ''; }    # catch undef values, replace w/ ''
-            push @rows, $cgi->TR( join('', $cgi->td($line)) ) . "\n";
+            push @rows,          $cgi->TR( join( '', $cgi->td($line) ) ) . "\n";
             push @rows_to_store, [@$line] if $store_results;
         }
-        $message = $cgi->table(join "", @rows);
-    } elsif ($format eq 'csv') {
+        $message = $cgi->table( join "", @rows );
+    } elsif ( $format eq 'csv' ) {
         my $csv = Text::CSV::Encoded->new(
             {
                 encoding_out => 'utf8',
@@ -338,14 +335,14 @@ foreach my $report_id (@ARGV) {
             }
         );
 
-        if ( $csv_header ) {
+        if ($csv_header) {
             my @fields = map { decode( 'utf8', $_ ) } @{ $sth->{NAME} };
-            $csv->combine( @fields );
+            $csv->combine(@fields);
             $message .= $csv->string() . "\n";
             push @rows_to_store, [@fields] if $store_results;
         }
 
-        while (my $line = $sth->fetchrow_arrayref) {
+        while ( my $line = $sth->fetchrow_arrayref ) {
             $csv->combine(@$line);
             $message .= $csv->string() . "\n";
             push @rows_to_store, [@$line] if $store_results;
@@ -367,10 +364,10 @@ foreach my $report_id (@ARGV) {
         );
 
         if ( $format eq 'html' ) {
-            $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
+            $message =
+                "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
             $email->html_body($message);
-        }
-        else {
+        } else {
             $email->text_body($message);
         }
 
@@ -387,20 +384,17 @@ foreach my $report_id (@ARGV) {
                 user_name => $username,
                 password  => $password,
             }
-        )
-            if $username;
+        ) if $username;
 
         $email->transport( $smtp_server->transport );
         try {
             $email->send_or_die;
-        }
-        catch {
+        } catch {
             carp "Mail not sent: $_";
         };
-    }
-    else {
+    } else {
         print $message;
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

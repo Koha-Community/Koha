@@ -57,7 +57,7 @@ sub new {
     my $type    = $params->{type} // 'error';
     my $payload = $params->{payload};
 
-    Koha::Exceptions::MissingParameter->throw( "Mandatory parameter missing: 'message'" )
+    Koha::Exceptions::MissingParameter->throw("Mandatory parameter missing: 'message'")
         unless $message;
 
     my $self = $class->SUPER::new(

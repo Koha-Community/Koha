@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="form-content">
-                    <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Search by contract name or/and description:" size="40"/>
+                    <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Search by contract name or/and description:" size="40" />
                 </div>
 
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>

@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 opac-tags_subject.pl
 
 TODO :: Description here
@@ -29,7 +28,7 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 
 my $query = CGI->new;
 
@@ -51,26 +50,26 @@ my $sth = $dbh->prepare("SELECT entry,weight FROM tags ORDER BY weight DESC LIMI
 $sth->execute($number);
 
 my %result;
-my $max=0;
-my $min=9999;
-my ($entry,$weight);
-while (($entry,$weight) = $sth->fetchrow) {
-    $result{$entry}=$weight;
-    $max = $weight if $weight > $max;
-    $min = $weight if $weight < $min;
+my $max = 0;
+my $min = 9999;
+my ( $entry, $weight );
+while ( ( $entry, $weight ) = $sth->fetchrow ) {
+    $result{$entry} = $weight;
+    $max            = $weight if $weight > $max;
+    $min            = $weight if $weight < $min;
 }
 
 $min++ if $min == $max;
 
 my @loop;
-foreach my $entry (sort keys %result) {
+foreach my $entry ( sort keys %result ) {
     my %line;
-    $line{entry} = $entry;
-    $line{weight} = int(($result{$entry}-$min)/($max-$min)*25)+10;
+    $line{entry}  = $entry;
+    $line{weight} = int( ( $result{$entry} - $min ) / ( $max - $min ) * 25 ) + 10;
     push @loop, \%line;
 }
 $template->param(
-    LOOP => \@loop,
+    LOOP   => \@loop,
     number => $number
 );
 

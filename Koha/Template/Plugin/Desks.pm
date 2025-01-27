@@ -48,8 +48,8 @@ sub GetLoggedInDeskId {
     my ($self) = @_;
 
     return C4::Context->userenv
-      ? C4::Context->userenv->{'desk_id'}
-      : '';
+        ? C4::Context->userenv->{'desk_id'}
+        : '';
 }
 
 =head3 GetLoggedInDeskName
@@ -64,8 +64,8 @@ sub GetLoggedInDeskName {
     my ($self) = @_;
 
     return C4::Context->userenv
-      ? C4::Context->userenv->{'desk_name'}
-      : '';
+        ? C4::Context->userenv->{'desk_name'}
+        : '';
 }
 
 =head3 ListForLibrary
@@ -78,8 +78,7 @@ returns all desks existing at the current library
 
 sub ListForLibrary {
     my ($self) = @_;
-    my $branch_limit =
-      C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
     return Koha::Desks->search(
         { branchcode => $branch_limit },
         { order_by   => { '-asc' => 'desk_name' } }
@@ -94,10 +93,9 @@ returns all desks existing at all libraries
 
 =cut
 
-
 sub all {
 
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Desks->search();
 }
 

@@ -39,15 +39,17 @@ use Koha::Biblios;
 use Koha::Items;
 use Koha::SearchEngine::Elasticsearch;
 
-foreach my $index ( ('biblios','authorities') ){
+foreach my $index ( ( 'biblios', 'authorities' ) ) {
     print "=================\n";
     print "Checking $index\n";
-    my @db_records = $index eq 'biblios' ? Koha::Biblios->search()->get_column('biblionumber') : Koha::Authorities->search()->get_column('authid');
+    my @db_records =
+        $index eq 'biblios'
+        ? Koha::Biblios->search()->get_column('biblionumber')
+        : Koha::Authorities->search()->get_column('authid');
 
-    my $searcher = Koha::SearchEngine::Elasticsearch->new({ index => $index });
-    my $es = $searcher->get_elasticsearch();
-    my $count = $es->indices->stats( index => $searcher->index_name )
-        ->{_all}{primaries}{docs}{count};
+    my $searcher = Koha::SearchEngine::Elasticsearch->new( { index => $index } );
+    my $es       = $searcher->get_elasticsearch();
+    my $count    = $es->indices->stats( index => $searcher->index_name )->{_all}{primaries}{docs}{count};
     print "Count in db for $index is " . scalar @db_records . ", count in Elasticsearch is $count\n";
 
     # Now we get all the ids from Elasticsearch
@@ -67,29 +69,29 @@ foreach my $index ( ('biblios','authorities') ){
     # Fetching each record, pushing the id into the array
     my $i = 1;
     print "Fetching Elasticsearch records ids";
-    while (my $doc = $scroll->next ){
-        print "." if !($i % 500);
-        print "\n$i records retrieved" if !($i % 5000);
+    while ( my $doc = $scroll->next ) {
+        print "."                      if !( $i % 500 );
+        print "\n$i records retrieved" if !( $i % 5000 );
         push @es_ids, $doc->{_id};
         $i++;
     }
 
     # Fetch values for providing record links
     my $es_params = $searcher->get_elasticsearch_params;
-    my $es_base   = "$es_params->{nodes}[0]/".$searcher->index_name;
+    my $es_base   = "$es_params->{nodes}[0]/" . $searcher->index_name;
     my $opac_base = C4::Context->preference('OPACBaseURL');
 
     print "\nComparing arrays, this may take a while\n";
 
-    my @koha_problems = sort { $a <=> $b } array_minus(@db_records, @es_ids);
-    my @es_problems = sort { $a <=> $b } array_minus(@es_ids, @db_records);
+    my @koha_problems = sort { $a <=> $b } array_minus( @db_records, @es_ids );
+    my @es_problems   = sort { $a <=> $b } array_minus( @es_ids,     @db_records );
 
     print "All records match\n" unless ( @koha_problems || @es_problems );
 
-    if ( @koha_problems ){
+    if (@koha_problems) {
         print "=================\n";
         print "Records that exist in Koha but not in ES\n";
-        for my $problem ( @koha_problems ){
+        for my $problem (@koha_problems) {
             if ( $index eq 'biblios' ) {
                 print "  #$problem";
                 print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-detail.pl?biblionumber=$problem\n";
@@ -100,10 +102,10 @@ foreach my $index ( ('biblios','authorities') ){
         }
     }
 
-    if ( @es_problems ){
+    if (@es_problems) {
         print "=================\n";
         print "Records that exist in ES but not in Koha\n";
-        for my $problem ( @es_problems ){
+        for my $problem (@es_problems) {
             print "  #$problem";
             print "  Enter this command to view record: curl $es_base/data/$problem?pretty=true\n";
         }

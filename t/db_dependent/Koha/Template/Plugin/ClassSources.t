@@ -24,66 +24,72 @@ BEGIN {
     use_ok('Koha::Template::Plugin::ClassSources');
 }
 
-my $schema  = Koha::Database->schema;
+my $schema = Koha::Database->schema;
 
 subtest 'all' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
     $schema->resultset('ClassSource')->delete();
-    $schema->resultset('ClassSource')->create({
-        cn_source => 'anscr',
-        description => 'ANSCR (Sound Recordings)',
-        used => 0,
-        class_sort_rule => 'generic',
-        class_split_rule => 'generic',
-    });
-    $schema->resultset('ClassSource')->create({
-        cn_source => 'ddc',
-        description => 'Dewey Decimal Classification',
-        used => 1,
-        class_sort_rule => 'dewey',
-        class_split_rule => 'dewey',
-    });
-    $schema->resultset('ClassSource')->create({
-        cn_source => 'z',
-        description => 'Other/Generic Classification Scheme',
-        used => 0,
-        class_sort_rule => 'generic',
-        class_split_rule => 'generic',
-    });
+    $schema->resultset('ClassSource')->create(
+        {
+            cn_source        => 'anscr',
+            description      => 'ANSCR (Sound Recordings)',
+            used             => 0,
+            class_sort_rule  => 'generic',
+            class_split_rule => 'generic',
+        }
+    );
+    $schema->resultset('ClassSource')->create(
+        {
+            cn_source        => 'ddc',
+            description      => 'Dewey Decimal Classification',
+            used             => 1,
+            class_sort_rule  => 'dewey',
+            class_split_rule => 'dewey',
+        }
+    );
+    $schema->resultset('ClassSource')->create(
+        {
+            cn_source        => 'z',
+            description      => 'Other/Generic Classification Scheme',
+            used             => 0,
+            class_sort_rule  => 'generic',
+            class_split_rule => 'generic',
+        }
+    );
 
-    t::lib::Mocks::mock_preference('DefaultClassificationSource', '');
+    t::lib::Mocks::mock_preference( 'DefaultClassificationSource', '' );
 
     my $plugin = Koha::Template::Plugin::ClassSources->new();
     subtest 'when given no parameters' => sub {
         plan tests => 2;
         my @class_sources = $plugin->all();
 
-        is(scalar @class_sources, 1, 'it returns only "used" class sources');
-        is($class_sources[0]->used, 1, 'it returns only "used" class sources');
+        is( scalar @class_sources,   1, 'it returns only "used" class sources' );
+        is( $class_sources[0]->used, 1, 'it returns only "used" class sources' );
     };
 
     subtest 'when given parameter "selected"' => sub {
         plan tests => 1;
-        my @class_sources = $plugin->all({ selected => 'anscr' });
+        my @class_sources = $plugin->all( { selected => 'anscr' } );
 
-        ok(scalar @class_sources == 2, 'it returns "used" class sources and the selected one');
+        ok( scalar @class_sources == 2, 'it returns "used" class sources and the selected one' );
     };
 
     subtest 'when DefaultClassificationSource is set to a not used class source' => sub {
         plan tests => 1;
-        t::lib::Mocks::mock_preference('DefaultClassificationSource', 'anscr');
+        t::lib::Mocks::mock_preference( 'DefaultClassificationSource', 'anscr' );
         my @class_sources = $plugin->all();
 
-        ok(scalar @class_sources == 2, 'it returns "used" class sources and the default one');
+        ok( scalar @class_sources == 2, 'it returns "used" class sources and the default one' );
     };
 
     subtest 'when DefaultClassificationSource is set and "selected" parameter is given' => sub {
         plan tests => 1;
-        t::lib::Mocks::mock_preference('DefaultClassificationSource', 'anscr');
-        my @class_sources = $plugin->all({ selected => 'z' });
-        ok(scalar @class_sources == 3, 'it returns "used" class sources, the default one and the selected one');
+        t::lib::Mocks::mock_preference( 'DefaultClassificationSource', 'anscr' );
+        my @class_sources = $plugin->all( { selected => 'z' } );
+        ok( scalar @class_sources == 3, 'it returns "used" class sources, the default one and the selected one' );
     };
 
     $schema->storage->txn_rollback;

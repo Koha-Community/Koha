@@ -55,10 +55,10 @@ Returns a list of the mandatory config entries for the protocol.
 
 sub mandatory_config_attributes {
     return qw(
-      key
-      secret
-      authorize_url
-      token_url
+        key
+        secret
+        authorize_url
+        token_url
     );
 }
 

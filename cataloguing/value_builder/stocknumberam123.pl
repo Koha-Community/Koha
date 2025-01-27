@@ -41,8 +41,8 @@ In this case, a stocknumber has this form : "PREFIX 0009678570".
 =cut
 
 my $builder = sub {
-    my ( $params ) = @_;
-    my $res="
+    my ($params) = @_;
+    my $res = "
     <script>
         function Blur$params->{id}(ev) {
                 var code = document.getElementById(ev.data.id);
@@ -61,39 +61,45 @@ my $builder = sub {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $code = $input->param('code');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $code     = $input->param('code');
 
-    my ($template, $loggedinuser, $cookie) = get_template_and_user({
-        template_name   => "cataloguing/value_builder/ajax.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {editcatalogue => '*'},
-    });
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/ajax.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
     my $dbh = C4::Context->dbh;
+
     # If the textbox is empty, we return a simple incremented stocknumber
     if ( $code eq "" ) {
         my $sth = $dbh->prepare("SELECT MAX(CAST(stocknumber AS SIGNED)) FROM items");
         $sth->execute;
-    
+
         if ( my $max = $sth->fetchrow ) {
             $template->param(
-                return => $max+1,
+                return => $max + 1,
             );
         }
-    # If a prefix is submited, we look for the highest stocknumber with this prefix, and return it incremented
+
+        # If a prefix is submited, we look for the highest stocknumber with this prefix, and return it incremented
     } elsif ( $code =~ m/^[a-zA-Z]+$/ ) {
-        my $sth = $dbh->prepare("SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,' ',-1) AS SIGNED)) FROM items WHERE stocknumber LIKE ?");
-        $sth->execute($code.' %');
-        
+        my $sth = $dbh->prepare(
+            "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,' ',-1) AS SIGNED)) FROM items WHERE stocknumber LIKE ?");
+        $sth->execute( $code . ' %' );
+
         if ( my $max = $sth->fetchrow ) {
             $template->param(
-                return => $code.' '.sprintf('%010s',($max+1)),
+                return => $code . ' ' . sprintf( '%010s', ( $max + 1 ) ),
             );
         }
-    # The user entered a custom value, we don't touch it, this could be handled in js
+
+        # The user entered a custom value, we don't touch it, this could be handled in js
     } else {
         $template->param(
             return => $code,

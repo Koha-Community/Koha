@@ -27,7 +27,7 @@ subtest 'new() tests' => sub {
 
     throws_ok { Koha::Plugins::Tab->new( { title => 'A title' } ); }
     'Koha::Exceptions::MissingParameter',
-      'Exception is thrown on missing content';
+        'Exception is thrown on missing content';
 
     like(
         "$@",
@@ -37,7 +37,7 @@ subtest 'new() tests' => sub {
 
     throws_ok { Koha::Plugins::Tab->new( { content => 'Some content' } ); }
     'Koha::Exceptions::MissingParameter',
-      'Exception is thrown on missing title';
+        'Exception is thrown on missing title';
 
     like(
         "$@",
@@ -52,7 +52,7 @@ subtest 'new() tests' => sub {
         }
     );
 
-    is( $tab->title, 'A title', 'title accessor is correct' );
+    is( $tab->title,   'A title',      'title accessor is correct' );
     is( $tab->content, 'Some content', 'content accessor is correct' );
 
     my $id = 'calculated-id';

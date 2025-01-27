@@ -102,13 +102,13 @@ in order of some form of relevance.
 =cut
 
 sub browse {
-    my ($self, $prefix, $field, $options) = @_;
+    my ( $self, $prefix, $field, $options ) = @_;
 
-    my $query = $self->_build_query($prefix, $field, $options);
+    my $query         = $self->_build_query( $prefix, $field, $options );
     my $elasticsearch = $self->get_elasticsearch();
-    my $results = $elasticsearch->search(
+    my $results       = $elasticsearch->search(
         index => $self->index_name,
-        body => $query
+        body  => $query
     );
 
     return $results->{suggest}{suggestions}[0]{options};
@@ -132,17 +132,16 @@ sub _build_query {
     my $fuzzie;
     if ( $l <= 2 ) {
         $fuzzie = 0;
-    }
-    elsif ( $l <= 5 ) {
+    } elsif ( $l <= 5 ) {
         $fuzzie = $f;
-    }
-    else {
+    } else {
         $fuzzie = $f + 1;
     }
     $fuzzie = 2 if $fuzzie > 2;
 
-    my $size = $options->{count} // 500;
+    my $size  = $options->{count} // 500;
     my $query = {
+
         # this is an annoying thing, if we set size to 0 it gets rewritten
         # to 10. There's a bug somewhere in one of the libraries.
         size    => 1,

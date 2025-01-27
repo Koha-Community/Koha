@@ -47,10 +47,11 @@ sub get_providers {
     my ( $self, $interface ) = @_;
 
     $interface = 'staff'
-      if $interface eq 'intranet';
+        if $interface eq 'intranet';
 
-    my $providers = Koha::Auth::Identity::Providers->search( { "domains.allow_$interface" => 1 }, { prefetch => 'domains' } );
-    my $base_url  = ( $interface eq 'staff' ) ? "/api/v1/oauth/login" : "/api/v1/public/oauth/login";
+    my $providers =
+        Koha::Auth::Identity::Providers->search( { "domains.allow_$interface" => 1 }, { prefetch => 'domains' } );
+    my $base_url = ( $interface eq 'staff' ) ? "/api/v1/oauth/login" : "/api/v1/public/oauth/login";
 
     my @urls;
 
@@ -60,11 +61,12 @@ sub get_providers {
 
         if ( $provider->protocol eq 'OIDC' || $provider->protocol eq 'OAuth' ) {
             push @urls,
-              { code        => $code,
+                {
+                code        => $code,
                 description => $provider->description,
                 icon_url    => $provider->icon_url,
                 url         => "$base_url/$code/$interface",
-              };
+                };
         }
     }
     return \@urls;

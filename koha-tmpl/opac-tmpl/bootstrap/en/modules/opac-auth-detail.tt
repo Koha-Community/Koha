@@ -8,14 +8,15 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% summary.mainentry | html %]
-    [% IF authtypetext %]
-        ([% authtypetext | html %])
-    [% END %] &rsaquo;
-    [% t("Authority search") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% summary.mainentry | html %]
+        [% IF authtypetext %]
+            ([% authtypetext | html %])
+        [% END %]
+        &rsaquo; [% t("Authority search") | html %] &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     [% IF ( displayhierarchy ) %]
@@ -29,212 +30,211 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-authoritiesdetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% summary.mainentry | html %][% IF authtypetext %]([% authtypetext | html %])[% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="col col-lg-2 order-2 order-lg-1">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                    [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
-                        [% SET div_class = 'col-lg-5 order-first order-md-first order-lg-2' %]
-                    [% ELSE %]
-                        [% SET div_class = 'col-lg-10 order-first order-md-first order-lg-2' %]
-                    [% END %]
-                [% ELSIF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
-                    [% SET div_class = 'col-lg-6 order-first order-md-first order-lg-2' %]
+    <div class="container-fluid">
+        <div class="row">
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                <div class="col col-lg-2 order-2 order-lg-1">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
+                [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
+                    [% SET div_class = 'col-lg-5 order-first order-md-first order-lg-2' %]
                 [% ELSE %]
-                    [% SET div_class = 'col order-first order-md-first order-lg-2' %]
+                    [% SET div_class = 'col-lg-10 order-first order-md-first order-lg-2' %]
+                [% END %]
+            [% ELSIF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
+                [% SET div_class = 'col-lg-6 order-first order-md-first order-lg-2' %]
+            [% ELSE %]
+                [% SET div_class = 'col order-first order-md-first order-lg-2' %]
+            [% END %]
+            <div class="[% div_class | html %]">
+                <div id="userauthdetails" class="maincontent">
+                    <div id="views">
+                        <span class="view">
+                            <span id="Normalview">Normal view</span>
+                        </span>
+                        <span class="view">
+                            <a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]&amp;marc=1">MARC view</a>
+                        </span>
+                    </div>
+
+                    [% IF ( displayhierarchy ) %]
+                        <div id="hierarchies"> [% PROCESS showhierarchy trees = loophierarchies %] </div>
+                    [% END %]
+
+                    <h1>[% summary.mainentry | html %][% IF authtypetext %]([% authtypetext | html %])[% END %]</h1>
+
+                    <div class="usedin">
+                        [% IF count %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;q=[% authid | uri %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a>[% ELSE %]This authority is not used in any records.[% END %]
+                    </div>
+
+                    [% IF html %]
+                        [% html | $raw %]
+                    [% ELSE %]
+                        <div class="authstanza">
+                            [% FOREACH authorize IN summary.authorized %]
+                                <div class="heading authorized auth[% seefro.field | html %]">
+                                    <span class="label">Preferred form: </span>
+                                    <span class="authorized">[% authorize.heading | html %]</span>
+                                </div>
+                            [% END %]
+                            [% PROCESS otherscript headings=summary.otherscript wantcategory='preferred' %]
+                        </div>
+
+                        [% IF summary.seefrom.size %]
+                            <div class="authstanza seefrom">
+                                <div class="authstanzaheading">Used for/see from:</div>
+                                <ul class="seefrom">
+                                    [% FOREACH seefro IN summary.seefrom %]
+                                        <li class="heading seefrom auth[% seefro.field | html %]">
+                                            [% IF seefro.type && seefro.type != 'seefrom' %]
+                                                <span class="label">[% PROCESS authtypelabel type=seefro.type | trim %]:</span>
+                                            [% END %]
+                                            <span class="seefrom">[% PROCESS authheadingdisplay heading=seefro.heading search=seefrosearch authid=seefro.authid %]</span>
+                                        </li>
+                                    [% END %]
+                                    [% PROCESS otherscript headings=summary.otherscript wantcategory='seefrom' %]
+                                </ul>
+                            </div>
+                        [% END %]
+
+                        [% IF summary.seealso.size %]
+                            <div class="authstanza seealso">
+                                <div class="authstanzaheading">See also:</div>
+                                <ul class="seelso">
+                                    [% FOREACH seeals IN summary.seealso %]
+                                        <li class="heading seealso auth[% seeals.field | html %]">
+                                            [% IF seeals.type && seeals.type != 'seealso' %]
+                                                <span class="label">[% PROCESS authtypelabel type=seeals.type | trim %]:</span>
+                                            [% END %]
+                                            <span class="seealso">[% PROCESS authheadingdisplay heading=seeals.heading search=seeals.search authid=seeals.authid %]</span>
+                                        </li>
+                                    [% END %]
+                                    [% PROCESS otherscript headings=summary.otherscript wantcategory='seealso' %]
+                                </ul>
+                            </div>
+                        [% END %]
+
+                        [% IF marcflavour == 'UNIMARC' && summary.otherscript %]
+                            <div class="authstanza">
+                                <div class="authstanzaheading">Other forms:</div>
+                                <ul>
+                                    [% FOREACH otherscrip IN summary.otherscript %]
+                                        <li>
+                                            [% PROCESS language lang=otherscrip.lang | trim %]:
+                                            <span class="otherscript">[% otherscrip.term | html %]</span>
+                                        </li>
+                                    [% END %]
+                                </ul>
+                            </div>
+                        [% END %]
+
+                        [% IF ( MARCURLS ) %]
+                            <div class="authstanza online_resources">
+                                <span class="label">Online resources:</span>
+                                <ul>
+                                    [% FOREACH MARCurl IN MARCURLS %]
+                                        <li
+                                            >[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
+                                            [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
+                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer"> [% MARCurl.linktext | html %]</a>
+                                            [% ELSE %]
+                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]"> [% MARCurl.linktext | html %]</a>
+                                            [% END %]
+                                            [% IF ( MARCurl.notes ) %]
+                                                <ul>
+                                                    [% FOREACH note IN MARCurl.notes %]
+                                                        <li>[% note.note | html %]</li>
+                                                    [% END %]
+                                                </ul>
+                                            [% END %]
+                                        </li>
+                                    [% END # /FOREACH MARCURLS %]
+                                </ul>
+                            </div>
+                        [% END # / IF MARCURLS %]
+                    [% END %]
+
+                    [% WRAPPER tabs id= "authdescriptions" %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "tab_descriptions" bt_active= 1 %]
+                                <span>Notes</span>
+                            [% END %]
+                        [% END # /WRAPPER tabs_nav %]
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="tab_descriptions" bt_active= 1 %]
+                                <div class="content_set">
+                                    [% FOREACH note IN summary.notes %]
+                                        <p class="note auth[% note.field | html %]">[% note.note | html %]</p>
+                                    [% END %]
+                                </div>
+                            [% END # /tab_panel# %]
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs#authdescriptions %]
+                </div>
+                <!-- / .#userauthdetails -->
+            </div>
+            <!-- / .col-lg-10/12 -->
+            [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    [% SET div_class = 'col-lg-5 order-lg-3' %]
+                [% ELSE %]
+                    [% SET div_class = 'col-lg-6 order-lg-3' %]
                 [% END %]
                 <div class="[% div_class | html %]">
-                    <div id="userauthdetails" class="maincontent">
-                        <div id="views">
-                            <span class="view">
-                                <span id="Normalview">Normal view</span>
-                            </span>
-                            <span class="view">
-                                <a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]&amp;marc=1">MARC view</a>
-                            </span>
-                        </div>
-
-                        [% IF ( displayhierarchy ) %]
-                            <div id="hierarchies">
-                                [% PROCESS showhierarchy trees = loophierarchies %]
-                            </div>
-                        [% END %]
-
-                        <h1>[% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</h1>
-
-                        <div class="usedin">
-                            [% IF count %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;q=[% authid | uri %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a>[% ELSE %]This authority is not used in any records.[% END %]
-                        </div>
-
-                        [% IF html %]
-                            [% html | $raw %]
-                        [% ELSE %]
-                            <div class="authstanza">
-                                [% FOREACH authorize IN summary.authorized %]
-                                    <div class="heading authorized auth[% seefro.field | html %]">
-                                        <span class="label">Preferred form: </span>
-                                        <span class="authorized">[% authorize.heading | html %]</span>
-                                    </div>
-                                [% END %]
-                                [% PROCESS otherscript headings=summary.otherscript wantcategory='preferred' %]
-                            </div>
-
-                            [% IF summary.seefrom.size %]
-                                <div class="authstanza seefrom">
-                                    <div class="authstanzaheading">Used for/see from:</div>
-                                    <ul class="seefrom">
-                                        [% FOREACH seefro IN summary.seefrom %]
-                                            <li class="heading seefrom auth[% seefro.field | html %]">
-                                                [% IF seefro.type && seefro.type != 'seefrom' %]
-                                                    <span class="label">[% PROCESS authtypelabel type=seefro.type | trim %]:</span>
-                                                [% END %]
-                                                <span class="seefrom">[% PROCESS authheadingdisplay heading=seefro.heading search=seefrosearch authid=seefro.authid %]</span>
-                                            </li>
-                                        [% END %]
-                                        [% PROCESS otherscript headings=summary.otherscript wantcategory='seefrom' %]
-                                    </ul>
-                                </div>
-                            [% END %]
-
-                            [% IF summary.seealso.size %]
-                                <div class="authstanza seealso">
-                                    <div class="authstanzaheading">See also:</div>
-                                    <ul class="seelso">
-                                        [% FOREACH seeals IN summary.seealso %]
-                                            <li class="heading seealso auth[% seeals.field | html %]">
-                                                [% IF seeals.type && seeals.type != 'seealso' %]
-                                                    <span class="label">[% PROCESS authtypelabel type=seeals.type | trim %]:</span>
-                                                [% END %]
-                                                <span class="seealso">[% PROCESS authheadingdisplay heading=seeals.heading search=seeals.search authid=seeals.authid %]</span>
-                                            </li>
-                                        [% END %]
-                                        [% PROCESS otherscript headings=summary.otherscript wantcategory='seealso' %]
-                                    </ul>
-                                </div>
-                            [% END %]
-
-                            [% IF marcflavour == 'UNIMARC' && summary.otherscript %]
-                                <div class="authstanza">
-                                    <div class="authstanzaheading">Other forms:</div>
-                                    <ul>
-                                        [% FOREACH otherscrip IN summary.otherscript %]
-                                            <li>
-                                                [% PROCESS language lang=otherscrip.lang | trim %]:
-                                                <span class="otherscript">[% otherscrip.term | html %]</span>
-                                            </li>
-                                        [% END %]
-                                    </ul>
-                                </div>
-                            [% END %]
-
-                            [% IF ( MARCURLS ) %]
-                                <div class="authstanza online_resources">
-                                    <span class="label">Online resources:</span>
-                                    <ul>
-                                        [% FOREACH MARCurl IN MARCURLS %]
-                                            <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
-                                                [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
-                                                    <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
-                                                    [% MARCurl.linktext | html %]</a>
-                                                [% ELSE %]
-                                                    <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
-                                                    [% MARCurl.linktext | html %]</a>
-                                                [% END %]
-                                                [% IF ( MARCurl.notes ) %]
-                                                    <ul>
-                                                        [% FOREACH note IN MARCurl.notes %]
-                                                            <li>[% note.note | html %]</li>
-                                                        [% END %]
-                                                    </ul>
-                                                [% END %]
-                                            </li>
-                                        [% END # /FOREACH MARCURLS %]
-                                    </ul>
-                                </div>
-                            [% END # / IF MARCURLS %]
-                        [% END %]
-
-                        [% WRAPPER tabs id= "authdescriptions" %]
-                            [% WRAPPER tabs_nav %]
-                                [% WRAPPER tab_item tabname= "tab_descriptions" bt_active= 1 %]
-                                    <span>Notes</span>
-                                [% END %]
-                            [% END # /WRAPPER tabs_nav %]
-                            [% WRAPPER tab_panels %]
-                                [% WRAPPER tab_panel tabname="tab_descriptions" bt_active= 1 %]
-                                    <div class="content_set">
-                                        [% FOREACH note IN summary.notes %]
-                                            <p class="note auth[% note.field | html %]">[% note.note | html %]</p>
-                                        [% END %]
-                                    </div>
-                                [% END # /tab_panel# %]
-                            [% END # /WRAPPER tab_panels %]
-                        [% END # /WRAPPER tabs#authdescriptions %]
-
-                    </div> <!-- / .#userauthdetails -->
-                </div> <!-- / .col-lg-10/12 -->
-                [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
-                    [% IF ( OpacNav || OpacNavBottom ) %]
-                        [% SET div_class = 'col-lg-5 order-lg-3' %]
-                    [% ELSE %]
-                        [% SET div_class = 'col-lg-6 order-lg-3' %]
-                    [% END %]
-                    <div class="[% div_class | html %]">
-                        <div class="author_identifier_info">
-                            <span>Author information</span>
-                            <ul>
+                    <div class="author_identifier_info">
+                        <span>Author information</span>
+                        <ul>
                             [% FOR info IN Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ).split(',') %]
                                 [% NEXT IF author_information.keys.grep(info).size <= 0 %]
                                 [% PROCESS "authority-information.inc" information => author_information.$info, info_type => info %]
                             [% END %]
-                            </ul>
-                        </div>
+                        </ul>
                     </div>
-                [% END %]
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                </div>
+            [% END %]
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% IF ( displayhierarchy ) %]
-    [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
-[% END %]
-<script>
-    $(document).ready(function() {
-        [% IF ( displayhierarchy ) %]
-            $('#hierarchies').jstree({
-                "types" : {
-                    "default" : {
-                        "icon" : "fa-solid fa-file"
-                    }
-                },
-                "plugins" : [ "types" ]
-            }).on('ready.jstree', function(){
-                $(this).jstree('open_all');
-                $("#hier"+[% original_authid | html %]+"_anchor").on("click",
-                    function(e){e.preventDefault(); return false;}
-                ).css("text-decoration", "none").css("color", "#333");
-                $(".currentauth").css("text-decoration", "none").css("color", "#333");
-            }).bind("select_node.jstree", function (e, data) {
-                e.preventDefault();
-                document.location.href = data.node.a_attr.href;
-            });
-        [% END %]
-    });
-</script>
+    [% IF ( displayhierarchy ) %]
+        [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
+    [% END %]
+    <script>
+        $(document).ready(function() {
+            [% IF ( displayhierarchy ) %]
+                $('#hierarchies').jstree({
+                    "types" : {
+                        "default" : {
+                            "icon" : "fa-solid fa-file"
+                        }
+                    },
+                    "plugins" : [ "types" ]
+                }).on('ready.jstree', function(){
+                    $(this).jstree('open_all');
+                    $("#hier"+[% original_authid | html %]+"_anchor").on("click",
+                        function(e){e.preventDefault(); return false;}
+                    ).css("text-decoration", "none").css("color", "#333");
+                    $(".currentauth").css("text-decoration", "none").css("color", "#333");
+                }).bind("select_node.jstree", function (e, data) {
+                    e.preventDefault();
+                    document.location.href = data.node.a_attr.href;
+                });
+            [% END %]
+        });
+    </script>
 [% END %]

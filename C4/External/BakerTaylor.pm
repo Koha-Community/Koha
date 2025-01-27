@@ -26,12 +26,12 @@ use C4::Context;
 use Modern::Perl;
 
 use vars qw(%EXPORT_TAGS $VERSION);
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
 
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
-    $VERSION = 3.07.00.049;
+    @ISA       = qw(Exporter);
+    $VERSION   = 3.07.00.049;
     @EXPORT_OK = qw(availability content_cafe_url image_url link_url http_jacket_link);
 }
 
@@ -39,65 +39,70 @@ BEGIN {
 my ( $user, $pass, $agent, $image_url, $link_url );
 
 sub _initialize {
-	$user     = (@_ ? shift : C4::Context->preference('BakerTaylorUsername')    ) || ''; # LL17984
-	$pass     = (@_ ? shift : C4::Context->preference('BakerTaylorPassword')    ) || ''; # CC82349
-	$link_url = (@_ ? shift : C4::Context->preference('BakerTaylorBookstoreURL'));
-        $image_url = "https://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Options=Y&Return=T&Type=S&Value=";
-	$agent = "Koha/$VERSION [en] (Linux)";
-			#"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
+    $user     = ( @_ ? shift : C4::Context->preference('BakerTaylorUsername') ) || '';    # LL17984
+    $pass     = ( @_ ? shift : C4::Context->preference('BakerTaylorPassword') ) || '';    # CC82349
+    $link_url = ( @_ ? shift : C4::Context->preference('BakerTaylorBookstoreURL') );
+    $image_url =
+        "https://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Options=Y&Return=T&Type=S&Value=";
+    $agent = "Koha/$VERSION [en] (Linux)";
+
+    #"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
 }
 
 sub image_url {
     _initialize();
-	($user and $pass) or return;
-	my $isbn = (@_ ? shift : '');
-	$isbn =~ s/(p|-)//g;	# sanitize
-	return $image_url . $isbn;
+    ( $user and $pass ) or return;
+    my $isbn = ( @_ ? shift : '' );
+    $isbn =~ s/(p|-)//g;    # sanitize
+    return $image_url . $isbn;
 }
 
 sub link_url {
     _initialize();
-	my $isbn = (@_ ? shift : '');
-	$isbn =~ s/(p|-)//g;	# sanitize
-	$link_url or return;
-	return $link_url . $isbn;
+    my $isbn = ( @_ ? shift : '' );
+    $isbn =~ s/(p|-)//g;    # sanitize
+    $link_url or return;
+    return $link_url . $isbn;
 }
 
 sub content_cafe_url {
     _initialize();
-	($user and $pass) or return;
-	my $isbn = (@_ ? shift : '');
-	$isbn =~ s/(p|-)//g;	# sanitize
-    return "https://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
+    ( $user and $pass ) or return;
+    my $isbn = ( @_ ? shift : '' );
+    $isbn =~ s/(p|-)//g;    # sanitize
+    return
+        "https://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
 }
 
 sub http_jacket_link {
     _initialize();
-	my $isbn = shift or return;
-	$isbn =~ s/(p|-)//g;	# sanitize
-	my $image = availability($isbn);
-	my $alt = "Buy this book";
-	$image and $image = qq(<img class="btjacket" alt="$alt" src="$image" />);
-	my $link = &link_url($isbn);
-	unless ($link) {return $image || '';}
-	return sprintf qq(<a class="btlink" href="%s">%s</a>),$link,($image||$alt);
+    my $isbn = shift or return;
+    $isbn =~ s/(p|-)//g;    # sanitize
+    my $image = availability($isbn);
+    my $alt   = "Buy this book";
+    $image and $image = qq(<img class="btjacket" alt="$alt" src="$image" />);
+    my $link = &link_url($isbn);
+    unless ($link) { return $image || ''; }
+    return sprintf qq(<a class="btlink" href="%s">%s</a>), $link, ( $image || $alt );
 }
 
 sub availability {
     _initialize();
-	my $isbn = shift or return;
-	($user and $pass) or return;
-	$isbn =~ s/(p|-)//g;	# sanitize
-    my $url = "https://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
-	my $content = get($url);
-	warn "could not retrieve $url" unless $content;
-	my $xmlsimple = XML::Simple->new();
-	my $result = $xmlsimple->XMLin($content);
-	if ($result->{Error}) {
-		warn "Error returned to " . __PACKAGE__ . " : " . $result->{Error};
-	}
-	my $avail = $result->{Availability};
-	return ($avail and $avail !~ /^false$/i) ? &image_url($isbn) : 0;
+    my $isbn = shift    or return;
+    ( $user and $pass ) or return;
+    $isbn =~ s/(p|-)//g;    # sanitize
+    my $url =
+        "https://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
+    my $content = get($url);
+    warn "could not retrieve $url" unless $content;
+    my $xmlsimple = XML::Simple->new();
+    my $result    = $xmlsimple->XMLin($content);
+
+    if ( $result->{Error} ) {
+        warn "Error returned to " . __PACKAGE__ . " : " . $result->{Error};
+    }
+    my $avail = $result->{Availability};
+    return ( $avail and $avail !~ /^false$/i ) ? &image_url($isbn) : 0;
 }
 
 1;

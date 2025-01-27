@@ -17,7 +17,7 @@ module.exports = {
                 trailingComma: "es5",
                 arrowParens: "avoid",
                 semi: false,
-            }
+            },
         },
         {
             files: ["*.tt", "*.inc"],
@@ -29,4 +29,4 @@ module.exports = {
             },
         },
     ],
-}
+};

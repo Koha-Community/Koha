@@ -19,13 +19,13 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Koha qw( getallthemes );
-use C4::Languages qw( getTranslatedLanguages );
+use C4::Koha        qw( getallthemes );
+use C4::Languages   qw( getTranslatedLanguages );
 use C4::ClassSource qw( GetClassSources GetClassSource );
-use C4::Output qw( output_html_with_http_headers output_and_exit_if_error );
+use C4::Output      qw( output_html_with_http_headers output_and_exit_if_error );
 use C4::Templates;
 use Koha::Acquisition::Currencies;
 use Koha::Database::Columns;
@@ -45,18 +45,19 @@ sub GetTab {
         $local_currency = $active_currency->currency;
     }
     $tab_template->param(
-        local_currency => $local_currency, # currency code is used, because we do not know how a given currency is formatted.
+        local_currency =>
+            $local_currency,    # currency code is used, because we do not know how a given currency is formatted.
     );
 
-    return YAML::XS::Load( Encode::encode_utf8($tab_template->output()));
+    return YAML::XS::Load( Encode::encode_utf8( $tab_template->output() ) );
 }
 
 sub _get_chunk {
     my ( $value, %options ) = @_;
 
-    my $name = $options{'pref'};
+    my $name  = $options{'pref'};
     my $chunk = { name => $name, value => $value, type => $options{'type'} || 'input', class => $options{'class'} };
-    if( $options{'syntax'} ){
+    if ( $options{'syntax'} ) {
         $chunk->{'syntax'} = $options{'syntax'};
     }
     if ( $options{'type'} ) {
@@ -64,7 +65,7 @@ sub _get_chunk {
             $chunk->{'source'}     = $options{'source'};
             $chunk->{'exclusions'} = $options{'exclusions'} // "";
             $chunk->{'inclusions'} = $options{'inclusions'} // "";
-            $chunk->{'required'}   = $options{'required'} // "";
+            $chunk->{'required'}   = $options{'required'}   // "";
             $chunk->{'type'}       = 'modalselect';
         } elsif ( $options{'type'} eq 'modaljs' ) {
             $chunk->{'type'}      = 'modaljs';
@@ -85,32 +86,36 @@ sub _get_chunk {
         my $theme;
         my $interface;
         if ( $options{'type'} eq 'opac-languages' ) {
+
             # this is the OPAC
             $interface = 'opac';
             $theme     = C4::Context->preference('opacthemes');
         } else {
+
             # this is the staff interface
             $interface = 'intranet';
             $theme     = C4::Context->preference('template');
         }
         $chunk->{'languages'} = getTranslatedLanguages( $interface, $theme );
-        $chunk->{'type'} = 'languages';
-    } elsif ( $options{ 'choices' } ) {
+        $chunk->{'type'}      = 'languages';
+    } elsif ( $options{'choices'} ) {
         my $add_blank;
-        if ( $options{'choices'} && ref( $options{ 'choices' } ) eq '' ) {
+        if ( $options{'choices'} && ref( $options{'choices'} ) eq '' ) {
             if ( $options{'choices'} eq 'class-sources' ) {
                 my $sources = GetClassSources();
                 $options{'choices'} = { map { $_ => $sources->{$_}->{'description'} } keys %$sources };
             } elsif ( $options{'choices'} eq 'opac-templates' ) {
-                $options{'choices'} = { map { $_ => $_ } getallthemes( 'opac' ) }
+                $options{'choices'} = { map { $_ => $_ } getallthemes('opac') };
             } elsif ( $options{'choices'} eq 'staff-templates' ) {
-                $options{'choices'} = { map { $_ => $_ } getallthemes( 'intranet' ) }
+                $options{'choices'} = { map { $_ => $_ } getallthemes('intranet') };
             } elsif ( $options{choices} eq 'patron-categories' ) {
-                $options{choices} = { map { $_->categorycode => $_->description } Koha::Patron::Categories->search->as_list };
+                $options{choices} =
+                    { map { $_->categorycode => $_->description } Koha::Patron::Categories->search->as_list };
                 $add_blank = 1;
-            } elsif ( $options{'choices'} eq 'authval' ){
-                if( $options{'source'} ){
-                    $options{'choices'} = { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search( { category => $options{'source'} } )->as_list };
+            } elsif ( $options{'choices'} eq 'authval' ) {
+                if ( $options{'source'} ) {
+                    $options{'choices'} = { map { $_->authorised_value => $_->lib }
+                            Koha::AuthorisedValues->search( { category => $options{'source'} } )->as_list };
                     $add_blank = 1;
                 }
             } else {
@@ -126,17 +131,15 @@ sub _get_chunk {
         @values = split /,/, $value if defined($value);
         $chunk->{'CHOICES'} = [
             sort { $a->{'text'} cmp $b->{'text'} }
-            map {
+                map {
                 my $c = $_;
                 {
                     text     => $options{'choices'}->{$c},
                     value    => $c,
-                    selected => (
-                        grep { $_ eq $c || ( $c eq '' && ($value eq '0' || !$value ) ) } @values
-                    ) ? 1 : 0,
+                    selected => ( grep { $_ eq $c || ( $c eq '' && ( $value eq '0' || !$value ) ) } @values ) ? 1 : 0,
                 }
-              }
-            keys %{ $options{'choices'} }
+                }
+                keys %{ $options{'choices'} }
         ];
 
         # Add a first blank value if needed
@@ -147,38 +150,36 @@ sub _get_chunk {
 
     } elsif ( $options{'multiple'} ) {
         my @values;
-        @values = split /,/, $value if defined($value);
+        @values           = split /,/, $value if defined($value);
         $chunk->{type}    = 'multiple';
         $chunk->{CHOICES} = [
             sort { $a->{'text'} cmp $b->{'text'} }
-              map {
+                map {
                 my $option_value = $_;
                 {
                     text     => $options{multiple}->{$option_value},
                     value    => $option_value,
-                    selected => (grep { $_ eq $option_value } @values) ? 1 : 0,
+                    selected => ( grep { $_ eq $option_value } @values ) ? 1 : 0,
                 }
-              }
-              keys %{ $options{multiple} }
+                }
+                keys %{ $options{multiple} }
         ];
     } elsif ( $options{'multiple_sortable'} ) {
         my @values;
-        @values = split /,/, $value if defined($value);
-        $chunk->{type}    = 'multiple_sortable';
+        @values        = split /,/, $value if defined($value);
+        $chunk->{type} = 'multiple_sortable';
         my @options = sort keys %{ $options{multiple_sortable} };
         $chunk->{CHOICES} = [
-              map {
+            map {
                 my $option_value = $_;
                 {
                     text     => $options{multiple_sortable}->{$option_value},
                     value    => $option_value,
-                    selected => (grep { $_ eq $option_value } @values) ? 1 : 0,
+                    selected => ( grep { $_ eq $option_value } @values ) ? 1 : 0,
                 }
-              }
-              uniq(@values, @options)
+            } uniq( @values, @options )
         ];
     }
-
 
     $chunk->{ 'type_' . $chunk->{'type'} } = 1;
 
@@ -189,36 +190,41 @@ sub TransformPrefsToHTML {
     my ( $data, $searchfield ) = @_;
 
     my @lines;
-    my $dbh = C4::Context->dbh;
-    my $title = ( keys( %$data ) )[0];
-    my $tab = $data->{ $title };
-    $tab = { '' => $tab } if ( ref( $tab ) eq 'ARRAY' );
+    my $dbh   = C4::Context->dbh;
+    my $title = ( keys(%$data) )[0];
+    my $tab   = $data->{$title};
+    $tab = { '' => $tab } if ( ref($tab) eq 'ARRAY' );
 
     my @override_syspref_names;
-    if ( exists($ENV{OVERRIDE_SYSPREF_NAMES}) &&
-         defined($ENV{OVERRIDE_SYSPREF_NAMES})
-       ) {
+    if ( exists( $ENV{OVERRIDE_SYSPREF_NAMES} )
+        && defined( $ENV{OVERRIDE_SYSPREF_NAMES} ) )
+    {
         @override_syspref_names = split /,/, $ENV{OVERRIDE_SYSPREF_NAMES};
     }
 
     foreach my $group ( sort keys %$tab ) {
-        if ( $group ) {
+        if ($group) {
             push @lines, { is_group_title => 1, title => $group };
         }
 
-        foreach my $line ( @{ $tab->{ $group } } ) {
+        foreach my $line ( @{ $tab->{$group} } ) {
             my @chunks;
             my @names;
             my @warnings;
 
-            foreach my $piece ( @$line ) {
-                if ( ref ( $piece ) eq 'HASH' ) {
+            foreach my $piece (@$line) {
+                if ( ref($piece) eq 'HASH' ) {
                     my $name = $piece->{'pref'};
 
-                    if ( $name ) {
-                        my $row = $dbh->selectrow_hashref( "SELECT value, type FROM systempreferences WHERE variable = ?", {}, $name );
+                    if ($name) {
+                        my $row = $dbh->selectrow_hashref(
+                            "SELECT value, type FROM systempreferences WHERE variable = ?",
+                            {}, $name
+                        );
                         my $value;
-                        if ( ( !defined( $row ) || ( !defined( $row->{'value'} ) && $row->{'type'} ne 'YesNo' ) ) && defined( $piece->{'default'} ) ) {
+                        if ( ( !defined($row) || ( !defined( $row->{'value'} ) && $row->{'type'} ne 'YesNo' ) )
+                            && defined( $piece->{'default'} ) )
+                        {
                             $value = $piece->{'default'};
                         } else {
                             $value = $row->{'value'};
@@ -228,14 +234,14 @@ sub TransformPrefsToHTML {
                         # No highlighting of inputs yet, but would be useful
                         $chunk->{'highlighted'} = 1 if ( $searchfield && $name =~ /^$searchfield$/i );
 
-                        if ( $name eq 'Pseudonymization' && ! C4::Context->config('bcrypt_settings')) {
+                        if ( $name eq 'Pseudonymization' && !C4::Context->config('bcrypt_settings') ) {
                             push @warnings, 'bcrypt_config_not_set';
-                            $chunk->{disabled} = 1 unless $value; # Let disable if enabled
+                            $chunk->{disabled} = 1 unless $value;    # Let disable if enabled
                         }
                         push @chunks, $chunk;
 
                         my $name_entry = { name => $name };
-                        if ( $searchfield ) {
+                        if ($searchfield) {
                             if ( $name =~ /^$searchfield$/i ) {
                                 $name_entry->{'jumped'} = 1;
                             } elsif ( $name =~ /$searchfield/i ) {
@@ -249,7 +255,7 @@ sub TransformPrefsToHTML {
                         push @chunks, $piece;
                     }
                 } else {
-                    if ( $piece ) {
+                    if ($piece) {
                         my $version = Koha::version();
                         my ( $major, $minor, $maintenance, $development ) = split( '\.', $version );
                         if ( $minor % 2 ) {
@@ -271,12 +277,13 @@ sub TransformPrefsToHTML {
 sub _get_pref_files {
     my ( $input, $open_files ) = @_;
 
-    my ( $htdocs, $theme, $lang, undef ) = C4::Templates::_get_template_file( 'admin/preferences/admin.pref', 'intranet', $input );
+    my ( $htdocs, $theme, $lang, undef ) =
+        C4::Templates::_get_template_file( 'admin/preferences/admin.pref', 'intranet', $input );
 
     my %results;
 
-    foreach my $file ( glob( "$htdocs/$theme/$lang/modules/admin/preferences/*.pref" ) ) {
-        my ( $tab ) = ( $file =~ /([a-z0-9_-]+)\.pref$/ );
+    foreach my $file ( glob("$htdocs/$theme/$lang/modules/admin/preferences/*.pref") ) {
+        my ($tab) = ( $file =~ /([a-z0-9_-]+)\.pref$/ );
 
         $results{$tab} = $open_files ? IO::File->new( $file, 'r' ) : '';
     }
@@ -288,16 +295,17 @@ sub SearchPrefs {
     my ( $input, $searchfield ) = @_;
     my @tabs;
 
-    my %tab_files = _get_pref_files( $input );
+    my %tab_files = _get_pref_files($input);
     our @terms = split( /\s+/, $searchfield );
 
     foreach my $tab_name ( sort keys %tab_files ) {
+
         # FIXME Hum?
         # Force list context to remove 'uninitialized value in goto' warn coming from YAML::Syck; note that the other GetTab call is in list context too. The actual cause however is the null value for the pref OpacRenewalBranch in opac.pref
         my ($data) = GetTab( $input, $tab_name );
-        my $title = ( keys( %$data ) )[0];
-        my $tab = $data->{ $title };
-        $tab = { '' => $tab } if ( ref( $tab ) eq 'ARRAY' );
+        my $title  = ( keys(%$data) )[0];
+        my $tab    = $data->{$title};
+        $tab = { '' => $tab } if ( ref($tab) eq 'ARRAY' );
 
         my $matched_groups;
 
@@ -309,32 +317,34 @@ sub SearchPrefs {
 
             my @new_contents;
 
-            foreach my $line ( @$contents ) {
+            foreach my $line (@$contents) {
                 my $matched;
 
-                foreach my $piece ( @$line ) {
-                    if ( ref( $piece ) eq 'HASH' ) {
-                        if ( !$piece->{'pref'} ){
+                foreach my $piece (@$line) {
+                    if ( ref($piece) eq 'HASH' ) {
+                        if ( !$piece->{'pref'} ) {
                             next;
                         }
-                        if ( matches( $piece->{'pref'}, \@terms) ) {
+                        if ( matches( $piece->{'pref'}, \@terms ) ) {
                             $matched = 1;
-                        } elsif ( ref( $piece->{'choices'} ) eq 'HASH' && grep( { $_ && matches( $_, \@terms ) } values( %{ $piece->{'choices'} } ) ) ) {
+                        } elsif ( ref( $piece->{'choices'} ) eq 'HASH'
+                            && grep( { $_ && matches( $_, \@terms ) } values( %{ $piece->{'choices'} } ) ) )
+                        {
                             $matched = 1;
                         }
                     } elsif ( matches( $piece, \@terms ) ) {
                         $matched = 1;
                     }
-                    last if ( $matched );
+                    last if ($matched);
                 }
 
-                push @new_contents, $line if ( $matched );
+                push @new_contents, $line if ($matched);
             }
 
-            $matched_groups->{$group_title} = \@new_contents if ( @new_contents );
+            $matched_groups->{$group_title} = \@new_contents if (@new_contents);
         }
 
-        if ( $matched_groups ) {
+        if ($matched_groups) {
             my ( $title, $LINES ) = TransformPrefsToHTML( { $title => $matched_groups }, $searchfield );
 
             push @tabs, { tab => $tab, tab_title => $title, LINES => $LINES, tab_id => $tab_name };
@@ -346,14 +356,12 @@ sub SearchPrefs {
 
 sub matches {
     my ( $text, $terms ) = @_;
-    if ( $text ) {
-        return !grep(
-            {
-                my $re = eval{qr|$_|i};
+    if ($text) {
+        return !grep( {
+                my $re = eval { qr|$_|i };
                 $re = qr|\Q$_\E| if $@;
                 $text !~ m|$re|;
-            } @$terms
-        )
+        } @$terms );
     }
 }
 
@@ -361,28 +369,29 @@ my $dbh = C4::Context->dbh;
 our $input = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/preferences.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_sysprefs' },
+    {
+        template_name => "admin/preferences.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_sysprefs' },
     }
 );
 
-my $op = $input->param( 'op' ) || '';
-my $tab = $input->param( 'tab' );
-$tab ||= 'accounting'; # Ideally this should be "local-use" but preferences.pl
-                         # does not presently support local use preferences
+my $op  = $input->param('op') || '';
+my $tab = $input->param('tab');
+$tab ||= 'accounting';    # Ideally this should be "local-use" but preferences.pl
+                          # does not presently support local use preferences
 
 my $highlighted;
 
 if ( $op eq 'cud-save' ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
+    output_and_exit_if_error( $input, $cookie, $template, { check => 'csrf_token' } );
     foreach my $param ( $input->param() ) {
-        my ( $pref ) = ( $param =~ /pref_(.*)/ );
+        my ($pref) = ( $param =~ /pref_(.*)/ );
 
-        next if ( !defined( $pref ) );
+        next if ( !defined($pref) );
 
-        my $value = join( ',', $input->param( $param ) );
+        my $value = join( ',', $input->param($param) );
 
         C4::Context->set_preference( $pref, $value );
     }
@@ -394,7 +403,7 @@ if ( $op eq 'cud-save' ) {
 my @TABS;
 
 if ( $op eq 'search' ) {
-    my $searchfield = $input->param( 'searchfield' );
+    my $searchfield = $input->param('searchfield');
 
     $searchfield =~ s/\p{IsC}//g;
     $searchfield =~ s/\s+/ /;
@@ -405,14 +414,12 @@ if ( $op eq 'search' ) {
 
     @TABS = SearchPrefs( $input, $searchfield );
 
-    foreach my $tabh ( @TABS ) {
-        $template->param(
-            $tabh->{'tab'} => 1
-        );
+    foreach my $tabh (@TABS) {
+        $template->param( $tabh->{'tab'} => 1 );
     }
 
-    if ( @TABS ) {
-        $tab = ''; # No need to load a particular tab, as we found results
+    if (@TABS) {
+        $tab = '';    # No need to load a particular tab, as we found results
         $template->param( search_jumped => 1 ) if ( $TABS[0]->{'search_jumped'} );
     } else {
         $template->param(
@@ -421,18 +428,18 @@ if ( $op eq 'search' ) {
     }
 }
 
-if ( $tab ) {
+if ($tab) {
     my ( $tab_title, $LINES ) = TransformPrefsToHTML( GetTab( $input, $tab ), $highlighted );
 
     push @TABS, { tab_title => $tab_title, LINES => $LINES, tab_id => $tab };
     $template->param(
         $tab => 1,
-        tab => $tab,
+        tab  => $tab,
     );
 }
 
 $template->param(
-    TABS => \@TABS,
+    TABS       => \@TABS,
     db_columns => Koha::Database::Columns->columns,
 );
 

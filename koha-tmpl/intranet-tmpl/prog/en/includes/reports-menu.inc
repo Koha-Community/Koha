@@ -2,31 +2,30 @@
 
 <div id="navmenu">
     <div id="navmenulist">
-
         <h5>Guided reports</h5>
-            <ul>
-                <li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports</a></li>
-                [% IF ( CAN_user_reports_create_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form">Build new</a></li>
-                [% END %]
-                [% IF ( CAN_user_reports_execute_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Use saved</a></li>
-                [% END %]
-                [% IF ( CAN_user_reports_create_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql">Create from SQL</a></li>
-                [% END %]
-            </ul>
+        <ul>
+            <li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports</a></li>
+            [% IF ( CAN_user_reports_create_reports ) %]
+                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form">Build new</a></li>
+            [% END %]
+            [% IF ( CAN_user_reports_execute_reports ) %]
+                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Use saved</a></li>
+            [% END %]
+            [% IF ( CAN_user_reports_create_reports ) %]
+                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql">Create from SQL</a></li>
+            [% END %]
+        </ul>
 
         <h5>Statistics wizards</h5>
-            <ul>
-                <li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></li>
-                <li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons</a></li>
-                <li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalog</a></li>
-                <li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
-                <li><a href="/cgi-bin/koha/reports/serials_stats.pl">Serials</a></li>
-                <li><a href="/cgi-bin/koha/reports/cash_register_stats.pl">Cash register</a></li>
-                <li><a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds</a></li>
-            </ul>
+        <ul>
+            <li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></li>
+            <li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons</a></li>
+            <li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalog</a></li>
+            <li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
+            <li><a href="/cgi-bin/koha/reports/serials_stats.pl">Serials</a></li>
+            <li><a href="/cgi-bin/koha/reports/cash_register_stats.pl">Cash register</a></li>
+            <li><a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds</a></li>
+        </ul>
 
         [% IF plugins_enabled %]
             <h5>Report plugins</h5>
@@ -46,7 +45,6 @@
             <li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Patrons who haven't checked out</a></li>
             <li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Items with no checkouts</a></li>
         </ul>
-
 
         <h5>Other</h5>
         <ul>

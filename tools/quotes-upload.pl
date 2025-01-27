@@ -30,10 +30,10 @@ my $cgi = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/quotes-upload.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { tools => 'edit_quotes' },
+        template_name => "tools/quotes-upload.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { tools => 'edit_quotes' },
     }
 );
 

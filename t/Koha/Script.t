@@ -62,7 +62,7 @@ subtest 'lock_exec() tests' => sub {
         exit;
     }
 
-    sleep 1; # Make sure we start after the fork
+    sleep 1;    # Make sure we start after the fork
     my $command = dirname(__FILE__) . '/sleep.pl';
     my $result  = `$command 2>&1`;
 
@@ -74,15 +74,14 @@ subtest 'lock_exec() tests' => sub {
         exit;
     }
 
-    sleep 1; # Make sure we start after the fork
+    sleep 1;    # Make sure we start after the fork
     $command = dirname(__FILE__) . '/wait.pl';
     $result  = `$command 2>&1`;
 
     is( $result, 'YAY!', 'wait.pl successfully waits for the lock' );
 
-    throws_ok
-        { Koha::Script->new({ lock_name => 'blah' }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { Koha::Script->new( { lock_name => 'blah' } ); }
+    'Koha::Exceptions::MissingParameter',
         'Not passing the "script" parameter makes it raise an exception';
 };
 

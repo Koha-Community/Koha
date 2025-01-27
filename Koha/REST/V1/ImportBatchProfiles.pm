@@ -49,8 +49,7 @@ sub list {
             status  => 200,
             openapi => $profiles
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -67,14 +66,13 @@ sub add {
     my $body = $c->req->json;
 
     return try {
-        my $profile = Koha::ImportBatchProfile->new_from_api( $body )->store;
+        my $profile = Koha::ImportBatchProfile->new_from_api($body)->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $profile->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($profile),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -94,14 +92,13 @@ sub edit {
         return $c->render_resource_not_found("Import batch profile")
             unless $profile;
 
-        $profile->set_from_api($c->req->json)->store;
+        $profile->set_from_api( $c->req->json )->store;
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($profile),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

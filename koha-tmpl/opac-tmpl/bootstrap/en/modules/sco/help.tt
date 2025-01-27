@@ -6,9 +6,10 @@
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET SelfCheckHelpMessage = AdditionalContents.get( location => "SelfCheckHelpMessage", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
-<title>Self checkout help &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %]</title>
+<title>Self checkout help &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha[% END %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Koha" /> <!-- leave this for stats -->
+<meta name="generator" content="Koha" />
+<!-- leave this for stats -->
 <link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon')  ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
@@ -33,7 +34,9 @@
 [% END %]
 <script>
     var Koha = {};
-    function _(s) { return s } // dummy function for gettext
+    function _(s) {
+        return s;
+    } // dummy function for gettext
 </script>
 [% IF lang && lang != 'en' %]
     [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
@@ -42,52 +45,54 @@
 [% Asset.js('js/i18n.js') | $raw %]
 </head>
 <body id="sco_help" class="sco">
-    [% INCLUDE 'masthead-sco.inc' %]
+[% INCLUDE 'masthead-sco.inc' %]
 
-    <div class="main">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col order-first order-md-first order-lg-2">
-                    <h1>Self checkout help</h1>
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col order-first order-md-first order-lg-2">
+                <h1>Self checkout help</h1>
 
-                    [% IF ( SelfCheckHelpMessage ) %]
-                        <div id="selfcheckhelpmessage">
-                            [% PROCESS koha_news_block news => SelfCheckHelpMessage %]
-                        </div>
-                    [% END %]
+                [% IF ( SelfCheckHelpMessage ) %]
+                    <div id="selfcheckhelpmessage"> [% PROCESS koha_news_block news => SelfCheckHelpMessage %] </div>
+                [% END %]
 
-                    <div id="selfcheckdefaulthelpmessage">
-                        <p>If this is your first time using the self checkout system, or if the system
-                        is not behaving as expected, you may want to refer to this guide to get
-                        yourself started.</p>
+                <div id="selfcheckdefaulthelpmessage">
+                    <p>If this is your first time using the self checkout system, or if the system is not behaving as expected, you may want to refer to this guide to get yourself started.</p>
 
-                        <h2>Step one: Enter your user ID[% IF ( SelfCheckoutByLogin ) %] and password[% END %]</h2>
+                    <h2>Step one: Enter your user ID[% IF ( SelfCheckoutByLogin ) %]and password[% END %]</h2>
 
-                        <p>Enter your user ID[% IF ( SelfCheckoutByLogin ) %] and password[% END %], and click the
-                        submit button (or press the enter key).</p>
+                    <p>Enter your user ID[% IF ( SelfCheckoutByLogin ) %]and password[% END %], and click the submit button (or press the enter key).</p>
 
-                        <h2>Step two: Scan the barcode for each item, one at a time</h2>
+                    <h2>Step two: Scan the barcode for each item, one at a time</h2>
 
-                        <p>Scan each item and wait for the page to reload before scanning the next item.
-                        The checked-out item should appear in your checkouts list.
-                        The submit button only needs to be clicked if you enter the barcode manually.</p>
+                    <p
+                        >Scan each item and wait for the page to reload before scanning the next item. The checked-out item should appear in your checkouts list. The submit button only needs to be clicked if you enter the barcode
+                        manually.</p
+                    >
 
-                        <h2>Step three: Click the 'Finish' button</h2>
+                    <h2>Step three: Click the 'Finish' button</h2>
 
-                        <p>If you do not click the 'Finish' button, your session will automatically expire in
-                        [% SelfCheckTimeout | html %] seconds.</p>
-                    </div>
+                    <p>If you do not click the 'Finish' button, your session will automatically expire in [% SelfCheckTimeout | html %] seconds.</p>
+                </div>
 
-                    <div class="button">
-                        <a href="javascript:history.go(-1)">Return to the self-checkout</a>
-                    </div>
-
-                </div> <!-- / .col -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                <div class="button">
+                    <a href="javascript:history.go(-1)">Return to the self-checkout</a>
+                </div>
+            </div>
+            <!-- / .col -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% IF ( SCOUserJS ) %]<script>[% SCOUserJS | $raw %]</script>[% END %]
+    [% IF ( SCOUserJS ) %]
+        <script>
+            [% SCOUserJS | $raw %]
+        </script>
+    [% END %]
 [% END %]

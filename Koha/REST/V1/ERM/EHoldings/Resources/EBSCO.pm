@@ -42,22 +42,19 @@ sub list {
 
         # FIXME Do we need more validation here? Don't think so we have the API specs.
         my ( $vendor_id, $package_id ) = split '-',
-          $c->param('package_id') || q{};
+            $c->param('package_id') || q{};
         my $title_id = $c->param('title_id') || q{};
 
         my $url =
-          $title_id
-          ? sprintf '/titles/%s', $title_id
-          : sprintf '/vendors/%s/packages/%s/titles', $vendor_id, $package_id;
+            $title_id
+            ? sprintf '/titles/%s', $title_id
+            : sprintf '/vendors/%s/packages/%s/titles', $vendor_id, $package_id;
 
-        my $params =
-          '?orderby=titlename&offset=1&count=1&searchfield=titlename';
+        my $params = '?orderby=titlename&offset=1&count=1&searchfield=titlename';
         my $result;
         try {
-            $result =
-              $ebsco->request( GET => $url . $params );
-        }
-        catch {
+            $result = $ebsco->request( GET => $url . $params );
+        } catch {
             if ( blessed $_ ) {
                 if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
                     return $c->render(
@@ -76,11 +73,11 @@ sub list {
         my ( $per_page, $page ) = $ebsco->build_query_pagination( $c->req->params->to_hash );
 
         my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
-        my $searchfield = 'titlename';
+        my $searchfield       = 'titlename';
 
         $params =
-          sprintf '?orderby=titlename&offset=%s&count=%s&searchfield=%s',
-          $page, $per_page, $searchfield;
+            sprintf '?orderby=titlename&offset=%s&count=%s&searchfield=%s',
+            $page, $per_page, $searchfield;
 
         $result = $ebsco->request(
             GET => $url . $params,
@@ -89,13 +86,14 @@ sub list {
 
         my @resources;
         for my $t ( @{ $result->{titles} } ) {
-            my $r =
-              $t->{customerResourcesList}->[0];   # FIXME What about the others?
+            my $r = $t->{customerResourcesList}->[0];    # FIXME What about the others?
 
             my $resource = $ebsco->build_resource($r);
 
-            $resource = $ebsco->embed( $resource, $t,
-                $c->req->headers->header('x-koha-embed') );
+            $resource = $ebsco->embed(
+                $resource, $t,
+                $c->req->headers->header('x-koha-embed')
+            );
 
             push @resources, $resource;
         }
@@ -103,15 +101,14 @@ sub list {
         $total = 10000 if $total > 10000;
         $c->add_pagination_headers(
             {
-                base_total   => $base_total,
-                page         => $page,
-                per_page     => $per_page,
-                total        => $total,
+                base_total => $base_total,
+                page       => $page,
+                per_page   => $per_page,
+                total      => $total,
             }
         );
         return $c->render( status => 200, openapi => \@resources );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -125,18 +122,13 @@ sub get {
 
     return try {
         my ( $vendor_id, $package_id, $resource_id ) = split '-',
-          $c->param('resource_id');
-        my $ebsco      = Koha::ERM::Providers::EBSCO->new;
-        my $t = try {
-              return $ebsco->request( GET => '/vendors/'
-                  . $vendor_id
-                  . '/packages/'
-                  . $package_id
-                  . '/titles/'
-                  . $resource_id );
+            $c->param('resource_id');
+        my $ebsco = Koha::ERM::Providers::EBSCO->new;
+        my $t     = try {
+            return $ebsco->request(
+                GET => '/vendors/' . $vendor_id . '/packages/' . $package_id . '/titles/' . $resource_id );
 
-        }
-        catch {
+        } catch {
             if ( blessed $_ ) {
                 if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
                     return $c->render(
@@ -157,17 +149,16 @@ sub get {
             );
         }
 
-        my $r = $t->{customerResourcesList}->[0]; # FIXME What about the others?
+        my $r        = $t->{customerResourcesList}->[0];    # FIXME What about the others?
         my $resource = $ebsco->build_resource($r);
 
-        $resource = $ebsco->embed( $resource, {%$t, %$r}, $c->req->headers->header('x-koha-embed') );
+        $resource = $ebsco->embed( $resource, { %$t, %$r }, $c->req->headers->header('x-koha-embed') );
 
         return $c->render(
             status  => 200,
             openapi => $resource,
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -183,19 +174,14 @@ sub edit {
         my $body        = $c->req->json;
         my $is_selected = $body->{is_selected};
         my ( $vendor_id, $package_id, $resource_id ) = split '-',
-          $c->param('resource_id');
+            $c->param('resource_id');
 
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
         my $t     = try {
-            return $ebsco->request( GET => '/vendors/'
-                  . $vendor_id
-                  . '/packages/'
-                  . $package_id
-                  . '/titles/'
-                  . $resource_id );
+            return $ebsco->request(
+                GET => '/vendors/' . $vendor_id . '/packages/' . $package_id . '/titles/' . $resource_id );
 
-        }
-        catch {
+        } catch {
             if ( blessed $_ ) {
                 if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
                     return $c->render(
@@ -217,12 +203,7 @@ sub edit {
         }
 
         $ebsco->request(
-            PUT => '/vendors/'
-              . $vendor_id
-              . '/packages/'
-              . $package_id
-              . '/titles/'
-              . $resource_id,
+            PUT => '/vendors/' . $vendor_id . '/packages/' . $package_id . '/titles/' . $resource_id,
             undef,
             {
                 isSelected => $is_selected,
@@ -233,10 +214,10 @@ sub edit {
 
         return $c->render(
             status  => 200,
-            openapi => { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
+            openapi =>
+                { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 

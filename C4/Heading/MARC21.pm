@@ -21,7 +21,6 @@ use strict;
 use warnings;
 use MARC::Field;
 
-
 =head1 NAME
 
 C4::Heading::MARC21
@@ -68,33 +67,33 @@ my $bib_heading_fields = {
         main_entry => 1
     },
     '147' => {
-        auth_type => 'NAME_EVENT',
-        subfields => 'acdgvxyz68',
+        auth_type  => 'NAME_EVENT',
+        subfields  => 'acdgvxyz68',
         main_entry => 1
     },
     '148' => {
-        auth_type => 'CHRON_TERM',
-        subfields => 'abvxyz68',
+        auth_type  => 'CHRON_TERM',
+        subfields  => 'abvxyz68',
         main_entry => 1
     },
     '150' => {
-        auth_type => 'TOPIC_TERM',
-        subfields => 'abgvxyz68',
+        auth_type  => 'TOPIC_TERM',
+        subfields  => 'abgvxyz68',
         main_entry => 1
     },
     '151' => {
-        auth_type => 'GEOGR_NAME',
-        subfields => 'avxyz68',
+        auth_type  => 'GEOGR_NAME',
+        subfields  => 'avxyz68',
         main_entry => 1
     },
     '155' => {
-        auth_type => 'GENRE/FORM',
-        subfields => 'abvxyz68',
+        auth_type  => 'GENRE/FORM',
+        subfields  => 'abvxyz68',
         main_entry => 1
     },
     '162' => {
-        auth_type => 'MED_PERFRM',
-        subfields => 'a68',
+        auth_type  => 'MED_PERFRM',
+        subfields  => 'a68',
         main_entry => 1
     },
     '180' => {
@@ -158,10 +157,8 @@ my $bib_heading_fields = {
         subfields => 'abcdfghklmnoprst',
         series    => 1
     },
-    '811' =>
-      { auth_type => 'MEETI_NAME', subfields => 'acdefghklnpqst', series => 1 },
-    '830' =>
-      { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst', series => 1 },
+    '811' => { auth_type => 'MEETI_NAME', subfields => 'acdefghklnpqst', series => 1 },
+    '830' => { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst', series => 1 },
 };
 
 my $auth_heading_fields = {
@@ -262,16 +259,15 @@ sub new {
 =cut
 
 sub valid_heading_tag {
-    my $self          = shift;
-    my $tag           = shift;
-    my $frameworkcode = shift;
-    my $auth          = shift;
-    my $heading_fields = $auth ? { %$auth_heading_fields } : { %$bib_heading_fields };
+    my $self           = shift;
+    my $tag            = shift;
+    my $frameworkcode  = shift;
+    my $auth           = shift;
+    my $heading_fields = $auth ? {%$auth_heading_fields} : {%$bib_heading_fields};
 
     if ( exists $heading_fields->{$tag} ) {
         return 1;
-    }
-    else {
+    } else {
         return 0;
     }
 
@@ -282,15 +278,15 @@ sub valid_heading_tag {
 =cut
 
 sub valid_heading_subfield {
-    my $self          = shift;
-    my $tag           = shift;
-    my $subfield      = shift;
-    my $auth          = shift;
+    my $self     = shift;
+    my $tag      = shift;
+    my $subfield = shift;
+    my $auth     = shift;
 
-    my $heading_fields = $auth ? { %$auth_heading_fields } : { %$bib_heading_fields };
+    my $heading_fields = $auth ? {%$auth_heading_fields} : {%$bib_heading_fields};
 
     if ( exists $heading_fields->{$tag} ) {
-        return 1 if ($heading_fields->{$tag}->{subfields} =~ /$subfield/);
+        return 1 if ( $heading_fields->{$tag}->{subfields} =~ /$subfield/ );
     }
     return 0;
 }
@@ -300,8 +296,8 @@ sub valid_heading_subfield {
 =cut
 
 sub get_valid_bib_heading_subfields {
-    my $self          = shift;
-    my $tag           = shift;
+    my $self = shift;
+    my $tag  = shift;
 
     return $bib_heading_fields->{$tag}->{subfields} // undef;
 }
@@ -311,8 +307,8 @@ sub get_valid_bib_heading_subfields {
 =cut
 
 sub get_auth_heading_subfields_to_report {
-    my $self          = shift;
-    my $tag           = shift;
+    my $self = shift;
+    my $tag  = shift;
 
     my $subfields = $auth_heading_fields->{$tag}->{subfields} // '';
     $subfields =~ s/[68]//;
@@ -331,21 +327,21 @@ sub parse_heading {
     my $field = shift;
     my $auth  = shift;
 
-    my $tag        = $field->tag;
-    my $heading_fields = $auth ? { %$auth_heading_fields } : { %$bib_heading_fields };
+    my $tag            = $field->tag;
+    my $heading_fields = $auth ? {%$auth_heading_fields} : {%$bib_heading_fields};
 
     my $field_info = $heading_fields->{$tag};
-    my $auth_type = $field_info->{'auth_type'};
+    my $auth_type  = $field_info->{'auth_type'};
     my $thesaurus =
-      $tag =~ m/6../
-      ? _get_subject_thesaurus($field)
-      : undef;    # We can't know the thesaurus for non-subject fields
-    my $search_heading =
-      _get_search_heading( $field, $field_info->{'subfields'} );
-    my $display_heading =
-      _get_display_heading( $field, $field_info->{'subfields'} );
-    return ( $auth_type, $thesaurus, $search_heading, $display_heading,
-        'exact' );
+        $tag =~ m/6../
+        ? _get_subject_thesaurus($field)
+        : undef;    # We can't know the thesaurus for non-subject fields
+    my $search_heading  = _get_search_heading( $field, $field_info->{'subfields'} );
+    my $display_heading = _get_display_heading( $field, $field_info->{'subfields'} );
+    return (
+        $auth_type, $thesaurus, $search_heading, $display_heading,
+        'exact'
+    );
 }
 
 =head1 INTERNAL FUNCTIONS
@@ -366,26 +362,19 @@ sub _get_subject_thesaurus {
     my $thesaurus = "notdefined";
     if ( $ind2 eq '0' ) {
         $thesaurus = "lcsh";
-    }
-    elsif ( $ind2 eq '1' ) {
+    } elsif ( $ind2 eq '1' ) {
         $thesaurus = "lcac";
-    }
-    elsif ( $ind2 eq '2' ) {
+    } elsif ( $ind2 eq '2' ) {
         $thesaurus = "mesh";
-    }
-    elsif ( $ind2 eq '3' ) {
+    } elsif ( $ind2 eq '3' ) {
         $thesaurus = "nal";
-    }
-    elsif ( $ind2 eq '4' ) {
+    } elsif ( $ind2 eq '4' ) {
         $thesaurus = "notspecified";
-    }
-    elsif ( $ind2 eq '5' ) {
+    } elsif ( $ind2 eq '5' ) {
         $thesaurus = "cash";
-    }
-    elsif ( $ind2 eq '6' ) {
+    } elsif ( $ind2 eq '6' ) {
         $thesaurus = "rvm";
-    }
-    elsif ( $ind2 eq '7' ) {
+    } elsif ( $ind2 eq '7' ) {
         my $sf2 = $field->subfield('2');
         $thesaurus = $sf2 if defined($sf2);
     }
@@ -415,12 +404,10 @@ sub _get_search_heading {
         if ($first) {
             $first   = 0;
             $heading = $value;
-        }
-        else {
+        } else {
             if ( exists $subdivisions{$code} ) {
                 $heading .= " $subdivisions{$code} $value";
-            }
-            else {
+            } else {
                 $heading .= " $value";
             }
         }
@@ -453,12 +440,10 @@ sub _get_display_heading {
         if ($first) {
             $first   = 0;
             $heading = $value;
-        }
-        else {
+        } else {
             if ( exists $subdivisions{$code} ) {
                 $heading .= "--$value";
-            }
-            else {
+            } else {
                 $heading .= " $value";
             }
         }

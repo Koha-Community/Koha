@@ -4,18 +4,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Print receipt for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Print receipt for") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
 
-[% Asset.css("css/printreceiptinvoice.css") | $raw %]
-<!-- prettier-ignore-start -->
+[% Asset.css("css/printreceiptinvoice.css") | $raw %] <!-- prettier-ignore-start -->
 [% IF style %]<style>[% style | $raw %]</style>[% END %]
 <!-- prettier-ignore-end -->
 [% INCLUDE 'blocking_errors.inc' %]
@@ -24,17 +25,18 @@
 <body id="pat_printfeercpt" class="pat">
 
 <div id="receipt">
-  [% IF slip %]
-    [% IF plain %]
-    <pre>
+    [% IF slip %]
+        [% IF plain %]
+            <pre>
       [% slip | html %]
-    </pre>
+    </pre
+            >
+        [% ELSE %]
+            [% slip | $raw %]
+        [% END %]
     [% ELSE %]
-      [% slip | $raw %]
+        <span>No print template found</span>
     [% END %]
-  [% ELSE %]
-    <span>No print template found</span>
-  [% END %]
 </div>
 
 [% MACRO jsinclude BLOCK %]

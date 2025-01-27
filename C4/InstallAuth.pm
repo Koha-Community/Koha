@@ -29,12 +29,13 @@ use C4::Templates;
 
 use Koha::Session;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
-    @ISA    = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      checkauth
-      get_template_and_user
+        checkauth
+        get_template_and_user
     );
 }
 
@@ -104,18 +105,18 @@ Templates.pm module.
 sub get_template_and_user {
     my $in       = shift;
     my $query    = $in->{'query'};
-    my $language =_get_template_language($query->cookie('KohaOpacLanguage'));
-    my $path     = C4::Context->config('intrahtdocs'). "/prog/". $language;
+    my $language = _get_template_language( $query->cookie('KohaOpacLanguage') );
+    my $path     = C4::Context->config('intrahtdocs') . "/prog/" . $language;
 
-    my $tmplbase = $in->{template_name};
-    my $filename = "$path/modules/" . $tmplbase;
+    my $tmplbase  = $in->{template_name};
+    my $filename  = "$path/modules/" . $tmplbase;
     my $interface = 'intranet';
-    my $template = C4::Templates->new( $interface, $filename, $tmplbase, $query);
+    my $template  = C4::Templates->new( $interface, $filename, $tmplbase, $query );
 
     my $request_method = $in->{query}->request_method // q{};
     unless ( $request_method eq 'POST' && $in->{query}->param('op') eq 'cud-login' ) {
-        $in->{query}->param('login_userid', '');
-        $in->{query}->param('login_password', '')
+        $in->{query}->param( 'login_userid',   '' );
+        $in->{query}->param( 'login_password', '' );
     }
 
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
@@ -149,13 +150,13 @@ sub get_template_and_user {
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
-            $template->param( CAN_user_problem_reports   => 1 );
+            $template->param( CAN_user_problem_reports  => 1 );
             $template->param( CAN_user_recalls          => 1 );
         }
 
         my $minPasswordLength = C4::Context->preference('minPasswordLength');
         $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
-        $template->param(minPasswordLength => $minPasswordLength,);
+        $template->param( minPasswordLength => $minPasswordLength, );
     }
     return ( $template, $borrowernumber, $cookie );
 }
@@ -232,7 +233,7 @@ has authenticated.
 sub checkauth {
     my $query = shift;
 
-# $authnotrequired will be set for scripts which will run without authentication
+    # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
@@ -249,9 +250,9 @@ sub checkauth {
     my $logout = $query->param('logout.x');
 
     my $sessionID = $query->cookie("CGISESSID");
-    my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
+    my $session   = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
 
-    if ( $session ) {
+    if ($session) {
         if ( $session->param('cardnumber') ) {
             C4::Context->set_userenv(
                 $session->param('number'),
@@ -268,7 +269,7 @@ sub checkauth {
                 -name     => 'CGISESSID',
                 -value    => $session->id,
                 -HttpOnly => 1,
-                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
                 -sameSite => 'Lax'
             );
             $loggedin = 1;
@@ -276,7 +277,8 @@ sub checkauth {
         }
     }
 
-    if ($logout || !$session) {
+    if ( $logout || !$session ) {
+
         # voluntary logout the user
         C4::Context->unset_userenv();
         $session = Koha::Session->get_session( { storage_method => 'file' } );
@@ -290,6 +292,7 @@ sub checkauth {
         my ( $return, $cardnumber ) = checkpw( $userid, $password );
         if ($return) {
             $loggedin = 1;
+
             # open L, ">>/tmp/sessionlog";
             # my $time = localtime( time() );
             # printf L "%20s from %16s logged in  at %30s.\n", $userid,
@@ -299,14 +302,14 @@ sub checkauth {
                 -name     => 'CGISESSID',
                 -value    => $sessionID,
                 -HttpOnly => 1,
-                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
                 -sameSite => 'Lax'
             );
             if ( $return == 2 ) {
 
-           #Only superlibrarian should have access to this page.
-           #Since if it is a user, it is supposed that there is a borrower table
-           #And thus that data structure is loaded.
+                #Only superlibrarian should have access to this page.
+                #Since if it is a user, it is supposed that there is a borrower table
+                #And thus that data structure is loaded.
                 my $hash = C4::Context->set_userenv(
                     0,                           0,
                     C4::Context->config('user'), C4::Context->config('user'),
@@ -322,14 +325,15 @@ sub checkauth {
                 $session->param( 'branch',     'NO_LIBRARY_SET' );
                 $session->param( 'branchname', 'NO_LIBRARY_SET' );
                 $session->param( 'flags',      1 );
-                $session->param( 'emailaddress',
-                    C4::Context->preference('KohaAdminEmailAddress') );
+                $session->param(
+                    'emailaddress',
+                    C4::Context->preference('KohaAdminEmailAddress')
+                );
                 $session->param( 'ip',       $session->remote_addr() );
                 $session->param( 'lasttime', time() );
                 $userid = C4::Context->config('user');
             }
-        }
-        else {
+        } else {
             if ($userid) {
                 $info{'invalid_username_or_password'} = 1;
                 C4::Context->unset_userenv();
@@ -343,18 +347,17 @@ sub checkauth {
         # successful login
         unless ($cookie) {
             $cookie = $query->cookie(
-                -name    => 'CGISESSID',
-                -value   => '',
+                -name     => 'CGISESSID',
+                -value    => '',
                 -HttpOnly => 1,
-                -expires => '',
-                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -expires  => '',
+                -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
                 -sameSite => 'Lax'
             );
         }
         if ($envcookie) {
             return ( $userid, [ $cookie, $envcookie ], $sessionID, $flags );
-        }
-        else {
+        } else {
             return ( $userid, $cookie, $sessionID, $flags );
         }
     }
@@ -369,24 +372,25 @@ sub checkauth {
     }
 
     my $path =
-      C4::Context->config('intrahtdocs') . "/prog/"
-      . ( $query->param('language') ? $query->param('language') : "en" );
-    my $filename = "$path/modules/$template_name";
+          C4::Context->config('intrahtdocs')
+        . "/prog/"
+        . ( $query->param('language') ? $query->param('language') : "en" );
+    my $filename  = "$path/modules/$template_name";
     my $interface = 'intranet';
-    my $template = C4::Templates->new( $interface, $filename, '', $query);
+    my $template  = C4::Templates->new( $interface, $filename, '', $query );
     $template->param(
         INPUTS => \@inputs,
 
     );
-    $template->param( login => 1 );
+    $template->param( login       => 1 );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
-    if ($info{'invalid_username_or_password'} && $info{'invalid_username_or_password'} == 1) {
-                $template->param( 'invalid_username_or_password' => $info{'invalid_username_or_password'});
+    if ( $info{'invalid_username_or_password'} && $info{'invalid_username_or_password'} == 1 ) {
+        $template->param( 'invalid_username_or_password' => $info{'invalid_username_or_password'} );
     }
 
-    unless ( $sessionID ) {
-        $session = Koha::Session->get_session( { storage_method => 'file' } );
+    unless ($sessionID) {
+        $session   = Koha::Session->get_session( { storage_method => 'file' } );
         $sessionID = $session->id;
     }
     $template->param(
@@ -394,18 +398,18 @@ sub checkauth {
         sessionID => $sessionID,
     );
     $cookie = $query->cookie(
-        -name    => 'CGISESSID',
-        -value   => $sessionID,
+        -name     => 'CGISESSID',
+        -value    => $sessionID,
         -HttpOnly => 1,
-        -expires => '',
-        -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+        -expires  => '',
+        -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
         -sameSite => 'Lax'
     );
     print $query->header(
-        -type    => 'text/html; charset=utf-8',
-        -cookie  => $cookie
-      ),
-      $template->output;
+        -type   => 'text/html; charset=utf-8',
+        -cookie => $cookie
+        ),
+        $template->output;
     exit;
 }
 
@@ -414,7 +418,7 @@ sub checkpw {
     my ( $userid, $password ) = @_;
 
     if (   $userid
-        && $userid     eq C4::Context->config('user')
+        && $userid eq C4::Context->config('user')
         && "$password" eq C4::Context->config('pass') )
     {
 

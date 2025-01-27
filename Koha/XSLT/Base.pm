@@ -128,13 +128,13 @@ use base qw(Class::Accessor);
 __PACKAGE__->mk_ro_accessors(qw( err ));
 __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 
-use constant XSLTH_ERR_1    => 'XSLTH_ERR_NO_FILE';
-use constant XSLTH_ERR_2    => 'XSLTH_ERR_FILE_NOT_FOUND';
-use constant XSLTH_ERR_3    => 'XSLTH_ERR_LOADING';
-use constant XSLTH_ERR_4    => 'XSLTH_ERR_PARSING_CODE';
-use constant XSLTH_ERR_5    => 'XSLTH_ERR_PARSING_DATA';
-use constant XSLTH_ERR_6    => 'XSLTH_ERR_TRANSFORMING';
-use constant XSLTH_ERR_7    => 'XSLTH_NO_STRING_PASSED';
+use constant XSLTH_ERR_1 => 'XSLTH_ERR_NO_FILE';
+use constant XSLTH_ERR_2 => 'XSLTH_ERR_FILE_NOT_FOUND';
+use constant XSLTH_ERR_3 => 'XSLTH_ERR_LOADING';
+use constant XSLTH_ERR_4 => 'XSLTH_ERR_PARSING_CODE';
+use constant XSLTH_ERR_5 => 'XSLTH_ERR_PARSING_DATA';
+use constant XSLTH_ERR_6 => 'XSLTH_ERR_TRANSFORMING';
+use constant XSLTH_ERR_7 => 'XSLTH_NO_STRING_PASSED';
 
 =head2 new
 
@@ -143,7 +143,7 @@ use constant XSLTH_ERR_7    => 'XSLTH_NO_STRING_PASSED';
 =cut
 
 sub new {
-    my ($class, $params) = @_;
+    my ( $class, $params ) = @_;
     my $self = $class->SUPER::new($params);
     $self->{_security} = Koha::XSLT::Security->new;
     $self->{_security}->register_callbacks;
@@ -180,12 +180,12 @@ sub transform {
     #  new style: $hashref
     my ( $xml, $filename, $xsltcode, $format );
     my $parameters = {};
-    if( ref $_[0] eq 'HASH' ) {
-        $xml = $_[0]->{xml};
-        $xsltcode = $_[0]->{code};
-        $filename = $_[0]->{file} if !$xsltcode; #xsltcode gets priority
+    if ( ref $_[0] eq 'HASH' ) {
+        $xml        = $_[0]->{xml};
+        $xsltcode   = $_[0]->{code};
+        $filename   = $_[0]->{file}       if !$xsltcode;                          #xsltcode gets priority
         $parameters = $_[0]->{parameters} if ref $_[0]->{parameters} eq 'HASH';
-        $format = $_[0]->{format} || 'chars';
+        $format     = $_[0]->{format} || 'chars';
     } else {
         ( $xml, $filename, $format ) = @_;
         $format ||= 'chars';
@@ -194,21 +194,20 @@ sub transform {
     #Initialized yet?
     if ( !$self->{xslt_hash} ) {
         $self->_init;
-    }
-    else {
-        $self->_set_error;    #clear last error
+    } else {
+        $self->_set_error;                                                        #clear last error
     }
     my $retval = $self->{do_not_return_source} ? undef : $xml;
 
     #check if no string passed
     if ( !defined $xml ) {
-        $self->_set_error( XSLTH_ERR_7 );
-        return;               #always undef
+        $self->_set_error(XSLTH_ERR_7);
+        return;                                                                   #always undef
     }
 
     #load stylesheet
-    my $key = $self->_load( $filename, $xsltcode );
-    my $stsh = $key? $self->{xslt_hash}->{$key}: undef;
+    my $key  = $self->_load( $filename, $xsltcode );
+    my $stsh = $key ? $self->{xslt_hash}->{$key} : undef;
     return $retval if $self->{err};
 
     #parse input and transform
@@ -220,6 +219,7 @@ sub transform {
         return $retval;
     }
     my $result = eval {
+
         #$parameters is an optional hashref that contains
         #key-value pairs to be sent to the XSLT.
         #Numbers may be bare but strings must be double quoted
@@ -228,12 +228,10 @@ sub transform {
 
         #NOTE: Parameters are not cached. They are provided for
         #each different transform.
-        my $transformed = $stsh->transform($source, %$parameters);
-        $format eq 'bytes'
-            ? $stsh->output_as_bytes( $transformed )
-            : $format eq 'xmldoc'
-            ? $transformed
-            : $stsh->output_as_chars( $transformed ); # default: chars
+        my $transformed = $stsh->transform( $source, %$parameters );
+              $format eq 'bytes'  ? $stsh->output_as_bytes($transformed)
+            : $format eq 'xmldoc' ? $transformed
+            :                       $stsh->output_as_chars($transformed);    # default: chars
     };
     if ($@) {
         $self->_set_error( XSLTH_ERR_6, $@ );
@@ -265,8 +263,7 @@ sub refresh {
     my $rv;
     if ($file) {
         $rv = delete $self->{xslt_hash}->{$file} ? 1 : 0;
-    }
-    else {
+    } else {
         $rv = scalar keys %{ $self->{xslt_hash} };
         $self->{xslt_hash} = {};
     }
@@ -282,10 +279,10 @@ sub _init {
     my $self = shift;
 
     $self->_set_error;
-    $self->{xslt_hash} = {};
-    $self->{print_warns} = 1 unless exists $self->{print_warns};
+    $self->{xslt_hash}            = {};
+    $self->{print_warns}          = 1 unless exists $self->{print_warns};
     $self->{do_not_return_source} = 0
-      unless exists $self->{do_not_return_source};
+        unless exists $self->{do_not_return_source};
 
     #by default we return source on a failing transformation
     #but it could be passed at construction time already
@@ -298,41 +295,39 @@ sub _init {
 sub _load {
     my ( $self, $filename, $code ) = @_;
     my ( $digest, $codelen, $salt, $rv );
-    $salt = 'AZ'; #just a constant actually
+    $salt = 'AZ';    #just a constant actually
 
     #If no file or code passed, use the last file again
     if ( !$filename && !$code ) {
         my $last = $self->{last_xsltfile};
         if ( !$last || !exists $self->{xslt_hash}->{$last} ) {
-            $self->_set_error( XSLTH_ERR_1 );
+            $self->_set_error(XSLTH_ERR_1);
             return;
         }
         return $last;
     }
 
     #check if it is loaded already
-    if( $code ) {
-        $codelen = length( $code );
-        $digest = eval { crypt($code, $salt) };
-        if( $digest && exists $self->{xslt_hash}->{$digest.$codelen} ) {
-            return $digest.$codelen;
+    if ($code) {
+        $codelen = length($code);
+        $digest  = eval { crypt( $code, $salt ) };
+        if ( $digest && exists $self->{xslt_hash}->{ $digest . $codelen } ) {
+            return $digest . $codelen;
         }
-    } elsif( $filename && exists $self->{xslt_hash}->{$filename} ) {
-          return $filename;
+    } elsif ( $filename && exists $self->{xslt_hash}->{$filename} ) {
+        return $filename;
     }
 
     #Check file existence (skipping URLs)
-    if( $filename && $filename !~ /^https?:\/\// && !-e $filename ) {
-        $self->_set_error( XSLTH_ERR_2 );
+    if ( $filename && $filename !~ /^https?:\/\// && !-e $filename ) {
+        $self->_set_error(XSLTH_ERR_2);
         return;
     }
 
     #load sheet
     my $parser = XML::LibXML->new;
     $self->{_security}->set_parser_options($parser);
-    my $style_doc = eval {
-        $parser->load_xml( $self->_load_xml_args($filename, $code) )
-    };
+    my $style_doc = eval { $parser->load_xml( $self->_load_xml_args( $filename, $code ) ) };
     if ($@) {
         $self->_set_error( XSLTH_ERR_3, $@ );
         return;
@@ -342,7 +337,7 @@ sub _load {
     my $xslt = XML::LibXSLT->new;
     $self->{_security}->set_callbacks($xslt);
 
-    $rv = $code? $digest.$codelen: $filename;
+    $rv = $code ? $digest . $codelen : $filename;
     $self->{xslt_hash}->{$rv} = eval { $xslt->parse_stylesheet($style_doc) };
     if ($@) {
         $self->_set_error( XSLTH_ERR_4, $@ );
@@ -355,8 +350,9 @@ sub _load {
 sub _load_xml_args {
     my ( $self, $filename, $code ) = @_;
     return Koha::XSLT::HTTPS->load($filename) if $filename && $filename =~ /^https/i;
-        # Workaround for current problems with https location in libxml2/libxslt
-        # Returns response like { string => SOME_CODE }
+
+    # Workaround for current problems with https location in libxml2/libxslt
+    # Returns response like { string => SOME_CODE }
     return $code ? { string => $code } : { location => $filename };
 }
 
@@ -366,8 +362,8 @@ sub _load_xml_args {
 sub _set_error {
     my ( $self, $errcode, $warn ) = @_;
 
-    $self->{err} = $errcode; #set or clear error
-    warn 'XSLT::Base: '. $warn if $warn && $self->{print_warns};
+    $self->{err} = $errcode;    #set or clear error
+    warn 'XSLT::Base: ' . $warn if $warn && $self->{print_warns};
 }
 
 =head1 AUTHOR

@@ -26,12 +26,13 @@ use Koha::AuthorisedValues;
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
-    my $av = Koha::AuthorisedValues->search({ category => $category, authorised_value => $code });
-    return $av->count
-            ? $opac
-                ? $av->next->opac_description
-                : $av->next->lib
-            : $code;
+    my $av = Koha::AuthorisedValues->search( { category => $category, authorised_value => $code } );
+    return
+          $av->count
+        ? $opac
+            ? $av->next->opac_description
+            : $av->next->lib
+        : $code;
 }
 
 sub Get {
@@ -55,7 +56,7 @@ sub GetAuthValueDropbox {
 
 sub GetCategories {
     my ( $self, $params ) = @_;
-    my $selected = $params->{selected};
+    my $selected   = $params->{selected};
     my @categories = Koha::AuthorisedValues->new->categories;
     return [
         map {
@@ -69,8 +70,7 @@ sub GetCategories {
 
 sub GetDescriptionsByKohaField {
     my ( $self, $params ) = @_;
-    return [ Koha::AuthorisedValues->get_descriptions_by_koha_field(
-        { kohafield => $params->{kohafield} } ) ];
+    return [ Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => $params->{kohafield} } ) ];
 }
 
 sub GetDescriptionByKohaField {
@@ -85,8 +85,8 @@ sub GetDescriptionByKohaField {
     my $description = $av->{lib} || $params->{authorised_value} || '';
 
     return $params->{opac}
-      ? $av->{opac_description} || $description
-      : $description;
+        ? $av->{opac_description} || $description
+        : $description;
 }
 
 1;

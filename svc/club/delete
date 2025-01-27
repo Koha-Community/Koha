@@ -28,7 +28,7 @@ use Koha::Clubs;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) = check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'edit_clubs' } );
+my ($auth_status) = check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'edit_clubs' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -39,7 +39,7 @@ my $op = $cgi->param('op') || q{};
 my $id = $cgi->param('id');
 
 my $club = Koha::Clubs->find($id);
-if ($club && $op eq 'cud-delete') {
+if ( $club && $op eq 'cud-delete' ) {
     $success = $club->delete();
 }
 

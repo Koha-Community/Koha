@@ -5,11 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Rotating collections") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Rotating collections") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -31,49 +32,66 @@
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
 
-                [% INCLUDE 'rotating-collections-toolbar.inc' %]
+    [% INCLUDE 'rotating-collections-toolbar.inc' %]
 
-                <h1>Rotating collections</h1>
-                <div>
-                    [% IF ( collectionsLoop ) %]
-                        <div class="page-section">
-                            <table id="rotating-collections-table">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Current library</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                [% FOREACH collectionsLoo IN collectionsLoop %]
-                                    <tr>
-                                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]">[% collectionsLoo.colTitle | html %]</a></td>
-                                        <td>[% collectionsLoo.colDesc | html %]</td>
-                                        <td>[% Branches.GetName( collectionsLoo.colBranchcode ) | html %]</td>
-                                        <td>
-                                        <div class="btn-group dropup">
-                                            <a class="btn btn-default btn-xs dropdown-toggle" id="collectionsactions[% collectionsLoo.colId | html %]" role="button" data-bs-toggle="dropdown" href="#">Actions</a>
-                                            <ul class="dropdown-menu" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId | html %]">
-                                                <li><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa fa-plus"></i> Manage items</a></li>
-                                                <li><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-right-left"></i> Transfer</a></li>
-                                                <li><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/editCollections.pl?op=edit&amp;colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                                                <li><a class="dropdown-item submit-form-link" data-action="/cgi-bin/koha/rotating_collections/editCollections.pl" data-confirmation-msg="[% t('Are you sure you want to delete this rotating collection?') | html %]" data-method="post" data-op="cud-delete" data-col-id="[% collectionsLoo.colId | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        </td>
-                                    </tr>
-                                [% END %]
-                                </tbody>
-                            </table>
-                        </div> <!-- /.page-section -->
-                    [% ELSE %]
-                        <div class="alert alert-info">There are no collections currently defined.</div>
-                    [% END %]
-                </div>
-
+    <h1>Rotating collections</h1>
+    <div>
+        [% IF ( collectionsLoop ) %]
+            <div class="page-section">
+                <table id="rotating-collections-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Current library</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH collectionsLoo IN collectionsLoop %]
+                            <tr>
+                                <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]">[% collectionsLoo.colTitle | html %]</a></td>
+                                <td>[% collectionsLoo.colDesc | html %]</td>
+                                <td>[% Branches.GetName( collectionsLoo.colBranchcode ) | html %]</td>
+                                <td>
+                                    <div class="btn-group dropup">
+                                        <a class="btn btn-default btn-xs dropdown-toggle" id="collectionsactions[% collectionsLoo.colId | html %]" role="button" data-bs-toggle="dropdown" href="#">Actions</a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId | html %]">
+                                            <li
+                                                ><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa fa-plus"></i> Manage items</a></li
+                                            >
+                                            <li
+                                                ><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-right-left"></i> Transfer</a></li
+                                            >
+                                            <li
+                                                ><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/editCollections.pl?op=edit&amp;colId=[% collectionsLoo.colId | uri %]"
+                                                    ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                                                ></li
+                                            >
+                                            <li
+                                                ><a
+                                                    class="dropdown-item submit-form-link"
+                                                    data-action="/cgi-bin/koha/rotating_collections/editCollections.pl"
+                                                    data-confirmation-msg="[% t('Are you sure you want to delete this rotating collection?') | html %]"
+                                                    data-method="post"
+                                                    data-op="cud-delete"
+                                                    data-col-id="[% collectionsLoo.colId | html %]"
+                                                    ><i class="fa fa-trash-can"></i> Delete</a
+                                                >
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.page-section -->
+        [% ELSE %]
+            <div class="alert alert-info">There are no collections currently defined.</div>
+        [% END %]
+    </div>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

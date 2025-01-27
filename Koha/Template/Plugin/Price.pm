@@ -30,8 +30,8 @@ sub filter {
     $value ||= 0;
     $config->{on_editing} //= 0;
     return $config->{on_editing}
-        ? Koha::Number::Price->new( $value )->format_for_editing
-        : Koha::Number::Price->new( $value )->format( $config );
+        ? Koha::Number::Price->new($value)->format_for_editing
+        : Koha::Number::Price->new($value)->format($config);
 }
 
 1;

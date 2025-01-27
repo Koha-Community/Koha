@@ -6,12 +6,15 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Course reserves") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Course reserves") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-course-reserves' %]
@@ -48,26 +51,34 @@
                         <tbody>
                             [% FOREACH c IN courses %]
                                 <tr>
-                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %][%- IF c.section -%] - [% c.section | html %][%- END -%]</a></td>
+                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %][%- IF c.section -%]- [% c.section | html %][%- END -%]</a></td>
                                     <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department, 1 ) | html %]</td>
                                     <td>[% c.course_number | html %]</td>
                                     <td>[% c.section | html %]</td>
                                     <td>[% AuthorisedValues.GetByCode( 'TERM' c.term, 1 ) | html %]</td>
                                     <td>
-                                      [% FOREACH i IN c.instructors %]
-                                          <div class="instructor"><span class="inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div>
-                                      [% END %]
+                                        [% FOREACH i IN c.instructors %]
+                                            <div class="instructor"
+                                                ><span class="inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div
+                                            >
+                                        [% END %]
                                     </td>
                                     <td>[% c.public_note | $raw %]</td>
                                     <td></td>
+                                </tr>
                             [% END %]
                         </tbody>
                     </table>
-                </div> <!-- / #courses -->
-            </div> <!-- / .col -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #courses -->
+            </div>
+            <!-- / .col -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]

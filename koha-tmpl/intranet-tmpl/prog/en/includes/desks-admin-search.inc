@@ -24,23 +24,23 @@
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
         [% END %]
-
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         <li role="presentation" class="active">
-        [% WRAPPER tab_item tabname= "desk_search" bt_active= 1 %]
-            <i class="fa fa-fw fa-desktop" aria-hidden="true"></i> <span class="tab-title">Search desks</span>
-        [% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-            [% WRAPPER tab_item tabname= "circ_search" %]
-                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span>
+            [% WRAPPER tab_item tabname= "desk_search" bt_active= 1 %]
+                <i class="fa fa-fw fa-desktop" aria-hidden="true"></i> <span class="tab-title">Search desks</span>
             [% END %]
-        [% END %]
-        [% IF ( CAN_user_catalogue ) %]
-            [% WRAPPER tab_item tabname= "catalog_search" %]
-                <i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span>
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+                [% WRAPPER tab_item tabname= "circ_search" %]
+                    <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span>
+                [% END %]
             [% END %]
-        [% END %]
+            [% IF ( CAN_user_catalogue ) %]
+                [% WRAPPER tab_item tabname= "catalog_search" %]
+                    <i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span>
+                [% END %]
+            [% END %]
+        </li>
     [% END # /tabs_nav %]
 [% END # /WRAPPER tabs %]
 <!-- /desks-admin-search.inc -->

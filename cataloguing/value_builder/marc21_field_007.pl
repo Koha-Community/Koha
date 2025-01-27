@@ -22,14 +22,14 @@
 use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
 use C4::Output qw( output_html_with_http_headers );
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
     my $res           = "
 <script>
@@ -46,42 +46,43 @@ function Click$function_name(event) {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $index   = $input->param('index');
-    my $result  = $input->param('result');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $index    = $input->param('index');
+    my $result   = $input->param('result');
 
     my $dbh = C4::Context->dbh;
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "cataloguing/value_builder/marc21_field_007.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { editcatalogue => '*' },
+        {
+            template_name => "cataloguing/value_builder/marc21_field_007.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
         }
     );
 
     $result = "ta" unless $result;
     my $pad_length = 23 - length $result;
-    my @fvalues = split //, $result;
-    if ($pad_length>0) {
-        push @fvalues, (undef)x($pad_length);
+    my @fvalues    = split //, $result;
+    if ( $pad_length > 0 ) {
+        push @fvalues, (undef) x ($pad_length);
     }
-    my @fnames = map { "f$_" } (0..22);
+    my @fnames = map { "f$_" } ( 0 .. 22 );
 
     #FIXME:  Two of the material types treat position 06, 07, and 08 as a single
     #three-char field.  This script works fine for creating values and sending them
     #back to the MARC, but if there is already a value in the 007, it won't send
     #it properly to the value builder for those two instances.  Not sure how to solve.
     $template->param( index => $index );
-    foreach my $count ( 0..22 ) {
-        if (defined $fvalues[$count]) {
+    foreach my $count ( 0 .. 22 ) {
+        if ( defined $fvalues[$count] ) {
+
             # template uses f##pipe variables.
             my $key2;
-            if ($fvalues[$count] eq q{|}) {
+            if ( $fvalues[$count] eq q{|} ) {
                 $key2 = $fnames[$count] . 'pipe';
-            }
-            else {
+            } else {
                 $key2 = $fnames[$count] . $fvalues[$count];
             }
             $template->param(

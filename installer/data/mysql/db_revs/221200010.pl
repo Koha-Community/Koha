@@ -1,13 +1,14 @@
 use Modern::Perl;
 
 return {
-    bug_number => "31028",
+    bug_number  => "31028",
     description => "Add a way to record users concerns about catalog records",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
         unless ( TableExists('tickets') ) {
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 CREATE TABLE IF NOT EXISTS `tickets` (
                   `id` int(11) NOT NULL auto_increment COMMENT 'primary key',
                   `reporter_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id of the patron who reported the ticket',
@@ -25,13 +26,15 @@ return {
                   CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`resolver_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
                   CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            });
+            }
+            );
 
             say $out "Added new table 'tickets'";
         }
 
         unless ( TableExists('ticket_updates') ) {
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 CREATE TABLE IF NOT EXISTS `ticket_updates` (
                   `id` int(11) NOT NULL auto_increment COMMENT 'primary key',
                   `ticket_id` int(11) NOT NULL COMMENT 'id of catalog ticket the update relates to',
@@ -45,7 +48,8 @@ return {
                   CONSTRAINT `ticket_updates_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
                   CONSTRAINT `ticket_updates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            });
+            }
+            );
 
             say $out "Added new table 'ticket_updates'";
         }
@@ -58,7 +62,14 @@ return {
         );
         say $out "Added new system preference 'OpacCatalogConcerns'";
 
-        if ( ( $dbh->selectrow_array('SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernHelp') )[0] == 0 ) { # Check to make idempotent
+        if (
+            (
+                $dbh->selectrow_array(
+                    'SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernHelp'
+                )
+            )[0] == 0
+            )
+        {    # Check to make idempotent
             $dbh->do(
                 q{
                     INSERT INTO additional_contents ( category, code, location, title, content, lang, published_on, expirationdate, number ) VALUES ('html_customizations', 'CatalogConcernHelp_1', 'CatalogConcernHelp', 'Catalog concern help text', 'Please describe your concern clearly and the library will try to deal with it as quickly as possible', 'default', CAST(NOW() AS date), '2099-01-10', 1 )
@@ -67,7 +78,14 @@ return {
             say $out "`CatalogConcernHelp` block added to html_customization";
         }
 
-        if ( ( $dbh->selectrow_array('SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernTemplate') )[0] == 0 ) { # Check to make idempotent
+        if (
+            (
+                $dbh->selectrow_array(
+                    'SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernTemplate'
+                )
+            )[0] == 0
+            )
+        {    # Check to make idempotent
             my $cc_template = <<~ 'END_TEMPLATE';
             **Describe the concern**
             A clear and concise description of what the concern is.
@@ -139,4 +157,4 @@ return {
         );
         say $out "Added new system preference 'CatalogConcerns'";
     }
-}
+    }

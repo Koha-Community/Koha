@@ -43,6 +43,5 @@
         value = value.replace(thousands_sep, '').replace(decimal_point, '.').replace(new RegExp('[^\\d.]', 'g'), '');
         return Number(value).toFixed(decimal_digits);
     }
-
 </script>
 <!-- / format-price.inc -->

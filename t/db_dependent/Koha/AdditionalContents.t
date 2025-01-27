@@ -28,7 +28,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'Koha::AdditionalContents basic test' => sub {
@@ -37,8 +37,8 @@ subtest 'Koha::AdditionalContents basic test' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build({ source => 'Branch'});
-    my $nb_of_news = Koha::AdditionalContents->search->count;
+    my $library         = $builder->build( { source => 'Branch' } );
+    my $nb_of_news      = Koha::AdditionalContents->search->count;
     my $new_news_item_1 = Koha::AdditionalContent->new(
         {
             category   => 'news',
@@ -107,31 +107,37 @@ subtest '->is_expired' => sub {
 
     $schema->storage->txn_begin;
 
-    my $today = dt_from_string;
+    my $today     = dt_from_string;
     my $yesterday = dt_from_string->add( days => -1 );
-    my $tomorrow = dt_from_string->add( days => 1 );
-    my $new_today = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $today,
+    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $new_today = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $today,
+            }
         }
-    });
-    my $new_expired = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $yesterday,
+    );
+    my $new_expired = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $yesterday,
+            }
         }
-    });
-    my $new_not_expired = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $tomorrow,
+    );
+    my $new_not_expired = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+            }
         }
-    });
+    );
 
-    ok($new_expired->is_expired, 'Expired new is expired');
-    ok(!$new_not_expired->is_expired, 'Not expired new is not expired');
-    ok(!$new_today->is_expired, 'Today expiration date means the new is not expired');
+    ok( $new_expired->is_expired,      'Expired new is expired' );
+    ok( !$new_not_expired->is_expired, 'Not expired new is not expired' );
+    ok( !$new_today->is_expired,       'Today expiration date means the new is not expired' );
 
     $schema->storage->txn_rollback;
 };
@@ -142,25 +148,25 @@ subtest '->library' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $new_with_library = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            branchcode => $library->branchcode
+    my $new_with_library = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { branchcode => $library->branchcode }
         }
-    });
-    my $new_without_library = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            branchcode => undef
+    );
+    my $new_without_library = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { branchcode => undef }
         }
-    });
+    );
 
-    ok($new_with_library->library, 'News item with library have library relation');
-    is($new_with_library->library->branchcode, $library->branchcode, 'The library linked with new item is right');
+    ok( $new_with_library->library, 'News item with library have library relation' );
+    is( $new_with_library->library->branchcode, $library->branchcode, 'The library linked with new item is right' );
 
-    ok(!$new_without_library->library, 'New item without library does not have library relation');
+    ok( !$new_without_library->library, 'New item without library does not have library relation' );
 
     $schema->storage->txn_rollback;
 };
@@ -170,15 +176,15 @@ subtest '->author' => sub {
 
     $schema->storage->txn_begin;
 
-    my $news_item = $builder->build_object({ class => 'Koha::AdditionalContents' });
-    my $author = $news_item->author;
+    my $news_item = $builder->build_object( { class => 'Koha::AdditionalContents' } );
+    my $author    = $news_item->author;
     is( ref($author), 'Koha::Patron', 'Koha::AdditionalContent->author returns a Koha::Patron object' );
 
     $author->delete;
 
     $news_item = Koha::AdditionalContents->find( $news_item->id );
-    is( ref($news_item), 'Koha::AdditionalContent', 'News are not deleted alongwith the author' );
-    is( $news_item->author, undef, '->author returns undef is the author has been deleted' );
+    is( ref($news_item),    'Koha::AdditionalContent', 'News are not deleted alongwith the author' );
+    is( $news_item->author, undef,                     '->author returns undef is the author has been deleted' );
 
     $schema->storage->txn_rollback;
 };
@@ -191,97 +197,109 @@ subtest '->search_for_display' => sub {
 
     Koha::AdditionalContents->search->delete;
 
-    my $today = dt_from_string;
+    my $today     = dt_from_string;
     my $yesterday = dt_from_string->add( days => -1 );
-    my $tomorrow = dt_from_string->add( days => 1 );
-    my $library1 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $new_expired = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $yesterday,
-            published_on => $today,
-            category => 'news',
-            location => 'staff_and_opac',
-            branchcode => undef,
-            number => 1,
+    my $new_expired = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $yesterday,
+                published_on   => $today,
+                category       => 'news',
+                location       => 'staff_and_opac',
+                branchcode     => undef,
+                number         => 1,
+            }
         }
-    });
+    );
     $new_expired->translated_contents( [ { lang => 'default', content => '' } ] );
-    my $new_not_expired = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $tomorrow,
-            published_on => $today,
-            category => 'news',
-            location => 'staff_and_opac',
-            branchcode => undef,
-            number => 2,
+    my $new_not_expired = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $today,
+                category       => 'news',
+                location       => 'staff_and_opac',
+                branchcode     => undef,
+                number         => 2,
+            }
         }
-    });
+    );
     $new_not_expired->translated_contents( [ { lang => 'default', content => '' } ] );
-    my $new_not_active = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $tomorrow,
-            published_on => $tomorrow,
-            category => 'news',
-            location => 'staff_and_opac',
-            branchcode => undef,
-            number => 3,
+    my $new_not_active = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $tomorrow,
+                category       => 'news',
+                location       => 'staff_and_opac',
+                branchcode     => undef,
+                number         => 3,
+            }
         }
-    });
+    );
     $new_not_active->translated_contents( [ { lang => 'default', content => '' } ] );
-    my $new_slip= $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $tomorrow,
-            published_on => $today,
-            category => 'news',
-            location => 'staff_only',
-            branchcode => $library1->branchcode,
-            number => 4,
+    my $new_slip = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $today,
+                category       => 'news',
+                location       => 'staff_only',
+                branchcode     => $library1->branchcode,
+                number         => 4,
+            }
         }
-    });
+    );
     $new_slip->translated_contents( [ { lang => 'default', content => '' } ] );
-    my $new_intra = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $tomorrow,
-            published_on => $today,
-            category => 'news',
-            location => 'staff_only',
-            branchcode => $library2->branchcode,
-            number => 5,
+    my $new_intra = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $today,
+                category       => 'news',
+                location       => 'staff_only',
+                branchcode     => $library2->branchcode,
+                number         => 5,
+            }
         }
-    });
+    );
     $new_intra->translated_contents( [ { lang => 'default', content => '' } ] );
-    my $new_intra2 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            expirationdate => $tomorrow,
-            published_on => $today,
-            category => 'news',
-            location => 'staff_only',
-            branchcode => undef,
-            number => 5,
+    my $new_intra2 = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $today,
+                category       => 'news',
+                location       => 'staff_only',
+                branchcode     => undef,
+                number         => 5,
+            }
         }
-    });
+    );
     $new_intra2->translated_contents( [ { lang => 'default', content => '' } ] );
 
-    my $news = Koha::AdditionalContents->search_for_display({ location => 'staff_only' });
-    is($news->count, 1, "There is 1 news for all staff");
+    my $news = Koha::AdditionalContents->search_for_display( { location => 'staff_only' } );
+    is( $news->count, 1, "There is 1 news for all staff" );
 
     $news = Koha::AdditionalContents->search_for_display(
         { location => 'staff_only', library_id => $library1->branchcode } );
     is( $news->count, 2, "There are 2 news for staff at library1" );
 
-    $news = Koha::AdditionalContents->search_for_display({ location => 'opac_only' });
-    is($news->count, 0, "There are 0 news for OPAC only");
+    $news = Koha::AdditionalContents->search_for_display( { location => 'opac_only' } );
+    is( $news->count, 0, "There are 0 news for OPAC only" );
 
-    $news = Koha::AdditionalContents->search_for_display({ location => 'staff_and_opac' });
-    is($news->count, 1, "There is 1 news for all staff and all OPAC ");
+    $news = Koha::AdditionalContents->search_for_display( { location => 'staff_and_opac' } );
+    is( $news->count, 1, "There is 1 news for all staff and all OPAC " );
 
     # TODO We should add more tests here
 

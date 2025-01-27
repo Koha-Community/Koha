@@ -48,10 +48,10 @@ backends.
 sub new {
     my ( $class, $attributes ) = @_;
 
-    my $self = $class->SUPER::new($class, $attributes);
+    my $self = $class->SUPER::new( $class, $attributes );
 
-    my $config = Koha::ILL::Request::Config->new; # <- Necessary
-    $self->{_config} = $config;                 # <- Necessary
+    my $config = Koha::ILL::Request::Config->new;    # <- Necessary
+    $self->{_config} = $config;                      # <- Necessary
 
     return $self;
 }
@@ -69,15 +69,15 @@ sub filter_by_visible {
     my ($self) = @_;
 
     my $hidden_statuses_string = C4::Context->preference('ILLHiddenRequestStatuses') // q{};
-    my $hidden_statuses = [ split '\|', $hidden_statuses_string ];
+    my $hidden_statuses        = [ split '\|', $hidden_statuses_string ];
 
     if ( scalar @{$hidden_statuses} ) {
         return $self->search(
             {
                 -and => {
-                    status => { 'not in' => $hidden_statuses },
-                    status_alias => [ -or =>
-                        { 'not in' => $hidden_statuses },
+                    status       => { 'not in' => $hidden_statuses },
+                    status_alias => [
+                        -or => { 'not in' => $hidden_statuses },
                         { '=' => undef }
                     ]
                 }
@@ -98,12 +98,8 @@ not considered completed.
 =cut
 
 sub search_incomplete {
-    my ( $self ) = @_;
-    $self->search( {
-        status => [
-            -and => { '!=', 'COMP' }, { '!=', 'GENCOMP' }
-        ]
-    } );
+    my ($self) = @_;
+    $self->search( { status => [ -and => { '!=', 'COMP' }, { '!=', 'GENCOMP' } ] } );
 }
 
 =head3 extended_attributes_config

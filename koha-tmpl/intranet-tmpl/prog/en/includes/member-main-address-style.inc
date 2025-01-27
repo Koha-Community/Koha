@@ -76,7 +76,7 @@
         <li>
             <label for="address" [% IF mandatoryaddress %]class="required"[% END %]>Address: </label>
             <input type="text" id="address" name="address" size="40" value="[% patron.address | html %]" />
-          [% IF ( mandatoryaddress ) %]<span class="required">Required</span>[% END %]
+            [% IF ( mandatoryaddress ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
 [% END %]
@@ -106,7 +106,7 @@
         <li>
             <label for="zipcode" [% IF mandatoryzipcode %]class="required"[% END %]>ZIP/Postal code: </label>
             <input type="text" id="zipcode" name="zipcode" maxlength="10" size="10" value="[% patron.zipcode | html %]" />
-              [% IF ( mandatoryzipcode ) %]<span class="required">Required</span>[% END %]
+            [% IF ( mandatoryzipcode ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
 [% END %]
@@ -124,9 +124,7 @@
                         [% IF c.city_name == patron.city && c.city_state == patron.state && c.city_zipcode == patron.zipcode %]
                             [% option_selected = 1 %]
                         [% END %]
-                        <option value="[% option_value | html %]" [% IF option_selected %]selected="selected"[% END %]>
-                            [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %]
-                        </option>
+                        <option value="[% option_value | html %]" [% IF option_selected %]selected="selected"[% END %]> [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %] </option>
                     [% END %]
                 </select>
                 <span class="hint">or enter</span>

@@ -21,7 +21,7 @@ use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Checkouts::ReturnClaims' => {
-        isa         => 'Koha::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy' => {
         isa         => 'Koha::Exceptions::Checkouts::ReturnClaims',

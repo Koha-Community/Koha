@@ -9,7 +9,7 @@ use C4::Context;
 my $dbh = C4::Context->dbh();
 my $sth = $dbh->prepare("Show tables");
 $sth->execute();
-while (my @table = $sth->fetchrow_array()) {
+while ( my @table = $sth->fetchrow_array() ) {
     print "Altering table $table[0]\n";
     my $alter_query = "ALTER TABLE $table[0] convert to CHARACTER SET UTF8 collate utf8_general_ci";
     my $sth2        = $dbh->prepare($alter_query);

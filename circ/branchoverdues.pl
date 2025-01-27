@@ -18,12 +18,12 @@
 
 use Modern::Perl;
 use C4::Context;
-use CGI qw ( -utf8 );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use CGI          qw ( -utf8 );
+use C4::Output   qw( output_html_with_http_headers );
+use C4::Auth     qw( get_template_and_user );
 use C4::Overdues qw( GetOverduesForBranch );
-use C4::Biblio qw( GetMarcFromKohaField GetMarcStructure );
-use C4::Koha qw( GetAuthorisedValues );
+use C4::Biblio   qw( GetMarcFromKohaField GetMarcStructure );
+use C4::Koha     qw( GetAuthorisedValues );
 use Koha::BiblioFrameworks;
 
 =head1 branchoverdues.pl
@@ -35,15 +35,17 @@ by item location.
 
 =cut
 
-my $input       = CGI->new;
-my $dbh = C4::Context->dbh;
+my $input = CGI->new;
+my $dbh   = C4::Context->dbh;
 
-my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
-        template_name   => "circ/branchoverdues.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { circulate => "overdues_report" },
-});
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => "circ/branchoverdues.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { circulate => "overdues_report" },
+    }
+);
 
 my $default = C4::Context->userenv->{'branch'};
 
@@ -59,14 +61,16 @@ my $location       = $input->param('location');
 
 my @overduesloop;
 my @getoverdues = GetOverduesForBranch( $default, $location );
+
 # search for location authorised value
-my ($tag,$subfield) = GetMarcFromKohaField( 'items.location' );
-my $tagslib = &GetMarcStructure(1,'');
-if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-    my $values= GetAuthorisedValues($tagslib->{$tag}->{$subfield}->{authorised_value});
+my ( $tag, $subfield ) = GetMarcFromKohaField('items.location');
+my $tagslib = &GetMarcStructure( 1, '' );
+if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
+    my $values = GetAuthorisedValues( $tagslib->{$tag}->{$subfield}->{authorised_value} );
     for (@$values) { $_->{selected} = 1 if defined $location && $location eq $_->{authorised_value} }
-    $template->param(locationsloop => $values);
+    $template->param( locationsloop => $values );
 }
+
 # now display infos
 foreach my $num (@getoverdues) {
     my %overdueforbranch;
@@ -100,6 +104,6 @@ $template->param(
 );
 
 # Checking if there is a Fast Cataloging Framework
-$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
 output_html_with_http_headers $input, $cookie, $template->output;

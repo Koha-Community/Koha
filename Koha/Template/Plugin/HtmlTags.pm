@@ -26,7 +26,7 @@ our $DYNAMIC = 1;
 
 sub filter {
     my ( $self, $text, $args, $config ) = @_;
-    return "" unless $text;
+    return ""    unless $text;
     return $text unless $config->{tag};
     $config->{attributes} //= '';
 

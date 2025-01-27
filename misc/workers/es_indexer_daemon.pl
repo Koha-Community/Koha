@@ -64,14 +64,13 @@ use Koha::BackgroundJobs;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 
-
 my ( $help, $batch_size );
 
 my $not_found_retries = {};
-my $max_retries = $ENV{MAX_RETRIES} || 10;
+my $max_retries       = $ENV{MAX_RETRIES} || 10;
 
 GetOptions(
-    'h|help' => \$help,
+    'h|help'         => \$help,
     'b|batch_size=s' => \$batch_size
 ) || pod2usage(1);
 
@@ -81,7 +80,7 @@ $batch_size //= 10;
 
 warn "Not using Elasticsearch" unless C4::Context->preference('SearchEngine') eq 'Elasticsearch';
 
-my $logger = Koha::Logger->get({ interface =>  'worker' });
+my $logger = Koha::Logger->get( { interface => 'worker' } );
 
 my $conn;
 try {
@@ -90,7 +89,8 @@ try {
     warn sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
 };
 
-if ( $conn ) {
+if ($conn) {
+
     # FIXME cf note in Koha::BackgroundJob about $namespace
     my $namespace = C4::Context->config('memcached_namespace');
     $conn->subscribe(
@@ -110,23 +110,25 @@ my @jobs = ();
 
 while (1) {
 
-    if ( $conn ) {
+    if ($conn) {
         my $frame = $conn->receive_frame;
         if ( !defined $frame ) {
+
             # maybe log connection problems
             next;    # will reconnect automatically
         }
 
         my $args = try {
             my $body = $frame->body;
-            decode_json($body); # TODO Should this be from_json? Check utf8 flag.
+            decode_json($body);    # TODO Should this be from_json? Check utf8 flag.
         } catch {
-            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame not processed - %s", $_);
+            Koha::Logger->get( { interface => 'worker' } )->warn( sprintf "Frame not processed - %s", $_ );
             return;
         };
 
-        unless ( $args ) {
-            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame does not have correct args, ignoring it");
+        unless ($args) {
+            Koha::Logger->get( { interface => 'worker' } )
+                ->warn( sprintf "Frame does not have correct args, ignoring it" );
             $conn->nack( { frame => $frame, requeue => 'false' } );
             next;
         }
@@ -170,8 +172,7 @@ while (1) {
         }
 
     } else {
-        @jobs = Koha::BackgroundJobs->search(
-            { status => 'new', queue => 'elastic_index' } )->as_list;
+        @jobs = Koha::BackgroundJobs->search( { status => 'new', queue => 'elastic_index' } )->as_list;
         commit(@jobs);
         @jobs = ();
         sleep 10;
@@ -186,13 +187,16 @@ sub commit {
     my @bib_records;
     my @auth_records;
 
-    my $jobs = Koha::BackgroundJobs->search( { id => [ map { $_->id } @jobs ] });
+    my $jobs = Koha::BackgroundJobs->search( { id => [ map { $_->id } @jobs ] } );
+
     # Start
-    $jobs->update({
-        progress => 0,
-        status => 'started',
-        started_on => \'NOW()',
-    });
+    $jobs->update(
+        {
+            progress   => 0,
+            status     => 'started',
+            started_on => \'NOW()',
+        }
+    );
 
     for my $job (@jobs) {
         my $args = try {
@@ -232,9 +236,11 @@ sub commit {
     }
 
     # Finish
-    $jobs->update({
-        progress => 1,
-        status => 'finished',
-        ended_on => \'NOW()',
-    });
+    $jobs->update(
+        {
+            progress => 1,
+            status   => 'finished',
+            ended_on => \'NOW()',
+        }
+    );
 }

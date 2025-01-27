@@ -32,17 +32,15 @@ my $builder = t::lib::TestBuilder->new;
 
 # Profile Tests
 
-my $role = $builder->build({ source => 'HouseboundRole' });
+my $role = $builder->build( { source => 'HouseboundRole' } );
 
 is(
-    Koha::Patron::HouseboundRoles
-          ->find($role->{borrowernumber_id})->borrowernumber_id,
+    Koha::Patron::HouseboundRoles->find( $role->{borrowernumber_id} )->borrowernumber_id,
     $role->{borrowernumber_id},
     "Find created role."
 );
 
-my @roles = Koha::Patron::HouseboundRoles
-    ->search({ borrowernumber_id => $role->{borrowernumber_id} })->as_list;
+my @roles      = Koha::Patron::HouseboundRoles->search( { borrowernumber_id => $role->{borrowernumber_id} } )->as_list;
 my $found_role = shift @roles;
 is(
     $found_role->borrowernumber_id,
@@ -57,33 +55,36 @@ my $orig_del_count = Koha::Patrons->search_housebound_deliverers->count;
 my $orig_cho_count = Koha::Patrons->search_housebound_choosers->count;
 
 # We add one, just in case the above is 0, so we're guaranteed one of each.
-my $patron_chooser = $builder->build({ source => 'Borrower' });
-$builder->build({
-    source => 'HouseboundRole',
-    value  => {
-        borrowernumber_id  => $patron_chooser->{borrowernumber},
-        housebound_chooser   => 1,
-        housebound_deliverer => 0,
-    },
-});
+my $patron_chooser = $builder->build( { source => 'Borrower' } );
+$builder->build(
+    {
+        source => 'HouseboundRole',
+        value  => {
+            borrowernumber_id    => $patron_chooser->{borrowernumber},
+            housebound_chooser   => 1,
+            housebound_deliverer => 0,
+        },
+    }
+);
 
-my $patron_deliverer = $builder->build({ source => 'Borrower' });
-$builder->build({
-    source => 'HouseboundRole',
-    value  => {
-        borrowernumber_id    => $patron_deliverer->{borrowernumber},
-        housebound_deliverer => 1,
-        housebound_chooser   => 0,
-    },
-});
+my $patron_deliverer = $builder->build( { source => 'Borrower' } );
+$builder->build(
+    {
+        source => 'HouseboundRole',
+        value  => {
+            borrowernumber_id    => $patron_deliverer->{borrowernumber},
+            housebound_deliverer => 1,
+            housebound_chooser   => 0,
+        },
+    }
+);
 
 # Test search_housebound_choosers
-is(Koha::Patrons->search_housebound_choosers->count, $orig_cho_count + 1, "Correct count of choosers.");
-is(Koha::Patrons->search_housebound_deliverers->count, $orig_del_count + 1, "Correct count of deliverers");
+is( Koha::Patrons->search_housebound_choosers->count,   $orig_cho_count + 1, "Correct count of choosers." );
+is( Koha::Patrons->search_housebound_deliverers->count, $orig_del_count + 1, "Correct count of deliverers" );
 
-isa_ok(Koha::Patrons->search_housebound_choosers->next, "Koha::Patron");
-isa_ok(Koha::Patrons->search_housebound_deliverers->next, "Koha::Patron");
-
+isa_ok( Koha::Patrons->search_housebound_choosers->next,   "Koha::Patron" );
+isa_ok( Koha::Patrons->search_housebound_deliverers->next, "Koha::Patron" );
 
 $schema->storage->txn_rollback;
 

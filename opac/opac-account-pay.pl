@@ -36,13 +36,14 @@ my $payment_method = $cgi->param('payment_method');
 my @accountlines   = $cgi->multi_param('accountline');
 
 my $use_plugin = Koha::Plugins::Handler->run(
-    {   class  => $payment_method,
+    {
+        class  => $payment_method,
         method => 'opac_online_payment',
         cgi    => $cgi,
     }
 );
 
-unless ( $use_plugin ) {
+unless ($use_plugin) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -54,9 +55,9 @@ unless ( $op eq 'cud-pay' ) {
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-account-pay-error.tt",
-        query           => $cgi,
-        type            => "opac",
+        template_name => "opac-account-pay-error.tt",
+        query         => $cgi,
+        type          => "opac",
     }
 );
 

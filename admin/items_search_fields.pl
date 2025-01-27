@@ -19,37 +19,39 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Item::Search::Field qw(GetItemSearchFields DelItemSearchField);
 
 my $cgi = CGI->new;
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => 'admin/items_search_fields.tt',
-    query => $cgi,
-    type => 'intranet',
-    flagsrequired   => { parameters => 'manage_item_search_fields' },
-});
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => 'admin/items_search_fields.tt',
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { parameters => 'manage_item_search_fields' },
+    }
+);
 
 my $op = $cgi->param('op') || '';
 
-if ($op eq 'cud-del') {
+if ( $op eq 'cud-del' ) {
     my $name = $cgi->param('name');
-    my $rv = DelItemSearchField($name);
+    my $rv   = DelItemSearchField($name);
     if ($rv) {
-        $template->param(field_deleted => 1);
+        $template->param( field_deleted => 1 );
     } else {
-        $template->param(field_not_deleted => 1);
+        $template->param( field_not_deleted => 1 );
     }
 } else {
     my $updated = $cgi->param('updated');
-    if (defined $updated) {
+    if ( defined $updated ) {
         if ($updated) {
-            $template->param(field_updated => 1);
+            $template->param( field_updated => 1 );
         } else {
-            $template->param(field_not_updated => 1);
+            $template->param( field_not_updated => 1 );
         }
     }
 }

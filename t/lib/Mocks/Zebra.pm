@@ -18,9 +18,9 @@ package t::lib::Mocks::Zebra;
 use Modern::Perl;
 use Test::More;
 use File::Basename qw(dirname );
-use File::Temp qw( tempdir );
-use File::Path qw( rmtree );
-use JSON qw( decode_json );
+use File::Temp     qw( tempdir );
+use File::Path     qw( rmtree );
+use JSON           qw( decode_json );
 use C4::ImportBatch;
 use Koha::BackgroundJobs;
 use Koha::Token;
@@ -39,17 +39,16 @@ and the usual zebra db will not be affected. However you must pass $ENV{KOHA_CON
 
 =cut
 
-
 sub new {
     my ( $class, $params ) = @_;
 
-    my $marcflavour = $params->{marcflavour} ? lc($params->{marcflavour}) : 'marc21';
-    my $koha_conf = $params->{koha_conf};
+    my $marcflavour = $params->{marcflavour} ? lc( $params->{marcflavour} ) : 'marc21';
+    my $koha_conf   = $params->{koha_conf};
 
     my $datadir = tempdir();
     my $zebra_db_dir;
-    unless ( $koha_conf ) {
-        system(dirname(__FILE__) . "/../../db_dependent/zebra_config.pl $datadir $marcflavour");
+    unless ($koha_conf) {
+        system( dirname(__FILE__) . "/../../db_dependent/zebra_config.pl $datadir $marcflavour" );
 
         Koha::Caches->get_instance('config')->flush_all;
         $koha_conf = "$datadir/etc/koha-conf.xml";
@@ -57,16 +56,16 @@ sub new {
         $context->set_context();
         $zebra_db_dir = "$datadir/etc/koha/zebradb/";
     } else {
-        $koha_conf = $ENV{KOHA_CONF};
+        $koha_conf    = $ENV{KOHA_CONF};
         $zebra_db_dir = dirname($koha_conf);
     }
 
     my $self = {
-        datadir   => $datadir,
-        koha_conf => $koha_conf,
+        datadir      => $datadir,
+        koha_conf    => $koha_conf,
         zebra_db_dir => $zebra_db_dir,
-        intranet  => $params->{intranet},
-        opac      => $params->{opac}
+        intranet     => $params->{intranet},
+        opac         => $params->{opac}
     };
 
     return bless $self, $class;
@@ -74,9 +73,9 @@ sub new {
 
 # function that launches the zebra daemon
 sub launch_zebra {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $datadir = $self->{datadir};
+    my $datadir   = $self->{datadir};
     my $koha_conf = $self->{koha_conf};
 
     unlink("$datadir/zebra.log");
@@ -85,12 +84,12 @@ sub launch_zebra {
         exec("zebrasrv -f $koha_conf -v none,request -l $datadir/zebra.log");
         exit;
     }
-    sleep( 1 );
+    sleep(1);
     $self->{zebra_pid} = $zebra_pid;
 }
 
 sub launch_indexer {
-    my ($self) = @_;
+    my ($self)        = @_;
     my $rootdir       = dirname(__FILE__) . '/../../../';
     my $rebuild_zebra = "$rootdir/misc/migration_tools/rebuild_zebra.pl";
 
@@ -100,25 +99,27 @@ sub launch_indexer {
         exec("$rebuild_zebra -daemon -sleep 5");
         exit;
     }
-    sleep( 1 );
+    sleep(1);
     $self->{indexer_pid} = $indexer_pid;
 }
 
 sub load_records {
     my ( $self, $marc_dir, $marc_format, $record_type, $init ) = @_;
 
-    my $datadir = $self->{datadir};
+    my $datadir   = $self->{datadir};
     my $zebra_cfg = $self->{zebra_db_dir}
-      . ( $record_type eq 'biblios'
+        . (
+        $record_type eq 'biblios'
         ? '/zebra-biblios-dom.cfg'
-        : '/zebra-authorities-dom.cfg' );
+        : '/zebra-authorities-dom.cfg'
+        );
 
     my @cmds;
     push @cmds, "zebraidx -c $zebra_cfg  -v none,fatal -g $marc_format -d $record_type init" if $init;
     push @cmds, "zebraidx -c $zebra_cfg  -v none,fatal -g $marc_format -d $record_type update $marc_dir";
     push @cmds, "zebraidx -c $zebra_cfg  -v none,fatal -g $marc_format -d $record_type commit";
 
-    for my $cmd ( @cmds ) {
+    for my $cmd (@cmds) {
         system($cmd);
     }
 }
@@ -131,19 +132,21 @@ sub load_records_ui {
     our $agent = Test::WWW::Mechanize->new( autocheck => 1 );
     $agent->get_ok( "$cgi_root/mainpage.pl", 'connect to intranet' );
     $agent->form_name('loginform');
-    $agent->field( 'login_userid', $ENV{KOHA_PASS} );
+    $agent->field( 'login_userid',   $ENV{KOHA_PASS} );
     $agent->field( 'login_password', $ENV{KOHA_USER} );
-    $agent->field( 'branch',   '' );
+    $agent->field( 'branch',         '' );
     $agent->click_ok( '', 'login to staff interface' );
 
     $agent->get_ok( "$cgi_root/mainpage.pl", 'load main page' );
 
     $agent->follow_link_ok( { url_regex => qr/cataloging-home/i }, 'open caaloging module' );
-    $agent->follow_link_ok( { text => 'Stage records for import' },
-        'go to stage MARC' );
+    $agent->follow_link_ok(
+        { text => 'Stage records for import' },
+        'go to stage MARC'
+    );
 
     my $session_id = $agent->cookie_jar->get_cookies( $self->{intranet} )->{CGISESSID};
-    my $csrf_token = Koha::Token->new->generate_csrf({session_id => $session_id});
+    my $csrf_token = Koha::Token->new->generate_csrf( { session_id => $session_id } );
     $agent->post(
         "$cgi_root/tools/upload-file.pl?temp=1",
         [ 'fileToUpload' => [$file], csrf_token => $csrf_token ],
@@ -155,37 +158,40 @@ sub load_records_ui {
     is( $jsonresponse->{'status'}, 'done', 'upload succeeded' );
     my $fileid = $jsonresponse->{'fileid'};
 
-    $agent->get_ok( "$cgi_root/tools/stage-marc-import.pl",
-        'reopen stage MARC page' );
+    $agent->get_ok(
+        "$cgi_root/tools/stage-marc-import.pl",
+        'reopen stage MARC page'
+    );
     $agent->submit_form_ok(
         {
             form_id => 'processfile',
-            fields      => {
-                'uploadedfileid'  => $fileid,
-                'nomatch_action'  => 'create_new',
-                'overlay_action'  => 'replace',
-                'item_action'     => 'always_add',
-                'matcher'         => '',
-                'comments'        => '',
-                'encoding'        => 'utf8',
-                'parse_items'     => '1',
-                'record_type'     => 'biblio',
-                op                => 'cud-stage',
-                csrf_token        => $csrf_token, # TODO May need to retrieve another token if we invalid them at some point
+            fields  => {
+                'uploadedfileid' => $fileid,
+                'nomatch_action' => 'create_new',
+                'overlay_action' => 'replace',
+                'item_action'    => 'always_add',
+                'matcher'        => '',
+                'comments'       => '',
+                'encoding'       => 'utf8',
+                'parse_items'    => '1',
+                'record_type'    => 'biblio',
+                op               => 'cud-stage',
+                csrf_token => $csrf_token,    # TODO May need to retrieve another token if we invalid them at some point
             }
         },
         'stage MARC'
     );
 
     sleep(1);
+
     # FIXME - This if fragile and can fail if there is a race condition
-    my $job = Koha::BackgroundJobs->search({ type => 'stage_marc_for_import' })->last;
+    my $job = Koha::BackgroundJobs->search( { type => 'stage_marc_for_import' } )->last;
     my $i;
     while ( $job->discard_changes->status ne 'finished' ) {
         sleep(1);
         last if ++$i > 10;
     }
-    is ( $job->status, 'finished', 'job is finished' );
+    is( $job->status, 'finished', 'job is finished' );
 
     $job->discard_changes;
     my $import_batch_id = $job->report->{import_batch_id};
@@ -208,25 +214,28 @@ sub load_records_ui {
 sub clean_records {
     my ( $self, $batch_id ) = @_;
 
-    my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
+    my $agent    = Test::WWW::Mechanize->new( autocheck => 1 );
     my $cgi_root = $self->{intranet} . '/cgi-bin/koha';
 
-    my $data = C4::ImportBatch::GetImportRecordsRange($batch_id, '', '', undef,
-                    { order_by => 'import_record_id', order_by_direction => 'DESC' });
+    my $data = C4::ImportBatch::GetImportRecordsRange(
+        $batch_id, '', '', undef,
+        { order_by => 'import_record_id', order_by_direction => 'DESC' }
+    );
     my $biblionumber = $data->[0]->{'matched_biblionumber'};
 
     $agent->get_ok( "$cgi_root/tools/manage-marc-import.pl", 'view and clean batch' );
-    $agent->form_name('clean_batch_'.$batch_id);
+    $agent->form_name( 'clean_batch_' . $batch_id );
     $agent->click();
-    $agent->get_ok( "$cgi_root/catalogue/detail.pl?biblionumber=$biblionumber", 'biblio on intranet' );
+    $agent->get_ok( "$cgi_root/catalogue/detail.pl?biblionumber=$biblionumber",                'biblio on intranet' );
     $agent->get_ok( "$cgi_root/cataloguing/addbiblio.pl?op=delete&biblionumber=$biblionumber", 'biblio deleted' );
 
 }
 
 sub cleanup {
-    my ( $self ) = @_;
+    my ($self) = @_;
     kill 9, $self->{zebra_pid}   if defined $self->{zebra_pid};
     kill 9, $self->{indexer_pid} if defined $self->{indexer_pid};
+
     # Clean up the Zebra files since the child process was just shot
     rmtree $self->{datadir};
 }

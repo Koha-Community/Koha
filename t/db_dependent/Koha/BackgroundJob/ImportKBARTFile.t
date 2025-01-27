@@ -413,10 +413,10 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         $job3->messages,
         [
             {
-                'type'          => 'error',
-                'code'          => 'no_title_found',
-                'title_id'      => '12345',
-                'title'         => '(Unknown)'
+                'type'     => 'error',
+                'code'     => 'no_title_found',
+                'title_id' => '12345',
+                'title'    => '(Unknown)'
             },
             {
                 'code'          => 'title_already_exists',

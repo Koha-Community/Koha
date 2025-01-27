@@ -27,11 +27,11 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      GetContracts
-      GetContract
-      AddContract
-      ModContract
-      DelContract
+        GetContracts
+        GetContract
+        AddContract
+        ModContract
+        DelContract
     );
 }
 
@@ -50,7 +50,6 @@ add a new contract, to modify it or to get some informations around
 a contract.
 
 =cut
-
 
 =head2 GetContracts
 
@@ -75,8 +74,8 @@ Returns a list of contracts
 
 sub GetContracts {
     my ($filters) = @_;
-    if( $filters->{activeonly} ) {
-        $filters->{contractenddate} = {'>=' => \'now()'};
+    if ( $filters->{activeonly} ) {
+        $filters->{contractenddate} = { '>=' => \'now()' };
         delete $filters->{activeonly};
     }
 
@@ -102,15 +101,17 @@ sub GetContract {
 
     return unless $contractnumber;
 
-    my $contracts = GetContracts({
-        contractnumber => $contractnumber,
-    });
+    my $contracts = GetContracts(
+        {
+            contractnumber => $contractnumber,
+        }
+    );
     return $contracts->[0];
 }
 
 sub AddContract {
     my ($contract) = @_;
-    return unless($contract->{booksellerid});
+    return unless ( $contract->{booksellerid} );
 
     my $rs = Koha::Database->new()->schema->resultset('Aqcontract');
     return $rs->create($contract)->id;
@@ -119,7 +120,7 @@ sub AddContract {
 sub ModContract {
     my ($contract) = @_;
     my $result = Koha::Database->new()->schema->resultset('Aqcontract')->find($contract);
-    return unless($result);
+    return unless ($result);
 
     $result = $result->update($contract);
     return $result->in_storage;
@@ -127,10 +128,10 @@ sub ModContract {
 
 sub DelContract {
     my ($contract) = @_;
-    return unless($contract->{contractnumber});
+    return unless ( $contract->{contractnumber} );
 
     my $result = Koha::Database->new()->schema->resultset('Aqcontract')->find($contract);
-    return unless($result);
+    return unless ($result);
 
     eval { $result->delete };
     return !( $result->in_storage );

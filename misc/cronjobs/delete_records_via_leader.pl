@@ -24,7 +24,7 @@ use Modern::Perl;
 binmode( STDOUT, ":encoding(UTF-8)" );
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Koha::Script -cron;
 use C4::Biblio qw( DelBiblio );
 use Koha::Database;
@@ -53,7 +53,7 @@ unless ( $confirm or $test ) {
     $test = 1;
 }
 
-if ( $help ) {
+if ($help) {
     say qq{
 delete_records_via_leader.pl - Attempt to delete any MARC records where the leader character 5 equals 'd'
 usage: delete_records_via_leader.pl --confirm --verbose [--test]
@@ -72,7 +72,12 @@ This script has the following parameters :
 
 my $metadatas =    # Should be replaced by a call to C4::Search on zebra index
                    # Record-status when bug 15537 will be pushed
-  Koha::Biblio::Metadatas->search( { format => 'marcxml', schema => C4::Context->preference('marcflavour'), metadata => { LIKE => '%<leader>_____d%' } } );
+    Koha::Biblio::Metadatas->search(
+    {
+        format   => 'marcxml', schema => C4::Context->preference('marcflavour'),
+        metadata => { LIKE => '%<leader>_____d%' }
+    }
+    );
 
 my $total_records_count   = $metadatas->count;
 my $deleted_records_count = 0;
@@ -85,26 +90,26 @@ while ( my $m = $metadatas->next ) {
 
     if ($delete_items) {
         my $deleted_count = 0;
-        my $biblio = Koha::Biblios->find( $biblionumber );
-        my @items = Koha::Items->search( { biblionumber => $biblionumber } )->as_list;
-        foreach my $item ( @items ) {
+        my $biblio        = Koha::Biblios->find($biblionumber);
+        my @items         = Koha::Items->search( { biblionumber => $biblionumber } )->as_list;
+        foreach my $item (@items) {
             my $itemnumber = $item->itemnumber;
 
-            if( $test ){
+            if ($test) {
                 my $deleted = $item->safe_to_delete;
-                if ( $deleted ) {
+                if ($deleted) {
                     say "TEST MODE: Item $itemnumber would have been deleted";
                 } else {
-                    my $error = @{$deleted->messages}[0]->message;
+                    my $error = @{ $deleted->messages }[0]->message;
                     say "TEST MODE: ERROR DELETING ITEM $itemnumber: $error";
                 }
             } else {
                 my $deleted = $item->safe_delete;
-                if ( $deleted ) {
+                if ($deleted) {
                     say "DELETED ITEM $itemnumber" if $verbose;
                     $deleted_items_count++;
                 } else {
-                    my $error = @{$deleted->messages}[0]->message;
+                    my $error = @{ $deleted->messages }[0]->message;
                     say "ERROR DELETING ITEM $itemnumber: $error";
                 }
             }
@@ -113,7 +118,7 @@ while ( my $m = $metadatas->next ) {
     }
 
     my $error = $test ? q{Test mode enabled} : DelBiblio($biblionumber);
-    if ( $error ) {
+    if ($error) {
         say "ERROR DELETING BIBLIO $biblionumber: $error";
     } else {
         say "DELETED BIBLIO $biblionumber" if $verbose;
@@ -123,7 +128,7 @@ while ( my $m = $metadatas->next ) {
     say q{};
 }
 
-if ( $verbose ) {
+if ($verbose) {
     say "DELETED $deleted_records_count OF $total_records_count RECORDS";
     say "DELETED $deleted_items_count OF $total_items_count ITEMS" if $delete_items;
 }

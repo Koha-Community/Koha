@@ -30,53 +30,52 @@ its basket is closed.
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use CGI             qw ( -utf8 );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Acquisition qw( GetOrder GetBasket ModOrder );
 
 use Koha::Acquisition::Booksellers;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'acqui/moddeliverydate.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'acquisition' => 'order_manage' },
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'acqui/moddeliverydate.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'acquisition' => 'order_manage' },
+    }
+);
 
-my $op = $input->param('op');
+my $op          = $input->param('op');
 my $ordernumber = $input->param('ordernumber');
-my $referrer = $input->param('referrer') || $input->referer();
-my $order = GetOrder($ordernumber);
-my $basket = GetBasket($order->{basketno});
-my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
+my $referrer    = $input->param('referrer') || $input->referer();
+my $order       = GetOrder($ordernumber);
+my $basket      = GetBasket( $order->{basketno} );
+my $bookseller  = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
 
-if($op and $op eq 'cud-save') {
+if ( $op and $op eq 'cud-save' ) {
     my $estimated_delivery_date = $input->param('estimated_delivery_date');
-    $order->{'estimated_delivery_date'} = $estimated_delivery_date ? dt_from_string( $estimated_delivery_date ) : undef;
+    $order->{'estimated_delivery_date'} = $estimated_delivery_date ? dt_from_string($estimated_delivery_date) : undef;
     ModOrder($order);
     print $input->redirect($referrer);
     exit;
 } else {
-    $template->param(
-        estimated_delivery_date => $order->{'estimated_delivery_date'}
-    );
+    $template->param( estimated_delivery_date => $order->{'estimated_delivery_date'} );
 }
 
-if($op) {
-    $template->param($op => 1);
+if ($op) {
+    $template->param( $op => 1 );
 }
 
 $template->param(
-    basketname           => $basket->{'basketname'},
-    basketno             => $order->{basketno},
-    booksellerid         => $bookseller->id,
-    booksellername       => $bookseller->name,
-    ordernumber => $ordernumber,
-    referrer => $referrer,
+    basketname     => $basket->{'basketname'},
+    basketno       => $order->{basketno},
+    booksellerid   => $bookseller->id,
+    booksellername => $bookseller->name,
+    ordernumber    => $ordernumber,
+    referrer       => $referrer,
 );
-
 
 output_html_with_http_headers $input, $cookie, $template->output;

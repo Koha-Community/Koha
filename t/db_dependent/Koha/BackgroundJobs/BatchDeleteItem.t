@@ -28,7 +28,7 @@ use Koha::BackgroundJob::BatchDeleteItem;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest "process() tests" => sub {
@@ -38,15 +38,18 @@ subtest "process() tests" => sub {
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio;
-    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->id });
-    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->id });
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->id } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->id } );
 
     my $counter = 0;
 
     my $mock_holds_queue_job = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $mock_holds_queue_job->mock( 'enqueue', sub {
-        $counter++;
-    });
+    $mock_holds_queue_job->mock(
+        'enqueue',
+        sub {
+            $counter++;
+        }
+    );
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
@@ -75,7 +78,7 @@ subtest "process() tests" => sub {
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
     $biblio = $builder->build_sample_biblio;
-    my $item = $builder->build_sample_item({ biblionumber => $biblio->id });
+    my $item = $builder->build_sample_item( { biblionumber => $biblio->id } );
 
     $job = Koha::BackgroundJob::BatchDeleteItem->new(
         {

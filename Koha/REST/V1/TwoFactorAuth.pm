@@ -36,7 +36,6 @@ Will send an email with the OTP token needed to complete the second authenticati
 
 =cut
 
-
 sub send_otp_token {
 
     my $c = shift->openapi->valid_input or return;
@@ -45,7 +44,7 @@ sub send_otp_token {
 
     return try {
 
-        my $code = Koha::Auth::TwoFactorAuth->new({patron => $patron})->code;
+        my $code   = Koha::Auth::TwoFactorAuth->new( { patron => $patron } )->code;
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'members',
             letter_code => '2FA_OTP_TOKEN',
@@ -67,12 +66,11 @@ sub send_otp_token {
         my $message = C4::Letters::GetMessage($message_id);
 
         if ( $message->{status} eq 'sent' ) {
-            return $c->render(status => 200, openapi => {});
+            return $c->render( status => 200, openapi => {} );
         } elsif ( $message->{status} eq 'failed' ) {
-            return $c->render(status => 400, openapi => { error => 'email_not_sent'});
+            return $c->render( status => 400, openapi => { error => 'email_not_sent' } );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -94,12 +92,11 @@ sub registration {
 
     return try {
         my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
-        my $auth   = Koha::Auth::TwoFactorAuth->new(
-            { patron => $patron, secret => $secret } );
+        my $auth   = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret => $secret } );
 
         my $response = {
-            issuer   => Encode::decode_utf8($auth->issuer),
-            key_id   => Encode::decode_utf8($auth->key_id),
+            issuer   => Encode::decode_utf8( $auth->issuer ),
+            key_id   => Encode::decode_utf8( $auth->key_id ),
             qr_code  => $auth->qr_code,
             secret32 => $auth->secret32,
 
@@ -107,9 +104,8 @@ sub registration {
         };
         $auth->clear;
 
-        return $c->render(status => 201, openapi => $response);
-    }
-    catch {
+        return $c->render( status => 201, openapi => $response );
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -134,8 +130,7 @@ sub verification {
         my $pin_code = $c->param('pin_code');
         my $secret32 = $c->param('secret32');
 
-        my $auth     = Koha::Auth::TwoFactorAuth->new(
-            { patron => $patron, secret32 => $secret32 } );
+        my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret32 => $secret32 } );
 
         my $verified = $auth->verify(
             $pin_code,
@@ -174,8 +169,7 @@ sub verification {
         }
 
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 

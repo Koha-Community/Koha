@@ -40,27 +40,28 @@ subtest 'EmbedItemsAvailability tests' => sub {
     $schema->storage->txn_begin();
 
     my $biblio = Test::MockModule->new('C4::Biblio');
-    $biblio->mock( 'GetMarcFromKohaField', sub {
-        my ( $kohafield ) = @_;
-        if ( $kohafield eq 'biblio.biblionumber' ) {
-            if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-                return ( '001', '@' );
-            }
-            else {
-                return ( '999', 'c' );
+    $biblio->mock(
+        'GetMarcFromKohaField',
+        sub {
+            my ($kohafield) = @_;
+            if ( $kohafield eq 'biblio.biblionumber' ) {
+                if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+                    return ( '001', '@' );
+                } else {
+                    return ( '999', 'c' );
+                }
+            } else {
+                my $func_ref = $biblio->original('GetMarcFromKohaField');
+                &$func_ref($kohafield);
             }
         }
-        else {
-            my $func_ref = $biblio->original( 'GetMarcFromKohaField' );
-            &$func_ref( $kohafield );
-        }
-    });
+    );
 
     # MARC21 tests
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 
     # Create a dummy record
-    my ( $biblionumber, $biblioitemnumber ) = AddBiblio(MARC::Record->new(), '');
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( MARC::Record->new(), '' );
 
     # Add some items with different onloan values
     $builder->build_sample_item(
@@ -86,11 +87,12 @@ subtest 'EmbedItemsAvailability tests' => sub {
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
     my $biblio_object = Koha::Biblios->find($biblionumber);
-    my $record = $biblio_object->metadata->record;
+    my $record        = $biblio_object->metadata->record;
     ok( !defined $record->field('999')->subfield('x'), q{The record doesn't originally contain 999$x} );
+
     # Apply filter
     $processor->process($record);
-    is($record->field('999')->subfield('x'), 1, 'There is only one item with undef onloan');
+    is( $record->field('999')->subfield('x'), 1, 'There is only one item with undef onloan' );
 
     $schema->storage->txn_rollback();
 
@@ -100,7 +102,7 @@ subtest 'EmbedItemsAvailability tests' => sub {
     $schema->storage->txn_begin();
 
     # Create a dummy record
-    ( $biblionumber, $biblioitemnumber ) = AddBiblio(MARC::Record->new(), '');
+    ( $biblionumber, $biblioitemnumber ) = AddBiblio( MARC::Record->new(), '' );
 
     # Add some items with different onloan values
     $builder->build_sample_item(
@@ -126,11 +128,12 @@ subtest 'EmbedItemsAvailability tests' => sub {
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
     $biblio_object = Koha::Biblios->find($biblionumber);
-    $record = $biblio_object->metadata->record;
-    ok( !defined $record->subfield('999', 'x'), q{The record doesn't originally contain 999$x} );
+    $record        = $biblio_object->metadata->record;
+    ok( !defined $record->subfield( '999', 'x' ), q{The record doesn't originally contain 999$x} );
+
     # Apply filter
     $processor->process($record);
-    is($record->subfield('999', 'x'), 1, 'There is only one item with undef onloan');
+    is( $record->subfield( '999', 'x' ), 1, 'There is only one item with undef onloan' );
 
     $schema->storage->txn_rollback();
 };

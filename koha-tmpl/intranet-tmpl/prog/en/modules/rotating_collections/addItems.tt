@@ -4,13 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Manage items") | html %] &rsaquo;
-    [% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %] &rsaquo;
-    [% t("Rotating collections") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Manage items") | html %]
+        &rsaquo; [% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %] &rsaquo; [% t("Rotating collections") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -37,22 +36,22 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
-              [% IF ( ! colId ) %]
-                <div class="alert alert-info">
-                    <p>Invalid collection id</p>
-                    <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
-                </div>
-              [% ELSE %]
-              [% INCLUDE 'rotating-collections-toolbar.inc' %]
-              <h1>[% tx("Manage items for '{collection_title}'", { collection_title = colTitle }) | html %]</h1>
+    [% IF ( ! colId ) %]
+        <div class="alert alert-info">
+            <p>Invalid collection id</p>
+            <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+        </div>
+    [% ELSE %]
+        [% INCLUDE 'rotating-collections-toolbar.inc' %]
+        <h1>[% tx("Manage items for '{collection_title}'", { collection_title = colTitle }) | html %]</h1>
 
-              [% IF ( previousActionAdd ) %]
-                [% IF ( addSuccess ) %]
-                  <div class="alert alert-info">Item with barcode '[% barcode | html %]' added successfully</div>
-                [% ELSE %]
-                  <div class="alert alert-warning">
-                    <p>Failed to add item with barcode <em>[% barcode | html %]</em>:
-                    <p>
+        [% IF ( previousActionAdd ) %]
+            [% IF ( addSuccess ) %]
+                <div class="alert alert-info">Item with barcode '[% barcode | html %]' added successfully</div>
+            [% ELSE %]
+                <div class="alert alert-warning">
+                    <p>Failed to add item with barcode <em>[% barcode | html %]</em>: </p
+                    ><p>
                         [% IF failureMessage == "NO_ITEM" %]
                             <span>No item with matching barcode found</span>
                         [% ELSIF failureMessage == "IN_COLLECTION_OTHER" %]
@@ -64,14 +63,14 @@
                         [% END %]
                     </p>
                 </div>
-                [% END %]
-              [% END %]
+            [% END %]
+        [% END %]
 
-              [% IF ( previousActionRemove ) %]
-                [% IF ( removeSuccess ) %]
-                  <div class="alert alert-info">Item with barcode <em>[% barcode | html %]</em> removed successfully</div>
-                [% ELSE %]
-                  <div class="alert alert-warning">
+        [% IF ( previousActionRemove ) %]
+            [% IF ( removeSuccess ) %]
+                <div class="alert alert-info">Item with barcode <em>[% barcode | html %]</em> removed successfully</div>
+            [% ELSE %]
+                <div class="alert alert-warning">
                     Failed to remove item with barcode <em>[% barcode | html %]</em>:
                     <p>
                         [% IF failureMessage == "NO_ITEM" %]
@@ -83,70 +82,68 @@
                         [% END %]
                     </p>
                 </div>
-                [% END %]
-              [% END %]
+            [% END %]
+        [% END %]
 
-              <div>
-                <form action="addItems.pl" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <fieldset class="brief">
-                        <legend>Add or remove items</legend>
-                        <ol>
-                            <li>
-                                <label for="barcode">Barcode: </label>
-                                <input type="text" id="barcode" name="barcode" />
-                                [% IF ( removeChecked ) %]
-                                    <label class="inline"><input type="checkbox" name="removeItem" checked="checked" /> Remove item from collection</label>
-                                [% ELSE %]
-                                    <label class="inline"><input type="checkbox" name="removeItem" /> Remove item from collection</label>
-                                [% END %]
-                            </li>
-                        </ol>
-                    </fieldset>
-                    <fieldset class="action">
-                        <input type="hidden" id="colId" name="colId" value="[% colId | html %]" />
-                        <input type="hidden" name="op" value="cud-add" />
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </fieldset>
+        <div>
+            <form action="addItems.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <fieldset class="brief">
+                    <legend>Add or remove items</legend>
+                    <ol>
+                        <li>
+                            <label for="barcode">Barcode: </label>
+                            <input type="text" id="barcode" name="barcode" />
+                            [% IF ( removeChecked ) %]
+                                <label class="inline"><input type="checkbox" name="removeItem" checked="checked" /> Remove item from collection</label>
+                            [% ELSE %]
+                                <label class="inline"><input type="checkbox" name="removeItem" /> Remove item from collection</label>
+                            [% END %]
+                        </li>
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="hidden" id="colId" name="colId" value="[% colId | html %]" />
+                    <input type="hidden" name="op" value="cud-add" />
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                </fieldset>
+            </form>
+        </div>
 
-                </form>
-              </div>
-
-              <div class="page-section">
-                [% IF ( collectionItemsLoop ) %]
-                  <h2>Items in collection</h2>
-                  <p>Total items: [% collectionItemsLoop.size | html%]</p>
-                  <table>
+        <div class="page-section">
+            [% IF ( collectionItemsLoop ) %]
+                <h2>Items in collection</h2>
+                <p>Total items: [% collectionItemsLoop.size | html %]</p>
+                <table>
                     <tr>
-                      <th>Title</th>
-                      <th>Call number</th>
-                      <th>Barcode</th>
-                      <th>&nbsp;</th>
+                        <th>Title</th>
+                        <th>Call number</th>
+                        <th>Barcode</th>
+                        <th>&nbsp;</th>
                     </tr>
                     [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
-                      <tr>
-                        <td>[% INCLUDE 'biblio-title.inc' biblio=collectionItemsLoo link = 1 %]</td>
-                        <td>[% collectionItemsLoo.itemcallnumber | html %]</td>
-                        <td>[% collectionItemsLoo.barcode | html %]</td>
-                        <td>
-                            <form action="/cgi-bin/koha/rotating_collections/addItems.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-add" />
-                                <input type="hidden" name="colId" value="[% colId | html %]" />
-                                <input type="hidden" name="barcode" value="[% collectionItemsLoo.barcode | html %]" />
-                                <input type="hidden" name="removeItem" value="1" />
-                                <button type="submit" class="btn btn-default btn-xs removeitem"><i class="fa fa-trash"></i> Remove</button>
-                            </form>
-                        </td>
-                      </tr>
+                        <tr>
+                            <td>[% INCLUDE 'biblio-title.inc' biblio=collectionItemsLoo link = 1 %]</td>
+                            <td>[% collectionItemsLoo.itemcallnumber | html %]</td>
+                            <td>[% collectionItemsLoo.barcode | html %]</td>
+                            <td>
+                                <form action="/cgi-bin/koha/rotating_collections/addItems.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-add" />
+                                    <input type="hidden" name="colId" value="[% colId | html %]" />
+                                    <input type="hidden" name="barcode" value="[% collectionItemsLoo.barcode | html %]" />
+                                    <input type="hidden" name="removeItem" value="1" />
+                                    <button type="submit" class="btn btn-default btn-xs removeitem"><i class="fa fa-trash"></i> Remove</button>
+                                </form>
+                            </td>
+                        </tr>
                     [% END %]
-                  </table>
-                [% ELSE %]
-                  <div class="alert alert-info">There are no items in this collection.</div>
-                [% END %]
-              </div>
+                </table>
+            [% ELSE %]
+                <div class="alert alert-info">There are no items in this collection.</div>
             [% END %]
-
+        </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

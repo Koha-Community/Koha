@@ -9,12 +9,15 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Course reserves for '{course_name}'", { course_name = course.course_name }) | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Course reserves for '{course_name}'", { course_name = course.course_name }) | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-course-details' %]
@@ -34,7 +37,6 @@
         <div class="row">
             <div class="col">
                 <div id="course_reserves" class="maincontent">
-
                     <h1>[% tx("Course reserves for '{course_name}'", { course_name = course.course_name }) | html %]</h1>
                     <div class="rows">
                         <ol>
@@ -43,7 +45,8 @@
                             [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number | html %]</li>[% END %]
                             [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section | html %]</li>[% END %]
                             [% IF ( course.instructors ) %]
-                                <li><span class="label">Instructors:</span>
+                                <li
+                                    ><span class="label">Instructors:</span>
                                     <ul>
                                         [% FOREACH i IN course.instructors %]
                                             <li><div class="instructor">[% i.firstname | html %] [% i.surname | html %]</div></li>
@@ -57,7 +60,7 @@
 
                     [% IF ( course_reserves ) %]
                         <table id="course-items-table" class="table table-bordered table-striped table-condensed">
-                        <caption class="sr-only">Courses</caption>
+                            <caption class="sr-only">Courses</caption>
                             <thead>
                                 <tr>
                                     <th class="anti-the">Title</th>
@@ -81,7 +84,10 @@
                                         <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
                                         <td>[% cr.biblio.author | html %]</td>
                                         <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
-                                        <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => cr.item.location, opac => 1 ) | html %]</em></td>
+                                        <td
+                                            >[% Branches.GetName( cr.item.holdingbranch ) | html %] <br />
+                                            <em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => cr.item.location, opac => 1 ) | html %]</em></td
+                                        >
                                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode, opac => 1 ) | html %]</td>
                                         <td>[% cr.item.itemcallnumber | html %]</td>
                                         <td>[% cr.item.copynumber | html %]</td>
@@ -91,13 +97,15 @@
                                             [% END %]
                                         </td>
                                         <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
-                                        <td>[% IF ( cr.public_note ) %]
+                                        <td
+                                            >[% IF ( cr.public_note ) %]
                                                 [% cr.public_note | $raw %]
                                             [% ELSIF ( cr.item.itemnotes ) %]
                                                 [% cr.item.itemnotes | $raw %]
                                             [% END %]
                                         </td>
-                                        <td>[% IF (cr.item.uri) %]
+                                        <td
+                                            >[% IF (cr.item.uri) %]
                                                 <a href="[% cr.item.uri | url %]">Item URI</a>
                                             [% ELSIF (cr.biblioitem.url) %]
                                                 <a href="[% cr.biblioitem.url | url %]">Record URL</a>
@@ -114,11 +122,16 @@
                             <p>No reserves have been selected for this course.</p>
                         </div>
                     [% END %]
-                </div> <!-- / #course_reserves -->
-            </div> <!-- / .col -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #course_reserves -->
+            </div>
+            <!-- / .col -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]

@@ -14,4 +14,4 @@
 [% IF bodyid.defined %]
     [% SET idprop = 'ID="' _ bodyid _ '" ' %]
 [% END %]
-<body [%idprop|$raw%][%classprop|$raw%] >
+<body [% idprop|$raw %][% classprop|$raw %] >

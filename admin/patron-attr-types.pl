@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use List::MoreUtils qw( uniq );
 
 use C4::Auth qw( get_template_and_user );
@@ -36,11 +36,11 @@ use Koha::Patron::Categories;
 our $input = CGI->new;
 my $op = $input->param('op') || '';
 
-
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/patron-attr-types.tt",
-        query           => $input,
-        type            => "intranet",
+    {
+        template_name => "admin/patron-attr-types.tt",
+        query         => $input,
+        type          => "intranet",
         flagsrequired => { parameters => 'manage_patron_attributes' }
     }
 );
@@ -48,26 +48,26 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $code = $input->param("code");
 
 my $display_list = 0;
-if ($op eq "edit_attribute_type") {
-    edit_attribute_type_form($template, $code);
-} elsif ($op eq "cud-edit_attribute_type_confirmed") {
-    $display_list = add_update_attribute_type('edit', $template, $code);
-} elsif ($op eq "add_attribute_type") {
+if ( $op eq "edit_attribute_type" ) {
+    edit_attribute_type_form( $template, $code );
+} elsif ( $op eq "cud-edit_attribute_type_confirmed" ) {
+    $display_list = add_update_attribute_type( 'edit', $template, $code );
+} elsif ( $op eq "add_attribute_type" ) {
     add_attribute_type_form($template);
-} elsif ($op eq "cud-add_attribute_type_confirmed") {
-    $display_list = add_update_attribute_type('add', $template, $code);
-} elsif ($op eq "delete_attribute_type") {
-    $display_list = delete_attribute_type_form($template, $code);
-} elsif ($op eq "cud-delete_attribute_type_confirmed") {
-    delete_attribute_type($template, $code);
+} elsif ( $op eq "cud-add_attribute_type_confirmed" ) {
+    $display_list = add_update_attribute_type( 'add', $template, $code );
+} elsif ( $op eq "delete_attribute_type" ) {
+    $display_list = delete_attribute_type_form( $template, $code );
+} elsif ( $op eq "cud-delete_attribute_type_confirmed" ) {
+    delete_attribute_type( $template, $code );
     $display_list = 1;
 } else {
     $display_list = 1;
 }
 
 if ($display_list) {
-    unless (C4::Context->preference('ExtendedPatronAttributes')) {
-        $template->param(WARNING_extended_attributes_off => 1); 
+    unless ( C4::Context->preference('ExtendedPatronAttributes') ) {
+        $template->param( WARNING_extended_attributes_off => 1 );
     }
     patron_attribute_type_list($template);
 }
@@ -79,24 +79,24 @@ exit 0;
 sub add_attribute_type_form {
     my $template = shift;
 
-    my $patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
+    my $patron_categories = Koha::Patron::Categories->search_with_library_limits( {}, { order_by => ['description'] } );
     $template->param(
         attribute_type_form => 1,
-        confirm_op => 'cud-add_attribute_type_confirmed',
-        categories => $patron_categories,
+        confirm_op          => 'cud-add_attribute_type_confirmed',
+        categories          => $patron_categories,
     );
 }
 
 sub error_add_attribute_type_form {
     my $template = shift;
 
-    $template->param(description => scalar $input->param('description'));
+    $template->param( description   => scalar $input->param('description') );
     $template->param( category_code => scalar $input->param('category_code') );
-    $template->param( class => scalar $input->param('class') );
+    $template->param( class         => scalar $input->param('class') );
 
     $template->param(
-        attribute_type_form => 1,
-        confirm_op => 'cud-add_attribute_type_confirmed',
+        attribute_type_form       => 1,
+        confirm_op                => 'cud-add_attribute_type_confirmed',
         authorised_value_category => scalar $input->param('authorised_value_category'),
     );
 }
@@ -107,15 +107,15 @@ sub add_update_attribute_type {
     my $code     = shift;
 
     my $description               = $input->param('description');
-    my $repeatable                = $input->param('repeatable') ? 1 : 0;
-    my $unique_id                 = $input->param('unique_id') ? 1 : 0;
-    my $is_date                   = $input->param('is_date') ? 1 : 0;
-    my $opac_display              = $input->param('opac_display') ? 1 : 0;
-    my $opac_editable             = $input->param('opac_editable') ? 1 : 0;
-    my $staff_searchable          = $input->param('staff_searchable') ? 1 : 0;
-    my $searched_by_default       = $input->param('searched_by_default') ? 1 : 0;
+    my $repeatable                = $input->param('repeatable')                ? 1 : 0;
+    my $unique_id                 = $input->param('unique_id')                 ? 1 : 0;
+    my $is_date                   = $input->param('is_date')                   ? 1 : 0;
+    my $opac_display              = $input->param('opac_display')              ? 1 : 0;
+    my $opac_editable             = $input->param('opac_editable')             ? 1 : 0;
+    my $staff_searchable          = $input->param('staff_searchable')          ? 1 : 0;
+    my $searched_by_default       = $input->param('searched_by_default')       ? 1 : 0;
     my $keep_for_pseudonymization = $input->param('keep_for_pseudonymization') ? 1 : 0;
-    my $mandatory                 = $input->param('mandatory') ? 1 : 0;
+    my $mandatory                 = $input->param('mandatory')                 ? 1 : 0;
     my $authorised_value_category = $input->param('authorised_value_category');
     my $display_checkout          = $input->param('display_checkout') ? 1 : 0;
     my $category_code             = $input->param('category_code') || undef;
@@ -124,8 +124,7 @@ sub add_update_attribute_type {
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
     if ( $op eq 'edit' ) {
         $attr_type->description($description);
-    }
-    else {
+    } else {
         if ($attr_type) {    # Already exists
             $template->param( duplicate_code_error => $code );
 
@@ -160,13 +159,12 @@ sub add_update_attribute_type {
         }
     )->store;
 
-    my @branches = grep { ! /^\s*$/ } $input->multi_param('branches');
+    my @branches = grep { !/^\s*$/ } $input->multi_param('branches');
     $attr_type->library_limits( \@branches );
 
     if ( $op eq 'edit' ) {
         $template->param( edited_attribute_type => $attr_type->code() );
-    }
-    else {
+    } else {
         $template->param( added_attribute_type => $attr_type->code() );
     }
 
@@ -175,19 +173,19 @@ sub add_update_attribute_type {
 
 sub delete_attribute_type_form {
     my $template = shift;
-    my $code = shift;
+    my $code     = shift;
 
-    my $attr_type = Koha::Patron::Attribute::Types->find($code);
+    my $attr_type    = Koha::Patron::Attribute::Types->find($code);
     my $display_list = 0;
-    if (defined($attr_type)) {
+    if ( defined($attr_type) ) {
         $template->param(
             delete_attribute_type_form => 1,
-            confirm_op => "cud-delete_attribute_type_confirmed",
-            code => $code,
-            description => $attr_type->description(),
+            confirm_op                 => "cud-delete_attribute_type_confirmed",
+            code                       => $code,
+            description                => $attr_type->description(),
         );
     } else {
-        $template->param(ERROR_delete_not_found => $code);
+        $template->param( ERROR_delete_not_found => $code );
         $display_list = 1;
     }
     return $display_list;
@@ -195,54 +193,56 @@ sub delete_attribute_type_form {
 
 sub delete_attribute_type {
     my $template = shift;
-    my $code = shift;
+    my $code     = shift;
 
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
-    if (defined($attr_type)) {
+    if ( defined($attr_type) ) {
+
         # TODO Check must be done for previous step as well
         if ( my $num_patrons = Koha::Patrons->filter_by_attribute_type($code)->count ) {
-            $template->param(ERROR_delete_in_use => $code);
-            $template->param(ERROR_num_patrons => $num_patrons );
+            $template->param( ERROR_delete_in_use => $code );
+            $template->param( ERROR_num_patrons   => $num_patrons );
         } else {
             $attr_type->delete();
-            $template->param(deleted_attribute_type => $code);
+            $template->param( deleted_attribute_type => $code );
         }
     } else {
+
         # FIXME Really needed?
-        $template->param(ERROR_delete_not_found => $code);
+        $template->param( ERROR_delete_not_found => $code );
     }
 }
 
 sub edit_attribute_type_form {
     my $template = shift;
-    my $code = shift;
+    my $code     = shift;
 
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
 
-    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
+    my $patron_categories = Koha::Patron::Categories->search( {}, { order_by => ['description'] } );
 
     my $can_be_set_to_nonrepeatable = 1;
     if ( $attr_type->repeatable == 1 ) {
         $attr_type->repeatable(0);
-        eval {$attr_type->check_repeatables};
+        eval { $attr_type->check_repeatables };
         $can_be_set_to_nonrepeatable = 0 if $@;
         $attr_type->repeatable(1);
     }
     my $can_be_set_to_unique = 1;
     if ( $attr_type->unique_id == 0 ) {
         $attr_type->unique_id(1);
-        eval {$attr_type->check_unique_ids};
+        eval { $attr_type->check_unique_ids };
         $can_be_set_to_unique = 0 if $@;
         $attr_type->unique_id(0);
     }
     $template->param(
-        attribute_type => $attr_type,
-        attribute_type_form => 1,
-        edit_attribute_type => 1,
+        attribute_type              => $attr_type,
+        attribute_type_form         => 1,
+        edit_attribute_type         => 1,
         can_be_set_to_nonrepeatable => $can_be_set_to_nonrepeatable,
-        can_be_set_to_unique => $can_be_set_to_unique,
-        confirm_op => 'cud-edit_attribute_type_confirmed',
-        categories => $patron_categories,
+        can_be_set_to_unique        => $can_be_set_to_unique,
+        confirm_op                  => 'cud-edit_attribute_type_confirmed',
+        categories                  => $patron_categories,
     );
 
 }
@@ -256,6 +256,7 @@ sub patron_attribute_type_list {
     @classes = sort @classes;
 
     my @attributes_loop;
+
     # FIXME This is not efficient and should be improved
     for my $class (@classes) {
         my @items;
@@ -263,7 +264,7 @@ sub patron_attribute_type_list {
             next if $attr->class ne $class;
             push @items, $attr;
         }
-        my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
+        my $av  = Koha::AuthorisedValues->search( { category => 'PA_CLASS', authorised_value => $class } );
         my $lib = $av->count ? $av->next->lib : $class;
         push @attributes_loop, {
             class => $class,
@@ -271,6 +272,6 @@ sub patron_attribute_type_list {
             lib   => $lib,
         };
     }
-    $template->param(available_attribute_types => \@attributes_loop);
-    $template->param(display_list => 1);
+    $template->param( available_attribute_types => \@attributes_loop );
+    $template->param( display_list              => 1 );
 }

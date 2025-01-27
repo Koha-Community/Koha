@@ -14,11 +14,13 @@
 [% PROCESS 'accounts.inc' %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Account for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Account for") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -42,229 +44,263 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
-            [% IF receipt_sent == '1' %]
-            <div id="receipt_sent_dialog" class="alert alert-info">
-              Receipt sent.
-            </div>
-            [% END %]
-            [% IF receipt_sent == '-1' %]
-            <div id="receipt_sent_dialog" class="alert alert-warning">
-              Receipt not sent, failed to find template.
-            </div>
-            [% END %]
-
-[% INCLUDE 'members-toolbar.inc' %]
-<h1>Account for [% INCLUDE 'patron-title.inc' %]</h1>
-<form action="/cgi-bin/koha/members/boraccount.pl" method="get">[% INCLUDE 'csrf-token.inc' %]<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
-
-<!-- The manual invoice and credit buttons -->
-<div class="toptabs">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="nav-item transactions">
-            <a class="nav-link active" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
-        </li>
-        <li role="presentation" class="nav-item makepayment">
-            <a class="nav-link" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
-        </li>
-        [% IF CAN_user_updatecharges_manual_invoice %]
-            <li role="presentation" class="nav-item manualinvoice">
-                <a class="nav-link" href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
-            </li>
-        [% END %]
-        [% IF CAN_user_updatecharges_manual_credit %]
-            <li role="presentation" class="nav-item manualcredit">
-                <a class="nav-link" href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
-            </li>
-        [% END %]
-    </ul> <!-- /.nav.nav-tabs -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active">
-[% INCLUDE 'renew_results.inc' renew_results=renew_results %]
-<!-- The table with the account items -->
-<table id="table_account_fines">
-    <thead>
-      <tr>
-          <th>Created</th>
-          <th>Updated</th>
-          <th>Credit number</th>
-          <th>Account type</th>
-          <th>Description of charges</th>
-          <th>Barcode</th>
-          <th>Call number</th>
-          <th>Due date</th>
-          <th>Checkin date</th>
-          <th>Checkout date</th>
-          <th class="checked_out_from">Checked out from</th>
-          <th>Home library</th>
-          <th>Note</th>
-          <th>Amount</th>
-          <th>Outstanding</th>
-          <th class="NoSort noExport">Actions</th>
-        </tr>
-    </thead>
-
-	<!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
-  [% FOREACH account IN accounts %]
-
-   <tr>
-   <td data-order="[% account.date | html %]">[% account.date | $KohaDates %]</td>
-   <td data-order="[% account.timestamp | html %]">[% account.timestamp | $KohaDates with_hours = 1 %]</td>
-        <td>[% account.credit_number | html %]</td>
-        <td>[% PROCESS account_type_description account=account %]</td>
-      <td>
-        [%- IF account.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
-        [%- IF account.description %][% account.description | html %][% END %]
-        &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
-      <td>[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% account.itemnumber | uri %]&amp;biblionumber=[% account.item.biblionumber | uri %]#item[% account.itemnumber | uri %]">[% account.item.barcode | html %]</a>[% END %]</td>
-      <td>[% IF ( account.itemnumber ) %][% account.item.itemcallnumber | html %][% END %]</td>
-      <td>[% IF ( account.issue_id ) %][% account.checkout.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
-      <td>[% IF ( account.issue_id ) %][% account.checkout.returndate | $KohaDates with_hours => 1 %][% END %]</td>
-      <td>[% IF ( account.issue_id ) %][% account.checkout.issuedate | $KohaDates %][% END %]</td>
-      <td class="checked_out_from">
-          [% IF account.issue_id && account.checkout.library %]
-              [% account.checkout.library.branchname | html %]
-          [% END %]
-      </td>
-      <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
-      <td>[% account.note | html_line_break %]</td>
-      [% IF account.amount <= 0 %]
-        [% SET td_class="credit" %]
-      [% ELSE %]
-        [% SET td_class="debig" %]
-      [% END %]
-      <td class="[% td_class | html %]" style="text-align: right;">[% account.amount | $Price %]</td>
-      <td class="[% td_class | html %]" style="text-align: right;">[% account.amountoutstanding | $Price %]</td>
-      <td class="actions">
-        [% IF ( account.is_credit ) %]
-          [% IF Koha.Preference('UseEmailReceipts') %]
-          <div class="btn-group">
-          <button class="btn btn-xs btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-receipt"></i> Receipt</button>
-          <ul class="dropdown-menu dropdown-menu-end">
-              <li><a target="_blank" href="printfeercpt.pl?accountlines_id=[% account.accountlines_id | uri %]" class="receipt-print-action dropdown-item"><i class="fa fa-print"></i> Print</a></li>
-              <li>
-                  <form method="post" action="/cgi-bin/koha/members/boraccount.pl">
-                      [% INCLUDE 'csrf-token.inc' %]
-                      <input type="hidden" name="op" value="cud-send_receipt" />
-                      <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
-                      <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
-                  </form>
-                  <a href="#" class="receipt-email-action"><i class="fa fa-envelope"></i> Email</a>
-              </li>
-          </ul>
-          </div>
-          [% ELSE %]
-          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"><i class="fa fa-print"></i> Print</a>
-          [% END %]
-        [% ELSE %]
-          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs invoice-print-action"><i class="fa fa-print"></i> Print</a>
-        [% END %]
-        <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs details-action"><i class="fa fa-list"></i> Details</a>
-        [% IF account.is_debit && account.amountoutstanding > 0 %]
-            <form method="get" action="/cgi-bin/koha/members/paycollect.pl">
-                <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]"/>
-                <input type="hidden" name="pay_individual" value="1" />
-                <input type="hidden" name="debit_type_code" value="[% account.debit_type_code | html %]" />
-                <input type="hidden" name="amount" value="[% account.amount | html %]" />
-                <input type="hidden" name="amountoutstanding" value="[% account.amountoutstanding | html %]"/>
-                <input type="hidden" name="description" value="[% account.description | html %]" />
-                <input type="hidden" name="itemnumber" value="[% account.itemnumber | html %]" />
-                <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
-                <button type="submit" class="btn btn-default btn-xs pay-action">
-                    <i class="fa-solid fa-money-bill-1"></i> Pay
-                </button>
-            </form>
-        [% END %]
-        [% IF account.is_credit && account.status != 'VOID' %]
-          <form method="post" action="/cgi-bin/koha/members/boraccount.pl">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-void" />
-            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]">
-            <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]">
-            <button type="submit" class="btn btn-default btn-xs void-action">
-                <i class="fa fa-ban"></i>
-                Void payment
-            </button>
-          </form>
-        [% END %]
-        [% IF account.is_debit && account.amount == account.amountoutstanding && account.status != 'CANCELLED' && !(account.debit_type_code == 'PAYOUT') %]
-          <form method="post" action="/cgi-bin/koha/members/cancel-charge.pl">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-cancel">
-            <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]">
-            <button type="submit" class="btn btn-default btn-xs cancel-action">
-                <i class="fa fa-ban"></i>
-                Cancel charge
-            </button>
-          </form>
-        [% END %]
-        [% IF CAN_user_updatecharges_payout && account.is_credit && ( account.amountoutstanding < 0 ) %]
-          <button type="button" data-bs-toggle="modal" data-bs-target="#issuePayoutModal" data-account="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amountoutstanding | $Price on_editing => 1 %]" class="btn btn-default btn-xs payout-action"><i class="fa-solid fa-money-bill-1"></i> Issue payout</button>
-        [% END %]
-        [% IF CAN_user_updatecharges_refund && account.is_debit && ( account.amountoutstanding != account.amount ) && !(account.status == 'REFUNDED') && !(account.debit_type_code == 'PAYOUT') && !(account.debit_type_code == 'VOID') %]
-          <button type="button"  class="btn btn-default btn-xs refund-action" data-bs-toggle="modal" data-bs-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price on_editing => 1 %]" data-amountoutstanding="[% account.amountoutstanding | $Price on_editing => 1 %]" data-member="[% account.borrowernumber | html %]"><i class="fa-solid fa-money-bill-1"></i> Issue refund</button>
-        [% END %]
-        [% IF CAN_user_updatecharges_discount && account.is_debit && ( account.amountoutstanding == account.amount ) && !(account.debit_type_code == 'PAYOUT') && !(account.debit_type_code == 'VOID') %]
-          <button type="button" data-bs-toggle="modal" data-bs-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price on_editing => 1 %]" data-amountoutstanding="[% account.amountoutstanding | $Price on_editing => 1 %]" class="btn btn-default btn-xs discount-action">Apply discount</button>
-        [% END %]
-      </td>
-    </tr>
-
-  [% END %]
-<tfoot>
-  <tr>
-    <td colspan="14">Total due</td>
-    [% IF ( totalcredit ) %]
-        <td class="credit" style="text-align: right;">[% total | $Price %]</td>
-        <td>
-          [% IF CAN_user_updatecharges_payout %]
-          <button type="button" data-bs-toggle="modal" data-bs-target="#issuePayoutModal" data-amount="[% total | $Price on_editing => 1 %]" class="btn btn-default btn-xs payout-amount-action"><i class="fa-solid fa-money-bill-1"></i> Payout amount</button>
-        [% END %]
-        </td>
-    [% ELSE %]
-       <td class="debit"style="text-align: right;">[% total | $Price %]</td>
-       <td></td>
+    [% IF receipt_sent == '1' %]
+        <div id="receipt_sent_dialog" class="alert alert-info"> Receipt sent. </div>
     [% END %]
-  </tr>
-  </tfoot>
-</table>
-</div> <!-- /.tab-pane -->
-</div> <!-- /.tab-content -->
-</div> <!-- /.toptabs -->
+    [% IF receipt_sent == '-1' %]
+        <div id="receipt_sent_dialog" class="alert alert-warning"> Receipt not sent, failed to find template. </div>
+    [% END %]
 
+    [% INCLUDE 'members-toolbar.inc' %]
+    <h1>Account for [% INCLUDE 'patron-title.inc' %]</h1>
+    <form action="/cgi-bin/koha/members/boraccount.pl" method="get">[% INCLUDE 'csrf-token.inc' %]<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
+
+    <!-- The manual invoice and credit buttons -->
+    <div class="toptabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="nav-item transactions">
+                <a class="nav-link active" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
+            </li>
+            <li role="presentation" class="nav-item makepayment">
+                <a class="nav-link" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
+            </li>
+            [% IF CAN_user_updatecharges_manual_invoice %]
+                <li role="presentation" class="nav-item manualinvoice">
+                    <a class="nav-link" href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
+                </li>
+            [% END %]
+            [% IF CAN_user_updatecharges_manual_credit %]
+                <li role="presentation" class="nav-item manualcredit">
+                    <a class="nav-link" href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
+                </li>
+            [% END %]
+        </ul>
+        <!-- /.nav.nav-tabs -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
+                [% INCLUDE 'renew_results.inc' renew_results=renew_results %]
+                <!-- The table with the account items -->
+                <table id="table_account_fines">
+                    <thead>
+                        <tr>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Credit number</th>
+                            <th>Account type</th>
+                            <th>Description of charges</th>
+                            <th>Barcode</th>
+                            <th>Call number</th>
+                            <th>Due date</th>
+                            <th>Checkin date</th>
+                            <th>Checkout date</th>
+                            <th class="checked_out_from">Checked out from</th>
+                            <th>Home library</th>
+                            <th>Note</th>
+                            <th>Amount</th>
+                            <th>Outstanding</th>
+                            <th class="NoSort noExport">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
+                    [% FOREACH account IN accounts %]
+                        <tr>
+                            <td data-order="[% account.date | html %]">[% account.date | $KohaDates %]</td>
+                            <td data-order="[% account.timestamp | html %]">[% account.timestamp | $KohaDates with_hours = 1 %]</td>
+                            <td>[% account.credit_number | html %]</td>
+                            <td>[% PROCESS account_type_description account=account %]</td>
+                            <td>
+                                [%- IF account.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
+                                [%- IF account.description %][% account.description | html %][% END %]
+                                &nbsp;[% IF ( account.itemnumber ) %]
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>
+                                [% END %]</td
+                            >
+                            <td
+                                >[% IF ( account.itemnumber ) %]
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% account.itemnumber | uri %]&amp;biblionumber=[% account.item.biblionumber | uri %]#item[% account.itemnumber | uri %]"
+                                        >[% account.item.barcode | html %]</a
+                                    >
+                                [% END %]</td
+                            >
+                            <td>[% IF ( account.itemnumber ) %][% account.item.itemcallnumber | html %][% END %]</td>
+                            <td>[% IF ( account.issue_id ) %][% account.checkout.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
+                            <td>[% IF ( account.issue_id ) %][% account.checkout.returndate | $KohaDates with_hours => 1 %][% END %]</td>
+                            <td>[% IF ( account.issue_id ) %][% account.checkout.issuedate | $KohaDates %][% END %]</td>
+                            <td class="checked_out_from">
+                                [% IF account.issue_id && account.checkout.library %]
+                                    [% account.checkout.library.branchname | html %]
+                                [% END %]
+                            </td>
+                            <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
+                            <td>[% account.note | html_line_break %]</td>
+                            [% IF account.amount <= 0 %]
+                                [% SET td_class="credit" %]
+                            [% ELSE %]
+                                [% SET td_class="debig" %]
+                            [% END %]
+                            <td class="[% td_class | html %]" style="text-align: right;">[% account.amount | $Price %]</td>
+                            <td class="[% td_class | html %]" style="text-align: right;">[% account.amountoutstanding | $Price %]</td>
+                            <td class="actions">
+                                [% IF ( account.is_credit ) %]
+                                    [% IF Koha.Preference('UseEmailReceipts') %]
+                                        <div class="btn-group">
+                                            <button class="btn btn-xs btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-receipt"></i> Receipt</button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li
+                                                    ><a target="_blank" href="printfeercpt.pl?accountlines_id=[% account.accountlines_id | uri %]" class="receipt-print-action dropdown-item"><i class="fa fa-print"></i> Print</a></li
+                                                >
+                                                <li>
+                                                    <form method="post" action="/cgi-bin/koha/members/boraccount.pl">
+                                                        [% INCLUDE 'csrf-token.inc' %]
+                                                        <input type="hidden" name="op" value="cud-send_receipt" />
+                                                        <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
+                                                        <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+                                                    </form>
+                                                    <a href="#" class="receipt-email-action"><i class="fa fa-envelope"></i> Email</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    [% ELSE %]
+                                        <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"><i class="fa fa-print"></i> Print</a>
+                                    [% END %]
+                                [% ELSE %]
+                                    <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs invoice-print-action"><i class="fa fa-print"></i> Print</a>
+                                [% END %]
+                                <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs details-action"><i class="fa fa-list"></i> Details</a>
+                                [% IF account.is_debit && account.amountoutstanding > 0 %]
+                                    <form method="get" action="/cgi-bin/koha/members/paycollect.pl">
+                                        <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+                                        <input type="hidden" name="pay_individual" value="1" />
+                                        <input type="hidden" name="debit_type_code" value="[% account.debit_type_code | html %]" />
+                                        <input type="hidden" name="amount" value="[% account.amount | html %]" />
+                                        <input type="hidden" name="amountoutstanding" value="[% account.amountoutstanding | html %]" />
+                                        <input type="hidden" name="description" value="[% account.description | html %]" />
+                                        <input type="hidden" name="itemnumber" value="[% account.itemnumber | html %]" />
+                                        <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
+                                        <button type="submit" class="btn btn-default btn-xs pay-action"> <i class="fa-solid fa-money-bill-1"></i> Pay </button>
+                                    </form>
+                                [% END %]
+                                [% IF account.is_credit && account.status != 'VOID' %]
+                                    <form method="post" action="/cgi-bin/koha/members/boraccount.pl">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-void" />
+                                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                                        <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
+                                        <button type="submit" class="btn btn-default btn-xs void-action">
+                                            <i class="fa fa-ban"></i>
+                                            Void payment
+                                        </button>
+                                    </form>
+                                [% END %]
+                                [% IF account.is_debit && account.amount == account.amountoutstanding && account.status != 'CANCELLED' && !(account.debit_type_code == 'PAYOUT') %]
+                                    <form method="post" action="/cgi-bin/koha/members/cancel-charge.pl">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-cancel" />
+                                        <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
+                                        <button type="submit" class="btn btn-default btn-xs cancel-action">
+                                            <i class="fa fa-ban"></i>
+                                            Cancel charge
+                                        </button>
+                                    </form>
+                                [% END %]
+                                [% IF CAN_user_updatecharges_payout && account.is_credit && ( account.amountoutstanding < 0 ) %]
+                                    <button
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#issuePayoutModal"
+                                        data-account="[%- PROCESS account_type_description account=account -%]"
+                                        data-accountline="[% account.accountlines_id | html %]"
+                                        data-amount="[% account.amountoutstanding | $Price on_editing => 1 %]"
+                                        class="btn btn-default btn-xs payout-action"
+                                        ><i class="fa-solid fa-money-bill-1"></i> Issue payout</button
+                                    >
+                                [% END %]
+                                [% IF CAN_user_updatecharges_refund && account.is_debit && ( account.amountoutstanding != account.amount ) && !(account.status == 'REFUNDED') && !(account.debit_type_code == 'PAYOUT') && !(account.debit_type_code == 'VOID') %]
+                                    <button
+                                        type="button"
+                                        class="btn btn-default btn-xs refund-action"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#issueRefundModal"
+                                        data-item="[%- PROCESS account_type_description account=account -%]"
+                                        data-accountline="[% account.accountlines_id | html %]"
+                                        data-amount="[% account.amount | $Price on_editing => 1 %]"
+                                        data-amountoutstanding="[% account.amountoutstanding | $Price on_editing => 1 %]"
+                                        data-member="[% account.borrowernumber | html %]"
+                                        ><i class="fa-solid fa-money-bill-1"></i> Issue refund</button
+                                    >
+                                [% END %]
+                                [% IF CAN_user_updatecharges_discount && account.is_debit && ( account.amountoutstanding == account.amount ) && !(account.debit_type_code == 'PAYOUT') && !(account.debit_type_code == 'VOID') %]
+                                    <button
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#applyDiscountModal"
+                                        data-item="[%- PROCESS account_type_description account=account -%]"
+                                        data-accountline="[% account.accountlines_id | html %]"
+                                        data-amount="[% account.amount | $Price on_editing => 1 %]"
+                                        data-amountoutstanding="[% account.amountoutstanding | $Price on_editing => 1 %]"
+                                        class="btn btn-default btn-xs discount-action"
+                                        >Apply discount</button
+                                    >
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                    <tfoot>
+                        <tr>
+                            <td colspan="14">Total due</td>
+                            [% IF ( totalcredit ) %]
+                                <td class="credit" style="text-align: right;">[% total | $Price %]</td>
+                                <td>
+                                    [% IF CAN_user_updatecharges_payout %]
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#issuePayoutModal" data-amount="[% total | $Price on_editing => 1 %]" class="btn btn-default btn-xs payout-amount-action"
+                                            ><i class="fa-solid fa-money-bill-1"></i> Payout amount</button
+                                        >
+                                    [% END %]
+                                </td>
+                            [% ELSE %]
+                                <td class="debit" style="text-align: right;">[% total | $Price %]</td>
+                                <td></td>
+                            [% END %]
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+    <!-- /.toptabs -->
 [% END %]
-    <!-- Issue payout modal -->
-    <div class="modal" id="issuePayoutModal" tabindex="-1" role="dialog" aria-labelledby="issuePayoutLabel">
-        <form id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="accountlines_id" value="" id="payoutline">
-            <input type="hidden" name="op" value="cud-payout">
-            <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="issuePayoutLabel">Issue payout</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
-                        <div id="payout_error" class="alert alert-warning">
-                            You must have at least one cash register associated with this branch before you can record cash payouts.
-                        </div>
-                        [% END %]
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <span id="paid" class="label">Outstanding credit: </span><span>[% payout.amount | $Price %]</span>
-                                </li>
-                                <li>
-                                    <label class="required" for="amount">Returned to patron: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="amount" name="amount" required="required">
-                                    <span class="required">Required</span>
-                                </li>
+<!-- Issue payout modal -->
+<div class="modal" id="issuePayoutModal" tabindex="-1" role="dialog" aria-labelledby="issuePayoutLabel">
+    <form id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="accountlines_id" value="" id="payoutline" />
+        <input type="hidden" name="op" value="cud-payout" />
+        <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="issuePayoutLabel">Issue payout</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
+                        <div id="payout_error" class="alert alert-warning"> You must have at least one cash register associated with this branch before you can record cash payouts. </div>
+                    [% END %]
+                    <fieldset class="rows">
+                        <ol>
+                            <li> <span id="paid" class="label">Outstanding credit: </span><span>[% payout.amount | $Price %]</span> </li>
+                            <li>
+                                <label class="required" for="amount">Returned to patron: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="amount" name="amount" required="required" />
+                                <span class="required">Required</span>
+                            </li>
 
-                                [% INCLUDE 'transaction_types.inc' type="payout" %]
+                            [% INCLUDE 'transaction_types.inc' type="payout" %]
 
-                                [% IF Koha.Preference('UseCashRegisters') %]
+                            [% IF Koha.Preference('UseCashRegisters') %]
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="payout_registerid">
@@ -272,56 +308,56 @@
                                         [% PROCESS options_for_registers %]
                                     </select>
                                 </li>
-                                [% END %]
+                            [% END %]
+                        </ol>
+                    </fieldset>
+                    <!-- /.rows -->
+                </div>
+                <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="borr_payout_confirm">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </form>
+    <!-- /#payout_form -->
+</div>
+<!-- /#issuePayoutModal -->
 
-                            </ol>
-                        </fieldset> <!-- /.rows -->
-                    </div> <!-- /.modal-body -->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="borr_payout_confirm">Confirm</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    </div> <!-- /.modal-footer -->
-                </div> <!-- /.modal-content -->
-            </div> <!-- /.modal-dialog -->
-        </form> <!-- /#payout_form -->
-    </div> <!-- /#issuePayoutModal -->
+<!-- Issue refund modal -->
+<div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
+    <form id="refund_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="accountlines_id" value="" id="refundline" />
+        <input type="hidden" name="op" value="cud-refund" />
+        <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="issueRefundLabel">Issue refund</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
+                        <div id="refund_error" class="alert alert-warning"> You must have at least one cash register associated with this branch before you can record cash refunds. </div>
+                    [% END %]
+                    <fieldset class="rows">
+                        <ol>
+                            <li> <span id="item" class="label">Account: </span><span></span> </li>
+                            <li> <span id="paid" class="label">Amount paid: </span><span></span> </li>
+                            <li>
+                                <label class="required" for="amount">Returned to patron: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="returned" name="amount" required="required" />
+                                <span class="required">Required</span>
+                            </li>
 
-    <!-- Issue refund modal -->
-    <div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
-        <form  id="refund_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="accountlines_id" value="" id="refundline">
-            <input type="hidden" name="op" value="cud-refund">
-            <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="issueRefundLabel">Issue refund</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
-                        <div id="refund_error" class="alert alert-warning">
-                            You must have at least one cash register associated with this branch before you can record cash refunds.
-                        </div>
-                        [% END %]
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <span id="item" class="label">Account: </span><span></span>
-                                </li>
-                                <li>
-                                    <span id="paid" class="label">Amount paid: </span><span></span>
-                                </li>
-                                <li>
-                                    <label class="required" for="amount">Returned to patron: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="returned" name="amount" required="required">
-                                    <span class="required">Required</span>
-                                </li>
+                            [% INCLUDE 'transaction_types.inc' type="refund" %]
 
-                                [% INCLUDE 'transaction_types.inc' type="refund" %]
-
-                                [% IF Koha.Preference('UseCashRegisters') %]
+                            [% IF Koha.Preference('UseCashRegisters') %]
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="refund_registerid">
@@ -329,58 +365,67 @@
                                         [% PROCESS options_for_registers %]
                                     </select>
                                 </li>
-                                [% END %]
+                            [% END %]
+                        </ol>
+                    </fieldset>
+                    <!-- /.rows -->
+                </div>
+                <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="borr_refund_confirm">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </form>
+    <!-- /#refund_form -->
+</div>
+<!-- /#issueRefundModal -->
 
-                            </ol>
-                        </fieldset> <!-- /.rows -->
-                    </div> <!-- /.modal-body -->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="borr_refund_confirm">Confirm</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    </div> <!-- /.modal-footer -->
-                </div> <!-- /.modal-content -->
-            </div> <!-- /.modal-dialog -->
-        </form> <!-- /#refund_form -->
-    </div> <!-- /#issueRefundModal -->
-
-    <!-- Apply discount modal -->
-    <div class="modal" id="applyDiscountModal" tabindex="-1" role="dialog" aria-labelledby="applyDiscountLabel">
-        <form  id="discount_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="accountlines_id" value="" id="discountline">
-            <input type="hidden" name="op" value="cud-discount">
-            <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="applyDiscountLabel">Apply discount</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <span id="item" class="label">Account type: </span><span></span>
-                                </li>
-                                <li>
-                                    <span id="charged" class="label">Amount charged: </span><span></span>
-                                </li>
-                                <li>
-                                    <label class="required" for="amount">Discount to apply: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="discount" name="amount" required="required">
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset> <!-- /.rows -->
-                    </div> <!-- /.modal-body -->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Confirm</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    </div> <!-- /.modal-footer -->
-                </div> <!-- /.modal-content -->
-            </div> <!-- /.modal-dialog -->
-        </form> <!-- /#discount_form -->
-    </div> <!-- /#applyDiscountModal -->
+<!-- Apply discount modal -->
+<div class="modal" id="applyDiscountModal" tabindex="-1" role="dialog" aria-labelledby="applyDiscountLabel">
+    <form id="discount_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="accountlines_id" value="" id="discountline" />
+        <input type="hidden" name="op" value="cud-discount" />
+        <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="applyDiscountLabel">Apply discount</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <fieldset class="rows">
+                        <ol>
+                            <li> <span id="item" class="label">Account type: </span><span></span> </li>
+                            <li> <span id="charged" class="label">Amount charged: </span><span></span> </li>
+                            <li>
+                                <label class="required" for="amount">Discount to apply: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="discount" name="amount" required="required" />
+                                <span class="required">Required</span>
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <!-- /.rows -->
+                </div>
+                <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </form>
+    <!-- /#discount_form -->
+</div>
+<!-- /#applyDiscountModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

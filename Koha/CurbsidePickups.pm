@@ -55,8 +55,7 @@ Filter by pickups that have been staged and are ready
 
 sub filter_by_staged_and_ready {
     my ($self) = @_;
-    return $self->search(
-        { staged_datetime => { -not => undef }, arrival_datetime => undef } );
+    return $self->search( { staged_datetime => { -not => undef }, arrival_datetime => undef } );
 }
 
 =head3 filter_by_patron_outside
@@ -67,9 +66,7 @@ Filter by pickups with patrons waiting outside
 
 sub filter_by_patron_outside {
     my ($self) = @_;
-    return $self->search(
-        { arrival_datetime => { -not => undef }, delivered_datetime => undef }
-    );
+    return $self->search( { arrival_datetime => { -not => undef }, delivered_datetime => undef } );
 }
 
 =head3 filter_by_delivered
@@ -88,9 +85,10 @@ sub filter_by_delivered {
 Filter by pickups that are scheduled today
 
 =cut
+
 sub filter_by_scheduled_today {
     my ($self) = @_;
-    my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     return $self->search( { scheduled_pickup_datetime => { '>' => $dtf->format_date(dt_from_string) } } );
 }
 

@@ -32,47 +32,51 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder     = t::lib::TestBuilder->new;
+my $builder = t::lib::TestBuilder->new;
 
 use_ok('Koha::Subscription');
 
 subtest 'Koha::Subscription->biblio' => sub {
     plan tests => 1;
 
-    my $biblio = Koha::Biblio->new()->store();
-    my $subscription = Koha::Subscription->new({
-        biblionumber => $biblio->biblionumber,
-    })->store();
+    my $biblio       = Koha::Biblio->new()->store();
+    my $subscription = Koha::Subscription->new(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    )->store();
 
     my $b = $subscription->biblio;
-    is($b->biblionumber, $biblio->biblionumber, 'Koha::Subscription->biblio returns the correct biblio');
+    is( $b->biblionumber, $biblio->biblionumber, 'Koha::Subscription->biblio returns the correct biblio' );
 };
 
 subtest 'Notifications on new issues - add_subscriber|remove_subscriber|subscribers' => sub {
     plan tests => 5;
-    my $subscriber_1 = $builder->build_object( { class => 'Koha::Patrons' });
-    my $subscriber_2 = $builder->build_object( { class => 'Koha::Patrons' });
+    my $subscriber_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $subscriber_2 = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $subscription = Koha::Subscription->new({
-        biblionumber => Koha::Biblio->new->store->biblionumber,
-    })->store();
+    my $subscription = Koha::Subscription->new(
+        {
+            biblionumber => Koha::Biblio->new->store->biblionumber,
+        }
+    )->store();
 
     my $subscribers = $subscription->subscribers;
-    is( $subscribers->count, 0, '->subscribers should return 0 if there are no subscribers');
-    is( ref($subscribers), 'Koha::Patrons', '->subscribers should return a Koha::Patrons object');
+    is( $subscribers->count, 0,               '->subscribers should return 0 if there are no subscribers' );
+    is( ref($subscribers),   'Koha::Patrons', '->subscribers should return a Koha::Patrons object' );
 
-    $subscription->add_subscriber( $subscriber_1 );
-    $subscription->add_subscriber( $subscriber_2 );
+    $subscription->add_subscriber($subscriber_1);
+    $subscription->add_subscriber($subscriber_2);
 
     $subscribers = $subscription->subscribers;
     is( $subscribers->count, 2, '->subscribers should return 2 if there are 2 subscribers' );
 
-    $subscription->remove_subscriber( $subscriber_1 );
+    $subscription->remove_subscriber($subscriber_1);
 
     $subscribers = $subscription->subscribers;
     is( $subscribers->count, 1, '->remove_subscriber should have remove the subscriber' );
 
-    $subscription->remove_subscriber( $subscriber_1 ); # We do not explode if the patron is not a subscriber
+    $subscription->remove_subscriber($subscriber_1);    # We do not explode if the patron is not a subscriber
 
     my $is_subscriber = $subscribers->find( $subscriber_2->borrowernumber );
     ok( $is_subscriber, 'This structure is used in the code and should work as expected' );
@@ -81,7 +85,7 @@ subtest 'Notifications on new issues - add_subscriber|remove_subscriber|subscrib
 
 subtest 'Koha::Subscription->vendor' => sub {
     plan tests => 3;
-    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+    my $vendor       = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
     my $subscription = $builder->build_object(
         {
             class => 'Koha::Subscriptions',
@@ -104,15 +108,21 @@ subtest 'Koha::Subscription->vendor' => sub {
 
 subtest 'Koha::Subscription->frequency' => sub {
     plan tests => 2;
-    my $frequency = $builder->build_object( { class => 'Koha::Subscription::Frequencies' } );
+    my $frequency    = $builder->build_object( { class => 'Koha::Subscription::Frequencies' } );
     my $subscription = $builder->build_object(
         {
-            class  => 'Koha::Subscriptions',
-            value  => { periodicity => $frequency->id }
+            class => 'Koha::Subscriptions',
+            value => { periodicity => $frequency->id }
         }
     );
-    is( ref($subscription->frequency), 'Koha::Subscription::Frequency', 'Koha::Subscription->frequency should return a Koha::Subscription::Frequency' );
-    is( $subscription->frequency->id, $frequency->id, 'Koha::Subscription->frequency should return the correct frequency' );
+    is(
+        ref( $subscription->frequency ), 'Koha::Subscription::Frequency',
+        'Koha::Subscription->frequency should return a Koha::Subscription::Frequency'
+    );
+    is(
+        $subscription->frequency->id, $frequency->id,
+        'Koha::Subscription->frequency should return the correct frequency'
+    );
 };
 
 my $nb_of_subs = Koha::Subscriptions->search->count;
@@ -141,11 +151,15 @@ is(
     $biblio_1->biblionumber,
     'The link between sub and biblio is well done'
 );
-is( $sub_1->{periodicity}, $sub_freq_1->{id},
-    'The link between sub and sub_freq is well done' );
-is( $sub_1->{numberpattern},
+is(
+    $sub_1->{periodicity}, $sub_freq_1->{id},
+    'The link between sub and sub_freq is well done'
+);
+is(
+    $sub_1->{numberpattern},
     $sub_np_1->{id},
-    'The link between sub and sub_numberpattern is well done' );
+    'The link between sub and sub_numberpattern is well done'
+);
 
 my $ref = {
     'title'           => $biblio_1->title,
@@ -180,8 +194,10 @@ my $ref = {
     'publishercode'   => $bi_1->publishercode,
 };
 
-is_deeply( Koha::Subscription->get_sharable_info( $sub_1->{subscriptionid} ),
-    $ref, "get_sharable_info function is ok" );
+is_deeply(
+    Koha::Subscription->get_sharable_info( $sub_1->{subscriptionid} ),
+    $ref, "get_sharable_info function is ok"
+);
 
 $schema->storage->txn_rollback;
 

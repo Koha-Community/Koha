@@ -41,12 +41,13 @@ suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    my $json_invoice = $self->SUPER::to_api( $params );
+    my $json_invoice = $self->SUPER::to_api($params);
     return unless $json_invoice;
 
-    $json_invoice->{closed} = ( $self->closedate )
-                                    ? Mojo::JSON->true
-                                    : Mojo::JSON->false;
+    $json_invoice->{closed} =
+        ( $self->closedate )
+        ? Mojo::JSON->true
+        : Mojo::JSON->false;
 
     return $json_invoice;
 }

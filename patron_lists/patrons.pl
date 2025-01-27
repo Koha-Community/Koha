@@ -21,17 +21,17 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth           qw( get_template_and_user );
+use C4::Output         qw( output_html_with_http_headers );
 use Koha::List::Patron qw( AddPatronList GetPatronLists ModPatronList );
 
 my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patron_lists/add-modify.tt",
-        query           => $cgi,
-        type            => "intranet",
+        template_name => "patron_lists/add-modify.tt",
+        query         => $cgi,
+        type          => "intranet",
         flagsrequired => { tools => 'manage_patron_lists' },
     }
 );
@@ -47,8 +47,7 @@ if ($id) {
 if ($name) {
     if ($id) {
         ModPatronList( { patron_list_id => $id, name => $name } );
-    }
-    else {
+    } else {
         AddPatronList( { name => $name } );
     }
 

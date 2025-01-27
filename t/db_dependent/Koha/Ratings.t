@@ -29,13 +29,15 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
-my $patron_1 = $builder->build( { source => 'Borrower', } );
-my $patron_2 = $builder->build( { source => 'Borrower', } );
-my $biblio_1 = $builder->build_sample_biblio;
+my $patron_1     = $builder->build( { source => 'Borrower', } );
+my $patron_2     = $builder->build( { source => 'Borrower', } );
+my $biblio_1     = $builder->build_sample_biblio;
 my $biblionumber = $biblio_1->biblionumber;
 
-my $rating_1 = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber}, rating_value => 3 } )->store;
-my $rating_2 = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber}, rating_value => 4 } )->store;
+my $rating_1 = Koha::Rating->new(
+    { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber}, rating_value => 3 } )->store;
+my $rating_2 = Koha::Rating->new(
+    { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber}, rating_value => 4 } )->store;
 
 is( $biblio_1->ratings->get_avg_rating, 3.5, 'get_avg_rating is 3.5' );
 
@@ -44,15 +46,21 @@ $rating_1->rating_value(5)->store;
 is( $biblio_1->ratings->get_avg_rating, 4.5, 'get_avg_rating now up to 4.5' );
 
 $rating_1->rating_value(42)->store;
-is( Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->rating_value,
-    5, 'Koha::Ratings->store should mark out the boundaries of the rating values, 5 is max' );
+is(
+    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )
+        ->rating_value,
+    5, 'Koha::Ratings->store should mark out the boundaries of the rating values, 5 is max'
+);
 
 $rating_1->rating_value(-42)->store;
-is( Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->rating_value,
-    0, 'Koha::Ratings->store should mark out the boundaries of the rating values, 0 is min' );
+is(
+    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )
+        ->rating_value,
+    0, 'Koha::Ratings->store should mark out the boundaries of the rating values, 0 is min'
+);
 
 Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->delete;
 Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber} } )->delete;
 is( $biblio_1->ratings->count, 0, 'Delete should have deleted the ratings' );
 
-is( int($biblio_1->ratings->get_avg_rating), 0, 'get_avg_rating should return 0 if no rating exist' );
+is( int( $biblio_1->ratings->get_avg_rating ), 0, 'get_avg_rating should return 0 if no rating exist' );

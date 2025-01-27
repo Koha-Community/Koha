@@ -4,16 +4,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( new ) %]
-        [% t("New numbering pattern") | html %] &rsaquo;
-    [% ELSIF ( modify ) %]
-        [% tx("Modify numbering pattern '{pattern}'", { pattern = label }) | html %] &rsaquo;
-    [% END %]
-    [% t("Numbering patterns") | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( new ) %]
+            [% t("New numbering pattern") | html %]
+            &rsaquo;
+        [% ELSIF ( modify ) %]
+            [% tx("Modify numbering pattern '{pattern}'", { pattern = label }) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Numbering patterns") | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -50,218 +53,214 @@
 
 [% WRAPPER 'main-container.inc' aside='serials-menu' %]
 
-      [% IF (new or modify) %]
-          [% IF (new) %]
+    [% IF (new or modify) %]
+        [% IF (new) %]
             <h1>New numbering pattern</h1>
             [% IF (error_existing_numberpattern) %]
-              <div class="alert alert-warning">
-                <p>A pattern with this name already exists.</p>
-              </div>
+                <div class="alert alert-warning">
+                    <p>A pattern with this name already exists.</p>
+                </div>
             [% END %]
-          [% ELSE %]
+        [% ELSE %]
             <h1>[% tx("Modify numbering pattern '{pattern}'", { pattern = label }) | html %]</h1>
             [% IF (error_existing_numberpattern) %]
-              <div class="alert alert-warning">
-                <p>Another pattern with this name already exists.</p>
-              </div>
+                <div class="alert alert-warning">
+                    <p>Another pattern with this name already exists.</p>
+                </div>
             [% END %]
-          [% END %]
+        [% END %]
 
-          <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post" class="validated">
-              [% INCLUDE 'csrf-token.inc' %]
+        <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
             [% IF (new) %]
-              <input type="hidden" name="op" value="cud-savenew" />
+                <input type="hidden" name="op" value="cud-savenew" />
             [% ELSE %]
-              <input type="hidden" name="op" value="cud-savemod" />
-              <input type="hidden" name="id" value="[% id | html %]" />
+                <input type="hidden" name="op" value="cud-savemod" />
+                <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]
             <fieldset class="rows">
-              <ol>
-                <li>
-                  <label class="required" for="label">Name:</label>
-                  <input type="text" id="label" name="label" value="[% label | html %]" class="required" required="required" />
-                  <span class="required">Required</span>
-                </li>
-                <li>
-                  <label for="description">Description:</label>
-                  <input type="text" id="description" name="description" value="[% description | html %]" size="50" />
-                </li>
-                <li>
-                  <label class="required" for="numberingmethod">Numbering formula:</label>
-                  <input type="text" id="numberingmethod" name="numberingmethod" value="[% numberingmethod | html %]" class="required" required="required" />
-                  <span class="required">Required</span>
-                </li>
-                <li>
-                  <label for="displayorder">Display order:</label>
-                  <input type="text" inputmode="numeric" class="digits" id="displayorder" name="displayorder" value="[% displayorder | html %]" />
-                </li>
-              </ol>
-              <table>
-                <thead>
-                  <tr>
-                    <th>&nbsp;</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>Z</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Label</td>
-                    <td><input type="text" id="label1" name="label1" value="[% label1 | html %]" /></td>
-                    <td><input type="text" id="label2" name="label2" value="[% label2 | html %]" /></td>
-                    <td><input type="text" id="label3" name="label3" value="[% label3 | html %]" /></td>
-                  </tr>
-                  <tr>
-                    <td>Add</td>
-                    <td><input type="text" id="add1" name="add1" value="[% add1 | html %]" /></td>
-                    <td><input type="text" id="add2" name="add2" value="[% add2 | html %]" /></td>
-                    <td><input type="text" id="add3" name="add3" value="[% add3 | html %]" /></td>
-                  </tr>
-                  <tr>
-                    <td>Every</td>
-                    <td><input type="text" id="every1" name="every1" value="[% every1 | html %]" /></td>
-                    <td><input type="text" id="every2" name="every2" value="[% every2 | html %]" /></td>
-                    <td><input type="text" id="every3" name="every3" value="[% every3 | html %]" /></td>
-                  </tr>
-                  <tr>
-                    <td>Set back to</td>
-                    <td><input type="text" id="setto1" name="setto1" value="[% setto1 | html %]" /></td>
-                    <td><input type="text" id="setto2" name="setto2" value="[% setto2 | html %]" /></td>
-                    <td><input type="text" id="setto3" name="setto3" value="[% setto3 | html %]" /></td>
-                  </tr>
-                  <tr>
-                    <td>When more than</td>
-                    <td><input type="text" id="whenmorethan1" name="whenmorethan1" value="[% whenmorethan1 | html %]" /></td>
-                    <td><input type="text" id="whenmorethan2" name="whenmorethan2" value="[% whenmorethan2 | html %]" /></td>
-                    <td><input type="text" id="whenmorethan3" name="whenmorethan3" value="[% whenmorethan3 | html %]" /></td>
-                  </tr>
-                  <tr>
-                    [% BLOCK numbering_select %]
-                      <select id="[% name | html %]" name="[% name | html %]">
-                        <option value=""></option>
-                        [% IF (value == "dayname") %]
-                            <option selected="selected" value="dayname">Name of day</option>
-                        [% ELSE %]
-                            <option value="dayname">Name of day</option>
-                        [% END %]
-                        [% IF (value == "dayabrv") %]
-                            <option selected="selected" value="dayabrv">Name of day (abbreviated)</option>
-                        [% ELSE %]
-                            <option value="dayabrv">Name of day (abbreviated)</option>
-                        [% END %]
-                        [% IF (value == "monthname") %]
-                            <option selected="selected" value="monthname">Name of month</option>
-                        [% ELSE %]
-                            <option value="monthname">Name of month</option>
-                        [% END %]
-                        [% IF (value == "monthabrv") %]
-                            <option selected="selected" value="monthabrv">Name of month (abbreviated)</option>
-                        [% ELSE %]
-                            <option value="monthabrv">Name of month (abbreviated)</option>
-                        [% END %]
-                        [% IF (value == "season") %]
-                            <option selected="selected" value="season">Name of season</option>
-                        [% ELSE %]
-                            <option value="season">Name of season</option>
-                        [% END %]
-                        [% IF (value == "seasonabrv") %]
-                            <option selected="selected" value="seasonabrv">Name of season (abbreviated)</option>
-                        [% ELSE %]
-                            <option value="seasonabrv">Name of season (abbreviated)</option>
-                        [% END %]
-                      </select>
-                    [% END %]
-                    <td>Formatting</td>
-                    <td>[% PROCESS numbering_select name="numbering1" value=numbering1 %]</td>
-                    <td>[% PROCESS numbering_select name="numbering2" value=numbering2 %]</td>
-                    <td>[% PROCESS numbering_select name="numbering3" value=numbering3 %]</td>
-                  </tr>
-                </tbody>
-              </table>
+                <ol>
+                    <li>
+                        <label class="required" for="label">Name:</label>
+                        <input type="text" id="label" name="label" value="[% label | html %]" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description" value="[% description | html %]" size="50" />
+                    </li>
+                    <li>
+                        <label class="required" for="numberingmethod">Numbering formula:</label>
+                        <input type="text" id="numberingmethod" name="numberingmethod" value="[% numberingmethod | html %]" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="displayorder">Display order:</label>
+                        <input type="text" inputmode="numeric" class="digits" id="displayorder" name="displayorder" value="[% displayorder | html %]" />
+                    </li>
+                </ol>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>Z</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Label</td>
+                            <td><input type="text" id="label1" name="label1" value="[% label1 | html %]" /></td>
+                            <td><input type="text" id="label2" name="label2" value="[% label2 | html %]" /></td>
+                            <td><input type="text" id="label3" name="label3" value="[% label3 | html %]" /></td>
+                        </tr>
+                        <tr>
+                            <td>Add</td>
+                            <td><input type="text" id="add1" name="add1" value="[% add1 | html %]" /></td>
+                            <td><input type="text" id="add2" name="add2" value="[% add2 | html %]" /></td>
+                            <td><input type="text" id="add3" name="add3" value="[% add3 | html %]" /></td>
+                        </tr>
+                        <tr>
+                            <td>Every</td>
+                            <td><input type="text" id="every1" name="every1" value="[% every1 | html %]" /></td>
+                            <td><input type="text" id="every2" name="every2" value="[% every2 | html %]" /></td>
+                            <td><input type="text" id="every3" name="every3" value="[% every3 | html %]" /></td>
+                        </tr>
+                        <tr>
+                            <td>Set back to</td>
+                            <td><input type="text" id="setto1" name="setto1" value="[% setto1 | html %]" /></td>
+                            <td><input type="text" id="setto2" name="setto2" value="[% setto2 | html %]" /></td>
+                            <td><input type="text" id="setto3" name="setto3" value="[% setto3 | html %]" /></td>
+                        </tr>
+                        <tr>
+                            <td>When more than</td>
+                            <td><input type="text" id="whenmorethan1" name="whenmorethan1" value="[% whenmorethan1 | html %]" /></td>
+                            <td><input type="text" id="whenmorethan2" name="whenmorethan2" value="[% whenmorethan2 | html %]" /></td>
+                            <td><input type="text" id="whenmorethan3" name="whenmorethan3" value="[% whenmorethan3 | html %]" /></td>
+                        </tr>
+                        <tr>
+                            [% BLOCK numbering_select %]
+                                <select id="[% name | html %]" name="[% name | html %]">
+                                    <option value=""></option>
+                                    [% IF (value == "dayname") %]
+                                        <option selected="selected" value="dayname">Name of day</option>
+                                    [% ELSE %]
+                                        <option value="dayname">Name of day</option>
+                                    [% END %]
+                                    [% IF (value == "dayabrv") %]
+                                        <option selected="selected" value="dayabrv">Name of day (abbreviated)</option>
+                                    [% ELSE %]
+                                        <option value="dayabrv">Name of day (abbreviated)</option>
+                                    [% END %]
+                                    [% IF (value == "monthname") %]
+                                        <option selected="selected" value="monthname">Name of month</option>
+                                    [% ELSE %]
+                                        <option value="monthname">Name of month</option>
+                                    [% END %]
+                                    [% IF (value == "monthabrv") %]
+                                        <option selected="selected" value="monthabrv">Name of month (abbreviated)</option>
+                                    [% ELSE %]
+                                        <option value="monthabrv">Name of month (abbreviated)</option>
+                                    [% END %]
+                                    [% IF (value == "season") %]
+                                        <option selected="selected" value="season">Name of season</option>
+                                    [% ELSE %]
+                                        <option value="season">Name of season</option>
+                                    [% END %]
+                                    [% IF (value == "seasonabrv") %]
+                                        <option selected="selected" value="seasonabrv">Name of season (abbreviated)</option>
+                                    [% ELSE %]
+                                        <option value="seasonabrv">Name of season (abbreviated)</option>
+                                    [% END %]
+                                </select>
+                            [% END %]
+                            <td>Formatting</td>
+                            <td>[% PROCESS numbering_select name="numbering1" value=numbering1 %]</td>
+                            <td>[% PROCESS numbering_select name="numbering2" value=numbering2 %]</td>
+                            <td>[% PROCESS numbering_select name="numbering3" value=numbering3 %]</td>
+                        </tr>
+                    </tbody>
+                </table>
             </fieldset>
             <fieldset class="action">
-              <button type="submit" class="btn btn-primary">Save</button>
-              <button type="reset" class="btn btn-default">Reset</button>
-              <a class="cancel" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-default">Reset</button>
+                <a class="cancel" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Cancel</a>
             </fieldset>
-          </form>
+        </form>
 
-          <form method="get">
+        <form method="get">
             <fieldset class="rows">
-              <legend>Test prediction pattern</legend>
-              <ol>
-                <li>
-                  <label for="frequency">Frequency: </label>
-                  <select id="frequency">
-                    [% FOREACH frequency IN frequencies_loop %]
-                      <option value="[% frequency.id | html %]">[% frequency.description | html %]</option>
-                    [% END %]
-                  </select>
-                </li>
-                <li>
-                  <label for="firstacquidate">First issue publication date: </label>
-                  <input type="text" id="firstacquidate" class="flatpickr" size="10" />
-                </li>
-                <li>
-                  <label for="sublength">Subscription length:</label>
-                  <select id="subtype">
-                    <option value="issues">issues</option>
-                    <option value="weeks">weeks</option>
-                    <option value="months">months</option>
-                  </select>
-                  <input type="text" id="sublength" size="3" />
-                </li>
-                <li>
-                  <label for="locale">Locale: </label>
-                  <select id="locale" name="locale">
-                      <option value=""></option>
-                      [% FOREACH locale IN locales %]
-                        <option value="[% locale.language | html %]">[% locale.description | html %]</option>
-                      [% END %]
-                    </select>
-                  <span class="hint">If empty, English is used</span>
-                </li>
-              </ol>
-              <table>
-                <thead>
-                  <tr>
-                    <th>&nbsp;</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>Z</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Begins with</td>
-                    <td><input type="text" id="lastvalue1" name="lastvalue1" value="[% lastvalue1 | html %]" /></td>
-                    <td><input type="text" id="lastvalue2" name="lastvalue2" value="[% lastvalue2 | html %]" /></td>
-                    <td><input type="text" id="lastvalue3" name="lastvalue3" value="[% lastvalue3 | html %]" /></td>
-                  </tr>
-                  <tr>
-                    <td>Inner counter</td>
-                    <td><input type="text" id="innerloop1" name="innerloop1" value="[% innerloop1 | html %]" /></td>
-                    <td><input type="text" id="innerloop2" name="innerloop2" value="[% innerloop2 | html %]" /></td>
-                    <td><input type="text" id="innerloop3" name="innerloop3" value="[% innerloop3 | html %]" /></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div id="predictionpattern"></div>
+                <legend>Test prediction pattern</legend>
+                <ol>
+                    <li>
+                        <label for="frequency">Frequency: </label>
+                        <select id="frequency">
+                            [% FOREACH frequency IN frequencies_loop %]
+                                <option value="[% frequency.id | html %]">[% frequency.description | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="firstacquidate">First issue publication date: </label>
+                        <input type="text" id="firstacquidate" class="flatpickr" size="10" />
+                    </li>
+                    <li>
+                        <label for="sublength">Subscription length:</label>
+                        <select id="subtype">
+                            <option value="issues">issues</option>
+                            <option value="weeks">weeks</option>
+                            <option value="months">months</option>
+                        </select>
+                        <input type="text" id="sublength" size="3" />
+                    </li>
+                    <li>
+                        <label for="locale">Locale: </label>
+                        <select id="locale" name="locale">
+                            <option value=""></option>
+                            [% FOREACH locale IN locales %]
+                                <option value="[% locale.language | html %]">[% locale.description | html %]</option>
+                            [% END %]
+                        </select>
+                        <span class="hint">If empty, English is used</span>
+                    </li>
+                </ol>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>Z</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Begins with</td>
+                            <td><input type="text" id="lastvalue1" name="lastvalue1" value="[% lastvalue1 | html %]" /></td>
+                            <td><input type="text" id="lastvalue2" name="lastvalue2" value="[% lastvalue2 | html %]" /></td>
+                            <td><input type="text" id="lastvalue3" name="lastvalue3" value="[% lastvalue3 | html %]" /></td>
+                        </tr>
+                        <tr>
+                            <td>Inner counter</td>
+                            <td><input type="text" id="innerloop1" name="innerloop1" value="[% innerloop1 | html %]" /></td>
+                            <td><input type="text" id="innerloop2" name="innerloop2" value="[% innerloop2 | html %]" /></td>
+                            <td><input type="text" id="innerloop3" name="innerloop3" value="[% innerloop3 | html %]" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="predictionpattern"></div>
             </fieldset>
             <fieldset class="action">
                 <button type="button" id="test_pattern" class="btn btn-default">Test pattern</button>
             </fieldset>
-          </form>
-
-      [% ELSE %]
+        </form>
+    [% ELSE %]
         <h1>Numbering patterns</h1>
         [% IF still_used %]
             <div class="alert alert-warning">
-                <p>
-                    This pattern is still used by [% subscriptions.size | html %]
-                    subscription(s). Do you still want to delete it?
-                </p>
+                <p> This pattern is still used by [% subscriptions.size | html %] subscription(s). Do you still want to delete it? </p>
                 <p><a href="#" id="show_blocking_subs">Show subscriptions</a></p>
                 <ul id="blocking_subs" style="display:none">
                     [% FOREACH sub IN subscriptions %]
@@ -289,41 +288,40 @@
         </div>
 
         [% IF (numberpatterns_loop.size) %]
-          <table id="numberpatternst">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Numbering formula</th>
-                <th>Display order</th>
-                <th class="noExport">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              [% FOREACH numberpattern IN numberpatterns_loop %]
-                <tr>
-                  <td>[% numberpattern.label | html %]</td>
-                  <td>[% numberpattern.description | html %]</td>
-                  <td>[% numberpattern.numberingmethod | html %]</td>
-                  <td>[% numberpattern.displayorder | html %]</td>
-                  <td class="actions">
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-del" />
-                        <input type="hidden" name="id" value="[% numberpattern.id | html %]" />
-                        <button class="delete_pattern btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
-                    </form>
-                  </td>
-                </tr>
-              [% END %]
-            </tbody>
-          </table>
+            <table id="numberpatternst">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Numbering formula</th>
+                        <th>Display order</th>
+                        <th class="noExport">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH numberpattern IN numberpatterns_loop %]
+                        <tr>
+                            <td>[% numberpattern.label | html %]</td>
+                            <td>[% numberpattern.description | html %]</td>
+                            <td>[% numberpattern.numberingmethod | html %]</td>
+                            <td>[% numberpattern.displayorder | html %]</td>
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-del" />
+                                    <input type="hidden" name="id" value="[% numberpattern.id | html %]" />
+                                    <button class="delete_pattern btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
         [% ELSE %]
-          <p>There are no existing numbering patterns.</p>
+            <p>There are no existing numbering patterns.</p>
         [% END %]
-      [% END %]
-
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

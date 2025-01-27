@@ -24,7 +24,6 @@
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
         [% END %]
-
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "city_search" bt_active= 1 %]

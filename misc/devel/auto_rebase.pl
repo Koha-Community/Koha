@@ -77,7 +77,7 @@ $new_branch ||= "$source_branch-rebased";
 
 say BLUE "Creating a temporary branch '$tmp_src_branch'...";
 try {
-    $git->checkout('-b', $tmp_src_branch);
+    $git->checkout( '-b', $tmp_src_branch );
 } catch {
     say MAGENTA $_->error;
     say RED sprintf "Cannot create and checkout branch '%s'.", $tmp_src_branch;
@@ -110,7 +110,7 @@ unless ( $git->branch( $source_branch, '--contains', $commit_before_tidy ) ) {
 # Create a new branch
 say BLUE "Creating a new branch '$new_branch' starting at the end of the tidy commits...";
 try {
-    $git->checkout('-b', $new_branch, $tidy_commit);
+    $git->checkout( '-b', $new_branch, $tidy_commit );
 } catch {
     say MAGENTA $_->error;
     say RED sprintf "Cannot create and checkout branch '%s'.", $new_branch;
@@ -141,13 +141,13 @@ unless ($nb_commits) {
 # Apply each commit to the new branch
 my @commits = reverse $git->RUN( 'log', '--format=%h', "$tmp_src_branch~$nb_commits..$tmp_src_branch" );
 say BLUE sprintf "Processing %s commits...", scalar(@commits);
-while ( my ($i, $commit) = each @commits ) {
-    say BLUE sprintf "\tProcessing commit %s... (%s/%s)", $commit, $i+1, scalar @commits;
+while ( my ( $i, $commit ) = each @commits ) {
+    say BLUE sprintf "\tProcessing commit %s... (%s/%s)", $commit, $i + 1, scalar @commits;
 
     # Get the list of modified files in this commit
     my @modified_files = $git->diff_tree( '--no-commit-id', '--name-only', '-r', $commit );
-    FILE: while ( my ( $ii, $file ) = each @modified_files ) {
-        say BLUE sprintf "\t\tProcessing file %s... (%s/%s)", $file, $ii+1, scalar @modified_files;
+FILE: while ( my ( $ii, $file ) = each @modified_files ) {
+        say BLUE sprintf "\t\tProcessing file %s... (%s/%s)", $file, $ii + 1, scalar @modified_files;
 
         # Retrieve the content of the file from this commit
         my @content = try {
@@ -162,7 +162,7 @@ while ( my ($i, $commit) = each @commits ) {
             }
         };
 
-        next unless @content; # We removed the file
+        next unless @content;    # We removed the file
 
         write_file( $file, join "\n", @content );
 

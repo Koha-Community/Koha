@@ -24,7 +24,7 @@ use Koha::Acquisition::Orders;
 use Clone qw( clone );
 use JSON;
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -53,35 +53,34 @@ sub list {
 
         my $orders_rs;
 
-        if ( $only_active ) {
+        if ($only_active) {
             $orders_rs = Koha::Acquisition::Orders->filter_by_active;
-        }
-        else {
+        } else {
             $orders_rs = Koha::Acquisition::Orders->new;
         }
 
-        $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_id })
+        $orders_rs = $orders_rs->filter_by_id_including_transfers( { ordernumber => $order_id } )
             if $order_id;
 
         my @query_fixers;
 
         # Look for embeds
         my $embed = $c->stash('koha.embed');
-        if ( exists $embed->{biblio} ) { # asked to embed biblio
+        if ( exists $embed->{biblio} ) {    # asked to embed biblio
             my $fixed_embed = clone($embed);
+
             # Add biblioitems to prefetch
             # FIXME remove if we merge biblio + biblioitems
             $fixed_embed->{biblio}->{children}->{biblioitem} = {};
-            $c->stash('koha.embed', $fixed_embed);
-            push @query_fixers, (sub{ Koha::Biblios->new->api_query_fixer( $_[0], 'biblio', $_[1] ) });
+            $c->stash( 'koha.embed', $fixed_embed );
+            push @query_fixers, ( sub { Koha::Biblios->new->api_query_fixer( $_[0], 'biblio', $_[1] ) } );
         }
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->search( $orders_rs, \@query_fixers ),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -103,10 +102,9 @@ sub get {
     return try {
         return $c->render(
             status  => 200,
-            openapi => $c->objects->to_api( $order ),
+            openapi => $c->objects->to_api($order),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -124,16 +122,13 @@ sub add {
         my $order = Koha::Acquisition::Order->new_from_api( $c->req->json );
         $order->store->discard_changes;
 
-        $c->res->headers->location(
-            $c->req->url->to_string . '/' . $order->ordernumber
-        );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $order->ordernumber );
 
         return $c->render(
             status  => 201,
-            openapi => $c->objects->to_api( $order ),
+            openapi => $c->objects->to_api($order),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
@@ -165,10 +160,9 @@ sub update {
 
         return $c->render(
             status  => 200,
-            openapi => $c->objects->to_api( $order ),
+            openapi => $c->objects->to_api($order),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -189,6 +183,7 @@ sub delete {
     unless ($order) {
         return $c->render_resource_not_found("Order");
     } elsif ( ( $order->orderstatus && $order->orderstatus ne 'cancelled' ) || !$order->datecancellationprinted ) {
+
         # Koha may (historically) have inconsistent order data here (e.g. cancelled without date)
         return $c->render(
             status  => 409,

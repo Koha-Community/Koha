@@ -12,16 +12,19 @@ use Cwd;
 my @files_with_switch = do {
     my @files;
     local $/ = undef;
-    find( sub {
-        my $dir = getcwd();
-        return if $dir =~ /blib/;
-        return unless /\.(pl|pm)$/; # Don't inspect non-Perl files
-        open my $fh, "<", $_;
-        my $content = <$fh>;
-        push @files, "$dir/$_"  if $content =~ /switch\s*\(.*{/;
-      }, ( '.' ) );
+    find(
+        sub {
+            my $dir = getcwd();
+            return if $dir =~ /blib/;
+            return unless /\.(pl|pm)$/;    # Don't inspect non-Perl files
+            open my $fh, "<", $_;
+            my $content = <$fh>;
+            push @files, "$dir/$_" if $content =~ /switch\s*\(.*{/;
+        },
+        ('.')
+    );
     @files;
 };
 ok( !@files_with_switch, "Perl syntax: no use of switch statement" )
-    or diag( "Files list: " . join(', ', @files_with_switch) );
+    or diag( "Files list: " . join( ', ', @files_with_switch ) );
 

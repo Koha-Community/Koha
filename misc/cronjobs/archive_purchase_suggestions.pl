@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
@@ -45,7 +45,7 @@ if (@statuses) {
     my @unknown_statuses;
     for my $status (@statuses) {
         push @unknown_statuses, $status
-          if !grep { $_ eq $status } @available_statuses;
+            if !grep { $_ eq $status } @available_statuses;
     }
     if (@unknown_statuses) {
         pod2usage(
@@ -63,15 +63,12 @@ if (@statuses) {
 }
 
 if ($age_date_field) {
-    if ( !grep { $_ eq $age_date_field }
-        qw( suggesteddate manageddate accepteddate rejecteddate lastmodificationdate)
-      )
+    if ( !grep { $_ eq $age_date_field } qw( suggesteddate manageddate accepteddate rejecteddate lastmodificationdate) )
     {
         pod2usage( sprintf( "The parameter for --age-field (%s) is invalid", $age_date_field ) );
         exit;
     }
-}
-else {
+} else {
     $age_date_field = 'manageddate';
 }
 
@@ -79,20 +76,15 @@ my $date = dt_from_string;
 if ($age) {
     if ( $age =~ m|^(\d)$| || $age =~ m|^days:(\d+)$| ) {
         $date->subtract( days => $1 );
-    }
-    elsif ( $age =~ m|^hours:(\d+)$| ) {
+    } elsif ( $age =~ m|^hours:(\d+)$| ) {
         $date->subtract( hours => $1 );
-    }
-    elsif ( $age =~ m|^weeks:(\d+)$| ) {
+    } elsif ( $age =~ m|^weeks:(\d+)$| ) {
         $date->subtract( weeks => $1 );
-    }
-    elsif ( $age =~ m|^months:(\d+)$| ) {
+    } elsif ( $age =~ m|^months:(\d+)$| ) {
         $date->subtract( months => $1 );
-    }
-    elsif ( $age =~ m|^years:(\d+)$| ) {
+    } elsif ( $age =~ m|^years:(\d+)$| ) {
         $date->subtract( years => $1 );
-    }
-    else {
+    } else {
         pod2usage( sprintf( "The parameter for --age (%s) is invalid", $age ) );
         exit;
     }
@@ -100,28 +92,33 @@ if ($age) {
     $params->{$age_date_field} = { '<=' => $dtf->format_date($date) };
 }
 my $suggestions = Koha::Suggestions->search($params);
-say sprintf( "Found %d suggestions", $suggestions->count )
-  . (
-    exists $params->{$age_date_field} ? sprintf( " with %s older than %s",
-        $age_date_field, output_pref( { dt => $date, dateonly => 1 } ) )
+say sprintf( "Found %d suggestions", $suggestions->count ) . (
+    exists $params->{$age_date_field}
+    ? sprintf(
+        " with %s older than %s",
+        $age_date_field, output_pref( { dt => $date, dateonly => 1 } )
+        )
     : ""
-  )
-  . (
+    )
+    . (
     exists $params->{status}
-    ? sprintf( " and one of the following statuses: %s",
-        join( ', ', @available_statuses ) )
+    ? sprintf(
+        " and one of the following statuses: %s",
+        join( ', ', @available_statuses )
+        )
     : ""
-  ) if $verbose;
+    ) if $verbose;
 
 while ( my $suggestion = $suggestions->next ) {
     if ($confirm) {
         say sprintf( "Archiving suggestion %s", $suggestion->suggestionid )
-          if $verbose;
+            if $verbose;
         $suggestion->update( { archived => 1 } );
-    }
-    else {
-        say sprintf( "Suggestion %s would have been archived",
-            $suggestion->suggestionid );
+    } else {
+        say sprintf(
+            "Suggestion %s would have been archived",
+            $suggestion->suggestionid
+        );
     }
 }
 

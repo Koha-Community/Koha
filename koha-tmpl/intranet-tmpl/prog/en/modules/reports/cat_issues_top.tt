@@ -4,14 +4,16 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( do_it ) %]
-        [% t("Results") | html %] &rsaquo;
-    [% END %]
-    [% t("Most-circulated items") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( do_it ) %]
+            [% t("Results") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Most-circulated items") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -42,172 +44,182 @@
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
 
-[% IF ( do_it ) %]
+    [% IF ( do_it ) %]
 
-	[% FOREACH mainloo IN mainloop %]
-        <h1>Top [% mainloo.limit | html %] Most-circulated items</h1>
-		[% IF ( mainloo.loopfilter ) %]
-            <p>Filtered on:</p>
-			[% FOREACH loopfilte IN mainloo.loopfilter %]
-                    <p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit | html %] =[% loopfilte.filter | html %][% IF ( loopfilte.err ) %]  [% END %]</p>
-			[% END %]
-		[% END %]
-		
-		<table>
-<tr>				<th>Rank/Biblioitemnumbers</th>
-				[% FOREACH loopco IN mainloo.loopcol %]
-					<th colspan="2">[% loopco.coltitle | html %]</th>
-				[% END %]</tr>
-        <tr>
-				<th>&nbsp;</th>
-				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>Item</th>
-                    <th>Count of checkouts</th>
-				[% END %]
-			  </tr>
-				[% FOREACH loopro IN mainloo.looprow %]
+        [% FOREACH mainloo IN mainloop %]
+            <h1>Top [% mainloo.limit | html %] Most-circulated items</h1>
+            [% IF ( mainloo.loopfilter ) %]
+                <p>Filtered on:</p>
+                [% FOREACH loopfilte IN mainloo.loopfilter %]
+                    <p>[% IF ( loopfilte.err ) %][% END %] [% loopfilte.crit | html %] =[% loopfilte.filter | html %][% IF ( loopfilte.err ) %][% END %]</p>
+                [% END %]
+            [% END %]
+
+            <table>
+                <tr>
+                    <th>Rank/Biblioitemnumbers</th> [% FOREACH loopco IN mainloo.loopcol %]
+                        <th colspan="2">[% loopco.coltitle | html %]</th>
+                    [% END %]</tr
+                >
+                <tr>
+                    <th>&nbsp;</th>
+                    [% FOREACH loopco IN mainloo.loopcol %]
+                        <th>Item</th>
+                        <th>Count of checkouts</th>
+                    [% END %]
+                </tr>
+                [% FOREACH loopro IN mainloo.looprow %]
                     <tr>
-						<td>[% loopro.rowtitle | html %]</td>
-						[% FOREACH loopcel IN loopro.loopcell %]
-							<td>
+                        <td>[% loopro.rowtitle | html %]</td>
+                        [% FOREACH loopcel IN loopro.loopcell %]
+                            <td>
+                                [% IF ( loopcel.reference ) %]
+                                    <a href="[% PROCESS biblio_a_href biblionumber => loopcel.reference %]">[% loopcel.value | html %]</a>
+                                [% END %]
+                            </td>
+                            <td> [% IF ( loopcel.count ) %][% loopcel.count | html %][% END %] </td>
+                        [% END %]
+                    </tr>
+                [% END %]
+            </table>
+        [% END %]
+    [% ELSE %]
+        <h1>Most-circulated items</h1>
+        <form method="get" action="/cgi-bin/koha/reports/cat_issues_top.pl">
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="checkoutfrom">Checkout date from: </label>
+                        <input type="text" size="10" id="checkoutfrom" name="Filter" data-date_to="checkoutto" class="flatpickr" />
 
-[% IF ( loopcel.reference ) %]
-    <a href="[% PROCESS biblio_a_href biblionumber => loopcel.reference %]">[% loopcel.value | html %]</a>
- [% END %]
-							</td>
-							<td>
-								[% IF ( loopcel.count ) %][% loopcel.count | html %][% END %]
-							</td>
-						[% END %]
-					</tr>
-				[% END %]
-		</table>
-	[% END %]
-[% ELSE %]
-    <h1>Most-circulated items</h1>
-	<form method="get" action="/cgi-bin/koha/reports/cat_issues_top.pl">
-	<fieldset class="rows">
-	<ol>
-        <li>
-            <label for="checkoutfrom">Checkout date from: </label>
-            <input type="text" size="10" id="checkoutfrom" name="Filter" data-date_to="checkoutto" class="flatpickr" />
+                        <label for="checkoutto" class="inline">To:</label>
+                        <input size="10" id="checkoutto" name="Filter" value="" type="text" class="flatpickr" />
+                        <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    </li>
+                    <li>
+                        <label for="checkinfrom">Check-in date from</label>
+                        <input type="text" size="10" id="checkinfrom" name="Filter" data-date_to="checkinto" class="flatpickr" />
 
-            <label for="checkoutto" class="inline">To:</label>
-            <input size="10" id="checkoutto" name="Filter" value="" type="text" class="flatpickr" />
-            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-        </li>
-        <li>
-            <label for="checkinfrom">Check-in date from</label>
-            <input type="text" size="10" id="checkinfrom" name="Filter" data-date_to="checkinto" class="flatpickr" />
+                        <label for="checkinto" class="inline">To: </label>
+                        <input type="text" size="10" id="checkinto" name="Filter" value="" class="flatpickr" />
+                        <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    </li>
+                    <li>
+                        <label for="branch">Library: </label>
+                        <select name="Filter" id="branch"
+                            ><option value=""> Any library</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all() %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="documenttype">Item type: </label
+                        ><select name="Filter" id="documenttype"
+                            ><option value=""> Any item type</option>
+                            [% FOREACH itemtype IN itemtypes %]
+                                <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %] </option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li> <label for="itemcallnumber">Call number: </label><input type="text" name="Filter" id="itemcallnumber" value="" /> </li>
+                    <li>
+                        <label for="ccode">Collection: </label
+                        ><select name="Filter" id="ccode"
+                            ><option value=""> Any collection</option>
+                            [% FOREACH ccodeloo IN ccodeloop %]
+                                <option value="[% ccodeloo.value | html %]">[% ccodeloo.description | html %] </option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="shelvingloc">Shelving location: </label
+                        ><select name="Filter" id="shelvingloc"
+                            ><option value=""> Any shelving location</option>
+                            [% FOREACH shelvinglocloo IN shelvinglocloop %]
+                                <option value="[% shelvinglocloo.value | html %]">[% shelvinglocloo.description | html %] </option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="patroncategory">Patron category: </label
+                        ><select name="Filter" id="patroncategory"
+                            ><option value=""> Any category code</option>
+                            [% FOREACH patron_category IN patron_categories %]
+                                <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %] </option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li><label for="day">Day: </label> <input type="text" name="Filter" id="day" value="" /></li>
+                    <li><label for="month">Month: </label> <input type="text" name="Filter" id="month" value="" /></li>
+                    <li><label for="year">Year: </label> <input type="text" name="Filter" id="year" value="" /></li>
+                </ol>
+            </fieldset>
 
-            <label for="checkinto" class="inline">To: </label>
-            <input type="text" size="10" id="checkinto" name="Filter" value="" class="flatpickr" />
-            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-        </li>
-        <li>
-            <label for="branch">Library: </label>
-            <select name="Filter" id="branch"><option value="" > Any library</option>
-                [% PROCESS options_for_libraries libraries => Branches.all() %]
-            </select>
-        </li>
-      <li> 
-        <label for="documenttype">Item type: </label><select name="Filter" id="documenttype"><option value="" > Any item type</option>
-    [% FOREACH itemtype IN itemtypes %]
-        <option value="[% itemtype.itemtype | html %]" >[% itemtype.translated_description | html %] </option>
-     [% END %] 
-    </select>
-      </li>
-      <li> 
-        <label for="itemcallnumber">Call number: </label><input type="text" name="Filter" id="itemcallnumber" value="" />
-      </li>
-      <li>
-        <label for="ccode">Collection: </label><select name="Filter" id="ccode"><option value="" > Any collection</option>
-    [% FOREACH ccodeloo IN ccodeloop %]
-        <option value="[% ccodeloo.value | html %]" >[% ccodeloo.description | html %] </option>
-     [% END %]
-    </select>
-      </li>
-      <li>
-        <label for="shelvingloc">Shelving location: </label><select name="Filter" id="shelvingloc"><option value="" > Any shelving location</option>
-    [% FOREACH shelvinglocloo IN shelvinglocloop %]
-        <option value="[% shelvinglocloo.value | html %]" >[% shelvinglocloo.description | html %] </option>
-     [% END %]
-    </select>
-      </li>
-      <li>
-        <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any category code</option>
-    [% FOREACH patron_category IN patron_categories %]
-        <option value="[% patron_category.categorycode | html %]" >[% patron_category.description | html %] </option>
-     [% END %]
-    </select>
-        </li>
-				<li><label for="day">Day: </label> <input type="text" name="Filter" id="day" value="" /></li>
-				<li><label for="month">Month: </label> <input type="text" name="Filter" id="month" value="" /></li>
-				<li><label for="year">Year: </label> <input type="text" name="Filter" id="year" value="" /></li>
-	</ol>
-	</fieldset>
-	
-	<fieldset class="rows">
-	<legend>Limits</legend>
-	<ol><li><label for="numberlimit">Limit to:</label><select name="Limit" id="numberlimit">
-                        <option value ="" selected="selected">None</option>
-						<option value="5" selected="selected"> 5</option>
-						<option value ="10">10</option>
-						<option value ="15">15</option>
-						<option value ="20">20</option>
-						<option value ="25">25</option>
-						<option value ="40">40</option>
-						<option value ="50">50</option>
-						<option value ="100">100</option>
-					</select></li>
-	<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
-						<option value ="" selected="selected">None</option>
-                        <option value ="branch">Library</option>
-						<option value ="categorycode">Categorycode</option>
-						<option value ="itemtype">Itemtype</option>
-						<option value ="Day">Day</option>
-						<option value ="Week">Week</option>
-						<option value ="Month">Month</option>
-						<option value ="Year">Year</option>
-					</select></li></ol>
-	</fieldset>
-	
-	<fieldset class="rows">
-	<legend>Output</legend>
-    <ol>
-        <li>
-            <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" />
-        </li>
-        <li>
-            <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
-            <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
-            <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME">
-            [% FOREACH value IN CGIextChoice %]
-                <option value="[% value | html %]">[% value | html %]</option>
-            [% END %]
-            </select>
-            <select name="sep" id="sep">
-            [% FOREACH value IN CGIsepChoice.values.sort() %]
-              [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-              [% ELSE %]
-                <option value="[% value | html %]">[% value | html %]</option>
-              [% END %]
-            [% END %]
-            </select>
-        </li>
-    </ol>
-	</fieldset>
+            <fieldset class="rows">
+                <legend>Limits</legend>
+                <ol
+                    ><li
+                        ><label for="numberlimit">Limit to:</label
+                        ><select name="Limit" id="numberlimit">
+                            <option value="" selected="selected">None</option>
+                            <option value="5" selected="selected"> 5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select></li
+                    >
+                    <li
+                        ><label for="criteria">By: </label
+                        ><select name="Criteria" id="criteria">
+                            <option value="" selected="selected">None</option>
+                            <option value="branch">Library</option>
+                            <option value="categorycode">Categorycode</option>
+                            <option value="itemtype">Itemtype</option>
+                            <option value="Day">Day</option>
+                            <option value="Week">Week</option>
+                            <option value="Month">Month</option>
+                            <option value="Year">Year</option>
+                        </select></li
+                    ></ol
+                >
+            </fieldset>
 
-	<fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name | html %]" />
-	<input type="hidden" name="do_it" value="1" />
-	</fieldset>
-	</form>
-[% END %]
+            <fieldset class="rows">
+                <legend>Output</legend>
+                <ol>
+                    <li> <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+                    <li>
+                        <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label
+                        ><input type="text" name="basename" id="basename" value="Export" />
+                        <label class="inline" for="MIME">Into an application:</label>
+                        <select name="MIME" id="MIME">
+                            [% FOREACH value IN CGIextChoice %]
+                                <option value="[% value | html %]">[% value | html %]</option>
+                            [% END %]
+                        </select>
+                        <select name="sep" id="sep">
+                            [% FOREACH value IN CGIsepChoice.values.sort() %]
+                                [% IF ( value == CGIsepChoice.default ) %]
+                                    <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% value | html %]">[% value | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
 
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="report_name" value="[% report_name | html %]" />
+                <input type="hidden" name="do_it" value="1" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

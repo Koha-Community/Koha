@@ -6,44 +6,43 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Report a problem &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-reportproblem' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% IF messages %]
-                    [% FOR m IN messages %]
-                        [% SWITCH m.code %]
-                            [% CASE 'success_on_send' %]
-                                <span>Report submitted</span>
-                            [% CASE 'error_on_send' %]
-                                <span>Error submitting report</span>
-                            [% CASE %]
-                        [% END %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF messages %]
+                [% FOR m IN messages %]
+                    [% SWITCH m.code %]
+                    [% CASE 'success_on_send' %]
+                        <span>Report submitted</span>
+                    [% CASE 'error_on_send' %]
+                        <span>Error submitting report</span>
+                    [% CASE %]
+
                     [% END %]
-                [% ELSE %]
-                    <span>Report a problem</span>
                 [% END %]
+            [% ELSE %]
+                <span>Report a problem</span>
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav ||  OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                [% END %]
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
+            [% END %]
 
-                <div class="[% column_class | html %]">
-
+            <div class="[% column_class | html %]">
                 <h1>Report a problem</h1>
 
                 [% IF messages %]
@@ -62,7 +61,6 @@
                         </div>
                     [% END %]
                 [% ELSE %]
-
                     <div id="reportproblem" class="maincontent toptabs">
                         <form name="reportlibform" action="/cgi-bin/koha/opac-reportproblem.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
@@ -84,13 +82,13 @@
                                     <li>
                                         <label for="problempage">Problem found on page: </label>
                                         <input type="hidden" name="problempage" id="problempage" value="[% problempage | url %]" />
-                                         [% problempage | html %]<br/>
+                                        [% problempage | html %]<br />
                                     </li>
                                     <li>
                                         <label for="user">Username: </label>
                                         <input type="hidden" name="user" id="user" value="[% username | html %]" />
-                                        [% username | html %]
-                                    <li>
+                                        [% username | html %] </li
+                                    ><li>
                                         <label for="subject">Subject: </label>
                                         <input type="text" name="subject" id="subject" value="[% subject | html %]" />
                                     </li>
@@ -101,17 +99,21 @@
                                 </ol>
                             </fieldset>
                             <fieldset class="action">
-                                <input type="submit" value="Submit" class="btn btn-primary">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
                             </fieldset>
                         </form>
-                    </div> <!-- / #reportproblem -->
-
+                    </div>
+                    <!-- / #reportproblem -->
                 [% END # /IF messages %]
-
-                </div> <!-- / .col-10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+            </div>
+            <!-- / .col-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

@@ -12,7 +12,7 @@ return {
             q{ INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('RestrictPatronsWithFailedNotices', '0', NULL, 'If enabled then when SMS and email notices fail sending at the Koha level then a debarment will be applied to a patrons account', 'YesNo') }
         );
 
-        say_success ( $out, "Added new system preference 'RestrictPatronsWithFailedNotices'" );
+        say_success( $out, "Added new system preference 'RestrictPatronsWithFailedNotices'" );
 
         $dbh->do(
             q{INSERT IGNORE INTO restriction_types (code, display_text, is_system, is_default) VALUES ('NOTICE_FAILURE_SUSPENSION', 'Notice failure suspension', 1, 0)}

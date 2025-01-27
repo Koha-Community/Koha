@@ -6,11 +6,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Catalog by item types") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Catalog by item types") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( do_it ) %]
 [% END %]
@@ -43,65 +44,67 @@
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
 
-[% IF ( do_it ) %]
-[% FOREACH mainloo IN mainloop %]
-    <h1>Reports on item types [% IF branch %] held at [% Branches.GetName( branch ) | html %][% END %]</h1>
-	<table id="itemtypest">
-		<thead>
-		<tr>
-			<th>Item type</th>
-			<th>Count</th>
-		</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<th>TOTAL</th>
-				<th>[% mainloo.total | html %]</th>
-			</tr>
-		</tfoot>
-		<tbody>
-			[% FOREACH loopitemtyp IN mainloo.loopitemtype %]
-				<tr>
-                    <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) | html %]</td>
-					<td>[% loopitemtyp.count | html %]</td>
-				</tr>
-			[% END %]
-		</tbody>
-	</table>
-[% END %]
-[% ELSE %]
+    [% IF ( do_it ) %]
+        [% FOREACH mainloo IN mainloop %]
+            <h1>Reports on item types [% IF branch %]held at [% Branches.GetName( branch ) | html %][% END %]</h1>
+            <table id="itemtypest">
+                <thead>
+                    <tr>
+                        <th>Item type</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>TOTAL</th>
+                        <th>[% mainloo.total | html %]</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    [% FOREACH loopitemtyp IN mainloo.loopitemtype %]
+                        <tr>
+                            <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) | html %]</td>
+                            <td>[% loopitemtyp.count | html %]</td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        [% END %]
+    [% ELSE %]
         <h1>View a count of items held at your library grouped by item type</h1>
         <form method="get" action="/cgi-bin/koha/reports/catalog_by_itemtype.pl">
-          <fieldset class="rows">
-            <ol>
-              <li>
-                <label for="value">Select a library:</label>
-                <select name="value" id="value">
-                  <option value=""></option>
-                  [% PROCESS options_for_libraries libraries => Branches.all() %]
-                </select>
-                <div class="hint">Select none to see all libraries</div>
-              </li>
-            </ol>
-          </fieldset>
-          <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" />
-            <input type="hidden" name="report_name" value="[% report_name | html %]" />
-            <input type="hidden" name="do_it" value="1" />
-          </fieldset>
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="value">Select a library:</label>
+                        <select name="value" id="value">
+                            <option value=""></option>
+                            [% PROCESS options_for_libraries libraries => Branches.all() %]
+                        </select>
+                        <div class="hint">Select none to see all libraries</div>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action"
+                ><input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="report_name" value="[% report_name | html %]" />
+                <input type="hidden" name="do_it" value="1" />
+            </fieldset>
         </form>
-[% END %]
-
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% IF ( do_it ) %]
         [% INCLUDE 'datatables.inc' %]
         <script>
-            $(document).ready(function(){
-                $("#itemtypest").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "dom": 't',
-                    "paginate": false
-                }));
+            $(document).ready(function () {
+                $("#itemtypest").dataTable(
+                    $.extend(true, {}, dataTablesDefaults, {
+                        dom: "t",
+                        paginate: false,
+                    })
+                );
             });
         </script>
     [% END %]

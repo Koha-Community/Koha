@@ -30,22 +30,26 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder      = t::lib::TestBuilder->new;
 my $nb_of_cities = Koha::Cities->search->count;
-my $new_city_1 = Koha::City->new({
-    city_name => 'my_city_name_for_test_1',
-    city_state => 'my_city_state_for_test_1',
-    city_zipcode => 'my_zipcode_4_test_1',
-    city_country => 'my_city_country_for_test_1',
-})->store;
-my $new_city_2 = Koha::City->new({
-    city_name => 'my_city_name_for_test_2',
-    city_state => 'my_city_state_for_test_2',
-    city_zipcode => 'my_zipcode_4_test_2',
-    city_country => 'my_city_country_for_test_2',
-})->store;
+my $new_city_1   = Koha::City->new(
+    {
+        city_name    => 'my_city_name_for_test_1',
+        city_state   => 'my_city_state_for_test_1',
+        city_zipcode => 'my_zipcode_4_test_1',
+        city_country => 'my_city_country_for_test_1',
+    }
+)->store;
+my $new_city_2 = Koha::City->new(
+    {
+        city_name    => 'my_city_name_for_test_2',
+        city_state   => 'my_city_state_for_test_2',
+        city_zipcode => 'my_zipcode_4_test_2',
+        city_country => 'my_city_country_for_test_2',
+    }
+)->store;
 
-like( $new_city_1->cityid, qr|^\d+$|, 'Adding a new city should have set the cityid');
+like( $new_city_1->cityid, qr|^\d+$|, 'Adding a new city should have set the cityid' );
 is( Koha::Cities->search->count, $nb_of_cities + 2, 'The 2 cities should have been added' );
 
 my $retrieved_city_1 = Koha::Cities->find( $new_city_1->cityid );

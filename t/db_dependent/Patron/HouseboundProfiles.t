@@ -33,17 +33,15 @@ subtest 'housebound_visits() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $profile = $builder->build({ source => 'HouseboundProfile' });
+    my $profile = $builder->build( { source => 'HouseboundProfile' } );
 
     is(
-        Koha::Patron::HouseboundProfiles
-            ->find($profile->{borrowernumber})->borrowernumber,
+        Koha::Patron::HouseboundProfiles->find( $profile->{borrowernumber} )->borrowernumber,
         $profile->{borrowernumber},
         "Find created profile."
     );
 
-    my @profiles = Koha::Patron::HouseboundProfiles
-        ->search({ day => $profile->{day} })->as_list;
+    my @profiles      = Koha::Patron::HouseboundProfiles->search( { day => $profile->{day} } )->as_list;
     my $found_profile = shift @profiles;
     is(
         $found_profile->borrowernumber,
@@ -53,18 +51,22 @@ subtest 'housebound_visits() tests' => sub {
 
     # ->housebound_profile Tests
 
-    my $visit1 = $builder->build({
-        source => 'HouseboundVisit',
-        value  => {
-            borrowernumber => $profile->{borrowernumber},
-        },
-    });
-    my $visit2 = $builder->build({
-        source => 'HouseboundVisit',
-        value  => {
-            borrowernumber => $profile->{borrowernumber},
-        },
-    });
+    my $visit1 = $builder->build(
+        {
+            source => 'HouseboundVisit',
+            value  => {
+                borrowernumber => $profile->{borrowernumber},
+            },
+        }
+    );
+    my $visit2 = $builder->build(
+        {
+            source => 'HouseboundVisit',
+            value  => {
+                borrowernumber => $profile->{borrowernumber},
+            },
+        }
+    );
 
     is(
         $found_profile->housebound_visits->count,

@@ -22,7 +22,7 @@ use warnings;
 
 use Koha::Script;
 use C4::Context;
-use Getopt::Long qw( GetOptions );
+use Getopt::Long    qw( GetOptions );
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
@@ -79,18 +79,18 @@ only if there is a problem and with the '-n' option.
 
 =cut
 
-my $mode = '';
+my $mode      = '';
 my $want_help = 0;
-my $limit = -1;
-my $done = 0;
-my $DEBUG = 0;
+my $limit     = -1;
+my $done      = 0;
+my $DEBUG     = 0;
 
 # Regexes for the two date formats
-our $US_DATE = '((0\d|1[0-2])\/([0-2]\d|3[01])\/(\d{4}))';
+our $US_DATE     = '((0\d|1[0-2])\/([0-2]\d|3[01])\/(\d{4}))';
 our $METRIC_DATE = '(([0-2]\d|3[01])\/(0\d|1[0-2])\/(\d{4}))';
 
 sub print_usage {
-    print <<_USAGE_
+    print <<_USAGE_;
 $0: Fix the date code in the description of fines
 
 Due to the multiple scripts used to update fines in earlier versions of Koha,
@@ -107,47 +107,46 @@ _USAGE_
 }
 
 my $result = GetOptions(
-    'm=s' => \$mode,
-    'd'  => \$DEBUG,
-    'n=i'  => \$limit, 
-    'help|h'   => \$want_help,
+    'm=s'    => \$mode,
+    'd'      => \$DEBUG,
+    'n=i'    => \$limit,
+    'help|h' => \$want_help,
 );
 
-if (not $result or $want_help or ($mode ne 'us' and $mode ne 'metric')) {
+if ( not $result or $want_help or ( $mode ne 'us' and $mode ne 'metric' ) ) {
     print_usage();
     exit 0;
 }
 
 our $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
-my $sth = $dbh->prepare("
+my $sth = $dbh->prepare( "
 SELECT accountlines_id, description
   FROM accountlines
   WHERE accounttype in ('FU', 'F', 'M')
-;");
+;" );
 $sth->execute();
 
-my $update_sth = $dbh->prepare('
+my $update_sth = $dbh->prepare( '
 UPDATE accountlines
   SET description = ?
   WHERE accountlines_id = ?
-;');
+;' );
 
-
-while (my $accountline = $sth->fetchrow_hashref) {
+while ( my $accountline = $sth->fetchrow_hashref ) {
     my $description = $accountline->{'description'};
-    my $updated = 0;
+    my $updated     = 0;
 
-    if ($mode eq 'us') {
-        if ($description =~ /$US_DATE/) { # mm/dd/yyyy
-            my $date = output_pref( { dt => dt_from_string( $1, 'us' ), dateonly => 1} );
-            print "Converting $1 (us) to " . $date . "\n" if $DEBUG;i
-            $description =~ s/$US_DATE/$date/;
+    if ( $mode eq 'us' ) {
+        if ( $description =~ /$US_DATE/ ) {    # mm/dd/yyyy
+            my $date = output_pref( { dt => dt_from_string( $1, 'us' ), dateonly => 1 } );
+            print "Converting $1 (us) to " . $date . "\n" if $DEBUG;
+            i $description =~ s/$US_DATE/$date/;
             $updated = 1;
         }
-    } elsif ($mode eq 'metric') {
-        if ($description =~ /$METRIC_DATE/) { # dd/mm/yyyy
-            my $date = output_pref( { dt => dt_from_string( $1, 'metric' ), dateonly => 1} );
+    } elsif ( $mode eq 'metric' ) {
+        if ( $description =~ /$METRIC_DATE/ ) {    # dd/mm/yyyy
+            my $date = output_pref( { dt => dt_from_string( $1, 'metric' ), dateonly => 1 } );
             print "Converting $1 (metric) to " . $date . "\n" if $DEBUG;
             $description =~ s/$METRIC_DATE/$date/;
             $updated = 2;
@@ -155,11 +154,11 @@ while (my $accountline = $sth->fetchrow_hashref) {
     }
 
     print "Changing description from '" . $accountline->{'description'} . "' to '" . $description . "'\n" if $DEBUG;
-    $update_sth->execute($description, $accountline->{'accountlines_id'});
+    $update_sth->execute( $description, $accountline->{'accountlines_id'} );
 
     $done++;
 
-    last if ($done == $limit); # $done can't be -1, so this works
+    last if ( $done == $limit );    # $done can't be -1, so this works
 }
 
 $dbh->commit();

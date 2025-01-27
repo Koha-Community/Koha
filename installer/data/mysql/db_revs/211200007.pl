@@ -1,15 +1,17 @@
 use Modern::Perl;
 
 return {
-    bug_number => "20076",
+    bug_number  => "20076",
     description => "Add system preference EmailOverduesNoEmail",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences (`variable`,`value`,`options`,`explanation`,`type`)
             VALUES ('EmailOverduesNoEmail','1',NULL,'Send send overdues of patrons without email address to staff', 'YesNo')
-        });
+        }
+        );
     },
-}
+    }

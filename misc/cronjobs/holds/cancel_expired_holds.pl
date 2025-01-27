@@ -40,7 +40,7 @@ This script calls C4::Reserves::CancelExpiredReserves which will find and cancel
 
 use Modern::Perl;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use C4::Reserves;
@@ -65,8 +65,8 @@ Optionally adds a reason for cancellation (which will trigger a notice to be sen
 my $help = 0;
 my $reason;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help|?'   => \$help,
@@ -76,4 +76,4 @@ pod2usage(1) if $help;
 
 C4::Reserves::CancelExpiredReserves($reason);
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

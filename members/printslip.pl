@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 moremember.pl
 
  script to do a borrower enquiry/bring up borrower details etc
@@ -35,13 +34,13 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_session get_template_and_user );
-use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
+use C4::Auth    qw( get_session get_template_and_user );
+use C4::Output  qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Members qw( IssueSlip );
 
-my $input = CGI->new;
+my $input     = CGI->new;
 my $sessionID = $input->cookie("CGISESSID");
-my $session = get_session($sessionID);
+my $session   = get_session($sessionID);
 
 my $print = $input->param('print');
 my $error = $input->param('error');
@@ -52,20 +51,23 @@ my $flagsrequired = { circulate => "circulate_remaining_permissions" };
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/printslip.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => $flagsrequired,
+        template_name => "circ/printslip.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => $flagsrequired,
     }
 );
 
 my $borrowernumber = $input->param('borrowernumber');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
-my $branch=C4::Context->userenv->{'branch'};
+my $branch = C4::Context->userenv->{'branch'};
 my ( $letter, $slip, $is_html );
 if ( $print eq 'checkinslip' ) {
     my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
@@ -107,10 +109,8 @@ if ( $print eq 'checkinslip' ) {
     );
 }
 
-
 $slip    = $letter->{content};
 $is_html = $letter->{is_html};
-
 
 $template->param(
     slip           => $slip,
@@ -123,6 +123,6 @@ $template->param(
     id             => $print,
 );
 
-$template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS' ) );
+$template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS') );
 
 output_html_with_http_headers $input, $cookie, $template->output;

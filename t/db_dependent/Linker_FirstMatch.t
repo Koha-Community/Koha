@@ -62,11 +62,7 @@ sub run_tests {
 
     $builder->delete( { source => 'AuthHeader' } );
 
-    my $auth_header = $builder->build(
-        {
-            source => 'AuthHeader'
-        }
-    );
+    my $auth_header = $builder->build( { source => 'AuthHeader' } );
 
     $authid = $auth_header->{authid};
 
@@ -76,11 +72,7 @@ sub run_tests {
     my $fake_marc    = $auth->as_usmarc();
     my $fake_xml     = $auth->as_xml($authid);
 
-    my $auth_header_record = $schema->resultset('AuthHeader')->find(
-        {
-            authid => $authid
-        }
-    );
+    my $auth_header_record = $schema->resultset('AuthHeader')->find( { authid => $authid } );
     $auth_header_record->marcxml($fake_xml);
     $auth_header_record->marc($fake_marc);
     $auth_header_record->update;
@@ -89,8 +81,7 @@ sub run_tests {
     my $fieldmatch;
     if ( C4::Context->preference('MARCFlavour') eq 'UNIMARC' ) {
         $fieldmatch = '2..';
-    }
-    else {
+    } else {
         $fieldmatch = '1..';
     }
     my $bibfield = $auth->field($fieldmatch);
@@ -109,9 +100,7 @@ sub run_tests {
     # Can we build a heading from it?
     my $heading;
     ok(
-        defined(
-            $heading = C4::Heading->new_from_field( $new_bibfield, q{} )
-        ),
+        defined( $heading = C4::Heading->new_from_field( $new_bibfield, q{} ) ),
         'Creating heading from bib field'
     );
 
@@ -130,7 +119,7 @@ sub run_tests {
 sub get_authority_record {
     my ( $marc_flavour, $auth_id ) = @_;
     my $main_heading_field = ( $marc_flavour eq 'UNIMARC' ) ? '200' : '100';
-    my $auth = MARC::Record->new();
+    my $auth               = MARC::Record->new();
     $auth->append_fields(
         MARC::Field->new( '001', $auth_id ),
         MARC::Field->new(

@@ -66,7 +66,7 @@ sub process {
 
     $self->start;
 
-    my $mmtid = $args->{mmtid};
+    my $mmtid      = $args->{mmtid};
     my @record_ids = @{ $args->{record_ids} };
 
     my $report = {
@@ -74,7 +74,7 @@ sub process {
         total_success => 0,
     };
     my @messages;
-    RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
+RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
 
         last if $self->get_from_storage->status eq 'cancelled';
 
@@ -85,23 +85,28 @@ sub process {
             my $biblio = Koha::Biblios->find($biblionumber);
             my $record = $biblio->metadata->record;
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
-            my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
-            C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode, {
-                overlay_context   => $args->{overlay_context},
-                skip_record_index => 1,
-            });
+            my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
+            C4::Biblio::ModBiblio(
+                $record,
+                $biblionumber,
+                $frameworkcode,
+                {
+                    overlay_context   => $args->{overlay_context},
+                    skip_record_index => 1,
+                }
+            );
         };
-        if ( $error and $error != 1 or $@ ) { # ModBiblio returns 1 if everything as gone well
+        if ( $error and $error != 1 or $@ ) {    # ModBiblio returns 1 if everything as gone well
             push @messages, {
-                type => 'error',
-                code => 'biblio_not_modified',
+                type         => 'error',
+                code         => 'biblio_not_modified',
                 biblionumber => $biblionumber,
-                error => ($@ ? "$@" : $error),
+                error        => ( $@ ? "$@" : $error ),
             };
         } else {
             push @messages, {
-                type => 'success',
-                code => 'biblio_modified',
+                type         => 'success',
+                code         => 'biblio_modified',
                 biblionumber => $biblionumber,
             };
             $report->{total_success}++;
@@ -110,14 +115,14 @@ sub process {
         $self->step;
     }
 
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     $indexer->index_records( \@record_ids, "specialUpdate", "biblioserver" );
 
     my $data = $self->decoded_data;
     $data->{messages} = \@messages;
-    $data->{report} = $report;
+    $data->{report}   = $report;
 
-    $self->finish( $data );
+    $self->finish($data);
 }
 
 =head3 enqueue
@@ -127,17 +132,19 @@ Enqueue the new job
 =cut
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     # TODO Raise exception instead
     return unless exists $args->{mmtid};
     return unless exists $args->{record_ids};
 
-    $self->SUPER::enqueue({
-        job_size  => scalar @{$args->{record_ids}},
-        job_args  => $args,
-        job_queue => 'long_tasks',
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size  => scalar @{ $args->{record_ids} },
+            job_args  => $args,
+            job_queue => 'long_tasks',
+        }
+    );
 }
 
 =head3 additional_report

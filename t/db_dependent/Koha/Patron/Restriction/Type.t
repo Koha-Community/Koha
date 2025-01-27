@@ -38,10 +38,10 @@ subtest 'delete() tests' => sub {
     $schema->storage->txn_begin;
 
     # Default restriction type
-    my $default_restriction_type = Koha::Patron::Restriction::Types->find({ is_default => 1 });
+    my $default_restriction_type = Koha::Patron::Restriction::Types->find( { is_default => 1 } );
     throws_ok { $default_restriction_type->delete }
     'Koha::Exceptions::CannotDeleteDefault',
-      'Delete exception thrown on current default';
+        'Delete exception thrown on current default';
 
     # System restriction type
     my $system_restriction_type = $builder->build_object(
@@ -55,7 +55,7 @@ subtest 'delete() tests' => sub {
     )->store;
     throws_ok { $system_restriction_type->delete }
     'Koha::Exceptions::CannotDeleteSystem',
-      'Delete exception thrown on system type';
+        'Delete exception thrown on system type';
 
     # Used restriction type
     my $used_restriction_type = $builder->build_object(
@@ -81,7 +81,7 @@ subtest 'delete() tests' => sub {
         }
     );
     ok( $used_restriction_type->delete, 'Used restriction type deleted' );
-    my $restrictions = $patron->restrictions;
+    my $restrictions    = $patron->restrictions;
     my $THE_restriction = $restrictions->next;
     is(
         $THE_restriction->type->code,
@@ -99,7 +99,7 @@ subtest 'make_default() tests' => sub {
     $schema->storage->txn_begin;
 
     # Get current default restriction type
-    my $current_default = Koha::Patron::Restriction::Types->find({ is_default => 1 });
+    my $current_default = Koha::Patron::Restriction::Types->find( { is_default => 1 } );
 
     # New non-default restriction type
     my $new_default = $builder->build_object(
@@ -112,8 +112,8 @@ subtest 'make_default() tests' => sub {
     $new_default->make_default;
 
     $current_default->discard_changes;
-    is($current_default->is_default, 0, 'is_default set to false on prior default');
-    is($new_default->is_default, 1, 'is_default set true on new default');
+    is( $current_default->is_default, 0, 'is_default set to false on prior default' );
+    is( $new_default->is_default,     1, 'is_default set true on new default' );
 
     $schema->storage->txn_rollback;
 };

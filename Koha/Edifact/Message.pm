@@ -56,8 +56,7 @@ sub function {
     my $msg_function = $self->{bgm}->elem(2);
     if ( $msg_function == 9 ) {
         return 'original';
-    }
-    elsif ( $msg_function == 7 ) {
+    } elsif ( $msg_function == 7 ) {
         return 'retransmission';
     }
     return;
@@ -188,8 +187,7 @@ sub lineitems {
     my $self = shift;
     if ( $self->{quotation_lines} ) {
         return $self->{quotation_lines};
-    }
-    else {
+    } else {
         my $items    = [];
         my $item_arr = [];
         foreach my $seg ( @{ $self->{datasegs} } ) {
@@ -200,14 +198,12 @@ sub lineitems {
                 }
                 $item_arr = [$seg];
                 next;
-            }
-            elsif ( $tag =~ m/^(UNS|CNT|UNT)$/sxm ) {
+            } elsif ( $tag =~ m/^(UNS|CNT|UNT)$/sxm ) {
                 if ( @{$item_arr} ) {
                     push @{$items}, Koha::Edifact::Line->new($item_arr);
                 }
                 last;
-            }
-            else {
+            } else {
                 if ( @{$item_arr} ) {
                     push @{$item_arr}, $seg;
                 }

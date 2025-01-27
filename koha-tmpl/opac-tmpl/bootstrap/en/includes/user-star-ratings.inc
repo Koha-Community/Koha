@@ -1,5 +1,4 @@
 <div class="results_summary ratings" id="rating-[% item.itemnumber | html %]">
-
     [% SET rating_avg = item.ratings.get_avg_rating() %]
     [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
 
@@ -18,7 +17,6 @@
     </div>
 
     <select class="star_rating" id="star_rating-[% item.itemnumber | html %]" name="rating" autocomplete="off" data-biblionumber="[% item.biblionumber | html %]" data-context="rating-[% item.itemnumber | html %]">
-
         [% IF ( rating_avg_int == 0 ) %]
             <option value="" selected="selected"></option>
         [% END %]
@@ -42,11 +40,15 @@
     [% IF item.my_rating %]
         <div>
             <span class="rating_value_text">Your rating: [% item.my_rating.rating_value | html %].</span>
-            <span class="cancel_rating_text js-show"><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating</a>.</span>
+            <span class="cancel_rating_text js-show"
+                ><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating</a>.</span
+            >
         </div>
     [% ELSE %]
         <span class="rating_value_text"></span>
-        <span class="cancel_rating_text" style="display:none;"><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating</a>.</span>
+        <span class="cancel_rating_text" style="display:none;"
+            ><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating</a>.</span
+        >
     [% END %]
 
     <div class="rating_text">Average rating: [% rating_avg | html %] ([% item.ratings.count | html %] votes)</div>

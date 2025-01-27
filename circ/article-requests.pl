@@ -21,21 +21,22 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::ArticleRequests;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/article-requests.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "circ/article-requests.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
-my $branchcode = defined( $query->param('branchcode') ) ? $query->param('branchcode') : C4::Context->userenv->{'branch'};
+my $branchcode =
+    defined( $query->param('branchcode') ) ? $query->param('branchcode') : C4::Context->userenv->{'branch'};
 
 $template->param(
     branchcode                  => $branchcode,

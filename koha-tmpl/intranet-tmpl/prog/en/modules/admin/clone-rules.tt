@@ -5,12 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Clone circulation and fine rules") | html %] &rsaquo;
-    [% t("Circulation and fine rules") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Clone circulation and fine rules") | html %]
+        &rsaquo; [% t("Circulation and fine rules") | html %] &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_clone-rules" class="admin">
@@ -33,18 +33,17 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <h1
+        >Cloning circulation and fine rules [% IF frombranch == "*" %]from standard rules[% ELSIF frombranch %]from "[% Branches.GetName( frombranch ) | html %]"[% END %]
+        [% IF tobranch %]to "[% Branches.GetName( tobranch ) | html %]"[% END %]
+    </h1>
 
-                <h1>Cloning circulation and fine rules
-                    [% IF frombranch == "*" %] from standard rules[% ELSIF frombranch %] from "[% Branches.GetName( frombranch ) | html %]"[% END %]
-                    [% IF tobranch %] to "[% Branches.GetName( tobranch ) | html %]"[% END %]
-                </h1>
-
-                [% IF ( error ) %]
-                    <div class="alert alert-warning">Cloning of circulation and fine rules failed!</div>
-                [% ELSE %]
-                    <div class="alert alert-info"><p>The rules have been cloned.</p></div>
-                [% END %]
-                <a href="/cgi-bin/koha/admin/smart-rules.pl">Return to circulation and fine rules</a>
+    [% IF ( error ) %]
+        <div class="alert alert-warning">Cloning of circulation and fine rules failed!</div>
+    [% ELSE %]
+        <div class="alert alert-info"><p>The rules have been cloned.</p></div>
+    [% END %]
+    <a href="/cgi-bin/koha/admin/smart-rules.pl">Return to circulation and fine rules</a>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

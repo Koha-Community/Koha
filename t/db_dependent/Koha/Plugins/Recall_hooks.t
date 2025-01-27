@@ -53,46 +53,53 @@ subtest 'after_recall_action hook' => sub {
     $plugins->InstallPlugins;
 
     my $plugin = Koha::Plugin::Test->new->enable;
+
     # Avoid testing useless warnings
     my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
-    $test_plugin->mock( 'after_item_action',   undef );
-    $test_plugin->mock( 'after_circ_action', undef );
-    $test_plugin->mock( 'after_biblio_action', undef );
+    $test_plugin->mock( 'after_item_action',        undef );
+    $test_plugin->mock( 'after_circ_action',        undef );
+    $test_plugin->mock( 'after_biblio_action',      undef );
     $test_plugin->mock( 'patron_barcode_transform', undef );
-    $test_plugin->mock( 'item_barcode_transform', undef );
+    $test_plugin->mock( 'item_barcode_transform',   undef );
 
-    my $item = $builder->build_sample_item();
-    my $biblio = $item->biblio;
-    my $branch = $item->holdingbranch;
-    my $category = $builder->build({ source => 'Category' })->{ categorycode };
-    my $patron1 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category, branchcode => $branch } });
-    my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category, branchcode => $branch } });
-    t::lib::Mocks::mock_userenv({ patron => $patron1 });
+    my $item     = $builder->build_sample_item();
+    my $biblio   = $item->biblio;
+    my $branch   = $item->holdingbranch;
+    my $category = $builder->build( { source => 'Category' } )->{categorycode};
+    my $patron1  = $builder->build_object(
+        { class => 'Koha::Patrons', value => { categorycode => $category, branchcode => $branch } } );
+    my $patron2 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { categorycode => $category, branchcode => $branch } } );
+    t::lib::Mocks::mock_userenv( { patron => $patron1 } );
 
-    Koha::CirculationRules->set_rules({
-        branchcode => undef,
-        categorycode => undef,
-        itemtype => undef,
-        rules => {
-            'recall_due_date_interval' => undef,
-            'recalls_allowed' => 10,
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                'recall_due_date_interval' => undef,
+                'recalls_allowed'          => 10,
+            }
         }
-    });
+    );
 
     C4::Circulation::AddIssue( $patron2, $item->barcode );
 
     warnings_exist {
-      Koha::Recalls->add_recall({
-          patron => $patron1,
-          biblio => $biblio,
-          branchcode => $branch,
-          item => undef,
-          expirationdate => undef,
-          interface => 'COMMANDLINE',
-      });
+        Koha::Recalls->add_recall(
+            {
+                patron         => $patron1,
+                biblio         => $biblio,
+                branchcode     => $branch,
+                item           => undef,
+                expirationdate => undef,
+                interface      => 'COMMANDLINE',
+            }
+        );
     }
     qr/after_recall_action called with action: add, ref: Koha::Recall/,
-      '->add_recall calls the after_recall_action hook with action add';
+        '->add_recall calls the after_recall_action hook with action add';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;

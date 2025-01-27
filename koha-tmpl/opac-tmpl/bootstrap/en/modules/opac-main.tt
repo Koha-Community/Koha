@@ -17,7 +17,8 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 <link rel="canonical" href="[% OPACBaseURL | url %]/" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-main' %]
 [% INCLUDE 'masthead.inc' %]
@@ -29,6 +30,7 @@
                 [% news_item.title | html %]
             [% END %]
         [% ELSE %]
+
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 
@@ -37,276 +39,274 @@
         [% container_id = "loggedin" %]
     [% END %]
     <div id="[% container_id | html %]" class="container-fluid">
-
-    <div class="row">
-        [% IF ( OpacNav ||  OpacNavBottom ) %]
-            <div class="col-12 col-lg-2 order-3 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' %]
+        <div class="row">
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                <div class="col-12 col-lg-2 order-3 order-lg-1">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
                 </div>
-            </div>
-        [% END %]
-
-        [% SET column_class = "col order-md-1 maincontent" %]
-        [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
-            [%#  Three-column layout with right and left sidebars %]
-            [% column_class = "col-12 col-lg-7 order-md-1 maincontent" %]
-        [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
-            [%#  Two-column layout with right sidebar %]
-            [% column_class = "col-12 col-lg-9 order-md-1 maincontent" %]
-        [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
-            [% column_class = "col-12 col-lg-10 order-md-1 maincontent" %]
-        [% END %]
-        <div class="[% column_class | html %]">
-
-        <h1 class="sr-only">Koha home</h1>
-
-        [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) && AllPublicBranches.size > 1 %]
-            [% UNLESS news_id %]
-                <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
-                    <legend class="sr-only">News</legend>
-                    <label for="news-branch">Display news for: </label>
-                    <select id="news-branch" name="branch">
-                        [% IF ( branchcode == "" ) %]
-                            <option value="" selected="selected">System-wide only</option>
-                        [% ELSE %]
-                            <option value="">System-wide only</option>
-                        [% END %]
-                        [% PROCESS options_for_libraries libraries => AllPublicBranches %]
-                    </select>
-                </form>
             [% END %]
-        [% END %]
 
-        [% IF news_id %]
-            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, id => news_id ) %]
-        [% ELSE %]
-            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
-        [% END %]
-        [% IF koha_news.content.count %]
-            <div id="news" class="newscontainer">
-                [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
-                [% FOREACH koha_new IN koha_news.content %]
-                    <div class="newsitem">
-                        <h4 class="newsheader">
-                            [% IF ( news_item ) %]
-                                [% koha_new.title | html %]
-                            [% ELSE %]
-                                <a id="newsitem[% koha_new.additional_content.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.additional_content.id | uri %]">[% koha_new.title | html %]</a>
-                            [% END %]
-                        </h4>
-                        <div class="newsbody">[% koha_new.content | $raw %]</div>
-                        <div class="newsfooter">
-                            Published on [% koha_new.published_on | $KohaDates %]
-                            [% IF ( show_author && koha_new.author ) %]
-                                by <span class="newsauthor">[% INCLUDE 'patron-title.inc' patron=koha_new.author %]</span>
-                            [% END %]
-                            [% IF ( news_id ) %]
-                                &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
-                            [% END %]
-                        </div>
-                    </div>
+            [% SET column_class = "col order-md-1 maincontent" %]
+            [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
+                [%#  Three-column layout with right and left sidebars %]
+                [% column_class = "col-12 col-lg-7 order-md-1 maincontent" %]
+            [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
+                [%#  Two-column layout with right sidebar %]
+                [% column_class = "col-12 col-lg-9 order-md-1 maincontent" %]
+            [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
+                [% column_class = "col-12 col-lg-10 order-md-1 maincontent" %]
+            [% END %]
+            <div class="[% column_class | html %]">
+                <h1 class="sr-only">Koha home</h1>
+
+                [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) && AllPublicBranches.size > 1 %]
+                    [% UNLESS news_id %]
+                        <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
+                            <legend class="sr-only">News</legend>
+                            <label for="news-branch">Display news for: </label>
+                            <select id="news-branch" name="branch">
+                                [% IF ( branchcode == "" ) %]
+                                    <option value="" selected="selected">System-wide only</option>
+                                [% ELSE %]
+                                    <option value="">System-wide only</option>
+                                [% END %]
+                                [% PROCESS options_for_libraries libraries => AllPublicBranches %]
+                            </select>
+                        </form>
+                    [% END %]
                 [% END %]
 
-                [% UNLESS news_id %]
-                    <div id="rssnews-container">
-                        <!-- Logged in users have a branch code or it could be explicitly set -->
-                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | uri %]">
-                            <i class="fa fa-rss" aria-hidden="true"></i>
-                            [% IF Branches.all.size == 1 %]
-                                [% IF branchcode %]
-                                    <span>RSS feed for [% Branches.GetName( branchcode ) | html %] library news</span>
-                                [% ELSE %]
-                                    <span>RSS feed for library news</span>
-                                [% END %]
-                            [% ELSE %]
-                                [% IF branchcode %]
-                                    <span>RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news</span>
-                                [% ELSE %]
-                                    <span>RSS feed for system-wide library news</span>
-                                [% END %]
-                            [% END %]
-                        </a>
-                    </div>
+                [% IF news_id %]
+                    [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, id => news_id ) %]
+                [% ELSE %]
+                    [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
                 [% END %]
-            </div>
-        [% ELSIF news_id %] <!-- news_id but no koha_news.content -->
-            <div class="alert alert-error">
-                This news item does not exist.
-            </div>
-        [% ELSE %] <!-- koha news -->
-            [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
-                <div id="news" class="newscontainer">
-                    <div class="newsitem">
-                        <div class="newsbody">No news to display.</div>
-                        <div class="newsfooter"></div>
-                    </div>
-                </div>
-            [% END %]
-
-        [% END # IF koha_news %]
-
-        [% UNLESS news_item # Don't show under single news item %]
-            [% IF ( daily_quote ) %]
-                <div id="daily-quote">
-                    <h2>Quote of the day</h2>
-                    <div>
-                        <span id="daily-quote-text">[% daily_quote.text | html %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source | html %]</span>
-                    </div>
-                </div>
-            [% END %]
-
-            [% IF ( OpacMainUserBlock ) %]
-                [% PROCESS koha_news_block news => OpacMainUserBlock %]
-            [% END %]
-        [% END %]
-
-        </div> <!-- / .col 6/8 -->
-
-        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
-            <div class="col-12 col-lg-3 order-md-2">
-                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                    [% UNLESS ( loggedinusername ) %]
-                        [% UNLESS ( casAuthentication || shibbolethAuthentication || Koha.Preference('opacShibOnly') ) %]
-                            <div id="login">
-                                <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="koha_login_context" value="opac" />
-                                    <fieldset class="brief">
-                                        <legend>Log in to your account:</legend>
-                                        [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa-brands fa-google" aria-hidden="true"></i> Log in with Google</a>
-                                            <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
-                                        [% END # /IF GoogleOpenIDConnect %]
-                                        [% SET identity_providers = AuthClient.get_providers('opac') %]
-                                        [% IF ( ! identity_providers.empty ) %]
-                                            [% FOREACH provider IN identity_providers %]
-                                                <p class="clearfix">
-                                                    <a href="[% provider.url | url %]" class="btn btn-light col-md-12" id="provider_[% provider.code | html %]">
-                                                        [% IF provider.icon_url %]
-                                                        <img src="[% provider.icon_url | url %]"  style="max-height: 20px; max-width: 20px;"/>
-                                                        [% ELSE %]
-                                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                                        [% END %]
-                                                        Log in with [% provider.description | html %]
-                                                    </a>
-                                                </p>
-                                            [% END %]
-                                            <hr/>
-                                            <p>If you do not have an external account, but do have a local account, you can still log in: </p>
-                                        [% END # /IF  identity_providers.size %]
-                                        <div class="local-login">
-                                            [% PROCESS login_label for='userid' %]
-                                            <input class="form-control" type="text" id="userid" name="login_userid" autocomplete="off" />
-                                            <label for="password">Password:</label>
-                                            <input class="form-control" type="password" id="password" name="login_password" autocomplete="off" />
-                                            <fieldset class="action">
-                                                <input type="hidden" name="op" value="cud-login" />
-                                                <input type="submit" value="Log in" class="btn btn-primary" />
-                                            </fieldset>
-                                        </div>
-                                        [% IF ( OpacLoginInstructions ) %]
-                                            <div id="nologininstructions-main" class="nologininstructions">
-                                                [% PROCESS koha_news_block news => OpacLoginInstructions %]
-                                            </div>
-                                        [% END %]
-                                        [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
-                                            <div id="forgotpassword-main" class="forgotpassword">
-                                                <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
-                                            </div>
-                                        [% END %]
-                                        [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
-                                            <div id="patronregistration-main" class="patronregistration">
-                                                <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
-                                            </div>
-                                        [% END %]
-                                    </fieldset>
-                                </form>
-                            </div> <!-- /#login -->
-                        [% END # /casAuthentication %]
-                    [% ELSE %]
-                        [% IF Koha.Preference('OPACUserSummary') && dashboard_info %]
-                            <div id="user_summary">
-                                <h2>User summary</h2>
-                                <p>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</span></a></p>
-                                <ul id="user_summary_shortcuts">
-                                    [% IF checkouts && checkouts > 0 %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">
-                                                <span class="user_checkouts_count count_label">[% checkouts | html %]</span>
-                                                [% tn('checkout', 'checkouts', checkouts ) | html %]
-                                            </a>
-                                        </li>
+                [% IF koha_news.content.count %]
+                    <div id="news" class="newscontainer">
+                        [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
+                        [% FOREACH koha_new IN koha_news.content %]
+                            <div class="newsitem">
+                                <h4 class="newsheader">
+                                    [% IF ( news_item ) %]
+                                        [% koha_new.title | html %]
+                                    [% ELSE %]
+                                        <a id="newsitem[% koha_new.additional_content.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.additional_content.id | uri %]">[% koha_new.title | html %]</a>
                                     [% END %]
-                                    [% IF overdues && overdues > 0 %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">
-                                                <span class="user_overdues_count count_label">[% overdues | html %]</span>
-                                                [% tn('overdue', 'overdues', overdues ) | html %]
-                                            </a>
-                                        </li>
+                                </h4>
+                                <div class="newsbody">[% koha_new.content | $raw %]</div>
+                                <div class="newsfooter">
+                                    Published on [% koha_new.published_on | $KohaDates %]
+                                    [% IF ( show_author && koha_new.author ) %]
+                                        by <span class="newsauthor">[% INCLUDE 'patron-title.inc' patron=koha_new.author %]</span>
                                     [% END %]
-                                    [% IF holds_pending && holds_pending > 0 %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">
-                                                <span class="user_holds_pending_count count_label">[% holds_pending | html %]</span>
-                                                [% tn('hold pending', 'holds pending', holds_pending ) | html %]
-                                            </a>
-                                        </li>
+                                    [% IF ( news_id ) %]
+                                        &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
                                     [% END %]
-                                    [% IF holds_waiting && holds_waiting > 0 %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">
-                                                <span class="user_holds_waiting_count count_label">[% holds_waiting | html %]</span>
-                                                [% tn('hold waiting', 'holds waiting', holds_waiting ) | html %]
-                                            </a>
-                                        </li>
-                                    [% END %]
-                                    [% IF total_owing && total_owing > 0 %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/opac-account.pl">
-                                                <span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span>
-                                                due in fines and charges
-                                            </a>
-                                        </li>
-                                    [% END %]
-                                    [% IF patron_messages && patron_messages.filter_by_unread.count > 0 || opacnote %]
-                                        [% IF opacnote %]
-                                            <li>
-                                                <a href="/cgi-bin/koha/opac-user.pl">
-                                                    <span class="count_label">[% patron_messages.filter_by_unread.count + 1 | html %]</span>
-                                                    [% tn('message', 'messages', patron_messages.filter_by_unread.count + 1 ) | html %]
-                                                </a>
-                                            </li>
-                                        [% ELSE %]
-                                            <li>
-                                                <a href="/cgi-bin/koha/opac-user.pl">
-                                                    <span class="count_label">[% patron_messages.filter_by_unread.count | html %]</span>
-                                                    [% tn('message', 'messages', patron_messages.filter_by_unread.count ) | html %]
-                                                </a>
-                                            </li>
-                                        [% END %]
-                                    [% END %]
-                                    [% IF savings %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/opac-user.pl">
-                                                <span class="count_label">[% savings | $Price with_symbol => 1 %]</span>
-                                                total savings
-                                            </a>
-                                        </li>
-                                    [% END %]
-                                </ul>
+                                </div>
                             </div>
                         [% END %]
-                    [% END # /loggedinusername %]
-                [% END # /opacuserlogin %]
-                [% PROCESS koha_news_block news => OpacNavRight %]
-            </div> <!-- / .col -->
-        [% END # /opacuserlogin || OpacNavRight %]
 
-        </div> <!-- /.container-fluid -->
-    </div> <!-- /.row -->
-</div> <!-- /.main -->
+                        [% UNLESS news_id %]
+                            <div id="rssnews-container">
+                                <!-- Logged in users have a branch code or it could be explicitly set -->
+                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | uri %]">
+                                    <i class="fa fa-rss" aria-hidden="true"></i>
+                                    [% IF Branches.all.size == 1 %]
+                                        [% IF branchcode %]
+                                            <span>RSS feed for [% Branches.GetName( branchcode ) | html %] library news</span>
+                                        [% ELSE %]
+                                            <span>RSS feed for library news</span>
+                                        [% END %]
+                                    [% ELSE %]
+                                        [% IF branchcode %]
+                                            <span>RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news</span>
+                                        [% ELSE %]
+                                            <span>RSS feed for system-wide library news</span>
+                                        [% END %]
+                                    [% END %]
+                                </a>
+                            </div>
+                        [% END %]
+                    </div>
+                [% ELSIF news_id %]
+                    <!-- news_id but no koha_news.content -->
+                    <div class="alert alert-error"> This news item does not exist. </div>
+                [% ELSE %]
+                    <!-- koha news -->
+                    [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
+                        <div id="news" class="newscontainer">
+                            <div class="newsitem">
+                                <div class="newsbody">No news to display.</div>
+                                <div class="newsfooter"></div>
+                            </div>
+                        </div>
+                    [% END %]
+                [% END # IF koha_news %]
+
+                [% UNLESS news_item # Don't show under single news item %]
+                    [% IF ( daily_quote ) %]
+                        <div id="daily-quote">
+                            <h2>Quote of the day</h2>
+                            <div> <span id="daily-quote-text">[% daily_quote.text | html %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source | html %]</span> </div>
+                        </div>
+                    [% END %]
+
+                    [% IF ( OpacMainUserBlock ) %]
+                        [% PROCESS koha_news_block news => OpacMainUserBlock %]
+                    [% END %]
+                [% END %]
+            </div>
+            <!-- / .col 6/8 -->
+
+            [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
+                <div class="col-12 col-lg-3 order-md-2">
+                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                        [% UNLESS ( loggedinusername ) %]
+                            [% UNLESS ( casAuthentication || shibbolethAuthentication || Koha.Preference('opacShibOnly') ) %]
+                                <div id="login">
+                                    <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="koha_login_context" value="opac" />
+                                        <fieldset class="brief">
+                                            <legend>Log in to your account:</legend>
+                                            [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
+                                                <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa-brands fa-google" aria-hidden="true"></i> Log in with Google</a>
+                                                <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
+                                            [% END # /IF GoogleOpenIDConnect %]
+                                            [% SET identity_providers = AuthClient.get_providers('opac') %]
+                                            [% IF ( ! identity_providers.empty ) %]
+                                                [% FOREACH provider IN identity_providers %]
+                                                    <p class="clearfix">
+                                                        <a href="[% provider.url | url %]" class="btn btn-light col-md-12" id="provider_[% provider.code | html %]">
+                                                            [% IF provider.icon_url %]
+                                                                <img src="[% provider.icon_url | url %]" style="max-height: 20px; max-width: 20px;" />
+                                                            [% ELSE %]
+                                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                            [% END %]
+                                                            Log in with [% provider.description | html %]
+                                                        </a>
+                                                    </p>
+                                                [% END %]
+                                                <hr />
+                                                <p>If you do not have an external account, but do have a local account, you can still log in: </p>
+                                            [% END # /IF  identity_providers.size %]
+                                            <div class="local-login">
+                                                [% PROCESS login_label for='userid' %]
+                                                <input class="form-control" type="text" id="userid" name="login_userid" autocomplete="off" />
+                                                <label for="password">Password:</label>
+                                                <input class="form-control" type="password" id="password" name="login_password" autocomplete="off" />
+                                                <fieldset class="action">
+                                                    <input type="hidden" name="op" value="cud-login" />
+                                                    <input type="submit" value="Log in" class="btn btn-primary" />
+                                                </fieldset>
+                                            </div>
+                                            [% IF ( OpacLoginInstructions ) %]
+                                                <div id="nologininstructions-main" class="nologininstructions"> [% PROCESS koha_news_block news => OpacLoginInstructions %] </div>
+                                            [% END %]
+                                            [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                                <div id="forgotpassword-main" class="forgotpassword">
+                                                    <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
+                                                </div>
+                                            [% END %]
+                                            [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
+                                                <div id="patronregistration-main" class="patronregistration">
+                                                    <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
+                                                </div>
+                                            [% END %]
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <!-- /#login -->
+                            [% END # /casAuthentication %]
+                        [% ELSE %]
+                            [% IF Koha.Preference('OPACUserSummary') && dashboard_info %]
+                                <div id="user_summary">
+                                    <h2>User summary</h2>
+                                    <p
+                                        >Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</span></a></p
+                                    >
+                                    <ul id="user_summary_shortcuts">
+                                        [% IF checkouts && checkouts > 0 %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">
+                                                    <span class="user_checkouts_count count_label">[% checkouts | html %]</span>
+                                                    [% tn('checkout', 'checkouts', checkouts ) | html %]
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                        [% IF overdues && overdues > 0 %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">
+                                                    <span class="user_overdues_count count_label">[% overdues | html %]</span>
+                                                    [% tn('overdue', 'overdues', overdues ) | html %]
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                        [% IF holds_pending && holds_pending > 0 %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">
+                                                    <span class="user_holds_pending_count count_label">[% holds_pending | html %]</span>
+                                                    [% tn('hold pending', 'holds pending', holds_pending ) | html %]
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                        [% IF holds_waiting && holds_waiting > 0 %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">
+                                                    <span class="user_holds_waiting_count count_label">[% holds_waiting | html %]</span>
+                                                    [% tn('hold waiting', 'holds waiting', holds_waiting ) | html %]
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                        [% IF total_owing && total_owing > 0 %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-account.pl">
+                                                    <span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span>
+                                                    due in fines and charges
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                        [% IF patron_messages && patron_messages.filter_by_unread.count > 0 || opacnote %]
+                                            [% IF opacnote %]
+                                                <li>
+                                                    <a href="/cgi-bin/koha/opac-user.pl">
+                                                        <span class="count_label">[% patron_messages.filter_by_unread.count + 1 | html %]</span>
+                                                        [% tn('message', 'messages', patron_messages.filter_by_unread.count + 1 ) | html %]
+                                                    </a>
+                                                </li>
+                                            [% ELSE %]
+                                                <li>
+                                                    <a href="/cgi-bin/koha/opac-user.pl">
+                                                        <span class="count_label">[% patron_messages.filter_by_unread.count | html %]</span>
+                                                        [% tn('message', 'messages', patron_messages.filter_by_unread.count ) | html %]
+                                                    </a>
+                                                </li>
+                                            [% END %]
+                                        [% END %]
+                                        [% IF savings %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl">
+                                                    <span class="count_label">[% savings | $Price with_symbol => 1 %]</span>
+                                                    total savings
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                    </ul>
+                                </div>
+                            [% END %]
+                        [% END # /loggedinusername %]
+                    [% END # /opacuserlogin %]
+                    [% PROCESS koha_news_block news => OpacNavRight %]
+                </div>
+                <!-- / .col -->
+            [% END # /opacuserlogin || OpacNavRight %]
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

@@ -15,7 +15,6 @@ package t::lib::Selenium;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use Carp qw( croak );
 
@@ -35,13 +34,13 @@ sub new {
     my ( $class, $params ) = @_;
     my $self   = {};
     my $config = $class->config;
-    $self->{login}    = $params->{login}    || $config->{login};
-    $self->{password} = $params->{password} || $config->{password};
-    $self->{base_url} = $params->{base_url} || $config->{base_url};
+    $self->{login}         = $params->{login}         || $config->{login};
+    $self->{password}      = $params->{password}      || $config->{password};
+    $self->{base_url}      = $params->{base_url}      || $config->{base_url};
     $self->{opac_base_url} = $params->{opac_base_url} || $config->{opac_base_url};
     $self->{selenium_addr} = $params->{selenium_addr} || $config->{selenium_addr};
     $self->{selenium_port} = $params->{selenium_port} || $config->{selenium_port};
-    $self->{driver} = Selenium::Remote::Driver->new(
+    $self->{driver}        = Selenium::Remote::Driver->new(
         port               => $self->{selenium_port},
         remote_server_addr => $self->{selenium_addr},
     );
@@ -52,17 +51,17 @@ sub new {
 }
 
 sub add_error_handler {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->{driver}->error_handler(
         sub {
             my ( $driver, $selenium_error ) = @_;
             print STDERR "\nSTRACE:";
             my $i = 1;
-            while ( (my @call_details = (caller($i++))) ){
-                print STDERR "\t" . $call_details[1]. ":" . $call_details[2] . " in " . $call_details[3]."\n";
+            while ( ( my @call_details = ( caller( $i++ ) ) ) ) {
+                print STDERR "\t" . $call_details[1] . ":" . $call_details[2] . " in " . $call_details[3] . "\n";
             }
             print STDERR "\n";
-            $self->capture( $driver );
+            $self->capture($driver);
             $driver->quit();
             croak $selenium_error;
         }
@@ -70,8 +69,8 @@ sub add_error_handler {
 }
 
 sub remove_error_handler {
-    my ( $self ) = @_;
-    $self->{driver}->error_handler( sub {} );
+    my ($self) = @_;
+    $self->{driver}->error_handler( sub { } );
 }
 
 sub config {
@@ -88,7 +87,7 @@ sub config {
 sub auth {
     my ( $self, $login, $password ) = @_;
 
-    $login ||= $self->login;
+    $login    ||= $self->login;
     $password ||= $self->password;
     my $mainpage = $self->base_url . 'mainpage.pl';
 
@@ -101,11 +100,11 @@ sub auth {
 sub opac_auth {
     my ( $self, $login, $password ) = @_;
 
-    $login ||= $self->login;
+    $login    ||= $self->login;
     $password ||= $self->password;
     my $mainpage = $self->opac_base_url . 'opac-main.pl';
 
-    $self->driver->get($mainpage . q|?logout.x=1|); # Logout before, to make sure we will see the login form
+    $self->driver->get( $mainpage . q|?logout.x=1| );    # Logout before, to make sure we will see the login form
     $self->driver->get($mainpage);
     $self->fill_form( { userid => $login, password => $password } );
     $self->submit_form;
@@ -131,7 +130,7 @@ sub fill_form {
 }
 
 sub submit_form {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # If there is only one submit element on the page we use it
     my @submit_elements = $self->driver->find_elements('//input[@type="submit"]');
@@ -141,7 +140,8 @@ sub submit_form {
     }
 
     my $default_submit_selector = '//fieldset[@class="action"]/input[@type="submit"]';
-    my @elts = map { my $size = $_->get_size; ( $size->{height} && $size->{width} ) ? $_ : () } $self->driver->find_elements($default_submit_selector);
+    my @elts                    = map { my $size = $_->get_size; ( $size->{height} && $size->{width} ) ? $_ : () }
+        $self->driver->find_elements($default_submit_selector);
 
     die "Too many forms are displayed. Cannot submit." if @elts > 1;
 
@@ -152,43 +152,49 @@ sub click {
     my ( $self, $params ) = @_;
     my $xpath_selector;
     if ( exists $params->{main} ) {
-        $xpath_selector = '//div[@id="'.$params->{main}.'"]';
+        $xpath_selector = '//div[@id="' . $params->{main} . '"]';
     } elsif ( exists $params->{main_class} ) {
-        $xpath_selector = '//div[@class="'.$params->{main_class}.'"]';
+        $xpath_selector = '//div[@class="' . $params->{main_class} . '"]';
     }
     if ( exists $params->{href} ) {
         if ( ref( $params->{href} ) ) {
             for my $k ( keys %{ $params->{href} } ) {
                 if ( $k eq 'ends-with' ) {
+
                     # ends-with version for xpath version 1
                     my $ends_with = $params->{href}{"ends-with"};
-                    $xpath_selector .= '//a[substring(@href, string-length(@href) - string-length("'.$ends_with.'") + 1 ) = "'.$ends_with.'"]';
+                    $xpath_selector .=
+                          '//a[substring(@href, string-length(@href) - string-length("'
+                        . $ends_with
+                        . '") + 1 ) = "'
+                        . $ends_with . '"]';
+
                     # ends-with version for xpath version 2
                     #$xpath_selector .= '//a[ends-with(@href, "'.$ends_with.'") ]';
 
-            } else {
+                } else {
                     die "Only ends-with is supported so far ($k)";
                 }
             }
         } else {
-            $xpath_selector .= '//a[contains(@href, "'.$params->{href}.'")]';
+            $xpath_selector .= '//a[contains(@href, "' . $params->{href} . '")]';
         }
     }
     if ( exists $params->{id} ) {
-        $xpath_selector .= '//*[@id="'.$params->{id}.'"]';
+        $xpath_selector .= '//*[@id="' . $params->{id} . '"]';
     }
-    $self->driver->find_element($xpath_selector)->click
+    $self->driver->find_element($xpath_selector)->click;
 }
 
 sub wait_for_element_visible {
     my ( $self, $xpath_selector ) = @_;
 
-    my ($visible, $elt);
+    my ( $visible, $elt );
     $self->remove_error_handler;
     my $max_retries = $self->max_retries;
     my $i;
     while ( not $visible ) {
-        $elt = eval {$self->driver->find_element($xpath_selector) };
+        $elt     = eval { $self->driver->find_element($xpath_selector) };
         $visible = $elt && $elt->is_displayed;
         $self->driver->pause(1000) unless $visible;
 
@@ -222,7 +228,7 @@ sub wait_for_element_hidden {
 }
 
 sub wait_for_ajax {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $is_ready;
     my $max_retries = $self->max_retries;
@@ -232,12 +238,12 @@ sub wait_for_ajax {
         $self->driver->pause(1000) unless $is_ready;
 
         die "Cannot wait more for jQuery to be active (wait_for_ajax)"
-            if $max_retries <= ++$i
+            if $max_retries <= ++$i;
     }
 }
 
 sub get_next_alert_text {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $alert_text;
     my $max_retries = $self->max_retries;
@@ -248,7 +254,7 @@ sub get_next_alert_text {
         $self->driver->pause(1000) unless $alert_text;
 
         die "Cannot wait more for next alert (get_next_alert)"
-          if $max_retries <= ++$i;
+            if $max_retries <= ++$i;
     }
     $self->add_error_handler;
     return $alert_text;
@@ -257,14 +263,12 @@ sub get_next_alert_text {
 sub show_all_entries {
     my ( $self, $xpath_selector ) = @_;
 
-    $self->driver->find_element( $xpath_selector
-          . '//div[@class="dt-length"]/label/select/option[@value="-1"]'
-    )->click;
-    my ($all_displayed, $i);
+    $self->driver->find_element( $xpath_selector . '//div[@class="dt-length"]/label/select/option[@value="-1"]' )
+        ->click;
+    my ( $all_displayed, $i );
     my $max_retries = $self->max_retries;
     while ( not $all_displayed ) {
-        my $dt_infos = $self->driver->get_text(
-            $xpath_selector . '//div[@class="dt-info"]' );
+        my $dt_infos = $self->driver->get_text( $xpath_selector . '//div[@class="dt-info"]' );
 
         if ( $dt_infos =~ m|Showing 1 to (\d+) of (\d+) entries| ) {
             $all_displayed = 1 if $1 == $2;
@@ -273,14 +277,14 @@ sub show_all_entries {
         $self->driver->pause(1000) unless $all_displayed;
 
         die "Cannot show all entries from table $xpath_selector"
-            if $max_retries <= ++$i
+            if $max_retries <= ++$i;
     }
 }
 
 sub click_when_visible {
     my ( $self, $xpath_selector ) = @_;
 
-    my $elt = $self->wait_for_element_visible( $xpath_selector );
+    my $elt = $self->wait_for_element_visible($xpath_selector);
 
     my $clicked;
     $self->remove_error_handler;
@@ -290,7 +294,7 @@ sub click_when_visible {
         $self->driver->pause(1000) unless $clicked;
     }
     $self->add_error_handler;
-    $elt->click unless $clicked; # finally Raise the error
+    $elt->click unless $clicked;    # finally Raise the error
 }
 
 sub max_retries { 10 }

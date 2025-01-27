@@ -55,9 +55,9 @@ Returns a list of the mandatory config entries for the protocol.
 
 sub mandatory_config_attributes {
     return qw(
-      key
-      secret
-      well_known_url
+        key
+        secret
+        well_known_url
     );
 }
 

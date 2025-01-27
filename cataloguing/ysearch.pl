@@ -28,8 +28,8 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Charset qw( nsb_clean );
-use C4::Auth qw( check_cookie_auth );
-use JSON qw( to_json );
+use C4::Auth    qw( check_cookie_auth );
+use JSON        qw( to_json );
 
 my $input = CGI->new;
 my $query = $input->param('term');
@@ -43,7 +43,7 @@ die() unless ( $field eq 'publishercode' || $field eq 'collectiontitle' );
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ( $auth_status ) = check_cookie_auth( $input->cookie('CGISESSID'), { editcatalogue => '*' } );
+my ($auth_status) = check_cookie_auth( $input->cookie('CGISESSID'), { editcatalogue => '*' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -54,11 +54,11 @@ my $sql = qq(SELECT distinct $field
              WHERE $field LIKE ? OR $field LIKE ? or $field LIKE ?);
 $sql .= qq( ORDER BY $field);
 my $sth = $dbh->prepare($sql);
-$sth->execute("$query%", "% $query%", "%-$query%");
+$sth->execute( "$query%", "% $query%", "%-$query%" );
 
 my $a = [];
 while ( my $rec = $sth->fetchrow_hashref ) {
-    push @$a, { fieldvalue => nsb_clean($rec->{$field}) };
+    push @$a, { fieldvalue => nsb_clean( $rec->{$field} ) };
 }
 
 print to_json($a);

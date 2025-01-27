@@ -7,14 +7,13 @@ use Test::More tests => 13;
 use t::lib::Mocks;
 
 BEGIN { use_ok('Koha::Edifact::Order') }
-t::lib::Mocks::mock_preference('EdifactLSQ', 'location');
+t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );
 
 # The following tests are for internal methods but they could
 # error spectacularly so best
 # Check that quoting is done correctly
 #
-my $processed_text =
-  Koha::Edifact::Order::encode_text(q{string containing ?,',:,+});
+my $processed_text = Koha::Edifact::Order::encode_text(q{string containing ?,',:,+});
 
 cmp_ok(
     $processed_text, 'eq',
@@ -43,18 +42,22 @@ $data_to_encode .= 'C' x 10;
 cmp_ok(
     $segs[0],
     'eq',
-q{IMD+L+010+:::AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'},
+    q{IMD+L+010+:::AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'},
     'IMD segment correctly chunked'
 );
-cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC'},
-    'IMD segment correctly split across segments' );
+cmp_ok(
+    $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC'},
+    'IMD segment correctly split across segments'
+);
 
 $data_to_encode .= '??';
 
 # this used to cause an infinite loop
 @segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
-cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
-    'IMD segment deals with quoted character at end' );
+cmp_ok(
+    $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
+    'IMD segment deals with quoted character at end'
+);
 
 # special case for text ending in apostrophe e.g. nuthin'
 $data_to_encode .= q{?'};
@@ -67,19 +70,25 @@ cmp_ok(
 
 $data_to_encode =~ s/\?'$//;
 @segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
-cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
-    'IMD segment deals with apostrophe preceded by quoted ?  at end' );
+cmp_ok(
+    $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
+    'IMD segment deals with apostrophe preceded by quoted ?  at end'
+);
 
 my $isbn = '3540556753';
 my $ean  = '9783540556756';
 
 my $seg = Koha::Edifact::Order::additional_product_id($isbn);
-cmp_ok( $seg, 'eq', q{PIA+5+3540556753:IB'},
-    'isbn correctly encoded in PIA segment' );
+cmp_ok(
+    $seg, 'eq', q{PIA+5+3540556753:IB'},
+    'isbn correctly encoded in PIA segment'
+);
 
 $seg = Koha::Edifact::Order::additional_product_id($ean);
-cmp_ok( $seg, 'eq', q{PIA+5+9783540556756:EN'},
-    'ean correctly encoded in PIA segment' );
+cmp_ok(
+    $seg, 'eq', q{PIA+5+9783540556756:EN'},
+    'ean correctly encoded in PIA segment'
+);
 
 my $orderfields = { budget_code => 'BUDGET', };
 my @items       = (
@@ -122,5 +131,7 @@ cmp_ok(
     'First part of split Gir field OK'
 );
 
-cmp_ok( $gsegs[3], 'eq', q{GIR+002+S_I:LVT},
-    'Second part of split GIR field OK' );
+cmp_ok(
+    $gsegs[3], 'eq', q{GIR+002+S_I:LVT},
+    'Second part of split GIR field OK'
+);

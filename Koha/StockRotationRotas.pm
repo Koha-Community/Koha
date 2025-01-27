@@ -55,7 +55,7 @@ See Koha::StockRotationRota->investigate for details.
 =cut
 
 sub investigate {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $report = {
         actionable     => 0,
@@ -75,7 +75,7 @@ sub investigate {
     };
 
     while ( my $rota = $self->next ) {
-        $report = $rota->investigate($report)
+        $report = $rota->investigate($report);
     }
 
     return $report;

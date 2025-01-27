@@ -21,7 +21,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 
 use C4::RotatingCollections;
@@ -30,15 +30,15 @@ my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "rotating_collections/editCollections.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { tools => 'rotating_collections' },
+        template_name => "rotating_collections/editCollections.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { tools => 'rotating_collections' },
     }
 );
 
 my $action = $query->param('action');
-my $op = $query->param('op');
+my $op     = $query->param('op');
 $template->param( op => $op );
 
 # Create new Collection
@@ -46,8 +46,7 @@ if ( $op eq 'cud-create' ) {
     my $title       = $query->param('title');
     my $description = $query->param('description');
 
-    my ( $createdSuccessfully, $errorCode, $errorMessage ) =
-      CreateCollection( $title, $description );
+    my ( $createdSuccessfully, $errorCode, $errorMessage ) = CreateCollection( $title, $description );
 
     $template->param(
         previousActionCreate => 1,
@@ -56,8 +55,7 @@ if ( $op eq 'cud-create' ) {
 
     if ($createdSuccessfully) {
         $template->param( createSuccess => 1 );
-    }
-    else {
+    } else {
         $template->param( createFailure  => 1 );
         $template->param( failureMessage => $errorMessage );
     }
@@ -71,8 +69,7 @@ elsif ( $op eq 'cud-delete' ) {
     $template->param( previousActionDelete => 1 );
     if ($success) {
         $template->param( deleteSuccess => 1 );
-    }
-    else {
+    } else {
         $template->param( deleteFailure  => 1 );
         $template->param( failureMessage => $errorMessage );
     }
@@ -96,8 +93,7 @@ elsif ( $op eq 'cud-update' ) {
     my $title       = $query->param('title');
     my $description = $query->param('description');
 
-    my ( $createdSuccessfully, $errorCode, $errorMessage ) =
-      UpdateCollection( $colId, $title, $description );
+    my ( $createdSuccessfully, $errorCode, $errorMessage ) = UpdateCollection( $colId, $title, $description );
 
     $template->param(
         previousActionUpdate => 1,
@@ -106,8 +102,7 @@ elsif ( $op eq 'cud-update' ) {
 
     if ($createdSuccessfully) {
         $template->param( updateSuccess => 1 );
-    }
-    else {
+    } else {
         $template->param( updateFailure  => 1 );
         $template->param( failureMessage => $errorMessage );
     }

@@ -20,7 +20,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 NAME
 
 neworderempty.pl
@@ -68,13 +67,13 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth    qw( get_template_and_user );
 use C4::Budgets qw( GetBudget GetBudgetHierarchy CanUserUseBudget );
 
 use C4::Acquisition qw( GetOrder GetBasket FillWithDefaultValues GetOrderUsers );
-use C4::Contract qw( GetContract );
+use C4::Contract    qw( GetContract );
 use C4::Suggestions qw( GetSuggestion GetSuggestionInfo );
-use C4::Biblio qw(
+use C4::Biblio      qw(
     AddBiblio
     GetBiblioData
     GetMarcFromKohaField
@@ -126,16 +125,16 @@ my $op  = $input->param('op') || q{};
 
 our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
-        template_name   => "acqui/neworderempty.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => 'order_manage' },
+        template_name => "acqui/neworderempty.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
     }
 );
 
 our $marcflavour = C4::Context->preference('marcflavour');
 
-if(!$basketno) {
+if ( !$basketno ) {
     my $order = GetOrder($ordernumber);
     $basketno = $order->{'basketno'};
 }
@@ -146,8 +145,8 @@ $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
 $data = GetOrder($ordernumber) if $ordernumber;
 
-output_and_exit( $input, $cookie, $template, 'unknown_basket') unless $basketobj;
-output_and_exit( $input, $cookie, $template, 'unknown_vendor') unless $bookseller;
+output_and_exit( $input, $cookie, $template, 'unknown_basket' ) unless $basketobj;
+output_and_exit( $input, $cookie, $template, 'unknown_vendor' ) unless $bookseller;
 
 $template->param(
     ordernumber  => $ordernumber,
@@ -159,52 +158,54 @@ $template->param(
 output_and_exit( $input, $cookie, $template, 'order_cannot_be_edited' )
     if $ordernumber and ( $basketobj->closedate || $data->{orderstatus} eq "complete" );
 
-my $contract = GetContract({
-    contractnumber => $basket->{contractnumber}
-});
+my $contract = GetContract( { contractnumber => $basket->{contractnumber} } );
 
-my $listprice=0; # the price, that can be in MARC record if we have one
-if ( $ordernumber eq '' and defined $breedingid ){
-#we want to import from the breeding reservoir (from a z3950 search)
-    my ($marcrecord, $encoding) = MARCfindbreeding($breedingid);
+my $listprice = 0;    # the price, that can be in MARC record if we have one
+if ( $ordernumber eq '' and defined $breedingid ) {
+
+    #we want to import from the breeding reservoir (from a z3950 search)
+    my ( $marcrecord, $encoding ) = MARCfindbreeding($breedingid);
     die("Could not find the selected record in the reservoir, bailing") unless $marcrecord;
 
     # Remove all the items (952) from the imported record
-    foreach my $item ($marcrecord->field('952')) {
+    foreach my $item ( $marcrecord->field('952') ) {
         $marcrecord->delete_field($item);
     }
 
     my $duplicatetitle;
-#look for duplicates
-    ($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord);
-    if($biblionumber && $op ne 'cud-use_external_source') {
+
+    #look for duplicates
+    ( $biblionumber, $duplicatetitle ) = FindDuplicate($marcrecord);
+    if ( $biblionumber && $op ne 'cud-use_external_source' ) {
+
         #if duplicate record found and user did not decide yet, first warn user
         #and let them choose between using a new record or an existing record
         Load_Duplicate($duplicatetitle);
         exit;
     }
+
     #from this point: add a new record
-    C4::Acquisition::FillWithDefaultValues($marcrecord, {only_mandatory => 1});
+    C4::Acquisition::FillWithDefaultValues( $marcrecord, { only_mandatory => 1 } );
     my $bibitemnum;
     ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $frameworkcode );
+
     # get the price if there is one.
-    $listprice = GetMarcPrice($marcrecord, $marcflavour);
+    $listprice = GetMarcPrice( $marcrecord, $marcflavour );
     SetImportRecordStatus( $breedingid, 'imported' );
 
     SetMatchedBiblionumber( $breedingid, $biblionumber );
 }
 
-
-
 my ( @order_user_ids, @order_users, @catalog_details );
-our $tagslib = GetMarcStructure(1, 'ACQ', { unsafe => 1 } );
-my ( $itemnumber_tag, $itemnumber_subtag ) = GetMarcFromKohaField( 'items.itemnumber' );
+our $tagslib = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
+my ( $itemnumber_tag, $itemnumber_subtag ) = GetMarcFromKohaField('items.itemnumber');
 if ( not $ordernumber ) {    # create order
     $new = 'yes';
 
-    if ( $biblionumber ) {
+    if ($biblionumber) {
         $data = GetBiblioData($biblionumber);
     }
+
     # get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
     # otherwise, retrieve suggestion information.
     elsif ($suggestionid) {
@@ -219,52 +220,46 @@ if ( not $ordernumber ) {    # create order
         foreach my $tag ( sort keys %{$tagslib} ) {
             next if $tag eq '';
             next if $tag eq $itemnumber_tag;    # skip items fields
-            my $index_tag = int(rand(1000000));
+            my $index_tag = int( rand(1000000) );
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
                 my $mss = $tagslib->{$tag}{$subfield};
                 next if IsMarcStructureInternal($mss);
                 next if $mss->{tab} == -1;
                 my $value = $mss->{defaultvalue};
 
-                if ($suggestionid and $mss->{kohafield}) {
+                if ( $suggestionid and $mss->{kohafield} ) {
+
                     # Reading suggestion info if ordering from a suggestion
                     if ( $mss->{kohafield} eq 'biblio.title' ) {
                         $value = $data->{title};
-                    }
-                    elsif ( $mss->{kohafield} eq 'biblio.author' ) {
+                    } elsif ( $mss->{kohafield} eq 'biblio.author' ) {
                         $value = $data->{author};
-                    }
-                    elsif ( $mss->{kohafield} eq 'biblioitems.publishercode' ) {
+                    } elsif ( $mss->{kohafield} eq 'biblioitems.publishercode' ) {
                         $value = $data->{publishercode};
-                    }
-                    elsif ( $mss->{kohafield} eq 'biblioitems.editionstatement' ) {
+                    } elsif ( $mss->{kohafield} eq 'biblioitems.editionstatement' ) {
                         $value = $data->{editionstatement};
-                    }
-                    elsif ( $mss->{kohafield} eq 'biblioitems.publicationyear' ) {
+                    } elsif ( $mss->{kohafield} eq 'biblioitems.publicationyear' ) {
                         $value = $data->{publicationyear};
-                    }
-                    elsif ( $mss->{kohafield} eq 'biblioitems.isbn' ) {
+                    } elsif ( $mss->{kohafield} eq 'biblioitems.isbn' ) {
                         $value = $data->{isbn};
-                    }
-                    elsif ( $mss->{kohafield} eq 'biblio.seriestitle' ) {
+                    } elsif ( $mss->{kohafield} eq 'biblio.seriestitle' ) {
                         $value = $data->{seriestitle};
                     }
                 }
 
                 push @catalog_details, $biblio_form_builder->generate_subfield_form(
                     {
-                        tag => $tag,
-                        subfield => $subfield,
-                        value => $value,
+                        tag       => $tag,
+                        subfield  => $subfield,
+                        value     => $value,
                         index_tag => $index_tag,
-                        tagslib => $tagslib,
+                        tagslib   => $tagslib,
                     }
                 );
             }
         }
     }
-}
-else {    #modify order
+} else {    #modify order
     $budget_id = $data->{'budget_id'};
 
     $template->param(
@@ -276,8 +271,9 @@ else {    #modify order
 
     @order_user_ids = GetOrderUsers($ordernumber);
     foreach my $order_user_id (@order_user_ids) {
+
         # FIXME Could be improved with search -in
-        my $order_patron = Koha::Patrons->find( $order_user_id );
+        my $order_patron = Koha::Patrons->find($order_user_id);
         push @order_users, $order_patron if $order_patron;
     }
 }
@@ -288,8 +284,8 @@ $biblionumber = $data->{biblionumber};
 # - no ordernumber, no biblionumber: from a suggestion, from a new order
 if ( not $ordernumber or $biblionumber ) {
     if ( C4::Context->preference('UseACQFrameworkForBiblioRecords') ) {
-        my $biblio = Koha::Biblios->find($biblionumber);
-        my $record = $biblio ? $biblio->metadata->record : undef;
+        my $biblio              = Koha::Biblios->find($biblionumber);
+        my $record              = $biblio ? $biblio->metadata->record : undef;
         my $biblio_form_builder = Koha::UI::Form::Builder::Biblio->new(
             {
                 biblionumber => $biblionumber,
@@ -297,24 +293,25 @@ if ( not $ordernumber or $biblionumber ) {
         );
         foreach my $tag ( sort keys %{$tagslib} ) {
             next if $tag eq '';
-            next if $tag eq $itemnumber_tag; # skip items fields
-            my @fields = $biblionumber ? $record->field($tag) : ();
-            my $index_tag = int(rand(1000000));
+            next if $tag eq $itemnumber_tag;    # skip items fields
+            my @fields    = $biblionumber ? $record->field($tag) : ();
+            my $index_tag = int( rand(1000000) );
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
                 my $mss = $tagslib->{$tag}{$subfield};
                 next if IsMarcStructureInternal($mss);
                 next if $mss->{tab} == -1;
+
                 # We only need to display the values
-                my $value = join '; ', map { $tag < 10 ? $_->data : $_->subfield( $subfield ) } @fields;
-                if ( $value ) {
+                my $value = join '; ', map { $tag < 10 ? $_->data : $_->subfield($subfield) } @fields;
+                if ($value) {
                     push @catalog_details, $biblio_form_builder->generate_subfield_form(
                         {
-                            tag => $tag,
-                            subfield => $subfield,
-                            value => $value,
+                            tag       => $tag,
+                            subfield  => $subfield,
+                            value     => $value,
                             index_tag => $index_tag,
-                            record => $record,
-                            tagslib => $tagslib,
+                            record    => $record,
+                            tagslib   => $tagslib,
                         }
                     );
                 }
@@ -331,30 +328,31 @@ $suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # build bookfund list
-my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
+my $patron = Koha::Patrons->find($loggedinuser)->unblessed;
 
-my $budget =  GetBudget($budget_id);
+my $budget = GetBudget($budget_id);
+
 # build budget list
 my $budget_loop = [];
-my $budgets = GetBudgetHierarchy;
-foreach my $r (@{$budgets}) {
-    next unless (CanUserUseBudget($patron, $r, $userflags));
+my $budgets     = GetBudgetHierarchy;
+foreach my $r ( @{$budgets} ) {
+    next unless ( CanUserUseBudget( $patron, $r, $userflags ) );
     push @{$budget_loop}, {
-        b_id  => $r->{budget_id},
-        b_txt => $r->{budget_name},
+        b_id            => $r->{budget_id},
+        b_txt           => $r->{budget_name},
         b_sort1_authcat => $r->{'sort1_authcat'},
         b_sort2_authcat => $r->{'sort2_authcat'},
-        b_active => $r->{budget_period_active},
-        b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
-        b_level => $r->{budget_level},
+        b_active        => $r->{budget_period_active},
+        b_sel           => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
+        b_level         => $r->{budget_level},
     };
 }
-
 
 $template->param( sort1 => $data->{'sort1'} );
 $template->param( sort2 => $data->{'sort2'} );
 
 if ( $basketobj->effective_create_items eq 'ordering' ) {
+
     # Check if ACQ framework exists
     my $marc = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
     unless ($marc) {
@@ -369,33 +367,31 @@ if ( $basketobj->effective_create_items eq 'ordering' ) {
 my @itemtypes = Koha::ItemTypes->search( {}, { order_by => { -asc => "description" } } )->as_list;
 
 if ( defined $from_subscriptionid ) {
+
     # Get the last received order for this subscription
     my $lastOrderReceived = Koha::Acquisition::Orders->search(
         {
             subscriptionid => $from_subscriptionid,
             datereceived   => { '!=' => undef }
         },
-        {
-            order_by =>
-              [ { -desc => 'datereceived' }, { -desc => 'ordernumber' } ]
-        }
+        { order_by => [ { -desc => 'datereceived' }, { -desc => 'ordernumber' } ] }
     );
     if ( $lastOrderReceived->count ) {
-        $lastOrderReceived = $lastOrderReceived->next->unblessed; # FIXME We should send the object to the template
+        $lastOrderReceived      = $lastOrderReceived->next->unblessed; # FIXME We should send the object to the template
         $budget_id              = $lastOrderReceived->{budgetid};
         $data->{listprice}      = $lastOrderReceived->{listprice};
         $data->{uncertainprice} = $lastOrderReceived->{uncertainprice};
-        $data->{tax_rate}       = $lastOrderReceived->{tax_rate_on_ordering};
-        $data->{discount}       = $lastOrderReceived->{discount};
-        $data->{rrp}            = $lastOrderReceived->{rrp};
-        $data->{replacementprice} = $lastOrderReceived->{replacementprice};
-        $data->{ecost}          = $lastOrderReceived->{ecost};
-        $data->{quantity}       = $lastOrderReceived->{quantity};
-        $data->{unitprice}       = $lastOrderReceived->{unitprice};
+        $data->{tax_rate}           = $lastOrderReceived->{tax_rate_on_ordering};
+        $data->{discount}           = $lastOrderReceived->{discount};
+        $data->{rrp}                = $lastOrderReceived->{rrp};
+        $data->{replacementprice}   = $lastOrderReceived->{replacementprice};
+        $data->{ecost}              = $lastOrderReceived->{ecost};
+        $data->{quantity}           = $lastOrderReceived->{quantity};
+        $data->{unitprice}          = $lastOrderReceived->{unitprice};
         $data->{order_internalnote} = $lastOrderReceived->{order_internalnote};
         $data->{order_vendornote}   = $lastOrderReceived->{order_vendornote};
-        $data->{sort1}          = $lastOrderReceived->{sort1};
-        $data->{sort2}          = $lastOrderReceived->{sort2};
+        $data->{sort1}              = $lastOrderReceived->{sort1};
+        $data->{sort2}              = $lastOrderReceived->{sort2};
 
         $basket = GetBasket( $input->param('basketno') );
     }
@@ -408,46 +404,44 @@ if ( defined $from_subscriptionid ) {
 }
 
 # Find the items.barcode subfield for barcode validations
-my (undef, $barcode_subfield) = GetMarcFromKohaField( 'items.barcode' );
-
+my ( undef, $barcode_subfield ) = GetMarcFromKohaField('items.barcode');
 
 # get option values for TaxRates syspref
-my @gst_values = map {
-    option => $_ + 0.0
-}, split( '\|', C4::Context->preference("TaxRates") );
+my @gst_values = map { option => $_ + 0.0 }, split( '\|', C4::Context->preference("TaxRates") );
 
-my $quantity = $input->param('rr_quantity_to_order') ?
-      $input->param('rr_quantity_to_order') :
-      $data->{'quantity'};
+my $quantity =
+      $input->param('rr_quantity_to_order')
+    ? $input->param('rr_quantity_to_order')
+    : $data->{'quantity'};
 $quantity //= 0;
 
 # Get additional fields
 my $record;
-my @additional_fields = Koha::AdditionalFields->search({ tablename => 'aqorders' })->as_list;
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'aqorders' } )->as_list;
 my $additional_field_values;
 my $items;
 if ($ordernumber) {
     my $order = Koha::Acquisition::Orders->find($ordernumber);
     $additional_field_values = $order->get_additional_field_values_for_template;
-    $items = $order->items;
-} elsif ( $biblionumber ) {
+    $items                   = $order->items;
+} elsif ($biblionumber) {
     my %additional_field_values;
     foreach my $af (@additional_fields) {
         my @marc_field_values;
-        if ($af->marcfield) {
+        if ( $af->marcfield ) {
             $record //= Koha::Biblios->find($biblionumber)->metadata->record;
-            my ($field, $subfield) = split /\$/, $af->marcfield;
+            my ( $field, $subfield ) = split /\$/, $af->marcfield;
             push @marc_field_values, $record->subfield( $field, $subfield ) if $record->subfield( $field, $subfield );
             $additional_field_values{ $af->id } = \@marc_field_values;
         }
     }
-    $additional_field_values = \%additional_field_values
+    $additional_field_values = \%additional_field_values;
 }
 
 $template->param(
-    additional_fields => \@additional_fields,
+    additional_fields       => \@additional_fields,
     additional_field_values => $additional_field_values,
-    items => $items,
+    items                   => $items,
 );
 
 # fill template
@@ -520,7 +514,6 @@ $template->param(
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
-
 =head2 MARCfindbreeding
 
   $record = MARCfindbreeding($breedingid);
@@ -533,12 +526,13 @@ Returns as second parameter the character encoding.
 =cut
 
 sub MARCfindbreeding {
-    my ( $id ) = @_;
-    my ($marc, $encoding) = GetImportRecordMarc($id);
+    my ($id) = @_;
+    my ( $marc, $encoding ) = GetImportRecordMarc($id);
+
     # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
-        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField( 'biblioitems.isbn' );
+        my ( $isbnfield, $isbnsubfield ) = GetMarcFromKohaField('biblioitems.isbn');
         if ( $record->field($isbnfield) ) {
             foreach my $field ( $record->field($isbnfield) ) {
                 foreach my $subfield ( $field->subfield($isbnsubfield) ) {
@@ -548,10 +542,11 @@ sub MARCfindbreeding {
                 }
             }
         }
+
         # fix the unimarc 100 coded field (with unicode information)
-        if ($marcflavour eq 'UNIMARC' && $record->subfield(100,'a')) {
-            my $f100a=$record->subfield(100,'a');
-            my $f100 = $record->field(100);
+        if ( $marcflavour eq 'UNIMARC' && $record->subfield( 100, 'a' ) ) {
+            my $f100a    = $record->subfield( 100, 'a' );
+            my $f100     = $record->field(100);
             my $f100temp = $f100->as_string;
             $record->delete_field($f100);
             if ( length($f100temp) > 28 ) {
@@ -561,19 +556,18 @@ sub MARCfindbreeding {
                 $record->insert_fields_ordered($f100);
             }
         }
-        
-        if ( !defined(ref($record)) ) {
+
+        if ( !defined( ref($record) ) ) {
             return -1;
-        }
-        else {
+        } else {
+
             # normalize author : probably UNIMARC specific...
             if (    C4::Context->preference("z3950NormalizeAuthor")
                 and C4::Context->preference("z3950AuthorAuthFields") )
             {
-                my ( $tag, $subfield ) = GetMarcFromKohaField( "biblio.author" );
+                my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author");
 
-                my $auth_fields =
-                C4::Context->preference("z3950AuthorAuthFields");
+                my $auth_fields = C4::Context->preference("z3950AuthorAuthFields");
                 my @auth_fields = split /,/, $auth_fields;
                 my $field;
 
@@ -583,15 +577,13 @@ sub MARCfindbreeding {
                         my $subfieldcode  = shift @$tmpfield;
                         my $subfieldvalue = shift @$tmpfield;
                         if ($field) {
-                            $field->add_subfields(
-                                "$subfieldcode" => $subfieldvalue )
-                            if ( $subfieldcode ne $subfield );
-                        }
-                        else {
-                            $field =
-                            MARC::Field->new( $tag, "", "",
-                                $subfieldcode => $subfieldvalue )
-                            if ( $subfieldcode ne $subfield );
+                            $field->add_subfields( "$subfieldcode" => $subfieldvalue )
+                                if ( $subfieldcode ne $subfield );
+                        } else {
+                            $field = MARC::Field->new(
+                                $tag, "", "",
+                                $subfieldcode => $subfieldvalue
+                            ) if ( $subfieldcode ne $subfield );
                         }
                     }
                 }
@@ -604,14 +596,9 @@ sub MARCfindbreeding {
                     my $number    = $record->field($fieldtag)->subfield('d');
                     if ($title) {
                         $field->add_subfields(
-                                "$subfield" => ucfirst($title) . " "
-                            . ucfirst($firstname) . " "
-                            . $number );
-                    }
-                    else {
-                        $field->add_subfields(
-                            "$subfield" => ucfirst($firstname) . ", "
-                            . ucfirst($lastname) );
+                            "$subfield" => ucfirst($title) . " " . ucfirst($firstname) . " " . $number );
+                    } else {
+                        $field->add_subfields( "$subfield" => ucfirst($firstname) . ", " . ucfirst($lastname) );
                     }
                 }
                 $record->insert_fields_ordered($field);
@@ -623,24 +610,24 @@ sub MARCfindbreeding {
 }
 
 sub Load_Duplicate {
-  my ($duplicatetitle)= @_;
-  ($template, $loggedinuser, $cookie) = get_template_and_user(
-    {
-        template_name   => "acqui/neworderempty_duplicate.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => 'order_manage' },
-    }
-  );
+    my ($duplicatetitle) = @_;
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "acqui/neworderempty_duplicate.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { acquisition => 'order_manage' },
+        }
+    );
 
-  $template->param(
-    biblionumber        => $biblionumber,
-    basketno            => $basketno,
-    booksellerid        => $basket->{'booksellerid'},
-    breedingid          => $breedingid,
-    duplicatetitle      => $duplicatetitle,
-    (uc(C4::Context->preference("marcflavour"))) => 1
-  );
+    $template->param(
+        biblionumber                                     => $biblionumber,
+        basketno                                         => $basketno,
+        booksellerid                                     => $basket->{'booksellerid'},
+        breedingid                                       => $breedingid,
+        duplicatetitle                                   => $duplicatetitle,
+        ( uc( C4::Context->preference("marcflavour") ) ) => 1
+    );
 
-  output_html_with_http_headers $input, $cookie, $template->output;
+    output_html_with_http_headers $input, $cookie, $template->output;
 }

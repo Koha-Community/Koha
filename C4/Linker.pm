@@ -62,20 +62,17 @@ sub new {
     while ( my ( $key, $value ) = each %$param ) {
         if ( $key eq 'auth_limit' && $value ) {
             my $dbh = C4::Context->dbh;
-            my $sql =
-              "SELECT authid FROM auth_header WHERE $value ORDER BY authid ASC";
+            my $sql = "SELECT authid FROM auth_header WHERE $value ORDER BY authid ASC";
             my $sth = $dbh->prepare($sql);
             $sth->execute();
             while ( my ($authid) = $sth->fetchrow_array() ) {
                 push @{ $self->{'auths_to_link'} }, $authid;
             }
-        }
-        elsif ( $key eq 'options' && $value ) {
+        } elsif ( $key eq 'options' && $value ) {
             foreach my $opt ( split( /\|/, $value ) ) {
                 $self->{$opt} = 1;
             }
-        }
-        elsif ($value) {
+        } elsif ($value) {
             $self->{$key} = $value;
         }
     }
@@ -96,8 +93,7 @@ sub _handle_auth_limit {
     my $self   = shift;
     my $authid = shift;
 
-    if ( defined $self->{'auths_to_link'} && defined $authid && !grep { $_ == $authid }
-        @{ $self->{'auths_to_link'} } )
+    if ( defined $self->{'auths_to_link'} && defined $authid && !grep { $_ == $authid } @{ $self->{'auths_to_link'} } )
     {
         undef $authid;
     }

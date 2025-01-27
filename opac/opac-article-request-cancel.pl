@@ -29,21 +29,20 @@ my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-account.tt",
-        query           => $query,
-        type            => "opac",
+        template_name => "opac-account.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
 my $id = $query->param('id');
 
-if ( $id ) {
-    my $ar = Koha::ArticleRequests->find( $id );
+if ($id) {
+    my $ar = Koha::ArticleRequests->find($id);
     if ( !$ar ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl");
         exit;
-    }
-    elsif ( $ar->borrowernumber != $borrowernumber ) {
+    } elsif ( $ar->borrowernumber != $borrowernumber ) {
         print $query->redirect("/cgi-bin/koha/errors/403.pl");
         exit;
     }

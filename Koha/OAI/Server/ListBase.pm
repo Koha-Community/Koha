@@ -36,50 +36,51 @@ use C4::OAI::Sets qw( GetOAISetBySpec GetOAISetsBiblio );
 use MARC::File::XML;
 
 sub GetRecords {
-    my ($class, $self, $repository, $metadata, %args) = @_;
+    my ( $class, $self, $repository, $metadata, %args ) = @_;
 
-    my $token = Koha::OAI::Server::ResumptionToken->new( %args );
-    my $dbh = C4::Context->dbh;
+    my $token = Koha::OAI::Server::ResumptionToken->new(%args);
+    my $dbh   = C4::Context->dbh;
     my $set;
     if ( defined $token->{'set'} ) {
-        $set = GetOAISetBySpec($token->{'set'});
+        $set = GetOAISetBySpec( $token->{'set'} );
     }
-    my $deleted = defined $token->{deleted} ? $token->{deleted} : 0;
-    my $max = $repository->{koha_max_count};
-    my $count = 0;
-    my $format = $args{metadataPrefix} || $token->{metadata_prefix};
-    my $include_items = $repository->items_included( $format );
-    my $from = $token->{from_arg};
-    my $until = $token->{until_arg};
-    my $next_id = $token->{next_id};
+    my $deleted       = defined $token->{deleted} ? $token->{deleted} : 0;
+    my $max           = $repository->{koha_max_count};
+    my $count         = 0;
+    my $format        = $args{metadataPrefix} || $token->{metadata_prefix};
+    my $include_items = $repository->items_included($format);
+    my $from          = $token->{from_arg};
+    my $until         = $token->{until_arg};
+    my $next_id       = $token->{next_id};
 
     # Since creating a union of normal and deleted record tables would be a heavy
     # operation in a large database, build results in two stages:
     # first deleted records ($deleted == 1), then normal records ($deleted == 0)
-    STAGELOOP:
-    for ( ; $deleted >= 0; $deleted-- ) {
+STAGELOOP:
+    for ( ; $deleted >= 0 ; $deleted-- ) {
         my $table = $deleted ? 'deletedbiblio_metadata' : 'biblio_metadata';
 
         my @part_bind_params = ($next_id);
 
         # Note: "main" is alias of the main table in the SELECT statement to avoid ambiquity with joined tables
         my $where = "main.biblionumber >= ?";
-        if ( $from ) {
+        if ($from) {
             $where .= " AND main.timestamp >= ?";
             push @part_bind_params, $from;
         }
-        if ( $until ) {
+        if ($until) {
             $where .= " AND main.timestamp <= ?";
             push @part_bind_params, $until;
         }
         if ( defined $set ) {
-            $where .= " AND main.biblionumber in (SELECT osb.biblionumber FROM oai_sets_biblios osb WHERE osb.set_id = ?)";
+            $where .=
+                " AND main.biblionumber in (SELECT osb.biblionumber FROM oai_sets_biblios osb WHERE osb.set_id = ?)";
             push @part_bind_params, $set->{'id'};
         }
 
         my @bind_params = @part_bind_params;
 
-        my $order_limit = 'ORDER BY main.biblionumber LIMIT ' . ($max + 1);
+        my $order_limit = 'ORDER BY main.biblionumber LIMIT ' . ( $max + 1 );
 
         my $sql;
         my $ts_sql;
@@ -88,7 +89,7 @@ sub GetRecords {
         # Then merge them, sort them and take the required number of them from the resulting list.
         # This may seem counter-intuitive as in worst case we fetch 3 times the biblionumbers needed,
         # but avoiding joins or subqueries makes this so much faster that it does not matter.
-        if ( $include_items && !$deleted )  {
+        if ( $include_items && !$deleted ) {
             $sql = "
                 (SELECT biblionumber
                 FROM $table main
@@ -122,41 +123,41 @@ sub GetRecords {
             $ts_sql = "SELECT max(timestamp) FROM $table WHERE biblionumber = ?";
         }
 
-        my $sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
-        my $ts_sth = $dbh->prepare( $ts_sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
+        my $sth    = $dbh->prepare($sql)    || die( 'Could not prepare statement: ' . $dbh->errstr );
+        my $ts_sth = $dbh->prepare($ts_sql) || die( 'Could not prepare statement: ' . $dbh->errstr );
 
-        $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
-        foreach my $row (@{ $sth->fetchall_arrayref() }) {
+        $sth->execute(@bind_params) || die( 'Could not execute statement: ' . $sth->errstr );
+        foreach my $row ( @{ $sth->fetchall_arrayref() } ) {
             my $biblionumber = $row->[0];
             $count++;
             if ( $count > $max ) {
                 $self->resumptionToken(
                     Koha::OAI::Server::ResumptionToken->new(
-                        metadataPrefix  => $token->{metadata_prefix},
-                        from            => $token->{from},
-                        until           => $token->{until},
-                        cursor          => $token->{cursor} + $max,
-                        set             => $token->{set},
-                        deleted         => $deleted,
-                        next_id         => $biblionumber
+                        metadataPrefix => $token->{metadata_prefix},
+                        from           => $token->{from},
+                        until          => $token->{until},
+                        cursor         => $token->{cursor} + $max,
+                        set            => $token->{set},
+                        deleted        => $deleted,
+                        next_id        => $biblionumber
                     )
                 );
                 last STAGELOOP;
             }
             my @params = ($biblionumber);
             if ( $include_items && !$deleted ) {
-                push @params, $deleted ? ( $biblionumber ) : ( $biblionumber, $biblionumber );
+                push @params, $deleted ? ($biblionumber) : ( $biblionumber, $biblionumber );
             }
-            $ts_sth->execute( @params ) || die( 'Could not execute statement: ' . $ts_sth->errstr );
+            $ts_sth->execute(@params) || die( 'Could not execute statement: ' . $ts_sth->errstr );
 
             my ($timestamp) = $ts_sth->fetchrow;
 
             my $oai_sets = GetOAISetsBiblio($biblionumber);
             my @setSpecs;
-            foreach ( @$oai_sets ) {
+            foreach (@$oai_sets) {
                 push @setSpecs, $_->{spec};
             }
-            if ( $metadata ) {
+            if ($metadata) {
                 my ( $marcxml, $marcxml_error );
                 ( $marcxml, $marcxml_error ) = $repository->get_biblio_marcxml( $biblionumber, $format ) if !$deleted;
                 my %params;
@@ -171,7 +172,7 @@ sub GetRecords {
                         )
                     );
                 } elsif ($marcxml_error) {
-                    my $record = MARC::Record->new();
+                    my $record  = MARC::Record->new();
                     my $marcxml = $record->as_xml_record();
                     $self->record(
                         Koha::OAI::Server::Record->new(
@@ -187,6 +188,7 @@ sub GetRecords {
                     );
                 }
             } else {
+
                 #NOTE: Show a deleted record if there is no metadata
                 my $deleted_status = ($deleted) ? 'deleted' : undef;
                 if ( !$deleted_status ) {
@@ -197,13 +199,16 @@ sub GetRecords {
                 }
                 $timestamp =~ s/ /T/;
                 $timestamp .= 'Z';
-                $self->identifier( HTTP::OAI::Header->new(
-                    identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
-                    datestamp  => $timestamp,
-                    status     => $deleted_status,
-                ) );
+                $self->identifier(
+                    HTTP::OAI::Header->new(
+                        identifier => $repository->{koha_identifier} . ':' . $biblionumber,
+                        datestamp  => $timestamp,
+                        status     => $deleted_status,
+                    )
+                );
             }
         }
+
         # Reset $next_id for the next stage
         $next_id = 0;
     }

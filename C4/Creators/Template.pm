@@ -9,11 +9,10 @@ use C4::Context;
 use C4::Creators::Profile;
 use C4::Creators::Lib qw( get_unit_values );
 
-
 sub _check_params {
-    shift if $_[0] =~ m/::/; # this seems a bit hackish
-    my $given_params = {};
-    my $exit_code = 0;
+    shift if $_[0] =~ m/::/;    # this seems a bit hackish
+    my $given_params          = {};
+    my $exit_code             = 0;
     my @valid_template_params = (
         'profile_id',
         'template_code',
@@ -36,18 +35,17 @@ sub _check_params {
         'creator',
         'current_label',
     );
-    if (scalar(@_) >1) {
+    if ( scalar(@_) > 1 ) {
         $given_params = {@_};
-        foreach my $key (keys %{$given_params}) {
-            if (!(grep m/$key/, @valid_template_params)) {
-                warn sprintf('Unrecognized parameter type of "%s".', $key);
+        foreach my $key ( keys %{$given_params} ) {
+            if ( !( grep m/$key/, @valid_template_params ) ) {
+                warn sprintf( 'Unrecognized parameter type of "%s".', $key );
                 $exit_code = 1;
             }
         }
-    }
-    else {
-        if (!(grep m/$_/, @valid_template_params)) {
-            warn sprintf('Unrecognized parameter type of "%s".', $_);
+    } else {
+        if ( !( grep m/$_/, @valid_template_params ) ) {
+            warn sprintf( 'Unrecognized parameter type of "%s".', $_ );
             $exit_code = 1;
         }
     }
@@ -55,103 +53,106 @@ sub _check_params {
 }
 
 sub _conv_points {
-    my $self = shift;
-    my @unit_value = grep {$_->{'type'} eq $self->{'units'}} @{get_unit_values()};
-    $self->{'page_width'}         = $self->{'page_width'} * $unit_value[0]->{'value'};
-    $self->{'page_height'}        = $self->{'page_height'} * $unit_value[0]->{'value'};
-    $self->{'label_width'}        = $self->{'label_width'} * $unit_value[0]->{'value'};
-    $self->{'label_height'}       = $self->{'label_height'} * $unit_value[0]->{'value'};
-    $self->{'top_text_margin'}    = $self->{'top_text_margin'} * $unit_value[0]->{'value'};
-    $self->{'left_text_margin'}   = $self->{'left_text_margin'} * $unit_value[0]->{'value'};
-    $self->{'top_margin'}         = $self->{'top_margin'} * $unit_value[0]->{'value'};
-    $self->{'left_margin'}        = $self->{'left_margin'} * $unit_value[0]->{'value'};
-    $self->{'col_gap'}            = $self->{'col_gap'} * $unit_value[0]->{'value'};
-    $self->{'row_gap'}            = $self->{'row_gap'} * $unit_value[0]->{'value'};
+    my $self       = shift;
+    my @unit_value = grep { $_->{'type'} eq $self->{'units'} } @{ get_unit_values() };
+    $self->{'page_width'}       = $self->{'page_width'} * $unit_value[0]->{'value'};
+    $self->{'page_height'}      = $self->{'page_height'} * $unit_value[0]->{'value'};
+    $self->{'label_width'}      = $self->{'label_width'} * $unit_value[0]->{'value'};
+    $self->{'label_height'}     = $self->{'label_height'} * $unit_value[0]->{'value'};
+    $self->{'top_text_margin'}  = $self->{'top_text_margin'} * $unit_value[0]->{'value'};
+    $self->{'left_text_margin'} = $self->{'left_text_margin'} * $unit_value[0]->{'value'};
+    $self->{'top_margin'}       = $self->{'top_margin'} * $unit_value[0]->{'value'};
+    $self->{'left_margin'}      = $self->{'left_margin'} * $unit_value[0]->{'value'};
+    $self->{'col_gap'}          = $self->{'col_gap'} * $unit_value[0]->{'value'};
+    $self->{'row_gap'}          = $self->{'row_gap'} * $unit_value[0]->{'value'};
     return $self;
 }
 
 sub _apply_profile {
-    my $self = shift;
+    my $self    = shift;
     my $creator = shift;
-    my $profile = C4::Creators::Profile->retrieve(profile_id => $self->{'profile_id'}, creator => $creator, convert => 1);
-    $self->{'top_margin'} = $self->{'top_margin'} + $profile->get_attr('offset_vert');      # controls vertical offset
-    $self->{'left_margin'} = $self->{'left_margin'} + $profile->get_attr('offset_horz');    # controls horizontal offset
+    my $profile =
+        C4::Creators::Profile->retrieve( profile_id => $self->{'profile_id'}, creator => $creator, convert => 1 );
+    $self->{'top_margin'}   = $self->{'top_margin'} + $profile->get_attr('offset_vert');    # controls vertical offset
+    $self->{'left_margin'}  = $self->{'left_margin'} + $profile->get_attr('offset_horz');   # controls horizontal offset
     $self->{'label_height'} = $self->{'label_height'} + $profile->get_attr('creep_vert');   # controls vertical creep
-    $self->{'label_width'} = $self->{'label_width'} + $profile->get_attr('creep_horz');     # controls horizontal creep
+    $self->{'label_width'}  = $self->{'label_width'} + $profile->get_attr('creep_horz');    # controls horizontal creep
     return $self;
 }
 
 sub new {
     my $invocant = shift;
-    my $type = ref($invocant) || $invocant;
-    if (_check_params(@_) eq 1) {
+    my $type     = ref($invocant) || $invocant;
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my $self = {
-        profile_id      =>      0,
-        template_code   =>      'DEFAULT TEMPLATE',
-        template_desc   =>      'Default description',
-        page_width      =>      0,
-        page_height     =>      0,
-        label_width     =>      0,
-        label_height    =>      0,
-        top_text_margin =>      0,
-        left_text_margin =>     0,
-        top_margin      =>      0,
-        left_margin     =>      0,
-        cols            =>      0,
-        rows            =>      0,
-        col_gap         =>      0,
-        row_gap         =>      0,
-        units           =>      'POINT',
-        template_stat   =>      0,      # false if any data has changed and the db has not been updated
+        profile_id       => 0,
+        template_code    => 'DEFAULT TEMPLATE',
+        template_desc    => 'Default description',
+        page_width       => 0,
+        page_height      => 0,
+        label_width      => 0,
+        label_height     => 0,
+        top_text_margin  => 0,
+        left_text_margin => 0,
+        top_margin       => 0,
+        left_margin      => 0,
+        cols             => 0,
+        rows             => 0,
+        col_gap          => 0,
+        row_gap          => 0,
+        units            => 'POINT',
+        template_stat    => 0,                       # false if any data has changed and the db has not been updated
         @_,
     };
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
 sub retrieve {
     my $invocant = shift;
-    my %opts = @_;
-    my $type = ref($invocant) || $invocant;
-    my $query = "SELECT * FROM " . $opts{'table_name'} . " WHERE template_id = ? AND creator = ?";
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($opts{'template_id'}, $opts{'creator'});
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
+    my %opts     = @_;
+    my $type     = ref($invocant) || $invocant;
+    my $query    = "SELECT * FROM " . $opts{'table_name'} . " WHERE template_id = ? AND creator = ?";
+    my $sth      = C4::Context->dbh->prepare($query);
+    $sth->execute( $opts{'template_id'}, $opts{'creator'} );
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth->errstr );
         return -1;
     }
     my $self = $sth->fetchrow_hashref;
-    $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
-    $self = _apply_profile($self, $opts{'creator'}) if $opts{profile_id} && $self->{'profile_id'};        # don't bother if there is no profile_id
+    $self = _conv_points($self) if ( ( $opts{convert} && $opts{convert} == 1 ) || $opts{profile_id} );
+    $self = _apply_profile( $self, $opts{'creator'} )
+        if $opts{profile_id} && $self->{'profile_id'};    # don't bother if there is no profile_id
     $self->{'template_stat'} = 1;
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
 sub delete {
-    my $self = {};
-    my %opts = ();
-    my $call_type = '';
+    my $self         = {};
+    my %opts         = ();
+    my $call_type    = '';
     my @query_params = ();
-    if (ref($_[0])) {
-        $self = shift;  # check to see if this is a method call
+    if ( ref( $_[0] ) ) {
+        $self      = shift;                            # check to see if this is a method call
         $call_type = 'C4::Labels::Template->delete';
         push @query_params, $self->{'template_id'}, $self->{'creator'};
-    }
-    else {
-        %opts = @_;
+    } else {
+        %opts      = @_;
         $call_type = 'C4::Labels::Template::delete';
         push @query_params, $opts{'template_id'}, $opts{'creator'};
     }
-    if (scalar(@query_params) < 2) {   # If there is no template id or creator type then we cannot delete it
-        warn sprintf('%s : Cannot delete template as the template ID is invalid or non-existent.', $call_type) if !$query_params[0];
-        warn sprintf('%s : Cannot delete template as the creator type is invalid or non-existent.', $call_type) if !$query_params[1];
+    if ( scalar(@query_params) < 2 ) {    # If there is no template id or creator type then we cannot delete it
+        warn sprintf( '%s : Cannot delete template as the template ID is invalid or non-existent.', $call_type )
+            if !$query_params[0];
+        warn sprintf( '%s : Cannot delete template as the creator type is invalid or non-existent.', $call_type )
+            if !$query_params[1];
         return -1;
     }
     my $query = "DELETE FROM creator_templates WHERE template_id = ? AND creator = ?";
-    my $sth = C4::Context->dbh->prepare($query);
+    my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute(@query_params);
     $self->{'template_stat'} = 0;
 }
@@ -159,51 +160,50 @@ sub delete {
 sub save {
     my $self = shift;
     my %opts = @_;
-    if ($self->{'template_id'}) {        # if we have an template_id, the record exists and needs UPDATE
+    if ( $self->{'template_id'} ) {    # if we have an template_id, the record exists and needs UPDATE
         my @params;
         my $query = "UPDATE " . $opts{'table_name'} . " SET ";
-        foreach my $key (keys %{$self}) {
-            next if ($key eq 'template_id') || ($key eq 'template_stat') || ($key eq 'creator');
-            push (@params, $self->{$key});
+        foreach my $key ( keys %{$self} ) {
+            next if ( $key eq 'template_id' ) || ( $key eq 'template_stat' ) || ( $key eq 'creator' );
+            push( @params, $self->{$key} );
             $query .= "`$key`=?, ";
         }
-        $query = substr($query, 0, (length($query)-2));
-        push (@params, $self->{'template_id'}, $self->{'creator'});
+        $query = substr( $query, 0, ( length($query) - 2 ) );
+        push( @params, $self->{'template_id'}, $self->{'creator'} );
         $query .= " WHERE template_id=? AND creator=?;";
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
-        if ($sth->err) {
-            warn sprintf('Database returned the following error: %s', $sth->errstr);
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error: %s', $sth->errstr );
             return -1;
         }
         $self->{'template_stat'} = 1;
         return $self->{'template_id'};
-    }
-    else {                      # otherwise create a new record
+    } else {    # otherwise create a new record
         my @params;
-        my $query = "INSERT INTO " . $opts{'table_name'} ." (";
-        foreach my $key (keys %{$self}) {
+        my $query = "INSERT INTO " . $opts{'table_name'} . " (";
+        foreach my $key ( keys %{$self} ) {
             next if $key eq 'template_stat';
-            push (@params, $self->{$key});
+            push( @params, $self->{$key} );
             $query .= "`$key`, ";
         }
-        $query = substr($query, 0, (length($query)-2));
+        $query = substr( $query, 0, ( length($query) - 2 ) );
         $query .= ") VALUES (";
-        for (my $i=1; $i<=((scalar keys %$self) - 1); $i++) {   # key count less keys not db related...
+        for ( my $i = 1 ; $i <= ( ( scalar keys %$self ) - 1 ) ; $i++ ) {    # key count less keys not db related...
             $query .= "?,";
         }
-        $query = substr($query, 0, (length($query)-1));
+        $query = substr( $query, 0, ( length($query) - 1 ) );
         $query .= ");";
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
-        if ($sth->err) {
-            warn sprintf('Database returned the following error: %s', $sth->errstr);
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error: %s', $sth->errstr );
             return -1;
         }
-        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(template_id) FROM " . $opts{'table_name'} . ";");
+        my $sth1 = C4::Context->dbh->prepare( "SELECT MAX(template_id) FROM " . $opts{'table_name'} . ";" );
         $sth1->execute();
         my $template_id = $sth1->fetchrow_array;
-        $self->{'template_id'} = $template_id;
+        $self->{'template_id'}   = $template_id;
         $self->{'template_stat'} = 1;
         return $template_id;
     }
@@ -211,72 +211,84 @@ sub save {
 
 sub get_attr {
     my $self = shift;
-    if (_check_params(@_) eq 1) {
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my ($attr) = @_;
-    if (exists($self->{$attr})) {
+    if ( exists( $self->{$attr} ) ) {
         return $self->{$attr};
-    }
-    else {
+    } else {
         return -1;
     }
 }
 
 sub set_attr {
     my $self = shift;
-    if (_check_params(@_) eq 1) {
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my %attrs = @_;
-    foreach my $attrib (keys(%attrs)) {
+    foreach my $attrib ( keys(%attrs) ) {
         $self->{$attrib} = $attrs{$attrib};
-    };
+    }
 }
 
 sub get_label_position {
-    my ($self, $start_label) = @_;
+    my ( $self, $start_label ) = @_;
     my $current_label = $self->{'current_label'};
-    if ($start_label eq 1) {
+    if ( $start_label eq 1 ) {
         $current_label->{'row_count'} = 1;
         $current_label->{'col_count'} = 1;
-        $current_label->{'llx'} = $self->{'left_margin'};
-        $current_label->{'lly'} = ($self->{'page_height'} - $self->{'top_margin'} - $self->{'label_height'});
+        $current_label->{'llx'}       = $self->{'left_margin'};
+        $current_label->{'lly'}       = ( $self->{'page_height'} - $self->{'top_margin'} - $self->{'label_height'} );
+        $self->{'current_label'}      = $current_label;
+        return (
+            $current_label->{'row_count'}, $current_label->{'col_count'}, $current_label->{'llx'},
+            $current_label->{'lly'}
+        );
+    } else {
+        $current_label->{'row_count'} = ceil( $start_label / $self->{'cols'} );
+        $current_label->{'col_count'} = ( $start_label - ( ( $current_label->{'row_count'} - 1 ) * $self->{'cols'} ) );
+        $current_label->{'llx'} =
+            $self->{'left_margin'} +
+            ( $self->{'label_width'} * ( $current_label->{'col_count'} - 1 ) ) +
+            ( $self->{'col_gap'} * ( $current_label->{'col_count'} - 1 ) );
+        $current_label->{'lly'} =
+            $self->{'page_height'} -
+            $self->{'top_margin'} -
+            ( $self->{'label_height'} * $current_label->{'row_count'} ) -
+            ( $self->{'row_gap'} * ( $current_label->{'row_count'} - 1 ) );
         $self->{'current_label'} = $current_label;
-        return ($current_label->{'row_count'}, $current_label->{'col_count'}, $current_label->{'llx'}, $current_label->{'lly'});
-    }
-    else {
-        $current_label->{'row_count'} = ceil($start_label / $self->{'cols'});
-        $current_label->{'col_count'} = ($start_label - (($current_label->{'row_count'} - 1) * $self->{'cols'}));
-        $current_label->{'llx'} = $self->{'left_margin'} + ($self->{'label_width'} * ($current_label->{'col_count'} - 1)) + ($self->{'col_gap'} * ($current_label->{'col_count'} - 1));
-        $current_label->{'lly'} = $self->{'page_height'} - $self->{'top_margin'} - ($self->{'label_height'} * $current_label->{'row_count'}) - ($self->{'row_gap'} * ($current_label->{'row_count'} - 1));
-        $self->{'current_label'} = $current_label;
-        return ($current_label->{'row_count'}, $current_label->{'col_count'}, $current_label->{'llx'}, $current_label->{'lly'});
+        return (
+            $current_label->{'row_count'}, $current_label->{'col_count'}, $current_label->{'llx'},
+            $current_label->{'lly'}
+        );
     }
 }
 
 sub get_next_label_pos {
-    my $self = shift;
+    my $self          = shift;
     my $current_label = $self->{'current_label'};
-    my $new_page = 0;
-    if ($current_label->{'col_count'} lt $self->get_attr('cols')) {
-        $current_label->{'llx'} = ($current_label->{'llx'} + $self->get_attr('label_width') + $self->get_attr('col_gap'));
+    my $new_page      = 0;
+    if ( $current_label->{'col_count'} lt $self->get_attr('cols') ) {
+        $current_label->{'llx'} =
+            ( $current_label->{'llx'} + $self->get_attr('label_width') + $self->get_attr('col_gap') );
         $current_label->{'col_count'}++;
-    }
-    else {
+    } else {
         $current_label->{'llx'} = $self->get_attr('left_margin');
-        if ($current_label->{'row_count'} eq $self->get_attr('rows')) {
+        if ( $current_label->{'row_count'} eq $self->get_attr('rows') ) {
             $new_page = 1;
-            $current_label->{'lly'} = ($self->get_attr('page_height') - $self->get_attr('top_margin') - $self->get_attr('label_height'));
+            $current_label->{'lly'} =
+                ( $self->get_attr('page_height') - $self->get_attr('top_margin') - $self->get_attr('label_height') );
             $current_label->{'row_count'} = 1;
-        }
-        else {
-            $current_label->{'lly'} = ($current_label->{'lly'} - $self->get_attr('row_gap') - $self->get_attr('label_height'));
+        } else {
+            $current_label->{'lly'} =
+                ( $current_label->{'lly'} - $self->get_attr('row_gap') - $self->get_attr('label_height') );
             $current_label->{'row_count'}++;
         }
         $current_label->{'col_count'} = 1;
     }
-    return ($current_label->{'llx'}, $current_label->{'lly'}, $new_page);
+    return ( $current_label->{'llx'}, $current_label->{'lly'}, $new_page );
 }
 
 1;

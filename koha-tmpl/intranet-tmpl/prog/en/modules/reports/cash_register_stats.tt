@@ -10,14 +10,16 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF( do_it ) %]
-        [% t("Results") | html %] &rsaquo;
-    [% END %]
-    [% t("Cash register statistics") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF( do_it ) %]
+            [% t("Results") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Cash register statistics") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -25,7 +27,6 @@
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
-
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
@@ -48,13 +49,12 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
-
     <h1>Cash register statistics</h1>
     <form method="get" action="/cgi-bin/koha/reports/cash_register_stats.pl" id="frmCashRegister">
         <fieldset class="rows">
             <legend>Cash register statistics [% beginDate | $KohaDates %] to [% endDate | $KohaDates %]</legend>
             <ol>
-                <br>
+                <br />
                 <li>
                     <label for="from">From: </label>
                     <input type="text" size="10" id="from" name="from" value="[% beginDate | html %]" class="flatpickr" data-date_to="to" />
@@ -70,36 +70,36 @@
                     <label for="">Transaction type:</label>
                     <select name="transaction_type" id="transaction_type">
                         [% IF transaction_type == "ALL" %]
-                        <option value="ALL" selected="selected">All transactions</option>
+                            <option value="ALL" selected="selected">All transactions</option>
                         [% ELSE %]
-                        <option value="ALL">All transactions</option>
+                            <option value="ALL">All transactions</option>
                         [% END %]
 
                         [% IF transaction_type == "ACT" %]
-                        <option value="ACT" selected="selected">All payments to the library</option>
+                            <option value="ACT" selected="selected">All payments to the library</option>
                         [% ELSE %]
-                        <option value="ACT">All payments to the library</option>
+                            <option value="ACT">All payments to the library</option>
                         [% END %]
 
                         [% IF transaction_type == "FORW" %]
-                        <option value="FORW" selected="selected">Write off</option>
+                            <option value="FORW" selected="selected">Write off</option>
                         [% ELSE %]
-                        <option value="FORW">Write off</option>
+                            <option value="FORW">Write off</option>
                         [% END %]
 
                         [% FOREACH debit_type IN debit_types %]
                             [% IF transaction_type == debit_type.code %]
-                            <option value="[% debit_type.code | html %]" selected="selected">[% debit_type.description | html %]</option>
+                                <option value="[% debit_type.code | html %]" selected="selected">[% debit_type.description | html %]</option>
                             [% ELSE %]
-                            <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
+                                <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
                             [% END %]
                         [% END %]
 
                         [% FOREACH credit_type IN credit_types %]
                             [% IF transaction_type == credit_type.code %]
-                            <option value="[% credit_type.code | html %]" selected="selected">[% credit_type.description | html %]</option>
+                                <option value="[% credit_type.code | html %]" selected="selected">[% credit_type.description | html %]</option>
                             [% ELSE %]
-                            <option value="[% credit_type.code | html %]">[% credit_type.description | html %]</option>
+                                <option value="[% credit_type.code | html %]">[% credit_type.description | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -110,21 +110,21 @@
                         <option value="ALL">All</option>
                         [% FOREACH branchloo IN branchloop %]
                             [% IF ( branchloo.selected ) %]
-                            <option value="[% branchloo.branchcode | html %]" selected="selected">[% branchloo.branchname | html %]</option>
+                                <option value="[% branchloo.branchcode | html %]" selected="selected">[% branchloo.branchname | html %]</option>
                             [% ELSE %]
-                            <option value="[% branchloo.branchcode | html %]">[% branchloo.branchname | html %]</option>
+                                <option value="[% branchloo.branchcode | html %]">[% branchloo.branchname | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
                 </li>
                 [% IF Koha.Preference('UseCashRegisters') %]
-                <li>
-                    <label for="registerid">Cash register: </label>
-                    <select name="registerid" id="registerid">
-                        <option id="noregister" selected="selected" value="">-- All --</option>
-                        [% PROCESS options_for_registers registers => Registers.all( selected => registerid ) %]
-                    </select>
-                </li>
+                    <li>
+                        <label for="registerid">Cash register: </label>
+                        <select name="registerid" id="registerid">
+                            <option id="noregister" selected="selected" value="">-- All --</option>
+                            [% PROCESS options_for_registers registers => Registers.all( selected => registerid ) %]
+                        </select>
+                    </li>
                 [% END %]
             </ol>
         </fieldset>
@@ -140,64 +140,62 @@
                     <label for="outputfile">To a file:</label>
                     <input type="radio" name="output" value="file" id="outputfile" />
                     <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
-
                 </li>
             </ol>
         </fieldset>
 
         <fieldset class="action">
-        <input type="submit" value="Submit" class="btn btn-default" name="do_it" />
+            <input type="submit" value="Submit" class="btn btn-default" name="do_it" />
         </fieldset>
     </form>
 
     [% IF ( do_it ) %]
-    <div>&nbsp;</div>
-    <table id="tbl_cash_register_stats">
-        <thead>
-        <tr>
-            <th>Manager name</th>
-            <th>Patron card number</th>
-            <th>Patron name</th>
-            <th>Transaction library</th>
-            <th>Transaction date</th>
-            <th>Updated</th>
-            <th>Transaction type</th>
-            <th>Notes</th>
-            <th>Amount</th>
-            <th>Bibliographic record title</th>
-            <th>Barcode</th>
-            <th>Item type</th>
-        </tr>
-        </thead>
-        [% FOREACH loopresul IN loopresult %]
-            <tr>
-                <td>[% loopresul.mfirstname | html %] [% loopresul.msurname | html %]</td>
-                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | uri %]">[% loopresul.cardnumber | html %]</a></td>
-                <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
-                <td>[% loopresul.branchname | html %]</td>
-                <td>[% loopresul.date | $KohaDates %]</td>
-                <td>[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
-                <td>[% loopresul.type_description | html %]</td>
-                <td>[% loopresul.note | html %]</td>
-                <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | uri %]">[% loopresul.title | html %]</a></td>
-                <td>[% loopresul.barcode | html %]</td>
-                <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
-            </tr>
-        [% END %]
-        <tfoot>
-        <tr>
-            [% IF transaction_type == "ACT" %]
-            <th colspan="8" style="text-align:right;">TOTAL</th>
-            <th style="text-align:right;">[% total  | $Price %]</th>
-            <th colspan="3">&nbsp;</th>
+        <div>&nbsp;</div>
+        <table id="tbl_cash_register_stats">
+            <thead>
+                <tr>
+                    <th>Manager name</th>
+                    <th>Patron card number</th>
+                    <th>Patron name</th>
+                    <th>Transaction library</th>
+                    <th>Transaction date</th>
+                    <th>Updated</th>
+                    <th>Transaction type</th>
+                    <th>Notes</th>
+                    <th>Amount</th>
+                    <th>Bibliographic record title</th>
+                    <th>Barcode</th>
+                    <th>Item type</th>
+                </tr>
+            </thead>
+            [% FOREACH loopresul IN loopresult %]
+                <tr>
+                    <td>[% loopresul.mfirstname | html %] [% loopresul.msurname | html %]</td>
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | uri %]">[% loopresul.cardnumber | html %]</a></td>
+                    <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
+                    <td>[% loopresul.branchname | html %]</td>
+                    <td>[% loopresul.date | $KohaDates %]</td>
+                    <td>[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
+                    <td>[% loopresul.type_description | html %]</td>
+                    <td>[% loopresul.note | html %]</td>
+                    <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
+                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | uri %]">[% loopresul.title | html %]</a></td>
+                    <td>[% loopresul.barcode | html %]</td>
+                    <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
+                </tr>
             [% END %]
-        </tr>
-        </tfoot>
-    </table>
-
-    [% END %] [%# do_it %]
-
+            <tfoot>
+                <tr>
+                    [% IF transaction_type == "ACT" %]
+                        <th colspan="8" style="text-align:right;">TOTAL</th>
+                        <th style="text-align:right;">[% total  | $Price %]</th>
+                        <th colspan="3">&nbsp;</th>
+                    [% END %]
+                </tr>
+            </tfoot>
+        </table>
+    [% END %]
+    [%# do_it %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -205,52 +203,55 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         actTotal = "";
-        $(document).ready(function() {
-            $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "pageLength": 50,
-                "pagingType": "full_numbers"
-            }));
+        $(document).ready(function () {
+            $("#tbl_cash_register_stats").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    pageLength: 50,
+                    pagingType: "full_numbers",
+                })
+            );
 
-            $("#branch").on("change", function() {
-                var selectedBranch = $("#branch").children(
-                    "option:selected").val();
+            $("#branch").on("change", function () {
+                var selectedBranch = $("#branch").children("option:selected").val();
 
-                $("#registerid").children().each(function() {
-                    // default to no-register
-                    if ($(this).is("#noregister")) {
-                        $(this).prop("selected", true)
-                    }
-                    // display branch registers
-                    else if ($(this).hasClass(selectedBranch)) {
-                        $(this).prop("disabled", false);
-                        $(this).show();
-                        // default to branch default if there is one
-                        if ($(this).hasClass("default")) {
-                            $(this).prop("selected", true)
+                $("#registerid")
+                    .children()
+                    .each(function () {
+                        // default to no-register
+                        if ($(this).is("#noregister")) {
+                            $(this).prop("selected", true);
                         }
-                    }
-                    // hide non-branch registers
-                    else {
-                        $(this).hide();
-                        $(this).prop("disabled", true);
-                    }
-                });
+                        // display branch registers
+                        else if ($(this).hasClass(selectedBranch)) {
+                            $(this).prop("disabled", false);
+                            $(this).show();
+                            // default to branch default if there is one
+                            if ($(this).hasClass("default")) {
+                                $(this).prop("selected", true);
+                            }
+                        }
+                        // hide non-branch registers
+                        else {
+                            $(this).hide();
+                            $(this).prop("disabled", true);
+                        }
+                    });
             });
 
-            $('#frmCashRegister').submit(function() {
+            $("#frmCashRegister").submit(function () {
                 var isFormValid = true;
-                var alertString= _("Form not submitted because of the following problem(s)")+"\n";
+                var alertString = _("Form not submitted because of the following problem(s)") + "\n";
 
-                alertString +="-------------------------------------------------------------------\n\n";
+                alertString += "-------------------------------------------------------------------\n\n";
 
-                if ( !$('#from').val() || !$('#to').val()){
+                if (!$("#from").val() || !$("#to").val()) {
                     isFormValid = false;
                     alertString += "\n- " + _("Dates cannot be empty");
                 }
 
                 if (!isFormValid) {
-                   alert(alertString);
-                   return false;
+                    alert(alertString);
+                    return false;
                 }
             });
         });

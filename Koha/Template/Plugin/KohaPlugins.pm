@@ -62,12 +62,11 @@ sub get_plugins_opac_head {
     );
 
     my @data = ();
-    foreach my $plugin (@plugins){
+    foreach my $plugin (@plugins) {
         try {
             my $datum = $plugin->opac_head || q{};
-            push(@data,$datum);
-        }
-        catch {
+            push( @data, $datum );
+        } catch {
             warn "Error calling 'opac_head' on the " . $plugin->{class} . "plugin ($_)";
         };
     }
@@ -98,12 +97,11 @@ sub get_plugins_opac_js {
     );
 
     my @data = ();
-    foreach my $plugin (@plugins){
+    foreach my $plugin (@plugins) {
         try {
             my $datum = $plugin->opac_js || q{};
-            push(@data,$datum);
-        }
-        catch {
+            push( @data, $datum );
+        } catch {
             warn "Error calling 'opac_js' on the " . $plugin->{class} . "plugin ($_)";
         };
     }
@@ -134,12 +132,11 @@ sub get_plugins_intranet_head {
     );
 
     my @data = ();
-    foreach my $plugin (@plugins){
+    foreach my $plugin (@plugins) {
         try {
             my $datum = $plugin->intranet_head || q{};
-            push(@data,$datum);
-        }
-        catch {
+            push( @data, $datum );
+        } catch {
             warn "Error calling 'intranet_head' on the " . $plugin->{class} . "plugin ($_)";
         };
     }
@@ -170,12 +167,11 @@ sub get_plugins_intranet_js {
     );
 
     my @data = ();
-    foreach my $plugin (@plugins){
+    foreach my $plugin (@plugins) {
         try {
             my $datum = $plugin->intranet_js || q{};
-            push(@data,$datum);
-        }
-        catch {
+            push( @data, $datum );
+        } catch {
             warn "Error calling 'intranet_js' on the " . $plugin->{class} . "plugin ($_)";
         };
     }
@@ -214,15 +210,16 @@ sub get_plugins_intranet_catalog_biblio_tab {
         try {
             my @newtabs = $plugin->intranet_catalog_biblio_tab($params);
             foreach my $newtab (@newtabs) {
+
                 # Add a unique HTML id
-                my $html_id = 'tab-'. $plugin->{class} . '-' . $newtab->title;
+                my $html_id = 'tab-' . $plugin->{class} . '-' . $newtab->title;
+
                 # Using characters except ASCII letters, digits, '_', '-' and '.' may cause compatibility problems
                 $html_id =~ s/[^0-9A-Za-z]+/-/g;
                 $newtab->id($html_id);
             }
             push @$tabs, @newtabs;
-        }
-        catch {
+        } catch {
             warn "Error calling 'intranet_catalog_biblio_tab' on the " . $plugin->{class} . "plugin ($_)";
         };
     }

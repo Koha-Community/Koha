@@ -51,93 +51,94 @@ use Koha::Caches;
 use Koha::AuthorisedValueCategories;
 
 our %index_field_convert = (
-    'kw' => '',
-    'ab' => 'abstract',
-    'au' => 'author',
-    'lcn' => 'local-classification',
-    'callnum' => 'local-classification',
-    'record-type' => 'rtype',
-    'mc-rtype' => 'rtype',
-    'mus' => 'rtype',
-    'lc-card' => 'lc-card-number',
-    'sn' => 'local-number',
-    'biblionumber' => 'local-number',
-    'yr' => 'date-of-publication',
-    'pubdate' => 'date-of-publication',
-    'acqdate' => 'date-of-acquisition',
+    'kw'                      => '',
+    'ab'                      => 'abstract',
+    'au'                      => 'author',
+    'lcn'                     => 'local-classification',
+    'callnum'                 => 'local-classification',
+    'record-type'             => 'rtype',
+    'mc-rtype'                => 'rtype',
+    'mus'                     => 'rtype',
+    'lc-card'                 => 'lc-card-number',
+    'sn'                      => 'local-number',
+    'biblionumber'            => 'local-number',
+    'yr'                      => 'date-of-publication',
+    'pubdate'                 => 'date-of-publication',
+    'acqdate'                 => 'date-of-acquisition',
     'date/time-last-modified' => 'date-time-last-modified',
-    'dtlm' => 'date-time-last-modified',
-    'diss' => 'dissertation-information',
-    'nb' => 'isbn',
-    'ns' => 'issn',
-    'music-number' => 'identifier-publisher-for-music',
-    'number-music-publisher' => 'identifier-publisher-for-music',
-    'music' => 'identifier-publisher-for-music',
-    'ident' => 'identifier-standard',
-    'cpn' => 'corporate-name',
-    'cfn' => 'conference-name',
-    'pn' => 'personal-name',
-    'pb' => 'publisher',
-    'pv' => 'provider',
-    'nt' => 'note',
-    'notes' => 'note',
-    'rcn' => 'record-control-number',
-    'cni' => 'control-number-identifier',
-    'cnum' => 'control-number',
-    'su' => 'subject',
-    'su-to' => 'subject',
+    'dtlm'                    => 'date-time-last-modified',
+    'diss'                    => 'dissertation-information',
+    'nb'                      => 'isbn',
+    'ns'                      => 'issn',
+    'music-number'            => 'identifier-publisher-for-music',
+    'number-music-publisher'  => 'identifier-publisher-for-music',
+    'music'                   => 'identifier-publisher-for-music',
+    'ident'                   => 'identifier-standard',
+    'cpn'                     => 'corporate-name',
+    'cfn'                     => 'conference-name',
+    'pn'                      => 'personal-name',
+    'pb'                      => 'publisher',
+    'pv'                      => 'provider',
+    'nt'                      => 'note',
+    'notes'                   => 'note',
+    'rcn'                     => 'record-control-number',
+    'cni'                     => 'control-number-identifier',
+    'cnum'                    => 'control-number',
+    'su'                      => 'subject',
+    'su-to'                   => 'subject',
+
     #'su-geo' => 'subject',
-    'su-ut' => 'subject',
-    'ti' => 'title',
-    'se' => 'title-series',
-    'ut' => 'title-uniform',
-    'an' => 'koha-auth-number',
-    'authority-number' => 'koha-auth-number',
-    'at' => 'authtype',
-    'he' => 'heading',
-    'rank' => 'relevance',
-    'phr' => 'st-phrase',
-    'wrdl' => 'st-word-list',
-    'rt' => 'right-truncation',
-    'rtrn' => 'right-truncation',
-    'ltrn' => 'left-truncation',
-    'rltrn' => 'left-and-right',
-    'mc-itemtype' => 'itemtype',
-    'mc-ccode' => 'ccode',
-    'branch' => 'homebranch',
-    'mc-loc' => 'location',
-    'loc' => 'location',
-    'stocknumber' => 'number-local-acquisition',
-    'inv' => 'number-local-acquisition',
-    'bc' => 'barcode',
-    'mc-itype' => 'itype',
-    'aub' => 'author-personal-bibliography',
-    'auo' => 'author-in-order',
-    'ff8-22' => 'ta',
-    'aud' => 'ta',
-    'audience' => 'ta',
-    'frequency-code' => 'ff8-18',
-    'illustration-code' => 'ff8-18-21',
-    'regularity-code' => 'ff8-19',
-    'type-of-serial' => 'ff8-21',
-    'format' => 'ff8-23',
-    'conference-code' => 'ff8-29',
+    'su-ut'                 => 'subject',
+    'ti'                    => 'title',
+    'se'                    => 'title-series',
+    'ut'                    => 'title-uniform',
+    'an'                    => 'koha-auth-number',
+    'authority-number'      => 'koha-auth-number',
+    'at'                    => 'authtype',
+    'he'                    => 'heading',
+    'rank'                  => 'relevance',
+    'phr'                   => 'st-phrase',
+    'wrdl'                  => 'st-word-list',
+    'rt'                    => 'right-truncation',
+    'rtrn'                  => 'right-truncation',
+    'ltrn'                  => 'left-truncation',
+    'rltrn'                 => 'left-and-right',
+    'mc-itemtype'           => 'itemtype',
+    'mc-ccode'              => 'ccode',
+    'branch'                => 'homebranch',
+    'mc-loc'                => 'location',
+    'loc'                   => 'location',
+    'stocknumber'           => 'number-local-acquisition',
+    'inv'                   => 'number-local-acquisition',
+    'bc'                    => 'barcode',
+    'mc-itype'              => 'itype',
+    'aub'                   => 'author-personal-bibliography',
+    'auo'                   => 'author-in-order',
+    'ff8-22'                => 'ta',
+    'aud'                   => 'ta',
+    'audience'              => 'ta',
+    'frequency-code'        => 'ff8-18',
+    'illustration-code'     => 'ff8-18-21',
+    'regularity-code'       => 'ff8-19',
+    'type-of-serial'        => 'ff8-21',
+    'format'                => 'ff8-23',
+    'conference-code'       => 'ff8-29',
     'festschrift-indicator' => 'ff8-30',
-    'index-indicator' => 'ff8-31',
-    'fiction' => 'lf',
-    'fic' => 'lf',
-    'literature-code' => 'lf',
-    'biography' => 'bio',
-    'ff8-34' => 'bio',
-    'biography-code' => 'bio',
-    'l-format' => 'ff7-01-02',
-    'lex' => 'lexile-number',
-    'hi' => 'host-item-number',
-    'itu' => 'index-term-uncontrolled',
-    'itg' => 'index-term-genre',
+    'index-indicator'       => 'ff8-31',
+    'fiction'               => 'lf',
+    'fic'                   => 'lf',
+    'literature-code'       => 'lf',
+    'biography'             => 'bio',
+    'ff8-34'                => 'bio',
+    'biography-code'        => 'bio',
+    'l-format'              => 'ff7-01-02',
+    'lex'                   => 'lexile-number',
+    'hi'                    => 'host-item-number',
+    'itu'                   => 'index-term-uncontrolled',
+    'itg'                   => 'index-term-genre',
 );
-my $field_name_pattern = '[\w\-]+';
-my $multi_field_pattern = "(?:\\.$field_name_pattern)*";
+my $field_name_pattern   = '[\w\-]+';
+my $multi_field_pattern  = "(?:\\.$field_name_pattern)*";
 my $es_advanced_searches = [];
 
 =head2 get_index_field_convert
@@ -186,18 +187,20 @@ according to these values. Valid values for C<direction> are 'asc' and 'desc'.
 sub build_query {
     my ( $self, $query, %options ) = @_;
 
-    my $stemming         = C4::Context->preference("QueryStemming")        || 0;
-    my $auto_truncation  = C4::Context->preference("QueryAutoTruncate")    || 0;
-    my $fuzzy_enabled    = C4::Context->preference("QueryFuzzy")           || 0;
+    my $stemming        = C4::Context->preference("QueryStemming")     || 0;
+    my $auto_truncation = C4::Context->preference("QueryAutoTruncate") || 0;
+    my $fuzzy_enabled   = C4::Context->preference("QueryFuzzy")        || 0;
 
     $query = '*' unless defined $query;
 
     my $res;
-    my $fields = $self->_search_fields({
-        is_opac => $options{is_opac},
-        weighted_fields => $options{weighted_fields},
-    });
-    if ($options{whole_record}) {
+    my $fields = $self->_search_fields(
+        {
+            is_opac         => $options{is_opac},
+            weighted_fields => $options{weighted_fields},
+        }
+    );
+    if ( $options{whole_record} ) {
         push @$fields, 'marc_data_array.*';
     }
     $res->{query} = {
@@ -216,7 +219,7 @@ sub build_query {
         foreach my $sort ( @{ $options{sort} } ) {
             my ( $f, $d ) = @$sort{qw/ field direction /};
             die "Invalid sort direction, $d"
-              if $d && ( $d ne 'asc' && $d ne 'desc' );
+                if $d && ( $d ne 'asc' && $d ne 'desc' );
             $d = 'asc' unless $d;
 
             $f = $self->_sort_field($f);
@@ -226,14 +229,14 @@ sub build_query {
 
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
-    my $size = C4::Context->preference('FacetMaxCount');
+    my $size   = C4::Context->preference('FacetMaxCount');
     my @facets = Koha::SearchEngine::Elasticsearch->get_facet_fields;
-    for my $f ( @facets ) {
+    for my $f (@facets) {
         my $name = $f->name;
-        $res->{aggregations}->{$name} = { terms => { field => "${name}__facet" , size => $size } };
-    };
+        $res->{aggregations}->{$name} = { terms => { field => "${name}__facet", size => $size } };
+    }
 
-    $res = _rebuild_to_es_advanced_query($res) if @$es_advanced_searches ;
+    $res = _rebuild_to_es_advanced_query($res) if @$es_advanced_searches;
     return $res;
 }
 
@@ -258,35 +261,37 @@ reproduce this search, and C<$query_desc> set to something else.
 =cut
 
 sub build_query_compat {
-    my ( $self, $operators, $operands, $indexes, $orig_limits, $sort_by, $scan,
-        $lang, $params )
-      = @_;
+    my (
+        $self, $operators, $operands, $indexes, $orig_limits, $sort_by, $scan,
+        $lang, $params
+    ) = @_;
 
     my $query;
-    my $query_str = '';
+    my $query_str              = '';
     my $search_param_query_str = '';
-    my $limits = ();
-    if ( $scan ) {
-        ($query, $query_str) = $self->_build_scan_query( $operands, $indexes );
+    my $limits                 = ();
+    if ($scan) {
+        ( $query, $query_str ) = $self->_build_scan_query( $operands, $indexes );
         $search_param_query_str = $query_str;
     } else {
         my @sort_params  = $self->_convert_sort_fields(@$sort_by);
         my @index_params = $self->_convert_index_fields(@$indexes);
-        $limits       = $self->_fix_limit_special_cases($orig_limits);
+        $limits = $self->_fix_limit_special_cases($orig_limits);
         if ( $params->{suppress} ) { push @$limits, "suppress:false"; }
+
         # Merge the indexes in with the search terms and the operands so that
         # each search thing is a handy unit.
         unshift @$operators, undef;    # The first one can't have an op
         my @search_params;
         my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
-        my $ea = each_array( @$operands, @$operators, @index_params );
+        my $ea       = each_array( @$operands, @$operators, @index_params );
         while ( my ( $oand, $otor, $index ) = $ea->() ) {
             next if ( !defined($oand) || $oand eq '' );
             $oand = $self->clean_search_term($oand);
             $oand = $self->_truncate_terms($oand)
                 if $truncate && $self->_is_safe_to_auto_truncate( $index->{field}, $oand );
             push @search_params, {
-                operand => $oand,      # the search terms
+                operand => $oand,                                 # the search terms
                 operator => defined($otor) ? uc $otor : undef,    # AND and so on
                 $index ? %$index : (),
             };
@@ -298,48 +303,50 @@ sub build_query_compat {
         # more robust.
         my @search_param_query_array = $self->_create_query_string(@search_params);
         $search_param_query_str = join( ' ', @search_param_query_array );
-        my $search_param_limit_str =
-          $self->_join_queries( $self->_convert_index_strings(@$limits) );
+        my $search_param_limit_str = $self->_join_queries( $self->_convert_index_strings(@$limits) );
         if ( @search_param_query_array > 1 && $search_param_limit_str ) {
             $search_param_query_str = "($search_param_query_str)";
         }
-        $query_str = join( ' AND ',
+        $query_str = join(
+            ' AND ',
             $search_param_query_str || (),
-            $search_param_limit_str || () );
+            $search_param_limit_str || ()
+        );
 
         # If there's no query on the left, let's remove the junk left behind
         $query_str =~ s/^ AND //;
         my %options;
-        $options{sort} = \@sort_params;
-        $options{is_opac} = $params->{is_opac};
+        $options{sort}            = \@sort_params;
+        $options{is_opac}         = $params->{is_opac};
         $options{weighted_fields} = $params->{weighted_fields};
-        $options{whole_record} = $params->{whole_record};
-        $query = $self->build_query( $query_str, %options );
+        $options{whole_record}    = $params->{whole_record};
+        $query                    = $self->build_query( $query_str, %options );
     }
 
     # We roughly emulate the CGI parameters of the zebra query builder
     my $query_cgi = '';
-    shift @$operators; # Shift out the one we unshifted before
+    shift @$operators;    # Shift out the one we unshifted before
     my $ea = each_array( @$operands, @$operators, @$indexes );
     while ( my ( $oand, $otor, $index ) = $ea->() ) {
         $query_cgi .= '&' if $query_cgi;
-        $query_cgi .= 'idx=' . uri_escape_utf8( $index // '') . '&q=' . uri_escape_utf8( $oand );
-        $query_cgi .= '&op=' . uri_escape_utf8( $otor ) if $otor;
+        $query_cgi .= 'idx=' . uri_escape_utf8( $index // '' ) . '&q=' . uri_escape_utf8($oand);
+        $query_cgi .= '&op=' . uri_escape_utf8($otor) if $otor;
     }
-    $query_cgi .= '&scan=1' if ( $scan );
+    $query_cgi .= '&scan=1' if ($scan);
 
     my $simple_query;
     $simple_query = $operands->[0] if @$operands == 1;
     my $query_desc;
-    if ( $simple_query ) {
+    if ($simple_query) {
         $query_desc = $simple_query;
     } else {
         $query_desc = $search_param_query_str;
     }
-    my $limit     = $self->_join_queries( $self->_convert_index_strings(@$limits));
-    my $limit_cgi = ( $orig_limits and @$orig_limits )
-      ? '&limit=' . join( '&limit=', map { uri_escape_utf8($_) } @$orig_limits )
-      : '';
+    my $limit = $self->_join_queries( $self->_convert_index_strings(@$limits) );
+    my $limit_cgi =
+        ( $orig_limits and @$orig_limits )
+        ? '&limit=' . join( '&limit=', map { uri_escape_utf8($_) } @$orig_limits )
+        : '';
     my $limit_desc;
     $limit_desc = "$limit" if $limit;
 
@@ -388,12 +395,13 @@ sub build_authorities_query {
 
     foreach my $s ( @{ $search->{searches} } ) {
         my ( $wh, $op, $val ) = @{$s}{qw(where operator value)};
-        if ( defined $op && ($op eq 'is' || $op eq '=' || $op eq 'exact') ) {
+        if ( defined $op && ( $op eq 'is' || $op eq '=' || $op eq 'exact' ) ) {
             if ($wh) {
+
                 # Match the whole field, case insensitive, UTF normalized.
                 push @query_parts, { term => { "$wh.ci_raw" => $val } };
-            }
-            else {
+            } else {
+
                 # Match the whole field for all searchable fields, case insensitive,
                 # UTF normalized.
                 # Given that field data is "The quick brown fox"
@@ -401,13 +409,13 @@ sub build_authorities_query {
                 # but not "quick brown fox".
                 push @query_parts, {
                     multi_match => {
-                        query => $val,
-                        fields => $self->_search_fields({ subfield => 'ci_raw' }),
+                        query  => $val,
+                        fields => $self->_search_fields( { subfield => 'ci_raw' } ),
                     }
                 };
             }
-        }
-        elsif ( defined $op && $op eq 'start') {
+        } elsif ( defined $op && $op eq 'start' ) {
+
             # Match the prefix within a field for all searchable fields.
             # Given that field data is "The quick brown fox"
             # "The quick bro" will match, but not "quick bro"
@@ -415,37 +423,33 @@ sub build_authorities_query {
             # Does not seems to be a multi prefix query
             # so we need to create one
             if ($wh) {
+
                 # Match prefix of the field.
-                push @query_parts, { prefix => {"$wh.ci_raw" => $val} };
-            }
-            else {
+                push @query_parts, { prefix => { "$wh.ci_raw" => $val } };
+            } else {
                 my @prefix_queries;
-                foreach my $field (@{$self->_search_fields()}) {
-                    push @prefix_queries, {
-                        prefix => { "$field.ci_raw" => $val }
-                    };
+                foreach my $field ( @{ $self->_search_fields() } ) {
+                    push @prefix_queries, { prefix => { "$field.ci_raw" => $val } };
                 }
                 push @query_parts, {
                     'bool' => {
-                        'should' => \@prefix_queries,
+                        'should'               => \@prefix_queries,
                         'minimum_should_match' => 1
                     }
                 };
             }
-        }
-        else {
+        } else {
+
             # Query all searchable fields.
             # Given that field data is "The quick brown fox"
             # a search containing any of the words will match, regardless
             # of order.
 
-            my @tokens = $self->_split_query( $val );
-            foreach my $token ( @tokens ) {
-                $token = $self->_truncate_terms(
-                    $self->clean_search_term( $token )
-                );
+            my @tokens = $self->_split_query($val);
+            foreach my $token (@tokens) {
+                $token = $self->_truncate_terms( $self->clean_search_term($token) );
             }
-            my $query = $self->_join_queries( @tokens );
+            my $query        = $self->_join_queries(@tokens);
             my $query_string = {
                 query            => $query,
                 lenient          => JSON::true,
@@ -453,8 +457,7 @@ sub build_authorities_query {
             };
             if ($wh) {
                 $query_string->{default_field} = $wh;
-            }
-            else {
+            } else {
                 $query_string->{fields} = $self->_search_fields();
             }
             push @query_parts, { query_string => $query_string };
@@ -469,17 +472,11 @@ sub build_authorities_query {
     $elastic_query->{bool}->{must} = \@query_parts;
 
     # Filter by authtypecode if set
-    if ($search->{authtypecode}) {
-        $elastic_query->{bool}->{filter} = {
-            term => {
-                "authtype.raw" => $search->{authtypecode}
-            }
-        };
+    if ( $search->{authtypecode} ) {
+        $elastic_query->{bool}->{filter} = { term => { "authtype.raw" => $search->{authtypecode} } };
     }
 
-    my $query = {
-        query => $elastic_query
-    };
+    my $query = { query => $elastic_query };
 
     # Add the sort stuff
     $query->{sort} = [ $search->{sort} ] if exists $search->{sort};
@@ -544,15 +541,15 @@ appropriate search object.
 =cut
 
 our $koha_to_index_name = {
-    mainmainentry   => 'heading-main',
-    mainentry       => 'heading',
-    match           => 'match',
-    'match-heading' => 'match-heading',
-    'see-from'      => 'match-heading-see-from',
-    thesaurus       => 'subject-heading-thesaurus',
+    mainmainentry           => 'heading-main',
+    mainentry               => 'heading',
+    match                   => 'match',
+    'match-heading'         => 'match-heading',
+    'see-from'              => 'match-heading-see-from',
+    thesaurus               => 'subject-heading-thesaurus',
     'thesaurus-conventions' => 'subject-heading-thesaurus-conventions',
-    any             => '',
-    all             => ''
+    any                     => '',
+    all                     => ''
 };
 
 # Note that sears and aat map to 008/11 values here
@@ -560,23 +557,24 @@ our $koha_to_index_name = {
 # because they don't have values in controlled field indicators
 # https://www.loc.gov/marc/authority/ad008.html
 our $thesaurus_to_value = {
-   lcsh  => 'a',
-   lcac  => 'b',
-   mesh  => 'c',
-   nal   => 'd',
-   notapplicable => 'n',
-   cash  => 'k',
-   rvm   => 'v',
-   aat   => 'r',
-   sears => 's',
-   notdefined => 'z',
-   notspecified => '|'
+    lcsh          => 'a',
+    lcac          => 'b',
+    mesh          => 'c',
+    nal           => 'd',
+    notapplicable => 'n',
+    cash          => 'k',
+    rvm           => 'v',
+    aat           => 'r',
+    sears         => 's',
+    notdefined    => 'z',
+    notspecified  => '|'
 };
 
 sub build_authorities_query_compat {
-    my ( $self, $marclist, $and_or, $excluding, $operator, $value,
-        $authtypecode, $orderby )
-      = @_;
+    my (
+        $self,         $marclist, $and_or, $excluding, $operator, $value,
+        $authtypecode, $orderby
+    ) = @_;
 
     # This turns the old-style many-options argument form into a more
     # extensible hash form that is understood by L<build_authorities_query>.
@@ -584,34 +582,36 @@ sub build_authorities_query_compat {
     my $mappings = $self->get_elasticsearch_mappings();
 
     # Convert to lower case
-    $marclist = [map(lc, @{$marclist})];
+    $marclist = [ map( lc, @{$marclist} ) ];
     $orderby  = lc $orderby;
 
     my @indexes;
+
     # Make sure everything exists
     foreach my $m (@$marclist) {
 
         $m = exists $koha_to_index_name->{$m} ? $koha_to_index_name->{$m} : $m;
         push @indexes, $m;
-        warn "Unknown search field $m in marclist" unless (defined $mappings->{properties}->{$m} || $m eq '' || $m eq 'match-heading');
+        warn "Unknown search field $m in marclist"
+            unless ( defined $mappings->{properties}->{$m} || $m eq '' || $m eq 'match-heading' );
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
-        next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches
+        next unless $value->[$i];    #clean empty form values, ES doesn't like undefined searches
         $value->[$i] = $thesaurus_to_value->{ $value->[$i] }
-            if( defined $thesaurus_to_value->{ $value->[$i] } && $indexes[$i] eq 'subject-heading-thesaurus' );
+            if ( defined $thesaurus_to_value->{ $value->[$i] } && $indexes[$i] eq 'subject-heading-thesaurus' );
         push @searches,
-          {
+            {
             where    => $indexes[$i],
             operator => $operator->[$i],
             value    => $value->[$i],
-          };
+            };
     }
 
     my %sort;
     my $sort_field =
-        ( $orderby =~ /^heading/ ) ? 'heading__sort'
-      : ( $orderby =~ /^auth/ )    ? 'local-number__sort'
-      :                              undef;
+          ( $orderby =~ /^heading/ ) ? 'heading__sort'
+        : ( $orderby =~ /^auth/ )    ? 'local-number__sort'
+        :                              undef;
     if ($sort_field) {
         my $sort_order = ( $orderby =~ /asc$/ ) ? 'asc' : 'desc';
         %sort = ( $sort_field => $sort_order, );
@@ -646,28 +646,24 @@ our %scan_field_convert = (
 sub _build_scan_query {
     my ( $self, $operands, $indexes ) = @_;
 
-    my $term = scalar( @$operands ) == 0 ? '' : $operands->[0];
-    my $index = scalar( @$indexes ) == 0 ? 'subject' : $indexes->[0];
+    my $term  = scalar(@$operands) == 0 ? ''        : $operands->[0];
+    my $index = scalar(@$indexes) == 0  ? 'subject' : $indexes->[0];
 
-    my ( $f, $d ) = split( /,/, $index);
+    my ( $f, $d ) = split( /,/, $index );
     $index = $scan_field_convert{$f} || $f;
 
     my $res;
-    $res->{query} = {
-        query_string => {
-            query => '*'
-        }
-    };
+    $res->{query}        = { query_string => { query => '*' } };
     $res->{aggregations} = {
         $index => {
             terms => {
-                field => $index . '__facet',
-                order => { '_key' => 'asc' },
-                include => $self->_create_regex_filter($self->clean_search_term($term)) . '.*'
+                field   => $index . '__facet',
+                order   => { '_key' => 'asc' },
+                include => $self->_create_regex_filter( $self->clean_search_term($term) ) . '.*'
             }
         }
     };
-    return ($res, $term);
+    return ( $res, $term );
 }
 
 =head2 _create_regex_filter
@@ -679,10 +675,10 @@ This will create a regex filter that can be used with an aggregation query.
 =cut
 
 sub _create_regex_filter {
-    my ($self, $term) = @_;
+    my ( $self, $term ) = @_;
 
     my $result = '';
-    foreach my $c (split(//, quotemeta($term))) {
+    foreach my $c ( split( //, quotemeta($term) ) ) {
         my $lc = lc($c);
         my $uc = uc($c);
         $result .= $lc ne $uc ? '[' . $lc . $uc . ']' : $c;
@@ -706,17 +702,16 @@ sub _convert_sort_fields {
 
     # Turn the sorting into something we care about.
     my %sort_field_convert = (
-        acqdate     => 'date-of-acquisition',
-        author      => 'author',
-        call_number => 'cn-sort',
-        popularity  => 'issues',
-        relevance   => undef,       # default
-        title       => 'title',
-        pubdate     => 'date-of-publication',
+        acqdate      => 'date-of-acquisition',
+        author       => 'author',
+        call_number  => 'cn-sort',
+        popularity   => 'issues',
+        relevance    => undef,                   # default
+        title        => 'title',
+        pubdate      => 'date-of-publication',
         biblionumber => 'local-number',
     );
-    my %sort_order_convert =
-      ( qw( desc desc ), qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
+    my %sort_order_convert = ( qw( desc desc ), qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
 
     # Convert the fields and orders, drop anything we don't know about.
     grep { $_->{field} } map {
@@ -733,10 +728,9 @@ sub _convert_sort_fields {
 sub _convert_index_fields {
     my ( $self, @indexes ) = @_;
 
-    my %index_type_convert =
-      ( __default => undef, phr => 'phrase', rtrn => 'right-truncate', 'st-year' => 'st-year' );
+    my %index_type_convert = ( __default => undef, phr => 'phrase', rtrn => 'right-truncate', 'st-year' => 'st-year' );
 
-    @indexes = grep { $_ ne q{} } @indexes; # Remove any blank indexes, i.e. keyword
+    @indexes = grep { $_ ne q{} } @indexes;    # Remove any blank indexes, i.e. keyword
 
     # Convert according to our table, drop anything that doesn't convert.
     # If a field starts with mc- we save it as it's used (and removed) later
@@ -744,9 +738,9 @@ sub _convert_index_fields {
     # (Sorry, this got a bit ugly after special cases were found.)
     map {
         # Lower case all field names
-        my ( $f, $t ) = map(lc, split /,/);
+        my ( $f, $t ) = map( lc, split /,/ );
         my $mc = '';
-        if ($f =~ /^mc-/) {
+        if ( $f =~ /^mc-/ ) {
             $mc = 'mc-';
             $f =~ s/^mc-//;
         }
@@ -756,7 +750,7 @@ sub _convert_index_fields {
         };
         $r->{field} .= '-all'
             if C4::Context->preference('SearchCancelledAndInvalidISBNandISSN') && $r->{field} =~ /^is[bs]n$/;
-        $r->{field} = ($mc . $r->{field}) if $mc && $r->{field};
+        $r->{field} = ( $mc . $r->{field} ) if $mc && $r->{field};
         $r->{field} || $r->{type} ? $r : undef;
     } @indexes;
 }
@@ -786,8 +780,8 @@ sub _convert_index_strings {
             push @res, $s;
             next;
         }
-        push @res, ($conv->{field} ? $conv->{field} . ':' : '')
-            . $self->_modify_string_by_type( %$conv, operand => $term );
+        push @res,
+            ( $conv->{field} ? $conv->{field} . ':' : '' ) . $self->_modify_string_by_type( %$conv, operand => $term );
     }
     return @res;
 }
@@ -808,6 +802,7 @@ will have to wait for a real query parser.
 
 sub _convert_index_strings_freeform {
     my ( $self, $search ) = @_;
+
     # @TODO: Currently will alter also fields contained within quotes:
     # `searching for "stuff cn:123"` for example will become
     # `searching for "stuff local-number:123"
@@ -821,8 +816,10 @@ sub _convert_index_strings_freeform {
 
     # Lower case field names
     $search =~ s/($field_name_pattern)(?:,[\w-]*)?($multi_field_pattern):/\L$1\E$2:/og;
+
     # Resolve possible field aliases
-    $search =~ s/($field_name_pattern)($multi_field_pattern):/(exists $index_field_convert{$1} ? $index_field_convert{$1} : $1).($1 eq 'kw' ? "$2" : "$2:")/oge;
+    $search =~
+        s/($field_name_pattern)($multi_field_pattern):/(exists $index_field_convert{$1} ? $index_field_convert{$1} : $1).($1 eq 'kw' ? "$2" : "$2:")/oge;
     if ( C4::Context->preference('SearchCancelledAndInvalidISBNandISSN') ) {
         $search =~ s/\b(is[bs]n)(?=$multi_field_pattern:)/$1-all/g;
     }
@@ -843,14 +840,14 @@ sub _modify_string_by_type {
     my ( $self, %idx ) = @_;
 
     my $type = $idx{type} || '';
-    my $str = $idx{operand};
+    my $str  = $idx{operand};
     return $str unless $str;    # Empty or undef, we can't use it.
 
-    $str .= '*' if $type eq 'right-truncate';
+    $str .= '*'             if $type eq 'right-truncate';
     $str = '"' . $str . '"' if $type eq 'phrase' && $str !~ /^".*"$/;
-    if ($type eq 'st-year') {
-        if ($str =~ /^(.*)-(.*)$/) {
-            my $from = $1 || '*';
+    if ( $type eq 'st-year' ) {
+        if ( $str =~ /^(.*)-(.*)$/ ) {
+            my $from  = $1 || '*';
             my $until = $2 || '*';
             $str = "[$from TO $until]";
         }
@@ -885,25 +882,23 @@ sub _join_queries {
 
     my @norm_parts = grep { defined($_) && $_ ne '' && $_ !~ /^mc-/ } @parts;
     my @mc_parts =
-      map { s/^mc-//r } grep { defined($_) && $_ ne '' && $_ =~ /^mc-/ } @parts;
+        map { s/^mc-//r } grep { defined($_) && $_ ne '' && $_ =~ /^mc-/ } @parts;
     return () unless @norm_parts + @mc_parts;
     return ( @norm_parts, @mc_parts )[0] if @norm_parts + @mc_parts == 1;
 
     # Group limits by field, so they can be OR'ed together
     my %mc_limits;
     foreach my $mc_part (@mc_parts) {
-        my ($field, $value) = split /:/, $mc_part, 2;
+        my ( $field, $value ) = split /:/, $mc_part, 2;
         $mc_limits{$field} //= [];
         push @{ $mc_limits{$field} }, $value;
     }
 
-    @mc_parts = map {
-        sprintf('%s:(%s)', $_, join (' OR ', @{ $mc_limits{$_} }));
-    } sort keys %mc_limits;
+    @mc_parts = map { sprintf( '%s:(%s)', $_, join( ' OR ', @{ $mc_limits{$_} } ) ); } sort keys %mc_limits;
 
     @norm_parts = map { "($_)" } @norm_parts;
 
-    return join( ' AND ', @norm_parts, @mc_parts);
+    return join( ' AND ', @norm_parts, @mc_parts );
 }
 
 =head2 _make_phrases
@@ -950,7 +945,8 @@ sub _create_query_string {
         my $field = $_->{field}    ? $_->{field} . ':'    : '';
 
         my $oand = $self->_modify_string_by_type(%$_);
-        $oand = "($oand)" if $field && scalar(split(/\s+/, $oand)) > 1 && (!defined $_->{type} || $_->{type} ne 'st-year');
+        $oand = "($oand)"
+            if $field && scalar( split( /\s+/, $oand ) ) > 1 && ( !defined $_->{type} || $_->{type} ne 'st-year' );
         "$otor($field$oand)";
     } @queries;
 }
@@ -979,8 +975,8 @@ sub clean_search_term {
 
     # Remove unbalanced quotes
     my $unquoted = $term;
-    my $count = ($unquoted =~ tr/"/ /);
-    if ($count % 2 == 1) {
+    my $count    = ( $unquoted =~ tr/"/ / );
+    if ( $count % 2 == 1 ) {
         $term = $unquoted;
     }
     $term = $self->_query_regex_escape_process($term);
@@ -990,7 +986,8 @@ sub clean_search_term {
     # for ex. search for "test [6 TO 7]" will be converted to "test* [6* TO* 7]"
     # so no reason to keep ranges in QueryAutoTruncate==true case:
     my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
-    unless($truncate) {
+    unless ($truncate) {
+
         # replace all ranges with any square/curly brackets combinations to temporary substitutions (ex: "{a TO b]"" -> "~~LC~~a TO b~~RS~~")
         # (where L is for left and C is for Curly and so on)
         $term =~ s/
@@ -1005,28 +1002,33 @@ sub clean_search_term {
             (?<rightbracket>\}|\])
         /$+{backslashes}.'~~L'.($+{leftbracket} eq '[' ? 'S':'C').'~~'.$+{ranges}.'~~R'.($+{rightbracket} eq ']' ? 'S':'C').'~~'/gex;
     }
+
     # save all regex contents away before escaping brackets:
     # (same trick as with brackets above, just RE for 'RegularExpression')
     my @saved_regexes;
     my $rgx_i = 0;
-    while(
-            $term =~ s@(
+    while (
+        $term =~ s@(
                 (?<!\\)(?:[\\]{2})*/
                 (?:[^/]+|(?<=\\)(?:[\\]{2})*/)+
                 (?<!\\)(?:[\\]{2})*/
             )$lookahead@~~RE$rgx_i~~@x
-    ) {
-        @saved_regexes[$rgx_i++] = $1;
+        )
+    {
+        @saved_regexes[ $rgx_i++ ] = $1;
     }
 
     # remove leading and trailing colons mixed with optional slashes and spaces
     $term =~ s/^([\s\\]*:\s*)+//;
     $term =~ s/([\s\\]*:\s*)+$//;
+
     # remove unquoted colons that have whitespace on either side of them
     $term =~ s/([\s\\]*:\s*)+(\s+)$lookahead/$2/g;
     $term =~ s/(\s+)([\s\\]*:\s*)+$lookahead/$1/g;
+
     # replace with spaces all repeated colons no matter how they surrounded with spaces and slashes
     $term =~ s/([\s\\]*:\s*){2,}$lookahead/ /g;
+
     # screen all followups for colons after first colon,
     # and correctly ignore unevenly backslashed:
     $term =~ s/((?<!\\)(?:[\\]{2})*:[^:\s]+(?<!\\)(?:[\\]{2})*)(?=:)/$1\\/g;
@@ -1047,12 +1049,14 @@ sub clean_search_term {
     $term =~ s/\s([&;,:\.=\-\/\s]|(\\\/))+\s$lookahead/ /g if $truncate;
 
     # restore all regex contents after escaping brackets:
-    for (my $i = 0; $i < @saved_regexes; $i++) {
+    for ( my $i = 0 ; $i < @saved_regexes ; $i++ ) {
         $term =~ s/~~RE$i~~/$saved_regexes[$i]/;
     }
-    unless($truncate) {
+    unless ($truncate) {
+
         # restore temporary weird substitutions back to normal brackets
-        $term =~ s/~~L(C|S)~~([^\s\[\]\{\}]+ TO [^\s\[\]\{\}]+)~~R(C|S)~~/($1 eq 'S' ? '[':'{').$2.($3 eq 'S' ? ']':'}')/ge;
+        $term =~
+            s/~~L(C|S)~~([^\s\[\]\{\}]+ TO [^\s\[\]\{\}]+)~~R(C|S)~~/($1 eq 'S' ? '[':'{').$2.($3 eq 'S' ? ']':'}')/ge;
     }
     return $term;
 }
@@ -1066,10 +1070,11 @@ Processes query in accordance with current "QueryRegexEscapeOptions" system pref
 =cut
 
 sub _query_regex_escape_process {
-    my ($self, $query) = @_;
+    my ( $self, $query ) = @_;
     my $regex_escape_options = C4::Context->preference("QueryRegexEscapeOptions");
-    if ($regex_escape_options ne 'dont_escape') {
-        if ($regex_escape_options eq 'escape') {
+    if ( $regex_escape_options ne 'dont_escape' ) {
+        if ( $regex_escape_options eq 'escape' ) {
+
             # Will escape unescaped slashes (/) while preserving
             # unescaped slashes within quotes
             # @TODO: assumes quotes are always balanced and will
@@ -1078,12 +1083,13 @@ sub _query_regex_escape_process {
             # so that this function is ever only provided with unquoted
             # query parts
             $query =~ s@(?:(?<!\\)((?:[\\]{2})*)(?=/))(?![^"]*"(?:[^"]*"[^"]*")*[^"]*$)@\\$1@g;
-        }
-        elsif($regex_escape_options eq 'unescape_escaped') {
+        } elsif ( $regex_escape_options eq 'unescape_escaped' ) {
+
             # Will unescape escaped slashes (\/) and escape
             # unescaped slashes (/) while preserving slashes within quotes
             # The same limitatations as above apply for handling of quotes
-            $query =~ s@(?:(?<!\\)(?:((?:[\\]{2})*[\\])|((?:[\\]{2})*))(?=/))(?![^"]*"(?:[^"]*"[^"]*")*[^"]*$)@($1 ? substr($1, 0, -1) : ($2 . "\\"))@ge;
+            $query =~
+                s@(?:(?<!\\)(?:((?:[\\]{2})*[\\])|((?:[\\]{2})*))(?=/))(?![^"]*"(?:[^"]*"[^"]*")*[^"]*$)@($1 ? substr($1, 0, -1) : ($2 . "\\"))@ge;
         }
     }
     return $query;
@@ -1105,69 +1111,65 @@ sub _fix_limit_special_cases {
 
     my @new_lim;
     foreach my $l (@$limits) {
+
         # This is set up by opac-search.pl
         if ( $l =~ /^yr,st-numeric,ge[=:]/ ) {
-            my ( $start, $end ) =
-              ( $l =~ /^yr,st-numeric,ge[=:](.*) and yr,st-numeric,le[=:](.*)$/ );
+            my ( $start, $end ) = ( $l =~ /^yr,st-numeric,ge[=:](.*) and yr,st-numeric,le[=:](.*)$/ );
             next unless defined($start) && defined($end);
             push @new_lim, "date-of-publication:[$start TO $end]";
-        }
-        elsif( $l =~ /^search_filter:/ ){
+        } elsif ( $l =~ /^search_filter:/ ) {
+
             # Here we are going to get the query as a string, clean it, and take care of the part of the limit
             # Calling build_query_compat here is avoided because we generate more complex query structures
             my ($filter_id) = ( $l =~ /^search_filter:(.*)$/ );
-            my $search_filter = Koha::SearchFilters->find( $filter_id );
+            my $search_filter = Koha::SearchFilters->find($filter_id);
             next unless $search_filter;
-            my ($expanded_lim,$query_lim) = $search_filter->expand_filter;
+            my ( $expanded_lim, $query_lim ) = $search_filter->expand_filter;
+
             # In the case of nested filters we need to expand them all
-            foreach my $el ( @{$self->_fix_limit_special_cases($expanded_lim)} ){
+            foreach my $el ( @{ $self->_fix_limit_special_cases($expanded_lim) } ) {
                 push @new_lim, $el;
             }
+
             # We need to clean the query part as we have built a string from the original search
-            push @new_lim, $self->clean_search_term( $query_lim );
-        }
-        elsif ( $l =~ /^yr,st-numeric[=:]/ ) {
+            push @new_lim, $self->clean_search_term($query_lim);
+        } elsif ( $l =~ /^yr,st-numeric[=:]/ ) {
             my ($date) = ( $l =~ /^yr,st-numeric[=:](.*)$/ );
             next unless defined($date);
-            $date = $self->_modify_string_by_type(type => 'st-year', operand => $date);
+            $date = $self->_modify_string_by_type( type => 'st-year', operand => $date );
             push @new_lim, "date-of-publication:$date";
-        }
-        elsif ( $l =~ 'multibranchlimit|^branch' ) {
-            my $branchfield  = C4::Context->preference('SearchLimitLibrary');
+        } elsif ( $l =~ 'multibranchlimit|^branch' ) {
+            my $branchfield = C4::Context->preference('SearchLimitLibrary');
             my @branchcodes;
-            if( $l =~ 'multibranchlimit' ) {
+            if ( $l =~ 'multibranchlimit' ) {
                 my ($group_id) = ( $l =~ /^multibranchlimit:(.*)$/ );
-                my $search_group = Koha::Library::Groups->find( $group_id );
-                @branchcodes = map { $_->branchcode } $search_group->all_libraries;
+                my $search_group = Koha::Library::Groups->find($group_id);
+                @branchcodes = map  { $_->branchcode } $search_group->all_libraries;
                 @branchcodes = sort { $a cmp $b } @branchcodes;
             } else {
                 @branchcodes = ( $l =~ /^branch:(.*)$/ );
             }
 
             if (@branchcodes) {
+
                 # We quote the branchcodes here to prevent issues when codes are reserved words in ES, e.g. OR, AND, NOT, etc.
                 if ( $branchfield eq "homebranch" ) {
                     push @new_lim, sprintf "(%s)", join " OR ", map { 'homebranch: "' . $_ . '"' } @branchcodes;
-                }
-                elsif ( $branchfield eq "holdingbranch" ) {
+                } elsif ( $branchfield eq "holdingbranch" ) {
                     push @new_lim, sprintf "(%s)", join " OR ", map { 'holdingbranch: "' . $_ . '"' } @branchcodes;
-                }
-                else {
+                } else {
                     push @new_lim, sprintf "(%s OR %s)",
-                      join( " OR ", map { 'homebranch: "' . $_ . '"' } @branchcodes ),
-                      join( " OR ", map { 'holdingbranch: "' . $_ . '"' } @branchcodes );
+                        join( " OR ", map { 'homebranch: "' . $_ . '"' } @branchcodes ),
+                        join( " OR ", map { 'holdingbranch: "' . $_ . '"' } @branchcodes );
                 }
             }
-        }
-        elsif ( $l =~ /^available$/ ) {
+        } elsif ( $l =~ /^available$/ ) {
             push @new_lim, 'available:true';
-        }
-        elsif ( $l =~ /^\s*(kw\b[\w,-]*?):(.*)/) {
-            my ( $field, $term ) = ($1, $2);
-            if ( defined($field) && defined($term) && $field =~ /,phr$/) {
+        } elsif ( $l =~ /^\s*(kw\b[\w,-]*?):(.*)/ ) {
+            my ( $field, $term ) = ( $1, $2 );
+            if ( defined($field) && defined($term) && $field =~ /,phr$/ ) {
                 push @new_lim, "(\"$term\")";
-            }
-            else {
+            } else {
                 push @new_lim, $term;
             }
         } elsif ( $l =~ /^acqdate,st-date-normalized=/ ) {
@@ -1175,14 +1177,12 @@ sub _fix_limit_special_cases {
             next unless defined($date);
             $date = $self->_modify_string_by_type( type => 'st-date-normalized', operand => $date );
             push @new_lim, "date-of-acquisition.raw:$date";
-        }
-        else {
+        } else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
-            $field =~ s/,phr$//; #We are quoting all the limits as phrase, this prevents from quoting again later
+            $field =~ s/,phr$//;    #We are quoting all the limits as phrase, this prevents from quoting again later
             if ( defined($field) && defined($term) ) {
                 push @new_lim, "$field:(\"$term\")";
-            }
-            else {
+            } else {
                 push @new_lim, $l;
             }
         }
@@ -1202,13 +1202,14 @@ to avoid sorting on a tokenized value.
 =cut
 
 sub _sort_field {
-    my ($self, $f) = @_;
+    my ( $self, $f ) = @_;
 
-    my $mappings = $self->get_elasticsearch_mappings();
+    my $mappings  = $self->get_elasticsearch_mappings();
     my $textField = defined $mappings->{properties}{$f}{type} && $mappings->{properties}{$f}{type} eq 'text';
-    if (!defined $self->sort_fields()->{$f} || $self->sort_fields()->{$f}) {
+    if ( !defined $self->sort_fields()->{$f} || $self->sort_fields()->{$f} ) {
         $f .= '__sort';
     } else {
+
         # We need to add '.raw' to text fields without a sort field,
         # otherwise it'll sort based on the tokenised form.
         $f .= '.raw' if $textField;
@@ -1228,7 +1229,7 @@ operands and double quoted strings.
 sub _truncate_terms {
     my ( $self, $query ) = @_;
 
-    my @tokens = $self->_split_query( $query );
+    my @tokens = $self->_split_query($query);
 
     # Filter out empty tokens
     my @words = grep { $_ !~ /^\s*$/ } @tokens;
@@ -1236,7 +1237,7 @@ sub _truncate_terms {
     # Append '*' to words if needed, ie. if it ends in a word character and is not a keyword
     my @terms = map {
         my $w = $_;
-        (/\W$/ or grep {lc($w) eq $_} qw/and or not/) ? $_ : "$_*";
+        ( /\W$/ or grep { lc($w) eq $_ } qw/and or not/ ) ? $_ : "$_*";
     } @words;
 
     return join ' ', @terms;
@@ -1297,19 +1298,22 @@ provide a subfield that will be appended to fields as "C<field_name>.C<subfield>
 =cut
 
 sub _search_fields {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
     $params //= {
-        is_opac => 0,
+        is_opac         => 0,
         weighted_fields => 0,
-        whole_record => 0,
+        whole_record    => 0,
+
         # This is a hack for authorities build_authorities_query
         # can hopefully be removed in the future
         subfield => undef,
     };
     my $cache = Koha::Caches->get_instance();
-    my $cache_key = 'elasticsearch_search_fields' . ($params->{is_opac} ? '_opac' : '_staff_client') . "_" . $self->index;
-    my $search_fields = $cache->get_from_cache($cache_key, { unsafe => 1 });
-    if (!$search_fields) {
+    my $cache_key =
+        'elasticsearch_search_fields' . ( $params->{is_opac} ? '_opac' : '_staff_client' ) . "_" . $self->index;
+    my $search_fields = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+    if ( !$search_fields ) {
+
         # The reason we don't use Koha::SearchFields->search here is we don't
         # want or need resultset wrapped as Koha::SearchField object.
         # It does not make any sense in this context and would cause
@@ -1319,52 +1323,51 @@ sub _search_fields {
         my $schema = Koha::Database->schema;
         my $result = $schema->resultset('SearchField')->search(
             {
-                $params->{is_opac} ? (
+                $params->{is_opac}
+                ? (
                     'opac' => 1,
-                ) : (
-                    'staff_client' => 1
-                ),
-                'type' => { '!=' => 'boolean' },
-                'search_marc_map.index_name' => $self->index,
-                'search_marc_map.marc_type' => C4::Context->preference('marcflavour'),
+                    )
+                : ( 'staff_client' => 1 ),
+                'type'                         => { '!=' => 'boolean' },
+                'search_marc_map.index_name'   => $self->index,
+                'search_marc_map.marc_type'    => C4::Context->preference('marcflavour'),
                 'search_marc_to_fields.search' => 1,
             },
             {
-                columns => [qw/name weight/],
+                columns  => [qw/name weight/],
                 collapse => 1,
-                join => {search_marc_to_fields => 'search_marc_map'},
+                join     => { search_marc_to_fields => 'search_marc_map' },
             }
         );
         my @search_fields;
-        while (my $search_field = $result->next) {
+        while ( my $search_field = $result->next ) {
             push @search_fields, [
                 lc $search_field->name,
                 $search_field->weight ? $search_field->weight : ()
             ];
         }
         $search_fields = \@search_fields;
-        $cache->set_in_cache($cache_key, $search_fields);
+        $cache->set_in_cache( $cache_key, $search_fields );
     }
-    if ($params->{subfield}) {
+    if ( $params->{subfield} ) {
         my $subfield = $params->{subfield};
         $search_fields = [
             map {
                 # Copy values to avoid mutating cached
                 # data (since unsafe is used)
-                my ($field, $weight) = @{$_};
-                ["${field}.${subfield}", $weight];
+                my ( $field, $weight ) = @{$_};
+                [ "${field}.${subfield}", $weight ];
             } @{$search_fields}
         ];
     }
-    if ($params->{weighted_fields}) {
-        return [map { join('^', @{$_}) } @{$search_fields}];
-    }
-    else {
+    if ( $params->{weighted_fields} ) {
+        return [ map { join( '^', @{$_} ) } @{$search_fields} ];
+    } else {
+
         # Exclude weight from field
-        return [map { $_->[0] } @{$search_fields}];
+        return [ map { $_->[0] } @{$search_fields} ];
     }
 }
-
 
 =pod
 
@@ -1464,6 +1467,5 @@ sub _rebuild_to_es_advanced_query {
 
     return $res;
 }
-
 
 1;

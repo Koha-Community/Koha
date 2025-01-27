@@ -30,7 +30,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 my $t = Test::Mojo->new('Koha::REST::V1');
-t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth',       1 );
 t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 
 subtest 'list() tests' => sub {
@@ -86,10 +86,8 @@ subtest 'list() tests' => sub {
         [ $librarian->to_api( { user => $librarian } ), $another_erm_user->to_api( { user => $another_erm_user } ) ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/users?blah=blah")
-      ->status_is(400)
-      ->json_is(
-        [ { path => '/query/blah', message => 'Malformed query string' } ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/users?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     my $patron = $builder->build_object(
         {

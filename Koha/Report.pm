@@ -17,9 +17,9 @@ package Koha::Report;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Reports;
+
 #use Koha::DateUtils qw( dt_from_string output_pref );
 
 use base qw(Koha::Object);
@@ -58,9 +58,9 @@ sub is_sql_valid {
     $sql //= '';
     my @errors = ();
 
-    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
+    if ( $sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i ) {
         push @errors, { sqlerr => $1 };
-    } elsif ($sql !~ /^\s*SELECT\b\s*/i) {
+    } elsif ( $sql !~ /^\s*SELECT\b\s*/i ) {
         push @errors, { queryerr => 'Missing SELECT' };
     } else {
         push @errors, { passworderr => "Illegal column in results" }
@@ -112,7 +112,7 @@ Return search info
 =cut
 
 sub get_search_info {
-    my $self = shift;
+    my $self          = shift;
     my $sub_mana_info = { 'query' => shift };
     return $sub_mana_info;
 }
@@ -178,19 +178,16 @@ sub prep_report {
     # while allowing the library to alter the column names
     my @split = split /\[\[|\]\]/, $sql;
     my $headers;
-    for ( my $i = 0 ; $i < $#split / 2 ; $i++ )
-    {    #The placeholders are always the odd elements of the array
+    for ( my $i = 0 ; $i < $#split / 2 ; $i++ ) {    #The placeholders are always the odd elements of the array
         my ( $type, $name ) = split /\|/,
-          $split[ $i * 2 + 1 ];    # We split them on '|'
-        $name =~ s/^\s+|\s+$//;    # Trim
-        $headers->{$name} = $type; # Store as a lookup for the template
-        $headers->{$name} =~
-          s/^\w*\.//;    # strip the table name just as in $sth->{NAME} array
-        $split[ $i * 2 + 1 ] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g
-          ;    #Quote any special characters so we can replace the placeholders
+            $split[ $i * 2 + 1 ];                    # We split them on '|'
+        $name =~ s/^\s+|\s+$//;                      # Trim
+        $headers->{$name} = $type;                   # Store as a lookup for the template
+        $headers->{$name} =~ s/^\w*\.//;             # strip the table name just as in $sth->{NAME} array
+        $split[ $i * 2 + 1 ] =~
+            s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;         #Quote any special characters so we can replace the placeholders
         $name = C4::Context->dbh->quote($name);
-        $sql =~ s/\[\[$split[$i*2+1]\]\]/$type AS $name/
-          ;    # Remove placeholders from SQL
+        $sql =~ s/\[\[$split[$i*2+1]\]\]/$type AS $name/;    # Remove placeholders from SQL
     }
 
     my %lookup;
@@ -204,10 +201,11 @@ sub prep_report {
     @split = split /<<|>>/, $sql;
     for ( my $i = 0 ; $i < $#split / 2 ; $i++ ) {
         my $quoted =
-          @$param_names ? $lookup{ $split[ $i * 2 + 1 ] } : @$sql_params[$i];
+            @$param_names ? $lookup{ $split[ $i * 2 + 1 ] } : @$sql_params[$i];
 
         # if there are special regexp chars, we must \ them
         $split[ $i * 2 + 1 ] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
+
         #if ( $split[ $i * 2 + 1 ] =~ /\|\s*date\s*$/ ) {
         #    $quoted = output_pref(
         #        {
@@ -219,8 +217,7 @@ sub prep_report {
         #}
         unless ( $split[ $i * 2 + 1 ] =~ /\|\s*list\s*$|\s*\:in\s*$/ && $quoted ) {
             $quoted = C4::Context->dbh->quote($quoted);
-        }
-        else {
+        } else {
             my @list = split /\n/, $quoted;
             my @quoted_list;
             foreach my $item (@list) {

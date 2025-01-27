@@ -7,11 +7,13 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Files for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Files for") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -36,97 +38,98 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-                [% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-                <h1>Files</h1>
+    <h1>Files</h1>
 
-                [% IF errors %]
-                    <div class="alert alert-warning">
-                        [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
-                        [% IF errors.no_file %]You did not select a file to upload.[% END %]
-                        [% IF errors.upload_failed %]The upload failed. More information may be in the system logs.[% END %]
-                    </div>
-                [% END %]
+    [% IF errors %]
+        <div class="alert alert-warning">
+            [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
+            [% IF errors.no_file %]You did not select a file to upload.[% END %]
+            [% IF errors.upload_failed %]The upload failed. More information may be in the system logs.[% END %]
+        </div>
+    [% END %]
 
-                [% IF ( files ) %]
-                    <div class="page-section">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Description</th>
-                                    <th>Uploaded</th>
-                                    [% IF CAN_user_borrowers_edit_borrowers %]<th>&nbsp;</th>[% END %]
-                                </tr>
-                            </thead>
+    [% IF ( files ) %]
+        <div class="page-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Uploaded</th>
+                        [% IF CAN_user_borrowers_edit_borrowers %]<th>&nbsp;</th>[% END %]
+                    </tr>
+                </thead>
 
-                            <tbody>
-                                [% FOREACH f IN files %]
-                                    <tr>
-                                        <td><a href="?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
-                                        <td>[% f.file_type | html %]</td>
-                                        <td>[% f.file_description | html %]</td>
-                                        <td>[% f.date_uploaded | $KohaDates %]</td>
-                                        [% IF CAN_user_borrowers_edit_borrowers %]
-                                            <td>
-                                                <form action="files.pl" method="post">
-                                                    [% INCLUDE 'csrf-token.inc' %]
-                                                    <input type="hidden" name="op" value="cud-delete" />
-                                                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                                    <input type="hidden" name="file_id" value="[% f.file_id | html %]" />
-                                                    <button class="btn btn-default btn-xs confirmdelete"><i class="fa fa-trash-can"></i> Delete</button>
-                                                </form>
-                                            </td>
-                                        [% END %]
-                                    </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
-                    </div>
-                [% ELSE %]
-                <div class="alert alert-info">
-                    <p>This patron has no files attached.</p>
-                </div>
-                [% END %]
+                <tbody>
+                    [% FOREACH f IN files %]
+                        <tr>
+                            <td><a href="?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
+                            <td>[% f.file_type | html %]</td>
+                            <td>[% f.file_description | html %]</td>
+                            <td>[% f.date_uploaded | $KohaDates %]</td>
+                            [% IF CAN_user_borrowers_edit_borrowers %]
+                                <td>
+                                    <form action="files.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-delete" />
+                                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                                        <input type="hidden" name="file_id" value="[% f.file_id | html %]" />
+                                        <button class="btn btn-default btn-xs confirmdelete"><i class="fa fa-trash-can"></i> Delete</button>
+                                    </form>
+                                </td>
+                            [% END %]
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+    [% ELSE %]
+        <div class="alert alert-info">
+            <p>This patron has no files attached.</p>
+        </div>
+    [% END %]
 
-                <form method="post" action="/cgi-bin/koha/members/files.pl" enctype="multipart/form-data">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <fieldset class="rows">
-                        <legend>Upload new file</legend>
-                        <ol>
-                        <li><input type="hidden" name="op" value="cud-upload" />
-                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                        <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+    <form method="post" action="/cgi-bin/koha/members/files.pl" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
+        <fieldset class="rows">
+            <legend>Upload new file</legend>
+            <ol>
+                <li
+                    ><input type="hidden" name="op" value="cud-upload" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
 
-                        <label for="description">Description:</label>
-                        <input name="description" id="description" type="text" /></li>
+                    <label for="description">Description:</label>
+                    <input name="description" id="description" type="text"
+                /></li>
 
-                        <li><label for="uploadfile">File:</label><input name="uploadfile" type="file" id="uploadfile" /></li>
-
-                        </ol>
-                    </fieldset>
-                    <fieldset class="action">
-                        <input name="upload" type="submit" id="upload" class="btn btn-primary" value="Upload file" />
-                    </fieldset>
-                </form>
+                <li><label for="uploadfile">File:</label><input name="uploadfile" type="file" id="uploadfile" /></li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input name="upload" type="submit" id="upload" class="btn btn-primary" value="Upload file" />
+        </fieldset>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        $(document).ready(function(){
-            $(".confirmdelete").on("click", function(){
-                $(this).parents('tr').addClass("warn");
-                if(confirm(_("Are you sure you want to delete this file?"))){
+        $(document).ready(function () {
+            $(".confirmdelete").on("click", function () {
+                $(this).parents("tr").addClass("warn");
+                if (confirm(_("Are you sure you want to delete this file?"))) {
                     return true;
                 } else {
-                    $(this).parents('tr').removeClass("warn");
+                    $(this).parents("tr").removeClass("warn");
                     return false;
                 }
             });
-    });
+        });
     </script>
 [% END %]
 

@@ -33,18 +33,21 @@ subtest 'manager' => sub {
     $schema->storage->txn_begin;
 
     my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $cashup = $builder->build_object(
+    my $cashup  = $builder->build_object(
         {
             class => 'Koha::Cash::Register::Cashups',
             value => { manager_id => $manager->borrowernumber },
         }
     );
 
-    is( ref( $cashup->manager ),
+    is(
+        ref( $cashup->manager ),
         'Koha::Patron',
-        'Koha::Cash::Register::Cashup->manager should return a Koha::Patron' );
+        'Koha::Cash::Register::Cashup->manager should return a Koha::Patron'
+    );
 
-    is( $cashup->manager->id, $manager->id,
+    is(
+        $cashup->manager->id, $manager->id,
         'Koha::Cash::Register::Cashup->manager returns the correct Koha::Patron'
     );
 
@@ -57,9 +60,8 @@ subtest 'register' => sub {
 
     $schema->storage->txn_begin;
 
-    my $register =
-      $builder->build_object( { class => 'Koha::Cash::Registers' } );
-    my $cashup = $builder->build_object(
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $cashup   = $builder->build_object(
         {
             class => 'Koha::Cash::Register::Cashups',
             value => { register_id => $register->id },
@@ -69,11 +71,12 @@ subtest 'register' => sub {
     is(
         ref( $cashup->register ),
         'Koha::Cash::Register',
-'Koha::Cash::Register::Cashup->register should return a Koha::Cash::Register'
+        'Koha::Cash::Register::Cashup->register should return a Koha::Cash::Register'
     );
 
-    is( $cashup->register->id, $register->id,
-'Koha::Cash::Register::Cashup->register returns the correct Koha::Cash::Register'
+    is(
+        $cashup->register->id, $register->id,
+        'Koha::Cash::Register::Cashup->register returns the correct Koha::Cash::Register'
     );
 
     $schema->storage->txn_rollback;
@@ -85,12 +88,11 @@ subtest 'summary' => sub {
 
     $schema->storage->txn_begin;
 
-    my $register =
-      $builder->build_object( { class => 'Koha::Cash::Registers' } );
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $account = $patron->account;
-    my $expected_total   = 0;
+    my $register                = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron                  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $manager                 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account                 = $patron->account;
+    my $expected_total          = 0;
     my $expected_income_total   = 0;
     my $expected_income_grouped = [];
     my $expected_payout_total   = 0;
@@ -120,11 +122,11 @@ subtest 'summary' => sub {
 
     # Overdue of 1.0 fully paid
     unshift @{$expected_income_grouped},
-      {
+        {
         debit_type_code => 'OVERDUE',
         total           => '1',
         debit_type      => { description => 'Overdue fine' }
-      };
+        };
 
     # Transaction 2 (Account (1.00) + Lost (0.50) + Payment (-1.50))
     my $account1 = $account->add_debit(
@@ -157,19 +159,19 @@ subtest 'summary' => sub {
 
     # Lost charge of 0.5 fully paid
     unshift @{$expected_income_grouped},
-      {
+        {
         debit_type_code => 'LOST',
         total           => '0.5',
         debit_type      => { description => 'Lost item' }
-      };
+        };
 
     # Account fee of 1.0 fully paid
     unshift @{$expected_income_grouped},
-      {
+        {
         debit_type_code => 'ACCOUNT',
         total           => '1',
         debit_type      => { description => 'Account creation fee' }
-      };
+        };
 
     # Transaction 3 (Refund (-0.50) + Payout (0.50))
     $lost1->discard_changes;
@@ -197,46 +199,41 @@ subtest 'summary' => sub {
 
     # Lost fee of 0.50 fully refunded
     unshift @{$expected_payout_grouped},
-      {
-        'total'       => '0.5',
-        'credit_type' => {
-            'description' => 'Refund'
-        },
+        {
+        'total'            => '0.5',
+        'credit_type'      => { 'description' => 'Refund' },
         'credit_type_code' => 'REFUND',
-        'related_debit' => {
+        'related_debit'    => {
             'debit_type_code' => 'LOST',
-            'debit_type' => {
-                'description' => 'Lost item'
-            }
+            'debit_type'      => { 'description' => 'Lost item' }
         }
-      };
+        };
 
     $expected_total += $expected_income_total;
     $expected_total -= $expected_payout_total;
 
     # Cashup 1
-    my $cashup1 =
-      $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
+    my $cashup1 = $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
 
     my $summary = $cashup1->summary;
 
-    is( $summary->{from_date}, undef, "from_date is undefined if there is only one recorded" );
-    is( $summary->{to_date}, $cashup1->timestamp, "to_date equals cashup timestamp" );
-    is( ref( $summary->{income_grouped} ), 'ARRAY', "income_grouped contains an arrayref" );
-    is( scalar @{ $summary->{income_grouped} }, 3, "income_grouped contains 3 transactions" );
+    is( $summary->{from_date}, undef,                    "from_date is undefined if there is only one recorded" );
+    is( $summary->{to_date},   $cashup1->timestamp,      "to_date equals cashup timestamp" );
+    is( ref( $summary->{income_grouped} ),      'ARRAY', "income_grouped contains an arrayref" );
+    is( scalar @{ $summary->{income_grouped} }, 3,       "income_grouped contains 3 transactions" );
     is_deeply( $summary->{income_grouped}, $expected_income_grouped, "income_grouped arrayref is correct" );
     is( $summary->{income_total}, $expected_income_total, "income_total is correct" );
 
-    is( ref( $summary->{payout_grouped} ), 'ARRAY', "payout_grouped contains an arrayref" );
-    is( scalar @{ $summary->{payout_grouped} }, 1, "payout_grouped contains 1 transaction" );
+    is( ref( $summary->{payout_grouped} ),      'ARRAY', "payout_grouped contains an arrayref" );
+    is( scalar @{ $summary->{payout_grouped} }, 1,       "payout_grouped contains 1 transaction" );
     is_deeply( $summary->{payout_grouped}, $expected_payout_grouped, "payout_grouped arrayref is correct" );
     is( $summary->{payout_total}, $expected_payout_total, "payout_total is correct" );
-    is( $summary->{total}, $expected_total,"total equals expected_total" );
+    is( $summary->{total},        $expected_total,        "total equals expected_total" );
 
     # Backdate cashup1 so we can add a new cashup to check 'previous'
     $cashup1->timestamp( \'NOW() - INTERVAL 12 MINUTE' )->store();
     $cashup1->discard_changes;
-    $expected_total = 0;
+    $expected_total          = 0;
     $expected_income_total   = 0;
     $expected_income_grouped = [];
     $expected_payout_total   = 0;
@@ -265,35 +262,37 @@ subtest 'summary' => sub {
     $expected_income_total += '2.00';
 
     unshift @{$expected_income_grouped},
-      {
+        {
         debit_type_code => 'OVERDUE',
         total           => '-2.000000' * -1,
         debit_type      => { 'description' => 'Overdue fine' }
-      };
+        };
 
     $expected_total += $expected_income_total;
     $expected_total -= $expected_payout_total;
 
     # Cashup 2
-    my $cashup2 =
-      $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
+    my $cashup2 = $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
 
     $summary = $cashup2->summary;
 
     is( $summary->{from_date}, $cashup1->timestamp, "from_date returns the timestamp of the previous cashup cashup" );
-    is( $summary->{to_date}, $cashup2->timestamp, "to_date equals cashup timestamp" );
-    is( ref( $summary->{income_grouped} ), 'ARRAY', "income_grouped contains Koha::Account::Lines" );
-    is( scalar @{ $summary->{income_grouped} }, 1, "income_grouped contains 1 transaction" );
-    is_deeply( $summary->{income_grouped}, $expected_income_grouped, "income_grouped arrayref is correct for partial payment" );
-    is( ref( $summary->{payout_grouped} ), 'ARRAY', "payout_grouped contains Koha::Account::Lines" );
-    is( scalar @{ $summary->{payout_grouped} }, 0, "payout_grouped contains 0 transactions" );
+    is( $summary->{to_date},   $cashup2->timestamp, "to_date equals cashup timestamp" );
+    is( ref( $summary->{income_grouped} ),      'ARRAY', "income_grouped contains Koha::Account::Lines" );
+    is( scalar @{ $summary->{income_grouped} }, 1,       "income_grouped contains 1 transaction" );
+    is_deeply(
+        $summary->{income_grouped}, $expected_income_grouped,
+        "income_grouped arrayref is correct for partial payment"
+    );
+    is( ref( $summary->{payout_grouped} ),      'ARRAY', "payout_grouped contains Koha::Account::Lines" );
+    is( scalar @{ $summary->{payout_grouped} }, 0,       "payout_grouped contains 0 transactions" );
     is_deeply( $summary->{payout_grouped}, $expected_payout_grouped, "payout_grouped arrayref is correct" );
     is( $summary->{total}, $expected_total, "total equals expected_total" );
 
     # Backdate cashup2 so we can add a new cashup to check
     $cashup2->timestamp( \'NOW() - INTERVAL 6 MINUTE' )->store();
     $cashup2->discard_changes;
-    $expected_total = 0;
+    $expected_total          = 0;
     $expected_income_total   = 0;
     $expected_income_grouped = [];
     $expected_payout_total   = 0;
@@ -325,36 +324,34 @@ subtest 'summary' => sub {
 
     # Account fee of 1.00 fully refunded (Across cashup boundary)
     unshift @{$expected_payout_grouped},
-      {
-        'total'       => '1',
-        'credit_type' => {
-            'description' => 'Refund'
-        },
+        {
+        'total'            => '1',
+        'credit_type'      => { 'description' => 'Refund' },
         'credit_type_code' => 'REFUND',
-        'related_debit' => {
+        'related_debit'    => {
             'debit_type_code' => 'ACCOUNT',
-            'debit_type' => {
-                'description' => 'Account creation fee'
-            }
+            'debit_type'      => { 'description' => 'Account creation fee' }
         }
-      };
+        };
 
     $expected_total += $expected_income_total;
     $expected_total -= $expected_payout_total;
 
     # Cashup 3
-    my $cashup3 =
-      $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
+    my $cashup3 = $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
 
     $summary = $cashup3->summary;
 
     is( $summary->{from_date}, $cashup2->timestamp, "from_date returns the timestamp of the previous cashup cashup" );
-    is( $summary->{to_date}, $cashup3->timestamp, "to_date equals cashup timestamp" );
-    is( ref( $summary->{income_grouped} ), 'ARRAY', "income_grouped contains Koha::Account::Lines" );
-    is( scalar @{ $summary->{income_grouped} }, 0, "income_grouped contains 1 transaction" );
-    is_deeply( $summary->{income_grouped}, $expected_income_grouped, "income_grouped arrayref is correct for partial payment" );
-    is( ref( $summary->{payout_grouped} ), 'ARRAY', "payout_grouped contains Koha::Account::Lines" );
-    is( scalar @{ $summary->{payout_grouped} }, 1, "payout_grouped contains 0 transactions" );
+    is( $summary->{to_date},   $cashup3->timestamp, "to_date equals cashup timestamp" );
+    is( ref( $summary->{income_grouped} ),      'ARRAY', "income_grouped contains Koha::Account::Lines" );
+    is( scalar @{ $summary->{income_grouped} }, 0,       "income_grouped contains 1 transaction" );
+    is_deeply(
+        $summary->{income_grouped}, $expected_income_grouped,
+        "income_grouped arrayref is correct for partial payment"
+    );
+    is( ref( $summary->{payout_grouped} ),      'ARRAY', "payout_grouped contains Koha::Account::Lines" );
+    is( scalar @{ $summary->{payout_grouped} }, 1,       "payout_grouped contains 0 transactions" );
     is_deeply( $summary->{payout_grouped}, $expected_payout_grouped, "payout_grouped arrayref is correct" );
     is( $summary->{total}, $expected_total, "total equals expected_total" );
 

@@ -19,7 +19,7 @@ package Koha::Objects;
 
 use Modern::Perl;
 
-use Carp qw( carp );
+use Carp            qw( carp );
 use List::MoreUtils qw( none );
 use Class::Inspector;
 
@@ -91,7 +91,7 @@ sub find {
 
     my $object;
 
-    unless (!@pars || none { defined($_) } @pars) {
+    unless ( !@pars || none { defined($_) } @pars ) {
         my $result = $self->_resultset()->find(@pars);
         if ($result) {
             $object = $self->object_class()->_new_from_dbic($result);
@@ -136,7 +136,7 @@ sub search {
     my ( $self, $params, $attributes ) = @_;
 
     my $class = ref($self) ? ref($self) : $self;
-    my $rs = $self->_resultset()->search($params, $attributes);
+    my $rs    = $self->_resultset()->search( $params, $attributes );
 
     return $class->_new_from_dbic($rs);
 }
@@ -154,7 +154,7 @@ sub search_related {
 
     return if !$rel_name;
 
-    my $rs = $self->_resultset()->search_related($rel_name, @params);
+    my $rs = $self->_resultset()->search_related( $rel_name, @params );
     return if !$rs;
     my $object_class = _get_objects_class( $rs->result_class );
 
@@ -203,7 +203,7 @@ catch wrong uses as well.
 =cut
 
 sub update {
-    my ($self, $fields, $options) = @_;
+    my ( $self, $fields, $options ) = @_;
 
     Koha::Exceptions::Object::NotInstantiated->throw(
         method => 'update',
@@ -214,17 +214,19 @@ sub update {
 
     if (
         !$no_triggers
-        && ( Class::Inspector->function_exists( $self->object_class, 'update' )
-          or Class::Inspector->function_exists( $self->object_class, 'store' ) )
-      )
+        && (   Class::Inspector->function_exists( $self->object_class, 'update' )
+            or Class::Inspector->function_exists( $self->object_class, 'store' ) )
+        )
     {
         my $objects_updated;
-        $self->_resultset->result_source->schema->txn_do( sub {
-            while ( my $o = $self->next ) {
-                $o->update($fields);
-                $objects_updated++;
+        $self->_resultset->result_source->schema->txn_do(
+            sub {
+                while ( my $o = $self->next ) {
+                    $o->update($fields);
+                    $objects_updated++;
+                }
             }
-        });
+        );
         return $objects_updated;
     }
 
@@ -256,17 +258,17 @@ sub filter_by_last_update {
         unless grep { exists $params->{$_} } qw/days from to older_than younger_than min_days/;
 
     foreach my $key (qw(from to)) {
-        if (exists $params->{$key} and ref $params->{$key} ne 'DateTime') {
+        if ( exists $params->{$key} and ref $params->{$key} ne 'DateTime' ) {
             Koha::Exceptions::WrongParameter->throw("'$key' parameter must be a DateTime object");
         }
     }
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    foreach my $p ( qw/days older_than younger_than min_days/  ) {
+    foreach my $p (qw/days older_than younger_than min_days/) {
         next if !exists $params->{$p};
-        my $days = $params->{$p};
+        my $days     = $params->{$p};
         my $operator = { days => '<', older_than => '<', min_days => '<=' }->{$p} // '>';
-        $conditions->{$operator} = \['DATE_SUB(CURDATE(), INTERVAL ? DAY)', $days];
+        $conditions->{$operator} = \[ 'DATE_SUB(CURDATE(), INTERVAL ? DAY)', $days ];
     }
     if ( exists $params->{from} ) {
         $conditions->{'>='} = $dtf->format_datetime( $params->{from} );
@@ -275,11 +277,7 @@ sub filter_by_last_update {
         $conditions->{'<='} = $dtf->format_datetime( $params->{to} );
     }
 
-    return $self->search(
-        {
-            $timestamp_column_name => $conditions
-        }
-    );
+    return $self->search( { $timestamp_column_name => $conditions } );
 }
 
 =head3 single
@@ -316,12 +314,12 @@ Returns undef if there are no more objects to return.
 =cut
 
 sub next {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $result = $self->_resultset()->next();
     return unless $result;
 
-    my $object = $self->object_class()->_new_from_dbic( $result );
+    my $object = $self->object_class()->_new_from_dbic($result);
 
     return $object;
 }
@@ -336,14 +334,14 @@ Returns undef if there are no object to return.
 =cut
 
 sub last {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $count = $self->_resultset->count;
     return unless $count;
 
-    my ( $result ) = $self->_resultset->slice($count - 1, $count - 1);
+    my ($result) = $self->_resultset->slice( $count - 1, $count - 1 );
 
-    my $object = $self->object_class()->_new_from_dbic( $result );
+    my $object = $self->object_class()->_new_from_dbic($result);
 
     return $object;
 }
@@ -366,8 +364,8 @@ sub empty {
         class  => $self
     ) unless ref $self;
 
-    $self = $self->search(\'0 = 1');
-    $self->_resultset()->set_cache([]);
+    $self = $self->search( \'0 = 1' );
+    $self->_resultset()->set_cache( [] );
 
     return $self;
 }
@@ -382,7 +380,7 @@ with the first object in a set.
 =cut
 
 sub reset {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->_resultset()->reset();
 
@@ -398,7 +396,7 @@ Returns an arrayref of the objects in this set.
 =cut
 
 sub as_list {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my @dbic_rows = $self->_resultset()->all();
 
@@ -426,8 +424,8 @@ Return all the values of this set for a given column
 =cut
 
 sub get_column {
-    my ($self, $column_name) = @_;
-    return $self->_resultset->get_column( $column_name )->all;
+    my ( $self, $column_name ) = @_;
+    return $self->_resultset->get_column($column_name)->all;
 }
 
 =head3 Koha::Objects->TO_JSON
@@ -449,7 +447,7 @@ Returns a representation of the objects, suitable for API output .
 =cut
 
 sub to_api {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     return [ map { $_->to_api($params) } $self->as_list ];
 }
@@ -466,7 +464,7 @@ sub attributes_from_api {
     my ( $self, $attributes ) = @_;
 
     $self->{_singular_object} ||= $self->object_class->new();
-    return $self->{_singular_object}->attributes_from_api( $attributes );
+    return $self->{_singular_object}->attributes_from_api($attributes);
 }
 
 =head3 from_api_mapping
@@ -478,7 +476,7 @@ Attributes map from the API to DBIC
 =cut
 
 sub from_api_mapping {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->{_singular_object} ||= $self->object_class->new();
     return $self->{_singular_object}->from_api_mapping;
@@ -493,7 +491,7 @@ Returns a hash of prefetchable subs and the type it returns
 =cut
 
 sub prefetch_whitelist {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->{_singular_object} ||= $self->object_class->new();
 
@@ -509,7 +507,7 @@ wraps the DBIC object in a corresponding Koha object
 sub _wrap {
     my ( $self, @dbic_rows ) = @_;
 
-    my @objects = map { $self->object_class->_new_from_dbic( $_ ) } @dbic_rows;
+    my @objects = map { $self->object_class->_new_from_dbic($_) } @dbic_rows;
 
     return @objects;
 }
@@ -525,20 +523,19 @@ sub _resultset {
 
     if ( ref($self) ) {
         $self->{_resultset} ||=
-          Koha::Database->new()->schema()->resultset( $self->_type() );
+            Koha::Database->new()->schema()->resultset( $self->_type() );
 
         return $self->{_resultset};
-    }
-    else {
+    } else {
         return Koha::Database->new()->schema()->resultset( $self->_type() );
     }
 }
 
 sub _get_objects_class {
-    my ( $type ) = @_;
+    my ($type) = @_;
     return unless $type;
 
-    if( $type->can('koha_objects_class') ) {
+    if ( $type->can('koha_objects_class') ) {
         return $type->koha_objects_class;
     }
     $type =~ s|Schema::Result::||;
@@ -554,7 +551,7 @@ Return the table columns
 =cut
 
 sub columns {
-    my ( $class ) = @_;
+    my ($class) = @_;
     return Koha::Database->new->schema->resultset( $class->_type )->result_source->columns;
 }
 
@@ -572,22 +569,21 @@ sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
     my @known_methods = qw( count is_paged pager result_class single slice );
-    my $method = our $AUTOLOAD;
+    my $method        = our $AUTOLOAD;
     $method =~ s/.*:://;
-
 
     unless ( grep { $_ eq $method } @known_methods ) {
         my $class = ref($self) ? ref($self) : $self;
         Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
-            error      => sprintf("The method %s->%s is not covered by tests!", $class, $method),
+            error      => sprintf( "The method %s->%s is not covered by tests!", $class, $method ),
             show_trace => 1
         );
     }
 
     my $r = eval { $self->_resultset->$method(@params) };
-    if ( $@ ) {
+    if ($@) {
         carp "No method $method found for " . ref($self) . " " . $@;
-        return
+        return;
     }
     return $r;
 }

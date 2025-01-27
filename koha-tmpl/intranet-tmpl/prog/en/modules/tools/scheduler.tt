@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Task scheduler") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Task scheduler") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -29,86 +30,86 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' asides=['tools-menu', 'guided-reports-view.inc'] %]
+    <h1>Task scheduler</h1>
 
-                <h1>Task scheduler</h1>
-
-[% IF ( job_add_failed ) %]
-<div class="alert alert-info">Failed to add scheduled task</div>
-[% END %]
-
-<form name="form1" action="scheduler.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-<input type="hidden" name="op" value="cud-add" />
-
-<fieldset class="rows">
-<legend>Task scheduler</legend><ol>
-<li><span class="label">Current server time is:</span>
-[% time | html %]</li>
-<li><label for="starttime">Time:</label>
-<input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" /></li>
-    <li>
-        <label for="startdate">Date: </label>
-        <input type="text" size="10" id="startdate" name="startdate" class="flatpickr" data-flatpickr-futuredate="true" value="" />
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-<li><label for="report">Report:</label>
-<select name="report" id="report">
-[% FOREACH savedreport IN savedreports %]
-    [% IF ( savedreport.selected ) %]
-        <option value="[% savedreport.id | html %]" selected="selected">[% savedreport.report_name | html %]</option>
-    [% ELSE %]
-        <option value="[% savedreport.id | html %]">[% savedreport.report_name | html %]</option>
+    [% IF ( job_add_failed ) %]
+        <div class="alert alert-info">Failed to add scheduled task</div>
     [% END %]
-[% END %]
-</select>
-</li>
-<li>
-    <label for="format">Output format:</label>
-    <select name="format" id="format">
-        <option value="text">Text (TSV)</option>
-        <option value="csv">CSV</option>
-        <option value="html">HTML</option>
-    </select>
-</li>
-<li><label for="email">Email:</label>
 
-<input type="text" name="email" id="email" size="50" />
-</li>
-</ol></fieldset>
-<fieldset class="action"><input class="btn btn-primary" type="submit" value="Save" /></fieldset>
-</form>
+    <form name="form1" action="scheduler.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-add" />
 
-[% IF ( JOBS ) %]
-    <h2>Scheduled tasks</h2>
-    <div class="page-section">
-        <table>
-            <thead>
-                <tr>
-                    <th>Date/Time</th>
-                    <th>Action</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH JOB IN JOBS %]
+        <fieldset class="rows">
+            <legend>Task scheduler</legend
+            ><ol>
+                <li><span class="label">Current server time is:</span> [% time | html %]</li>
+                <li><label for="starttime">Time:</label> <input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" /></li>
+                <li>
+                    <label for="startdate">Date: </label>
+                    <input type="text" size="10" id="startdate" name="startdate" class="flatpickr" data-flatpickr-futuredate="true" value="" />
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </li>
+                <li
+                    ><label for="report">Report:</label>
+                    <select name="report" id="report">
+                        [% FOREACH savedreport IN savedreports %]
+                            [% IF ( savedreport.selected ) %]
+                                <option value="[% savedreport.id | html %]" selected="selected">[% savedreport.report_name | html %]</option>
+                            [% ELSE %]
+                                <option value="[% savedreport.id | html %]">[% savedreport.report_name | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="format">Output format:</label>
+                    <select name="format" id="format">
+                        <option value="text">Text (TSV)</option>
+                        <option value="csv">CSV</option>
+                        <option value="html">HTML</option>
+                    </select>
+                </li>
+                <li
+                    ><label for="email">Email:</label>
+
+                    <input type="text" name="email" id="email" size="50" />
+                </li> </ol
+        ></fieldset>
+        <fieldset class="action"><input class="btn btn-primary" type="submit" value="Save" /></fieldset>
+    </form>
+
+    [% IF ( JOBS ) %]
+        <h2>Scheduled tasks</h2>
+        <div class="page-section">
+            <table>
+                <thead>
                     <tr>
-                        <td>[% JOB.TIME | html %]</td>
-                        <td>[% JOB.TAG | html %]</td>
-                        <td>
-                            <form action="scheduler.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-delete" />
-                                <input type="hidden" name="jobid" value="[% JOB.JOBID | html %]" />
-                                <button type="submit" name="delete" class="btn btn-xs btn-default"><i class="fa fa-trash-can"></i> Delete</button>
-                            </form>
-                        </td>
+                        <th>Date/Time</th>
+                        <th>Action</th>
+                        <th>&nbsp;</th>
                     </tr>
-                [% END %]
-            </tbody>
-        </table>
-    </div> <!-- /.page-section -->
-[% END %]
-
+                </thead>
+                <tbody>
+                    [% FOREACH JOB IN JOBS %]
+                        <tr>
+                            <td>[% JOB.TIME | html %]</td>
+                            <td>[% JOB.TAG | html %]</td>
+                            <td>
+                                <form action="scheduler.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-delete" />
+                                    <input type="hidden" name="jobid" value="[% JOB.JOBID | html %]" />
+                                    <button type="submit" name="delete" class="btn btn-xs btn-default"><i class="fa fa-trash-can"></i> Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

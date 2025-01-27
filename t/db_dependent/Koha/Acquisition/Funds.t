@@ -29,8 +29,8 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
-my $nb_of_funds = Koha::Acquisition::Funds->search->count;
+my $builder          = t::lib::TestBuilder->new;
+my $nb_of_funds      = Koha::Acquisition::Funds->search->count;
 my $budget_period_id = C4::Budgets::AddBudgetPeriod(
     {
         budget_period_startdate   => '2024-01-01',
@@ -47,7 +47,7 @@ my $new_fund = Koha::Acquisition::Fund->new(
     }
 )->store;
 
-like( $new_fund->budget_id, qr|^\d+$|, 'Adding a new fund should have set the budget_id');
+like( $new_fund->budget_id, qr|^\d+$|, 'Adding a new fund should have set the budget_id' );
 is( Koha::Acquisition::Funds->search->count, $nb_of_funds + 1, 'The fund should have been added' );
 
 my $retrieved_fund_1 = Koha::Acquisition::Funds->find( $new_fund->budget_id );

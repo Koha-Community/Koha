@@ -5,11 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Receive shipment from vendor {vendor}", { vendor = name }) | html %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Receive shipment from vendor {vendor}", { vendor = name }) | html %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -34,228 +35,233 @@
 
 <div class="main container-fluid">
     <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
-<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
+                <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
 
-    [% IF closed_invoices %]
-        <p>[% I18N.tnx("There is one closed invoice not included in this search.", "There are {closed_invoices} closed invoices not included in this search.", closed_invoices, { closed_invoices => closed_invoices }) %]</p>
-    [% END %]
-
-[% IF ( error_failed_to_create_invoice ) %]
-    <div id="error" class="alert alert-warning">
-        <p>An error has occurred. Invoice cannot be created.</p>
-    </div>
-[% END %]
-
-    [% IF duplicate_invoices %]
-    <div id="parcels_duplicate_invoice" class="alert alert-warning">
-        <p>This invoice number has already been used. Would you like to receive on an existing invoice?</p>
-        <table>
-            <thead><tr><th>Invoice number</th><th>Shipment date</th><th></th></tr></thead>
-            <tbody>
-                [% FOREACH invoice IN duplicate_invoices %]
-                    <tr>
-                        <td>[% invoice.invoicenumber | html %]</td>
-                        <td>[% invoice.shipmentdate | $KohaDates %]</td>
-                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid | uri %]">Receive</a></td>
-                    </tr>
+                [% IF closed_invoices %]
+                    <p>[% I18N.tnx("There is one closed invoice not included in this search.", "There are {closed_invoices} closed invoices not included in this search.", closed_invoices, { closed_invoices => closed_invoices }) %]</p>
                 [% END %]
-            </tbody>
-        </table>
-        <form method="post" action="parcels.pl">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-            <input type="hidden" name="op" value="cud-confirm" />
-            <input type="hidden" name="invoice" value="[% invoicenumber | html %]" />
-            <input type="hidden" name="shipmentdate" value="[% shipmentdate | $KohaDates dateformat => 'iso' %]" />
-            <input type="hidden" name="shipmentcost" value="[% shipmentcost | html %]" />
-            <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid | html %]" />
-            <input type="submit" class="btn btn-primary" value="Create new invoice anyway" />
-        </form>
-    </div>
-    [% END %]
 
-
-[% IF ( count ) %]
-<p> [% count | html %] shipments</p>
-<div id="resultlist" class="page-section">
-<!-- Search Results Table -->
-
-<table class="small" id="parcelst">
-    <thead>
-        <tr>
-            <th>Line</th>
-            <th>Date received</th>
-            <th>Invoice number</th>
-            <th>Item count</th>
-            <th>[% tp("Bibliographic record", "Record count") | html %]</th>
-            <th>Items expected</th>
-        </tr>
-    </thead>
-    <tbody>
-    <!-- Actual Search Results -->
-    [% FOREACH searchresult IN searchresults %]
-        <tr>
-            <td>
-                [% searchresult.number | html %]
-            </td>
-            <td data-order="[% searchresult.datereceived | html %]">
-                [% searchresult.datereceived | $KohaDates %]
-            </td>
-            <td>
-                [% IF ( searchresult.code ) %]
-                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid | uri %]">[% searchresult.code | html %]</a>
-                [% ELSE %]
-                    <abbr title="not available">n/a</abbr>
+                [% IF ( error_failed_to_create_invoice ) %]
+                    <div id="error" class="alert alert-warning">
+                        <p>An error has occurred. Invoice cannot be created.</p>
+                    </div>
                 [% END %]
-            </td>
-            <td>
-                [% searchresult.reccount | html %]
-            </td>
-            <td>
-                [% searchresult.bibcount | html %]
-            </td>
-            <td>
-                [% searchresult.itemcount | html %]
-            </td>
-        </tr>
-    [% END %]
-    </tbody>
-</table>
 
-<div id="resultnumber">
-<!-- Row of numbers corresponding to search result pages -->
-[% IF ( displayprev ) %]
-    <a href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% prevstartfrom | uri %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | uri %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | uri %][% END %][% IF ( code ) %]&amp;filter=[% code | uri %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | uri %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | uri %][% END %]&amp;type=intra">&lt;&lt; Previous</a>
-[% END %]
-[% FOREACH number IN numbers %]
-    [% IF ( number.highlight ) %]
-    <span class="current">[% number.number | html %]</span>
-    [% ELSE %]
-    <a href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% number.startfrom | uri %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom | uri %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto | uri %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code | uri %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby | uri %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage | uri %][% END %]&amp;type=intra">[% number.number | html %]</a>
-    [% END %]
-[% END %]
-[% IF ( displaynext ) %]
-    <a href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% nextstartfrom | uri %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | uri %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | uri %][% END %][% IF ( code ) %]&amp;filter=[% code | uri %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | uri %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | uri %][% END %]&amp;type=intra">Next &gt;&gt;</a>
-[% END %]
-</div>
-</div>
-[% END %]
+                [% IF duplicate_invoices %]
+                    <div id="parcels_duplicate_invoice" class="alert alert-warning">
+                        <p>This invoice number has already been used. Would you like to receive on an existing invoice?</p>
+                        <table>
+                            <thead
+                                ><tr><th>Invoice number</th><th>Shipment date</th><th></th></tr
+                            ></thead>
+                            <tbody>
+                                [% FOREACH invoice IN duplicate_invoices %]
+                                    <tr>
+                                        <td>[% invoice.invoicenumber | html %]</td>
+                                        <td>[% invoice.shipmentdate | $KohaDates %]</td>
+                                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid | uri %]">Receive</a></td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                        <form method="post" action="parcels.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                            <input type="hidden" name="op" value="cud-confirm" />
+                            <input type="hidden" name="invoice" value="[% invoicenumber | html %]" />
+                            <input type="hidden" name="shipmentdate" value="[% shipmentdate | $KohaDates dateformat => 'iso' %]" />
+                            <input type="hidden" name="shipmentcost" value="[% shipmentcost | html %]" />
+                            <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid | html %]" />
+                            <input type="submit" class="btn btn-primary" value="Create new invoice anyway" />
+                        </form>
+                    </div>
+                [% END %]
 
-    <div id="parcels_new_parcel">
-        <form method="post" action="parcels.pl" class="validated">
-            [% INCLUDE 'csrf-token.inc' %]
-    <fieldset class="rows">
-    <legend>Receive a new shipment</legend>
-       <ol> <li>
-            <label for="invoice" class="required">Vendor invoice:</label>
-            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-            <input type="hidden" name="op" value="cud-new" />
-            <input type="text" size="20" id="invoice" name="invoice" class="focus required" required="required" />
-        </li>
-		[% IF ( gst ) %]
-        <li>
-            <label for="gst">GST:</label>
-            <input type="text" size="20" id="gst" name="gst" />
-        </li>
-		[% END %]
-      <!--  // Removing freight input until shipping can be proplerly handled .
+                [% IF ( count ) %]
+                    <p> [% count | html %] shipments</p>
+                    <div id="resultlist" class="page-section">
+                        <!-- Search Results Table -->
+
+                        <table class="small" id="parcelst">
+                            <thead>
+                                <tr>
+                                    <th>Line</th>
+                                    <th>Date received</th>
+                                    <th>Invoice number</th>
+                                    <th>Item count</th>
+                                    <th>[% tp("Bibliographic record", "Record count") | html %]</th>
+                                    <th>Items expected</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Actual Search Results -->
+                                [% FOREACH searchresult IN searchresults %]
+                                    <tr>
+                                        <td> [% searchresult.number | html %] </td>
+                                        <td data-order="[% searchresult.datereceived | html %]"> [% searchresult.datereceived | $KohaDates %] </td>
+                                        <td>
+                                            [% IF ( searchresult.code ) %]
+                                                <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid | uri %]">[% searchresult.code | html %]</a>
+                                            [% ELSE %]
+                                                <abbr title="not available">n/a</abbr>
+                                            [% END %]
+                                        </td>
+                                        <td> [% searchresult.reccount | html %] </td>
+                                        <td> [% searchresult.bibcount | html %] </td>
+                                        <td> [% searchresult.itemcount | html %] </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+
+                        <div id="resultnumber">
+                            <!-- Row of numbers corresponding to search result pages -->
+                            [% IF ( displayprev ) %]
+                                <a
+                                    href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% prevstartfrom | uri %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | uri %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | uri %][% END %][% IF ( code ) %]&amp;filter=[% code | uri %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | uri %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | uri %][% END %]&amp;type=intra"
+                                    >&lt;&lt; Previous</a
+                                >
+                            [% END %]
+                            [% FOREACH number IN numbers %]
+                                [% IF ( number.highlight ) %]
+                                    <span class="current">[% number.number | html %]</span>
+                                [% ELSE %]
+                                    <a
+                                        href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% number.startfrom | uri %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom | uri %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto | uri %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code | uri %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby | uri %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage | uri %][% END %]&amp;type=intra"
+                                        >[% number.number | html %]</a
+                                    >
+                                [% END %]
+                            [% END %]
+                            [% IF ( displaynext ) %]
+                                <a
+                                    href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% nextstartfrom | uri %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | uri %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | uri %][% END %][% IF ( code ) %]&amp;filter=[% code | uri %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | uri %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | uri %][% END %]&amp;type=intra"
+                                    >Next &gt;&gt;</a
+                                >
+                            [% END %]
+                        </div>
+                    </div>
+                [% END %]
+
+                <div id="parcels_new_parcel">
+                    <form method="post" action="parcels.pl" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <fieldset class="rows">
+                            <legend>Receive a new shipment</legend>
+                            <ol>
+                                <li>
+                                    <label for="invoice" class="required">Vendor invoice:</label>
+                                    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                                    <input type="hidden" name="op" value="cud-new" />
+                                    <input type="text" size="20" id="invoice" name="invoice" class="focus required" required="required" />
+                                </li>
+                                [% IF ( gst ) %]
+                                    <li>
+                                        <label for="gst">GST:</label>
+                                        <input type="text" size="20" id="gst" name="gst" />
+                                    </li>
+                                [% END %]
+                                <!--  // Removing freight input until shipping can be proplerly handled .
 	  <li>
             <label for="freight">Shipping:</label>
             <input type="text" size="20" id="freight" name="freight" />
         </li> -->
-         <li>
-            <label for="shipmentdate">Shipment date: </label>
-            <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today | html %]" class="flatpickr" />
-            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-        </li>
-        <li>
-            <label for="shipmentcost">Shipping cost: </label>
-            <input class="decimal" type="text" id="shipmentcost" name="shipmentcost" size="10" />
-        </li>
-        <li>
-            <label for="shipmentcost_budgetid">Shipping fund: </label>
-            <select id="shipmentcost_budgetid" name="shipmentcost_budgetid">
-                <option value="">No fund</option>
-                [% FOREACH budget IN budgets %]
-                    [% IF ( budget.b_active ) %]
-                        <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
-                    [% ELSE %]
-                        <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
-                    [% END %]
-                [% END %]
-            </select>
-            <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-            <input type="checkbox" id="showallfunds" />
+                                <li>
+                                    <label for="shipmentdate">Shipment date: </label>
+                                    <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today | html %]" class="flatpickr" />
+                                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                </li>
+                                <li>
+                                    <label for="shipmentcost">Shipping cost: </label>
+                                    <input class="decimal" type="text" id="shipmentcost" name="shipmentcost" size="10" />
+                                </li>
+                                <li>
+                                    <label for="shipmentcost_budgetid">Shipping fund: </label>
+                                    <select id="shipmentcost_budgetid" name="shipmentcost_budgetid">
+                                        <option value="">No fund</option>
+                                        [% FOREACH budget IN budgets %]
+                                            [% IF ( budget.b_active ) %]
+                                                <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+                                    <input type="checkbox" id="showallfunds" />
+                                </li>
+                            </ol>
+                        </fieldset>
+                        [% IF available_additional_fields %]
+                            [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+                        [% END %]
+                        <fieldset class="action"><input type="submit" class="btn btn-default" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
-        </li>
-		</ol>
-    </fieldset>
-            [% IF available_additional_fields %]
-                [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
-            [% END %]
-            <fieldset class="action"><input type="submit" class="btn btn-default" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
-        </form>
+        <div class="col-md-2 order-sm-2 order-md-1">
+            <aside>
+                <form method="get" action="parcels.pl">
+                    <fieldset class="brief">
+                        <h4>Filter</h4>
+                        <ol>
+                            <li> <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" /></li>
+                            <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="[% filter | html %]" id="filter" /></li>
+                            <li>
+                                <label for="datefrom">From:</label>
+                                <input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom | html %]" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                            <li>
+                                <label for="dateto">To:</label>
+                                <input type="text" size="9" id="dateto" name="dateto" value="[% dateto | html %]" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                            <li
+                                ><label for="orderby">Sort by :</label
+                                ><select name="orderby" id="orderby">
+                                    <option value="invoicenumber">Invoice number</option>
+                                    <option value="shipmentdate">Shipment date</option>
+                                    <option value="shipmentdate desc">Shipment date reverse</option>
+                                    <option value="invoicenumber desc">Invoice number reverse</option> </select
+                                ><br />
+                                <label for="resultsperpage">Results per page :</label
+                                ><select name="resultsperpage" id="resultsperpage">
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select></li
+                            >
+                            <li>
+                                <label for="filter_include_closed">
+                                    [% IF filter_include_closed %]
+                                        <input type="checkbox" id="filter_include_closed" value="1" name="filter_include_closed" checked="checked" title="Include closed invoices in the search" />
+                                    [% ELSE %]
+                                        <input type="checkbox" id="filter_include_closed" value="1" name="filter_include_closed" title="Include closed invoices in the search" />
+                                    [% END %]
+                                    Include closed invoices
+                                </label>
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Filter" />
+                        <a class="btn btn-default clear_search" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | uri %]">Clear</a>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
     </div>
-</main>
-</div> <!-- /.col-md-10.order-md-2 -->
-
-
-<div class="col-md-2 order-sm-2 order-md-1">
-    <aside>
-    <form method="get" action="parcels.pl">
-    <fieldset class="brief">
-	<h4>Filter</h4>
-        <ol>
-            <li> <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" /></li>
-            <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="[% filter | html %]" id="filter" /></li>
-            <li>
-                <label for="datefrom">From:</label>
-                <input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom | html %]" class="flatpickr" />
-                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-            </li>
-            <li>
-                <label for="dateto">To:</label>
-                <input type="text" size="9" id="dateto" name="dateto" value="[% dateto | html %]" class="flatpickr" />
-                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-            </li>
-            <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
-                <option value="invoicenumber">Invoice number</option>
-                <option value="shipmentdate">Shipment date</option>
-                <option value="shipmentdate desc">Shipment date reverse</option>
-                <option value="invoicenumber desc">Invoice number reverse</option>
-                </select><br />
-                <label for="resultsperpage">Results per page :</label><select name="resultsperpage" id="resultsperpage">
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                </select></li>
-            <li>
-                <label for="filter_include_closed">
-                    [% IF filter_include_closed %]
-                        <input type="checkbox" id="filter_include_closed" value="1" name="filter_include_closed" checked="checked" title="Include closed invoices in the search" />
-                    [% ELSE %]
-                        <input type="checkbox" id="filter_include_closed" value="1" name="filter_include_closed" title="Include closed invoices in the search" />
-                    [% END %]
-                    Include closed invoices
-                </label>
-
-            </li>
-        </ol>
-    </fieldset>
-    <fieldset class="action">
-        <input type="submit" class="btn btn-primary" value="Filter" />
-        <a class="btn btn-default clear_search" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | uri %]">Clear</a>
-    </fieldset>
-</form>
-</aside>
-</div>  <!-- /.col-md-2.order-md-1 -->
-
-</div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+    <!-- /.row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
@@ -263,22 +269,23 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-            var parcelst = $("#parcelst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "paginate": false
-            }));
+        $(document).ready(function () {
+            var parcelst = $("#parcelst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    paginate: false,
+                })
+            );
 
             //keep a copy of all budgets before removing the inactives
             var budgetId = $("#shipmentcost_budgetid");
             var disabledBudgetsCopy = budgetId.html();
-            $('.b_inactive').remove();
+            $(".b_inactive").remove();
 
-            $('#showallfunds').click(function() {
+            $("#showallfunds").click(function () {
                 if ($(this).is(":checked")) {
                     budgetId.html(disabledBudgetsCopy); //Puts back all the funds
-                }
-                else {
-                    $('.b_inactive').remove();
+                } else {
+                    $(".b_inactive").remove();
                 }
             });
         });

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2005 Biblibre
 # This file is part of Koha.
 #
@@ -44,22 +43,22 @@ To know on which branch this script have to display late order.
 =cut
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use C4::Letters qw( SendAlerts GetLetters );
+use C4::Letters     qw( SendAlerts GetLetters );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Orders;
 use Koha::CsvProfiles;
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/lateorders.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => 'order_receive' },
+        template_name => "acqui/lateorders.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_receive' },
     }
 );
 
@@ -72,19 +71,19 @@ my $estimateddeliverydateto   = $input->param('estimateddeliverydateto');
 
 # Get the "date to" param. If it is not defined and $delay is not defined too, it is the today's date.
 $estimateddeliverydateto ||=
-  ( not defined $delay and not defined $estimateddeliverydatefrom )
-  ? dt_from_string()
-  : undef;
+    ( not defined $delay and not defined $estimateddeliverydatefrom )
+    ? dt_from_string()
+    : undef;
 
-my $branch     = $input->param('branch');
-my $op         = $input->param('op');
+my $branch = $input->param('branch');
+my $op     = $input->param('op');
 
 my @errors = ();
 if ( $delay and not $delay =~ /^\d{1,3}$/ ) {
-    push @errors, {delay_digits => 1, bad_delay => $delay};
+    push @errors, { delay_digits => 1, bad_delay => $delay };
 }
 
-if ($op and $op eq "cud-send_alert"){
+if ( $op and $op eq "cud-send_alert" ) {
     my @ordernums = $input->multi_param("ordernumber");
     my $err;
     eval {
@@ -96,10 +95,10 @@ if ($op and $op eq "cud-send_alert"){
 
     if ( ref $err and exists $err->{error} and $err->{error} eq "no_email" ) {
         $template->{VARS}->{'error_claim'} = "no_email";
-    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_order_selected"){
+    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_order_selected" ) {
         $template->{VARS}->{'error_claim'} = "no_order_selected";
     } elsif ( $@ or ref $err and exists $err->{error} ) {
-        $template->param(error_claim => $@ || $err->{error});
+        $template->param( error_claim => $@ || $err->{error} );
     } else {
         $template->{VARS}->{'info_claim'} = 1;
     }
@@ -107,15 +106,15 @@ if ($op and $op eq "cud-send_alert"){
 
 my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
     {
-        delay        => $delay,
+        delay => $delay,
         (
             $estimateddeliverydatefrom
-            ? ( estimated_from => dt_from_string($estimateddeliverydatefrom, 'iso') )
+            ? ( estimated_from => dt_from_string( $estimateddeliverydatefrom, 'iso' ) )
             : ()
         ),
         (
             $estimateddeliverydateto
-            ? ( estimated_to => dt_from_string($estimateddeliverydateto, 'iso') )
+            ? ( estimated_to => dt_from_string( $estimateddeliverydateto, 'iso' ) )
             : ()
         )
     },
@@ -123,26 +122,24 @@ my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
 
 my $booksellers = Koha::Acquisition::Booksellers->search(
     {
-        id => {
-            -in => [ map { $_->basket->booksellerid } @lateorders ]
-        },
+        id => { -in => [ map { $_->basket->booksellerid } @lateorders ] },
     }
 );
 
 @lateorders = grep { $_->basket->booksellerid eq $booksellerid } @lateorders if $booksellerid;
 
-my $letters = GetLetters({ module => "claimacquisition" });
+my $letters = GetLetters( { module => "claimacquisition" } );
 
-$template->param(ERROR_LOOP => \@errors) if (@errors);
+$template->param( ERROR_LOOP => \@errors ) if (@errors);
 $template->param(
-    lateorders => \@lateorders,
-    booksellers => $booksellers,
-    bookseller_filter => ( $booksellerid ? $booksellers->find($booksellerid) : undef),
-	delay => $delay,
-    letters => $letters,
+    lateorders                => \@lateorders,
+    booksellers               => $booksellers,
+    bookseller_filter         => ( $booksellerid ? $booksellers->find($booksellerid) : undef ),
+    delay                     => $delay,
+    letters                   => $letters,
     estimateddeliverydatefrom => $estimateddeliverydatefrom,
     estimateddeliverydateto   => $estimateddeliverydateto,
-	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-    csv_profiles         => Koha::CsvProfiles->search({ type => 'sql', used_for => 'late_orders' }),
+    intranetcolorstylesheet   => C4::Context->preference("intranetcolorstylesheet"),
+    csv_profiles              => Koha::CsvProfiles->search( { type => 'sql', used_for => 'late_orders' } ),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

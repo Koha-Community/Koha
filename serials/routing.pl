@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 Routing.pl
 
 script used to create a routing list for a serial subscription
@@ -29,42 +28,43 @@ use Modern::Perl;
 use Try::Tiny;
 use CGI qw ( -utf8 );
 use C4::Koha;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Context;
 
-use C4::Serials qw( GetSubscription delroutingmember addroutingmember getroutinglist GetSerials GetLatestSerials check_routing );
+use C4::Serials
+    qw( GetSubscription delroutingmember addroutingmember getroutinglist GetSerials GetLatestSerials check_routing );
 use Koha::Patrons;
 
 use URI::Escape;
 
-my $query = CGI->new;
-my $subscriptionid = $query->param('subscriptionid');
-my $serialseq = $query->param('serialseq');
-my $routingid = $query->param('routingid');
+my $query           = CGI->new;
+my $subscriptionid  = $query->param('subscriptionid');
+my $serialseq       = $query->param('serialseq');
+my $routingid       = $query->param('routingid');
 my $borrowernumbers = $query->param('borrowernumbers');
-my $notes = $query->param('notes');
-my $op = $query->param('op') || q{};
-my $date_selected = $query->param('date_selected');
+my $notes           = $query->param('notes');
+my $op              = $query->param('op') || q{};
+my $date_selected   = $query->param('date_selected');
 $date_selected ||= q{};
 my $dbh = C4::Context->dbh;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'serials/routing.tt',
-        query           => $query,
-        type            => 'intranet',
-        flagsrequired   => { serials => 'routing' },
+        template_name => 'serials/routing.tt',
+        query         => $query,
+        type          => 'intranet',
+        flagsrequired => { serials => 'routing' },
     }
 );
 
 my $subs = GetSubscription($subscriptionid);
 
-output_and_exit( $query, $cookie, $template, 'unknown_subscription')
+output_and_exit( $query, $cookie, $template, 'unknown_subscription' )
     unless $subs;
 
-if($op eq 'cud-delete'){
-    delroutingmember($routingid,$subscriptionid);
+if ( $op eq 'cud-delete' ) {
+    delroutingmember( $routingid, $subscriptionid );
 }
 
 if ( $op eq 'cud-add_new_recipients' ) {
@@ -78,25 +78,25 @@ if ( $op eq 'cud-add_new_recipients' ) {
         };
     }
 }
-if($op eq 'cud-save'){
+if ( $op eq 'cud-save' ) {
     my $sth = $dbh->prepare('UPDATE serial SET routingnotes = ? WHERE subscriptionid = ?');
-    $sth->execute($notes,$subscriptionid);
+    $sth->execute( $notes, $subscriptionid );
     my $urldate = URI::Escape::uri_escape_utf8($date_selected);
     print $query->redirect("routing-preview.pl?subscriptionid=$subscriptionid&issue=$urldate");
 }
 
 my @routinglist = getroutinglist($subscriptionid);
 
-my ($count,@serials) = GetSerials($subscriptionid);
-my $serialdates = GetLatestSerials($subscriptionid,$count);
+my ( $count, @serials ) = GetSerials($subscriptionid);
+my $serialdates = GetLatestSerials( $subscriptionid, $count );
 
 my $dates = [];
-foreach my $dateseq (@{$serialdates}) {
+foreach my $dateseq ( @{$serialdates} ) {
     my $d = {};
     $d->{publisheddate} = $dateseq->{publisheddate};
-    $d->{serialseq} = $dateseq->{serialseq};
-    $d->{serialid} = $dateseq->{serialid};
-    if($date_selected eq $dateseq->{serialid}){
+    $d->{serialseq}     = $dateseq->{serialseq};
+    $d->{serialid}      = $dateseq->{serialid};
+    if ( $date_selected eq $dateseq->{serialid} ) {
         $d->{selected} = ' selected';
     } else {
         $d->{selected} = q{};
@@ -105,34 +105,33 @@ foreach my $dateseq (@{$serialdates}) {
 }
 
 my $member_loop = [];
-for my $routing ( @routinglist ) {
+for my $routing (@routinglist) {
     my $member = Koha::Patrons->find( $routing->{borrowernumber} )->unblessed;
     $member->{location} = $member->{branchcode};
-    if ($member->{firstname} ) {
+    if ( $member->{firstname} ) {
         $member->{name} = $member->{firstname} . q| |;
-    }
-    else {
+    } else {
         $member->{name} = q{};
     }
-    if ($member->{surname} ) {
+    if ( $member->{surname} ) {
         $member->{name} .= $member->{surname};
     }
-    $member->{routingid}=$routing->{routingid} || q{};
-    $member->{ranking} = $routing->{ranking} || q{};
+    $member->{routingid} = $routing->{routingid} || q{};
+    $member->{ranking}   = $routing->{ranking}   || q{};
 
-    push(@{$member_loop}, $member);
+    push( @{$member_loop}, $member );
 }
 
 $template->param(
-    title => $subs->{bibliotitle},
-    subscriptionid => $subscriptionid,
-    memberloop => $member_loop,
-    op => $op eq 'new',
-    dates => $dates,
-    routingnotes => $serials[0]->{'routingnotes'},
-    hasRouting => check_routing($subscriptionid),
-    (uc(C4::Context->preference("marcflavour"))) => 1
+    title                                            => $subs->{bibliotitle},
+    subscriptionid                                   => $subscriptionid,
+    memberloop                                       => $member_loop,
+    op                                               => $op eq 'new',
+    dates                                            => $dates,
+    routingnotes                                     => $serials[0]->{'routingnotes'},
+    hasRouting                                       => check_routing($subscriptionid),
+    ( uc( C4::Context->preference("marcflavour") ) ) => 1
 
-    );
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

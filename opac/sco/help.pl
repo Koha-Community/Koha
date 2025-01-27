@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # This code  (originally from circulation.pl) has been modified by:
-#   Trendsetters, 
+#   Trendsetters,
 #   dan, and
 #   Christina Lee.
 #
@@ -20,15 +20,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( in_iprange get_template_and_user );
+use C4::Auth   qw( in_iprange get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 my $query = CGI->new;
-unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+unless ( in_iprange( C4::Context->preference('SelfCheckAllowByIPRanges') ) ) {
     print $query->redirect("/cgi-bin/koha/opac-main.pl");
     exit;
 }
@@ -42,18 +41,18 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-if (C4::Context->preference('SelfCheckoutByLogin')) {
-    $template->param(SelfCheckoutByLogin => 1);
+if ( C4::Context->preference('SelfCheckoutByLogin') ) {
+    $template->param( SelfCheckoutByLogin => 1 );
 }
 my $selfchecktimeout = 120;
-if (C4::Context->preference('SelfCheckTimeout')) {
-   $selfchecktimeout = C4::Context->preference('SelfCheckTimeout');
+if ( C4::Context->preference('SelfCheckTimeout') ) {
+    $selfchecktimeout = C4::Context->preference('SelfCheckTimeout');
 }
 
-$template->param(SelfCheckTimeout => $selfchecktimeout);
+$template->param( SelfCheckTimeout => $selfchecktimeout );
 
-if (C4::Context->preference('SelfCheckHelpMessage')) {
-    $template->param(SelfCheckHelpMessage => C4::Context->preference('SelfCheckHelpMessage'));
+if ( C4::Context->preference('SelfCheckHelpMessage') ) {
+    $template->param( SelfCheckHelpMessage => C4::Context->preference('SelfCheckHelpMessage') );
 }
 
 $template->param(

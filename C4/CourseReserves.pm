@@ -28,30 +28,31 @@ use Koha::Course::Reserves;
 use Koha::Checkouts;
 
 use vars qw(@FIELDS);
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      GetCourse
-      ModCourse
-      GetCourses
-      DelCourse
+        GetCourse
+        ModCourse
+        GetCourses
+        DelCourse
 
-      GetCourseInstructors
-      ModCourseInstructors
+        GetCourseInstructors
+        ModCourseInstructors
 
-      GetCourseItem
-      ModCourseItem
+        GetCourseItem
+        ModCourseItem
 
-      GetCourseReserve
-      ModCourseReserve
-      GetCourseReserves
-      DelCourseReserve
+        GetCourseReserve
+        ModCourseReserve
+        GetCourseReserves
+        DelCourseReserve
 
-      SearchCourses
+        SearchCourses
 
-      GetItemCourseReservesInfo
+        GetItemCourseReservesInfo
     );
 
     @FIELDS = ( 'itype', 'ccode', 'homebranch', 'holdingbranch', 'location' );
@@ -80,11 +81,11 @@ This module deals with course reserves.
 sub GetCourse {
     my ($course_id) = @_;
 
-    my $course = Koha::Courses->find( $course_id );
+    my $course = Koha::Courses->find($course_id);
     return unless $course;
     $course = $course->unblessed;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "
         SELECT b.* FROM course_instructors ci
         LEFT JOIN borrowers b ON ( ci.borrowernumber = b.borrowernumber )
@@ -136,7 +137,7 @@ sub ModCourse {
     $dbh->do( $query, undef, @query_values );
 
     $course_id = $course_id
-      || $dbh->last_insert_id( undef, undef, 'courses', 'course_id' );
+        || $dbh->last_insert_id( undef, undef, 'courses', 'course_id' );
 
     EnableOrDisableCourseItems(
         course_id => $course_id,
@@ -177,7 +178,8 @@ sub GetCourses {
         $query .= join( ' AND ', @query_keys );
     }
 
-    $query .= " GROUP BY c.course_id, c.department, c.course_number, c.section, c.course_name, c.term, c.staff_note, c.public_note, c.students_count, c.enabled, c.timestamp ";
+    $query .=
+        " GROUP BY c.course_id, c.department, c.course_number, c.section, c.course_name, c.term, c.staff_note, c.public_note, c.students_count, c.enabled, c.timestamp ";
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
@@ -238,7 +240,7 @@ sub EnableOrDisableCourseItems {
     my (%params) = @_;
 
     my $course_id = $params{'course_id'};
-    my $enabled = $params{'enabled'} || 0;
+    my $enabled   = $params{'enabled'} || 0;
 
     my $lookfor = ( $enabled eq 'yes' ) ? 'no' : 'yes';
 
@@ -249,13 +251,15 @@ sub EnableOrDisableCourseItems {
 
     if ( $enabled eq 'yes' ) {
         foreach my $course_reserve (@$course_reserves) {
-            if (CountCourseReservesForItem(
+            if (
+                CountCourseReservesForItem(
                     ci_id   => $course_reserve->{'ci_id'},
                     enabled => 'yes'
                 )
-              ) {
+                )
+            {
                 EnableOrDisableCourseItem(
-                    ci_id   => $course_reserve->{'ci_id'},
+                    ci_id => $course_reserve->{'ci_id'},
                 );
             }
         }
@@ -267,9 +271,10 @@ sub EnableOrDisableCourseItems {
                     ci_id   => $course_reserve->{'ci_id'},
                     enabled => 'yes'
                 )
-              ) {
+                )
+            {
                 EnableOrDisableCourseItem(
-                    ci_id   => $course_reserve->{'ci_id'},
+                    ci_id => $course_reserve->{'ci_id'},
                 );
             }
         }
@@ -285,13 +290,16 @@ sub EnableOrDisableCourseItems {
 sub EnableOrDisableCourseItem {
     my (%params) = @_;
 
-    my $ci_id   = $params{'ci_id'};
+    my $ci_id = $params{'ci_id'};
 
-    return unless ( $ci_id );
+    return unless ($ci_id);
 
     my $course_item = GetCourseItem( ci_id => $ci_id );
 
-    my $info = $course_item->{itemnumber} ? GetItemCourseReservesInfo( itemnumber => $course_item->{itemnumber} ) : GetItemCourseReservesInfo( biblionumber => $course_item->{biblionumber} );
+    my $info =
+        $course_item->{itemnumber}
+        ? GetItemCourseReservesInfo( itemnumber   => $course_item->{itemnumber} )
+        : GetItemCourseReservesInfo( biblionumber => $course_item->{biblionumber} );
 
     my $enabled = any { $_->{course}->{enabled} eq 'yes' } @$info;
     $enabled = $enabled ? 'yes' : 'no';
@@ -300,7 +308,7 @@ sub EnableOrDisableCourseItem {
     ## or disable and already disabled item,
     ## as that would cause the fields to swap
     if ( $course_item->{'enabled'} ne $enabled ) {
-        _SwapAllFields($ci_id, $enabled );
+        _SwapAllFields( $ci_id, $enabled );
 
         my $query = "
             UPDATE course_items
@@ -358,25 +366,25 @@ sub ModCourseInstructors {
 
     return unless ($course_id);
     return
-      unless ( $mode eq 'replace'
+        unless ( $mode eq 'replace'
         || $mode eq 'add'
         || $mode eq 'delete' );
     return unless ( $cardnumbers || $borrowernumbers );
     return if ( $cardnumbers && $borrowernumbers );
 
     my ( @cardnumbers, @borrowernumbers );
-    @cardnumbers = @$cardnumbers if ( ref($cardnumbers) eq 'ARRAY' );
+    @cardnumbers     = @$cardnumbers if ( ref($cardnumbers) eq 'ARRAY' );
     @borrowernumbers = @$borrowernumbers
-      if ( ref($borrowernumbers) eq 'ARRAY' );
+        if ( ref($borrowernumbers) eq 'ARRAY' );
 
-    my $field  = (@cardnumbers) ? 'cardnumber' : 'borrowernumber';
-    my @fields = (@cardnumbers) ? @cardnumbers : @borrowernumbers;
+    my $field        = (@cardnumbers) ? 'cardnumber' : 'borrowernumber';
+    my @fields       = (@cardnumbers) ? @cardnumbers : @borrowernumbers;
     my $placeholders = join( ',', ('?') x scalar @fields );
 
     my $dbh = C4::Context->dbh;
 
     $dbh->do( "DELETE FROM course_instructors WHERE course_id = ?", undef, $course_id )
-      if ( $mode eq 'replace' );
+        if ( $mode eq 'replace' );
 
     my $query;
 
@@ -415,17 +423,17 @@ sub ModCourseInstructors {
 sub GetCourseItem {
     my (%params) = @_;
 
-    my $ci_id      = $params{'ci_id'};
-    my $itemnumber = $params{'itemnumber'};
+    my $ci_id        = $params{'ci_id'};
+    my $itemnumber   = $params{'itemnumber'};
     my $biblionumber = $params{'biblionumber'};
 
     return unless ( $itemnumber xor $biblionumber xor $ci_id );
 
     my ( $field, $value );
-    if ( $itemnumber ) {
+    if ($itemnumber) {
         $field = 'itemnumber';
         $value = $itemnumber;
-    } elsif ( $biblionumber ) {
+    } elsif ($biblionumber) {
         $field = 'biblionumber';
         $value = $biblionumber;
     } else {
@@ -447,7 +455,7 @@ sub GetCourseItem {
         my $course_reserves = $sth->fetchall_arrayref( {} );
 
         $course_item->{'course_reserves'} = $course_reserves
-          if ($course_reserves);
+            if ($course_reserves);
     }
     return $course_item;
 }
@@ -463,15 +471,16 @@ sub GetCourseItem {
 sub ModCourseItem {
     my (%params) = @_;
 
-    my $itemnumber = $params{'itemnumber'};
+    my $itemnumber   = $params{'itemnumber'};
     my $biblionumber = $params{'biblionumber'};
 
-    return unless ($itemnumber xor $biblionumber);
+    return unless ( $itemnumber xor $biblionumber );
 
-    my $course_item = $itemnumber ? GetCourseItem( itemnumber => $itemnumber ) : GetCourseItem( biblionumber => $biblionumber );
+    my $course_item =
+        $itemnumber ? GetCourseItem( itemnumber => $itemnumber ) : GetCourseItem( biblionumber => $biblionumber );
 
     if ( $itemnumber and !$biblionumber ) {
-        $biblionumber = Koha::Items->find( $itemnumber )->biblionumber;
+        $biblionumber = Koha::Items->find($itemnumber)->biblionumber;
         $params{biblionumber} = $biblionumber;
     }
 
@@ -502,15 +511,15 @@ sub ModCourseItem {
 sub _AddCourseItem {
     my (%params) = @_;
 
-    $params{homebranch} ||= undef; # Can't be empty string, FK constraint
-    $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
+    $params{homebranch}    ||= undef;    # Can't be empty string, FK constraint
+    $params{holdingbranch} ||= undef;    # Can't be empty string, FK constraint
 
-    my %data = map { $_ => $params{$_} } @FIELDS;
+    my %data    = map { $_              => $params{$_} } @FIELDS;
     my %enabled = map { $_ . "_enabled" => $params{ $_ . "_enabled" } } @FIELDS;
 
     my $ci = Koha::Course::Item->new(
         {
-            itemnumber => $params{itemnumber},
+            itemnumber   => $params{itemnumber},
             biblionumber => $params{biblionumber},
             %data,
             %enabled,
@@ -529,20 +538,21 @@ sub _AddCourseItem {
 sub _UpdateCourseItem {
     my (%params) = @_;
 
-    my $ci_id         = $params{'ci_id'};
-    my $course_item   = $params{'course_item'};
+    my $ci_id       = $params{'ci_id'};
+    my $course_item = $params{'course_item'};
 
-    $params{homebranch} ||= undef; # Can't be empty string, FK constraint
-    $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
+    $params{homebranch}    ||= undef;    # Can't be empty string, FK constraint
+    $params{holdingbranch} ||= undef;    # Can't be empty string, FK constraint
 
     return unless ( $ci_id || $course_item );
 
     $course_item = Koha::Course::Items->find( $ci_id || $course_item->{ci_id} );
 
-    my %data = map { $_ => $params{$_} } @FIELDS;
+    my %data    = map { $_              => $params{$_} } @FIELDS;
     my %enabled = map { $_ . "_enabled" => $params{ $_ . "_enabled" } } @FIELDS;
 
     if ( $course_item->itemnumber ) {
+
         # biblio-level course items don't store any of these fields
         my $item = Koha::Items->find( $course_item->itemnumber );
 
@@ -550,7 +560,7 @@ sub _UpdateCourseItem {
         if ( $course_item->is_enabled ) {
             my $item_fields = {};
 
-            for my $field ( @FIELDS ) {
+            for my $field (@FIELDS) {
 
                 my $field_enabled = $field . '_enabled';
                 my $field_storage = $field . '_storage';
@@ -558,21 +568,23 @@ sub _UpdateCourseItem {
                 # Find newly enabled field and add item value to storage
                 if ( $params{$field_enabled} && !$course_item->$field_enabled ) {
                     $enabled{$field_storage} = $item->$field;
-                    $item_fields->{$field}   = $params{$field};
+                    $item_fields->{$field} = $params{$field};
                 }
+
                 # Find newly disabled field and copy the storage value to the item, unset storage value
                 elsif ( !$params{$field_enabled} && $course_item->$field_enabled ) {
-                    $item_fields->{$field}   = $course_item->$field_storage;
+                    $item_fields->{$field} = $course_item->$field_storage;
                     $enabled{$field_storage} = undef;
                 }
+
                 # The field was already enabled, copy the incoming value to the item.
                 # The "original" ( when not on course reserve ) value is already in the storage field
-                elsif ( $course_item->$field_enabled) {
+                elsif ( $course_item->$field_enabled ) {
                     $item_fields->{$field} = $params{$field};
                 }
             }
 
-            $item->set( $item_fields )->store
+            $item->set($item_fields)->store
                 if keys %$item_fields;
         }
     }
@@ -596,18 +608,16 @@ sub _RevertFields {
 
     return unless $ci_id;
 
-    my $course_item = Koha::Course::Items->find( $ci_id );
+    my $course_item = Koha::Course::Items->find($ci_id);
 
     my $item_fields = {};
     $item_fields->{itype}         = $course_item->itype_storage         if $course_item->itype_enabled;
     $item_fields->{ccode}         = $course_item->ccode_storage         if $course_item->ccode_enabled;
     $item_fields->{location}      = $course_item->location_storage      if $course_item->location_enabled;
-    $item_fields->{homebranch} = $course_item->homebranch_storage if $course_item->homebranch_enabled;
+    $item_fields->{homebranch}    = $course_item->homebranch_storage    if $course_item->homebranch_enabled;
     $item_fields->{holdingbranch} = $course_item->holdingbranch_storage if $course_item->holdingbranch_enabled;
 
-    Koha::Items->find( $course_item->itemnumber )
-               ->set( $item_fields )
-               ->store
+    Koha::Items->find( $course_item->itemnumber )->set($item_fields)->store
         if keys %$item_fields;
 
     $course_item->itype_storage(undef);
@@ -627,10 +637,10 @@ sub _RevertFields {
 sub _SwapAllFields {
     my ( $ci_id, $enabled ) = @_;
 
-    my $course_item = Koha::Course::Items->find( $ci_id );
-    my $item = Koha::Items->find( $course_item->itemnumber );
+    my $course_item = Koha::Course::Items->find($ci_id);
+    my $item        = Koha::Items->find( $course_item->itemnumber );
 
-    if ( $enabled eq 'yes' ) { # Copy item fields to course item storage, course item fields to item
+    if ( $enabled eq 'yes' ) {    # Copy item fields to course item storage, course item fields to item
         $course_item->itype_storage( $item->effective_itemtype )    if $course_item->itype_enabled;
         $course_item->ccode_storage( $item->ccode )                 if $course_item->ccode_enabled;
         $course_item->location_storage( $item->location )           if $course_item->location_enabled;
@@ -645,12 +655,10 @@ sub _SwapAllFields {
         $item_fields->{homebranch}    = $course_item->homebranch    if $course_item->homebranch_enabled;
         $item_fields->{holdingbranch} = $course_item->holdingbranch if $course_item->holdingbranch_enabled;
 
-        Koha::Items->find( $course_item->itemnumber )
-                   ->set( $item_fields )
-                   ->store
+        Koha::Items->find( $course_item->itemnumber )->set($item_fields)->store
             if keys %$item_fields;
 
-    } else { # Copy course item storage to item
+    } else {    # Copy course item storage to item
         my $item_fields = {};
         $item_fields->{itype}         = $course_item->itype_storage         if $course_item->itype_enabled;
         $item_fields->{ccode}         = $course_item->ccode_storage         if $course_item->ccode_enabled;
@@ -658,9 +666,7 @@ sub _SwapAllFields {
         $item_fields->{homebranch}    = $course_item->homebranch_storage    if $course_item->homebranch_enabled;
         $item_fields->{holdingbranch} = $course_item->holdingbranch_storage if $course_item->holdingbranch_enabled;
 
-        Koha::Items->find( $course_item->itemnumber )
-                   ->set( $item_fields )
-                   ->store
+        Koha::Items->find( $course_item->itemnumber )->set($item_fields)->store
             if keys %$item_fields;
 
         $course_item->itype_storage(undef);
@@ -726,7 +732,7 @@ sub DelCourseItem {
 
     return unless ($ci_id);
 
-    my $course_item = Koha::Course::Items->find( $ci_id );
+    my $course_item = Koha::Course::Items->find($ci_id);
     return unless $course_item;
 
     _RevertFields( ci_id => $ci_id ) if $course_item->enabled eq 'yes';
@@ -819,7 +825,7 @@ sub ModCourseReserve {
     }
 
     EnableOrDisableCourseItem(
-        ci_id   => $params{'ci_id'},
+        ci_id => $params{'ci_id'},
     );
 
     return $cr_id;
@@ -866,14 +872,17 @@ sub GetCourseReserves {
 
     if ($include_items) {
         foreach my $cr (@$course_reserves) {
-            my $item = Koha::Items->find( $cr->{itemnumber}, { prefetch => ['biblio','biblioitem'] });
-            my $biblio = $cr->{itemnumber} ? $item->biblio : Koha::Biblios->find( $cr->{biblionumber}, { prefetch => ['biblioitem'] });
+            my $item = Koha::Items->find( $cr->{itemnumber}, { prefetch => [ 'biblio', 'biblioitem' ] } );
+            my $biblio =
+                  $cr->{itemnumber}
+                ? $item->biblio
+                : Koha::Biblios->find( $cr->{biblionumber}, { prefetch => ['biblioitem'] } );
             my $biblioitem = $biblio->biblioitem;
             $cr->{'course_item'} = GetCourseItem( ci_id => $cr->{'ci_id'} );
             $cr->{'item'}        = $item;
             $cr->{'biblio'}      = $biblio;
             $cr->{'biblioitem'}  = $biblioitem;
-            $cr->{'issue'}       = Koha::Checkouts->find({ itemnumber => $cr->{'itemnumber'} });
+            $cr->{'issue'}       = Koha::Checkouts->find( { itemnumber => $cr->{'itemnumber'} } );
         }
     }
 
@@ -885,7 +894,10 @@ sub GetCourseReserves {
 
     if ($include_courses) {
         foreach my $cr (@$course_reserves) {
-            $cr->{'courses'} = $cr->{itemnumber} ? GetCourses( itemnumber => $cr->{'itemnumber'} ) : GetCourses( biblionumber => $cr->{biblionumber} );
+            $cr->{'courses'} =
+                $cr->{itemnumber}
+                ? GetCourses( itemnumber   => $cr->{'itemnumber'} )
+                : GetCourses( biblionumber => $cr->{biblionumber} );
         }
     }
 
@@ -936,12 +948,13 @@ sub DelCourseReserve {
 sub GetItemCourseReservesInfo {
     my (%params) = @_;
 
-    my $itemnumber = $params{'itemnumber'};
+    my $itemnumber   = $params{'itemnumber'};
     my $biblionumber = $params{'biblionumber'};
 
-    return unless ($itemnumber xor $biblionumber);
+    return unless ( $itemnumber xor $biblionumber );
 
-    my $course_item = $itemnumber ? GetCourseItem( itemnumber => $itemnumber ) : GetCourseItem( biblionumber => $biblionumber );
+    my $course_item =
+        $itemnumber ? GetCourseItem( itemnumber => $itemnumber ) : GetCourseItem( biblionumber => $biblionumber );
 
     return unless ( keys %$course_item );
 
@@ -973,14 +986,17 @@ sub GetItemCourseReservesInfo {
 sub CountCourseReservesForItem {
     my (%params) = @_;
 
-    my $ci_id      = $params{'ci_id'};
-    my $itemnumber = $params{'itemnumber'};
-    my $enabled    = $params{'enabled'};
+    my $ci_id        = $params{'ci_id'};
+    my $itemnumber   = $params{'itemnumber'};
+    my $enabled      = $params{'enabled'};
     my $biblionumber = $params{'biblionumber'};
 
     return unless ( $ci_id xor $itemnumber xor $biblionumber );
 
-    my $course_item = GetCourseItem( ci_id => $ci_id ) || GetCourseItem( itemnumber => $itemnumber ) || GetCourseItem( biblionumber => $biblionumber );
+    my $course_item =
+           GetCourseItem( ci_id => $ci_id )
+        || GetCourseItem( itemnumber   => $itemnumber )
+        || GetCourseItem( biblionumber => $biblionumber );
 
     my @params = ( $course_item->{'ci_id'} );
     push( @params, $enabled ) if ($enabled);

@@ -49,10 +49,10 @@ my $cgi = CGI->new;
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/automatic_item_modification_by_age.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { tools => 'items_batchmod' },
+        template_name => "tools/automatic_item_modification_by_age.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { tools => 'items_batchmod' },
     }
 );
 
@@ -62,24 +62,24 @@ my $syspref_name = q|automatic_item_modification_by_age_configuration|;
 if ( $op eq 'cud-update' ) {
     my @rules;
     my @unique_ids = $cgi->multi_param('unique_id');
-    for my $unique_id ( @unique_ids ) {
+    for my $unique_id (@unique_ids) {
         my @substitution_fields = $cgi->multi_param("substitution_field_$unique_id");
         my @substitution_values = $cgi->multi_param("substitution_value_$unique_id");
-        my @condition_fields = $cgi->multi_param("condition_field_$unique_id");
-        my @condition_values = $cgi->multi_param("condition_value_$unique_id");
-        my @age_fields = $cgi->multi_param("agefield_$unique_id");
-        my $rule = {
+        my @condition_fields    = $cgi->multi_param("condition_field_$unique_id");
+        my @condition_values    = $cgi->multi_param("condition_value_$unique_id");
+        my @age_fields          = $cgi->multi_param("agefield_$unique_id");
+        my $rule                = {
             substitutions => [],
-            conditions => [],
+            conditions    => [],
         };
-        for my $value ( @substitution_values ) {
+        for my $value (@substitution_values) {
             my $field = shift @substitution_fields;
             last unless $field;
             push @{ $rule->{substitutions} }, { field => $field, value => $value };
         }
         push @{ $rule->{substitutions} }, {}
             unless @{ $rule->{substitutions} };
-        for my $value ( @condition_values ) {
+        for my $value (@condition_values) {
             my $field = shift @condition_fields;
             last unless $field;
             push @{ $rule->{conditions} }, { field => $field, value => $value };
@@ -88,13 +88,13 @@ if ( $op eq 'cud-update' ) {
             unless @{ $rule->{conditions} };
         $rule->{age} = $cgi->param("age_$unique_id");
 
-        for my $age_field ( @age_fields ) {
+        for my $age_field (@age_fields) {
             $rule->{agefield} = $age_field ? $age_field : "items.dateaccessioned";
         }
         push @rules, $rule;
     }
     my $syspref_content = to_json( \@rules );
-    C4::Context->set_preference($syspref_name, $syspref_content);
+    C4::Context->set_preference( $syspref_name, $syspref_content );
 
     $op = 'show';
 }
@@ -102,9 +102,9 @@ if ( $op eq 'cud-update' ) {
 my @messages;
 my $syspref_content = C4::Context->preference($syspref_name);
 my $rules;
-$rules = eval { JSON::from_json( $syspref_content ) }
+$rules = eval { JSON::from_json($syspref_content) }
     if $syspref_content;
-if ( $@ ) {
+if ($@) {
     push @messages, {
         type => 'error',
         code => 'unable_to_load_configuration'

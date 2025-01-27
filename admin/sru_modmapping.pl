@@ -19,27 +19,29 @@
 
 use Modern::Perl;
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 # Initialize CGI, template
 
-my $input = CGI->new;
-my $mapstr = $input->param('mapping')//'';
-my $type = $input->param('type')//'';
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
-    template_name => $type eq "authority" ? "admin/sru_modmapping_auth.tt" : "admin/sru_modmapping.tt",
-    query => $input,
-    type => "intranet",
-    flagsrequired   => { parameters => 'manage_search_targets' },
-});
+my $input  = CGI->new;
+my $mapstr = $input->param('mapping') // '';
+my $type   = $input->param('type')    // '';
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => $type eq "authority" ? "admin/sru_modmapping_auth.tt" : "admin/sru_modmapping.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_search_targets' },
+    }
+);
 
 # Main code: convert mapping string to hash structure and show template
 
 my %map;
 foreach my $singlemap ( split ',', $mapstr ) {
     my @temp = split '=', $singlemap, 2;
-    $map{ $temp[0] } = $temp[1] if @temp>1;
+    $map{ $temp[0] } = $temp[1] if @temp > 1;
 }
 $template->param( mapping => \%map );
 output_html_with_http_headers $input, $cookie, $template->output;

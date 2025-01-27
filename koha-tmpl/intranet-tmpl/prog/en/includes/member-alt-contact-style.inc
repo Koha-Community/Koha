@@ -114,9 +114,7 @@
                         [% IF c.city_name == patron.altcontactaddress3 && c.city_state == patron.altcontactstate && c.city_zipcode == patron.altcontactzipcode %]
                             [% option_selected = 1 %]
                         [% END %]
-                        <option value="[% option_value | html %]" [% IF option_selected %]selected="selected"[% END %]>
-                            [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %]
-                        </option>
+                        <option value="[% option_value | html %]" [% IF option_selected %]selected="selected"[% END %]> [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %] </option>
                     [% END %]
                 </select>
                 <span class="hint">or enter</span>

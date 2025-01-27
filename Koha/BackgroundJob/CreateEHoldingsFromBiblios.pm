@@ -47,11 +47,10 @@ sub job_type {
     return 'create_eholdings_from_biblios';
 }
 
-
 my $fix_coverage = sub {
-    my $coverage = shift || q{};
+    my $coverage  = shift || q{};
     my @coverages = split '-', $coverage;
-    return ($coverages[0], (@coverages > 1 ? $coverages[1] : q{}));
+    return ( $coverages[0], ( @coverages > 1 ? $coverages[1] : q{} ) );
 };
 
 sub _get_unimarc_mapping {
@@ -60,32 +59,33 @@ sub _get_unimarc_mapping {
     my $biblio_id         = $biblio->biblionumber;
     my $publication_title = $biblio->title;
     my $print_identifier =
-         $record->subfield( '010', 'a' )
-      || $record->subfield( '010', 'z' )
-      || $record->subfield( '011', 'a' )
-      || $record->subfield( '011', 'y' );
-    my $online_identifier               = $print_identifier;
-    my $date_first_issue_online         = $record->subfield( '955', 'a' );
-    my $date_last_issue_online          = $record->subfield( '955', 'k' );
-    my $num_first_vol_online            = $record->subfield( '955', 'd' );
-    my $num_last_vol_online             = $record->subfield( '955', 'n' );
-    my $num_first_issue_online          = $record->subfield( '955', 'e' );
-    my $num_last_issue_online           = $record->subfield( '955', 'o' );
-    my $title_url                       = $record->subfield( '856', 'u' );
-    my $first_author                    = $biblio->author;
-    my $embargo_info                    = $record->subfield( '371', 'a' );
-    my $coverage_depth                  = $title_url ? 'fulltext' : 'print';
-    my $notes                           = $record->subfield( '336', 'a' );
-    my $publisher_name                  = $record->subfield( '214', 'c' );
-    my $label_pos67                     = substr( $record->leader, 6, 2 );
-    my $publication_type                = $label_pos67 eq 'am' ? 'monograph' : $label_pos67 eq 'as' ? 'serial' : '';
-    my $date_monograph_published_print  = $record->subfield( '214', 'd' ) || substr( $record->subfield(100, 'a'), 9, 4 ) || '';
+           $record->subfield( '010', 'a' )
+        || $record->subfield( '010', 'z' )
+        || $record->subfield( '011', 'a' )
+        || $record->subfield( '011', 'y' );
+    my $online_identifier       = $print_identifier;
+    my $date_first_issue_online = $record->subfield( '955', 'a' );
+    my $date_last_issue_online  = $record->subfield( '955', 'k' );
+    my $num_first_vol_online    = $record->subfield( '955', 'd' );
+    my $num_last_vol_online     = $record->subfield( '955', 'n' );
+    my $num_first_issue_online  = $record->subfield( '955', 'e' );
+    my $num_last_issue_online   = $record->subfield( '955', 'o' );
+    my $title_url               = $record->subfield( '856', 'u' );
+    my $first_author            = $biblio->author;
+    my $embargo_info            = $record->subfield( '371', 'a' );
+    my $coverage_depth          = $title_url ? 'fulltext' : 'print';
+    my $notes                   = $record->subfield( '336', 'a' );
+    my $publisher_name          = $record->subfield( '214', 'c' );
+    my $label_pos67             = substr( $record->leader, 6, 2 );
+    my $publication_type        = $label_pos67 eq 'am' ? 'monograph' : $label_pos67 eq 'as' ? 'serial' : '';
+    my $date_monograph_published_print =
+        $record->subfield( '214', 'd' ) || substr( $record->subfield( 100, 'a' ), 9, 4 ) || '';
     my $date_monograph_published_online = $date_monograph_published_print;
     my $monograph_volume                = $record->subfield( '200', 'v' );
     my $monograph_edition               = $record->subfield( '205', 'a' );
     my $first_editor                    = $publisher_name;
-    my $parent_publication_title_id     = '';                                  # FIXME ?
-    my $preceding_publication_title_id  = '';                                  # FIXME ?
+    my $parent_publication_title_id     = '';                                # FIXME ?
+    my $preceding_publication_title_id  = '';                                # FIXME ?
     my $access_type                     = $record->subfield( '856', 'y' );
 
     return {
@@ -123,16 +123,16 @@ sub _get_marc21_mapping {
     my $biblio_id         = $biblio->biblionumber;
     my $publication_title = $biblio->title;
     my $print_identifier =
-         $record->subfield( '020', 'a' )
-      || $record->subfield( '020', 'z' )
-      || $record->subfield( '022', 'a' )
-      || $record->subfield( '022', 'y' );
+           $record->subfield( '020', 'a' )
+        || $record->subfield( '020', 'z' )
+        || $record->subfield( '022', 'a' )
+        || $record->subfield( '022', 'y' );
     my $online_identifier = $print_identifier;
     my ( $date_first_issue_online, $date_last_issue_online ) =
-      $fix_coverage->( $record->subfield( '866', 'a' ) );
+        $fix_coverage->( $record->subfield( '866', 'a' ) );
     my ( $num_first_vol_online, $num_last_vol_online ) =
-      $fix_coverage->( $record->subfield( '863', 'a' ) );
-    my ( $num_first_issue_online, $num_last_issue_online ) = ( '', '' );    # FIXME ?
+        $fix_coverage->( $record->subfield( '863', 'a' ) );
+    my ( $num_first_issue_online, $num_last_issue_online ) = ( '', '' );       # FIXME ?
     my $title_url                       = $record->subfield( '856', 'u' );
     my $first_author                    = $biblio->author;
     my $embargo_info                    = '';                                  # FIXME ?
@@ -203,18 +203,18 @@ sub process {
     };
 
     my $package = Koha::ERM::EHoldings::Packages->find($package_id);
-    unless ( $package ) {
+    unless ($package) {
         push @messages, {
-            type => 'error',
-            code => 'package_do_not_exist',
+            type       => 'error',
+            code       => 'package_do_not_exist',
             package_id => $package_id,
         };
 
         my $data = $self->decoded_data;
         $data->{messages} = \@messages;
-        $data->{report} = $report;
+        $data->{report}   = $report;
 
-        return $self->finish( $data );
+        return $self->finish($data);
     }
 
     my %existing_biblio_ids = map {
@@ -222,7 +222,7 @@ sub process {
         map { $_->biblio_id => $resource->resource_id } $resource->title
     } $package->resources->as_list;
 
-    RECORD_IDS: for my $biblio_id ( sort { $a <=> $b } @record_ids ) {
+RECORD_IDS: for my $biblio_id ( sort { $a <=> $b } @record_ids ) {
 
         last if $self->get_from_storage->status eq 'cancelled';
 
@@ -231,38 +231,39 @@ sub process {
         try {
             if ( grep { $_ eq $biblio_id } keys %existing_biblio_ids ) {
                 push @messages,
-                  {
+                    {
                     type        => 'warning',
                     code        => 'biblio_already_exists',
                     biblio_id   => $biblio_id,
                     resource_id => $existing_biblio_ids{$biblio_id},
-                  };
+                    };
                 return;
             }
             my $biblio = Koha::Biblios->find($biblio_id);
-            my $eholding_title = C4::Context->preference('marcflavour') eq 'UNIMARC'
+            my $eholding_title =
+                C4::Context->preference('marcflavour') eq 'UNIMARC'
                 ? _get_unimarc_mapping($biblio)
                 : _get_marc21_mapping($biblio);
 
             $eholding_title = Koha::ERM::EHoldings::Title->new($eholding_title)->store;
-            Koha::ERM::EHoldings::Resource->new({ title_id => $eholding_title->title_id, package_id => $package_id })->store;
+            Koha::ERM::EHoldings::Resource->new( { title_id => $eholding_title->title_id, package_id => $package_id } )
+                ->store;
             $report->{total_success}++;
         } catch {
             push @messages, {
-                type => 'error',
-                code => 'eholding_not_created',
+                type  => 'error',
+                code  => 'eholding_not_created',
                 error => $_,
             };
         };
         $self->step;
     }
 
-
     my $data = $self->decoded_data;
     $data->{messages} = \@messages;
-    $data->{report} = $report;
+    $data->{report}   = $report;
 
-    $self->finish( $data );
+    $self->finish($data);
 }
 
 =head3 enqueue
@@ -272,16 +273,18 @@ Enqueue the new job
 =cut
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     return unless exists $args->{package_id};
     return unless exists $args->{record_ids};
 
-    $self->SUPER::enqueue({
-        job_size  => scalar @{$args->{record_ids}},
-        job_args  => $args,
-        job_queue => 'long_tasks',
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size  => scalar @{ $args->{record_ids} },
+            job_args  => $args,
+            job_queue => 'long_tasks',
+        }
+    );
 }
 
 =head3 additional_report

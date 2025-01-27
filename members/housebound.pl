@@ -41,32 +41,33 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'members/housebound.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+        template_name => 'members/housebound.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
-my @messages;                   # For error messages.
-my $op = $input->param('op') // q{};
+my @messages;    # For error messages.
+my $op       = $input->param('op')       // q{};
 my $visit_id = $input->param('visit_id') // q{};
 
 # Get patron
 my $borrowernumber = $input->param('borrowernumber');
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron = Koha::Patrons->find($borrowernumber);
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 # Get supporting cast
 my ( $houseboundprofile, $visit );
-if ( $patron ) { # FIXME This test is not needed - output_and_exit_if_error handles it
+if ($patron) {    # FIXME This test is not needed - output_and_exit_if_error handles it
     $houseboundprofile = $patron->housebound_profile;
 }
-if ( $visit_id ) {
-    $visit = eval {
-        return Koha::Patron::HouseboundVisits->find($visit_id);
-    };
+if ($visit_id) {
+    $visit = eval { return Koha::Patron::HouseboundVisits->find($visit_id); };
     push @messages, { type => 'error', code => 'error_on_visit_load' }
         if ( $@ or !$visit );
 }
@@ -75,73 +76,87 @@ if ( $visit_id ) {
 my ( $deliverers, $choosers, $houseboundvisit );
 
 if ( $op eq 'cud-updateconfirm' and $houseboundprofile ) {
+
     # We have received the input from the profile edit form.  We must save the
     # changes, and return to simple display.
-    $houseboundprofile->set({
-        day           => scalar $input->param('day')           // q{},
-        frequency     => scalar $input->param('frequency')     // q{},
-        fav_itemtypes => scalar $input->param('fav_itemtypes') // q{},
-        fav_subjects  => scalar $input->param('fav_subjects')  // q{},
-        fav_authors   => scalar $input->param('fav_authors')   // q{},
-        referral      => scalar $input->param('referral')      // q{},
-        notes         => scalar $input->param('notes')         // q{},
-    });
+    $houseboundprofile->set(
+        {
+            day           => scalar $input->param('day')           // q{},
+            frequency     => scalar $input->param('frequency')     // q{},
+            fav_itemtypes => scalar $input->param('fav_itemtypes') // q{},
+            fav_subjects  => scalar $input->param('fav_subjects')  // q{},
+            fav_authors   => scalar $input->param('fav_authors')   // q{},
+            referral      => scalar $input->param('referral')      // q{},
+            notes         => scalar $input->param('notes')         // q{},
+        }
+    );
     my $success = eval { return $houseboundprofile->store };
     push @messages, { type => 'error', code => 'error_on_profile_store' }
         if ( $@ or !$success );
     $op = undef;
 } elsif ( $op eq 'cud-createconfirm' ) {
+
     # We have received the input necessary to create a new profile.  We must
     # save it, and return to simple display.
-    $houseboundprofile = Koha::Patron::HouseboundProfile->new({
-        borrowernumber => $patron->borrowernumber,
-        day            => scalar $input->param('day')           // q{},
-        frequency      => scalar $input->param('frequency')     // q{},
-        fav_itemtypes  => scalar $input->param('fav_itemtypes') // q{},
-        fav_subjects   => scalar $input->param('fav_subjects')  // q{},
-        fav_authors    => scalar $input->param('fav_authors')   // q{},
-        referral       => scalar $input->param('referral')      // q{},
-        notes          => scalar $input->param('notes')         // q{},
-    });
+    $houseboundprofile = Koha::Patron::HouseboundProfile->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            day            => scalar $input->param('day')           // q{},
+            frequency      => scalar $input->param('frequency')     // q{},
+            fav_itemtypes  => scalar $input->param('fav_itemtypes') // q{},
+            fav_subjects   => scalar $input->param('fav_subjects')  // q{},
+            fav_authors    => scalar $input->param('fav_authors')   // q{},
+            referral       => scalar $input->param('referral')      // q{},
+            notes          => scalar $input->param('notes')         // q{},
+        }
+    );
     my $success = eval { return $houseboundprofile->store };
     push @messages, { type => 'error', code => 'error_on_profile_create' }
         if ( $@ or !$success );
     $op = undef;
 } elsif ( $op eq 'visit_update_or_create' ) {
+
     # We want to edit, edit a visit, so we must pass its details.
-    $deliverers = Koha::Patrons->search_housebound_deliverers;
-    $choosers = Koha::Patrons->search_housebound_choosers;
+    $deliverers      = Koha::Patrons->search_housebound_deliverers;
+    $choosers        = Koha::Patrons->search_housebound_choosers;
     $houseboundvisit = $visit;
 } elsif ( $op eq 'cud-visit_delete' and $visit ) {
+
     # We want ot delete a specific visit.
     my $success = eval { return $visit->delete };
     push @messages, { type => 'error', code => 'error_on_visit_delete' }
         if ( $@ or !$success );
     $op = undef;
 } elsif ( $op eq 'cud-editvisitconfirm' and $visit ) {
+
     # We have received input for editing a visit.  We must store and return to
     # simple display.
-    $visit->set({
-        borrowernumber      => scalar $input->param('borrowernumber')      // q{},
-        appointment_date    => scalar $input->param('date')                // q{},
-        day_segment         => scalar $input->param('segment')             // q{},
-        chooser_brwnumber   => scalar $input->param('chooser')             // q{},
-        deliverer_brwnumber => scalar $input->param('deliverer')           // q{},
-    });
+    $visit->set(
+        {
+            borrowernumber      => scalar $input->param('borrowernumber') // q{},
+            appointment_date    => scalar $input->param('date')           // q{},
+            day_segment         => scalar $input->param('segment')        // q{},
+            chooser_brwnumber   => scalar $input->param('chooser')        // q{},
+            deliverer_brwnumber => scalar $input->param('deliverer')      // q{},
+        }
+    );
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_store' }
         if ( $@ or !$success );
     $op = undef;
 } elsif ( $op eq 'cud-addvisitconfirm' and !$visit ) {
+
     # We have received input for creating a visit.  We must store and return
     # to simple display.
-    my $visit = Koha::Patron::HouseboundVisit->new({
-        borrowernumber      => scalar $input->param('borrowernumber')      // q{},
-        appointment_date    => scalar $input->param('date')                // q{},
-        day_segment         => scalar $input->param('segment')             // q{},
-        chooser_brwnumber   => scalar $input->param('chooser')             // q{},
-        deliverer_brwnumber => scalar $input->param('deliverer')           // q{},
-    });
+    my $visit = Koha::Patron::HouseboundVisit->new(
+        {
+            borrowernumber      => scalar $input->param('borrowernumber') // q{},
+            appointment_date    => scalar $input->param('date')           // q{},
+            day_segment         => scalar $input->param('segment')        // q{},
+            chooser_brwnumber   => scalar $input->param('chooser')        // q{},
+            deliverer_brwnumber => scalar $input->param('deliverer')      // q{},
+        }
+    );
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_create' }
         if ( $@ or !$success );

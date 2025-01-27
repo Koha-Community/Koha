@@ -79,8 +79,7 @@ sub prep_metadata {
     # so this function returns something predictable that we can test!
     my $json = JSON->new;
     $json->canonical( [1] );
-    return uri_escape(
-        encode_base64( encode( 'utf-8', $json->encode($metadata) ) ) );
+    return uri_escape( encode_base64( encode( 'utf-8', $json->encode($metadata) ) ) );
 }
 
 =head1 AUTHOR

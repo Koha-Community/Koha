@@ -58,41 +58,42 @@ sub new { bless {}, shift }
 
 sub dbh {
     my $config = Koha::Config->get_instance;
-    my $driver = db_scheme2dbi($config->get('db_scheme'));
-    my $user = $config->get("user"),
-    my $pass = $config->get("pass"),
-    my $dsn = generate_dsn($config);
+    my $driver = db_scheme2dbi( $config->get('db_scheme') );
+    my $user   = $config->get("user"),
+        my $pass = $config->get("pass"),
+        my $dsn = generate_dsn($config);
 
     my $attr = {
         RaiseError => 1,
         PrintError => 1,
     };
 
-    if ($driver eq 'mysql') {
+    if ( $driver eq 'mysql' ) {
         $attr->{mysql_enable_utf8} = 1;
     }
 
-    my $dbh = DBI->connect($dsn, $user, $pass, $attr);
+    my $dbh = DBI->connect( $dsn, $user, $pass, $attr );
 
     if ($dbh) {
         my @queries;
         my $tz = $config->timezone;
         $tz = '' if $tz eq 'local';
 
-        if ($driver eq 'mysql') {
+        if ( $driver eq 'mysql' ) {
             push @queries, "SET NAMES 'utf8mb4'";
             push @queries, qq{SET time_zone = "$tz"} if $tz;
             if (   $config->get('strict_sql_modes')
                 || ( exists $ENV{_} && $ENV{_} =~ m|prove| )
-                || $ENV{KOHA_TESTING}
-            ) {
+                || $ENV{KOHA_TESTING} )
+            {
                 push @queries, q{
                     SET sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
                 };
             } else {
-                push @queries, q{SET sql_mode = 'IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'}
+                push @queries,
+                    q{SET sql_mode = 'IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'};
             }
-        } elsif ($driver eq 'Pg') {
+        } elsif ( $driver eq 'Pg' ) {
             push @queries, qq{SET TIME ZONE = "$tz"} if $tz;
             push @queries, q{set client_encoding = 'UTF8'};
         }
@@ -105,7 +106,6 @@ sub dbh {
     return $dbh;
 }
 
-
 # _new_schema
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
@@ -114,11 +114,13 @@ sub _new_schema {
 
     require Koha::Schema;
 
-    my $schema = Koha::Schema->connect({
-        dbh_maker => \&Koha::Database::dbh,
-        quote_names => 1,
-        auto_savepoint => 1,
-    });
+    my $schema = Koha::Schema->connect(
+        {
+            dbh_maker      => \&Koha::Database::dbh,
+            quote_names    => 1,
+            auto_savepoint => 1,
+        }
+    );
 
     my $dbh = $schema->storage->dbh;
     eval {
@@ -126,13 +128,14 @@ sub _new_schema {
         if ( $ENV{KOHA_DB_DO_NOT_RAISE_OR_PRINT_ERROR} ) {
             $dbh->{HandleError} = sub { return 1 };
         }
-        $dbh->do(q|
+        $dbh->do(
+            q|
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
         $dbh->{HandleError} = $HandleError;
     };
 
-    if ( $@ ) {
+    if ($@) {
         $dbh->{HandleError} = sub { warn $_[0]; return 1 };
     }
 
@@ -155,7 +158,7 @@ times.
 =cut
 
 sub schema {
-    my ($class, $params) = @_;
+    my ( $class, $params ) = @_;
 
     unless ( $params->{new} ) {
         return $database->{schema} if defined $database->{schema};

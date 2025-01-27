@@ -26,7 +26,7 @@ use Exception::Class (
     },
 
     'Koha::Exceptions::TransferLimit::Duplicate' => {
-        isa => 'Koha::Exceptions::TransferLimit::Exception',
+        isa         => 'Koha::Exceptions::TransferLimit::Exception',
         description => 'A transfer limit with the given parameters already exists!',
     },
 );

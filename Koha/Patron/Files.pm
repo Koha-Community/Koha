@@ -19,7 +19,6 @@ package Koha::Patron::Files;
 
 use Modern::Perl;
 
-
 use C4::Context;
 use C4::Output;
 
@@ -93,8 +92,10 @@ sub AddFile {
         VALUES ( ?,?,?,?,? )
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $self->{'borrowernumber'},
-        $name, $type, $description, $content );
+    $sth->execute(
+        $self->{'borrowernumber'},
+        $name, $type, $description, $content
+    );
 }
 
 =item GetFile()

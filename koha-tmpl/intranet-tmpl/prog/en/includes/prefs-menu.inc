@@ -4,7 +4,7 @@
         [% IF ( accounting ) %]
             <li class="active">
                 <a title="Accounting" href="/cgi-bin/koha/admin/preferences.pl?tab=accounting">Accounting</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -14,7 +14,7 @@
         [% IF ( acquisitions ) %]
             <li class="active">
                 <a title="Acquisitions" href="/cgi-bin/koha/admin/preferences.pl?tab=acquisitions">Acquisitions</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -25,7 +25,7 @@
         [% IF ( admin ) %]
             <li class="active">
                 <a title="Administration" href="/cgi-bin/koha/admin/preferences.pl?tab=admin">Administration</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -36,7 +36,7 @@
         [% IF ( authorities ) %]
             <li class="active">
                 <a title="Authority control" href="/cgi-bin/koha/admin/preferences.pl?tab=authorities">Authorities</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -47,7 +47,7 @@
         [% IF ( cataloguing ) %]
             <li class="active">
                 <a title="Cataloging" href="/cgi-bin/koha/admin/preferences.pl?tab=cataloguing">Cataloging</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -58,7 +58,7 @@
         [% IF ( circulation ) %]
             <li class="active">
                 <a title="Circulation" href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">Circulation</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -69,7 +69,7 @@
         [% IF ( enhanced_content ) %]
             <li class="active">
                 <a title="Enhanced content settings" href="/cgi-bin/koha/admin/preferences.pl?tab=enhanced_content">Enhanced content</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -80,7 +80,7 @@
         [% IF ( erm ) %]
             <li class="active">
                 <a title="E-resource management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">E-resource management</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -91,7 +91,7 @@
         [% IF ( i18n_l10n ) %]
             <li class="active">
                 <a title="Internationalization and localization" href="/cgi-bin/koha/admin/preferences.pl?tab=i18n_l10n">I18N/L10N</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -102,7 +102,7 @@
         [% IF ( interlibrary_loans ) %]
             <li class="active">
                 <a title="Interlibrary loans" href="/cgi-bin/koha/admin/preferences.pl?tab=interlibrary_loans">Interlibrary loans</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -113,7 +113,7 @@
         [% IF ( local_use ) %]
             <li class="active">
                 <a href="/cgi-bin/koha/admin/systempreferences.pl">Local use</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -124,7 +124,7 @@
         [% IF ( logs ) %]
             <li class="active">
                 <a title="Transaction logs" href="/cgi-bin/koha/admin/preferences.pl?tab=logs">Logs</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -135,7 +135,7 @@
         [% IF ( opac ) %]
             <li class="active">
                 <a title="Online Public Access Catalog" href="/cgi-bin/koha/admin/preferences.pl?tab=opac">OPAC</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -146,7 +146,7 @@
         [% IF ( patrons ) %]
             <li class="active">
                 <a title="Patrons" href="/cgi-bin/koha/admin/preferences.pl?tab=patrons">Patrons</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -157,7 +157,7 @@
         [% IF ( preservation ) %]
             <li class="active">
                 <a title="Preservation" href="/cgi-bin/koha/admin/preferences.pl?tab=preservation">Preservation</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -168,7 +168,7 @@
         [% IF ( searching ) %]
             <li class="active">
                 <a title="Searching" href="/cgi-bin/koha/admin/preferences.pl?tab=searching">Searching</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -179,7 +179,7 @@
         [% IF ( serials ) %]
             <li class="active">
                 <a title="Serials" href="/cgi-bin/koha/admin/preferences.pl?tab=serials">Serials</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -190,7 +190,7 @@
         [% IF ( staff_interface ) %]
             <li class="active">
                 <a title="Staff interface" href="/cgi-bin/koha/admin/preferences.pl?tab=staff_interface">Staff interface</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -201,7 +201,7 @@
         [% IF ( tools ) %]
             <li class="active">
                 <a title="Tools" href="/cgi-bin/koha/admin/preferences.pl?tab=tools">Tools</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>
@@ -212,7 +212,7 @@
         [% IF ( web_services ) %]
             <li class="active">
                 <a title="Web services" href="/cgi-bin/koha/admin/preferences.pl?tab=web_services">Web services</a>
-                [% PROCESS subtabs  %]
+                [% PROCESS subtabs %]
             </li>
         [% ELSE %]
             <li>

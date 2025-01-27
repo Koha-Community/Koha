@@ -17,40 +17,39 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-      template_name   => "recalls/recalls_queue.tt",
-      query           => $query,
-      type            => "intranet",
-      flagsrequired   => { recalls => 'manage_recalls' },
-      debug           => 1,
+        template_name => "recalls/recalls_queue.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { recalls => 'manage_recalls' },
+        debug         => 1,
     }
 );
 
-my $op = $query->param('op') || 'list';
+my $op         = $query->param('op') || 'list';
 my @recall_ids = $query->multi_param('recall_ids');
 if ( $op eq 'cud-cancel_multiple_recalls' ) {
-    foreach my $id ( @recall_ids ) {
-        Koha::Recalls->find( $id )->set_cancelled;
+    foreach my $id (@recall_ids) {
+        Koha::Recalls->find($id)->set_cancelled;
     }
-    $op = 'list'
-}
-elsif ( $op eq 'list' ) {
-    my $recalls = Koha::Recalls->search({ completed => 0 });
+    $op = 'list';
+} elsif ( $op eq 'list' ) {
+    my $recalls = Koha::Recalls->search( { completed => 0 } );
     $template->param(
-        recalls => $recalls,
+        recalls    => $recalls,
         checkboxes => 1,
     );
 }
 
 # Checking if there is a Fast Cataloging Framework
-$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
 # writing the template
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -17,12 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
-use C4::Serials qw( GetFullSubscription GetFullSubscriptionsFromBiblionumber PrepareSerialsData GetSubscription GetSubscriptionsFromBiblionumber );
+use C4::Serials
+    qw( GetFullSubscription GetFullSubscriptionsFromBiblionumber PrepareSerialsData GetSubscription GetSubscriptionsFromBiblionumber );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 
@@ -44,12 +44,13 @@ if ( $selectview eq "full" ) {
             authnotrequired => 1,
         }
     );
-    my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
-    my $subscriptioninformation=PrepareSerialsData($subscriptions);
+    my $subscriptions           = GetFullSubscriptionsFromBiblionumber($biblionumber);
+    my $subscriptioninformation = PrepareSerialsData($subscriptions);
+
     # PrepareSerialsData does some bogus stuff that the template could handle
     # But at least it sorts the array by the year field so we dont have to
     # find 'manage' if its there
-    if ($subscriptioninformation->[0]->{year} eq 'manage') {
+    if ( $subscriptioninformation->[0]->{year} eq 'manage' ) {
         shift @{$subscriptioninformation};
     }
 
@@ -57,14 +58,14 @@ if ( $selectview eq "full" ) {
     if ($loggedinuser) {
         foreach (@$subscriptions) {
             my $subscription = Koha::Subscriptions->find( $_->{subscriptionid} );
-            my $subscriber = $subscription->subscribers->find( $loggedinuser );
+            my $subscriber   = $subscription->subscribers->find($loggedinuser);
             $_->{hasalert} = 1 if $subscriber;
         }
     }
 
     my $title   = $subscriptions->[0]->{bibliotitle};
     my $yearmin = $subscriptions->[0]->{year};
-    my $yearmax = $subscriptions->[ -1 ]->{year};
+    my $yearmax = $subscriptions->[-1]->{year};
 
     $template->param(
         biblionumber   => scalar $query->param('biblionumber'),
@@ -76,8 +77,7 @@ if ( $selectview eq "full" ) {
         virtualshelves => C4::Context->preference("virtualshelves"),
     );
 
-}
-else {
+} else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-serial-issues.tt",
@@ -88,21 +88,22 @@ else {
     );
 
     my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
+
     # now, check is there is an alert subscription for one of the subscriptions
     if ($loggedinuser) {
         foreach (@$subscriptions) {
             my $subscription = Koha::Subscriptions->find( $_->{subscriptionid} );
-            my $subscriber = $subscription->subscribers->find( $loggedinuser );
+            my $subscriber   = $subscription->subscribers->find($loggedinuser);
             $_->{hasalert} = 1 if $subscriber;
         }
     }
 
-    my $title   = $subscriptions->[0]->{bibliotitle};
+    my $title = $subscriptions->[0]->{bibliotitle};
 
     $template->param(
         biblionumber      => scalar $query->param('biblionumber'),
         subscription_LOOP => $subscriptions,
-        bibliotitle        => $title,
+        bibliotitle       => $title,
     );
 }
 output_html_with_http_headers $query, $cookie, $template->output;

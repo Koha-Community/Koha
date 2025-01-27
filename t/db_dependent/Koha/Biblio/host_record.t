@@ -30,7 +30,6 @@ use Koha::Database;
 use Koha::Biblios;
 use C4::Biblio;
 
-
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
@@ -41,21 +40,21 @@ subtest 'get_marc_host' => sub {
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
 
-    my $bib1 = $builder->build_object({ class => 'Koha::Biblios' });
-    my $bib2 = $builder->build_object({ class => 'Koha::Biblios' });
-    my $item1 = $builder->build_object({ class => 'Koha::Items', value => { biblionumber => $bib2->biblionumber } });
-    my $marc = MARC::Record->new;
+    my $bib1  = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $bib2  = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item1 = $builder->build_object( { class => 'Koha::Items', value => { biblionumber => $bib2->biblionumber } } );
+    my $marc    = MARC::Record->new;
     my $results = [];
 
     # Lets mock! Simulate search engine response and biblio metadata call.
     my $metadata = Test::MockObject->new;
     $metadata->mock( 'record', sub { return $marc; } );
-    my $meta_mod = Test::MockModule->new( 'Koha::Biblio' );
+    my $meta_mod = Test::MockModule->new('Koha::Biblio');
     $meta_mod->mock( 'metadata', sub { return $metadata; } );
     my $engine = Test::MockObject->new;
     $engine->mock( 'simple_search_compat', sub { return ( undef, $results, scalar @$results ); } );
     $engine->mock( 'extract_biblionumber', sub { return $results->[0]; } );
-    my $search_mod = Test::MockModule->new( 'Koha::SearchEngine::Search' );
+    my $search_mod = Test::MockModule->new('Koha::SearchEngine::Search');
     $search_mod->mock( 'new', sub { return $engine; } );
 
     # Case 1: Search engine does not return any results on controlnumber
@@ -66,15 +65,16 @@ subtest 'get_marc_host' => sub {
     is( $bib1->get_marc_host, undef, '773 looks fine, but no search results' );
 
     # Case 2: Search engine returns (at maximum) one result
-    $results = [ $bib1->biblionumber ]; # will be found because 773w is in shape
+    $results = [ $bib1->biblionumber ];                      # will be found because 773w is in shape
     my $host = $bib1->get_marc_host;
-    is( ref( $host ), 'Koha::Biblio', 'Correct object returned' );
+    is( ref($host),          'Koha::Biblio',      'Correct object returned' );
     is( $host->biblionumber, $bib1->biblionumber, 'Check biblionumber' );
-    $marc->field('773')->update( w => '(xyz) bad data' ); # causes no results
+    $marc->field('773')->update( w => '(xyz) bad data' );    # causes no results
     $host = $bib1->get_marc_host;
     is( $bib1->get_marc_host, undef, 'No results for bad 773' );
 
     t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
+
     # no $w
     $marc->field('773')->update( t => 'title' );
     $marc->field('773')->delete_subfield( code => 'w' );
@@ -90,7 +90,7 @@ subtest 'get_marc_host' => sub {
     $marc->field('773')->delete_subfield( code => '9' );
     my ( $relatedparts, $info );
     ( $host, $relatedparts, $info ) = $bib1->get_marc_host;
-    is( $host, undef, 'No Koha Biblio object returned with no $w' );
+    is( $host, undef,            'No Koha Biblio object returned with no $w' );
     is( $info, "title, relpart", '773$atg returned when no $w' );
 
     my $host_only = $bib1->get_marc_host_only;
@@ -98,23 +98,26 @@ subtest 'get_marc_host' => sub {
     my $relatedparts_only = $bib1->get_marc_relatedparts_only;
     is_deeply( $relatedparts_only, $relatedparts, "Related parts only retrieved successfully" );
     my $hostinfo_only = $bib1->get_marc_hostinfo_only;
-    is_deeply( $hostinfo_only, $info, "Host info only retrieved successfully");
+    is_deeply( $hostinfo_only, $info, "Host info only retrieved successfully" );
 
-    $marc->field('773')->delete_subfield( code => 't' ); # restore
+    $marc->field('773')->delete_subfield( code => 't' );    # restore
 
     # Add second 773
     $marc->append_fields( MARC::Field->new( '773', '', '', g => 'relpart2', w => '234' ) );
     $host = $bib1->get_marc_host;
     is( $host->biblionumber, $bib1->biblionumber, 'Result triggered by second 773' );
+
     # Replace orgcode
-    ($marc->field('773'))[1]->update( w => '(abc)345' );
+    ( $marc->field('773') )[1]->update( w => '(abc)345' );
     is( $bib1->get_marc_host, undef, 'No results for two 773s' );
+
     # Test no_items flag
-    ($marc->field('773'))[1]->update( w => '234' ); # restore
-    $host = $bib1->get_marc_host({ no_items => 1 });
+    ( $marc->field('773') )[1]->update( w => '234' );       # restore
+    $host = $bib1->get_marc_host( { no_items => 1 } );
     is( $host->biblionumber, $bib1->biblionumber, 'Record found with no_items' );
-    $builder->build({ source => 'Item', value => { biblionumber => $bib1->biblionumber } });
-    is( $bib1->get_marc_host({ no_items => 1 }), undef, 'Record not found with no_items flag after adding one item' );
+    $builder->build( { source => 'Item', value => { biblionumber => $bib1->biblionumber } } );
+    is( $bib1->get_marc_host( { no_items => 1 } ), undef, 'Record not found with no_items flag after adding one item' );
+
     # Test list context
     my @temp = $bib1->get_marc_host;
     is( $temp[1], 'relpart2', 'Return $g in list context' );

@@ -97,18 +97,20 @@ sub show_availability {
 
     return
 
-      # ILLCheckAvailability is enabled
-      C4::Context->preference("ILLCheckAvailability")
+        # ILLCheckAvailability is enabled
+        C4::Context->preference("ILLCheckAvailability")
 
-      # At least 1 availability service exists
-      && scalar @{$services}
+        # At least 1 availability service exists
+        && scalar @{$services}
 
-      # Availability has not yet been checked
-      && !$self->{metadata}->{checked_availability}
+        # Availability has not yet been checked
+        && !$self->{metadata}->{checked_availability}
 
-     # The form has been submitted and the backend is able to create the request
-      && $request->_backend_capability( 'can_create_request',
-        $self->{metadata} );
+        # The form has been submitted and the backend is able to create the request
+        && $request->_backend_capability(
+        'can_create_request',
+        $self->{metadata}
+        );
 }
 
 =head3 availability_template_params
@@ -138,7 +140,7 @@ sub availability_template_params {
             illrequestsview => 1,
             message         => $params->{message},
             op              => 'availability',
-          )
+            )
         : ()
     );
 }

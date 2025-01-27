@@ -77,7 +77,7 @@ subtest 'field_exists' => sub {
 
 # read_field
 subtest 'read_field' => sub {
-    plan tests              => 2;
+    plan tests => 2;
     subtest 'read subfield' => sub {
         plan tests => 6;
         my $record = new_record;
@@ -93,8 +93,7 @@ subtest 'read_field' => sub {
             )
         );
 
-        my @fields_650a =
-          read_field( { record => $record, field => '650', subfield => 'a' } );
+        my @fields_650a = read_field( { record => $record, field => '650', subfield => 'a' } );
         is_deeply( $fields_650a[0], 'Computer programming.', 'first 650$a' );
         is_deeply( $fields_650a[1], 'Computer algorithms.',  'second 650$a' );
         is_deeply(
@@ -190,29 +189,21 @@ subtest 'read_field' => sub {
             'Get the all subfield values for the first field 650'
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '650', field_numbers => [2] } ) ],
             [ 'Computer algorithms.', '463' ],
             'Get the all subfield values for the second field 650'
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650', field_numbers => [3] }
-                )
-            ],
+            [ read_field( { record => $record, field => '650', field_numbers => [3] } ) ],
             [],
-'Get the all subfield values for the third field 650 which does not exist'
+            'Get the all subfield values for the third field 650 which does not exist'
         );
     };
 };
 
 # update_field
 subtest 'update_field' => sub {
-    plan tests                => 1;
+    plan tests => 1;
     subtest 'update subfield' => sub {
         plan tests => 6;
         my $record = new_record;
@@ -226,11 +217,7 @@ subtest 'update_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', subfield => 'p' }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', subfield => 'p' } ) ],
             ['3010023918'],
             'update existing subfield 952$p'
         );
@@ -252,18 +239,12 @@ subtest 'update_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', subfield => 'p' }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', subfield => 'p' } ) ],
             ['3010023918'],
             'create subfield 952$p'
         );
         is_deeply(
-            read_field(
-                { record => $record, field => '952', subfield => 'y' }
-            ),
+            read_field( { record => $record, field => '952', subfield => 'y' } ),
             'BK',
             'create subfield 952$k on existing 952 field'
         );
@@ -284,8 +265,7 @@ subtest 'update_field' => sub {
                 values   => ['3010023919']
             }
         );
-        my @fields_952p =
-          read_field( { record => $record, field => '952', subfield => 'p' } );
+        my @fields_952p = read_field( { record => $record, field => '952', subfield => 'p' } );
         is_deeply(
             \@fields_952p,
             [ '3010023919', '3010023919' ],
@@ -300,8 +280,7 @@ subtest 'update_field' => sub {
                 values   => [ '3010023917', '3010023918' ]
             }
         );
-        @fields_952p =
-          read_field( { record => $record, field => '952', subfield => 'p' } );
+        @fields_952p = read_field( { record => $record, field => '952', subfield => 'p' } );
         is_deeply(
             \@fields_952p,
             [ '3010023917', '3010023918' ],
@@ -313,11 +292,10 @@ subtest 'update_field' => sub {
                 record   => $record,
                 field    => '952',
                 subfield => '0',
-                values   => [ '654321' ]
+                values   => ['654321']
             }
         );
-        my @fields_9520 =
-          read_field( { record => $record, field => '952', subfield => '0' } );
+        my @fields_9520 = read_field( { record => $record, field => '952', subfield => '0' } );
         is_deeply(
             \@fields_9520,
             [ '654321', '654321' ],
@@ -329,7 +307,7 @@ subtest 'update_field' => sub {
 
 # copy_field - subfield
 subtest 'copy_field' => sub {
-    plan tests              => 2;
+    plan tests => 2;
     subtest 'copy subfield' => sub {
         plan tests => 21;
         my $record = new_record;
@@ -350,28 +328,18 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
             ['The art of computer programming'],
             'After copy 245$a still exists'
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '246', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '246', subfield => 'a' } ) ],
             ['The art of computer programming'],
             '246$a is a new field'
         );
         delete_field( { record => $record, field => '246' } );
         is_deeply(
-            field_exists(
-                { record => $record, field => '246', subfield => 'a' }
-            ),
+            field_exists( { record => $record, field => '246', subfield => 'a' } ),
             [],
             '246$a does not exist anymore'
         );
@@ -385,8 +353,7 @@ subtest 'copy_field' => sub {
                 to_subfield   => 'a'
             }
         );
-        my @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        my @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'Computer algorithms.', 'Computer programming.' ],
@@ -405,11 +372,7 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '651', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '651', subfield => 'a' } ) ],
             ['Computer programming.'],
             'Copy first field 650$a'
         );
@@ -426,12 +389,8 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '651', subfield => 'a' }
-                )
-            ],
-            ['Computer programming.', 'Computer algorithms.'],
+            [ read_field( { record => $record, field => '651', subfield => 'a' } ) ],
+            [ 'Computer programming.', 'Computer algorithms.' ],
             'Copy second field 650$a'
         );
         delete_field( { record => $record, field => '651' } );
@@ -443,11 +402,10 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The art of' }
+                regex         => { search => 'Computer', replace => 'The art of' }
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The art of algorithms.', 'The art of programming.' ],
@@ -462,11 +420,10 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The mistake of' }
+                regex         => { search => 'Computer', replace => 'The mistake of' }
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The mistake of algorithms.', 'The mistake of programming.' ],
@@ -481,11 +438,10 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The art of' }
+                regex         => { search => 'Computer', replace => 'The art of' }
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The art of algorithms.', 'The art of programming.', ],
@@ -500,12 +456,11 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The art of' },
+                regex         => { search => 'Computer', replace => 'The art of' },
                 field_numbers => [1]
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The art of programming.', ],
@@ -532,8 +487,7 @@ subtest 'copy_field' => sub {
                 regex         => { search => 'o', replace => 'foo' }
             }
         );
-        my @fields_652a =
-          read_field( { record => $record, field => '652', subfield => 'a' } );
+        my @fields_652a = read_field( { record => $record, field => '652', subfield => 'a' } );
         is_deeply(
             \@fields_652a,
             [ 'Cfoomputer algorithms.', 'Cfoomputer programming.' ],
@@ -547,11 +501,10 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '653',
                 to_subfield   => 'a',
-                regex => { search => 'o', replace => 'foo', modifiers => 'g' }
+                regex         => { search => 'o', replace => 'foo', modifiers => 'g' }
             }
         );
-        my @fields_653a =
-          read_field( { record => $record, field => '653', subfield => 'a' } );
+        my @fields_653a = read_field( { record => $record, field => '653', subfield => 'a' } );
         is_deeply(
             \@fields_653a,
             [ 'Cfoomputer algfoorithms.', 'Cfoomputer prfoogramming.' ],
@@ -565,11 +518,10 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '654',
                 to_subfield   => 'a',
-                regex => { search => 'O', replace => 'foo', modifiers => 'i' }
+                regex         => { search => 'O', replace => 'foo', modifiers => 'i' }
             }
         );
-        my @fields_654a =
-          read_field( { record => $record, field => '654', subfield => 'a' } );
+        my @fields_654a = read_field( { record => $record, field => '654', subfield => 'a' } );
         is_deeply(
             \@fields_654a,
             [ 'Cfoomputer algorithms.', 'Cfoomputer programming.' ],
@@ -583,11 +535,10 @@ subtest 'copy_field' => sub {
                 from_subfield => 'a',
                 to_field      => '655',
                 to_subfield   => 'a',
-                regex => { search => 'O', replace => 'foo', modifiers => 'gi' }
+                regex         => { search => 'O', replace => 'foo', modifiers => 'gi' }
             }
         );
-        my @fields_655a =
-          read_field( { record => $record, field => '655', subfield => 'a' } );
+        my @fields_655a = read_field( { record => $record, field => '655', subfield => 'a' } );
         is_deeply(
             \@fields_655a,
             [ 'Cfoomputer algfoorithms.', 'Cfoomputer prfoogramming.' ],
@@ -612,8 +563,8 @@ subtest 'copy_field' => sub {
                 to_subfield   => 'd'
             }
         );
-        my @fields_952d =
-          read_field( { record => $record, field => '952', subfield => 'd' } );
+        my @fields_952d = read_field( { record => $record, field => '952', subfield => 'd' } );
+
         # FIXME We need a new action "duplicate" if we don't want to modify the original field
         is_deeply(
             \@fields_952d,
@@ -630,10 +581,11 @@ subtest 'copy_field' => sub {
                 to_subfield   => '9'
             }
         );
-        my @fields_9999 =
-          read_field( { record => $record, field => '999', subfield => '9' } );
-        is_deeply( \@fields_9999, [],
-            'copy a nonexistent subfield does not create a new one' );
+        my @fields_9999 = read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply(
+            \@fields_9999, [],
+            'copy a nonexistent subfield does not create a new one'
+        );
 
         $record = new_record;
         copy_field(
@@ -647,12 +599,8 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
-            ['The art of computer programming', 'BEGIN The art of computer programming'],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
+            [ 'The art of computer programming', 'BEGIN The art of computer programming' ],
             'Update a subfield: add a string at the beginning'
         );
 
@@ -668,12 +616,8 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
-            ['The art of computer programming', 'The art of computer programming END'],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
+            [ 'The art of computer programming', 'The art of computer programming END' ],
             'Update a subfield: add a string at the end'
         );
 
@@ -689,12 +633,8 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
-            ['The art of computer programming', 'The smart art of computer programming'],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
+            [ 'The art of computer programming', 'The smart art of computer programming' ],
             'Update a subfield: use capture groups'
         );
 
@@ -710,11 +650,7 @@ subtest 'copy_field' => sub {
         );
 
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650' }
-                )
-            ],
+            [ read_field( { record => $record, field => '650' } ) ],
             [ 'Computer programming.', '462', 'Donald E. Knuth.' ],
             'Copy a subfield to an existent field but inexistent subfield'
         );
@@ -731,11 +667,7 @@ subtest 'copy_field' => sub {
         );
 
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650' }
-                )
-            ],
+            [ read_field( { record => $record, field => '650' } ) ],
             [ 'Computer programming.', '462', 'Donald E. Knuth.' ],
             'Copy a subfield to an existent field / subfield'
         );
@@ -753,42 +685,25 @@ subtest 'copy_field' => sub {
         );
 
         #- copy all fields
-        copy_field(
-            { record => $record, from_field => '952', to_field => '953' } );
+        copy_field( { record => $record, from_field => '952', to_field => '953' } );
         my @fields_952 = read_field( { record => $record, field => '952' } );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy all: original first field still exists"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy all: original second field still exists"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy all: first original fields has been copied"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy all: second original fields has been copied"
         );
@@ -803,20 +718,12 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy first: first original fields has been copied"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy first: second original fields has been copied"
         );
@@ -845,38 +752,22 @@ subtest 'copy_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy all with regex: original first field still exists"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy all with regex: original second field still exists"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '4242423917', 'BK', 'GEN', '2001-06-25' ],
             "copy all with regex: first original fields has been copied"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '4242423918', 'CD' ],
             "copy all with regex: second original fields has been copied"
         );
@@ -887,35 +778,28 @@ subtest 'copy_field' => sub {
                 to_field   => '999',
             }
         );
-        my @fields_9999 =
-          read_field( { record => $record, field => '999', subfield => '9' } );
-        is_deeply( \@fields_9999, [],
-            'copy a nonexistent field does not create a new one' );
+        my @fields_9999 = read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply(
+            \@fields_9999, [],
+            'copy a nonexistent field does not create a new one'
+        );
 
         $record = new_record;
         copy_field(
             {
-                record        => $record,
-                from_field    => 245,
-                to_field      => 650,
+                record     => $record,
+                from_field => 245,
+                to_field   => 650,
             }
         );
 
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '650', field_numbers => [2] } ) ],
             [ 'Computer programming.', '462' ],
             'Copy a field to existent fields should create a new field'
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '650', field_numbers => [1] } ) ],
             [ 'The art of computer programming', 'Donald E. Knuth.' ],
             'Copy a field to existent fields should create a new field, the original one should not have been updated'
         );
@@ -924,7 +808,7 @@ subtest 'copy_field' => sub {
 
 # copy_and_replace_field - subfield
 subtest 'copy_and_replace_field' => sub {
-    plan tests              => 3;
+    plan tests => 3;
     subtest 'copy and replace subfield' => sub {
         plan tests => 20;
         my $record = new_record;
@@ -945,20 +829,12 @@ subtest 'copy_and_replace_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
             ['The art of computer programming'],
             'Copy and replace should not have modify original subfield 245$a (same as copy)'
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '246', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '246', subfield => 'a' } ) ],
             ['The art of computer programming'],
             'Copy and replace should create a new 246$a (same as copy)'
         );
@@ -980,8 +856,7 @@ subtest 'copy_and_replace_field' => sub {
                 to_subfield   => 'a'
             }
         );
-        my @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        my @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'Computer algorithms.', 'Computer programming.' ],
@@ -1000,11 +875,7 @@ subtest 'copy_and_replace_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '651', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '651', subfield => 'a' } ) ],
             ['Computer programming.'],
             'Copy and replace first field 650$a should only copy the 1st (same as copy)'
         );
@@ -1020,11 +891,7 @@ subtest 'copy_and_replace_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '651', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '651', subfield => 'a' } ) ],
             ['Computer algorithms.'],
             'Copy and replace second field 650$a should erase 651$a'
         );
@@ -1037,11 +904,10 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The art of' }
+                regex         => { search => 'Computer', replace => 'The art of' }
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The art of algorithms.', 'The art of programming.' ],
@@ -1056,11 +922,10 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The mistake of' }
+                regex         => { search => 'Computer', replace => 'The mistake of' }
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The mistake of algorithms.', 'The mistake of programming.' ],
@@ -1075,11 +940,10 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The art of' }
+                regex         => { search => 'Computer', replace => 'The art of' }
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The art of algorithms.', 'The art of programming.', ],
@@ -1094,12 +958,11 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '651',
                 to_subfield   => 'a',
-                regex => { search => 'Computer', replace => 'The art of' },
+                regex         => { search => 'Computer', replace => 'The art of' },
                 field_numbers => [1]
             }
         );
-        @fields_651a =
-          read_field( { record => $record, field => '651', subfield => 'a' } );
+        @fields_651a = read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
             [ 'The art of programming.', ],
@@ -1126,8 +989,7 @@ subtest 'copy_and_replace_field' => sub {
                 regex         => { search => 'o', replace => 'foo' }
             }
         );
-        my @fields_652a =
-          read_field( { record => $record, field => '652', subfield => 'a' } );
+        my @fields_652a = read_field( { record => $record, field => '652', subfield => 'a' } );
         is_deeply(
             \@fields_652a,
             [ 'Cfoomputer algorithms.', 'Cfoomputer programming.' ],
@@ -1141,11 +1003,10 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '653',
                 to_subfield   => 'a',
-                regex => { search => 'o', replace => 'foo', modifiers => 'g' }
+                regex         => { search => 'o', replace => 'foo', modifiers => 'g' }
             }
         );
-        my @fields_653a =
-          read_field( { record => $record, field => '653', subfield => 'a' } );
+        my @fields_653a = read_field( { record => $record, field => '653', subfield => 'a' } );
         is_deeply(
             \@fields_653a,
             [ 'Cfoomputer algfoorithms.', 'Cfoomputer prfoogramming.' ],
@@ -1159,11 +1020,10 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '654',
                 to_subfield   => 'a',
-                regex => { search => 'O', replace => 'foo', modifiers => 'i' }
+                regex         => { search => 'O', replace => 'foo', modifiers => 'i' }
             }
         );
-        my @fields_654a =
-          read_field( { record => $record, field => '654', subfield => 'a' } );
+        my @fields_654a = read_field( { record => $record, field => '654', subfield => 'a' } );
         is_deeply(
             \@fields_654a,
             [ 'Cfoomputer algorithms.', 'Cfoomputer programming.' ],
@@ -1177,11 +1037,10 @@ subtest 'copy_and_replace_field' => sub {
                 from_subfield => 'a',
                 to_field      => '655',
                 to_subfield   => 'a',
-                regex => { search => 'O', replace => 'foo', modifiers => 'gi' }
+                regex         => { search => 'O', replace => 'foo', modifiers => 'gi' }
             }
         );
-        my @fields_655a =
-          read_field( { record => $record, field => '655', subfield => 'a' } );
+        my @fields_655a = read_field( { record => $record, field => '655', subfield => 'a' } );
         is_deeply(
             \@fields_655a,
             [ 'Cfoomputer algfoorithms.', 'Cfoomputer prfoogramming.' ],
@@ -1206,8 +1065,7 @@ subtest 'copy_and_replace_field' => sub {
                 to_subfield   => 'd'
             }
         );
-        my @fields_952d =
-          read_field( { record => $record, field => '952', subfield => 'd' } );
+        my @fields_952d = read_field( { record => $record, field => '952', subfield => 'd' } );
         is_deeply(
             \@fields_952d,
             [ '2001-06-25', '2001-06-25' ],
@@ -1223,10 +1081,11 @@ subtest 'copy_and_replace_field' => sub {
                 to_subfield   => '9'
             }
         );
-        my @fields_9999 =
-          read_field( { record => $record, field => '999', subfield => '9' } );
-        is_deeply( \@fields_9999, [],
-            'copy and replace a nonexistent subfield does not create a new one (same as copy)' );
+        my @fields_9999 = read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply(
+            \@fields_9999, [],
+            'copy and replace a nonexistent subfield does not create a new one (same as copy)'
+        );
 
         $record = new_record;
         copy_and_replace_field(
@@ -1239,13 +1098,10 @@ subtest 'copy_and_replace_field' => sub {
                 regex         => { search => '^', replace => 'BEGIN ' }
             }
         );
+
         # This is the same as update the subfield
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
             ['BEGIN The art of computer programming'],
             'Copy and replace - Update a subfield: add a string at the beginning'
         );
@@ -1261,13 +1117,10 @@ subtest 'copy_and_replace_field' => sub {
                 regex         => { search => '$', replace => ' END' }
             }
         );
+
         # This is the same as update the subfield
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
             ['The art of computer programming END'],
             'Copy and replace - Update a subfield: add a string at the end'
         );
@@ -1283,13 +1136,10 @@ subtest 'copy_and_replace_field' => sub {
                 regex         => { search => '(art)', replace => 'sm$1 $1' }
             }
         );
+
         # This is the same as update the subfield
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '245', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '245', subfield => 'a' } ) ],
             ['The smart art of computer programming'],
             'Copy and replace - Update a subfield: use capture groups'
         );
@@ -1306,11 +1156,7 @@ subtest 'copy_and_replace_field' => sub {
         );
 
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650' }
-                )
-            ],
+            [ read_field( { record => $record, field => '650' } ) ],
             [ 'Computer programming.', '462', 'Donald E. Knuth.' ],
             'Copy and replace a subfield to an existent field but inexistent subfield (same as copy)'
         );
@@ -1327,11 +1173,7 @@ subtest 'copy_and_replace_field' => sub {
         );
 
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650' }
-                )
-            ],
+            [ read_field( { record => $record, field => '650' } ) ],
             [ 'Computer programming.', 'Donald E. Knuth.' ],
             'Copy and replace a subfield to an existent field / subfield, the origin subfield is replaced'
         );
@@ -1349,42 +1191,25 @@ subtest 'copy_and_replace_field' => sub {
         );
 
         #- copy all fields
-        copy_and_replace_field(
-            { record => $record, from_field => '952', to_field => '953' } );
+        copy_and_replace_field( { record => $record, from_field => '952', to_field => '953' } );
         my @fields_952 = read_field( { record => $record, field => '952' } );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy all: original first field still exists (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy all: original second field still exists (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy all: first original fields has been copied (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy all: second original fields has been copied (same as copy)"
         );
@@ -1399,20 +1224,12 @@ subtest 'copy_and_replace_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy and replace first: first original fields has been copied (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy and replace first: second original fields has been copied (same as copy)"
         );
@@ -1441,38 +1258,22 @@ subtest 'copy_and_replace_field' => sub {
             }
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "copy and replace all with regex: original first field still exists (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '952', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952', field_numbers => [2] } ) ],
             [ '3010023918', 'CD' ],
             "copy and replace all with regex: original second field still exists (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '4242423917', 'BK', 'GEN', '2001-06-25' ],
             "copy and replace all with regex: first original fields has been copied (same as copy)"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '4242423918', 'CD' ],
             "copy and replace all with regex: second original fields has been copied (same as copy)"
         );
@@ -1483,35 +1284,28 @@ subtest 'copy_and_replace_field' => sub {
                 to_field   => '999',
             }
         );
-        my @fields_9999 =
-          read_field( { record => $record, field => '999', subfield => '9' } );
-        is_deeply( \@fields_9999, [],
-            'copy and replace a nonexistent field does not create a new one (same as copy)' );
+        my @fields_9999 = read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply(
+            \@fields_9999, [],
+            'copy and replace a nonexistent field does not create a new one (same as copy)'
+        );
 
         $record = new_record;
         copy_and_replace_field(
             {
-                record        => $record,
-                from_field    => 245,
-                to_field      => 650,
+                record     => $record,
+                from_field => 245,
+                to_field   => 650,
             }
         );
 
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '650', field_numbers => [1] } ) ],
             [ 'The art of computer programming', 'Donald E. Knuth.' ],
             'Copy and replace to an existent field should erase the original field'
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '650', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '650', field_numbers => [2] } ) ],
             [],
             'Copy and replace to an existent field should not create a new field'
         );
@@ -1537,7 +1331,7 @@ subtest 'copy_and_replace_field' => sub {
 
 # move_field - subfields
 subtest 'move_field' => sub {
-    plan tests              => 2;
+    plan tests => 2;
     subtest 'move subfield' => sub {
         plan tests => 7;
         my $record = new_record;
@@ -1558,10 +1352,8 @@ subtest 'move_field' => sub {
                 to_subfield   => 'c'
             }
         );
-        @fields_952c =
-          read_field( { record => $record, field => '952', subfield => 'c' } );
-        @fields_954c =
-          read_field( { record => $record, field => '954', subfield => 'c' } );
+        @fields_952c = read_field( { record => $record, field => '952', subfield => 'c' } );
+        @fields_954c = read_field( { record => $record, field => '954', subfield => 'c' } );
         is_deeply( \@fields_952c, [],      'The 952$c has moved' );
         is_deeply( \@fields_954c, ['GEN'], 'Now 954$c exists' );
 
@@ -1575,10 +1367,8 @@ subtest 'move_field' => sub {
                 field_numbers => [1]
             }
         );    # Move the first field
-        my @fields_952p =
-          read_field( { record => $record, field => '952', subfield => 'p' } );
-        @fields_954p =
-          read_field( { record => $record, field => '954', subfield => 'p' } );
+        my @fields_952p = read_field( { record => $record, field => '952', subfield => 'p' } );
+        @fields_954p = read_field( { record => $record, field => '954', subfield => 'p' } );
         is_deeply( \@fields_952p, ['3010023917'], 'One of 952$p has moved' );
         is_deeply( \@fields_954p, ['3010023917'], 'Now 954$p exists' );
 
@@ -1600,10 +1390,8 @@ subtest 'move_field' => sub {
                 to_subfield   => 'p'
             }
         );    # Move all field
-        @fields_952p =
-          read_field( { record => $record, field => '952', subfield => 'p' } );
-        @fields_954p =
-          read_field( { record => $record, field => '954', subfield => 'p' } );
+        @fields_952p = read_field( { record => $record, field => '952', subfield => 'p' } );
+        @fields_954p = read_field( { record => $record, field => '954', subfield => 'p' } );
         is_deeply( \@fields_952p, [], 'All 952$p have moved' );
         is_deeply(
             \@fields_954p,
@@ -1620,10 +1408,11 @@ subtest 'move_field' => sub {
                 to_subfield   => '9'
             }
         );
-        my @fields_9999 =
-          read_field( { record => $record, field => '999', subfield => '9' } );
-        is_deeply( \@fields_9999, [],
-            'move a nonexistent subfield does not create a new one' );
+        my @fields_9999 = read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply(
+            \@fields_9999, [],
+            'move a nonexistent subfield does not create a new one'
+        );
     };
 
     subtest 'move field' => sub {
@@ -1640,25 +1429,18 @@ subtest 'move_field' => sub {
         );
 
         #- Move all fields
-        move_field(
-            { record => $record, from_field => '952', to_field => '953' } );
-        is_deeply( [ read_field( { record => $record, field => '952' } ) ],
-            [], "original fields don't exist" );
+        move_field( { record => $record, from_field => '952', to_field => '953' } );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952' } ) ],
+            [], "original fields don't exist"
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
             "first original fields has been copied"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '3010023917', 'BK' ],
             "second original fields has been copied"
         );
@@ -1701,23 +1483,17 @@ subtest 'move_field' => sub {
                 regex      => { search => 'BK', replace => 'DVD' }
             }
         );
-        is_deeply( [ read_field( { record => $record, field => '952' } ) ],
-            [], "use a regex, original fields don't exist" );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [1] }
-                )
-            ],
+            [ read_field( { record => $record, field => '952' } ) ],
+            [], "use a regex, original fields don't exist"
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '953', field_numbers => [1] } ) ],
             [ '3010023917', 'DVD', 'GEN', '2001-06-25' ],
             "use a regex, first original fields has been copied"
         );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '953', field_numbers => [2] }
-                )
-            ],
+            [ read_field( { record => $record, field => '953', field_numbers => [2] } ) ],
             [ '3010023917', 'DVD' ],
             "use a regex, second original fields has been copied"
         );
@@ -1729,17 +1505,18 @@ subtest 'move_field' => sub {
                 to_field   => '999',
             }
         );
-        my @fields_9999 =
-          read_field( { record => $record, field => '999', subfield => '9' } );
-        is_deeply( \@fields_9999, [],
-            'move a nonexistent field does not create a new one' );
+        my @fields_9999 = read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply(
+            \@fields_9999, [],
+            'move a nonexistent field does not create a new one'
+        );
 
     };
 };
 
 # delete_field
 subtest 'delete_field' => sub {
-    plan tests                => 2;
+    plan tests => 2;
     subtest 'delete subfield' => sub {
         plan tests => 3;
         my $record = new_record;
@@ -1759,8 +1536,7 @@ subtest 'delete_field' => sub {
                 field_numbers => [1]
             }
         );
-        my @fields_952p =
-          read_field( { record => $record, field => '952', subfield => 'p' } );
+        my @fields_952p = read_field( { record => $record, field => '952', subfield => 'p' } );
         is_deeply( \@fields_952p, ['3010023917'], 'Delete first 952$p' );
 
         $record = new_record;
@@ -1772,8 +1548,7 @@ subtest 'delete_field' => sub {
             ),
         );
         delete_field( { record => $record, field => '952', subfield => 'p' } );
-        @fields_952p =
-          read_field( { record => $record, field => '952', subfield => 'p' } );
+        @fields_952p = read_field( { record => $record, field => '952', subfield => 'p' } );
         is_deeply( \@fields_952p, [], 'Delete all 952$p' );
 
         $record = new_record;
@@ -1815,41 +1590,49 @@ subtest 'field_equals' => sub {
     my $record = new_record;
     subtest 'standard MARC fields' => sub {
         plan tests => 2;
-        my $match = Koha::SimpleMARC::field_equals({
-                record => $record,
-                value => 'Donald',
-                field => '100',
+        my $match = Koha::SimpleMARC::field_equals(
+            {
+                record   => $record,
+                value    => 'Donald',
+                field    => '100',
                 subfield => 'a',
-            });
+            }
+        );
         is_deeply( $match, [], '100$a not equal to "Donald"' );
 
-        $match = Koha::SimpleMARC::field_equals({
-                record => $record,
-                value => 'Donald',
-                field => '100',
+        $match = Koha::SimpleMARC::field_equals(
+            {
+                record   => $record,
+                value    => 'Donald',
+                field    => '100',
                 subfield => 'a',
                 is_regex => 1,
-            });
-        is_deeply( $match, [1], 'first 100$a matches "Donald"');
+            }
+        );
+        is_deeply( $match, [1], 'first 100$a matches "Donald"' );
     };
 
     subtest 'control fields' => sub {
         plan tests => 2;
-        my $match = Koha::SimpleMARC::field_equals({
-                record => $record,
-                value => 'eng',
-                field => '008',
+        my $match = Koha::SimpleMARC::field_equals(
+            {
+                record   => $record,
+                value    => 'eng',
+                field    => '008',
                 subfield => '',
-            });
+            }
+        );
         is_deeply( $match, [], '008 control field not equal to "eng"' );
 
-        $match = Koha::SimpleMARC::field_equals({
-                record => $record,
-                value => 'eng',
-                field => '008',
+        $match = Koha::SimpleMARC::field_equals(
+            {
+                record   => $record,
+                value    => 'eng',
+                field    => '008',
                 subfield => '',
                 is_regex => 1,
-            });
+            }
+        );
         is_deeply( $match, [1], 'first 008 control field matches "eng"' );
     };
 };

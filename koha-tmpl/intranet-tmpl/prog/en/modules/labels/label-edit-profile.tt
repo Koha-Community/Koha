@@ -2,23 +2,22 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
         [% IF( profile_id ) %]
             [% tx("Edit printer profile {profile_id}", { profile_id = profile_id }) | html %]
         [% ELSE %]
             [% t("New printer profile") | html %]
-        [% END%] &rsaquo;
-        [% t("Profiles") | html %] &rsaquo;
-        [% t("Label creator") | html %] &rsaquo;
-        [% t("Cataloging") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+        [% END %]
+        &rsaquo; [% t("Profiles") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="labels_label-edit-profile" class="tools labels">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -31,123 +30,117 @@
             <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Profiles</a>
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Profiles</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF ( profile_id ) %]
                 <span>Edit printer profile [% profile_id | html %]</span>
             [% ELSE %]
                 <span>New printer profile</span>
-            [% END%]
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
+[% WRAPPER 'main-container.inc' aside='cat-menu' %]
 
-                    [% INCLUDE 'labels-toolbar.inc' %]
+    [% INCLUDE 'labels-toolbar.inc' %]
 
+    [% IF ( profile_id ) %]
+        <h1>Edit printer profile [% profile_id | html %]</h1>
+    [% ELSE %]
+        <h1>New printer profile</h1>
+    [% END %]
+
+    <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="post">
+        <fieldset class="rows"
+            ><legend>Profile settings</legend>
+            <ol>
+                <li>
                     [% IF ( profile_id ) %]
-                        <h1>Edit printer profile [% profile_id | html %]</h1>
+                        <span class="label">Printer name:</span>[% printer_name | html %]
+                        <input type="hidden" name="printer_name" value="[% printer_name | html %]" />
                     [% ELSE %]
-                        <h1>New printer profile</h1>
-                    [% END%]
+                        <label for="printer_name">Printer name:</label><input type="text" size="20" name="printer_name" id="printer_name" />
+                    [% END %]
+                </li>
+                <li>
+                    [% IF ( profile_id ) %]
+                        <span class="label">Paper bin:</span> [% paper_bin | html %]
+                        <input type="hidden" name="paper_bin" value="[% paper_bin | html %]" />
+                    [% ELSE %]
+                        <label for="paper_bin">Paper bin:</label><input type="text" size="20" name="paper_bin" id="paper_bin" />
+                    [% END %]
+                </li>
+                <li>
+                    [% IF ( label_template ) %]
+                        <label for="template_name">Template name:</label> [% label_template | html %]
+                    [% ELSE %]
+                        <span class="label">Template name:</span> Profile unassigned
+                    [% END %]
+                </li>
+                <li>
+                    <label for="units">Units: </label>
+                    <select id="units" name="units">
+                        [% FOREACH unit IN units %]
+                            <option value="[% unit.type | html %]" [% IF unit.selected %]selected="selected"[% END %]>
+                                [% SWITCH unit.type %]
+                                [% CASE 'POINT' %]
+                                    <span>PostScript points</span>
+                                [% CASE 'AGATE' %]
+                                    <span>Agates</span>
+                                [% CASE 'INCH' %]
+                                    <span>US Inches</span>
+                                [% CASE 'MM' %]
+                                    <span>SI Millimeters</span>
+                                [% CASE 'CM' %]
+                                    <span>SI Centimeters</span>
+                                [% END %]
+                            </option>
+                        [% END %]
+                    </select>
+                </li>
+            </ol>
+        </fieldset>
 
-                    <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="post">
-                                    <fieldset class="rows"><legend>Profile settings</legend>
-                                        <ol>
-                                            <li>
-                                                [% IF ( profile_id ) %]
-                                                 <span class="label">Printer name:</span>[% printer_name | html %]
-                                                <input type="hidden" name="printer_name" value="[% printer_name | html %]" />
-                                                [% ELSE %]
-                                                <label for="printer_name">Printer name:</label><input type="text"  size="20" name="printer_name" id="printer_name" />
-                                                [% END %]
-                                            </li>
-                                            <li>
-                                                [% IF ( profile_id ) %]
-												<span class="label">Paper bin:</span> [% paper_bin | html %]
-                                                <input type="hidden" name="paper_bin" value="[% paper_bin | html %]" />
-                                                [% ELSE %]
-                                                <label for="paper_bin">Paper bin:</label><input type="text"  size="20" name="paper_bin" id="paper_bin" />
-                                                [% END %]
-                                            </li>
-                                            <li>
-                                                [% IF ( label_template ) %]
-                                                 <label for="template_name">Template name:</label> [% label_template | html %]
-                                                [% ELSE %]
-                                                 <span class="label">Template name:</span> Profile unassigned
-                                                [% END %]
-                                            </li>
-                                            <li>
-                                                <label for="units">Units: </label>
-                                                <select id="units" name="units">
-                                                    [% FOREACH unit IN units %]
-                                                    <option value="[% unit.type | html %]" [% IF unit.selected %]selected="selected"[% END %]>
-                                                    [% SWITCH unit.type %]
-                                                    [%   CASE 'POINT' %]
-                                                        <span>PostScript points</span>
-                                                    [%   CASE 'AGATE' %]
-                                                        <span>Agates</span>
-                                                    [%   CASE 'INCH' %]
-                                                        <span>US Inches</span>
-                                                    [%   CASE 'MM' %]
-                                                        <span>SI Millimeters</span>
-                                                    [%   CASE 'CM' %]
-                                                        <span>SI Centimeters</span>
-                                                    [% END %]
-                                                    </option>
-                                                    [% END %]
-                                                </select>
-                                            </li>
-                                         </ol>
-										</fieldset>
+        <fieldset class="rows"
+            ><legend>Offset:</legend>
+            <ol>
+                <li> <label for="offset_horz">Horizontal: </label><input type="text" size="4" name="offset_horz" id="offset_horz" value="[% offset_horz | html %]" /> </li>
+                <li> <label for="offset_vert">Vertical: </label><input type="text" size="4" name="offset_vert" id="offset_vert" value="[% offset_vert | html %]" /> </li>
+            </ol>
+        </fieldset>
 
-										<fieldset class="rows"><legend>Offset:</legend>
-										<ol>
-                                            <li>
-                                                <label for="offset_horz">Horizontal: </label><input type="text"  size="4" name="offset_horz" id="offset_horz" value="[% offset_horz | html %]" />
-                                            </li>
-                                            <li>
-                                                <label for="offset_vert">Vertical: </label><input type="text" size="4" name="offset_vert" id="offset_vert" value="[% offset_vert | html %]" />
-                                            </li>
-                                         </ol>
-										</fieldset>
-
-										<fieldset class="rows"><legend>Creep:</legend>
-										<ol>
-                                            <li>
-                                                <label for="creep_horz">Horizontal: </label><input type="text"  size="4" name="creep_horz" id="creep_horz" value="[% creep_horz | html %]" />
-                                            </li>
-                                            <li>
-                                                <label for="creep_vert">Vertical: </label><input type="text" size="4" name="creep_vert" id="creep_vert" value="[% creep_vert | html %]" />
-                                            </li>
-                                        </ol>
-                                    </fieldset>
-                                    <fieldset class="action">
-                                        [% INCLUDE 'csrf-token.inc' %] 
-                                        <input type="hidden" name="op" value="cud-save" />
-                                        <input type="hidden" name="profile_id" value="[% profile_id | html %]" />
-                                        <input type="submit" class="btn btn-primary" value="Save" />
-                                        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile" class="cancel">Cancel</a>
-                                    </fieldset>
-                    </form>
-
+        <fieldset class="rows"
+            ><legend>Creep:</legend>
+            <ol>
+                <li> <label for="creep_horz">Horizontal: </label><input type="text" size="4" name="creep_horz" id="creep_horz" value="[% creep_horz | html %]" /> </li>
+                <li> <label for="creep_vert">Vertical: </label><input type="text" size="4" name="creep_vert" id="creep_vert" value="[% creep_vert | html %]" /> </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-save" />
+            <input type="hidden" name="profile_id" value="[% profile_id | html %]" />
+            <input type="submit" class="btn btn-primary" value="Save" />
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile" class="cancel">Cancel</a>
+        </fieldset>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
             var selectedUnit = $("#units option:selected").val();
             var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
-            $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
-            $("#units").change(function(){
+            $(unitfields).after('<span class="unit">' + getUnit(selectedUnit) + "</span>");
+            $("#units").change(function () {
                 $(".unit").html(getUnit($(this).val()));
             });
         });
-        function getUnit(unit){
-            switch(unit){
+        function getUnit(unit) {
+            switch (unit) {
                 case "POINT":
                     var unit = " pt";
                     break;

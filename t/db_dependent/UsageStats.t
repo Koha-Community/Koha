@@ -33,14 +33,14 @@ use Koha::Old::Holds;
 use Koha::Patrons;
 
 BEGIN {
-    use_ok('C4::UsageStats', qw( BuildReport ReportToCommunity _count ));
+    use_ok( 'C4::UsageStats', qw( BuildReport ReportToCommunity _count ) );
 }
 
 can_ok(
     'C4::UsageStats', qw(
-      BuildReport
-      ReportToCommunity
-      _count )
+        BuildReport
+        ReportToCommunity
+        _count )
 );
 
 my $builder = t::lib::TestBuilder->new;
@@ -104,13 +104,13 @@ subtest 'BuildReport() tests' => sub {
 
     isa_ok( $report,              'HASH', '$report is a HASH' );
     isa_ok( $report->{volumetry}, 'HASH', '$report->{volumetry} is a HASH' );
-    is( scalar( keys %{ $report->{volumetry} } ), 8,                                "There are 8 fields in 'volumetry'" );
-    is( $report->{volumetry}->{biblio},           Koha::Biblios->count,             "Biblios count correct" );
-    is( $report->{volumetry}->{items},            Koha::Items->count,               "Items count correct" );
-    is( $report->{volumetry}->{auth_header},      Koha::Authorities->count,         "Authorities count correct" );
-    is( $report->{volumetry}->{old_issues},       Koha::Old::Checkouts->count,      "Old checkouts count correct" );
-    is( $report->{volumetry}->{old_reserves},     Koha::Old::Holds->count,          "Old holds count correct" );
-    is( $report->{volumetry}->{borrowers},        Koha::Patrons->count,             "Patrons count correct" );
+    is( scalar( keys %{ $report->{volumetry} } ), 8,                           "There are 8 fields in 'volumetry'" );
+    is( $report->{volumetry}->{biblio},           Koha::Biblios->count,        "Biblios count correct" );
+    is( $report->{volumetry}->{items},            Koha::Items->count,          "Items count correct" );
+    is( $report->{volumetry}->{auth_header},      Koha::Authorities->count,    "Authorities count correct" );
+    is( $report->{volumetry}->{old_issues},       Koha::Old::Checkouts->count, "Old checkouts count correct" );
+    is( $report->{volumetry}->{old_reserves},     Koha::Old::Holds->count,     "Old holds count correct" );
+    is( $report->{volumetry}->{borrowers},        Koha::Patrons->count,        "Patrons count correct" );
     is( $report->{volumetry}->{aqorders},         Koha::Acquisition::Orders->count, "Orders count correct" );
     is( $report->{volumetry}->{subscription},     Koha::Subscriptions->count,       "Suscriptions count correct" );
 

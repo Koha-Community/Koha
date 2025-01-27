@@ -17,7 +17,6 @@ package Koha::Notice::Messages;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Notice::Message;
 

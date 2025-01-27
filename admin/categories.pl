@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
@@ -30,18 +30,18 @@ use Koha::Database;
 use Koha::Patron::Categories;
 use Koha::Libraries;
 
-my $input         = CGI->new;
-my $searchfield   = $input->param('description') // q||;
-my $categorycode  = $input->param('categorycode');
-my $op            = $input->param('op') // 'list';
+my $input        = CGI->new;
+my $searchfield  = $input->param('description') // q||;
+my $categorycode = $input->param('categorycode');
+my $op           = $input->param('op') // 'list';
 my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/categories.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_patron_categories' },
+        template_name => "admin/categories.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_patron_categories' },
     }
 );
 
@@ -54,8 +54,7 @@ if ( $op eq 'add_form' ) {
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
         C4::Form::MessagingPreferences::set_form_values( { categorycode => $categorycode }, $template );
     }
-}
-elsif ( $op eq 'cud-add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $categorycode                           = $input->param('categorycode');
     my $description                            = $input->param('description');
     my $enrolmentperiod                        = $input->param('enrolmentperiod');
@@ -77,12 +76,12 @@ elsif ( $op eq 'cud-add_validate' ) {
     my $exclude_from_local_holds_priority      = $input->param('exclude_from_local_holds_priority');
     my $min_password_length                    = $input->param('min_password_length');
     my $require_strong_password                = $input->param('require_strong_password');
-    my $noissuescharge                         = $input->param('noissuescharge') || undef;
-    my $noissueschargeguarantees               = $input->param('noissueschargeguarantees') || undef;
+    my $noissuescharge                         = $input->param('noissuescharge')                         || undef;
+    my $noissueschargeguarantees               = $input->param('noissueschargeguarantees')               || undef;
     my $noissueschargeguarantorswithguarantees = $input->param('noissueschargeguarantorswithguarantees') || undef;
 
-    my @branches = grep { $_ ne q{} } $input->multi_param('branches');
-    my $can_be_guarantee = $input->param('can_be_guarantee');
+    my @branches                               = grep { $_ ne q{} } $input->multi_param('branches');
+    my $can_be_guarantee                       = $input->param('can_be_guarantee');
     my $force_password_reset_when_set_by_staff = $input->param('force_password_reset_when_set_by_staff');
 
     $reset_password                         = undef if $reset_password eq -1;
@@ -182,29 +181,25 @@ elsif ( $op eq 'cud-add_validate' ) {
 
     $searchfield = q||;
     $op          = 'list';
-}
-elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
 
-    my $count = Koha::Patrons->search({
-        categorycode => $categorycode
-    })->count;
+    my $count = Koha::Patrons->search( { categorycode => $categorycode } )->count;
 
     my $category = Koha::Patron::Categories->find($categorycode);
 
     $template->param(
-        category => $category,
+        category            => $category,
         patrons_in_category => $count,
     );
 
-}
-elsif ( $op eq 'cud-delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     my $categorycode = uc( $input->param('categorycode') );
 
-    my $category = Koha::Patron::Categories->find( $categorycode );
-    my $deleted = eval { $category->delete; };
+    my $category = Koha::Patron::Categories->find($categorycode);
+    my $deleted  = eval { $category->delete; };
 
     if ( $@ or not $deleted ) {
-        push @messages, {type => 'error', code => 'error_on_delete' };
+        push @messages, { type => 'error', code => 'error_on_delete' };
     } else {
         push @messages, { type => 'message', code => 'success_on_delete' };
     }
@@ -214,24 +209,20 @@ elsif ( $op eq 'cud-delete_confirmed' ) {
 
 if ( $op eq 'list' ) {
     my $categories = Koha::Patron::Categories->search(
-        {
-            description => { -like => "$searchfield%" }
-        },
-        {
-            order_by => ['category_type', 'description', 'categorycode' ]
-        }
+        { description => { -like => "$searchfield%" } },
+        { order_by    => [ 'category_type', 'description', 'categorycode' ] }
     );
 
     $template->param(
         categories => $categories,
-    )
+    );
 }
 
 $template->param(
     categorycode => $categorycode,
     searchfield  => $searchfield,
     messages     => \@messages,
-    op => $op,
+    op           => $op,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -3,6 +3,7 @@
 #  Written by TG on 01/10/2005
 #  Revised by Joshua Ferraro on 03/31/2006
 use strict;
+
 #use warnings; FIXME - Bug 2505
 
 # Koha modules used
@@ -12,65 +13,69 @@ use C4::Biblio qw( GetMarcFromKohaField ModBiblioMarc );
 use Koha::Biblios;
 use MARC::File::USMARC;
 
-$|=1;
+$| = 1;
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare("SELECT biblionumber, biblioitemnumber FROM biblioitems");
+my $sth = $dbh->prepare("SELECT biblionumber, biblioitemnumber FROM biblioitems");
 $sth->execute();
 
-my $i=1;
-while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
- my $biblio = Koha::Biblios->find($biblionumber);
- my $record = $biblio->metadata->record;
+my $i = 1;
+while ( my ( $biblionumber, $biblioitemnumber ) = $sth->fetchrow ) {
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record;
     print ".";
-    print "\r$i" unless $i %100;
-    MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);
+    print "\r$i" unless $i % 100;
+    MARCmodbiblionumber( $biblionumber, $biblioitemnumber, $record );
 }
 
-sub MARCmodbiblionumber{
-    my ($biblionumber,$biblioitemnumber,$record)=@_;
-    
+sub MARCmodbiblionumber {
+    my ( $biblionumber, $biblioitemnumber, $record ) = @_;
+
     return unless $record;
 
-    my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField( "biblio.biblionumber" );
-    my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField( "biblio.biblioitemnumber" );
-        
-    my $update=0;
-    if (defined $record) {
+    my ( $tagfield,  $biblionumtagsubfield )  = &GetMarcFromKohaField("biblio.biblionumber");
+    my ( $tagfield2, $biblioitemtagsubfield ) = &GetMarcFromKohaField("biblio.biblioitemnumber");
+
+    my $update = 0;
+    if ( defined $record ) {
         my $tag = $record->field($tagfield);
+
         #warn "ICI : ".$record->as_formatted if $record->subfield('090','a') eq '11546';
-    
+
         # check that we have biblionumber at the right place, otherwise, update or create the field.
-        if ($tagfield <10) {
-            unless ($tag && $tag->data() == $biblionumber) {
+        if ( $tagfield < 10 ) {
+            unless ( $tag && $tag->data() == $biblionumber ) {
                 if ($tag) {
                     $tag->update($biblionumber);
                 } else {
-                    my $newrec = MARC::Field->new( $tagfield, $biblionumber);
+                    my $newrec = MARC::Field->new( $tagfield, $biblionumber );
                     $record->insert_fields_ordered($newrec);
                 }
-                $update=1;
+                $update = 1;
             }
         } else {
-            unless ($tag && $tag->subfield($biblionumtagsubfield) == $biblionumber) {
-                if($tag) {
-                    $tag->update($tagfield => $biblionumber);
+            unless ( $tag && $tag->subfield($biblionumtagsubfield) == $biblionumber ) {
+                if ($tag) {
+                    $tag->update( $tagfield => $biblionumber );
                 } else {
-                    my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
+                    my $newrec = MARC::Field->new(
+                        $tagfield, '', '', $biblionumtagsubfield => $biblionumber,
+                        $biblioitemtagsubfield => $biblioitemnumber
+                    );
                     $record->insert_fields_ordered($newrec);
                 }
-                $update=1;
+                $update = 1;
             }
         }
     } else {
-        warn "problem with :".$biblionumber." , record undefined";
+        warn "problem with :" . $biblionumber . " , record undefined";
     }
 
-
-    if ($update){
-        &ModBiblioMarc($record,$biblionumber);
+    if ($update) {
+        &ModBiblioMarc( $record, $biblionumber );
         print "\n modified : $biblionumber \n";
     }
-    
+
 }
+
 END;

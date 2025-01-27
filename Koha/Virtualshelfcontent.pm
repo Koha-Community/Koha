@@ -17,7 +17,6 @@ package Koha::Virtualshelfcontent;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Exceptions;
 

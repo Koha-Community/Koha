@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
@@ -45,8 +45,8 @@ for my $number_of_days (@days) {
 
         say "Suggestion $suggestion->{suggestionid} should be processed" if $verbose;
 
-        my $budget = C4::Budgets::GetBudget( $suggestion->{budgetid} );
-        my $patron = Koha::Patrons->find( $budget->{budget_owner_id} );
+        my $budget        = C4::Budgets::GetBudget( $suggestion->{budgetid} );
+        my $patron        = Koha::Patrons->find( $budget->{budget_owner_id} );
         my $email_address = $patron->notice_email_address;
 
         if ($email_address) {
@@ -62,7 +62,7 @@ for my $number_of_days (@days) {
                     borrowers   => $patron->borrowernumber,
                 },
             );
-            if ( $confirm ) {
+            if ($confirm) {
                 C4::Letters::EnqueueLetter(
                     {
                         letter                 => $letter,

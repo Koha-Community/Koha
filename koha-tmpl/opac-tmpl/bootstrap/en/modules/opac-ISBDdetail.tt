@@ -3,17 +3,19 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("ISBD view for: {title}", { title = biblio.title }) | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("ISBD view for: {title}", { title = biblio.title }) | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-isbddetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% tx("ISBD view for {title}", { title = biblio.title }) | html %]
@@ -27,22 +29,35 @@
                     <div id="usermarcdetail">
                         <div id="catalogue_detail_biblio">
                             <div id="views">
-                                <span class="view"><a id="Normalview" class="btn btn-link" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Normal view</a></span>
-                                <span class="view"><a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-rectangle-list" aria-hidden="true"></i> MARC view</a></span>
-                                <span class="view current-view"><span id="ISBDview"><i class="fa fa-list-ul" aria-hidden="true"></i> ISBD view</span></span></div>
-                                <h1 class="title">[% INCLUDE 'biblio-title.inc' %]</h1>
-                                <div id="isbdcontents">[% ISBD | $raw %]</div>
-
-                        </div> <!-- / #catalogue_detail_biblio -->
-                    </div> <!-- / #usermarcdetail -->
-                </div> <!-- / #opac-detail -->
-            </div> <!-- / .col-lg-9 -->
-            <div class="col-lg-3">
-                [% INCLUDE 'opac-detail-sidebar.inc' %]
+                                <span class="view"
+                                    ><a id="Normalview" class="btn btn-link" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Normal view</a></span
+                                >
+                                <span class="view"
+                                    ><a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"
+                                        ><i class="fa-solid fa-rectangle-list" aria-hidden="true"></i> MARC view</a
+                                    ></span
+                                >
+                                <span class="view current-view"
+                                    ><span id="ISBDview"><i class="fa fa-list-ul" aria-hidden="true"></i> ISBD view</span></span
+                                ></div
+                            >
+                            <h1 class="title">[% INCLUDE 'biblio-title.inc' %]</h1>
+                            <div id="isbdcontents">[% ISBD | $raw %]</div>
+                        </div>
+                        <!-- / #catalogue_detail_biblio -->
+                    </div>
+                    <!-- / #usermarcdetail -->
+                </div>
+                <!-- / #opac-detail -->
             </div>
-        </div> <!-- / .row -->
-    </div>  <!-- / .container-fluid -->
-</div> <!-- / .main -->
+            <!-- / .col-lg-9 -->
+            <div class="col-lg-3"> [% INCLUDE 'opac-detail-sidebar.inc' %] </div>
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% IF Koha.Preference('OpacCatalogConcerns') %]
     [% INCLUDE 'modals/catalog_concern.inc' %]

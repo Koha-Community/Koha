@@ -23,10 +23,10 @@
 use Modern::Perl;
 use Test::More qw(no_plan);
 
-my $doc_dir = 'debian/docs';
-my @doc_files = glob($doc_dir . '/*.xml');
-my @command = qw(xmllint --noout);
+my $doc_dir   = 'debian/docs';
+my @doc_files = glob( $doc_dir . '/*.xml' );
+my @command   = qw(xmllint --noout);
 
 foreach my $file (@doc_files) {
-    ok(system(@command, $file) == 0, "XML validation for $file");
+    ok( system( @command, $file ) == 0, "XML validation for $file" );
 }

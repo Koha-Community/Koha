@@ -4,13 +4,9 @@
 [% BLOCK report %]
     [% IF job.status == 'finished' %]
         [% IF report %]
-            <div class="alert alert-info">
-                [% report.record_ids.size | html %] records have successfully been reindexed.
-            </div>
+            <div class="alert alert-info"> [% report.record_ids.size | html %] records have successfully been reindexed. </div>
         [% ELSE %]
-            <div class="alert alert-info">
-               Job data could not be read, see the logs for details
-            </div>
+            <div class="alert alert-info"> Job data could not be read, see the logs for details </div>
         [% END %]
     [% ELSIF job.status == 'cancelled' %]
         <span>The job has been cancelled before it finished.</span>
@@ -36,13 +32,12 @@
     [% IF report %]
         <h3> Record IDs:</h3>
         <ul>
-        [% FOREACH record_id IN report.record_ids %]
-            <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_id | uri %]">[% record_id | html %]</a></li>
-        [% END %]
+            [% FOREACH record_id IN report.record_ids %]
+                <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_id | uri %]">[% record_id | html %]</a></li>
+            [% END %]
         </ul>
     [% END %]
 [% END %]
-
 
 [% BLOCK js %]
 [% END %]

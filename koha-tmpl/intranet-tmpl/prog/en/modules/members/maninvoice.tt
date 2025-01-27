@@ -7,11 +7,12 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Create manual invoice") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Create manual invoice") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -35,38 +36,35 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
-            [% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-            <h1>Manual invoice</h1>
+    <h1>Manual invoice</h1>
 
-            <!-- The manual invoice and credit buttons -->
-            <div class="toptabs">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="nav-item transactions">
-                        <a class="nav-link" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
-                    </li>
-                    <li role="presentation" class="nav-item makepayment">
-                        <a class="nav-link" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
-                    </li>
-                    <li role="presentation" class="nav-item manualinvoice">
-                        <a class="nav-link active" href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
-                    </li>
-                    [% IF CAN_user_updatecharges_manual_credit %]
-                        <li role="presentation" class="nav-item manualcredit">
-                            <a class="nav-link" href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
-                        </li>
-                    [% END %]
-                </ul> <!-- /.nav.nav-tabs -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active">
+    <!-- The manual invoice and credit buttons -->
+    <div class="toptabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="nav-item transactions">
+                <a class="nav-link" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
+            </li>
+            <li role="presentation" class="nav-item makepayment">
+                <a class="nav-link" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
+            </li>
+            <li role="presentation" class="nav-item manualinvoice">
+                <a class="nav-link active" href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
+            </li>
+            [% IF CAN_user_updatecharges_manual_credit %]
+                <li role="presentation" class="nav-item manualcredit">
+                    <a class="nav-link" href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
+                </li>
+            [% END %]
+        </ul>
+        <!-- /.nav.nav-tabs -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
                 [% IF error == 'itemnumber' %]
-                    <div id="error_message" class="alert alert-warning">
-                        Error: Invalid item barcode entered, please try again
-                    </div>
+                    <div id="error_message" class="alert alert-warning"> Error: Invalid item barcode entered, please try again </div>
                 [% ELSIF error %]
-                    <div id="error_message" class="alert alert-warning">
-                        An error occurred, please try again: [% error | html %]
-                    </div>
+                    <div id="error_message" class="alert alert-warning"> An error occurred, please try again: [% error | html %] </div>
                 [% END %]
                 <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice">
                     <input type="hidden" name="op" value="cud-add" />
@@ -79,11 +77,11 @@
                                 <label for="type">Type: </label>
                                 <select name="type" id="type">
                                     [% FOREACH debit_type IN debit_types %]
-                                    [% IF debit_type.code == type %]
-                                    <option value="[% debit_type.code | html %]" selected="selected">[%- PROCESS debit_type_description debit_type=debit_type -%]</option>
-                                    [% ELSE %]
-                                    <option value="[% debit_type.code | html %]">[%- PROCESS debit_type_description debit_type=debit_type -%]</option>
-                                    [% END %]
+                                        [% IF debit_type.code == type %]
+                                            <option value="[% debit_type.code | html %]" selected="selected">[%- PROCESS debit_type_description debit_type=debit_type -%]</option>
+                                        [% ELSE %]
+                                            <option value="[% debit_type.code | html %]">[%- PROCESS debit_type_description debit_type=debit_type -%]</option>
+                                        [% END %]
                                     [% END %]
                                 </select>
                             </li>
@@ -92,7 +90,10 @@
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note | html %]" /></li>
                             <li class="additional_field"><label for="cost">Cost: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="cost" id="cost" min="0" value="[% amount | $Price on_editing => 1 %]" /></li>
                             <li class="additional_field"><label for="quantity">Quantity: </label><input type="text" name="quantity" id="quantity" value="1" /></li>
-                            <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li>
+                            <li
+                                ><label for="amount">Amount: </label
+                                ><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li
+                            >
                         </ol>
                     </fieldset>
 
@@ -106,11 +107,12 @@
                         <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
                     </fieldset>
                 </form>
-
-                    </div> <!-- /.tab-pane -->
-                </div> <!-- /.tab-content -->
-            </div> <!-- /.toptabs -->
-
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+    <!-- /.toptabs -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -3,12 +3,15 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Your payment") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Your payment") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 
 <body id="opac-account-pay-return" class="scrollto">
@@ -18,7 +21,7 @@
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-               <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-routing-lists.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
@@ -27,14 +30,13 @@
                 <a href="#" aria-current="page">Your payment</a>
             </li>
         </ol>
-    </nav> <!-- /#breadcrumbs -->
+    </nav>
+    <!-- /#breadcrumbs -->
 
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="useraccount" class="maincontent">
@@ -46,12 +48,17 @@
                     [% END %]
 
                     <a href="/cgi-bin/koha/opac-account.pl">Return to fine details</a>
-                </div> <!-- / #useraccount -->
-
-            </div> <!-- / .col-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #useraccount -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

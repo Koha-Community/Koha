@@ -21,7 +21,7 @@ use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Plugin' => {
-        isa         => 'Koha::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Plugin::ForbiddenAction' => {
         isa         => 'Koha::Exceptions::Plugin',
@@ -30,7 +30,7 @@ use Exception::Class (
     'Koha::Exceptions::Plugin::MissingMethod' => {
         isa         => 'Koha::Exceptions::Plugin',
         description => 'Required method is missing',
-        fields      =>  ['plugin_name','method']
+        fields      => [ 'plugin_name', 'method' ]
     },
     'Koha::Exceptions::Plugin::InstallDied' => {
         isa         => 'Koha::Exceptions::Plugin',
@@ -49,15 +49,16 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Plugin::MissingMethod') ) {
-            $msg = sprintf("Cannot use plugin (%s) because the it doesn't implement the '%s' method which is required.", $self->plugin_name, $self->method );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Plugin::InstallDied') ) {
-            $msg = sprintf("Calling 'install' died for plugin %s", $self->plugin_class);
-        }
-        elsif ( $self->isa('Koha::Exceptions::Plugin::UpgradeDied') ) {
-            $msg = sprintf("Calling 'upgrade' died for plugin %s", $self->plugin_class);
+            $msg = sprintf(
+                "Cannot use plugin (%s) because the it doesn't implement the '%s' method which is required.",
+                $self->plugin_name, $self->method
+            );
+        } elsif ( $self->isa('Koha::Exceptions::Plugin::InstallDied') ) {
+            $msg = sprintf( "Calling 'install' died for plugin %s", $self->plugin_class );
+        } elsif ( $self->isa('Koha::Exceptions::Plugin::UpgradeDied') ) {
+            $msg = sprintf( "Calling 'upgrade' died for plugin %s", $self->plugin_class );
         }
     }
 

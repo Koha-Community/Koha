@@ -22,99 +22,107 @@ use Carp qw( croak );
 
 use C4::Context;
 use C4::Members::Messaging;
-use C4::Auth qw( checkpw_internal );
+use C4::Auth    qw( checkpw_internal );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use Koha::Patrons;
 use Koha::AuthUtils qw( hash_password );
 use Net::LDAP;
 use Net::LDAP::Filter;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT_OK = qw( checkpw_ldap );
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw( checkpw_ldap );
 }
 
 # Redefine checkpw_ldap:
 # connect to LDAP (named or anonymous)
 # ~ retrieves $userid from KOHA_CONF mapping
-# ~ then compares $password with userPassword 
+# ~ then compares $password with userPassword
 # ~ then gets the LDAP entry
 # ~ and calls the memberadd if necessary
 
 sub ldapserver_error {
-	return sprintf('No ldapserver "%s" defined in KOHA_CONF: ' . $ENV{KOHA_CONF}, shift);
+    return sprintf( 'No ldapserver "%s" defined in KOHA_CONF: ' . $ENV{KOHA_CONF}, shift );
 }
 
 use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
 my $ldap = C4::Context->config("ldapserver") or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
+
 # since Bug 28278 we need to skip id in <ldapserver id="ldapserver"> which generates additional hash level
 if ( exists $ldap->{ldapserver} ) {
-    $ldap = $ldap->{ldapserver}         or die ldapserver_error('id="ldapserver"');
+    $ldap = $ldap->{ldapserver} or die ldapserver_error('id="ldapserver"');
 }
-my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
-my $base      = $ldap->{base}		or die ldapserver_error('base');
-$ldapname     = $ldap->{user}		;
-$ldappassword = $ldap->{pass}		;
-our %mapping  = %{$ldap->{mapping}}; # FIXME dpavlin -- don't die because of || (); from 6eaf8511c70eb82d797c941ef528f4310a15e9f9
+my $prefhost = $ldap->{hostname} or die ldapserver_error('hostname');
+my $base     = $ldap->{base}     or die ldapserver_error('base');
+$ldapname     = $ldap->{user};
+$ldappassword = $ldap->{pass};
+our %mapping =
+    %{ $ldap->{mapping} };  # FIXME dpavlin -- don't die because of || (); from 6eaf8511c70eb82d797c941ef528f4310a15e9f9
 my @mapkeys = keys %mapping;
+
 #warn "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
-@mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
+@mapkeys = grep { defined $mapping{$_}->{is} } @mapkeys;
+
 #warn "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
 
 my %categorycode_conversions;
 my $default_categorycode;
-if(defined $ldap->{categorycode_mapping}) {
+if ( defined $ldap->{categorycode_mapping} ) {
     $default_categorycode = $ldap->{categorycode_mapping}->{default};
-    foreach my $cat (@{$ldap->{categorycode_mapping}->{categorycode}}) {
-        $categorycode_conversions{$cat->{value}} = $cat->{content};
+    foreach my $cat ( @{ $ldap->{categorycode_mapping}->{categorycode} } ) {
+        $categorycode_conversions{ $cat->{value} } = $cat->{content};
     }
 }
 
 my %config = (
-    anonymous => defined ($ldap->{anonymous_bind}) ? $ldap->{anonymous_bind} : 1,
-    replicate => defined($ldap->{replicate}) ? $ldap->{replicate} : 1,  #    add from LDAP to Koha database for new user
-    welcome   => defined($ldap->{welcome}) ? $ldap->{welcome} : 0,  #    send welcome notice when patron is added via replicate
-    update    => defined($ldap->{update}) ? $ldap->{update} : 1,  # update from LDAP to Koha database for existing user
+    anonymous => defined( $ldap->{anonymous_bind} ) ? $ldap->{anonymous_bind} : 1,
+    replicate => defined( $ldap->{replicate} )
+    ? $ldap->{replicate}
+    : 1,                                                           #    add from LDAP to Koha database for new user
+    welcome => defined( $ldap->{welcome} )
+    ? $ldap->{welcome}
+    : 0,    #    send welcome notice when patron is added via replicate
+    update => defined( $ldap->{update} ) ? $ldap->{update} : 1,    # update from LDAP to Koha database for existing user
 );
 
 sub description {
-	my $result = shift or return;
-	return "LDAP error #" . $result->code
-			. ": " . $result->error_name . "\n"
-			. "# " . $result->error_text . "\n";
+    my $result = shift or return;
+    return "LDAP error #" . $result->code . ": " . $result->error_name . "\n" . "# " . $result->error_text . "\n";
 }
 
 sub search_method {
-    my $db     = shift or return;
-    my $userid = shift or return;
-	my $uid_field = $mapping{userid}->{is} or die ldapserver_error("mapping for 'userid'");
-	my $filter = Net::LDAP::Filter->new("$uid_field=$userid") or die "Failed to create new Net::LDAP::Filter";
-	my $search = $db->search(
-		  base => $base,
-	 	filter => $filter,
-		# attrs => ['*'],
+    my $db        = shift                                        or return;
+    my $userid    = shift                                        or return;
+    my $uid_field = $mapping{userid}->{is}                       or die ldapserver_error("mapping for 'userid'");
+    my $filter    = Net::LDAP::Filter->new("$uid_field=$userid") or die "Failed to create new Net::LDAP::Filter";
+    my $search    = $db->search(
+        base   => $base,
+        filter => $filter,
+
+        # attrs => ['*'],
     );
     die "LDAP search failed to return object : " . $search->error if $search->code;
 
-	my $count = $search->count;
-	if ($search->code > 0) {
-		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count) . description($search);
-		return 0;
-	}
-    if ($count == 0) {
-        warn sprintf("LDAP Auth rejected : search with filter '%s' returns no hit\n", $filter->as_string);
+    my $count = $search->count;
+    if ( $search->code > 0 ) {
+        warn sprintf( "LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count ) . description($search);
+        return 0;
+    }
+    if ( $count == 0 ) {
+        warn sprintf( "LDAP Auth rejected : search with filter '%s' returns no hit\n", $filter->as_string );
         return 0;
     }
     return $search;
 }
 
 sub checkpw_ldap {
-    my ($userid, $password) = @_;
-    my @hosts = split(',', $prefhost);
-    my $db = Net::LDAP->new(\@hosts);
-    unless ( $db ) {
+    my ( $userid, $password ) = @_;
+    my @hosts = split( ',', $prefhost );
+    my $db    = Net::LDAP->new( \@hosts );
+    unless ($db) {
         warn "LDAP connexion failed";
         return 0;
     }
@@ -135,16 +143,14 @@ sub checkpw_ldap {
 
             # Perform a LDAP search for the given username
             my $search = search_method( $db, $userid )
-              or return 0;    # warnings are in the sub
-            $userldapentry = $search->shift_entry;
+                or return 0;    # warnings are in the sub
+            $userldapentry  = $search->shift_entry;
             $principal_name = $userldapentry->dn;
-        }
-        else {
+        } else {
             $principal_name = $ldap->{principal_name};
             if ( $principal_name and $principal_name =~ /\%/ ) {
                 $principal_name = sprintf( $principal_name, $userid );
-            }
-            else {
+            } else {
                 $principal_name = $userid;
             }
         }
@@ -153,12 +159,14 @@ sub checkpw_ldap {
         my $res = $db->bind( $principal_name, password => $password );
         if ( $res->code ) {
             if ( $config{anonymous} ) {
+
                 # With anonymous_bind approach we can be sure we have found the correct user
                 # and that any 'code' response indicates a 'bad' user (be that blocked, banned
                 # or password changed). We should not fall back to local accounts in this case.
                 warn "LDAP bind failed as kohauser $userid: " . description($res);
                 return -1;
             } else {
+
                 # Without a anonymous_bind, we cannot be sure we are looking at a valid ldap user
                 # at all, and thus we should fall back to local logins to restore previous behaviour
                 # see bug 12831
@@ -173,19 +181,19 @@ sub checkpw_ldap {
             $userldapentry = $search->shift_entry;
         }
     } else {
-        my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
-		if ($res->code) {		# connection refused
-			warn "LDAP bind failed as ldapuser " . ($ldapname || '[ANONYMOUS]') . ": " . description($res);
-			return 0;
-		}
-        my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
-        # Handle multiple branches. Same login exists several times in different branches.
+        my $res = ( $config{anonymous} ) ? $db->bind : $db->bind( $ldapname, password => $ldappassword );
+        if ( $res->code ) {    # connection refused
+            warn "LDAP bind failed as ldapuser " . ( $ldapname || '[ANONYMOUS]' ) . ": " . description($res);
+            return 0;
+        }
+        my $search = search_method( $db, $userid ) or return 0;    # warnings are in the sub
+            # Handle multiple branches. Same login exists several times in different branches.
         my $bind_ok = 0;
-        while (my $entry = $search->shift_entry) {
-            my $user_ldap_bind_ret = $db->bind($entry->dn, password => $password);
-            unless ($user_ldap_bind_ret->code) {
+        while ( my $entry = $search->shift_entry ) {
+            my $user_ldap_bind_ret = $db->bind( $entry->dn, password => $password );
+            unless ( $user_ldap_bind_ret->code ) {
                 $userldapentry = $entry;
-                $bind_ok = 1;
+                $bind_ok       = 1;
                 last;
             }
         }
@@ -195,19 +203,20 @@ sub checkpw_ldap {
             return -1;
         }
 
-
     }
 
     # To get here, LDAP has accepted our user's login attempt.
     # But we still have work to do.  See perldoc below for detailed breakdown.
 
     my (%borrower);
-	my ($borrowernumber,$cardnumber,$local_userid,$savedpw) = exists_local($userid);
+    my ( $borrowernumber, $cardnumber, $local_userid, $savedpw ) = exists_local($userid);
 
     my $patron;
-    if (( $borrowernumber and $config{update}   ) or
-        (!$borrowernumber and $config{replicate})   ) {
-        %borrower = ldap_entry_2_hash($userldapentry,$cardnumber);
+    if (   ( $borrowernumber and $config{update} )
+        or ( !$borrowernumber and $config{replicate} ) )
+    {
+        %borrower = ldap_entry_2_hash( $userldapentry, $cardnumber );
+
         #warn "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
     }
 
@@ -220,13 +229,10 @@ sub checkpw_ldap {
             my $patron = Koha::Patrons->find($borrowernumber);
             return ( 1, $cardnumber, $local_userid, $patron );
         }
-    } elsif ($config{replicate}) { # A2, C2
+    } elsif ( $config{replicate} ) {    # A2, C2
         my @columns = Koha::Patrons->columns;
-        $patron = Koha::Patron->new(
-            {
-                map { exists( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns
-            }
-        )->store;
+        $patron =
+            Koha::Patron->new( { map { exists( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns } )->store;
         $patron->discard_changes;
         die "Insert of new patron failed" unless $patron;
         $borrowernumber = $patron->borrowernumber;
@@ -267,30 +273,33 @@ sub checkpw_ldap {
                 C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
             }
         }
-   } else {
-        return 0;   # B2, D2
+    } else {
+        return 0;    # B2, D2
     }
-    if (C4::Context->preference('ExtendedPatronAttributes') && $borrowernumber && ($config{update} ||$config{replicate})) {
-        my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-        my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
+    if (   C4::Context->preference('ExtendedPatronAttributes')
+        && $borrowernumber
+        && ( $config{update} || $config{replicate} ) )
+    {
+        my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+        my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
         while ( my $attribute_type = $attribute_types->next ) {
             my $code = $attribute_type->code;
-            unless (exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) {
+            unless ( exists( $borrower{$code} ) && $borrower{$code} !~ m/^\s*$/ ) {
                 next;
             }
             $patron = Koha::Patrons->find($borrowernumber);
-            if ( $patron ) { # Should not be needed, but we are in C4::Auth LDAP...
+            if ($patron) {    # Should not be needed, but we are in C4::Auth LDAP...
                 eval {
-                    my $attribute = Koha::Patron::Attribute->new({code => $code, attribute => $borrower{$code}});
-                    $patron->extended_attributes([$attribute->unblessed]);
+                    my $attribute = Koha::Patron::Attribute->new( { code => $code, attribute => $borrower{$code} } );
+                    $patron->extended_attributes( [ $attribute->unblessed ] );
                 };
-                if ($@) { # FIXME Test if Koha::Exceptions::Patron::Attribute::NonRepeatable
+                if ($@) {     # FIXME Test if Koha::Exceptions::Patron::Attribute::NonRepeatable
                     warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
                 }
             }
         }
     }
-    return(1, $cardnumber, $userid, $patron);
+    return ( 1, $cardnumber, $userid, $patron );
 }
 
 # Pass LDAP entry object and local cardnumber (userid).
@@ -299,68 +308,71 @@ sub checkpw_ldap {
 # Ensure that mandatory fields are correctly filled!
 #
 sub ldap_entry_2_hash {
-	my $userldapentry = shift;
-	my %borrower = ( cardnumber => shift );
-	my %memberhash;
-	$userldapentry->exists('uid');	# This is bad, but required!  By side-effect, this initializes the attrs hash. 
-    #foreach (keys %$userldapentry) {
-    #    print STDERR "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
-    #}
-	my $x = $userldapentry->{attrs} or return;
-	foreach (keys %$x) {
-		$memberhash{$_} = join ' ', @{$x->{$_}};	
+    my $userldapentry = shift;
+    my %borrower      = ( cardnumber => shift );
+    my %memberhash;
+    $userldapentry->exists('uid');    # This is bad, but required!  By side-effect, this initializes the attrs hash.
+                                      #foreach (keys %$userldapentry) {
+        #    print STDERR "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
+        #}
+    my $x = $userldapentry->{attrs} or return;
+
+    foreach ( keys %$x ) {
+        $memberhash{$_} = join ' ', @{ $x->{$_} };
+
         #warn sprintf("building \$memberhash{%s} = ", $_, join(' ', @{$x->{$_}})), "\n";
-	}
+    }
+
     #warn "Finished \%memberhash has ", scalar(keys %memberhash), " keys\n", "Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
-	foreach my $key (keys %mapping) {
-		my  $data = $memberhash{ lc($mapping{$key}->{is}) }; # Net::LDAP returns all names in lowercase
-        #warn "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
-		unless (defined $data) { 
+    foreach my $key ( keys %mapping ) {
+        my $data = $memberhash{ lc( $mapping{$key}->{is} ) };    # Net::LDAP returns all names in lowercase
+            #warn "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
+        unless ( defined $data ) {
             $data = $mapping{$key}->{content} || undef;
-		}
+        }
         $borrower{$key} = $data;
-	}
-	$borrower{initials} = $memberhash{initials} || 
-		( substr($borrower{'firstname'},0,1)
-  		. substr($borrower{ 'surname' },0,1)
-  		. " ");
+    }
+    $borrower{initials} = $memberhash{initials}
+        || ( substr( $borrower{'firstname'}, 0, 1 ) . substr( $borrower{'surname'}, 0, 1 ) . " " );
 
     # categorycode conversions
-    if(defined $categorycode_conversions{$borrower{categorycode}}) {
-        $borrower{categorycode} = $categorycode_conversions{$borrower{categorycode}};
-    }
-    elsif($default_categorycode) {
+    if ( defined $categorycode_conversions{ $borrower{categorycode} } ) {
+        $borrower{categorycode} = $categorycode_conversions{ $borrower{categorycode} };
+    } elsif ($default_categorycode) {
         $borrower{categorycode} = $default_categorycode;
     }
 
-	# check if categorycode exists, if not, fallback to default from koha-conf.xml
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT categorycode FROM categories WHERE categorycode = ?");
-	$sth->execute( uc($borrower{'categorycode'}) );
-	unless ( my $row = $sth->fetchrow_hashref ) {
-		my $default = $mapping{'categorycode'}->{content};
-        #warn "Can't find ", $borrower{'categorycode'}, " default to: $default for ", $borrower{userid};
-		$borrower{'categorycode'} = $default
-	}
+    # check if categorycode exists, if not, fallback to default from koha-conf.xml
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT categorycode FROM categories WHERE categorycode = ?");
+    $sth->execute( uc( $borrower{'categorycode'} ) );
+    unless ( my $row = $sth->fetchrow_hashref ) {
+        my $default = $mapping{'categorycode'}->{content};
 
-	return %borrower;
+        #warn "Can't find ", $borrower{'categorycode'}, " default to: $default for ", $borrower{userid};
+        $borrower{'categorycode'} = $default;
+    }
+
+    return %borrower;
 }
 
 sub exists_local {
-	my $arg = shift;
-	my $dbh = C4::Context->dbh;
-	my $select = "SELECT borrowernumber,cardnumber,userid,password FROM borrowers ";
+    my $arg    = shift;
+    my $dbh    = C4::Context->dbh;
+    my $select = "SELECT borrowernumber,cardnumber,userid,password FROM borrowers ";
 
-	my $sth = $dbh->prepare("$select WHERE userid=?");	# was cardnumber=?
-	$sth->execute($arg);
+    my $sth = $dbh->prepare("$select WHERE userid=?");    # was cardnumber=?
+    $sth->execute($arg);
+
     #warn "Userid '$arg' exists_local? %s\n", $sth->rows;
-	($sth->rows == 1) and return $sth->fetchrow;
+    ( $sth->rows == 1 ) and return $sth->fetchrow;
 
-	$sth = $dbh->prepare("$select WHERE cardnumber=?");
-	$sth->execute($arg);
+    $sth = $dbh->prepare("$select WHERE cardnumber=?");
+    $sth->execute($arg);
+
     #warn "Cardnumber '$arg' exists_local? %s\n", $sth->rows;
-	($sth->rows == 1) and return $sth->fetchrow;
-	return 0;
+    ( $sth->rows == 1 ) and return $sth->fetchrow;
+    return 0;
 }
 
 # This function performs a password update, given the userid, borrowerid,
@@ -373,30 +385,27 @@ sub exists_local {
 # Note: if the LDAP config has the update_password tag set to a false value,
 # then this will not update the password, it will simply return the cardnumber.
 sub _do_changepassword {
-    my ($userid, $borrowerid, $password) = @_;
+    my ( $userid, $borrowerid, $password ) = @_;
 
     if ( exists( $ldap->{update_password} ) && !$ldap->{update_password} ) {
 
         # We don't store the password in the database
-        my $sth = C4::Context->dbh->prepare(
-            'SELECT cardnumber FROM borrowers WHERE borrowernumber=?');
+        my $sth = C4::Context->dbh->prepare('SELECT cardnumber FROM borrowers WHERE borrowernumber=?');
         $sth->execute($borrowerid);
-        die "Unable to access borrowernumber "
-            . "with userid=$userid, "
-            . "borrowernumber=$borrowerid"
-          if !$sth->rows;
+        die "Unable to access borrowernumber " . "with userid=$userid, " . "borrowernumber=$borrowerid"
+            if !$sth->rows;
         my ($cardnum) = $sth->fetchrow;
-        $sth = C4::Context->dbh->prepare(
-            'UPDATE borrowers SET password = null WHERE borrowernumber=?');
+        $sth = C4::Context->dbh->prepare('UPDATE borrowers SET password = null WHERE borrowernumber=?');
         $sth->execute($borrowerid);
         return $cardnum;
     }
 
     my $digest = hash_password($password);
-    #warn "changing local password for borrowernumber=$borrowerid to '$digest'\n";
-    Koha::Patrons->find($borrowerid)->set_password({ password => $password, skip_validation => 1 });
 
-    my ($ok, $cardnum) = checkpw_internal($userid, $password);
+    #warn "changing local password for borrowernumber=$borrowerid to '$digest'\n";
+    Koha::Patrons->find($borrowerid)->set_password( { password => $password, skip_validation => 1 } );
+
+    my ( $ok, $cardnum ) = checkpw_internal( $userid, $password );
     return $cardnum if $ok;
 
     warn "Password mismatch after update to borrowernumber=$borrowerid";
@@ -411,29 +420,27 @@ sub update_local {
 
     # skip extended patron attributes in 'borrowers' attribute update
     my @keys = keys %$borrower;
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-        my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
+    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+        my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+        my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
         while ( my $attribute_type = $attribute_types->next ) {
-           my $code = $attribute_type->code;
-           @keys = grep { $_ ne $code } @keys;
-           #warn "ignoring extended patron attribute '%s' in update_local()\n", $code;
+            my $code = $attribute_type->code;
+            @keys = grep { $_ ne $code } @keys;
+
+            #warn "ignoring extended patron attribute '%s' in update_local()\n", $code;
         }
     }
 
-    my $dbh = C4::Context->dbh;
-    my $query = "UPDATE  borrowers\nSET     " .
-        join(',', map {"$_=?"} @keys) .
-        "\nWHERE   borrowernumber=? ";
-    my $sth = $dbh->prepare($query);
+    my $dbh   = C4::Context->dbh;
+    my $query = "UPDATE  borrowers\nSET     " . join( ',', map { "$_=?" } @keys ) . "\nWHERE   borrowernumber=? ";
+    my $sth   = $dbh->prepare($query);
+
     #warn $query, "\n", join "\n", map {"$_ = '" . $borrower->{$_} . "'"} @keys;
     #warn "\nuserid = $userid\n";
-    $sth->execute(
-        ((map {$borrower->{$_}} @keys), $borrowerid)
-    );
+    $sth->execute( ( ( map { $borrower->{$_} } @keys ), $borrowerid ) );
 
     # MODIFY PASSWORD/LOGIN if password was mapped
-    _do_changepassword($userid, $borrowerid, $password) if exists( $borrower->{'password'} );
+    _do_changepassword( $userid, $borrowerid, $password ) if exists( $borrower->{'password'} );
 }
 
 1;

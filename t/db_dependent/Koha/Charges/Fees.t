@@ -28,7 +28,7 @@ use t::lib::TestBuilder;
 use t::lib::Dates;
 
 use Time::Fake;
-use C4::Calendar qw( new insert_week_day_holiday delete_holiday );
+use C4::Calendar    qw( new insert_week_day_holiday delete_holiday );
 use Koha::DateUtils qw(dt_from_string);
 
 BEGIN {
@@ -69,7 +69,7 @@ my $itemtype = $builder->build_object(
             rentalcharge                 => '0.00',
             processfee                   => '0.00',
             defaultreplacecost           => '0.00',
-          },
+        },
     }
 );
 my $item = $builder->build_object(
@@ -97,7 +97,7 @@ my $now = dt_from_string()->set_time_zone('floating');
 Time::Fake->offset( $now->epoch );
 
 my $dt_from = $now->clone->subtract( days => 2 );
-my $dt_to = $now->clone->add( days => 4 );
+my $dt_to   = $now->clone->add( days => 4 );
 
 subtest 'new' => sub {
     plan tests => 9;
@@ -110,7 +110,7 @@ subtest 'new' => sub {
                 item    => $item,
                 to_date => $dt_to,
             }
-          )
+        )
     }
     'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for patron';
     throws_ok {
@@ -120,7 +120,7 @@ subtest 'new' => sub {
                 item    => $item,
                 to_date => $dt_to,
             }
-          )
+        )
     }
     'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for library';
     throws_ok {
@@ -130,7 +130,7 @@ subtest 'new' => sub {
                 library => $library,
                 to_date => $dt_to,
             }
-          )
+        )
     }
     'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for item';
     throws_ok {
@@ -140,7 +140,7 @@ subtest 'new' => sub {
                 library => $library,
                 item    => $item,
             }
-          )
+        )
     }
     'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for to_date';
 
@@ -153,7 +153,7 @@ subtest 'new' => sub {
                 item    => $item,
                 to_date => $dt_to,
             }
-          )
+        )
     }
     'dies for bad patron';
     dies_ok {
@@ -164,7 +164,7 @@ subtest 'new' => sub {
                 item    => $item,
                 to_date => $dt_to,
             }
-          )
+        )
     }
     'dies for bad library';
     dies_ok {
@@ -175,7 +175,7 @@ subtest 'new' => sub {
                 item    => '12345',
                 to_date => $dt_to,
             }
-          )
+        )
     }
     'dies for bad item';
     dies_ok {
@@ -186,7 +186,7 @@ subtest 'new' => sub {
                 item    => $item,
                 to_date => 12345
             }
-          )
+        )
     }
     'dies for bad to_date';
 
@@ -199,8 +199,10 @@ subtest 'new' => sub {
             to_date => $dt_to,
         }
     );
-    is( t::lib::Dates::compare($fees->from_date, dt_from_string()), 0,
-        'from_date default set correctly to today' );
+    is(
+        t::lib::Dates::compare( $fees->from_date, dt_from_string() ), 0,
+        'from_date default set correctly to today'
+    );
 };
 
 subtest 'patron accessor' => sub {
@@ -220,9 +222,8 @@ subtest 'patron accessor' => sub {
         'patron accessor returns a Koha::Patron'
     );
     warning_is { $fees->patron('12345') }
-    { carped =>
-"Setting 'patron' to something other than a Koha::Patron is not supported!"
-    }, "Warning thrown when attempting to set patron to string";
+    { carped => "Setting 'patron' to something other than a Koha::Patron is not supported!" },
+        "Warning thrown when attempting to set patron to string";
 
 };
 
@@ -243,9 +244,8 @@ subtest 'library accessor' => sub {
         'library accessor returns a Koha::Library'
     );
     warning_is { $fees->library('12345') }
-    { carped =>
-"Setting 'library' to something other than a Koha::Library is not supported!"
-    }, "Warning thrown when attempting to set library to string";
+    { carped => "Setting 'library' to something other than a Koha::Library is not supported!" },
+        "Warning thrown when attempting to set library to string";
 };
 
 subtest 'item accessor' => sub {
@@ -262,9 +262,8 @@ subtest 'item accessor' => sub {
 
     ok( $fees->item->isa('Koha::Item'), 'item accessor returns a Koha::Item' );
     warning_is { $fees->item('12345') }
-    { carped =>
-"Setting 'item' to something other than a Koha::Item is not supported!"
-    }, "Warning thrown when attempting to set item to string";
+    { carped => "Setting 'item' to something other than a Koha::Item is not supported!" },
+        "Warning thrown when attempting to set item to string";
 };
 
 subtest 'to_date accessor' => sub {
@@ -279,12 +278,13 @@ subtest 'to_date accessor' => sub {
         }
     );
 
-    ok( $fees->to_date->isa('DateTime'),
-        'to_date accessor returns a DateTime' );
+    ok(
+        $fees->to_date->isa('DateTime'),
+        'to_date accessor returns a DateTime'
+    );
     warning_is { $fees->to_date(12345) }
-    { carped =>
-"Setting 'to_date' to something other than a DateTime is not supported!"
-    }, "Warning thrown when attempting to set to_date to integer";
+    { carped => "Setting 'to_date' to something other than a DateTime is not supported!" },
+        "Warning thrown when attempting to set to_date to integer";
 };
 
 subtest 'from_date accessor' => sub {
@@ -304,9 +304,8 @@ subtest 'from_date accessor' => sub {
         'from_date accessor returns a DateTime'
     );
     warning_is { $fees->from_date(12345) }
-    { carped =>
-"Setting 'from_date' to something other than a DateTime is not supported!"
-    }, "Warning thrown when attempting to set from_date to integer";
+    { carped => "Setting 'from_date' to something other than a DateTime is not supported!" },
+        "Warning thrown when attempting to set from_date to integer";
 };
 
 subtest 'accumulate_rentalcharge tests' => sub {
@@ -323,11 +322,12 @@ subtest 'accumulate_rentalcharge tests' => sub {
     );
 
     # Daily tests
-    Koha::CirculationRules->set_rules({
+    Koha::CirculationRules->set_rules(
+        {
             categorycode => $patron->categorycode,
             itemtype     => $itemtype->id,
             branchcode   => $library->id,
-            rules => {
+            rules        => {
                 lengthunit => 'days',
             }
         }
@@ -335,34 +335,40 @@ subtest 'accumulate_rentalcharge tests' => sub {
 
     $itemtype->rentalcharge_daily(1.00);
     $itemtype->store();
-    is( $itemtype->rentalcharge_daily,
-        1.00, 'Daily return charge stored correctly' );
+    is(
+        $itemtype->rentalcharge_daily,
+        1.00, 'Daily return charge stored correctly'
+    );
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
     my $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 6.00,
-'Daily rental charge calculated correctly with finesCalendar = ignoreCalendar'
+    is(
+        $charge, 6.00,
+        'Daily rental charge calculated correctly with finesCalendar = ignoreCalendar'
     );
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 6.00,
-'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed'
+    is(
+        $charge, 6.00,
+        'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed'
     );
 
     $itemtype->rentalcharge_daily_calendar(0)->store();
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 6.00,
-'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and rentalcharge_daily_calendar = 0'
+    is(
+        $charge, 6.00,
+        'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and rentalcharge_daily_calendar = 0'
     );
     $itemtype->rentalcharge_daily_calendar(1)->store();
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
+
     # DateTime 1..7 (Mon..Sun), C4::Calender 0..6 (Sun..Sat)
     my $closed_day =
-        ( $dt_from->day_of_week == 6 ) ? 0
-      : ( $dt_from->day_of_week == 7 ) ? 1
-      :                                  $dt_from->day_of_week + 1;
+          ( $dt_from->day_of_week == 6 ) ? 0
+        : ( $dt_from->day_of_week == 7 ) ? 1
+        :                                  $dt_from->day_of_week + 1;
     $calendar->insert_week_day_holiday(
         weekday     => $closed_day,
         title       => 'Test holiday',
@@ -379,16 +385,18 @@ subtest 'accumulate_rentalcharge tests' => sub {
         6 => 'Saturday'
     };
     my $dayname = $day_names->{$closed_day};
-    is( $charge, 5.00,
-"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname"
+    is(
+        $charge, 5.00,
+        "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname"
     );
 
     # Hourly tests
-    Koha::CirculationRules->set_rules({
+    Koha::CirculationRules->set_rules(
+        {
             categorycode => $patron->categorycode,
             itemtype     => $itemtype->id,
             branchcode   => $library->id,
-            rules => {
+            rules        => {
                 lengthunit => 'hours',
             }
         }
@@ -398,8 +406,8 @@ subtest 'accumulate_rentalcharge tests' => sub {
     $itemtype->rentalcharge_hourly("0.25");
     $itemtype->store();
 
-    $dt_to   = $dt_from->clone->add( hours => 96 );
-    $fees    = Koha::Charges::Fees->new(
+    $dt_to = $dt_from->clone->add( hours => 96 );
+    $fees  = Koha::Charges::Fees->new(
         {
             patron    => $patron,
             library   => $library,
@@ -415,20 +423,25 @@ subtest 'accumulate_rentalcharge tests' => sub {
 
     $itemtype->rentalcharge_hourly_calendar(1)->store();
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 18.00,
-"Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u)"
+    is(
+        $charge, 18.00,
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u)"
     );
 
     $itemtype->rentalcharge_hourly_calendar(0)->store();
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 24.00,
-"Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u) and rentalcharge_hourly_calendar = 0"
+    is(
+        $charge, 24.00,
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u) and rentalcharge_hourly_calendar = 0"
     );
 
     $itemtype->rentalcharge_hourly_calendar(1)->store();
     $calendar->delete_holiday( weekday => $closed_day );
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 24.00, 'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (96h - 0h * 0.25u)' );
+    is(
+        $charge, 24.00,
+        'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (96h - 0h * 0.25u)'
+    );
 };
 
 $schema->storage->txn_rollback;

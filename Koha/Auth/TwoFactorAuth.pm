@@ -54,10 +54,10 @@ It's based on Auth::GoogleAuth
 =cut
 
 sub new {
-    my ($class, $params) = @_;
+    my ( $class, $params ) = @_;
     my $patron   = $params->{patron};
     my $secret32 = $params->{secret32};
-    my $secret = $params->{secret};
+    my $secret   = $params->{secret};
 
     # FIXME Raise an exception if the syspref is disabled
 
@@ -65,26 +65,28 @@ sub new {
         unless $patron && ref($patron) eq 'Koha::Patron';
 
     my $type = 'secret32';
-    if( $secret32 ) {
+    if ($secret32) {
         Koha::Exceptions::BadParameter->throw("Secret32 should be base32")
             if $secret32 =~ /[^a-z2-7]/;
-    } elsif( $secret ) {
+    } elsif ($secret) {
         $type = 'secret';
-    } elsif( $patron->secret ) {
-        $secret32 = $patron->decoded_secret; # saved already in base32
+    } elsif ( $patron->secret ) {
+        $secret32 = $patron->decoded_secret;    # saved already in base32
     } else {
         Koha::Exceptions::MissingParameter->throw("No secret passed or patron has no secret");
     }
 
-    my $issuer = Encode::encode_utf8($patron->library->branchname);
+    my $issuer = Encode::encode_utf8( $patron->library->branchname );
     my $key_id = sprintf "%s_%s",
-      $issuer, ( $patron->email || $patron->userid );
+        $issuer, ( $patron->email || $patron->userid );
 
-    return $class->SUPER::new({
-        $type => $secret32 || $secret,
-        issuer => $issuer,
-        key_id => $key_id,
-    });
+    return $class->SUPER::new(
+        {
+            $type  => $secret32 || $secret,
+            issuer => $issuer,
+            key_id => $key_id,
+        }
+    );
 }
 
 =head3 qr_code
@@ -98,13 +100,14 @@ sub new {
 =cut
 
 sub qr_code {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $otpauth = $self->SUPER::qr_code( undef, undef, undef, 1);
-        # no need to pass secret, key and issuer again
+    my $otpauth = $self->SUPER::qr_code( undef, undef, undef, 1 );
+
+    # no need to pass secret, key and issuer again
     my $qrcode = GD::Barcode->new( 'QRcode', $otpauth, { Ecc => 'M', ModuleSize => 4 } );
-    my $data = $qrcode->plot->png;
-    return "data:image/png;base64,". encode_base64( $data, q{} ); # does not contain newlines
+    my $data   = $qrcode->plot->png;
+    return "data:image/png;base64," . encode_base64( $data, q{} );    # does not contain newlines
 }
 
 =head3 verify

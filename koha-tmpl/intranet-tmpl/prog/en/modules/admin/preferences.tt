@@ -6,11 +6,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("System preferences") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("System preferences") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.min.css") | $raw %]
 [% Asset.css("css/preferences.css") | $raw %]
@@ -37,24 +38,20 @@
 [% WRAPPER 'main-container.inc' aside='prefs-menu' %]
 
     [% IF ( jump_not_found ) %]
-    <div class="alert alert-warning">
-        Could not find a system preference named <code>[% jumpfield | html %]</code>.
-    </div>
+        <div class="alert alert-warning"> Could not find a system preference named <code>[% jumpfield | html %]</code>. </div>
     [% END %]
     [% IF ( search_not_found ) %]
-    <div class="alert alert-warning">
-        No system preferences matched your search for: <strong>[% searchfield | html %]</strong>
-    </div>
-    <h1>System preferences</h1>
+        <div class="alert alert-warning"> No system preferences matched your search for: <strong>[% searchfield | html %]</strong> </div>
+        <h1>System preferences</h1>
     [% ELSIF searchfield %]
-    <h1>System preferences matching: [% searchfield | html %]</h1>
+        <h1>System preferences matching: [% searchfield | html %]</h1>
     [% ELSE %]
-    <h1>System preferences</h1>
+        <h1>System preferences</h1>
     [% END %]
     [% FOREACH TAB IN TABS %]
-    <div class="prefs-tab">
-    <h2>[% TAB.tab_title | html %] preferences</h2>
-    <!-- prettier-ignore-start -->
+        <div class="prefs-tab">
+            <h2>[% TAB.tab_title | html %] preferences</h2>
+            <!-- prettier-ignore-start -->
     <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         [% UNLESS ( searchfield ) %]<div id="toolbar" class="sticky"><button class="save-all btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button></div>[% END %]
@@ -236,9 +233,8 @@
         <fieldset class="action"><button class="save-all submit btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl" class="force_reload cancel">Cancel</a></fieldset>
     </form>
     <!-- prettier-ignore-end -->
-    </div>
+        </div>
     [% END %]
-
 [% END %]
 
 <!-- Modal -->
@@ -283,7 +279,6 @@
     [% Asset.js( "lib/codemirror/css-lint.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/yaml-lint.min.js" ) | $raw %]
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
-
     <script>
         var themelang = "[% themelang | html %]";
         $(document).ready(function(){
@@ -303,7 +298,6 @@
         var to_highlight = "[% To.json( searchfield ) | html %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
         var db_columns = [% To.json( db_columns ) | $raw %];
-
     </script>
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/ajax.js") | $raw %]

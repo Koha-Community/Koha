@@ -9,8 +9,7 @@ BEGIN { use_ok('Koha::Edifact') }
 
 my $filedir = "$Bin/edi_testfiles";
 
-my @files = map { "$filedir/$_" }
-  ( 'ordrsp1.CEA', 'ordrsp2.CEA', 'ordrsp3.CEA', 'ordrsp4.CEA' );
+my @files = map { "$filedir/$_" } ( 'ordrsp1.CEA', 'ordrsp2.CEA', 'ordrsp3.CEA', 'ordrsp4.CEA' );
 
 my @responses;
 for my $filename (@files) {
@@ -46,14 +45,22 @@ is(
 );
 
 is( $lines->[1]->ordernumber(), 'P28838', 'Line 2 correct ordernumber' );
-is( $lines->[1]->action_notification(),
-    'cancelled', 'Cancelled action returned' );
-is( $lines->[1]->coded_orderline_text(),
-    'Out of print', 'OP returned and translated' );
+is(
+    $lines->[1]->action_notification(),
+    'cancelled', 'Cancelled action returned'
+);
+is(
+    $lines->[1]->coded_orderline_text(),
+    'Out of print', 'OP returned and translated'
+);
 
 is( $lines->[2]->ordernumber(), 'P28846', 'Line 3 correct ordernumber' );
-is( $lines->[2]->action_notification(),
-    'recorded', 'Accepted with change action returned' );
+is(
+    $lines->[2]->action_notification(),
+    'recorded', 'Accepted with change action returned'
+);
 
-is( $lines->[0]->availability_date(), '19971120',
-    'Availability date returned' );
+is(
+    $lines->[0]->availability_date(), '19971120',
+    'Availability date returned'
+);

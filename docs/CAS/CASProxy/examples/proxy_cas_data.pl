@@ -33,46 +33,44 @@ This PGTIOU will allow us to retrive the matching PGTID
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use Authen::CAS::Client;
-use Storable qw( fd_retrieve );
+use Storable    qw( fd_retrieve );
 use LWP::Simple qw( get );
 
 my $casServerUrl = 'https://localhost:8443/cas/';
-my $cas = Authen::CAS::Client->new($casServerUrl);
+my $cas          = Authen::CAS::Client->new($casServerUrl);
 
 # URL of the service we'd like to be proxy for (typically the Koha webservice we want to query)
 my $target_service = "https://.../koha_webservice.pl";
 
 my $cgi = CGI->new;
 
-print $cgi->header({-type  =>  'text/html'});
+print $cgi->header( { -type => 'text/html' } );
 print $cgi->start_html("proxy cas");
 
+if ( $cgi->param('PGTIOU') ) {
 
-if ($cgi->param('PGTIOU')) {
+    # At this point, we must retrieve the PgtId by matching the PgtIou we
+    # just received and the PgtIou given by the CAS Server to the callback URL
+    # The callback page stored it in the application vars (in our case a storable object in a file)
+    open my $fh, '<', "casSession.tmp" or die "Unable to open file";
+    my $hashref = fd_retrieve($fh);
+    my $pgtId   = %{ $hashref->{ $cgi->param('PGTIOU') } };
+    close $fh;
 
-      # At this point, we must retrieve the PgtId by matching the PgtIou we
-      # just received and the PgtIou given by the CAS Server to the callback URL
-      # The callback page stored it in the application vars (in our case a storable object in a file)
-      open my $fh, '<', "casSession.tmp" or die "Unable to open file";
-      my $hashref = fd_retrieve($fh);
-      my $pgtId = %{$hashref->{$cgi->param('PGTIOU')}};
-      close $fh;
-
-      # Now that we have a PgtId, we can ask the cas server for a proxy ticket...
-      my $rp = $cas->proxy( $pgtId, $target_service );
-      if( $rp->is_success ) {
+    # Now that we have a PgtId, we can ask the cas server for a proxy ticket...
+    my $rp = $cas->proxy( $pgtId, $target_service );
+    if ( $rp->is_success ) {
         print "Proxy Ticket issued: ", $rp->proxy_ticket, "<br />\n";
 
-	# ...which we will provide to the target service (the koha webservice) for authentication !
-	my $data = get($target_service . "?PT=" . $rp->proxy_ticket);
-	
-	# And finally, we can display the data gathered from the koha webservice !
-	print "This is the output of the koha webservice we just queried, CAS authenticated : <br/>";
-	print "<code>$data</code>";
+        # ...which we will provide to the target service (the koha webservice) for authentication !
+        my $data = get( $target_service . "?PT=" . $rp->proxy_ticket );
 
-      } else {
-	print "Cannot get Proxy Ticket";
-      }
+        # And finally, we can display the data gathered from the koha webservice !
+        print "This is the output of the koha webservice we just queried, CAS authenticated : <br/>";
+        print "<code>$data</code>";
 
+    } else {
+        print "Cannot get Proxy Ticket";
+    }
 
 }

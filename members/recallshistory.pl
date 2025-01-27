@@ -17,30 +17,30 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie)= get_template_and_user(
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-       template_name => "members/recallshistory.tt",
-       query => $input,
-       type => "intranet",
-       flagsrequired => { recalls => 1 },
-       debug => 1,
+        template_name => "members/recallshistory.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { recalls => 1 },
+        debug         => 1,
     }
 );
 
 my $borrowernumber = $input->param('borrowernumber');
-my $recalls = Koha::Recalls->search({ patron_id => $borrowernumber }, { order_by => { '-desc' => 'created_date' } });
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $recalls = Koha::Recalls->search( { patron_id => $borrowernumber }, { order_by => { '-desc' => 'created_date' } } );
+my $patron  = Koha::Patrons->find($borrowernumber);
 
 $template->param(
-        patron          => $patron,
-        recalls         => $recalls,
-        recallsview     => 1,
-        specific_patron => 1,
+    patron          => $patron,
+    recalls         => $recalls,
+    recallsview     => 1,
+    specific_patron => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

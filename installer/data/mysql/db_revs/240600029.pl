@@ -23,7 +23,7 @@ return {
         my $modification_date_statement = <<~'SQL';
             ALTER TABLE bookings ADD COLUMN modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'the timestamp for when a booking has been updated'
         SQL
-        unless ( column_exists( 'bookings', 'creation_date' ) && column_exists( 'bookings', 'modification_date' )) {
+        unless ( column_exists( 'bookings', 'creation_date' ) && column_exists( 'bookings', 'modification_date' ) ) {
             $dbh->do("$creation_date_statement AFTER `end_date`");
             say_success( $out, q{Added column 'bookings.creation_date'} );
 

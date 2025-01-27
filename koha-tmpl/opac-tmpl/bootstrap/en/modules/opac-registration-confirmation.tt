@@ -9,7 +9,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-registration-confirmation' %]
 [% INCLUDE 'masthead.inc' %]
@@ -29,9 +30,7 @@
         <div class="row">
             [% IF ( OpacNav ||  OpacNavBottom ) %]
                 <div class="col-12 col-lg-2 order-3 order-lg-1">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' %]
-                    </div>
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
                 </div>
             [% END %]
 
@@ -46,16 +45,15 @@
                 [% column_class = "col-12 col-lg-10 order-md-1 maincontent" %]
             [% END %]
             <div class="[% column_class | html %]">
-
                 [% IF ( ! confirmed ) %]
                     <div id="registration-pending">
                         <h1>Registration pending</h1>
                         <p id="confirm-instruction" class="registration-line">Click the button below to confirm registration.</p>
                         <form action="/cgi-bin/koha/opac-registration-verify.pl" method="post" name="confirm_registration" id="confirm_registration">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="token" value="[% token | html %]">
-                            <input type="hidden" name="op" value="cud-confirmed">
-                            <input type="submit" value="Confirm" class="btn btn-primary">
+                            <input type="hidden" name="token" value="[% token | html %]" />
+                            <input type="hidden" name="op" value="cud-confirmed" />
+                            <input type="submit" value="Confirm" class="btn btn-primary" />
                         </form>
                     </div>
                 [% ELSE %]
@@ -83,45 +81,45 @@
                             [% END %]
 
                             <p id="patron-instructions">
-                            [% IF borrower.category.effective_change_password %]
-                                <span>For your convenience, the login box on this page has been pre-filled with this data. Please log in and change your password.</span>
-                            [% ELSE %]
-                                <span>For your convenience, the login box on this page has been pre-filled with this data. Please log in.</span>
-                            [% END %]
+                                [% IF borrower.category.effective_change_password %]
+                                    <span>For your convenience, the login box on this page has been pre-filled with this data. Please log in and change your password.</span>
+                                [% ELSE %]
+                                    <span>For your convenience, the login box on this page has been pre-filled with this data. Please log in.</span>
+                                [% END %]
                             </p>
                         [% END %]
 
                         [% IF ( PatronSelfRegistrationAdditionalInstructions ) %]
-                            <div id="PatronSelfRegistrationAdditionalInstructions">
-                                [% PROCESS koha_news_block news => PatronSelfRegistrationAdditionalInstructions %]
-                            </div>
+                            <div id="PatronSelfRegistrationAdditionalInstructions"> [% PROCESS koha_news_block news => PatronSelfRegistrationAdditionalInstructions %] </div>
                         [% END %]
-                    </div> <!-- /#registration-complete -->
+                    </div>
+                    <!-- /#registration-complete -->
                 [% END %]
-                </div> <!-- / .col-7/9 -->
+            </div>
+            <!-- / .col-7/9 -->
 
-                <div class="col-12 col-lg-3 order-md-2">
-                    [% UNLESS ( loggedinusername ) %]
-                        [% UNLESS ( casAuthentication ) %]
-                            <div id="login">
-                                <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="koha_login_context" value="opac" />
-                                    <input type="hidden" name="op" value="cud-login">
-                                    <fieldset class="brief">
-                                        <legend>Log in to your account:</legend>
-                                        [% PROCESS login_label for="userid" %]
-                                        [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                            <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="[% borrower.userid | html %]" autocomplete="off" />
-                                        [% ELSE %]
-                                            <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="" autocomplete="off" />
-                                        [% END %]
-                                        <label for="password">Password:</label>
-                                        [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                            <input class="form-control" type="password" id="password" size="10" name="login_password" value="[% password_cleartext | html %]" autocomplete="off" />
-                                        [% ELSE %]
-                                            <input class="form-control" type="password" id="password" size="10" name="login_password" value="" autocomplete="off" />
-                                        [% END %]
+            <div class="col-12 col-lg-3 order-md-2">
+                [% UNLESS ( loggedinusername ) %]
+                    [% UNLESS ( casAuthentication ) %]
+                        <div id="login">
+                            <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="koha_login_context" value="opac" />
+                                <input type="hidden" name="op" value="cud-login" />
+                                <fieldset class="brief">
+                                    <legend>Log in to your account:</legend>
+                                    [% PROCESS login_label for="userid" %]
+                                    [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
+                                        <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="[% borrower.userid | html %]" autocomplete="off" />
+                                    [% ELSE %]
+                                        <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="" autocomplete="off" />
+                                    [% END %]
+                                    <label for="password">Password:</label>
+                                    [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
+                                        <input class="form-control" type="password" id="password" size="10" name="login_password" value="[% password_cleartext | html %]" autocomplete="off" />
+                                    [% ELSE %]
+                                        <input class="form-control" type="password" id="password" size="10" name="login_password" value="" autocomplete="off" />
+                                    [% END %]
                                     <fieldset class="action">
                                         <input type="submit" value="Log in" class="btn btn-primary" />
                                     </fieldset>
@@ -130,19 +128,25 @@
                                             <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
                                         </div>
                                     [% END %]
-                                    </fieldset>
-                                </form> <!-- /#auth -->
-                            </div> <!-- /#login -->
-                        [% END # /casAuthentication %]
-                    [% END # / loggedinusername %]
-                    [% IF ( OpacNavRight ) %]
-                        [% PROCESS koha_news_block news => OpacNavRight %]
-                    [% END # /OpacNavRight %]
-                </div> <!-- / .col-lg-3 -->
-
-        </div> <!-- /.row -->
-    </div> <!-- /.container-fluid -->
-</div> <!-- /.main -->
+                                </fieldset>
+                            </form>
+                            <!-- /#auth -->
+                        </div>
+                        <!-- /#login -->
+                    [% END # /casAuthentication %]
+                [% END # / loggedinusername %]
+                [% IF ( OpacNavRight ) %]
+                    [% PROCESS koha_news_block news => OpacNavRight %]
+                [% END # /OpacNavRight %]
+            </div>
+            <!-- / .col-lg-3 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

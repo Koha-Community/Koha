@@ -43,12 +43,9 @@ sub store {
     my ($self) = @_;
 
     unless ( $self->in_storage ) {
+
         # new entry
-        $self->set(
-            {
-                created_on => \'NOW()'
-            }
-        );
+        $self->set( { created_on => \'NOW()' } );
     }
 
     return $self->SUPER::store();
@@ -70,13 +67,7 @@ sub items {
 
     return Koha::Items->new->empty unless @item_ids;
 
-    return Koha::Items->search(
-        {
-            itemnumber => {
-                -in => \@item_ids
-            }
-        }
-    );
+    return Koha::Items->search( { itemnumber => { -in => \@item_ids } } );
 }
 
 =head3 add_item
@@ -86,15 +77,13 @@ sub items {
 =cut
 
 sub add_item {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $item_id = $params->{item_id};
 
-    my $item = Koha::Items->find( $item_id );
+    my $item = Koha::Items->find($item_id);
     unless ( $item->biblionumber == $self->biblio_id ) {
-        Koha::Exceptions::Object::FKConstraint->throw(
-            broken_fk => 'biblio_id'
-        );
+        Koha::Exceptions::Object::FKConstraint->throw( broken_fk => 'biblio_id' );
     }
 
     Koha::Biblio::ItemGroup::Item->new(
@@ -116,8 +105,8 @@ on the API.
 
 sub to_api_mapping {
     return {
-        created_on   => 'creation_date',
-        updated_on   => 'modification_date'
+        created_on => 'creation_date',
+        updated_on => 'modification_date'
     };
 }
 

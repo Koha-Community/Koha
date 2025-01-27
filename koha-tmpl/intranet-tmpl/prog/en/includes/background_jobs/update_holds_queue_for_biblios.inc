@@ -3,9 +3,7 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_biblios == report.total_success %]
-            <div class="alert alert-info">
-                Holds queue successfully updated.
-            </div>
+            <div class="alert alert-info"> Holds queue successfully updated. </div>
         [% ELSE %]
             <div class="alert alert-info">
                 <span>Holds queue for [% report.total_success | html %] / [% report.total_biblios | html %] has been successfully updated. Some errors occurred.</span>
@@ -13,7 +11,6 @@
             </div>
         [% END %]
     [% END %]
-
 [% END %]
 
 [% BLOCK detail %]

@@ -96,5 +96,7 @@
                 <li><a href="/cgi-bin/koha/pos/register.pl">Transaction history for [% Registers.session_register_name | html %]</a></li>
             </ul>
         [% END %]
-    </div> <!-- /#navmenulist -->
-</div> <!-- /#navmenu -->
+    </div>
+    <!-- /#navmenulist -->
+</div>
+<!-- /#navmenu -->

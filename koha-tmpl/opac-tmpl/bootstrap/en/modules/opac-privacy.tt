@@ -6,7 +6,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your privacy management &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-privacy' %]
 [% INCLUDE 'masthead.inc' %]
@@ -24,12 +25,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-md-12 col-lg-10 order-1">
-
                 <div id="userprivacy" class="maincontent">
                     <h1>Your privacy management</h1>
 
@@ -38,7 +36,9 @@
                             [% IF deleted_checkouts %]
                                 <div class="alert alert-success">Your checkout history has been deleted.</div>
                             [% ELSIF error_deleting_checkouts_history %]
-                                <div class="alert alert-warning">The deletion of your checkout history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div>
+                                <div class="alert alert-warning"
+                                    >The deletion of your checkout history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div
+                                >
                             [% ELSIF no_checkouts_to_delete %]
                                 <div class="alert alert-warning">No checkout history to delete</div>
                             [% END %]
@@ -94,8 +94,10 @@
                                                 <option value="2" class="privacy2">Never</option>
                                             [% END %]
                                         </select>
-                                    </div> <!-- /.col-6 -->
-                                </div> <!-- /.form-group.row -->
+                                    </div>
+                                    <!-- /.col-6 -->
+                                </div>
+                                <!-- /.form-group.row -->
                                 <div id="never-warning" class="alert alert-danger">This option will delete all previous checkout history immediately.</div>
 
                                 [% IF has_guarantor_flag && (Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') || Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') ) %]
@@ -112,8 +114,10 @@
                                                         <option value="1">Yes</option>
                                                     [% END %]
                                                 </select>
-                                            </div> <!-- /.col-6 -->
-                                        </div> <!-- /.form-group.row -->
+                                            </div>
+                                            <!-- /.col-6 -->
+                                        </div>
+                                        <!-- /.form-group.row -->
                                     [% END # /IF Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
 
                                     [% IF Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') %]
@@ -129,16 +133,19 @@
                                                         <option value="1">Yes</option>
                                                     [% END %]
                                                 </select>
-                                            </div> <!-- /.col-6 -->
-                                        </div> <!-- /.form-group.row -->
+                                            </div>
+                                            <!-- /.col-6 -->
+                                        </div>
+                                        <!-- /.form-group.row -->
                                     [% END %]
 
                                     <span class="hint">
                                         Guaranteed by
                                         [% FOREACH gr IN borrower.guarantor_relationships %]
                                             [% SET g = gr.guarantor %]
-                                            [% g.firstname | html %] [% g.surname | html %]
-                                            [%- IF ! loop.last %], [% END %]
+                                            [% g.firstname | html %]
+                                            [% g.surname | html %]
+                                            [%- IF ! loop.last %],[% END %]
                                         [% END %]
                                     </span>
                                 [% END # /IF has_guarantor_flag.. %]
@@ -146,7 +153,8 @@
                                     <button type="Submit" class="btn btn-primary">Save</button>
                                 </fieldset>
                             </fieldset>
-                        </form> <!-- /#opac-privacy-update-form -->
+                        </form>
+                        <!-- /#opac-privacy-update-form -->
 
                         <hr />
 
@@ -173,24 +181,24 @@
                         </form>
                         <table class="table table-bordered table-condensed table-striped">
                             <tr>
-                                <td colspan=7>Immediately delete my checkout history. This action cannot be undone.</td>
-                                <td colspan=1>
+                                <td colspan="7">Immediately delete my checkout history. This action cannot be undone.</td>
+                                <td colspan="1">
                                     <fieldset class="action">
                                         <input type="submit" value="Delete checkout history" form="opac-privacy-delete-checkouts" class="btn btn-danger btn-block privacy-confirm-delete" />
                                     </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan=7>Immediately delete my hold history. This action cannot be undone.</td>
-                                <td colspan=1>
+                                <td colspan="7">Immediately delete my hold history. This action cannot be undone.</td>
+                                <td colspan="1">
                                     <fieldset class="action">
                                         <input type="submit" value="Delete hold history" form="opac-privacy-delete-holds" class="btn btn-danger btn-block privacy-confirm-delete" />
                                     </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan=7>Immediately delete my checkout history & my hold history. This action cannot be undone.</td>
-                                <td colspan=1>
+                                <td colspan="7">Immediately delete my checkout history & my hold history. This action cannot be undone.</td>
+                                <td colspan="1">
                                     <fieldset class="action">
                                         <input type="submit" value="Delete checkout and hold history" form="opac-privacy-delete-all" class="btn btn-danger btn-block privacy-confirm-delete" />
                                     </fieldset>
@@ -202,11 +210,16 @@
                             <p id="store-last-borrower-msg">Please note, the last person to return an item is tracked for the management of items returned damaged.</p>
                         [% END %]
                     [% END # / IF Ask_data %]
-                </div> <!-- / .userprivacy -->
-            </div> <!-- / .col-lg-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / .userprivacy -->
+            </div>
+            <!-- / .col-lg-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

@@ -20,8 +20,8 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Output  qw( output_html_with_http_headers );
+use C4::Auth    qw( get_template_and_user );
 use C4::Budgets qw( GetBudget GetBudgetPeriod );
 
 =head1 DESCRIPTION
@@ -33,7 +33,7 @@ to determine whether the new parent budget (or period) has enough unallocated fu
 
 =cut
 
-my $dbh = C4::Context->dbh;
+my $dbh   = C4::Context->dbh;
 my $input = CGI->new;
 
 my $total     = $input->param('total');
@@ -43,29 +43,31 @@ my $period_id = $input->param('period_id');
 my $returncode;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "acqui/ajax.tt",
-        query           => $input,
-        type            => "intranet",
+    {
+        template_name => "acqui/ajax.tt",
+        query         => $input,
+        type          => "intranet",
     }
 );
-my ($period, $parent , $budget);
+my ( $period, $parent, $budget );
 $period = GetBudgetPeriod($period_id) if $period_id;
 $parent = GetBudget($parent_id)       if defined $parent_id;
 $budget = GetBudget($budget_id)       if defined $budget_id;
 
 # CHECK THE PARENT BUDGET FOR ENOUGHT AMOUNT UNALLOCATED,  IF NOT THEN RETURN 1
-my ($sub_unalloc , $period_sum, $budget_period_unalloc);
+my ( $sub_unalloc, $period_sum, $budget_period_unalloc );
 
 if ($parent) {
     my $query = "  SELECT SUM(budget_amount) as sum FROM aqbudgets where budget_parent_id = ? ";
     my @sql_params;
-    my $sth   = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute( $parent->{'budget_id'} );
     my $sum = $sth->fetchrow_hashref;
     $sth->finish;
     $sub_unalloc = $parent->{'budget_amount'} - $sum->{sum};
-#    TRICKY.. , IF THE PARENT IS THE CURRENT PARENT  - THEN SUBTRACT CURRENT BUDGET FROM TOTAL
-    $sub_unalloc           += $budget->{'budget_amount'} if ( $budget->{'budget_parent_id'} == $parent_id ) ;
+
+    #    TRICKY.. , IF THE PARENT IS THE CURRENT PARENT  - THEN SUBTRACT CURRENT BUDGET FROM TOTAL
+    $sub_unalloc += $budget->{'budget_amount'} if ( $budget->{'budget_parent_id'} == $parent_id );
 }
 
 # ELSE , IF NO PARENT PASSED, THEN CHECK UNALLOCATED FOR PERIOD, IF NOT THEN RETURN 2
@@ -74,16 +76,17 @@ else {
                 FROM aqbudgets WHERE budget_period_id = ? and budget_parent_id IS NULL |;
     my @sql_params;
     push @sql_params, $period_id;
-    if ($budget_id){
-        $query.=qq| and budget_id <> ? |;
-        push @sql_params,$budget_id;
+    if ($budget_id) {
+        $query .= qq| and budget_id <> ? |;
+        push @sql_params, $budget_id;
     }
 
     my $sth = $dbh->prepare($query);
     $sth->execute(@sql_params);
     $period_sum = $sth->fetchrow_hashref;
     $sth->finish;
-    $budget_period_unalloc = $period->{'budget_period_total'} - $period_sum->{'sum'} if $period->{'budget_period_total'};
+    $budget_period_unalloc = $period->{'budget_period_total'} - $period_sum->{'sum'}
+        if $period->{'budget_period_total'};
 }
 
 # FIXME - we really need a better way to do this consistently
@@ -94,8 +97,8 @@ $total                 = sprintf( "%.2f", $total );
 $sub_unalloc           = sprintf( "%.2f", $sub_unalloc );
 $budget_period_unalloc = sprintf( "%.2f", $budget_period_unalloc );
 
-if ( $parent_id) {
-    if ( ($total > $sub_unalloc ) && $sub_unalloc )  {
+if ($parent_id) {
+    if ( ( $total > $sub_unalloc ) && $sub_unalloc ) {
         $returncode = 1;
     }
 } elsif ( ( $total > $budget_period_unalloc ) && $budget_period_unalloc ) {
@@ -104,7 +107,6 @@ if ( $parent_id) {
 } else {
     $returncode = 0;
 }
-
 
 output_html_with_http_headers $input, $cookie, $returncode;
 1;

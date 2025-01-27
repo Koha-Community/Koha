@@ -9,7 +9,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your search history &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-search-history' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -36,13 +37,10 @@
             [% IF ( OpacNav||loggedinusername ) %]
                 [% column_class = "col-md-12 col-lg-10 order-1" %]
                 <div class="col col-lg-2 order-2 order-lg-1">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                    </div>
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
                 </div>
             [% END %]
             <div class="[% column_class | html %]">
-
                 <div id="searchhistory" class="maincontent">
                     <h1>Search history</h1>
 
@@ -50,32 +48,34 @@
 
                         [% WRAPPER tabs id= "tabs" %]
                             [% WRAPPER tabs_nav %]
-                                [% WRAPPER tab_item tabname= "biblio_tab" bt_active= 1 %] <span>Catalog</span> [% END %]
-                                [% WRAPPER tab_item tabname= "authority_tab" %] <span>Authority</span> [% END %]
+                                [% WRAPPER tab_item tabname= "biblio_tab" bt_active= 1 %]<span>Catalog</span>[% END %]
+                                [% WRAPPER tab_item tabname= "authority_tab" %]<span>Authority</span>[% END %]
                             [% END # /WRAPPER tabs_nav %]
 
                             [% WRAPPER tab_panels %]
                                 [% WRAPPER tab_panel tabname="biblio_tab" bt_active= 1 %]
-                                    <div id="biblio_tab" role="tabpanel" class="tab-pane active" aria-labelledby="biblio-tab-link">
-                                        [% PROCESS catalog_search_history %]
-                                    </div> <!-- / #biblio_tab -->
+                                    <div id="biblio_tab" role="tabpanel" class="tab-pane active" aria-labelledby="biblio-tab-link"> [% PROCESS catalog_search_history %] </div>
+                                    <!-- / #biblio_tab -->
                                 [% END # /tab_panel# %]
                                 [% WRAPPER tab_panel tabname="authority_tab" %]
-                                    <div id="authority_tab" role="tabpanel" class="tab-pane" aria-labelledby="authority-tab-link">
-                                        [% PROCESS authority_search_history %]
-                                    </div> <!-- / #authority_tab -->
+                                    <div id="authority_tab" role="tabpanel" class="tab-pane" aria-labelledby="authority-tab-link"> [% PROCESS authority_search_history %] </div>
+                                    <!-- / #authority_tab -->
                                 [% END # /tab_panel# %]
                             [% END # /WRAPPER tab_panels %]
                         [% END # /WRAPPER tabs %]
-
                     [% ELSE %]
                         [% PROCESS catalog_search_history %]
                     [% END %]
-                </div> <!-- / #searchhistory -->
-            </div> <!-- / .col-lg-10/12 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / #main -->
+                </div>
+                <!-- / #searchhistory -->
+            </div>
+            <!-- / .col-lg-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / #main -->
 
 [% BLOCK catalog_search_history %]
     <div id="current_biblio">
@@ -105,12 +105,14 @@
                                     <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                 </td>
                                 <td data-order="[% s.time | html %]">
-                                    <label for="result[% s.id | html %]">
-                                        [% s.time |$KohaDates  with_hours => 1 %]
-                                    </label>
+                                    <label for="result[% s.id | html %]"> [% s.time |$KohaDates  with_hours => 1 %] </label>
                                 </td>
                                 <td>
-                                    <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" aria-label="Subscribe to this search" class="rsssearchlink">
+                                    <a
+                                        href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss"
+                                        aria-label="Subscribe to this search"
+                                        class="rsssearchlink"
+                                    >
                                         <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
                                     </a>
                                     <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a>
@@ -121,10 +123,11 @@
                         [% END %]
                     </tbody>
                 </table>
-                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
+                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches" />
             </form>
         [% END # IF ( current_biblio_searches ) %]
-    </div> <!-- / #current_biblio -->
+    </div>
+    <!-- / #current_biblio -->
     <hr />
     <div id="previous_biblio">
         [% IF ( previous_biblio_searches ) %]
@@ -147,34 +150,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                    [% FOREACH s IN previous_biblio_searches %]
-                        <tr>
-                            <td class="selectcol">
-                                <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
-                            </td>
-                            <td data-order="[% s.time | html %]">
-                                <label for="result[% s.id | html %]">
-                                    [% s.time |$KohaDates  with_hours => 1 %]
-                                </label>
-                            </td>
-                            <td>
-                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" aria-label="Subscribe to this search" class="rsssearchlink">
-                                    <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
-                                </a>
-                                <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">
-                                    [% s.query_desc | html %]
-                                </a>
-                            </td>
-                            <td>[% s.total | html %]</td>
-                            <td></td>
-                        </tr>
-                    [% END %]
+                        [% FOREACH s IN previous_biblio_searches %]
+                            <tr>
+                                <td class="selectcol">
+                                    <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
+                                </td>
+                                <td data-order="[% s.time | html %]">
+                                    <label for="result[% s.id | html %]"> [% s.time |$KohaDates  with_hours => 1 %] </label>
+                                </td>
+                                <td>
+                                    <a
+                                        href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss"
+                                        aria-label="Subscribe to this search"
+                                        class="rsssearchlink"
+                                    >
+                                        <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
+                                    </a>
+                                    <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]"> [% s.query_desc | html %] </a>
+                                </td>
+                                <td>[% s.total | html %]</td>
+                                <td></td>
+                            </tr>
+                        [% END %]
                     </tbody>
                 </table>
-                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
+                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches" />
             </form>
         [% END # IF ( previous_biblio_searches ) %]
-    </div> <!-- / #previous_biblio -->
+    </div>
+    <!-- / #previous_biblio -->
 
     [% IF !current_biblio_searches && !previous_biblio_searches %]
         <p>Your catalog search history is empty.</p>
@@ -208,9 +212,7 @@
                                     <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                 </td>
                                 <td data-order="[% s.time | html %]">
-                                    <label for="result[% s.id | html %]">
-                                        [% s.time |$KohaDates  with_hours => 1 %]
-                                    </label>
+                                    <label for="result[% s.id | html %]"> [% s.time |$KohaDates  with_hours => 1 %] </label>
                                 </td>
                                 <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                 <td>[% s.total | html %]</td>
@@ -219,10 +221,11 @@
                         [% END %]
                     </tbody>
                 </table>
-                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
+                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches" />
             </form>
         [% END # / IF ( current_authority_searches ) %]
-    </div> <!-- / #current_authority -->
+    </div>
+    <!-- / #current_authority -->
     <hr />
     <div id="previous_authority">
         [% IF ( previous_authority_searches ) %]
@@ -250,9 +253,7 @@
                                     <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                 </td>
                                 <td data-order="[% s.time | html %]">
-                                    <label for="result[% s.id | html %]">
-                                        [% s.time |$KohaDates  with_hours => 1 %]
-                                    </label>
+                                    <label for="result[% s.id | html %]"> [% s.time |$KohaDates  with_hours => 1 %] </label>
                                 </td>
                                 <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                 <td>[% s.total | html %]</td>
@@ -261,9 +262,9 @@
                         [% END %]
                     </tbody>
                 </table>
-                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
+                <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches" />
             </form>
-        [% END # / IF ( previous_authority_searches )%]
+        [% END # / IF ( previous_authority_searches ) %]
     </div>
 
     [% IF !current_authority_searches && !previous_authority_searches %]
@@ -288,80 +289,77 @@
 [% END %]
 
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script>
-    $(document).ready(function() {
-        // We show table ordered by descending dates by default
-        // (so that the more recent query is shown first)
-        var table = KohaTable(".historyt", {
-            "order": [[ 1, "desc" ]],
-            "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
-            "columnDefs": [
-                { "targets": [ 0 ], "sortable": false, "searchable": false },
-                { "className": 'dtr-control', "orderable": false, "targets": -1 }
-            ],
-            "language": {
-                "search": "_INPUT_",
-                "searchPlaceholder": _("Search")
-            },
-            "responsive": {
-                "details": { "type": 'column',"target": -1 }
-            },
-        });
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
+        $(document).ready(function () {
+            // We show table ordered by descending dates by default
+            // (so that the more recent query is shown first)
+            var table = KohaTable(".historyt", {
+                order: [[1, "desc"]],
+                dom: '<"top"<"table_entries"><"table_controls"fB>>t',
+                columnDefs: [
+                    { targets: [0], sortable: false, searchable: false },
+                    { className: "dtr-control", orderable: false, targets: -1 },
+                ],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: _("Search"),
+                },
+                responsive: {
+                    details: { type: "column", target: -1 },
+                },
+            });
 
-        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-            table.DataTable().responsive.recalc();
-        });
+            $('a[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
+                table.DataTable().responsive.recalc();
+            });
 
-        $(".CheckNone").click(function(e){
-            e.preventDefault();
-            var form = $(this).parents("form").get(0);
-            $(form).find("input:checkbox").prop("checked", false);
-            enableCheckboxActions(form);
-        });
-        $(".CheckAll").click(function(e){
-            e.preventDefault();
-            var form = $(this).parents("form").get(0);
-            $(form).find("input:checkbox").prop("checked", true);
-            enableCheckboxActions(form);
-        });
+            $(".CheckNone").click(function (e) {
+                e.preventDefault();
+                var form = $(this).parents("form").get(0);
+                $(form).find("input:checkbox").prop("checked", false);
+                enableCheckboxActions(form);
+            });
+            $(".CheckAll").click(function (e) {
+                e.preventDefault();
+                var form = $(this).parents("form").get(0);
+                $(form).find("input:checkbox").prop("checked", true);
+                enableCheckboxActions(form);
+            });
 
-        $("input:checkbox").click(function(){
-            var form = $(this).parents("form").get(0);
-            enableCheckboxActions(form);
-        });
+            $("input:checkbox").click(function () {
+                var form = $(this).parents("form").get(0);
+                enableCheckboxActions(form);
+            });
 
-        $(".removeitems,.remove-selected").click(function(e){
-            e.preventDefault();
-            var form = $(this).parents("form").get(0);
-            var ids = $(form).find("input:checkbox:checked");
-            if ( $(ids).length < 1 ) {
+            $(".removeitems,.remove-selected").click(function (e) {
+                e.preventDefault();
+                var form = $(this).parents("form").get(0);
+                var ids = $(form).find("input:checkbox:checked");
+                if ($(ids).length < 1) {
+                    return false;
+                }
+                if (confirm(_("Are you sure you want to delete selected search history entries?"))) {
+                    $(form).submit();
+                }
                 return false;
-            }
-            if ( confirm( _("Are you sure you want to delete selected search history entries?") ) ) {
-                $(form).submit();
-            }
-            return false;
+            });
+            $(".remove-selected").addClass("disabled");
         });
-        $(".remove-selected").addClass("disabled");
-    });
 
-    function enableCheckboxActions(form){
-        // Enable/disable controls if checkboxes are checked
-        var checkedBoxes = $(form).find("input:checkbox:checked");
-        if ($(checkedBoxes).size()) {
-            $(form).find(".selections").html(_("With selected searches: "));
-            $(form).find(".selections-toolbar .links a").removeClass("disabled");
-            $(form).find(".remove-selected").removeClass("disabled");
-        } else {
-            $(form).find(".selections").html(_("Select searches to: "));
-            $(form).find(".selections-toolbar .links a").addClass("disabled");
-            $(form).find(".remove-selected").addClass("disabled");
+        function enableCheckboxActions(form) {
+            // Enable/disable controls if checkboxes are checked
+            var checkedBoxes = $(form).find("input:checkbox:checked");
+            if ($(checkedBoxes).size()) {
+                $(form).find(".selections").html(_("With selected searches: "));
+                $(form).find(".selections-toolbar .links a").removeClass("disabled");
+                $(form).find(".remove-selected").removeClass("disabled");
+            } else {
+                $(form).find(".selections").html(_("Select searches to: "));
+                $(form).find(".selections-toolbar .links a").addClass("disabled");
+                $(form).find(".remove-selected").addClass("disabled");
+            }
         }
-    }
-
-
-
-</script>
+    </script>
 [% END %]

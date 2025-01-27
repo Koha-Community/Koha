@@ -19,7 +19,6 @@ package Koha::Club::Template;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Club::Template::Fields;

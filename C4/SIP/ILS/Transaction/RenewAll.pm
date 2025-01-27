@@ -32,10 +32,10 @@ sub new {
 }
 
 sub do_renew_all {
-    my $self     = shift;
-    siplog('LOG_DEBUG', "ILS::Transaction::RenewAll performing renewals...");
+    my $self = shift;
+    siplog( 'LOG_DEBUG', "ILS::Transaction::RenewAll performing renewals..." );
     my $patron = Koha::Patrons->find( $self->{patron}->{borrowernumber} );
-    my $all_ok   = 1;
+    my $all_ok = 1;
     $self->{renewed}   = [];
     $self->{unrenewed} = [];
     foreach my $itemx ( @{ $self->{patron}->{items} } ) {
@@ -58,8 +58,7 @@ sub do_renew_all {
         if ( $self->renewal_ok ) {
             $item->{due_date} = $self->{due};
             push @{ $self->{renewed} }, $item_id;
-        }
-        else {
+        } else {
             push @{ $self->{unrenewed} }, $item_id;
         }
         $self->screen_msg(q{});    # clear indiv message

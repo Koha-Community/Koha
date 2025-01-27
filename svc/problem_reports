@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use JSON qw( to_json );
 use CGI;
-use C4::Auth qw( check_cookie_auth );
+use C4::Auth   qw( check_cookie_auth );
 use C4::Output qw( is_ajax output_with_http_headers );
 use Koha::ProblemReports;
 
@@ -34,24 +34,24 @@ svc/problem_reports - Web service for managing OPAC problem reports
 =cut
 
 # AJAX requests
-my $is_ajax = is_ajax();
-my $query = CGI->new;
-my ( $auth_status ) = check_cookie_auth( $query->cookie('CGISESSID'), { problem_reports => 1 } );
+my $is_ajax       = is_ajax();
+my $query         = CGI->new;
+my ($auth_status) = check_cookie_auth( $query->cookie('CGISESSID'), { problem_reports => 1 } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
 my $op = $query->param('op') || q{};
 if ($is_ajax) {
     my $report_id = $query->param('report_id');
-    my $report = Koha::ProblemReports->find($report_id);
+    my $report    = Koha::ProblemReports->find($report_id);
     if ( $op eq 'cud-viewed' ) {
-        $report->set({ status => 'Viewed' })->store;
+        $report->set( { status => 'Viewed' } )->store;
     } elsif ( $op eq 'cud-closed' ) {
-        $report->set({ status => 'Closed' })->store;
+        $report->set( { status => 'Closed' } )->store;
     } elsif ( $op eq 'cud-new' ) {
-        $report->set({ status => 'New' })->store;
+        $report->set( { status => 'New' } )->store;
     }
-    my $json = to_json ( { status => $report->status } );
+    my $json = to_json( { status => $report->status } );
     output_with_http_headers $query, undef, $json, 'js';
     exit;
 }

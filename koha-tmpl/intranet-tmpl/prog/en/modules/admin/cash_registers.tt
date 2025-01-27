@@ -6,20 +6,23 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF op == 'add_form' %]
-        [% IF cash_register %]
-            [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
-        [% ELSE %]
-            [% t("New cash register") | html %]
-        [% END %] &rsaquo;
-    [% ELSIF op == 'delete_confirm' %]
-        [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.name }) | html %] &rsaquo;
-    [% END %]
-    [% t("Cash registers") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op == 'add_form' %]
+            [% IF cash_register %]
+                [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
+            [% ELSE %]
+                [% t("New cash register") | html %]
+            [% END %]
+            &rsaquo;
+        [% ELSIF op == 'delete_confirm' %]
+            [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Cash registers") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -44,7 +47,7 @@
             [% END %]
         [% END %]
 
-        [% IF op == 'add_form'  %]
+        [% IF op == 'add_form' %]
             [% IF cash_register %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
@@ -54,222 +57,216 @@
                     <span>New cash register</span>
                 [% END %]
             [% END %]
-
         [% ELSIF op == 'delete_confirm' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.id }) | html %]
             [% END %]
-
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-                [% FOREACH m IN messages %]
-                <div class="alert alert-[% m.type | html %]">
-                    [% SWITCH m.code %]
-                    [% CASE 'success_on_insert' %]
-                        <span>Cash register added successfully.</span>
-                    [% CASE 'error_on_insert' %]
-                        <span>An error occurred when adding this cash register.</span>
-                    [% CASE 'success_on_update' %]
-                        <span>Cash register updated successfully.</span>
-                    [% CASE 'error_on_update' %]
-                        <span>An error occurred when updating this cash register. Check the logs for details.</span>
-                    [% CASE 'success_on_default' %]
-                        <span>Library default updated successfully.</span>
-                    [% CASE 'error_on_update' %]
-                        <span>An error on setting library default.</span>
-                    [% CASE 'success_on_archive' %]
-                        <span>Cash register archived successfully.</span>
-                    [% CASE 'success_on_restore' %]
-                        <span>Cash register restored successfully.</span>
-                    [% CASE %]
-                        <span>[% m.code | html %]</span>
-                    [% END %]
-                </div>
-                [% END %]
+    [% FOREACH m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'success_on_insert' %]
+                <span>Cash register added successfully.</span>
+            [% CASE 'error_on_insert' %]
+                <span>An error occurred when adding this cash register.</span>
+            [% CASE 'success_on_update' %]
+                <span>Cash register updated successfully.</span>
+            [% CASE 'error_on_update' %]
+                <span>An error occurred when updating this cash register. Check the logs for details.</span>
+            [% CASE 'success_on_default' %]
+                <span>Library default updated successfully.</span>
+            [% CASE 'error_on_update' %]
+                <span>An error on setting library default.</span>
+            [% CASE 'success_on_archive' %]
+                <span>Cash register archived successfully.</span>
+            [% CASE 'success_on_restore' %]
+                <span>Cash register restored successfully.</span>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
 
-                [% IF op == 'add_form' %]
-                <h1>
+    [% IF op == 'add_form' %]
+        <h1>
+            [% IF cash_register %]
+                [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
+            [% ELSE %]
+                <span>New cash register</span>
+            [% END %]
+        </h1>
+        <form action="/cgi-bin/koha/admin/cash_registers.pl" id="Aform" name="Aform" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+
+            <fieldset class="rows">
+                <input type="hidden" name="op" value="cud-add_validate" />
+                <ol>
                     [% IF cash_register %]
-                        [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
-                    [% ELSE %]
-                        <span>New cash register</span>
+                        <li>
+                            <span class="label">Cash register ID: </span>[% cash_register.id | html %]
+                            <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                        </li>
                     [% END %]
-                </h1>
-                <form action="/cgi-bin/koha/admin/cash_registers.pl" id="Aform" name="Aform" class="validated" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
+                    <li>
+                        <label for="name" class="required">Name: </label>
+                        <input type="text" name="name" id="name" size="24" maxlength="24" value="[% cash_register.name | html %]" class="required focus" />
+                        <span class="required">Required</span>
+                    </li>
 
-                    <fieldset class="rows">
-                        <input type="hidden" name="op" value="cud-add_validate" />
-                        <ol>
-                        [% IF cash_register %]
-                            <li>
-                                <span class="label">Cash register ID: </span>[% cash_register.id | html %]
-                                <input type="hidden" name="id" value="[% cash_register.id | html %]" />
-                            </li>
+                    <li>
+                        <label for="description">Description: </label>
+                        <input type="text" name="description" id="description" size="24" value="[% cash_register.description | html %]" />
+                    </li>
+                    <li>
+                        <label for="branch">Library: </label>
+                        <select id="branch" name="branch">
+                            [% IF cash_register %]
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => cash_register.branch ) %]
+                            [% ELSE %]
+                                [% PROCESS options_for_libraries libraries => Branches.all() %]
+                            [% END %]
+                        </select>
+                    </li>
+
+                    <li>
+                        <label for="starting_float">Initial float: </label>
+                        <input type="text" pattern="^\d+(?:\.\d{0,2})$" name="starting_float" id="starting_float" size="24" value="[% cash_register.starting_float | $Price on_editing => 1 %]" />
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                [% IF cash_register %]
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                [% ELSE %]
+                    <input type="submit" class="btn btn-primary" value="Add" />
+                [% END %]
+                <a class="cancel" href="/cgi-bin/koha/admin/cash_registers.pl?op=list">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="newcashregister" href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form"><i class="fa fa-plus"></i> New cash register</a>
+        </div>
+
+        <h1>Cash registers</h1>
+        <div class="page-section">
+            <label for="branch_filter"><strong>Filter by library:</strong></label>
+            <select id="branch_filter" name="branch_filter">
+                <option value=""></option>
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+            </select>
+
+            [% IF cash_registers.count %]
+                <table id="table_cash_registers">
+                    <thead>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Library</th>
+                        <th>Library default</th>
+                        <th>Initial float</th>
+                        <th class="noExport">Actions</th>
+                    </thead>
+                    <tbody>
+                        [% FOREACH cash_register IN cash_registers %]
+                            [% IF cash_register.branch_default %]
+                                [% SET tr_class="default" %]
+                            [% ELSE %]
+                                [% SET tr_class="" %]
+                            [% END %]
+                            <tr class="[% tr_class | html %]">
+                                <td>[% cash_register.name | html %]</td>
+                                <td>[% cash_register.description | html %]</td>
+                                <td>[% cash_register.library.branchname | html %]</td>
+                                <td>[% IF cash_register.branch_default %]Yes[% ELSE %]No[% END %]</td>
+                                <td>[% cash_register.starting_float | $Price %]</td>
+                                <td class="actions">
+                                    [% IF cash_register.archived == '0' %]
+                                        <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        [% IF cash_register.branch_default %]
+                                            <form id="drop_default_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-drop_default" />
+                                                <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                                <button type="submit" id="drop_default_button" class="btn btn-default btn-xs" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Drop default</button>
+                                            </form>
+                                        [% ELSE %]
+                                            <form id="make_default_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-make_default" />
+                                                <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                                <button type="submit" class="btn btn-default btn-xs make_default_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Make default</button>
+                                            </form>
+                                        [% END %]
+                                        <form id="archive_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-archive" />
+                                            <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                            <button type="submit" class="btn btn-default btn-xs archive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Archive</button>
+                                        </form>
+                                    [% ELSE %]
+                                        <form id="unarchive_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-unarchive" />
+                                            <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                            <button type="submit" class="btn btn-default btn-xs unarchive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-undo"></i> Restore</button>
+                                        </form>
+                                    [% END %]
+                                </td>
+                            </tr>
                         [% END %]
-                            <li>
-                                <label for="name" class="required">Name: </label>
-                                <input type="text" name="name" id="name" size="24" maxlength="24" value="[% cash_register.name | html %]" class="required focus" />
-                                <span class="required">Required</span>
-                            </li>
-
-                            <li>
-                                <label for="description">Description: </label>
-                                <input type="text" name="description" id="description" size="24" value="[% cash_register.description | html %]"/>
-                            </li>
-                            <li>
-                                <label for="branch">Library: </label>
-                                <select id="branch" name="branch">
-                                [% IF cash_register %]
-                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => cash_register.branch ) %]
-                                [% ELSE %]
-                                    [% PROCESS options_for_libraries libraries => Branches.all() %]
-                                [% END %]
-                                </select>
-                            </li>
-
-                            <li>
-                                <label for="starting_float">Initial float: </label>
-                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" size="24" value="[% cash_register.starting_float | $Price on_editing => 1  %]" />
-                            </li>
-                        </ol>
-                   </fieldset>
-
-                   <fieldset class="action">
-                       [% IF cash_register %]
-                       <input type="submit" class="btn btn-primary" value="Save" />
-                       [% ELSE %]
-                       <input type="submit" class="btn btn-primary" value="Add" />
-                       [% END %]
-                       <a class="cancel" href="/cgi-bin/koha/admin/cash_registers.pl?op=list">Cancel</a>
-                   </fieldset>
-               </form>
-               [% END %]
-
-               [% IF op == 'list' %]
-               <div id="toolbar" class="btn-toolbar">
-                   <a class="btn btn-default" id="newcashregister" href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form"><i class="fa fa-plus"></i> New cash register</a>
-               </div>
-
-               <h1>Cash registers</h1>
-               <div class="page-section">
-                    <label for="branch_filter"><strong>Filter by library:</strong></label>
-                    <select id="branch_filter" name="branch_filter">
-                        <option value=""></option>
-                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
-                    </select>
-
-                   [% IF cash_registers.count %]
-                   <table id="table_cash_registers">
-                       <thead>
-                           <th>Name</th>
-                           <th>Description</th>
-                           <th>Library</th>
-                           <th>Library default</th>
-                           <th>Initial float</th>
-                           <th class="noExport">Actions</th>
-                       </thead>
-                       <tbody>
-                       [% FOREACH cash_register IN cash_registers %]
-                       [% IF cash_register.branch_default %]
-                        [% SET tr_class="default" %]
-                       [% ELSE %]
-                        [% SET tr_class="" %]
-                       [% END %]
-                       <tr class="[% tr_class | html %]">
-                           <td>[% cash_register.name | html %]</td>
-                           <td>[% cash_register.description | html %]</td>
-                           <td>[% cash_register.library.branchname | html %]</td>
-                           <td>[% IF cash_register.branch_default %]Yes[% ELSE %]No[% END %]</td>
-                           <td>[% cash_register.starting_float | $Price %]</td>
-                           <td class="actions">
-                           [% IF cash_register.archived == '0' %]
-                               <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                               [% IF cash_register.branch_default %]
-                                <form id="drop_default_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op" value="cud-drop_default" />
-                                    <input type="hidden" name="id" value="[% cash_register.id | html %]" />
-                                    <button type="submit" id="drop_default_button" class="btn btn-default btn-xs" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Drop default</button>
-                                </form>
-                               [% ELSE %]
-                                <form id="make_default_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op" value="cud-make_default" />
-                                    <input type="hidden" name="id" value="[% cash_register.id | html %]" />
-                                    <button type="submit" class="btn btn-default btn-xs make_default_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Make default</button>
-                                </form>
-                               [% END %]
-                                <form id="archive_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op" value="cud-archive" />
-                                    <input type="hidden" name="id" value="[% cash_register.id | html %]" />
-                                    <button type="submit" class="btn btn-default btn-xs archive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Archive</button>
-                                </form>
-                           [% ELSE %]
-                            <form id="unarchive_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-unarchive" />
-                                <input type="hidden" name="id" value="[% cash_register.id | html %]" />
-                                <button type="submit" class="btn btn-default btn-xs unarchive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-undo"></i> Restore</button>
-                            </form>
-                           [% END %]
-                           </td>
-                       </tr>
-                       [% END %]
-                       </tbody>
-                   </table>
-                   [% ELSE %]
-                   <div class="alert alert-info">There are no cash registers defined. <a href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form">Start adding cash registers</a>.</div>
-                   [% END # /cash_register.count %]
-               </div>
-               [% END # /op == 'list' %]
-
+                    </tbody>
+                </table>
+            [% ELSE %]
+                <div class="alert alert-info">There are no cash registers defined. <a href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form">Start adding cash registers</a>.</div>
+            [% END # /cash_register.count %]
+        </div>
+    [% END # /op == 'list' %]
 [% END %]
-
-
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-    function filterDataTable( table, column, term ){
-        if( column ){
-            table.column( column ).search( term ).draw();
-        } else {
-            table.search( term ).draw();
+        function filterDataTable(table, column, term) {
+            if (column) {
+                table.column(column).search(term).draw();
+            } else {
+                table.search(term).draw();
+            }
+            clearFilter(term);
         }
-        clearFilter( term );
-    }
 
-    function clearFilter( term ){
-        if( term == "" ){
-            $(".dt_button_clear_filter").addClass("disabled");
-        } else {
-            $(".dt_button_clear_filter").removeClass("disabled");
+        function clearFilter(term) {
+            if (term == "") {
+                $(".dt_button_clear_filter").addClass("disabled");
+            } else {
+                $(".dt_button_clear_filter").removeClass("disabled");
+            }
         }
-    }
 
-    $(document).ready(function() {
-        var crtable = $("#table_cash_registers").DataTable($.extend(true, {}, dataTablesDefaults, {
-              "columnDefs": [
-                  { "targets": [ -1, -2 ], "orderable": false, "searchable": false },
-               ],
-               "order": [[ 1, "asc" ]],
-               "paginationType": "full",
-        }));
+        $(document).ready(function () {
+            var crtable = $("#table_cash_registers").DataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
+                    order: [[1, "asc"]],
+                    paginationType: "full",
+                })
+            );
 
-        $("#branch_filter").on("change", function(){
-            // Table must be filtered by the <option>'s text, not its value
-            var opt = $(this).find("option:selected").text();
-            filterDataTable( crtable, 2, opt );
+            $("#branch_filter").on("change", function () {
+                // Table must be filtered by the <option>'s text, not its value
+                var opt = $(this).find("option:selected").text();
+                filterDataTable(crtable, 2, opt);
+            });
         });
-
-    });
     </script>
 [% END %]
 

@@ -5,13 +5,13 @@ use Modern::Perl;
 use Getopt::Long qw( GetOptions );
 use MARC::Field;
 use MARC::Record;
-use Pod::Usage qw( pod2usage );
+use Pod::Usage  qw( pod2usage );
 use Time::HiRes qw( gettimeofday );
 
 use Koha::Script;
 use C4::Context;
 use C4::Biblio qw( GetMarcFromKohaField );
-use C4::Items qw( ModItemFromMarc );
+use C4::Items  qw( ModItemFromMarc );
 use Koha::Biblios;
 
 =head1 NAME
@@ -44,10 +44,10 @@ GetOptions(
     'where:s' => \$where,
 ) or pod2usage(2);
 
-pod2usage(1) if $help || ( !$confirm && !$test_parameter );
+pod2usage(1)                                    if $help || ( !$confirm && !$test_parameter );
 print "### Database will not be modified ###\n" if $test_parameter;
 
-my $dbh = C4::Context->dbh;
+my $dbh    = C4::Context->dbh;
 my $schema = Koha::Database->schema;
 $schema->txn_begin;
 
@@ -57,15 +57,15 @@ my $CataloguingLog = C4::Context->preference('CataloguingLog');
 my $mergelimit     = C4::Context->preference('AuthorityMergeLimit');
 $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
 $dbh->do("UPDATE systempreferences SET value=0 where variable='AuthorityMergeLimit'");
-unless ($test_parameter){
+unless ($test_parameter) {
     $schema->txn_commit;
     $schema->txn_begin;
 }
-my ( $itemfield, $itemnumbersubfield ) = &GetMarcFromKohaField( "items.itemnumber" );
+my ( $itemfield, $itemnumbersubfield ) = &GetMarcFromKohaField("items.itemnumber");
 
 #dbh query init
 my $query =
-qq{SELECT biblio.biblionumber AS biblionumber, biblioitems.biblioitemnumber AS biblioitemnumber, biblio.frameworkcode AS frameworkcode FROM biblio JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber};
+    qq{SELECT biblio.biblionumber AS biblionumber, biblioitems.biblioitemnumber AS biblioitemnumber, biblio.frameworkcode AS frameworkcode FROM biblio JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber};
 $query .= qq{ WHERE $where } if ($where);
 
 my $sth = $dbh->prepare($query);
@@ -79,7 +79,8 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
     unless ($record) { push @errors, "bad record biblionumber $biblionumber"; next; }
 
     unless ($test_parameter) {
-        my $rqitemnumber = $dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
+        my $rqitemnumber =
+            $dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
         foreach my $itemfield ( $record->field($itemfield) ) {
             my $marcitem = MARC::Record->new();
             $marcitem->encoding('UTF-8');
@@ -98,7 +99,7 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
         }
     }
 
-    unless ($test_parameter || $count % 1000) {
+    unless ( $test_parameter || $count % 1000 ) {
         $schema->txn_commit;
         $schema->txn_begin;
     }

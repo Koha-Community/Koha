@@ -17,10 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::AdditionalContents;
 
@@ -38,14 +37,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 # Get the news to display
 # use cookie setting for language, bug default to syspref if it's not set
-my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
+my ( $theme, $news_lang, $availablethemes ) =
+    C4::Templates::themelanguage( C4::Context->config('opachtdocs'), 'opac-main.tt', 'opac', $input );
 
 my $branchcode = $input->param('branchcode');
 
 my $koha_news = Koha::AdditionalContents->search_for_display(
     {
         category   => 'news',
-        location   => ['opac_only', 'staff_and_opac'],
+        location   => [ 'opac_only', 'staff_and_opac' ],
         lang       => $news_lang,
         library_id => $branchcode,
     }

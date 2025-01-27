@@ -33,10 +33,10 @@ use Koha::Cash::Registers;
 my $cgi = CGI->new();
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => 'admin/cash_registers.tt',
-        query           => $cgi,
-        type            => 'intranet',
-        flagsrequired   => { parameters => 'manage_cash_registers' },
+        template_name => 'admin/cash_registers.tt',
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { parameters => 'manage_cash_registers' },
     }
 );
 
@@ -50,13 +50,12 @@ if ( $op eq 'add_form' ) {
         $template->param( cash_register => $cash_register );
     }
     my $libraries =
-      Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
+        Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
     $template->param(
         branch_list => $libraries,
         add_form    => 1
     );
-}
-elsif ( $op eq 'cud-add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $name = $cgi->param('name');
     $name ||= q{};
     my $description = $cgi->param('description');
@@ -75,12 +74,10 @@ elsif ( $op eq 'cud-add_validate' ) {
                 }
             )->store;
             push @messages, { code => 'success_on_update', type => 'message' };
-        }
-        catch {
+        } catch {
             push @messages, { code => 'error_on_update', type => 'alert' };
         }
-    }
-    else {
+    } else {
         try {
             my $cash_register = Koha::Cash::Register->new(
                 {
@@ -91,74 +88,65 @@ elsif ( $op eq 'cud-add_validate' ) {
                 }
             )->store;
             push @messages, { code => 'success_on_insert', type => 'message' };
-        }
-        catch {
+        } catch {
             push @messages, { code => 'error_on_insert', type => 'alert' };
         }
     }
     $op = 'list';
-}
 
-elsif ( $op eq 'cud-archive' ) {
+} elsif ( $op eq 'cud-archive' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
             $cash_register->archived(1)->store();
             push @messages, { code => 'success_on_archive', type => 'message' };
-        }
-        catch {
+        } catch {
             push @messages, { code => 'error_on_archive', type => 'alert' };
 
         }
     }
     $op = 'list';
-}
-elsif ( $op eq 'cud-unarchive' ) {
+} elsif ( $op eq 'cud-unarchive' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
             $cash_register->archived(0)->store();
             push @messages, { code => 'success_on_restore', type => 'message' };
-        }
-        catch {
+        } catch {
             push @messages, { code => 'error_on_restore', type => 'alert' };
         }
     }
     $op = 'list';
-}
 
-elsif ( $op eq 'cud-make_default' ) {
+} elsif ( $op eq 'cud-make_default' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
             $cash_register->make_default;
             push @messages, { code => 'success_on_default', type => 'message' };
-        }
-        catch {
+        } catch {
             push @messages, { code => 'error_on_default', type => 'alert' };
         }
     }
     $op = 'list';
-}
-elsif ( $op eq 'cud-drop_default' ) {
+} elsif ( $op eq 'cud-drop_default' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
             $cash_register->drop_default;
             push @messages, { code => 'success_on_default', type => 'message' };
-        }
-        catch {
+        } catch {
             push @messages, { code => 'error_on_default', type => 'alert' };
         }
     }
     $op = 'list';
 }
 
-
 if ( $op eq 'list' ) {
-    my $cash_registers =
-      Koha::Cash::Registers->search( {},
-        { prefetch => 'branch', order_by => { -asc => [qw/branch name/] } } );
+    my $cash_registers = Koha::Cash::Registers->search(
+        {},
+        { prefetch => 'branch', order_by => { -asc => [qw/branch name/] } }
+    );
     $template->param( cash_registers => $cash_registers, );
 }
 

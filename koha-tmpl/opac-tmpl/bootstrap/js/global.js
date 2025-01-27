@@ -198,8 +198,8 @@ const checkError = function (response) {
             (/input|select|textarea|button|object/.test(nodeName)
                 ? !element.disabled
                 : "a" === nodeName
-                ? element.href || isTabIndexNotNaN
-                : isTabIndexNotNaN) &&
+                  ? element.href || isTabIndexNotNaN
+                  : isTabIndexNotNaN) &&
             // the element and all of its ancestors must be visible
             visible(element)
         );
@@ -249,20 +249,23 @@ var facetHandler = function (e) {
     $(".menu-collapse").toggle();
 };
 
-function setPlaceholder(){
-    let search_placeholder = $("#masthead_search option:selected").data("placeholder");
-    $("#translControl1").attr("placeholder", search_placeholder );
+function setPlaceholder() {
+    let search_placeholder = $("#masthead_search option:selected").data(
+        "placeholder"
+    );
+    $("#translControl1").attr("placeholder", search_placeholder);
 }
 
 $(document).ready(function () {
     //check if sticky element is stuck, if so add floating class
-    if ( $('.sticky').length ) {
-      const observer = new IntersectionObserver(
-        ([e]) => e.target.classList.toggle('floating', e.intersectionRatio < 1),
-        {threshold: [1]}
-      );
+    if ($(".sticky").length) {
+        const observer = new IntersectionObserver(
+            ([e]) =>
+                e.target.classList.toggle("floating", e.intersectionRatio < 1),
+            { threshold: [1] }
+        );
 
-      observer.observe(document.querySelector('.sticky'));
+        observer.observe(document.querySelector(".sticky"));
     }
     $("html").removeClass("no-js").addClass("js");
     $(".close").click(function () {
@@ -353,7 +356,7 @@ $(document).ready(function () {
     });
 
     setPlaceholder();
-    $("#masthead_search").on("change", function(){
+    $("#masthead_search").on("change", function () {
         setPlaceholder();
     });
 });

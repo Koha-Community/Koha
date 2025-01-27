@@ -57,7 +57,6 @@ sub patron {
     return Koha::Patron->_new_from_dbic($patrons_rs);
 }
 
-
 =head2 Internal methods
 
 =head3 _type

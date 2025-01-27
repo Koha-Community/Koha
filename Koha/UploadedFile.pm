@@ -77,12 +77,11 @@ sub delete {
     my $retval = $self->SUPER::delete;
     return $retval if $params->{keep_file};
 
-    if( ! -e $file ) {
+    if ( !-e $file ) {
         if ( $self->permanent ) {
-            warn "Removing record for $name within category ".
-                $self->uploadcategorycode. ", but file was missing.";
+            warn "Removing record for $name within category " . $self->uploadcategorycode . ", but file was missing.";
         }
-    } elsif( ! unlink($file) ) {
+    } elsif ( !unlink($file) ) {
         warn "Problem while deleting: $file";
     }
     return $retval;
@@ -95,13 +94,13 @@ Returns the fully qualified path name for an uploaded file.
 =cut
 
 sub full_path {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $path = File::Spec->catfile(
-        $self->permanent
-            ? $self->permanent_directory
-            : C4::Context->temporary_directory,
+          $self->permanent
+        ? $self->permanent_directory
+        : C4::Context->temporary_directory,
         $self->dir,
-        $self->hashvalue. '_'. $self->filename,
+        $self->hashvalue . '_' . $self->filename,
     );
     return $path;
 }
@@ -113,7 +112,7 @@ Returns a file handle for an uploaded file.
 =cut
 
 sub file_handle {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->{_file_handle} = IO::File->new( $self->full_path, "r" );
     return if !$self->{_file_handle};
     $self->{_file_handle}->binmode;
@@ -129,11 +128,11 @@ Will be extended by report 14282
 =cut
 
 sub httpheaders {
-    my ( $self ) = @_;
-    if( $self->filename =~ /\.pdf$/ ) {
+    my ($self) = @_;
+    if ( $self->filename =~ /\.pdf$/ ) {
         return (
-            '-type'       => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$self->filename.'"',
+            '-type'               => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $self->filename . '"',
         );
     } else {
         return (
@@ -152,7 +151,7 @@ Returns root directory for permanent storage
 =cut
 
 sub permanent_directory {
-    my ( $class ) = @_;
+    my ($class) = @_;
     return C4::Context->config('upload_path');
 }
 

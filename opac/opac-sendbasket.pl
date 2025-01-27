@@ -42,7 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $patron     = Koha::Patrons->find($borrowernumber);
 my $user_email = $patron ? $patron->notice_email_address : undef;
 
-my $op        = $query->param('op') || q{};
+my $op        = $query->param('op')       || q{};
 my $bib_list  = $query->param('bib_list') || '';
 my $email_add = $query->param('email_add');
 
@@ -59,8 +59,7 @@ if ( $op eq "cud-send" && $email_add && $user_email ) {
 
     if ( !defined $iso2709 ) {
         $template->param( error => 'NO_BODY' );
-    }
-    else {
+    } else {
         my %loops = ( biblio => \@bibs, );
 
         my %substitute = ( comment => $comment, );
@@ -100,9 +99,9 @@ if ( $op eq "cud-send" && $email_add && $user_email ) {
 
     $template->param( email_add => $email_add );
     output_html_with_http_headers $query, $cookie, $template->output, undef,
-      { force_no_caching => 1 };
+        { force_no_caching => 1 };
 
-} elsif( !$user_email ) {
+} elsif ( !$user_email ) {
     $template->param( email_add => 1, error => 'NO_REPLY_ADDRESS' );
     output_html_with_http_headers $query, $cookie, $template->output;
 
@@ -115,5 +114,5 @@ if ( $op eq "cud-send" && $email_add && $user_email ) {
         virtualshelves => C4::Context->preference("virtualshelves"),
     );
     output_html_with_http_headers $query, $cookie, $template->output, undef,
-      { force_no_caching => 1 };
+        { force_no_caching => 1 };
 }

@@ -12,69 +12,68 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Checkouts;
 
 my %fields = (
-	ok            => 0,
-	patron        => undef,
-	item          => undef,
-	desensitize   => 0,
-	alert         => '',
-	transaction_id=> undef,
-	sip_fee_type  => '01', # Other/Unknown
-	fee_amount    => undef,
-	sip_currency  => 'USD', # FIXME: why hardcoded?
-	screen_msg    => '',
-	print_line    => '',
-    fee_ack       => 'N',
+    ok             => 0,
+    patron         => undef,
+    item           => undef,
+    desensitize    => 0,
+    alert          => '',
+    transaction_id => undef,
+    sip_fee_type   => '01',     # Other/Unknown
+    fee_amount     => undef,
+    sip_currency   => 'USD',    # FIXME: why hardcoded?
+    screen_msg     => '',
+    print_line     => '',
+    fee_ack        => 'N',
 );
 
 our $AUTOLOAD;
 
 sub new {
-	my $class = shift;
-	my $self = {
-		_permitted => \%fields,
-		%fields,
-	};
-	return bless $self, $class;
+    my $class = shift;
+    my $self  = {
+        _permitted => \%fields,
+        %fields,
+    };
+    return bless $self, $class;
 }
 
 sub duedatefromissue {
-    my ($self, $iss, $itemnum) = @_;
+    my ( $self, $iss, $itemnum ) = @_;
     my $due_dt;
-    if (defined $iss ) {
+    if ( defined $iss ) {
         $due_dt = dt_from_string( $iss->date_due() );
-    } # renew from AddIssue ??
+    }    # renew from AddIssue ??
     else {
         # need to reread the issue to get due date
         $iss = Koha::Checkouts->find( { itemnumber => $itemnum } );
-        if ($iss && $iss->date_due ) {
+        if ( $iss && $iss->date_due ) {
             $due_dt = dt_from_string( $iss->date_due, 'sql' );
         }
     }
     return $due_dt;
 }
 
-
-
 sub DESTROY {
+
     # be cool
 }
 
 sub AUTOLOAD {
-    my $self = shift;
+    my $self  = shift;
     my $class = ref($self) or croak "$self is not an object";
-    my $name = $AUTOLOAD;
+    my $name  = $AUTOLOAD;
 
     $name =~ s/.*://;
 
-    unless (exists $self->{_permitted}->{$name}) {
-		croak "Can't access '$name' field of class '$class'";
+    unless ( exists $self->{_permitted}->{$name} ) {
+        croak "Can't access '$name' field of class '$class'";
     }
 
-	if (@_) {
-		return $self->{$name} = shift;
-	} else {
-		return $self->{$name};
-	}
+    if (@_) {
+        return $self->{$name} = shift;
+    } else {
+        return $self->{$name};
+    }
 }
 
 1;

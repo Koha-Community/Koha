@@ -19,7 +19,6 @@ package Koha::Checkouts::Renewals;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Checkouts::Renewal;

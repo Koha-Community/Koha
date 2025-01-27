@@ -18,23 +18,23 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI                        qw ( -utf8 );
 use C4::Serials::Numberpattern qw( GetSubscriptionNumberpattern );
-use C4::Auth qw( check_cookie_auth );
-use JSON qw( to_json );
+use C4::Auth                   qw( check_cookie_auth );
+use JSON                       qw( to_json );
 
-my $input=CGI->new;
+my $input = CGI->new;
 
-my ($auth_status) = check_cookie_auth($input->cookie('CGISESSID'), { serials => '*' });
-if ($auth_status ne "ok") {
-    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
+my ($auth_status) = check_cookie_auth( $input->cookie('CGISESSID'), { serials => '*' } );
+if ( $auth_status ne "ok" ) {
+    print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
     exit 0;
 }
 
-my $numpatternid=$input->param("numberpattern_id");
+my $numpatternid = $input->param("numberpattern_id");
 
-my $numberpatternrecord=GetSubscriptionNumberpattern($numpatternid);
+my $numberpatternrecord = GetSubscriptionNumberpattern($numpatternid);
 
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header(-type => 'text/plain', -charset => 'UTF-8');
-print to_json( $numberpatternrecord );
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+print to_json($numberpatternrecord);

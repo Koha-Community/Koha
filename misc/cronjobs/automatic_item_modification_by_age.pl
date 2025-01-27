@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use JSON;
 
 use Koha::Script -cron;
@@ -11,8 +11,8 @@ use C4::Context;
 use C4::Items;
 use C4::Log qw( cronlogaction );
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 # Getting options
 my ( $verbose, $help, $confirm );
@@ -27,22 +27,21 @@ $verbose = 1 unless $confirm;
 
 # Load configuration from the syspref
 my $syspref_content = C4::Context->preference('automatic_item_modification_by_age_configuration');
-my $rules = eval { JSON::from_json( $syspref_content ) };
-pod2usage({ -message => "Unable to load the configuration : $@", -exitval => 1 })
+my $rules           = eval { JSON::from_json($syspref_content) };
+pod2usage( { -message => "Unable to load the configuration : $@", -exitval => 1 } )
     if $@;
-
 
 my $report = C4::Items::ToggleNewStatus( { rules => $rules, report_only => not $confirm } );
 
-if ( $verbose ) {
-    if ( $report ) {
+if ($verbose) {
+    if ($report) {
         say "Item to modify:";
         while ( my ( $itemnumber, $substitutions ) = each %$report ) {
-            for my $substitution ( @$substitutions ) {
+            for my $substitution (@$substitutions) {
                 if ( defined $substitution->{value} and $substitution->{value} ne q|| ) {
-                   say "\titemnumber $itemnumber: $substitution->{field}=$substitution->{value}";
+                    say "\titemnumber $itemnumber: $substitution->{field}=$substitution->{value}";
                 } else {
-                   say "\titemnumber $itemnumber: field $substitution->{field} to delete";
+                    say "\titemnumber $itemnumber: field $substitution->{field} to delete";
                 }
             }
         }
@@ -51,7 +50,7 @@ if ( $verbose ) {
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit(0);
 

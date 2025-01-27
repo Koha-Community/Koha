@@ -102,7 +102,7 @@ sub add {
         $params->{identity_provider_id} = $c->param('identity_provider_id');
         Koha::Database->new->schema->txn_do(
             sub {
-                my $domain = Koha::Auth::Identity::Provider::Domain->new_from_api( $params );
+                my $domain = Koha::Auth::Identity::Provider::Domain->new_from_api($params);
                 $domain->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $domain->id );

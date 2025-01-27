@@ -43,8 +43,8 @@ CCC QW - returns first unused number CCC QWxx starting with CCC QW01
 =cut
 
 my $builder = sub {
-    my ( $params ) = @_;
-    my $res="
+    my ($params) = @_;
+    my $res = "
     <script>
         function Click$params->{id}(ev) {
                 ev.preventDefault();
@@ -63,60 +63,66 @@ my $builder = sub {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $code = $input->param('code');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $code     = $input->param('code');
 
-    my ($template, $loggedinuser, $cookie) = get_template_and_user({
-        template_name   => "cataloguing/value_builder/ajax.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {editcatalogue => '*'},
-    });
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/ajax.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
     my $BASE_CALLNUMBER_RE = qr/^(\w+) (\w+)$/;
     my $ret;
-    my ($alpha, $num) = ($code =~ $BASE_CALLNUMBER_RE);
-    if (defined $num) { # otherwise no point
-        my ($num_alpha, $num_num) = ($num =~ m/^(\D+)?(\d+)?$/);
+    my ( $alpha, $num ) = ( $code =~ $BASE_CALLNUMBER_RE );
+    if ( defined $num ) {    # otherwise no point
+        my ( $num_alpha, $num_num ) = ( $num =~ m/^(\D+)?(\d+)?$/ );
         $num_alpha ||= '';
         my $pad_len = 4 - length($num);
 
-        if ($pad_len > 0) {
+        if ( $pad_len > 0 ) {
             my $num_padded = $num_num;
-            $num_padded .= "0" x ($pad_len - 1) if $pad_len > 1;
+            $num_padded .= "0" x ( $pad_len - 1 ) if $pad_len > 1;
             $num_padded .= "1";
             my $padded = "$alpha $num_alpha" . $num_padded;
 
             my $dbh = C4::Context->dbh;
-            if ( my $first = $dbh->selectrow_array("SELECT itemcallnumber
+            if (
+                my $first = $dbh->selectrow_array(
+                    "SELECT itemcallnumber
                                                     FROM items
-                                                    WHERE itemcallnumber = ?", undef, $padded) ) {
-                my $icn = $dbh->selectcol_arrayref("SELECT DISTINCT itemcallnumber
+                                                    WHERE itemcallnumber = ?", undef, $padded
+                )
+                )
+            {
+                my $icn = $dbh->selectcol_arrayref(
+                    "SELECT DISTINCT itemcallnumber
                                                     FROM items
                                                     WHERE itemcallnumber LIKE ?
                                                       AND itemcallnumber >   ?
-                                                    ORDER BY itemcallnumber", undef, "$alpha $num_alpha%", $first);
+                                                    ORDER BY itemcallnumber", undef, "$alpha $num_alpha%", $first
+                );
                 my $next = $num_padded + 1;
-                my $len = length($num_padded);
+                my $len  = length($num_padded);
                 foreach (@$icn) {
-                    my ($num1) = ( m/(\d+)$/o );
-                    if ($num1 > $next) { # a hole in numbering found, stop
+                    my ($num1) = (m/(\d+)$/o);
+                    if ( $num1 > $next ) {    # a hole in numbering found, stop
                         last;
                     }
                     $next++;
                 }
-                $ret = "$alpha $num_alpha" . sprintf("%0${len}d", $next) if length($next) <= $len; # no overflow
-            }
-            else {
+                $ret = "$alpha $num_alpha" . sprintf( "%0${len}d", $next ) if length($next) <= $len;    # no overflow
+            } else {
                 $ret = $padded;
             }
         }
     }
 
-    $template->param(
-        return => $ret || $code
-    );
+    $template->param( return => $ret || $code );
     output_html_with_http_headers $input, $cookie, $template->output;
 };
 

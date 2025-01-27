@@ -34,7 +34,7 @@ use Text::CSV;
 use Koha::Script;
 use C4::Context;
 use C4::Biblio qw( ModBiblio );
-use C4::Koha qw( GetVariationsOfISBN );
+use C4::Koha   qw( GetVariationsOfISBN );
 
 use Koha::Biblios;
 use Koha::Database;
@@ -97,7 +97,7 @@ if ( $help || !$file || !$confirm ) {
 my $schema = Koha::Database->new()->schema();
 
 my $csv = Text::CSV->new( { binary => 1, sep_char => "\t", formula => 'empty' } )
-  or die "Cannot use CSV: " . Text::CSV->error_diag();
+    or die "Cannot use CSV: " . Text::CSV->error_diag();
 
 open my $fh, "<:encoding(utf8)", $file or die "test.csv: $!";
 
@@ -137,11 +137,10 @@ while ( my $row = $csv->getline_hr($fh) ) {
     my @likes = map { { isbn => { like => '%' . $_ . '%' } } } @isbns;
 
     my @biblionumbers =
-      $schema->resultset('Biblioitem')->search( { -or => \@likes } )
-      ->get_column('biblionumber')->all();
+        $schema->resultset('Biblioitem')->search( { -or => \@likes } )->get_column('biblionumber')->all();
 
     say "Found matching records! Biblionumbers: " . join( " ,", @biblionumbers )
-      if ( @biblionumbers && $verbose > 2 );
+        if ( @biblionumbers && $verbose > 2 );
 
     foreach my $biblionumber (@biblionumbers) {
         $counter++;
@@ -152,13 +151,13 @@ while ( my $row = $csv->getline_hr($fh) ) {
             say "Found matching record! Biblionumber: $biblionumber";
 
             if ( $verbose > 2 ) {
-                my $biblio = Koha::Biblios->find( $biblionumber );
+                my $biblio = Koha::Biblios->find($biblionumber);
                 say "Title from record: " . $biblio->title
-                  if $biblio->title;
+                    if $biblio->title;
                 say "Author from record: " . $biblio->author
-                  if $biblio->author;
+                    if $biblio->author;
                 say "ISBN from record: " . $biblio->biblioitem->isbn
-                  if $biblio->biblioitem->isbn;
+                    if $biblio->biblioitem->isbn;
             }
             say "Title: " . $row->{Title};
             say "Author: " . $row->{Author};
@@ -171,8 +170,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
         my $lexile_score_field;
         for my $field ( $record->field($field_number) ) {
             if ( defined( $field->subfield($subfield_source) )
-                && $field->subfield($subfield_source) eq
-                $subfield_source_value )
+                && $field->subfield($subfield_source) eq $subfield_source_value )
             {
                 $lexile_score_field = $field;
                 last;    # Each item can only have one lexile score
@@ -186,8 +184,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
                 $subfield_target_audience_note => $row->{Lexile},
                 $subfield_source               => $subfield_source_value,
             );
-        }
-        else {
+        } else {
             my $field = MARC::Field->new(
                 $field_number, '8', '#',
                 $subfield_target_audience_note => $row->{Lexile},
@@ -196,7 +193,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
             $record->append_fields($field);
         }
 
-        ModBiblio( $record, $biblionumber, undef, { overlay_context => { source => 'import_lexile' } } ) unless ( $test );
+        ModBiblio( $record, $biblionumber, undef, { overlay_context => { source => 'import_lexile' } } ) unless ($test);
     }
 
 }

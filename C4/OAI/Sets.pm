@@ -37,7 +37,7 @@ use vars qw(@ISA @EXPORT);
 
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA    = qw(Exporter);
     @EXPORT = qw(
         GetOAISets GetOAISet GetOAISetBySpec ModOAISet DelOAISet AddOAISet
         GetOAISetsMappings GetOAISetMappings ModOAISetMappings
@@ -68,13 +68,13 @@ The hash references looks like this:
 =cut
 
 sub GetOAISets {
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT * FROM oai_sets
     };
     my $sth = $dbh->prepare($query);
     $sth->execute;
-    my $results = $sth->fetchall_arrayref({});
+    my $results = $sth->fetchall_arrayref( {} );
 
     $query = qq{
         SELECT description
@@ -83,10 +83,10 @@ sub GetOAISets {
     };
     $sth = $dbh->prepare($query);
     foreach my $set (@$results) {
-        $sth->execute($set->{'id'});
-        my $desc = $sth->fetchall_arrayref({});
+        $sth->execute( $set->{'id'} );
+        my $desc = $sth->fetchall_arrayref( {} );
         foreach (@$desc) {
-            push @{$set->{'descriptions'}}, $_->{'description'};
+            push @{ $set->{'descriptions'} }, $_->{'description'};
         }
     }
 
@@ -108,7 +108,7 @@ sub GetOAISet {
 
     return unless $set_id;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM oai_sets
@@ -124,10 +124,10 @@ sub GetOAISet {
         WHERE set_id = ?
     };
     $sth = $dbh->prepare($query);
-    $sth->execute($set->{'id'});
-    my $desc = $sth->fetchall_arrayref({});
+    $sth->execute( $set->{'id'} );
+    my $desc = $sth->fetchall_arrayref( {} );
     foreach (@$desc) {
-        push @{$set->{'descriptions'}}, $_->{'description'};
+        push @{ $set->{'descriptions'} }, $_->{'description'};
     }
 
     return $set;
@@ -146,7 +146,7 @@ sub GetOAISetBySpec {
 
     return unless defined $setSpec;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM oai_sets
@@ -176,14 +176,14 @@ ModOAISet modify a set in the database.
 sub ModOAISet {
     my ($set) = @_;
 
-    return unless($set && $set->{'spec'} && $set->{'name'});
+    return unless ( $set && $set->{'spec'} && $set->{'name'} );
 
-    if(!defined $set->{'id'}) {
+    if ( !defined $set->{'id'} ) {
         warn "Set ID not defined, can't modify the set";
         return;
     }
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         UPDATE oai_sets
         SET spec = ?,
@@ -191,24 +191,24 @@ sub ModOAISet {
         WHERE id = ?
     };
     my $sth = $dbh->prepare($query);
-    $sth->execute($set->{'spec'}, $set->{'name'}, $set->{'id'});
+    $sth->execute( $set->{'spec'}, $set->{'name'}, $set->{'id'} );
 
-    if($set->{'descriptions'}) {
+    if ( $set->{'descriptions'} ) {
         $query = qq{
             DELETE FROM oai_sets_descriptions
             WHERE set_id = ?
         };
         $sth = $dbh->prepare($query);
-        $sth->execute($set->{'id'});
+        $sth->execute( $set->{'id'} );
 
-        if(scalar @{$set->{'descriptions'}} > 0) {
+        if ( scalar @{ $set->{'descriptions'} } > 0 ) {
             $query = qq{
                 INSERT INTO oai_sets_descriptions (set_id, description)
                 VALUES (?,?)
             };
             $sth = $dbh->prepare($query);
-            foreach (@{ $set->{'descriptions'} }) {
-                $sth->execute($set->{'id'}, $_) if $_;
+            foreach ( @{ $set->{'descriptions'} } ) {
+                $sth->execute( $set->{'id'}, $_ ) if $_;
             }
         }
     }
@@ -227,7 +227,7 @@ sub DelOAISet {
 
     return unless $set_id;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         DELETE oai_sets, oai_sets_descriptions, oai_sets_mappings
         FROM oai_sets
@@ -256,25 +256,25 @@ AddOAISet adds a new set and returns its id, or undef if something went wrong.
 sub AddOAISet {
     my ($set) = @_;
 
-    return unless($set && $set->{'spec'} && $set->{'name'});
+    return unless ( $set && $set->{'spec'} && $set->{'name'} );
 
     my $set_id;
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         INSERT INTO oai_sets (spec, name)
         VALUES (?,?)
     };
     my $sth = $dbh->prepare($query);
-    if( $sth->execute($set->{'spec'}, $set->{'name'}) ) {
-        $set_id = $dbh->last_insert_id(undef, undef, 'oai_sets', undef);
-        if($set->{'descriptions'}) {
+    if ( $sth->execute( $set->{'spec'}, $set->{'name'} ) ) {
+        $set_id = $dbh->last_insert_id( undef, undef, 'oai_sets', undef );
+        if ( $set->{'descriptions'} ) {
             $query = qq{
                 INSERT INTO oai_sets_descriptions (set_id, description)
                 VALUES (?,?)
             };
             $sth = $dbh->prepare($query);
-            foreach( @{ $set->{'descriptions'} } ) {
-                $sth->execute($set_id, $_) if $_;
+            foreach ( @{ $set->{'descriptions'} } ) {
+                $sth->execute( $set_id, $_ ) if $_;
             }
         }
     } else {
@@ -330,7 +330,7 @@ The first hashref keys are the sets IDs, so it looks like this:
 =cut
 
 sub GetOAISetsMappings {
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT * FROM oai_sets_mappings ORDER BY set_id, rule_order
     };
@@ -338,14 +338,14 @@ sub GetOAISetsMappings {
     $sth->execute;
 
     my $mappings = {};
-    while(my $result = $sth->fetchrow_hashref) {
-        push @{ $mappings->{$result->{'set_id'}} }, {
-            marcfield => $result->{'marcfield'},
-            marcsubfield => $result->{'marcsubfield'},
-            operator => $result->{'operator'},
-            marcvalue => $result->{'marcvalue'},
+    while ( my $result = $sth->fetchrow_hashref ) {
+        push @{ $mappings->{ $result->{'set_id'} } }, {
+            marcfield     => $result->{'marcfield'},
+            marcsubfield  => $result->{'marcsubfield'},
+            operator      => $result->{'operator'},
+            marcvalue     => $result->{'marcvalue'},
             rule_operator => $result->{'rule_operator'},
-            rule_order => $result->{'rule_order'}
+            rule_order    => $result->{'rule_order'}
         };
     }
 
@@ -365,7 +365,7 @@ sub GetOAISetMappings {
 
     return unless $set_id;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM oai_sets_mappings
@@ -376,14 +376,14 @@ sub GetOAISetMappings {
     $sth->execute($set_id);
 
     my @mappings;
-    while(my $result = $sth->fetchrow_hashref) {
+    while ( my $result = $sth->fetchrow_hashref ) {
         push @mappings, {
-            marcfield => $result->{'marcfield'},
-            marcsubfield => $result->{'marcsubfield'},
-            operator => $result->{'operator'},
-            marcvalue => $result->{'marcvalue'},
+            marcfield     => $result->{'marcfield'},
+            marcsubfield  => $result->{'marcsubfield'},
+            operator      => $result->{'operator'},
+            marcvalue     => $result->{'marcvalue'},
             rule_operator => $result->{'rule_operator'},
-            rule_order => $result->{'rule_order'}
+            rule_order    => $result->{'rule_order'}
         };
     }
 
@@ -408,25 +408,28 @@ ModOAISetMappings modifies mappings of a given set.
 =cut
 
 sub ModOAISetMappings {
-    my ($set_id, $mappings) = @_;
+    my ( $set_id, $mappings ) = @_;
 
     return unless $set_id;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         DELETE FROM oai_sets_mappings
         WHERE set_id = ?
     };
     my $sth = $dbh->prepare($query);
     $sth->execute($set_id);
-    if(scalar @$mappings > 0) {
+    if ( scalar @$mappings > 0 ) {
         $query = qq{
             INSERT INTO oai_sets_mappings (set_id, marcfield, marcsubfield, operator, marcvalue, rule_operator, rule_order)
             VALUES (?,?,?,?,?,?,?)
         };
         $sth = $dbh->prepare($query);
         foreach (@$mappings) {
-            $sth->execute($set_id, $_->{'marcfield'}, $_->{'marcsubfield'}, $_->{'operator'}, $_->{'marcvalue'}, $_->{'rule_operator'}, $_->{'rule_order'});
+            $sth->execute(
+                $set_id, $_->{'marcfield'}, $_->{'marcsubfield'}, $_->{'operator'}, $_->{'marcvalue'},
+                $_->{'rule_operator'}, $_->{'rule_order'}
+            );
         }
     }
 }
@@ -445,7 +448,7 @@ Keys of hash are id, spec and name
 sub GetOAISetsBiblio {
     my ($biblionumber) = @_;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT oai_sets.*
         FROM oai_sets
@@ -455,7 +458,7 @@ sub GetOAISetsBiblio {
     my $sth = $dbh->prepare($query);
 
     $sth->execute($biblionumber);
-    return $sth->fetchall_arrayref({});
+    return $sth->fetchall_arrayref( {} );
 }
 
 =head2 DelOAISetsBiblio
@@ -471,7 +474,7 @@ sub DelOAISetsBiblio {
 
     return unless $biblionumber;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         DELETE FROM oai_sets_biblios
         WHERE biblionumber = ?
@@ -491,41 +494,41 @@ GetOAISetsMappings
 =cut
 
 sub CalcOAISetsBiblio {
-    my ($record, $oai_sets_mappings) = @_;
+    my ( $record, $oai_sets_mappings ) = @_;
 
     return unless $record;
 
     $oai_sets_mappings ||= GetOAISetsMappings;
 
     my @biblio_sets;
-    foreach my $set_id (keys %$oai_sets_mappings) {
+    foreach my $set_id ( keys %$oai_sets_mappings ) {
 
         my $rules = [];
-        foreach my $mapping (@{ $oai_sets_mappings->{$set_id} }) {
+        foreach my $mapping ( @{ $oai_sets_mappings->{$set_id} } ) {
             next if not $mapping;
             my $rule_operator = $mapping->{'rule_operator'};
-            my $result = _evalRule($record, $mapping);
+            my $result        = _evalRule( $record, $mapping );
 
             # First rule or 'or' rule is always pushed
-            if (!@$rules || $rule_operator eq 'or') {
+            if ( !@$rules || $rule_operator eq 'or' ) {
                 push @$rules, [$result];
                 next;
             }
 
             # 'and' rule is pushed in the last 'or' rule
-            push @{$rules->[-1]}, $result;
+            push @{ $rules->[-1] }, $result;
         }
 
         my @evaluated_and;
         foreach my $ruleset (@$rules) {
-           if (0 < grep /0/, @{$ruleset}) {
+            if ( 0 < grep /0/, @{$ruleset} ) {
                 push @evaluated_and, 0;
             } else {
                 push @evaluated_and, 1;
             }
         }
 
-        if (grep /1/, @evaluated_and) {
+        if ( grep /1/, @evaluated_and ) {
             push @biblio_sets, $set_id;
         }
 
@@ -535,38 +538,39 @@ sub CalcOAISetsBiblio {
 
 # Does the record match a given mapping rule?
 sub _evalRule {
-    my $record = shift;
+    my $record  = shift;
     my $mapping = shift;
 
-    my $field = $mapping->{'marcfield'};
+    my $field    = $mapping->{'marcfield'};
     my $subfield = $mapping->{'marcsubfield'};
     my $operator = $mapping->{'operator'};
-    my $value = $mapping->{'marcvalue'};
+    my $value    = $mapping->{'marcvalue'};
 
     my @all_subfield_values;
+
     # Get all the fields with the given tag
     my @fields = $record->field($field);
+
     # Iterate over all the fields
-    foreach my $field ( @fields ) {
+    foreach my $field (@fields) {
+
         # Get the values from all the subfields with the given subfield code
         if ( my @subfield_values = $field->subfield($subfield) ) {
             push @all_subfield_values, @subfield_values;
         }
     }
 
-    if ($operator eq 'notequal') {
-        if(0 == grep { $_ eq $value } @all_subfield_values) {
+    if ( $operator eq 'notequal' ) {
+        if ( 0 == grep { $_ eq $value } @all_subfield_values ) {
             return 1;
         }
-    }
-    else {
-        if(0 < grep { $_ eq $value } @all_subfield_values) {
+    } else {
+        if ( 0 < grep { $_ eq $value } @all_subfield_values ) {
             return 1;
         }
     }
     return 0;
 }
-
 
 =head2 ModOAISetsBiblios
 
@@ -587,7 +591,7 @@ sub ModOAISetsBiblios {
 
     return unless ref($oai_sets_biblios) eq "HASH";
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         DELETE FROM oai_sets_biblios
     };
@@ -606,12 +610,12 @@ $record is a MARC::Record.
 =cut
 
 sub UpdateOAISetsBiblio {
-    my ($biblionumber, $record) = @_;
+    my ( $biblionumber, $record ) = @_;
 
-    return unless($biblionumber and $record);
+    return unless ( $biblionumber and $record );
 
     $record = $record->clone;
-    if (C4::Context->preference('OAI-PMH:AutoUpdateSetsEmbedItemData')) {
+    if ( C4::Context->preference('OAI-PMH:AutoUpdateSetsEmbedItemData') ) {
         $record = Koha::Biblio::Metadata->record(
             {
                 record       => $record,
@@ -649,15 +653,15 @@ sub AddOAISetsBiblios {
 
     return unless ref($oai_sets_biblios) eq "HASH";
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         INSERT INTO oai_sets_biblios (set_id, biblionumber)
         VALUES (?,?)
     };
     my $sth = $dbh->prepare($query);
-    foreach my $set_id (keys %$oai_sets_biblios) {
-        foreach my $biblionumber (@{$oai_sets_biblios->{$set_id}}) {
-            $sth->execute($set_id, $biblionumber);
+    foreach my $set_id ( keys %$oai_sets_biblios ) {
+        foreach my $biblionumber ( @{ $oai_sets_biblios->{$set_id} } ) {
+            $sth->execute( $set_id, $biblionumber );
         }
     }
 }

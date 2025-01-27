@@ -35,51 +35,51 @@ The predefined constants are
 
 ###############################################################################
 
-
 ###############################################################################
 
 use vars qw( $_text $_text_parametrized $_cdata
     $_tag $_decl $_pi $_directive $_comment $_null $_unknown );
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
 
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      TEXT
-      TEXT_PARAMETRIZED
-      CDATA
-      TAG
-      DECL
-      PI
-      DIRECTIVE
-      COMMENT
-      UNKNOWN
+        TEXT
+        TEXT_PARAMETRIZED
+        CDATA
+        TAG
+        DECL
+        PI
+        DIRECTIVE
+        COMMENT
+        UNKNOWN
     );
 
     my $new = sub {
-	my $this = 'C4::TmplTokenType';#shift;
-	my $class = ref($this) || $this;
-	my $self = {};
-	bless $self, $class;
-	($self->{'id'}, $self->{'name'}, $self->{'desc'}) = @_;
-	return $self;
+        my $this  = 'C4::TmplTokenType';    #shift;
+        my $class = ref($this) || $this;
+        my $self  = {};
+        bless $self, $class;
+        ( $self->{'id'}, $self->{'name'}, $self->{'desc'} ) = @_;
+        return $self;
     };
-    $_text		= &$new(0, 'TEXT');
-    $_text_parametrized	= &$new(8, 'TEXT-PARAMETRIZED');
-    $_cdata		= &$new(1, 'CDATA');
-    $_tag		= &$new(2, 'TAG');
-    $_decl		= &$new(3, 'DECL');
-    $_pi		= &$new(4, 'PI');
-    $_directive		= &$new(5, 'DIRECTIVE');
-    $_comment		= &$new(6, 'COMMENT');
-    $_unknown		= &$new(7, 'UNKNOWN');
+    $_text              = &$new( 0, 'TEXT' );
+    $_text_parametrized = &$new( 8, 'TEXT-PARAMETRIZED' );
+    $_cdata             = &$new( 1, 'CDATA' );
+    $_tag               = &$new( 2, 'TAG' );
+    $_decl              = &$new( 3, 'DECL' );
+    $_pi                = &$new( 4, 'PI' );
+    $_directive         = &$new( 5, 'DIRECTIVE' );
+    $_comment           = &$new( 6, 'COMMENT' );
+    $_unknown           = &$new( 7, 'UNKNOWN' );
 }
 
 sub to_string {
     my $this = shift;
-    return $this->{'name'}
+    return $this->{'name'};
 }
 
 sub TEXT              { $_text }

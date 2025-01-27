@@ -54,12 +54,13 @@ sub load {
     my ( $class, $filename ) = @_;
 
     Koha::Exceptions::XSLT::MissingFilename->throw if !$filename;
-    return { location => $filename } if $filename !~ /^https:\/\//;
+    return { location => $filename }               if $filename !~ /^https:\/\//;
 
-    my $ua = LWP::UserAgent->new( ssl_opts => { verify_hostname => 0 } );
-    my $resp = $ua->get( $filename );
-    if( $resp->is_success ) {
+    my $ua   = LWP::UserAgent->new( ssl_opts => { verify_hostname => 0 } );
+    my $resp = $ua->get($filename);
+    if ( $resp->is_success ) {
         my $contents = $resp->decoded_content;
+
         # $contents = $self->_resolve_includes( $contents );
         return { string => $contents };
     }
@@ -67,8 +68,10 @@ sub load {
 }
 
 sub _resolve_includes {
-# We could parse the code for includes/imports, fetch them and change refs
+
+    # We could parse the code for includes/imports, fetch them and change refs
     my ( $self, $code ) = @_;
+
     # TODO Extend it
     return $code;
 }

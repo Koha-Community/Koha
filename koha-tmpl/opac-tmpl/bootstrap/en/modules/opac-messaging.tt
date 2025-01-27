@@ -6,13 +6,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your messaging settings &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-messaging' %]
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
@@ -25,23 +25,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-md-12 col-lg-10 order-1">
-
                 [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) || Koha.Preference('TranslateNotices') %]
                     <div id="usermessaging" class="maincontent">
                         <h1>Your messaging settings</h1>
                         [% IF ( settings_updated ) %]
-                        <div class="alert alert-success"><p><strong>Settings updated</strong></p></div>
+                            <div class="alert alert-success"
+                                ><p><strong>Settings updated</strong></p></div
+                            >
                         [% END %]
                         <form action="/cgi-bin/koha/opac-messaging.pl" method="post" name="opacmessaging">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="cud-modify" />
 
-                            [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
+                            [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) %]
                                 <table class="table table-bordered table-condensed table-striped">
                                     <caption class="sr-only">Your messaging settings</caption>
                                     <thead>
@@ -52,136 +51,219 @@
                                             [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
                                             [% IF Koha.Preference('PhoneNotification') %]<th>Phone</th>[% END %]
                                             <th>Email</th>
-                                            <th>Digests only <i id="info_digests" data-bs-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-bs-placement="right" class="fa fa-info-circle"></i></th>
+                                            <th
+                                                >Digests only
+                                                <i
+                                                    id="info_digests"
+                                                    data-bs-toggle="tooltip"
+                                                    title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message."
+                                                    data-bs-placement="right"
+                                                    class="fa fa-info-circle"
+                                                ></i
+                                            ></th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    [% FOREACH messaging_preference IN messaging_preferences %]
-                                        [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
-                                        [% NEXT IF !Koha.Preference('MembershipExpiryDaysNotice') && messaging_preference.Patron_Expiry %]
-                                        [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
-                                        [% NEXT IF !Koha.Preference('UseRecalls') && messaging_preference.message_name.match('^Recall_') %]
-                                        <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
-                                            <td>[% IF ( messaging_preference.Item_Due ) %]<span>Item due</span>
-                                                [% ELSIF ( messaging_preference.Advance_Notice ) %]<span>Advance notice</span>
-                                                [% ELSIF ( messaging_preference.Hold_Filled ) %]<span>Hold filled</span>
-                                                [% ELSIF ( messaging_preference.Hold_Reminder ) %]<span>Hold reminder</span>
-                                                [% ELSIF ( messaging_preference.Item_Check_in ) %]<span>Item check-in</span>
-                                                [% ELSIF ( messaging_preference.Item_Checkout ) %]
-                                                    [% IF Koha.Preference( 'RenewalSendNotice' ) %]
-                                                        <span>Item checkout and renewal</span>
+                                        [% FOREACH messaging_preference IN messaging_preferences %]
+                                            [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
+                                            [% NEXT IF !Koha.Preference('MembershipExpiryDaysNotice') && messaging_preference.Patron_Expiry %]
+                                            [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
+                                            [% NEXT IF !Koha.Preference('UseRecalls') && messaging_preference.message_name.match('^Recall_') %]
+                                            <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
+                                                <td
+                                                    >[% IF ( messaging_preference.Item_Due ) %]
+                                                        <span>Item due</span>
+                                                    [% ELSIF ( messaging_preference.Advance_Notice ) %]
+                                                        <span>Advance notice</span>
+                                                    [% ELSIF ( messaging_preference.Hold_Filled ) %]
+                                                        <span>Hold filled</span>
+                                                    [% ELSIF ( messaging_preference.Hold_Reminder ) %]
+                                                        <span>Hold reminder</span>
+                                                    [% ELSIF ( messaging_preference.Item_Check_in ) %]
+                                                        <span>Item check-in</span>
+                                                    [% ELSIF ( messaging_preference.Item_Checkout ) %]
+                                                        [% IF Koha.Preference( 'RenewalSendNotice' ) %]
+                                                            <span>Item checkout and renewal</span>
+                                                        [% ELSE %]
+                                                            <span>Item checkout</span>
+                                                        [% END %]
+                                                    [% ELSIF ( messaging_preference.Patron_Expiry ) %]
+                                                        <span>Patron account expiry</span>
+                                                    [% ELSIF ( messaging_preference.Ill_ready ) %]
+                                                        <span>Interlibrary loan ready</span>
+                                                    [% ELSIF ( messaging_preference.Ill_unavailable ) %]
+                                                        <span>Interlibrary loan unavailable</span>
+                                                    [% ELSIF ( messaging_preference.Ill_update ) %]
+                                                        <span>Interlibrary loan updated</span>
+                                                    [% ELSIF ( messaging_preference.Auto_Renewals ) %]
+                                                        <span>Auto renewal</span>
+                                                    [% ELSIF ( messaging_preference.Recall_Waiting ) %]
+                                                        <span>Recall awaiting pickup</span>
+                                                    [% ELSIF ( messaging_preference.Recall_Requested ) %]
+                                                        <span>Return recalled item</span>
                                                     [% ELSE %]
-                                                        <span>Item checkout</span>
-                                                    [% END %]
-                                                [% ELSIF ( messaging_preference.Patron_Expiry ) %]<span>Patron account expiry</span>
-                                                [% ELSIF ( messaging_preference.Ill_ready ) %]<span>Interlibrary loan ready</span>
-                                                [% ELSIF ( messaging_preference.Ill_unavailable ) %]<span>Interlibrary loan unavailable</span>
-                                                [% ELSIF ( messaging_preference.Ill_update ) %]<span>Interlibrary loan updated</span>
-                                                [% ELSIF ( messaging_preference.Auto_Renewals ) %]<span>Auto renewal</span>
-                                                [% ELSIF ( messaging_preference.Recall_Waiting ) %]<span>Recall awaiting pickup</span>
-                                                [% ELSIF ( messaging_preference.Recall_Requested ) %]<span>Return recalled item</span>
-                                                [% ELSE %]<span>Unknown</span> [% END %]</td>
-                                            [% IF ( messaging_preference.takes_days ) %]
-                                                <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS" aria-label="Choose how many days in advance you wish to receive the message">
-                                                [% FOREACH select_day IN messaging_preference.select_days %]
-                                                    [% IF ( select_day.selected ) %]
-                                                        <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
+                                                        <span>Unknown</span>
+                                                    [% END %]</td
+                                                >
+                                                [% IF ( messaging_preference.takes_days ) %]
+                                                    <td
+                                                        ><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS" aria-label="Choose how many days in advance you wish to receive the message">
+                                                            [% FOREACH select_day IN messaging_preference.select_days %]
+                                                                [% IF ( select_day.selected ) %]
+                                                                    <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                                                                [% END %]
+                                                            [% END %]
+                                                        </select></td
+                                                    >
+                                                [% ELSE %]
+                                                    <td>-</td>
+                                                [% END %]
+                                                [% IF ( SMSSendDriver ) %]
+                                                    [% IF ( messaging_preference.transport_sms ) %]
+                                                        <td class="selectcol">
+                                                            [% IF ( messaging_preference.transports_sms ) %]
+                                                                <input
+                                                                    type="checkbox"
+                                                                    aria-label="Unselect SMS messaging"
+                                                                    class="pmp_sms"
+                                                                    id="sms[% messaging_preference.message_attribute_id | html %]"
+                                                                    name="[% messaging_preference.message_attribute_id | html %]"
+                                                                    value="sms"
+                                                                    checked="checked"
+                                                                />
+                                                            [% ELSE %]
+                                                                <input
+                                                                    type="checkbox"
+                                                                    aria-label="Select SMS messaging"
+                                                                    class="pmp_sms"
+                                                                    id="sms[% messaging_preference.message_attribute_id | html %]"
+                                                                    name="[% messaging_preference.message_attribute_id | html %]"
+                                                                    value="sms"
+                                                                />
+                                                            [% END %]
+                                                        </td>
                                                     [% ELSE %]
-                                                        <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                                                        <td>-</td>
                                                     [% END %]
                                                 [% END %]
-                                                </select></td>
-                                            [% ELSE %]
-                                                <td>-</td>
-                                            [% END %]
-                                            [% IF ( SMSSendDriver ) %]
-                                                [% IF ( messaging_preference.transport_sms ) %]
+                                                [% IF Koha.Preference('PhoneNotification') %]
+                                                    [% IF ( messaging_preference.transport_phone ) %]
+                                                        <td class="selectcol">
+                                                            [% IF ( messaging_preference.transports_phone ) %]
+                                                                <input
+                                                                    type="checkbox"
+                                                                    aria-label="Unselect notification by phone"
+                                                                    class="pmp_phone"
+                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                                    name="[% messaging_preference.message_attribute_id | html %]"
+                                                                    value="phone"
+                                                                    checked="checked"
+                                                                />
+                                                            [% ELSE %]
+                                                                <input
+                                                                    type="checkbox"
+                                                                    aria-label="Select notification by phone"
+                                                                    class="pmp_phone"
+                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                                    name="[% messaging_preference.message_attribute_id | html %]"
+                                                                    value="phone"
+                                                                />
+                                                            [% END %]
+                                                        </td>
+                                                    [% ELSE %]
+                                                        <td>-</td>
+                                                    [% END %]
+                                                [% END %]
+                                                [% IF ( TalkingTechItivaPhone ) %]
+                                                    [% IF ( messaging_preference.transport_itiva ) %]
+                                                        <td class="selectcol">
+                                                            [% IF ( messaging_preference.transports_itiva ) %]
+                                                                <input
+                                                                    type="checkbox"
+                                                                    aria-label="Unselect itiva messaging"
+                                                                    class="itiva"
+                                                                    id="itiva[% messaging_preference.message_attribute_id | html %]"
+                                                                    name="[% messaging_preference.message_attribute_id | html %]"
+                                                                    value="itiva"
+                                                                    checked="checked"
+                                                                />
+                                                            [% ELSE %]
+                                                                <input
+                                                                    type="checkbox"
+                                                                    aria-label="Select itiva messaging"
+                                                                    class="itiva"
+                                                                    id="itiva[% messaging_preference.message_attribute_id | html %]"
+                                                                    name="[% messaging_preference.message_attribute_id | html %]"
+                                                                    value="itiva"
+                                                                />
+                                                            [% END %]
+                                                        </td>
+                                                    [% ELSE %]
+                                                        <td>-</td>
+                                                    [% END %]
+                                                [% END %]
+
+                                                [% IF ( messaging_preference.transport_email ) %]
                                                     <td class="selectcol">
-                                                        [% IF ( messaging_preference.transports_sms ) %]
-                                                        <input type="checkbox" aria-label="Unselect SMS messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
+                                                        [% IF ( messaging_preference.transports_email ) %]
+                                                            <input
+                                                                type="checkbox"
+                                                                aria-label="Unselect email messaging"
+                                                                class="pmp_email"
+                                                                id="email[% messaging_preference.message_attribute_id | html %]"
+                                                                name="[% messaging_preference.message_attribute_id | html %]"
+                                                                value="email"
+                                                                checked="checked"
+                                                            />
                                                         [% ELSE %]
-                                                            <input type="checkbox" aria-label="Select SMS messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                            <input
+                                                                type="checkbox"
+                                                                aria-label="Select email messaging"
+                                                                class="pmp_email"
+                                                                id="email[% messaging_preference.message_attribute_id | html %]"
+                                                                name="[% messaging_preference.message_attribute_id | html %]"
+                                                                value="email"
+                                                            />
                                                         [% END %]
                                                     </td>
                                                 [% ELSE %]
                                                     <td>-</td>
                                                 [% END %]
-                                            [% END %]
-                                            [% IF Koha.Preference('PhoneNotification') %]
-                                                [% IF ( messaging_preference.transport_phone ) %]
+
+                                                [% IF ( messaging_preference.has_digest ) %]
                                                     <td class="selectcol">
-                                                        [% IF ( messaging_preference.transports_phone ) %]
-                                                            <input type="checkbox"
-                                                                   aria-label="Unselect notification by phone"
-                                                                   class="pmp_phone"
-                                                                   id="phone[% messaging_preference.message_attribute_id | html %]"
-                                                                   name="[% messaging_preference.message_attribute_id | html %]"
-                                                                   value="phone" checked="checked" />
+                                                        [% IF ( messaging_preference.digest ) %]
+                                                            <input
+                                                                type="checkbox"
+                                                                aria-label="Unselect digests"
+                                                                id="digest[% messaging_preference.message_attribute_id | html %]"
+                                                                value="[% messaging_preference.message_attribute_id | html %]"
+                                                                name="digest"
+                                                                checked="checked"
+                                                                data-bs-toggle="tooltip"
+                                                                title="You must select a digestible transport to select digests"
+                                                            />
                                                         [% ELSE %]
-                                                            <input type="checkbox"
-                                                                   aria-label="Select notification by phone"
-                                                                   class="pmp_phone"
-                                                                   id="phone[% messaging_preference.message_attribute_id | html %]"
-                                                                   name="[% messaging_preference.message_attribute_id | html %]"
-                                                                   value="phone" />
+                                                            <input
+                                                                type="checkbox"
+                                                                aria-label="Select digests"
+                                                                id="digest[% messaging_preference.message_attribute_id | html %]"
+                                                                value="[% messaging_preference.message_attribute_id | html %]"
+                                                                name="digest"
+                                                                data-bs-toggle="tooltip"
+                                                                title="You must select a digestible transport to select digests"
+                                                            />
                                                         [% END %]
                                                     </td>
                                                 [% ELSE %]
                                                     <td>-</td>
                                                 [% END %]
-                                            [% END %]
-                                            [% IF ( TalkingTechItivaPhone ) %]
-                                                [% IF ( messaging_preference.transport_itiva ) %]
-                                                <td class="selectcol">
-                                                [% IF ( messaging_preference.transports_itiva ) %]
-                                                <input type="checkbox"
-                                                            aria-label="Unselect itiva messaging"
-                                                            class="itiva"
-                                                            id="itiva[% messaging_preference.message_attribute_id | html %]"
-                                                            name="[% messaging_preference.message_attribute_id | html %]"
-                                                            value="itiva" checked="checked" />
-                                                [% ELSE %]
-                                                <input type="checkbox"
-                                                            aria-label="Select itiva messaging"
-                                                            class="itiva"
-                                                            id="itiva[% messaging_preference.message_attribute_id | html %]"
-                                                            name="[% messaging_preference.message_attribute_id | html %]"
-                                                            value="itiva" />
-                                                [% END %]
-                                                </td>
-                                                [% ELSE %]
-                                                    <td>-</td>
-                                                [% END %]
-                                            [% END %]
-
-                                            [% IF ( messaging_preference.transport_email ) %]
-                                                <td class="selectcol">
-                                                    [% IF ( messaging_preference.transports_email ) %]
-                                                        <input type="checkbox" aria-label="Unselect email messaging"class="pmp_email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" aria-label="Select email messaging" class="pmp_email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" />
-                                                    [% END %]
-                                                </td>
-                                            [% ELSE %]
-                                                <td>-</td>
-                                            [% END %]
-
-                                            [% IF ( messaging_preference.has_digest ) %]
-                                                <td class="selectcol">
-                                                    [% IF ( messaging_preference.digest ) %]
-                                                        <input type="checkbox" aria-label="Unselect digests" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" data-bs-toggle="tooltip" title="You must select a digestible transport to select digests" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" aria-label="Select digests"id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" data-bs-toggle="tooltip" title="You must select a digestible transport to select digests" />
-                                                    [% END %]
-                                                </td>
-                                            [% ELSE %]
-                                            <td>-</td>
-                                            [% END %]
-                                            <td></td>
-
-                                        </tr>
-                                    [% END # / FOREACH messaging_preferences%]
+                                                <td></td>
+                                            </tr>
+                                        [% END # / FOREACH messaging_preferences %]
                                     </tbody>
                                 </table>
                             [% END %]
@@ -190,9 +272,7 @@
                                 <fieldset class="rows d-print-none">
                                     <ol>
                                         [% IF ( SMSSendDriver ) %]
-                                            <li>
-                                                <strong>Notice:</strong> Some charges for text messages may be incurred when using this service. Please check with your mobile service provider if you have questions.
-                                            </li>
+                                            <li> <strong>Notice:</strong> Some charges for text messages may be incurred when using this service. Please check with your mobile service provider if you have questions. </li>
                                             <li>
                                                 <label for="SMSnumber">SMS number:</label>
                                                 <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" pattern="^(\+[1-9]\d{0,2})?\d{1,12}$" />
@@ -226,9 +306,13 @@
                                                         [% FOR sublanguage IN language.sublanguages_loop %]
                                                             [% IF language.plural %]
                                                                 [% IF sublanguage.rfc4646_subtag == patron_lang %]
-                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected"
+                                                                        >[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option
+                                                                    >
                                                                 [% ELSE %]
-                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]"
+                                                                        >[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option
+                                                                    >
                                                                 [% END %]
                                                             [% ELSE %]
                                                                 [% IF sublanguage.rfc4646_subtag == patron_lang %]
@@ -239,7 +323,8 @@
                                                             [% END # /IF language.plural %]
                                                         [% END # /FOR sublanguage %]
                                                     [% END #/FOR language %]
-                                                </select> <!-- /#lang -->
+                                                </select>
+                                                <!-- /#lang -->
                                             </li>
                                         [% END #/IF Koha.Preference('TranslateNotices') %]
                                     </ol>
@@ -251,14 +336,19 @@
                                 <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
                             </fieldset>
                         </form>
-                    </div> <!-- / #usermessaging -->
+                    </div>
+                    <!-- / #usermessaging -->
                 [% ELSE %]
-                <p><strong>You are not allowed to call this page directly</strong></p>
+                    <p><strong>You are not allowed to call this page directly</strong></p>
                 [% END # /IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) %]
-           </div> <!-- / .col-lg-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+            </div>
+            <!-- / .col-lg-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

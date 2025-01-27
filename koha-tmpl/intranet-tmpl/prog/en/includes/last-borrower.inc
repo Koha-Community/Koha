@@ -1,5 +1,6 @@
+
 <script>
-   var showLastPatronCount = "[% Koha.Preference('showLastPatronCount') | html %]";
+    var showLastPatronCount = "[% Koha.Preference('showLastPatronCount') | html %]";
 </script>
 <div id="lastborrower-window">
     <div class="btn-group">
@@ -8,7 +9,7 @@
             <span class="visually-hidden">Toggle dropdown</span>
         </button>
         <ul id="lastBorrowerList" class="dropdown-menu dropdown-menu-end">
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider" /></li>
             <li><a id="lastborrower-remove" class="lastborrower dropdown-item" href="#">Clear list</a></li>
         </ul>
     </div>

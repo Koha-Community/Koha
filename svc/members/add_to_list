@@ -20,13 +20,13 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( check_cookie_auth );
-use JSON qw( to_json );
+use C4::Auth           qw( check_cookie_auth );
+use JSON               qw( to_json );
 use Koha::List::Patron qw( AddPatronList GetPatronLists AddPatronsToList );
 
 my $input = CGI->new;
 
-my ( $auth_status ) = check_cookie_auth(
+my ($auth_status) = check_cookie_auth(
     $input->cookie('CGISESSID'),
     { tools => 'manage_patron_lists' },
 );
@@ -39,29 +39,28 @@ my @borrowernumbers    = $input->multi_param('borrowernumber');
 my $response;
 
 binmode STDOUT, ":encoding(UTF-8)";
-if ($input->request_method eq "POST") {
+if ( $input->request_method eq "POST" ) {
     if ($add_to_patron_list) {
         my $patron_list = [];
 
         if ( $add_to_patron_list eq 'new' ) {
             $patron_list = AddPatronList( { name => $new_patron_list } );
-        }
-        else {
+        } else {
             $patron_list =
-              [ GetPatronLists( { patron_list_id => $add_to_patron_list } ) ]->[0];
+                [ GetPatronLists( { patron_list_id => $add_to_patron_list } ) ]->[0];
         }
 
         my @patrons_added_to_list = AddPatronsToList( { list => $patron_list, borrowernumbers => \@borrowernumbers } );
 
         $response->{patron_list} = { patron_list_id => $patron_list->patron_list_id, name => $patron_list->name };
-        $response->{patrons_added_to_list} = scalar( @patrons_added_to_list );
+        $response->{patrons_added_to_list} = scalar(@patrons_added_to_list);
     }
     print $input->header(
-        -type => 'application/json',
+        -type    => 'application/json',
         -charset => 'UTF-8'
     );
 } else {
-    print $input->header(-type => 'text/xml', -status => '400 Bad Request');
+    print $input->header( -type => 'text/xml', -status => '400 Bad Request' );
 }
 
-print to_json( $response );
+print to_json($response);

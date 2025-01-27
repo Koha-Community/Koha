@@ -20,7 +20,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Libraries;
@@ -31,10 +31,10 @@ my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/library_groups.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_libraries' },
+        template_name => "admin/library_groups.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_libraries' },
     }
 );
 
@@ -42,10 +42,10 @@ my $op = $cgi->param('op') || q{};
 my @messages;
 
 if ( $op eq 'cud-add' ) {
-    my $parent_id   = $cgi->param('parent_id')   || undef;
-    my $title       = $cgi->param('title')       || undef;
-    my $description = $cgi->param('description') || undef;
-    my $branchcode  = $cgi->param('branchcode')  || undef;
+    my $parent_id              = $cgi->param('parent_id')              || undef;
+    my $title                  = $cgi->param('title')                  || undef;
+    my $description            = $cgi->param('description')            || undef;
+    my $branchcode             = $cgi->param('branchcode')             || undef;
     my $ft_hide_patron_info    = $cgi->param('ft_hide_patron_info')    || 0;
     my $ft_limit_item_editing  = $cgi->param('ft_limit_item_editing')  || 0;
     my $ft_search_groups_opac  = $cgi->param('ft_search_groups_opac')  || 0;
@@ -55,8 +55,7 @@ if ( $op eq 'cud-add' ) {
 
     if ( !$branchcode && Koha::Library::Groups->search( { title => $title } )->count() ) {
         $template->param( error_duplicate_title => $title );
-    }
-    else {
+    } else {
         my $group = eval {
             Koha::Library::Group->new(
                 {
@@ -75,16 +74,14 @@ if ( $op eq 'cud-add' ) {
         };
         if ($@) {
             push @messages, { type => 'warning', code => 'error_on_insert' };
-        }
-        else {
+        } else {
             $template->param( added => $group );
         }
     }
-}
-elsif ( $op eq 'cud-edit' ) {
-    my $id          = $cgi->param('id')          || undef;
-    my $title       = $cgi->param('title')       || undef;
-    my $description = $cgi->param('description') || undef;
+} elsif ( $op eq 'cud-edit' ) {
+    my $id                     = $cgi->param('id')                     || undef;
+    my $title                  = $cgi->param('title')                  || undef;
+    my $description            = $cgi->param('description')            || undef;
     my $ft_hide_patron_info    = $cgi->param('ft_hide_patron_info')    || 0;
     my $ft_limit_item_editing  = $cgi->param('ft_limit_item_editing')  || 0;
     my $ft_search_groups_opac  = $cgi->param('ft_search_groups_opac')  || 0;
@@ -110,8 +107,7 @@ elsif ( $op eq 'cud-edit' ) {
 
         $template->param( edited => $group );
     }
-}
-elsif ( $op eq 'cud-delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     my $id = $cgi->param('id');
 
     my $group = Koha::Library::Groups->find($id);

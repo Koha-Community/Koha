@@ -23,10 +23,10 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 use C4::Circulation qw( barcodedecode AddRenewal AddIssue MarkIssueReturned );
-use C4::Items qw( ModDateLastSeen );
+use C4::Items       qw( ModDateLastSeen );
 use Koha::UploadedFiles;
 use Koha::Account;
 use Koha::Checkouts;
@@ -41,50 +41,51 @@ my $FILE_VERSION = '1.0';
 
 our $query = CGI->new;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "offline_circ/process_koc.tt",
-    query => $query,
-    type => "intranet",
-     flagsrequired   => { circulate => "circulate_remaining_permissions" },
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "offline_circ/process_koc.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
+    }
+);
 
-
-my $fileID=$query->param('uploadedfileid');
-my $op = $query->param('op') || q{};
-my %cookies = CGI::Cookie->fetch();
+my $fileID    = $query->param('uploadedfileid');
+my $op        = $query->param('op') || q{};
+my %cookies   = CGI::Cookie->fetch();
 my $sessionID = $cookies{'CGISESSID'}->value;
 ## 'Local' globals.
-our $dbh = C4::Context->dbh();
-our @output = (); ## For storing messages to be displayed to the user
+our $dbh    = C4::Context->dbh();
+our @output = ();                   ## For storing messages to be displayed to the user
 
 if ( $op eq 'cud-upload' && $fileID ) {
-    my $upload = Koha::UploadedFiles->find( $fileID );
-    my $fh = $upload? $upload->file_handle: undef;
-    my $filename = $upload? $upload->filename: undef;
-    my @input_lines = $fh? <$fh>: ();
+    my $upload      = Koha::UploadedFiles->find($fileID);
+    my $fh          = $upload ? $upload->file_handle : undef;
+    my $filename    = $upload ? $upload->filename    : undef;
+    my @input_lines = $fh     ? <$fh>                : ();
     $fh->close if $fh;
 
     my $header_line = shift @input_lines;
     my $file_info   = parse_header_line($header_line);
-    if ($file_info->{'Version'} ne $FILE_VERSION) {
+    if ( $file_info->{'Version'} ne $FILE_VERSION ) {
         push @output, {
-            message => 1,
+            message            => 1,
             ERROR_file_version => 1,
-            upload_version => $file_info->{'Version'},
-            current_version => $FILE_VERSION
+            upload_version     => $file_info->{'Version'},
+            current_version    => $FILE_VERSION
         };
     }
 
     my $i = 0;
-    foreach  my $line (@input_lines)  {
+    foreach my $line (@input_lines) {
         $i++;
         my $command_line = parse_command_line($line);
 
         # map command names in the file to subroutine names
         my %dispatch_table = (
-            issue     => \&kocIssueItem,
-            'return'  => \&kocReturnItem,
-            payment   => \&kocMakePayment,
+            issue    => \&kocIssueItem,
+            'return' => \&kocReturnItem,
+            payment  => \&kocMakePayment,
         );
 
         # call the right sub name, passing the hashref of command_line to it.
@@ -95,8 +96,8 @@ if ( $op eq 'cud-upload' && $fileID ) {
         }
     }
 
-    $template->param(transactions_loaded => 1);
-    $template->param(messages => \@output);
+    $template->param( transactions_loaded => 1 );
+    $template->param( messages            => \@output );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
@@ -123,7 +124,7 @@ sub parse_header_line {
     chomp($header_line);
     $header_line =~ s/\r//g;
 
-    my @fields = split( /\t/, $header_line );
+    my @fields      = split( /\t/, $header_line );
     my %header_info = map { split( /=/, $_ ) } @fields;
     return \%header_info;
 }
@@ -187,16 +188,16 @@ sub kocIssueItem {
     $circ->{barcode} = barcodedecode( $circ->{barcode} ) if $circ->{barcode};
 
     my $branchcode = C4::Context->userenv->{branch};
-    my $patron = Koha::Patrons->find( { cardnumber => $circ->{cardnumber} } );
-    my $item = Koha::Items->find({ barcode => $circ->{barcode} });
-    my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
-    my $biblio = $item->biblio;
+    my $patron     = Koha::Patrons->find( { cardnumber => $circ->{cardnumber} } );
+    my $item       = Koha::Items->find( { barcode => $circ->{barcode} } );
+    my $issue      = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+    my $biblio     = $item->biblio;
 
-    if ( $issue ) { ## Item is currently checked out to another person.
-        #warn "Item Currently Issued.";
+    if ($issue) {    ## Item is currently checked out to another person.
+                     #warn "Item Currently Issued.";
 
-        if ( $issue->borrowernumber eq $patron->borrowernumber ) { ## Issued to this person already, renew it.
-            #warn "Item issued to this member already, renewing.";
+        if ( $issue->borrowernumber eq $patron->borrowernumber ) {    ## Issued to this person already, renew it.
+                #warn "Item issued to this member already, renewing.";
 
             C4::Circulation::AddRenewal(
                 {
@@ -207,70 +208,73 @@ sub kocIssueItem {
             ) unless (DEBUG);
 
             push @output, {
-                renew => 1,
-                title => $biblio->title,
-                biblionumber => $biblio->biblionumber,
-                barcode => $item->barcode,
-                firstname => $patron->firstname,
-                surname => $patron->surname,
+                renew          => 1,
+                title          => $biblio->title,
+                biblionumber   => $biblio->biblionumber,
+                barcode        => $item->barcode,
+                firstname      => $patron->firstname,
+                surname        => $patron->surname,
                 borrowernumber => $patron->borrowernumber,
-                cardnumber => $patron->cardnumber,
-                datetime => $circ->datetime
+                cardnumber     => $patron->cardnumber,
+                datetime       => $circ->datetime
             };
 
         } else {
+
             #warn "Item issued to a different member.";
             #warn "Date of previous issue: $issue->issuedate";
             #warn "Date of this issue: $circ->{'date'}";
             my ( $i_y, $i_m, $i_d ) = split( /-/, $issue->issuedate );
             my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
 
-            if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
-                C4::Circulation::AddIssue( $patron, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
+            if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) )
+            {    ## Current issue to a different persion is older than this issue, return and issue.
+                C4::Circulation::AddIssue( $patron, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless (DEBUG);
                 push @output, {
-                    issue => 1,
-                    title => $biblio->title,
-                    biblionumber => $biblio->biblionumber,
-                    barcode => $item->barcode,
-                    firstname => $patron->firstname,
-                    surname => $patron->surname,
+                    issue          => 1,
+                    title          => $biblio->title,
+                    biblionumber   => $biblio->biblionumber,
+                    barcode        => $item->barcode,
+                    firstname      => $patron->firstname,
+                    surname        => $patron->surname,
                     borrowernumber => $patron->borrowernumber,
-                    cardnumber => $patron->cardnumber,
-                    datetime => $circ->datetime
+                    cardnumber     => $patron->cardnumber,
+                    datetime       => $circ->datetime
                 };
 
-            } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
-                #warn "Current issue to another member is newer. Doing nothing";
+            } else
+            { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
+                 #warn "Current issue to another member is newer. Doing nothing";
                 ## This situation should only happen of the Offline Circ data is *really* old.
                 ## FIXME: write line to old_issues and statistics
             }
         }
-    } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
-        C4::Circulation::AddIssue( $patron, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
+    } else {    ## Item is not checked out to anyone at the moment, go ahead and issue it
+        C4::Circulation::AddIssue( $patron, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless (DEBUG);
         push @output, {
-            issue => 1,
-            title => $biblio->title,
-            biblionumber => $biblio->biblionumber,
-            barcode => $item->barcode,
-            firstname => $patron->firstname,
-            surname => $patron->surname,
+            issue          => 1,
+            title          => $biblio->title,
+            biblionumber   => $biblio->biblionumber,
+            barcode        => $item->barcode,
+            firstname      => $patron->firstname,
+            surname        => $patron->surname,
             borrowernumber => $patron->borrowernumber,
-            cardnumber => $patron->cardnumber,
-            datetime =>$circ->datetime
+            cardnumber     => $patron->cardnumber,
+            datetime       => $circ->datetime
         };
     }
 }
 
 sub kocReturnItem {
-    my ( $circ ) = @_;
+    my ($circ) = @_;
 
     $circ->{barcode} = barcodedecode( $circ->{barcode} ) if $circ->{barcode};
 
-    my $item = Koha::Items->find({ barcode => $circ->{barcode} });
-    my $biblio = $item->biblio;
+    my $item           = Koha::Items->find( { barcode => $circ->{barcode} } );
+    my $biblio         = $item->biblio;
     my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
-    if ( $borrowernumber ) {
-        my $patron = Koha::Patrons->find( $borrowernumber );
+    if ($borrowernumber) {
+        my $patron = Koha::Patrons->find($borrowernumber);
         C4::Circulation::MarkIssueReturned(
             $borrowernumber,
             $item->itemnumber,
@@ -282,7 +286,7 @@ sub kocReturnItem {
         ModDateLastSeen( $item->itemnumber );
 
         push @output,
-          {
+            {
             return         => 1,
             title          => $biblio->title,
             biblionumber   => $biblio->biblionumber,
@@ -292,11 +296,11 @@ sub kocReturnItem {
             surname        => $patron->surname,
             cardnumber     => $patron->cardnumber,
             datetime       => $circ->{'datetime'}
-          };
+            };
     } else {
         push @output, {
             ERROR_no_borrower_from_item => 1,
-            badbarcode => $circ->{'barcode'}
+            badbarcode                  => $circ->{'barcode'}
         };
     }
 }
@@ -305,22 +309,22 @@ sub kocMakePayment {
     my ($circ) = @_;
 
     my $cardnumber = $circ->{cardnumber};
-    my $amount = $circ->{amount};
+    my $amount     = $circ->{amount};
 
     my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
 
     Koha::Account->new( { patron_id => $patron->id } )
-      ->pay( { amount => $amount, interface => C4::Context->interface } );
+        ->pay( { amount => $amount, interface => C4::Context->interface } );
 
     push @output,
-      {
+        {
         payment    => 1,
         amount     => $circ->{'amount'},
         firstname  => $patron->firstname,
         surname    => $patron->surname,
         cardnumber => $patron->cardnumber,
         borrower   => $patron->id,
-      };
+        };
 }
 
 =head2 _get_borrowernumber_from_barcode
@@ -336,7 +340,7 @@ sub _get_borrowernumber_from_barcode {
 
     return unless $barcode;
 
-    my $item = Koha::Items->find({ barcode => $barcode });
+    my $item = Koha::Items->find( { barcode => $barcode } );
     return unless $item;
 
     my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );

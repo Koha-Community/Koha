@@ -23,7 +23,7 @@ use File::Slurp qw(read_file);
 use C4::Context;
 use Koha::Exceptions;
 
-use constant KOHA_STRUCTURE => 'installer/data/mysql/kohastructure.sql';
+use constant KOHA_STRUCTURE   => 'installer/data/mysql/kohastructure.sql';
 use constant DBI_HANDLE_CLASS => 'DBI::db';
 
 =head1 NAME
@@ -69,12 +69,12 @@ Koha::Database::Commenter - Manage column comments in database
 =cut
 
 sub new {
-    my ( $class, $params ) = @_; # params: database, dbh, schema_file
+    my ( $class, $params ) = @_;    # params: database, dbh, schema_file
     my $self = bless $params // {}, $class;
 
     Koha::Exceptions::MissingParameter->throw( parameter => 'dbh' ) unless $self->{dbh};
-    Koha::Exceptions::WrongParameter->throw( name => 'dbh', type => ref($self->{dbh}) )
-        unless ref($self->{dbh}) eq DBI_HANDLE_CLASS;
+    Koha::Exceptions::WrongParameter->throw( name => 'dbh', type => ref( $self->{dbh} ) )
+        unless ref( $self->{dbh} ) eq DBI_HANDLE_CLASS;
 
     $self->{database} //= ( $self->{dbh}->selectrow_array('SELECT DATABASE()') )[0];
     $self->_find_schema;
@@ -94,12 +94,12 @@ sub new {
 =cut
 
 sub clear {
-    my ( $self, $params, $messages ) = @_; # dry_run, table
+    my ( $self, $params, $messages ) = @_;    # dry_run, table
     my $cols = $self->_fetch_stored_comments($params);
-    foreach my $col ( @$cols ) {
+    foreach my $col (@$cols) {
         next if !$col->{column_comment};
         next if $params->{table} && $col->{table_name} ne $params->{table};
-        $self->_change_column( $col->{table_name}, $col->{column_name}, undef, $params, $messages ); # undef clears
+        $self->_change_column( $col->{table_name}, $col->{column_name}, undef, $params, $messages );    # undef clears
     }
 }
 
@@ -115,12 +115,12 @@ sub clear {
 =cut
 
 sub reset_to_schema {
-    my ( $self, $params, $messages ) = @_; # dry_run, table
+    my ( $self, $params, $messages ) = @_;    # dry_run, table
     $self->clear( $params, $messages );
     my $schema_comments = $self->_fetch_schema_comments;
     foreach my $table ( sort keys %$schema_comments ) {
         next if $params->{table} && $table ne $params->{table};
-        foreach my $col ( sort keys %{$schema_comments->{$table}} ) {
+        foreach my $col ( sort keys %{ $schema_comments->{$table} } ) {
             $self->_change_column( $table, $col, $schema_comments->{$table}->{$col}, $params, $messages );
         }
     }
@@ -140,10 +140,10 @@ sub reset_to_schema {
 =cut
 
 sub renumber {
-    my ( $self, $params, $messages ) = @_; # dry_run, table
+    my ( $self, $params, $messages ) = @_;    # dry_run, table
     my $cols = $self->_fetch_stored_comments($params);
-    my $i = 0;
-    foreach my $col ( @$cols ) {
+    my $i    = 0;
+    foreach my $col (@$cols) {
         next if $params->{table} && $col->{table_name} ne $params->{table};
         $i++;
         $self->_change_column( $col->{table_name}, $col->{column_name}, "Column_$i", $params, $messages );
@@ -157,14 +157,14 @@ sub renumber {
 =cut
 
 sub _find_schema {
-    my $self = shift;
+    my $self    = shift;
     my $rootdir = C4::Context->config('intranetdir');
-    if( $self->{schema_file} ) {
-        warn "File ". $self->{schema_file}. " not found!\n" if !-e $self->{schema_file};
-    } elsif( -e "$rootdir/". KOHA_STRUCTURE ) {
-        $self->{schema_file} = "$rootdir/". KOHA_STRUCTURE;
-    } elsif( -e "$rootdir/intranet/cgi-bin/". KOHA_STRUCTURE ) {
-        $self->{schema_file} = "$rootdir/intranet/cgi-bin/". KOHA_STRUCTURE;
+    if ( $self->{schema_file} ) {
+        warn "File " . $self->{schema_file} . " not found!\n" if !-e $self->{schema_file};
+    } elsif ( -e "$rootdir/" . KOHA_STRUCTURE ) {
+        $self->{schema_file} = "$rootdir/" . KOHA_STRUCTURE;
+    } elsif ( -e "$rootdir/intranet/cgi-bin/" . KOHA_STRUCTURE ) {
+        $self->{schema_file} = "$rootdir/intranet/cgi-bin/" . KOHA_STRUCTURE;
     }
 }
 
@@ -173,22 +173,23 @@ sub _find_schema {
 =cut
 
 sub _fetch_schema_comments {
-# Wish we had a DBIC function for this, showing comments too ;) Now using kohastructure as source of truth.
-    my ( $self ) = @_;
+
+    # Wish we had a DBIC function for this, showing comments too ;) Now using kohastructure as source of truth.
+    my ($self) = @_;
     my $file = $self->{schema_file};
     Koha::Exceptions::FileNotFound->throw( filename => $file ) unless $file && -e $file;
 
-    return $self->{schema_info} if keys %{$self->{schema_info}};
+    return $self->{schema_info} if keys %{ $self->{schema_info} };
 
-    my @schema_lines = read_file( $file );
-    my $info = {};
+    my @schema_lines  = read_file($file);
+    my $info          = {};
     my $current_table = q{};
-    foreach my $line ( @schema_lines ) {
-        if( $line =~ /^CREATE TABLE\s*(?:IF NOT EXISTS)?\s*`?(\w+)`?/ ) {
+    foreach my $line (@schema_lines) {
+        if ( $line =~ /^CREATE TABLE\s*(?:IF NOT EXISTS)?\s*`?(\w+)`?/ ) {
             $current_table = $1;
-        } elsif( $current_table && $line =~ /^\s+`?(\w+)`?.*COMMENT ['"](.+)['"][,)]?$/ ) {
+        } elsif ( $current_table && $line =~ /^\s+`?(\w+)`?.*COMMENT ['"](.+)['"][,)]?$/ ) {
             my ( $col, $comment ) = ( $1, $2 );
-            $comment =~ s/''/'/g; # we call quote later on
+            $comment =~ s/''/'/g;    # we call quote later on
             $info->{$current_table}->{$col} = $comment;
         }
     }
@@ -200,13 +201,14 @@ sub _fetch_schema_comments {
 =cut
 
 sub _fetch_stored_comments {
-    my ( $self, $params ) = @_; # params: table
+    my ( $self, $params ) = @_;    # params: table
     my $sql = q|
 SELECT table_name AS `table_name`, column_name AS `column_name`, column_comment AS `column_comment`
 FROM information_schema.columns
 WHERE table_schema=? AND table_name=?
 ORDER BY table_name, column_name|;
-# The AS `table_name` etc. is needed for MySQL8 which returns uppercase columns in information_schema
+
+    # The AS `table_name` etc. is needed for MySQL8 which returns uppercase columns in information_schema
     $sql =~ s/AND table_name=\?// unless $params->{table};
     return $self->{dbh}->selectall_arrayref( $sql, { Slice => {} }, $self->{database}, $params->{table} || () );
 }
@@ -216,54 +218,56 @@ ORDER BY table_name, column_name|;
 =cut
 
 sub _change_column {
-# NOTE: We do not want to use DBIx schema here, but we use stored structure,
-# since we only want to change comment not actual table structure.
-    my ( $self, $table_name, $column_name, $comment, $params, $messages ) = @_; # params: dry_run
+
+    # NOTE: We do not want to use DBIx schema here, but we use stored structure,
+    # since we only want to change comment not actual table structure.
+    my ( $self, $table_name, $column_name, $comment, $params, $messages ) = @_;    # params: dry_run
     $params //= {};
 
-    my $dbh = $self->{dbh};
-    my $info = $self->_columns_info( $table_name )->{$column_name};
+    my $dbh  = $self->{dbh};
+    my $info = $self->_columns_info($table_name)->{$column_name};
 
     # datatype; nullable, collation
     my $rv = qq|ALTER TABLE $self->{database}.$table_name MODIFY COLUMN `$column_name` $info->{Type} |;
-    $rv .= 'NOT NULL ' if $info->{Null} eq 'NO';
+    $rv .= 'NOT NULL '                   if $info->{Null} eq 'NO';
     $rv .= "COLLATE $info->{Collation} " if $info->{Collation};
 
     # Default - needs a bit of tweaking
-    if( !defined $info->{Default} && $info->{Null} eq 'NO' ) {
+    if ( !defined $info->{Default} && $info->{Null} eq 'NO' ) {
+
         # Do not provide a default
-    } elsif( $info->{Type} =~ /char|text|enum/i ) {
-        if( !defined $info->{Default} ) {
+    } elsif ( $info->{Type} =~ /char|text|enum/i ) {
+        if ( !defined $info->{Default} ) {
             $rv .= "DEFAULT NULL ";
-        } else {      #includes: $info->{Default} eq '' || $info->{Default} eq '0'
-            $rv .= "DEFAULT ". $dbh->quote($info->{Default}). " ";
+        } else {    #includes: $info->{Default} eq '' || $info->{Default} eq '0'
+            $rv .= "DEFAULT " . $dbh->quote( $info->{Default} ) . " ";
         }
-    } elsif( !$info->{Default} && $info->{Type} =~ /timestamp/ ) { # Peculiar correction for nullable timestamps
+    } elsif ( !$info->{Default} && $info->{Type} =~ /timestamp/ ) {    # Peculiar correction for nullable timestamps
         $rv .= 'NULL DEFAULT NULL ' if $info->{Null} eq 'YES';
     } else {
-        $rv .= "DEFAULT ". ( $info->{Default} // 'NULL' ). " ";
+        $rv .= "DEFAULT " . ( $info->{Default} // 'NULL' ) . " ";
     }
 
     # Extra (like autoincrement)
-    $info->{Extra} =~ s/DEFAULT_GENERATED//; # need to remove it for mysql8 timestamps
-    $rv .= $info->{Extra}. ' ' if $info->{Extra};
+    $info->{Extra} =~ s/DEFAULT_GENERATED//;                           # need to remove it for mysql8 timestamps
+    $rv .= $info->{Extra} . ' ' if $info->{Extra};
 
     # Comment if passed; not passing means clearing actually.
-    if( $comment ) {
-        $comment = $dbh->quote($comment) unless $comment =~ /\\'/; # Prevent quoting twice
-        $rv .= "COMMENT ". $comment;
+    if ($comment) {
+        $comment = $dbh->quote($comment) unless $comment =~ /\\'/;     # Prevent quoting twice
+        $rv .= "COMMENT " . $comment;
     }
-    $rv =~ s/\s+$//; # remove trailing spaces
+    $rv =~ s/\s+$//;                                                   # remove trailing spaces
 
     # Dry run
-    if( $params->{dry_run} ) {
+    if ( $params->{dry_run} ) {
         push @$messages, "$rv;" if $messages;
         return;
     }
 
     # Deploy
     eval { $dbh->do($rv) };
-    if( $@ ) {
+    if ($@) {
         warn "Failure for $table_name:$column_name";
         push @$messages, "-- FAILED: $rv;" if $messages;
     } else {
@@ -273,7 +277,7 @@ sub _change_column {
 
 sub _columns_info {
     my ( $self, $table ) = @_;
-    return $self->{dbh}->selectall_hashref( 'SHOW FULL COLUMNS FROM '. $self->{database}. '.'. $table, 'Field' );
+    return $self->{dbh}->selectall_hashref( 'SHOW FULL COLUMNS FROM ' . $self->{database} . '.' . $table, 'Field' );
 }
 
 1;

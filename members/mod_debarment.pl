@@ -21,8 +21,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( checkauth );
-use Koha::DateUtils qw( dt_from_string );
+use C4::Auth                 qw( checkauth );
+use Koha::DateUtils          qw( dt_from_string );
 use Koha::Patron::Debarments qw( AddDebarment DelDebarment );
 
 my $cgi = CGI->new;
@@ -38,20 +38,21 @@ my $patron         = Koha::Patrons->find($borrowernumber);
 # Ideally we should display a warning on the interface if the patron is not allowed
 # to modify a debarment
 # But a librarian is not supposed to hack the system
-$op = '' unless $logged_in_user->can_see_patron_infos( $patron );
+$op = '' unless $logged_in_user->can_see_patron_infos($patron);
 
 if ( $op eq 'cud-del' ) {
     DelDebarment( scalar $cgi->param('borrower_debarment_id') );
 } elsif ( $op eq 'cud-add' ) {
     my $expiration = $cgi->param('expiration');
-    my $type = $cgi->param('debarred_type') // 'MANUAL';
+    my $type       = $cgi->param('debarred_type') // 'MANUAL';
     if ($expiration) {
         $expiration = dt_from_string($expiration);
         $expiration = $expiration->ymd();
     }
 
     AddDebarment(
-        {   borrowernumber => $borrowernumber,
+        {
+            borrowernumber => $borrowernumber,
             type           => $type,
             comment        => scalar $cgi->param('comment'),
             expiration     => $expiration,

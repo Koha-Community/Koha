@@ -33,9 +33,10 @@ use Koha::Libraries;
 
 my $input = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $input->cookie('CGISESSID'),
-    { circulate => 'circulate_remaining_permissions' } );
+my ($auth_status) = check_cookie_auth(
+    $input->cookie('CGISESSID'),
+    { circulate => 'circulate_remaining_permissions' }
+);
 
 if ( $auth_status ne "ok" ) {
     exit 0;
@@ -45,34 +46,31 @@ my $branch = C4::Context->userenv->{'branch'};
 
 my $schema = Koha::Database->new()->schema();
 
-my @sort_columns =
-  qw/reservedate title itemcallnumber barcode expirationdate priority/;
+my @sort_columns = qw/reservedate title itemcallnumber barcode expirationdate priority/;
 
 my $borrowernumber    = $input->param('borrowernumber');
 my $offset            = $input->param('iDisplayStart');
 my $results_per_page  = $input->param('iDisplayLength');
 my $sorting_direction = $input->param('sSortDir_0') || 'desc';
 my $iSortCol          = $input->param('iSortCol_0') // 0;
-my $sorting_column    = $sort_columns[$iSortCol] // 'reservedate';
+my $sorting_column    = $sort_columns[$iSortCol]    // 'reservedate';
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'application/json', -charset => 'UTF-8' );
 
 my $holds_rs = Koha::Holds->search(
     { borrowernumber => $borrowernumber },
-    {
-        order_by => { "-$sorting_direction" => $sorting_column }
-    }
+    { order_by       => { "-$sorting_direction" => $sorting_column } }
 );
 
 my @holds;
 while ( my $h = $holds_rs->next() ) {
-    my $item = $h->item();
+    my $item       = $h->item();
     my $item_group = $h->item_group();
 
     my $biblionumber = $h->biblio()->biblionumber();
 
-    my $desk_id = $h->desk_id;
+    my $desk_id   = $h->desk_id;
     my $desk_name = '';
     if ($desk_id) {
         $desk_name = $h->desk()->desk_name();
@@ -84,21 +82,21 @@ while ( my $h = $holds_rs->next() ) {
         $itemtype_limit = $itemtype->translated_description;
     }
 
-    my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;
-    for my $library ( @$libraries ) {
+    my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+    for my $library (@$libraries) {
         $library->{selected} = 1 if $library->{branchcode} eq $h->branchcode();
     }
 
-    my $biblio = $h->biblio();
-    my @subtitles = split(/ \| /, $biblio->subtitle() // '');
-    my $hold = {
+    my $biblio    = $h->biblio();
+    my @subtitles = split( / \| /, $biblio->subtitle() // '' );
+    my $hold      = {
         DT_RowId              => $h->reserve_id(),
         biblionumber          => $biblionumber,
         title                 => $biblio->title(),
         subtitle              => \@subtitles,
-        medium                => $biblio->medium() // '',
+        medium                => $biblio->medium()      // '',
         part_number           => $biblio->part_number() // '',
-        part_name             => $biblio->part_name() // '',
+        part_name             => $biblio->part_name()   // '',
         author                => $biblio->author(),
         reserve_id            => $h->reserve_id(),
         branchcode            => $h->branch()->branchname(),
@@ -130,23 +128,20 @@ while ( my $h = $holds_rs->next() ) {
     $hold->{not_transfered} = 0;
 
     if ($item) {
-        $hold->{itemnumber}     = $item->itemnumber();
-        $hold->{barcode}        = $item->barcode();
-        $hold->{itemtype}       = $item->effective_itemtype();
+        $hold->{itemnumber}           = $item->itemnumber();
+        $hold->{barcode}              = $item->barcode();
+        $hold->{itemtype}             = $item->effective_itemtype();
         $hold->{itemtype_description} = $item->itemtype->description;
-        $hold->{enumchron}      = $item->enumchron();
-        $hold->{itemcallnumber} = $item->itemcallnumber() || q{};
+        $hold->{enumchron}            = $item->enumchron();
+        $hold->{itemcallnumber}       = $item->itemcallnumber() || q{};
 
         my $transfer = $item->get_transfer;
         if ( $transfer && $transfer->in_transit ) {
             $hold->{color}       = 'transferred';
             $hold->{transferred} = 1;
-            $hold->{date_sent} = output_pref({ dt => dt_from_string($transfer->datesent) });
-            $hold->{from_branch} = Koha::Libraries->find($transfer->frombranch)->branchname;
-        }
-        elsif ( $item->holding_branch() && $item->holding_branch()->branchcode() ne
-            $h->branch()->branchcode() )
-        {
+            $hold->{date_sent}   = output_pref( { dt => dt_from_string( $transfer->datesent ) } );
+            $hold->{from_branch} = Koha::Libraries->find( $transfer->frombranch )->branchname;
+        } elsif ( $item->holding_branch() && $item->holding_branch()->branchcode() ne $h->branch()->branchcode() ) {
             $hold->{not_transferred}    = 1;
             $hold->{not_transferred_by} = $h->item()->holding_branch()->branchname();
         }

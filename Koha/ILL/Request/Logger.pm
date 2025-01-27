@@ -57,8 +57,8 @@ log entries we get back out
 =cut
 
 sub new {
-    my ( $class ) = @_;
-    my $self  = {};
+    my ($class) = @_;
+    my $self = {};
 
     $self->{loggers} = {
         status => sub {
@@ -69,9 +69,8 @@ sub new {
         }
     };
 
-    my $query = CGI->new; # To keep C4::Templates::_get_template_file() from complaining
-    my ( $htdocs, $theme, $lang, $base ) =
-        C4::Templates::_get_template_file('ill/log/', 'intranet', $query);
+    my $query = CGI->new;    # To keep C4::Templates::_get_template_file() from complaining
+    my ( $htdocs, $theme, $lang, $base ) = C4::Templates::_get_template_file( 'ill/log/', 'intranet', $query );
 
     $self->{templates} = {
         STATUS_CHANGE => $base . 'status_change.tt',
@@ -94,11 +93,11 @@ a key matching our "loggers" hashref then we want to log it
 =cut
 
 sub log_maybe {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
-    if (defined $params->{request} && defined $params->{attrs}) {
-        foreach my $key (keys %{ $params->{attrs} }) {
-            if (defined($self->{loggers}->{$key})) {
+    if ( defined $params->{request} && defined $params->{attrs} ) {
+        foreach my $key ( keys %{ $params->{attrs} } ) {
+            if ( defined( $self->{loggers}->{$key} ) ) {
                 $self->{loggers}->{$key}(
                     $params->{request},
                     $params->{attrs}->{$key}
@@ -120,16 +119,20 @@ and log it
 sub log_patron_notice {
     my ( $self, $params ) = @_;
 
-    if (defined $params->{request} && defined $params->{notice_code}) {
-        $self->log_something({
-            modulename   => 'ILL',
-            actionname   => 'PATRON_NOTICE',
-            objectnumber => $params->{request}->id,
-            infos        => to_json({
-                log_origin    => 'core',
-                notice_code => $params->{notice_code}
-            })
-        });
+    if ( defined $params->{request} && defined $params->{notice_code} ) {
+        $self->log_something(
+            {
+                modulename   => 'ILL',
+                actionname   => 'PATRON_NOTICE',
+                objectnumber => $params->{request}->id,
+                infos        => to_json(
+                    {
+                        log_origin  => 'core',
+                        notice_code => $params->{notice_code}
+                    }
+                )
+            }
+        );
     }
 }
 
@@ -145,17 +148,21 @@ and log it
 sub log_status_change {
     my ( $self, $params ) = @_;
 
-    if (defined $params->{request} && defined $params->{value}) {
-        $self->log_something({
-            modulename   => 'ILL',
-            actionname   => 'STATUS_CHANGE',
-            objectnumber => $params->{request}->id,
-            infos        => to_json({
-                log_origin    => 'core',
-                status_before => $params->{request}->{previous_status},
-                status_after  => $params->{value}
-            })
-        });
+    if ( defined $params->{request} && defined $params->{value} ) {
+        $self->log_something(
+            {
+                modulename   => 'ILL',
+                actionname   => 'STATUS_CHANGE',
+                objectnumber => $params->{request}->id,
+                infos        => to_json(
+                    {
+                        log_origin    => 'core',
+                        status_before => $params->{request}->{previous_status},
+                        status_after  => $params->{value}
+                    }
+                )
+            }
+        );
     }
 }
 
@@ -179,13 +186,12 @@ If we have the required data passed, log an action
 sub log_something {
     my ( $self, $to_log ) = @_;
 
-    if (
-        defined $to_log->{modulename} &&
-        defined $to_log->{actionname} &&
-        defined $to_log->{objectnumber} &&
-        defined $to_log->{infos} &&
-        C4::Context->preference("IllLog")
-    ) {
+    if (   defined $to_log->{modulename}
+        && defined $to_log->{actionname}
+        && defined $to_log->{objectnumber}
+        && defined $to_log->{infos}
+        && C4::Context->preference("IllLog") )
+    {
         logaction(
             $to_log->{modulename},
             $to_log->{actionname},
@@ -204,23 +210,25 @@ Given a log's origin and action, get the appropriate display template
 =cut
 
 sub get_log_template {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $origin = $params->{origin};
     my $action = $params->{action};
 
-    if ($origin eq 'core') {
+    if ( $origin eq 'core' ) {
+
         # It's a core log, so we can just get the template path from
         # the hashref above
         return $self->{templates}->{$action};
     } else {
+
         # It's probably a backend log, so we need to get the path to the
         # template from the backend
         #
         # We need to load the backend that this log was made from, so we
         # can get the template
         $params->{request}->load_backend($origin);
-        my $backend =$params->{request}->{_my_backend};
+        my $backend = $params->{request}->{_my_backend};
         return $backend->get_log_template_path($action);
     }
 }
@@ -245,18 +253,17 @@ sub get_request_logs {
     )->unblessed;
 
     # Populate a lookup table for all ILL notice types
-    my $notice_types = Koha::Notice::Templates->search({
-        module => 'ill'
-    })->unblessed;
+    my $notice_types = Koha::Notice::Templates->search( { module => 'ill' } )->unblessed;
     my $notice_hash;
-    foreach my $notice(@{$notice_types}) {
-        $notice_hash->{$notice->{code}} = $notice;
+    foreach my $notice ( @{$notice_types} ) {
+        $notice_hash->{ $notice->{code} } = $notice;
     }
+
     # Populate a lookup table for status aliases
     my $aliases = C4::Koha::GetAuthorisedValues('ILL_STATUS_ALIAS');
     my $alias_hash;
-    foreach my $alias(@{$aliases}) {
-        $alias_hash->{$alias->{authorised_value}} = $alias;
+    foreach my $alias ( @{$aliases} ) {
+        $alias_hash->{ $alias->{authorised_value} } = $alias;
     }
     foreach my $log ( @{$logs} ) {
         $log->{patron}       = Koha::Patrons->find( $log->{user} );

@@ -53,7 +53,7 @@ sub filter_by_anonymizable {
     return $self->search(
         {
             'me.borrowernumber' => { 'not' => undef },
-            'patron.privacy' => { '<>'  => 0 },
+            'patron.privacy'    => { '<>'  => 0 },
             (
                 $anonymous_patron
                 ? ( 'me.borrowernumber' => { '!=' => $anonymous_patron } )

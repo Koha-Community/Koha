@@ -72,8 +72,7 @@ sub get {
             unless $provider;
 
         return $c->render( status => 200, openapi => $provider );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     }
 }
@@ -100,10 +99,7 @@ sub add {
 
                 my $class = Koha::Auth::Identity::Provider::protocol_to_class_mapping->{$protocol};
 
-                my $provider = $class->new_from_api( $body )
-                                     ->set_config( $config )
-                                     ->set_mapping( $mapping )
-                                     ->store;
+                my $provider = $class->new_from_api($body)->set_config($config)->set_mapping($mapping)->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $provider->identity_provider_id );
                 return $c->render(
@@ -112,8 +108,7 @@ sub add {
                 );
             }
         );
-    }
-    catch {
+    } catch {
         if ( blessed($_) ) {
             if ( $_->isa('Koha::Exceptions::MissingParameter') ) {
                 return $c->render(
@@ -151,14 +146,12 @@ sub update {
 
                 my $body = $c->req->json;
 
-                my $config   = delete $body->{config};
-                my $mapping  = delete $body->{mapping};
+                my $config  = delete $body->{config};
+                my $mapping = delete $body->{mapping};
 
-                $provider = $provider->set_from_api( $body )->upgrade_class;
+                $provider = $provider->set_from_api($body)->upgrade_class;
 
-                $provider->set_config( $config )
-                         ->set_mapping( $mapping )
-                         ->store;
+                $provider->set_config($config)->set_mapping($mapping)->store;
 
                 $provider->discard_changes;
 
@@ -168,8 +161,7 @@ sub update {
                 );
             }
         );
-    }
-    catch {
+    } catch {
         if ( blessed($_) ) {
             if ( $_->isa('Koha::Exceptions::MissingParameter') ) {
                 return $c->render(

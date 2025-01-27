@@ -38,10 +38,9 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $tickets = $c->objects->search(Koha::Tickets->new);
+        my $tickets = $c->objects->search( Koha::Tickets->new );
         return $c->render( status => 200, openapi => $tickets );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -60,8 +59,7 @@ sub get {
             unless $ticket;
 
         return $c->render( status => 200, openapi => $c->objects->to_api($ticket), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     }
 }
@@ -71,7 +69,7 @@ sub get {
 =cut
 
 sub add {
-    my $c = shift->openapi->valid_input or return;
+    my $c      = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
 
     return try {
@@ -79,19 +77,18 @@ sub add {
 
         # Set reporter from session
         $body->{reporter_id} = $patron->id;
+
         # FIXME: We should allow impersonation at a later date to
         # allow an API user to submit on behalf of a user
 
         my $ticket = Koha::Ticket->new_from_api($body)->store;
         $ticket->discard_changes;
-        $c->res->headers->location(
-            $c->req->url->to_string . '/' . $ticket->id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $ticket->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($ticket),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -167,8 +164,7 @@ sub list_updates {
         my $updates_set = $ticket->updates;
         my $updates     = $c->objects->search($updates_set);
         return $c->render( status => 200, openapi => $updates );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -178,7 +174,7 @@ sub list_updates {
 =cut
 
 sub add_update {
-    my $c = shift->openapi->valid_input or return;
+    my $c      = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
 
     my $ticket_id_param = $c->param('ticket_id');
@@ -192,10 +188,11 @@ sub add_update {
         );
     }
 
-     # Set user from session
-     $ticket_update->{user_id} = $patron->id;
-     # FIXME: We should allow impersonation at a later date to
-     # allow an API user to submit on behalf of a user
+    # Set user from session
+    $ticket_update->{user_id} = $patron->id;
+
+    # FIXME: We should allow impersonation at a later date to
+    # allow an API user to submit on behalf of a user
 
     return try {
         my $state = delete $ticket_update->{state};
@@ -230,9 +227,9 @@ sub add_update {
         # Optionally add to message_queue here to notify reporter
         if ( $update->public ) {
             my $notice =
-              ( defined($state) && $state eq 'resolved' )
-              ? 'TICKET_RESOLVE'
-              : 'TICKET_UPDATE';
+                ( defined($state) && $state eq 'resolved' )
+                ? 'TICKET_RESOLVE'
+                : 'TICKET_UPDATE';
             my $letter = C4::Letters::GetPreparedLetter(
                 module      => 'catalogue',
                 letter_code => $notice,
@@ -252,14 +249,12 @@ sub add_update {
         }
 
         # Return
-        $c->res->headers->location(
-            $c->req->url->to_string . '/' . $update->id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $update->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($update),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

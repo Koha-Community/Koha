@@ -1,7 +1,7 @@
 package C4::ClassSortRoutine::Generic;
 
 # Copyright (C) 2007 LibLime
-# 
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -19,8 +19,6 @@ package C4::ClassSortRoutine::Generic;
 
 use strict;
 use warnings;
-
-
 
 =head1 NAME 
 
@@ -48,7 +46,7 @@ Generates sorting key using the following rules:
 =cut
 
 sub get_class_sort_key {
-    my ($cn_class, $cn_item) = @_;
+    my ( $cn_class, $cn_item ) = @_;
 
     $cn_class = '' unless defined $cn_class;
     $cn_item  = '' unless defined $cn_item;

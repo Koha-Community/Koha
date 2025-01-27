@@ -32,8 +32,8 @@ GetOptions( 'showsql' => \$showsql );
 use Test::More tests => 2;
 
 our $dbh = C4::Context->dbh;
-my $intranetdir = C4::Context->config('intranetdir');
-my $root_dir = $intranetdir . '/installer/data/mysql/mandatory';
+my $intranetdir       = C4::Context->config('intranetdir');
+my $root_dir          = $intranetdir . '/installer/data/mysql/mandatory';
 my $base_syspref_file = "sysprefs.sql";
 
 open my $ref_fh, '<', "$root_dir/$base_syspref_file" or croak "Can't open '$root_dir/$base_syspref_file': $!";
@@ -79,7 +79,6 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
         diag "System preferences missing from sysprefs.sql:\n  * " . join( "\n  * ", @missing_sysprefs ) . "\n";
     }
 };
-
 
 #
 # Get sysprefs from SQL file populating sysprefs table with INSERT statement.
@@ -136,8 +135,9 @@ sub check_db {
     my $res     = $sth->fetchrow_arrayref;
     my $dbcount = $res->[0];
     if ( !$showsql ) {
-        cmp_ok( $dbcount, ">=", scalar( keys %$sysprefs ),
-"There are at least as many sysprefs in the database as in the sysprefs.sql"
+        cmp_ok(
+            $dbcount, ">=", scalar( keys %$sysprefs ),
+            "There are at least as many sysprefs in the database as in the sysprefs.sql"
         );
     }
 
@@ -150,8 +150,7 @@ sub check_db {
         my $count = $res->[0];
         if ( !$showsql ) {
             is( $count, 1, "Syspref $_ exists in the database" );
-        }
-        else {
+        } else {
             if ( $count != 1 ) {
                 print $sysprefs->{$_};
             }

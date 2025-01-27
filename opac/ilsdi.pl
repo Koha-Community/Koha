@@ -20,13 +20,13 @@
 use Modern::Perl;
 
 use C4::ILSDI::Services;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 
 use List::MoreUtils qw( any );
-use XML::Simple qw( XMLout );
-use CGI qw ( -utf8 );
+use XML::Simple     qw( XMLout );
+use CGI             qw ( -utf8 );
 use Net::Netmask;
 
 =head1 DLF ILS-DI for Koha
@@ -54,7 +54,7 @@ my @services = (
     #	Level 2: Elementary OPAC supplement
     #	'HarvestAuthorityRecords',           # OAI-PMH
     #	'HarvestHoldingsRecords',            # OAI-PMH
-    'GetRecords',         # Note that we can use OAI-PMH for this too
+    'GetRecords',    # Note that we can use OAI-PMH for this too
 
     #	'Search',                            # TODO
     #	'Scan',	                             # TODO
@@ -94,7 +94,7 @@ my %required = (
     'RenewLoan'           => [ 'patron_id', 'item_id' ],
     'HoldTitle'           => [ 'patron_id', 'bib_id', 'request_location' ],
     'HoldItem'            => [ 'patron_id', 'bib_id', 'item_id' ],
-    'CancelHold' => [ 'patron_id', 'item_id' ],
+    'CancelHold'          => [ 'patron_id', 'item_id' ],
 );
 
 # List of optional arguments
@@ -105,19 +105,21 @@ my %optional = (
     'GetAuthorityRecords' => ['schema'],
     'LookupPatron'        => ['id_type'],
     'AuthenticatePatron'  => [],
-    'GetPatronInfo'       => [ 'show_contact', 'show_fines', 'show_holds', 'show_loans', 'loans_per_page', 'loans_page', 'show_attributes' ],
-    'GetPatronStatus'     => [],
-    'GetServices'         => [],
-    'RenewLoan'           => ['desired_due_date'],
-    'HoldTitle'  => [ 'pickup_location', 'start_date', 'expiry_date' ],
-    'HoldItem'   => [ 'pickup_location', 'start_date', 'expiry_date' ],
-    'CancelHold' => [],
+    'GetPatronInfo'       =>
+        [ 'show_contact', 'show_fines', 'show_holds', 'show_loans', 'loans_per_page', 'loans_page', 'show_attributes' ],
+    'GetPatronStatus' => [],
+    'GetServices'     => [],
+    'RenewLoan'       => ['desired_due_date'],
+    'HoldTitle'       => [ 'pickup_location', 'start_date', 'expiry_date' ],
+    'HoldItem'        => [ 'pickup_location', 'start_date', 'expiry_date' ],
+    'CancelHold'      => [],
 );
 
 # If no service is requested, display the online documentation
 unless ( $cgi->param('service') ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "ilsdi.tt",
+        {
+            template_name   => "ilsdi.tt",
             query           => $cgi,
             type            => "opac",
             authnotrequired => 1,
@@ -130,14 +132,15 @@ unless ( $cgi->param('service') ) {
 # Set the userenv
 C4::Context->set_userenv(
     undef, undef, undef, 'ILSDI', 'ILSDI',
-    undef, undef, undef, undef, undef,
+    undef, undef, undef, undef,   undef,
 );
 C4::Context->interface('opac');
 
 # If user requested a service description, then display it
 if ( scalar $cgi->param('service') eq "Describe" and any { scalar $cgi->param('verb') eq $_ } @services ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "ilsdi.tt",
+        {
+            template_name   => "ilsdi.tt",
             query           => $cgi,
             type            => "opac",
             authnotrequired => 1,
@@ -150,13 +153,13 @@ if ( scalar $cgi->param('service') eq "Describe" and any { scalar $cgi->param('v
 
 # any output after this point will be UTF-8 XML
 binmode STDOUT, ':encoding(UTF-8)';
-print CGI::header('-type'=>'text/xml', '-charset'=>'utf-8');
+print CGI::header( '-type' => 'text/xml', '-charset' => 'utf-8' );
 
 my $out;
 
 # If ILS-DI module is disabled in System->Preferences, redirect to 404
 unless ( C4::Context->preference('ILS-DI') ) {
-    $out->{'code'} = "NotAllowed";
+    $out->{'code'}    = "NotAllowed";
     $out->{'message'} = "ILS-DI is disabled.";
 }
 
@@ -172,7 +175,7 @@ if (@AuthorizedIPs) {    # If no filter set, allow access to everybody
         }
     }
     unless ($authorized) {
-        $out->{'code'} = "NotAllowed";
+        $out->{'code'}    = "NotAllowed";
         $out->{'message'} = "Unauthorized IP address: $ENV{REMOTE_ADDR}.";
     }
 }
@@ -190,15 +193,15 @@ if ( $service and any { $service eq $_ } @services ) {
     $paramhash{$_} = 1 for @names;
 
     # check for missing parameters
-    for ( @parmsrequired ) {
+    for (@parmsrequired) {
         unless ( exists $paramhash{$_} ) {
-            $out->{'code'} = "MissingParameter";
-            $out->{'message'} = "The required parameter ".$_." is missing.";
+            $out->{'code'}    = "MissingParameter";
+            $out->{'message'} = "The required parameter " . $_ . " is missing.";
         }
     }
 
     # check for illegal parameters
-    for my $name ( @names ) {
+    for my $name (@names) {
         my $found = 0;
         for my $name2 (@parmsall) {
             if ( $name eq $name2 ) {
@@ -206,17 +209,17 @@ if ( $service and any { $service eq $_ } @services ) {
             }
         }
         if ( $found == 0 && $name ne 'service' ) {
-            $out->{'code'} = "IllegalParameter";
-            $out->{'message'} = "The parameter ".$name." is illegal.";
+            $out->{'code'}    = "IllegalParameter";
+            $out->{'message'} = "The parameter " . $name . " is illegal.";
         }
     }
 
     # check for multiple parameters
-    for ( @names ) {
+    for (@names) {
         my @values = $cgi->multi_param($_);
         if ( $#values != 0 ) {
-            $out->{'code'} = "MultipleValuesNotAllowed";
-            $out->{'message'} = "Multiple values not allowed for the parameter ".$_.".";
+            $out->{'code'}    = "MultipleValuesNotAllowed";
+            $out->{'message'} = "Multiple values not allowed for the parameter " . $_ . ".";
         }
     }
 
@@ -230,7 +233,8 @@ if ( $service and any { $service eq $_ } @services ) {
 
             # Variable functions
             my $sub = do {
-#                no strict 'refs';
+
+                #                no strict 'refs';
                 my $symbol = 'C4::ILSDI::Services::' . $service;
                 \&{"$symbol"};
             };

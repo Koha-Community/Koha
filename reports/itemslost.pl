@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 itemslost
 
 This script displays lost items.
@@ -27,8 +26,8 @@ This script displays lost items.
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Text::CSV::Encoded;
 use Koha::AuthorisedValues;
@@ -37,51 +36,54 @@ use Koha::CsvProfiles;
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "reports/itemslost.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { reports => '*' },
+        template_name => "reports/itemslost.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
     }
 );
 
-my $params = $query->Vars;
+my $params    = $query->Vars;
 my $get_items = $params->{'get_items'};
-my $op = $query->param('op') || '';
+my $op        = $query->param('op') || '';
 
 if ( $op eq 'cud-export' ) {
-    my @itemnumbers = $query->multi_param('itemnumber');
+    my @itemnumbers    = $query->multi_param('itemnumber');
     my $csv_profile_id = $query->param('csv_profile_id');
     my @rows;
     if ($csv_profile_id) {
+
         # FIXME This following code has the same logic as GetBasketAsCSV
         # We should refactor all the CSV export code
         # Note: For MARC it is already done in Koha::Exporter::Record but not for SQL CSV profiles type
-        my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
+        my $csv_profile = Koha::CsvProfiles->find($csv_profile_id);
         die "There is no valid csv profile given" unless $csv_profile;
 
         my $csv_profile_content = $csv_profile->content;
         my ( @headers, @fields );
-        while ( $csv_profile_content =~ /
+        while (
+            $csv_profile_content =~ /
             ([^=\|]+) # header
             =?
             ([^\|]*) # fieldname (table.row or row)
             \|? /gxms
-        ) {
+            )
+        {
             my $header = $1;
-            my $field = ($2 eq '') ? $1 : $2;
+            my $field  = ( $2 eq '' ) ? $1 : $2;
 
-            $header =~ s/^\s+|\s+$//g; # Trim whitespaces
+            $header =~ s/^\s+|\s+$//g;    # Trim whitespaces
             push @headers, $header;
 
-            $field =~ s/[^\.]*\.{1}//; # Remove the table name if exists.
-            $field =~ s/^\s+|\s+$//g; # Trim whitespaces
+            $field =~ s/[^\.]*\.{1}//;    # Remove the table name if exists.
+            $field =~ s/^\s+|\s+$//g;     # Trim whitespaces
             push @fields, $field;
         }
-        my $items = Koha::Items->search({ itemnumber => { -in => \@itemnumbers } });
+        my $items = Koha::Items->search( { itemnumber => { -in => \@itemnumbers } } );
         while ( my $item = $items->next ) {
             my @row;
             my $all_fields = $item->unblessed;
-            $all_fields = { %$all_fields, %{$item->biblio->unblessed}, %{$item->biblioitem->unblessed} };
+            $all_fields = { %$all_fields, %{ $item->biblio->unblessed }, %{ $item->biblioitem->unblessed } };
             for my $field (@fields) {
                 push @row, $all_fields->{$field};
             }
@@ -93,8 +95,8 @@ if ( $op eq 'cud-export' ) {
         my $csv = Text::CSV::Encoded->new( { encoding_out => 'UTF-8', sep_char => $delimiter, formula => 'empty' } );
         $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
         $csv->combine(@headers);
-        my $content .= Encode::decode('UTF-8', $csv->string()) . "\n";
-        for my $row ( @rows ) {
+        my $content .= Encode::decode( 'UTF-8', $csv->string() ) . "\n";
+        for my $row (@rows) {
             $csv->combine(@$row);
             $content .= $csv->string . "\n";
         }
@@ -105,7 +107,7 @@ if ( $op eq 'cud-export' ) {
         print $content;
         exit;
     }
-} elsif ( $get_items ) {
+} elsif ($get_items) {
     my $branchfilter     = $params->{'branchfilter'}     || undef;
     my $barcodefilter    = $params->{'barcodefilter'}    || undef;
     my $itemtypesfilter  = $params->{'itemtypesfilter'}  || undef;
@@ -131,8 +133,8 @@ if ( $op eq 'cud-export' ) {
     if ($itemtypesfilter) {
         if ( C4::Context->preference('item-level_itypes') ) {
             $params->{itype} = $itemtypesfilter;
-        }
-        else {
+        } else {
+
             # We want a join on biblioitems
             $attributes = { join => 'biblioitem' };
             $params->{'biblioitem.itemtype'} = $itemtypesfilter;
@@ -150,10 +152,10 @@ if ( $op eq 'cud-export' ) {
 # getting all itemtypes
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
-my $csv_profiles = Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_lost_items' });
+my $csv_profiles = Koha::CsvProfiles->search( { type => 'sql', used_for => 'export_lost_items' } );
 
 $template->param(
-    itemtypes => $itemtypes,
+    itemtypes    => $itemtypes,
     csv_profiles => $csv_profiles,
 );
 

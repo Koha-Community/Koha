@@ -32,10 +32,9 @@ subtest 'search' => sub {
 
     $schema->storage->txn_begin;
 
-    my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $register =
-      $builder->build_object( { class => 'Koha::Cash::Registers' } );
-    my $cashup1 = $builder->build_object(
+    my $manager  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $cashup1  = $builder->build_object(
         {
             class => 'Koha::Cash::Register::Actions',
             value => {

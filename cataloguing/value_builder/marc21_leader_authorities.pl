@@ -22,14 +22,14 @@
 use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
 use C4::Output qw( output_html_with_http_headers );
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
     my $res           = "
 <script>
@@ -53,18 +53,19 @@ function Click$function_name(event) {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $index   = $input->param('index');
-    my $result  = $input->param('result');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $index    = $input->param('index');
+    my $result   = $input->param('result');
 
     my $dbh = C4::Context->dbh;
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "cataloguing/value_builder/marc21_leader_authorities.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { editcatalogue => '*' },
+        {
+            template_name => "cataloguing/value_builder/marc21_leader_authorities.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
         }
     );
     $result = "     nz  a22     n  4500" unless $result;

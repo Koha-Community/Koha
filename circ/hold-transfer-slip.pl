@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2008 LibLime
 #
 # This file is part of Koha.
@@ -20,32 +19,37 @@
 
 use Modern::Perl;
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_session get_template_and_user );
+use C4::Output   qw( output_html_with_http_headers );
+use CGI          qw ( -utf8 );
+use C4::Auth     qw( get_session get_template_and_user );
 use C4::Reserves qw( ReserveSlip );
 
-my $input = CGI->new;
+my $input     = CGI->new;
 my $sessionID = $input->cookie("CGISESSID");
-my $session = get_session($sessionID);
+my $session   = get_session($sessionID);
 
 my $reserve_id = $input->param('reserve_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/printslip.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "circ/printslip.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
 my $userenv = C4::Context->userenv;
 my ( $slip, $is_html, $style );
-if ( my $letter = ReserveSlip ({
-    branchcode     => $session->param('branch') || $userenv->{branch},
-    reserve_id => $reserve_id,
-}) ) {
+if (
+    my $letter = ReserveSlip(
+        {
+            branchcode => $session->param('branch') || $userenv->{branch},
+            reserve_id => $reserve_id,
+        }
+    )
+    )
+{
     $slip    = $letter->{content};
     $is_html = $letter->{is_html};
     $style   = $letter->{style};

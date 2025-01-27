@@ -3,98 +3,112 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Localization") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Localization") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' popup => 1 %]
-<style>#localization { margin-top: 1em; }</style>
+<style>
+    #localization {
+        margin-top: 1em;
+    }
+</style>
 </head>
 
 <body id="admin_localization" class="admin">
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1>Localization</h1>
-<form id="add_translation" method="get">
-    [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="entity" value="[% entity | html %]" />
-    <input type="hidden" name="code" value="[% code | html %]" />
-    <input type="hidden" name="interface" value="[% interface_side | html %]" />
-    <fieldset class="rows clearfix">
-        <ol>
-            <li>
-                <span class="label">Authorized value:</span>
-                [% code | html %]
-            </li>
-            <li>
-                <label for="lang">Language:</label>
-                <select name="lang" id="lang">
-                    [% FOR language IN languages %]
-                        [% FOR sublanguage IN language.sublanguages_loop %]
-                            [% IF language.plural %]
-                                <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                            [% ELSE %]
-                                <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                            [% END %]
-                        [% END %]
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Localization</h1>
+            <form id="add_translation" method="get">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="entity" value="[% entity | html %]" />
+                <input type="hidden" name="code" value="[% code | html %]" />
+                <input type="hidden" name="interface" value="[% interface_side | html %]" />
+                <fieldset class="rows clearfix">
+                    <ol>
+                        <li>
+                            <span class="label">Authorized value:</span>
+                            [% code | html %]
+                        </li>
+                        <li>
+                            <label for="lang">Language:</label>
+                            <select name="lang" id="lang">
+                                [% FOR language IN languages %]
+                                    [% FOR sublanguage IN language.sublanguages_loop %]
+                                        [% IF language.plural %]
+                                            <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                        [% ELSE %]
+                                            <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="translation">Translation:</label>
+                            <input type="text" size="40" name="translation" id="translation" />
+                        </li>
+                        <li>
+                            <span class="label">&nbsp;</span>
+                            <input type="submit" class="btn btn-primary" value="Add" />
+                        </li>
+                    </ol>
+                </fieldset>
+            </form>
+        </div>
+        <!-- /.col-sm-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="messages"></div>
+        </div>
+        <!-- /.col-sm-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="localization">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Entity</th>
+                        <th>Code</th>
+                        <th>Language</th>
+                        <th>Translation</th>
+                        <th class="NoSort">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOR t IN translations %]
+                        <tr id="row_id_[% t.id | html %]" data-id="[% t.id | html %]">
+                            <td>[% t.id | html %]</td>
+                            <td>[% t.entity | html %]</td>
+                            <td>[% t.code | html %]</td>
+                            <td class="lang">[% t.lang | html %]</td>
+                            <td class="translation" contenteditable="true">[% t.translation | html %]</td>
+                            <td class="actions"
+                                ><a href="#" class="delete"><i class="fa fa-trash-can"></i> Delete</a></td
+                            >
+                        </tr>
                     [% END %]
-                </select>
-            </li>
-            <li>
-                <label for="translation">Translation:</label>
-                <input type="text" size="40" name="translation" id="translation" />
-            </li>
-            <li>
-                <span class="label">&nbsp;</span>
-                <input type="submit" class="btn btn-primary" value="Add" />
-            </li>
-        </ol>
-    </fieldset>
-</form>
-            </div> <!-- /.col-sm-12 -->
-        </div> <!-- /.row -->
-
-        <div class="row">
-            <div class="col-sm-12">
-<div id="messages"></div>
-            </div> <!-- /.col-sm-12 -->
-        </div> <!-- /.row -->
-
-        <div class="row">
-            <div class="col-sm-12">
-<table id="localization">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Entity</th>
-            <th>Code</th>
-            <th>Language</th>
-            <th>Translation</th>
-            <th class="NoSort">&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody>
-        [% FOR t IN translations %]
-        <tr id="row_id_[% t.id | html %]" data-id="[% t.id | html %]">
-            <td>[% t.id | html %]</td>
-            <td>[% t.entity | html %]</td>
-            <td>[% t.code | html %]</td>
-            <td class="lang">[% t.lang | html %]</td>
-            <td class="translation" contenteditable="true">[% t.translation | html %]</td>
-            <td class="actions"><a href="#" class="delete"><i class="fa fa-trash-can"></i> Delete</a></td>
-        </tr>
-        [% END %]
-    </tbody>
-</table>
-            </div> <!-- /.col-sm-12 -->
-        </div> <!-- /.row -->
-    </div> <!-- /.main.container-fluid -->
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col-sm-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-
         function show_message( params ) {
             var type = params.type;
             var data = params.data;

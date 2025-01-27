@@ -17,7 +17,6 @@ package Koha::CoverImages;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::CoverImage;
@@ -42,10 +41,10 @@ Its mimetype is image/gif.
 =cut
 
 sub no_image {
-    my $no_image = pack( "H*",
-            '47494638396101000100800000FFFFFF'
-          . '00000021F90401000000002C00000000'
-          . '010001000002024401003B' );
+    my $no_image = pack(
+        "H*",
+        '47494638396101000100800000FFFFFF' . '00000021F90401000000002C00000000' . '010001000002024401003B'
+    );
     return Koha::CoverImage->new(
         {
             mimetype  => 'image/gif',

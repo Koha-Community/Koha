@@ -26,12 +26,13 @@ use C4::Koha qw( GetNormalizedUPC GetNormalizedOCLCNumber GetNormalizedISBN GetN
 use Koha::Biblios;
 use Koha::Libraries;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      GetNearbyItems
+        GetNearbyItems
     );
 }
 
@@ -106,62 +107,68 @@ This will throw an exception if something went wrong.
 =cut
 
 sub GetNearbyItems {
-    my ( $itemnumber, $num_each_side, $gap) = @_;
+    my ( $itemnumber, $num_each_side, $gap ) = @_;
     $num_each_side ||= 3;
-    $gap ||= 7; # Should be > $num_each_side
+    $gap           ||= 7;    # Should be > $num_each_side
     die "BAD CALL in C4::ShelfBrowser::GetNearbyItems, gap should be > num_each_side"
         if $gap <= $num_each_side;
 
-    my $dbh         = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     my $sth_get_item_details = $dbh->prepare("SELECT cn_sort,homebranch,location,ccode from items where itemnumber=?");
     $sth_get_item_details->execute($itemnumber);
     my $item_details_result = $sth_get_item_details->fetchrow_hashref();
-    die "Unable to find item '$itemnumber' for shelf browser" if (!$sth_get_item_details);
+    die "Unable to find item '$itemnumber' for shelf browser" if ( !$sth_get_item_details );
     my $start_cn_sort = $item_details_result->{'cn_sort'};
 
-    my ($start_homebranch, $start_location, $start_ccode);
-    if (C4::Context->preference('ShelfBrowserUsesHomeBranch') && 
-    	defined($item_details_result->{'homebranch'})) {
-        $start_homebranch->{code} = $item_details_result->{'homebranch'};
-        $start_homebranch->{description} = Koha::Libraries->find($item_details_result->{'homebranch'})->branchname;
+    my ( $start_homebranch, $start_location, $start_ccode );
+    if ( C4::Context->preference('ShelfBrowserUsesHomeBranch')
+        && defined( $item_details_result->{'homebranch'} ) )
+    {
+        $start_homebranch->{code}        = $item_details_result->{'homebranch'};
+        $start_homebranch->{description} = Koha::Libraries->find( $item_details_result->{'homebranch'} )->branchname;
     }
-    if (C4::Context->preference('ShelfBrowserUsesLocation') && 
-    	defined($item_details_result->{'location'})) {
+    if ( C4::Context->preference('ShelfBrowserUsesLocation')
+        && defined( $item_details_result->{'location'} ) )
+    {
         $start_location->{code} = $item_details_result->{'location'};
-        $start_location->{description} = GetAuthorisedValueDesc('','',$item_details_result->{'location'},'','','LOC','opac');
+        $start_location->{description} =
+            GetAuthorisedValueDesc( '', '', $item_details_result->{'location'}, '', '', 'LOC', 'opac' );
     }
-    if (C4::Context->preference('ShelfBrowserUsesCcode') && 
-    	defined($item_details_result->{'ccode'})) {
+    if ( C4::Context->preference('ShelfBrowserUsesCcode')
+        && defined( $item_details_result->{'ccode'} ) )
+    {
         $start_ccode->{code} = $item_details_result->{'ccode'};
-        $start_ccode->{description} = GetAuthorisedValueDesc('', '', $item_details_result->{'ccode'}, '', '', 'CCODE', 'opac');
+        $start_ccode->{description} =
+            GetAuthorisedValueDesc( '', '', $item_details_result->{'ccode'}, '', '', 'CCODE', 'opac' );
     }
 
     # Build the query for previous and next items
-    my $prev_query ='
+    my $prev_query = '
         SELECT itemnumber, biblionumber, cn_sort, itemcallnumber
         FROM items
         WHERE
             ((cn_sort = ? AND itemnumber < ?) OR cn_sort < ?) ';
-    my $next_query ='
+    my $next_query = '
         SELECT itemnumber, biblionumber, cn_sort, itemcallnumber
         FROM items
         WHERE
             ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) ';
     my @params;
     my $query_cond;
-    push @params, ($start_cn_sort, $itemnumber, $start_cn_sort);
+    push @params, ( $start_cn_sort, $itemnumber, $start_cn_sort );
+
     if ($start_homebranch) {
-    	$query_cond .= 'AND homebranch = ? ';
-    	push @params, $start_homebranch->{code};
+        $query_cond .= 'AND homebranch = ? ';
+        push @params, $start_homebranch->{code};
     }
     if ($start_location) {
-    	$query_cond .= 'AND location = ? ';
-    	push @params, $start_location->{code};
+        $query_cond .= 'AND location = ? ';
+        push @params, $start_location->{code};
     }
     if ($start_ccode) {
-    	$query_cond .= 'AND ccode = ? ';
-    	push @params, $start_ccode->{code};
+        $query_cond .= 'AND ccode = ? ';
+        push @params, $start_ccode->{code};
     }
 
     my @prev_items = @{
@@ -187,17 +194,15 @@ sub GetNearbyItems {
 
     $next_item = undef
         if not $next_item
-            or ( $next_item->{itemnumber} == $items[-1]->{itemnumber}
-                and ( @prev_items or @next_items <= 1 )
-            );
+        or ( $next_item->{itemnumber} == $items[-1]->{itemnumber}
+        and ( @prev_items or @next_items <= 1 ) );
     $prev_item = undef
         if not $prev_item
-            or ( $prev_item->{itemnumber} == $items[0]->{itemnumber}
-                and ( @next_items or @prev_items <= 1 )
-            );
+        or ( $prev_item->{itemnumber} == $items[0]->{itemnumber}
+        and ( @next_items or @prev_items <= 1 ) );
 
     # populate the items
-    @items = GetShelfInfo( @items );
+    @items = GetShelfInfo(@items);
 
     return {
         items               => \@items,
@@ -212,10 +217,10 @@ sub GetNearbyItems {
 # populate an item list with its title and upc, oclc and isbn normalized.
 # Not really intended to be exported.
 sub GetShelfInfo {
-    my @items = @_;
+    my @items       = @_;
     my $marcflavour = C4::Context->preference("marcflavour");
     my @valid_items;
-    for my $item ( @items ) {
+    for my $item (@items) {
         my $biblio = Koha::Biblios->find( $item->{biblionumber} );
         next unless defined $biblio;
 
@@ -227,10 +232,10 @@ sub GetShelfInfo {
         $item->{part_number}   = $biblio->part_number;
         $item->{part_name}     = $biblio->part_name;
         my $this_record = $biblio->metadata->record;
-        $item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
-        $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
-        $item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
-        $item->{'browser_normalized_ean'} = GetNormalizedEAN($this_record,$marcflavour);
+        $item->{'browser_normalized_upc'}  = GetNormalizedUPC( $this_record, $marcflavour );
+        $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber( $this_record, $marcflavour );
+        $item->{'browser_normalized_isbn'} = GetNormalizedISBN( undef, $this_record, $marcflavour );
+        $item->{'browser_normalized_ean'}  = GetNormalizedEAN( $this_record, $marcflavour );
         push @valid_items, $item;
     }
     return @valid_items;

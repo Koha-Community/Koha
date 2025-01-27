@@ -5,19 +5,25 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF( do_it ) %]
-        [% t("Results") | html %] &rsaquo;
-    [% END %]
-    [% t("Patrons statistics") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF( do_it ) %]
+            [% t("Results") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Patrons statistics") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-	.sql {display:none;}
-	.debug {display:none;}
+    .sql {
+        display: none;
+    }
+    .debug {
+        display: none;
+    }
 </style>
 </head>
 
@@ -47,277 +53,275 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
-
-<h1>Patrons statistics</h1>
-[% IF ( do_it ) %]
-	[% FOREACH mainloo IN mainloop %]
-        [% IF ( mainloo.loopfilter.size>0 ) %]
-            <p>Filtered on:</p>
-			[% FOREACH loopfilte IN mainloo.loopfilter %]
-				<p>
-					[% loopfilte.crit | html %] = [% loopfilte.filter | html %]
-				</p>
-			[% END %]
-		[% END %]
-		<table>
-			<tr>
-				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% IF ( loopco.coltitle_display ) %][% loopco.coltitle_display | html %][% ELSE %][% loopco.coltitle | html %][% END %]
-					</th>
-				[% END %]
-				<th>TOTAL</th>
-			</tr>
-				[% FOREACH loopro IN mainloo.looprow %]
-                    <tr>
-						<td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display | html %][% ELSE %][% loopro.rowtitle | html %][% END %]
-						</td>
-						[% FOREACH loopcel IN loopro.loopcell %]
-						<td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% ELSE %]&nbsp;[% END %]
-						</td>
-						[% END %]
-						<td>[% loopro.totalrow | html %]</td>
-					</tr>
-				[% END %]
-				<tr>
-					<th>TOTAL</th>
-					[% FOREACH loopfoote IN mainloo.loopfooter %]
-						<th>[% loopfoote.totalcol | html %]</th>
-					[% END %]
-					<th>[% mainloo.total | html %]</th>
-				</tr>
-		</table>
-	[% END %]
-[% ELSE %]
-
-	<form method="get" action="/cgi-bin/koha/reports/borrowers_stats.pl">
-	<fieldset class="rows"><legend>Patrons statistics</legend>
-	<table>
-		<thead>
-			<tr>
-			<th>Title</th>
-			<th>Row</th>
-			<th>Column</th>
-			<th>Filter</th>
-			</tr>
-		</thead>
-		<tbody>
-            <tr>
-			<td>Patron category</td>
-			<td><input type="radio" name="Line" value="categorycode" /></td>
-            <td><input type="radio" checked="checked" name="Column" value="categorycode" /></td>
-            <td>
-                <select name="Filter" id="catcode">
-                    <option value=""></option>
-                    [% FOREACH patron_category IN patron_categories %]
-                        <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
-                    [% END %]
-                </select>
-            </td>
-			</tr>
-			<tr>
-			<td>Patron status</td>
-			<td colspan="2"></td>
-			<td ><select name="status"><option value=""> </option><option value="debarred">restricted</option><option value="gonenoadress">gone no address</option><option value="lost">lost</option></select></td>
-			</tr>
-            <tr>
-			<td>Patron activity</td>
-			<td colspan="2"><select name="period" id="period">
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			</select>
-			<label for="period">years of activity</label> 
-			</td>
-			<td><select name="activity"><option value=""> </option><option value="active">active</option><option value="nonactive">no active</option></select></td>
-			</tr>
-
-			<tr>
-            <td rowspan="2">ZIP/Postal code</td>
-			<td><input type="radio" name="Line" value="zipcode" /></td>
-			<td><input type="radio" name="Column" value="zipcode" /></td>
-            <td><select name="Filter" id="zipcode">
-				<option value=""> </option>
-				[% FOREACH ZIP_LOO IN ZIP_LOOP %]
-				<option value="[% ZIP_LOO.zipcode | html %]">[% ZIP_LOO.zipcode | html %]</option>
-				[% END %]
-				</select>
-			</td>
-			</tr>
-			<tr>
-			<td colspan="2"><select name="digits" id="digits">
-			<option value=""> </option>
-			<option value ="1">1</option>
-			<option value ="2">2</option>
-			<option value ="3">3</option>
-			<option value ="4">4</option>
-			<option value ="5">5</option>
-			<option value ="6">6</option>
-			<option value ="7">7</option>
-			<option value ="8">8</option>
-			<option value ="9">9</option>
-			<option value ="10">10</option>
-			</select>
-			<label for="digits">digits</label> 
-			</td>
-			<td>&nbsp;</td>
-			</tr>
-
-            <tr>
-			<td>Library</td>
-            <td><input type="radio" checked="checked" name="Line"   value="branchcode" /></td>
-			<td><input type="radio" name="Column" value="branchcode" /></td>
-			<td>
-                <select name="Filter" id="branch">
-                <option value=""></option>
-                [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
-                    <option value="[% l.branchcode | html %]">[% l.branchcode | html %] - [% l.branchname || 'UNKNOWN' | html %]</option>
+    <h1>Patrons statistics</h1>
+    [% IF ( do_it ) %]
+        [% FOREACH mainloo IN mainloop %]
+            [% IF ( mainloo.loopfilter.size>0 ) %]
+                <p>Filtered on:</p>
+                [% FOREACH loopfilte IN mainloo.loopfilter %]
+                    <p> [% loopfilte.crit | html %] = [% loopfilte.filter | html %] </p>
                 [% END %]
-                </select>
-			</td>
-			</tr>
-		    <tr>
-                <td>Date of birth</td>
-                <td colspan="2"></td>
-                <td>
-                    <label for="from">From</label>
-                    <input type="text" size="10" id="from" name="Filter" class="flatpickr"data-date_to="to" />
-                    <label for="to">To</label>
-                    <input size="10" id="to" name="Filter" value="" type="text" class="flatpickr" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                </td>
-            </tr>
-            <tr>
-                <td>Gender</td>
-                <td><input type="radio" name="Line" value="sex" /></td>
-                <td><input type="radio" name="Column" value="sex" /></td>
-                <td>
-                    <select id="sex" name="Filter">
-                        <option value="" />
-                        <option value="M">Men</option>
-                        <option value="F">Women</option>
-                    </select>
-                </td>
-            </tr>
-			[% IF ( SORT1_LOOP ) %]
+            [% END %]
+            <table>
                 <tr>
-				<td>Sort1</td>
-				<td><input type="radio" name="Line" value="sort1" /></td>
-				<td><input type="radio" name="Column" value="sort1" /></td>
-				<td>
-                    <select id="sort1" name="Filter">
-					<option value=""/>
-					[% FOREACH SORT1_LOO IN SORT1_LOOP %]
-						<option value="[% SORT1_LOO.authorized_value | html %]">[% SORT1_LOO.lib | html %]</option>
-					[% END %]
-					</select>
-				</td>
-				</tr>
-            [% ELSE %]
-                <input type="hidden" name="Filter" />
-			[% END %]
-			[% IF ( SORT2_LOOP ) %]
-                <tr>
-				<td>Sort2</td>
-				<td><input type="radio" name="Line" value="sort2" /></td>
-				<td><input type="radio" name="Column" value="sort2" /></td>
-				<td>
-                    <select id="sort2" name="Filter">
-					<option value=""/>
-					[% FOREACH SORT2_LOO IN SORT2_LOOP %]
-						<option value="[% SORT2_LOO.value | html %]">[% SORT2_LOO.value | html %]</option>
-					[% END %]
-					</select>
-				</td>
-				</tr>
-            [% ELSE %]
-                <input type="hidden" name="Filter" />
-			[% END %]
-            [% IF Koha.Preference('ExtendedPatronAttributes') %]
-                <tr>
-                    <th colspan="4">Patron attributes</th>
+                    <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                    [% FOREACH loopco IN mainloo.loopcol %]
+                        <th>[% IF ( loopco.coltitle_display ) %][% loopco.coltitle_display | html %][% ELSE %][% loopco.coltitle | html %][% END %] </th>
+                    [% END %]
+                    <th>TOTAL</th>
                 </tr>
-            [% FOREACH pa_loo IN patron_attributes %]
-                [% IF (pa_loo.class) %]
+                [% FOREACH loopro IN mainloo.looprow %]
                     <tr>
-                        <th>[% pa_loo.class | html %] ([% pa_loo.lib | html %])</th>
-                        <th colspan="3"></th>
+                        <td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display | html %][% ELSE %][% loopro.rowtitle | html %][% END %] </td>
+                        [% FOREACH loopcel IN loopro.loopcell %]
+                            <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% ELSE %]&nbsp;[% END %] </td>
+                        [% END %]
+                        <td>[% loopro.totalrow | html %]</td>
                     </tr>
                 [% END %]
-            [% FOREACH patron_attribute IN pa_loo.items %]
-                <tr data-category_code="[% patron_attribute.category_code | html %]">
-                    <td>
-                        [% patron_attribute.code | html %]
-                        ([% patron_attribute.description | html %])
-                    </td>
-                    <td>
-                        <input type="radio" name="Line"
-                            value="patron_attr.[% patron_attribute.code | html %]" />
-                    </td>
-                    <td>
-                        <input type="radio" name="Column"
-                            value="patron_attr.[% patron_attribute.code | html %]" />
-                    </td>
-                    <td>
-                        [% IF ( patron_attribute.use_dropdown ) %]
-                            <select name="Filter_patron_attr.[% patron_attribute.code | html %]"  >
-                                <option value="" />
-                                [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
-                                    <option value="[% auth_val_loo.authorised_value | html %]" >
-                                        [% auth_val_loo.lib | html %]
-                                    </option>
-                                [% END %]
-                            </select>
-                        [% ELSE %]
-                            <input type="text" maxlength="64"
-                                   name="Filter_patron_attr.[% patron_attribute.code | html %]" />
-                        [% END %]
-                    </td>
+                <tr>
+                    <th>TOTAL</th>
+                    [% FOREACH loopfoote IN mainloo.loopfooter %]
+                        <th>[% loopfoote.totalcol | html %]</th>
+                    [% END %]
+                    <th>[% mainloo.total | html %]</th>
                 </tr>
-            [% END %]
-            [% END %]
-            [% END %]
-        </tbody>
-    </table>
-    </fieldset>
+            </table>
+        [% END %]
+    [% ELSE %]
+        <form method="get" action="/cgi-bin/koha/reports/borrowers_stats.pl">
+            <fieldset class="rows"
+                ><legend>Patrons statistics</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Filter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Patron category</td>
+                            <td><input type="radio" name="Line" value="categorycode" /></td>
+                            <td><input type="radio" checked="checked" name="Column" value="categorycode" /></td>
+                            <td>
+                                <select name="Filter" id="catcode">
+                                    <option value=""></option>
+                                    [% FOREACH patron_category IN patron_categories %]
+                                        <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Patron status</td>
+                            <td colspan="2"></td>
+                            <td
+                                ><select name="status"
+                                    ><option value=""> </option
+                                    ><option value="debarred">restricted</option
+                                    ><option value="gonenoadress">gone no address</option
+                                    ><option value="lost">lost</option></select
+                                ></td
+                            >
+                        </tr>
+                        <tr>
+                            <td>Patron activity</td>
+                            <td colspan="2"
+                                ><select name="period" id="period">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                                <label for="period">years of activity</label>
+                            </td>
+                            <td
+                                ><select name="activity"
+                                    ><option value=""> </option
+                                    ><option value="active">active</option
+                                    ><option value="nonactive">no active</option></select
+                                ></td
+                            >
+                        </tr>
 
-	
-	<fieldset class="rows">
-	<legend>Output</legend>
-    <ol>
-        <li>
-            <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" />
-        </li>
-        <li>
-            <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
-            <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
-            <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME">
-            [% FOREACH value IN CGIextChoice %]
-                <option value="[% value | html %]">[% value | html %]</option>
-            [% END %]
-            </select>
-            <select name="sep" id="sep">
-            [% FOREACH value IN CGIsepChoice.values.sort() %]
-              [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-              [% ELSE %]
-                <option value="[% value | html %]">[% value | html %]</option>
-              [% END %]
-            [% END %]
-            </select>
-        </li>
-    </ol>
-	</fieldset>
+                        <tr>
+                            <td rowspan="2">ZIP/Postal code</td>
+                            <td><input type="radio" name="Line" value="zipcode" /></td>
+                            <td><input type="radio" name="Column" value="zipcode" /></td>
+                            <td
+                                ><select name="Filter" id="zipcode">
+                                    <option value=""> </option>
+                                    [% FOREACH ZIP_LOO IN ZIP_LOOP %]
+                                        <option value="[% ZIP_LOO.zipcode | html %]">[% ZIP_LOO.zipcode | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"
+                                ><select name="digits" id="digits">
+                                    <option value=""> </option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                                <label for="digits">digits</label>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
 
-	<fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name | html %]" />
-	<input type="hidden" name="do_it" value="1" />
-	</fieldset>
-	</form>
-[% END %]
+                        <tr>
+                            <td>Library</td>
+                            <td><input type="radio" checked="checked" name="Line" value="branchcode" /></td>
+                            <td><input type="radio" name="Column" value="branchcode" /></td>
+                            <td>
+                                <select name="Filter" id="branch">
+                                    <option value=""></option>
+                                    [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
+                                        <option value="[% l.branchcode | html %]">[% l.branchcode | html %] - [% l.branchname || 'UNKNOWN' | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Date of birth</td>
+                            <td colspan="2"></td>
+                            <td>
+                                <label for="from">From</label>
+                                <input type="text" size="10" id="from" name="Filter" class="flatpickr" data-date_to="to" />
+                                <label for="to">To</label>
+                                <input size="10" id="to" name="Filter" value="" type="text" class="flatpickr" />
+                                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td><input type="radio" name="Line" value="sex" /></td>
+                            <td><input type="radio" name="Column" value="sex" /></td>
+                            <td>
+                                <select id="sex" name="Filter">
+                                    <option value="" />
+                                    <option value="M">Men</option>
+                                    <option value="F">Women</option>
+                                </select>
+                            </td>
+                        </tr>
+                        [% IF ( SORT1_LOOP ) %]
+                            <tr>
+                                <td>Sort1</td>
+                                <td><input type="radio" name="Line" value="sort1" /></td>
+                                <td><input type="radio" name="Column" value="sort1" /></td>
+                                <td>
+                                    <select id="sort1" name="Filter">
+                                        <option value="" />
+                                        [% FOREACH SORT1_LOO IN SORT1_LOOP %]
+                                            <option value="[% SORT1_LOO.authorized_value | html %]">[% SORT1_LOO.lib | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </td>
+                            </tr>
+                        [% ELSE %]
+                            <input type="hidden" name="Filter" />
+                        [% END %]
+                        [% IF ( SORT2_LOOP ) %]
+                            <tr>
+                                <td>Sort2</td>
+                                <td><input type="radio" name="Line" value="sort2" /></td>
+                                <td><input type="radio" name="Column" value="sort2" /></td>
+                                <td>
+                                    <select id="sort2" name="Filter">
+                                        <option value="" />
+                                        [% FOREACH SORT2_LOO IN SORT2_LOOP %]
+                                            <option value="[% SORT2_LOO.value | html %]">[% SORT2_LOO.value | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </td>
+                            </tr>
+                        [% ELSE %]
+                            <input type="hidden" name="Filter" />
+                        [% END %]
+                        [% IF Koha.Preference('ExtendedPatronAttributes') %]
+                            <tr>
+                                <th colspan="4">Patron attributes</th>
+                            </tr>
+                            [% FOREACH pa_loo IN patron_attributes %]
+                                [% IF (pa_loo.class) %]
+                                    <tr>
+                                        <th>[% pa_loo.class | html %] ([% pa_loo.lib | html %])</th>
+                                        <th colspan="3"></th>
+                                    </tr>
+                                [% END %]
+                                [% FOREACH patron_attribute IN pa_loo.items %]
+                                    <tr data-category_code="[% patron_attribute.category_code | html %]">
+                                        <td> [% patron_attribute.code | html %] ([% patron_attribute.description | html %]) </td>
+                                        <td>
+                                            <input type="radio" name="Line" value="patron_attr.[% patron_attribute.code | html %]" />
+                                        </td>
+                                        <td>
+                                            <input type="radio" name="Column" value="patron_attr.[% patron_attribute.code | html %]" />
+                                        </td>
+                                        <td>
+                                            [% IF ( patron_attribute.use_dropdown ) %]
+                                                <select name="Filter_patron_attr.[% patron_attribute.code | html %]">
+                                                    <option value="" />
+                                                    [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
+                                                        <option value="[% auth_val_loo.authorised_value | html %]"> [% auth_val_loo.lib | html %] </option>
+                                                    [% END %]
+                                                </select>
+                                            [% ELSE %]
+                                                <input type="text" maxlength="64" name="Filter_patron_attr.[% patron_attribute.code | html %]" />
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                    </tbody>
+                </table>
+            </fieldset>
 
+            <fieldset class="rows">
+                <legend>Output</legend>
+                <ol>
+                    <li> <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+                    <li>
+                        <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label
+                        ><input type="text" name="basename" id="basename" value="Export" />
+                        <label class="inline" for="MIME">Into an application:</label>
+                        <select name="MIME" id="MIME">
+                            [% FOREACH value IN CGIextChoice %]
+                                <option value="[% value | html %]">[% value | html %]</option>
+                            [% END %]
+                        </select>
+                        <select name="sep" id="sep">
+                            [% FOREACH value IN CGIsepChoice.values.sort() %]
+                                [% IF ( value == CGIsepChoice.default ) %]
+                                    <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% value | html %]">[% value | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="report_name" value="[% report_name | html %]" />
+                <input type="hidden" name="do_it" value="1" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

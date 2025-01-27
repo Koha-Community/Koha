@@ -35,7 +35,7 @@ use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
 
 use Try::Tiny qw( catch try );
-use JSON qw( decode_json );
+use JSON      qw( decode_json );
 
 =head1 API
 
@@ -51,7 +51,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     my $attributes;
-    $attributes = { prefetch => [ 'metadata' ] } # don't prefetch metadata if not needed
+    $attributes = { prefetch => ['metadata'] }    # don't prefetch metadata if not needed
         unless $c->req->headers->accept =~ m/application\/json/;
 
     my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, $attributes );
@@ -66,8 +66,7 @@ sub get {
                 status => 200,
                 json   => $c->objects->to_api($biblio),
             );
-        }
-        else {
+        } else {
             my $metadata = $biblio->metadata;
             my $record   = $metadata->record;
             my $schema   = $metadata->schema // C4::Context->preference("marcflavour");
@@ -105,8 +104,7 @@ sub get {
                 }
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -133,12 +131,10 @@ sub delete {
                 status  => 409,
                 openapi => { error => $error }
             );
-        }
-        else {
+        } else {
             return $c->render_resource_deleted;
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -154,7 +150,8 @@ sub get_public {
 
     my $biblio = Koha::Biblios->find(
         { biblionumber => $c->param('biblio_id') },
-        { prefetch     => ['metadata'] } );
+        { prefetch     => ['metadata'] }
+    );
 
     return $c->render_resource_not_found("Bibliographic record")
         unless $biblio;
@@ -206,12 +203,10 @@ sub get_public {
                 ]
             }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 get_bookings
 
@@ -265,6 +260,7 @@ sub get_items {
         # FIXME Should we prefetch => ['issue','branchtransfer']?
         my $items_rs = $biblio->items( { host_items => 1 } )->search_ordered( {}, { join => 'biblioitem' } );
         $items_rs = $items_rs->filter_by_bookable if $bookable_only;
+
         # FIXME We need to order_by serial.publisheddate if we have _order_by=+me.serial_issue_number
         my $items = $c->objects->search($items_rs);
 
@@ -288,7 +284,7 @@ sub add_item {
 
     try {
         my $biblio_id = $c->param('biblio_id');
-        my $biblio    = Koha::Biblios->find( $biblio_id );
+        my $biblio    = Koha::Biblios->find($biblio_id);
 
         return $c->render_resource_not_found("Bibliographic record")
             unless $biblio;
@@ -309,19 +305,14 @@ sub add_item {
             my $barcode     = '';
 
             if ( !$autoBarcode || $autoBarcode eq 'OFF' ) {
+
                 #We do nothing
-            }
-            elsif ( $autoBarcode eq 'incremental' ) {
-                ($barcode) =
-                  C4::Barcodes::ValueBuilder::incremental::get_barcode;
-            }
-            elsif ( $autoBarcode eq 'annual' ) {
+            } elsif ( $autoBarcode eq 'incremental' ) {
+                ($barcode) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+            } elsif ( $autoBarcode eq 'annual' ) {
                 my $year = Koha::DateUtils::dt_from_string()->year();
-                ($barcode) =
-                  C4::Barcodes::ValueBuilder::annual::get_barcode(
-                    { year => $year } );
-            }
-            elsif ( $autoBarcode eq 'hbyymmincr' ) {
+                ($barcode) = C4::Barcodes::ValueBuilder::annual::get_barcode( { year => $year } );
+            } elsif ( $autoBarcode eq 'hbyymmincr' ) {
 
                 # Generates a barcode where
                 #  hb = home branch Code,
@@ -332,12 +323,9 @@ sub add_item {
                 my $year       = $now->year();
                 my $month      = $now->month();
                 my $homebranch = $item->homebranch // '';
-                ($barcode) =
-                  C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(
-                    { year => $year, mon => $month } );
+                ($barcode) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode( { year => $year, mon => $month } );
                 $barcode = $homebranch . $barcode;
-            }
-            elsif ( $autoBarcode eq 'EAN13' ) {
+            } elsif ( $autoBarcode eq 'EAN13' ) {
 
                 # not the best, two catalogers could add the same
                 # barcode easily this way :/
@@ -353,16 +341,13 @@ sub add_item {
                 if ( $ean->is_valid($nextnum) ) {
                     my $next = $ean->basenumber($nextnum) + 1;
                     $nextnum = $ean->complete($next);
-                    $nextnum =
-                      '0' x ( 13 - length($nextnum) ) . $nextnum;    # pad zeros
-                }
-                else {
+                    $nextnum = '0' x ( 13 - length($nextnum) ) . $nextnum;    # pad zeros
+                } else {
                     warn "ERROR: invalid EAN-13 $nextnum, using increment";
                     $nextnum++;
                 }
                 $barcode = $nextnum;
-            }
-            else {
+            } else {
                 warn "ERROR: unknown autoBarcode: $autoBarcode";
             }
             $item->barcode($barcode) if $barcode;
@@ -378,8 +363,7 @@ sub add_item {
             status  => 201,
             openapi => $c->objects->to_api($item),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
@@ -407,7 +391,7 @@ sub update_item {
         return $c->render_resource_not_found("Bibliographic record")
             unless $biblio;
 
-        my $item = $biblio->items->find({ itemnumber => $item_id });
+        my $item = $biblio->items->find( { itemnumber => $item_id } );
 
         return $c->render_resource_not_found("Item")
             unless $item;
@@ -427,8 +411,7 @@ sub update_item {
             status  => 200,
             openapi => $c->objects->to_api($item),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
@@ -458,16 +441,15 @@ sub get_checkouts {
             unless $biblio;
 
         my $checkouts =
-          ($checked_in)
-          ? $c->objects->search( $biblio->old_checkouts )
-          : $c->objects->search( $biblio->current_checkouts );
+            ($checked_in)
+            ? $c->objects->search( $biblio->old_checkouts )
+            : $c->objects->search( $biblio->current_checkouts );
 
         return $c->render(
             status  => 200,
             openapi => $checkouts
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -509,16 +491,13 @@ sub pickup_locations {
 
             @response = map {
                 my $library = $_;
-                $library->{needs_override} = (
-                    any { $_->branchcode eq $library->{library_id} }
-                    @{$pl_set->as_list}
-                  )
-                  ? Mojo::JSON->false
-                  : Mojo::JSON->true;
+                $library->{needs_override} =
+                    ( any { $_->branchcode eq $library->{library_id} } @{ $pl_set->as_list } )
+                    ? Mojo::JSON->false
+                    : Mojo::JSON->true;
                 $library;
             } @{$libraries};
-        }
-        else {
+        } else {
 
             my $pickup_locations = $c->objects->search($pl_set);
             @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
@@ -538,8 +517,7 @@ sub pickup_locations {
             status  => 200,
             openapi => \@response
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -566,14 +544,13 @@ sub get_items_public {
 
         my $patron = $c->stash('koha.user');
 
-        my $items_rs = $biblio->items->filter_by_visible_in_opac({ patron => $patron });
-        my $items    = $c->objects->search( $items_rs );
+        my $items_rs = $biblio->items->filter_by_visible_in_opac( { patron => $patron } );
+        my $items    = $c->objects->search($items_rs);
         return $c->render(
             status  => 200,
             openapi => $items
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -583,7 +560,6 @@ sub get_items_public {
 Set rating for the logged in user
 
 =cut
-
 
 sub set_rating {
     my $c = shift->openapi->valid_input or return;
@@ -596,9 +572,8 @@ sub set_rating {
     my $patron = $c->stash('koha.user');
     unless ($patron) {
         return $c->render(
-            status => 403,
-            openapi =>
-                { error => "Cannot rate. Reason: must be logged-in" }
+            status  => 403,
+            openapi => { error => "Cannot rate. Reason: must be logged-in" }
         );
     }
 
@@ -615,7 +590,7 @@ sub set_rating {
         );
         $rating->delete if $rating;
 
-        if ( $rating_value ) { # Cannot set to 0 from the UI
+        if ($rating_value) {    # Cannot set to 0 from the UI
             $rating = Koha::Rating->new(
                 {
                     biblionumber   => $biblio->biblionumber,
@@ -623,9 +598,8 @@ sub set_rating {
                     rating_value   => $rating_value,
                 }
             )->store;
-        };
-        my $ratings =
-          Koha::Ratings->search( { biblionumber => $biblio->biblionumber } );
+        }
+        my $ratings = Koha::Ratings->search( { biblionumber => $biblio->biblionumber } );
         my $average = $ratings->get_avg_rating;
 
         return $c->render(
@@ -636,8 +610,7 @@ sub set_rating {
                 count   => $ratings->count
             },
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -677,14 +650,11 @@ sub add {
 
         if ( $content_type =~ m/application\/marcxml\+xml/ ) {
             $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
-        }
-        elsif ( $content_type =~ m/application\/marc-in-json/ ) {
+        } elsif ( $content_type =~ m/application\/marc-in-json/ ) {
             $record = MARC::Record->new_from_mij_structure( $c->req->json );
-        }
-        elsif ( $content_type =~ m/application\/marc/ ) {
+        } elsif ( $content_type =~ m/application\/marc/ ) {
             $record = MARC::Record->new_from_usmarc( $c->req->body );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 406,
                 openapi => [
@@ -729,8 +699,7 @@ sub add {
             status  => 200,
             openapi => { id => $biblio_id }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -763,14 +732,11 @@ sub update {
 
         if ( $content_type =~ m/application\/marcxml\+xml/ ) {
             $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
-        }
-        elsif ( $content_type =~ m/application\/marc-in-json/ ) {
+        } elsif ( $content_type =~ m/application\/marc-in-json/ ) {
             $record = MARC::Record->new_from_mij_structure( $c->req->json );
-        }
-        elsif ( $content_type =~ m/application\/marc/ ) {
+        } elsif ( $content_type =~ m/application\/marc/ ) {
             $record = MARC::Record->new_from_usmarc( $c->req->body );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 406,
                 openapi => [
@@ -788,8 +754,7 @@ sub update {
             status  => 200,
             openapi => { id => $biblio->id }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -805,51 +770,42 @@ sub list {
 
     my @prefetch = qw(biblioitem);
     push @prefetch, 'metadata'    # don't prefetch metadata if not needed
-      unless $c->req->headers->accept =~ m/application\/json/;
+        unless $c->req->headers->accept =~ m/application\/json/;
 
-    my $rs = Koha::Biblios->search( undef, { prefetch => \@prefetch });
-    my $biblios = $c->objects->search_rs( $rs, [(sub{ $rs->api_query_fixer( $_[0], '', $_[1] ) })] );
+    my $rs      = Koha::Biblios->search( undef, { prefetch => \@prefetch } );
+    my $biblios = $c->objects->search_rs( $rs, [ ( sub { $rs->api_query_fixer( $_[0], '', $_[1] ) } ) ] );
 
     return try {
 
         if ( $c->req->headers->accept =~ m/application\/json(;.*)?$/ ) {
             return $c->render(
                 status => 200,
-                json   => $c->objects->to_api( $biblios ),
+                json   => $c->objects->to_api($biblios),
             );
-        }
-        elsif (
-            $c->req->headers->accept =~ m/application\/marcxml\+xml(;.*)?$/ )
-        {
+        } elsif ( $c->req->headers->accept =~ m/application\/marcxml\+xml(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marcxml+xml' );
             return $c->render(
                 status => 200,
                 text   => $biblios->print_collection('marcxml')
             );
-        }
-        elsif (
-            $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ )
-        {
+        } elsif ( $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc-in-json' );
             return $c->render(
                 status => 200,
                 data   => $biblios->print_collection('mij')
             );
-        }
-        elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
+        } elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc' );
             return $c->render(
                 status => 200,
                 text   => $biblios->print_collection('marc')
             );
-        }
-        elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
+        } elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
             return $c->render(
                 status => 200,
                 text   => $biblios->print_collection('txt')
             );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 406,
                 openapi => [
@@ -859,8 +815,7 @@ sub list {
                 ]
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

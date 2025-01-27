@@ -47,25 +47,25 @@ Default value for the dropbox.
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI         qw ( -utf8 );
 use C4::Charset qw( NormalizeString );
-use C4::Auth qw( check_api_auth );
+use C4::Auth    qw( check_api_auth );
 use Koha::AuthorisedValues;
 
 my $query = CGI->new();
 binmode STDOUT, ':encoding(UTF-8)';
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { catalogue => '*'} );
-unless ($status eq "ok") {
-    print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { catalogue => '*' } );
+unless ( $status eq "ok" ) {
+    print $query->header( -type => 'text/plain', -status => '403 Forbidden' );
     print '<option></option>';
     exit 0;
 }
 
-my $input = CGI->new;
-my $name = $input->param('name');
+my $input    = CGI->new;
+my $name     = $input->param('name');
 my $category = $input->param('category');
-my $default = $input->param('default');
+my $default  = $input->param('default');
 $default = C4::Charset::NormalizeString($default);
 my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
 
@@ -89,5 +89,5 @@ while ( my $av = $avs->next ) {
 $html .= qq|</select>|;
 
 binmode STDOUT, ':encoding(UTF-8)';
-print $input->header(-type => 'text/plain', -charset => 'UTF-8');
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 print $html;

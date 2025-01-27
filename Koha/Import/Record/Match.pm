@@ -41,11 +41,10 @@ Return the import record of this match
 =cut
 
 sub import_record {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $record_rs = $self->_result->import_record;
-    return Koha::Import::Record->_new_from_dbic( $record_rs );
+    return Koha::Import::Record->_new_from_dbic($record_rs);
 }
-
 
 =head2 Internal methods
 

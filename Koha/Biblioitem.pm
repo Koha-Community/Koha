@@ -17,7 +17,6 @@ package Koha::Biblioitem;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -59,24 +58,24 @@ on the API.
 
 sub to_api_mapping {
     return {
-        agerestriction   => 'age_restriction',
-        biblionumber     => 'biblio_id',
-        biblioitemnumber => undef, # meaningless
-        collectionissn   => 'collection_issn',
-        collectiontitle  => 'collection_title',
-        collectionvolume => 'collection_volume',
-        editionresponsibility => undef, # obsolete, not mapped
-        editionstatement => 'edition_statement',
-        illus            => 'illustrations',
-        itemtype         => 'item_type',
-        lccn             => 'lc_control_number',
-        place            => 'publication_place',
-        publicationyear  => 'publication_year',
-        publishercode    => 'publisher',
-        size             => 'material_size',
-        totalissues      => 'serial_total_issues',
-        volumedate       => 'volume_date',
-        volumedesc       => 'volume_description',
+        agerestriction        => 'age_restriction',
+        biblionumber          => 'biblio_id',
+        biblioitemnumber      => undef,                   # meaningless
+        collectionissn        => 'collection_issn',
+        collectiontitle       => 'collection_title',
+        collectionvolume      => 'collection_volume',
+        editionresponsibility => undef,                   # obsolete, not mapped
+        editionstatement      => 'edition_statement',
+        illus                 => 'illustrations',
+        itemtype              => 'item_type',
+        lccn                  => 'lc_control_number',
+        place                 => 'publication_place',
+        publicationyear       => 'publication_year',
+        publishercode         => 'publisher',
+        size                  => 'material_size',
+        totalissues           => 'serial_total_issues',
+        volumedate            => 'volume_date',
+        volumedesc            => 'volume_description',
     };
 }
 

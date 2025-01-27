@@ -21,11 +21,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use C4::Circulation qw( transferbook barcodedecode );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Reserves qw( ModReserve ModReserveAffect );
-use C4::Auth qw( get_session get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Reserves    qw( ModReserve ModReserveAffect );
+use C4::Auth        qw( get_session get_template_and_user );
 use C4::Members;
 use Koha::BiblioFrameworks;
 use Koha::AuthorisedValues;
@@ -38,25 +38,26 @@ use Koha::Patrons;
 
 my $query = CGI->new;
 
-if (!C4::Context->userenv){
-	my $sessionID = $query->cookie("CGISESSID");
+if ( !C4::Context->userenv ) {
+    my $sessionID = $query->cookie("CGISESSID");
     my $session;
-	$session = get_session($sessionID) if $sessionID;
-    if (!$session){
-		# no branch set we can't transfer
+    $session = get_session($sessionID) if $sessionID;
+    if ( !$session ) {
+
+        # no branch set we can't transfer
         print $query->redirect("/cgi-bin/koha/circ/set-library.pl");
-		exit;
-	}
+        exit;
+    }
 }
 
 #######################################################################################
 # Make the page .....
-my ($template, $user, $cookie, $flags ) = get_template_and_user(
+my ( $template, $user, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "circ/branchtransfers.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "circ/branchtransfers.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
@@ -77,7 +78,7 @@ my $cancelled;
 my $settransit;
 
 my $op             = $query->param('op')             || '';
-my $borrowernumber = $query->param('borrowernumber') ||  0;
+my $borrowernumber = $query->param('borrowernumber') || 0;
 my $tobranchcd     = $query->param('tobranchcd')     || '';
 my $trigger        = 'Manual';
 
@@ -85,58 +86,60 @@ my $ignoreRs = 0;
 ############
 # Deal with the requests....
 if ( $op eq "cud-KillWaiting" ) {
-    my $item = $query->param('itemnumber');
-    my $holds = Koha::Holds->search({
-        itemnumber     => $item,
-        borrowernumber => $borrowernumber
-    });
+    my $item  = $query->param('itemnumber');
+    my $holds = Koha::Holds->search(
+        {
+            itemnumber     => $item,
+            borrowernumber => $borrowernumber
+        }
+    );
     if ( $holds->count ) {
         $holds->next->cancel;
-        $cancelled   = 1;
-        $reqmessage  = 1;
-    } # FIXME else?
-}
-elsif ( $op eq "cud-SetTransit" ) {
-    my $item = $query->param('itemnumber');
+        $cancelled  = 1;
+        $reqmessage = 1;
+    }    # FIXME else?
+} elsif ( $op eq "cud-SetTransit" ) {
+    my $item       = $query->param('itemnumber');
     my $reserve_id = $query->param('reserve_id');
     ModReserveAffect( $item, $borrowernumber, 1, $reserve_id );
-    $ignoreRs    = 1;
-    $settransit  = 1;
-    $reqmessage  = 1;
-    $trigger     = 'Reserve';
-}
-elsif ( $op eq 'cud-KillReserved' ) {
+    $ignoreRs   = 1;
+    $settransit = 1;
+    $reqmessage = 1;
+    $trigger    = 'Reserve';
+} elsif ( $op eq 'cud-KillReserved' ) {
     my $biblionumber = $query->param('biblionumber');
-    my $reserve_id = $query->param('reserve_id');
-    my $hold = Koha::Holds->find({ reserve_id => $reserve_id });
-    if ( $hold ) {
+    my $reserve_id   = $query->param('reserve_id');
+    my $hold         = Koha::Holds->find( { reserve_id => $reserve_id } );
+    if ($hold) {
         $hold->cancel;
-        $cancelled   = 1;
-        $reqmessage  = 1;
-    } # FIXME else?
+        $cancelled  = 1;
+        $reqmessage = 1;
+    }    # FIXME else?
 }
 
 # collect the stack of books already transferred so they can printed...
 my @trsfitemloop;
 my $transferred;
 my $barcode = $query->param('barcode');
+
 # remove leading/trailing whitespace
 $barcode = barcodedecode($barcode) if $barcode;
-if ($op eq 'cud-transfer' && $barcode) {
+if ( $op eq 'cud-transfer' && $barcode ) {
 
-    ( $transferred, $messages ) =
-        transferbook({
-            from_branch => C4::Context->userenv->{'branch'},
-            to_branch => $tobranchcd,
-            barcode => $barcode,
+    ( $transferred, $messages ) = transferbook(
+        {
+            from_branch     => C4::Context->userenv->{'branch'},
+            to_branch       => $tobranchcd,
+            barcode         => $barcode,
             ignore_reserves => $ignoreRs,
-            trigger => $trigger
-        });
-    my $item = Koha::Items->find({ barcode => $barcode });
+            trigger         => $trigger
+        }
+    );
+    my $item = Koha::Items->find( { barcode => $barcode } );
     $found = $messages->{'ResFound'} unless $settransit;
     if ($transferred) {
         my %trsfitem;
-        my $frbranchcd =  C4::Context->userenv->{'branch'};
+        my $frbranchcd = C4::Context->userenv->{'branch'};
         $trsfitem{item}     = $item;
         $trsfitem{counter}  = 0;
         $trsfitem{frombrcd} = $frbranchcd;
@@ -156,8 +159,8 @@ foreach ( $query->param ) {
     $trsfitem{counter}  = $counter;
     $trsfitem{frombrcd} = $frbcd;
     $trsfitem{tobrcd}   = $tobcd;
-    my $item = Koha::Items->find({ barcode => $bc });
-    $trsfitem{item}     = $item;
+    my $item = Koha::Items->find( { barcode => $bc } );
+    $trsfitem{item} = $item;
     push( @trsfitemloop, \%trsfitem );
 }
 
@@ -169,12 +172,12 @@ my $biblionumber;
 my $hold;
 my $patron;
 my $found_biblio;
-if ($found){
+if ($found) {
     $hold = Koha::Holds->find(
         { reserve_id => $found->{reserve_id} },
-        { prefetch => ['item','patron'] }
+        { prefetch   => [ 'item', 'patron' ] }
     );
-    $itemnumber = $found->{'itemnumber'};
+    $itemnumber     = $found->{'itemnumber'};
     $borrowernumber = $found->{'borrowernumber'};
     $patron         = Koha::Patrons->find($borrowernumber);
     $found_biblio   = Koha::Biblios->find( $found->{'biblionumber'} );
@@ -186,7 +189,7 @@ if ($found){
     } elsif ( $found->{'ResFound'} eq "Processing" ) {
         $hold_processed = 1;
     } elsif ( $found->{'ResFound'} eq "Reserved" ) {
-        $reserved  = 1;
+        $reserved     = 1;
         $biblionumber = $found->{'biblionumber'};
     }
 }
@@ -198,27 +201,25 @@ foreach my $code ( keys %$messages ) {
         if ( $code eq 'BadBarcode' ) {
             $err{msg}        = $messages->{'BadBarcode'};
             $err{errbadcode} = 1;
-        }
-        elsif ( $code eq "NotAllowed" ) {
+        } elsif ( $code eq "NotAllowed" ) {
             warn "NotAllowed: $messages->{'NotAllowed'} to branchcode " . $messages->{'NotAllowed'};
+
             # Do we really want a error log message here? --atz
-            $err{errnotallowed} =  1;
-            my ( $tbr, $typecode ) = split( /::/,  $messages->{'NotAllowed'} );
-            $err{tbr}      = $tbr;
-            $err{code}     = $typecode;
-        }
-        elsif ( $code eq 'WasReturned' ) {
+            $err{errnotallowed} = 1;
+            my ( $tbr, $typecode ) = split( /::/, $messages->{'NotAllowed'} );
+            $err{tbr}  = $tbr;
+            $err{code} = $typecode;
+        } elsif ( $code eq 'WasReturned' ) {
             $err{errwasreturned} = 1;
             $err{borrowernumber} = $messages->{'WasReturned'};
             my $patron = Koha::Patrons->find( $messages->{'WasReturned'} );
-            if ( $patron ) { # Just in case...
+            if ($patron) {    # Just in case...
                 $err{patron} = $patron;
             }
-        }
-        elsif ( $code eq 'DestinationEqualsHolding' ) {
+        } elsif ( $code eq 'DestinationEqualsHolding' ) {
             $err{errdesteqholding} = 1;
         }
-        push( @errmsgloop, \%err ) if (keys %err);
+        push( @errmsgloop, \%err ) if ( keys %err );
     }
 }
 
@@ -226,29 +227,29 @@ foreach my $code ( keys %$messages ) {
 # warn "FINAL ============= ".Dumper(@trsfitemloop);
 
 $template->param(
-    found                   => $found,
-    hold                    => $hold,
-    reserved                => $reserved,
-    waiting                 => $waiting,
-    transferred             => $hold_transferred,
-    processing              => $hold_processed,
-    borrowernumber          => $borrowernumber,
-    itemnumber              => $itemnumber,
-    barcode                 => $barcode,
-    biblionumber            => $biblionumber,
-    tobranchcd              => $tobranchcd,
-    reqmessage              => $reqmessage,
-    cancelled               => $cancelled,
-    settransit              => $settransit,
-    trsfitemloop            => \@trsfitemloop,
-    errmsgloop              => \@errmsgloop,
-    PatronAutoComplete      => C4::Context->preference("PatronAutoComplete"),
-    patron                  => $patron,
-    found_biblio            => $found_biblio,
+    found              => $found,
+    hold               => $hold,
+    reserved           => $reserved,
+    waiting            => $waiting,
+    transferred        => $hold_transferred,
+    processing         => $hold_processed,
+    borrowernumber     => $borrowernumber,
+    itemnumber         => $itemnumber,
+    barcode            => $barcode,
+    biblionumber       => $biblionumber,
+    tobranchcd         => $tobranchcd,
+    reqmessage         => $reqmessage,
+    cancelled          => $cancelled,
+    settransit         => $settransit,
+    trsfitemloop       => \@trsfitemloop,
+    errmsgloop         => \@errmsgloop,
+    PatronAutoComplete => C4::Context->preference("PatronAutoComplete"),
+    patron             => $patron,
+    found_biblio       => $found_biblio,
 );
 
 # Checking if there is a Fast Cataloging Framework
-$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

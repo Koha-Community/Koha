@@ -19,7 +19,6 @@ package Koha::ArticleRequests;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::ArticleRequest::Status;
@@ -54,9 +53,10 @@ sub search_limited {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
         @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
     }
+
     # TODO This 'borrowernumber' relation name is confusing and needs to be renamed
     $params->{'borrowernumber.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
-    $attributes->{join} = 'borrowernumber';
+    $attributes->{join}                    = 'borrowernumber';
     return $self->search( $params, $attributes );
 }
 
@@ -122,7 +122,7 @@ sub pending {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Pending };
     $params->{'me.branchcode'} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search_limited( $params );
+    return Koha::ArticleRequests->search_limited($params);
 }
 
 =head3 processing
@@ -133,7 +133,7 @@ sub processing {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Processing };
     $params->{'me.branchcode'} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search_limited( $params );
+    return Koha::ArticleRequests->search_limited($params);
 }
 
 =head3 completed
@@ -144,7 +144,7 @@ sub completed {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Completed };
     $params->{'me.branchcode'} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search_limited( $params );
+    return Koha::ArticleRequests->search_limited($params);
 }
 
 =head3 canceled
@@ -155,7 +155,7 @@ sub canceled {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Canceled };
     $params->{'me.branchcode'} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search_limited( $params );
+    return Koha::ArticleRequests->search_limited($params);
 }
 
 =head3 _type

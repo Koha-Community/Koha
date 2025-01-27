@@ -19,12 +19,12 @@
 
 use Modern::Perl;
 use C4::Context;
-use C4::Scheduler qw( add_at_job get_jobs remove_at_job );
+use C4::Scheduler       qw( add_at_job get_jobs remove_at_job );
 use C4::Reports::Guided qw( get_saved_reports );
-use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
-use C4::Output qw( output_html_with_http_headers );
-use Koha::DateUtils qw( dt_from_string );;
+use C4::Auth            qw( get_template_and_user );
+use CGI                 qw ( -utf8 );
+use C4::Output          qw( output_html_with_http_headers );
+use Koha::DateUtils     qw( dt_from_string );
 use Koha::Reports;
 use Koha::Email;
 
@@ -32,20 +32,19 @@ my $input = CGI->new;
 my $base;
 
 if ( C4::Context->config('supportdir') ) {
-     $base = C4::Context->config('supportdir');
-}
-else {
-     $base = "/usr/share/koha/bin";
+    $base = C4::Context->config('supportdir');
+} else {
+    $base = "/usr/share/koha/bin";
 }
 
 my $CONFIG_NAME = $ENV{'KOHA_CONF'};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/scheduler.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'schedule_tasks' },
+        template_name => "tools/scheduler.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'schedule_tasks' },
     }
 );
 
@@ -57,7 +56,7 @@ if ( $op eq 'cud-add' ) {
     my $startdate = dt_from_string( scalar $input->param('startdate'), 'iso' )->ymd;
 
     # Formatting it for Schedule::At
-    $startdate = join('', (split /-/, $startdate));
+    $startdate = join( '', ( split /-/, $startdate ) );
     my $starttime = $input->param('starttime');
     $starttime =~ s/\://g;
     my $start  = $startdate . $starttime;
@@ -96,8 +95,7 @@ if ( $op eq 'cud-add' ) {
         unless ( add_at_job( $start, $command ) ) {
             $template->param( job_add_failed => 1 );
         }
-    }
-    else {
+    } else {
         $template->param( job_add_failed => 1 );
     }
 } elsif ( $op eq 'cud-delete' ) {

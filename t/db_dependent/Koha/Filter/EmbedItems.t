@@ -38,10 +38,10 @@ subtest 'EmbedItems tests' => sub {
     # Add a biblio
     my $biblio = $builder->build_sample_biblio;
     foreach ( 1 .. 10 ) {
-        $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+        $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
     }
 
-    my $mss = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 0 } );
+    my $mss      = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 0 } );
     my $item_tag = $mss->{'items.itemnumber'}[0]->{tagfield};
 
     $biblio->discard_changes;
@@ -50,16 +50,14 @@ subtest 'EmbedItems tests' => sub {
 
     my $processor = Koha::RecordProcessor->new(
         {
-            schema => 'MARC',
+            schema  => 'MARC',
             filters => ('EmbedItems'),
-            options => {
-                items => \@items
-            }
+            options => { items => \@items }
         }
     );
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
-    my $result = $processor->process( $record );
+    my $result = $processor->process($record);
     is( ref($result), 'MARC::Record', 'It returns a reference to a MARC::Record object' );
 
     my @item_fields = $record->field($item_tag);

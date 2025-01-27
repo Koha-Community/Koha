@@ -28,7 +28,7 @@ use C4::AuthoritiesMarc qw( GetTagsLabels );
 use Koha::Authority::Types;
 use Koha::Database;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 our $builder = t::lib::TestBuilder->new;
 
 $schema->storage->txn_begin;
@@ -42,18 +42,24 @@ subtest 'GetTagsLabels' => sub {
     is( $tagslib, undef, 'Nothing in table' );
 
     # Add one tag (and auth type), test librarian flag
-    my $tag = $builder->build_object({ class => 'Koha::Authority::Tags', value => { authtypecode => 'XX1', tagfield => '177' } });
+    my $tag = $builder->build_object(
+        { class => 'Koha::Authority::Tags', value => { authtypecode => 'XX1', tagfield => '177' } } );
     $tagslib = GetTagsLabels( 1, $tag->authtypecode );
-    is( ref($tagslib), 'HASH', 'Should be a hash' );
-    is( scalar keys %$tagslib, 1, 'Only one entry' );
-    is( ref( $tagslib->{177} ), 'HASH' , 'Should be a hash' );
+    is( ref($tagslib),          'HASH',             'Should be a hash' );
+    is( scalar keys %$tagslib,  1,                  'Only one entry' );
+    is( ref( $tagslib->{177} ), 'HASH',             'Should be a hash' );
     is( $tagslib->{177}->{lib}, $tag->liblibrarian, 'passed librarian flag' );
 
     # Add subfield, test opac flag
-    my $sub = $builder->build_object({ class => 'Koha::Authority::Subfields', value => { authtypecode => 'XX1', tagfield => '177', tagsubfield => 'a' } });
+    my $sub = $builder->build_object(
+        {
+            class => 'Koha::Authority::Subfields',
+            value => { authtypecode => 'XX1', tagfield => '177', tagsubfield => 'a' }
+        }
+    );
     $tagslib = GetTagsLabels( 0, $tag->authtypecode );
-    is( $tagslib->{177}->{lib}, $tag->libopac, 'passed opac flag' );
-    is( ref( $tagslib->{177}->{a} ), 'HASH' , 'Should be a hash' );
+    is( $tagslib->{177}->{lib},      $tag->libopac, 'passed opac flag' );
+    is( ref( $tagslib->{177}->{a} ), 'HASH',        'Should be a hash' );
     is( $tagslib->{177}->{a}->{lib}, $sub->libopac, 'opac lib in subfield' );
 };
 

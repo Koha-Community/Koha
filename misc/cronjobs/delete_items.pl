@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 
@@ -27,67 +27,60 @@ use Koha::Items;
 
 my $dbh = C4::Context->dbh();
 
-my $query = {
-    target_items => q|SELECT itemnumber, biblionumber from items|
-};
+my $query = { target_items => q|SELECT itemnumber, biblionumber from items| };
 
-my $GLOBAL = {
-      query => $query
-    , sth   => {}
-};
+my $GLOBAL = { query => $query, sth => {} };
 
 my $OPTIONS = {
-      where => []
-    , flags    => {
-            verbose   => ''
-          , commit    => ''
-          , help      => ''
-          , manual    => ''
-          , version   => ''
-      }
+    where => [],
+    flags => {
+        verbose => '', commit => ''
+        , help    => ''
+        , manual  => ''
+        , version => ''
+    }
 };
 
 GetOptions(
-      'where=s'    => $OPTIONS->{where}
-    , 'v|verbose'  => sub { $OPTIONS->{flags}->{verbose}   = 1 }
-    , 'V|version'  => sub { $OPTIONS->{flags}->{version}   = 1 }
-    , 'h|help'     => sub { $OPTIONS->{flags}->{help}      = 1 }
-    , 'm|manual'   => sub { $OPTIONS->{flags}->{manual}    = 1 }
-    , 'c|commit'   => sub { $OPTIONS->{flags}->{commit}    = 1 } # aka DO-EET!
+    'where=s' => $OPTIONS->{where}, 'v|verbose' => sub { $OPTIONS->{flags}->{verbose} = 1 }
+    , 'V|version' => sub { $OPTIONS->{flags}->{version} = 1 }
+    , 'h|help'    => sub { $OPTIONS->{flags}->{help}    = 1 }
+    , 'm|manual'  => sub { $OPTIONS->{flags}->{manual}  = 1 }
+    , 'c|commit'  => sub { $OPTIONS->{flags}->{commit}  = 1 }    # aka DO-EET!
 );
 
 my @where = @{ $OPTIONS->{where} };
 
-pod2usage( -verbose => 2 ) if  $OPTIONS->{flags}->{manual};
-pod2usage( -verbose => 1 ) if  $OPTIONS->{flags}->{help};
+pod2usage( -verbose => 2 )                                                       if $OPTIONS->{flags}->{manual};
+pod2usage( -verbose => 1 )                                                       if $OPTIONS->{flags}->{help};
 pod2usage( -verbose => 1 -msg => 'You must supply at least one --where option' ) if scalar @where == 0;
 
 sub verbose {
     say @_ if $OPTIONS->{flags}->{verbose};
 }
 
-my $where_clause = ' where ' . join ( " and ", @where );
+my $where_clause = ' where ' . join( " and ", @where );
 
 verbose "Where statement: $where_clause";
 
 # FIXME Use Koha::Items instead
-$GLOBAL->{sth}->{target_items} = $dbh->prepare( $query->{target_items} . $where_clause  );
+$GLOBAL->{sth}->{target_items} = $dbh->prepare( $query->{target_items} . $where_clause );
 $GLOBAL->{sth}->{target_items}->execute();
 
 DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() ) {
 
-    my $item_object = Koha::Items->find($item->{itemnumber});
+    my $item_object    = Koha::Items->find( $item->{itemnumber} );
     my $safe_to_delete = $item_object->safe_to_delete;
-    if( $safe_to_delete )  {
+    if ($safe_to_delete) {
         $item_object->safe_delete
             if $OPTIONS->{flags}->{commit};
         verbose "Deleting '$item->{itemnumber}'";
     } else {
         verbose sprintf "Item '%s' (Barcode: '%s', Title: '%s') not deleted: %s",
-                $item->{itemnumber},
-                $item_object->barcode,
-                $item_object->biblio->title,
-                @{$safe_to_delete->messages}[0]->message;
+            $item->{itemnumber},
+            $item_object->barcode,
+            $item_object->biblio->title,
+            @{ $safe_to_delete->messages }[0]->message;
     }
 }
 
@@ -134,7 +127,6 @@ No items will be deleted unless the C<--commit> flag is present.
 
 =cut
 
-
 =head1 EXAMPLES
 
   The following is an example of this script:
@@ -145,13 +137,11 @@ No items will be deleted unless the C<--commit> flag is present.
 
 =cut
 
-
 =head1 DESCRIPTION
 
  This is a lightweight batch deletion tool for items, suitable for running in a cron job.
 
 =cut
-
 
 =head1 AUTHOR
 

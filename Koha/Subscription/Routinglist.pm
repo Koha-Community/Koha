@@ -18,7 +18,6 @@ package Koha::Subscription::Routinglist;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Subscriptions;
 
@@ -43,8 +42,8 @@ Returns the subscription for a routing list.
 =cut
 
 sub subscription {
-    my ( $self ) = @_;
-    return Koha::Subscription->_new_from_dbic($self->_result->subscriptionid);
+    my ($self) = @_;
+    return Koha::Subscription->_new_from_dbic( $self->_result->subscriptionid );
 }
 
 =head2 Internal methods

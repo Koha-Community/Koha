@@ -23,9 +23,9 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 
 use C4::Members;
 use C4::Accounts;
@@ -39,10 +39,10 @@ use Koha::AdditionalFields;
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/mancredit.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {
+        template_name => "members/mancredit.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => {
             borrowers     => 'edit_borrowers',
             updatecharges => 'manual_credit'
         }
@@ -63,14 +63,13 @@ output_and_exit_if_error(
     }
 );
 
-my $library_id =
-  C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
 
 my $op = $input->param('op') // q{};
 if ( $op eq 'cud-add' ) {
 
-# Note: If the logged in user is not allowed to see this patron an invoice can be forced
-# Here we are trusting librarians not to hack the system
+    # Note: If the logged in user is not allowed to see this patron an invoice can be forced
+    # Here we are trusting librarians not to hack the system
     my $barcode = $input->param('barcode');
     my $item_id;
     if ($barcode) {
@@ -101,28 +100,28 @@ if ( $op eq 'cud-add' ) {
 
     my @additional_fields = $line->prepare_cgi_additional_field_values( $input, 'accountlines:credit' );
     if (@additional_fields) {
-        $line->set_additional_fields(\@additional_fields);
+        $line->set_additional_fields( \@additional_fields );
     }
 
     if ( C4::Context->preference('AccountAutoReconcile') ) {
         $patron->account->reconcile_balance;
     }
 
-    print $input->redirect(
-        "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
     exit;
-}
-else {
+} else {
 
     my @credit_types = Koha::Account::CreditTypes->search_with_library_limits(
         { can_be_added_manually => 1, archived => 0 },
-        {}, $library_id )->as_list;
+        {}, $library_id
+    )->as_list;
 
     $template->param(
-        patron       => $patron,
-        credit_types => \@credit_types,
-        finesview    => 1,
-        available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:credit' })->as_list ],
+        patron                      => $patron,
+        credit_types                => \@credit_types,
+        finesview                   => 1,
+        available_additional_fields =>
+            [ Koha::AdditionalFields->search( { tablename => 'accountlines:credit' } )->as_list ],
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

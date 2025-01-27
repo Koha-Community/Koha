@@ -7,7 +7,7 @@ use CGI;
 use Test::More tests => 5;
 
 use C4::Acquisition qw( NewBasket GetBasket GetBasketAsCSV );
-use C4::Biblio qw( AddBiblio );
+use C4::Biblio      qw( AddBiblio );
 use Koha::Database;
 use Koha::CsvProfiles;
 use Koha::Acquisition::Orders;
@@ -21,12 +21,14 @@ $schema->storage->txn_begin();
 
 my $query = CGI->new();
 
-my $vendor = Koha::Acquisition::Bookseller->new({
-    name => 'my vendor',
-    address1 => 'vendor address',
-    active => 1,
-    deliverytime => 5,
-})->store;
+my $vendor = Koha::Acquisition::Bookseller->new(
+    {
+        name         => 'my vendor',
+        address1     => 'vendor address',
+        active       => 1,
+        deliverytime => 5,
+    }
+)->store;
 
 my $budget_period_id = C4::Budgets::AddBudgetPeriod(
     {
@@ -44,47 +46,55 @@ my $budget_id = C4::Budgets::AddBudget(
         budget_period_id => $budget_period_id,
     }
 );
-my $budget = C4::Budgets::GetBudget( $budget_id );
+my $budget = C4::Budgets::GetBudget($budget_id);
 
-my $csv_profile = Koha::CsvProfile->new({
-    profile => 'my user profile',
-    type => 'export_basket',
-    csv_separator => ',',
-    content => 'autor=biblio.author|title=biblio.title|quantity=aqorders.quantity',
-    description => 'csv profile',
-})->store;
+my $csv_profile = Koha::CsvProfile->new(
+    {
+        profile       => 'my user profile',
+        type          => 'export_basket',
+        csv_separator => ',',
+        content       => 'autor=biblio.author|title=biblio.title|quantity=aqorders.quantity',
+        description   => 'csv profile',
+    }
+)->store;
 
-my $csv_profile2 = Koha::CsvProfile->new({
-    profile => 'my user profile',
-    type => 'export_basket',
-    csv_separator => ',',
-    content => 'biblio.author | title = biblio.title|quantity=aqorders.quantity',
-    description => 'csv profile 2',
-})->store;
+my $csv_profile2 = Koha::CsvProfile->new(
+    {
+        profile       => 'my user profile',
+        type          => 'export_basket',
+        csv_separator => ',',
+        content       => 'biblio.author | title = biblio.title|quantity=aqorders.quantity',
+        description   => 'csv profile 2',
+    }
+)->store;
 
 my $basketno;
-$basketno = NewBasket($vendor->id, 1);
+$basketno = NewBasket( $vendor->id, 1 );
 
 my $biblio = MARC::Record->new();
 $biblio->append_fields(
     MARC::Field->new( '100', ' ', ' ', a => 'King, Stephen' ),
     MARC::Field->new( '245', ' ', ' ', a => 'Test Record' ),
 );
-my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
 
-my $order = Koha::Acquisition::Order->new({
-    basketno => $basketno,
-    quantity => 3,
-    biblionumber => $biblionumber,
-    budget_id => $budget_id,
-    entrydate => '2016-01-02',
-})->store;
+my $order = Koha::Acquisition::Order->new(
+    {
+        basketno     => $basketno,
+        quantity     => 3,
+        biblionumber => $biblionumber,
+        budget_id    => $budget_id,
+        entrydate    => '2016-01-02',
+    }
+)->store;
 
 # Use user CSV profile
-my $basket_csv1 = C4::Acquisition::GetBasketAsCSV($basketno, $query, $csv_profile->export_format_id);
-is($basket_csv1, 'autor,title,quantity
+my $basket_csv1 = C4::Acquisition::GetBasketAsCSV( $basketno, $query, $csv_profile->export_format_id );
+is(
+    $basket_csv1, 'autor,title,quantity
 "King, Stephen","Test Record",3
-', 'CSV should be generated with user profile');
+', 'CSV should be generated with user profile'
+);
 
 # Use default template
 t::lib::Mocks::mock_preference( 'CSVDelimiter', ',' );
@@ -96,16 +106,21 @@ is(
 ', 'CSV should be generated with default template'
 );
 
-my $basket_csv3 = C4::Acquisition::GetBasketAsCSV($basketno, $query, $csv_profile2->export_format_id);
-is($basket_csv3, 'biblio.author,title,quantity
+my $basket_csv3 = C4::Acquisition::GetBasketAsCSV( $basketno, $query, $csv_profile2->export_format_id );
+is(
+    $basket_csv3, 'biblio.author,title,quantity
 "King, Stephen","Test Record",3
-', 'CSV should be generated with user profile which does not have all headers defined');
+', 'CSV should be generated with user profile which does not have all headers defined'
+);
 
 try {
-    my $basket_csv4 = C4::Acquisition::GetBasketAsCSV($basketno, $query, 'non_existant_profile_id');
+    my $basket_csv4 = C4::Acquisition::GetBasketAsCSV( $basketno, $query, 'non_existant_profile_id' );
     fail("It is not possible to export basket using non-existant profile");
 } catch {
-    ok($_->isa("Koha::Exceptions::ObjectNotFound"), "Using non-existant profile should throw ObjectNotFound exception");
+    ok(
+        $_->isa("Koha::Exceptions::ObjectNotFound"),
+        "Using non-existant profile should throw ObjectNotFound exception"
+    );
 };
 
 Koha::Biblios->find($biblionumber)->delete;

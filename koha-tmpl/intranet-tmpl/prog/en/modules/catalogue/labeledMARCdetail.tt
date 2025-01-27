@@ -5,21 +5,22 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% FILTER collapse %]
-    [% IF ( unknownbiblionumber ) %]
-        [% t("Unknown record") | html %]
-    [% ELSE %]
-        [% tx("Labeled MARC details for {title}", { title = bibliotitle }) | html %]
-    [% END %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( unknownbiblionumber ) %]
+            [% t("Unknown record") | html %]
+        [% ELSE %]
+            [% tx("Labeled MARC details for {title}", { title = bibliotitle }) | html %]
+        [% END %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 
-    [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="catlaog_labeledMARCdetail" class="catalog">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -39,46 +40,48 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
-                [% INCLUDE 'cat-toolbar.inc' %]
+    [% INCLUDE 'cat-toolbar.inc' %]
 
-                <h1>
-                    [% IF ( unknownbiblionumber ) %]
-                        Unknown record
-                    [% ELSE %]
-                        Labeled MARC record : [% biblionumber | html %]  ( [% bibliotitle | html %] )
-                    [% END %]
-                </h1>
+    <h1>
+        [% IF ( unknownbiblionumber ) %]
+            Unknown record
+        [% ELSE %]
+            Labeled MARC record : [% biblionumber | html %] ( [% bibliotitle | html %] )
+        [% END %]
+    </h1>
 
-                <div class="page-section">
-
-                    <p><strong>With framework:
-                    <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
-                        <option value="">Default</option>
-                        [% FOREACH framework IN frameworks %]
+    <div class="page-section">
+        <p
+            ><strong
+                >With framework:
+                <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+                    <option value="">Default</option>
+                    [% FOREACH framework IN frameworks %]
                         [% IF framework.frameworkcode == frameworkcode %]
                             <option value="[% framework.frameworkcode | html %]" selected="selected">[% framework.frameworktext | html %]</option>
                         [% ELSE %]
                             <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
                         [% END %]
-                        [% END %]
-                    </select>
-                    </strong></p>
-					<!-- div id="bibliotabs" class="toptabs numbered" -->
-					<div>
-						<table class="labeledmarc-table">
-							[% FOREACH marc_dat IN marc_data %]
-								<tr>
-									<td class="labeledmarc-label">[% marc_dat.label | html %]</td>
-									<td class="labeledmarc-value">[% marc_dat.value | html %]</td>
-								</tr>
-							[% END %]
-						</table>
-					</div>
-                </div>
+                    [% END %]
+                </select>
+            </strong></p
+        >
+        <!-- div id="bibliotabs" class="toptabs numbered" -->
+        <div>
+            <table class="labeledmarc-table">
+                [% FOREACH marc_dat IN marc_data %]
+                    <tr>
+                        <td class="labeledmarc-label">[% marc_dat.label | html %]</td>
+                        <td class="labeledmarc-value">[% marc_dat.value | html %]</td>
+                    </tr>
+                [% END %]
+            </table>
+        </div>
+    </div>
 [% END %]
 
 [% IF ( Koha.Preference('CatalogConcerns') ) %]
-[% INCLUDE 'modals/add_catalog_concern.inc' %]
+    [% INCLUDE 'modals/add_catalog_concern.inc' %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -86,8 +89,12 @@
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+    </script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+    </script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
@@ -101,20 +108,20 @@
         [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
     [% END %]
     <script>
-    //<![CDATA[
-        var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
-        browser.show();
-        $(document).ready(function() {
-            $("#Frameworks").on("change",function(){
-                Changefwk(this);
+        //<![CDATA[
+            var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
+            browser.show();
+            $(document).ready(function() {
+                $("#Frameworks").on("change",function(){
+                    Changefwk(this);
+                });
             });
-        });
-        function Changefwk(FwkList)
-        {
-            var fwk = FwkList.options[FwkList.selectedIndex].value;
-            window.location = "labeledMARCdetail.pl?biblionumber=[% biblionumber | html %]&frameworkcode="+fwk;
-        }
-    //]]>
+            function Changefwk(FwkList)
+            {
+                var fwk = FwkList.options[FwkList.selectedIndex].value;
+                window.location = "labeledMARCdetail.pl?biblionumber=[% biblionumber | html %]&frameworkcode="+fwk;
+            }
+        //]]>
     </script>
 [% END %]
 

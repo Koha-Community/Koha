@@ -17,7 +17,6 @@ package Koha::Course::Reserves;
 
 use Modern::Perl;
 
-
 use Koha::Course::Reserve;
 
 use base qw(Koha::Objects);

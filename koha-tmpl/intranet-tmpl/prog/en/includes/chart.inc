@@ -36,7 +36,7 @@
                         [% IF allresults.size %]
                             <li>
                                 <label for="include-all">Include all rows (ignore pagination):</label>
-                                <input id="include-all" name="chart-include-all" type="checkbox" checked="checked"/>
+                                <input id="include-all" name="chart-include-all" type="checkbox" checked="checked" />
                             </li>
                         [% ELSE %]
                             <li>
@@ -59,7 +59,7 @@
                                         </a>
                                     </legend>
                                     <div>
-                                        <label for="y_[% column | html %]" >y:</label>
+                                        <label for="y_[% column | html %]">y:</label>
                                         <select id="y_[% column | html %]" name="y">
                                             <option value="[% supposed_x | html %]" selected>[% supposed_x | html %]</option>
                                             [% FOREACH h IN header_row %]
@@ -68,7 +68,7 @@
                                                 [% ELSE %]
                                                     <option value="[% h.cell | html %]">[% h.cell | html %]</option>
                                                 [% END %]
-                                        [% END %]
+                                            [% END %]
                                         </select>
                                     </div>
 

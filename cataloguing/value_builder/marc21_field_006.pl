@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
@@ -30,7 +30,7 @@ use C4::Output qw( output_html_with_http_headers );
 use XML::LibXML;
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
     my $res           = "
 <script>
@@ -47,53 +47,54 @@ function Click$function_name(event) {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $index   = $input->param('index');
-    my $result  = $input->param('result');
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $index    = $input->param('index');
+    my $result   = $input->param('result');
 
     my $dbh = C4::Context->dbh;
 
-    my ($template, $loggedinuser, $cookie) = get_template_and_user(
-        {   template_name   => "cataloguing/value_builder/marc21_field_006.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { editcatalogue => '*' },
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/marc21_field_006.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
         }
     );
     $result = "a|||||r|||| 00| 0 " unless $result;
     my $material_form_mapping = {
         a => 'BKS', t => 'BKS',
-        c => 'MU', d => 'MU', i => 'MU', j => 'MU',
-        e => 'MP', f => 'MP',
-        g => 'VM', k => 'VM', o => 'VM', r => 'VM',
+        c => 'MU',  d => 'MU', i => 'MU', j => 'MU',
+        e => 'MP',  f => 'MP',
+        g => 'VM',  k => 'VM', o => 'VM', r => 'VM',
         m => 'CF',
         p => 'MX',
         s => 'CR',
     };
-    my $material_code = substr(($result // ' '), 0, 1);
+    my $material_code          = substr( ( $result // ' ' ), 0, 1 );
     my $material_configuration = $material_form_mapping->{$material_code};
 
     my $errorXml = '';
+
     # Check if the xml, xsd exists and is validated
     my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->{lang} . '/data/';
-    if (-r $dir . 'marc21_field_006.xml') {
-        my $doc = XML::LibXML->new->parse_file($dir . 'marc21_field_006.xml');
-        if (-r $dir . 'marc21_field_CF.xsd') {
-            my $xmlschema = XML::LibXML::Schema->new(location => $dir . 'marc21_field_CF.xsd');
-            eval {
-                $xmlschema->validate( $doc );
-            };
+    if ( -r $dir . 'marc21_field_006.xml' ) {
+        my $doc = XML::LibXML->new->parse_file( $dir . 'marc21_field_006.xml' );
+        if ( -r $dir . 'marc21_field_CF.xsd' ) {
+            my $xmlschema = XML::LibXML::Schema->new( location => $dir . 'marc21_field_CF.xsd' );
+            eval { $xmlschema->validate($doc); };
             $errorXml = 'Can\'t validate the xml data from ' . $dir . 'marc21_field_006.xml' if ($@);
         }
     } else {
         $errorXml = 'Can\'t read the xml file ' . $dir . 'marc21_field_006.xml';
     }
-    $template->param(tagfield => '006',
-            index => $index,
-            result => $result,
-            errorXml => $errorXml,
-            material_configuration => $material_configuration,
+    $template->param(
+        tagfield               => '006',
+        index                  => $index,
+        result                 => $result,
+        errorXml               => $errorXml,
+        material_configuration => $material_configuration,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 };

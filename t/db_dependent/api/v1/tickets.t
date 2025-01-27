@@ -62,18 +62,15 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No tickets, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/tickets")->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/tickets")->status_is(200)->json_is( [] );
 
     my $ticket = $builder->build_object( { class => 'Koha::Tickets' } );
 
     # One ticket created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/tickets")->status_is(200)
-      ->json_is( [ $ticket->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/tickets")->status_is(200)->json_is( [ $ticket->to_api ] );
 
-    my $another_ticket = $builder->build_object( { class => 'Koha::Tickets' } );
-    my $and_another_ticket =
-      $builder->build_object( { class => 'Koha::Tickets' } );
+    my $another_ticket     = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $and_another_ticket = $builder->build_object( { class => 'Koha::Tickets' } );
 
     # Two tickets created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/tickets")->status_is(200)->json_is(
@@ -84,15 +81,14 @@ subtest 'list() tests' => sub {
     );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/tickets?ticket_blah=blah")
-      ->status_is(400)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/tickets?ticket_blah=blah")->status_is(400)->json_is(
         [
             {
                 path    => '/query/ticket_blah',
                 message => 'Malformed query string'
             }
         ]
-      );
+    );
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/tickets")->status_is(403);
@@ -127,19 +123,16 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/tickets/" . $ticket->id )
-      ->status_is(200)->json_is( $ticket->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/tickets/" . $ticket->id )->status_is(200)->json_is( $ticket->to_api );
 
-    $t->get_ok( "//$unauth_userid:$password@/api/v1/tickets/" . $ticket->id )
-      ->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/tickets/" . $ticket->id )->status_is(403);
 
-    my $ticket_to_delete =
-      $builder->build_object( { class => 'Koha::Tickets' } );
-    my $non_existent_id = $ticket_to_delete->id;
+    my $ticket_to_delete = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $non_existent_id  = $ticket_to_delete->id;
     $ticket_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/tickets/$non_existent_id")
-      ->status_is(404)->json_is( '/error' => 'Ticket not found' );
+    $t->get_ok("//$userid:$password@/api/v1/tickets/$non_existent_id")->status_is(404)
+        ->json_is( '/error' => 'Ticket not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -179,9 +172,7 @@ subtest 'add() tests' => sub {
     };
 
     # Unauthorized attempt to write
-    $t->post_ok(
-        "//$unauth_userid:$password@/api/v1/tickets" => json => $ticket )
-      ->status_is(403);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/tickets" => json => $ticket )->status_is(403);
 
     # Authorized attempt to write invalid data
     my $ticket_with_invalid_field = {
@@ -192,43 +183,40 @@ subtest 'add() tests' => sub {
         body      => "Test ticket details",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json =>
-          $ticket_with_invalid_field )->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket_with_invalid_field )->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-          );
+        );
 
     # Authorized attempt to write
     my $ticket_id =
-      $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )
-      ->status_is( 201, 'REST3.2.1' )->header_like(
+        $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
         'REST3.4.1'
-    )->json_is( '/biblio_id' => $ticket->{biblio_id} )
-      ->json_is( '/title'       => $ticket->{title} )
-      ->json_is( '/body'        => $ticket->{body} )
-      ->json_is( '/reporter_id' => $librarian->id )->tx->res->json->{ticket_id};
+    )->json_is( '/biblio_id' => $ticket->{biblio_id} )->json_is( '/title' => $ticket->{title} )
+        ->json_is( '/body' => $ticket->{body} )->json_is( '/reporter_id' => $librarian->id )
+        ->tx->res->json->{ticket_id};
 
     # Authorized attempt to create with null id
     $ticket->{ticket_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )
-      ->status_is(400)->json_has('/errors');
+    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )->status_is(400)->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $ticket->{ticket_id} = $ticket_id;
-    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )
-      ->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
                 path    => "/body/ticket_id"
             }
         ]
-      );
+    );
 
     # Authorized attempt to write missing data
     my $ticket_with_missing_field = {
@@ -237,15 +225,15 @@ subtest 'add() tests' => sub {
         body      => "Test ticket details",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json =>
-          $ticket_with_missing_field )->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket_with_missing_field )->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Missing property.",
                 path    => "/body/title"
             }
         ]
-    );
+        );
 
     subtest 'public add' => sub {
         plan tests => 7;
@@ -295,13 +283,13 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $ticket = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $ticket    = $builder->build_object( { class => 'Koha::Tickets' } );
     my $ticket_id = $ticket->id;
 
     # Unauthorized attempt to update
     $t->put_ok(
-        "//$unauth_userid:$password@/api/v1/tickets/$ticket_id" => json =>
-          { name => 'New unauthorized name change' } )->status_is(403);
+        "//$unauth_userid:$password@/api/v1/tickets/$ticket_id" => json => { name => 'New unauthorized name change' } )
+        ->status_is(403);
 
     # Attempt partial update on a PUT
     my $ticket_with_missing_field = {
@@ -309,10 +297,8 @@ subtest 'update() tests' => sub {
         body   => "Test ticket details",
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
-          $ticket_with_missing_field )->status_is(400)
-      ->json_is( "/errors" =>
-          [ { message => "Missing property.", path => "/body/title" } ] );
+    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json => $ticket_with_missing_field )
+        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/title" } ] );
 
     # Full object update on PUT
     my $ticket_with_updated_field = {
@@ -321,16 +307,13 @@ subtest 'update() tests' => sub {
         body   => "Test ticket update details",
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
-          $ticket_with_updated_field )->status_is(200)
-      ->json_is( '/title' => 'Test ticket update' );
+    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json => $ticket_with_updated_field )
+        ->status_is(200)->json_is( '/title' => 'Test ticket update' );
 
     # Set the assignee on PUT
     $ticket_with_updated_field->{assignee_id} = $librarian->id;
-    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
-          $ticket_with_updated_field )->status_is(200)
-      ->json_is( '/title' => 'Test ticket update' )
-      ->json_is( '/assignee_id' => $librarian->id );
+    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json => $ticket_with_updated_field )
+        ->status_is(200)->json_is( '/title' => 'Test ticket update' )->json_is( '/assignee_id' => $librarian->id );
 
     my $updates = $ticket->updates;
     is( $updates->count, 1, "Ticket update added for assignee change" );
@@ -343,30 +326,28 @@ subtest 'update() tests' => sub {
         body   => "Test ticket update details",
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
-          $ticket_with_invalid_field )->status_is(400)->json_is(
+    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json => $ticket_with_invalid_field )
+        ->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-          );
+        );
 
-    my $ticket_to_delete =
-      $builder->build_object( { class => 'Koha::Tickets' } );
-    my $non_existent_id = $ticket_to_delete->id;
+    my $ticket_to_delete = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $non_existent_id  = $ticket_to_delete->id;
     $ticket_to_delete->delete;
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/tickets/$non_existent_id" => json =>
-          $ticket_with_updated_field )->status_is(404);
+    $t->put_ok( "//$userid:$password@/api/v1/tickets/$non_existent_id" => json => $ticket_with_updated_field )
+        ->status_is(404);
 
     # Wrong method (POST)
     $ticket_with_updated_field->{ticket_id} = 2;
 
-    $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
-          $ticket_with_updated_field )->status_is(404);
+    $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json => $ticket_with_updated_field )
+        ->status_is(404);
 
     $schema->storage->txn_rollback;
 };
@@ -400,14 +381,12 @@ subtest 'delete() tests' => sub {
     my $ticket_id = $builder->build_object( { class => 'Koha::Tickets' } )->id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok("//$unauth_userid:$password@/api/v1/tickets/$ticket_id")
-      ->status_is(403);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/tickets/$ticket_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/tickets/$ticket_id")
-      ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/tickets/$ticket_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
-    $t->delete_ok("//$userid:$password@/api/v1/tickets/$ticket_id")
-      ->status_is(404);
+    $t->delete_ok("//$userid:$password@/api/v1/tickets/$ticket_id")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

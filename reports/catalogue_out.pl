@@ -23,6 +23,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
+
 # use Date::Manip;  # TODO: add not borrowed since date X criteria
 
 =head1 catalogue_out
@@ -39,10 +40,10 @@ my @filters = $input->multi_param("Filter");
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "reports/catalogue_out.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { reports => 'execute_reports' },
+        template_name => "reports/catalogue_out.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => 'execute_reports' },
     }
 );
 
@@ -76,8 +77,8 @@ sub calculate {
             if ( ( $i == 1 ) and ( @$filters[ $i - 1 ] ) ) {
                 $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
             }
-            $cell{crit} = "homelibrary"   if ( $i == 0 );
-            $cell{crit} = "itemtype" if ( $i == 1 );
+            $cell{crit} = "homelibrary" if ( $i == 0 );
+            $cell{crit} = "itemtype"    if ( $i == 1 );
             push @loopfilter, \%cell;
         }
     }
@@ -86,13 +87,13 @@ sub calculate {
         push @loopfilter, { crit => 'by', filter => $column };
         my $tablename = ( $column =~ /branchcode/ ) ? 'branches' : 'items';
         $column =
-          ( $column =~ /branchcode/ or $column =~ /itype/ )
-          ? "$tablename.$column"
-          : $column;
+            ( $column =~ /branchcode/ or $column =~ /itype/ )
+            ? "$tablename.$column"
+            : $column;
         my $strsth2 =
-          ( $tablename eq 'branches' )
-          ? "SELECT $column as coltitle, count(items.itemnumber) AS coltitle_count FROM $tablename LEFT JOIN items ON items.homebranch=$column "
-          : "SELECT $column as coltitle, count(*)                AS coltitle_count FROM $tablename ";
+            ( $tablename eq 'branches' )
+            ? "SELECT $column as coltitle, count(items.itemnumber) AS coltitle_count FROM $tablename LEFT JOIN items ON items.homebranch=$column "
+            : "SELECT $column as coltitle, count(*)                AS coltitle_count FROM $tablename ";
         if ( $tablename eq 'branches' ) {
             my $f = @$filters[0];
             $f =~ s/\*/%/g;
@@ -141,9 +142,9 @@ sub calculate {
     }
     if ($column) {
         $query .= " AND $column = ? GROUP BY items.itemnumber, $column ";
+
         # placeholder handled below
-    }
-    else {
+    } else {
         $query .= " GROUP BY items.itemnumber ";
     }
     $query .= " ORDER BY items.itemcallnumber DESC, barcode";
@@ -154,20 +155,20 @@ sub calculate {
 
     if ($column) {
         foreach ( sort keys %columns ) {
+
             # execute(@exe_args,$_) would fail when the array is empty
             # but @more_exe_args will work
             my (@more_exe_args) = @exe_args;
             push @more_exe_args, $_;
             $dbcalc->execute(@more_exe_args)
-              or die "Query execute(@more_exe_args) failed: $query";
+                or die "Query execute(@more_exe_args) failed: $query";
             while ( my $data = $dbcalc->fetchrow_hashref ) {
                 my $col = $data->{col} || 'NULL';
                 $tables{$col} or $tables{$col} = [];
                 push @{ $tables{$col} }, $data;
             }
         }
-    }
-    else {
+    } else {
         ( scalar @exe_args ) ? $dbcalc->execute(@exe_args) : $dbcalc->execute;
         while ( my $data = $dbcalc->fetchrow_hashref ) {
             my $col = $data->{col} || 'NULL';
@@ -187,14 +188,14 @@ sub calculate {
         $globalline{total_looptable_count} += $count;
         $globalline{total_coltitle_count}  += $allitems;
         push @{ $globalline{looptables} },
-          {
+            {
             looprow         => \@temptable,
             coltitle        => $tablename,
             coltitle_count  => $allitems,
             looptable_count => $count,
-            looptable_first => ($count) ? $temptable[0]->{itemcallnumber} : '',
+            looptable_first => ($count) ? $temptable[0]->{itemcallnumber}  : '',
             looptable_last  => ($count) ? $temptable[-1]->{itemcallnumber} : '',
-          };
+            };
     }
 
     # the header of the table

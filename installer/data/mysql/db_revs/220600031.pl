@@ -1,15 +1,17 @@
 use Modern::Perl;
 
 return {
-    bug_number => "30327",
+    bug_number  => "30327",
     description => "Add biblionumber to ComponentSortField",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
-        $dbh->do(q{
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
+        $dbh->do(
+            q{
             UPDATE systempreferences set options="call_number|pubdate|acqdate|title|author|biblionumber"
             WHERE variable = 'ComponentSortField'
-        });
+        }
+        );
         say $out "Added biblionumber option to ComponentSortField";
     },
 };

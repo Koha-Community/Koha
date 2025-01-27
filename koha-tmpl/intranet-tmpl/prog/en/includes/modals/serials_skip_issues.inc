@@ -11,8 +11,8 @@
                         <legend>Skip issues and generate next</legend>
                         <ol>
                             <li>
-                            <label for="nbissues" class="required">How many issues do you want to skip?</label>
-                            <input type="text" pattern="^\d$" size="10" id="skip_issues" name="skip_issues" required="required" />
+                                <label for="nbissues" class="required">How many issues do you want to skip?</label>
+                                <input type="text" pattern="^\d$" size="10" id="skip_issues" name="skip_issues" required="required" />
                             </li>
                         </ol>
                         <input type="hidden" name="op" value="cud-gennext" />

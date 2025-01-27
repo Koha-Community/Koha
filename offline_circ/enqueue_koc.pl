@@ -20,9 +20,9 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 use C4::Accounts;
 use C4::Circulation qw( AddOfflineOperation );
@@ -32,19 +32,20 @@ use Koha::Checkouts;
 use Koha::UploadedFiles;
 use Koha::Items;
 
-
 # this is the file version number that we're coded against.
 my $FILE_VERSION = '1.0';
 
 my $query = CGI->new;
 my @output;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "offline_circ/enqueue_koc.tt",
-    query => $query,
-    type => "intranet",
-     flagsrequired   => { circulate => "circulate_remaining_permissions" },
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "offline_circ/enqueue_koc.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
+    }
+);
 
 my $fileID = $query->param('uploadedfileid');
 my $op     = $query->param('op') // q{};
@@ -53,32 +54,32 @@ my $op     = $query->param('op') // q{};
 our $dbh = C4::Context->dbh();
 
 if ( $op eq 'cud-enqueue' && $fileID ) {
-    my $upload = Koha::UploadedFiles->find($fileID);
-    my $fh = $upload? $upload->file_handle: undef;
-    my @input_lines = $fh? <$fh>: ();
+    my $upload      = Koha::UploadedFiles->find($fileID);
+    my $fh          = $upload ? $upload->file_handle : undef;
+    my @input_lines = $fh     ? <$fh>                : ();
     $fh->close if $fh;
 
     my $header_line = shift @input_lines;
     my $file_info   = parse_header_line($header_line);
-    if ($file_info->{'Version'} ne $FILE_VERSION) {
+    if ( $file_info->{'Version'} ne $FILE_VERSION ) {
         push @output, {
-            message => 1,
+            message            => 1,
             ERROR_file_version => 1,
-            upload_version => $file_info->{'Version'},
-            current_version => $FILE_VERSION
+            upload_version     => $file_info->{'Version'},
+            current_version    => $FILE_VERSION
         };
     }
 
-    my $userid = C4::Context->userenv->{id};
+    my $userid     = C4::Context->userenv->{id};
     my $branchcode = C4::Context->userenv->{branch};
 
-    foreach  my $line (@input_lines)  {
+    foreach my $line (@input_lines) {
         my $command_line = parse_command_line($line);
-        my $timestamp = $command_line->{'date'} . ' ' . $command_line->{'time'};
-        my $action = $command_line->{'command'};
-        my $barcode = $command_line->{'barcode'};
-        my $cardnumber = $command_line->{'cardnumber'};
-        my $amount = $command_line->{'amount'};
+        my $timestamp    = $command_line->{'date'} . ' ' . $command_line->{'time'};
+        my $action       = $command_line->{'command'};
+        my $barcode      = $command_line->{'barcode'};
+        my $cardnumber   = $command_line->{'cardnumber'};
+        my $amount       = $command_line->{'amount'};
 
         AddOfflineOperation( $userid, $branchcode, $timestamp, $action, $barcode, $cardnumber, $amount );
     }
@@ -111,7 +112,7 @@ sub parse_header_line {
     chomp($header_line);
     $header_line =~ s/\r//g;
 
-    my @fields = split( /\t/, $header_line );
+    my @fields      = split( /\t/, $header_line );
     my %header_info = map { split( /=/, $_ ) } @fields;
     return \%header_info;
 }
@@ -182,7 +183,7 @@ sub _get_borrowernumber_from_barcode {
 
     return unless $barcode;
 
-    my $item = Koha::Items->find({ barcode => $barcode });
+    my $item = Koha::Items->find( { barcode => $barcode } );
     return unless $item;
 
     my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );

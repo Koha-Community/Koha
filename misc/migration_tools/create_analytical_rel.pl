@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+
 #use warnings; FIXME - Bug 2505
 
 use Koha::Script;
@@ -18,23 +19,23 @@ my $do_update = 0;
 my $wherestrings;
 
 my $result = GetOptions(
-    'run-update'    => \$do_update,
-    'where=s@'         => \$wherestrings,
-    'h|help'        => \$want_help,
+    'run-update' => \$do_update,
+    'where=s@'   => \$wherestrings,
+    'h|help'     => \$want_help,
 );
 
-if (not $result or $want_help or not $do_update) {
+if ( not $result or $want_help or not $do_update ) {
     print_usage();
     exit 0;
 }
 
-my $num_bibs_processed     = 0;
-my $num_bibs_modified      = 0;
-my $num_noitem_forbarcode = 0;
-my $num_nobarcode_inhostfield =0;
-my $num_hostfields_unabletomodify =0;
-my $num_bad_bibs           = 0;
-my $dbh = C4::Context->dbh;
+my $num_bibs_processed            = 0;
+my $num_bibs_modified             = 0;
+my $num_noitem_forbarcode         = 0;
+my $num_nobarcode_inhostfield     = 0;
+my $num_hostfields_unabletomodify = 0;
+my $num_bad_bibs                  = 0;
+my $dbh                           = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 
 process_bibs();
@@ -44,16 +45,16 @@ exit 0;
 
 sub process_bibs {
     my $sql = "SELECT biblionumber FROM biblio JOIN biblioitems USING (biblionumber)";
-    $sql.="WHERE ". join(" AND ",@$wherestrings) if ($wherestrings);
-    $sql.="ORDER BY biblionumber ASC";
+    $sql .= "WHERE " . join( " AND ", @$wherestrings ) if ($wherestrings);
+    $sql .= "ORDER BY biblionumber ASC";
     my $sth = $dbh->prepare($sql);
-    eval{$sth->execute();};
-    if ($@){ die "error $@";};
-    while (my ($biblionumber) = $sth->fetchrow_array()) {
+    eval { $sth->execute(); };
+    if ($@) { die "error $@"; }
+    while ( my ($biblionumber) = $sth->fetchrow_array() ) {
         $num_bibs_processed++;
         process_bib($biblionumber);
 
-        if (($num_bibs_processed % 100) == 0) {
+        if ( ( $num_bibs_processed % 100 ) == 0 ) {
             print_progress_and_commit($num_bibs_processed);
         }
     }
@@ -78,16 +79,17 @@ sub process_bib {
 
     my $biblio = Koha::Biblios->find($biblionumber);
     my $record = $biblio->metadata->record;
-    unless (defined $record) {
+    unless ( defined $record ) {
         print "\nCould not retrieve bib $biblionumber from the database - record is corrupt.\n";
         $num_bad_bibs++;
         return;
     }
-	#loop through each host field and populate subfield 0 and 9
+
+    #loop through each host field and populate subfield 0 and 9
     my $analyticfield = '773';
     foreach my $hostfield ( $record->field($analyticfield) ) {
-		if(my $barcode = $hostfield->subfield('o')){
-            my $item = Koha::Items->find({ barcode => $barcode });
+        if ( my $barcode = $hostfield->subfield('o') ) {
+            my $item = Koha::Items->find( { barcode => $barcode } );
             if ($item) {
                 my $modif;
                 if ( $hostfield->subfield('0') ne $biblionumber ) {
@@ -107,16 +109,15 @@ sub process_bib {
                         $num_hostfields_unabletomodify++;
                     }
                 }
-            }
-            else {
+            } else {
                 warn "No item record found for barcode $barcode";
                 $num_noitem_forbarcode++;
             }
-		} else{
-			warn "No barcode in host field for biblionumber $biblionumber";
-			$num_nobarcode_inhostfield++;
-		}
-	}
+        } else {
+            warn "No barcode in host field for biblionumber $biblionumber";
+            $num_nobarcode_inhostfield++;
+        }
+    }
 }
 
 sub print_progress_and_commit {

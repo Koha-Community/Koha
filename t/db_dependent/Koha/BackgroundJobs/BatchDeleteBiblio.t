@@ -31,7 +31,7 @@ use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest "process() tests" => sub {
@@ -40,13 +40,13 @@ subtest "process() tests" => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
 
     my $biblio = $builder->build_sample_biblio;
-    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->id });
-    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->id });
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->id } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->id } );
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     AddReserve(
         {
             borrowernumber => $patron->id,
@@ -59,16 +59,22 @@ subtest "process() tests" => sub {
     my $update_biblio_counter = 0;
 
     my $mock_holds_queue_job = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $mock_holds_queue_job->mock( 'enqueue', sub {
-        $update_biblio_counter++;
-    });
+    $mock_holds_queue_job->mock(
+        'enqueue',
+        sub {
+            $update_biblio_counter++;
+        }
+    );
 
     my $index_biblio_counter = 0;
 
     my $mock_index = Test::MockModule->new("Koha::SearchEngine::Elasticsearch::Indexer");
-    $mock_index->mock( 'index_records', sub {
-        $index_biblio_counter++;
-    });
+    $mock_index->mock(
+        'index_records',
+        sub {
+            $index_biblio_counter++;
+        }
+    );
 
     my $job = Koha::BackgroundJob::BatchDeleteBiblio->new(
         {
@@ -77,7 +83,7 @@ subtest "process() tests" => sub {
             borrowernumber => undef,
             type           => 'batch_biblio_record_deletion',
             data           => encode_json {
-                record_ids     => [ $biblio->id ],
+                record_ids => [ $biblio->id ],
             }
         }
     );
@@ -104,7 +110,7 @@ subtest "process() tests" => sub {
             borrowernumber => undef,
             type           => 'batch_biblio_record_deletion',
             data           => encode_json {
-                record_ids     => [ $biblio->id ],
+                record_ids => [ $biblio->id ],
             }
         }
     );

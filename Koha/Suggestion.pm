@@ -91,30 +91,29 @@ sub store {
                     'suggestions' => $result->unblessed,
                 },
             )
-        ){
+            )
+        {
 
             my $toaddress;
             if ( $emailpurchasesuggestions eq "BranchEmailAddress" ) {
                 my $library = $result->library;
                 $toaddress = $library->inbound_email_address;
-            }
-            elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
+            } elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
                 $toaddress = C4::Context->preference('ReplytoDefault')
-                  || C4::Context->preference('KohaAdminEmailAddress');
-            }
-            else {
+                    || C4::Context->preference('KohaAdminEmailAddress');
+            } else {
                 $toaddress =
-                     C4::Context->preference($emailpurchasesuggestions)
-                  || C4::Context->preference('ReplytoDefault')
-                  || C4::Context->preference('KohaAdminEmailAddress');
+                       C4::Context->preference($emailpurchasesuggestions)
+                    || C4::Context->preference('ReplytoDefault')
+                    || C4::Context->preference('KohaAdminEmailAddress');
             }
 
             C4::Letters::EnqueueLetter(
                 {
-                    letter         => $letter,
-                    borrowernumber => $result->suggestedby,
-                    suggestionid   => $result->id,
-                    to_address     => $toaddress,
+                    letter                 => $letter,
+                    borrowernumber         => $result->suggestedby,
+                    suggestionid           => $result->id,
+                    to_address             => $toaddress,
                     message_transport_type => 'email',
                 }
             ) or warn "can't enqueue letter $letter";

@@ -42,14 +42,16 @@ subtest 'import record matches tests' => sub {
         }
     );
 
-    $builder->build({
-        source => 'UserPermission',
-        value  => {
-            borrowernumber => $librarian->id,
-            module_bit     => 13, # tools
-            code           => 'manage_staged_marc',
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->id,
+                module_bit     => 13,                     # tools
+                code           => 'manage_staged_marc',
+            }
         }
-    });
+    );
 
     my $password = 'thePassword123';
     $librarian->set_password( { password => $password, skip_validation => 1 } );
@@ -65,74 +67,67 @@ subtest 'import record matches tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $match_1 = $builder->build_object({
-        class => 'Koha::Import::Record::Matches',
-        value => {
-            chosen => 0,
+    my $match_1 = $builder->build_object(
+        {
+            class => 'Koha::Import::Record::Matches',
+            value => {
+                chosen => 0,
+            }
         }
-    });
-    my $match_2 = $builder->build_object({
-        class => 'Koha::Import::Record::Matches',
-        value => {
-            import_record_id => $match_1->import_record_id,
-            chosen => 1,
+    );
+    my $match_2 = $builder->build_object(
+        {
+            class => 'Koha::Import::Record::Matches',
+            value => {
+                import_record_id => $match_1->import_record_id,
+                chosen           => 1,
+            }
         }
-    });
-    my $del_match = $builder->build_object({ class => 'Koha::Import::Record::Matches' });
+    );
+    my $del_match           = $builder->build_object( { class => 'Koha::Import::Record::Matches' } );
     my $del_import_batch_id = $del_match->import_record->import_batch_id;
-    my $del_match_id = $del_match->import_record_id;
+    my $del_match_id        = $del_match->import_record_id;
 
-    $t->put_ok(
-            "//$unauth_userid:$password@/api/v1/import_batches/"
-          . $match_1->import_record->import_batch_id
-          . "/records/"
-          . $match_1->import_record_id
-          . "/matches/chosen" => json => {
-            candidate_match_id => $match_1->candidate_match_id
-          }
-    )->status_is(403);
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/import_batches/"
+            . $match_1->import_record->import_batch_id
+            . "/records/"
+            . $match_1->import_record_id
+            . "/matches/chosen" => json => { candidate_match_id => $match_1->candidate_match_id } )->status_is(403);
 
     # Invalid attempt to allow match on a non-existent record
     $del_match->delete();
 
-    $t->put_ok(
-            "//$userid:$password@/api/v1/import_batches/"
-          . $del_import_batch_id
-          . "/records/"
-          . $del_match_id
-          . "/matches/chosen" => json => {
-            candidate_match_id => $match_1->candidate_match_id
-          }
-    )->status_is(404)->json_is( '/error' => "Match not found" );
+    $t->put_ok( "//$userid:$password@/api/v1/import_batches/"
+            . $del_import_batch_id
+            . "/records/"
+            . $del_match_id
+            . "/matches/chosen" => json => { candidate_match_id => $match_1->candidate_match_id } )->status_is(404)
+        ->json_is( '/error' => "Match not found" );
 
     # Valid, authorised update
-    $t->put_ok(
-            "//$userid:$password@/api/v1/import_batches/"
-          . $match_1->import_record->import_batch_id
-          . "/records/"
-          . $match_1->import_record_id
-          . "/matches/chosen" => json => {
-            candidate_match_id => $match_1->candidate_match_id
-          }
-    )->status_is(200);
+    $t->put_ok( "//$userid:$password@/api/v1/import_batches/"
+            . $match_1->import_record->import_batch_id
+            . "/records/"
+            . $match_1->import_record_id
+            . "/matches/chosen" => json => { candidate_match_id => $match_1->candidate_match_id } )->status_is(200);
 
     $match_1->discard_changes;
     $match_2->discard_changes;
 
-    ok( $match_1->chosen,"Match 1 is correctly set to chosen");
-    ok( !$match_2->chosen,"Match 2 correctly unset when match 1 is set");
+    ok( $match_1->chosen,  "Match 1 is correctly set to chosen" );
+    ok( !$match_2->chosen, "Match 2 correctly unset when match 1 is set" );
 
     # Valid unsetting
     $t->delete_ok( "//$userid:$password@/api/v1/import_batches/"
-          . $match_1->import_record->import_batch_id
-          . "/records/"
-          . $match_1->import_record_id
-          . "/matches/chosen" )->status_is(204);
+            . $match_1->import_record->import_batch_id
+            . "/records/"
+            . $match_1->import_record_id
+            . "/matches/chosen" )->status_is(204);
 
     $match_1->discard_changes;
     $match_2->discard_changes;
-    ok( !$match_1->chosen,"Match 1 is correctly unset to chosen");
-    ok( !$match_2->chosen,"Match 2 is correctly unset to chosen");
+    ok( !$match_1->chosen, "Match 1 is correctly unset to chosen" );
+    ok( !$match_2->chosen, "Match 2 is correctly unset to chosen" );
 
     $schema->storage->txn_rollback;
 };

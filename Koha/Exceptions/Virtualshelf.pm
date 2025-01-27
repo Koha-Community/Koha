@@ -25,23 +25,23 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Virtualshelf::DuplicateObject' => {
-        isa => 'Koha::Exceptions::Virtualshelf',
+        isa         => 'Koha::Exceptions::Virtualshelf',
         description => "Duplicate shelf object",
     },
     'Koha::Exceptions::Virtualshelf::InvalidInviteKey' => {
-        isa => 'Koha::Exceptions::Virtualshelf',
+        isa         => 'Koha::Exceptions::Virtualshelf',
         description => 'Invalid key on accepting the share',
     },
     'Koha::Exceptions::Virtualshelf::InvalidKeyOnSharing' => {
-        isa => 'Koha::Exceptions::Virtualshelf',
-        description=> 'Invalid key on sharing a shelf',
+        isa         => 'Koha::Exceptions::Virtualshelf',
+        description => 'Invalid key on sharing a shelf',
     },
     'Koha::Exceptions::Virtualshelf::ShareHasExpired' => {
-        isa => 'Koha::Exceptions::Virtualshelf',
-        description=> 'Cannot share this shelf, the share has expired',
+        isa         => 'Koha::Exceptions::Virtualshelf',
+        description => 'Cannot share this shelf, the share has expired',
     },
     'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' => {
-        isa => 'Koha::Exceptions::Virtualshelf',
+        isa         => 'Koha::Exceptions::Virtualshelf',
         description => "Invalid use of database administrator account",
     }
 );

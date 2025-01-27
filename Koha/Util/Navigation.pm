@@ -49,27 +49,27 @@ Utility class
 
 sub local_referer {
     my ( $cgi, $params ) = @_;
-    my $referer = $cgi->referer;
+    my $referer  = $cgi->referer;
     my $fallback = $params->{fallback} // '/';
-    my $staff = $params->{staff}; # no staff means OPAC
+    my $staff    = $params->{staff};             # no staff means OPAC
     return $fallback if !$referer;
 
-    my $base = C4::Context->preference($staff ? 'staffClientBaseURL' : 'OPACBaseURL');
+    my $base = C4::Context->preference( $staff ? 'staffClientBaseURL' : 'OPACBaseURL' );
     my $rv;
 
     # Try ..BaseURL first, otherwise use CGI::url
-    if( $base ) {
-        if( $referer =~ m|^\Q$base\E|i &&
-            $referer =~ /\/cgi-bin\/koha\// )
+    if ($base) {
+        if (   $referer =~ m|^\Q$base\E|i
+            && $referer =~ /\/cgi-bin\/koha\// )
         {
             $rv = substr( $referer, length($base) );
             $rv =~ s/^\///;
-            $rv = '/'.$rv;
+            $rv = '/' . $rv;
         }
     } else {
         my $cgibase = $cgi->url( -base => 1 );
         $cgibase =~ s/^https?://;
-        if( $referer =~ /$cgibase(\/cgi-bin\/koha\/.*)$/ ) {
+        if ( $referer =~ /$cgibase(\/cgi-bin\/koha\/.*)$/ ) {
             $rv = $1;
         }
     }

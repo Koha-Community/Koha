@@ -8,11 +8,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Update patron records") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Update patron records") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -22,69 +23,121 @@
 [% END %]
 
 [% BLOCK display_names %]
-[% SWITCH field %]
-[% CASE 'branchcode'          %]<span>Home library (branchcode)</span>
-[% CASE 'surname'             %]<span>Surname</span>
-[% CASE 'firstname'           %]<span>First name</span>
-[% CASE 'preferred_name'      %]<span>Preferred name</span>
-[% CASE 'middle_name'         %]<span>Middle name</span>
-[% CASE 'title'               %]<span>Title</span>
-[% CASE 'othernames'          %]<span>Other names</span>
-[% CASE 'initials'            %]<span>Initials</span>
-[% CASE 'pronouns'            %]<span>Pronouns</span>
-[% CASE 'streetnumber'        %]<span>Street number</span>
-[% CASE 'streettype'          %]<span>Street type</span>
-[% CASE 'address'             %]<span>Address</span>
-[% CASE 'address2'            %]<span>Address 2</span>
-[% CASE 'city'                %]<span>City</span>
-[% CASE 'state'               %]<span>State</span>
-[% CASE 'zipcode'             %]<span>ZIP/Postal code</span>
-[% CASE 'country'             %]<span>Country</span>
-[% CASE 'email'               %]<span>Email</span>
-[% CASE 'phone'               %]<span>Primary phone</span>
-[% CASE 'mobile'              %]<span>Other phone</span>
-[% CASE 'fax'                 %]<span>Fax</span>
-[% CASE 'emailpro'            %]<span>Secondary email</span>
-[% CASE 'phonepro'            %]<span>Secondary phone</span>
-[% CASE 'B_streetnumber'      %]<span>Alternate address: Street number</span>
-[% CASE 'B_streettype'        %]<span>Alternate address: Street type</span>
-[% CASE 'B_address'           %]<span>Alternate address: Address</span>
-[% CASE 'B_address2'          %]<span>Alternate address: Address 2</span>
-[% CASE 'B_city'              %]<span>Alternate address: City</span>
-[% CASE 'B_state'             %]<span>Alternate address: State</span>
-[% CASE 'B_zipcode'           %]<span>Alternate address: ZIP/Postal code</span>
-[% CASE 'B_email'             %]<span>Alternate address: Email</span>
-[% CASE 'B_phone'             %]<span>Alternate address: Phone</span>
-[% CASE 'contactnote'         %]<span>Alternate address: Contact note</span>
-[% CASE 'dateofbirth'         %]<span>Date of birth</span>
-[% CASE 'contactname'         %]<span>Contact: Last name</span>
-[% CASE 'contactfirstname'    %]<span>Contact: First name</span>
-[% CASE 'contacttitle'        %]<span>Contact: Title</span>
-[% CASE 'relationship'        %]<span>Contact: Relationship</span>
-[% CASE 'sex'                 %]<span>Gender</span>
-[% CASE 'autorenew_checkouts' %]<span>Auto-renewal</span>
-[% CASE 'altcontactfirstname' %]<span>Alternate contact: First name</span>
-[% CASE 'altcontactsurname'   %]<span>Alternate contact: Surname</span>
-[% CASE 'altcontactaddress1'  %]<span>Alternate contact: Address</span>
-[% CASE 'altcontactaddress2'  %]<span>Alternate contact: Address 2</span>
-[% CASE 'altcontactaddress3'  %]<span>Alternate contact: City</span>
-[% CASE 'altcontactstate'     %]<span>Alternate contact: State</span>
-[% CASE 'altcontactzipcode'   %]<span>Alternate contact: ZIP/Postal code</span>
-[% CASE 'altcontactcountry'   %]<span>Alternate contact: Country</span>
-[% CASE 'altcontactphone'     %]<span>Alternate contact: Phone</span>
-[% CASE 'smsalertnumber'      %]<span>SMS alert number</span>
-[% CASE 'extended_attributes' %]<span>Additional attributes and identifiers</span>
-[% CASE %][% field | html %]
-[% END %]
+    [% SWITCH field %]
+    [% CASE 'branchcode' %]
+        <span>Home library (branchcode)</span>
+    [% CASE 'surname' %]
+        <span>Surname</span>
+    [% CASE 'firstname' %]
+        <span>First name</span>
+    [% CASE 'preferred_name' %]
+        <span>Preferred name</span>
+    [% CASE 'middle_name' %]
+        <span>Middle name</span>
+    [% CASE 'title' %]
+        <span>Title</span>
+    [% CASE 'othernames' %]
+        <span>Other names</span>
+    [% CASE 'initials' %]
+        <span>Initials</span>
+    [% CASE 'pronouns' %]
+        <span>Pronouns</span>
+    [% CASE 'streetnumber' %]
+        <span>Street number</span>
+    [% CASE 'streettype' %]
+        <span>Street type</span>
+    [% CASE 'address' %]
+        <span>Address</span>
+    [% CASE 'address2' %]
+        <span>Address 2</span>
+    [% CASE 'city' %]
+        <span>City</span>
+    [% CASE 'state' %]
+        <span>State</span>
+    [% CASE 'zipcode' %]
+        <span>ZIP/Postal code</span>
+    [% CASE 'country' %]
+        <span>Country</span>
+    [% CASE 'email' %]
+        <span>Email</span>
+    [% CASE 'phone' %]
+        <span>Primary phone</span>
+    [% CASE 'mobile' %]
+        <span>Other phone</span>
+    [% CASE 'fax' %]
+        <span>Fax</span>
+    [% CASE 'emailpro' %]
+        <span>Secondary email</span>
+    [% CASE 'phonepro' %]
+        <span>Secondary phone</span>
+    [% CASE 'B_streetnumber' %]
+        <span>Alternate address: Street number</span>
+    [% CASE 'B_streettype' %]
+        <span>Alternate address: Street type</span>
+    [% CASE 'B_address' %]
+        <span>Alternate address: Address</span>
+    [% CASE 'B_address2' %]
+        <span>Alternate address: Address 2</span>
+    [% CASE 'B_city' %]
+        <span>Alternate address: City</span>
+    [% CASE 'B_state' %]
+        <span>Alternate address: State</span>
+    [% CASE 'B_zipcode' %]
+        <span>Alternate address: ZIP/Postal code</span>
+    [% CASE 'B_email' %]
+        <span>Alternate address: Email</span>
+    [% CASE 'B_phone' %]
+        <span>Alternate address: Phone</span>
+    [% CASE 'contactnote' %]
+        <span>Alternate address: Contact note</span>
+    [% CASE 'dateofbirth' %]
+        <span>Date of birth</span>
+    [% CASE 'contactname' %]
+        <span>Contact: Last name</span>
+    [% CASE 'contactfirstname' %]
+        <span>Contact: First name</span>
+    [% CASE 'contacttitle' %]
+        <span>Contact: Title</span>
+    [% CASE 'relationship' %]
+        <span>Contact: Relationship</span>
+    [% CASE 'sex' %]
+        <span>Gender</span>
+    [% CASE 'autorenew_checkouts' %]
+        <span>Auto-renewal</span>
+    [% CASE 'altcontactfirstname' %]
+        <span>Alternate contact: First name</span>
+    [% CASE 'altcontactsurname' %]
+        <span>Alternate contact: Surname</span>
+    [% CASE 'altcontactaddress1' %]
+        <span>Alternate contact: Address</span>
+    [% CASE 'altcontactaddress2' %]
+        <span>Alternate contact: Address 2</span>
+    [% CASE 'altcontactaddress3' %]
+        <span>Alternate contact: City</span>
+    [% CASE 'altcontactstate' %]
+        <span>Alternate contact: State</span>
+    [% CASE 'altcontactzipcode' %]
+        <span>Alternate contact: ZIP/Postal code</span>
+    [% CASE 'altcontactcountry' %]
+        <span>Alternate contact: Country</span>
+    [% CASE 'altcontactphone' %]
+        <span>Alternate contact: Phone</span>
+    [% CASE 'smsalertnumber' %]
+        <span>SMS alert number</span>
+    [% CASE 'extended_attributes' %]
+        <span>Additional attributes and identifiers</span>
+    [% CASE %]
+        [% field | html %]
+    [% END %]
 [% END %]
 
 [% BLOCK display_extended_attributes %]
     [% IF attrs and attrs.size > 1 %]
-      <ul>
-        [% FOREACH attr IN attrs %]
-            <li>[% PROCESS display_attribute attr=attr type=type %]</li>
-        [% END %]
-      </ul>
+        <ul>
+            [% FOREACH attr IN attrs %]
+                <li>[% PROCESS display_attribute attr=attr type=type %]</li>
+            [% END %]
+        </ul>
     [% ELSIF attrs %]
         [% PROCESS display_attribute attr=attrs.0 type=type %]
     [% END %]
@@ -110,108 +163,109 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
+    <h1>Update patron records</h1>
+    [% IF PendingModifications %]
+        <form method="post" action="members-update-do.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            [% WRAPPER accordion panelgroup_id="pending_updates" %]
+                [% FOREACH pm IN PendingModifications %]
+                    [% SET borrowernumber = pm.borrowernumber %]
+                    [% WRAPPER accordion_item %]
+                        [% WRAPPER accordion_heading panel_id="panel-${pm.borrowernumber}" %]
+                            [% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %]
+                            - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested
+                            on [% pm.timestamp | $KohaDates with_hours = 1 %]
+                        [% END %]
+                        [% WRAPPER accordion_panel panel_id="panel-${pm.borrowernumber}" %]
+                            <div class="btn-toolbar">
+                                <label for="approve_modify_[% pm.borrowernumber | html %]"
+                                    ><input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" /> Approve</label
+                                >
 
-            <h1>Update patron records</h1>
-            [% IF PendingModifications %]
-                <form method="post" action="members-update-do.pl">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    [% WRAPPER accordion panelgroup_id="pending_updates" %]
-                        [% FOREACH pm IN PendingModifications %]
-                            [% SET borrowernumber = pm.borrowernumber %]
-                            [% WRAPPER accordion_item %]
-                                [% WRAPPER accordion_heading panel_id="panel-${pm.borrowernumber}" %]
-                                    [% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]
-                                [% END %]
-                                [% WRAPPER accordion_panel panel_id="panel-${pm.borrowernumber}" %]
+                                <label for="deny_modify_[% pm.borrowernumber | html %]"><input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" /> Deny</label>
 
-                                    <div class="btn-toolbar">
+                                <label for="ignore_modify_[% pm.borrowernumber | html %]"
+                                    ><input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked" /> Ignore</label
+                                >
+                                &nbsp;|&nbsp; <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]">Patron details</a>
+                            </div>
 
-                                        <label for="approve_modify_[% pm.borrowernumber | html %]"><input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" /> Approve</label>
+                            [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
+                                <div class="alert alert-info" style="margin-top:.8em">
+                                    <h4>Patron's address in doubt</h4>
+                                    <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
+                                    <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]" />
+                                    <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
+                                </div>
+                            [% END %]
 
+                            [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
+                                [%# timestamp+verification_token+borrowernumber=3 %]
+                                <div class="members-update-table">
+                                    <table>
+                                        <tr>
+                                            <th>Field</th>
+                                            <th>Old value</th>
+                                            <th>New value</th>
+                                        </tr>
 
-                                        <label for="deny_modify_[% pm.borrowernumber | html %]"><input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" /> Deny</label>
-
-
-                                        <label for="ignore_modify_[% pm.borrowernumber | html %]"><input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/> Ignore</label>
-                                        &nbsp;|&nbsp; <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
-                                    </div>
-
-                                    [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
-                                        <div class="alert alert-info" style="margin-top:.8em">
-                                            <h4>Patron's address in doubt</h4>
-                                            <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
-                                            <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
-                                            <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
-                                        </div>
-                                    [% END %]
-
-                                    [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
-                                        [%# timestamp+verification_token+borrowernumber=3 %]
-                                        <div class="members-update-table">
-                                            <table>
-                                                <tr>
-                                                    <th>Field</th>
-                                                    <th>Old value</th>
-                                                    <th>New value</th>
-                                                </tr>
-
-
-                                                [% FOREACH key IN pm.keys %]
-                                                    [% IF ( key != "timestamp" and key != "extended_attributes" ) %]
-                                                        [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
-                                                            <tr>
-                                                                <td>[% PROCESS display_names field = key %]</td>
-                                                                [% IF ( key == "dateofbirth" ) %]
-                                                                    <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
-                                                                    <td>[% pm.$key | $KohaDates %]</td>
-                                                                [% ELSIF key == 'branchcode' %]
-                                                                    <td>[% Branches.GetName( borrowers.$borrowernumber.$key ) | html %]</td>
-                                                                    <td>[% Branches.GetName( pm.$key ) | html %]</td>
-                                                                [% ELSE %]
-                                                                    <td>[% borrowers.$borrowernumber.$key | html %]</td>
-                                                                    <td>[% pm.$key | html %]</td>
-                                                                [% END %]
-                                                            </tr>
-                                                        [% END %]
-                                                    [% END %]
-                                                [% END %]
-                                            </table>
-                                        </div> <!-- /.members-update-table -->
-                                    [% END # /!pm.extended_attributes %]
-                                    [% IF borrowers.$borrowernumber.modified_attributes %]
-                                        <div class="members-update-table">
-                                            <h4>[% PROCESS display_names field='extended_attributes' %]</h4>
-                                            <table>
-                                                <tr>
-                                                    <th>Field</th>
-                                                    <th>Old value</th>
-                                                    <th>New value</th>
-                                                </tr>
-                                                [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
+                                        [% FOREACH key IN pm.keys %]
+                                            [% IF ( key != "timestamp" and key != "extended_attributes" ) %]
+                                                [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
                                                     <tr>
-                                                        <td>[% attribute_group.type.description | html %]</td>
-                                                        <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
-                                                        <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
+                                                        <td>[% PROCESS display_names field = key %]</td>
+                                                        [% IF ( key == "dateofbirth" ) %]
+                                                            <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
+                                                            <td>[% pm.$key | $KohaDates %]</td>
+                                                        [% ELSIF key == 'branchcode' %]
+                                                            <td>[% Branches.GetName( borrowers.$borrowernumber.$key ) | html %]</td>
+                                                            <td>[% Branches.GetName( pm.$key ) | html %]</td>
+                                                        [% ELSE %]
+                                                            <td>[% borrowers.$borrowernumber.$key | html %]</td>
+                                                            <td>[% pm.$key | html %]</td>
+                                                        [% END %]
                                                     </tr>
                                                 [% END %]
-                                            </table>
-                                        </div> <!-- /.members-update-table -->
-                                    [% END # / borrowers.$borrowernumber.modified_attributes %]
-                                [% END %]
-                            [% END %]
-                        [% END # /FOREACH pm %]
-                    [% END # /collapse %]
-                    <fieldset class="action">
-                        <input type="hidden" name="op" value="cud-update" />
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </fieldset>
-                </form>
-            [% ELSE %]
-                <div class="alert alert-info">
-                    <p>There are no pending patron modifications.</p>
-                </div>
-            [% END %]
-
+                                            [% END %]
+                                        [% END %]
+                                    </table>
+                                </div>
+                                <!-- /.members-update-table -->
+                            [% END # /!pm.extended_attributes %]
+                            [% IF borrowers.$borrowernumber.modified_attributes %]
+                                <div class="members-update-table">
+                                    <h4>[% PROCESS display_names field='extended_attributes' %]</h4>
+                                    <table>
+                                        <tr>
+                                            <th>Field</th>
+                                            <th>Old value</th>
+                                            <th>New value</th>
+                                        </tr>
+                                        [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
+                                            <tr>
+                                                <td>[% attribute_group.type.description | html %]</td>
+                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
+                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </table>
+                                </div>
+                                <!-- /.members-update-table -->
+                            [% END # / borrowers.$borrowernumber.modified_attributes %]
+                        [% END %]
+                    [% END %]
+                [% END # /FOREACH pm %]
+            [% END # /collapse %]
+            <fieldset class="action">
+                <input type="hidden" name="op" value="cud-update" />
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </fieldset>
+        </form>
+    [% ELSE %]
+        <div class="alert alert-info">
+            <p>There are no pending patron modifications.</p>
+        </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

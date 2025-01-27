@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Letters;
 use Koha::Account::Lines;
 
@@ -52,15 +52,13 @@ output_and_exit_if_error(
 );
 
 my $letter_code = $input->param('notice');
-my $letter = C4::Letters::GetPreparedLetter(
+my $letter      = C4::Letters::GetPreparedLetter(
     module                 => 'members',
     letter_code            => $letter_code,
     branchcode             => C4::Context::mybranch,
     message_transport_type => 'print',
     lang                   => $patron->lang,
-    tables                 => {
-        borrowers => $patron->borrowernumber
-    }
+    tables                 => { borrowers => $patron->borrowernumber }
 );
 
 $template->param(

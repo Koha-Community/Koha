@@ -55,14 +55,14 @@ subtest 'store() tests' => sub {
         )->store
     }
     'Koha::Exceptions::Hold::MissingPickupLocation',
-      'Exception thrown because branchcode was not passed';
+        'Exception thrown because branchcode was not passed';
 
     my $hold = $builder->build_object( { class => 'Koha::Holds' } );
     throws_ok {
         $hold->branchcode(undef)->store;
     }
     'Koha::Exceptions::Hold::MissingPickupLocation',
-      'Exception thrown if one tries to set branchcode to null';
+        'Exception thrown if one tries to set branchcode to null';
 
     $schema->storage->txn_rollback;
 };
@@ -144,35 +144,41 @@ subtest 'fill() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'HoldFeeMode', 'any_time_is_collected' );
     t::lib::Mocks::mock_preference( 'HoldsLog',    1 );
-    t::lib::Mocks::mock_userenv(
-        { patron => $manager, branchcode => $manager->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
 
     my $interface = 'api';
     C4::Context->interface($interface);
     my $hold_timestamp = $hold->timestamp;
-    my $ret = $hold->fill;
+    my $ret            = $hold->fill;
 
     is( ref($ret), 'Koha::Hold', '->fill returns the object type' );
-    is( $ret->id, $hold->id, '->fill returns the object' );
+    is( $ret->id,  $hold->id,    '->fill returns the object' );
 
-    is( Koha::Holds->find($hold->id), undef, 'Hold no longer current' );
+    is( Koha::Holds->find( $hold->id ), undef, 'Hold no longer current' );
     my $old_hold = Koha::Old::Holds->find( $hold->id );
 
-    is( $old_hold->id, $hold->id, 'reserve_id retained' );
-    is( $old_hold->priority, 0, 'priority set to 0' );
+    is( $old_hold->id,       $hold->id, 'reserve_id retained' );
+    is( $old_hold->priority, 0,         'priority set to 0' );
     isnt( $old_hold->timestamp, $hold_timestamp, 'timestamp updated' );
     is( $old_hold->found, 'F', 'found set to F' );
 
     subtest 'item_id parameter' => sub {
         plan tests => 1;
-        $category->reservefee(0)->store; # do not disturb later accounts
-        $hold = $builder->build_object({ class => 'Koha::Holds', value => { biblionumber => $biblio->id, borrowernumber => $patron->id, itemnumber => undef, priority => 1 } });
+        $category->reservefee(0)->store;    # do not disturb later accounts
+        $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value =>
+                    { biblionumber => $biblio->id, borrowernumber => $patron->id, itemnumber => undef, priority => 1 }
+            }
+        );
+
         # Simulating checkout without confirming hold
-        $hold->fill({ item_id => $item->id });
-        $old_hold = Koha::Old::Holds->find($hold->id);
+        $hold->fill( { item_id => $item->id } );
+        $old_hold = Koha::Old::Holds->find( $hold->id );
         is( $old_hold->itemnumber, $item->itemnumber, 'The itemnumber has been saved in old_reserves by fill' );
         $old_hold->delete;
-        $category->reservefee($fee)->store; # restore
+        $category->reservefee($fee)->store;    # restore
     };
 
     subtest 'fee applied tests' => sub {
@@ -187,18 +193,30 @@ subtest 'fill() tests' => sub {
 
         my $fee_debit = $debits->next;
         is( $fee_debit->amount * 1, $fee, 'Fee amount stored correctly' );
-        is( $fee_debit->description, $title,
-            'Fee description stored correctly' );
-        is( $fee_debit->manager_id, $manager->id,
-            'Fee manager_id stored correctly' );
-        is( $fee_debit->branchcode, $manager->branchcode,
-            'Fee branchcode stored correctly' );
-        is( $fee_debit->interface, $interface,
-            'Fee interface stored correctly' );
-        is( $fee_debit->debit_type_code,
-            'RESERVE', 'Fee debit_type_code stored correctly' );
-        is( $fee_debit->itemnumber, $item->id,
-            'Fee itemnumber stored correctly' );
+        is(
+            $fee_debit->description, $title,
+            'Fee description stored correctly'
+        );
+        is(
+            $fee_debit->manager_id, $manager->id,
+            'Fee manager_id stored correctly'
+        );
+        is(
+            $fee_debit->branchcode, $manager->branchcode,
+            'Fee branchcode stored correctly'
+        );
+        is(
+            $fee_debit->interface, $interface,
+            'Fee interface stored correctly'
+        );
+        is(
+            $fee_debit->debit_type_code,
+            'RESERVE', 'Fee debit_type_code stored correctly'
+        );
+        is(
+            $fee_debit->itemnumber, $item->id,
+            'Fee itemnumber stored correctly'
+        );
     };
 
     my $logs = Koha::ActionLogs->search(
@@ -213,8 +231,9 @@ subtest 'fill() tests' => sub {
 
     # Set HoldFeeMode to something other than any_time_is_collected
     t::lib::Mocks::mock_preference( 'HoldFeeMode', 'not_always' );
+
     # Disable logging
-    t::lib::Mocks::mock_preference( 'HoldsLog',    0 );
+    t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
 
     $hold = $builder->build_object(
         {
@@ -253,6 +272,7 @@ subtest 'fill() tests' => sub {
         # reduce the tests noise
         t::lib::Mocks::mock_preference( 'HoldsLog',    0 );
         t::lib::Mocks::mock_preference( 'HoldFeeMode', 'not_always' );
+
         # unset AnonymousPatron
         t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
@@ -265,8 +285,10 @@ subtest 'fill() tests' => sub {
             }
         );
         $hold->fill();
-        is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
-            $patron->borrowernumber, 'Patron link is kept' );
+        is(
+            Koha::Old::Holds->find( $hold->id )->borrowernumber,
+            $patron->borrowernumber, 'Patron link is kept'
+        );
 
         # 1 == "default", meaning it is not protected from removal
         $patron->privacy(1)->store;
@@ -277,11 +299,14 @@ subtest 'fill() tests' => sub {
             }
         );
         $hold->fill();
-        is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
-            $patron->borrowernumber, 'Patron link is kept' );
+        is(
+            Koha::Old::Holds->find( $hold->id )->borrowernumber,
+            $patron->borrowernumber, 'Patron link is kept'
+        );
 
-        my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $anonymous_patron = $builder->build_object( { class => 'Koha::Patrons' } );
         t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
         # We need anonymous patron set to change patron privacy to never
         # (2 == delete immediately)
         # then we can undef for further tests
@@ -294,12 +319,11 @@ subtest 'fill() tests' => sub {
             }
         );
 
-        throws_ok
-            { $hold->fill(); }
-            'Koha::Exception',
+        throws_ok { $hold->fill(); }
+        'Koha::Exception',
             'AnonymousPatron not set, exception thrown';
 
-        $hold->discard_changes; # refresh from DB
+        $hold->discard_changes;    # refresh from DB
 
         ok( !$hold->is_found, 'Hold is not filled' );
 
@@ -326,14 +350,17 @@ subtest 'fill() tests' => sub {
         my $biblio = $builder->build_sample_biblio;
 
         my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-        $mock->mock( 'enqueue', sub {
-            my ( $self, $args ) = @_;
-            is_deeply(
-                $args->{biblio_ids},
-                [ $biblio->id ],
-                '->fill triggers a holds queue update for the related biblio'
-            );
-        } );
+        $mock->mock(
+            'enqueue',
+            sub {
+                my ( $self, $args ) = @_;
+                is_deeply(
+                    $args->{biblio_ids},
+                    [ $biblio->id ],
+                    '->fill triggers a holds queue update for the related biblio'
+                );
+            }
+        );
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
@@ -341,18 +368,19 @@ subtest 'fill() tests' => sub {
             {
                 class => 'Koha::Holds',
                 value => {
-                    biblionumber   => $biblio->id,
+                    biblionumber => $biblio->id,
                 }
             }
         )->fill;
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
         # this call shouldn't add a new test
         $builder->build_object(
             {
                 class => 'Koha::Holds',
                 value => {
-                    biblionumber   => $biblio->id,
+                    biblionumber => $biblio->id,
                 }
             }
         )->fill;
@@ -367,19 +395,17 @@ subtest 'patron() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $hold   = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => {
-                borrowernumber => $patron->borrowernumber
-            }
+            value => { borrowernumber => $patron->borrowernumber }
         }
     );
 
     my $hold_patron = $hold->patron;
     is( ref($hold_patron), 'Koha::Patron', 'Right type' );
-    is( $hold_patron->id, $patron->id, 'Right object' );
+    is( $hold_patron->id,  $patron->id,    'Right object' );
 
     $schema->storage->txn_rollback;
 };
@@ -393,21 +419,28 @@ subtest 'set_pickup_location() tests' => sub {
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
     my $mock_item   = Test::MockModule->new('Koha::Item');
 
-    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_3 = $builder->build_object( { class => 'Koha::Libraries' } );
 
     # let's control what Koha::Biblio->pickup_locations returns, for testing
-    $mock_biblio->mock( 'pickup_locations', sub {
-        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
-    });
+    $mock_biblio->mock(
+        'pickup_locations',
+        sub {
+            return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+        }
+    );
+
     # let's mock what Koha::Item->pickup_locations returns, for testing
-    $mock_item->mock( 'pickup_locations', sub {
-        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
-    });
+    $mock_item->mock(
+        'pickup_locations',
+        sub {
+            return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+        }
+    );
 
     my $biblio = $builder->build_sample_biblio;
-    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
     # Test biblio-level holds
     my $biblio_hold = $builder->build_object(
@@ -421,15 +454,14 @@ subtest 'set_pickup_location() tests' => sub {
         }
     );
 
-    throws_ok
-        { $biblio_hold->set_pickup_location({ library_id => $library_1->branchcode }); }
-        'Koha::Exceptions::Hold::InvalidPickupLocation',
+    throws_ok { $biblio_hold->set_pickup_location( { library_id => $library_1->branchcode } ); }
+    'Koha::Exceptions::Hold::InvalidPickupLocation',
         'Exception thrown on invalid pickup location';
 
     $biblio_hold->discard_changes;
     is( $biblio_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
-    my $ret = $biblio_hold->set_pickup_location({ library_id => $library_2->id });
+    my $ret = $biblio_hold->set_pickup_location( { library_id => $library_2->id } );
     is( ref($ret), 'Koha::Hold', 'self is returned' );
 
     $biblio_hold->discard_changes;
@@ -447,27 +479,25 @@ subtest 'set_pickup_location() tests' => sub {
         }
     );
 
-    throws_ok
-        { $item_hold->set_pickup_location({ library_id => $library_1->branchcode }); }
-        'Koha::Exceptions::Hold::InvalidPickupLocation',
+    throws_ok { $item_hold->set_pickup_location( { library_id => $library_1->branchcode } ); }
+    'Koha::Exceptions::Hold::InvalidPickupLocation',
         'Exception thrown on invalid pickup location';
 
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
-    $item_hold->set_pickup_location({ library_id => $library_1->branchcode, force => 1 });
+    $item_hold->set_pickup_location( { library_id => $library_1->branchcode, force => 1 } );
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_1->branchcode, 'branchcode changed because of \'force\'' );
 
-    $ret = $item_hold->set_pickup_location({ library_id => $library_2->id });
+    $ret = $item_hold->set_pickup_location( { library_id => $library_2->id } );
     is( ref($ret), 'Koha::Hold', 'self is returned' );
 
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_2->id, 'Pickup location changed correctly' );
 
-    throws_ok
-        { $item_hold->set_pickup_location({ library_id => undef }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $item_hold->set_pickup_location( { library_id => undef } ); }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown if missing parameter';
 
     like( "$@", qr/The library_id parameter is mandatory/, 'Exception message is clear' );
@@ -484,21 +514,28 @@ subtest 'is_pickup_location_valid() tests' => sub {
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
     my $mock_item   = Test::MockModule->new('Koha::Item');
 
-    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_3 = $builder->build_object( { class => 'Koha::Libraries' } );
 
     # let's control what Koha::Biblio->pickup_locations returns, for testing
-    $mock_biblio->mock( 'pickup_locations', sub {
-        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
-    });
+    $mock_biblio->mock(
+        'pickup_locations',
+        sub {
+            return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+        }
+    );
+
     # let's mock what Koha::Item->pickup_locations returns, for testing
-    $mock_item->mock( 'pickup_locations', sub {
-        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
-    });
+    $mock_item->mock(
+        'pickup_locations',
+        sub {
+            return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+        }
+    );
 
     my $biblio = $builder->build_sample_biblio;
-    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
     # Test biblio-level holds
     my $biblio_hold = $builder->build_object(
@@ -512,8 +549,11 @@ subtest 'is_pickup_location_valid() tests' => sub {
         }
     );
 
-    ok( !$biblio_hold->is_pickup_location_valid({ library_id => $library_1->branchcode }), 'Pickup location invalid');
-    ok( $biblio_hold->is_pickup_location_valid({ library_id => $library_2->id }), 'Pickup location valid');
+    ok(
+        !$biblio_hold->is_pickup_location_valid( { library_id => $library_1->branchcode } ),
+        'Pickup location invalid'
+    );
+    ok( $biblio_hold->is_pickup_location_valid( { library_id => $library_2->id } ), 'Pickup location valid' );
 
     # Test item-level holds
     my $item_hold = $builder->build_object(
@@ -527,8 +567,8 @@ subtest 'is_pickup_location_valid() tests' => sub {
         }
     );
 
-    ok( !$item_hold->is_pickup_location_valid({ library_id => $library_1->branchcode }), 'Pickup location invalid');
-    ok( $item_hold->is_pickup_location_valid({ library_id => $library_2->id }), 'Pickup location valid' );
+    ok( !$item_hold->is_pickup_location_valid( { library_id => $library_1->branchcode } ), 'Pickup location invalid' );
+    ok( $item_hold->is_pickup_location_valid( { library_id  => $library_2->id } ),         'Pickup location valid' );
 
     subtest 'pickup_locations() returning ->empty' => sub {
 
@@ -536,7 +576,7 @@ subtest 'is_pickup_location_valid() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $library = $builder->build_object({ class => 'Koha::Libraries' });
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
         my $mock_item = Test::MockModule->new('Koha::Item');
         $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->new->empty; } );
@@ -558,7 +598,10 @@ subtest 'is_pickup_location_valid() tests' => sub {
             }
         );
 
-        ok( !$biblio_hold->is_pickup_location_valid({ library_id => $library->branchcode }), 'Pickup location invalid');
+        ok(
+            !$biblio_hold->is_pickup_location_valid( { library_id => $library->branchcode } ),
+            'Pickup location invalid'
+        );
 
         # Test item-level holds
         my $item_hold = $builder->build_object(
@@ -571,7 +614,10 @@ subtest 'is_pickup_location_valid() tests' => sub {
             }
         );
 
-        ok( !$item_hold->is_pickup_location_valid({ library_id => $library->branchcode }), 'Pickup location invalid');
+        ok(
+            !$item_hold->is_pickup_location_valid( { library_id => $library->branchcode } ),
+            'Pickup location invalid'
+        );
 
         $schema->storage->txn_rollback;
     };
@@ -589,8 +635,10 @@ subtest 'cancel() tests' => sub {
 
     # reduce the tests noise
     t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
-    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelayCharge',
-        undef );
+    t::lib::Mocks::mock_preference(
+        'ExpireReservesMaxPickUpDelayCharge',
+        undef
+    );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
@@ -603,8 +651,10 @@ subtest 'cancel() tests' => sub {
         }
     );
     $hold->cancel();
-    is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
-        $patron->borrowernumber, 'Patron link is kept' );
+    is(
+        Koha::Old::Holds->find( $hold->id )->borrowernumber,
+        $patron->borrowernumber, 'Patron link is kept'
+    );
 
     # 1 == "default", meaning it is not protected from removal
     $patron->privacy(1)->store;
@@ -615,11 +665,14 @@ subtest 'cancel() tests' => sub {
         }
     );
     $hold->cancel();
-    is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
-        $patron->borrowernumber, 'Patron link is kept' );
+    is(
+        Koha::Old::Holds->find( $hold->id )->borrowernumber,
+        $patron->borrowernumber, 'Patron link is kept'
+    );
 
-    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $anonymous_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
     # We need anonymous patron set to change patron privacy to never
     # (2 == delete immediately)
     # then we can undef for further tests
@@ -631,9 +684,8 @@ subtest 'cancel() tests' => sub {
             value => { borrowernumber => $patron->id, found => undef }
         }
     );
-    throws_ok
-        { $hold->cancel(); }
-        'Koha::Exception',
+    throws_ok { $hold->cancel(); }
+    'Koha::Exception',
         'AnonymousPatron not set, exception thrown';
 
     $hold->discard_changes;
@@ -664,20 +716,23 @@ subtest 'cancel() tests' => sub {
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
         my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-        $mock->mock( 'enqueue', sub {
-            my ( $self, $args ) = @_;
-            is_deeply(
-                $args->{biblio_ids},
-                [ $biblio->id ],
-                '->cancel triggers a holds queue update for the related biblio'
-            );
-        } );
+        $mock->mock(
+            'enqueue',
+            sub {
+                my ( $self, $args ) = @_;
+                is_deeply(
+                    $args->{biblio_ids},
+                    [ $biblio->id ],
+                    '->cancel triggers a holds queue update for the related biblio'
+                );
+            }
+        );
 
         $builder->build_object(
             {
                 class => 'Koha::Holds',
                 value => {
-                    biblionumber   => $biblio->id,
+                    biblionumber => $biblio->id,
                 }
             }
         )->cancel;
@@ -687,10 +742,10 @@ subtest 'cancel() tests' => sub {
             {
                 class => 'Koha::Holds',
                 value => {
-                    biblionumber   => $biblio->id,
+                    biblionumber => $biblio->id,
                 }
             }
-        )->cancel({ skip_holds_queue => 1 });
+        )->cancel( { skip_holds_queue => 1 } );
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
@@ -698,10 +753,10 @@ subtest 'cancel() tests' => sub {
             {
                 class => 'Koha::Holds',
                 value => {
-                    biblionumber   => $biblio->id,
+                    biblionumber => $biblio->id,
                 }
             }
-        )->cancel({ skip_holds_queue => 0 });
+        )->cancel( { skip_holds_queue => 0 } );
     };
 
     $schema->storage->txn_rollback;
@@ -719,14 +774,17 @@ subtest 'suspend_hold() and resume() tests' => sub {
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $mock->mock( 'enqueue', sub {
-        my ( $self, $args ) = @_;
-        is_deeply(
-            $args->{biblio_ids},
-            [ $biblio->id ],
-            "->$action triggers a holds queue update for the related biblio"
-        );
-    } );
+    $mock->mock(
+        'enqueue',
+        sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                "->$action triggers a holds queue update for the related biblio"
+            );
+        }
+    );
 
     my $hold = $builder->build_object(
         {
@@ -787,15 +845,11 @@ subtest 'cancellation_requestable_from_opac() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $category =
-      $builder->build_object( { class => 'Koha::Patron::Categories' } );
-    my $item_home_library =
-      $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron_home_library =
-      $builder->build_object( { class => 'Koha::Libraries' } );
+    my $category            = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    my $item_home_library   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_home_library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $item =
-      $builder->build_sample_item( { library => $item_home_library->id } );
+    my $item   = $builder->build_sample_item( { library => $item_home_library->id } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -820,7 +874,7 @@ subtest 'cancellation_requestable_from_opac() tests' => sub {
 
         throws_ok { $hold->cancellation_requestable_from_opac; }
         'Koha::Exceptions::InvalidStatus',
-          'Exception thrown because hold is not waiting';
+            'Exception thrown because hold is not waiting';
 
         is( $@->invalid_status, 'hold_not_waiting' );
 
@@ -837,7 +891,7 @@ subtest 'cancellation_requestable_from_opac() tests' => sub {
 
         throws_ok { $hold->cancellation_requestable_from_opac; }
         'Koha::Exceptions::InvalidStatus',
-          'Exception thrown because waiting hold has no item linked';
+            'Exception thrown because waiting hold has no item linked';
 
         is( $@->invalid_status, 'no_item_linked' );
     };
@@ -864,8 +918,10 @@ subtest 'cancellation_requestable_from_opac() tests' => sub {
         }
     );
 
-    t::lib::Mocks::mock_preference( 'ReservesControlBranch',
-        'ItemHomeLibrary' );
+    t::lib::Mocks::mock_preference(
+        'ReservesControlBranch',
+        'ItemHomeLibrary'
+    );
 
     Koha::CirculationRules->set_rule(
         {
@@ -933,7 +989,8 @@ subtest 'can_update_pickup_location_opac() tests' => sub {
     $schema->storage->txn_begin;
 
     my $hold = $builder->build_object(
-        {   class => 'Koha::Holds',
+        {
+            class => 'Koha::Holds',
             value => { found => undef, suspend => 0, suspend_until => undef, waitingdate => undef }
         }
     );
@@ -951,24 +1008,36 @@ subtest 'can_update_pickup_location_opac() tests' => sub {
     $hold->found(undef);
     my $dt = dt_from_string();
 
-    $hold->suspend_hold( $dt );
+    $hold->suspend_hold($dt);
     is( $hold->can_update_pickup_location_opac, 0, "Suspended hold pickup can't be changed (No change allowed)" );
     $hold->resume();
 
     t::lib::Mocks::mock_preference( 'OPACAllowUserToChangeBranch', 'pending,intransit,suspended' );
     $hold->found(undef);
-    is( $hold->can_update_pickup_location_opac, 1, "Pending hold pickup can be changed (pending,intransit,suspended allowed)" );
+    is(
+        $hold->can_update_pickup_location_opac, 1,
+        "Pending hold pickup can be changed (pending,intransit,suspended allowed)"
+    );
 
     $hold->found('T');
-    is( $hold->can_update_pickup_location_opac, 1, "In transit hold pickup can be changed (pending,intransit,suspended allowed)" );
+    is(
+        $hold->can_update_pickup_location_opac, 1,
+        "In transit hold pickup can be changed (pending,intransit,suspended allowed)"
+    );
 
     $hold->found('W');
-    is( $hold->can_update_pickup_location_opac, 0, "Waiting hold pickup can't be changed (pending,intransit,suspended allowed)" );
+    is(
+        $hold->can_update_pickup_location_opac, 0,
+        "Waiting hold pickup can't be changed (pending,intransit,suspended allowed)"
+    );
 
     $hold->found(undef);
     $dt = dt_from_string();
-    $hold->suspend_hold( $dt );
-    is( $hold->can_update_pickup_location_opac, 1, "Suspended hold pickup can be changed (pending,intransit,suspended allowed)" );
+    $hold->suspend_hold($dt);
+    is(
+        $hold->can_update_pickup_location_opac, 1,
+        "Suspended hold pickup can be changed (pending,intransit,suspended allowed)"
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -998,7 +1067,7 @@ subtest 'Koha::Hold::item_group tests' => sub {
     my $biblio = $builder->build_sample_biblio();
 
     my $item_group =
-      Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+        Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
 
     my $hold = $builder->build_object(
         {

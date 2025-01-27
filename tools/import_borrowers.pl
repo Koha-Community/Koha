@@ -36,7 +36,7 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use Koha::Database::Columns;
 use Koha::Patrons;
@@ -65,22 +65,23 @@ my $op    = $input->param('op') // q{};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/import_borrowers.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'import_patrons' },
+        template_name => "tools/import_borrowers.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'import_patrons' },
     }
 );
 
 # get the patron categories and pass them to the template
-my @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']})->as_list;
-$template->param( categories => \@patron_categories );
+my @patron_categories =
+    Koha::Patron::Categories->search_with_library_limits( {}, { order_by => ['description'] } )->as_list;
+$template->param( categories      => \@patron_categories );
 $template->param( borrower_fields => Koha::Database::Columns->columns->{borrowers} );
 
 if ( $input->param('sample') ) {
     our $csv = Text::CSV->new( { binary => 1, formula => 'empty' } );    # binary needed for non-ASCII Unicode
     print $input->header(
-        -type       => 'application/vnd.sun.xml.calc',    # 'application/vnd.ms-excel' ?
+        -type       => 'application/vnd.sun.xml.calc',                   # 'application/vnd.ms-excel' ?
         -attachment => 'patron_import.csv',
     );
     $csv->combine(@columnkeys);
@@ -99,17 +100,17 @@ if ($matchpoint) {
 
 #create a patronlist
 my $createpatronlist = $input->param('createpatronlist') || 0;
-my $dt = dt_from_string();
-my $timestamp = $dt->ymd('-').' '.$dt->hms(':');
-my $patronlistname = $uploadborrowers . ' (' . $timestamp .')';
+my $dt               = dt_from_string();
+my $timestamp        = $dt->ymd('-') . ' ' . $dt->hms(':');
+my $patronlistname   = $uploadborrowers . ' (' . $timestamp . ')';
 
 if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
 
-    my $handle   = $input->upload('uploadborrowers');
-    my %defaults = $input->Vars;
+    my $handle              = $input->upload('uploadborrowers');
+    my %defaults            = $input->Vars;
     my $overwrite_passwords = defined $input->param('overwrite_passwords') ? 1 : 0;
-    my $update_dateexpiry = $input->param('update_dateexpiry');
-    my $return = $Import->import_patrons(
+    my $update_dateexpiry   = $input->param('update_dateexpiry');
+    my $return              = $Import->import_patrons(
         {
             file                            => $handle,
             defaults                        => \%defaults,
@@ -118,25 +119,25 @@ if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
             overwrite_passwords             => $overwrite_passwords,
             preserve_extended_attributes    => scalar $input->param('ext_preserve') || 0,
             preserve_fields                 => \@preserve_fields,
-            update_dateexpiry               => $update_dateexpiry ? 1 : 0,
-            update_dateexpiry_from_today    => $update_dateexpiry eq "now" ? 1 : 0,
+            update_dateexpiry               => $update_dateexpiry                 ? 1 : 0,
+            update_dateexpiry_from_today    => $update_dateexpiry eq "now"        ? 1 : 0,
             update_dateexpiry_from_existing => $update_dateexpiry eq "dateexpiry" ? 1 : 0,
             send_welcome                    => $welcome_new,
         }
     );
 
-    my $feedback    = $return->{feedback};
-    my $errors      = $return->{errors};
-    my $imported    = $return->{imported};
-    my $overwritten = $return->{overwritten};
-    my $alreadyindb = $return->{already_in_db};
-    my $invalid     = $return->{invalid};
+    my $feedback           = $return->{feedback};
+    my $errors             = $return->{errors};
+    my $imported           = $return->{imported};
+    my $overwritten        = $return->{overwritten};
+    my $alreadyindb        = $return->{already_in_db};
+    my $invalid            = $return->{invalid};
     my $imported_borrowers = $return->{imported_borrowers};
 
     if ( $imported && $createpatronlist ) {
-        my $patronlist = AddPatronList({ name => $patronlistname });
-        AddPatronsToList({ list => $patronlist, borrowernumbers => $imported_borrowers });
-        $template->param('patronlistname' => $patronlistname);
+        my $patronlist = AddPatronList( { name => $patronlistname } );
+        AddPatronsToList( { list => $patronlist, borrowernumbers => $imported_borrowers } );
+        $template->param( 'patronlistname' => $patronlistname );
     }
 
     my $uploadinfo = $input->uploadInfo($uploadborrowers);
@@ -159,13 +160,13 @@ if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
 
 } else {
     if ($extended) {
-        my @matchpoints = ();
+        my @matchpoints     = ();
         my $attribute_types = Koha::Patron::Attribute::Types->search;
 
         while ( my $attr_type = $attribute_types->next ) {
             if ( $attr_type->unique_id() ) {
                 push @matchpoints,
-                  { code => "patron_attribute_" . $attr_type->code(), description => $attr_type->description() };
+                    { code => "patron_attribute_" . $attr_type->code(), description => $attr_type->description() };
             }
         }
         $template->param( matchpoints => \@matchpoints );

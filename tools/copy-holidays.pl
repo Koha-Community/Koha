@@ -24,20 +24,19 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( checkauth );
 use C4::Output;
 
-
 use C4::Calendar;
 
-my $input               = CGI->new;
-my $op                  = $input->param('op') // q{};
-my $dbh                 = C4::Context->dbh();
+my $input = CGI->new;
+my $op    = $input->param('op') // q{};
+my $dbh   = C4::Context->dbh();
 
-checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
+checkauth( $input, 0, { tools => 'edit_calendar' }, 'intranet' );
 
-my $branchcode          = $input->param('branchcode');
-my $from_branchcode     = $input->param('from_branchcode');
+my $branchcode      = $input->param('branchcode');
+my $from_branchcode = $input->param('from_branchcode');
 
 if ( $op eq 'cud-copy' ) {
     C4::Calendar->new( branchcode => $from_branchcode )->copy_to_branch($branchcode) if $from_branchcode && $branchcode;
 }
 
-print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=".($branchcode || $from_branchcode));
+print $input->redirect( "/cgi-bin/koha/tools/holidays.pl?branch=" . ( $branchcode || $from_branchcode ) );

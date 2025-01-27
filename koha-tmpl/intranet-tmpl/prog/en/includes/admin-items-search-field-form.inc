@@ -4,7 +4,7 @@
         [% IF field %]
             <span class="label">Name: </span>
             [% field.name | html %]
-            <input type="hidden" name="name" value="[% field.name | html %]">
+            <input type="hidden" name="name" value="[% field.name | html %]" />
         [% ELSE %]
             <label class="required" for="name">Name: </label>
             <input type="text" name="name" id="name" class="required" required="required" />

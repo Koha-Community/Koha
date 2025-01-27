@@ -47,14 +47,15 @@ exceptions as needed.
 =cut
 
 sub store {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     unless ( $self->in_storage || $self->created_by ) {
         Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy->throw();
     }
 
     # if issue_id is not found in issues or old_issues, set to null
-    $self->issue_id(undef) unless ( !$self->issue_id
+    $self->issue_id(undef)
+        unless ( !$self->issue_id
         || Koha::Checkouts->find( $self->issue_id )
         || Koha::Old::Checkouts->find( $self->issue_id ) );
 
@@ -90,10 +91,10 @@ sub old_checkout {
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $borrower = $self->_result->borrowernumber;
-    return Koha::Patron->_new_from_dbic( $borrower ) if $borrower;
+    return Koha::Patron->_new_from_dbic($borrower) if $borrower;
 }
 
 =head3 item
@@ -105,9 +106,9 @@ Return the return claim item
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $item_rs = $self->_result->item;
-    return Koha::Item->_new_from_dbic( $item_rs );
+    return Koha::Item->_new_from_dbic($item_rs);
 }
 
 =head3 resolve
@@ -138,7 +139,8 @@ sub resolve {
     $self->_result->result_source->schema->txn_do(
         sub {
             $self->set(
-                {   resolution  => $params->{resolution},
+                {
+                    resolution  => $params->{resolution},
                     resolved_by => $params->{resolved_by},
                     resolved_on => $params->{resolved_on} // \'NOW()',
                     updated_by  => $params->{resolved_by}

@@ -4,32 +4,38 @@
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% BLOCK pluginlist %]
-<div class="pluginlist">
-[% FOREACH plugin IN plugins %]
-    <div class="plugin">
-        <div class="pluginname">
-            [% IF plugin.enabled %]<input type="checkbox" checked="checked" id="checkbox_[% type | html %][% plugin.name | html %]">[% ELSE %]<input type="checkbox" id="checkbox_[% type | html %][% plugin.name | html %]">[% END %]
-            <label class='pluginlabel' for="checkbox_[% type | html %][% plugin.name | html %]">[% plugin.name | html %]</label></div>
-        <div class="plugindesc">
-        [% SWITCH plugin.name %]
-        [% CASE 'AuthorityFile' %]
-            <span>Suggest authorities which are relevant to the term the user searched for.</span>
-        [% CASE 'ExplodedTerms' %]
-            <span>Suggest that patrons expand their searches to include broader/narrower/related terms.</span>
-        [% CASE 'LibrisSpellcheck' %]
-            <span>Use the LIBRIS spellcheck API.</span>
+    <div class="pluginlist">
+        [% FOREACH plugin IN plugins %]
+            <div class="plugin">
+                <div class="pluginname">
+                    [% IF plugin.enabled %]
+                        <input type="checkbox" checked="checked" id="checkbox_[% type | html %][% plugin.name | html %]" />
+                    [% ELSE %]
+                        <input type="checkbox" id="checkbox_[% type | html %][% plugin.name | html %]" />
+                    [% END %]
+                    <label class="pluginlabel" for="checkbox_[% type | html %][% plugin.name | html %]">[% plugin.name | html %]</label></div
+                >
+                <div class="plugindesc">
+                    [% SWITCH plugin.name %]
+                    [% CASE 'AuthorityFile' %]
+                        <span>Suggest authorities which are relevant to the term the user searched for.</span>
+                    [% CASE 'ExplodedTerms' %]
+                        <span>Suggest that patrons expand their searches to include broader/narrower/related terms.</span>
+                    [% CASE 'LibrisSpellcheck' %]
+                        <span>Use the LIBRIS spellcheck API.</span>
+                    [% END %]
+                </div>
+            </div>
         [% END %]
-        </div>
     </div>
 [% END %]
-</div>
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Did you mean?") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Did you mean?") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -42,91 +48,79 @@
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-       [% END %]
+        [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Did you mean?</span>
-       [% END %]
+        [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-
-        <h1>Did you mean?</h1>
-        <noscript><div class="alert alert-warning"><strong>Please enable Javascript:</strong>
-            Configuring 'Did you mean?' plugins requires Javascript. If
-            you are unable to use Javascript, you may be able to enter the
-            configuration (which is stored in JSON in the OPACdidyoumean system preferences)
-            in the Local preferences tab in
-            the system preference editor, but this is unsupported, not
-            recommended, and likely will not work.</div></noscript>
-        <div id="didyoumeanlegend">
-            Please put the 'Did you mean?' plugins in order by significance, from
-            most significant to least significant, and check the box to enable those
-            plugins that you want to use.
-        </div>
-        <form action="/cgi-bin/koha/admin/didyoumean.pl" method="get">
-            <fieldset id="didyoumeanopac">
-                <legend>OPAC</legend>
-                [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
-            </fieldset>
-            <fieldset class="action">
-                <button class="save-all btn btn-primary" type="submit">Save configuration</button>
-                <a href="/cgi-bin/koha/admin/didyoumean.pl" class="force_reload cancel">Cancel</a>
-            </fieldset>
-        </form>
-
+    <h1>Did you mean?</h1>
+    <noscript
+        ><div class="alert alert-warning"
+            ><strong>Please enable Javascript:</strong> Configuring 'Did you mean?' plugins requires Javascript. If you are unable to use Javascript, you may be able to enter the configuration (which is stored in JSON in the OPACdidyoumean
+            system preferences) in the Local preferences tab in the system preference editor, but this is unsupported, not recommended, and likely will not work.</div
+        ></noscript
+    >
+    <div id="didyoumeanlegend"> Please put the 'Did you mean?' plugins in order by significance, from most significant to least significant, and check the box to enable those plugins that you want to use. </div>
+    <form action="/cgi-bin/koha/admin/didyoumean.pl" method="get">
+        <fieldset id="didyoumeanopac">
+            <legend>OPAC</legend>
+            [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
+        </fieldset>
+        <fieldset class="action">
+            <button class="save-all btn btn-primary" type="submit">Save configuration</button>
+            <a href="/cgi-bin/koha/admin/didyoumean.pl" class="force_reload cancel">Cancel</a>
+        </fieldset>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     <script>
-        $(document).ready(function() {
-            $( ".pluginlist" ).each( (i, e) => {
+        $(document).ready(function () {
+            $(".pluginlist").each((i, e) => {
                 Sortable.create(e, {
-                    animation: 150
+                    animation: 150,
                 });
             });
-            $( ".plugin" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-                .find( ".pluginname" )
-                        .addClass( "ui-widget-header ui-corner-all" )
-                        .end()
-                .find( ".plugindesc" );
-            $(".save-all").on("click",function(e){
+            $(".plugin").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".pluginname").addClass("ui-widget-header ui-corner-all").end().find(".plugindesc");
+            $(".save-all").on("click", function (e) {
                 e.preventDefault();
                 yesimeant();
             });
-            $(".force_reload").on("click",function(e){
+            $(".force_reload").on("click", function (e) {
                 e.preventDefault();
                 window.location.reload(true);
             });
         });
 
         function yesimeant() {
-            var OPACdidyoumean = serialize_plugins('opac');
+            var OPACdidyoumean = serialize_plugins("opac");
             const client = APIClient.syspref;
-            client.sysprefs.update('OPACdidyoumean', OPACdidyoumean).then(
+            client.sysprefs.update("OPACdidyoumean", OPACdidyoumean).then(
                 success => {
                     alert(_("Successfully saved configuration"));
                 },
                 error => {
-                     console.warn("Something wrong happened: %s".format(error));
+                    console.warn("Something wrong happened: %s".format(error));
                 }
             );
             return false;
         }
 
         function serialize_plugins(interface) {
-            var serializedconfig = '[';
-            $('#didyoumean' + interface + ' .pluginlist .plugin').each(function(index) {
-                var name = $(this).find('.pluginlabel').text();
-                var enabled = $(this).find('input:checkbox:checked').length ?
-                              ', "enabled": 1' : '';
-                serializedconfig += '{ "name": "' + name + '"' + enabled + '}, ';
-                });
-                serializedconfig = serializedconfig.substring(0, serializedconfig.length - 2);
-                serializedconfig += ']';
-                return serializedconfig;
+            var serializedconfig = "[";
+            $("#didyoumean" + interface + " .pluginlist .plugin").each(function (index) {
+                var name = $(this).find(".pluginlabel").text();
+                var enabled = $(this).find("input:checkbox:checked").length ? ', "enabled": 1' : "";
+                serializedconfig += '{ "name": "' + name + '"' + enabled + "}, ";
+            });
+            serializedconfig = serializedconfig.substring(0, serializedconfig.length - 2);
+            serializedconfig += "]";
+            return serializedconfig;
         }
     </script>
 [% END %]

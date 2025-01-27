@@ -23,8 +23,11 @@ use Koha::Database;
 use t::lib::TestBuilder;
 
 BEGIN {
-    use_ok('C4::Biblio', qw( AddBiblio ));
-    use_ok('C4::CourseReserves', qw( GetCourse ModCourse GetCourses DelCourse GetCourseInstructors ModCourseInstructors GetCourseItem ModCourseItem GetCourseReserve ModCourseReserve GetCourseReserves DelCourseReserve SearchCourses GetItemCourseReservesInfo ));
+    use_ok( 'C4::Biblio', qw( AddBiblio ) );
+    use_ok(
+        'C4::CourseReserves',
+        qw( GetCourse ModCourse GetCourses DelCourse GetCourseInstructors ModCourseInstructors GetCourseItem ModCourseItem GetCourseReserve ModCourseReserve GetCourseReserves DelCourseReserve SearchCourses GetItemCourseReservesInfo )
+    );
     use_ok('C4::Context');
     use_ok('MARC::Field');
     use_ok('MARC::Record');
@@ -35,17 +38,17 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-my $itemtype = $builder->build( { source => 'Itemtype', value => { notforloan => 0 } } )->{itemtype};
+my $itemtype   = $builder->build( { source => 'Itemtype', value => { notforloan => 0 } } )->{itemtype};
 
 # Create 10 sample borrowers
 my @borrowers = ();
-foreach (1..10) {
-    push @borrowers, $builder->build({ source => 'Borrower' });
+foreach ( 1 .. 10 ) {
+    push @borrowers, $builder->build( { source => 'Borrower' } );
 }
 
 # Create the a record with an item
 my $record = MARC::Record->new;
-my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
+my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
 my $itemnumber = Koha::Item->new(
     {
         biblionumber  => $biblionumber,
@@ -66,26 +69,35 @@ ok( $course_id, "ModCourse created course successfully" );
 $course_id = ModCourse(
     course_id  => $course_id,
     staff_note => "Test staff note 2",
-    enabled   => 'no',
+    enabled    => 'no',
 );
 
 my $course = GetCourse($course_id);
 
-ok( $course->{'course_name'} eq "Test Course",       "GetCourse returned correct course" );
-ok( $course->{'staff_note'}  eq "Test staff note 2", "ModCourse updated course succesfully" );
+ok( $course->{'course_name'} eq "Test Course",      "GetCourse returned correct course" );
+ok( $course->{'staff_note'} eq "Test staff note 2", "ModCourse updated course succesfully" );
 is( $course->{'enabled'}, 'no', "Test Course is disabled" );
 
 my $courses = GetCourses();
 is( ref($courses), 'ARRAY', "GetCourses returns an array" );
-my @match = map {$_->{course_name} eq 'Test Course'} @$courses;
+my @match = map { $_->{course_name} eq 'Test Course' } @$courses;
 ok( scalar(@match) > 0, "GetCourses returns valid array of course data" );
 
-ModCourseInstructors( mode => 'add', course_id => $course_id, borrowernumbers => [ $borrowers[0]->{'borrowernumber'} ] );
+ModCourseInstructors(
+    mode            => 'add', course_id => $course_id,
+    borrowernumbers => [ $borrowers[0]->{'borrowernumber'} ]
+);
 $course = GetCourse($course_id);
-ok( $course->{'instructors'}->[0]->{'borrowernumber'} == $borrowers[0]->{'borrowernumber'}, "ModCourseInstructors added instructors correctly" );
+ok(
+    $course->{'instructors'}->[0]->{'borrowernumber'} == $borrowers[0]->{'borrowernumber'},
+    "ModCourseInstructors added instructors correctly"
+);
 
 my $course_instructors = GetCourseInstructors($course_id);
-ok( $course_instructors->[0]->{'borrowernumber'} eq $borrowers[0]->{'borrowernumber'}, "GetCourseInstructors returns valid data" );
+ok(
+    $course_instructors->[0]->{'borrowernumber'} eq $borrowers[0]->{'borrowernumber'},
+    "GetCourseInstructors returns valid data"
+);
 
 my $ci_id = ModCourseItem( 'itemnumber' => $itemnumber );
 ok( $ci_id, "ModCourseItem returned valid data" );
@@ -104,7 +116,7 @@ ok( $course_reserves->[0]->{'ci_id'} eq $ci_id, "GetCourseReserves returns valid
 
 ## Check for regression of Bug 15530
 $course_id = ModCourse(
-    course_id  => $course_id,
+    course_id => $course_id,
     enabled   => 'yes',
 );
 $course = GetCourse($course_id);
@@ -115,7 +127,7 @@ my $disabled_course_id = ModCourse(
     course_name => "Disabled Course",
     enabled     => 'no',
 );
-my $disabled_course = GetCourse( $disabled_course_id );
+my $disabled_course = GetCourse($disabled_course_id);
 is( $disabled_course->{'enabled'}, 'no', "Disabled Course is disabled" );
 my $cr_id2 = ModCourseReserve( 'course_id' => $disabled_course_id, 'ci_id' => $ci_id );
 $course_item = GetCourseItem( 'ci_id' => $ci_id );
@@ -133,7 +145,7 @@ DelCourse($course_id);
 $course = GetCourse($course_id);
 ok( !defined( $course->{'course_id'} ), "DelCourse deleted course successfully" );
 
-$courses = SearchCourses(); # FIXME Lack of tests for SearchCourses
+$courses = SearchCourses();    # FIXME Lack of tests for SearchCourses
 is( ref($courses), 'ARRAY', 'SearchCourses should not crash and return an arrayref' );
 
 $schema->storage->txn_rollback;

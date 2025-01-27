@@ -28,67 +28,72 @@ Admin page to describe OAI SETs
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use CGI           qw ( -utf8 );
+use C4::Auth      qw( get_template_and_user );
+use C4::Output    qw( output_html_with_http_headers );
 use C4::OAI::Sets qw( AddOAISet DelOAISet GetOAISet GetOAISets ModOAISet );
 
-
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'admin/oai_sets.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'parameters' => 'manage_oai_sets' },
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'admin/oai_sets.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'parameters' => 'manage_oai_sets' },
+    }
+);
 
 my $op = $input->param('op');
 
-if($op && $op eq "new") {
+if ( $op && $op eq "new" ) {
     $template->param( op_new => 1 );
-} elsif($op && $op eq "cud-savenew") {
-    my $spec = $input->param('spec');
-    my $name = $input->param('name');
+} elsif ( $op && $op eq "cud-savenew" ) {
+    my $spec         = $input->param('spec');
+    my $name         = $input->param('name');
     my @descriptions = $input->multi_param('description');
-    AddOAISet({
-        spec => $spec,
-        name => $name,
-        descriptions => \@descriptions
-    });
-} elsif($op && $op eq "mod") {
-    my $id = $input->param('id');
+    AddOAISet(
+        {
+            spec         => $spec,
+            name         => $name,
+            descriptions => \@descriptions
+        }
+    );
+} elsif ( $op && $op eq "mod" ) {
+    my $id  = $input->param('id');
     my $set = GetOAISet($id);
     $template->param(
-        op_mod => 1,
-        id => $set->{'id'},
-        spec => $set->{'spec'},
-        name => $set->{'name'},
-        descriptions => [ map { {description => $_} } @{ $set->{'descriptions'} } ],
+        op_mod       => 1,
+        id           => $set->{'id'},
+        spec         => $set->{'spec'},
+        name         => $set->{'name'},
+        descriptions => [ map { { description => $_ } } @{ $set->{'descriptions'} } ],
     );
-} elsif($op && $op eq "cud-savemod") {
-    my $id = $input->param('id');
-    my $spec = $input->param('spec');
-    my $name = $input->param('name');
+} elsif ( $op && $op eq "cud-savemod" ) {
+    my $id           = $input->param('id');
+    my $spec         = $input->param('spec');
+    my $name         = $input->param('name');
     my @descriptions = $input->multi_param('description');
-    ModOAISet({
-        id => $id,
-        spec => $spec,
-        name => $name,
-        descriptions => \@descriptions
-    });
-} elsif($op && $op eq "cud-del") {
+    ModOAISet(
+        {
+            id           => $id,
+            spec         => $spec,
+            name         => $name,
+            descriptions => \@descriptions
+        }
+    );
+} elsif ( $op && $op eq "cud-del" ) {
     my $id = $input->param('id');
     DelOAISet($id);
 }
 
 my $OAISets = GetOAISets;
 my @sets_loop;
-foreach(@$OAISets) {
+foreach (@$OAISets) {
     push @sets_loop, {
-        id => $_->{'id'},
-        spec => $_->{'spec'},
-        name => $_->{'name'},
-        descriptions => [ map { {description => $_} } @{ $_->{'descriptions'} } ]
+        id           => $_->{'id'},
+        spec         => $_->{'spec'},
+        name         => $_->{'name'},
+        descriptions => [ map { { description => $_ } } @{ $_->{'descriptions'} } ]
     };
 }
 

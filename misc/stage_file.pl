@@ -23,27 +23,28 @@ use Modern::Perl;
 
 use Koha::Script;
 use C4::Context;
-use C4::ImportBatch qw( RecordsFromISO2709File RecordsFromMARCXMLFile BatchStageMarcRecords SetImportBatchMatcher SetImportBatchOverlayAction SetImportBatchNoMatchAction SetImportBatchItemAction BatchFindDuplicates );
+use C4::ImportBatch
+    qw( RecordsFromISO2709File RecordsFromMARCXMLFile BatchStageMarcRecords SetImportBatchMatcher SetImportBatchOverlayAction SetImportBatchNoMatchAction SetImportBatchItemAction BatchFindDuplicates );
 use C4::Matcher;
 use C4::MarcModificationTemplates qw( GetModificationTemplates );
-use Getopt::Long qw( GetOptions );
+use Getopt::Long                  qw( GetOptions );
 
 $| = 1;
 
 # command-line parameters
-my $record_type = "biblio";
-my $encoding = "UTF-8";
-my $authorities = 0;
-my $match = 0;
-my $add_items = 0;
-my $input_file = "";
+my $record_type   = "biblio";
+my $encoding      = "UTF-8";
+my $authorities   = 0;
+my $match         = 0;
+my $add_items     = 0;
+my $input_file    = "";
 my $batch_comment = "";
-my $want_help = 0;
+my $want_help     = 0;
 my $no_replace;
 my $format = 'ISO2709';
 my $no_create;
-my $item_action = 'always_add';
-my $marc_mod_template = '';
+my $item_action          = 'always_add';
+my $marc_mod_template    = '';
 my $marc_mod_template_id = undef;
 
 my $result = GetOptions(
@@ -61,29 +62,29 @@ my $result = GetOptions(
     'h|help'             => \$want_help
 );
 
-if($marc_mod_template ne '') {
-   my @templates = GetModificationTemplates();
-   foreach my $this_template (@templates) {
-       if($this_template->{'name'} eq $marc_mod_template) {
-          if(!defined $marc_mod_template_id) {
-               $marc_mod_template_id = $this_template->{'template_id'};
-           } else {
-               print "WARNING: MARC modification template name " .
-                   "'$marc_mod_template' matches multiple templates. " .
-                   "Please fix this issue before proceeding.\n";
-               exit 1;
-           }
-       }
-   }
+if ( $marc_mod_template ne '' ) {
+    my @templates = GetModificationTemplates();
+    foreach my $this_template (@templates) {
+        if ( $this_template->{'name'} eq $marc_mod_template ) {
+            if ( !defined $marc_mod_template_id ) {
+                $marc_mod_template_id = $this_template->{'template_id'};
+            } else {
+                print "WARNING: MARC modification template name "
+                    . "'$marc_mod_template' matches multiple templates. "
+                    . "Please fix this issue before proceeding.\n";
+                exit 1;
+            }
+        }
+    }
 
-   if(!defined $marc_mod_template_id ) {
-       die "Can't locate MARC modification template '$marc_mod_template'\n";
-   }
+    if ( !defined $marc_mod_template_id ) {
+        die "Can't locate MARC modification template '$marc_mod_template'\n";
+    }
 }
 
 $record_type = 'auth' if ($authorities);
 
-if (not $result or $input_file eq "" or $want_help) {
+if ( not $result or $input_file eq "" or $want_help ) {
     print_usage();
     exit 0;
 }
@@ -93,7 +94,7 @@ if ( $format !~ /^(MARCXML|ISO2709)$/i ) {
     exit 0;
 }
 
-unless (-r $input_file) {
+unless ( -r $input_file ) {
     die "$0: cannot open input file $input_file: $!\n";
 }
 
@@ -119,51 +120,55 @@ $dbh->commit();
 exit 0;
 
 sub process_batch {
-    my ( $params ) = @_;  #Possible params are: format input_file record_type match add_items batch_comment encoding no_replace no_create item_action
-    my $format = $params->{format} // '';
+    my ($params) = @_
+        ; #Possible params are: format input_file record_type match add_items batch_comment encoding no_replace no_create item_action
+    my $format      = $params->{format}      // '';
     my $record_type = $params->{record_type} // 'biblio';
 
     my ( $errors, $marc_records );
-    if( $format eq 'ISO2709' ) {
-        ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromISO2709File(
-            $params->{input_file}, $record_type, $params->{encoding} );
-    } elsif( $format eq 'MARCXML' ) {
-        ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromMARCXMLFile(
-            $params->{input_file}, $params->{encoding} );
+    if ( $format eq 'ISO2709' ) {
+        ( $errors, $marc_records ) =
+            C4::ImportBatch::RecordsFromISO2709File( $params->{input_file}, $record_type, $params->{encoding} );
+    } elsif ( $format eq 'MARCXML' ) {
+        ( $errors, $marc_records ) =
+            C4::ImportBatch::RecordsFromMARCXMLFile( $params->{input_file}, $params->{encoding} );
     }
-    warn ( join ',', @$errors ) if @$errors;
+    warn( join ',', @$errors ) if @$errors;
     my $num_input_records = ($marc_records) ? scalar(@$marc_records) : 0;
 
     print "... staging MARC records -- please wait\n";
+
     #FIXME: We should really allow the use of marc modification frameworks and to_marc plugins here if possible
-    my ( $batch_id, $num_valid_records, $num_items, @import_errors ) =
-      BatchStageMarcRecords(
+    my ( $batch_id, $num_valid_records, $num_items, @import_errors ) = BatchStageMarcRecords(
         $record_type,                      $params->{encoding},
         $marc_records,                     $params->{input_file},
         $params->{'marc_mod_template_id'}, $params->{batch_comment},
         '',                                $params->{add_items},
         0,                                 100,
         \&print_progress_and_commit
-      );
+    );
     print "... finished staging MARC records\n";
 
     my $num_with_matches = 0;
     if ( $params->{match} ) {
         my $matcher = C4::Matcher->fetch( $params->{match} );
-        if (defined $matcher) {
+        if ( defined $matcher ) {
             SetImportBatchMatcher( $batch_id, $params->{match} );
-        } elsif ($record_type eq 'biblio')  {
+        } elsif ( $record_type eq 'biblio' ) {
             $matcher = C4::Matcher->new($record_type);
-            $matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
-            $matcher->add_simple_required_check('245', 'a', -1, 0, '',
-                                            '245', 'a', -1, 0, '');
+            $matcher->add_simple_matchpoint( 'isbn', 1000, '020', 'a', -1, 0, '' );
+            $matcher->add_simple_required_check(
+                '245', 'a', -1, 0, '',
+                '245', 'a', -1, 0, ''
+            );
         }
+
         # set default record overlay behavior
         SetImportBatchOverlayAction( $batch_id, $params->{no_replace} ? 'ignore' : 'replace' );
-        SetImportBatchNoMatchAction( $batch_id, $params->{no_create} ? 'ignore' : 'create_new' );
+        SetImportBatchNoMatchAction( $batch_id, $params->{no_create}  ? 'ignore' : 'create_new' );
         SetImportBatchItemAction( $batch_id, $params->{item_action} );
         print "... looking for matches with records already in database\n";
-        $num_with_matches = BatchFindDuplicates($batch_id, $matcher, 10, 100, \&print_progress_and_commit);
+        $num_with_matches = BatchFindDuplicates( $batch_id, $matcher, 10, 100, \&print_progress_and_commit );
         print "... finished looking for matches\n";
     }
 
@@ -178,12 +183,12 @@ Number of input records:    $num_input_records
 Number of valid records:    $num_valid_records
 Number of invalid records:  $num_invalid_records
 _SUMMARY_
-    if( $params->{match} ) {
+    if ( $params->{match} ) {
         print "Number of records matched:  $num_with_matches\n";
     } else {
         print "Incoming records not matched against existing records (--match option not supplied)\n";
     }
-    if ($record_type eq 'biblio') {
+    if ( $record_type eq 'biblio' ) {
         if ( $params->{add_items} ) {
             print "Number of items parsed:  $num_items\n";
         } else {

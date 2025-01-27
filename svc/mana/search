@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use Koha::SharedContent;
 use Koha::Subscription;
-use C4::Auth qw(get_template_and_user);
+use C4::Auth   qw(get_template_and_user);
 use C4::Output qw( output_html_with_http_headers );
 
 use CGI;
@@ -30,7 +30,7 @@ use CGI;
 my $input = CGI->new;
 
 my $templatename;
-if ($input->param( "resource" ) eq 'report') {
+if ( $input->param("resource") eq 'report' ) {
     $templatename = "mana/mana-report-search-result.tt";
 } else {
     $templatename = "mana/mana-subscription-search-result.tt";
@@ -38,9 +38,9 @@ if ($input->param( "resource" ) eq 'report') {
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => $templatename,
-        query           => $input,
-        type            => "intranet",
+        template_name => $templatename,
+        query         => $input,
+        type          => "intranet",
 
         # flagsrequired   => { serials => $permission },
         flagsrequired => { serials => 'create_subscription' },
@@ -48,26 +48,26 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my ($identifier, $sub_mana_info);
+my ( $identifier, $sub_mana_info );
 $identifier = $input->param('id');
-$template->param( lowWarned => 5, warned => 10, highWarned => 20);
-my $package = "Koha::".ucfirst($input->param( 'resource' ));
+$template->param( lowWarned => 5, warned => 10, highWarned => 20 );
+my $package = "Koha::" . ucfirst( $input->param('resource') );
 $sub_mana_info = $package->get_search_info($identifier);
 
-$sub_mana_info->{ usecomments } = $input->param('usecomments');
+$sub_mana_info->{usecomments} = $input->param('usecomments');
 my $resourcename = $input->param('resource');
-my $result = Koha::SharedContent::search_entities( $resourcename, $sub_mana_info);
+my $result       = Koha::SharedContent::search_entities( $resourcename, $sub_mana_info );
 my $nbofcomment;
-foreach my $resource (@{ $result->{data} }){
+foreach my $resource ( @{ $result->{data} } ) {
     $nbofcomment = 0;
-    foreach my $comment (@{ $resource->{comments} }){
+    foreach my $comment ( @{ $resource->{comments} } ) {
         $nbofcomment += $comment->{nb};
     }
     $resource->{nbofcomment} = $nbofcomment;
 }
 
-$template->param( $input->param('resource')."s" => $result->{data} );
-$template->param( statuscode => $result->{code} );
-$template->param( msg => $result->{msg} );
+$template->param( $input->param('resource') . "s" => $result->{data} );
+$template->param( statuscode                      => $result->{code} );
+$template->param( msg                             => $result->{msg} );
 
 output_html_with_http_headers $input, $cookie, $template->output;

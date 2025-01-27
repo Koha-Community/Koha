@@ -38,11 +38,11 @@ parameters tables.
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth            qw( get_template_and_user );
 use C4::AuthoritiesMarc qw( GetAuthority );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 
 use Koha::Authorities;
 use Koha::Authority::Types;
@@ -59,10 +59,10 @@ my $relationship = $query->param('relationship');
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "authorities/blinddetail-biblio-search.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { editcatalogue => 'edit_catalogue' },
+        template_name => "authorities/blinddetail-biblio-search.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { editcatalogue => 'edit_catalogue' },
     }
 );
 
@@ -72,29 +72,29 @@ $tag_number =~ s/^tag_(\d*)_.*$/$1/;
 
 # fill arrays
 my @subfield_loop;
-my ($indicator1, $indicator2);
+my ( $indicator1, $indicator2 );
 if ($authid) {
-    my $auth = Koha::Authorities->find( $authid );
+    my $auth         = Koha::Authorities->find($authid);
     my $authtypecode = $auth ? $auth->authtypecode : q{};
-    my $auth_type = Koha::Authority::Types->find($authtypecode);
-    my $record = GetAuthority($authid);
-    my @fields = $record->field( $auth_type->auth_tag_to_report );
-    my $repet = ($query->param('repet') || 1) - 1;
-    my $field = $fields[$repet];
+    my $auth_type    = Koha::Authority::Types->find($authtypecode);
+    my $record       = GetAuthority($authid);
+    my @fields       = $record->field( $auth_type->auth_tag_to_report );
+    my $repet        = ( $query->param('repet') || 1 ) - 1;
+    my $field        = $fields[$repet];
 
     # Get all values for each distinct subfield and add to subfield loop
     my %done_subfields;
     for ( $field->subfields ) {
-        next if $_->[0] eq '9'; # $9 will be set with authid value
+        next if $_->[0] eq '9';    # $9 will be set with authid value
         my $letter = $_->[0];
         $letter ||= '@';
         next if defined $done_subfields{$letter};
         my @values = $field->subfield($letter);
-        push @subfield_loop, {marc_subfield => $letter, marc_values => \@values };
+        push @subfield_loop, { marc_subfield => $letter, marc_values => \@values };
         $done_subfields{$letter} = 1;
     }
 
-    push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
+    push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ($relationship);
 
     # Copy the ISNI number over (should one exist) to subfield $o when linking
     # authorities with authorities in UNIMARC instances. This only applies to
@@ -119,32 +119,30 @@ if ($authid) {
         push( @subfield_loop, { marc_subfield => 'o', marc_values => $isninumber } ) if defined $isninumber;
     }
 
-    my $controlled_ind = $auth->controlled_indicators({ record => $record, biblio_tag => $tag_number });
+    my $controlled_ind = $auth->controlled_indicators( { record => $record, biblio_tag => $tag_number } );
     $indicator1 = $controlled_ind->{ind1};
     $indicator2 = $controlled_ind->{ind2};
-    if( defined $controlled_ind->{sub2} ) {
+    if ( defined $controlled_ind->{sub2} ) {
         my $v = $controlled_ind->{sub2};
-        push @subfield_loop, { marc_subfield => '2', marc_values => [ $v ] };
+        push @subfield_loop, { marc_subfield => '2', marc_values => [$v] };
     }
 } else {
+
     # authid is empty => the user want to empty the entry.
     $template->param( "clear" => 1 );
 }
 
-
-
 $template->param(
-    authid          => $authid ? $authid : "",
-    index           => $index,
-    tagid           => $tagid,
-    update_ind1     => defined($indicator1),
-    indicator1      => $indicator1,
-    update_ind2     => defined($indicator2),
-    indicator2      => $indicator2,
-    SUBFIELD_LOOP   => \@subfield_loop,
-    tag_number      => $tag_number,
-    rancor          => $index =~ /rancor$/,
+    authid        => $authid ? $authid : "",
+    index         => $index,
+    tagid         => $tagid,
+    update_ind1   => defined($indicator1),
+    indicator1    => $indicator1,
+    update_ind2   => defined($indicator2),
+    indicator2    => $indicator2,
+    SUBFIELD_LOOP => \@subfield_loop,
+    tag_number    => $tag_number,
+    rancor        => $index =~ /rancor$/,
 );
-
 
 output_html_with_http_headers $query, $cookie, $template->output;

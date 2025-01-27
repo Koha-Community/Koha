@@ -36,7 +36,7 @@ This class should be used in all scripts. It sets the interface and userenv appr
 =cut
 
 use File::Basename qw( fileparse );
-use Fcntl qw( LOCK_EX LOCK_NB );
+use Fcntl          qw( LOCK_EX LOCK_NB );
 
 use C4::Context;
 use Koha::Exceptions;
@@ -57,12 +57,12 @@ sub import {
         # Set interface
         C4::Context->interface('cron');
 
-    }
-    else {
+    } else {
+
         # Set userenv
         C4::Context->set_userenv(
             undef, undef, undef, 'CLI', 'CLI',
-            undef, undef, undef, undef,  undef
+            undef, undef, undef, undef, undef
         );
 
         # Set interface
@@ -90,12 +90,11 @@ parameter is optional, and is used to generate the lock file if passed.
 =cut
 
 sub new {
-    my ($class, $params) = @_;
-    my $script   = $params->{script};
+    my ( $class, $params ) = @_;
+    my $script = $params->{script};
 
-    Koha::Exceptions::MissingParameter->throw(
-        "The 'script' parameter is mandatory. You should usually pass \$0"
-    ) unless $script;
+    Koha::Exceptions::MissingParameter->throw("The 'script' parameter is mandatory. You should usually pass \$0")
+        unless $script;
 
     my $self = { script => $script };
     $self->{lock_name} = $params->{lock_name}
@@ -126,18 +125,18 @@ otherwise throw an exception immediately.
 =cut
 
 sub lock_exec {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     $self->_initialize_locking
         unless $self->{lock_file};
 
-    my $lock_params = ($params->{wait}) ? LOCK_EX : LOCK_EX | LOCK_NB;
+    my $lock_params = ( $params->{wait} ) ? LOCK_EX : LOCK_EX | LOCK_NB;
 
     open my $lock_handle, '>', $self->{lock_file}
-        or Koha::Exception->throw("Unable to open the lock file ".$self->{lock_file}.": $!");
+        or Koha::Exception->throw( "Unable to open the lock file " . $self->{lock_file} . ": $!" );
     $self->{lock_handle} = $lock_handle;
     flock( $lock_handle, $lock_params )
-        or Koha::Exception->throw("Unable to acquire the lock ".$self->{lock_file}.": $!");
+        or Koha::Exception->throw( "Unable to acquire the lock " . $self->{lock_file} . ": $!" );
 }
 
 =head2 Internal methods
@@ -153,8 +152,7 @@ This method initializes the locking configuration.
 sub _initialize_locking {
     my ($self) = @_;
 
-    my $lock_dir = C4::Context->config('lockdir')
-        // C4::Context->temporary_directory();
+    my $lock_dir = C4::Context->config('lockdir') // C4::Context->temporary_directory();
 
     my $lock_name = $self->{lock_name} // fileparse( $self->{script} );
     $self->{lock_file} = "$lock_dir/$lock_name";

@@ -12,7 +12,7 @@ use Koha::AdditionalFieldValue;
 
 use base 'Koha::Objects';
 
-sub _type { 'AdditionalFieldValue' }
+sub _type        { 'AdditionalFieldValue' }
 sub object_class { 'Koha::AdditionalFieldValue' }
 
 =head1 AUTHOR

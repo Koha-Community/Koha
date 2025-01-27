@@ -10,7 +10,7 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Config::MissingEntry' => {
-        isa => 'Koha::Exceptions::Config',
+        isa         => 'Koha::Exceptions::Config',
         description => 'The required entry is missing in the configuration file'
     }
 );

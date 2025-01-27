@@ -5,26 +5,31 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( add_form ) %]
-        [% IF heading_add_tag_p %]
-            [% tx("New tag {searchfield}", { searchfield = searchfield }) | html %]
+<title
+    >[% FILTER collapse %]
+        [% IF ( add_form ) %]
+            [% IF heading_add_tag_p %]
+                [% tx("New tag {searchfield}", { searchfield = searchfield }) | html %]
+            [% ELSE %]
+                [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% IF ( delete_confirm ) %]
+            [% tx("Confirm deletion of tag {searchfield}", { searchfield = searchfield }) | html %]
+            &rsaquo;
+        [% END %]
+        [% IF framework %]
+            [% framework.frameworktext | html %]
+            ([% framework.frameworkcode | html %]) &rsaquo;
         [% ELSE %]
-            [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% IF ( delete_confirm ) %]
-        [% tx("Confirm deletion of tag {searchfield}", { searchfield = searchfield }) | html %] &rsaquo;
-    [% END %]
-    [% IF framework %]
-        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %]) &rsaquo;
-    [% ELSE %]
-        [% t("Default framework") | html %] &rsaquo;
-    [% END %]
-    [% t("MARC bibliographic frameworks") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+            [% t("Default framework") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("MARC bibliographic frameworks") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -49,26 +54,24 @@
                         <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
                         <span>Default MARC bibliographic framework</span>
-                    [% END%]
+                    [% END %]
                 </a>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF heading_add_tag_p %]
                     [% tx("New tag {searchfield}", { searchfield = searchfield }) | html %]
                 [% ELSE %]
                     [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
                 [% END %]
             [% END %]
-
         [% ELSIF ( else ) %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF framework %]
                     <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                 [% ELSE %]
                     <span>Default framework</span>
                 [% END %]
             [% END %]
-
         [% ELSIF ( delete_confirm ) %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
@@ -79,7 +82,7 @@
                     [% END %]
                 </a>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("Confirm deletion of tag {searchfield}", { searchfield = searchfield }) | html %]
             [% END %]
         [% END %]
@@ -88,226 +91,249 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% IF ( else ) %]
-<div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-plus"></i> New tag</a>
-    <a class="btn btn-default" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit framework</a>
-</div>[% END %]
+    [% IF ( else ) %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-plus"></i> New tag</a>
+            <a class="btn btn-default" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit framework</a>
+        </div>
+    [% END %]
 
-[% IF framework %]
-    <h1>
-        [% tx("MARC bibliographic framework '{framework}' ({frameworkcode})", { framework = framework.frameworktext, frameworkcode = framework.frameworkcode }) | html %]
-    </h1>
-[% ELSE %]
-    <h1>Default MARC bibliographic framework</h1>
-[% END %]
+    [% IF framework %]
+        <h1> [% tx("MARC bibliographic framework '{framework}' ({frameworkcode})", { framework = framework.frameworktext, frameworkcode = framework.frameworkcode }) | html %] </h1>
+    [% ELSE %]
+        <h1>Default MARC bibliographic framework</h1>
+    [% END %]
 
-[% IF ( add_form ) %]
+    [% IF ( add_form ) %]
+        <form action="/cgi-bin/koha/admin/marctagstructure.pl" name="Aform" method="post" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
 
-    <form action="/cgi-bin/koha/admin/marctagstructure.pl" name="Aform" method="post" class="validated">
-        [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows">
+                <legend>
+                    [% IF heading_add_tag_p %]
+                        <span>New tag</span>
+                    [% ELSE %]
+                        [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
+                        <input type="hidden" name="modif" value="1" />
+                    [% END %]
+                </legend>
+                <input type="hidden" name="op" value="cud-add_validate" />
+                <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
+                <ol>
+                    <li>
+                        [% IF ( heading_modify_tag_p ) %]
+                            <input type="hidden" name="tagfield" value="[% searchfield | html %]" />
+                            <span class="label">Tag:</span>
+                            [% searchfield | html %]
+                        [% ELSE %]
+                            <label for="tagfield" class="required">Tag: </label>
+                            <input id="tagfield" type="text" name="tagfield" value="[% searchfield | html %]" maxlength="3" size="3" required="required" class="required" />
+                            <span class="required">Required</span>
+                        [% END %]
+                    </li>
+                    <li><label for="liblibrarian">Description in staff interface: </label><input type="text" id="liblibrarian" name="liblibrarian" value="[% liblibrarian | html %]" size="40" maxlength="255" /></li>
+                    <li><label for="libopac">Description in OPAC: </label><input type="text" id="libopac" name="libopac" value="[% libopac | html %]" size="40" maxlength="255" /></li>
+                    <li
+                        ><label for="repeatable">Repeatable: </label>
+                        [% IF ( repeatable ) %]
+                            <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="repeatable" id="repeatable" value="1" />
+                        [% END %]
+                    </li>
+                    <li
+                        ><label for="mandatory">Mandatory: </label>
+                        [% IF ( mandatory ) %]
+                            <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="mandatory" id="mandatory" value="1" />
+                        [% END %]
+                    </li>
+                    <li
+                        ><label for="important">Important: </label>
+                        [% IF ( important ) %]
+                            <input type="checkbox" name="important" id="important" value="1" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="important" id="important" value="1" />
+                        [% END %]
+                    </li>
+                    <li
+                        ><label for="ind1_defaultvalue">First indicator default value: </label>
+                        <input id="ind1_defaultvalue" type="text" name="ind1_defaultvalue" value="[% ind1_defaultvalue | html %]" maxlength="1" size="1" />
+                    </li>
+                    <li
+                        ><label for="ind2_defaultvalue">Second indicator default value: </label>
+                        <input id="ind2_defaultvalue" type="text" name="ind2_defaultvalue" value="[% ind2_defaultvalue | html %]" maxlength="1" size="1" />
+                    </li>
+                    <li
+                        ><label for="authorised_value">Authorized value: </label>
+                        <select name="authorised_value" id="authorised_value">
+                            <option value=""></option>
+                            [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => authorised_value ) %]
+                        </select>
+                        (if you select a value here, the indicators will be limited to the authorized value list)</li
+                    >
+                </ol></fieldset
+            >
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save changes" />
+                <a class="cancel" href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
 
-      <fieldset class="rows">
-            <legend>
-                [% IF heading_add_tag_p %]
-                    <span>New tag</span>
-                [% ELSE %]
-                    [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
-                    <input type="hidden" name="modif" value="1" />
-                [% END %]
-            </legend>
-            <input type="hidden" name="op" value="cud-add_validate" />
-            <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-        <ol>
-            <li>
-                [% IF ( heading_modify_tag_p ) %]
-                    <input type="hidden" name="tagfield" value="[% searchfield | html %]" />
-                    <span class="label">Tag:</span>
-                    [% searchfield | html %]
-                [% ELSE %]
-                    <label for="tagfield" class="required">Tag: </label>
-                    <input id="tagfield" type="text" name="tagfield" value="[% searchfield | html %]" maxlength="3" size="3" required="required" class="required" />
-                    <span class="required">Required</span>
-                [% END %]
-            </li>
-    <li><label for="liblibrarian">Description in staff interface: </label><input type="text" id="liblibrarian" name="liblibrarian" value="[% liblibrarian | html %]" size="40" maxlength="255" /></li>
-    <li><label for="libopac">Description in OPAC: </label><input type="text" id="libopac" name="libopac" value="[% libopac | html %]" size="40" maxlength="255" /></li>
-    <li><label for="repeatable">Repeatable: </label>
-        [% IF ( repeatable ) %]
-            <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
-        [% ELSE %]
-            <input type="checkbox" name="repeatable" id="repeatable" value="1" />
-        [% END %]
-    </li>
-    <li><label for="mandatory">Mandatory: </label>
-        [% IF ( mandatory ) %]
-            <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
-        [% ELSE %]
-            <input type="checkbox" name="mandatory" id="mandatory" value="1" />
-        [% END %]
-    </li>
-    <li><label for="important">Important: </label>
-        [% IF ( important ) %]
-            <input type="checkbox" name="important" id="important" value="1" checked="checked" />
-        [% ELSE %]
-            <input type="checkbox" name="important" id="important" value="1" />
-        [% END %]
-    </li>
-    <li><label for="ind1_defaultvalue">First indicator default value: </label>
-        <input id="ind1_defaultvalue" type="text" name="ind1_defaultvalue" value="[% ind1_defaultvalue | html %]" maxlength="1" size="1" />
-    </li>
-    <li><label for="ind2_defaultvalue">Second indicator default value: </label>
-        <input id="ind2_defaultvalue" type="text" name="ind2_defaultvalue" value="[% ind2_defaultvalue | html %]" maxlength="1" size="1" />
-    </li>
-    <li><label for="authorised_value">Authorized value: </label>
-        <select name="authorised_value" id="authorised_value">
-            <option value=""></option>
-            [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => authorised_value ) %]
-        </select>
-        (if you select a value here, the indicators will be limited to the authorized value list)</li>
-</ol></fieldset> 
-    <fieldset class="action">
-        <input type="submit" class="btn btn-primary" value="Save changes" />
-        <a class="cancel" href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">Cancel</a>
-    </fieldset>
-    </form>
-[% END %]
+    [% IF ( delete_confirm ) %]
+        <div class="alert alert-warning">
+            <h3>[% tx("Confirm deletion of tag {searchfield}?", { searchfield = searchfield }) | html %]</h3>
+            <p>Tag: [% searchfield | html %]</p>
+            <p>Description: [% liblibrarian | html %]</p>
+            <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
+                <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+                <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
+            </form>
+            <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="get"
+                ><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            </form>
+        </div>
+    [% END %]
 
-
-[% IF ( delete_confirm ) %]
-    <div class="alert alert-warning">
-        <h3>[% tx("Confirm deletion of tag {searchfield}?", { searchfield = searchfield }) | html %]</h3>
-        <p>Tag: [% searchfield | html %]</p>
-        <p>Description: [% liblibrarian | html %]</p>
+    [% IF ( framework_create ) %]
         <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete_confirmed" />
-            <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+            <input type="hidden" name="op" value="cud-framework_create_confirm" />
             <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
-        </form>
-        <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="get"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
-        </form>
-    </div>
-[% END %]
-
-[% IF ( framework_create ) %]
-
-    <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-framework_create_confirm" />
-        <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-        Create framework for [% framework.frameworkcode | html %] ([% framework.frameworktext | html %]) using
-        <select name="existingframeworkcode">
-            <option value="">Default</option>
-        [% FOREACH fw IN existing_frameworks%]
-            <option value="[% fw.frameworkcode | html %]">[% fw.frameworktext | html %]</option>
-        [% END %]
-        </select>
-        <input type="submit" class="btn btn-primary" value="OK" />
-    </form>
-[% END %]
-
-
-[% IF ( else ) %]
-<form name="f" action="/cgi-bin/koha/admin/marctagstructure.pl" method="get">
-<fieldset style="padding:.5em;">
-        <label for="tag_search"><strong>Search for tag:</strong> </label>
-        <input type="text" name="searchfield" id="tag_search" size="4" value="[% searchfield | html %]" />
-
-<label for="frameworkcode"><strong>In framework:</strong> </label>
-        <select id="frameworkcode" name="frameworkcode">
-            <option value="">Default</option>
-            [% FOREACH f IN frameworks %]
-            [% IF f.frameworkcode == framework.frameworkcode %]
-                <option value="[% f.frameworkcode | html %]" selected="selected">[% f.frameworktext | html %]</option>
-                [% ELSE %]
-                <option value="[% f.frameworkcode | html %]">[% f.frameworktext | html %]</option>
+            Create framework for [% framework.frameworkcode | html %] ([% framework.frameworktext | html %]) using
+            <select name="existingframeworkcode">
+                <option value="">Default</option>
+                [% FOREACH fw IN existing_frameworks %]
+                    <option value="[% fw.frameworkcode | html %]">[% fw.frameworktext | html %]</option>
                 [% END %]
-            [% END %]
-        </select>
-    <input type="submit" class="btn btn-primary" value="Search" />
-<p>        <label for="select_display">Display only used tags/subfields</label>
-        [% IF ( select_display ) %]
-            <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked" />
-        [% ELSE %]
-            <input type="checkbox" name="select_display" id="select_display" value="True" />
-        [% END %]</p>
-</fieldset>
-</form>
-
-<div class="page-section">
-    <table id="table_marctagstructure">
-    <thead>
-        <tr>
-        <th>Tag</th>
-        <th>Tag description</th>
-        <th>Repeatable</th>
-        <th>Mandatory</th>
-        <th>Important</th>
-        <th>Auth value</th>
-        <th>Indicator 1</th>
-        <th>Indicator 2</th>
-        <th>&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody>
-    [% FOREACH loo IN loop %]
-        <tr>
-            <td>[% loo.tagfield | html %]</td>
-            <td>
-                [% loo.liblibrarian | html %]
-            [% IF ( select_display ) %]
-                [% FOREACH subfield IN loo.subfields %]
-                    <p>
-                        <span>Tab:[% subfield.tab | html %]</span> | $[% subfield.tagsubfield | html %]
-                        [% subfield.liblibrarian | html %] [% IF ( subfield.kohafield ) %][% subfield.kohafield | html %][% END %][% IF ( subfield.repeatable ) %], <span>repeatable</span>[% END %][% IF ( subfield.mandatory ) %], <span>Mandatory</span>[% END %][% IF ( subfield.seealso ) %], <span>See [% subfield.seealso | html %]</span>[% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value | html %][% END %][% IF ( subfield.authtypecode ) %], [% subfield.authtypecode | html %][% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder | html %][% END %]
-                    </p>
-                [% END %]
-            [% END %]
-            </td>
-            <td>[% IF ( loo.repeatable ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
-            <td>[% IF ( loo.mandatory ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
-            <td>[% IF ( loo.important ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
-            <td>[% loo.authorised_value | html %]</td>
-            <td>[% loo.ind1_defaultvalue | html %]</td>
-            <td>[% loo.ind2_defaultvalue | html %]</td>
-            <td>
-                <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-bs-toggle="dropdown" href="#">
-                        Actions </a>
-                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
-                        <li><a class="dropdown-item" href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit tag</a></li>
-                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-eye"></i> View subfields</a></li>
-                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit subfields</a></li>
-                        <li><a class="dropdown-item" href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
+            </select>
+            <input type="submit" class="btn btn-primary" value="OK" />
+        </form>
     [% END %]
-    </tbody>
-    </table>
-    </div> <!-- /.page-section -->
-[% END %]
 
+    [% IF ( else ) %]
+        <form name="f" action="/cgi-bin/koha/admin/marctagstructure.pl" method="get">
+            <fieldset style="padding:.5em;">
+                <label for="tag_search"><strong>Search for tag:</strong> </label>
+                <input type="text" name="searchfield" id="tag_search" size="4" value="[% searchfield | html %]" />
+
+                <label for="frameworkcode"><strong>In framework:</strong> </label>
+                <select id="frameworkcode" name="frameworkcode">
+                    <option value="">Default</option>
+                    [% FOREACH f IN frameworks %]
+                        [% IF f.frameworkcode == framework.frameworkcode %]
+                            <option value="[% f.frameworkcode | html %]" selected="selected">[% f.frameworktext | html %]</option>
+                        [% ELSE %]
+                            <option value="[% f.frameworkcode | html %]">[% f.frameworktext | html %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+                <input type="submit" class="btn btn-primary" value="Search" />
+                <p>
+                    <label for="select_display">Display only used tags/subfields</label> [% IF ( select_display ) %]
+                        <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" name="select_display" id="select_display" value="True" />
+                    [% END %]</p
+                >
+            </fieldset>
+        </form>
+
+        <div class="page-section">
+            <table id="table_marctagstructure">
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th>Tag description</th>
+                        <th>Repeatable</th>
+                        <th>Mandatory</th>
+                        <th>Important</th>
+                        <th>Auth value</th>
+                        <th>Indicator 1</th>
+                        <th>Indicator 2</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH loo IN loop %]
+                        <tr>
+                            <td>[% loo.tagfield | html %]</td>
+                            <td>
+                                [% loo.liblibrarian | html %]
+                                [% IF ( select_display ) %]
+                                    [% FOREACH subfield IN loo.subfields %]
+                                        <p>
+                                            <span>Tab:[% subfield.tab | html %]</span> | $[% subfield.tagsubfield | html %]
+                                            [% subfield.liblibrarian | html %]
+                                            [% IF ( subfield.kohafield ) %][% subfield.kohafield | html %][% END %][% IF ( subfield.repeatable ) %], <span>repeatable</span>[% END %][% IF ( subfield.mandatory ) %]
+                                                , <span>Mandatory</span>
+                                            [% END %][% IF ( subfield.seealso ) %], <span>See [% subfield.seealso | html %]</span>[% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value | html %][% END %][% IF ( subfield.authtypecode ) %]
+                                                , [% subfield.authtypecode | html %]
+                                            [% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder | html %][% END %]
+                                        </p>
+                                    [% END %]
+                                [% END %]
+                            </td>
+                            <td>[% IF ( loo.repeatable ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
+                            <td>[% IF ( loo.mandatory ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
+                            <td>[% IF ( loo.important ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
+                            <td>[% loo.authorised_value | html %]</td>
+                            <td>[% loo.ind1_defaultvalue | html %]</td>
+                            <td>[% loo.ind2_defaultvalue | html %]</td>
+                            <td>
+                                <div class="btn-group dropup">
+                                    <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
+                                        <li
+                                            ><a class="dropdown-item" href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"
+                                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit tag</a
+                                            ></li
+                                        >
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"
+                                                ><i class="fa-solid fa-eye"></i> View subfields</a
+                                            ></li
+                                        >
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"
+                                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit subfields</a
+                                            ></li
+                                        >
+                                        <li
+                                            ><a class="dropdown-item" href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li
+                                        >
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
-        $(document).ready(function() {
-            $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ],
-                "pagingType": "full"
-            }));
-            $("#select_display").on("change",function(){
-                var checked = $(this).prop("checked") ? 1: 0;
-                Cookies.set("marctagstructure_selectdisplay", checked, { sameSite: 'Lax' });
+        $(document).ready(function () {
+            $("#table_marctagstructure").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                    pagingType: "full",
+                })
+            );
+            $("#select_display").on("change", function () {
+                var checked = $(this).prop("checked") ? 1 : 0;
+                Cookies.set("marctagstructure_selectdisplay", checked, { sameSite: "Lax" });
                 this.form.submit();
             });
         });

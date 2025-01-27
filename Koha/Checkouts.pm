@@ -19,7 +19,6 @@ package Koha::Checkouts;
 
 use Modern::Perl;
 
-
 use C4::Context;
 use C4::Circulation qw( AddReturn );
 use Koha::Checkout;
@@ -27,7 +26,6 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Objects);
-
 
 =head1 NAME
 
@@ -108,7 +106,6 @@ sub automatic_checkin {
         }
     }
 }
-
 
 =head3 type
 

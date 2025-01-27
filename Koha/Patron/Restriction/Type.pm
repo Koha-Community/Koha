@@ -52,14 +52,14 @@ sub delete {
     return $self->_result->result_source->schema->txn_do(
         sub {
             # Update all linked restrictions to the default
-            my $default =
-              Koha::Patron::Restriction::Types->find( { is_default => 1 } )->code;
+            my $default = Koha::Patron::Restriction::Types->find( { is_default => 1 } )->code;
 
             # We can't use Koha objects here because Koha::Patron::Debarments
             # is not a Koha object. So we'll do it old skool
             my $rows = C4::Context->dbh->do(
                 "UPDATE borrower_debarments SET type = ? WHERE type = ?",
-                undef, ( $default, $self->code ) );
+                undef, ( $default, $self->code )
+            );
 
             return $self->SUPER::delete;
         }
@@ -73,12 +73,12 @@ Set the current restriction type as the default for manual restrictions
 =cut
 
 sub make_default {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->_result->result_source->schema->txn_do(
         sub {
             my $types =
-              Koha::Patron::Restriction::Types->search( { code => { '!=' => $self->code } } );
+                Koha::Patron::Restriction::Types->search( { code => { '!=' => $self->code } } );
             $types->update( { is_default => 0 } );
             $self->set( { is_default => 1 } );
             $self->SUPER::store;

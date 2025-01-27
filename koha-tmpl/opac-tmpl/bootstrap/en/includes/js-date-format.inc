@@ -9,7 +9,6 @@
     dayjs.extend(window.dayjs_plugin_utc);
     dayjs.extend(window.dayjs_plugin_timezone);
 </script>
-
 <!-- js-date-format.inc -->
 <script>
     (function() {

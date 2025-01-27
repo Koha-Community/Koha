@@ -41,10 +41,10 @@ It should be an arrayref that will be serialized in JSON before stored in DB.
 =cut
 
 sub new {
-    my ($class, $attributes) = @_;
+    my ( $class, $attributes ) = @_;
 
     if ( exists $attributes->{regexs} ) {
-        $attributes->{split_regex} = to_json($attributes->{regexs});
+        $attributes->{split_regex} = to_json( $attributes->{regexs} );
         delete $attributes->{regexs};
     }
     return $class->SUPER::new($attributes);
@@ -63,8 +63,8 @@ Getter or setter for split_regex
 sub regexs {
     my ( $self, $regexs ) = @_;
     return $regexs
-      ? $self->split_regex( to_json($regexs) )
-      : from_json( $self->split_regex || '[]' );
+        ? $self->split_regex( to_json($regexs) )
+        : from_json( $self->split_regex || '[]' );
 }
 
 =head3 type

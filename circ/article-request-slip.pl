@@ -23,7 +23,7 @@ use CGI qw( -utf8 );
 
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Letters;
 use Koha::ArticleRequests;
 use Koha::Patrons;
@@ -34,10 +34,10 @@ my @ids = split( ',', scalar $cgi->param('id') );
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/printslip.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "circ/printslip.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
@@ -69,9 +69,9 @@ while ( my $ar = $ars->next ) {
     );
 
     $slipContent .=
-        $slip->{is_html}
-      ? $slip->{content}
-      : '<pre>' . $slip->{content} . '</pre>';
+          $slip->{is_html}
+        ? $slip->{content}
+        : '<pre>' . $slip->{content} . '</pre>';
 
     $style = $slip->{style};
 }

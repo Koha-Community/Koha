@@ -31,12 +31,9 @@ our $AUTOLOAD;
 our $valid = sub {
     my $opts = shift;
     for (qw(branchcode categorycode item_type notification)) {
-        exists($opts->{$_}) || croak("'$_' is a required parameter.");
+        exists( $opts->{$_} ) || croak("'$_' is a required parameter.");
     }
 };
-
-
-
 
 =head1 NAME
 
@@ -93,12 +90,9 @@ object.  The database is not affected by this method.
 =cut
 
 sub new {
-    my ($class, $opts) = @_;
+    my ( $class, $opts ) = @_;
     bless $opts => $class;
 }
-
-
-
 
 =head3 C4::ItemCirculationAlertPreference->create(\%opts)
 
@@ -129,9 +123,9 @@ This can be "CHECKIN" or "CHECKOUT"
 =cut
 
 sub create {
-    my ($class, $opts) = @_;
+    my ( $class, $opts ) = @_;
     $valid->($opts);
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $prefs = $dbh->selectall_arrayref(
         "SELECT id, branchcode, categorycode, item_type
         FROM  item_circulation_alert_preferences
@@ -146,7 +140,7 @@ sub create {
         $opts->{notification},
     );
     if (@$prefs) {
-        return $class->new($prefs->[0]);
+        return $class->new( $prefs->[0] );
     } else {
         my $success = $dbh->do(
             "INSERT INTO item_circulation_alert_preferences
@@ -159,7 +153,7 @@ sub create {
         );
         if ($success) {
             my $self = {
-                id           => $dbh->last_insert_id(undef, undef, undef, undef),
+                id           => $dbh->last_insert_id( undef, undef, undef, undef ),
                 branchcode   => $opts->{branchcode},
                 categorycode => $opts->{categorycode},
                 item_type    => $opts->{item_type},
@@ -173,9 +167,6 @@ sub create {
     }
 }
 
-
-
-
 =head3 C4::ItemCirculationAlertPreference->delete(\%opts)
 
 Delete an item circulation alert preference.  You can delete by either passing
@@ -185,9 +176,9 @@ triplet.
 =cut
 
 sub delete {
-    my ($class, $opts) = @_;
+    my ( $class, $opts ) = @_;
     my $dbh = C4::Context->dbh;
-    if ($opts->{id}) {
+    if ( $opts->{id} ) {
         $dbh->do(
             "DELETE FROM item_circulation_alert_preferences WHERE id = ?",
             {},
@@ -195,8 +186,7 @@ sub delete {
         );
     } else {
         $valid->($opts);
-        my $sql =
-            "DELETE FROM item_circulation_alert_preferences
+        my $sql = "DELETE FROM item_circulation_alert_preferences
             WHERE branchcode   = ?
             AND   categorycode = ?
             AND   item_type    = ?
@@ -211,9 +201,6 @@ sub delete {
         );
     }
 }
-
-
-
 
 =head3 C4::ItemCirculationAlertPreference->is_enabled_for(\%opts)
 
@@ -237,7 +224,7 @@ B<Example>:
 =cut
 
 sub is_disabled_for {
-    my ($class, $opts) = @_;
+    my ( $class, $opts ) = @_;
     $valid->($opts);
     my $dbh = C4::Context->dbh;
 
@@ -265,12 +252,9 @@ sub is_disabled_for {
 }
 
 sub is_enabled_for {
-    my ($class, $opts) = @_;
+    my ( $class, $opts ) = @_;
     return not $class->is_disabled_for($opts);
 }
-
-
-
 
 =head3 C4::ItemCirculationAlertPreference->find({ branchcode => $bc, notification => $type })
 
@@ -287,24 +271,23 @@ B<Example>:
 =cut
 
 sub find {
-    my ($class, $where) = @_;
-    my $dbh = C4::Context->dbh;
+    my ( $class, $where ) = @_;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT id, branchcode, categorycode, item_type, notification
           FROM item_circulation_alert_preferences
          WHERE branchcode = ? AND notification = ?
          ORDER BY categorycode, item_type
     };
-    return    map { $class->new($_) }    @{$dbh->selectall_arrayref(
-        $query,
-        { Slice => {} },
-        $where->{branchcode},
-        $where->{notification},
-    )};
+    return map { $class->new($_) } @{
+        $dbh->selectall_arrayref(
+            $query,
+            { Slice => {} },
+            $where->{branchcode},
+            $where->{notification},
+        )
+    };
 }
-
-
-
 
 =head3 C4::ItemCirculationAlertPreference->grid({ branchcode => $c, notification => $type })
 
@@ -328,21 +311,21 @@ See F<admin/item_circulation_alerts.pl> to see how this method is used.
 =cut
 
 sub grid {
-    my ($class, $where) = @_;
-    my @branch_prefs = $class->find($where);
-    my @default_prefs = $class->find({ branchcode => '*', notification => $where->{notification} });
-    my @cc = Koha::Patron::Categories->search_with_library_limits->as_list;
-    my @it = Koha::ItemTypes->search->as_list;
-    my $notification = $where->{notification};
-    my %disabled = map {
+    my ( $class, $where ) = @_;
+    my @branch_prefs  = $class->find($where);
+    my @default_prefs = $class->find( { branchcode => '*', notification => $where->{notification} } );
+    my @cc            = Koha::Patron::Categories->search_with_library_limits->as_list;
+    my @it            = Koha::ItemTypes->search->as_list;
+    my $notification  = $where->{notification};
+    my %disabled      = map {
         my $key = $_->categorycode . "-" . $_->item_type . "-" . $notification;
         $key =~ s/\*/_/g;
-        ($key => 1);
+        ( $key => 1 );
     } @branch_prefs;
     my %default = map {
         my $key = $_->categorycode . "-" . $_->item_type . "-" . $notification;
         $key =~ s/\*/_/g;
-        ($key => 1);
+        ( $key => 1 );
     } @default_prefs;
     my @grid;
     for my $c (@cc) {
@@ -353,16 +336,16 @@ sub grid {
             $key =~ s/\*/_/g;
             my @classes;
             my $text = " ";
-            if ($disabled{$key}) {
+            if ( $disabled{$key} ) {
                 push @classes, 'disabled';
                 $text = "Disabled for $where->{branchcode}";
             }
-            if ($default{$key}) {
+            if ( $default{$key} ) {
                 push @classes, 'default';
                 $text = "Disabled for all";
             }
-            push @{$row->{items}}, {
-                class => join(' ', @classes),
+            push @{ $row->{items} }, {
+                class => join( ' ', @classes ),
                 id    => $key,
                 text  => $text,
             };
@@ -370,9 +353,6 @@ sub grid {
     }
     return \@grid;
 }
-
-
-
 
 =head2 Object Methods
 
@@ -402,7 +382,7 @@ sub AUTOLOAD {
     my $self = shift;
     my $attr = $AUTOLOAD;
     $attr =~ s/.*://;
-    if (exists $self->{$attr}) {
+    if ( exists $self->{$attr} ) {
         return $self->{$attr};
     } else {
         return;
@@ -410,8 +390,6 @@ sub AUTOLOAD {
 }
 
 sub DESTROY { }
-
-
 
 =head1 SEE ALSO
 

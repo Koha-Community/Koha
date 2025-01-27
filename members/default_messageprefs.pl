@@ -27,8 +27,8 @@ use C4::Form::MessagingPreferences;
 # update the prefs if operator is creating a new patron and has
 # changed the patron category from its original value.
 
-my ($query, $response) = C4::Service->init(borrowers => 'edit_borrowers');
+my ( $query, $response ) = C4::Service->init( borrowers => 'edit_borrowers' );
 my ($categorycode) = C4::Service->require_params('categorycode');
-C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode }, $response);
-C4::Service->return_success( $response );
+C4::Form::MessagingPreferences::set_form_values( { categorycode => $categorycode }, $response );
+C4::Service->return_success($response);
 

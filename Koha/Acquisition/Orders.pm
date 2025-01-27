@@ -17,7 +17,6 @@ package Koha::Acquisition::Orders;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::DateUtils qw( dt_from_string );
@@ -60,32 +59,36 @@ $params can be:
 
 sub filter_by_lates {
     my ( $self, $params ) = @_;
-    my $delay = $params->{delay};
+    my $delay         = $params->{delay};
     my $bookseller_id = $params->{bookseller_id};
+
     # my $branchcode = $params->{branchcode}; # FIXME do we really need this
     my $estimated_from = $params->{estimated_from};
-    my $estimated_to = $params->{estimated_to};
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $estimated_to   = $params->{estimated_to};
+    my $dtf            = Koha::Database->new->schema->storage->datetime_parser;
 
     my @delivery_time_conditions;
-    my $date_add = "DATE_ADD(basketno.closedate, INTERVAL COALESCE(booksellerid.deliverytime, booksellerid.deliverytime, 0) day)";
+    my $date_add =
+        "DATE_ADD(basketno.closedate, INTERVAL COALESCE(booksellerid.deliverytime, booksellerid.deliverytime, 0) day)";
     my @estimated_delivery_time_conditions;
     if ( defined $estimated_from or defined $estimated_to ) {
-        push @delivery_time_conditions, \[ "$date_add IS NOT NULL" ];
-        push @delivery_time_conditions, \[ "estimated_delivery_date IS NULL" ];
-        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date IS NOT NULL" ];
+        push @delivery_time_conditions,           \["$date_add IS NOT NULL"];
+        push @delivery_time_conditions,           \["estimated_delivery_date IS NULL"];
+        push @estimated_delivery_time_conditions, \["estimated_delivery_date IS NOT NULL"];
     }
     if ( defined $estimated_from ) {
         push @delivery_time_conditions, \[ "$date_add >= ?", $dtf->format_date($estimated_from) ];
-        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date >= ?", $dtf->format_date($estimated_from) ];
+        push @estimated_delivery_time_conditions,
+            \[ "estimated_delivery_date >= ?", $dtf->format_date($estimated_from) ];
     }
     if ( defined $estimated_to ) {
-        push @delivery_time_conditions, \[ "$date_add <= ?", $dtf->format_date($estimated_to) ];
+        push @delivery_time_conditions,           \[ "$date_add <= ?",               $dtf->format_date($estimated_to) ];
         push @estimated_delivery_time_conditions, \[ "estimated_delivery_date <= ?", $dtf->format_date($estimated_to) ];
     }
     if ( defined $estimated_from and not defined $estimated_to ) {
         push @delivery_time_conditions, \[ "$date_add <= ?", $dtf->format_date(dt_from_string) ];
-        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date <= ?", $dtf->format_date(dt_from_string) ];
+        push @estimated_delivery_time_conditions,
+            \[ "estimated_delivery_date <= ?", $dtf->format_date(dt_from_string) ];
     }
 
     $self->search(
@@ -95,18 +98,13 @@ sub filter_by_lates {
                 quantityreceived => { '<' => \'quantity' }
             ],
             'basketno.closedate' => [
-                -and =>
-                { '!=' => undef },
+                -and => { '!=' => undef },
                 {
                     defined $delay
-                    ? (
-                        '<=' => $dtf->format_date(
-                            dt_from_string->subtract( days => $delay )
-                        )
-                      )
+                    ? ( '<=' => $dtf->format_date( dt_from_string->subtract( days => $delay ) ) )
                     : ()
                 }
-              ],
+            ],
             'datecancellationprinted' => undef,
             (
                 $bookseller_id
@@ -116,18 +114,19 @@ sub filter_by_lates {
 
             # ( $branchcode ? ('borrower.branchcode')) # FIXME branch is not a filter we may not need to implement this
 
-            ( ( @delivery_time_conditions and @estimated_delivery_time_conditions ) ?
-                ( -or =>
-                    [
+            (
+                ( @delivery_time_conditions and @estimated_delivery_time_conditions )
+                ? (
+                    -or => [
                         -and => \@estimated_delivery_time_conditions,
                         -and => \@delivery_time_conditions
                     ]
-                )
+                    )
                 : ()
             ),
             (
                 C4::Context->preference('IndependentBranches')
-                  && !C4::Context->IsSuperLibrarian
+                    && !C4::Context->IsSuperLibrarian
                 ? ( 'borrower.branchcode' => C4::Context->userenv->{branch} )
                 : ()
             )
@@ -136,11 +135,13 @@ sub filter_by_lates {
             '+select' => [
                 \"DATE_ADD(basketno.closedate, INTERVAL COALESCE(booksellerid.deliverytime, booksellerid.deliverytime, 0) day)",
             ],
-            '+as' => [qw/
-                calculated_estimated_delivery_date
-            /],
-            join => { 'basketno' => 'booksellerid' },
-            prefetch => {'basketno' => 'booksellerid'},
+            '+as' => [
+                qw/
+                    calculated_estimated_delivery_date
+                    /
+            ],
+            join     => { 'basketno' => 'booksellerid' },
+            prefetch => { 'basketno' => 'booksellerid' },
         }
     )->filter_by_active;
 }
@@ -162,8 +163,10 @@ sub filter_by_active {
     return $self->search(
         {
             '-or' => [
-                { 'basket.is_standing' => 1,
-                  'orderstatus' => [ 'new', 'ordered', 'partial' ] },
+                {
+                    'basket.is_standing' => 1,
+                    'orderstatus'        => [ 'new', 'ordered', 'partial' ]
+                },
                 { 'orderstatus' => [ 'ordered', 'partial' ] }
             ],
             quantityreceived => { '<', \['COALESCE(me.quantity,0)'] },
@@ -199,11 +202,7 @@ Return the orders of the set that have been cancelled.
 
 sub filter_by_cancelled {
     my ($self) = @_;
-    return $self->search(
-        {
-            datecancellationprinted => { '!=' => undef }
-        }
-    );
+    return $self->search( { datecancellationprinted => { '!=' => undef } } );
 }
 
 =head3 filter_by_id_including_transfers
@@ -222,13 +221,13 @@ so we can find orders that have changed their ordernumber as the result of a tra
 sub filter_by_id_including_transfers {
     my ( $self, $params ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw( "The ordernumber param is mandatory" )
+    Koha::Exceptions::MissingParameter->throw("The ordernumber param is mandatory")
         unless $params->{ordernumber};
 
     return $self->search(
         {
             -or => [
-                { 'me.ordernumber' => $params->{ordernumber} },
+                { 'me.ordernumber'                                     => $params->{ordernumber} },
                 { 'aqorders_transfers_ordernumber_to.ordernumber_from' => $params->{ordernumber} }
             ]
         },
@@ -276,7 +275,6 @@ sub filter_by_obsolete {
     }
     return $rs;
 }
-
 
 =head3 cancel
 

@@ -17,7 +17,7 @@ package Koha::UI::Table::Builder::Items;
 
 use Modern::Perl;
 use List::MoreUtils qw( uniq );
-use C4::Biblio qw( GetMarcStructure GetMarcFromKohaField IsMarcStructureInternal );
+use C4::Biblio      qw( GetMarcStructure GetMarcFromKohaField IsMarcStructureInternal );
 use Koha::Items;
 
 =head1 NAME
@@ -74,7 +74,7 @@ sub build_table {
 
     my $patron = $params->{patron};
 
-    my %itemnumbers_to_idx = map { $self->{itemnumbers}->[$_] => $_ } 0..$#{$self->{itemnumbers}};
+    my %itemnumbers_to_idx = map { $self->{itemnumbers}->[$_] => $_ } 0 .. $#{ $self->{itemnumbers} };
 
     my $items = Koha::Items->search( { itemnumber => $self->{itemnumbers} } );
 
@@ -83,13 +83,13 @@ sub build_table {
         my $item_info = $item->columns_to_str;
         $item_info = {
             %$item_info,
-            index          => $itemnumbers_to_idx{$item->itemnumber},
+            index          => $itemnumbers_to_idx{ $item->itemnumber },
             biblio         => $item->biblio,
             safe_to_delete => $item->safe_to_delete,
             holds          => $item->biblio->holds->count,
             item_holds     => $item->holds->count,
-            is_checked_out => $item->checkout ? 1 : 0,
-            nomod          => $patron ? !$patron->can_edit_items_from($item->homebranch) : 0,
+            is_checked_out => $item->checkout ? 1                                                  : 0,
+            nomod          => $patron         ? !$patron->can_edit_items_from( $item->homebranch ) : 0,
         };
         push @items, $item_info;
     }
@@ -116,15 +116,14 @@ sub _build_headers {
         my $item = $_;
         map {
             defined $item->{$_}
-              && !ref( $item->{$_} ) # biblio and safe_to_delete are objects
-              && $item->{$_} ne ""
-              ? $_
-              : ()
-          } keys %$item
+                && !ref( $item->{$_} )    # biblio and safe_to_delete are objects
+                && $item->{$_} ne ""
+                ? $_
+                : ()
+        } keys %$item
     } @$items;
 
-    my ( $itemtag, $itemsubfield ) =
-      C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
     my $tagslib = C4::Biblio::GetMarcStructure(1);
     my $subfieldcode_attribute_mappings;
     for my $subfield_code ( keys %{ $tagslib->{$itemtag} } ) {
@@ -137,8 +136,7 @@ sub _build_headers {
         my $attribute;
         if ( $subfield->{kohafield} ) {
             ( $attribute = $subfield->{kohafield} ) =~ s|^items\.||;
-        }
-        else {
+        } else {
             $attribute = $subfield_code;       # It's in more_subfields_xml
         }
         next unless grep { $attribute eq $_ } @witness_attributes;

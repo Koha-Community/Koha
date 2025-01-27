@@ -79,14 +79,12 @@ sub getConf {
             my @line = split( /=/, $_, 2 );
             unless ( $line[1] ) {
                 $inSection = 0;
-            }
-            else {
+            } else {
                 my ( $key, $value ) = @line;
                 chomp $value;
                 $return{$key} = $value;
             }
-        }
-        else {
+        } else {
             if ( $_ eq "$section\n" ) { $inSection = 1 }
         }
     }

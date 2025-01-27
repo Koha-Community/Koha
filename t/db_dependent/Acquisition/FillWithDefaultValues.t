@@ -31,7 +31,7 @@ $biblio_module->mock(
                 repeatable => 0,
                 tab        => 0,
                 lib        => 'a lib',
-              },
+            },
 
             # default for a nonexisting field
             '099' => {
@@ -97,24 +97,25 @@ is_deeply(
 );
 
 # Test controlfield default
-$record->field('008')->update( undef );
+$record->field('008')->update(undef);
 C4::Acquisition::FillWithDefaultValues($record);
 is( $record->field('008')->data, $default_x, 'Controlfield got default' );
 
-is( $record->subfield('942','d'), '942d_val', 'Check 942d' );
+is( $record->subfield( '942', 'd' ), '942d_val', 'Check 942d' );
 
 # Now test only_mandatory parameter
 $record->delete_fields( $record->field('245') );
 $record->delete_fields( $record->field('942') );
-$record->append_fields( MARC::Field->new('942','','','f'=>'f val') );
+$record->append_fields( MARC::Field->new( '942', '', '', 'f' => 'f val' ) );
+
 # We deleted 245 and replaced 942. If we only apply mandatories, we should get
 # back 245c again and 942c but not 942d. 942f should be left alone.
-C4::Acquisition::FillWithDefaultValues($record, { only_mandatory => 1 });
+C4::Acquisition::FillWithDefaultValues( $record, { only_mandatory => 1 } );
 @fields_245 = $record->field(245);
 is( scalar @fields_245, 1, 'Only one 245 expected' );
-is( $record->subfield('245','c'), $default_author, '245c restored' );
-is( $record->subfield('942','c'), 'BK', '942c also restored' );
-is( $record->subfield('942','d'), undef, '942d should not be there' );
-is( $record->subfield('942','f'), 'f val', '942f untouched' );
+is( $record->subfield( '245', 'c' ), $default_author, '245c restored' );
+is( $record->subfield( '942', 'c' ), 'BK',            '942c also restored' );
+is( $record->subfield( '942', 'd' ), undef,           '942d should not be there' );
+is( $record->subfield( '942', 'f' ), 'f val',         '942f untouched' );
 
 $schema->storage->txn_rollback;

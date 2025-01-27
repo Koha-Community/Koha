@@ -24,7 +24,7 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::Tags;
 
-my $schema = Koha::Database->schema;
+my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'search() tests' => sub {
@@ -35,8 +35,8 @@ subtest 'search() tests' => sub {
 
     my $current_count = Koha::Tags->search->count;
 
-    my $approval_1 = $builder->build_object({ class => 'Koha::Tags' });
-    my $approval_2 = $builder->build_object({ class => 'Koha::Tags' });
+    my $approval_1 = $builder->build_object( { class => 'Koha::Tags' } );
+    my $approval_2 = $builder->build_object( { class => 'Koha::Tags' } );
 
     is( Koha::Tags->search->count, $current_count + 2, 'Tags count consistent' );
 

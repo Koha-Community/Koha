@@ -20,8 +20,8 @@
 use Modern::Perl;
 
 use File::Basename qw( fileparse );
-use Getopt::Long qw( GetOptions :config no_ignore_case );
-use Pod::Usage qw( pod2usage );
+use Getopt::Long   qw( GetOptions :config no_ignore_case );
+use Pod::Usage     qw( pod2usage );
 
 use Koha::Config;
 use Koha::Z3950Responder;
@@ -105,7 +105,7 @@ my $add_status_multi_subfield;
 my $debug = 0;
 my $help;
 my $man;
-my $prefetch = 20;
+my $prefetch   = 20;
 my $config_dir = '';
 
 my @yaz_options;
@@ -117,19 +117,20 @@ sub add_yaz_option {
 }
 
 sub pass_yaz_option {
-    my ( $opt_name ) = @_;
+    my ($opt_name) = @_;
 
     push @yaz_options, "-$opt_name";
 }
 
 GetOptions(
-    '-h|help' => \$help,
-    '--man' => \$man,
-    '--debug' => \$debug,
-    '--add-item-status=s' => \$add_item_status_subfield,
+    '-h|help'                     => \$help,
+    '--man'                       => \$man,
+    '--debug'                     => \$debug,
+    '--add-item-status=s'         => \$add_item_status_subfield,
     '--add-status-multi-subfield' => \$add_status_multi_subfield,
-    '--prefetch=i' => \$prefetch,
-    '--config-dir=s' => \$config_dir,
+    '--prefetch=i'                => \$prefetch,
+    '--config-dir=s'              => \$config_dir,
+
     # Pass through YAZ options.
     'a=s' => \&add_yaz_option,
     'v=s' => \&add_yaz_option,
@@ -143,35 +144,37 @@ GetOptions(
     'C=s' => \&add_yaz_option,
     'm=s' => \&add_yaz_option,
     'w=s' => \&add_yaz_option,
-    'z' => \&pass_yaz_option,
-    'K' => \&pass_yaz_option,
-    'i' => \&pass_yaz_option,
-    'D' => \&pass_yaz_option,
-    'S' => \&pass_yaz_option,
-    'T' => \&pass_yaz_option,
-    '1' => \&pass_yaz_option
+    'z'   => \&pass_yaz_option,
+    'K'   => \&pass_yaz_option,
+    'i'   => \&pass_yaz_option,
+    'D'   => \&pass_yaz_option,
+    'S'   => \&pass_yaz_option,
+    'T'   => \&pass_yaz_option,
+    '1'   => \&pass_yaz_option
 ) || pod2usage(2);
 
-pod2usage(1) if $help;
+pod2usage(1)               if $help;
 pod2usage( -verbose => 2 ) if $man;
 
 # If config_dir is not defined, default to z3950 under the Koha config directory
-if (!$config_dir) {
-    (undef, $config_dir) = fileparse(Koha::Config->guess_koha_conf);
+if ( !$config_dir ) {
+    ( undef, $config_dir ) = fileparse( Koha::Config->guess_koha_conf );
     $config_dir .= 'z3950/';
 } else {
-    $config_dir .= '/' if ($config_dir !~ /\/$/);
+    $config_dir .= '/' if ( $config_dir !~ /\/$/ );
 }
 
 # Create and start the server.
 
-my $z = Koha::Z3950Responder->new( {
-    add_item_status_subfield => $add_item_status_subfield,
-    add_status_multi_subfield => $add_status_multi_subfield,
-    debug => $debug,
-    num_to_prefetch => $prefetch,
-    config_dir => $config_dir,
-    yaz_options => [ @yaz_options, @ARGV ],
-} );
+my $z = Koha::Z3950Responder->new(
+    {
+        add_item_status_subfield  => $add_item_status_subfield,
+        add_status_multi_subfield => $add_status_multi_subfield,
+        debug                     => $debug,
+        num_to_prefetch           => $prefetch,
+        config_dir                => $config_dir,
+        yaz_options               => [ @yaz_options, @ARGV ],
+    }
+);
 
 $z->start();

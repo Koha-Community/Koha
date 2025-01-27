@@ -69,13 +69,17 @@ subtest 'overdue_fines' => sub {
     )->store();
 
     my $overdue_fines = $checkout->overdue_fines;
-    is( ref($overdue_fines), 'Koha::Account::Lines',
-        'Koha::Checkout->overdue_fines should return a Koha::Account::Lines' );
-    is( $overdue_fines->count, 1, "Koha::Checkout->overdue_fines returns only overdue fines");
+    is(
+        ref($overdue_fines), 'Koha::Account::Lines',
+        'Koha::Checkout->overdue_fines should return a Koha::Account::Lines'
+    );
+    is( $overdue_fines->count, 1, "Koha::Checkout->overdue_fines returns only overdue fines" );
 
     my $overdue = $overdue_fines->next;
-    is( ref($overdue), 'Koha::Account::Line',
-        'next returns a Koha::Account::Line' );
+    is(
+        ref($overdue), 'Koha::Account::Line',
+        'next returns a Koha::Account::Line'
+    );
 
     is(
         $overdueline->id,
@@ -92,17 +96,15 @@ subtest 'library() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => {
-                branchcode => $library->branchcode
-            }
+            value => { branchcode => $library->branchcode }
         }
     );
 
-    is( ref($checkout->library), 'Koha::Library', 'Object type is correct' );
+    is( ref( $checkout->library ),      'Koha::Library',      'Object type is correct' );
     is( $checkout->library->branchcode, $library->branchcode, 'Right library linked' );
 
     $schema->storage->txn_rollback;
@@ -113,11 +115,7 @@ subtest 'renewals() tests' => sub {
     plan tests => 2;
     $schema->storage->txn_begin;
 
-    my $checkout = $builder->build_object(
-        {
-            class => 'Koha::Checkouts'
-        }
-    );
+    my $checkout = $builder->build_object( { class => 'Koha::Checkouts' } );
     my $renewal1 = $builder->build_object(
         {
             class => 'Koha::Checkouts::Renewals',
@@ -131,8 +129,8 @@ subtest 'renewals() tests' => sub {
         }
     );
 
-    is( ref($checkout->renewals), 'Koha::Checkouts::Renewals', 'Object set type is correct' );
-    is( $checkout->renewals->count, 2, "Count of renewals is correct" );
+    is( ref( $checkout->renewals ), 'Koha::Checkouts::Renewals', 'Object set type is correct' );
+    is( $checkout->renewals->count, 2,                           "Count of renewals is correct" );
 
     $schema->storage->txn_rollback;
 };

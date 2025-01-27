@@ -5,11 +5,12 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Circulation statistics for {title}", { title = title }) | html %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Circulation statistics for {title}", { title = title }) | html %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -42,61 +43,65 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
+    <h1>
+        [% IF ( author ) %]
+            Circulation statistics for [% INCLUDE 'biblio-title.inc' %] by [% author |html %]
+        [% ELSE %]
+            Circulation statistics for [% INCLUDE 'biblio-title.inc' %]
+        [% END %]
+    </h1>
 
-                <h1>
-                    [% IF ( author ) %]
-                        Circulation statistics for [% INCLUDE 'biblio-title.inc' %] by [% author |html %]
-                    [% ELSE %]
-                        Circulation statistics for [% INCLUDE 'biblio-title.inc' %]
-                    [% END %]
-                </h1>
+    <h3>Barcode [% barcode | html %]</h3>
+    <div class="page-section">
+        <table>
+            <tr
+                ><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr
+            >
 
-<h3>Barcode [% barcode | html %]</h3>
-<div class="page-section">
-    <table>
-            <tr><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr>
-
-            <tr><td>[% Branches.GetName( homebranch ) | html %]</td>
+            <tr
+                ><td>[% Branches.GetName( homebranch ) | html %]</td>
                 <td>[% Branches.GetName( holdingbranch ) | html %]</td>
                 <td>[% IF ( lastdate ) %][% lastdate | $KohaDates %][% ELSE %]Item has no transfer record[% END %]</td>
                 <td>[% count | html %]</td>
             </tr>
-    </table>
-</div> <!-- /.page-section -->
+        </table>
+    </div>
+    <!-- /.page-section -->
 
-<div class="page-section">
-    <table>
-        <tr>
-            <th>Library</th>
-            <th>No. of times checked out</th>
-            <th>Last seen</th>
-        </tr>
-        [% FOREACH library IN libraries %]
-            [% SET tr_class = '' %]
-            [% IF library.selected %]
-                [% tr_class="mybranch" %]
-            [% END %]
-            <tr class="[% tr_class | html %]">
-                <td>[% library.branchname | html %]</td>
-                <td>[% library.issues | html %]</td>
-                <td>[% IF library.seen %]
-                        [% library.seen | $KohaDates  with_hours => 1 %]
-                    [% ELSE %]
-                        <span>Never</span>
-                    [% END %]
-                </td>
+    <div class="page-section">
+        <table>
+            <tr>
+                <th>Library</th>
+                <th>No. of times checked out</th>
+                <th>Last seen</th>
             </tr>
-        [% END %]
-    </table>
-</div> <!-- /.page-section -->
-
+            [% FOREACH library IN libraries %]
+                [% SET tr_class = '' %]
+                [% IF library.selected %]
+                    [% tr_class="mybranch" %]
+                [% END %]
+                <tr class="[% tr_class | html %]">
+                    <td>[% library.branchname | html %]</td>
+                    <td>[% library.issues | html %]</td>
+                    <td
+                        >[% IF library.seen %]
+                            [% library.seen | $KohaDates  with_hours => 1 %]
+                        [% ELSE %]
+                            <span>Never</span>
+                        [% END %]
+                    </td>
+                </tr>
+            [% END %]
+        </table>
+    </div>
+    <!-- /.page-section -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
-        $("tr.mybranch td").css("background-color", "#CFE7FF");
-    });
+        $(document).ready(function () {
+            $("tr.mybranch td").css("background-color", "#CFE7FF");
+        });
     </script>
 [% END %]
 

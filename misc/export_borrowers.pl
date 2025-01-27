@@ -73,7 +73,7 @@ GetOptions(
     'field|f=s'     => \@fields,
     'separator|s=s' => \$separator,
     'show-header|H' => \$show_header,
-    'where|w=s'       => \$where,
+    'where|w=s'     => \$where,
     'help|h'        => \$help
 ) or print_usage, exit 1;
 
@@ -87,10 +87,10 @@ my $dbh   = C4::Context->dbh;
 my $query = "SELECT borrowernumber FROM borrowers";
 $query .= " WHERE $where" if ($where);
 $query .= " ORDER BY borrowernumber";
-my $sth   = $dbh->prepare($query);
+my $sth = $dbh->prepare($query);
 $sth->execute;
 
-unless ( $separator ) {
+unless ($separator) {
     $separator = C4::Context->csv_delimiter;
 }
 
@@ -99,11 +99,11 @@ my $csv = Text::CSV->new( { sep_char => $separator, binary => 1, formula => 'emp
 # If the user did not specify any field to export, we assume they want them all
 # We retrieve the first borrower informations to get field names
 my ($borrowernumber) = $sth->fetchrow_array or die "No borrower to export";
-my $patron = Koha::Patrons->find( $borrowernumber ); # FIXME Now is_expired is no longer available
-                                         # We will have to use Koha::Patron and allow method calls
+my $patron           = Koha::Patrons->find($borrowernumber);               # FIXME Now is_expired is no longer available
+    # We will have to use Koha::Patron and allow method calls
 my $category = $patron->category;
-my $member = $patron->unblessed;
-$member->{description} = $category->description;
+my $member   = $patron->unblessed;
+$member->{description}   = $category->description;
 $member->{category_type} = $category->category_type;
 
 @fields = keys %$member unless (@fields);
@@ -113,33 +113,19 @@ if ($show_header) {
     print $csv->string . "\n";
 }
 
-$csv->combine(
-    map {
-        ( defined $member->{$_} and !ref $member->{$_} )
-          ? $member->{$_}
-          : ''
-      } @fields
-);
-die "Invalid character at borrower $borrowernumber: ["
-  . $csv->error_input . "]\n"
-  if ( !defined( $csv->string ) );
+$csv->combine( map { ( defined $member->{$_} and !ref $member->{$_} ) ? $member->{$_} : '' } @fields );
+die "Invalid character at borrower $borrowernumber: [" . $csv->error_input . "]\n"
+    if ( !defined( $csv->string ) );
 print $csv->string . "\n";
 
 while ( my $borrowernumber = $sth->fetchrow_array ) {
-    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $patron   = Koha::Patrons->find($borrowernumber);
     my $category = $patron->category;
-    my $member = $patron->unblessed;
-    $member->{description} = $category->description;
+    my $member   = $patron->unblessed;
+    $member->{description}   = $category->description;
     $member->{category_type} = $category->category_type;
-    $csv->combine(
-        map {
-            ( defined $member->{$_} and !ref $member->{$_} )
-              ? $member->{$_}
-              : ''
-          } @fields
-    );
-    die "Invalid character at borrower $borrowernumber: ["
-      . $csv->error_input . "]\n"
-      if ( !defined( $csv->string ) );
+    $csv->combine( map { ( defined $member->{$_} and !ref $member->{$_} ) ? $member->{$_} : '' } @fields );
+    die "Invalid character at borrower $borrowernumber: [" . $csv->error_input . "]\n"
+        if ( !defined( $csv->string ) );
     print $csv->string . "\n";
 }

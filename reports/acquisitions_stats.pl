@@ -20,12 +20,12 @@
 use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 use C4::Reports qw( GetDelimiterChoices );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Koha qw( GetAuthorisedValues );
-use C4::Biblio qw( GetMarcSubfieldStructureFromKohaField );
+use C4::Output  qw( output_html_with_http_headers );
+use C4::Koha    qw( GetAuthorisedValues );
+use C4::Biblio  qw( GetMarcSubfieldStructureFromKohaField );
 use Koha::ItemTypes;
 use Koha::Libraries;
 
@@ -53,30 +53,28 @@ my $basename       = $input->param("basename");
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => $fullreportname,
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { reports => '*' },
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
     }
 );
 
-our $sep = C4::Context->csv_delimiter(scalar $input->param("sep"));
+our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 
 $template->param(
-    do_it                    => $do_it,
+    do_it => $do_it,
 );
 
 if ($do_it) {
-    my $results =
-      calculate( $line, $column, $podsp, $rodsp, $calc, \@filters );
+    my $results = calculate( $line, $column, $podsp, $rodsp, $calc, \@filters );
     if ( $output eq "screen" ) {
         $template->param( mainloop => $results );
         output_html_with_http_headers $input, $cookie, $template->output;
-    }
-    else {
+    } else {
         print $input->header(
             -type       => 'application/vnd.sun.xml.calc',
-            -encoding    => 'utf-8',
+            -encoding   => 'utf-8',
             -attachment => "$basename.csv",
             -name       => "$basename.csv"
         );
@@ -104,13 +102,12 @@ if ($do_it) {
         print $sep. @$results[0]->{total};
     }
     exit;
-}
-else {
+} else {
     my $dbh = C4::Context->dbh;
     my $req;
     $req = $dbh->prepare("SELECT distinctrow id,name FROM aqbooksellers ORDER BY name");
     $req->execute;
-    my $booksellers = $req->fetchall_arrayref({});
+    my $booksellers = $req->fetchall_arrayref( {} );
 
     $req = $dbh->prepare("SELECT DISTINCTROW budget_code, budget_name FROM aqbudgets ORDER BY budget_name");
     $req->execute;
@@ -122,14 +119,11 @@ else {
         $bselect{$value} = $desc;
     }
     my $Budgets = {
-        values   => \@bselect,
-        labels   => \%bselect,
+        values => \@bselect,
+        labels => \%bselect,
     };
 
-    $req =
-      $dbh->prepare(
-"SELECT DISTINCTROW sort1 FROM aqorders WHERE sort1 IS NOT NULL ORDER BY sort1"
-      );
+    $req = $dbh->prepare("SELECT DISTINCTROW sort1 FROM aqorders WHERE sort1 IS NOT NULL ORDER BY sort1");
     $req->execute;
     my @s1select;
     my %s1select;
@@ -142,14 +136,11 @@ else {
         }
     }
     my $Sort1 = {
-        values   => \@s1select,
-        labels   => \%s1select,
+        values => \@s1select,
+        labels => \%s1select,
     };
 
-    $req =
-      $dbh->prepare(
-"SELECT DISTINCTROW sort2 FROM aqorders WHERE sort2 IS NOT NULL ORDER BY sort2"
-      );
+    $req = $dbh->prepare("SELECT DISTINCTROW sort2 FROM aqorders WHERE sort2 IS NOT NULL ORDER BY sort2");
     $req->execute;
     my @s2select;
     my %s2select;
@@ -165,35 +156,35 @@ else {
         }
     }
     my $Sort2 = {
-        values   => \@s2select,
-        labels   => \%s2select,
+        values => \@s2select,
+        labels => \%s2select,
     };
 
     my $CGIsepChoice = GetDelimiterChoices;
 
-    my $libraries = Koha::Libraries->search({}, { order_by => 'branchname' });
+    my $libraries = Koha::Libraries->search( {}, { order_by => 'branchname' } );
 
     my $ccode_subfield_structure = GetMarcSubfieldStructureFromKohaField('items.ccode')->[0];    # assuming one result..
     my $ccode_label;
     my $ccode_avlist;
-    if($ccode_subfield_structure) {
-        $ccode_label = $ccode_subfield_structure->{liblibrarian};
-        $ccode_avlist = GetAuthorisedValues($ccode_subfield_structure->{authorised_value});
+    if ($ccode_subfield_structure) {
+        $ccode_label  = $ccode_subfield_structure->{liblibrarian};
+        $ccode_avlist = GetAuthorisedValues( $ccode_subfield_structure->{authorised_value} );
     }
 
     my $itemtypes = Koha::ItemTypes->search_with_localization;
     $template->param(
-        booksellers   => $booksellers,
-        itemtypes     => $itemtypes, # FIXME Should use the TT plugin instead
-        Budgets       => $Budgets,
-        hassort1      => $hassort1,
-        hassort2      => $hassort2,
-        Sort1         => $Sort1,
-        Sort2         => $Sort2,
-        CGIsepChoice  => $CGIsepChoice,
-        branches      => $libraries,
-        ccode_label   => $ccode_label,
-        ccode_avlist  => $ccode_avlist,
+        booksellers  => $booksellers,
+        itemtypes    => $itemtypes,      # FIXME Should use the TT plugin instead
+        Budgets      => $Budgets,
+        hassort1     => $hassort1,
+        hassort2     => $hassort2,
+        Sort1        => $Sort1,
+        Sort2        => $Sort2,
+        CGIsepChoice => $CGIsepChoice,
+        branches     => $libraries,
+        ccode_label  => $ccode_label,
+        ccode_avlist => $ccode_avlist,
     );
 
 }
@@ -220,22 +211,22 @@ sub calculate {
     #
     my @loopfilter;
     for ( my $i = 0 ; $i <= @$filters ; $i++ ) {
-        if( defined @$filters[$i] and @$filters[$i] ne '' ) {
+        if ( defined @$filters[$i] and @$filters[$i] ne '' ) {
             my %cell;
             if ( ( ( $i == 1 ) or ( $i == 3 ) ) and ( @$filters[ $i - 1 ] ) ) {
                 $cell{err} = 1 if ( @$filters[$i] lt @$filters[ $i - 1 ] );
             }
             $cell{filter} = @$filters[$i];
-            $cell{crit} = $i;
+            $cell{crit}   = $i;
             push @loopfilter, \%cell;
         }
     }
 
     my %filter;
     my %field;
-    foreach ($line, $column) {
+    foreach ( $line, $column ) {
         $filter{$_} = [];
-        $field{$_} = $_;
+        $field{$_}  = $_;
         if ( $_ =~ /closedate/ ) {
             $filter{$_}->[0] = @$filters[0];
             $filter{$_}->[1] = @$filters[1];
@@ -249,8 +240,7 @@ sub calculate {
             } else {
                 $field{$a} = $a;
             }
-        }
-        elsif ( $_ =~ /received/ ) {
+        } elsif ( $_ =~ /received/ ) {
             $filter{$_}->[0] = @$filters[2];
             $filter{$_}->[1] = @$filters[3];
             my $a = $_;
@@ -263,34 +253,27 @@ sub calculate {
             } else {
                 $field{$a} = $a;
             }
-        }
-        elsif ( $_ =~ /bookseller/ ) {
+        } elsif ( $_ =~ /bookseller/ ) {
             $filter{$_}->[0] = @$filters[4];
-        }
-        elsif ( $_ =~ /homebranch/ ) {
+        } elsif ( $_ =~ /homebranch/ ) {
             $filter{$_}->[0] = @$filters[5];
-        }
-        elsif ( $_ =~ /ccode/ ) {
+        } elsif ( $_ =~ /ccode/ ) {
             $filter{$_}->[0] = @$filters[6];
-        }
-        elsif ( $_ =~ /itemtype/ ) {
+        } elsif ( $_ =~ /itemtype/ ) {
             $filter{$_}->[0] = @$filters[7];
-        }
-        elsif ( $_ =~ /budget/ ) {
+        } elsif ( $_ =~ /budget/ ) {
             $filter{$_}->[0] = @$filters[8];
-        }
-        elsif ( $_ =~ /sort1/ ) {
+        } elsif ( $_ =~ /sort1/ ) {
             $filter{$_}->[0] = @$filters[9];
-        }
-        elsif ( $_ =~ /sort2/ ) {
+        } elsif ( $_ =~ /sort2/ ) {
             $filter{$_}->[0] = @$filters[10];
         }
     }
 
     my @linefilter = @{ $filter{$line} };
-    my $linefield = $field{$line};
-    my @colfilter = @{ $filter{$column} };
-    my $colfield = $field{$column};
+    my $linefield  = $field{$line};
+    my @colfilter  = @{ $filter{$column} };
+    my $colfield   = $field{$column};
 
     # 1st, loop rows.
     my $strsth = "
@@ -308,20 +291,17 @@ sub calculate {
         if ( $linefilter[1] ) {
             if ( $linefilter[0] ) {
                 $strsth .= " AND $line BETWEEN ? AND ? ";
-            }
-            else {
+            } else {
                 $strsth .= " AND $line <= ? ";
             }
-        }
-        elsif (
+        } elsif (
             ( $linefilter[0] )
             and (  ( $line =~ /closedate/ )
-                or ( $line =~ /received/ ))
-          )
+                or ( $line =~ /received/ ) )
+            )
         {
             $strsth .= " AND $line >= ? ";
-        }
-        elsif ( $linefilter[0] ) {
+        } elsif ( $linefilter[0] ) {
             $linefilter[0] =~ s/\*/%/g;
             $strsth .= " AND $line LIKE ? ";
         }
@@ -332,11 +312,9 @@ sub calculate {
     my $sth = $dbh->prepare($strsth);
     if ( (@linefilter) and ( $linefilter[1] ) ) {
         $sth->execute( $linefilter[0], $linefilter[1] );
-    }
-    elsif ( $linefilter[0] ) {
+    } elsif ( $linefilter[0] ) {
         $sth->execute( $linefilter[0] );
-    }
-    else {
+    } else {
         $sth->execute;
     }
     while ( my ($celvalue) = $sth->fetchrow ) {
@@ -365,20 +343,17 @@ sub calculate {
         if ( $colfilter[1] ) {
             if ( $colfilter[0] ) {
                 $strsth2 .= " AND $column BETWEEN  ? AND ? ";
-            }
-            else {
+            } else {
                 $strsth2 .= " AND $column <= ? ";
             }
-        }
-        elsif (
+        } elsif (
             ( $colfilter[0] )
             and (  ( $column =~ /closedate/ )
-                or ( $line =~ /received/ ))
-          )
+                or ( $line =~ /received/ ) )
+            )
         {
             $strsth2 .= " AND $column >= ? ";
-        }
-        elsif ( $colfilter[0] ) {
+        } elsif ( $colfilter[0] ) {
             $colfilter[0] =~ s/\*/%/g;
             $strsth2 .= " AND $column LIKE ? ";
         }
@@ -389,13 +364,11 @@ sub calculate {
 
     my $sth2 = $dbh->prepare($strsth2);
 
-    if ( (@colfilter) and ($colfilter[1]) ) {
+    if ( (@colfilter) and ( $colfilter[1] ) ) {
         $sth2->execute( $colfilter[0], $colfilter[1] );
-    }
-    elsif ( $colfilter[0] ) {
+    } elsif ( $colfilter[0] ) {
         $sth2->execute( $colfilter[0] );
-    }
-    else {
+    } else {
         $sth2->execute;
     }
     while ( my $celvalue = $sth2->fetchrow ) {
@@ -406,7 +379,7 @@ sub calculate {
         }
     }
 
-    my $i = 0;
+    my $i         = 0;
     my $hilighted = -1;
 
     #Initialization of cell values.....
@@ -446,36 +419,36 @@ sub calculate {
         if ( $process == 5 );
     @$filters[0] =~ s/\*/%/g if ( @$filters[0] );
     $strcalc .= " AND aqbasket.closedate >= '" . @$filters[0] . "'"
-      if ( @$filters[0] );
+        if ( @$filters[0] );
     @$filters[1] =~ s/\*/%/g if ( @$filters[1] );
     $strcalc .= " AND aqbasket.closedate <= '" . @$filters[1] . "'"
-      if ( @$filters[1] );
+        if ( @$filters[1] );
     @$filters[2] =~ s/\*/%/g if ( @$filters[2] );
     $strcalc .= " AND aqorders.datereceived >= '" . @$filters[2] . "'"
-      if ( @$filters[2] );
+        if ( @$filters[2] );
     @$filters[3] =~ s/\*/%/g if ( @$filters[3] );
     $strcalc .= " AND aqorders.datereceived <= '" . @$filters[3] . "'"
-      if ( @$filters[3] );
+        if ( @$filters[3] );
     @$filters[4] =~ s/\*/%/g if ( @$filters[4] );
     $strcalc .= " AND aqbooksellers.name LIKE '" . @$filters[4] . "'"
-      if ( @$filters[4] );
+        if ( @$filters[4] );
     $strcalc .= " AND items.homebranch = '" . @$filters[5] . "'"
-      if ( @$filters[5] );
+        if ( @$filters[5] );
     @$filters[6] =~ s/\*/%/g if ( @$filters[6] );
     $strcalc .= " AND items.ccode = '" . @$filters[6] . "'"
-      if ( @$filters[6] );
+        if ( @$filters[6] );
     @$filters[7] =~ s/\*/%/g if ( @$filters[7] );
     $strcalc .= " AND biblioitems.itemtype LIKE '" . @$filters[7] . "'"
-      if ( @$filters[7] );
+        if ( @$filters[7] );
     @$filters[8] =~ s/\*/%/g if ( @$filters[8] );
     $strcalc .= " AND aqbudgets.budget_code LIKE '" . @$filters[8] . "'"
-      if ( @$filters[8] );
+        if ( @$filters[8] );
     @$filters[9] =~ s/\*/%/g if ( @$filters[9] );
     $strcalc .= " AND aqorders.sort1 LIKE '" . @$filters[9] . "'"
-      if ( @$filters[9] );
+        if ( @$filters[9] );
     @$filters[10] =~ s/\*/%/g if ( @$filters[10] );
     $strcalc .= " AND aqorders.sort2 LIKE '" . @$filters[10] . "'"
-      if ( @$filters[10] );
+        if ( @$filters[10] );
 
     $strcalc .= " GROUP BY $linefield, $colfield ORDER BY $linefield,$colfield";
     my $dbcalc = $dbh->prepare($strcalc);
@@ -496,20 +469,21 @@ sub calculate {
 
     foreach my $row ( sort keys %table ) {
         my @loopcell;
+
         #@loopcol ensures the order for columns is common with column titles
         # and the number matches the number of columns
         foreach my $col (@loopcol) {
             my $value = $table{$row}->{ ( $col->{coltitle} eq "NULL" ) ? "zzEMPTY" : $col->{coltitle} };
-            $value = sprintf("%.2f", $value) if($value and grep /$process/, (3,4,5));
+            $value = sprintf( "%.2f", $value ) if ( $value and grep /$process/, ( 3, 4, 5 ) );
             push @loopcell, { value => $value };
         }
         my $r = {
-            rowtitle => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
+            rowtitle  => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
             loopcell  => \@loopcell,
             hilighted => ( $hilighted > 0 ),
             totalrow  => $table{$row}->{totalrow}
         };
-        $r->{totalrow} = sprintf("%.2f", $r->{totalrow}) if($r->{totalrow} and grep /$process/, (3,4,5));
+        $r->{totalrow} = sprintf( "%.2f", $r->{totalrow} ) if ( $r->{totalrow} and grep /$process/, ( 3, 4, 5 ) );
         push @looprow, $r;
         $hilighted = -$hilighted;
     }
@@ -520,24 +494,25 @@ sub calculate {
             $total += $table{
                 ( $row->{rowtitle} eq "NULL" ) ? "zzEMPTY"
                 : $row->{rowtitle}
-              }->{
+                }->{
                 ( $col->{coltitle} eq "NULL" ) ? "zzEMPTY"
                 : $col->{coltitle}
-              };
+                };
         }
-        $total = sprintf("%.2f", $total) if($total and grep /$process/, (3,4,5));
+        $total = sprintf( "%.2f", $total ) if ( $total and grep /$process/, ( 3, 4, 5 ) );
 
         push @loopfooter, { 'totalcol' => $total };
     }
 
     # the header of the table
     $globalline{loopfilter} = \@loopfilter;
+
     # the core of the table
     $globalline{looprow} = \@looprow;
     $globalline{loopcol} = \@loopcol;
 
     #       # the foot (totals by borrower type)
-    $grantotal = sprintf("%.2f", $grantotal) if ($grantotal and grep /$process/, (3,4,5));
+    $grantotal              = sprintf( "%.2f", $grantotal ) if ( $grantotal and grep /$process/, ( 3, 4, 5 ) );
     $globalline{loopfooter} = \@loopfooter;
     $globalline{total}      = $grantotal;
     $globalline{line}       = $line;

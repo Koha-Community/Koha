@@ -20,35 +20,35 @@ my %fields = (
 
 sub new {
     my $class = shift;
-    my $self = $class->SUPER::new();
+    my $self  = $class->SUPER::new();
 
-    foreach my $element (keys %fields) {
+    foreach my $element ( keys %fields ) {
         $self->{_permitted}->{$element} = $fields{$element};
     }
 
-    @{$self}{keys %fields} = values %fields;	# overkill?
+    @{$self}{ keys %fields } = values %fields;    # overkill?
     return bless $self, $class;
 }
 
-sub do_renew_for  {
-    my $self = shift;
-    my $patron = shift;
-    my $checkout = Koha::Checkouts->find({ itemnumber => $self->{item}->{itemnumber} });
-    my ($renewokay,$renewerror) = CanBookBeRenewed($patron, $checkout);
-    if ($renewokay) { # ok so far check charges
-        my ($fee, undef) = GetIssuingCharges($self->{item}->{itemnumber}, $self->{patron}->{borrowernumber});
-        if ($fee > 0) {
+sub do_renew_for {
+    my $self     = shift;
+    my $patron   = shift;
+    my $checkout = Koha::Checkouts->find( { itemnumber => $self->{item}->{itemnumber} } );
+    my ( $renewokay, $renewerror ) = CanBookBeRenewed( $patron, $checkout );
+    if ($renewokay) {                             # ok so far check charges
+        my ( $fee, undef ) = GetIssuingCharges( $self->{item}->{itemnumber}, $self->{patron}->{borrowernumber} );
+        if ( $fee > 0 ) {
             $self->{sip_fee_type} = '06';
-            $self->{fee_amount} = sprintf '%.2f',$fee;
-            if ($self->{fee_ack} eq 'N') {
+            $self->{fee_amount}   = sprintf '%.2f', $fee;
+            if ( $self->{fee_ack} eq 'N' ) {
                 $renewokay = 0;
             }
         }
 
     }
-    if ($renewokay){
+    if ($renewokay) {
         my $issue = AddIssue( $patron, $self->{item}->id, undef, 0 );
-        $self->{due} = $self->duedatefromissue($issue, $self->{item}->{itemnumber});
+        $self->{due} = $self->duedatefromissue( $issue, $self->{item}->{itemnumber} );
         $self->renewal_ok(1);
     } else {
         $renewerror =~ s/on_reserve/Item unavailable due to outstanding holds/;
@@ -66,9 +66,9 @@ sub do_renew_for  {
 
 sub do_renew {
     my $self = shift;
-    siplog('LOG_DEBUG', "ILS::Transaction::Renew performing renewal...");
+    siplog( 'LOG_DEBUG', "ILS::Transaction::Renew performing renewal..." );
     my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
-    $patron or return; # FIXME we should log that
+    $patron or return;    # FIXME we should log that
     return $self->do_renew_for($patron);
 }
 

@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Biblios;
@@ -35,16 +35,16 @@ my $cgi = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-request-article.tt",
-        query           => $cgi,
-        type            => "opac",
+        template_name => "opac-request-article.tt",
+        query         => $cgi,
+        type          => "opac",
     }
 );
 
-my $op = $cgi->param('op') || q{};
+my $op           = $cgi->param('op') || q{};
 my $biblionumber = $cgi->param('biblionumber');
-my $biblio = Koha::Biblios->find($biblionumber);
-if( !$biblio ) {
+my $biblio       = Koha::Biblios->find($biblionumber);
+if ( !$biblio ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -63,7 +63,6 @@ if ( $op eq 'cud-create' ) {
     my $patron_notes = $cgi->param('patron_notes') || undef;
     my $format       = $cgi->param('format')       || undef;
     my $toc_request  = $cgi->param('toc_request');
-
 
     my $success;
 
@@ -89,52 +88,46 @@ if ( $op eq 'cud-create' ) {
         $success = 1;
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::ArticleRequest::LimitReached') ) {
-            $template->param(
-                error_message => 'article_request_limit_reached'
-            );
-        }
-        else {
+            $template->param( error_message => 'article_request_limit_reached' );
+        } else {
             Koha::Logger->get->debug("Unhandled exception when placing an article request ($_)");
-            $template->param(
-                error_message => 'article_request_unhandled_exception'
-            );
+            $template->param( error_message => 'article_request_unhandled_exception' );
         }
     };
 
-    if ( $success ) {
+    if ($success) {
         print $cgi->redirect("/cgi-bin/koha/opac-user.pl?opac-user-article-requests=1");
         exit;
     }
-# Should we redirect?
-}
-elsif ( !$op && C4::Context->preference('ArticleRequestsOpacHostRedirection') ) {
-  # Conditions: no items, host item entry (MARC21 773)
-  my ( $host, $pageinfo ) = $biblio->get_marc_host( { no_items => 1 } );
-  if ($host) {
-      $template->param(
-          pageinfo => $pageinfo,
-          title    => $biblio->title,
-          author   => $biblio->author
-      );
-      $biblio = $host;
-  }
+
+    # Should we redirect?
+} elsif ( !$op && C4::Context->preference('ArticleRequestsOpacHostRedirection') ) {
+
+    # Conditions: no items, host item entry (MARC21 773)
+    my ( $host, $pageinfo ) = $biblio->get_marc_host( { no_items => 1 } );
+    if ($host) {
+        $template->param(
+            pageinfo => $pageinfo,
+            title    => $biblio->title,
+            author   => $biblio->author
+        );
+        $biblio = $host;
+    }
 }
 
 my $patron = Koha::Patrons->find($borrowernumber);
 
-if(!$patron->can_request_article) {
-    $template->param(
-        error_message => 'article_request_limit_reached'
-    );
+if ( !$patron->can_request_article ) {
+    $template->param( error_message => 'article_request_limit_reached' );
 }
 
 $template->param( article_request_fee => $patron->article_request_fee )
-  if $op ne 'cud-create';
+    if $op ne 'cud-create';
 
 $template->param(
-    biblio => $biblio,
-    patron => $patron,
-    op     => $op,
+    biblio   => $biblio,
+    patron   => $patron,
+    op       => $op,
     accepted => scalar $cgi->param('accepted'),
 );
 

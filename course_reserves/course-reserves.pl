@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::CourseReserves qw( GetCourse GetCourses );
@@ -31,10 +31,10 @@ my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "course_reserves/course-reserves.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "course_reserves/course-reserves.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 

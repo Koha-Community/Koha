@@ -43,19 +43,20 @@ subtest 'list() tests' => sub {
 
     Koha::Item::Transfer::Limits->delete;
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 1 }
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    my $limit = $builder->build_object({ class => 'Koha::Item::Transfer::Limits' });
+    my $limit = $builder->build_object( { class => 'Koha::Item::Transfer::Limits' } );
 
-    $t->get_ok( "//$userid:$password@/api/v1/transfer_limits" )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( [$limit->to_api] );
+    $t->get_ok("//$userid:$password@/api/v1/transfer_limits")->status_is( 200, 'REST3.2.2' )
+        ->json_is( [ $limit->to_api ] );
 
     $schema->storage->txn_rollback;
 };
@@ -66,57 +67,58 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $authorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 1 }
-    });
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
     my $password = 'thePassword123';
-    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $auth_userid = $authorized_patron->userid;
 
-    my $unauthorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 4 }
-    });
-    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $unauthorized_patron->userid;
 
-    my $limit = $builder->build_object({ class => 'Koha::Item::Transfer::Limits' });
+    my $limit         = $builder->build_object( { class => 'Koha::Item::Transfer::Limits' } );
     my $limit_hashref = $limit->to_api;
     delete $limit_hashref->{limit_id};
     $limit->delete;
 
     # Unauthorized attempt to write
-    $t->post_ok( "//$unauth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
-      ->status_is(403);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )->status_is(403);
 
     # Authorized attempt to write invalid data
-    my $limit_with_invalid_field = {'invalid' => 'invalid'};
+    my $limit_with_invalid_field = { 'invalid' => 'invalid' };
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_with_invalid_field )
-      ->status_is(400)
-      ->json_is(
+        ->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: invalid.",
                 path    => "/body"
             }
         ]
-    );
+        );
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
-        ->status_is( 201, 'REST3.2.1' )
-        ->json_has( '' => $limit_hashref, 'REST3.3.1' )
+        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' )
         ->header_is( 'Location' => '/api/v1/transfer_limits/' . $t->tx->res->json->{limit_id}, 'REST3.4.1' );
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
-      ->status_is( 409, 'Conflict creating the resource' )
-      ->json_is(
+        ->status_is( 409, 'Conflict creating the resource' )->json_is(
         {
-            error => qq{Exception 'Koha::Exceptions::TransferLimit::Duplicate' thrown 'A transfer limit with the given parameters already exists!'\n}
+            error =>
+                qq{Exception 'Koha::Exceptions::TransferLimit::Duplicate' thrown 'A transfer limit with the given parameters already exists!'\n}
         }
-      );
+        );
 
     $schema->storage->txn_rollback;
 };
@@ -126,34 +128,35 @@ subtest 'delete() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $authorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 1 }
-    });
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
     my $password = 'thePassword123';
-    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $auth_userid = $authorized_patron->userid;
 
-    my $unauthorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 4 }
-    });
-    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $unauthorized_patron->userid;
 
-    my $limit = $builder->build_object({ class => 'Koha::Item::Transfer::Limits' });
+    my $limit    = $builder->build_object( { class => 'Koha::Item::Transfer::Limits' } );
     my $limit_id = $limit->id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok( "//$unauth_userid:$password@/api/v1/transfer_limits/$limit_id" )
-      ->status_is(403);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/transfer_limits/$limit_id")->status_is(403);
 
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/$limit_id" )
-      ->status_is(204, 'REST3.2.4')
-      ->content_is('', 'REST3.3.4');
+    $t->delete_ok("//$auth_userid:$password@/api/v1/transfer_limits/$limit_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/$limit_id" )
-      ->status_is(404);
+    $t->delete_ok("//$auth_userid:$password@/api/v1/transfer_limits/$limit_id")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

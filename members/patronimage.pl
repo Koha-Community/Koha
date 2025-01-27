@@ -22,12 +22,12 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_api_auth );
 use C4::Context;
 use Koha::Patrons;
 
-$|=1;
+$| = 1;
 
 my $query = CGI->new;
 my $borrowernumber;
@@ -46,25 +46,25 @@ This script, when called from within HTML and passed a valid patron borrowernumb
 
 =cut
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, [ { borrowers => '*' }, { circulate => '*' } ] );
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, [ { borrowers => '*' }, { circulate => '*' } ] );
 
 unless ( $status eq 'ok' ) {
-    print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+    print $query->header( -type => 'text/plain', -status => '403 Forbidden' );
     exit 0;
 }
 
-if ($query->param('borrowernumber')) {
+if ( $query->param('borrowernumber') ) {
     $borrowernumber = $query->param('borrowernumber');
 } else {
     $borrowernumber = shift;
 }
 
-my $patron         = Koha::Patrons->find( $borrowernumber );
-my $userenv = C4::Context->userenv;
+my $patron         = Koha::Patrons->find($borrowernumber);
+my $userenv        = C4::Context->userenv;
 my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
 
-unless ( $logged_in_user->can_see_patron_infos( $patron ) ) {
-    print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+unless ( $logged_in_user->can_see_patron_infos($patron) ) {
+    print $query->header( -type => 'text/plain', -status => '403 Forbidden' );
     exit 0;
 }
 
@@ -74,7 +74,11 @@ my $patron_image = $patron->image;
 # things will result... you have been warned!
 
 if ($patron_image) {
-    print $query->header (-type => $patron_image->mimetype, -'Cache-Control' => 'no-store', -Content_Length => length ($patron_image->imagefile)), $patron_image->imagefile;
+    print $query->header(
+        -type           => $patron_image->mimetype, -'Cache-Control' => 'no-store',
+        -Content_Length => length( $patron_image->imagefile )
+        ),
+        $patron_image->imagefile;
     exit;
 } else {
     warn "No image exists for $borrowernumber";

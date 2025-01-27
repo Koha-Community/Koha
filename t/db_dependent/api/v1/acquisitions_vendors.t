@@ -43,62 +43,53 @@ subtest 'list() and delete() tests | authorized user' => sub {
     $schema->resultset('Aqbasket')->search->delete;
     Koha::Acquisition::Booksellers->search->delete;
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 11 } ## 11 => acquisitions
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**11 }    ## 11 => acquisitions
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
     ## Authorized user tests
     # No vendors, so empty array should be returned
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
-      ->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)->json_is( [] );
 
     my $vendor_name = 'Ruben libros';
-    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers', value => { name => $vendor_name } });
+    my $vendor =
+        $builder->build_object( { class => 'Koha::Acquisition::Booksellers', value => { name => $vendor_name } } );
 
     # One vendor created, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/$vendor_name/ );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)
+        ->json_like( '/0/name' => qr/$vendor_name/ );
 
     my $other_vendor_name = 'Amerindia';
-    my $other_vendor
-        = $builder->build_object({ class => 'Koha::Acquisition::Booksellers', value => { name => $other_vendor_name } });
+    my $other_vendor      = $builder->build_object(
+        { class => 'Koha::Acquisition::Booksellers', value => { name => $other_vendor_name } } );
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/Ruben/ )
-      ->json_like( '/1/name' => qr/Amerindia/ );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)->json_like( '/0/name' => qr/Ruben/ )
+        ->json_like( '/1/name' => qr/Amerindia/ );
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?name=$vendor_name" )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/Ruben/ );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors?name=$vendor_name")->status_is(200)
+        ->json_like( '/0/name' => qr/Ruben/ );
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?name=$other_vendor_name" )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/Amerindia/ );
-
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors?name=$other_vendor_name")->status_is(200)
+        ->json_like( '/0/name' => qr/Amerindia/ );
 
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?accountnumber=" . $vendor->accountnumber )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/Ruben/ );
+        ->status_is(200)->json_like( '/0/name' => qr/Ruben/ );
 
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?accountnumber=" . $other_vendor->accountnumber )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/Amerindia/ );
+        ->status_is(200)->json_like( '/0/name' => qr/Amerindia/ );
 
     my @aliases = ( { alias => 'alias 1' }, { alias => 'alias 2' } );
     $vendor->aliases( \@aliases );
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" =>
-        { 'x-koha-embed' => 'aliases' } )
-      ->status_is(200)
-      ->json_has('/0/aliases', 'aliases are embedded')
-      ->json_is('/0/aliases/0/alias' => 'alias 1', 'alias 1 is embedded')
-      ->json_is('/0/aliases/1/alias' => 'alias 2', 'alias 2 is embedded');
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" => { 'x-koha-embed' => 'aliases' } )->status_is(200)
+        ->json_has( '/0/aliases', 'aliases are embedded' )
+        ->json_is( '/0/aliases/0/alias' => 'alias 1', 'alias 1 is embedded' )
+        ->json_is( '/0/aliases/1/alias' => 'alias 2', 'alias 2 is embedded' );
 
     for ( 0 .. 1 ) {
         $builder->build_object( { class => 'Koha::Subscriptions', value => { aqbooksellerid => $vendor->id } } );
@@ -107,22 +98,16 @@ subtest 'list() and delete() tests | authorized user' => sub {
         ->status_is(200)->json_has( '/0/subscriptions_count', 'subscriptions_count is embedded' )
         ->json_is( '/0/subscriptions_count' => '2', 'subscription count is 2' );
 
-    $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
-      ->status_is(204, 'REST3.2.4')
-      ->content_is('', 'REST3.3.4');
+    $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
-      ->status_is(200)
-      ->json_like( '/0/name' => qr/$other_vendor_name/ )
-      ->json_hasnt( '/1', 'Only one vendor' );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)
+        ->json_like( '/0/name' => qr/$other_vendor_name/ )->json_hasnt( '/1', 'Only one vendor' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $other_vendor->id )
-      ->status_is(204, 'REST3.2.4')
-      ->content_is('', 'REST3.3.4');
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
-      ->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)->json_is( [] );
 
     $schema->storage->txn_rollback;
 };
@@ -133,33 +118,32 @@ subtest 'get() test' => sub {
 
     $schema->storage->txn_begin;
 
-    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
-    my $nonexistent_vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
-    my $non_existent_id = $nonexistent_vendor->id;
+    my $vendor             = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+    my $nonexistent_vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+    my $non_existent_id    = $nonexistent_vendor->id;
     $nonexistent_vendor->delete;
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 11 } ## 11 => acquisitions
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**11 }    ## 11 => acquisitions
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
-      ->status_is(200)
-      ->json_is( $vendor->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(200)
+        ->json_is( $vendor->to_api );
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $non_existent_id )
-      ->status_is(404)
-      ->json_is( '/error' => 'Vendor not found' );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $non_existent_id )->status_is(404)
+        ->json_is( '/error' => 'Vendor not found' );
 
     # remove permissions
-    $patron->set({ flags => 0 })->store;
+    $patron->set( { flags => 0 } )->store;
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
-      ->status_is(403)
-      ->json_is( '/error', 'Authorization failure. Missing required permission(s).' );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(403)
+        ->json_is( '/error', 'Authorization failure. Missing required permission(s).' );
 
     $schema->storage->txn_rollback;
 };
@@ -170,26 +154,29 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $authorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 11 }
-    });
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**11 }
+        }
+    );
     my $password = 'thePassword123';
-    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $auth_userid = $authorized_patron->userid;
 
-    my $unauthorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 0 }
-    });
-    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $unauthorized_patron->userid;
 
     my $vendor = { name => 'Ruben libros' };
 
     # Unauthorized attempt to write
-    $t->post_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
-      ->status_is(403);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )->status_is(403);
 
     # Authorized attempt to write invalid data
     my $vendor_with_invalid_field = {
@@ -198,38 +185,35 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor_with_invalid_field )
-      ->status_is(400)
-      ->json_is(
+        ->status_is(400)->json_is(
         "/errors" => [
-            {   message => "Properties not allowed: address5.",
+            {
+                message => "Properties not allowed: address5.",
                 path    => "/body"
             }
-          ]
+        ]
         );
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
-      ->status_is( 201, 'REST3 .2.1' )
-      ->header_like( Location => qr|^\/api\/v1\/acquisitions\/vendors/\d*|, 'REST3.4.1')
-      ->json_is( '/name' => $vendor->{name} )
-      ->json_is( '/address1' => $vendor->{address1} );
+        ->status_is( 201, 'REST3 .2.1' )
+        ->header_like( Location => qr|^\/api\/v1\/acquisitions\/vendors/\d*|, 'REST3.4.1' )
+        ->json_is( '/name' => $vendor->{name} )->json_is( '/address1' => $vendor->{address1} );
 
     # read the response vendor id for later use
     my $vendor_id = $t->tx->res->json('/id');
 
     # Authorized attempt to create with null id
     $vendor->{id} = undef;
-    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
-      ->status_is(400)
-      ->json_has('/errors');
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )->status_is(400)
+        ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $vendor->{id} = $vendor_id;
-    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
-      ->status_is(400)
-      ->json_is(
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )->status_is(400)->json_is(
         "/errors" => [
-            {   message => "Read-only.",
+            {
+                message => "Read-only.",
                 path    => "/body/id"
             }
         ]
@@ -244,44 +228,44 @@ subtest 'update() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $authorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 11 }
-    });
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**11 }
+        }
+    );
     my $password = 'thePassword123';
-    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $auth_userid = $authorized_patron->userid;
 
-    my $unauthorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 0 }
-    });
-    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $unauthorized_patron->userid;
 
-    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' } );
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
 
     # Unauthorized attempt to update
     $t->put_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors/"
-          . $vendor->id => json =>
-          { city_name => 'New unauthorized name change' } )
-      ->status_is(403);
+            . $vendor->id => json => { city_name => 'New unauthorized name change' } )->status_is(403);
 
     # Attempt partial update on a PUT
     my $vendor_without_mandatory_field = { address1 => 'New address' };
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
-          . $vendor->id => json => $vendor_without_mandatory_field )
-      ->status_is(400)
-      ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+            . $vendor->id => json => $vendor_without_mandatory_field )->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $vendor_with_updated_field = { name => "London books", };
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
-          . $vendor->id => json => $vendor_with_updated_field )
-      ->status_is(200)
-      ->json_is( '/name' => 'London books' );
+    $t->put_ok(
+        "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $vendor_with_updated_field )
+        ->status_is(200)->json_is( '/name' => 'London books' );
 
     # Authorized attempt to write invalid data
     my $vendor_with_invalid_field = {
@@ -291,31 +275,30 @@ subtest 'update() tests' => sub {
         address3 => "Address 3"
     };
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
-          . $vendor->id => json => $vendor_with_invalid_field )
-      ->status_is(400)
-      ->json_is(
+    $t->put_ok(
+        "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $vendor_with_invalid_field )
+        ->status_is(400)->json_is(
         "/errors" => [
-            {   message => "Properties not allowed: blah.",
+            {
+                message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-      );
+        );
 
-    my $nonexistent_vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' } );
-    my $non_existent_id = $nonexistent_vendor->id;
+    my $nonexistent_vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+    my $non_existent_id    = $nonexistent_vendor->id;
     $nonexistent_vendor->delete;
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
-          . $non_existent_id => json => $vendor_with_updated_field )
-      ->status_is(404);
+            . $non_existent_id => json => $vendor_with_updated_field )->status_is(404);
 
     $schema->storage->txn_rollback;
 
     # Wrong method (POST)
-    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
-          . $vendor->id => json => $vendor_with_updated_field )
-      ->status_is(404);
+    $t->post_ok(
+        "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $vendor_with_updated_field )
+        ->status_is(404);
 };
 
 subtest 'delete() tests' => sub {
@@ -324,33 +307,34 @@ subtest 'delete() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $authorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 2 ** 11 }
-    });
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**11 }
+        }
+    );
     my $password = 'thePassword123';
-    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $auth_userid = $authorized_patron->userid;
 
-    my $unauthorized_patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 0 }
-    });
-    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $unauthorized_patron->userid;
 
-    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' } );
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
 
     # Unauthorized attempt to delete
-    $t->delete_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
-      ->status_is(403);
+    $t->delete_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(403);
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
-      ->status_is(204, 'REST3.2.4')
-      ->content_is('', 'REST3.3.4');
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
-      ->status_is(404);
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(404);
 
     $schema->storage->txn_rollback;
 };

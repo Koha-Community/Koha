@@ -1,8 +1,6 @@
 [% USE AuthorisedValues %]
 
-<h1 id="heading">
-    Enroll in <em>[% club.name | html %]</em>
-</h1>
+<h1 id="heading"> Enroll in <em>[% club.name | html %]</em> </h1>
 
 <div class="container">
     <form method="get" id="patron-enrollment-form">
@@ -11,47 +9,47 @@
         <input type="hidden" name="enrollent_id" value="[% enrollent_id | html %]" />
         <fieldset class="rows">
             <ol>
-            [% IF club_enrollment_fields %]
-                [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
-                    [% FOREACH c IN club_enrollment_fields %]
-                        [% IF f.id == c.club_template_enrollment_field_id %]
-                            <li>
-                                <label>[% f.name | html %]</label>
-                                [% IF f.authorised_value_category %]
-                                    <select name="[% f.id | html %]">
-                                        [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
-                                            [% IF a.authorised_value == c.value %]
-                                                <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
+                [% IF club_enrollment_fields %]
+                    [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
+                        [% FOREACH c IN club_enrollment_fields %]
+                            [% IF f.id == c.club_template_enrollment_field_id %]
+                                <li>
+                                    <label>[% f.name | html %]</label>
+                                    [% IF f.authorised_value_category %]
+                                        <select name="[% f.id | html %]">
+                                            [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
+                                                [% IF a.authorised_value == c.value %]
+                                                    <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
+                                                [% END %]
                                             [% END %]
-                                        [% END %]
-                                    </select>
-                                [% ELSE %]
-                                    <input type="text" name="[% f.id | html %]" value="[% c.value | html %]"/>
-                                [% END %]
-                                <span class="hint">[% f.description | html %]</span>
-                            </li>
+                                        </select>
+                                    [% ELSE %]
+                                        <input type="text" name="[% f.id | html %]" value="[% c.value | html %]" />
+                                    [% END %]
+                                    <span class="hint">[% f.description | html %]</span>
+                                </li>
+                            [% END %]
                         [% END %]
                     [% END %]
+                [% ELSE %]
+                    [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
+                        <li>
+                            <label>[% f.name | html %]</label>
+                            [% IF f.authorised_value_category %]
+                                <select name="[% f.id | html %]">
+                                    [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
+                                        <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
+                                    [% END %]
+                                </select>
+                            [% ELSE %]
+                                <input type="text" name="[% f.id | html %]" />
+                            [% END %]
+                            <span class="hint">[% f.description | html %]</span>
+                        </li>
+                    [% END %]
                 [% END %]
-            [% ELSE %]
-                [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
-                    <li>
-                        <label>[% f.name | html %]</label>
-                        [% IF f.authorised_value_category %]
-                            <select name="[% f.id | html %]">
-                                [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
-                                    <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
-                                [% END %]
-                            </select>
-                        [% ELSE %]
-                            <input type="text" name="[% f.id | html %]" />
-                        [% END %]
-                        <span class="hint">[% f.description | html %]</span>
-                    </li>
-                [% END %]
-            [% END %]
                 <li>
                     <a href="#" class="btn btn-sm btn-default" onclick="addEnrollment(); return false;">Finish enrollment</a>
                     <a class="cancel" href="#" onclick="showClubs(); return false;">Cancel</a>
@@ -60,37 +58,36 @@
         </fieldset>
     </form>
 </div>
-
 <script>
-if([% enrollent_id | html %]){
-    $("#heading").html(_("Modifying enrollment")+" <em>[% club.name | html %]</em>");
-}
-function addEnrollment() {
-    $("body").css("cursor", "progress");
-    const client = APIClient.club;
-    let data = $( "#patron-enrollment-form" ).serialize();
-    client.enrollments.enroll(data).then(
-        success => {
-            if ( success.success ) {
-                $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
-                    $("body").css("cursor", "default");
-                });
-            } else {
+    if([% enrollent_id | html %]){
+        $("#heading").html(_("Modifying enrollment")+" <em>[% club.name | html %]</em>");
+    }
+    function addEnrollment() {
+        $("body").css("cursor", "progress");
+        const client = APIClient.club;
+        let data = $( "#patron-enrollment-form" ).serialize();
+        client.enrollments.enroll(data).then(
+            success => {
+                if ( success.success ) {
+                    $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+                        $("body").css("cursor", "default");
+                    });
+                } else {
+                    alert(_("Unable to create enrollment!"));
+                }
+            },
+            error => {
+                console.warn("Something wrong happened: %s".format(error));
                 alert(_("Unable to create enrollment!"));
             }
-        },
-        error => {
-            console.warn("Something wrong happened: %s".format(error));
-            alert(_("Unable to create enrollment!"));
-        }
-    );
-    return false;
-}
+        );
+        return false;
+    }
 
-function showClubs() {
-    $("body").css("cursor", "progress");
-    $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
-        $("body").css("cursor", "default");
-    });
-}
+    function showClubs() {
+        $("body").css("cursor", "progress");
+        $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+            $("body").css("cursor", "default");
+        });
+    }
 </script>

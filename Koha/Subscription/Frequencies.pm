@@ -17,7 +17,6 @@ package Koha::Subscription::Frequencies;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Subscription::Frequency;

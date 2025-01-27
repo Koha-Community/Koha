@@ -36,47 +36,48 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
-my $library = $builder->build({ source => 'Branch' });
-my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
-my $patron_category = $builder->build({ source => 'Category' });
+my $library         = $builder->build( { source => 'Branch' } );
+my $itemtype        = $builder->build( { source => 'Itemtype' } )->{itemtype};
+my $patron_category = $builder->build( { source => 'Category' } );
 
-t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 
-my $borrower = Koha::Patron->new({
-    firstname =>  'my firstname',
-    surname => 'my surname',
-    categorycode => $patron_category->{categorycode},
-    branchcode => $library->{branchcode},
-})->store;
-
+my $borrower = Koha::Patron->new(
+    {
+        firstname    => 'my firstname',
+        surname      => 'my surname',
+        categorycode => $patron_category->{categorycode},
+        branchcode   => $library->{branchcode},
+    }
+)->store;
 
 my $record = MARC::Record->new();
 my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
 
 my $item = $builder->build_sample_item(
     {
-        biblionumber     => $biblionumber,
-        library          => $library->{branchcode},
-        itype            => $itemtype
+        biblionumber => $biblionumber,
+        library      => $library->{branchcode},
+        itype        => $itemtype
     }
 );
 
-is ( IsItemIssued( $item->itemnumber ), 0, "item is not on loan at first" );
+is( IsItemIssued( $item->itemnumber ), 0, "item is not on loan at first" );
 
-AddIssue($borrower, $item->barcode);
-is ( IsItemIssued( $item->itemnumber ), 1, "item is now on loan" );
+AddIssue( $borrower, $item->barcode );
+is( IsItemIssued( $item->itemnumber ), 1, "item is now on loan" );
 
 is(
-    @{$item->safe_delete->messages}[0]->message,
+    @{ $item->safe_delete->messages }[0]->message,
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
 
-AddReturn($item->barcode, $library->{branchcode});
-is ( IsItemIssued( $item->itemnumber ), 0, "item has been returned" );
+AddReturn( $item->barcode, $library->{branchcode} );
+is( IsItemIssued( $item->itemnumber ), 0, "item has been returned" );
 
-$item->discard_changes; # FIXME We should not need that
-                        # If we do not, $self->checkout in safe_to_delete will not know the item has been checked out
+$item->discard_changes;    # FIXME We should not need that
+                           # If we do not, $self->checkout in safe_to_delete will not know the item has been checked out
 ok(
     $item->safe_delete,
     'item that is not on loan can be deleted',

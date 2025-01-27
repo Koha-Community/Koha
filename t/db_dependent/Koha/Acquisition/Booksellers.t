@@ -22,9 +22,9 @@ use Test::More tests => 6;
 use t::lib::TestBuilder;
 
 use C4::Acquisition qw( NewBasket );
-use C4::Biblio qw( AddBiblio );
-use C4::Budgets qw( AddBudgetPeriod AddBudget );
-use C4::Serials qw( NewSubscription SearchSubscriptions );
+use C4::Biblio      qw( AddBiblio );
+use C4::Budgets     qw( AddBudgetPeriod AddBudget );
+use C4::Serials     qw( NewSubscription SearchSubscriptions );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Database;
@@ -39,7 +39,7 @@ subtest '->baskets() tests' => sub {
 
     $schema->storage->txn_begin();
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
 
@@ -66,23 +66,23 @@ subtest '->subscriptions() tests' => sub {
     is( $vendor->subscriptions->count, 0, 'Vendor has no subscriptions' );
 
     my $dt_today = dt_from_string;
-    my $today    = output_pref(
-        { dt => $dt_today, dateformat => 'iso', timeformat => '24hr', dateonly => 1 } );
+    my $today    = output_pref( { dt => $dt_today, dateformat => 'iso', timeformat => '24hr', dateonly => 1 } );
 
     my $dt_today1 = dt_from_string;
-    my $dur5 = DateTime::Duration->new( days => -5 );
+    my $dur5      = DateTime::Duration->new( days => -5 );
     $dt_today1->add_duration($dur5);
-    my $daysago5 = output_pref(
-        { dt => $dt_today1, dateformat => 'iso', timeformat => '24hr', dateonly => 1 } );
+    my $daysago5 = output_pref( { dt => $dt_today1, dateformat => 'iso', timeformat => '24hr', dateonly => 1 } );
 
     my $budgetperiod = C4::Budgets::AddBudgetPeriod(
-        {   budget_period_startdate   => $daysago5,
+        {
+            budget_period_startdate   => $daysago5,
             budget_period_enddate     => $today,
             budget_period_description => "budget desc"
         }
     );
     my $id_budget = AddBudget(
-        {   budget_code      => "CODE",
+        {
+            budget_code      => "CODE",
             budget_amount    => "123.132",
             budget_name      => "Budgetname",
             budget_notes     => "This is a note",
@@ -110,11 +110,13 @@ subtest '->subscriptions() tests' => sub {
     );
 
     my @subscriptions = SearchSubscriptions( { biblionumber => $biblionumber } );
-    is( $subscriptions[0]->{publicnotes},
+    is(
+        $subscriptions[0]->{publicnotes},
         'subscription notes',
         'subscription search results include public notes (bug 10689)'
     );
-    is( $subscriptions[0]->{subtitle},
+    is(
+        $subscriptions[0]->{subtitle},
         'A subtitle',
         'subscription search results include subtitle (bug 30204)'
     );
@@ -135,7 +137,7 @@ subtest '->subscriptions() tests' => sub {
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );
     my $subscriptions = $vendor->subscriptions;
     is( $subscriptions->count, 2, 'Vendor has two subscriptions' );
-    while (my $subscription = $subscriptions->next ) {
+    while ( my $subscription = $subscriptions->next ) {
         is( ref($subscription), 'Koha::Subscription', 'Type is correct' );
     }
 
@@ -154,12 +156,14 @@ subtest '->contacts() tests' => sub {
 
     # Add two contacts
     my $contact_1 = $builder->build_object(
-        {   class => 'Koha::Acquisition::Bookseller::Contacts',
+        {
+            class => 'Koha::Acquisition::Bookseller::Contacts',
             value => { booksellerid => $vendor->id }
         }
     );
     my $contact_2 = $builder->build_object(
-        {   class => 'Koha::Acquisition::Bookseller::Contacts',
+        {
+            class => 'Koha::Acquisition::Bookseller::Contacts',
             value => { booksellerid => $vendor->id }
         }
     );
@@ -167,8 +171,8 @@ subtest '->contacts() tests' => sub {
     # Re-fetch vendor
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );
     my $contacts = $vendor->contacts;
-    is( $contacts->count, 2, 'Vendor has two contacts' );
-    is( ref($contacts), 'Koha::Acquisition::Bookseller::Contacts', 'Type is correct' );
+    is( $contacts->count, 2,                                         'Vendor has two contacts' );
+    is( ref($contacts),   'Koha::Acquisition::Bookseller::Contacts', 'Type is correct' );
 
     $schema->storage->txn_rollback();
 };
@@ -207,8 +211,8 @@ subtest 'interfaces' => sub {
 
     $vendor = $vendor->get_from_storage;
     my $interfaces = $vendor->interfaces;
-    is( $interfaces->count, 2, '2 interfaces stored' );
-    is( ref($interfaces), 'Koha::Acquisition::Bookseller::Interfaces', 'Type is correct' );
+    is( $interfaces->count, 2,                                           '2 interfaces stored' );
+    is( ref($interfaces),   'Koha::Acquisition::Bookseller::Interfaces', 'Type is correct' );
 
     $vendor->interfaces( [ { name => 'first interface', login => 'one_login', password => 'oneP@sswOrd' } ] );
     $vendor     = $vendor->get_from_storage;

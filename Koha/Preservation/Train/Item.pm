@@ -62,7 +62,6 @@ sub catalogue_item {
     return Koha::Item->_new_from_dbic($item_rs);
 }
 
-
 =head3 train
 
 Return the train object for this item

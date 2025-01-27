@@ -38,16 +38,16 @@ Return the list of class sources
 =cut
 
 sub all {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $selected = $params->{selected};
 
     my $default_source = C4::Context->preference("DefaultClassificationSource");
 
     my @class_sources = grep {
-             $_->used
-          or ( $selected       and $_->cn_source eq $selected )
-          or ( $default_source and $_->cn_source eq $default_source )
+               $_->used
+            or ( $selected       and $_->cn_source eq $selected )
+            or ( $default_source and $_->cn_source eq $default_source )
     } Koha::ClassSources->search->as_list;
 
     return @class_sources;

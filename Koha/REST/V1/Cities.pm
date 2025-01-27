@@ -37,8 +37,7 @@ sub list {
     return try {
         my $cities = $c->objects->search( Koha::Cities->new );
         return $c->render( status => 200, openapi => $cities );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -77,8 +76,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($city),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -99,8 +97,7 @@ sub update {
         $city->set_from_api( $c->req->json );
         $city->store();
         return $c->render( status => 200, openapi => $c->objects->to_api($city), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -120,8 +117,7 @@ sub delete {
     return try {
         $city->delete;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

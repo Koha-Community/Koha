@@ -28,7 +28,8 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% SWITCH m.code %]
-            [% CASE %]<span>Unknown message '[% m.code | html %]'</span>
+            [% CASE %]
+                <span>Unknown message '[% m.code | html %]'</span>
             [% END %]
         </div>
     [% END %]

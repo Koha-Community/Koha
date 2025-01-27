@@ -33,67 +33,64 @@ use JSON qw( to_json );
 
 use C4::Context;
 use C4::Charset qw( nsb_clean );
-use C4::Auth qw( check_cookie_auth );
-use C4::Output qw( output_with_http_headers );
+use C4::Auth    qw( check_cookie_auth );
+use C4::Output  qw( output_with_http_headers );
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
 my $query = CGI->new;
 
-my ( $auth_status) = check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
+my ($auth_status) = check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
 
 if ( $auth_status ne "ok" ) {
+
     # send empty response
     my $reply = CGI->new("");
-    print $reply->header(-type => 'text/html');
+    print $reply->header( -type => 'text/html' );
     exit 0;
 }
 
-    my @value      = $query->multi_param('term');
-    my $searchtype = $query->param('querytype');
-    my @marclist  = ($searchtype);
-    my $authtypecode = $query->param('authtypecode');
-    my @and_or    = $query->multi_param('and_or');
-    my @excluding = $query->multi_param('excluding');
-    my @operator  = $query->multi_param('operator');
-    my $orderby   = $query->param('orderby');
+my @value        = $query->multi_param('term');
+my $searchtype   = $query->param('querytype');
+my @marclist     = ($searchtype);
+my $authtypecode = $query->param('authtypecode');
+my @and_or       = $query->multi_param('and_or');
+my @excluding    = $query->multi_param('excluding');
+my @operator     = $query->multi_param('operator');
+my $orderby      = $query->param('orderby');
 
-    my $resultsperpage = 50;
-    my $startfrom = 0;
+my $resultsperpage = 50;
+my $startfrom      = 0;
 
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    my $searcher = Koha::SearchEngine::Search->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    my $search_query = $builder->build_authorities_query_compat(
-        \@marclist, \@and_or, \@excluding, \@operator,
-        \@value, $authtypecode, $orderby
+my $builder      = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+my $searcher     = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+my $search_query = $builder->build_authorities_query_compat(
+    \@marclist, \@and_or,      \@excluding, \@operator,
+    \@value,    $authtypecode, $orderby
+);
+my $offset = $startfrom * $resultsperpage;
+my ( $results, $total ) = $searcher->search_auth_compat(
+    $search_query, $offset,
+    $resultsperpage
+);
+
+my %used_summaries;    # hash to avoid duplicates
+my @summaries;
+foreach my $result (@$results) {
+    my $authorized = $result->{'summary'}->{'authorized'};
+    my $summary    = join(
+        ' ',
+        map { ( $searchtype eq 'mainmainentry' ) ? $_->{'hemain'} : $_->{'heading'} } @$authorized
     );
-    my $offset = $startfrom * $resultsperpage;
-    my ( $results, $total ) =
-        $searcher->search_auth_compat( $search_query, $offset,
-        $resultsperpage );
+    $summary =~ s/^\s+//;
+    $summary =~ s/\s+$//;
+    $summary = nsb_clean($summary);
 
-    my %used_summaries; # hash to avoid duplicates
-    my @summaries;
-    foreach my $result (@$results) {
-        my $authorized = $result->{'summary'}->{'authorized'};
-        my $summary    = join(
-            ' ',
-            map {
-                ( $searchtype eq 'mainmainentry' )
-                  ? $_->{'hemain'}
-                  : $_->{'heading'}
-              } @$authorized
-        );
-        $summary =~ s/^\s+//;
-        $summary =~ s/\s+$//;
-        $summary = nsb_clean($summary);
-        # test if already added ignoring case
-        unless ( exists $used_summaries{ lc($summary) } ) {
-            push @summaries, { 'summary' => $summary };
-            $used_summaries{ lc($summary) } = 1;
-        }
+    # test if already added ignoring case
+    unless ( exists $used_summaries{ lc($summary) } ) {
+        push @summaries, { 'summary' => $summary };
+        $used_summaries{ lc($summary) } = 1;
     }
+}
 
-output_with_http_headers $query, undef, to_json(\@summaries, { utf8 => 1 }), 'json';
+output_with_http_headers $query, undef, to_json( \@summaries, { utf8 => 1 } ), 'json';

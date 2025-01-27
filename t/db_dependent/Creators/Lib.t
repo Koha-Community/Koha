@@ -26,7 +26,10 @@ use Koha::Database;
 use Test::Warn;
 
 BEGIN {
-    use_ok('C4::Creators::Lib', qw( get_all_templates get_all_layouts get_all_profiles get_all_image_names get_batch_summary get_label_summary get_card_summary get_barcode_types get_label_types get_font_types get_text_justification_types get_output_formats get_table_names get_unit_values html_table ));
+    use_ok(
+        'C4::Creators::Lib',
+        qw( get_all_templates get_all_layouts get_all_profiles get_all_image_names get_batch_summary get_label_summary get_card_summary get_barcode_types get_label_types get_font_types get_text_justification_types get_output_formats get_table_names get_unit_values html_table )
+    );
     use_ok('C4::Biblio');
     use_ok('C4::Context');
     use_ok('Koha::Patron');
@@ -35,21 +38,21 @@ BEGIN {
 
 can_ok(
     'C4::Creators::Lib', qw(
-      get_all_templates
-      get_all_layouts
-      get_all_profiles
-      get_all_image_names
-      get_batch_summary
-      get_label_summary
-      get_card_summary
-      get_barcode_types
-      get_label_types
-      get_font_types
-      get_text_justification_types
-      get_output_formats
-      get_table_names
-      get_unit_values
-      html_table )
+        get_all_templates
+        get_all_layouts
+        get_all_profiles
+        get_all_image_names
+        get_batch_summary
+        get_label_summary
+        get_card_summary
+        get_barcode_types
+        get_label_types
+        get_font_types
+        get_text_justification_types
+        get_output_formats
+        get_table_names
+        get_unit_values
+        html_table )
 );
 
 my $schema = Koha::Database->schema;
@@ -71,15 +74,21 @@ $dbh->do('DELETE FROM biblioitems');
 #                     Inserted data
 ###########################################################
 
-my $library1 = $builder->build({
-    source => 'Branch',
-});
-my $library2 = $builder->build({
-    source => 'Branch',
-});
-my $library3 = $builder->build({
-    source => 'Branch',
-});
+my $library1 = $builder->build(
+    {
+        source => 'Branch',
+    }
+);
+my $library2 = $builder->build(
+    {
+        source => 'Branch',
+    }
+);
+my $library3 = $builder->build(
+    {
+        source => 'Branch',
+    }
+);
 
 # ---------- Some Templates  --------------------
 my $query = '
@@ -110,7 +119,10 @@ $query = '
      creator)
   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
 $insert_sth = $dbh->prepare($query);
-$insert_sth->execute( 'COOP2OF5', 1, 'BAR1', 'NAME1', 1, 'TR', 11, 'POINT', 1, 'L', 'barcode', 'layout_xml1', 'Labels' );
+$insert_sth->execute(
+    'COOP2OF5', 1, 'BAR1', 'NAME1', 1, 'TR', 11, 'POINT', 1, 'L', 'barcode', 'layout_xml1',
+    'Labels'
+);
 
 $insert_sth->execute( 'EAN13', 2, 'BAR2', 'NAME2', 2, 'TR', 12, 'POINT', 2, 'L', 'barcode', 'layout_xml2', 'Labels' );
 
@@ -258,7 +270,7 @@ $insert_sth->execute( 12, $item_number3, $borrowernumber3, $library3->{branchcod
     $dbi_st->mock( 'errstr', sub { return 'something went wrong'; } );
     my $templates;
     warning_is { $templates = get_all_templates() } 'Database returned the following error: something went wrong',
-      'get_all_templates() raises warning if something went wrong with the sql request execution';
+        'get_all_templates() raises warning if something went wrong with the sql request execution';
 
     is( $templates, -1, '$templates return -1' );
 }
@@ -314,7 +326,7 @@ is( $templates->[1]->{units},            'POINT',      'units            is good
 is( $templates->[1]->{creator},          'Labels',     'creator          is good' );
 
 # With field_list params --------------
-$templates = get_all_templates( {fields=> [qw(units cols rows)] } );
+$templates = get_all_templates( { fields => [qw(units cols rows)] } );
 
 $query = '
   SELECT count(*)
@@ -337,12 +349,12 @@ isnt( exists $templates->[0]->{top_text_margin},  2,            'top_text_margin
 isnt( exists $templates->[0]->{left_text_margin}, 3,            'left_text_margin is good' );
 isnt( exists $templates->[0]->{top_margin},       1,            'top_margin       is good' );
 isnt( exists $templates->[0]->{left_margin},      4,            'left_margin      is good' );
-is  (        $templates->[0]->{cols},             9,            'cols             is good' );
-is  (        $templates->[0]->{rows},             6,            'rows             is good' );
-isnt( exists $templates->[0]->{col_gap},          0.1,          'col_gap          is good' );
-isnt( exists $templates->[0]->{row_gap},          0.2,          'row_gap          is good' );
-is  (        $templates->[0]->{units},            'POINT',      'units            is good' );
-isnt( exists $templates->[0]->{creator},          'Labels',     'creator          is good' );
+is( $templates->[0]->{cols}, 9, 'cols             is good' );
+is( $templates->[0]->{rows}, 6, 'rows             is good' );
+isnt( exists $templates->[0]->{col_gap}, 0.1, 'col_gap          is good' );
+isnt( exists $templates->[0]->{row_gap}, 0.2, 'row_gap          is good' );
+is( $templates->[0]->{units}, 'POINT', 'units            is good' );
+isnt( exists $templates->[0]->{creator}, 'Labels', 'creator          is good' );
 
 isa_ok( $templates->[1], 'HASH', '$templates->[1]  is a HASH' );
 isnt( exists $templates->[1]->{profile_id},       2,            'profile_id       is good' );
@@ -356,15 +368,15 @@ isnt( exists $templates->[1]->{top_text_margin},  3,            'top_text_margin
 isnt( exists $templates->[1]->{left_text_margin}, 4,            'left_text_margin is good' );
 isnt( exists $templates->[1]->{top_margin},       2,            'top_margin       is good' );
 isnt( exists $templates->[1]->{left_margin},      5,            'left_margin      is good' );
-is  (        $templates->[1]->{cols},             10,           'cols             is good' );
-is  (        $templates->[1]->{rows},             7,            'rows             is good' );
-isnt( exists $templates->[1]->{col_gap},          0.2,          'col_gap          is good' );
-isnt( exists $templates->[1]->{row_gap},          0.3,          'row_gap          is good' );
-is  (        $templates->[1]->{units},            'POINT',      'units            is good' );
-isnt( exists $templates->[1]->{creator},          'Labels',     'creator          is good' );
+is( $templates->[1]->{cols}, 10, 'cols             is good' );
+is( $templates->[1]->{rows}, 7,  'rows             is good' );
+isnt( exists $templates->[1]->{col_gap}, 0.2, 'col_gap          is good' );
+isnt( exists $templates->[1]->{row_gap}, 0.3, 'row_gap          is good' );
+is( $templates->[1]->{units}, 'POINT', 'units            is good' );
+isnt( exists $templates->[1]->{creator}, 'Labels', 'creator          is good' );
 
 # With filters params ------------------
-$templates = get_all_templates( { filters => { rows => 7} } );
+$templates = get_all_templates( { filters => { rows => 7 } } );
 
 $query = '
   SELECT count(*)
@@ -395,8 +407,9 @@ is( $templates->[0]->{row_gap},          0.3,          'row_gap          is good
 is( $templates->[0]->{units},            'POINT',      'units            is good' );
 is( $templates->[0]->{creator},          'Labels',     'creator          is good' );
 
-$templates = get_all_templates( { filters => { rows => [-42, 7]} } );
+$templates = get_all_templates( { filters => { rows => [ -42, 7 ] } } );
 is( @$templates, $count, 'There is 1 template matching' );
+
 # With orderby param ------------------
 $templates = get_all_templates( { orderby => '`rows` DESC' } );
 
@@ -455,7 +468,7 @@ is( $templates->[1]->{creator},          'Labels',     'creator          is good
     $dbi_st->mock( 'errstr', sub { return 'something went wrong'; } );
     my $layouts;
     warning_is { $layouts = get_all_layouts() } 'Database returned the following error: something went wrong',
-      'get_all_layouts() raises warning if something went wrong with the sql request execution';
+        'get_all_layouts() raises warning if something went wrong with the sql request execution';
 
     is( $layouts, -1, '$layouts return -1' );
 }
@@ -503,7 +516,7 @@ is( $layouts->[1]->{layout_xml},    'layout_xml2', 'layout_xml     is good' );
 is( $layouts->[1]->{creator},       'Labels',      'creator        is good' );
 
 # With field_list params --------------
-$layouts = get_all_layouts( { fields => [qw(barcode_type layout_name font)] });
+$layouts = get_all_layouts( { fields => [qw(barcode_type layout_name font)] } );
 
 $query = '
   SELECT count(*)
@@ -515,12 +528,12 @@ is( @$layouts, $count, 'There are 2 layouts matching' );
 isa_ok( $layouts, 'ARRAY', '$layouts is an ARRAY' );
 
 isa_ok( $layouts->[0], 'HASH', '$layouts->[0]  is a HASH' );
-is  (        $layouts->[0]->{barcode_type},  'COOP2OF5',    'barcode_type   is good' );
-isnt( exists $layouts->[0]->{start_label},   1,             'start_label    is good' );
-isnt( exists $layouts->[0]->{printing_type}, 'BAR1',        'printing_type  is good' );
-is  (        $layouts->[0]->{layout_name},   'NAME1',       'layout_name    is good' );
-isnt( exists $layouts->[0]->{guidebox},      1,             'guidebox       is good' );
-is  (        $layouts->[0]->{font},         'TR',           'font           is good' );
+is( $layouts->[0]->{barcode_type}, 'COOP2OF5', 'barcode_type   is good' );
+isnt( exists $layouts->[0]->{start_label},   1,      'start_label    is good' );
+isnt( exists $layouts->[0]->{printing_type}, 'BAR1', 'printing_type  is good' );
+is( $layouts->[0]->{layout_name}, 'NAME1', 'layout_name    is good' );
+isnt( exists $layouts->[0]->{guidebox}, 1, 'guidebox       is good' );
+is( $layouts->[0]->{font}, 'TR', 'font           is good' );
 isnt( exists $layouts->[0]->{font_size},     11,            'font_size      is good' );
 isnt( exists $layouts->[0]->{units},         'POINT',       'units          is good' );
 isnt( exists $layouts->[0]->{callnum_split}, 1,             'callnum_split  is good' );
@@ -530,15 +543,15 @@ isnt( exists $layouts->[0]->{layout_xml},    'layout_xml1', 'layout_xml     is g
 isnt( exists $layouts->[0]->{creator},       'Labels',      'creator        is good' );
 
 isa_ok( $layouts->[1], 'HASH', '$layouts->[1] is a HASH' );
-is  (        $layouts->[1]->{barcode_type},   'EAN13',      'barcode_type   is good' );
-isnt( exists $layouts->[1]->{start_label},    2,            'start_label    is good' );
-isnt( exists $layouts->[1]->{printing_type},  'BAR2',       'printing_type  is good' );
-is  (        $layouts->[1]->{layout_name},    'NAME2',      'layout_name    is good' );
-isnt( exists $layouts->[1]->{guidebox},       2,            'guidebox       is good' );
-is  (        $layouts->[1]->{font},          'TR',          'font           is good' );
-isnt( exists $layouts->[1]->{font_size},      12,           'font_size      is good' );
+is( $layouts->[1]->{barcode_type}, 'EAN13', 'barcode_type   is good' );
+isnt( exists $layouts->[1]->{start_label},   2,      'start_label    is good' );
+isnt( exists $layouts->[1]->{printing_type}, 'BAR2', 'printing_type  is good' );
+is( $layouts->[1]->{layout_name}, 'NAME2', 'layout_name    is good' );
+isnt( exists $layouts->[1]->{guidebox}, 2, 'guidebox       is good' );
+is( $layouts->[1]->{font}, 'TR', 'font           is good' );
+isnt( exists $layouts->[1]->{font_size},     12,            'font_size      is good' );
 isnt( exists $layouts->[1]->{units},         'POINT',       'units          is good' );
-isnt( exists $layouts->[1]->{callnum_split},  2,            'callnum_split  is good' );
+isnt( exists $layouts->[1]->{callnum_split}, 2,             'callnum_split  is good' );
 isnt( exists $layouts->[1]->{text_justify},  'L',           'text_justify   is good' );
 isnt( exists $layouts->[1]->{format_string}, 'barcode',     'format_string  is good' );
 isnt( exists $layouts->[1]->{layout_xml},    'layout_xml2', 'layout_xml     is good' );
@@ -622,7 +635,7 @@ is( $layouts->[1]->{creator},       'Labels',      'creator        is good' );
     $dbi_st->mock( 'errstr', sub { return 'something went wrong'; } );
     my $profiles;
     warning_is { $profiles = get_all_profiles() } 'Database returned the following error: something went wrong',
-      'get_all_profiles() raises warning if something went wrong with the sql request execution';
+        'get_all_profiles() raises warning if something went wrong with the sql request execution';
 
     is( $profiles, -1, '$profiles return -1' );
 }
@@ -662,7 +675,7 @@ is( $profiles->[1]->{units},        'POINT',        'units          is good' );
 is( $profiles->[1]->{creator},      'Labels',       'creator        is good' );
 
 # With field_list params --------------
-$profiles = get_all_profiles( { fields => [qw(printer_name template_id)] });
+$profiles = get_all_profiles( { fields => [qw(printer_name template_id)] } );
 
 $query = '
   SELECT count(*)
@@ -674,26 +687,26 @@ is( @$profiles, $count, 'There are 2 profiles matching' );
 isa_ok( $profiles, 'ARRAY', '$profiles is an ARRAY' );
 
 isa_ok( $profiles->[0], 'HASH', '$profiles->[0] is a HASH' );
-is  (        $profiles->[0]->{printer_name},  'Layout1 Name', 'printer_name   is good' );
-is  (        $profiles->[0]->{template_id},   1234,           'template_id    is good' );
-isnt( exists $profiles->[0]->{paper_bin},     'Bypass',       'paper_bin      is good' );
-isnt( exists $profiles->[0]->{offset_horz},   0.1,            'offset_horz    is good' );
-isnt( exists $profiles->[0]->{offset_vert},   0.2,            'offset_vert    is good' );
-isnt( exists $profiles->[0]->{creep_horz},    0.3,            'creep_horz     is good' );
-isnt( exists $profiles->[0]->{creep_vert},    0.4,            'creep_vert     is good' );
-isnt( exists $profiles->[0]->{units},         'POINT',        'units          is good' );
-isnt( exists $profiles->[0]->{creator},       'Labels',       'creator        is good' );
+is( $profiles->[0]->{printer_name}, 'Layout1 Name', 'printer_name   is good' );
+is( $profiles->[0]->{template_id},  1234,           'template_id    is good' );
+isnt( exists $profiles->[0]->{paper_bin},   'Bypass', 'paper_bin      is good' );
+isnt( exists $profiles->[0]->{offset_horz}, 0.1,      'offset_horz    is good' );
+isnt( exists $profiles->[0]->{offset_vert}, 0.2,      'offset_vert    is good' );
+isnt( exists $profiles->[0]->{creep_horz},  0.3,      'creep_horz     is good' );
+isnt( exists $profiles->[0]->{creep_vert},  0.4,      'creep_vert     is good' );
+isnt( exists $profiles->[0]->{units},       'POINT',  'units          is good' );
+isnt( exists $profiles->[0]->{creator},     'Labels', 'creator        is good' );
 
 isa_ok( $profiles->[1], 'HASH', '$profiles->[1] is a HASH' );
-is  (        $profiles->[1]->{printer_name},  'Layout2 Name', 'printer_name   is good' );
-is  (        $profiles->[1]->{template_id},   1235,           'template_id    is good' );
-isnt( exists $profiles->[1]->{paper_bin},     'Bypass',       'paper_bin      is good' );
-isnt( exists $profiles->[1]->{offset_horz},   0.2,            'offset_horz    is good' );
-isnt( exists $profiles->[1]->{offset_vert},   0.3,            'offset_vert    is good' );
-isnt( exists $profiles->[1]->{creep_horz},    0.4,            'creep_horz     is good' );
-isnt( exists $profiles->[1]->{creep_vert},    0.5,            'creep_vert     is good' );
-isnt( exists $profiles->[1]->{units},         'POINT',        'units          is good' );
-isnt( exists $profiles->[1]->{creator},       'Labels',       'creator        is good' );
+is( $profiles->[1]->{printer_name}, 'Layout2 Name', 'printer_name   is good' );
+is( $profiles->[1]->{template_id},  1235,           'template_id    is good' );
+isnt( exists $profiles->[1]->{paper_bin},   'Bypass', 'paper_bin      is good' );
+isnt( exists $profiles->[1]->{offset_horz}, 0.2,      'offset_horz    is good' );
+isnt( exists $profiles->[1]->{offset_vert}, 0.3,      'offset_vert    is good' );
+isnt( exists $profiles->[1]->{creep_horz},  0.4,      'creep_horz     is good' );
+isnt( exists $profiles->[1]->{creep_vert},  0.5,      'creep_vert     is good' );
+isnt( exists $profiles->[1]->{units},       'POINT',  'units          is good' );
+isnt( exists $profiles->[1]->{creator},     'Labels', 'creator        is good' );
 
 # With filters params ------------------
 $profiles = get_all_profiles( { filters => { template_id => 1235 } } );
@@ -709,15 +722,15 @@ is( @$profiles, $count, 'There is 1 profile matching' );
 isa_ok( $profiles, 'ARRAY', '$profiles is an ARRAY' );
 
 isa_ok( $profiles->[0], 'HASH', '$profiles->[0] is a HASH' );
-is  (        $profiles->[0]->{printer_name},  'Layout2 Name', 'printer_name   is good' );
-is  (        $profiles->[0]->{template_id},   1235,           'template_id    is good' );
-isnt( exists $profiles->[0]->{paper_bin},     'Bypass',       'paper_bin      is good' );
-isnt( exists $profiles->[0]->{offset_horz},   0.2,            'offset_horz    is good' );
-isnt( exists $profiles->[0]->{offset_vert},   0.3,            'offset_vert    is good' );
-isnt( exists $profiles->[0]->{creep_horz},    0.4,            'creep_horz     is good' );
-isnt( exists $profiles->[0]->{creep_vert},    0.5,            'creep_vert     is good' );
-isnt( exists $profiles->[0]->{units},         'POINT',        'units          is good' );
-isnt( exists $profiles->[0]->{creator},       'Labels',       'creator        is good' );
+is( $profiles->[0]->{printer_name}, 'Layout2 Name', 'printer_name   is good' );
+is( $profiles->[0]->{template_id},  1235,           'template_id    is good' );
+isnt( exists $profiles->[0]->{paper_bin},   'Bypass', 'paper_bin      is good' );
+isnt( exists $profiles->[0]->{offset_horz}, 0.2,      'offset_horz    is good' );
+isnt( exists $profiles->[0]->{offset_vert}, 0.3,      'offset_vert    is good' );
+isnt( exists $profiles->[0]->{creep_horz},  0.4,      'creep_horz     is good' );
+isnt( exists $profiles->[0]->{creep_vert},  0.5,      'creep_vert     is good' );
+isnt( exists $profiles->[0]->{units},       'POINT',  'units          is good' );
+isnt( exists $profiles->[0]->{creator},     'Labels', 'creator        is good' );
 
 # ---------- Testing get_all_image_names ------------------
 
@@ -728,7 +741,7 @@ isnt( exists $profiles->[0]->{creator},       'Labels',       'creator        is
     $dbi_st->mock( 'errstr', sub { return 'something went wrong'; } );
     my $images;
     warning_is { $images = get_all_image_names() } 'Database returned the following error: something went wrong',
-      'get_all_image_names() raises warning if something went wrong with the sql request execution';
+        'get_all_image_names() raises warning if something went wrong with the sql request execution';
 
     is( $images, -1, '$images return -1' );
 }
@@ -763,8 +776,9 @@ is( $images->[1]->{type},     $images->[1]->{name}, 'type         is good' );
     $dbi_st->mock( 'err',    sub { return 1; } );
     $dbi_st->mock( 'errstr', sub { return 'something went wrong'; } );
     my $batches;
-    warning_is { $batches = get_batch_summary() } 'Database returned the following error on attempted SELECT: something went wrong',
-      'get_batch_summary() raises warning if something went wrong with the sql request execution';
+    warning_is { $batches = get_batch_summary() }
+    'Database returned the following error on attempted SELECT: something went wrong',
+        'get_batch_summary() raises warning if something went wrong with the sql request execution';
 
     is( $batches, -1, '$batches return -1' );
 }
@@ -830,8 +844,9 @@ is( $batches->[0]->{_item_count}, $nb, 'item_number is good for this batch_id' )
     my $labels;
     my @items = [ { item_number => $item_number1 } ];
 
-    warning_is { $labels = get_label_summary( items => @items ) } 'Database returned the following error on attempted SELECT: something went wrong',
-      'get_label_summary() raises warning if something went wrong with the sql request execution';
+    warning_is { $labels = get_label_summary( items => @items ) }
+    'Database returned the following error on attempted SELECT: something went wrong',
+        'get_label_summary() raises warning if something went wrong with the sql request execution';
 
     is( $labels, -1, '$labels return -1' );
 }
@@ -856,16 +871,20 @@ $query = '
   FROM   biblioitems
   WHERE  biblioitemnumber = ?
   ';
-my ( $bi_biblionumber1, $bi_biblioitemnumber1, $bi_itemtype1 ) = $dbh->selectrow_array( $query, {}, $biblioitemnumber1 );
-my ( $bi_biblionumber2, $bi_biblioitemnumber2, $bi_itemtype2 ) = $dbh->selectrow_array( $query, {}, $biblioitemnumber2 );
+my ( $bi_biblionumber1, $bi_biblioitemnumber1, $bi_itemtype1 ) =
+    $dbh->selectrow_array( $query, {}, $biblioitemnumber1 );
+my ( $bi_biblionumber2, $bi_biblioitemnumber2, $bi_itemtype2 ) =
+    $dbh->selectrow_array( $query, {}, $biblioitemnumber2 );
 
 $query = '
   SELECT biblionumber, biblioitemnumber, itemnumber, barcode, itype
   FROM   items
   WHERE  itemnumber = ?
   ';
-my ( $i_biblionumber1, $i_biblioitemnumber1, $i_itemnumber1, $i_barcode1, $i_itype1 ) = $dbh->selectrow_array( $query, {}, $item_number1 );
-my ( $i_biblionumber2, $i_biblioitemnumber2, $i_itemnumber2, $i_barcode2, $i_itype2 ) = $dbh->selectrow_array( $query, {}, $item_number2 );
+my ( $i_biblionumber1, $i_biblioitemnumber1, $i_itemnumber1, $i_barcode1, $i_itype1 ) =
+    $dbh->selectrow_array( $query, {}, $item_number1 );
+my ( $i_biblionumber2, $i_biblioitemnumber2, $i_itemnumber2, $i_barcode2, $i_itype2 ) =
+    $dbh->selectrow_array( $query, {}, $item_number2 );
 
 $query = '
   SELECT label_id, batch_id, item_number
@@ -884,7 +903,8 @@ is( $i_biblioitemnumber2, $bi_biblioitemnumber2, 'ITEMS.biblioitemnumber      ==
 is( $bi_biblionumber2,    $b_biblionumber2,      'BIBLIOITEMS.biblionumber    == BIBLIO.biblionumber' );
 
 my @items = [
-    {   item_number => $item_number1,
+    {
+        item_number => $item_number1,
         label_id    => $c_label_id1,
     }
 ];
@@ -898,7 +918,8 @@ my $record_author = $b_author1;
 my $record_title  = $b_title1;
 $record_author =~ s/[^\.|\w]$//;
 $record_title  =~ s/\W*$//;
-$record_title = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $b_biblionumber1 . '"> ' . $b_title1 . '</a>';
+$record_title =
+    '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $b_biblionumber1 . '"> ' . $b_title1 . '</a>';
 my $summary1        = $record_title . " | " . ( $b_author1 ? $b_author1 : 'N/A' );
 my $itemtypes_pref  = C4::Context->preference("item-level_itypes");
 my $record_itemtype = $itemtypes_pref ? $i_itype1 : $bi_itemtype1;
@@ -914,7 +935,8 @@ is( $labels->[0]->{_label_id},                $c_label_id1,     '_label_id      
 
 # record without author
 @items = [
-    {   item_number => $item_number2,
+    {
+        item_number => $item_number2,
         label_id    => $c_label_id2,
     }
 ];
@@ -927,10 +949,11 @@ isa_ok( $labels->[0], 'HASH',  '$labels->[0] is an hash' );
 $record_author = $b_author2;
 $record_title  = $b_title2;
 $record_author =~ s/[^\.|\w]$// if $b_author2;
-$record_title =~ s/\W*$//;
-$record_title = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $b_biblionumber2 . '"> ' . $b_title2 . '</a>';
+$record_title  =~ s/\W*$//;
+$record_title =
+    '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $b_biblionumber2 . '"> ' . $b_title2 . '</a>';
 my $summary2 = $record_title . " | " . ( $b_author2 ? $b_author2 : 'N/A' );
-$itemtypes_pref = C4::Context->preference("item-level_itypes");
+$itemtypes_pref  = C4::Context->preference("item-level_itypes");
 $record_itemtype = $itemtypes_pref ? $i_itype2 : $bi_itemtype2;
 
 is( $labels->[0]->{_label_number},            1,                '_label_number            is good' );
@@ -948,7 +971,8 @@ is( $labels->[0]->{_label_id},                $c_label_id2,     '_label_id      
     my $h = C4::Context->preference("item-level_itypes");
 
     my @items = [
-        {   item_number => $item_number1,
+        {
+            item_number => $item_number1,
             label_id    => $c_label_id1,
         }
     ];
@@ -962,7 +986,8 @@ is( $labels->[0]->{_label_id},                $c_label_id2,     '_label_id      
     my $record_title  = $b_title1;
     $record_author =~ s/[^\.|\w]$//;
     $record_title  =~ s/\W*$//;
-    $record_title = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $b_biblionumber1 . '"> ' . $b_title1 . '</a>';
+    $record_title =
+        '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $b_biblionumber1 . '"> ' . $b_title1 . '</a>';
     my $summary1        = $record_title . " | " . ( $b_author1 ? $b_author1 : 'N/A' );
     my $itemtypes_pref  = C4::Context->preference("item-level_itypes");
     my $record_itemtype = $itemtypes_pref ? $i_itype1 : $bi_itemtype1;
@@ -987,8 +1012,9 @@ is( $labels->[0]->{_label_id},                $c_label_id2,     '_label_id      
     my $cards;
     my @items = [ { item_number => $item_number1 } ];
 
-    warning_is { $cards = get_card_summary( items => @items ) } 'Database returned the following error on attempted SELECT: something went wrong',
-      'get_card_summary() raises warning if something went wrong with the sql request execution';
+    warning_is { $cards = get_card_summary( items => @items ) }
+    'Database returned the following error on attempted SELECT: something went wrong',
+        'get_card_summary() raises warning if something went wrong with the sql request execution';
 
     is( $cards, -1, '$cards return -1' );
 }
@@ -1008,7 +1034,8 @@ $query = '
 my ( $b_surname1, $b_firstname1, $b_cardnumber1 ) = $dbh->selectrow_array( $query, {}, $borrowernumber1 );
 
 @items = [
-    {   item_number     => $item_number1,
+    {
+        item_number     => $item_number1,
         label_id        => $c_label_id1,
         borrower_number => $borrowernumber1,
     }
@@ -1032,43 +1059,62 @@ is( @$barcode_types, 6, 'There are 6 barcodes types' );
 isa_ok( $barcode_types, 'ARRAY', '$barcode_types is an ARRAY' );
 
 isa_ok( $barcode_types->[0], 'HASH', '$barcode_types->[0] is a HASH' );
-is( $barcode_types->[0]->{type},     'CODE39',                                                                                                              'type is good' );
-is( $barcode_types->[0]->{name},     'Code 39',                                                                                                             'name is good' );
-is( $barcode_types->[0]->{desc},     'Translates the characters 0-9, A-Z, \'-\', \'*\', \'+\', \'$\', \'%\', \'/\', \'.\' and \' \' to a barcode pattern.', 'desc is good' );
-is( $barcode_types->[0]->{selected}, 0,                                                                                                                     'selected is good' );
+is( $barcode_types->[0]->{type}, 'CODE39',  'type is good' );
+is( $barcode_types->[0]->{name}, 'Code 39', 'name is good' );
+is(
+    $barcode_types->[0]->{desc},
+    'Translates the characters 0-9, A-Z, \'-\', \'*\', \'+\', \'$\', \'%\', \'/\', \'.\' and \' \' to a barcode pattern.',
+    'desc is good'
+);
+is( $barcode_types->[0]->{selected}, 0, 'selected is good' );
 
 isa_ok( $barcode_types->[1], 'HASH', '$barcode_types->[1] is a HASH' );
 is( $barcode_types->[1]->{type}, 'CODE39MOD',          'type is good' );
 is( $barcode_types->[1]->{name}, 'Code 39 + Modulo43', 'name is good' );
-is( $barcode_types->[1]->{desc},
+is(
+    $barcode_types->[1]->{desc},
     'Translates the characters 0-9, A-Z, \'-\', \'*\', \'+\', \'$\', \'%\', \'/\', \'.\' and \' \' to a barcode pattern. Encodes Mod 43 checksum.',
     'desc is good'
 );
 is( $barcode_types->[1]->{selected}, 0, 'selected is good' );
 
 isa_ok( $barcode_types->[2], 'HASH', '$barcode_types->[2] is a HASH' );
-is( $barcode_types->[2]->{type},     'CODE39MOD10',        'type is good' );
-is( $barcode_types->[2]->{name},     'Code 39 + Modulo10', 'name is good' );
-is( $barcode_types->[2]->{desc},     'Translates the characters 0-9, A-Z, \'-\', \'*\', \'+\', \'$\', \'%\', \'/\', \'.\' and \' \' to a barcode pattern. Encodes Mod 10 checksum.', 'desc is good');
-is( $barcode_types->[2]->{selected}, 0,                    'selected is good' );
+is( $barcode_types->[2]->{type}, 'CODE39MOD10',        'type is good' );
+is( $barcode_types->[2]->{name}, 'Code 39 + Modulo10', 'name is good' );
+is(
+    $barcode_types->[2]->{desc},
+    'Translates the characters 0-9, A-Z, \'-\', \'*\', \'+\', \'$\', \'%\', \'/\', \'.\' and \' \' to a barcode pattern. Encodes Mod 10 checksum.',
+    'desc is good'
+);
+is( $barcode_types->[2]->{selected}, 0, 'selected is good' );
 
 isa_ok( $barcode_types->[3], 'HASH', '$barcode_types->[3] is a HASH' );
-is( $barcode_types->[3]->{type},     'COOP2OF5', 'type is good' );
-is( $barcode_types->[3]->{name},     'COOP2of5', 'name is good' );
-is( $barcode_types->[3]->{desc},     'Creates COOP2of5 barcodes from a string consisting of the numeric characters 0-9', 'desc is good' );
-is( $barcode_types->[3]->{selected}, 0,          'selected is good' );
+is( $barcode_types->[3]->{type}, 'COOP2OF5', 'type is good' );
+is( $barcode_types->[3]->{name}, 'COOP2of5', 'name is good' );
+is(
+    $barcode_types->[3]->{desc}, 'Creates COOP2of5 barcodes from a string consisting of the numeric characters 0-9',
+    'desc is good'
+);
+is( $barcode_types->[3]->{selected}, 0, 'selected is good' );
 
 isa_ok( $barcode_types->[4], 'HASH', '$barcode_types->[4] is a HASH' );
-is( $barcode_types->[4]->{type},     'EAN13',     'type is good' );
-is( $barcode_types->[4]->{name},     'EAN13',     'name is good' );
-is( $barcode_types->[4]->{desc},     'Creates EAN13 barcodes from a string of 12 or 13 digits. The check number (the 13:th digit) is calculated if not supplied.', 'desc is good' );
-is( $barcode_types->[4]->{selected}, 0,           'selected is good' );
+is( $barcode_types->[4]->{type}, 'EAN13', 'type is good' );
+is( $barcode_types->[4]->{name}, 'EAN13', 'name is good' );
+is(
+    $barcode_types->[4]->{desc},
+    'Creates EAN13 barcodes from a string of 12 or 13 digits. The check number (the 13:th digit) is calculated if not supplied.',
+    'desc is good'
+);
+is( $barcode_types->[4]->{selected}, 0, 'selected is good' );
 
 isa_ok( $barcode_types->[5], 'HASH', '$barcode_types->[5] is a HASH' );
-is( $barcode_types->[5]->{type},     'INDUSTRIAL2OF5', 'type is good' );
-is( $barcode_types->[5]->{name},     'Industrial2of5', 'name is good' );
-is( $barcode_types->[5]->{desc},     'Creates Industrial2of5 barcodes from a string consisting of the numeric characters 0-9', 'desc is good' );
-is( $barcode_types->[5]->{selected},  0,               'selected is good' );
+is( $barcode_types->[5]->{type}, 'INDUSTRIAL2OF5', 'type is good' );
+is( $barcode_types->[5]->{name}, 'Industrial2of5', 'name is good' );
+is(
+    $barcode_types->[5]->{desc},
+    'Creates Industrial2of5 barcodes from a string consisting of the numeric characters 0-9', 'desc is good'
+);
+is( $barcode_types->[5]->{selected}, 0, 'selected is good' );
 
 # ---------- Testing get_label_types ----------------------
 my $label_types = get_label_types();
@@ -1095,10 +1141,13 @@ is( $label_types->[2]->{desc},     'Bibliographic data proceeds barcode.', 'desc
 is( $label_types->[2]->{selected}, 0,                                      'selected is good' );
 
 isa_ok( $label_types->[3], 'HASH', '$label_types->[3] is a HASH' );
-is( $label_types->[3]->{type},     'ALT',                                                               'type     is good' );
-is( $label_types->[3]->{name},     'Alternating',                                                       'name     is good' );
-is( $label_types->[3]->{desc},     'Barcode and bibliographic data are printed on alternating labels.', 'desc     is good' );
-is( $label_types->[3]->{selected}, 0,                                                                   'selected is good' );
+is( $label_types->[3]->{type}, 'ALT',         'type     is good' );
+is( $label_types->[3]->{name}, 'Alternating', 'name     is good' );
+is(
+    $label_types->[3]->{desc}, 'Barcode and bibliographic data are printed on alternating labels.',
+    'desc     is good'
+);
+is( $label_types->[3]->{selected}, 0, 'selected is good' );
 
 isa_ok( $label_types->[4], 'HASH', '$label_types->[4] is a HASH' );
 is( $label_types->[4]->{type},     'BAR',                          'type     is good' );
@@ -1110,7 +1159,6 @@ $label_types->[0]->{selected} = 1;
 $label_types = get_label_types();
 is( $label_types->[0]->{selected}, 0, 'get_label_types must returned a new structure (copied)' );
 
-
 # ---------- Testing get_font_types -----------------------
 my $font_types = get_font_types();
 
@@ -1118,59 +1166,59 @@ is( @$font_types, 12, 'There are 12 font types' );
 isa_ok( $font_types, 'ARRAY', '$font_types is an ARRAY' );
 
 isa_ok( $font_types->[0], 'HASH', '$font_types->[0] is a HASH' );
-is( $font_types->[0]->{type},     'TR',                      'type     is good' );
-is( $font_types->[0]->{name},     'Times-Roman',             'name     is good' );
-is( $font_types->[0]->{selected}, 0,                         'selected is good' );
+is( $font_types->[0]->{type},     'TR',          'type     is good' );
+is( $font_types->[0]->{name},     'Times-Roman', 'name     is good' );
+is( $font_types->[0]->{selected}, 0,             'selected is good' );
 
 isa_ok( $font_types->[1], 'HASH', '$font_types->[1] is a HASH' );
-is( $font_types->[1]->{type},     'TB',                      'type     is good' );
-is( $font_types->[1]->{name},     'Times-Bold',              'name     is good' );
-is( $font_types->[1]->{selected}, 0,                         'selected is good' );
+is( $font_types->[1]->{type},     'TB',         'type     is good' );
+is( $font_types->[1]->{name},     'Times-Bold', 'name     is good' );
+is( $font_types->[1]->{selected}, 0,            'selected is good' );
 
 isa_ok( $font_types->[2], 'HASH', '$font_types->[2] is a HASH' );
-is( $font_types->[2]->{type},     'TI',                      'type     is good' );
-is( $font_types->[2]->{name},     'Times-Italic',            'name     is good' );
-is( $font_types->[2]->{selected}, 0,                         'selected is good' );
+is( $font_types->[2]->{type},     'TI',           'type     is good' );
+is( $font_types->[2]->{name},     'Times-Italic', 'name     is good' );
+is( $font_types->[2]->{selected}, 0,              'selected is good' );
 
 isa_ok( $font_types->[3], 'HASH', '$font_types->[3] is a HASH' );
-is( $font_types->[3]->{type},     'TBI',                     'type     is good' );
-is( $font_types->[3]->{name},     'Times-Bold-Italic',       'name     is good' );
-is( $font_types->[3]->{selected}, 0,                         'selected is good' );
+is( $font_types->[3]->{type},     'TBI',               'type     is good' );
+is( $font_types->[3]->{name},     'Times-Bold-Italic', 'name     is good' );
+is( $font_types->[3]->{selected}, 0,                   'selected is good' );
 
 isa_ok( $font_types->[4], 'HASH', '$font_types->[4] is a HASH' );
-is( $font_types->[4]->{type},     'C',                       'type     is good' );
-is( $font_types->[4]->{name},     'Courier',                 'name     is good' );
-is( $font_types->[4]->{selected}, 0,                         'selected is good' );
+is( $font_types->[4]->{type},     'C',       'type     is good' );
+is( $font_types->[4]->{name},     'Courier', 'name     is good' );
+is( $font_types->[4]->{selected}, 0,         'selected is good' );
 
 isa_ok( $font_types->[5], 'HASH', '$font_types->[5] is a HASH' );
-is( $font_types->[5]->{type},     'CB',                      'type     is good' );
-is( $font_types->[5]->{name},     'Courier-Bold',            'name     is good' );
-is( $font_types->[5]->{selected}, 0,                         'selected is good' );
+is( $font_types->[5]->{type},     'CB',           'type     is good' );
+is( $font_types->[5]->{name},     'Courier-Bold', 'name     is good' );
+is( $font_types->[5]->{selected}, 0,              'selected is good' );
 
 isa_ok( $font_types->[6], 'HASH', '$font_types->[6] is a HASH' );
-is( $font_types->[6]->{type},     'CO',                      'type     is good' );
-is( $font_types->[6]->{name},     'Courier-Oblique',         'name     is good' );
-is( $font_types->[6]->{selected}, 0,                         'selected is good' );
+is( $font_types->[6]->{type},     'CO',              'type     is good' );
+is( $font_types->[6]->{name},     'Courier-Oblique', 'name     is good' );
+is( $font_types->[6]->{selected}, 0,                 'selected is good' );
 
 isa_ok( $font_types->[7], 'HASH', '$font_types->[7] is a HASH' );
-is( $font_types->[7]->{type},     'CBO',                     'type     is good' );
-is( $font_types->[7]->{name},     'Courier-Bold-Oblique',    'name     is good' );
-is( $font_types->[7]->{selected}, 0,                         'selected is good' );
+is( $font_types->[7]->{type},     'CBO',                  'type     is good' );
+is( $font_types->[7]->{name},     'Courier-Bold-Oblique', 'name     is good' );
+is( $font_types->[7]->{selected}, 0,                      'selected is good' );
 
 isa_ok( $font_types->[8], 'HASH', '$font_types->[8] is a HASH' );
-is( $font_types->[8]->{type},     'H',                       'type     is good' );
-is( $font_types->[8]->{name},     'Helvetica',               'name     is good' );
-is( $font_types->[8]->{selected}, 0,                         'selected is good' );
+is( $font_types->[8]->{type},     'H',         'type     is good' );
+is( $font_types->[8]->{name},     'Helvetica', 'name     is good' );
+is( $font_types->[8]->{selected}, 0,           'selected is good' );
 
 isa_ok( $font_types->[9], 'HASH', '$font_types->[9] is a HASH' );
-is( $font_types->[9]->{type},     'HO',                      'type     is good' );
-is( $font_types->[9]->{name},     'Helvetica-Oblique',       'name     is good' );
-is( $font_types->[9]->{selected}, 0,                         'selected is good' );
+is( $font_types->[9]->{type},     'HO',                'type     is good' );
+is( $font_types->[9]->{name},     'Helvetica-Oblique', 'name     is good' );
+is( $font_types->[9]->{selected}, 0,                   'selected is good' );
 
 isa_ok( $font_types->[10], 'HASH', '$font_types->[10] is a HASH' );
-is( $font_types->[10]->{type},     'HB',                     'type     is good' );
-is( $font_types->[10]->{name},     'Helvetica-Bold',         'name     is good' );
-is( $font_types->[10]->{selected}, 0,                        'selected is good' );
+is( $font_types->[10]->{type},     'HB',             'type     is good' );
+is( $font_types->[10]->{name},     'Helvetica-Bold', 'name     is good' );
+is( $font_types->[10]->{selected}, 0,                'selected is good' );
 
 isa_ok( $font_types->[11], 'HASH', '$font_types->[11] is a HASH' );
 is( $font_types->[11]->{type},     'HBO',                    'type     is good' );
@@ -1184,19 +1232,19 @@ is( @$text_justification_types, 3, 'There are 3 text justification types' );
 isa_ok( $text_justification_types, 'ARRAY', '$text_justification_types is an ARRAY' );
 
 isa_ok( $text_justification_types->[0], 'HASH', '$font_types->[0] is a HASH' );
-is( $text_justification_types->[0]->{type},     'L',         'type     is good' );
-is( $text_justification_types->[0]->{name},     'Left',      'name     is good' );
-is( $text_justification_types->[0]->{selected}, 0,           'selected is good' );
+is( $text_justification_types->[0]->{type},     'L',    'type     is good' );
+is( $text_justification_types->[0]->{name},     'Left', 'name     is good' );
+is( $text_justification_types->[0]->{selected}, 0,      'selected is good' );
 
 isa_ok( $text_justification_types->[1], 'HASH', '$font_types->[1] is a HASH' );
-is( $text_justification_types->[1]->{type},     'C',         'type     is good' );
-is( $text_justification_types->[1]->{name},     'Center',    'name     is good' );
-is( $text_justification_types->[1]->{selected}, 0,           'selected is good' );
+is( $text_justification_types->[1]->{type},     'C',      'type     is good' );
+is( $text_justification_types->[1]->{name},     'Center', 'name     is good' );
+is( $text_justification_types->[1]->{selected}, 0,        'selected is good' );
 
 isa_ok( $text_justification_types->[2], 'HASH', '$font_types->[2] is a HASH' );
-is( $text_justification_types->[2]->{type},     'R',         'type     is good' );
-is( $text_justification_types->[2]->{name},     'Right',     'name     is good' );
-is( $text_justification_types->[2]->{selected}, 0,           'selected is good' );
+is( $text_justification_types->[2]->{type},     'R',     'type     is good' );
+is( $text_justification_types->[2]->{name},     'Right', 'name     is good' );
+is( $text_justification_types->[2]->{selected}, 0,       'selected is good' );
 
 # ---------- Testing get_unit_values ----------------------
 my $unit_values = get_unit_values();
@@ -1205,34 +1253,34 @@ is( @$unit_values, 5, 'There are 5 unit values' );
 isa_ok( $unit_values, 'ARRAY', '$unit_values is an ARRAY' );
 
 isa_ok( $unit_values->[0], 'HASH', '$unit_values->[0] is a HASH' );
-is( $unit_values->[0]->{type},     'POINT',                  'type     is good' );
-is( $unit_values->[0]->{desc},     'PostScript Points',      'desc     is good' );
-is( $unit_values->[0]->{value},    1,                        'value    is good' );
-is( $unit_values->[0]->{selected}, 0,                        'selected is good' );
+is( $unit_values->[0]->{type},     'POINT',             'type     is good' );
+is( $unit_values->[0]->{desc},     'PostScript Points', 'desc     is good' );
+is( $unit_values->[0]->{value},    1,                   'value    is good' );
+is( $unit_values->[0]->{selected}, 0,                   'selected is good' );
 
 isa_ok( $unit_values->[1], 'HASH', '$unit_values->[1] is a HASH' );
-is( $unit_values->[1]->{type},     'AGATE',                  'type     is good' );
-is( $unit_values->[1]->{desc},     'Adobe Agates',           'desc     is good' );
-is( $unit_values->[1]->{value},    5.1428571,                'value    is good' );
-is( $unit_values->[1]->{selected}, 0,                        'selected is good' );
+is( $unit_values->[1]->{type},     'AGATE',        'type     is good' );
+is( $unit_values->[1]->{desc},     'Adobe Agates', 'desc     is good' );
+is( $unit_values->[1]->{value},    5.1428571,      'value    is good' );
+is( $unit_values->[1]->{selected}, 0,              'selected is good' );
 
 isa_ok( $unit_values->[2], 'HASH', '$unit_values->[2] is a HASH' );
-is( $unit_values->[2]->{type},     'INCH',                   'type     is good' );
-is( $unit_values->[2]->{desc},     'US Inches',              'desc     is good' );
-is( $unit_values->[2]->{value},    72,                       'value    is good' );
-is( $unit_values->[2]->{selected}, 0,                        'selected is good' );
+is( $unit_values->[2]->{type},     'INCH',      'type     is good' );
+is( $unit_values->[2]->{desc},     'US Inches', 'desc     is good' );
+is( $unit_values->[2]->{value},    72,          'value    is good' );
+is( $unit_values->[2]->{selected}, 0,           'selected is good' );
 
 isa_ok( $unit_values->[3], 'HASH', '$unit_values->[3] is a HASH' );
-is( $unit_values->[3]->{type},     'MM',                     'type     is good' );
-is( $unit_values->[3]->{desc},     'SI Millimeters',         'desc     is good' );
-is( $unit_values->[3]->{value},    2.83464567,               'value    is good' );
-is( $unit_values->[3]->{selected}, 0,                        'selected is good' );
+is( $unit_values->[3]->{type},     'MM',             'type     is good' );
+is( $unit_values->[3]->{desc},     'SI Millimeters', 'desc     is good' );
+is( $unit_values->[3]->{value},    2.83464567,       'value    is good' );
+is( $unit_values->[3]->{selected}, 0,                'selected is good' );
 
 isa_ok( $unit_values->[4], 'HASH', '$unit_values->[4] is a HASH' );
-is( $unit_values->[4]->{type},     'CM',                     'type     is good' );
-is( $unit_values->[4]->{desc},     'SI Centimeters',         'desc     is good' );
-is( $unit_values->[4]->{value},    28.3464567,               'value    is good' );
-is( $unit_values->[4]->{selected}, 0,                        'selected is good' );
+is( $unit_values->[4]->{type},     'CM',             'type     is good' );
+is( $unit_values->[4]->{desc},     'SI Centimeters', 'desc     is good' );
+is( $unit_values->[4]->{value},    28.3464567,       'value    is good' );
+is( $unit_values->[4]->{selected}, 0,                'selected is good' );
 
 # ---------- Testing get_output_formats -------------------
 my $output_formats = get_output_formats();
@@ -1281,12 +1329,13 @@ my $display_columns = [
 
 #without $data param ------------------
 my $db_rows = [];
-my $table = html_table( $display_columns, $db_rows );
+my $table   = html_table( $display_columns, $db_rows );
 is( $table, undef, 'No need to generate a table if there is not data to display' );
 
 #with $data param ---------------------
 $db_rows = [
-    {   _label_number => 1,
+    {
+        _label_number => 1,
         _summary      => $summary1,
         _item_type    => 'Book',
         _barcode      => $barcode1,
@@ -1304,40 +1353,40 @@ isa_ok( $table->[0]->{header_fields}, 'ARRAY', '$table->[0]->{header_fields} is 
 is( scalar( @{ $table->[0]->{header_fields} } ), 6, 'There are 7 header_fields' );
 
 my $field_value = $display_columns->[0]->{_label_number}->{label};
-is( $table->[0]->{header_fields}->[0]->{hidden},       0,                '[Label Number]   hidden        field is good' );
-is( $table->[0]->{header_fields}->[0]->{select_field}, 0,                '[Label Number]   select_field  field is good' );
-is( $table->[0]->{header_fields}->[0]->{field_name},   '_label_number',  '[Label Number]   field_name    field is good' );
-is( $table->[0]->{header_fields}->[0]->{field_label},  $field_value,     '[Label Number]   field_label   field is good' );
+is( $table->[0]->{header_fields}->[0]->{hidden},       0,              '[Label Number]   hidden        field is good' );
+is( $table->[0]->{header_fields}->[0]->{select_field}, 0,              '[Label Number]   select_field  field is good' );
+is( $table->[0]->{header_fields}->[0]->{field_name},  '_label_number', '[Label Number]   field_name    field is good' );
+is( $table->[0]->{header_fields}->[0]->{field_label}, $field_value,    '[Label Number]   field_label   field is good' );
 
 $field_value = $display_columns->[1]->{_summary}->{label};
-is( $table->[0]->{header_fields}->[1]->{hidden},       0,                '[Summary]        hidden        field is good' );
-is( $table->[0]->{header_fields}->[1]->{select_field}, 0,                '[Summary]        select_field  field is good' );
-is( $table->[0]->{header_fields}->[1]->{field_name},   '_summary',       '[Summary]        field_name    field is good' );
-is( $table->[0]->{header_fields}->[1]->{field_label},  $field_value,     '[Summary]        field_label   field is good' );
+is( $table->[0]->{header_fields}->[1]->{hidden},       0,            '[Summary]        hidden        field is good' );
+is( $table->[0]->{header_fields}->[1]->{select_field}, 0,            '[Summary]        select_field  field is good' );
+is( $table->[0]->{header_fields}->[1]->{field_name},   '_summary',   '[Summary]        field_name    field is good' );
+is( $table->[0]->{header_fields}->[1]->{field_label},  $field_value, '[Summary]        field_label   field is good' );
 
 $field_value = $display_columns->[2]->{_item_type}->{label};
-is( $table->[0]->{header_fields}->[2]->{hidden},       0,                '[Item Type]      hidden        field is good' );
-is( $table->[0]->{header_fields}->[2]->{select_field}, 0,                '[Item Type]      select_field  field is good' );
-is( $table->[0]->{header_fields}->[2]->{field_name},   '_item_type',     '[Item Type]      field_name    field is good' );
-is( $table->[0]->{header_fields}->[2]->{field_label},  $field_value,     '[Item Type]      field_label   field is good' );
+is( $table->[0]->{header_fields}->[2]->{hidden},       0,            '[Item Type]      hidden        field is good' );
+is( $table->[0]->{header_fields}->[2]->{select_field}, 0,            '[Item Type]      select_field  field is good' );
+is( $table->[0]->{header_fields}->[2]->{field_name},   '_item_type', '[Item Type]      field_name    field is good' );
+is( $table->[0]->{header_fields}->[2]->{field_label},  $field_value, '[Item Type]      field_label   field is good' );
 
 $field_value = $display_columns->[3]->{_barcode}->{label};
-is( $table->[0]->{header_fields}->[3]->{hidden},       0,                '[Barcode]        hidden        field is good' );
-is( $table->[0]->{header_fields}->[3]->{select_field}, 0,                '[Barcode]        select_field  field is good' );
-is( $table->[0]->{header_fields}->[3]->{field_name},   '_barcode',       '[Barcode]        field_name    field is good' );
-is( $table->[0]->{header_fields}->[3]->{field_label},  $field_value,     '[Barcode]        field_label   field is good' );
+is( $table->[0]->{header_fields}->[3]->{hidden},       0,            '[Barcode]        hidden        field is good' );
+is( $table->[0]->{header_fields}->[3]->{select_field}, 0,            '[Barcode]        select_field  field is good' );
+is( $table->[0]->{header_fields}->[3]->{field_name},   '_barcode',   '[Barcode]        field_name    field is good' );
+is( $table->[0]->{header_fields}->[3]->{field_label},  $field_value, '[Barcode]        field_label   field is good' );
 
 $field_value = $display_columns->[4]->{_template_code}->{label};
-is( $table->[0]->{header_fields}->[4]->{hidden},       0,                '[Template Code]  hidden        field is good' );
-is( $table->[0]->{header_fields}->[4]->{select_field}, 0,                '[Template Code]  select_field  field is good' );
-is( $table->[0]->{header_fields}->[4]->{field_name},   '_template_code', '[Template Code]  field_name    field is good' );
-is( $table->[0]->{header_fields}->[4]->{field_label},  $field_value,     '[Template Code]  field_label   field is good' );
+is( $table->[0]->{header_fields}->[4]->{hidden},       0,              '[Template Code]  hidden        field is good' );
+is( $table->[0]->{header_fields}->[4]->{select_field}, 0,              '[Template Code]  select_field  field is good' );
+is( $table->[0]->{header_fields}->[4]->{field_name}, '_template_code', '[Template Code]  field_name    field is good' );
+is( $table->[0]->{header_fields}->[4]->{field_label}, $field_value,    '[Template Code]  field_label   field is good' );
 
 $field_value = $display_columns->[5]->{select}->{label};
-is( $table->[0]->{header_fields}->[5]->{hidden},       0,                '[Select]         hidden        field is good' );
-is( $table->[0]->{header_fields}->[5]->{select_field}, 0,                '[Select]         select_field  field is good' );
-is( $table->[0]->{header_fields}->[5]->{field_name},   'select',         '[Select]         field_name    field is good' );
-is( $table->[0]->{header_fields}->[5]->{field_label},  $field_value,     '[Select]         field_label   field is good' );
+is( $table->[0]->{header_fields}->[5]->{hidden},       0,            '[Select]         hidden        field is good' );
+is( $table->[0]->{header_fields}->[5]->{select_field}, 0,            '[Select]         select_field  field is good' );
+is( $table->[0]->{header_fields}->[5]->{field_name},   'select',     '[Select]         field_name    field is good' );
+is( $table->[0]->{header_fields}->[5]->{field_label},  $field_value, '[Select]         field_label   field is good' );
 
 #POPULATE TABLE
 isa_ok( $table->[1]->{text_fields}, 'ARRAY', '$table->[0]->{text_fields} is an ARRAY' );
@@ -1347,38 +1396,38 @@ is( scalar( @{ $table->[1]->{text_fields} } ), 6, 'There are 6 text_fields' );
 my $link_field = $display_columns->[0]->{_label_number}->{link_field};
 my $field_name = "$table->[0]->{header_fields}->[0]->{field_name}_tbl";
 $field_value = $db_rows->[0]->{_label_number};
-is( $table->[1]->{text_fields}->[0]->{hidden},       0,               '[Label Number]   hidden        field is good' );
-is( $table->[1]->{text_fields}->[0]->{link_field},   $link_field,     '[Label Number]   link_field    field is good' );
-is( $table->[1]->{text_fields}->[0]->{select_field}, 0,               '[Label Number]   select_field  field is good' );
-is( $table->[1]->{text_fields}->[0]->{field_name},   $field_name,     '[Label Number]   field_name    field is good' );
-is( $table->[1]->{text_fields}->[0]->{field_value},  $field_value,    '[Label Number]   field_value   field is good' );
+is( $table->[1]->{text_fields}->[0]->{hidden},       0,            '[Label Number]   hidden        field is good' );
+is( $table->[1]->{text_fields}->[0]->{link_field},   $link_field,  '[Label Number]   link_field    field is good' );
+is( $table->[1]->{text_fields}->[0]->{select_field}, 0,            '[Label Number]   select_field  field is good' );
+is( $table->[1]->{text_fields}->[0]->{field_name},   $field_name,  '[Label Number]   field_name    field is good' );
+is( $table->[1]->{text_fields}->[0]->{field_value},  $field_value, '[Label Number]   field_value   field is good' );
 
 $link_field  = $display_columns->[1]->{_summary}->{link_field};
 $field_value = $db_rows->[0]->{_summary};
 $field_name  = "$table->[0]->{header_fields}->[1]->{field_name}_tbl";
-is( $table->[1]->{text_fields}->[1]->{hidden},       0,               '[Summary]        hidden        field is good' );
-is( $table->[1]->{text_fields}->[1]->{link_field},   $link_field,     '[Summary]        link_field    field is good' );
-is( $table->[1]->{text_fields}->[1]->{select_field}, 0,               '[Summary]        select_field  field is good' );
-is( $table->[1]->{text_fields}->[1]->{field_name},   $field_name,     '[Summary]        field_name    field is good' );
-is( $table->[1]->{text_fields}->[1]->{field_value},  $field_value,    '[Summary]        field_value   field is good' );
+is( $table->[1]->{text_fields}->[1]->{hidden},       0,            '[Summary]        hidden        field is good' );
+is( $table->[1]->{text_fields}->[1]->{link_field},   $link_field,  '[Summary]        link_field    field is good' );
+is( $table->[1]->{text_fields}->[1]->{select_field}, 0,            '[Summary]        select_field  field is good' );
+is( $table->[1]->{text_fields}->[1]->{field_name},   $field_name,  '[Summary]        field_name    field is good' );
+is( $table->[1]->{text_fields}->[1]->{field_value},  $field_value, '[Summary]        field_value   field is good' );
 
 $link_field  = $display_columns->[2]->{_item_type}->{link_field};
 $field_name  = "$table->[0]->{header_fields}->[2]->{field_name}_tbl";
 $field_value = $db_rows->[0]->{_item_type};
-is( $table->[1]->{text_fields}->[2]->{hidden},       0,               '[Item Type]      hidden        field is good' );
-is( $table->[1]->{text_fields}->[2]->{link_field},   $link_field,     '[Item Type]      link_field    field is good' );
-is( $table->[1]->{text_fields}->[2]->{select_field}, 0,               '[Item Type]      select_field  field is good' );
-is( $table->[1]->{text_fields}->[2]->{field_name},   $field_name,     '[Item Type]      field_name    field is good' );
-is( $table->[1]->{text_fields}->[2]->{field_value},  $field_value,    '[Item Type]      field_value   field is good' );
+is( $table->[1]->{text_fields}->[2]->{hidden},       0,            '[Item Type]      hidden        field is good' );
+is( $table->[1]->{text_fields}->[2]->{link_field},   $link_field,  '[Item Type]      link_field    field is good' );
+is( $table->[1]->{text_fields}->[2]->{select_field}, 0,            '[Item Type]      select_field  field is good' );
+is( $table->[1]->{text_fields}->[2]->{field_name},   $field_name,  '[Item Type]      field_name    field is good' );
+is( $table->[1]->{text_fields}->[2]->{field_value},  $field_value, '[Item Type]      field_value   field is good' );
 
 $link_field  = $display_columns->[3]->{_barcode}->{link_field};
 $field_name  = "$table->[0]->{header_fields}->[3]->{field_name}_tbl";
 $field_value = $db_rows->[0]->{_barcode};
-is( $table->[1]->{text_fields}->[3]->{hidden},       0,               '[Barcode]        hidden        field is good' );
-is( $table->[1]->{text_fields}->[3]->{link_field},   $link_field,     '[Barcode]        link_field    field is good' );
-is( $table->[1]->{text_fields}->[3]->{select_field}, 0,               '[Barcode]        select_field  field is good' );
-is( $table->[1]->{text_fields}->[3]->{field_name},   $field_name,     '[Barcode]        field_name    field is good' );
-is( $table->[1]->{text_fields}->[3]->{field_value},  $field_value,    '[Barcode]        field_value   field is good' );
+is( $table->[1]->{text_fields}->[3]->{hidden},       0,            '[Barcode]        hidden        field is good' );
+is( $table->[1]->{text_fields}->[3]->{link_field},   $link_field,  '[Barcode]        link_field    field is good' );
+is( $table->[1]->{text_fields}->[3]->{select_field}, 0,            '[Barcode]        select_field  field is good' );
+is( $table->[1]->{text_fields}->[3]->{field_name},   $field_name,  '[Barcode]        field_name    field is good' );
+is( $table->[1]->{text_fields}->[3]->{field_value},  $field_value, '[Barcode]        field_value   field is good' );
 
 #test : elsif ($table_column =~ m/^_((.*)_(.*$))/)
 $link_field = $display_columns->[4]->{_template_code}->{link_field};
@@ -1391,10 +1440,10 @@ is( $table->[1]->{text_fields}->[4]->{field_value},  $template_code1, '[Template
 
 #test : elsif ($table_column eq 'select')
 $field_value = $db_rows->[0]->{_label_id};
-is( $table->[1]->{text_fields}->[5]->{hidden},       0,               '[Select]         hidden        field is good' );
-is( $table->[1]->{text_fields}->[5]->{select_field}, 1,               '[Select]         select_field  field is good' );
-is( $table->[1]->{text_fields}->[5]->{field_name},   'select',        '[Select]         field_name    field is good' );
-is( $table->[1]->{text_fields}->[5]->{field_value},  $field_value,    '[Select]         field_value   field is good' );
+is( $table->[1]->{text_fields}->[5]->{hidden},       0,            '[Select]         hidden        field is good' );
+is( $table->[1]->{text_fields}->[5]->{select_field}, 1,            '[Select]         select_field  field is good' );
+is( $table->[1]->{text_fields}->[5]->{field_name},   'select',     '[Select]         field_name    field is good' );
+is( $table->[1]->{text_fields}->[5]->{field_value},  $field_value, '[Select]         field_value   field is good' );
 
 # ---------- Testing _SELECT ---------------------------
 # Mocking $sth->err and $sth->errstr
@@ -1403,8 +1452,9 @@ is( $table->[1]->{text_fields}->[5]->{field_value},  $field_value,    '[Select] 
     $dbi_st->mock( 'err',    sub { return 1; } );
     $dbi_st->mock( 'errstr', sub { return 'something went wrong'; } );
     my $records;
-    warning_is { $records = C4::Creators::Lib::_SELECT( '*', 'borrowers', "borrowernumber = $borrowernumber1" ) } 'Database returned the following error: something went wrong',
-      '_SELECT raises warning if something went wrong with the sql request execution';
+    warning_is { $records = C4::Creators::Lib::_SELECT( '*', 'borrowers', "borrowernumber = $borrowernumber1" ) }
+    'Database returned the following error: something went wrong',
+        '_SELECT raises warning if something went wrong with the sql request execution';
 
     is( $records, 1, '$record return 1' );
 }
@@ -1437,7 +1487,10 @@ is( $records->[2]->{branchcode},   $branchcode,   'branchcode   is good' );
 is( $records->[2]->{categorycode}, $categorycode, 'categorycode is good' );
 
 #with $params[2] ----------------------
-$records = C4::Creators::Lib::_SELECT( 'surname, firstname, cardnumber, branchcode, categorycode', 'borrowers', "borrowernumber = $borrowernumber1" );
+$records = C4::Creators::Lib::_SELECT(
+    'surname, firstname, cardnumber, branchcode, categorycode', 'borrowers',
+    "borrowernumber = $borrowernumber1"
+);
 
 is( @$records, 1, 'There is 1 borrower where borrowernumber = $borrowernumber1' );
 isa_ok( $records, 'ARRAY', '$records is an ARRAY' );
@@ -1451,11 +1504,17 @@ is( $records->[0]->{categorycode}, $categorycode, 'categorycode is good' );
 
 subtest '_add_backtics' => sub {
     plan tests => 7;
-    my @a = ( 'rows', 'rows ', ' rows ', 'table.rows,field2', 'table.field1, table.field_2_a', 'table1.*, *', 'COUNT(id) AS mycount, count(*) as mycount2' );
-    my @a_exp = ( '`rows`', '`rows` ', ' `rows` ', '`table`.`rows`,`field2`', '`table`.`field1`, `table`.`field_2_a`', '`table1`.*, *', 'COUNT(`id`) AS `mycount`, COUNT(*) AS `mycount2`' ); # expected results
+    my @a = (
+        'rows', 'rows ', ' rows ', 'table.rows,field2', 'table.field1, table.field_2_a', 'table1.*, *',
+        'COUNT(id) AS mycount, count(*) as mycount2'
+    );
+    my @a_exp = (
+        '`rows`',        '`rows` ', ' `rows` ', '`table`.`rows`,`field2`', '`table`.`field1`, `table`.`field_2_a`',
+        '`table1`.*, *', 'COUNT(`id`) AS `mycount`, COUNT(*) AS `mycount2`'
+    );    # expected results
     my @b = C4::Creators::Lib::_add_backtics(@a);
-    while( my $f = shift @a_exp ) {
-        is( shift @b, $f, (shift @a). ' became '. $f );
+    while ( my $f = shift @a_exp ) {
+        is( shift @b, $f, ( shift @a ) . ' became ' . $f );
     }
 };
 

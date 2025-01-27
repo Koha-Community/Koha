@@ -23,7 +23,7 @@ use Carp;
 use Koha::Exceptions::MarcOverlayRule;
 use Try::Tiny;
 use Scalar::Util qw(looks_like_number);
-use Clone qw(clone);
+use Clone        qw(clone);
 
 use parent qw(Koha::Objects);
 
@@ -44,7 +44,7 @@ Returns a list of all valid operations.
 =cut
 
 sub operations {
-    return ('add', 'append', 'remove', 'delete');
+    return ( 'add', 'append', 'remove', 'delete' );
 }
 
 =head3 modules
@@ -199,7 +199,7 @@ C<$merged_record> are all MARC::Record objects.
 =cut
 
 sub merge_records {
-    my ($self, $old_record, $incoming_record, $context) = @_;
+    my ( $self, $old_record, $incoming_record, $context ) = @_;
 
     my $rules = $self->context_rules($context);
 
@@ -209,80 +209,78 @@ sub merge_records {
     my $fields_by_tag = sub {
         my ($record) = @_;
         my $fields = {};
-        foreach my $field ($record->fields()) {
-            $fields->{$field->tag()} //= [];
-            push @{$fields->{$field->tag()}}, $field;
+        foreach my $field ( $record->fields() ) {
+            $fields->{ $field->tag() } //= [];
+            push @{ $fields->{ $field->tag() } }, $field;
         }
         return $fields;
     };
 
     my $hash_field_data = sub {
         my ($field) = @_;
-        my $indicators = join("\x1E", map { $field->indicator($_) } (1, 2));
-        return $indicators . "\x1E" . join("\x1E", sort map { join "\x1E", @{$_} } $field->subfields());
+        my $indicators = join( "\x1E", map { $field->indicator($_) } ( 1, 2 ) );
+        return $indicators . "\x1E" . join( "\x1E", sort map { join "\x1E", @{$_} } $field->subfields() );
     };
 
     my $diff_by_key = sub {
-        my ($a, $b) = @_;
+        my ( $a, $b ) = @_;
         my @removed;
         my @intersecting;
         my @added;
-        my %keys_index = map { $_ => undef } (keys %{$a}, keys %{$b});
-        foreach my $key (keys %keys_index) {
-            if ($a->{$key} && $b->{$key}) {
-                push @intersecting, [$a->{$key}, $b->{$key}];
-            }
-            elsif ($a->{$key}) {
+        my %keys_index = map { $_ => undef } ( keys %{$a}, keys %{$b} );
+        foreach my $key ( keys %keys_index ) {
+            if ( $a->{$key} && $b->{$key} ) {
+                push @intersecting, [ $a->{$key}, $b->{$key} ];
+            } elsif ( $a->{$key} ) {
                 push @removed, $a->{$key};
-            }
-            else {
+            } else {
                 push @added, $b->{$key};
             }
         }
-        return (\@removed, \@intersecting, \@added);
+        return ( \@removed, \@intersecting, \@added );
     };
 
-    my $tag_rules = $rules->{tags} // {};
-    my $default_rule = $rules->{'*'} // {
-        add => { allow => 1, 'rule' => 0},
-        append => { allow => 1, 'rule' => 0},
-        delete => { allow => 1, 'rule' => 0},
-        remove => { allow => 1, 'rule' => 0},
+    my $tag_rules    = $rules->{tags} // {};
+    my $default_rule = $rules->{'*'}  // {
+        add    => { allow => 1, 'rule' => 0 },
+        append => { allow => 1, 'rule' => 0 },
+        delete => { allow => 1, 'rule' => 0 },
+        remove => { allow => 1, 'rule' => 0 },
     };
 
     # Precompile regexps
-    my @regexp_rules = map { { regexp => qr/^$_->[0]$/, actions => $_->[1] } } @{$rules->{regexps} // []};
+    my @regexp_rules = map { { regexp => qr/^$_->[0]$/, actions => $_->[1] } } @{ $rules->{regexps} // [] };
 
     my $get_matching_field_rule = sub {
         my ($tag) = @_;
+
         # Exact match takes precedence, then regexp, then wildcard/defaults
-        return $tag_rules->{$tag} //
-            %{(first { $tag =~ $_->{regexp} } @regexp_rules) // {}}{actions} //
-            $default_rule;
+        return $tag_rules->{$tag} // %{ ( first { $tag =~ $_->{regexp} } @regexp_rules ) // {} }{actions}
+            // $default_rule;
     };
 
     my %merged_record_fields;
 
-    my $current_fields = $fields_by_tag->($old_record);
+    my $current_fields  = $fields_by_tag->($old_record);
     my $incoming_fields = $fields_by_tag->($incoming_record);
 
     # First we get all new incoming fields
-    my @new_field_tags = grep { !(exists $current_fields->{$_}) } keys %{$incoming_fields};
+    my @new_field_tags = grep { !( exists $current_fields->{$_} ) } keys %{$incoming_fields};
     foreach my $tag (@new_field_tags) {
         my $rule = $get_matching_field_rule->($tag);
-        if ($rule->{add}->{allow}) {
+        if ( $rule->{add}->{allow} ) {
             $merged_record_fields{$tag} //= [];
-            push @{$merged_record_fields{$tag}}, @{$incoming_fields->{$tag}};
+            push @{ $merged_record_fields{$tag} }, @{ $incoming_fields->{$tag} };
         }
     }
 
     # Then we get all fields no longer present in incoming fields
-    my @deleted_field_tags = grep { !(exists $incoming_fields->{$_}) } keys %{$current_fields};
+    my @deleted_field_tags = grep { !( exists $incoming_fields->{$_} ) } keys %{$current_fields};
     foreach my $tag (@deleted_field_tags) {
         my $rule = $get_matching_field_rule->($tag);
-        if (!$rule->{delete}->{allow}) {
+        if ( !$rule->{delete}->{allow} ) {
             $merged_record_fields{$tag} //= [];
-            push @{$merged_record_fields{$tag}}, @{$current_fields->{$tag}};
+            push @{ $merged_record_fields{$tag} }, @{ $current_fields->{$tag} };
         }
     }
 
@@ -293,82 +291,86 @@ sub merge_records {
         my $rule = $get_matching_field_rule->($tag);
 
         # Special handling for control fields
-        if ($tag < 10) {
-            if (
-                $rule->{append}->{allow} &&
-                !$rule->{remove}->{allow}
-            ) {
+        if ( $tag < 10 ) {
+            if ( $rule->{append}->{allow}
+                && !$rule->{remove}->{allow} )
+            {
                 # This should be highly unlikely since we have input validation to protect against this case
-                carp "Allowing \"append\" and skipping \"remove\" is not permitted for control fields, falling back to skipping both \"append\" and \"remove\"";
-                push @{$merged_record_fields{$tag}}, @{$current_fields->{$tag}};
+                carp
+                    "Allowing \"append\" and skipping \"remove\" is not permitted for control fields, falling back to skipping both \"append\" and \"remove\"";
+                push @{ $merged_record_fields{$tag} }, @{ $current_fields->{$tag} };
+            } elsif ( $rule->{append}->{allow} ) {
+                push @{ $merged_record_fields{$tag} }, @{ $incoming_fields->{$tag} };
+            } else {
+                push @{ $merged_record_fields{$tag} }, @{ $current_fields->{$tag} };
             }
-            elsif ($rule->{append}->{allow}) {
-                push @{$merged_record_fields{$tag}}, @{$incoming_fields->{$tag}};
-            }
-            else {
-                push @{$merged_record_fields{$tag}}, @{$current_fields->{$tag}};
-            }
-        }
-        else {
+        } else {
+
             # Compute intersection and diff using field data
             my $sort_weight = 0;
-            my %current_fields_by_data = map { $hash_field_data->($_) => [$sort_weight++, $_] } @{$current_fields->{$tag}};
+            my %current_fields_by_data =
+                map { $hash_field_data->($_) => [ $sort_weight++, $_ ] } @{ $current_fields->{$tag} };
 
             # Always put incoming fields after current fields
-            my %incoming_fields_by_data = map { $hash_field_data->($_) => [$sort_weight++, $_] } @{$incoming_fields->{$tag}};
+            my %incoming_fields_by_data =
+                map { $hash_field_data->($_) => [ $sort_weight++, $_ ] } @{ $incoming_fields->{$tag} };
 
-            my ($current_fields_only, $common_fields, $incoming_fields_only) = $diff_by_key->(\%current_fields_by_data, \%incoming_fields_by_data);
+            my ( $current_fields_only, $common_fields, $incoming_fields_only ) =
+                $diff_by_key->( \%current_fields_by_data, \%incoming_fields_by_data );
 
             my @merged_fields;
 
             # First add common fields (intersection)
             # Unchanged
-            if (@{$common_fields}) {
-                if(
-                    $rule->{delete}->{allow} &&
-                    $rule->{add}->{allow} && (
-                        @{$common_fields} == 1 || (
-                            $rule->{append}->{allow} &&
-                            $rule->{remove}->{allow}
-                        )
+            if ( @{$common_fields} ) {
+                if (
+                       $rule->{delete}->{allow}
+                    && $rule->{add}->{allow}
+                    && (
+                        @{$common_fields} == 1
+                        || (   $rule->{append}->{allow}
+                            && $rule->{remove}->{allow} )
                     )
-                ) {
+                    )
+                {
                     # If overwritable apply possible subfield order
                     # changes from incoming fields
                     push @merged_fields, map { $_->[1] } @{$common_fields};
-                }
-                else {
+                } else {
+
                     # else keep existing subfield order
                     push @merged_fields, map { $_->[0] } @{$common_fields};
                 }
             }
+
             # Removed
-            if (@{$current_fields_only}) {
-                if (!$rule->{remove}->{allow}) {
+            if ( @{$current_fields_only} ) {
+                if ( !$rule->{remove}->{allow} ) {
                     push @merged_fields, @{$current_fields_only};
                 }
             }
+
             # Appended
-            if (@{$incoming_fields_only}) {
-                if ($rule->{append}->{allow}) {
+            if ( @{$incoming_fields_only} ) {
+                if ( $rule->{append}->{allow} ) {
                     push @merged_fields, @{$incoming_fields_only};
                 }
             }
             $merged_record_fields{$tag} //= [];
 
             # Sort ascending according to weight (original order)
-            push @{$merged_record_fields{$tag}}, map { $_->[1] } sort { $a->[0] <=> $b->[0] } @merged_fields;
+            push @{ $merged_record_fields{$tag} }, map { $_->[1] } sort { $a->[0] <=> $b->[0] } @merged_fields;
         }
     }
 
     my $merged_record = MARC::Record->new();
 
     # Leader is always overwritten, or kept???
-    $merged_record->leader($incoming_record->leader());
+    $merged_record->leader( $incoming_record->leader() );
 
     if (%merged_record_fields) {
-        foreach my $tag (sort keys %merged_record_fields) {
-            $merged_record->append_fields(@{$merged_record_fields{$tag}});
+        foreach my $tag ( sort keys %merged_record_fields ) {
+            $merged_record->append_fields( @{ $merged_record_fields{$tag} } );
         }
     }
     return $merged_record;
@@ -426,27 +428,24 @@ combination of actions for control fields. Otherwise returns true.
 =cut
 
 sub validate {
-    my ($self, $rule_data) = @_;
+    my ( $self, $rule_data ) = @_;
 
-    if(exists $rule_data->{tag}) {
-        if ($rule_data->{tag} ne '*') {
+    if ( exists $rule_data->{tag} ) {
+        if ( $rule_data->{tag} ne '*' ) {
             eval { qr/$rule_data->{tag}/ };
             if ($@) {
-                Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp->throw(
-                    "Invalid tag regular expression"
-                );
+                Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp->throw("Invalid tag regular expression");
             }
         }
+
         # TODO: Regexp or '*' that match controlfield not currently detected
-        if (
-            looks_like_number($rule_data->{tag}) &&
-            $rule_data->{tag} < 10 &&
-            $rule_data->{append} &&
-            !$rule_data->{remove}
-        ) {
+        if (   looks_like_number( $rule_data->{tag} )
+            && $rule_data->{tag} < 10
+            && $rule_data->{append}
+            && !$rule_data->{remove} )
+        {
             Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions->throw(
-                "Combination of allow append and skip remove not permitted for control fields"
-            );
+                "Combination of allow append and skip remove not permitted for control fields");
         }
     }
     return 1;

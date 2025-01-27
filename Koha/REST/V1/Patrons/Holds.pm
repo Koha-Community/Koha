@@ -48,17 +48,16 @@ sub list {
 
     return try {
         my $holds_set =
-            $old
+              $old
             ? $patron->old_holds
             : $patron->holds;
 
-        my $holds = $c->objects->search( $holds_set );
+        my $holds = $c->objects->search($holds_set);
         return $c->render( status => 200, openapi => $holds );
     } catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 delete_public
 

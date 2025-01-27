@@ -9,125 +9,129 @@
 [% PROCESS 'authorities-search-results.inc' %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Results") | html %] &rsaquo;
-    [% t("Authority search") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Results") | html %]
+        &rsaquo; [% t("Authority search") | html %] &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-authoritiesresultlist' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Results</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Results</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+            <div class="[% column_class | html %]">
+                <div id="userauthsearchresults" class="maincontent">
+                    <h1>Authority search results</h1>
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                [% END %]
-                <div class="[% column_class | html %]">
-                    <div id="userauthsearchresults" class="maincontent">
-                        <h1>Authority search results</h1>
-
-                        [% IF total %]
-                            <div class="pages">[% pagination_bar | $raw %]</div>
-                        [% END %]
-                        <div id="results">
-                            [% IF ( total ) %]
-                                [% IF ( countfuzzy ) %]
-                                    <p><strong>Showing [% resultcount | html %] of about [% total | html %] results</strong></p>
-                                [% ELSE %]
-                                    <p><strong>Results [% from | html %] to [% to | html %] of [% total | html %]</strong></p>
-                                [% END %]
-                            [% ELSE %]
-                                No results found.
-                            [% END %]
-                        </div>
-
+                    [% IF total %]
+                        <div class="pages">[% pagination_bar | $raw %]</div>
+                    [% END %]
+                    <div id="results">
                         [% IF ( total ) %]
-                            <div class="searchresults">
-                                <table class="table table-bordered table-striped">
-                                    <caption class="sr-only">Authority search results</caption>
-                                    <thead>
+                            [% IF ( countfuzzy ) %]
+                                <p><strong>Showing [% resultcount | html %] of about [% total | html %] results</strong></p>
+                            [% ELSE %]
+                                <p><strong>Results [% from | html %] to [% to | html %] of [% total | html %]</strong></p>
+                            [% END %]
+                        [% ELSE %]
+                            No results found.
+                        [% END %]
+                    </div>
+
+                    [% IF ( total ) %]
+                        <div class="searchresults">
+                            <table class="table table-bordered table-striped">
+                                <caption class="sr-only">Authority search results</caption>
+                                <thead>
+                                    <tr>
+                                        <th>Authorized headings</th>
+                                        <th></th>
+                                        <th>Type of heading</th>
+                                        [% UNLESS ( isEDITORS ) %]
+                                            <th>Records</th>
+                                        [% END %]
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH resul IN result %]
                                         <tr>
-                                            <th>Authorized headings</th>
-                                            <th></th>
-                                            <th>Type of heading</th>
-                                            [% UNLESS ( isEDITORS ) %]
-                                                <th>Records</th>
-                                            [% END %]
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH resul IN result %]
-                                            <tr>
+                                            <td>
+                                                [% IF resul.html %]
+                                                    [% resul.html | $raw %]
+                                                [% ELSE %]
+                                                    [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+                                                [% END %]
+                                            </td>
+                                            <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | uri %]">Details</a> </td><td>[% resul.authtype | html %]</td>
+                                            [% UNLESS ( resul.isEDITORS ) %]
                                                 <td>
-                                                    [% IF resul.html %]
-                                                        [% resul.html | $raw %]
+                                                    [% IF resul.used > 0 %]
+                                                        <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an,phr:[% resul.authid | uri %]">[% resul.used | html %] [% tn('record', 'records', resul.used ) | html %]</a>
                                                     [% ELSE %]
-                                                        [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+                                                        0 records
                                                     [% END %]
                                                 </td>
-                                                <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | uri %]">Details</a>
-                                                <td>[% resul.authtype | html %]</td>
-                                                [% UNLESS ( resul.isEDITORS ) %]
-                                                    <td>
-                                                         [% IF resul.used > 0 %]
-                                                            <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an,phr:[% resul.authid | uri %]">[% resul.used | html %] [% tn('record', 'records', resul.used ) | html %]</a>
-                                                        [% ELSE %]
-                                                            0 records
-                                                        [% END %]
-                                                    </td>
-                                                [% END %]
-                                                <td></td>
-                                            </tr>
-                                        [% END %]
-                                    </tbody>
-                                </table>
-                            </div> <!-- / .searchresults -->
+                                            [% END %]
+                                            <td></td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- / .searchresults -->
 
-                            <div class="pages">[% pagination_bar | $raw %]</div>
-
-                        [% END # / IF total %]
-                    </div> <!-- / #userauthsearchresults -->
-                </div> <!-- / .col-lg-10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                        <div class="pages">[% pagination_bar | $raw %]</div>
+                    [% END # / IF total %]
+                </div>
+                <!-- / #userauthsearchresults -->
+            </div>
+            <!-- / .col-lg-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/JavaScript">
-        $(document).ready(function(){
-            $('.table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "searching": false,
-                "paging": false,
-                "info": false,
-                "responsive": {
-                    "details": { "type": 'column',"target": -1 }
-                },
-                "columnDefs": [
-                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
-                ],
-            }));
+        $(document).ready(function () {
+            $(".table").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    searching: false,
+                    paging: false,
+                    info: false,
+                    responsive: {
+                        details: { type: "column", target: -1 },
+                    },
+                    columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
+                })
+            );
         });
     </script>
 [% END %]

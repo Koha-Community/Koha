@@ -21,7 +21,7 @@ use Koha::Patrons;
 use Koha::Patron::Messages;
 use t::lib::TestBuilder;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
@@ -29,22 +29,27 @@ my $builder = t::lib::TestBuilder->new;
 subtest 'Delete a patron having messages' => sub {
     plan tests => 2;
 
-    my $patron = $builder->build({ source => 'Borrower' });
-    my $message = $builder->build({
-        source => 'Message',
-        value => {
-            borrowernumber => $patron->{borrowernumber},
-            message => 'This is a message.'
+    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $message = $builder->build(
+        {
+            source => 'Message',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                message        => 'This is a message.'
+            }
         }
-    });
+    );
 
-    is(Koha::Patron::Messages->find($message->{message_id})->message, 'This is a message.', 'Got the right message');
+    is(
+        Koha::Patron::Messages->find( $message->{message_id} )->message, 'This is a message.',
+        'Got the right message'
+    );
 
     my $patron_to_delete = Koha::Patrons->find( $patron->{borrowernumber} );
     $patron_to_delete->move_to_deleted;
     $patron_to_delete->delete;
 
-    is(Koha::Patron::Messages->find($message->{message_id}), undef, 'Message is deleted');
+    is( Koha::Patron::Messages->find( $message->{message_id} ), undef, 'Message is deleted' );
 };
 
 $schema->storage->txn_rollback;

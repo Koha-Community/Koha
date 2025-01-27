@@ -17,7 +17,6 @@ package Koha::Item::Transfer;
 
 use Modern::Perl;
 
-
 use C4::Items qw( CartToShelf ModDateLastSeen );
 
 use Koha::Database;
@@ -92,16 +91,16 @@ reindex.
 =cut
 
 sub transit {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     # Throw exception if item is still checked out
     Koha::Exceptions::Item::Transfer::OnLoan->throw() if ( $self->item->checkout );
 
     # Remove the 'shelving cart' location status if it is being used (Bug 3701)
     CartToShelf( $self->item->itemnumber )
-      if $self->item->location
-      && $self->item->location eq 'CART'
-      && (!$self->item->permanent_location
+        if $self->item->location
+        && $self->item->location eq 'CART'
+        && ( !$self->item->permanent_location
         || $self->item->permanent_location ne 'CART' );
 
     # Update the transit state
@@ -126,9 +125,7 @@ Boolean returning whether the transfer is in transit or waiting
 sub in_transit {
     my ($self) = @_;
 
-    return ( defined( $self->datesent )
-          && !defined( $self->datearrived )
-          && !defined( $self->datecancelled ) );
+    return ( defined( $self->datesent ) && !defined( $self->datearrived ) && !defined( $self->datecancelled ) );
 }
 
 =head3 receive
@@ -141,10 +138,10 @@ sub receive {
     my ($self) = @_;
 
     # Throw exception if item is checked out
-    Koha::Exceptions::Item::Transfer::OnLoan->throw() if ($self->item->checkout);
+    Koha::Exceptions::Item::Transfer::OnLoan->throw() if ( $self->item->checkout );
 
     # Update the arrived date
-    $self->set({ datearrived => dt_from_string })->store;
+    $self->set( { datearrived => dt_from_string } )->store;
 
     ModDateLastSeen( $self->item->itemnumber );
     return $self;
@@ -161,21 +158,17 @@ Cancel the transfer by setting the datecancelled time and recording the reason.
 sub cancel {
     my ( $self, $params ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw(
-        error => "The 'reason' parameter is mandatory" )
-      unless defined($params->{reason});
+    Koha::Exceptions::MissingParameter->throw( error => "The 'reason' parameter is mandatory" )
+        unless defined( $params->{reason} );
 
     # Throw exception if item is in transit already
     Koha::Exceptions::Item::Transfer::InTransit->throw() if ( !$params->{force} && $self->in_transit );
 
     # Update the cancelled date
-    $self->set(
-        { datecancelled => dt_from_string, cancellation_reason => $params->{reason} } )
-      ->store;
+    $self->set( { datecancelled => dt_from_string, cancellation_reason => $params->{reason} } )->store;
 
     return $self;
 }
-
 
 =head3 strings_map
 

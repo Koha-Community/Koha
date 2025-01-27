@@ -8,16 +8,20 @@
             <form action="#" id="overdrive-login-form">
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
-                        <fieldset class="brief">
-                            <label for="ODpassword">Password:</label>
-                            <input type="password" name="ODpassword" id="ODpassword" value="" autocomplete="off" />
-                        </fieldset>
+                    <fieldset class="brief">
+                        <label for="ODpassword">Password:</label>
+                        <input type="password" name="ODpassword" id="ODpassword" value="" autocomplete="off" />
+                    </fieldset>
                 </div>
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-primary overdrive-checkout-submit" value="Login" />
                     <button type="button" data-bs-dismiss="modal" class="btn btn-default">Cancel</button>
                 </div>
-            </form> <!-- /#overdrive-login-form -->
-        </div> <!-- /.modal-content -->
-    </div> <!-- /.modal-dialog -->
-</div>  <!-- /#overdrive-login  -->
+            </form>
+            <!-- /#overdrive-login-form -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#overdrive-login  -->

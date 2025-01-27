@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -32,10 +32,10 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $function_name = $params->{id};
 
-    my $res  = <<END_OF_JS;
+    my $res = <<END_OF_JS;
 <script>
 /* from: cataloguing/value_builder/dateaccessioned.pl */
 

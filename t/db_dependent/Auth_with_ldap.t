@@ -64,7 +64,7 @@ my $desired_admin_bind_result     = 'error';
 my $desired_search_result         = 'error';
 my $desired_count_result          = 1;
 my $desired_bind_result           = 'error';
-my $remaining_entry = 1;
+my $remaining_entry               = 1;
 my $ret;
 
 # Mock the context module
@@ -81,8 +81,8 @@ $net_ldap->mock(
 
             # We were asked to fail the LDAP conexion
             return;
-        }
-        else {
+        } else {
+
             # Return a mocked Net::LDAP object (Test::MockObject)
             return mock_net_ldap();
         }
@@ -94,17 +94,13 @@ my $branchcode   = $builder->build( { source => 'Branch' } )->{branchcode};
 my $attr_type    = $builder->build(
     {
         source => 'BorrowerAttributeType',
-        value  => {
-            category_code => $categorycode
-        }
+        value  => { category_code => $categorycode }
     }
 );
-my $attr_type2    = $builder->build(
+my $attr_type2 = $builder->build(
     {
         source => 'BorrowerAttributeType',
-        value  => {
-            category_code => $categorycode
-        }
+        value  => { category_code => $categorycode }
     }
 );
 
@@ -130,14 +126,14 @@ $builder->build(
     }
 );
 
-my $patron = Koha::Patrons->find($borrower->{borrowernumber});
+my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
 
 # C4::Auth_with_ldap needs several stuff set first ^^^
-use_ok('C4::Auth_with_ldap', qw( checkpw_ldap ));
+use_ok( 'C4::Auth_with_ldap', qw( checkpw_ldap ) );
 can_ok(
     'C4::Auth_with_ldap', qw/
-      checkpw_ldap
-      search_method /
+        checkpw_ldap
+        search_method /
 );
 
 subtest 'checkpw_ldap tests' => sub {
@@ -147,11 +143,10 @@ subtest 'checkpw_ldap tests' => sub {
     ## Connection fail tests
     $desired_connection_result = 'error';
     warning_is {
-        $ret =
-          C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' );
+        $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' );
     }
     'LDAP connexion failed',
-      'checkpw_ldap prints correct warning if LDAP conexion fails';
+        'checkpw_ldap prints correct warning if LDAP conexion fails';
     is( $ret, 0, 'checkpw_ldap returns 0 if LDAP conexion fails' );
 
     ## Connection success tests
@@ -165,37 +160,41 @@ subtest 'checkpw_ldap tests' => sub {
 
         $desired_authentication_result = 'success';
         $anonymous_bind                = 1;
-        $desired_admin_bind_result   = 'error';
+        $desired_admin_bind_result     = 'error';
         $desired_search_result         = 'error';
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
         qr/Anonymous LDAP bind failed: LDAP error #1: error_name/,
-          'checkpw_ldap prints correct warning if LDAP anonymous bind fails';
+            'checkpw_ldap prints correct warning if LDAP anonymous bind fails';
         is( $ret, 0, 'checkpw_ldap returns 0 if LDAP anonymous bind fails' );
 
         $anonymous_bind = 0;
-        $user = undef;
-        $pass = undef;
+        $user           = undef;
+        $pass           = undef;
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
         qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
-          'checkpw_ldap prints correct warning if LDAP bind_by_auth fails';
+            'checkpw_ldap prints correct warning if LDAP bind_by_auth fails';
         is( $ret, 0, 'checkpw_ldap returns 0 if LDAP bind_by_auth fails' );
 
         $desired_authentication_result = 'success';
         $anonymous_bind                = 1;
-        $desired_admin_bind_result   = 'success';
+        $desired_admin_bind_result     = 'success';
         $desired_search_result         = 'success';
         $desired_count_result          = 1;
-        $desired_bind_result = 'success';
+        $desired_bind_result           = 'success';
         $update                        = 1;
         reload_ldap_module();
 
@@ -210,15 +209,13 @@ subtest 'checkpw_ldap tests' => sub {
         $auth->mock(
             'ldap_entry_2_hash',
             sub {
-                return (
-                    $attr_type2->{code}, 'BAR'
-                );
+                return ( $attr_type2->{code}, 'BAR' );
             }
         );
 
         C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' );
         ok(
-            Koha::Patrons->find($borrower->{borrowernumber})->extended_attributes->count,
+            Koha::Patrons->find( $borrower->{borrowernumber} )->extended_attributes->count,
             'Extended attributes are not deleted'
         );
 
@@ -264,10 +261,11 @@ subtest 'checkpw_ldap tests' => sub {
         is( $patrons->count, 1, 'New patron added with "replicate"' );
 
         $patron = $patrons->next;
-        my $queued_notices = Koha::Notice::Messages->search(
-            { borrowernumber => $patron->borrowernumber } );
-        is( $queued_notices->count, 1,
-            "One notice queued when `welcome` is set" );
+        my $queued_notices = Koha::Notice::Messages->search( { borrowernumber => $patron->borrowernumber } );
+        is(
+            $queued_notices->count, 1,
+            "One notice queued when `welcome` is set"
+        );
 
         my $THE_notice = $queued_notices->next;
         is( $THE_notice->status, 'failed', "The notice was sent immediately" );
@@ -288,6 +286,7 @@ subtest 'checkpw_ldap tests' => sub {
         $patron_replicated_from_auth->delete;
 
         $auth->unmock('ldap_entry_2_hash');
+
         # end replicate testing
 
         $desired_count_result = 0;
@@ -295,31 +294,39 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
         qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
-          'checkpw_ldap prints correct warning if LDAP bind fails';
-        is( $ret, -1,
-            'checkpw_ldap returns -1 LDAP bind fails for user (Bug 8148)' );
+            'checkpw_ldap prints correct warning if LDAP bind fails';
+        is(
+            $ret, -1,
+            'checkpw_ldap returns -1 LDAP bind fails for user (Bug 8148)'
+        );
 
         # regression tests for bug 12831
         $desired_authentication_result = 'error';
         $anonymous_bind                = 0;
-        $desired_admin_bind_result   = 'error';
+        $desired_admin_bind_result     = 'error';
         $desired_search_result         = 'success';
         $desired_count_result          = 0;           # user auth problem
-        $desired_bind_result = 'error';
+        $desired_bind_result           = 'error';
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
         qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
-          'checkpw_ldap prints correct warning if LDAP bind fails';
-        is( $ret, 0,
-            'checkpw_ldap returns 0 LDAP bind fails for user (Bug 12831)' );
+            'checkpw_ldap prints correct warning if LDAP bind fails';
+        is(
+            $ret, 0,
+            'checkpw_ldap returns 0 LDAP bind fails for user (Bug 12831)'
+        );
 
     };
 
@@ -338,53 +345,61 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
-qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: error_name/,
-          'checkpw_ldap prints correct warning if LDAP bind fails';
+        qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: error_name/,
+            'checkpw_ldap prints correct warning if LDAP bind fails';
         is( $ret, 0, 'checkpw_ldap returns 0 if bind fails' );
 
         $anonymous_bind            = 1;
         $desired_admin_bind_result = 'success';
-        $desired_bind_result = 'error';
-        $desired_search_result = 'success';
-        $desired_count_result = 1;
+        $desired_bind_result       = 'error';
+        $desired_search_result     = 'success';
+        $desired_count_result      = 1;
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
-qr/LDAP Auth rejected : invalid password for user 'hola'./,
-          'checkpw_ldap prints correct warning if LDAP bind fails';
+        qr/LDAP Auth rejected : invalid password for user 'hola'./,
+            'checkpw_ldap prints correct warning if LDAP bind fails';
         is( $ret, -1, 'checkpw_ldap returns -1 if bind fails (Bug 8148)' );
 
         # Non-anonymous bind
         $anonymous_bind            = 0;
         $desired_admin_bind_result = 'error';
-        $desired_bind_result = 'error';
+        $desired_bind_result       = 'error';
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
-qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: error_name/,
-          'checkpw_ldap prints correct warning if LDAP bind fails';
+        qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: error_name/,
+            'checkpw_ldap prints correct warning if LDAP bind fails';
         is( $ret, 0, 'checkpw_ldap returns 0 if bind fails' );
 
         $anonymous_bind            = 0;
         $desired_admin_bind_result = 'success';
-        $desired_bind_result = 'error';
+        $desired_bind_result       = 'error';
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
-                password => 'hey' );
+            $ret = C4::Auth_with_ldap::checkpw_ldap(
+                'hola',
+                password => 'hey'
+            );
         }
-qr/LDAP Auth rejected : invalid password for user 'hola'./,
-          'checkpw_ldap prints correct warning if LDAP bind fails';
+        qr/LDAP Auth rejected : invalid password for user 'hola'./,
+            'checkpw_ldap prints correct warning if LDAP bind fails';
         is( $ret, -1, 'checkpw_ldap returns -1 if bind fails (Bug 8148)' );
 
     };
@@ -492,20 +507,23 @@ subtest 'search_method tests' => sub {
     my $ldap = mock_net_ldap();
 
     # Null params tests
-    is( C4::Auth_with_ldap::search_method( $ldap, undef ),
-        undef, 'search_method returns undef on undefined userid' );
-    is( C4::Auth_with_ldap::search_method( undef, 'undef' ),
-        undef, 'search_method returns undef on undefined ldap object' );
+    is(
+        C4::Auth_with_ldap::search_method( $ldap, undef ),
+        undef, 'search_method returns undef on undefined userid'
+    );
+    is(
+        C4::Auth_with_ldap::search_method( undef, 'undef' ),
+        undef, 'search_method returns undef on undefined ldap object'
+    );
 
     # search ->code and !->code
     $desired_search_result = 'error';
     reload_ldap_module();
-    my $eval_retval =
-      eval { $ret = C4::Auth_with_ldap::search_method( $ldap, 'undef' ); };
+    my $eval_retval = eval { $ret = C4::Auth_with_ldap::search_method( $ldap, 'undef' ); };
     like(
         $@,
         qr/LDAP search failed to return object : 1/,
-'search_method prints correct warning when db->search returns error code'
+        'search_method prints correct warning when db->search returns error code'
     );
 };
 
@@ -557,7 +575,7 @@ sub mockedC4Config {
         return $class->{$param};
     }
 
-    return C4::Context::_common_config($param, 'config');
+    return C4::Context::_common_config( $param, 'config' );
 }
 
 # Function that mocks the call to Net::LDAP
@@ -565,22 +583,24 @@ sub mock_net_ldap {
 
     my $mocked_ldap = Test::MockObject->new();
 
-    $mocked_ldap->mock( 'bind', sub {
-        if (is_admin_bind(@_)) {
-            return mock_net_ldap_message(
-                ($desired_admin_bind_result eq 'error' ) ? 1 : 0, # code
-                ($desired_admin_bind_result eq 'error' ) ? 1 : 0, # error
-                ($desired_admin_bind_result eq 'error' ) ? 'error_name' : 0, # error_name
-                ($desired_admin_bind_result eq 'error' ) ? 'error_text' : 0  # error_text
-            );
-        }
-        else {
-            if ( $desired_bind_result eq 'error' ) {
-                return mock_net_ldap_message(1,1,'error_name','error_text');
+    $mocked_ldap->mock(
+        'bind',
+        sub {
+            if ( is_admin_bind(@_) ) {
+                return mock_net_ldap_message(
+                    ( $desired_admin_bind_result eq 'error' ) ? 1            : 0,    # code
+                    ( $desired_admin_bind_result eq 'error' ) ? 1            : 0,    # error
+                    ( $desired_admin_bind_result eq 'error' ) ? 'error_name' : 0,    # error_name
+                    ( $desired_admin_bind_result eq 'error' ) ? 'error_text' : 0     # error_text
+                );
+            } else {
+                if ( $desired_bind_result eq 'error' ) {
+                    return mock_net_ldap_message( 1, 1, 'error_name', 'error_text' );
+                }
+                return mock_net_ldap_message( 0, 0, '', '' );
             }
-            return mock_net_ldap_message(0,0,'','');
         }
-    });
+    );
 
     $mocked_ldap->mock(
         'search',
@@ -596,7 +616,8 @@ sub mock_net_ldap {
                     code => ( $desired_search_result eq 'error' )
                     ? 1
                     : 0,    # 0 == success
-                    error => ( $desired_search_result eq 'error' ) ? 1
+                    error => ( $desired_search_result eq 'error' )
+                    ? 1
                     : 0,
                     error_text => ( $desired_search_result eq 'error' )
                     ? 'error_text'
@@ -625,18 +646,21 @@ sub mock_net_ldap_search {
     my $shift_entry = $parameters->{shift_entry};
 
     my $mocked_search = Test::MockObject->new();
-    $mocked_search->mock( 'count',       sub { return $count; } );
-    $mocked_search->mock( 'code',        sub { return $code; } );
-    $mocked_search->mock( 'error',       sub { return $error; } );
-    $mocked_search->mock( 'error_name',  sub { return $error_name; } );
-    $mocked_search->mock( 'error_text',  sub { return $error_text; } );
-    $mocked_search->mock( 'shift_entry', sub {
-        if ($remaining_entry) {
-            $remaining_entry--;
-            return $shift_entry;
+    $mocked_search->mock( 'count',      sub { return $count; } );
+    $mocked_search->mock( 'code',       sub { return $code; } );
+    $mocked_search->mock( 'error',      sub { return $error; } );
+    $mocked_search->mock( 'error_name', sub { return $error_name; } );
+    $mocked_search->mock( 'error_text', sub { return $error_text; } );
+    $mocked_search->mock(
+        'shift_entry',
+        sub {
+            if ($remaining_entry) {
+                $remaining_entry--;
+                return $shift_entry;
+            }
+            return '';
         }
-        return '';
-    });
+    );
 
     return $mocked_search;
 }
@@ -676,7 +700,7 @@ sub reload_ldap_module {
 sub is_admin_bind {
     my @args = @_;
 
-    if ($#args <= 1 || $args[1] eq 'cn=Manager,dc=metavore,dc=com') {
+    if ( $#args <= 1 || $args[1] eq 'cn=Manager,dc=metavore,dc=com' ) {
         return 1;
     }
 

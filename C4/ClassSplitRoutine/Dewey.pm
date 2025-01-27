@@ -40,11 +40,10 @@ my $cn_split = C4::ClassSplitRoutine::Dewey::split_callnumber($cn_item);
 sub split_callnumber {
     my ($cn_item) = @_;
 
-    my $possible_decimal =
-      qr/\d{3,}(?:\.\d+)?/;    # at least three digits for a DDCN
+    my $possible_decimal = qr/\d{3,}(?:\.\d+)?/;    # at least three digits for a DDCN
 
     $cn_item =~ s/\///g
-      ; # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
+        ; # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
     my (@lines) = $cn_item =~ m/
         ^([-a-zA-Z]*\s?(?:$possible_decimal)?) # R220.3  CD-ROM 787.87 # will require extra splitting
         \s+
@@ -57,13 +56,12 @@ sub split_callnumber {
     }
 
     if ( $lines[0] =~ /^([-a-zA-Z]+)\s?($possible_decimal)$/ ) {
-        shift @lines;    # pull off the mathching first element, like example 1
+        shift @lines;              # pull off the mathching first element, like example 1
         unshift @lines, $1, $2;    # replace it with the two pieces
     }
 
     push @lines, split /\s+/,
-      pop @lines
-      ;    # split the last piece into an arbitrary number of pieces at spaces
+        pop @lines;                # split the last piece into an arbitrary number of pieces at spaces
     return @lines;
 }
 

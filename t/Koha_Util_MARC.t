@@ -27,16 +27,16 @@ use Test::More tests => 4;
 use MARC::Record;
 
 BEGIN {
-        use_ok('Koha::Util::MARC');
+    use_ok('Koha::Util::MARC');
 }
 
 my $marcrecord = MARC::Record->new;
 
 $marcrecord->add_fields(
-        [ '001', '1234' ],
-        [ '150', ' ', ' ', a => 'Cooking' ],
-        [ '450', ' ', ' ', a => 'Cookery', z => 'Instructional manuals' ],
-        );
+    [ '001', '1234' ],
+    [ '150', ' ', ' ', a => 'Cooking' ],
+    [ '450', ' ', ' ', a => 'Cookery', z => 'Instructional manuals' ],
+);
 my $samplehash = [
     {
         'value' => '1234',
@@ -73,16 +73,19 @@ my $samplehash = [
 my $hash = Koha::Util::MARC::createMergeHash($marcrecord);
 my %fieldkeys;
 foreach my $field (@$hash) {
-    $fieldkeys{delete $field->{'key'}}++;
-    if (defined $field->{'subfield'}) {
-        foreach my $subfield (@{$field->{'subfield'}}) {
-            $fieldkeys{delete $subfield->{'subkey'}}++;
+    $fieldkeys{ delete $field->{'key'} }++;
+    if ( defined $field->{'subfield'} ) {
+        foreach my $subfield ( @{ $field->{'subfield'} } ) {
+            $fieldkeys{ delete $subfield->{'subkey'} }++;
         }
     }
 }
 
-is_deeply($hash, $samplehash, 'Generated hash correctly');
+is_deeply( $hash, $samplehash, 'Generated hash correctly' );
 my $dupkeys = grep { $_ > 1 } values %fieldkeys;
-is($dupkeys, 0, 'No duplicate keys');
+is( $dupkeys, 0, 'No duplicate keys' );
 
-is(Koha::Util::MARC::getAuthorityAuthorizedHeading($marcrecord, 'marc21'), 'Cooking', 'Routine for retrieving authorized heading works');
+is(
+    Koha::Util::MARC::getAuthorityAuthorizedHeading( $marcrecord, 'marc21' ), 'Cooking',
+    'Routine for retrieving authorized heading works'
+);

@@ -2,11 +2,12 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Plugins disabled") | html %] &rsaquo;
-    [% t("Plugins") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Plugins disabled") | html %]
+        &rsaquo; [% t("Plugins") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 </head>
@@ -16,29 +17,30 @@
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Plugins disabled</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Plugins disabled</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6 offset-sm-3">
-                [% IF ( plugins_restricted.defined ) && ( plugins_restricted == 1 ) %]
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            [% IF ( plugins_restricted.defined ) && ( plugins_restricted == 1 ) %]
                 <h1>Plugin upload is restricted to only those plugins listed by your server administrator</h1>
                 <p>To enable unrestricted plugin uploads, ask your administrator to unset plugins_restricted in the Koha configuration file</p>
-                [% ELSE %]
+            [% ELSE %]
                 <h1>Plugins disabled</h1>
                 <p>To enable Koha plugins, the flag enable_plugins must be set in the Koha configuration file</p>
-                [% END %]
-            </div>
+            [% END %]
         </div>
-    </div> <!-- /.container-fluid -->
+    </div>
+</div>
+<!-- /.container-fluid -->
 
 [% INCLUDE 'intranet-bottom.inc' %]

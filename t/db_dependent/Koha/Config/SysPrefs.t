@@ -30,13 +30,15 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 my $nb_of_prefs = Koha::Config::SysPrefs->search->count;
-my $new_pref = Koha::Config::SysPref->new({
-    variable => 'ShouldNotBeDone',
-    value    => 'but a good test?',
-    options  => undef,
-    explanation => 'just for CRUD sake',
-    type     => 'Free'
-})->store;
+my $new_pref    = Koha::Config::SysPref->new(
+    {
+        variable    => 'ShouldNotBeDone',
+        value       => 'but a good test?',
+        options     => undef,
+        explanation => 'just for CRUD sake',
+        type        => 'Free'
+    }
+)->store;
 
 is( Koha::Config::SysPrefs->search->count, $nb_of_prefs + 1, 'The 1 pref should have been added' );
 my $retrieved_pref = Koha::Config::SysPrefs->find('ShouldNotBeDone');

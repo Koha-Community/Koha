@@ -3,48 +3,51 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( opsearch ) %]
-        [% t("Order from external source") | html %]
-    [% ELSE %]
-        [% t("Search results") | html %] &rsaquo;
-        [% t("Order from external source") | html %]
-        [% t("Acquisitions") | html %] &rsaquo;
-    [% END %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( opsearch ) %]
+            [% t("Order from external source") | html %]
+        [% ELSE %]
+            [% t("Search results") | html %]
+            &rsaquo; [% t("Order from external source") | html %]
+            [% t("Acquisitions") | html %]
+            &rsaquo;
+        [% END %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 
 [% INCLUDE 'doc-head-close.inc' %]
 [% USE Koha %]
 
 <style>
-tr.selected {
-    background-color : #FFFFCC;
-}
-
-tr.selected td {
-    background-color : transparent !important;
-}
-
-#dataPreview {
-    width : 90%;
-    top: 5%;
-}
-
-#dataPreview pre {
-    overflow: unset;
-}
-
-.modal-body {
-    max-height: 380px;
-}
-
-@media (max-width: 767px) {
-    #dataPreview {
-        margin: 0;
-        width : auto;
+    tr.selected {
+        background-color: #ffffcc;
     }
-}
+
+    tr.selected td {
+        background-color: transparent !important;
+    }
+
+    #dataPreview {
+        width: 90%;
+        top: 5%;
+    }
+
+    #dataPreview pre {
+        overflow: unset;
+    }
+
+    .modal-body {
+        max-height: 380px;
+    }
+
+    @media (max-width: 767px) {
+        #dataPreview {
+            margin: 0;
+            width: auto;
+        }
+    }
 </style>
 </head>
 
@@ -81,227 +84,245 @@ tr.selected td {
 
 <div class="main container-fluid">
     [% INCLUDE 'messages.inc' %]
-      [% IF ( opsearch ) %]
-    <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
-        [% INCLUDE 'csrf-token.inc' %]
-    <div class="row">
-    <div class="col-sm-6">
-    <h1>Order from external source</h1>
-    <input type="hidden" name="op" id="op" value="cud-do_search" />
-	    <fieldset class="rows">
-         <ol>
-             <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn | html %]" /></li>
-             <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn | html %]" /></li>
-             <li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title | html %]" class="focus" /></li>
-             <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author | html %]" /></li>
-             <li><label for="publicationyear">Publication year: </label> <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" /></li>
-            <li>
-                <label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="[% subject | html %]" />
-            </li>
-            <li>
-                <label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="[% srchany | html %]" />
-            </li>
-            <li>
-                <label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="[% lccall | html %]" />
-            </li>
-            <li>
-                <label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
-            </li>
-            <li>
-                <label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="[% dewey | html %]" />
-            </li>
-            <li>
-                <label for="stdid">Standard ID: </label> <input type="text" id="stdid" name="stdid" value="[% stdid | html %]" />
-            </li>
-            <li>
-             <label for="frameworkcode" >Select MARC framework:</label>
-             <select id="frameworkcode" name="frameworkcode" >
-             <option value="">Default</option>
-                 [% FOREACH framework IN frameworks %]
-                    <option value="[% framework.frameworkcode | html %]" >[% framework.frameworktext | html %]</option>
-                 [% END %]
-              </select>
-              </li>
-              <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash-can"></i> Clear search form</a></li>
-         </ol>
-    </fieldset>
-    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-    <input type="hidden" name="basketno" value="[% basketno | html %]" />
-    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-    </div> <!-- /.col-sm-6 -->
-<div class="col-sm-6">
-<h2>Search targets</h2>
-    <div id="z3950_search_targets_acq" class="page-section">
-        <span class="z3950checks"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span></span>
-    [% FOREACH serverloo IN serverloop %]
-        <p>
-            [% IF ( serverloo.checked ) %]
-                <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" checked="checked" />
-            [% ELSE %]
-                <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" />
-            [% END %]
-            <label for="z3950_[% serverloo.id | html %]">[% serverloo.servername | html %] [[% serverloo.host | html %]]</label>
-
-        </p>
-    [% END %]
-    </div> <!-- /#z3950_search-targets_acq -->
-  </div> <!-- /.col-sm-6 -->
-</div> <!-- /.row -->
-
-<div class="row">
-    <div class="col-md-12">
-        <fieldset class="action">
-            <input type="submit" id="submit_z3950_search" class="btn btn-primary" value="Search" />
-            <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Cancel</a>
-        </fieldset>
-    </div>
-</div>
-</form>
-
-
-[% ELSE %]
-    <div class="row">
-    <div class="col-md-12">
-    <h2>Search results</h2>
-
-    <p>You searched for:
-        [% IF ( title ) %]<em>Title: </em><span class=term>[% title | html %]</span> [% END %]
-        [% IF ( author ) %]<em>Author: </em><span class=term>[% author | html %]</span> [% END %]
-        [% IF ( publicationyear ) %]<em>Publication year: </em><span class=term>[% publicationyear | html %]</span> [% END %]
-        [% IF ( isbn ) %]<em>ISBN: </em><span class=term>[% isbn | html %]</span> [% END %]
-        [% IF ( issn ) %]<em>ISSN: </em><span class=term>[% issn | html %]</span> [% END %]
-        [% IF ( lccall ) %]<em>LC call number: </em><span class=term>[% lccall | html %]</span> [% END %]
-        [% IF ( subject ) %]<em>Subject heading: </em><span class=term>[% subject | html %]</span> [% END %]
-        [% IF ( controlnumber ) %]<em>Control no: </em><span class=term>[% controlnumber | html %]</span> [% END %]
-        [% IF ( dewey ) %]<em>Dewey: </em><span class=term>[% dewey | html %]</span> [%END %]
-    </p>
-
-    [% IF ( breeding_loop ) %]
-    <table id="resultst">
-    <thead><tr>
-        <th>Server</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Year</th>
-        <th>Edition</th>
-        <th>ISBN</th>
-        <th>LCCN</th>
-        [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' ) %]
-            <th>Additional fields</th>
-        [% END %]
-        <th>Actions</th>
-    </tr></thead>
-    <tbody>[% FOREACH breeding_loo IN breeding_loop %]
-        [% IF ( breeding_loo.breedingid ) %]
-
-        <tr>
-            <td>[% breeding_loo.server | html %]</td>
-            <td>[% breeding_loo.title | html %]</td>
-            <td>[% breeding_loo.author | html %]</td>
-            <td>[% breeding_loo.date | html %]</td>
-            <td>[% breeding_loo.edition | html %]</td>
-            <td>[% breeding_loo.isbn | html %]</td>
-            <td>[% breeding_loo.lccn | html %]</td>
-            [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' ) %]
-            <td>
-                <dl>
-                  [% FOREACH addnumberfield IN breeding_loo.addnumberfields %]
-                    [% FOREACH string IN breeding_loo.$addnumberfield %]
-                        <dt>[% addnumberfield | html %]:</dt>
-                        <dd>[% string | html %]</dd>
-                    [% END %]
-                  [% END %]
-               </dl>
-            </td>
-            [% END %]
-            <td class="actions">
-                <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a>
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="z3950preview[% breeding_loo.breedingid | html %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData dropdown-item" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC</a></li>
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData dropdown-item" data-action="show_card"><i class="fa-solid fa-eye"></i> Card</a></li>
-                        <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="chosen dropdown-item" title="[% tp('verb', 'Order') | html %]" data-action="order"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a></li>
-                    </ul>
+    [% IF ( opsearch ) %]
+        <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
+            [% INCLUDE 'csrf-token.inc' %]
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1>Order from external source</h1>
+                    <input type="hidden" name="op" id="op" value="cud-do_search" />
+                    <fieldset class="rows">
+                        <ol>
+                            <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn | html %]" /></li>
+                            <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn | html %]" /></li>
+                            <li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle" name="title" value="[% title | html %]" class="focus" /></li>
+                            <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author | html %]" /></li>
+                            <li><label for="publicationyear">Publication year: </label> <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" /></li>
+                            <li> <label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="[% subject | html %]" /> </li>
+                            <li> <label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="[% srchany | html %]" /> </li>
+                            <li> <label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="[% lccall | html %]" /> </li>
+                            <li> <label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" /> </li>
+                            <li> <label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="[% dewey | html %]" /> </li>
+                            <li> <label for="stdid">Standard ID: </label> <input type="text" id="stdid" name="stdid" value="[% stdid | html %]" /> </li>
+                            <li>
+                                <label for="frameworkcode">Select MARC framework:</label>
+                                <select id="frameworkcode" name="frameworkcode">
+                                    <option value="">Default</option>
+                                    [% FOREACH framework IN frameworks %]
+                                        <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li
+                                ><a id="resetZ3950Search" href="#"><i class="fa fa-trash-can"></i> Clear search form</a></li
+                            >
+                        </ol>
+                    </fieldset>
+                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                    <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                 </div>
-            </td>
-        </tr>
-        [% END %]
-    [% END %]</tbody>
-</table>
-
-
-    <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="dataPreviewLabel">MARC preview</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- /.col-sm-6 -->
+                <div class="col-sm-6">
+                    <h2>Search targets</h2>
+                    <div id="z3950_search_targets_acq" class="page-section">
+                        <span class="z3950checks"
+                            ><span class="checkall"
+                                ><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span
+                            >
+                            |
+                            <span class="clearall"
+                                ><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span
+                            ></span
+                        >
+                        [% FOREACH serverloo IN serverloop %]
+                            <p>
+                                [% IF ( serverloo.checked ) %]
+                                    <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" checked="checked" />
+                                [% ELSE %]
+                                    <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" />
+                                [% END %]
+                                <label for="z3950_[% serverloo.id | html %]">[% serverloo.servername | html %] [[% serverloo.host | html %]]</label>
+                            </p>
+                        [% END %]
+                    </div>
+                    <!-- /#z3950_search-targets_acq -->
                 </div>
-                <div class="modal-body">
-                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                <!-- /.col-sm-6 -->
+            </div>
+            <!-- /.row -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <fieldset class="action">
+                        <input type="submit" id="submit_z3950_search" class="btn btn-primary" value="Search" />
+                        <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Cancel</a>
+                    </fieldset>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <form method="post" action="z3950_search.pl" id="page_form" name="page_form" class="checkboxed">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" id="op" value="cud-do_search" />
-        <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
-        <input type="hidden" id="searchtitle"  name="title" value="[% title | html %]" />
-        <input type="hidden" id="isbn" name="isbn" value="[% isbn | html %]" />
-        <input type="hidden" id="lccall" name="lccall" value="[% lccall | html %]" />
-        <input type="hidden" id="author" name="author" value="[% author | html %]" />
-        <input type="hidden" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" />
-        <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
-        <input type="hidden" id="dewey" name="dewey" value="[% dewey | html %]" />
-        <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
-        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-        <input type="hidden" name="controlnumber" value="[% controlnumber | html %]" />
-        <input type="hidden" name="basketno" value="[% basketno | html %]" />
-        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-
-        [% FOREACH server IN servers %]
-        <input type="hidden" name="id" id="z3950_[% server.id | html %]" value="[% server.id | html %]" />
-        [% END %]
-
-        [% IF ( show_prevbutton ) %]
-            <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page | html %]" />
-        [% END %]
-        Page [% current_page | html %] / [% total_pages | html %]
-        [% IF ( show_nextbutton ) %]
-            <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
-        [% END %]
-        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /> <input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
-    </form>
-
+        </form>
     [% ELSE %]
-        [% IF ( emptyserverlist ) %]
-            <div class="alert alert-warning">You didn't select any external target.</div>
-        [% ELSE %]
-            [% IF ( errconn ) %]
-                <div class="alert alert-warning">
-                    <ul>
-                    [% FOREACH errcon IN errconn %]
-                        <li>Connection failed to [% errcon.server | html %]</li>
-                    [% END %]
-                    </ul>
-                </div>
-            [% END %]
-        [% END %]
-        <div class="alert alert-info">Nothing found. <a href="javascript: history.back()">Try another search</a>.</div>
-    [% END %]
-    </div> <!-- /.col-md-12 -->
-    </div> <!-- /.row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Search results</h2>
 
-[% END %]
-</div> <!-- /.main.container-fluid -->
+                <p
+                    >You searched for: [% IF ( title ) %]<em>Title: </em><span class="term">[% title | html %]</span>[% END %]
+                    [% IF ( author ) %]<em>Author: </em><span class="term">[% author | html %]</span>[% END %]
+                    [% IF ( publicationyear ) %]<em>Publication year: </em><span class="term">[% publicationyear | html %]</span>[% END %]
+                    [% IF ( isbn ) %]<em>ISBN: </em><span class="term">[% isbn | html %]</span>[% END %]
+                    [% IF ( issn ) %]<em>ISSN: </em><span class="term">[% issn | html %]</span>[% END %]
+                    [% IF ( lccall ) %]<em>LC call number: </em><span class="term">[% lccall | html %]</span>[% END %]
+                    [% IF ( subject ) %]<em>Subject heading: </em><span class="term">[% subject | html %]</span>[% END %]
+                    [% IF ( controlnumber ) %]<em>Control no: </em><span class="term">[% controlnumber | html %]</span>[% END %]
+                    [% IF ( dewey ) %]<em>Dewey: </em><span class="term">[% dewey | html %]</span>[% END %]
+                </p>
+
+                [% IF ( breeding_loop ) %]
+                    <table id="resultst">
+                        <thead
+                            ><tr>
+                                <th>Server</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Year</th>
+                                <th>Edition</th>
+                                <th>ISBN</th>
+                                <th>LCCN</th>
+                                [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' ) %]
+                                    <th>Additional fields</th>
+                                [% END %]
+                                <th>Actions</th>
+                            </tr></thead
+                        >
+                        <tbody
+                            >[% FOREACH breeding_loo IN breeding_loop %]
+                                [% IF ( breeding_loo.breedingid ) %]
+                                    <tr>
+                                        <td>[% breeding_loo.server | html %]</td>
+                                        <td>[% breeding_loo.title | html %]</td>
+                                        <td>[% breeding_loo.author | html %]</td>
+                                        <td>[% breeding_loo.date | html %]</td>
+                                        <td>[% breeding_loo.edition | html %]</td>
+                                        <td>[% breeding_loo.isbn | html %]</td>
+                                        <td>[% breeding_loo.lccn | html %]</td>
+                                        [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' ) %]
+                                            <td>
+                                                <dl>
+                                                    [% FOREACH addnumberfield IN breeding_loo.addnumberfields %]
+                                                        [% FOREACH string IN breeding_loo.$addnumberfield %]
+                                                            <dt>[% addnumberfield | html %]:</dt>
+                                                            <dd>[% string | html %]</dd>
+                                                        [% END %]
+                                                    [% END %]
+                                                </dl>
+                                            </td>
+                                        [% END %]
+                                        <td class="actions">
+                                            <div class="btn-group dropup">
+                                                <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a>
+                                                <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <span class="visually-hidden">Toggle dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="z3950preview[% breeding_loo.breedingid | html %]">
+                                                    <li
+                                                        ><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData dropdown-item" data-action="show_marc"
+                                                            ><i class="fa-solid fa-eye"></i> MARC</a
+                                                        ></li
+                                                    >
+                                                    <li
+                                                        ><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData dropdown-item" data-action="show_card"
+                                                            ><i class="fa-solid fa-eye"></i> Card</a
+                                                        ></li
+                                                    >
+                                                    <li
+                                                        ><a
+                                                            href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]"
+                                                            class="chosen dropdown-item"
+                                                            title="[% tp('verb', 'Order') | html %]"
+                                                            data-action="order"
+                                                            ><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a
+                                                        ></li
+                                                    >
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            [% END %]</tbody
+                        >
+                    </table>
+
+                    <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="dataPreviewLabel">MARC preview</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" action="z3950_search.pl" id="page_form" name="page_form" class="checkboxed">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" id="op" value="cud-do_search" />
+                        <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
+                        <input type="hidden" id="searchtitle" name="title" value="[% title | html %]" />
+                        <input type="hidden" id="isbn" name="isbn" value="[% isbn | html %]" />
+                        <input type="hidden" id="lccall" name="lccall" value="[% lccall | html %]" />
+                        <input type="hidden" id="author" name="author" value="[% author | html %]" />
+                        <input type="hidden" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" />
+                        <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+                        <input type="hidden" id="dewey" name="dewey" value="[% dewey | html %]" />
+                        <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
+                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                        <input type="hidden" name="controlnumber" value="[% controlnumber | html %]" />
+                        <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+
+                        [% FOREACH server IN servers %]
+                            <input type="hidden" name="id" id="z3950_[% server.id | html %]" value="[% server.id | html %]" />
+                        [% END %]
+
+                        [% IF ( show_prevbutton ) %]
+                            <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page | html %]" />
+                        [% END %]
+                        Page [% current_page | html %] / [% total_pages | html %]
+                        [% IF ( show_nextbutton ) %]
+                            <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
+                        [% END %]
+                        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /> <input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
+                    </form>
+                [% ELSE %]
+                    [% IF ( emptyserverlist ) %]
+                        <div class="alert alert-warning">You didn't select any external target.</div>
+                    [% ELSE %]
+                        [% IF ( errconn ) %]
+                            <div class="alert alert-warning">
+                                <ul>
+                                    [% FOREACH errcon IN errconn %]
+                                        <li>Connection failed to [% errcon.server | html %]</li>
+                                    [% END %]
+                                </ul>
+                            </div>
+                        [% END %]
+                    [% END %]
+                    <div class="alert alert-info">Nothing found. <a href="javascript: history.back()">Try another search</a>.</div>
+                [% END %]
+            </div>
+            <!-- /.col-md-12 -->
+        </div>
+        <!-- /.row -->
+    [% END %]
+</div>
+<!-- /.main.container-fluid -->
 
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending | html %] servers to search</h3>[% END %]
 
@@ -311,17 +332,19 @@ tr.selected td {
     [% INCLUDE 'z3950_search.inc' %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
-        $(document).ready(function(){
-            var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1, -2 ], "orderable": false, "searchable":  false },
-                    { "targets": [ 1 ], "type": "nsb-nse" },
-                ],
-                "order": [[ 1, "asc" ]],
-                "paginate": false,
-                "searching": false,
-                "info": false
-            }));
+        $(document).ready(function () {
+            var resultst = $("#resultst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [
+                        { targets: [-1, -2], orderable: false, searchable: false },
+                        { targets: [1], type: "nsb-nse" },
+                    ],
+                    order: [[1, "asc"]],
+                    paginate: false,
+                    searching: false,
+                    info: false,
+                })
+            );
             InitLastAction();
         });
     </script>

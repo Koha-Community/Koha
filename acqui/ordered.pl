@@ -29,23 +29,23 @@ this script is to show orders ordered but not yet received
 
 use C4::Context;
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Acquisition::Invoice::Adjustments;
 use C4::Acquisition qw( get_rounded_price );
 
-my $dbh     = C4::Context->dbh;
-my $input   = CGI->new;
-my $fund_id = $input->param('fund');
+my $dbh       = C4::Context->dbh;
+my $input     = CGI->new;
+my $fund_id   = $input->param('fund');
 my $fund_code = $input->param('fund_code');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/ordered.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => '*' },
+        template_name => "acqui/ordered.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => '*' },
     }
 );
 
@@ -93,7 +93,7 @@ my @ordered;
 
 my $total = 0;
 while ( my $data = $sth->fetchrow_hashref ) {
-    $data->{'itemtypes'} = [split('\|', $data->{itypes})];
+    $data->{'itemtypes'} = [ split( '\|', $data->{itypes} ) ];
     my $left = $data->{'tleft'};
     if ( !$left || $left eq '' ) {
         $left = $data->{'quantity'};
@@ -101,23 +101,26 @@ while ( my $data = $sth->fetchrow_hashref ) {
     if ( $left && $left > 0 ) {
         my $subtotal = $left * get_rounded_price( $data->{$ecost_field} );
         $data->{subtotal} = sprintf( "%.2f", $subtotal );
-        $data->{'left'} = $left;
+        $data->{'left'}   = $left;
         push @ordered, $data;
         $total += $subtotal;
     }
 }
 
-my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $fund_id, closedate => undef, encumber_open => 1 }, { prefetch => 'invoiceid' } );
-while ( my $adj = $adjustments->next ){
+my $adjustments = Koha::Acquisition::Invoice::Adjustments->search(
+    { budget_id => $fund_id, closedate => undef, encumber_open => 1 },
+    { prefetch  => 'invoiceid' }
+);
+while ( my $adj = $adjustments->next ) {
     $total += $adj->adjustment;
 }
 
 $total = sprintf( "%.2f", $total );
 
-$template->{VARS}->{'fund'}    = $fund_id;
-$template->{VARS}->{'ordered'} = \@ordered;
-$template->{VARS}->{'total'}   = $total;
-$template->{VARS}->{'fund_code'} = $fund_code;
+$template->{VARS}->{'fund'}        = $fund_id;
+$template->{VARS}->{'ordered'}     = \@ordered;
+$template->{VARS}->{'total'}       = $total;
+$template->{VARS}->{'fund_code'}   = $fund_code;
 $template->{VARS}->{'adjustments'} = $adjustments;
 
 $sth->finish;

@@ -49,7 +49,8 @@
 [%- SET display_patron_name = 1 -%]
 [%- SET display_cardnumber = 1 -%]
 [%- IF no_cardnumber -%][%- SET display_cardnumber = 0 -%][%- END -%]
-[%- IF hide_patron_infos_if_needed -%] [%# Should only be set if patron is set -%]
+[%- IF hide_patron_infos_if_needed -%]
+    [%# Should only be set if patron is set -%]
     [%- SET can_see_patron_infos = logged_in_user.can_see_patron_infos( patron ) -%]
     [%- UNLESS can_see_patron_infos -%]
         [%- SET display_patron_name = 0 -%]
@@ -59,10 +60,14 @@
     [%- END -%]
 [%- END -%]
 [%- IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -%]
-    [%- IF link_to == 'circulation_reserves' -%]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[%- data.borrowernumber | uri -%]#reserves">[%- PROCESS display_patron_name -%]</a>
-    [%- ELSIF link_to == 'circulation_recalls' -%]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[%- data.borrowernumber | uri -%]#recalls">[%- PROCESS display_patron_name -%]</a>
-    [%- ELSIF link_to == 'members_pay' -%]<a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[%- patron.borrowernumber | uri -%]">[%- PROCESS display_patron_name -%]</a>
-    [%- ELSE -%]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[%- data.borrowernumber | uri -%]">[%- PROCESS display_patron_name -%]</a>
+    [%- IF link_to == 'circulation_reserves' -%]
+        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[%- data.borrowernumber | uri -%]#reserves">[%- PROCESS display_patron_name -%]</a>
+    [%- ELSIF link_to == 'circulation_recalls' -%]
+        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[%- data.borrowernumber | uri -%]#recalls">[%- PROCESS display_patron_name -%]</a>
+    [%- ELSIF link_to == 'members_pay' -%]
+        <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[%- patron.borrowernumber | uri -%]">[%- PROCESS display_patron_name -%]</a>
+    [%- ELSE -%]
+        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[%- data.borrowernumber | uri -%]">[%- PROCESS display_patron_name -%]</a>
     [%- END -%]
 [%- ELSE -%]
     [%- PROCESS display_patron_name -%]
@@ -70,15 +75,18 @@
 [%- BLOCK display_patron_name -%]
     [%- IF display_patron_name -%]
         [%- IF data.category_type == 'I' -%]
-            [%- data.surname | html -%] [%- IF data.othernames -%] ([%- data.othernames | html -%])[%- END -%]
+            [%- data.surname | html -%]
+            [%- IF data.othernames -%]([%- data.othernames | html -%])[%- END -%]
         [%- ELSIF invert_name -%]
-            [%- data.title | $raw -%][%- data.surname | html -%][%- IF ( data.preferred_name ) -%], [% data.preferred_name | html -%][%- END -%][%- IF data.middle_name -%] [% data.middle_name | html -%][%- END -%][%- IF data.othernames -%] ([%- data.othernames | html -%])[%- END -%]
+            [%- data.title | $raw -%][%- data.surname | html -%][%- IF ( data.preferred_name ) -%], [% data.preferred_name | html -%][%- END -%][%- IF data.middle_name -%][% data.middle_name | html -%][%- END -%][%- IF data.othernames -%]([%- data.othernames | html -%])[%- END -%]
         [%- ELSE -%]
-            [%- data.title | $raw -%][%- data.preferred_name | html %][%- IF data.middle_name -%] [% data.middle_name | html -%][%- END -%][%- IF data.othernames -%] ([%- data.othernames | html -%]) [%- END -%] [% data.surname | html -%]
+            [%- data.title | $raw -%][%- data.preferred_name | html %][%- IF data.middle_name -%][% data.middle_name | html -%][%- END -%][%- IF data.othernames -%]([%- data.othernames | html -%])[%- END -%]
+            [% data.surname | html -%]
         [%- END -%]
-        [%- IF display_cardnumber AND data.cardnumber -%] ([%- data.cardnumber | html -%])[%- END -%]
+        [%- IF display_cardnumber AND data.cardnumber -%]([%- data.cardnumber | html -%])[%- END -%]
     [%- ELSIF display_cardnumber -%]
-        [%- IF data.cardnumber -%][%# FIXME Cardnumber should always be defined, right? -%]
+        [%- IF data.cardnumber -%]
+            [%# FIXME Cardnumber should always be defined, right? -%]
             [%- data.cardnumber | html -%]
         [%- END -%]
     [%- ELSE -%]

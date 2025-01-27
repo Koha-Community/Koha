@@ -16,13 +16,13 @@ package Koha::UI::Form::Builder::Item;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use feature qw(fc);
+use feature    qw(fc);
 use List::Util qw( any );
 use MARC::Record;
 
 use C4::Context;
-use C4::Biblio qw( GetFrameworkCode GetMarcStructure IsMarcStructureInternal );
-use C4::Koha qw( GetAuthorisedValues );
+use C4::Biblio      qw( GetFrameworkCode GetMarcStructure IsMarcStructureInternal );
+use C4::Koha        qw( GetAuthorisedValues );
 use C4::ClassSource qw( GetClassSources );
 
 use Koha::Biblios;
@@ -56,13 +56,12 @@ For edition, an hashref representing the item to edit item must be passed.
 
 =cut
 
-
 sub new {
     my ( $class, $params ) = @_;
 
     my $self;
     $self->{biblionumber} = $params->{biblionumber};
-    $self->{item} = $params->{item};
+    $self->{item}         = $params->{item};
 
     bless $self, $class;
     return $self;
@@ -76,18 +75,18 @@ Generate subfield's info for given tag, subfieldtag, etc.
 
 sub generate_subfield_form {
 
-    my ($self, $params)    = @_;
-    my $tag         = $params->{tag};
-    my $subfieldtag = $params->{subfieldtag};
-    my $value       = $params->{value};
-    my $tagslib     = $params->{tagslib};
-    my $libraries   = $params->{libraries};
-    my $marc_record = $params->{marc_record};
-    my $restricted_edition = $params->{restricted_editition};
+    my ( $self, $params ) = @_;
+    my $tag                         = $params->{tag};
+    my $subfieldtag                 = $params->{subfieldtag};
+    my $value                       = $params->{value};
+    my $tagslib                     = $params->{tagslib};
+    my $libraries                   = $params->{libraries};
+    my $marc_record                 = $params->{marc_record};
+    my $restricted_edition          = $params->{restricted_editition};
     my $prefill_with_default_values = $params->{prefill_with_default_values};
-    my $branch_limit = $params->{branch_limit};
-    my $default_branches_empty = $params->{default_branches_empty};
-    my $readonly = $params->{readonly};
+    my $branch_limit                = $params->{branch_limit};
+    my $default_branches_empty      = $params->{default_branches_empty};
+    my $readonly                    = $params->{readonly};
 
     my $item         = $self->{item};
     my $subfield     = $tagslib->{$tag}{$subfieldtag};
@@ -101,32 +100,25 @@ sub generate_subfield_form {
     my $index_subfield = int( rand(1000000) );
     if ( $subfieldtag eq '@' ) {
         $subfield_data{id} = "tag_" . $tag . "_subfield_00_" . $index_subfield;
-    }
-    else {
-        $subfield_data{id} =
-          "tag_" . $tag . "_subfield_" . $subfieldtag . "_" . $index_subfield;
+    } else {
+        $subfield_data{id} = "tag_" . $tag . "_subfield_" . $subfieldtag . "_" . $index_subfield;
     }
 
-    $subfield_data{tag}      = $tag;
-    $subfield_data{subfield} = $subfieldtag;
-    $subfield_data{marc_lib} =
-        "<span title=\""
-      . $subfield->{lib} . "\">"
-      . $subfield->{lib}
-      . "</span>";
+    $subfield_data{tag}           = $tag;
+    $subfield_data{subfield}      = $subfieldtag;
+    $subfield_data{marc_lib}      = "<span title=\"" . $subfield->{lib} . "\">" . $subfield->{lib} . "</span>";
     $subfield_data{mandatory}     = $subfield->{mandatory};
     $subfield_data{important}     = $subfield->{important};
     $subfield_data{repeatable}    = $subfield->{repeatable};
     $subfield_data{maxlength}     = $subfield->{maxlength};
     $subfield_data{display_order} = $subfield->{display_order};
-    $subfield_data{kohafield} =
-      $subfield->{kohafield} || 'items.more_subfields_xml';
+    $subfield_data{kohafield}     = $subfield->{kohafield} || 'items.more_subfields_xml';
 
     if ( $prefill_with_default_values && ( !defined($value) || $value eq '' ) ) {
-        $value = $subfield->{defaultvalue} if !$item->{itemnumber}; # apply defaultvalue only to new items
+        $value = $subfield->{defaultvalue} if !$item->{itemnumber};    # apply defaultvalue only to new items
         if ($value) {
 
-# get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
+            # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
             my $today_dt  = dt_from_string;
             my $year      = $today_dt->strftime('%Y');
             my $shortyear = $today_dt->strftime('%y');
@@ -152,23 +144,19 @@ sub generate_subfield_form {
         defined $subfield->{kohafield} ? $columns->{ $subfield->{kohafield} =~ s|^items\.||r }->{data_type} : undef;
 
     $subfield_data{visibility} = "display:none;"
-      if ( ( $subfield->{hidden} > 4 ) || ( $subfield->{hidden} <= -4 ) );
+        if ( ( $subfield->{hidden} > 4 ) || ( $subfield->{hidden} <= -4 ) );
 
     my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
-    if (  $prefill_with_default_values
+    if (   $prefill_with_default_values
         && !$value
         && $subfield->{kohafield}
         && $subfield->{kohafield} eq 'items.itemcallnumber'
         && $pref_itemcallnumber
         && $marc_record )
     {
-        foreach
-          my $pref_itemcallnumber_part ( split( /,/, $pref_itemcallnumber ) )
-        {
-            my $CNtag =
-              substr( $pref_itemcallnumber_part, 0, 3 );    # 3-digit tag number
-            my $CNsubfields =
-              substr( $pref_itemcallnumber_part, 3 );    # Any and all subfields
+        foreach my $pref_itemcallnumber_part ( split( /,/, $pref_itemcallnumber ) ) {
+            my $CNtag       = substr( $pref_itemcallnumber_part, 0, 3 );    # 3-digit tag number
+            my $CNsubfields = substr( $pref_itemcallnumber_part, 3 );       # Any and all subfields
             $CNsubfields = undef if $CNsubfields eq '';
             my $temp2 = $marc_record->field($CNtag);
 
@@ -184,9 +172,8 @@ sub generate_subfield_form {
 
         # builds list, depending on authorised value...
         if ( $subfield->{authorised_value} eq "LOST" ) {
-            my $ClaimReturnedLostValue =
-              C4::Context->preference('ClaimReturnedLostValue');
-            my $claim = Koha::Checkouts::ReturnClaims->find(
+            my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
+            my $claim                  = Koha::Checkouts::ReturnClaims->find(
                 {
                     itemnumber => $item->{itemnumber},
                     resolution => undef,
@@ -204,36 +191,30 @@ sub generate_subfield_form {
                 push @authorised_values, $r->{authorised_value};
                 $authorised_lib{ $r->{authorised_value} } = $r->{lib};
             }
-        }
-        elsif ( $subfield->{authorised_value} eq "branches" ) {
+        } elsif ( $subfield->{authorised_value} eq "branches" ) {
             push @authorised_values, "" if $default_branches_empty;
             foreach my $thisbranch (@$libraries) {
                 push @authorised_values, $thisbranch->{branchcode};
                 $authorised_lib{ $thisbranch->{branchcode} } =
-                  $thisbranch->{branchname};
+                    $thisbranch->{branchname};
                 $value = $thisbranch->{branchcode}
-                  if $thisbranch->{selected} && !$value;
+                    if $thisbranch->{selected} && !$value;
             }
-        }
-        elsif ( $subfield->{authorised_value} eq "itemtypes" ) {
+        } elsif ( $subfield->{authorised_value} eq "itemtypes" ) {
             push @authorised_values, "";
             my $itemtypes;
             if ($branch_limit) {
-                $itemtypes = Koha::ItemTypes->search_with_localization(
-                    { branchcode => $branch_limit } );
-            }
-            else {
+                $itemtypes = Koha::ItemTypes->search_with_localization( { branchcode => $branch_limit } );
+            } else {
                 $itemtypes = Koha::ItemTypes->search_with_localization;
             }
             while ( my $itemtype = $itemtypes->next ) {
                 push @authorised_values, $itemtype->itemtype;
-                $authorised_lib{ $itemtype->itemtype } =
-                  $itemtype->translated_description;
+                $authorised_lib{ $itemtype->itemtype } = $itemtype->translated_description;
             }
 
-            if (!$value && $biblionumber) {
-                my $itype_sth = $dbh->prepare(
-                    "SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
+            if ( !$value && $biblionumber ) {
+                my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
                 $itype_sth->execute($biblionumber);
                 my ($biblio_itemtype) = $itype_sth->fetchrow_array;
 
@@ -244,13 +225,11 @@ sub generate_subfield_form {
             }
 
             #---- class_sources
-        }
-        elsif ( $subfield->{authorised_value} eq "cn_source" ) {
+        } elsif ( $subfield->{authorised_value} eq "cn_source" ) {
             push @authorised_values, "";
 
-            my $class_sources = GetClassSources();
-            my $default_source =
-              C4::Context->preference("DefaultClassificationSource");
+            my $class_sources  = GetClassSources();
+            my $default_source = C4::Context->preference("DefaultClassificationSource");
 
             foreach my $class_source ( sort { fc($a) cmp fc($b) } keys %$class_sources ) {
                 next
@@ -264,8 +243,7 @@ sub generate_subfield_form {
             $value = $default_source if !$value && $prefill_with_default_values;
 
             #---- "true" authorised value
-        }
-        else {
+        } else {
             push @authorised_values, qq{};
             my $av = GetAuthorisedValues( $subfield->{authorised_value} );
             for my $r (@$av) {
@@ -281,29 +259,22 @@ sub generate_subfield_form {
                 maxlength => $subfield_data{maxlength},
                 value     => $value,
                 (
-                    (
-                        grep { $_ eq $subfield->{authorised_value} }
-                          (qw(branches itemtypes cn_source))
-                    ) ? () : ( category => $subfield->{authorised_value} )
+                      ( grep { $_ eq $subfield->{authorised_value} } (qw(branches itemtypes cn_source)) )
+                    ? ()
+                    : ( category => $subfield->{authorised_value} )
                 ),
             };
-        }
-        else {
+        } else {
             $subfield_data{marc_value} = {
-                type => 'select',
-                id   => "tag_"
-                  . $tag
-                  . "_subfield_"
-                  . $subfieldtag . "_"
-                  . $index_subfield,
+                type    => 'select',
+                id      => "tag_" . $tag . "_subfield_" . $subfieldtag . "_" . $index_subfield,
                 values  => \@authorised_values,
                 labels  => \%authorised_lib,
                 default => $value,
                 (
-                    (
-                        grep { $_ eq $subfield->{authorised_value} }
-                          (qw(branches itemtypes cn_source))
-                    ) ? () : ( category => $subfield->{authorised_value} )
+                      ( grep { $_ eq $subfield->{authorised_value} } (qw(branches itemtypes cn_source)) )
+                    ? ()
+                    : ( category => $subfield->{authorised_value} )
                 ),
             };
         }
@@ -318,21 +289,20 @@ sub generate_subfield_form {
             value        => $value,
             authtypecode => $subfield->{authtypecode},
         };
-    }
-    elsif ( defined $subfield_data{data_type} && $subfield_data{data_type} eq 'date' ) {
+    } elsif ( defined $subfield_data{data_type} && $subfield_data{data_type} eq 'date' ) {
         $subfield_data{marc_value} = {
-            type => 'date_field',
-            id => $subfield_data{id},
+            type  => 'date_field',
+            id    => $subfield_data{id},
             value => $value,
-        }
-    }
-    elsif ( defined $subfield_data{data_type} && $subfield_data{data_type} eq 'datetime' ) {
+        };
+    } elsif ( defined $subfield_data{data_type} && $subfield_data{data_type} eq 'datetime' ) {
         $subfield_data{marc_value} = {
-            type => 'datetime_field',
-            id => $subfield_data{id},
+            type  => 'datetime_field',
+            id    => $subfield_data{id},
             value => $value,
-        }
+        };
     }
+
     # it's a plugin field
     elsif ( $subfield->{value_builder} ) {    # plugin
         require Koha::FrameworkPlugin;
@@ -344,7 +314,7 @@ sub generate_subfield_form {
         );
         my $pars = {
             dbh     => $dbh,
-            record  => $marc_record, #Note: could be undefined
+            record  => $marc_record,         #Note: could be undefined
             tagslib => $tagslib,
             id      => $subfield_data{id},
         };
@@ -360,8 +330,7 @@ sub generate_subfield_form {
                 nopopup    => $plugin->noclick,
                 javascript => $plugin->javascript,
             };
-        }
-        else {
+        } else {
             warn $plugin->errstr;
             $subfield_data{marc_value} = {
                 type      => 'text',
@@ -370,31 +339,27 @@ sub generate_subfield_form {
                 value     => $value,
             };    # supply default input form
         }
-    }
-    elsif ( $tag eq '' ) {    # it's an hidden field
+    } elsif ( $tag eq '' ) {    # it's an hidden field
         $subfield_data{marc_value} = {
             type      => 'hidden',
             id        => $subfield_data{id},
             maxlength => $subfield_data{maxlength},
             value     => $value,
         };
-    }
-    elsif ( $subfield->{'hidden'} )
-    {                         # FIXME: shouldn't input type be "hidden" ?
+    } elsif ( $subfield->{'hidden'} ) {    # FIXME: shouldn't input type be "hidden" ?
         $subfield_data{marc_value} = {
             type      => 'text',
             id        => $subfield_data{id},
             maxlength => $subfield_data{maxlength},
             value     => $value,
         };
-    }
-    elsif (
+    } elsif (
         ( $value and length($value) > 100 )
         or ( C4::Context->preference("marcflavour") eq "UNIMARC"
             and 300 <= $tag && $tag < 400 && $subfieldtag eq 'a' )
         or ( C4::Context->preference("marcflavour") eq "MARC21"
             and 500 <= $tag && $tag < 600 )
-      )
+        )
     {
         # oversize field (textarea)
         $subfield_data{marc_value} = {
@@ -402,8 +367,8 @@ sub generate_subfield_form {
             id    => $subfield_data{id},
             value => $value,
         };
-    }
-    else {
+    } else {
+
         # it's a standard field
         $subfield_data{marc_value} = {
             type      => 'text',
@@ -499,34 +464,35 @@ When duplicating an item we do not want to retrieve the subfields that are hidde
 sub edit_form {
     my ( $self, $params ) = @_;
 
-    my $branchcode         = $params->{branchcode};
-    my $restricted_edition = $params->{restricted_editition};
-    my $subfields_to_prefill = $params->{subfields_to_prefill} || [];
-    my $subfields_to_allow = $params->{subfields_to_allow} || [];
+    my $branchcode                   = $params->{branchcode};
+    my $restricted_edition           = $params->{restricted_editition};
+    my $subfields_to_prefill         = $params->{subfields_to_prefill} || [];
+    my $subfields_to_allow           = $params->{subfields_to_allow}   || [];
     my $ignore_not_allowed_subfields = $params->{ignore_not_allowed_subfields};
-    my $kohafields_to_ignore = $params->{kohafields_to_ignore} || [];
-    my $prefill_with_default_values = $params->{prefill_with_default_values};
-    my $branch_limit = $params->{branch_limit};
-    my $default_branches_empty = $params->{default_branches_empty};
-    my $ignore_invisible_subfields = $params->{ignore_invisible_subfields} || 0;
+    my $kohafields_to_ignore         = $params->{kohafields_to_ignore} || [];
+    my $prefill_with_default_values  = $params->{prefill_with_default_values};
+    my $branch_limit                 = $params->{branch_limit};
+    my $default_branches_empty       = $params->{default_branches_empty};
+    my $ignore_invisible_subfields   = $params->{ignore_invisible_subfields} || 0;
 
     my $libraries =
-      Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+        Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     for my $library (@$libraries) {
         $library->{selected} = 1 if $branchcode && $library->{branchcode} eq $branchcode;
     }
 
     my $item                = $self->{item};
     my $marc_more_subfields = $item->{more_subfields_xml}
-      ?
+        ?
+
         # FIXME Use Maybe MARC::Record::new_from_xml if encoding issues on subfield (??)
         MARC::Record->new_from_xml( $item->{more_subfields_xml}, 'UTF-8' )
-      : undef;
+        : undef;
 
-    my $biblionumber   = $self->{biblionumber};
-    my $biblio         = Koha::Biblios->find($biblionumber);
-    my $frameworkcode  = $biblio ? GetFrameworkCode($biblionumber) : q{};
-    my $marc_record    = $biblio ? $biblio->metadata->record : undef;
+    my $biblionumber  = $self->{biblionumber};
+    my $biblio        = Koha::Biblios->find($biblionumber);
+    my $frameworkcode = $biblio ? GetFrameworkCode($biblionumber) : q{};
+    my $marc_record   = $biblio ? $biblio->metadata->record       : undef;
     my @subfields;
     my $tagslib = GetMarcStructure( 1, $frameworkcode );
     foreach my $tag ( keys %{$tagslib} ) {
@@ -538,21 +504,18 @@ sub edit_form {
             next if IsMarcStructureInternal($subfield);
             next if $subfield->{tab} ne "10";
             next
-              if grep { $subfield->{kohafield} && $subfield->{kohafield} eq $_ }
-              @$kohafields_to_ignore;
+                if grep { $subfield->{kohafield} && $subfield->{kohafield} eq $_ } @$kohafields_to_ignore;
 
             next
-              if $ignore_invisible_subfields
-              && ( $subfield->{hidden} > 4 || $subfield->{hidden} <= -4 );
+                if $ignore_invisible_subfields
+                && ( $subfield->{hidden} > 4 || $subfield->{hidden} <= -4 );
 
             my $readonly;
-            if (
-                @$subfields_to_allow && !grep {
-                    sprintf( "%s\$%s", $subfield->{tagfield}, $subfield->{tagsubfield} ) eq $_
-                } @$subfields_to_allow
-              )
+            if ( @$subfields_to_allow
+                && !grep { sprintf( "%s\$%s", $subfield->{tagfield}, $subfield->{tagsubfield} ) eq $_ }
+                @$subfields_to_allow )
             {
-                next if $ignore_not_allowed_subfields;
+                next          if $ignore_not_allowed_subfields;
                 $readonly = 1 if $restricted_edition;
             }
 
@@ -560,11 +523,8 @@ sub edit_form {
 
             my $subfield_data;
 
-            if (
-                !@$subfields_to_prefill
-                || ( @$subfields_to_prefill && grep { $_ eq $subfieldtag }
-                    @$subfields_to_prefill )
-              )
+            if ( !@$subfields_to_prefill
+                || ( @$subfields_to_prefill && grep { $_ eq $subfieldtag } @$subfields_to_prefill ) )
             {
                 my $kohafield = $subfield->{kohafield};
                 if ($kohafield) {
@@ -572,12 +532,12 @@ sub edit_form {
                     # This is a mapped field
                     ( my $attribute = $kohafield ) =~ s|^items\.||;
                     push @values, $subfield->{repeatable}
-                      ? split '\s\|\s', $item->{$attribute}
-                      : $item->{$attribute}
-                      if defined $item->{$attribute};
-                }
-                else {
-                  # Not mapped, picked the values from more_subfields_xml's MARC
+                        ? split '\s\|\s', $item->{$attribute}
+                        : $item->{$attribute}
+                        if defined $item->{$attribute};
+                } else {
+
+                    # Not mapped, picked the values from more_subfields_xml's MARC
                     if ($marc_more_subfields) {
                         for my $f ( $marc_more_subfields->fields($tag) ) {
                             push @values, $f->subfield($subfieldtag);
@@ -591,17 +551,17 @@ sub edit_form {
             for my $value (@values) {
                 my $subfield_data = $self->generate_subfield_form(
                     {
-                        tag                => $tag,
-                        subfieldtag        => $subfieldtag,
-                        value              => $value,
-                        tagslib            => $tagslib,
-                        libraries          => $libraries,
-                        marc_record        => $marc_record, #Note: could be undefined
-                        restricted_edition => $restricted_edition,
+                        tag                         => $tag,
+                        subfieldtag                 => $subfieldtag,
+                        value                       => $value,
+                        tagslib                     => $tagslib,
+                        libraries                   => $libraries,
+                        marc_record                 => $marc_record,                   #Note: could be undefined
+                        restricted_edition          => $restricted_edition,
                         prefill_with_default_values => $prefill_with_default_values,
-                        branch_limit       => $branch_limit,
-                        default_branches_empty => $default_branches_empty,
-                        readonly           => $readonly
+                        branch_limit                => $branch_limit,
+                        default_branches_empty      => $default_branches_empty,
+                        readonly                    => $readonly
                     }
                 );
                 push @subfields, $subfield_data;
@@ -609,10 +569,7 @@ sub edit_form {
         }
     }
 
-    @subfields = sort {
-             $a->{display_order} <=> $b->{display_order}
-          || $a->{subfield} cmp $b->{subfield}
-    } @subfields;
+    @subfields = sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} } @subfields;
 
     return \@subfields;
 

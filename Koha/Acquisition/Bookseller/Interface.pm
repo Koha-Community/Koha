@@ -42,7 +42,7 @@ sub store {
     my ($self) = @_;
 
     if ( $self->password ) {
-        $self->password(Koha::Encryption->new->encrypt_hex($self->password));
+        $self->password( Koha::Encryption->new->encrypt_hex( $self->password ) );
     }
 
     return $self->SUPER::store;
@@ -58,7 +58,7 @@ Decrypt the password and return its plain text form.
 
 sub plain_text_password {
     my ($self) = @_;
-    return Koha::Encryption->new->decrypt_hex($self->password)
+    return Koha::Encryption->new->decrypt_hex( $self->password )
         if $self->password;
 }
 

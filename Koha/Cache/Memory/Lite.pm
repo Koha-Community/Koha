@@ -107,7 +107,7 @@ Returns an array of all keys currently in the lite cache.
 =cut
 
 sub all_keys {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return keys %L1_cache;
 }
 
@@ -120,7 +120,7 @@ Clear the entire lite cache.
 =cut
 
 sub flush {
-    my ( $self ) = @_;
+    my ($self) = @_;
     %L1_cache = ();
 }
 

@@ -21,21 +21,21 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
 use Koha::Encryption;
 use Koha::Plugins;
 
-our $input = CGI->new();
+our $input  = CGI->new();
 our $schema = Koha::Database->new()->schema();
 
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'admin/edi_accounts.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => 'edi_manage' },
+        template_name => 'admin/edi_accounts.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { acquisition => 'edi_manage' },
     }
 );
 
@@ -50,28 +50,28 @@ if ( $op eq 'acct_form' ) {
     my @vendors = $schema->resultset('Aqbookseller')->search(
         undef,
         {
-            columns => [ 'name', 'id' ],
+            columns  => [ 'name', 'id' ],
             order_by => { -asc => 'name' }
         }
     );
     $template->param( vendors => \@vendors );
 
     if ( C4::Context->config("enable_plugins") ) {
-        my @plugins = Koha::Plugins->new()->GetPlugins({
-            method => 'edifact',
-        });
+        my @plugins = Koha::Plugins->new()->GetPlugins(
+            {
+                method => 'edifact',
+            }
+        );
         $template->param( plugins => \@plugins );
     }
-}
-elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     show_account($crypt);
     $template->param( delete_confirm => 1 );
-}
-else {
+} else {
     if ( $op eq 'cud-save' ) {
 
         # validate & display
-        my $id     = $input->param('id');
+        my $id       = $input->param('id');
         my $password = scalar $input->param('password');
         $password = $crypt->encrypt_hex($password);
         my $fields = {
@@ -87,11 +87,11 @@ else {
             san                => scalar $input->param('san'),
             standard           => scalar $input->param('standard'),
             transport          => scalar $input->param('transport'),
-            quotes_enabled     => $input->param('quotes_enabled') ? 1 : 0,
-            invoices_enabled   => $input->param('invoices_enabled') ? 1 : 0,
-            orders_enabled     => $input->param('orders_enabled') ? 1 : 0,
+            quotes_enabled     => $input->param('quotes_enabled')    ? 1 : 0,
+            invoices_enabled   => $input->param('invoices_enabled')  ? 1 : 0,
+            orders_enabled     => $input->param('orders_enabled')    ? 1 : 0,
             responses_enabled  => $input->param('responses_enabled') ? 1 : 0,
-            auto_orders        => $input->param('auto_orders') ? 1 : 0,
+            auto_orders        => $input->param('auto_orders')       ? 1 : 0,
             id_code_qualifier  => scalar $input->param('id_code_qualifier'),
             plugin             => scalar $input->param('plugin'),
         };
@@ -102,15 +102,12 @@ else {
                     id => $id,
                 }
             )->update_all($fields);
-        }
-        else {    # new record
+        } else {    # new record
             $schema->resultset('VendorEdiAccount')->create($fields);
         }
-    }
-    elsif ( $op eq 'cud-delete_confirmed' ) {
+    } elsif ( $op eq 'cud-delete_confirmed' ) {
 
-        $schema->resultset('VendorEdiAccount')
-          ->search( { id => scalar $input->param('id'), } )->delete_all;
+        $schema->resultset('VendorEdiAccount')->search( { id => scalar $input->param('id'), } )->delete_all;
     }
 
     # we do a default dispaly after deletes and saves
@@ -162,11 +159,11 @@ sub get_account {
 }
 
 sub show_account {
-    my $crypt = shift;
+    my $crypt   = shift;
     my $acct_id = $input->param('id');
     if ($acct_id) {
         my $acct = $schema->resultset('VendorEdiAccount')->find($acct_id);
-        $acct->password( $crypt->decrypt_hex($acct->password) );
+        $acct->password( $crypt->decrypt_hex( $acct->password ) );
         if ($acct) {
             $template->param( account => $acct );
         }

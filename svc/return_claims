@@ -32,19 +32,15 @@ use Koha::Patrons;
 my $input = CGI->new;
 
 my ( $auth_status, $session ) = check_cookie_auth( $input->cookie('CGISESSID') );
-if( $auth_status ne 'ok' ) {
+if ( $auth_status ne 'ok' ) {
     print CGI::header( '-status' => '401' );
     exit 0;
 }
 
-my $userid  = $session->param('id');
+my $userid = $session->param('id');
 
-unless (
-    haspermission(
-        $userid, { circulate => 'circulate_remaining_permissions' }
-    )
-    || haspermission( $userid, { borrowers => 'edit_borrowers' } )
-  )
+unless ( haspermission( $userid, { circulate => 'circulate_remaining_permissions' } )
+    || haspermission( $userid, { borrowers => 'edit_borrowers' } ) )
 {
     exit 0;
 }
@@ -57,9 +53,9 @@ my $results_per_page = $input->param('iDisplayLength') || -1;
 
 my $sorting_column = $input->param('iSortCol_0') || q{};
 $sorting_column =
-  ( $sorting_column && $sort_columns[$sorting_column] )
-  ? $sort_columns[$sorting_column]
-  : 'created_on';
+    ( $sorting_column && $sort_columns[$sorting_column] )
+    ? $sort_columns[$sorting_column]
+    : 'created_on';
 
 my $sorting_direction = $input->param('sSortDir_0') || q{};
 $sorting_direction = $sorting_direction eq 'asc' ? 'asc' : 'desc';
@@ -93,25 +89,28 @@ my $dbh = C4::Context->dbh();
 my $sth = $dbh->prepare($sql);
 $sth->execute($borrowernumber);
 
-my $resolved = 0;
+my $resolved   = 0;
 my $unresolved = 0;
 my @return_claims;
 while ( my $claim = $sth->fetchrow_hashref() ) {
-    $claim->{created_on_formatted}  = output_pref( { dt => dt_from_string( $claim->{created_on} ) } ) if $claim->{created_on};
-    $claim->{updated_on_formatted}  = output_pref( { dt => dt_from_string( $claim->{updated_on} ) } ) if $claim->{updated_on};
-    $claim->{resolved_on_formatted} = output_pref( { dt => dt_from_string( $claim->{resolved_on} ) } ) if $claim->{resolved_on};
+    $claim->{created_on_formatted} = output_pref( { dt => dt_from_string( $claim->{created_on} ) } )
+        if $claim->{created_on};
+    $claim->{updated_on_formatted} = output_pref( { dt => dt_from_string( $claim->{updated_on} ) } )
+        if $claim->{updated_on};
+    $claim->{resolved_on_formatted} = output_pref( { dt => dt_from_string( $claim->{resolved_on} ) } )
+        if $claim->{resolved_on};
 
     my $patron = $claim->{resolved_by} ? Koha::Patrons->find( $claim->{resolved_by} ) : undef;
     $claim->{resolved_by_data} = $patron->unblessed if $patron;
 
     my $resolution = $claim->{resolution}
-      ? Koha::AuthorisedValues->find(
+        ? Koha::AuthorisedValues->find(
         {
             category         => 'RETURN_CLAIM_RESOLUTION',
             authorised_value => $claim->{resolution},
         }
-      )
-      : undef;
+        )
+        : undef;
     $claim->{resolution_data} = $resolution->unblessed if $resolution;
 
     $claim->{resolved_on} ? $resolved++ : $unresolved++;

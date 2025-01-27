@@ -169,8 +169,8 @@ subtest 'add() tests' => sub {
         doh => 1
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_with_invalid_field )->status_is(400)
-        ->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_with_invalid_field )
+        ->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: doh.",
@@ -180,11 +180,8 @@ subtest 'add() tests' => sub {
         );
 
     # Authorized attempt to write
-    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )
-        ->status_is(201)
-        ->json_has( '/id',        'ID' )
-        ->json_has( '/name',      'Name' )
-        ->json_has( '/code',      'Code' )
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(201)
+        ->json_has( '/id',        'ID' )->json_has( '/name', 'Name' )->json_has( '/code', 'Code' )
         ->json_has( '/is_system', 'is_system' )
         ->header_is( 'Location' => '/api/v1/ill/batchstatuses/' . $t->tx->res->json->{code}, "REST3.4.1" );
 

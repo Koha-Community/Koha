@@ -19,8 +19,7 @@ use Modern::Perl;
 use Test::More tests => 1;
 use File::Slurp;
 use C4::Context;
-my $content = read_file( C4::Context->config("intranetdir")
-      . '/installer/data/mysql/kohastructure.sql' );
+my $content = read_file( C4::Context->config("intranetdir") . '/installer/data/mysql/kohastructure.sql' );
 my @drop_stmt_missing;
 my $ccc = $content;
 while ( $content =~ m|CREATE TABLE `?([^`\n ]*)`?\s?\(\s*\n|g ) {
@@ -32,9 +31,9 @@ is(
     @drop_stmt_missing,
     0,
     'DROP TABLE statements should exist for all tables'
-      . (
+        . (
         @drop_stmt_missing
         ? ' but missing for ' . join( ',', @drop_stmt_missing )
         : ''
-      )
+        )
 );

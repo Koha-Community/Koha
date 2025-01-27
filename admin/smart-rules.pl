@@ -21,7 +21,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use Koha::Exception;
 use Koha::Database;
 use Koha::Logger;
@@ -32,42 +32,44 @@ use Koha::Caches;
 use Koha::Patrons;
 
 my $input = CGI->new;
-my $dbh = C4::Context->dbh;
+my $dbh   = C4::Context->dbh;
 
 # my $flagsrequired;
 # $flagsrequired->{circulation}=1;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/smart-rules.tt",
-                            query => $input,
-                            type => "intranet",
-                            flagsrequired => {parameters => 'manage_circ_rules'},
-                            });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "admin/smart-rules.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_circ_rules' },
+    }
+);
 
-my $type=$input->param('type');
+my $type = $input->param('type');
 
 my $branch = $input->param('branch');
-unless ( $branch ) {
+unless ($branch) {
     if ( C4::Context->preference('DefaultToLoggedInLibraryCircRules') ) {
         $branch = Koha::Libraries->search->count() == 1 ? undef : C4::Context::mybranch();
-    }
-    else {
+    } else {
         $branch = C4::Context::only_my_library() ? ( C4::Context::mybranch() || '*' ) : '*';
     }
 }
 
-my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
+my $logged_in_patron = Koha::Patrons->find($loggedinuser);
 
-my $can_edit_from_any_library = $logged_in_patron->has_permission( {parameters => 'manage_circ_rules_from_any_libraries' } );
+my $can_edit_from_any_library =
+    $logged_in_patron->has_permission( { parameters => 'manage_circ_rules_from_any_libraries' } );
 $template->param( restricted_to_own_library => not $can_edit_from_any_library );
 $branch = C4::Context::mybranch() unless $can_edit_from_any_library;
 
-my $op = $input->param('op') || q{};
+my $op       = $input->param('op') || q{};
 my $language = C4::Languages::getlanguage();
 
 my $cache = Koha::Caches->get_instance;
-$cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
+$cache->clear_from_cache(Koha::CirculationRules::GUESSED_ITEMTYPES_KEY);
 
-if ($op eq 'cud-delete') {
+if ( $op eq 'cud-delete' ) {
     my $itemtype     = $input->param('itemtype');
     my $categorycode = $input->param('categorycode');
 
@@ -121,19 +123,18 @@ if ($op eq 'cud-delete') {
             }
         }
     );
-}
-elsif ($op eq 'cud-delete-branch-cat') {
-    my $categorycode  = $input->param('categorycode');
-    if ($branch eq "*") {
-        if ($categorycode eq "*") {
+} elsif ( $op eq 'cud-delete-branch-cat' ) {
+    my $categorycode = $input->param('categorycode');
+    if ( $branch eq "*" ) {
+        if ( $categorycode eq "*" ) {
             Koha::CirculationRules->set_rules(
                 {
                     branchcode   => undef,
                     categorycode => undef,
                     rules        => {
-                        max_holds                      => undef,
-                        patron_maxissueqty             => undef,
-                        patron_maxonsiteissueqty       => undef,
+                        max_holds                => undef,
+                        patron_maxissueqty       => undef,
+                        patron_maxonsiteissueqty => undef,
                     }
                 }
             );
@@ -163,7 +164,7 @@ elsif ($op eq 'cud-delete-branch-cat') {
                 }
             );
         }
-    } elsif ($categorycode eq "*") {
+    } elsif ( $categorycode eq "*" ) {
         Koha::CirculationRules->set_rules(
             {
                 branchcode   => $branch,
@@ -194,18 +195,17 @@ elsif ($op eq 'cud-delete-branch-cat') {
                 categorycode => $categorycode,
                 branchcode   => $branch,
                 rules        => {
-                    max_holds         => undef,
+                    max_holds                => undef,
                     patron_maxissueqty       => undef,
                     patron_maxonsiteissueqty => undef,
                 }
             }
         );
     }
-}
-elsif ($op eq 'cud-delete-branch-item') {
-    my $itemtype  = $input->param('itemtype');
-    if ($branch eq "*") {
-        if ($itemtype eq "*") {
+} elsif ( $op eq 'cud-delete-branch-item' ) {
+    my $itemtype = $input->param('itemtype');
+    if ( $branch eq "*" ) {
+        if ( $itemtype eq "*" ) {
             Koha::CirculationRules->set_rules(
                 {
                     branchcode => undef,
@@ -234,7 +234,7 @@ elsif ($op eq 'cud-delete-branch-item') {
                 }
             );
         }
-    } elsif ($itemtype eq "*") {
+    } elsif ( $itemtype eq "*" ) {
         Koha::CirculationRules->set_rules(
             {
                 branchcode => $branch,
@@ -264,6 +264,7 @@ elsif ($op eq 'cud-delete-branch-item') {
         );
     }
 }
+
 # save the values entered
 elsif ( $op eq 'cud-add' ) {
     my $br                      = $branch;                          # branch
@@ -286,7 +287,7 @@ elsif ( $op eq 'cud-add' ) {
     my $renewalperiod   = $input->param('renewalperiod');
     my $norenewalbefore = $input->param('norenewalbefore');
     $norenewalbefore = q{} if $norenewalbefore =~ /^\s*$/;
-    my $noautorenewalbefore = $input->param('noautorenewalbefore');
+    my $noautorenewalbefore   = $input->param('noautorenewalbefore');
     my $auto_renew            = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
     $no_auto_renewal_after = q{} if $no_auto_renewal_after =~ /^\s*$/;
@@ -370,8 +371,7 @@ elsif ( $op eq 'cud-add' ) {
         }
     );
 
-}
-elsif ($op eq "cud-set-branch-defaults") {
+} elsif ( $op eq "cud-set-branch-defaults" ) {
     my $categorycode             = $input->param('categorycode');
     my $patron_maxissueqty       = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
@@ -383,7 +383,7 @@ elsif ($op eq "cud-set-branch-defaults") {
     my $returnbranch            = $input->param('returnbranch');
     my $max_holds               = strip_non_numeric( scalar $input->param('max_holds') );
 
-    if ($branch eq "*") {
+    if ( $branch eq "*" ) {
         Koha::CirculationRules->set_rules(
             {
                 itemtype   => undef,
@@ -402,8 +402,8 @@ elsif ($op eq "cud-set-branch-defaults") {
                 categorycode => undef,
                 branchcode   => undef,
                 rules        => {
-                    patron_maxissueqty             => $patron_maxissueqty,
-                    patron_maxonsiteissueqty       => $patron_maxonsiteissueqty,
+                    patron_maxissueqty       => $patron_maxissueqty,
+                    patron_maxonsiteissueqty => $patron_maxonsiteissueqty,
                 }
             }
         );
@@ -426,8 +426,8 @@ elsif ($op eq "cud-set-branch-defaults") {
                 categorycode => undef,
                 branchcode   => $branch,
                 rules        => {
-                    patron_maxissueqty             => $patron_maxissueqty,
-                    patron_maxonsiteissueqty       => $patron_maxonsiteissueqty,
+                    patron_maxissueqty       => $patron_maxissueqty,
+                    patron_maxonsiteissueqty => $patron_maxonsiteissueqty,
                 }
             }
         );
@@ -440,23 +440,22 @@ elsif ($op eq "cud-set-branch-defaults") {
             rule_value   => $max_holds,
         }
     );
-}
-elsif ($op eq "cud-add-branch-cat") {
-    my $categorycode  = $input->param('categorycode');
-    my $patron_maxissueqty = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
+} elsif ( $op eq "cud-add-branch-cat" ) {
+    my $categorycode             = $input->param('categorycode');
+    my $patron_maxissueqty       = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
     $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
     my $max_holds = $input->param('max_holds');
     $max_holds = strip_non_numeric($max_holds);
 
-    if ($branch eq "*") {
-        if ($categorycode eq "*") {
+    if ( $branch eq "*" ) {
+        if ( $categorycode eq "*" ) {
             Koha::CirculationRules->set_rules(
                 {
                     categorycode => undef,
                     branchcode   => undef,
                     rules        => {
-                        max_holds         => $max_holds,
+                        max_holds                => $max_holds,
                         patron_maxissueqty       => $patron_maxissueqty,
                         patron_maxonsiteissueqty => $patron_maxonsiteissueqty,
                     }
@@ -468,20 +467,20 @@ elsif ($op eq "cud-add-branch-cat") {
                     categorycode => $categorycode,
                     branchcode   => undef,
                     rules        => {
-                        max_holds         => $max_holds,
+                        max_holds                => $max_holds,
                         patron_maxissueqty       => $patron_maxissueqty,
                         patron_maxonsiteissueqty => $patron_maxonsiteissueqty,
                     }
                 }
             );
         }
-    } elsif ($categorycode eq "*") {
+    } elsif ( $categorycode eq "*" ) {
         Koha::CirculationRules->set_rules(
             {
                 categorycode => undef,
                 branchcode   => $branch,
                 rules        => {
-                    max_holds         => $max_holds,
+                    max_holds                => $max_holds,
                     patron_maxissueqty       => $patron_maxissueqty,
                     patron_maxonsiteissueqty => $patron_maxonsiteissueqty,
                 }
@@ -493,33 +492,34 @@ elsif ($op eq "cud-add-branch-cat") {
                 categorycode => $categorycode,
                 branchcode   => $branch,
                 rules        => {
-                    max_holds         => $max_holds,
+                    max_holds                => $max_holds,
                     patron_maxissueqty       => $patron_maxissueqty,
                     patron_maxonsiteissueqty => $patron_maxonsiteissueqty,
                 }
             }
         );
     }
-}
-elsif ( $op eq "cud-add-open-article-requests-limit" ) {
+} elsif ( $op eq "cud-add-open-article-requests-limit" ) {
     my $categorycode                = $input->param('categorycode');
     my $open_article_requests_limit = strip_non_numeric( scalar $input->param('open_article_requests_limit') );
 
     Koha::Exception->throw("No value passed for article request limit")
-      if not defined $open_article_requests_limit # There is a JS check for that
-      || $open_article_requests_limit eq q{};
+        if not defined $open_article_requests_limit    # There is a JS check for that
+        || $open_article_requests_limit eq q{};
 
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {
             Koha::CirculationRules->set_rules(
-                {   categorycode => undef,
+                {
+                    categorycode => undef,
                     branchcode   => undef,
                     rules        => { open_article_requests_limit => $open_article_requests_limit, }
                 }
             );
         } else {
             Koha::CirculationRules->set_rules(
-                {   categorycode => $categorycode,
+                {
+                    categorycode => $categorycode,
                     branchcode   => undef,
                     rules        => { open_article_requests_limit => $open_article_requests_limit, }
                 }
@@ -527,14 +527,16 @@ elsif ( $op eq "cud-add-open-article-requests-limit" ) {
         }
     } elsif ( $categorycode eq "*" ) {
         Koha::CirculationRules->set_rules(
-            {   categorycode => undef,
+            {
+                categorycode => undef,
                 branchcode   => $branch,
                 rules        => { open_article_requests_limit => $open_article_requests_limit, }
             }
         );
     } else {
         Koha::CirculationRules->set_rules(
-            {   categorycode => $categorycode,
+            {
+                categorycode => $categorycode,
                 branchcode   => $branch,
                 rules        => { open_article_requests_limit => $open_article_requests_limit, }
             }
@@ -545,14 +547,16 @@ elsif ( $op eq "cud-add-open-article-requests-limit" ) {
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {
             Koha::CirculationRules->set_rules(
-                {   branchcode   => undef,
+                {
+                    branchcode   => undef,
                     categorycode => undef,
                     rules        => { open_article_requests_limit => undef, }
                 }
             );
         } else {
             Koha::CirculationRules->set_rules(
-                {   categorycode => $categorycode,
+                {
+                    categorycode => $categorycode,
                     branchcode   => undef,
                     rules        => { open_article_requests_limit => undef, }
                 }
@@ -560,48 +564,50 @@ elsif ( $op eq "cud-add-open-article-requests-limit" ) {
         }
     } elsif ( $categorycode eq "*" ) {
         Koha::CirculationRules->set_rules(
-            {   branchcode   => $branch,
+            {
+                branchcode   => $branch,
                 categorycode => undef,
                 rules        => { open_article_requests_limit => undef, }
             }
         );
     } else {
         Koha::CirculationRules->set_rules(
-            {   categorycode => $categorycode,
+            {
+                categorycode => $categorycode,
                 branchcode   => $branch,
                 rules        => { open_article_requests_limit => undef, }
             }
         );
     }
-}
-elsif ( $op eq "cud-set-article-request-fee" ) {
+} elsif ( $op eq "cud-set-article-request-fee" ) {
 
     my $category = $input->param('article_request_fee_category');
     my $fee      = strip_non_numeric( scalar $input->param('article_request_fee') );
 
     Koha::Exception->throw("No value passed for article request fee")
-      if not defined $fee # There is a JS check for that
-      || $fee eq q{};
+        if not defined $fee    # There is a JS check for that
+        || $fee eq q{};
 
     Koha::CirculationRules->set_rules(
-        {   categorycode => ( $category  eq '*' ) ? undef : $category,
-            branchcode   => ( $branch    eq '*' ) ? undef : $branch,
+        {
+            categorycode => ( $category eq '*' ) ? undef : $category,
+            branchcode   => ( $branch eq '*' )   ? undef : $branch,
             rules        => { article_request_fee => $fee },
         }
     );
 
 } elsif ( $op eq 'cud-del-article-request-fee' ) {
 
-    my $category  = $input->param('categorycode');
+    my $category = $input->param('categorycode');
 
     Koha::CirculationRules->set_rules(
-        {   categorycode => ( $category eq  '*' ) ? undef : $category,
-            branchcode   => ( $branch eq    '*' ) ? undef : $branch,
+        {
+            categorycode => ( $category eq '*' ) ? undef : $category,
+            branchcode   => ( $branch eq '*' )   ? undef : $branch,
             rules        => { article_request_fee => undef },
         }
     );
-}
-elsif ($op eq "cud-add-branch-item") {
+} elsif ( $op eq "cud-add-branch-item" ) {
     my $itemtype                = $input->param('itemtype');
     my $holdallowed             = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
@@ -609,8 +615,8 @@ elsif ($op eq "cud-add-branch-item") {
     my $bookings_trail_period   = $input->param('bookings_trail_period');
     my $returnbranch            = $input->param('returnbranch');
 
-    if ($branch eq "*") {
-        if ($itemtype eq "*") {
+    if ( $branch eq "*" ) {
+        if ( $itemtype eq "*" ) {
             Koha::CirculationRules->set_rules(
                 {
                     itemtype   => undef,
@@ -639,20 +645,20 @@ elsif ($op eq "cud-add-branch-item") {
                 }
             );
         }
-    } elsif ($itemtype eq "*") {
-            Koha::CirculationRules->set_rules(
-                {
-                    itemtype   => undef,
-                    branchcode => $branch,
-                    rules      => {
-                        holdallowed             => $holdallowed,
-                        hold_fulfillment_policy => $hold_fulfillment_policy,
-                        bookings_lead_period    => $bookings_lead_period,
-                        bookings_trail_period   => $bookings_trail_period,
-                        returnbranch            => $returnbranch,
-                    }
+    } elsif ( $itemtype eq "*" ) {
+        Koha::CirculationRules->set_rules(
+            {
+                itemtype   => undef,
+                branchcode => $branch,
+                rules      => {
+                    holdallowed             => $holdallowed,
+                    hold_fulfillment_policy => $hold_fulfillment_policy,
+                    bookings_lead_period    => $bookings_lead_period,
+                    bookings_trail_period   => $bookings_trail_period,
+                    returnbranch            => $returnbranch,
                 }
-            );
+            }
+        );
     } else {
         Koha::CirculationRules->set_rules(
             {
@@ -668,30 +674,26 @@ elsif ($op eq "cud-add-branch-item") {
             }
         );
     }
-}
-elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
+} elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
 
     my $lostreturn = $input->param('lostreturn');
 
     if ( $lostreturn eq '*' ) {
         if ( $branch ne '*' ) {
+
             # only do something for $lostreturn eq '*' if branch-specific
             Koha::CirculationRules->set_rules(
                 {
-                    branchcode   => $branch,
-                    rules        => {
-                        lostreturn => undef
-                    }
+                    branchcode => $branch,
+                    rules      => { lostreturn => undef }
                 }
             );
         }
     } else {
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => $branch,
-                rules        => {
-                    lostreturn => $lostreturn
-                }
+                branchcode => $branch,
+                rules      => { lostreturn => $lostreturn }
             }
         );
     }
@@ -700,23 +702,20 @@ elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
 
     if ( $processingreturn eq '*' ) {
         if ( $branch ne '*' ) {
+
             # only do something for $processingreturn eq '*' if branch-specific
             Koha::CirculationRules->set_rules(
                 {
-                    branchcode   => $branch,
-                    rules        => {
-                        processingreturn => undef
-                    }
+                    branchcode => $branch,
+                    rules      => { processingreturn => undef }
                 }
             );
         }
     } else {
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => $branch,
-                rules        => {
-                    processingreturn => $processingreturn
-                }
+                branchcode => $branch,
+                rules      => { processingreturn => $processingreturn }
             }
         );
     }
@@ -724,18 +723,20 @@ elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
 
     my $category = $input->param('waiting_hold_cancellation_category');
     my $itemtype = $input->param('waiting_hold_cancellation_itemtype');
-    my $policy   = strip_non_numeric( scalar $input->param('waiting_hold_cancellation_policy') )
-                    ? 1
-                    : 0;
+    my $policy =
+        strip_non_numeric( scalar $input->param('waiting_hold_cancellation_policy') )
+        ? 1
+        : 0;
 
     Koha::Exception->throw("No value passed for waiting holds cancellation policy")
-      if not defined $policy # There is a JS check for that
-      || $policy eq '';
+        if not defined $policy    # There is a JS check for that
+        || $policy eq '';
 
     Koha::CirculationRules->set_rules(
-        {   categorycode => ( $category eq '*' ) ? undef : $category,
+        {
+            categorycode => ( $category eq '*' ) ? undef : $category,
             itemtype     => ( $itemtype eq '*' ) ? undef : $itemtype,
-            branchcode   => ( $branch   eq '*' ) ? undef : $branch,
+            branchcode   => ( $branch eq '*' )   ? undef : $branch,
             rules        => { waiting_hold_cancellation => $policy },
         }
     );
@@ -746,27 +747,29 @@ elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
     my $itemtype = $input->param('itemtype');
 
     Koha::CirculationRules->set_rules(
-        {   categorycode => ( $category eq '*' ) ? undef : $category,
+        {
+            categorycode => ( $category eq '*' ) ? undef : $category,
             itemtype     => ( $itemtype eq '*' ) ? undef : $itemtype,
-            branchcode   => ( $branch   eq '*' ) ? undef : $branch,
+            branchcode   => ( $branch eq '*' )   ? undef : $branch,
             rules        => { waiting_hold_cancellation => undef },
         }
     );
 }
 
-
-my $refundLostItemFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'lostreturn' });
-my $defaultLostItemFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'lostreturn' });
-my $refundProcessingFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'processingreturn' });
-my $defaultProcessingFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'processingreturn' });
+my $refundLostItemFeeRule =
+    Koha::CirculationRules->find( { branchcode => ( $branch eq '*' ) ? undef : $branch, rule_name => 'lostreturn' } );
+my $defaultLostItemFeeRule  = Koha::CirculationRules->find( { branchcode => undef, rule_name => 'lostreturn' } );
+my $refundProcessingFeeRule = Koha::CirculationRules->find(
+    { branchcode => ( $branch eq '*' ) ? undef : $branch, rule_name => 'processingreturn' } );
+my $defaultProcessingFeeRule = Koha::CirculationRules->find( { branchcode => undef, rule_name => 'processingreturn' } );
 $template->param(
-    refundLostItemFeeRule => $refundLostItemFeeRule,
-    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'cud-refund',
-    refundProcessingFeeRule => $refundProcessingFeeRule,
+    refundLostItemFeeRule       => $refundLostItemFeeRule,
+    defaultRefundRule           => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'cud-refund',
+    refundProcessingFeeRule     => $refundProcessingFeeRule,
     defaultProcessingRefundRule => $defaultProcessingFeeRule ? $defaultProcessingFeeRule->rule_value : 'cud-refund',
 );
 
-my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });
+my $patron_categories = Koha::Patron::Categories->search( {}, { order_by => ['description'] } );
 
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
@@ -779,7 +782,7 @@ my @used_itemtypes =
     Koha::CirculationRules->search( { branchcode => $humanbranch }, { columns => ['itemtype'], distinct => 1, } )
     ->get_column('itemtype');
 
-my $all_rules = Koha::CirculationRules->search({ branchcode => $humanbranch });
+my $all_rules     = Koha::CirculationRules->search( { branchcode => $humanbranch } );
 my $definedbranch = $all_rules->count ? 1 : 0;
 
 my $rules = {};
@@ -788,7 +791,7 @@ while ( my $r = $all_rules->next ) {
     $rules->{ $r->{categorycode} // q{} }->{ $r->{itemtype} // q{} }->{ $r->{rule_name} } = $r->{rule_value};
 }
 
-$template->param(show_branch_cat_rule_form => 1);
+$template->param( show_branch_cat_rule_form => 1 );
 
 $template->param(
     used_categorycodes => \@used_categorycodes,
@@ -807,16 +810,16 @@ exit 0;
 # sort by patron category, then item type, putting
 # default entries at the bottom
 sub by_category_and_itemtype {
-    unless (by_category($a, $b)) {
-        return by_itemtype($a, $b);
+    unless ( by_category( $a, $b ) ) {
+        return by_itemtype( $a, $b );
     }
 }
 
 sub by_category {
-    my ($a, $b) = @_;
-    if ($a->{'default_humancategorycode'}) {
-        return ($b->{'default_humancategorycode'} ? 0 : 1);
-    } elsif ($b->{'default_humancategorycode'}) {
+    my ( $a, $b ) = @_;
+    if ( $a->{'default_humancategorycode'} ) {
+        return ( $b->{'default_humancategorycode'} ? 0 : 1 );
+    } elsif ( $b->{'default_humancategorycode'} ) {
         return -1;
     } else {
         return $a->{'humancategorycode'} cmp $b->{'humancategorycode'};
@@ -824,10 +827,10 @@ sub by_category {
 }
 
 sub by_itemtype {
-    my ($a, $b) = @_;
-    if ($a->{default_translated_description}) {
-        return ($b->{'default_translated_description'} ? 0 : 1);
-    } elsif ($b->{'default_translated_description'}) {
+    my ( $a, $b ) = @_;
+    if ( $a->{default_translated_description} ) {
+        return ( $b->{'default_translated_description'} ? 0 : 1 );
+    } elsif ( $b->{'default_translated_description'} ) {
         return -1;
     } else {
         return lc $a->{'translated_description'} cmp lc $b->{'translated_description'};

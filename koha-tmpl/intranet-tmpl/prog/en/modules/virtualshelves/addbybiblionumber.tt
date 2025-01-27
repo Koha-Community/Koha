@@ -1,130 +1,131 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Add to list") | html %] &rsaquo;
-    [% t("Lists") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Add to list") | html %]
+        &rsaquo; [% t("Lists") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="lists_addbybiblionumber" class="lists">
-    <div class="container-fluid">
+<div class="container-fluid">
+    [% UNLESS (authorized) %]
+        <div class="alert alert-warning">
+            <h1>Error adding to list</h1>
+            [% IF (errcode==1) %]<p>Could not create a new list. Please check the name.</p>[% END %]
+            [% IF (errcode==2) %]<p>Sorry, you do not have permission to add items to this list.</p>[% END %]
+            <button class="btn btn-default close_window focus">Close window</button>
+        </div>
+    [% ELSE %]
 
-[% UNLESS (authorized) %]
-    <div class="alert alert-warning">
-        <h1>Error adding to list</h1>
-        [% IF (errcode==1) %]<p>Could not create a new list. Please check the name.</p>[% END %]
-        [% IF (errcode==2) %]<p>Sorry, you do not have permission to add items to this list.</p>[% END %]
-        <button class="btn btn-default close_window focus">Close window</button>
-    </div>
-[% ELSE %]
-
-                [% IF ( multiple ) %]
-            <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]a list:[% END %]</h1>
-                [% ELSE %]
-                        <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
-                [% END %]
+        [% IF ( multiple ) %]
+            <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>:[% ELSE %]a list:[% END %]</h1>
+        [% ELSE %]
+            <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
+        [% END %]
         <ul>
             [% FOREACH biblio IN biblios %]
-            <li> <span class="title">[% biblio.title | html %]</span>
-                [% IF ( biblio.author ) %]<span class="author"> [% biblio.author | html %] </span>[% END %]
-            </li>
+                <li>
+                    <span class="title">[% biblio.title | html %]</span>
+                    [% IF ( biblio.author ) %]<span class="author"> [% biblio.author | html %] </span>[% END %]
+                </li>
             [% END %]
-                </ul>
+        </ul>
 
         <form name="f1" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-                        [% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
+            [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
             <input type="hidden" name="confirmed" value="1" />
             [% IF ( shelfnumber ) %]<input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />[% END %]
 
-[% UNLESS ( shelfnumber ) %]
+            [% UNLESS ( shelfnumber ) %]
 
-[% UNLESS ( newshelf ) %]
-    [% IF private_shelves.count OR public_shelves.count OR private_shelves_shared_with_me.count %]
-     <fieldset class="rows">
-    <legend>Select an existing list</legend>
-    <ol>
-        <li>
-            <label>Choose list</label>
-            <select name="shelfnumber" id="shelfnumber">
-                [% IF private_shelves.count %]
-                    <optgroup label="Private lists">
-                        [% FOREACH private_shelf IN private_shelves %]
-                            <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
-                        [% END %]
-                    </optgroup>
+                [% UNLESS ( newshelf ) %]
+                    [% IF private_shelves.count OR public_shelves.count OR private_shelves_shared_with_me.count %]
+                        <fieldset class="rows">
+                            <legend>Select an existing list</legend>
+                            <ol>
+                                <li>
+                                    <label>Choose list</label>
+                                    <select name="shelfnumber" id="shelfnumber">
+                                        [% IF private_shelves.count %]
+                                            <optgroup label="Private lists">
+                                                [% FOREACH private_shelf IN private_shelves %]
+                                                    <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
+                                                [% END %]
+                                            </optgroup>
+                                        [% END %]
+                                        [% IF private_shelves_shared_with_me.count %]
+                                            <optgroup label="Private lists shared with me">
+                                                [% FOREACH private_shelf IN private_shelves_shared_with_me %]
+                                                    <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
+                                                [% END %]
+                                            </optgroup>
+                                        [% END %]
+                                        [% IF public_shelves.count %]
+                                            <optgroup label="Public lists">
+                                                [% FOREACH public_shelf IN public_shelves %]
+                                                    <option value="[% public_shelf.shelfnumber | html %]">[% public_shelf.shelfname | html %]</option>
+                                                [% END %]
+                                            </optgroup>
+                                        [% END %]
+                                    </select>
+                                </li>
+                            </ol>
+                            [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
+                            [% UNLESS ( biblionumbers ) %]
+                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            [% ELSE %]
+                                <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]" />
+                            [% END %]
+                        </fieldset>
+
+                        <p>... or...</p>
+                    [% END %]
                 [% END %]
-                [% IF private_shelves_shared_with_me.count %]
-                    <optgroup label="Private lists shared with me">
-                        [% FOREACH private_shelf IN private_shelves_shared_with_me %]
-                            <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
-                        [% END %]
-                    </optgroup>
-                [% END %]
-                [% IF public_shelves.count %]
-                    <optgroup label="Public lists">
-                        [% FOREACH public_shelf IN public_shelves %]
-                            <option value="[% public_shelf.shelfnumber | html %]">[% public_shelf.shelfname | html %]</option>
-                        [% END %]
-                    </optgroup>
-                [% END %]
-            </select>
-        </li>
-    </ol>
-    [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
-    [% UNLESS ( biblionumbers ) %]
-      <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-    [% ELSE %]
-      <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]" />
-    [% END %]
-    </fieldset>
 
-    <p>... or...</p>
-[% END %]
-[% END %]
-
-    <fieldset class="rows"><legend>Add to a new list:</legend>
-    <ol><li>
-        <label for="newvirtualshelf">
-        List name:
-        </label>
-        [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
-        [% UNLESS ( biblionumbers ) %]
-              <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
-        [% ELSE %]
-              <input type="hidden" name="biblionumbers" id="biblionumbers" value="[% biblionumbers | html %]" />
-        [% END %]
-        <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
-        <input type="hidden" name="confirmed" value="1" />
-    </li>
-    <li>
-        <label for="category">Category:</label>
-        <select name="public" id="public">
-        <option value="0">Private</option>
-        <option value="1">Public</option>
-        </select>
-    </li></ol>
-    </fieldset>
-
-
-[% END %]
-
-        <input type="hidden" name="sortfield" value="title" />
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <input type="hidden" name="op" value="cud-add" />
-                    <input type="submit" class="btn btn-primary" value="Save" />
-                    <button class="btn btn-default close_window">Cancel</button>
+                <fieldset class="rows"
+                    ><legend>Add to a new list:</legend>
+                    <ol
+                        ><li>
+                            <label for="newvirtualshelf"> List name: </label>
+                            [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
+                            [% UNLESS ( biblionumbers ) %]
+                                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
+                            [% ELSE %]
+                                <input type="hidden" name="biblionumbers" id="biblionumbers" value="[% biblionumbers | html %]" />
+                            [% END %]
+                            <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
+                            <input type="hidden" name="confirmed" value="1" />
+                        </li>
+                        <li>
+                            <label for="category">Category:</label>
+                            <select name="public" id="public">
+                                <option value="0">Private</option>
+                                <option value="1">Public</option>
+                            </select>
+                        </li></ol
+                    >
                 </fieldset>
-            </div>
-        </nav>
-    </form>
-[% END %]
-</div> <!-- /.container-fluid -->
+            [% END %]
+
+            <input type="hidden" name="sortfield" value="title" />
+            <nav class="navbar navbar-default fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input type="hidden" name="op" value="cud-add" />
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <button class="btn btn-default close_window">Cancel</button>
+                    </fieldset>
+                </div>
+            </nav>
+        </form>
+    [% END %]
+</div>
+<!-- /.container-fluid -->
 
 [% SET popup_window = 1 %]
 [% INCLUDE 'intranet-bottom.inc' %]

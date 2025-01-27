@@ -38,20 +38,19 @@ use Modern::Perl;
 use HTML::Entities;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
-use C4::Biblio qw( GetBiblioData GetISBDView );
+use C4::Output  qw( output_html_with_http_headers );
+use CGI         qw ( -utf8 );
+use C4::Biblio  qw( GetBiblioData GetISBDView );
 use C4::Serials qw( CountSubscriptionFromBiblionumber GetSubscription GetSubscriptionsFromBiblionumber );
-use C4::Search qw( z3950_search_args enabled_staff_search_views );
+use C4::Search  qw( z3950_search_args enabled_staff_search_views );
 
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 use Koha::Virtualshelves;
 
-
 my $query = CGI->new;
-my $dbh = C4::Context->dbh;
+my $dbh   = C4::Context->dbh;
 
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
@@ -62,11 +61,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "catalogue/ISBDdetail.tt",
         query         => $query,
         type          => "intranet",
-	flagsrequired   => { catalogue => 1 },
+        flagsrequired => { catalogue => 1 },
     }
 );
 
-my $biblio = Koha::Biblios->find( $biblionumber );
+my $biblio = Koha::Biblios->find($biblionumber);
 unless ( $biblionumber && $biblio ) {
 
     # biblionumber invalid -> report and exit
@@ -78,8 +77,7 @@ unless ( $biblionumber && $biblio ) {
     exit;
 }
 
-my $record =
-  $biblio->metadata_record( { embed_items => 1, interface => 'intranet' } );
+my $record = $biblio->metadata_record( { embed_items => 1, interface => 'intranet' } );
 if ( not defined $record ) {
 
     # biblionumber invalid -> report and exit
@@ -91,15 +89,16 @@ if ( not defined $record ) {
     exit;
 }
 
-
 my $framework = $biblio->frameworkcode;
-my $res = GetISBDView({
-    'record'    => $record,
-    'template'  => 'intranet',
-    'framework' => $framework,
-});
+my $res       = GetISBDView(
+    {
+        'record'    => $record,
+        'template'  => 'intranet',
+        'framework' => $framework,
+    }
+);
 
-if($query->cookie("holdfor")){ 
+if ( $query->cookie("holdfor") ) {
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
         holdfor        => $query->cookie("holdfor"),
@@ -107,7 +106,7 @@ if($query->cookie("holdfor")){
     );
 }
 
-if( $query->cookie("searchToOrder") ){
+if ( $query->cookie("searchToOrder") ) {
     my ( $basketno, $vendorid ) = split( /\//, $query->cookie("searchToOrder") );
     $template->param(
         searchtoorder_basketno => $basketno,
@@ -117,9 +116,9 @@ if( $query->cookie("searchToOrder") ){
 
 # count of item linked with biblio
 my $itemcount = $biblio->items->count;
-$template->param( count => $itemcount);
+$template->param( count => $itemcount );
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
- 
+
 if ($subscriptionsnumber) {
     my $subscriptions     = GetSubscriptionsFromBiblionumber($biblionumber);
     my $subscriptiontitle = $subscriptions->[0]{'bibliotitle'};
@@ -132,10 +131,10 @@ if ($subscriptionsnumber) {
 # get biblionumbers stored in the cart
 my @cart_list;
 
-if($query->cookie("intranet_bib_list")){
+if ( $query->cookie("intranet_bib_list") ) {
     my $cart_list = $query->cookie("intranet_bib_list");
-    @cart_list = split(/\//, $cart_list);
-    if ( grep {$_ eq $biblionumber} @cart_list) {
+    @cart_list = split( /\//, $cart_list );
+    if ( grep { $_ eq $biblionumber } @cart_list ) {
         $template->param( incart => 1 );
     }
 }
@@ -155,21 +154,20 @@ my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
     }
 );
 
-
 $template->param(
     add_to_some_private_shelves => $some_private_shelves,
     add_to_some_public_shelves  => $some_public_shelves,
 );
 
-$template->param (
+$template->param(
     ISBD                => $res,
     biblionumber        => $biblionumber,
     isbdview            => 1,
-    z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
-    ocoins => $biblio->get_coins,
+    z3950_search_params => C4::Search::z3950_search_args( GetBiblioData($biblionumber) ),
+    ocoins              => $biblio->get_coins,
     C4::Search::enabled_staff_search_views,
-    searchid            => scalar $query->param('searchid'),
-    biblio              => $biblio,
+    searchid => scalar $query->param('searchid'),
+    biblio   => $biblio,
 );
 
 my $holds = $biblio->holds;

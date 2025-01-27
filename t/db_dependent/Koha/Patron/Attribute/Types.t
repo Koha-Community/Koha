@@ -43,28 +43,33 @@ subtest 'new() tests' => sub {
     Koha::Patron::Attribute::Types->search()->delete();
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
-        {   code        => 'code',
+        {
+            code        => 'code',
             description => 'description',
             repeatable  => 0
         }
     )->store();
 
-    is( Koha::Patron::Attribute::Types->search()->count,
-        1, 'Only one object created' );
+    is(
+        Koha::Patron::Attribute::Types->search()->count,
+        1, 'Only one object created'
+    );
 
-    my $cateogory_code
-        = $builder->build( { source => 'Category' } )->{categorycode};
+    my $cateogory_code = $builder->build( { source => 'Category' } )->{categorycode};
 
     my $attribute_type_with_category = Koha::Patron::Attribute::Type->new(
-        {   code          => 'code_2',
+        {
+            code          => 'code_2',
             description   => 'description',
             category_code => $cateogory_code,
             repeatable    => 0
         }
     )->store();
 
-    is( Koha::Patron::Attribute::Types->search()->count,
-        2, 'Two objects created' );
+    is(
+        Koha::Patron::Attribute::Types->search()->count,
+        2, 'Two objects created'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -155,7 +160,7 @@ subtest 'store' => sub {
     'Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty', "";
 
     $attribute_112->delete;
-    ok($attr_type_1->set({ unique_id => 1, repeatable => 0 })->store);
+    ok( $attr_type_1->set( { unique_id => 1, repeatable => 0 } )->store );
 
     throws_ok {
         $attr_type_2->unique_id(1)->store;
@@ -163,7 +168,7 @@ subtest 'store' => sub {
     'Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty', "";
 
     $attribute_321->attribute(43)->store;
-    ok($attr_type_2->set({ unique_id => 1, repeatable => 0 })->store);
+    ok( $attr_type_2->set( { unique_id => 1, repeatable => 0 } )->store );
 
     $schema->storage->txn_rollback;
 
@@ -179,7 +184,8 @@ subtest 'library_limits() tests' => sub {
     Koha::Patron::Attribute::Types->search()->delete();
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
-        {   code        => 'code',
+        {
+            code        => 'code',
             description => 'description',
             repeatable  => 0
         }
@@ -188,8 +194,10 @@ subtest 'library_limits() tests' => sub {
     my $library = $builder->build( { source => 'Branch' } )->{branchcode};
 
     my $library_limits = $attribute_type->library_limits();
-    is( $library_limits, undef,
-        'No branch limitations defined for attribute type' );
+    is(
+        $library_limits, undef,
+        'No branch limitations defined for attribute type'
+    );
 
     my $print_error = $dbh->{PrintError};
     $dbh->{PrintError} = 0;
@@ -200,8 +208,10 @@ subtest 'library_limits() tests' => sub {
     'Koha::Exceptions::CannotAddLibraryLimit',
         'Exception thrown on single invalid branchcode';
     $library_limits = $attribute_type->library_limits();
-    is( $library_limits, undef,
-        'No branch limitations defined for attribute type' );
+    is(
+        $library_limits, undef,
+        'No branch limitations defined for attribute type'
+    );
 
     throws_ok {
         $attribute_type->library_limits( [ 'fake', $library ] );
@@ -210,8 +220,10 @@ subtest 'library_limits() tests' => sub {
         'Exception thrown on invalid branchcode present';
 
     $library_limits = $attribute_type->library_limits();
-    is( $library_limits, undef,
-        'No branch limitations defined for attribute type' );
+    is(
+        $library_limits, undef,
+        'No branch limitations defined for attribute type'
+    );
 
     $dbh->{PrintError} = $print_error;
 
@@ -219,14 +231,16 @@ subtest 'library_limits() tests' => sub {
     $library_limits = $attribute_type->library_limits;
     is( $library_limits->count, 1, 'Library limits correctly set (count)' );
     my $limit_library = $library_limits->next;
-    ok( $limit_library->isa('Koha::Library'),
+    ok(
+        $limit_library->isa('Koha::Library'),
         'Library limits correctly set (type)'
     );
-    is( $limit_library->branchcode,
-        $library, 'Library limits correctly set (value)' );
+    is(
+        $limit_library->branchcode,
+        $library, 'Library limits correctly set (value)'
+    );
 
-    my $another_library
-        = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $another_library  = $builder->build( { source => 'Branch' } )->{branchcode};
     my @branchcodes_list = ( $library, $another_library );
 
     $attribute_type->library_limits( \@branchcodes_list );
@@ -234,10 +248,12 @@ subtest 'library_limits() tests' => sub {
     is( $library_limits->count, 2, 'Library limits correctly set (count)' );
 
     while ( $limit_library = $library_limits->next ) {
-        ok( $limit_library->isa('Koha::Library'),
+        ok(
+            $limit_library->isa('Koha::Library'),
             'Library limits correctly set (type)'
         );
-        ok( eval {
+        ok(
+            eval {
                 grep { $limit_library->branchcode eq $_ } @branchcodes_list;
             },
             'Library limits correctly set (values)'
@@ -257,7 +273,8 @@ subtest 'add_library_limit() tests' => sub {
     Koha::Patron::Attribute::Types->search()->delete();
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
-        {   code        => 'code',
+        {
+            code        => 'code',
             description => 'description',
             repeatable  => 0
         }
@@ -268,11 +285,12 @@ subtest 'add_library_limit() tests' => sub {
 
     my $library = $builder->build( { source => 'Branch' } )->{branchcode};
     $attribute_type->add_library_limit($library);
-    my $rs = Koha::Database->schema->resultset('BorrowerAttributeTypesBranch')
-        ->search( { bat_code => 'code' } );
+    my $rs = Koha::Database->schema->resultset('BorrowerAttributeTypesBranch')->search( { bat_code => 'code' } );
     is( $rs->count, 1, 'Library limit successfully added (count)' );
-    is( $rs->next->b_branchcode->branchcode,
-        $library, 'Library limit successfully added (value)' );
+    is(
+        $rs->next->b_branchcode->branchcode,
+        $library, 'Library limit successfully added (value)'
+    );
 
     my $print_error = $dbh->{PrintError};
     $dbh->{PrintError} = 0;
@@ -298,7 +316,8 @@ subtest 'del_library_limit() tests' => sub {
     Koha::Patron::Attribute::Types->search()->delete();
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
-        {   code        => 'code',
+        {
+            code        => 'code',
             description => 'description',
             repeatable  => 0
         }
@@ -311,8 +330,10 @@ subtest 'del_library_limit() tests' => sub {
     my $library = $builder->build( { source => 'Branch' } )->{branchcode};
     $attribute_type->add_library_limit($library);
 
-    is( $attribute_type->del_library_limit($library),
-        1, 'Library limit successfully deleted' );
+    is(
+        $attribute_type->del_library_limit($library),
+        1, 'Library limit successfully deleted'
+    );
 
     my $print_error = $dbh->{PrintError};
     $dbh->{PrintError} = 0;
@@ -344,7 +365,8 @@ subtest 'replace_library_limits() tests' => sub {
     Koha::Patron::Attribute::Types->search()->delete();
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
-        {   code        => 'code',
+        {
+            code        => 'code',
             description => 'description',
             repeatable  => 0
         }
@@ -354,29 +376,34 @@ subtest 'replace_library_limits() tests' => sub {
     my $library_limits = $attribute_type->library_limits;
     is( $library_limits, undef, 'Replacing with empty array yields no library limits' );
 
-    my $library_1 = $builder->build({ source => 'Branch' })->{branchcode};
-    my $library_2 = $builder->build({ source => 'Branch' })->{branchcode};
-    my $library_3 = $builder->build({ source => 'Branch' })->{branchcode};
+    my $library_1 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library_2 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library_3 = $builder->build( { source => 'Branch' } )->{branchcode};
 
     $attribute_type->replace_library_limits( [$library_1] );
     $library_limits = $attribute_type->library_limits;
-    is( $library_limits->count, 1,
-        'Successfully adds a single library limit' );
+    is(
+        $library_limits->count, 1,
+        'Successfully adds a single library limit'
+    );
     my $library_limit = $library_limits->next;
-    is( $library_limit->branchcode,
-        $library_1, 'Library limit correctly set' );
+    is(
+        $library_limit->branchcode,
+        $library_1, 'Library limit correctly set'
+    );
 
     my @branchcodes_list = ( $library_1, $library_2, $library_3 );
-    $attribute_type->replace_library_limits(
-        [ $library_1, $library_2, $library_3 ] );
+    $attribute_type->replace_library_limits( [ $library_1, $library_2, $library_3 ] );
     $library_limits = $attribute_type->library_limits;
     is( $library_limits->count, 3, 'Successfully adds two library limit' );
 
     while ( my $limit_library = $library_limits->next ) {
-        ok( $limit_library->isa('Koha::Library'),
+        ok(
+            $limit_library->isa('Koha::Library'),
             'Library limits correctly set (type)'
         );
-        ok( eval {
+        ok(
+            eval {
                 grep { $limit_library->branchcode eq $_ } @branchcodes_list;
             },
             'Library limits correctly set (values)'
@@ -395,10 +422,14 @@ subtest 'search_with_library_limits() tests' => sub {
     # Cleanup before running the tests
     Koha::Patron::Attribute::Types->search()->delete();
 
-    my $object_code_1 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_1' } });
-    my $object_code_2 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_2' } });
-    my $object_code_3 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_3' } });
-    my $object_code_4 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_4' } });
+    my $object_code_1 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_1' } } );
+    my $object_code_2 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_2' } } );
+    my $object_code_3 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_3' } } );
+    my $object_code_4 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_4' } } );
 
     is( Koha::Patron::Attribute::Types->search()->count, 4, 'Three objects created' );
 
@@ -421,7 +452,7 @@ subtest 'search_with_library_limits() tests' => sub {
 
     is( $results->count, 4, 'All attribute types are available with no library pssed' );
 
-    t::lib::Mocks::mock_userenv({ branchcode => $branch_2 });
+    t::lib::Mocks::mock_userenv( { branchcode => $branch_2 } );
 
     $results = Koha::Patron::Attribute::Types->search_with_library_limits( {}, { order_by => 'code' }, undef );
 

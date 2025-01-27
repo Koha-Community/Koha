@@ -21,16 +21,16 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth        qw( get_template_and_user );
 use C4::ClassSource qw( GetClassSort );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output      qw( output_html_with_http_headers );
 
 use Koha::ClassSources;
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
-    my $res = "
+    my $res           = "
 <script>
 
 function Click$function_name(ev) {
@@ -45,16 +45,17 @@ function Click$function_name(ev) {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $cgi = $params->{cgi};
+    my ($params)         = @_;
+    my $cgi              = $params->{cgi};
     my $results_per_page = 30;
-    my $current_page = $cgi->param('page') || 1;
+    my $current_page     = $cgi->param('page') || 1;
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "cataloguing/value_builder/cn_browser.tt",
-            query           => $cgi,
-            type            => "intranet",
-            flagsrequired   => { catalogue => 1 },
+        {
+            template_name => "cataloguing/value_builder/cn_browser.tt",
+            query         => $cgi,
+            type          => "intranet",
+            flagsrequired => { catalogue => 1 },
         }
     );
 
@@ -83,8 +84,8 @@ my $launcher = sub {
         $search = $gt;
     }
 
-    my $cn_source = $cgi->param('cn_source') || C4::Context->preference("DefaultClassificationSource");
-    my @class_sources = Koha::ClassSources->search({ used => 1})->as_list;
+    my $cn_source     = $cgi->param('cn_source') || C4::Context->preference("DefaultClassificationSource");
+    my @class_sources = Koha::ClassSources->search( { used => 1 } )->as_list;
 
     #Don't show half the results of show lt or gt
     $real_limit = $results_per_page if $search ne $q;
@@ -95,7 +96,8 @@ my $launcher = sub {
         my $green = 0;
 
         #Results before the cn_sort
-        $query = "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, itype
+        $query =
+            "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, itype
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
@@ -125,7 +127,8 @@ my $launcher = sub {
         my $green = 0;
 
         #Results after the cn_sort
-        $query = "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, itype
+        $query =
+            "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, itype
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
@@ -155,12 +158,11 @@ my $launcher = sub {
         $sth->finish;
     }
 
-    $template->param( 'q'       => $q );
-    $template->param( 'cn_loop' => \@cn ) if $#cn != -1;
-    $template->param( 'popup'   => defined( $cgi->param('popup') ) );
-    $template->param( 'cn_source' => $cn_source ) if $cn_source;
+    $template->param( 'q'             => $q );
+    $template->param( 'cn_loop'       => \@cn ) if $#cn != -1;
+    $template->param( 'popup'         => defined( $cgi->param('popup') ) );
+    $template->param( 'cn_source'     => $cn_source ) if $cn_source;
     $template->param( 'class_sources' => \@class_sources );
-
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
 };

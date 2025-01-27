@@ -34,28 +34,26 @@ sub new {
 }
 
 sub _init {
-    my $self       = shift;
-    my $branch     = $self->{branchcode};
-    my $dbh        = C4::Context->dbh();
-    my $weekly_closed_days_sth = $dbh->prepare(
-'SELECT weekday FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NOT NULL'
-    );
-    $weekly_closed_days_sth->execute( $branch );
+    my $self   = shift;
+    my $branch = $self->{branchcode};
+    my $dbh    = C4::Context->dbh();
+    my $weekly_closed_days_sth =
+        $dbh->prepare('SELECT weekday FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NOT NULL');
+    $weekly_closed_days_sth->execute($branch);
     $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
     while ( my $tuple = $weekly_closed_days_sth->fetchrow_hashref ) {
         $self->{weekly_closed_days}->[ $tuple->{weekday} ] = 1;
     }
-    my $day_month_closed_days_sth = $dbh->prepare(
-'SELECT day, month FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NULL'
-    );
-    $day_month_closed_days_sth->execute( $branch );
+    my $day_month_closed_days_sth =
+        $dbh->prepare('SELECT day, month FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NULL');
+    $day_month_closed_days_sth->execute($branch);
     $self->{day_month_closed_days} = {};
     while ( my $tuple = $day_month_closed_days_sth->fetchrow_hashref ) {
         $self->{day_month_closed_days}->{ $tuple->{month} }->{ $tuple->{day} } =
-          1;
+            1;
     }
 
-    $self->{test}            = 0;
+    $self->{test} = 0;
     return;
 }
 
@@ -80,17 +78,12 @@ sub _holidays {
 
         # Add holidays for each branch
         my $holidays_sth = $dbh->prepare(
-'SELECT day, month, year, MAX(isexception) FROM special_holidays WHERE branchcode = ? GROUP BY day, month, year'
+            'SELECT day, month, year, MAX(isexception) FROM special_holidays WHERE branchcode = ? GROUP BY day, month, year'
         );
-        $holidays_sth->execute($self->{branchcode});
+        $holidays_sth->execute( $self->{branchcode} );
 
-        while ( my ( $day, $month, $year, $exception ) =
-            $holidays_sth->fetchrow )
-        {
-            my $datestring =
-                sprintf( "%04d", $year )
-              . sprintf( "%02d", $month )
-              . sprintf( "%02d", $day );
+        while ( my ( $day, $month, $year, $exception ) = $holidays_sth->fetchrow ) {
+            my $datestring = sprintf( "%04d", $year ) . sprintf( "%02d", $month ) . sprintf( "%02d", $day );
 
             $holidays->{$datestring} = $exception ? 0 : 1;
         }
@@ -102,7 +95,6 @@ sub _holidays {
 sub addDuration {
     my ( $self, $startdate, $add_duration, $unit ) = @_;
 
-
     Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addDuration: days_mode")
         unless exists $self->{days_mode};
 
@@ -111,16 +103,18 @@ sub addDuration {
         $add_duration = DateTime::Duration->new( days => $add_duration );
     }
 
-    $unit ||= 'days'; # default days ?
+    $unit ||= 'days';    # default days ?
     my $dt;
     if ( $unit eq 'hours' ) {
+
         # Fixed for legacy support. Should be set as a branch parameter
         my $return_by_hour = 10;
 
-        $dt = $self->addHours($startdate, $add_duration, $return_by_hour);
+        $dt = $self->addHours( $startdate, $add_duration, $return_by_hour );
     } else {
+
         # days
-        $dt = $self->addDays($startdate, $add_duration);
+        $dt = $self->addDays( $startdate, $add_duration );
     }
     return $dt;
 }
@@ -137,13 +131,14 @@ sub addHours {
     Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addHours: days_mode")
         unless exists $self->{days_mode};
 
-    if ( $self->{days_mode} ne 'Days' &&
-          $self->is_holiday($base_date) ) {
+    if (   $self->{days_mode} ne 'Days'
+        && $self->is_holiday($base_date) )
+    {
 
         if ( $hours_duration->is_negative() ) {
-            $base_date = $self->prev_open_days($base_date, 1);
+            $base_date = $self->prev_open_days( $base_date, 1 );
         } else {
-            $base_date = $self->next_open_days($base_date, 1);
+            $base_date = $self->next_open_days( $base_date, 1 );
         }
 
         $base_date->set_hour($return_by_hour);
@@ -161,42 +156,44 @@ sub addDays {
         unless exists $self->{days_mode};
 
     if ( $self->{days_mode} eq 'Calendar' ) {
+
         # use the calendar to skip all days the library is closed
         # when adding
         my $days = abs $days_duration->in_units('days');
 
         if ( $days_duration->is_negative() ) {
             while ($days) {
-                $base_date = $self->prev_open_days($base_date, 1);
+                $base_date = $self->prev_open_days( $base_date, 1 );
                 --$days;
             }
         } else {
             while ($days) {
-                $base_date = $self->next_open_days($base_date, 1);
+                $base_date = $self->next_open_days( $base_date, 1 );
                 --$days;
             }
         }
 
-    } else { # Days, Datedue or Dayweek
-        # use straight days, then use calendar to push
-        # the date to the next open day as appropriate
-        # if Datedue or Dayweek
+    } else {    # Days, Datedue or Dayweek
+                # use straight days, then use calendar to push
+                # the date to the next open day as appropriate
+                # if Datedue or Dayweek
         $base_date->add_duration($days_duration);
 
-        if ( $self->{days_mode} eq 'Datedue' ||
-            $self->{days_mode} eq 'Dayweek') {
+        if (   $self->{days_mode} eq 'Datedue'
+            || $self->{days_mode} eq 'Dayweek' )
+        {
             # Datedue or Dayweek, then use the calendar to push
             # the date to the next open day if holiday
             if ( $self->is_holiday($base_date) ) {
-                my $dow = $base_date->day_of_week;
+                my $dow  = $base_date->day_of_week;
                 my $days = $days_duration->in_units('days');
+
                 # Is it a period based on weeks
-                my $push_amt = $days % 7 == 0 ?
-                    $self->get_push_amt($base_date) : 1;
+                my $push_amt = $days % 7 == 0 ? $self->get_push_amt($base_date) : 1;
                 if ( $days_duration->is_negative() ) {
-                    $base_date = $self->prev_open_days($base_date, $push_amt);
+                    $base_date = $self->prev_open_days( $base_date, $push_amt );
                 } else {
-                    $base_date = $self->next_open_days($base_date, $push_amt);
+                    $base_date = $self->next_open_days( $base_date, $push_amt );
                 }
             }
         }
@@ -206,12 +203,13 @@ sub addDays {
 }
 
 sub get_push_amt {
-    my ( $self, $base_date) = @_;
+    my ( $self, $base_date ) = @_;
 
     Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->get_push_amt: days_mode")
         unless exists $self->{days_mode};
 
     my $dow = $base_date->day_of_week;
+
     # Representation fix
     # DateTime object dow (1-7) where Monday is 1
     # Arrays are 0-based where 0 = Sunday, not 7.
@@ -222,8 +220,9 @@ sub get_push_amt {
     return (
         # We're using Dayweek useDaysMode option
         $self->{days_mode} eq 'Dayweek' &&
-        # It's not a permanently closed day
-        !$self->{weekly_closed_days}->[$dow]
+
+            # It's not a permanently closed day
+            !$self->{weekly_closed_days}->[$dow]
     ) ? 7 : 1;
 }
 
@@ -231,17 +230,18 @@ sub is_holiday {
     my ( $self, $dt ) = @_;
 
     my $localdt = $dt->clone();
-    my $day   = $localdt->day;
-    my $month = $localdt->month;
-    my $ymd   = $localdt->ymd('');
+    my $day     = $localdt->day;
+    my $month   = $localdt->month;
+    my $ymd     = $localdt->ymd('');
 
     #Change timezone to "floating" before doing any calculations or comparisons
     $localdt->set_time_zone("floating");
     $localdt->truncate( to => 'day' );
 
-    return $self->_holidays->{$ymd} if defined($self->_holidays->{$ymd});
+    return $self->_holidays->{$ymd} if defined( $self->_holidays->{$ymd} );
 
     my $dow = $localdt->day_of_week;
+
     # Representation fix
     # DateTime object dow (1-7) where Monday is 1
     # Arrays are 0-based where 0 = Sunday, not 7.
@@ -269,11 +269,11 @@ sub next_open_days {
 
     my $base_date = $dt->clone();
 
-    $base_date->add(days => $to_add);
+    $base_date->add( days => $to_add );
     my $i = 0;
     while ( $self->is_holiday($base_date) && $i < OPEN_DAYS_SEARCH_MAX_ITERATIONS ) {
         my $add_next = $self->get_push_amt($base_date);
-        $base_date->add(days => $add_next);
+        $base_date->add( days => $add_next );
         ++$i;
     }
 
@@ -297,14 +297,15 @@ sub prev_open_days {
     # subtracting, so do the right thing
     $to_sub = $to_sub > 0 ? 0 - $to_sub : $to_sub;
 
-    $base_date->add(days => $to_sub);
+    $base_date->add( days => $to_sub );
 
     my $i = 0;
     while ( $self->is_holiday($base_date) && $i < OPEN_DAYS_SEARCH_MAX_ITERATIONS ) {
         my $sub_next = $self->get_push_amt($base_date);
+
         # Ensure we're subtracting when we need to be
         $sub_next = $sub_next > 0 ? 0 - $sub_next : $sub_next;
-        $base_date->add(days => $sub_next);
+        $base_date->add( days => $sub_next );
         ++$i;
     }
 
@@ -328,8 +329,8 @@ sub days_forward {
 
     my $base_dt = $start_dt->clone();
 
-    while ($num_days--) {
-        $base_dt = $self->next_open_days($base_dt, 1);
+    while ( $num_days-- ) {
+        $base_dt = $self->next_open_days( $base_dt, 1 );
     }
 
     return $base_dt;
@@ -342,14 +343,14 @@ sub days_between {
 
     # Change time zone for date math and swap if needed
     $start_dt = $start_dt->clone->set_time_zone('floating');
-    $end_dt = $end_dt->clone->set_time_zone('floating');
-    if( $start_dt->compare($end_dt) > 0 ) {
+    $end_dt   = $end_dt->clone->set_time_zone('floating');
+    if ( $start_dt->compare($end_dt) > 0 ) {
         ( $start_dt, $end_dt ) = ( $end_dt, $start_dt );
     }
 
     # start and end should not be closed days
     my $delta_days = $start_dt->delta_days($end_dt)->delta_days;
-    while( $start_dt->compare($end_dt) < 1 ) {
+    while ( $start_dt->compare($end_dt) < 1 ) {
         $delta_days-- if $self->is_holiday($start_dt);
         $start_dt->add( days => 1 );
     }
@@ -357,9 +358,9 @@ sub days_between {
 }
 
 sub hours_between {
-    my ($self, $start_date, $end_date) = @_;
+    my ( $self, $start_date, $end_date ) = @_;
     my $start_dt = $start_date->clone()->set_time_zone('floating');
-    my $end_dt = $end_date->clone()->set_time_zone('floating');
+    my $end_dt   = $end_date->clone()->set_time_zone('floating');
 
     my $duration = $end_dt->delta_ms($start_dt);
     $start_dt->truncate( to => 'day' );
@@ -370,13 +371,13 @@ sub hours_between {
     # take into account open/close times then it would be a duration
     # of library open hours
     my $skipped_days = 0;
-    while( $start_dt->compare($end_dt) < 1 ) {
+    while ( $start_dt->compare($end_dt) < 1 ) {
         $skipped_days++ if $self->is_holiday($start_dt);
         $start_dt->add( days => 1 );
     }
 
     if ($skipped_days) {
-        $duration->subtract_duration(DateTime::Duration->new( hours => 24 * $skipped_days));
+        $duration->subtract_duration( DateTime::Duration->new( hours => 24 * $skipped_days ) );
     }
 
     return $duration;

@@ -25,35 +25,45 @@ use HTTP::OAI;
 use base ("HTTP::OAI::ListMetadataFormats");
 
 sub new {
-    my ($class, $repository) = @_;
+    my ( $class, $repository ) = @_;
 
     my $self = $class->SUPER::new();
 
-    if ( $repository->{ conf } ) {
-        foreach my $name ( @{ $repository->{ koha_metadata_format } } ) {
-            my $format = $repository->{ conf }->{ format }->{ $name };
-            $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
-                metadataPrefix    => $format->{metadataPrefix},
-                schema            => $format->{schema},
-                metadataNamespace => $format->{metadataNamespace}, ) );
+    if ( $repository->{conf} ) {
+        foreach my $name ( @{ $repository->{koha_metadata_format} } ) {
+            my $format = $repository->{conf}->{format}->{$name};
+            $self->metadataFormat(
+                HTTP::OAI::MetadataFormat->new(
+                    metadataPrefix    => $format->{metadataPrefix},
+                    schema            => $format->{schema},
+                    metadataNamespace => $format->{metadataNamespace},
+                )
+            );
         }
-    }
-    else {
-        $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
-            metadataPrefix    => 'oai_dc',
-            schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-            metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/'
-        ) );
-        $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
-            metadataPrefix    => 'marc21',
-            schema            => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
-            metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim'
-        ) );
-        $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
-            metadataPrefix    => 'marcxml',
-            schema            => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
-            metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim'
-        ) );
+    } else {
+        $self->metadataFormat(
+            HTTP::OAI::MetadataFormat->new(
+                metadataPrefix    => 'oai_dc',
+                schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+                metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/'
+            )
+        );
+        $self->metadataFormat(
+            HTTP::OAI::MetadataFormat->new(
+                metadataPrefix    => 'marc21',
+                schema            => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
+                metadataNamespace =>
+                    'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim'
+            )
+        );
+        $self->metadataFormat(
+            HTTP::OAI::MetadataFormat->new(
+                metadataPrefix    => 'marcxml',
+                schema            => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
+                metadataNamespace =>
+                    'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim'
+            )
+        );
     }
 
     return $self;

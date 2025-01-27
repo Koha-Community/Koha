@@ -34,15 +34,15 @@ use Koha::Checkouts;
 use Koha::Recalls;
 use C4::Log;
 
-my $command_line_options = join(" ",@ARGV);
+my $command_line_options = join( " ", @ARGV );
 
-cronlogaction({ info => $command_line_options });
+cronlogaction( { info => $command_line_options } );
 
-my $recalls = Koha::Recalls->search({ status => 'requested' });
-while( my $recall = $recalls->next ) {
-    if ( $recall->should_be_overdue ){
-        $recall->set_overdue({ interface => 'COMMANDLINE' });
+my $recalls = Koha::Recalls->search( { status => 'requested' } );
+while ( my $recall = $recalls->next ) {
+    if ( $recall->should_be_overdue ) {
+        $recall->set_overdue( { interface => 'COMMANDLINE' } );
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

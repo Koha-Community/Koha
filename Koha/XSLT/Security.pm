@@ -56,15 +56,15 @@ sub new {
 
     $self->{_options} = {};
     my $conf = C4::Context->config('koha_xslt_security');
-    if( $conf && ref($conf) eq 'HASH' ) {
+    if ( $conf && ref($conf) eq 'HASH' ) {
         $self->{_options} = $conf;
     }
 
     my $security = eval { XML::LibXSLT::Security->new };
-    if( $security ) {
+    if ($security) {
         $self->{_security_obj} = $security;
     } else {
-        warn "No XML::LibXSLT::Security object: $@"; #TODO Move to about ?
+        warn "No XML::LibXSLT::Security object: $@";    #TODO Move to about ?
     }
 
     return bless $self, $class;
@@ -82,35 +82,47 @@ sub register_callbacks {
     my $security = $self->{_security_obj};
     return if !$security;
 
-    $security->register_callback( read_file  => sub {
-        warn "read_file called in XML::LibXSLT";
-        #i.e. when using the exsl:document() element or document() function (to read a XML file)
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-    $security->register_callback( write_file => sub {
-        warn "write_file called in XML::LibXSLT";
-        #i.e. when using the exsl:document element (or document() function?) (to write an output file of many possible types)
-        #e.g.
-        #<exsl:document href="file:///tmp/breached.txt">
-        #   <xsl:text>breached!</xsl:text>
-        #</exsl:document>
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-    $security->register_callback( read_net   => sub {
-        warn "read_net called in XML::LibXSLT";
-        #i.e. when using the document() function (to read XML from the network)
-        #e.g. <xsl:copy-of select="document('http://localhost')" />
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-    $security->register_callback( write_net  => sub {
-        warn "write_net called in XML::LibXSLT";
-        #NOTE: it's unknown how one would invoke this, but covering our bases anyway
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
+    $security->register_callback(
+        read_file => sub {
+            warn "read_file called in XML::LibXSLT";
+
+            #i.e. when using the exsl:document() element or document() function (to read a XML file)
+            my ( $tctxt, $value ) = @_;
+            return 0;
+        }
+    );
+    $security->register_callback(
+        write_file => sub {
+            warn "write_file called in XML::LibXSLT";
+
+            #i.e. when using the exsl:document element (or document() function?) (to write an output file of many possible types)
+            #e.g.
+            #<exsl:document href="file:///tmp/breached.txt">
+            #   <xsl:text>breached!</xsl:text>
+            #</exsl:document>
+            my ( $tctxt, $value ) = @_;
+            return 0;
+        }
+    );
+    $security->register_callback(
+        read_net => sub {
+            warn "read_net called in XML::LibXSLT";
+
+            #i.e. when using the document() function (to read XML from the network)
+            #e.g. <xsl:copy-of select="document('http://localhost')" />
+            my ( $tctxt, $value ) = @_;
+            return 0;
+        }
+    );
+    $security->register_callback(
+        write_net => sub {
+            warn "write_net called in XML::LibXSLT";
+
+            #NOTE: it's unknown how one would invoke this, but covering our bases anyway
+            my ( $tctxt, $value ) = @_;
+            return 0;
+        }
+    );
 }
 
 =head2 set_callbacks
@@ -123,11 +135,11 @@ sub register_callbacks {
 =cut
 
 sub set_callbacks {
-    my ($self, $xslt) = @_;
+    my ( $self, $xslt ) = @_;
 
     my $security = $self->{_security_obj};
     return if !$security;
-    $xslt->security_callbacks( $security );
+    $xslt->security_callbacks($security);
 }
 
 =head2 set_parser_options
@@ -140,22 +152,24 @@ sub set_callbacks {
 =cut
 
 sub set_parser_options {
-    my ($self, $parser) = @_;
+    my ( $self, $parser ) = @_;
     my $conf = $self->{_options};
 
-    if( $conf->{expand_entities_unsafe} ) { # NOT recommended
-        _set_option($parser, 'expand_entities', 1);
+    if ( $conf->{expand_entities_unsafe} ) {    # NOT recommended
+        _set_option( $parser, 'expand_entities', 1 );
     } else {
+
         # If not explicitly set, we should disable expanding for security
-        _set_option($parser, 'expand_entities', 0);
+        _set_option( $parser, 'expand_entities', 0 );
     }
 }
 
 sub _set_option {
-    my ($parser, $option_name, $value) = @_;
-    if( $parser->option_exists($option_name) ) {
-        $parser->set_option($option_name, $value);
+    my ( $parser, $option_name, $value ) = @_;
+    if ( $parser->option_exists($option_name) ) {
+        $parser->set_option( $option_name, $value );
     }
+
     #TODO Should we warn if it does not exist?
 }
 

@@ -20,16 +20,16 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Reserves qw( SuspendAll );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth     qw( get_template_and_user );
 
 use Koha::Patrons;
 
 my $query = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-account.tt",
-        query           => $query,
-        type            => "opac",
+        template_name => "opac-account.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
@@ -46,8 +46,7 @@ if ( $op eq 'cud-suspend' ) {
     my $patron = Koha::Patrons->find($borrowernumber);
     my $hold   = $patron->holds->find($reserve_id);
     $hold->resume if $hold && $hold->is_cancelable_from_opac;
-}
-elsif( $op eq 'cud-suspend_all' || $op eq 'cud-unsuspend_all' ) {
+} elsif ( $op eq 'cud-suspend_all' || $op eq 'cud-unsuspend_all' ) {
     SuspendAll(
         borrowernumber => $borrowernumber,
         suspend        => $suspend,

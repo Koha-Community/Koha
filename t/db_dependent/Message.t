@@ -30,16 +30,18 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
 my $builder = t::lib::TestBuilder->new();
-my $dbh = C4::Context->dbh;
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test', 'TEST_MESSAGE','Test', '[% biblio.title %]', "
+my $dbh     = C4::Context->dbh;
+$dbh->do(
+    q{INSERT INTO letter (module, code, name, title, content) VALUES ('test', 'TEST_MESSAGE','Test', '[% biblio.title %]', "
 ----
 <<biblio.title>>
 ----
-")});
-my $biblio_1 = $builder->build_sample_biblio({ title => "heÄllo" });
-my $biblio_2 = $builder->build_sample_biblio({ title => "hell❤️" });
-my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-my $letter = C4::Letters::GetPreparedLetter(
+")}
+);
+my $biblio_1 = $builder->build_sample_biblio( { title => "heÄllo" } );
+my $biblio_2 = $builder->build_sample_biblio( { title => "hell❤️" } );
+my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+my $letter   = C4::Letters::GetPreparedLetter(
     (
         module      => 'test',
         letter_code => 'TEST_MESSAGE',
@@ -49,12 +51,11 @@ my $letter = C4::Letters::GetPreparedLetter(
     )
 );
 
-
 t::lib::Mocks::mock_preference( 'EmailFieldPrimary', '' );
-C4::Message->enqueue($letter, $patron, 'email');
-my $message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
+C4::Message->enqueue( $letter, $patron, 'email' );
+my $message = C4::Message->find_last_message( $patron->unblessed, 'TEST_MESSAGE', 'email' );
 like( $message->{metadata}, qr{heÄllo} );
-is ($message->{to_address}, $patron->email, "To address set correctly for EmailFieldPrimary 'off'");
+is( $message->{to_address}, $patron->email, "To address set correctly for EmailFieldPrimary 'off'" );
 
 $letter = C4::Letters::GetPreparedLetter(
     (
@@ -70,6 +71,6 @@ like( $message->{metadata}, qr{heÄllo} );
 like( $message->{metadata}, qr{hell❤️} );
 
 t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
-C4::Message->enqueue($letter, $patron, 'email');
-$message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
-is ($patron->notice_email_address, $patron->emailpro, "To address set correctly for EmailFieldPrimary 'emailpro'");
+C4::Message->enqueue( $letter, $patron, 'email' );
+$message = C4::Message->find_last_message( $patron->unblessed, 'TEST_MESSAGE', 'email' );
+is( $patron->notice_email_address, $patron->emailpro, "To address set correctly for EmailFieldPrimary 'emailpro'" );

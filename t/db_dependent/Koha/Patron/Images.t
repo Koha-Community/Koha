@@ -31,20 +31,28 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
-my $patron = $builder->build({ source => 'Borrower', });
-$patron = Koha::Patrons->find($patron->{borrowernumber});
+my $patron  = $builder->build( { source => 'Borrower', } );
+$patron = Koha::Patrons->find( $patron->{borrowernumber} );
 my $nb_of_images = Koha::Patron::Images->search->count;
-my $new_image = Koha::Patron::Image->new({
-    borrowernumber => $patron->borrowernumber,
-    mimetype => 'image/png',
-    imagefile => 'lot of binary content',
-})->store;
+my $new_image    = Koha::Patron::Image->new(
+    {
+        borrowernumber => $patron->borrowernumber,
+        mimetype       => 'image/png',
+        imagefile      => 'lot of binary content',
+    }
+)->store;
 
 is( Koha::Patron::Images->search->count, $nb_of_images + 1, 'The patron image should have been added' );
 
 my $retrieved_image = Koha::Patron::Images->find( $new_image->borrowernumber );
-is( $retrieved_image->imagefile, $new_image->imagefile, 'Find a patron image by borrowernumber should return the correct image' );
-is( ref($patron->image), 'Koha::Patron::Image', 'Koha::Patron should have a image method which returns a Koha::Patron::Image' );
+is(
+    $retrieved_image->imagefile, $new_image->imagefile,
+    'Find a patron image by borrowernumber should return the correct image'
+);
+is(
+    ref( $patron->image ), 'Koha::Patron::Image',
+    'Koha::Patron should have a image method which returns a Koha::Patron::Image'
+);
 
 $retrieved_image->delete;
 is( Koha::Patron::Images->search->count, $nb_of_images, 'Delete should have deleted the patron image' );

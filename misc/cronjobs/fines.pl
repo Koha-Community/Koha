@@ -34,7 +34,7 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Overdues qw( Getoverdues CalcFine UpdateFine );
 use Getopt::Long qw( GetOptions );
-use Carp qw( carp croak );
+use Carp         qw( carp croak );
 use File::Spec;
 use Try::Tiny qw( catch try );
 
@@ -50,15 +50,15 @@ my $log;
 my $maxdays;
 my $verify_issue;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'h|help'    => \$help,
-    'v|verbose' => \$verbose,
-    'l|log'     => \$log,
-    'o|out:s'   => \$output_dir,
-    'm|maxdays:i' => \$maxdays,
+    'h|help'        => \$help,
+    'v|verbose'     => \$verbose,
+    'l|log'         => \$log,
+    'o|out:s'       => \$output_dir,
+    'm|maxdays:i'   => \$maxdays,
     'i|verifyissue' => \$verify_issue,
 );
 my $usage = << 'ENDUSAGE';
@@ -84,33 +84,31 @@ if ($help) {
     exit;
 }
 
-my $script_handler = Koha::Script->new({ script => $0 });
+my $script_handler = Koha::Script->new( { script => $0 } );
 
 try {
     $script_handler->lock_exec;
-}
-catch {
+} catch {
     my $message = "Skipping execution of $0 ($_)";
     print STDERR "$message\n"
         if $verbose;
-    cronlogaction({ info => $message });
+    cronlogaction( { info => $message } );
     exit;
 };
 
-my @borrower_fields =
-  qw(cardnumber categorycode surname firstname email phone address citystate);
-my @item_fields  = qw(itemnumber barcode date_due);
-my @other_fields = qw(days_overdue fine);
-my $libname      = C4::Context->preference('LibraryName');
-my $control      = C4::Context->preference('CircControl');
-my $branch_type  = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
-my $mode         = C4::Context->preference('finesMode');
-my $delim = "\t";    # ?  C4::Context->preference('CSVDelimiter') || "\t";
+my @borrower_fields = qw(cardnumber categorycode surname firstname email phone address citystate);
+my @item_fields     = qw(itemnumber barcode date_due);
+my @other_fields    = qw(days_overdue fine);
+my $libname         = C4::Context->preference('LibraryName');
+my $control         = C4::Context->preference('CircControl');
+my $branch_type     = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
+my $mode            = C4::Context->preference('finesMode');
+my $delim           = "\t";    # ?  C4::Context->preference('CSVDelimiter') || "\t";
 
 my %is_holiday;
 my $today = dt_from_string();
 my $filename;
-if ($log or $output_dir) {
+if ( $log or $output_dir ) {
     $filename = get_filename($output_dir);
 }
 
@@ -129,17 +127,16 @@ for my $overdue ( @{$overdues} ) {
     next if $overdue->{itemlost};
 
     if ( !defined $overdue->{borrowernumber} ) {
-        carp
-"ERROR in Getoverdues : issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
+        carp "ERROR in Getoverdues : issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;
     }
     my $patron = Koha::Patrons->find( $overdue->{borrowernumber} );
     my $branchcode =
-        ( $control eq 'ItemHomeLibrary' ) ? $overdue->{$branch_type}
-      : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
-      :                                     $overdue->{branchcode};
+          ( $control eq 'ItemHomeLibrary' ) ? $overdue->{$branch_type}
+        : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
+        :                                     $overdue->{branchcode};
 
-# In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
+    # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
     if ( !exists $is_holiday{$branchcode} ) {
         $is_holiday{$branchcode} = set_holiday( $branchcode, $today );
     }
@@ -150,9 +147,10 @@ for my $overdue ( @{$overdues} ) {
     }
     ++$counted;
 
-    my ( $amount, $unitcounttotal, $unitcount ) =
-      CalcFine( $overdue, $patron->categorycode,
-        $branchcode, $datedue, $today );
+    my ( $amount, $unitcounttotal, $unitcount ) = CalcFine(
+        $overdue,    $patron->categorycode,
+        $branchcode, $datedue, $today
+    );
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.
@@ -161,12 +159,13 @@ for my $overdue ( @{$overdues} ) {
         && ( !$is_holiday{$branchcode}
             || C4::Context->preference('ChargeFinesOnClosedDays') )
         && ( $amount && $amount > 0 )
-      )
+        )
     {
-        if ( $verify_issue ) {
+        if ($verify_issue) {
+
             # if the issue changed before the script got to it, then pass on it.
-            my $issue = Koha::Checkouts->find({ issue_id => $overdue->{issue_id} });
-            if ( ! $issue or $issue->date_due ne $overdue->{date_due} ) {
+            my $issue = Koha::Checkouts->find( { issue_id => $overdue->{issue_id} } );
+            if ( !$issue or $issue->date_due ne $overdue->{date_due} ) {
                 $counted--;
                 next;
             }
@@ -186,14 +185,13 @@ for my $overdue ( @{$overdues} ) {
     if ($filename) {
         my @cells;
         push @cells,
-          map { defined $borrower->{$_} ? $borrower->{$_} : q{} }
-          @borrower_fields;
+            map { defined $borrower->{$_} ? $borrower->{$_} : q{} } @borrower_fields;
         push @cells, map { $overdue->{$_} } @item_fields;
         push @cells, $unitcounttotal, $amount;
         say {$fh} join $delim, @cells;
     }
 }
-if ($filename){
+if ($filename) {
     close $fh;
 }
 
@@ -214,7 +212,7 @@ Number of Overdue Items:
 EOM
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub set_holiday {
     my ( $branch, $dt ) = @_;
@@ -235,7 +233,7 @@ sub get_filename {
     $name =~ s/\W//;
     $name .= join q{}, q{_}, $today->ymd(), '.log';
     $name = File::Spec->catfile( $directory, $name );
-    if ($verbose && $log) {
+    if ( $verbose && $log ) {
         say "writing to $name";
     }
     return $name;

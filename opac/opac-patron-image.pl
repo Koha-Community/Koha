@@ -21,32 +21,32 @@
 use Modern::Perl;
 use C4::Members;
 use CGI qw ( -utf8 );
-use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
+use CGI::Cookie;    # need to check cookies before having CGI parse the POST request
 use C4::Auth qw( check_cookie_auth );
 use Koha::Patron::Images;
 
 my $query = CGI->new;
 
-unless (C4::Context->preference('OPACpatronimages')) {
-    print $query->header(status => '403 Forbidden - displaying patron images in the OPAC not enabled');
+unless ( C4::Context->preference('OPACpatronimages') ) {
+    print $query->header( status => '403 Forbidden - displaying patron images in the OPAC not enabled' );
     exit;
 }
 
 my ($auth_status) = check_cookie_auth( $query->cookie('CGISESSID') );
-if( $auth_status ne 'ok' ) {
+if ( $auth_status ne 'ok' ) {
     print CGI::header( '-status' => '401' );
     exit 0;
 }
 
-my $userenv = C4::Context->userenv;
+my $userenv      = C4::Context->userenv;
 my $patron_image = $userenv ? Koha::Patron::Images->find( $userenv->{number} ) : undef;
 
 if ($patron_image) {
     print $query->header(
         -type           => $patron_image->mimetype,
         -Content_Length => length( $patron_image->imagefile )
-      ),
-      $patron_image->imagefile;
+        ),
+        $patron_image->imagefile;
 } else {
-    print $query->header(status => '404 patron image not found');
+    print $query->header( status => '404 patron image not found' );
 }

@@ -23,7 +23,7 @@ use Koha::Patrons;
 use Koha::DateUtils qw(dt_from_string);
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -50,14 +50,13 @@ sub set {
 
     my $body = $c->req->json;
 
-    my $password_expiration_date   = $body->{expiration_date} // "";
+    my $password_expiration_date = $body->{expiration_date} // "";
 
     return try {
         my $pw_expiration_dt = dt_from_string($password_expiration_date);
-        $patron->password_expiration_date( $pw_expiration_dt)->store();
+        $patron->password_expiration_date($pw_expiration_dt)->store();
         return $c->render( status => 200, openapi => "" );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

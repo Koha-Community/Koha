@@ -60,21 +60,25 @@ sub cron_cleanup {
     my ( $class_or_self, $params ) = @_;
     my $reset_hours = $params->{reset_hours} || 1;
     my $remove_days = $params->{remove_days} || 30;
-    my $parser = Koha::Database->new->schema->storage->datetime_parser;
+    my $parser      = Koha::Database->new->schema->storage->datetime_parser;
 
     my $dt = dt_from_string;
     $dt->subtract( hours => $reset_hours );
-    $class_or_self->search({
-        done => 2,
-        timestamp => { '<' => $parser->format_datetime($dt) },
-    })->update({ done => 0 });
+    $class_or_self->search(
+        {
+            done      => 2,
+            timestamp => { '<' => $parser->format_datetime($dt) },
+        }
+    )->update( { done => 0 } );
 
     $dt = dt_from_string;
     $dt->subtract( days => $remove_days );
-    $class_or_self->search({
-        done => 1,
-        timestamp => { '<' => $parser->format_datetime($dt) },
-    })->delete;
+    $class_or_self->search(
+        {
+            done      => 1,
+            timestamp => { '<' => $parser->format_datetime($dt) },
+        }
+    )->delete;
 }
 
 =head3 _type

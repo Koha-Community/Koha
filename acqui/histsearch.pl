@@ -50,23 +50,23 @@ to filter on ended date.
 =cut
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use CGI             qw ( -utf8 );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Acquisition qw( GetHistory );
 use Koha::AdditionalFields;
 use Koha::DateUtils qw( dt_from_string );
 
-my $input = CGI->new;
-my $do_search               = $input->param('do_search') || 0;
+my $input     = CGI->new;
+my $do_search = $input->param('do_search') || 0;
 
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/histsearch.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => '*' },
+        template_name => "acqui/histsearch.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => '*' },
     }
 );
 
@@ -93,8 +93,9 @@ my $filters = {
 };
 
 my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || dt_from_string;
-my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
+my $to_placed_on   = eval { dt_from_string( scalar $input->param('to') ) }   || dt_from_string;
 unless ( $input->param('from') ) {
+
     # Fill the form with year-1
     $from_placed_on->set_time_zone('floating')->subtract( years => 1 );
 }
@@ -104,10 +105,10 @@ my $additional_fields = Koha::AdditionalFields->search( { tablename => 'aqbasket
 $template->param( available_additional_fields => $additional_fields );
 my @additional_field_filters;
 while ( my $additional_field = $additional_fields->next ) {
-    my $value = $input->param('additional_field_' . $additional_field->id);
-    if (defined $value and $value ne '') {
+    my $value = $input->param( 'additional_field_' . $additional_field->id );
+    if ( defined $value and $value ne '' ) {
         push @additional_field_filters, {
-            id => $additional_field->id,
+            id    => $additional_field->id,
             value => $value,
         };
     }
@@ -120,17 +121,18 @@ if ( $filters->{orderstatus} eq "any" ) {
 }
 
 my $order_loop;
+
 # If we're supplied any value then we do a search. Otherwise we don't.
 if ($do_search) {
     $order_loop = GetHistory(%$filters);
 }
 
 my $budgetperiods = C4::Budgets::GetBudgetPeriods;
-my $bp_loop = $budgetperiods;
+my $bp_loop       = $budgetperiods;
 for my $bp ( @{$budgetperiods} ) {
     my $hierarchy = C4::Budgets::GetBudgetHierarchy( $$bp{budget_period_id}, undef, undef, 1 );
     for my $budget ( @{$hierarchy} ) {
-        $$budget{budget_display_name} = sprintf("%s", ">" x $$budget{depth} . $$budget{budget_name});
+        $$budget{budget_display_name} = sprintf( "%s", ">" x $$budget{depth} . $$budget{budget_name} );
     }
     $$bp{hierarchy} = $hierarchy;
 }

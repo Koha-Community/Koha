@@ -31,10 +31,10 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use JSON qw( to_json );
+use CGI        qw ( -utf8 );
+use JSON       qw( to_json );
 use C4::Output qw( output_with_http_headers );
-use C4::Items qw( SearchItems );
+use C4::Items  qw( SearchItems );
 use C4::Auth   qw( check_cookie_auth );
 
 my $input = CGI->new;
@@ -50,11 +50,11 @@ my @value = $input->multi_param('value[]');
 
 my $r = {};
 my $i = 0;
-for ( my $i=0; $i<@field; $i++ ) {
-    my ($items) = C4::Items::SearchItems({ field => $field[$i], query => $value[$i]});
+for ( my $i = 0 ; $i < @field ; $i++ ) {
+    my ($items) = C4::Items::SearchItems( { field => $field[$i], query => $value[$i] } );
 
-    if ( @$items ) {
-        push @{ $r->{$field[$i]} }, $value[$i];
+    if (@$items) {
+        push @{ $r->{ $field[$i] } }, $value[$i];
     }
 }
 

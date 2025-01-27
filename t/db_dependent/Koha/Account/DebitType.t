@@ -57,27 +57,31 @@ is(
     '2 debit types added successfully'
 );
 
-my $retrieved_debit_type_1 =
-  Koha::Account::DebitTypes->find( $new_debit_type_1->code );
+my $retrieved_debit_type_1 = Koha::Account::DebitTypes->find( $new_debit_type_1->code );
 is(
     $retrieved_debit_type_1->description,
     $new_debit_type_1->description,
     'Find a debit type by code should return the correct one (non-system)'
 );
-ok( !$retrieved_debit_type_1->is_system,
-    'Non-system debit type identified correctly by "is_system"' );
+ok(
+    !$retrieved_debit_type_1->is_system,
+    'Non-system debit type identified correctly by "is_system"'
+);
 
 my $retrieved_debit_type_system = Koha::Account::DebitTypes->find('OVERDUE');
-is( $retrieved_debit_type_system->code,
+is(
+    $retrieved_debit_type_system->code,
     'OVERDUE',
-    'Find a debit type by code should return the correct one (system)' );
-ok( $retrieved_debit_type_system->is_system,
-    'System debit type identified correctly by "is_system"' );
+    'Find a debit type by code should return the correct one (system)'
+);
+ok(
+    $retrieved_debit_type_system->is_system,
+    'System debit type identified correctly by "is_system"'
+);
 
 try {
     $retrieved_debit_type_system->delete;
-}
-catch {
+} catch {
     ok(
         $_->isa('Koha::Exceptions::CannotDeleteDefault'),
         'A system debit type cannot be deleted'

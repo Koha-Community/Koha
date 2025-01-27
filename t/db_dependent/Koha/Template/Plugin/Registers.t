@@ -38,11 +38,15 @@ subtest 'session_register_id' => sub {
 
     my $plugin = Koha::Template::Plugin::Registers->new();
     ok( $plugin, "Plugin initialized" );
-    is( $plugin->session_register_id,
-        '', "Returns empty string if no userenv is set" );
+    is(
+        $plugin->session_register_id,
+        '', "Returns empty string if no userenv is set"
+    );
     t::lib::Mocks::mock_userenv( { register_id => '1' } );
-    is( $plugin->session_register_id,
-        '1', "Returns the register id when set in the userenv" );
+    is(
+        $plugin->session_register_id,
+        '1', "Returns the register id when set in the userenv"
+    );
 
     # Unset the userenv
     C4::Context->unset_userenv();
@@ -54,11 +58,15 @@ subtest 'session_register_name' => sub {
 
     my $plugin = Koha::Template::Plugin::Registers->new();
     ok( $plugin, "Plugin initialized" );
-    is( $plugin->session_register_name,
-        '', "Returns empty string if no userenv is set" );
+    is(
+        $plugin->session_register_name,
+        '', "Returns empty string if no userenv is set"
+    );
     t::lib::Mocks::mock_userenv( { register_name => 'Register One' } );
-    is( $plugin->session_register_name,
-        'Register One', "Returns the register name when set in the userenv" );
+    is(
+        $plugin->session_register_name,
+        'Register One', "Returns the register name when set in the userenv"
+    );
 
     # Unset the userenv
     C4::Context->unset_userenv();
@@ -72,16 +80,14 @@ subtest 'all() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
 
-    my $count = Koha::Cash::Registers->search({ archived => 0 })->count;
-    my $max_register = Koha::Cash::Registers->search( {},
-        { order_by => { '-desc' => 'id' }, rows => 1 } )->single;
+    my $count        = Koha::Cash::Registers->search( { archived => 0 } )->count;
+    my $max_register = Koha::Cash::Registers->search(
+        {},
+        { order_by => { '-desc' => 'id' }, rows => 1 }
+    )->single;
     my $max_id = $max_register ? $max_register->id : 0;
 
-    my $library1 = $builder->build_object(
-        {
-            class => 'Koha::Libraries'
-        }
-    );
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $register1 = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
@@ -103,11 +109,7 @@ subtest 'all() tests' => sub {
         }
     );
 
-    my $library2 = $builder->build_object(
-        {
-            class => 'Koha::Libraries'
-        }
-    );
+    my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $register3 = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
@@ -123,75 +125,90 @@ subtest 'all() tests' => sub {
 
     my $result = $plugin->all;
     is( ref($result), 'ARRAY', "Return arrayref (no userenv, no filters)" );
-    is( scalar( @{$result} ),
-        3 + $count, "Array contains all test registers (no userenv, no filters)" );
+    is(
+        scalar( @{$result} ),
+        3 + $count, "Array contains all test registers (no userenv, no filters)"
+    );
     for my $register ( @{$result} ) {
         next if $register->{id} <= $max_id;
         is( $register->{selected}, 0, "Register is not selected (no userenv)" );
     }
 
     $result = $plugin->all( { filters => { current_branch => 1 } } );
-    is( ref($result), 'ARRAY',
-        "Return arrayref (no userenv, filters: current_branch)" );
+    is(
+        ref($result), 'ARRAY',
+        "Return arrayref (no userenv, filters: current_branch)"
+    );
 
     t::lib::Mocks::mock_userenv( { branchcode => $library1->branchcode } );
     $result = $plugin->all;
-    is( ref($result), 'ARRAY',
-        "Return arrayref (userenv: branchcode, no filters)" );
-    is( scalar( @{$result} ),
-        3 + $count, "Array contains all test registers (userenv: branchcode, no filters)" );
-    for my $register ( @{$result} ) {
-        next if $register->{id} <= $max_id;
-        is( $register->{selected}, 0,
-            "Register is not selected (userenv: branchcode, no filters)" );
-    }
-
-    $result = $plugin->all( { filters => { current_branch => 1 } } );
-    is( ref($result), 'ARRAY',
-        "Return arrayref (userenv: branchcode, filters: current_branch)" );
+    is(
+        ref($result), 'ARRAY',
+        "Return arrayref (userenv: branchcode, no filters)"
+    );
     is(
         scalar( @{$result} ),
-        2,
-"Array contains 2 branch registers (userenv: branchcode, filters: current_branch)"
+        3 + $count, "Array contains all test registers (userenv: branchcode, no filters)"
     );
     for my $register ( @{$result} ) {
-        is( $register->{selected}, 0,
-"Register is not selected (userenv: branchcode, filters: current_branch)"
+        next if $register->{id} <= $max_id;
+        is(
+            $register->{selected}, 0,
+            "Register is not selected (userenv: branchcode, no filters)"
         );
     }
 
-    t::lib::Mocks::mock_userenv(
-        { branchcode => $library1->branchcode, register_id => $register2->id }
-    );
     $result = $plugin->all( { filters => { current_branch => 1 } } );
-    is( ref($result), 'ARRAY',
-"Return arrayref (userenv: branchcode + register_id, filters: current_branch)"
+    is(
+        ref($result), 'ARRAY',
+        "Return arrayref (userenv: branchcode, filters: current_branch)"
     );
     is(
         scalar( @{$result} ),
         2,
-"Array contains 2 branch registers (userenv: branchcode + register_id, filters: current_branch)"
+        "Array contains 2 branch registers (userenv: branchcode, filters: current_branch)"
+    );
+    for my $register ( @{$result} ) {
+        is(
+            $register->{selected}, 0,
+            "Register is not selected (userenv: branchcode, filters: current_branch)"
+        );
+    }
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library1->branchcode, register_id => $register2->id } );
+    $result = $plugin->all( { filters => { current_branch => 1 } } );
+    is(
+        ref($result), 'ARRAY',
+        "Return arrayref (userenv: branchcode + register_id, filters: current_branch)"
+    );
+    is(
+        scalar( @{$result} ),
+        2,
+        "Array contains 2 branch registers (userenv: branchcode + register_id, filters: current_branch)"
     );
     for my $register ( @{$result} ) {
         my $selected = ( $register->{id} == $register2->id ) ? 1 : 0;
-        is( $register->{selected}, $selected,
-"Register is selected $selected (userenv: brancode, filters: current_branch)"
+        is(
+            $register->{selected}, $selected,
+            "Register is selected $selected (userenv: brancode, filters: current_branch)"
         );
     }
 
     $result = $plugin->all( { filters => { current_branch => 1 }, selected => $register1->id } );
-    is( ref($result), 'ARRAY',
-"Return arrayref (userenv: branchcode + register_id, filters: current_branch, selected: register 1)"
+    is(
+        ref($result), 'ARRAY',
+        "Return arrayref (userenv: branchcode + register_id, filters: current_branch, selected: register 1)"
     );
     is(
         scalar( @{$result} ),
         2,
-"Array contains 2 branch registers (userenv: branchcode + register_id, filters: current_branch, selected: register 1)"
+        "Array contains 2 branch registers (userenv: branchcode + register_id, filters: current_branch, selected: register 1)"
     );
     for my $register ( @{$result} ) {
         my $selected = ( $register->{id} == $register1->id ) ? 1 : 0;
-        is( $register->{selected}, $selected,
-"Register is selected $selected (userenv: brancode, filters: current_branch, selected: register 1)"
+        is(
+            $register->{selected}, $selected,
+            "Register is selected $selected (userenv: brancode, filters: current_branch, selected: register 1)"
         );
     }
 

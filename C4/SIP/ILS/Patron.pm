@@ -1,6 +1,6 @@
 #
 # ILS::Patron.pm
-# 
+#
 # A Class for hiding the ILS's concept of the patron from the OpenSIP
 # system
 #
@@ -30,7 +30,7 @@ use Koha::Checkouts;
 use Koha::TemplateUtils qw( process_tt );
 use Koha::Patron::Messages;
 use Koha::DateUtils qw(dt_from_string output_pref);
-use Date::Calc qw/Today Date_to_Days/;
+use Date::Calc      qw/Today Date_to_Days/;
 
 our $kp;    # koha patron
 
@@ -39,7 +39,7 @@ our $kp;    # koha patron
 =cut
 
 sub new {
-    my ($class, $patron_id) = @_;
+    my ( $class, $patron_id ) = @_;
     my $type = ref($class) || $class;
     my $self;
 
@@ -58,17 +58,17 @@ sub new {
     }
 
     unless ($patron) {
-        siplog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
+        siplog( "LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id );
         return;
     }
     $kp = $patron->unblessed;
-    my $pw        = $kp->{password};
-    my $flags     = C4::Members::patronflags( $kp );
-    my $debarred  = $patron->is_debarred;
+    my $pw       = $kp->{password};
+    my $flags    = C4::Members::patronflags($kp);
+    my $debarred = $patron->is_debarred;
     siplog( "LOG_DEBUG", "Debarred = %s : ", ( $debarred || 'undef' ) );    # Do we need more debug info here?
     my $expired = 0;
     if ( $kp->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
-        my ( $today_year,   $today_month,   $today_day )   = Today();
+        my ( $today_year, $today_month, $today_day ) = Today();
         my ( $warning_year, $warning_month, $warning_day ) = split /-/, $kp->{'dateexpiry'};
         my $days_to_expiry = Date_to_Days( $warning_year, $warning_month, $warning_day ) -
             Date_to_Days( $today_year, $today_month, $today_day );
@@ -92,10 +92,10 @@ sub new {
         }
     }
     my %ilspatron;
-    my $adr     = _get_address($kp);
-    my $dob     = $kp->{dateofbirth};
-    $dob and $dob =~ s/-//g;    # YYYYMMDD
-    my $dexpiry     = $kp->{dateexpiry};
+    my $adr = _get_address($kp);
+    my $dob = $kp->{dateofbirth};
+    $dob and $dob =~ s/-//g;            # YYYYMMDD
+    my $dexpiry = $kp->{dateexpiry};
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 
     # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
@@ -107,7 +107,7 @@ sub new {
         $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
     my $noissueschargeguarantees = $patron_charge_limits->{NoIssuesChargeGuarantees}->{limit};
 
-    my $fines_msg = "";
+    my $fines_msg    = "";
     my $fine_blocked = 0;
     if ( $patron_charge_limits->{noissuescharge}->{overlimit} ) {
         $fine_blocked = 1;
@@ -127,69 +127,70 @@ sub new {
     # Get currency 3 chars max
     my $currency = substr Koha::Acquisition::Currencies->get_active->currency, 0, 3;
 
-    my $circ_blocked =( C4::Context->preference('OverduesBlockCirc') ne "noblock" &&  defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
+    my $circ_blocked =
+        ( C4::Context->preference('OverduesBlockCirc') ne "noblock" && defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
     {
-    no warnings;    # any of these $kp->{fields} being concat'd could be undef
-    %ilspatron = (
-        name => $kp->{firstname} . " " . $kp->{surname},
-        id   => $kp->{cardnumber},    # to SIP, the id is the BARCODE, not userid
-        password        => $pw,
-        ptype           => $kp->{categorycode},     # 'A'dult.  Whatever.
-        dateexpiry      => $dexpiry,
-        dateexpiry_iso  => $kp->{dateexpiry},
-        birthdate       => $dob,
-        birthdate_iso   => $kp->{dateofbirth},
-        branchcode      => $kp->{branchcode},
-        library_name    => "",                      # only populated if needed, cached here
-        borrowernumber  => $kp->{borrowernumber},
-        address         => $adr,
-        home_phone      => $kp->{phone},
-        email_addr      => $kp->{email},
-        charge_ok       => ( !$debarred && !$expired && !$fine_blocked && !$circ_blocked),
-        renew_ok        => ( !$debarred && !$expired && !$fine_blocked),
-        recall_ok       => ( !$debarred && !$expired && !$fine_blocked),
-        hold_ok         => ( !$debarred && !$expired && !$fine_blocked),
-        card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
-        claims_returned => 0,
-        fines           => $personal_fines_amount,
-        fees            => 0,             # currently not distinct from fines
-        recall_overdue  => 0,
-        items_billed    => 0,
-        screen_msg      => 'Greetings from Koha. ' . $kp->{opacnote} . $fines_msg,
-        print_line      => '',
-        items           => [],
-        hold_items      => $flags->{WAITING}->{itemlist},
-        overdue_items   => $flags->{ODUES}->{itemlist},
-        too_many_overdue => $circ_blocked,
-        fine_items      => [],
-        recall_items    => [],
-        unavail_holds   => [],
-        inet            => ( !$debarred && !$expired ),
-        debarred        => $debarred,
-        expired         => $expired,
-        fine_blocked    => $fine_blocked,
-        fee_limit       => $fee_limit,
-        userid          => $kp->{userid},
-        currency        => $currency,
-    );
+        no warnings;    # any of these $kp->{fields} being concat'd could be undef
+        %ilspatron = (
+            name            => $kp->{firstname} . " " . $kp->{surname},
+            id              => $kp->{cardnumber},                         # to SIP, the id is the BARCODE, not userid
+            password        => $pw,
+            ptype           => $kp->{categorycode},                       # 'A'dult.  Whatever.
+            dateexpiry      => $dexpiry,
+            dateexpiry_iso  => $kp->{dateexpiry},
+            birthdate       => $dob,
+            birthdate_iso   => $kp->{dateofbirth},
+            branchcode      => $kp->{branchcode},
+            library_name    => "",                                        # only populated if needed, cached here
+            borrowernumber  => $kp->{borrowernumber},
+            address         => $adr,
+            home_phone      => $kp->{phone},
+            email_addr      => $kp->{email},
+            charge_ok       => ( !$debarred && !$expired && !$fine_blocked && !$circ_blocked ),
+            renew_ok        => ( !$debarred && !$expired && !$fine_blocked ),
+            recall_ok       => ( !$debarred && !$expired && !$fine_blocked ),
+            hold_ok         => ( !$debarred && !$expired && !$fine_blocked ),
+            card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
+            claims_returned => 0,
+            fines           => $personal_fines_amount,
+            fees           => 0,                                                     # currently not distinct from fines
+            recall_overdue => 0,
+            items_billed   => 0,
+            screen_msg     => 'Greetings from Koha. ' . $kp->{opacnote} . $fines_msg,
+            print_line     => '',
+            items          => [],
+            hold_items     => $flags->{WAITING}->{itemlist},
+            overdue_items  => $flags->{ODUES}->{itemlist},
+            too_many_overdue => $circ_blocked,
+            fine_items       => [],
+            recall_items     => [],
+            unavail_holds    => [],
+            inet             => ( !$debarred && !$expired ),
+            debarred         => $debarred,
+            expired          => $expired,
+            fine_blocked     => $fine_blocked,
+            fee_limit        => $fee_limit,
+            userid           => $kp->{userid},
+            currency         => $currency,
+        );
     }
 
     if ( $patron->is_debarred and $patron->debarredcomment ) {
         $ilspatron{screen_msg} .= " -- " . $patron->debarredcomment;
     }
 
-    if ( $circ_blocked ) {
+    if ($circ_blocked) {
         $ilspatron{screen_msg} .= " -- " . "Patron has overdues";
     }
 
     for (qw(EXPIRED CHARGES CREDITS GNA LOST NOTES)) {
-        ($flags->{$_}) or next;
-        if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
-            $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};  # show all but internal NOTES
+        ( $flags->{$_} ) or next;
+        if ( $_ ne 'NOTES' and $flags->{$_}->{message} ) {
+            $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};    # show all but internal NOTES
         }
-        if ($flags->{$_}->{noissues}) {
+        if ( $flags->{$_}->{noissues} ) {
             foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok inet)) {
-                $ilspatron{$toggle} = 0;    # if we get noissues, disable everything
+                $ilspatron{$toggle} = 0;                                   # if we get noissues, disable everything
             }
         }
     }
@@ -213,7 +214,7 @@ sub new {
     }
 
     # FIXME: populate recall_items
-    $ilspatron{unavail_holds} = _get_outstanding_holds($kp->{borrowernumber});
+    $ilspatron{unavail_holds} = _get_outstanding_holds( $kp->{borrowernumber} );
 
     my $pending_checkouts = $patron->pending_checkouts;
     my @barcodes;
@@ -223,64 +224,65 @@ sub new {
     $ilspatron{items} = \@barcodes;
 
     $self = \%ilspatron;
-    siplog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
+    siplog( "LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id, $self->{id} );
     bless $self, $type;
     return $self;
 }
-
 
 # 0 means read-only
 # 1 means read/write
 
 my %fields = (
-    id                      => 0,
-    borrowernumber          => 0,
-    name                    => 0,
-    address                 => 0,
-    email_addr              => 0,
-    home_phone              => 0,
-    birthdate               => 0,
-    birthdate_iso           => 0,
-    dateexpiry              => 0,
-    dateexpiry_iso          => 0,
-    debarred                => 0,
-    fine_blocked            => 0,
-    ptype                   => 0,
-    charge_ok               => 0,   # for patron_status[0] (inverted)
-    renew_ok                => 0,   # for patron_status[1] (inverted)
-    recall_ok               => 0,   # for patron_status[2] (inverted)
-    hold_ok                 => 0,   # for patron_status[3] (inverted)
-    card_lost               => 0,   # for patron_status[4]
-    recall_overdue          => 0,
-    currency                => 1,
-    fee_limit               => 0,
-    screen_msg              => 1,
-    print_line              => 1,
-    too_many_charged        => 0,   # for patron_status[5]
-    too_many_overdue        => 0,   # for patron_status[6]
-    too_many_renewal        => 0,   # for patron_status[7]
-    too_many_claim_return   => 0,   # for patron_status[8]
-#   excessive_fines         => 0,   # for patron_status[10]
-#   excessive_fees          => 0,   # for patron_status[11]
-    recall_overdue          => 0,   # for patron_status[12]
-    too_many_billed         => 0,   # for patron_status[13]
-    inet                    => 0,   # EnvisionWare extension
+    id                    => 0,
+    borrowernumber        => 0,
+    name                  => 0,
+    address               => 0,
+    email_addr            => 0,
+    home_phone            => 0,
+    birthdate             => 0,
+    birthdate_iso         => 0,
+    dateexpiry            => 0,
+    dateexpiry_iso        => 0,
+    debarred              => 0,
+    fine_blocked          => 0,
+    ptype                 => 0,
+    charge_ok             => 0,    # for patron_status[0] (inverted)
+    renew_ok              => 0,    # for patron_status[1] (inverted)
+    recall_ok             => 0,    # for patron_status[2] (inverted)
+    hold_ok               => 0,    # for patron_status[3] (inverted)
+    card_lost             => 0,    # for patron_status[4]
+    recall_overdue        => 0,
+    currency              => 1,
+    fee_limit             => 0,
+    screen_msg            => 1,
+    print_line            => 1,
+    too_many_charged      => 0,    # for patron_status[5]
+    too_many_overdue      => 0,    # for patron_status[6]
+    too_many_renewal      => 0,    # for patron_status[7]
+    too_many_claim_return => 0,    # for patron_status[8]
+
+    #   excessive_fines         => 0,   # for patron_status[10]
+    #   excessive_fees          => 0,   # for patron_status[11]
+    recall_overdue  => 0,    # for patron_status[12]
+    too_many_billed => 0,    # for patron_status[13]
+    inet            => 0,    # EnvisionWare extension
 );
 
 our $AUTOLOAD;
 
 sub DESTROY {
+
     # be cool.  needed for AUTOLOAD(?)
 }
 
 sub AUTOLOAD {
-    my $self = shift;
+    my $self  = shift;
     my $class = ref($self) or croak "$self is not an object";
-    my $name = $AUTOLOAD;
+    my $name  = $AUTOLOAD;
 
     $name =~ s/.*://;
 
-    unless (exists $fields{$name}) {
+    unless ( exists $fields{$name} ) {
         croak "Cannot access '$name' field of class '$class'";
     }
 
@@ -320,7 +322,7 @@ sub check_password {
     return $pwd eq q{} unless $self->{password};
 
     my $ret = 0;
-    ($ret) = checkpw( $self->{userid}, $pwd, undef, undef, 1 ); # userid, query, type, no_set_userenv
+    ($ret) = checkpw( $self->{userid}, $pwd, undef, undef, 1 );    # userid, query, type, no_set_userenv
     return $ret;
 }
 
@@ -335,9 +337,12 @@ This method checks if number of checkouts of lost items exceeds a threshold (def
 sub too_many_lost {
     my ( $self, $server ) = @_;
     my $too_many_lost = 0;
-    if( $server && $server->{account} && ( my $lost_block_checkout = $server->{account}->{lost_block_checkout} )) {
+    if ( $server && $server->{account} && ( my $lost_block_checkout = $server->{account}->{lost_block_checkout} ) ) {
         my $lost_block_checkout_value = $server->{account}->{lost_block_checkout_value} // 1;
-        my $lost_checkouts = Koha::Checkouts->search({ borrowernumber => $self->borrowernumber, 'itemlost' => { '>=', $lost_block_checkout_value } }, { join => 'item'} )->count;
+        my $lost_checkouts            = Koha::Checkouts->search(
+            { borrowernumber => $self->borrowernumber, 'itemlost' => { '>=', $lost_block_checkout_value } },
+            { join           => 'item' }
+        )->count;
         $too_many_lost = $lost_checkouts >= $lost_block_checkout;
     }
     return $too_many_lost;
@@ -358,7 +363,7 @@ sub fines_amount {
 
 sub language {
     my $self = shift;
-    return $self->{language} || '000'; # Unspecified
+    return $self->{language} || '000';    # Unspecified
 }
 
 sub expired {
@@ -369,17 +374,17 @@ sub expired {
 #
 # remove the hold on item item_id from my hold queue.
 # return true if I was holding the item, false otherwise.
-# 
+#
 sub drop_hold {
-    my ($self, $item_id) = @_;
+    my ( $self, $item_id ) = @_;
     return if !$item_id;
     my $result = 0;
     foreach (qw(hold_items unavail_holds)) {
         $self->{$_} or next;
-        for (my $i = 0; $i < scalar @{$self->{$_}}; $i++) {
+        for ( my $i = 0 ; $i < scalar @{ $self->{$_} } ; $i++ ) {
             my $held_item = $self->{$_}[$i]->{barcode} or next;
-            if ($held_item eq $item_id) {
-                splice @{$self->{$_}}, $i, 1;
+            if ( $held_item eq $item_id ) {
+                splice @{ $self->{$_} }, $i, 1;
                 $result++;
             }
         }
@@ -393,25 +398,23 @@ sub drop_hold {
 sub x_items {
     my $self      = shift;
     my $array_var = shift or return;
-    my ($start, $end) = @_;
+    my ( $start, $end ) = @_;
 
     my $item_list = [];
-    if ($self->{$array_var}) {
+    if ( $self->{$array_var} ) {
 
-        if ($start && $start > 1) {
+        if ( $start && $start > 1 ) {
             --$start;
-        }
-        else {
+        } else {
             $start = 0;
         }
-        if ( $end && $end < @{$self->{$array_var}} ) {
-          --$end;
-        }
-        else {
-            $end = @{$self->{$array_var}};
+        if ( $end && $end < @{ $self->{$array_var} } ) {
+            --$end;
+        } else {
+            $end = @{ $self->{$array_var} };
             --$end;
         }
-        @{$item_list} = @{$self->{$array_var}}[ $start .. $end ];
+        @{$item_list} = @{ $self->{$array_var} }[ $start .. $end ];
 
     }
     return $item_list;
@@ -421,10 +424,10 @@ sub x_items {
 # List of outstanding holds placed
 #
 sub hold_items {
-    my $self = shift;
-    my $item_arr = $self->x_items('hold_items', @_);
-    foreach my $item (@{$item_arr}) {
-        my $item_obj = Koha::Items->find($item->{itemnumber});
+    my $self     = shift;
+    my $item_arr = $self->x_items( 'hold_items', @_ );
+    foreach my $item ( @{$item_arr} ) {
+        my $item_obj = Koha::Items->find( $item->{itemnumber} );
         $item->{barcode} = $item_obj ? $item_obj->barcode : undef;
     }
     return $item_arr;
@@ -432,12 +435,14 @@ sub hold_items {
 
 sub overdue_items {
     my $self = shift;
-    return $self->x_items('overdue_items', @_);
+    return $self->x_items( 'overdue_items', @_ );
 }
+
 sub charged_items {
     my $self = shift;
-    return $self->x_items('items', @_);
+    return $self->x_items( 'items', @_ );
 }
+
 sub fine_items {
 
     require Koha::Database;
@@ -448,21 +453,18 @@ sub fine_items {
     my $end    = shift;
     my $server = shift;
 
-    my @fees =
-      Koha::Database->new()->schema()->resultset('Accountline')->search(
+    my @fees = Koha::Database->new()->schema()->resultset('Accountline')->search(
         {
             borrowernumber    => $self->{borrowernumber},
             amountoutstanding => { '>' => '0' },
         }
-      );
+    );
 
     $start = $start ? $start - 1 : 0;
     $end   = $end   ? $end - 1   : scalar @fees - 1;
 
-    my $av_field_template =
-      $server ? $server->{account}->{av_field_template} : undef;
-    $av_field_template ||=
-"[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]";
+    my $av_field_template = $server ? $server->{account}->{av_field_template} : undef;
+    $av_field_template ||= "[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]";
 
     my @return_values;
     for ( my $i = $start ; $i <= $end ; $i++ ) {
@@ -480,32 +482,37 @@ sub fine_items {
 
 sub recall_items {
     my $self = shift;
-    return $self->x_items('recall_items', @_);
+    return $self->x_items( 'recall_items', @_ );
 }
+
 sub unavail_holds {
     my $self = shift;
-    return $self->x_items('unavail_holds', @_);
+    return $self->x_items( 'unavail_holds', @_ );
 }
 
 sub block {
-    my ($self, $card_retained, $blocked_card_msg) = @_;
-    foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
+    my ( $self, $card_retained, $blocked_card_msg ) = @_;
+    foreach my $field ( 'charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet' ) {
         $self->{$field} = 0;
     }
-    $self->{screen_msg} = "Block feature not implemented";  # $blocked_card_msg || "Card Blocked.  Please contact library staff";
-    # TODO: not really affecting patron record
+    $self->{screen_msg} =
+        "Block feature not implemented";    # $blocked_card_msg || "Card Blocked.  Please contact library staff";
+                                            # TODO: not really affecting patron record
     return $self;
 }
 
 sub enable {
     my $self = shift;
-    foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
+    foreach my $field ( 'charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet' ) {
         $self->{$field} = 1;
     }
-    siplog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
-       $self->{id}, $self->{charge_ok}, $self->{renew_ok},
-       $self->{recall_ok}, $self->{hold_ok});
-    $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
+    siplog(
+        "LOG_DEBUG",        "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
+        $self->{id},        $self->{charge_ok}, $self->{renew_ok},
+        $self->{recall_ok}, $self->{hold_ok}
+    );
+    $self->{screen_msg} =
+        "Enable feature not implemented.";    # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;
 }
 
@@ -516,23 +523,22 @@ sub inet_privileges {
 
 sub excessive_fees {
     my $self = shift;
-    return ($self->fee_amount and $self->fee_amount > $self->fee_limit);
+    return ( $self->fee_amount and $self->fee_amount > $self->fee_limit );
 }
 
 sub excessive_fines {
     my $self = shift;
-    return $self->excessive_fees;   # excessive_fines is the same thing as excessive_fees for Koha
+    return $self->excessive_fees;    # excessive_fines is the same thing as excessive_fees for Koha
 }
 
 sub holds_blocked_by_excessive_fees {
     my $self = shift;
-    return ( $self->fee_amount
-          && $self->fee_amount > C4::Context->preference("maxoutstanding") );
+    return ( $self->fee_amount && $self->fee_amount > C4::Context->preference("maxoutstanding") );
 }
-    
+
 sub library_name {
     my $self = shift;
-    unless ($self->{library_name}) {
+    unless ( $self->{library_name} ) {
         my $library = Koha::Libraries->find( $self->{branchcode} );
         $self->{library_name} = $library ? $library->branchname : '';
     }
@@ -556,14 +562,12 @@ sub _get_address {
     my $patron = shift;
 
     my $address = $patron->{streetnumber} || q{};
-    for my $field (qw( roaddetails address address2 city state zipcode country))
-    {
+    for my $field (qw( roaddetails address address2 city state zipcode country)) {
         next unless $patron->{$field};
         if ($address) {
             $address .= q{ };
             $address .= $patron->{$field};
-        }
-        else {
+        } else {
             $address .= $patron->{$field};
         }
     }
@@ -573,15 +577,15 @@ sub _get_address {
 sub _get_outstanding_holds {
     my $borrowernumber = shift;
 
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    my $holds = $patron->holds->search( { -or => [ { found => undef }, { found => { '!=' => 'W' } } ] } );
+    my $patron = Koha::Patrons->find($borrowernumber);
+    my $holds  = $patron->holds->search( { -or => [ { found => undef }, { found => { '!=' => 'W' } } ] } );
     my @holds;
     while ( my $hold = $holds->next ) {
         my $item;
-        if ($hold->itemnumber) {
+        if ( $hold->itemnumber ) {
             $item = $hold->item;
-        }
-        else {
+        } else {
+
             # We need to return a barcode for the biblio so the client
             # can request the biblio info
             my $items = $hold->biblio->items;
@@ -609,11 +613,11 @@ sub build_patron_attributes_string {
     my $string = q{};
     if ( $server->{account}->{patron_attribute} ) {
         my @attributes_to_send =
-          ref $server->{account}->{patron_attribute} eq "ARRAY"
-          ? @{ $server->{account}->{patron_attribute} }
-          : ( $server->{account}->{patron_attribute} );
+            ref $server->{account}->{patron_attribute} eq "ARRAY"
+            ? @{ $server->{account}->{patron_attribute} }
+            : ( $server->{account}->{patron_attribute} );
 
-        foreach my $a ( @attributes_to_send ) {
+        foreach my $a (@attributes_to_send) {
             my @attributes = Koha::Patron::Attributes->search(
                 {
                     borrowernumber => $self->{borrowernumber},
@@ -621,7 +625,7 @@ sub build_patron_attributes_string {
                 }
             )->as_list;
 
-            foreach my $attribute ( @attributes ) {
+            foreach my $attribute (@attributes) {
                 my $value = $attribute->attribute();
                 $string .= add_field( $a->{field}, $value );
             }
@@ -630,7 +634,6 @@ sub build_patron_attributes_string {
 
     return $string;
 }
-
 
 =head2 build_custom_field_string
 
@@ -648,8 +651,9 @@ sub build_custom_field_string {
             ref $server->{account}->{custom_patron_field} eq "ARRAY"
             ? @{ $server->{account}->{custom_patron_field} }
             : $server->{account}->{custom_patron_field};
-        foreach my $custom_field ( @custom_fields ) {
-            $string .= maybe_add( $custom_field->{field}, $self->format( $custom_field->{template} ) ) if defined $custom_field->{field};
+        foreach my $custom_field (@custom_fields) {
+            $string .= maybe_add( $custom_field->{field}, $self->format( $custom_field->{template} ) )
+                if defined $custom_field->{field};
         }
     }
     return $string;

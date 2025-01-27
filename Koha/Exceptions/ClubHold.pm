@@ -9,7 +9,7 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::ClubHold::NoPatrons' => {
-        isa => 'Koha::Exceptions::ClubHold',
+        isa         => 'Koha::Exceptions::ClubHold',
         description => "Cannot place a hold on a club without patrons.",
     },
 );

@@ -19,58 +19,57 @@ use Modern::Perl;
 
 use Exception::Class (
 
-    'Koha::Exceptions::Patron::MessagePreference' => {
-        description => 'Something went wrong'
-    },
+    'Koha::Exceptions::Patron::MessagePreference'                    => { description => 'Something went wrong' },
     'Koha::Exceptions::Patron::MessagePreference::AttributeNotFound' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Message attribute not found",
-        fields => ['message_attribute_id']
+        fields      => ['message_attribute_id']
     },
     'Koha::Exceptions::Patron::MessagePreference::DaysInAdvanceOutOfRange' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Days in advance is out of range",
-        fields => ['min','max', 'message_name']
+        fields      => [ 'min', 'max', 'message_name' ]
     },
     'Koha::Exceptions::Patron::MessagePreference::DaysInAdvanceNotAvailable' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Days in advance cannot be selected for this preference",
-        fields => ['message_name']
+        fields      => ['message_name']
     },
     'Koha::Exceptions::Patron::MessagePreference::DigestNotAvailable' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Digest is not available for this message type",
-        fields => ['message_name']
+        fields      => ['message_name']
     },
     'Koha::Exceptions::Patron::MessagePreference::DigestRequired' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Digest must be selected for this message type",
-        fields => ['message_name']
+        fields      => ['message_name']
     },
     'Koha::Exceptions::Patron::MessagePreference::EmailAddressRequired' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Patron has no email address, cannot use email transport type.",
-        fields => ['message_name', 'borrowernumber' ]
+        fields      => [ 'message_name', 'borrowernumber' ]
     },
     'Koha::Exceptions::Patron::MessagePreference::NoTransportType' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Transport type not available for this message.",
-        fields => ['message_name', 'transport_type']
+        fields      => [ 'message_name', 'transport_type' ]
     },
     'Koha::Exceptions::Patron::MessagePreference::PhoneNumberRequired' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Patron has no phone number, cannot use phone transport type.",
-        fields => ['message_name', 'borrowernumber' ]
+        fields      => [ 'message_name', 'borrowernumber' ]
     },
     'Koha::Exceptions::Patron::MessagePreference::SMSNumberRequired' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
         description => "Patron has no SMS number, cannot use sms transport type.",
-        fields => ['message_name', 'borrowernumber' ]
+        fields      => [ 'message_name', 'borrowernumber' ]
     },
     'Koha::Exceptions::Patron::MessagePreference::TalkingTechItivaPhoneNotificationRequired' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference',
-        description => "System preference TalkingTechItivaPhoneNotification is disabled, cannot use itiva transport type.",
-        fields => ['message_name', 'borrowernumber' ]
+        isa         => 'Koha::Exceptions::Patron::MessagePreference',
+        description =>
+            "System preference TalkingTechItivaPhoneNotification is disabled, cannot use itiva transport type.",
+        fields => [ 'message_name', 'borrowernumber' ]
     },
 );
 

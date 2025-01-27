@@ -7,12 +7,12 @@
 [% SET footerjs = 1 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Add reserves") | html %] &rsaquo;
-    [% course.course_name | html %] &rsaquo;
-    [% t("Course reserves") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Add reserves") | html %]
+        &rsaquo; [% course.course_name | html %] &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="courses_add_items_step1" class="course">
@@ -27,7 +27,7 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</a>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Add reserves</span>
@@ -36,25 +36,25 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-            <h1>Add reserves for <em>[% course.course_name | html %]</em></h1>
-        [% IF action == 'invalid_course' %]
-            <div id="invalid-course-error" class="alert alert-warning">Invalid course!</div>
-        [% END %]
+    <h1>Add reserves for <em>[% course.course_name | html %]</em></h1>
+    [% IF action == 'invalid_course' %]
+        <div id="invalid-course-error" class="alert alert-warning">Invalid course!</div>
+    [% END %]
 
-        [% IF action == 'display_form' %]
-            <form method="post" action="/cgi-bin/koha/course_reserves/batch_add_items.pl">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
-                <input type="hidden" name="op" value="cud-add" />
+    [% IF action == 'display_form' %]
+        <form method="post" action="/cgi-bin/koha/course_reserves/batch_add_items.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
+            <input type="hidden" name="op" value="cud-add" />
 
-                <fieldset class="rows">
-                    <legend>Add items: scan barcodes</legend>
-                    <ol>
-                        <li>
-                            <label class="required" for="barcodes">Item barcodes:</label>
-                            <textarea rows="20" cols="50" id="barcodes" name="barcodes" class="focus"></textarea>
-                        </li>
-                        [% IF item_level_itypes %]
+            <fieldset class="rows">
+                <legend>Add items: scan barcodes</legend>
+                <ol>
+                    <li>
+                        <label class="required" for="barcodes">Item barcodes:</label>
+                        <textarea rows="20" cols="50" id="barcodes" name="barcodes" class="focus"></textarea>
+                    </li>
+                    [% IF item_level_itypes %]
                         <li>
                             <label class="required" for="itype">Item type:</label>
                             <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" />
@@ -66,174 +66,172 @@
                                 [% END %]
                             </select>
                         </li>
-                        [% END %]
+                    [% END %]
 
-                        <li>
-                            <label class="required" for="ccode">Collection:</label>
-                            <input type="checkbox" class="field-toggle" data-pulldown="ccode" value="1" name="ccode_enabled" id="ccode_enabled" />
-                            <select id="ccode" name="ccode" disabled="disabled">
-                                <option value=""></option>
-                                [% FOREACH c IN AuthorisedValues.Get('CCODE') %]
-                                    <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
-                                [% END %]
-                            </select>
-                        </li>
+                    <li>
+                        <label class="required" for="ccode">Collection:</label>
+                        <input type="checkbox" class="field-toggle" data-pulldown="ccode" value="1" name="ccode_enabled" id="ccode_enabled" />
+                        <select id="ccode" name="ccode" disabled="disabled">
+                            <option value=""></option>
+                            [% FOREACH c IN AuthorisedValues.Get('CCODE') %]
+                                <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
 
-                        <li>
-                            <label class="required" for="location">Shelving location:</label>
-                            <input type="checkbox" class="field-toggle" data-pulldown="location"  value="1" name="location_enabled" id="location_enabled" />
-                            <select id="location" name="location" disabled="disabled">
-                                <option value=""></option>
-                                [% FOREACH s IN AuthorisedValues.Get('LOC') %]
-                                    <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
-                                [% END %]
-                            </select>
-                        </li>
+                    <li>
+                        <label class="required" for="location">Shelving location:</label>
+                        <input type="checkbox" class="field-toggle" data-pulldown="location" value="1" name="location_enabled" id="location_enabled" />
+                        <select id="location" name="location" disabled="disabled">
+                            <option value=""></option>
+                            [% FOREACH s IN AuthorisedValues.Get('LOC') %]
+                                <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
 
-                        <li>
-                            <label class="required" for="homebranch">Home library:</label>
-                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="homebranch" name="homebranch_enabled" id="homebranch_enabled" />
-                            <select id="homebranch" name="homebranch" disabled="disabled">
-                                <option value=""></option>
-                                [% FOREACH b IN Branches.all() %]
-                                    <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
-                                [% END %]
-                            </select>
-                        </li>
+                    <li>
+                        <label class="required" for="homebranch">Home library:</label>
+                        <input type="checkbox" value="1" class="field-toggle" data-pulldown="homebranch" name="homebranch_enabled" id="homebranch_enabled" />
+                        <select id="homebranch" name="homebranch" disabled="disabled">
+                            <option value=""></option>
+                            [% FOREACH b IN Branches.all() %]
+                                <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
 
-                        <li>
-                            <label class="required" for="holdingbranch">Holding library:</label>
-                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" />
-                            <select id="holdingbranch" name="holdingbranch" disabled="disabled">
-                                <option value=""></option>
-                                [% FOREACH b IN Branches.all() %]
-                                    <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
-                                [% END %]
-                            </select>
-                        </li>
+                    <li>
+                        <label class="required" for="holdingbranch">Holding library:</label>
+                        <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" />
+                        <select id="holdingbranch" name="holdingbranch" disabled="disabled">
+                            <option value=""></option>
+                            [% FOREACH b IN Branches.all() %]
+                                <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
 
-                        <li>
-                            <label for="item_staff_note">Staff note:</label>
-                            <textarea name="item_staff_note" id="item_staff_note">[% course_reserve.staff_note | html %]</textarea>
-                        </li>
+                    <li>
+                        <label for="item_staff_note">Staff note:</label>
+                        <textarea name="item_staff_note" id="item_staff_note">[% course_reserve.staff_note | html %]</textarea>
+                    </li>
 
-                        <li>
-                            <label for="item_public_note">Public note:</label>
-                            <textarea name="item_public_note" id="item_public_note">[% course_reserve.public_note | html %]</textarea>
-                        </li>
-                    </ol>
-                </fieldset>
-
-                <p>
-                    Checking the box next to the field label will enable changes to that field. Leave boxes unchecked to make no change.<br>
-                    Any items with existing course reserves will have their <em>on reserve</em> values updated.
-                </p>
-
-                <fieldset class="rows">
-                    <legend>Or use biblionumbers of bibliographic records</legend>
-                    <ol>
-                        <li>
-                            <label class="required" for="biblionumbers">Biblionumbers:</label>
-                            <textarea rows="20" cols="50" id="biblionumbers" name="biblionumbers"></textarea>
-                        </li>
-
-                        <li>
-                            <label for="biblio_staff_note">Staff note:</label>
-                            <textarea name="biblio_staff_note" id="biblio_staff_note">[% course_reserve.staff_note | html %]</textarea>
-                        </li>
-
-                        <li>
-                            <label for="biblio_public_note">Public note:</label>
-                            <textarea name="biblio_public_note" id="biblio_public_note">[% course_reserve.public_note | html %]</textarea>
-                        </li>
-                    </ol>
-                </fieldset>
-
-                <fieldset class="action">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-
-                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]" class="cancel">Cancel</a>
-                </fieldset>
-            </form>
-        [% END %]
-
-        [% IF action == 'display_results' %]
-            <h2>Results</h2>
-
-            [% IF barcodes %]
-                <h3>Items added</h3>
-                [% IF items_added.size > 0 %]
-                    <p>The following items were added or updated:</p>
-                    <ul>
-                        [% FOREACH i IN items_added %]
-                            <li>[% i.biblio.title | html %] ( [% i.barcode | html %] )</li>
-                        [% END %]
-                    </ul>
-                [% ELSE %]
-                    No valid item barcodes found.
-                [% END %]
-
-
-                [% IF invalid_barcodes.size > 0 %]
-                    <h3>Invalid barcodes</h3>
-                    <p>The following invalid barcodes were skipped:</p>
-                    <ul>
-                        [% FOREACH b IN invalid_barcodes %]
-                            <li>[% b | html %]</li>
-                        [% END %]
-                    </ul>
-                [% END %]
-            [% ELSIF biblionumbers %]
-                <h3>Bibliographic records added</h3>
-                [% IF biblios_added.size > 0 %]
-                    <p>The following bibliographic records were added or updated:</p>
-                    <ul>
-                        [% FOREACH b IN biblios_added %]
-                            <li>[% b.title | html %] ( [% b.biblionumber | html %] )</li>
-                        [% END %]
-                    </ul>
-                [% ELSE %]
-                    No valid biblionumbers found.
-                [% END %]
-
-
-                [% IF invalid_biblionumbers.size > 0 %]
-                    <h3>Invalid biblionumbers</h3>
-                    <p>The following invalid biblionumbers were skipped:</p>
-                    <ul>
-                        [% FOREACH b IN invalid_biblionumbers %]
-                            <li>[% b | html %]</li>
-                        [% END %]
-                    </ul>
-                [% END %]
-            [% END %]
+                    <li>
+                        <label for="item_public_note">Public note:</label>
+                        <textarea name="item_public_note" id="item_public_note">[% course_reserve.public_note | html %]</textarea>
+                    </li>
+                </ol>
+            </fieldset>
 
             <p>
-                <a class='btn btn-default' href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | html %]">View course</a>
+                Checking the box next to the field label will enable changes to that field. Leave boxes unchecked to make no change.<br />
+                Any items with existing course reserves will have their <em>on reserve</em> values updated.
             </p>
+
+            <fieldset class="rows">
+                <legend>Or use biblionumbers of bibliographic records</legend>
+                <ol>
+                    <li>
+                        <label class="required" for="biblionumbers">Biblionumbers:</label>
+                        <textarea rows="20" cols="50" id="biblionumbers" name="biblionumbers"></textarea>
+                    </li>
+
+                    <li>
+                        <label for="biblio_staff_note">Staff note:</label>
+                        <textarea name="biblio_staff_note" id="biblio_staff_note">[% course_reserve.staff_note | html %]</textarea>
+                    </li>
+
+                    <li>
+                        <label for="biblio_public_note">Public note:</label>
+                        <textarea name="biblio_public_note" id="biblio_public_note">[% course_reserve.public_note | html %]</textarea>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+
+                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]" class="cancel">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF action == 'display_results' %]
+        <h2>Results</h2>
+
+        [% IF barcodes %]
+            <h3>Items added</h3>
+            [% IF items_added.size > 0 %]
+                <p>The following items were added or updated:</p>
+                <ul>
+                    [% FOREACH i IN items_added %]
+                        <li>[% i.biblio.title | html %] ( [% i.barcode | html %] )</li>
+                    [% END %]
+                </ul>
+            [% ELSE %]
+                No valid item barcodes found.
+            [% END %]
+
+            [% IF invalid_barcodes.size > 0 %]
+                <h3>Invalid barcodes</h3>
+                <p>The following invalid barcodes were skipped:</p>
+                <ul>
+                    [% FOREACH b IN invalid_barcodes %]
+                        <li>[% b | html %]</li>
+                    [% END %]
+                </ul>
+            [% END %]
+        [% ELSIF biblionumbers %]
+            <h3>Bibliographic records added</h3>
+            [% IF biblios_added.size > 0 %]
+                <p>The following bibliographic records were added or updated:</p>
+                <ul>
+                    [% FOREACH b IN biblios_added %]
+                        <li>[% b.title | html %] ( [% b.biblionumber | html %] )</li>
+                    [% END %]
+                </ul>
+            [% ELSE %]
+                No valid biblionumbers found.
+            [% END %]
+
+            [% IF invalid_biblionumbers.size > 0 %]
+                <h3>Invalid biblionumbers</h3>
+                <p>The following invalid biblionumbers were skipped:</p>
+                <ul>
+                    [% FOREACH b IN invalid_biblionumbers %]
+                        <li>[% b | html %]</li>
+                    [% END %]
+                </ul>
+            [% END %]
         [% END %]
+
+        <p>
+            <a class="btn btn-default" href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | html %]">View course</a>
+        </p>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-    //<![CDATA[
-        $(document).ready(function(){
-            $('.field-toggle').change(function() {
-                if( this.checked ) {
-                    $('#' + $(this).data('pulldown') ).removeAttr('disabled');
+        //<![CDATA[
+        $(document).ready(function () {
+            $(".field-toggle").change(function () {
+                if (this.checked) {
+                    $("#" + $(this).data("pulldown")).removeAttr("disabled");
                 } else {
-                    $('#' + $(this).data('pulldown') ).val('');
-                    $('#' + $(this).data('pulldown') ).attr('disabled', 'disabled');
+                    $("#" + $(this).data("pulldown")).val("");
+                    $("#" + $(this).data("pulldown")).attr("disabled", "disabled");
                 }
             });
-            $("input[type='submit']").click(function(e){
-                if ( $("#biblionumbers").val().length > 0 && $("#barcodes").val().length > 0 ) {
+            $("input[type='submit']").click(function (e) {
+                if ($("#biblionumbers").val().length > 0 && $("#barcodes").val().length > 0) {
                     e.preventDefault();
                     alert(_("Please enter only barcodes, or only biblionumbers."));
                 }
             });
         });
-    //]]>
+        //]]>
     </script>
 [% END %]
 

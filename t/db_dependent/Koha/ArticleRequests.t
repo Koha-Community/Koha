@@ -39,7 +39,8 @@ subtest 'requested() tests' => sub {
     my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_1->id, flags => 1 } } );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_1->id, flags => 1 } } );
     t::lib::Mocks::mock_userenv( { patron => $patron } );
 
     # FIXME: we moved past this pattern. This method should be refactored
@@ -50,25 +51,28 @@ subtest 'requested() tests' => sub {
     $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
 
     my $ar_1 = $builder->build_object(
-        {   class => 'Koha::ArticleRequests',
+        {
+            class => 'Koha::ArticleRequests',
             value => { status => Koha::ArticleRequest::Status::Requested, branchcode => $library_1->id }
         }
     );
 
     my $ar_2 = $builder->build_object(
-        {   class => 'Koha::ArticleRequests',
+        {
+            class => 'Koha::ArticleRequests',
             value => { status => Koha::ArticleRequest::Status::Requested, branchcode => $library_2->id }
         }
     );
 
     my $ar_3 = $builder->build_object(
-        {   class => 'Koha::ArticleRequests',
+        {
+            class => 'Koha::ArticleRequests',
             value => { status => Koha::ArticleRequest::Status::Pending, branchcode => $library_2->id }
         }
     );
 
     my $requested = Koha::ArticleRequests->requested;
-    is( $requested->count,        2,                                       'Two article requests with the REQUESTED status' );
+    is( $requested->count,        2, 'Two article requests with the REQUESTED status' );
     is( $requested->next->status, Koha::ArticleRequest::Status::Requested, 'Status is correct' );
     is( $requested->next->status, Koha::ArticleRequest::Status::Requested, 'Status is correct' );
 

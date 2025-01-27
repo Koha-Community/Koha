@@ -1,4 +1,5 @@
 package C4::External::Syndetics;
+
 # Copyright (C) 2006 LibLime
 # <jmf at liblime dot com>
 #
@@ -29,7 +30,7 @@ use vars qw(@ISA @EXPORT);
 
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA    = qw(Exporter);
     @EXPORT = qw(
         get_syndetics_index
         get_syndetics_summary
@@ -65,20 +66,25 @@ sub get_syndetics_index {
 
     return unless ( $isbn || $upc || $oclc );
 
-    my $response = _fetch_syndetics_content('INDEX.XML', $isbn, $upc, $oclc);
-    unless ($response->content_type =~ /xml/) {
+    my $response = _fetch_syndetics_content( 'INDEX.XML', $isbn, $upc, $oclc );
+    unless ( $response->content_type =~ /xml/ ) {
         return;
     }
 
-    my $content = $response->content;
+    my $content   = $response->content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
     ) unless !$content;
 
     my $syndetics_elements;
-    for my $available_type ('SUMMARY','TOC','FICTION','AWARDS1','SERIES1','SPSUMMARY','SPREVIEW', 'AVPROFILE', 'AVSUMMARY','DBCHAPTER','LJREVIEW','PWREVIEW','SLJREVIEW','CHREVIEW','BLREVIEW','HBREVIEW','KIREVIEW','CRITICASREVIEW','ANOTES') {
-        if (exists $response->{$available_type} && $response->{$available_type} =~ /$available_type/) {
+    for my $available_type (
+        'SUMMARY',   'TOC', 'FICTION', 'AWARDS1', 'SERIES1', 'SPSUMMARY', 'SPREVIEW', 'AVPROFILE',
+        'AVSUMMARY', 'DBCHAPTER', 'LJREVIEW', 'PWREVIEW', 'SLJREVIEW', 'CHREVIEW', 'BLREVIEW', 'HBREVIEW', 'KIREVIEW',
+        'CRITICASREVIEW', 'ANOTES'
+        )
+    {
+        if ( exists $response->{$available_type} && $response->{$available_type} =~ /$available_type/ ) {
             $syndetics_elements->{$available_type} = $available_type;
         }
     }
@@ -89,16 +95,16 @@ sub get_syndetics_index {
 sub get_syndetics_summary {
     my ( $isbn, $upc, $oclc, $syndetics_elements ) = @_;
 
-    my $summary_type = exists($syndetics_elements->{'AVSUMMARY'}) ? 'AVSUMMARY.XML' : 'SUMMARY.XML';
-    my $response = _fetch_syndetics_content($summary_type, $isbn, $upc, $oclc);
-    unless ($response->content_type =~ /xml/) {
+    my $summary_type = exists( $syndetics_elements->{'AVSUMMARY'} ) ? 'AVSUMMARY.XML' : 'SUMMARY.XML';
+    my $response     = _fetch_syndetics_content( $summary_type, $isbn, $upc, $oclc );
+    unless ( $response->content_type =~ /xml/ ) {
         return;
-    }  
+    }
 
     my $content = $response->content;
 
     my $summary;
-    eval { 
+    eval {
         my $doc = $parser->parse_string($content);
         $summary = $doc->findvalue('//Fld520');
     };
@@ -109,76 +115,81 @@ sub get_syndetics_summary {
 }
 
 sub get_syndetics_toc {
-    my ( $isbn,$upc,$oclc ) = @_;
+    my ( $isbn, $upc, $oclc ) = @_;
 
-    my $response = _fetch_syndetics_content('TOC.XML', $isbn, $upc, $oclc);
-    unless ($response->content_type =~ /xml/) {
+    my $response = _fetch_syndetics_content( 'TOC.XML', $isbn, $upc, $oclc );
+    unless ( $response->content_type =~ /xml/ ) {
         return;
-    }  
+    }
 
-    my $content = $response->content;
+    my $content   = $response->content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
-        forcearray => [ qw(Fld970) ],
+        forcearray => [qw(Fld970)],
     ) unless !$content;
+
     # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
     my $toc;
-    $toc = \@{$response->{VarFlds}->{VarDFlds}->{SSIFlds}->{Fld970}} if $response;
-    return $toc if $toc;
+    $toc = \@{ $response->{VarFlds}->{VarDFlds}->{SSIFlds}->{Fld970} } if $response;
+    return $toc                                                        if $toc;
 }
 
 sub get_syndetics_excerpt {
-    my ( $isbn,$upc,$oclc ) = @_;
+    my ( $isbn, $upc, $oclc ) = @_;
 
-    my $response = _fetch_syndetics_content('DBCHAPTER.XML', $isbn, $upc, $oclc);
-    unless ($response->content_type =~ /xml/) {
+    my $response = _fetch_syndetics_content( 'DBCHAPTER.XML', $isbn, $upc, $oclc );
+    unless ( $response->content_type =~ /xml/ ) {
         return;
-    }  
-        
-    my $content = $response->content;
+    }
+
+    my $content   = $response->content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
-        forcearray => [ qw(Fld520) ],
+        forcearray => [qw(Fld520)],
     ) unless !$content;
+
     # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
     my $excerpt;
-    $excerpt = \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}} if $response;
-    return XMLout($excerpt, NoEscape => 1) if $excerpt;
+    $excerpt = \@{ $response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520} } if $response;
+    return XMLout( $excerpt, NoEscape => 1 )                             if $excerpt;
 }
 
 sub get_syndetics_reviews {
-    my ( $isbn,$upc,$oclc,$syndetics_elements ) = @_;
+    my ( $isbn, $upc, $oclc, $syndetics_elements ) = @_;
 
     my @reviews;
     my $review_sources = [
-    {title => 'Library Journal Review', file => 'LJREVIEW.XML', element => 'LJREVIEW'},
-    {title => 'Publishers Weekly Review', file => 'PWREVIEW.XML', element => 'PWREVIEW'},
-    {title => 'School Library Journal Review', file => 'SLJREVIEW.XML', element => 'SLJREVIEW'},
-    {title => 'CHOICE Review', file => 'CHREVIEW.XML', element => 'CHREVIEW'},
-    {title => 'Booklist Review', file => 'BLREVIEW.XML', element => 'BLREVIEW'},
-    {title => 'Horn Book Review', file => 'HBREVIEW.XML', element => 'HBREVIEW'},
-    {title => 'Kirkus Book Review', file => 'KIREVIEW.XML', element => 'KIREVIEW'},
-    {title => 'Criticas Review', file => 'CRITICASREVIEW.XML', element => 'CRITICASREVIEW'},
-    {title => 'Spanish Review', file => 'SPREVIEW.XML', element => 'SPREVIEW'},
+        { title => 'Library Journal Review',        file => 'LJREVIEW.XML',       element => 'LJREVIEW' },
+        { title => 'Publishers Weekly Review',      file => 'PWREVIEW.XML',       element => 'PWREVIEW' },
+        { title => 'School Library Journal Review', file => 'SLJREVIEW.XML',      element => 'SLJREVIEW' },
+        { title => 'CHOICE Review',                 file => 'CHREVIEW.XML',       element => 'CHREVIEW' },
+        { title => 'Booklist Review',               file => 'BLREVIEW.XML',       element => 'BLREVIEW' },
+        { title => 'Horn Book Review',              file => 'HBREVIEW.XML',       element => 'HBREVIEW' },
+        { title => 'Kirkus Book Review',            file => 'KIREVIEW.XML',       element => 'KIREVIEW' },
+        { title => 'Criticas Review',               file => 'CRITICASREVIEW.XML', element => 'CRITICASREVIEW' },
+        { title => 'Spanish Review',                file => 'SPREVIEW.XML',       element => 'SPREVIEW' },
     ];
 
     for my $source (@$review_sources) {
-        if ($syndetics_elements->{$source->{element}} and $source->{element} =~ $syndetics_elements->{$source->{element}}) {
+        if (    $syndetics_elements->{ $source->{element} }
+            and $source->{element} =~ $syndetics_elements->{ $source->{element} } )
+        {
 
         } else {
+
             #warn "Skipping $source->{element} doesn't match $syndetics_elements->{$source->{element}} \n";
             next;
         }
-        my $response = _fetch_syndetics_content($source->{file}, $isbn, $upc, $oclc);
-        unless ($response->content_type =~ /xml/) {
+        my $response = _fetch_syndetics_content( $source->{file}, $isbn, $upc, $oclc );
+        unless ( $response->content_type =~ /xml/ ) {
             next;
         }
 
         my $content = $response->content;
-       
-        eval { 
+
+        eval {
             my $doc = $parser->parse_string($content);
 
             # note that using findvalue strips any HTML elements embedded
@@ -188,7 +199,7 @@ sub get_syndetics_reviews {
             # may be present in the reviews, but does mean that any
             # <B> and <I> tags used to format the review are also gone.
             my $result = $doc->findvalue('//Fld520');
-            push @reviews, {title => $source->{title}, reviews => [ { content => $result } ]} if $result;
+            push @reviews, { title => $source->{title}, reviews => [ { content => $result } ] } if $result;
         };
         if ($@) {
             warn "Error parsing Syndetics $source->{title} review";
@@ -198,31 +209,10 @@ sub get_syndetics_reviews {
 }
 
 sub get_syndetics_editions {
-    my ( $isbn,$upc,$oclc ) = @_;
+    my ( $isbn, $upc, $oclc ) = @_;
 
-    my $response = _fetch_syndetics_content('FICTION.XML', $isbn, $upc, $oclc);
-    unless ($response->content_type =~ /xml/) {
-        return;
-    }  
-
-    my $content = $response->content;
-
-    my $xmlsimple = XML::Simple->new();
-    $response = $xmlsimple->XMLin(
-        $content,
-        forcearray => [ qw(Fld020) ],
-    ) unless !$content;
-    # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
-    my $similar_items;
-    $similar_items = \@{$response->{VarFlds}->{VarDFlds}->{NumbCode}->{Fld020}} if $response;
-    return $similar_items if $similar_items;
-}
-
-sub get_syndetics_anotes {
-    my ( $isbn,$upc,$oclc) = @_;
-
-    my $response = _fetch_syndetics_content('ANOTES.XML', $isbn, $upc, $oclc);
-    unless ($response->content_type =~ /xml/) {
+    my $response = _fetch_syndetics_content( 'FICTION.XML', $isbn, $upc, $oclc );
+    unless ( $response->content_type =~ /xml/ ) {
         return;
     }
 
@@ -231,20 +221,42 @@ sub get_syndetics_anotes {
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
-        forcearray => [ qw(Fld980) ],
+        forcearray => [qw(Fld020)],
+    ) unless !$content;
+
+    # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
+    my $similar_items;
+    $similar_items = \@{ $response->{VarFlds}->{VarDFlds}->{NumbCode}->{Fld020} } if $response;
+    return $similar_items                                                         if $similar_items;
+}
+
+sub get_syndetics_anotes {
+    my ( $isbn, $upc, $oclc ) = @_;
+
+    my $response = _fetch_syndetics_content( 'ANOTES.XML', $isbn, $upc, $oclc );
+    unless ( $response->content_type =~ /xml/ ) {
+        return;
+    }
+
+    my $content = $response->content;
+
+    my $xmlsimple = XML::Simple->new();
+    $response = $xmlsimple->XMLin(
+        $content,
+        forcearray   => [qw(Fld980)],
         ForceContent => 1,
     ) unless !$content;
     my @anotes;
-    for my $fld980 (@{$response->{VarFlds}->{VarDFlds}->{SSIFlds}->{Fld980}}) {
+    for my $fld980 ( @{ $response->{VarFlds}->{VarDFlds}->{SSIFlds}->{Fld980} } ) {
+
         # this is absurd, but sometimes this data serializes differently
-        if(ref($fld980->{a}->{content}) eq 'ARRAY') {
-            for my $content (@{$fld980->{a}->{content}}) {
-                push @anotes, {content => $content};
-                
+        if ( ref( $fld980->{a}->{content} ) eq 'ARRAY' ) {
+            for my $content ( @{ $fld980->{a}->{content} } ) {
+                push @anotes, { content => $content };
+
             }
-        }
-        else {
-            push @anotes, {content => $fld980->{a}->{content}};
+        } else {
+            push @anotes, { content => $fld980->{a}->{content} };
         }
     }
     return \@anotes;
@@ -259,7 +271,8 @@ sub _fetch_syndetics_content {
 
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/$element&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
+    my $url =
+        "http://www.syndetics.com/index.aspx?isbn=$isbn/$element&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;

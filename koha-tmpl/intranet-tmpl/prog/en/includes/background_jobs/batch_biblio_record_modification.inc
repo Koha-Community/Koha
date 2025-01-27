@@ -41,7 +41,7 @@
             [% SWITCH m.code %]
             [% CASE 'biblio_not_modified' %]
                 <span>Bibliographic record [% biblio_link | $raw %] has not been modified. An error occurred on modifying it.</span>
-                [% IF m.error %] ([% m.error | html %])[% END %].
+                [% IF m.error %]([% m.error | html %])[% END %].
             [% CASE 'biblio_modified' %]
                 <span>Bibliographic record [% biblio_link | $raw %] has successfully been modified.</span>
             [% END %]

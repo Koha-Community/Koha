@@ -38,27 +38,27 @@ C<Net::Z3950::SimpleServer>.
 =cut
 
 sub to_koha {
-    my ($self, $mappings) = @_;
+    my ( $self, $mappings ) = @_;
 
-    my $attrs = $self->{'attributes'};
+    my $attrs  = $self->{'attributes'};
     my $fields = $mappings->{use}{default};
-    my $split = 0;
+    my $split  = 0;
     my $prefix = '';
     my $suffix = '';
-    my $term = $self->{'term'};
+    my $term   = $self->{'term'};
     utf8::decode($term);
 
     if ($attrs) {
         foreach my $attr (@$attrs) {
-            if ($attr->{'attributeType'} == 1) { # use
+            if ( $attr->{'attributeType'} == 1 ) {    # use
                 my $use = $attr->{'attributeValue'};
                 $fields = $mappings->{use}{$use} if defined $mappings->{use}{$use};
-            } elsif ($attr->{'attributeType'} == 4) { # structure
-                $split = 1 if ($attr->{'attributeValue'} == 2);
-            } elsif ($attr->{'attributeType'} == 5) { # truncation
+            } elsif ( $attr->{'attributeType'} == 4 ) {    # structure
+                $split = 1 if ( $attr->{'attributeValue'} == 2 );
+            } elsif ( $attr->{'attributeType'} == 5 ) {    # truncation
                 my $truncation = $attr->{'attributeValue'};
-                $prefix = '*' if ($truncation == 2 || $truncation == 3);
-                $suffix = '*' if ($truncation == 1 || $truncation == 3);
+                $prefix = '*' if ( $truncation == 2 || $truncation == 3 );
+                $suffix = '*' if ( $truncation == 1 || $truncation == 3 );
             }
         }
     }
@@ -67,62 +67,62 @@ sub to_koha {
 
     if ($split) {
         my @terms;
-        foreach my $word (split(/\s/, $term)) {
+        foreach my $word ( split( /\s/, $term ) ) {
             $word =~ s/^[\,\.;:\\\/\"\'\-\=]+//g;
             $word =~ s/[\,\.;:\\\/\"\'\-\=]+$//g;
-            next if (!$word);
+            next if ( !$word );
             $word = $self->escape($word);
             my @words;
-            if( $fields ) {
-                foreach my $field (@{$fields}) {
-                    push(@words, "$field:($prefix$word$suffix)");
+            if ($fields) {
+                foreach my $field ( @{$fields} ) {
+                    push( @words, "$field:($prefix$word$suffix)" );
                 }
             } else {
-                push(@words, "($prefix$word$suffix)");
+                push( @words, "($prefix$word$suffix)" );
             }
-            push (@terms, join(' OR ', @words));
+            push( @terms, join( ' OR ', @words ) );
         }
-        return '(' . join(' AND ', @terms) . ')';
+        return '(' . join( ' AND ', @terms ) . ')';
     }
 
     my @terms;
     $term = $self->escape($term);
     return "($prefix$term$suffix)" unless $fields;
-    foreach my $field (@{$fields}) {
-        push(@terms, "$field:($prefix$term$suffix)");
+    foreach my $field ( @{$fields} ) {
+        push( @terms, "$field:($prefix$term$suffix)" );
     }
-    return '(' . join(' OR ', @terms) . ')';
+    return '(' . join( ' OR ', @terms ) . ')';
 }
 
 sub escape {
-    my ($self, $term) = @_;
+    my ( $self, $term ) = @_;
 
     $term =~ s/([()])/\\$1/g;
     return $term;
 }
 
 package Net::Z3950::RPN::And;
-sub to_koha {
-    my ($self, $mappings) = @_;
 
-    return '(' . $self->[0]->to_koha($mappings) . ' AND ' .
-                 $self->[1]->to_koha($mappings) . ')';
+sub to_koha {
+    my ( $self, $mappings ) = @_;
+
+    return '(' . $self->[0]->to_koha($mappings) . ' AND ' . $self->[1]->to_koha($mappings) . ')';
 }
 
 package Net::Z3950::RPN::Or;
-sub to_koha {
-    my ($self, $mappings) = @_;
 
-    return '(' . $self->[0]->to_koha($mappings) . ' OR ' .
-                 $self->[1]->to_koha($mappings) . ')';
+sub to_koha {
+    my ( $self, $mappings ) = @_;
+
+    return '(' . $self->[0]->to_koha($mappings) . ' OR ' . $self->[1]->to_koha($mappings) . ')';
 }
 
 package Net::Z3950::RPN::AndNot;
-sub to_koha {
-    my ($self, $mappings) = @_;
 
-    return '(' . $self->[0]->to_koha($mappings) . ' NOT ' .
-                 $self->[1]->to_koha($mappings) . ')';
+sub to_koha {
+    my ( $self, $mappings ) = @_;
+
+    return '(' . $self->[0]->to_koha($mappings) . ' NOT ' . $self->[1]->to_koha($mappings) . ')';
 }
 
 1;

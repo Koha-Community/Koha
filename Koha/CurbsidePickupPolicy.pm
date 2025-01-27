@@ -41,10 +41,10 @@ Return the branch associated with this policy
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->branchcode;
     return unless $rs;
-    return Koha::Library->_new_from_dbic( $rs );
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head3 opening_slots
@@ -56,10 +56,10 @@ Return the list of opening slots (Koha::CurbsidePickupOpeningSlots object)
 =cut
 
 sub opening_slots {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->curbside_pickup_opening_slots;
     return unless $rs;
-    return Koha::CurbsidePickupOpeningSlots->_new_from_dbic( $rs );
+    return Koha::CurbsidePickupOpeningSlots->_new_from_dbic($rs);
 }
 
 =head3 add_opening_slot
@@ -96,32 +96,29 @@ sub add_opening_slot {
 sub is_valid_pickup_datetime {
     my ( $self, $datetime ) = @_;
 
-    my $opening_slots =
-      $self->opening_slots->search( { day => $datetime->dow % 7 } );
+    my $opening_slots = $self->opening_slots->search( { day => $datetime->dow % 7 } );
     my $matching_slot;
     while ( my $opening_slot = $opening_slots->next ) {
-        my $start = $datetime->clone->set_hour( $opening_slot->start_hour )
-          ->set_minute( $opening_slot->start_minute );
-        my $end = $datetime->clone->set_hour( $opening_slot->end_hour )
-          ->set_minute( $opening_slot->end_minute );
+        my $start = $datetime->clone->set_hour( $opening_slot->start_hour )->set_minute( $opening_slot->start_minute );
+        my $end   = $datetime->clone->set_hour( $opening_slot->end_hour )->set_minute( $opening_slot->end_minute );
         my $keep_going = 1;
         my $slot_start = $start->clone;
-        my $slot_end = $slot_start->clone->add(minutes => $self->pickup_interval);
-        while ($slot_end <= $end) {
+        my $slot_end   = $slot_start->clone->add( minutes => $self->pickup_interval );
+        while ( $slot_end <= $end ) {
             if ( $slot_start == $datetime ) {
                 $matching_slot = $slot_start;
                 last;
             }
-            $slot_start->add( minutes => $self->pickup_interval);
-            $slot_end->add( minutes => $self->pickup_interval);
+            $slot_start->add( minutes => $self->pickup_interval );
+            $slot_end->add( minutes => $self->pickup_interval );
         }
     }
 
-    return Koha::Result::Boolean->new(0)
-      ->add_message( { message => 'no_matching_slots' } )
-      unless $matching_slot;
+    return Koha::Result::Boolean->new(0)->add_message( { message => 'no_matching_slots' } )
+        unless $matching_slot;
 
-    my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
     # Check too many users for this slot
     my $existing_pickups = Koha::CurbsidePickups->search(
         {
@@ -130,9 +127,8 @@ sub is_valid_pickup_datetime {
         }
     );
 
-    return Koha::Result::Boolean->new(0)
-      ->add_message( { message => 'no_more_available' } )
-      if $existing_pickups->count >= $self->patrons_per_interval;
+    return Koha::Result::Boolean->new(0)->add_message( { message => 'no_more_available' } )
+        if $existing_pickups->count >= $self->patrons_per_interval;
 
     return 1;
 }

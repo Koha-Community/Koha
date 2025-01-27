@@ -18,7 +18,6 @@ package Koha::Item::Transfer::Limit;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);

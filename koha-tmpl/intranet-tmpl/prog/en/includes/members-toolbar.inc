@@ -7,49 +7,56 @@
 [% USE scalar %]
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
-        <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+        <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]"
+            ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+        >
     [% END %]
-    [% SET guarantee_categories = Categories.limited( can_be_guarantee => 1 ).unblessed  %]
+    [% SET guarantee_categories = Categories.limited( can_be_guarantee => 1 ).unblessed %]
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF patron.is_adult AND Koha.Preference("borrowerRelationship") %]
             [% IF guarantee_categories.size > 1 %]
                 <div id="addchild" class="btn-group">
                     <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> Add guarantee</button>
-                        <ul class="dropdown-menu">
-                            [% FOREACH cat IN guarantee_categories %]
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;guarantor_id=[% patron.borrowernumber | html %]&categorycode=[%  cat.categorycode | html %]">[% cat.description | html%]</a></li>
-                            [% END %]
-                        </ul>
+                    <ul class="dropdown-menu">
+                        [% FOREACH cat IN guarantee_categories %]
+                            <li
+                                ><a class="dropdown-item" href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;guarantor_id=[% patron.borrowernumber | html %]&categorycode=[% cat.categorycode | html %]"
+                                    >[% cat.description | html %]</a
+                                ></li
+                            >
+                        [% END %]
+                    </ul>
                 </div>
             [% ELSE %]
                 <a id="addchild" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;guarantor_id=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> Add guarantee</a>
             [% END %]
-        <a id="changepassword" class="btn btn-default" href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | html %]"><i class="fa fa-lock"></i> Change password</a>
-        <a id="duplicate" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-copy"></i> Duplicate</a>
+            <a id="changepassword" class="btn btn-default" href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | html %]"><i class="fa fa-lock"></i> Change password</a>
+            <a id="duplicate" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-copy"></i> Duplicate</a>
         [% END %]
     [% END %]
 
     [% IF CAN_user_circulate_circulate_remaining_permissions %]
-    <div class="btn-group">
-        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-print"></i> Print</button>
+        <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-print"></i> Print</button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item printslip" data-code="printsummary" href="#">Print summary</a></li>
                 <li><a class="dropdown-item printslip" data-code="issueslip" href="#">Print slip</a></li>
                 <li><a class="dropdown-item printslip" data-code="issueqslip" href="#">Print quick slip</a></li>
                 [% IF patron.account_balance != 0 %]
-                <li><a class="dropdown-item" id="printfineslip" target="_blank" href="/cgi-bin/koha/members/printnotice.pl?notice=ACCOUNTS_SUMMARY&borrowernumber=[% patron.borrowernumber | uri %]">Print account balance</a></li>
+                    <li><a class="dropdown-item" id="printfineslip" target="_blank" href="/cgi-bin/koha/members/printnotice.pl?notice=ACCOUNTS_SUMMARY&borrowernumber=[% patron.borrowernumber | uri %]">Print account balance</a></li>
                 [% END %]
                 [% IF patron.has_overdues %]
                     <li><a class="dropdown-item" id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
-                [% IF patron.privacy < 2 %] [%# 2 is the privacy rule "Never" (Delete my history immediately) %]
+                [% IF patron.privacy < 2 %]
+                    [%# 2 is the privacy rule "Never" (Delete my history immediately) %]
                     <li><a class="dropdown-item printslip" data-code="checkinslip" href="#">Print checkin slip</a></li>
                 [% END %]
                 [% FOREACH notice IN Notices.GetTemplates( 'patron_slip' ) %]
                     <li><a class="dropdown-item printslip" data-code="[% notice.code | html %]" href="#">Print [% notice.name | html %]</a></li>
                 [% END %]
             </ul>
-    </div>
+        </div>
     [% END %]
 
     [% IF ( CAN_user_reserveforothers ) %]
@@ -66,7 +73,7 @@
 
     [% IF CAN_user_borrowers_edit_borrowers %]
         <div class="btn-group">
-        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">More <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 [% IF CAN_user_borrowers_edit_borrowers %]
                     <li>
@@ -166,7 +173,7 @@
         <div class="modal-content modal-lg">
             <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op" value="cud-add_message">
+                <input type="hidden" name="op" value="cud-add_message" />
                 <div class="modal-header">
                     <h1 class="modal-title">Leave a message</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -213,11 +220,11 @@
 
                             <li class="form-group form-row" id="subject_form" style="display: none;">
                                 <label for="borrower_subject" class="col-form-label">Subject:</label>
-                                <input type="text" size="60" name="borrower_subject" class="form-control" id="borrower_subject"/>
+                                <input type="text" size="60" name="borrower_subject" class="form-control" id="borrower_subject" />
                             </li>
                             <li class="form-group form-row">
                                 <label for="borrower_message" class="col-form-label" style="display: none;">Body:</label>
-                                <textarea cols="65" rows="5" name="borrower_message" class="form-control" id="borrower_message" ></textarea>
+                                <textarea cols="65" rows="5" name="borrower_message" class="form-control" id="borrower_message"></textarea>
                             </li>
                         </ol>
                     </fieldset>

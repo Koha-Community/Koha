@@ -21,17 +21,17 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Encode;
-use Carp qw( carp );
+use Carp      qw( carp );
 use Try::Tiny qw( catch try );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw(
-  GetMarcISBN
-  GetMarcSubjects
+    GetMarcISBN
+    GetMarcSubjects
 );
 use C4::Output qw(
-  output_html_with_http_headers
-  output_and_exit
+    output_html_with_http_headers
+    output_and_exit
 );
 
 use Koha::Biblios;
@@ -56,7 +56,7 @@ my $to_address = $query->param('email');
 my $shelf = Koha::Virtualshelves->find($shelfid);
 
 output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
-  if $shelf && !$shelf->can_be_viewed($borrowernumber);
+    if $shelf && !$shelf->can_be_viewed($borrowernumber);
 
 if ( $to_address && $op eq 'cud-send' ) {
     my $comment = $query->param('comment');
@@ -76,12 +76,10 @@ if ( $to_address && $op eq 'cud-send' ) {
     if ( !defined $iso2709 ) {
         carp "Error sending mail: empty basket";
         $template->param( error => 1 );
-    }
-    elsif ( !defined $user_email or $user_email eq '' ) {
+    } elsif ( !defined $user_email or $user_email eq '' ) {
         carp "Error sending mail: sender's email address is invalid";
         $template->param( error => 1 );
-    }
-    else {
+    } else {
         my %loops = ( biblio => \@biblionumbers, );
 
         my %substitute = (
@@ -126,8 +124,7 @@ if ( $to_address && $op eq 'cud-send' ) {
     $template->param( email => $to_address );
     output_html_with_http_headers $query, $cookie, $template->output;
 
-}
-else {
+} else {
     $template->param(
         shelfid => $shelfid,
         url     => "/cgi-bin/koha/virtualshelves/sendshelf.pl",

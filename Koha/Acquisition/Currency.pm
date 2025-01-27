@@ -17,7 +17,6 @@ package Koha::Acquisition::Currency;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -37,20 +36,23 @@ Koha::Acquisition::Currency - Koha Acquisition Currency Object class
 =cut
 
 sub store {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $result;
-    $self->_result->result_source->schema->txn_do( sub {
-        if ( $self->active ) {
-            # Remove the active flag from all other active currencies
-            Koha::Acquisition::Currencies->search(
-                {
-                    currency => { '!=' => $self->currency },
-                    active => 1,
-                }
-            )->update({ active => 0 });
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            if ( $self->active ) {
+
+                # Remove the active flag from all other active currencies
+                Koha::Acquisition::Currencies->search(
+                    {
+                        currency => { '!=' => $self->currency },
+                        active   => 1,
+                    }
+                )->update( { active => 0 } );
+            }
+            $result = $self->SUPER::store;
         }
-        $result = $self->SUPER::store;
-    });
+    );
     return $result;
 }
 

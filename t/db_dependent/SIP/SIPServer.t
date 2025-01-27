@@ -30,11 +30,11 @@ BEGIN {
     # Configuration->new and PreFork->run.
     use Test::MockModule;
     use C4::SIP::Sip::Configuration;
-    $mockConfig = Test::MockModule->new( 'C4::SIP::Sip::Configuration' );
+    $mockConfig = Test::MockModule->new('C4::SIP::Sip::Configuration');
     $mockConfig->mock( 'new', sub { return {}; } );
     use Net::Server::PreFork;
-    $mockPrefork = Test::MockModule->new( 'Net::Server::PreFork' );
-    $mockPrefork->mock( 'run', sub {} );
+    $mockPrefork = Test::MockModule->new('Net::Server::PreFork');
+    $mockPrefork->mock( 'run', sub { } );
 }
 
 use C4::SIP::SIPServer qw( get_timeout );
@@ -45,19 +45,20 @@ use C4::SIP::SIPServer qw( get_timeout );
 subtest 'Get_timeout' => sub {
     plan tests => 11;
 
-    my $server = { policy => { timeout => 1 },
-                   config => { timeout => 2 },
-                   service => {
-                       timeout => 3,
-                       client_timeout => 4,
-                   },
+    my $server = {
+        policy  => { timeout => 1 },
+        config  => { timeout => 2 },
+        service => {
+            timeout        => 3,
+            client_timeout => 4,
+        },
     };
 
     is( C4::SIP::SIPServer::get_timeout(), 30, "Default fallback" );
-    is( C4::SIP::SIPServer::get_timeout( undef, { fallback => 25 } ), 25, "Fallback parameter" );
-    is( C4::SIP::SIPServer::get_timeout( $server, { transport => 1 } ), 3, "Transport value" );
-    is( C4::SIP::SIPServer::get_timeout( $server, { client => 1 } ), 4, "Client value" );
-    is( C4::SIP::SIPServer::get_timeout( $server, { policy => 1 } ), '001', "Policy value" );
+    is( C4::SIP::SIPServer::get_timeout( undef,   { fallback  => 25 } ), 25,    "Fallback parameter" );
+    is( C4::SIP::SIPServer::get_timeout( $server, { transport => 1 } ),  3,     "Transport value" );
+    is( C4::SIP::SIPServer::get_timeout( $server, { client    => 1 } ),  4,     "Client value" );
+    is( C4::SIP::SIPServer::get_timeout( $server, { policy    => 1 } ),  '001', "Policy value" );
 
     delete $server->{policy}->{timeout};
     is( C4::SIP::SIPServer::get_timeout( $server, { policy => 1 } ), '000', "No policy" );

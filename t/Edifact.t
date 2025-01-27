@@ -37,11 +37,13 @@ is( $msg_count, 1, "correct message count returned" );
 my $m = $msgs->[0];
 
 is( $m->message_type, 'QUOTES', "Message shows correct type" );
-is( $m->message_reference_number,
-    'MQ09791', "Message reference number returned" );
-is( $m->docmsg_number, 'Q741588',  "Message docmsg number returned" );
-is( $m->message_date,  '20140430', "Message date returned" );
-is( $m->buyer_ean, '5030670137480', 'buyer ean returned');
+is(
+    $m->message_reference_number,
+    'MQ09791', "Message reference number returned"
+);
+is( $m->docmsg_number, 'Q741588',       "Message docmsg number returned" );
+is( $m->message_date,  '20140430',      "Message date returned" );
+is( $m->buyer_ean,     '5030670137480', 'buyer ean returned' );
 
 my $lin = $m->lineitems();
 
@@ -50,11 +52,11 @@ is( $num_lines, 18, 'Correct number of lines in message' );
 
 my $test_line = $lin->[-1];
 
-is( $test_line->line_item_number, 18, 'correct line number returned' );
-is( $test_line->item_number_id, '9780273761006', 'correct ean returned' );
-is( $test_line->quantity, 1, 'quantity returned' );
-is( $test_line->price_info, 114.97, 'price returned' );
-is( $test_line->price_info_inclusive, undef, 'discounted price undefined as expected' );
+is( $test_line->line_item_number,     18,              'correct line number returned' );
+is( $test_line->item_number_id,       '9780273761006', 'correct ean returned' );
+is( $test_line->quantity,             1,               'quantity returned' );
+is( $test_line->price_info,           114.97,          'price returned' );
+is( $test_line->price_info_inclusive, undef,           'discounted price undefined as expected' );
 
 my $test_title = 'International business [electronic resource]';
 my $marcrec    = $test_line->marc_record;
@@ -95,7 +97,7 @@ is( $test_line_2->orderline_free_text, $ftx_string, "ftx note retrieved" );
 
 my $filename2 = "$Bin/edi_testfiles/QUOTES_413514.CEQ";
 
-my $q2 = Koha::Edifact->new( { filename => $filename2, } );
+my $q2       = Koha::Edifact->new( { filename => $filename2, } );
 my $messages = $q2->message_array();
 
 my $orderlines = $messages->[0]->lineitems();
@@ -124,15 +126,15 @@ is( $y, 'ANF', 'Sequence code returned' );
 $y = $ol->girfield( 'stock_category', 4 );
 is( $y, 'RS', 'Copy stock category returned' );
 
-$y = $ol->girfield( 'library_rotation_plan', 0);
+$y = $ol->girfield( 'library_rotation_plan', 0 );
 is( $y, 'WRPC2', 'Library rotation plan returned' );
 
 # test internal routines for prices
-my $dp =  Koha::EDI::_discounted_price(33.0, 9);
+my $dp = Koha::EDI::_discounted_price( 33.0, 9 );
 is( $dp, 6.03, 'Discount calculated' );
 
-$dp =  Koha::EDI::_discounted_price(0.0, 9);
+$dp = Koha::EDI::_discounted_price( 0.0, 9 );
 is( $dp, 9.0, 'Discount calculated with discount = 0' );
 
-$dp =  Koha::EDI::_discounted_price(0.0, 9, 8.0);
-is( $dp, 8.0, 'Discount overridden by incoming calculated value');
+$dp = Koha::EDI::_discounted_price( 0.0, 9, 8.0 );
+is( $dp, 8.0, 'Discount overridden by incoming calculated value' );

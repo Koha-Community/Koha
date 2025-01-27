@@ -15,9 +15,9 @@
 
             <div class="form-content">
                 [% IF ( Koha.Preference('RetainPatronsSearchTerms') ) %]
-                    <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25" value="[% searchmember | html %]"/>
+                    <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25" value="[% searchmember | html %]" />
                 [% ELSE %]
-                    <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25"/>
+                    <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25" />
                 [% END %]
 
                 <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
@@ -26,19 +26,17 @@
             <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
             <div class="form-extra-content">
-                <div>
-                    [% INCLUDE patron_fields_dropdown search_box=1 %]
-                </div>
+                <div> [% INCLUDE patron_fields_dropdown search_box=1 %] </div>
 
                 <div>
                     <label for="searchtype" class="control-label">Search type</label>
                     <select name="searchtype" id="searchtype" class="form-select">
                         [% IF searchtype == 'starts_with' %]
-                            <option value='starts_with' selected='selected'>Starts with</option>
-                            <option value='contains'>Contains</option>
+                            <option value="starts_with" selected="selected">Starts with</option>
+                            <option value="contains">Contains</option>
                         [% ELSE %]
-                            <option value='starts_with'>Starts with</option>
-                            <option value='contains' selected='selected'>Contains</option>
+                            <option value="starts_with">Starts with</option>
+                            <option value="contains" selected="selected">Contains</option>
                         [% END %]
                     </select>
                 </div>

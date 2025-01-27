@@ -8,12 +8,14 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @{$args}{qw(dbh out)};
 
-    $dbh->do(q{
+        $dbh->do(
+            q{
         INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
         ('HoldsQueueParallelLoopsCount', '1', NULL, 'Number of parallel loops to use when running the holds queue builder', 'Integer');
-    });
-    
-    say_success( $out, "Added new system preference 'HoldsQueueParallelLoopsCount'");
+    }
+        );
+
+        say_success( $out, "Added new system preference 'HoldsQueueParallelLoopsCount'" );
 
     },
 };

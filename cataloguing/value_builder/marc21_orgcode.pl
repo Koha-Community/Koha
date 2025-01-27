@@ -24,7 +24,7 @@ use Modern::Perl;
 use C4::Context;
 
 use Koha::Libraries;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -35,9 +35,9 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
-    my $library = Koha::Libraries->find( C4::Context->userenv->{'branch'} );
-    my $org = $library->get_effective_marcorgcode;
+    my ($params) = @_;
+    my $library  = Koha::Libraries->find( C4::Context->userenv->{'branch'} );
+    my $org      = $library->get_effective_marcorgcode;
     return <<"HERE";
 <script>
 

@@ -38,16 +38,14 @@ subtest 'build_authorities_query' => sub {
         authtypecode => '',
         orderby      => 'HeadingAsc',
     };
-    my $built_search =
-      Koha::SearchEngine::Zebra::QueryBuilder->build_authorities_query( @test_search );
+    my $built_search = Koha::SearchEngine::Zebra::QueryBuilder->build_authorities_query(@test_search);
     is_deeply(
         $built_search, $expected_result,
         "We are simply hashifying our array of refs/values, should otherwise not be altered"
     );
     $expected_result->{value} = ['"any"'];
-    $test_search[4] = ['"any"'];
-    $built_search =
-      Koha::SearchEngine::Zebra::QueryBuilder->build_authorities_query( @test_search );
+    $test_search[4]           = ['"any"'];
+    $built_search             = Koha::SearchEngine::Zebra::QueryBuilder->build_authorities_query(@test_search);
     is_deeply(
         $built_search, $expected_result,
         "The same should hold true if the search contains double quotes which will be escaped during searching by search_auth_compat subroutine"
@@ -59,22 +57,38 @@ subtest 'build_query_compat() tests' => sub {
     plan tests => 4;
 
     my $search = Test::MockModule->new('C4::Search');
-    $search->mock( 'buildQuery', sub { return ( 'error', 'query', 'simple_query', 'query_cgi', 'query_desc', 'limit', 'limit_cgi', 'limit_desc', 'query_type' ) } );
+    $search->mock(
+        'buildQuery',
+        sub {
+            return (
+                'error', 'query', 'simple_query', 'query_cgi', 'query_desc', 'limit', 'limit_cgi', 'limit_desc',
+                'query_type'
+            );
+        }
+    );
     my $qb = Koha::SearchEngine::Zebra::QueryBuilder->new();
     my $query;
 
     ( undef, $query ) = $qb->build_query_compat( undef, undef, undef, undef, undef, undef, undef, { suppress => 1 } );
-    is( $query, '(query) not Suppress=1', 'Suppress part of the query added correctly');
+    is( $query, '(query) not Suppress=1', 'Suppress part of the query added correctly' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, undef, undef, undef, undef, undef, undef, { suppress => 0 } );
-    is( $query, 'query', 'Suppress part of the query not added');
+    is( $query, 'query', 'Suppress part of the query not added' );
 
-    $search->mock( 'buildQuery', sub { return ( 'error', 'query', 'simple_query', 'query_cgi', 'query_desc', 'limit', 'limit_cgi', 'limit_desc', 'pqf' ) } );
+    $search->mock(
+        'buildQuery',
+        sub {
+            return (
+                'error', 'query', 'simple_query', 'query_cgi', 'query_desc', 'limit', 'limit_cgi', 'limit_desc',
+                'pqf'
+            );
+        }
+    );
     ( undef, $query ) = $qb->build_query_compat( undef, undef, undef, undef, undef, undef, undef, { suppress => 1 } );
-    is( $query, '@not query @attr 14=1 @attr 1=9011 1', 'Suppress part of the query added correctly (PQF)');
+    is( $query, '@not query @attr 14=1 @attr 1=9011 1', 'Suppress part of the query added correctly (PQF)' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, undef, undef, undef, undef, undef, undef, { suppress => 0 } );
-    is( $query, 'query', 'Suppress part of the query not added (PQF)');
+    is( $query, 'query', 'Suppress part of the query not added (PQF)' );
 };
 
 subtest 'clean_search_term() tests' => sub {
@@ -88,5 +102,5 @@ subtest 'clean_search_term() tests' => sub {
     );
 
     my $res = $qb->clean_search_term('test "query":');
-    is($res, 'test \"query\":', 'Double-quotes are escaped');
+    is( $res, 'test \"query\":', 'Double-quotes are escaped' );
 };

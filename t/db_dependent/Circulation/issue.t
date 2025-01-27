@@ -24,7 +24,8 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Biblio qw( AddBiblio );
-use C4::Circulation qw( AddIssue AddIssuingCharge AddRenewal AddReturn GetIssuingCharges GetRenewCount GetUpcomingDueIssues );
+use C4::Circulation
+    qw( AddIssue AddIssuingCharge AddRenewal AddReturn GetIssuingCharges GetRenewCount GetUpcomingDueIssues );
 use C4::Context;
 use C4::Items;
 use C4::Reserves qw( AddReserve );
@@ -45,13 +46,13 @@ BEGIN {
 can_ok(
     'C4::Circulation',
     qw(AddIssue
-      AddIssuingCharge
-      AddRenewal
-      AddReturn
-      GetIssuingCharges
-      GetRenewCount
-      GetUpcomingDueIssues
-      )
+        AddIssuingCharge
+        AddRenewal
+        AddReturn
+        GetIssuingCharges
+        GetRenewCount
+        GetUpcomingDueIssues
+    )
 );
 
 #Start transaction
@@ -84,13 +85,15 @@ my $itemtype2 = $builder->build(
         value  => { notforloan => 0 }
     }
 )->{itemtype};
-my $branchcode_1 = $builder->build({ source => 'Branch' })->{branchcode};
-my $branchcode_2 = $builder->build({ source => 'Branch' })->{branchcode};
-my $branchcode_3 = $builder->build({ source => 'Branch' })->{branchcode};
-my $categorycode = $builder->build({
+my $branchcode_1 = $builder->build( { source => 'Branch' } )->{branchcode};
+my $branchcode_2 = $builder->build( { source => 'Branch' } )->{branchcode};
+my $branchcode_3 = $builder->build( { source => 'Branch' } )->{branchcode};
+my $categorycode = $builder->build(
+    {
         source => 'Category',
-        value => { enrolmentfee => undef }
-    })->{categorycode};
+        value  => { enrolmentfee => undef }
+    }
+)->{categorycode};
 
 # A default issuingrule should always be present
 Koha::CirculationRules->set_rules(
@@ -110,7 +113,8 @@ Koha::CirculationRules->set_rules(
 # Add Dates
 my $dt_today = dt_from_string;
 my $today    = output_pref(
-    {   dt         => $dt_today,
+    {
+        dt         => $dt_today,
         dateformat => 'iso',
         timeformat => '24hr',
         dateonly   => 1
@@ -118,10 +122,11 @@ my $today    = output_pref(
 );
 
 my $dt_today2 = dt_from_string;
-my $dur10 = DateTime::Duration->new( days => -10 );
+my $dur10     = DateTime::Duration->new( days => -10 );
 $dt_today2->add_duration($dur10);
 my $daysago10 = output_pref(
-    {   dt         => $dt_today2,
+    {
+        dt         => $dt_today2,
         dateformat => 'iso',
         timeformat => '24hr',
         dateonly   => 1
@@ -129,22 +134,24 @@ my $daysago10 = output_pref(
 );
 
 # Add biblio and item
-my $record = MARC::Record->new();
+my $record  = MARC::Record->new();
 my $record2 = MARC::Record->new();
 $record->append_fields(
     MARC::Field->new( '942', '0', '0', c => $itemtype ),
-    MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
+    MARC::Field->new( '952', '0', '0', a => $branchcode_1 )
+);
 
 $record2->append_fields(
     MARC::Field->new( '942', '0', '0', c => $itemtype2 ),
-    MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
+    MARC::Field->new( '952', '0', '0', a => $branchcode_1 )
+);
 
-my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
+my ( $biblionumber,  $biblioitemnumber )  = C4::Biblio::AddBiblio( $record,  '' );
 my ( $biblionumber2, $biblioitemnumber2 ) = C4::Biblio::AddBiblio( $record2, '' );
 
 my $barcode_1 = 'barcode_1';
 my $barcode_2 = 'barcode_2';
-my $item_id1 = Koha::Item->new(
+my $item_id1  = Koha::Item->new(
     {
         biblionumber   => $biblionumber,
         barcode        => $barcode_1,
@@ -167,34 +174,40 @@ my $item_id2 = Koha::Item->new(
 )->store->itemnumber;
 
 #Add borrower
-my $borrower_id1 = Koha::Patron->new({
-    firstname    => 'firstname1',
-    surname      => 'surname1 ',
-    categorycode => $categorycode,
-    branchcode   => $branchcode_1
-})->store->borrowernumber;
-my $patron_1 = Koha::Patrons->find( $borrower_id1 );
-my $borrower_id2 = Koha::Patron->new({
-    firstname    => 'firstname2',
-    surname      => 'surname2 ',
-    categorycode => $categorycode,
-    branchcode   => $branchcode_2,
-})->store->borrowernumber;
-my $patron_2 = Koha::Patrons->find( $borrower_id2 );
+my $borrower_id1 = Koha::Patron->new(
+    {
+        firstname    => 'firstname1',
+        surname      => 'surname1 ',
+        categorycode => $categorycode,
+        branchcode   => $branchcode_1
+    }
+)->store->borrowernumber;
+my $patron_1     = Koha::Patrons->find($borrower_id1);
+my $borrower_id2 = Koha::Patron->new(
+    {
+        firstname    => 'firstname2',
+        surname      => 'surname2 ',
+        categorycode => $categorycode,
+        branchcode   => $branchcode_2,
+    }
+)->store->borrowernumber;
+my $patron_2 = Koha::Patrons->find($borrower_id2);
 
-t::lib::Mocks::mock_userenv({ patron => $patron_1 });
+t::lib::Mocks::mock_userenv( { patron => $patron_1 } );
 
 #Begin Tests
 
 #Test AddIssue
 my $query = " SELECT count(*) FROM issues";
-my $sth = $dbh->prepare($query);
+my $sth   = $dbh->prepare($query);
 $sth->execute;
 my $countissue = $sth->fetchrow_array;
-is ($countissue ,0, "there is no issue");
+is( $countissue, 0, "there is no issue" );
 my $issue1 = C4::Circulation::AddIssue( $patron_1, $barcode_1, $daysago10, 0, $today, '' );
-is( ref $issue1, 'Koha::Checkout',
-       'AddIssue returns a Koha::Checkout object' );
+is(
+    ref $issue1, 'Koha::Checkout',
+    'AddIssue returns a Koha::Checkout object'
+);
 my $datedue1 = dt_from_string( $issue1->date_due() );
 like(
     $datedue1,
@@ -208,32 +221,32 @@ is( $issue2, undef, "AddIssue returns undef if no datedue is specified" );
 
 $sth->execute;
 $countissue = $sth->fetchrow_array;
-is ($countissue,1,"1 issues have been added");
+is( $countissue, 1, "1 issues have been added" );
 
 #Test AddIssuingCharge
 $query = " SELECT count(*) FROM accountlines";
-$sth = $dbh->prepare($query);
+$sth   = $dbh->prepare($query);
 $sth->execute;
 my $countaccount = $sth->fetchrow_array;
-is ($countaccount,0,"0 accountline exists");
-my $checkout = Koha::Checkouts->find( $issue_id1 );
-my $charge = C4::Circulation::AddIssuingCharge( $checkout, 10, 'RENT' );
-is( ref( $charge ), 'Koha::Account::Line', "An issuing charge has been added" );
-is( $charge->issue_id, $issue_id1, 'Issue id is set correctly for issuing charge' );
+is( $countaccount, 0, "0 accountline exists" );
+my $checkout = Koha::Checkouts->find($issue_id1);
+my $charge   = C4::Circulation::AddIssuingCharge( $checkout, 10, 'RENT' );
+is( ref($charge),      'Koha::Account::Line', "An issuing charge has been added" );
+is( $charge->issue_id, $issue_id1,            'Issue id is set correctly for issuing charge' );
 my $offset = Koha::Account::Offsets->find( { debit_id => $charge->id } );
-is( $offset->credit_id, undef, 'Offset was created');
+is( $offset->credit_id, undef, 'Offset was created' );
 $sth->execute;
 $countaccount = $sth->fetchrow_array;
-is ($countaccount,1,"1 accountline has been added");
+is( $countaccount, 1, "1 accountline has been added" );
 
 # Test AddRenewal
 
-my $se = Test::MockModule->new( 'C4::Context' );
-$se->mock( 'interface', sub {return 'intranet'});
+my $se = Test::MockModule->new('C4::Context');
+$se->mock( 'interface', sub { return 'intranet' } );
 
 # Let's renew this one at a different library for statistical purposes to test Bug 17781
 # Mocking userenv with a different branchcode
-t::lib::Mocks::mock_userenv({ patron => $patron_2, branchcode => $branchcode_3 });
+t::lib::Mocks::mock_userenv( { patron => $patron_2, branchcode => $branchcode_3 } );
 
 my $datedue3 = AddRenewal(
     {
@@ -246,7 +259,7 @@ my $datedue3 = AddRenewal(
 );
 
 # Restoring the userenv with the original branchcode
-t::lib::Mocks::mock_userenv({ patron => $patron_1});
+t::lib::Mocks::mock_userenv( { patron => $patron_1 } );
 
 like(
     $datedue3,
@@ -254,14 +267,17 @@ like(
     "AddRenewal returns a date"
 );
 
-my $stat = $dbh->selectrow_hashref("SELECT * FROM statistics WHERE type = 'renew' AND borrowernumber = ? AND itemnumber = ? AND branch = ?", undef, $borrower_id1, $item_id1, $branchcode_3 );
+my $stat = $dbh->selectrow_hashref(
+    "SELECT * FROM statistics WHERE type = 'renew' AND borrowernumber = ? AND itemnumber = ? AND branch = ?", undef,
+    $borrower_id1, $item_id1, $branchcode_3
+);
 ok( $stat, "Bug 17781 - 'Improper branchcode set during renewal' still fixed" );
 
 subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
     plan tests => 10;
 
-    my $item_library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron       = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item_library   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
     my $logged_in_user = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_userenv( { patron => $logged_in_user } );
 
@@ -280,10 +296,8 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
         {
             $se->mock( 'interface', sub { return 'opac' } );
 
-            my $item = $builder->build_sample_item(
-                { library => $item_library->branchcode, itype => $itemtype } );
-            my $opac_renew_issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $item = $builder->build_sample_item( { library => $item_library->branchcode, itype => $itemtype } );
+            my $opac_renew_issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             AddRenewal(
                 {
@@ -295,9 +309,9 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
                 }
             );
 
-            my $stat = Koha::Statistics->search(
-                { itemnumber => $item->itemnumber, type => 'renew' } )->next;
-            is( $stat->branch, $expected_branchcode,
+            my $stat = Koha::Statistics->search( { itemnumber => $item->itemnumber, type => 'renew' } )->next;
+            is(
+                $stat->branch, $expected_branchcode,
                 "->renewal_branchcode is respected for OpacRenewalBranch = $syspref"
             );
         }
@@ -305,10 +319,8 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
         {
             $se->mock( 'interface', sub { return 'intranet' } );
 
-            my $item = $builder->build_sample_item(
-                { library => $item_library->branchcode, itype => $itemtype } );
-            my $opac_renew_issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $item = $builder->build_sample_item( { library => $item_library->branchcode, itype => $itemtype } );
+            my $opac_renew_issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             AddRenewal(
                 {
@@ -320,33 +332,34 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
                 }
             );
 
-            my $stat = Koha::Statistics->search(
-                { itemnumber => $item->itemnumber, type => 'renew' } )->next;
-            is( $stat->branch, $logged_in_user->branchcode,
+            my $stat = Koha::Statistics->search( { itemnumber => $item->itemnumber, type => 'renew' } )->next;
+            is(
+                $stat->branch, $logged_in_user->branchcode,
                 "->renewal_branchcode is always logged in branch for intranet"
             );
         }
     }
 };
 
-
 my @renewcount;
+
 #Test GetRenewCount
 my $issue3 = C4::Circulation::AddIssue( $patron_1, $barcode_1 );
+
 #Without anything in DB
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0, 0, 0, 0 ], # FIXME Need to be fixed, see FIXME in GetRenewCount
+    [ 0, 0, 0, 0, 0, 0 ],    # FIXME Need to be fixed, see FIXME in GetRenewCount
     "Without issuing rules and without parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount(-1);
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0, 0, 0, 0 ], # FIXME Need to be fixed
+    [ 0, 0, 0, 0, 0, 0 ],    # FIXME Need to be fixed
     "Without issuing rules and without wrong parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
-@renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
+@renewcount = C4::Circulation::GetRenewCount( $borrower_id1, $item_id1 );
 is_deeply(
     \@renewcount,
     [ 2, 0, 0, 0, 0, 0 ],
@@ -366,7 +379,7 @@ is_deeply(
     [ 0, 0, 0, 0, 0, 0 ],
     "With issuing rules (renewal disallowed) and without wrong parameter, GetRenewCount returns renewcount = 0, renewsallowed = 0, renewsleft = 0"
 );
-@renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
+@renewcount = C4::Circulation::GetRenewCount( $borrower_id1, $item_id1 );
 is_deeply(
     \@renewcount,
     [ 2, 0, 0, 0, 0, 0 ],
@@ -384,7 +397,7 @@ Koha::CirculationRules->set_rules(
         }
     }
 );
-@renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
+@renewcount = C4::Circulation::GetRenewCount( $borrower_id1, $item_id1 );
 is_deeply(
     \@renewcount,
     [ 2, 3, 1, 0, 0, 0 ],
@@ -400,7 +413,7 @@ AddRenewal(
         lastreneweddate => $daysago10
     }
 );
-@renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
+@renewcount = C4::Circulation::GetRenewCount( $borrower_id1, $item_id1 );
 is_deeply(
     \@renewcount,
     [ 3, 3, 0, 0, 0, 0 ],
@@ -409,34 +422,38 @@ is_deeply(
 
 $dbh->do("DELETE FROM old_issues");
 AddReturn($barcode_1);
-my $return = $dbh->selectrow_hashref("SELECT DATE(returndate) AS return_date, CURRENT_DATE() AS today FROM old_issues LIMIT 1" );
+my $return =
+    $dbh->selectrow_hashref("SELECT DATE(returndate) AS return_date, CURRENT_DATE() AS today FROM old_issues LIMIT 1");
 ok( $return->{return_date} eq $return->{today}, "Item returned with no return date specified has todays date" );
 
 $dbh->do("DELETE FROM old_issues");
 C4::Circulation::AddIssue( $patron_1, $barcode_1, $daysago10, 0, $today );
-AddReturn($barcode_1, undef, undef, dt_from_string('2014-04-01 23:42'));
-$return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
-ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
+AddReturn( $barcode_1, undef, undef, dt_from_string('2014-04-01 23:42') );
+$return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1");
+ok(
+    $return->{returndate} eq '2014-04-01 23:42:00',
+    "Item returned with a return date of '2014-04-01 23:42' has that return date"
+);
 
 my $itemnumber = Koha::Item->new(
     {
-        biblionumber   => $biblionumber,
-        barcode        => 'barcode_3',
-        itemcallnumber => 'callnumber3',
-        homebranch     => $branchcode_1,
-        holdingbranch  => $branchcode_1,
-        notforloan     => 1,
-        itype          => $itemtype,
+        biblionumber     => $biblionumber,
+        barcode          => 'barcode_3',
+        itemcallnumber   => 'callnumber3',
+        homebranch       => $branchcode_1,
+        holdingbranch    => $branchcode_1,
+        notforloan       => 1,
+        itype            => $itemtype,
         biblioitemnumber => $biblioitemnumber
     },
 )->store->itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
-t::lib::Mocks::mock_preference( 'CataloguingLog', 1 );
-my $log_count_before = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
+t::lib::Mocks::mock_preference( 'CataloguingLog',                  1 );
+my $log_count_before = $schema->resultset('ActionLog')->search( { module => 'CATALOGUING' } )->count();
 
 AddReturn( 'barcode_3', $branchcode_1 );
-my $item = Koha::Items->find( $itemnumber );
+my $item = Koha::Items->find($itemnumber);
 ok( $item->notforloan eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
 
 my $updatenotforloanstatusoncheckin = "
@@ -448,21 +465,27 @@ $itemtype:\n
 ";
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', $updatenotforloanstatusoncheckin );
 AddReturn( 'barcode_3', $branchcode_1 );
-$item = Koha::Items->find( $itemnumber );
+$item = Koha::Items->find($itemnumber);
 ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin prioritises item type specific rule over _ALL_ rules} );
-my $log_count_after = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
-is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged");
+my $log_count_after = $schema->resultset('ActionLog')->search( { module => 'CATALOGUING' } )->count();
+is( $log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged" );
 
 AddReturn( 'barcode_3', $branchcode_1 );
-$item = Koha::Items->find( $itemnumber );
-ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin uses item type specific rules even if they do not target the returned items' notforloan value} );
+$item = Koha::Items->find($itemnumber);
+ok(
+    $item->notforloan eq 9,
+    q{UpdateNotForLoanStatusOnCheckin uses item type specific rules even if they do not target the returned items' notforloan value}
+);
 
 # Change the returning item to an item type without a rule
-Koha::Items->find( $itemnumber )->itype( $itemtype2 )->store;
-Koha::Items->find( $itemnumber )->notforloan( 1 )->store;
+Koha::Items->find($itemnumber)->itype($itemtype2)->store;
+Koha::Items->find($itemnumber)->notforloan(1)->store;
 AddReturn( 'barcode_3', $branchcode_1 );
-$item = Koha::Items->find( $itemnumber );
-ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckin _ALL_ rules are applied if there are no specific item type rule matching the returned item} );
+$item = Koha::Items->find($itemnumber);
+ok(
+    $item->notforloan eq 0,
+    q{UpdateNotForLoanStatusOnCheckin _ALL_ rules are applied if there are no specific item type rule matching the returned item}
+);
 
 t::lib::Mocks::mock_preference(
     'UpdateNotForLoanStatusOnCheckin', q{_ALL_:
@@ -477,9 +500,8 @@ is(
     q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 1 for _ALL_ with setting "1: ONLYMESSAGE"}
 );
 
-
 t::lib::Mocks::mock_preference(
-    'UpdateNotForLoanStatusOnCheckin',  "$itemtype:\n
+    'UpdateNotForLoanStatusOnCheckin', "$itemtype:\n
         1: ONLYMESSAGE
 "
 );
@@ -506,52 +528,87 @@ t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', q{} );
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin',  q{} );
 
 AddReturn( 'barcode_4', $branchcode_1 );
-my $item2 = Koha::Items->find( $itemnumber2 );
+my $item2 = Koha::Items->find($itemnumber2);
 ok( $item2->location eq 'FIC', 'UpdateItemLocationOnCheckin does not modify value when not enabled' );
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', 'FIC: GEN' );
-$log_count_before = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
+$log_count_before = $schema->resultset('ActionLog')->search( { module => 'CATALOGUING' } )->count();
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-is( $item2->location, 'GEN', q{UpdateItemLocationOnCheckin updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
-is( $item2->permanent_location, 'GEN', q{UpdateItemLocationOnCheckin updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
-$log_count_after = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
-is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged");
+$item2 = Koha::Items->find($itemnumber2);
+is(
+    $item2->location, 'GEN',
+    q{UpdateItemLocationOnCheckin updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"}
+);
+is(
+    $item2->permanent_location, 'GEN',
+    q{UpdateItemLocationOnCheckin updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"}
+);
+$log_count_after = $schema->resultset('ActionLog')->search( { module => 'CATALOGUING' } )->count();
+is( $log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged" );
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq 'GEN', q{UpdateItemLocationOnCheckin does not update location value from 'GEN' with setting "FIC: GEN"} );
+$item2 = Koha::Items->find($itemnumber2);
+ok(
+    $item2->location eq 'GEN',
+    q{UpdateItemLocationOnCheckin does not update location value from 'GEN' with setting "FIC: GEN"}
+);
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', '_ALL_: CART' );
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq 'CART', q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART"} );
-Koha::Item::Transfer->new({
-    itemnumber => $itemnumber2,
-    frombranch => $branchcode_2,
-    tobranch => $branchcode_1,
-    datesent => '2020-01-01'
-})->store;
+$item2 = Koha::Items->find($itemnumber2);
+ok(
+    $item2->location eq 'CART',
+    q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART"}
+);
+Koha::Item::Transfer->new(
+    {
+        itemnumber => $itemnumber2,
+        frombranch => $branchcode_2,
+        tobranch   => $branchcode_1,
+        datesent   => '2020-01-01'
+    }
+)->store;
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq 'CART', q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART" when transfer filled} );
+$item2 = Koha::Items->find($itemnumber2);
+ok(
+    $item2->location eq 'CART',
+    q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART" when transfer filled}
+);
 
-ok( $item2->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckin does not update permanent_location value from 'GEN' with setting "_ALL_: CART"} );
-AddIssue( $patron_1, 'barcode_4', $daysago10,0, $today, '' );
-$item2 = Koha::Items->find( $itemnumber2 );
+ok(
+    $item2->permanent_location eq 'GEN',
+    q{UpdateItemLocationOnCheckin does not update permanent_location value from 'GEN' with setting "_ALL_: CART"}
+);
+AddIssue( $patron_1, 'barcode_4', $daysago10, 0, $today, '' );
+$item2 = Koha::Items->find($itemnumber2);
 ok( $item2->location eq 'GEN', q{Location updates from 'CART' to permanent location on issue} );
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', "GEN: _BLANK_\n_BLANK_: PROC\nPROC: _PERM_" );
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq '', q{UpdateItemLocationOnCheckin updates location value from 'GEN' to '' with setting "GEN: _BLANK_"} );
+$item2 = Koha::Items->find($itemnumber2);
+ok(
+    $item2->location eq '',
+    q{UpdateItemLocationOnCheckin updates location value from 'GEN' to '' with setting "GEN: _BLANK_"}
+);
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq 'PROC' , q{UpdateItemLocationOnCheckin updates location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
-ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
+$item2 = Koha::Items->find($itemnumber2);
+ok(
+    $item2->location eq 'PROC',
+    q{UpdateItemLocationOnCheckin updates location value from '' to 'PROC' with setting "_BLANK_: PROC"}
+);
+ok(
+    $item2->permanent_location eq '',
+    q{UpdateItemLocationOnCheckin does not update permanent_location value from '' to 'PROC' with setting "_BLANK_: PROC"}
+);
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq '' , q{UpdateItemLocationOnCheckin updates location value from 'PROC' to '' with setting "PROC: _PERM_" } );
-ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location from '' with setting "PROC: _PERM_" } );
+$item2 = Koha::Items->find($itemnumber2);
+ok(
+    $item2->location eq '',
+    q{UpdateItemLocationOnCheckin updates location value from 'PROC' to '' with setting "PROC: _PERM_" }
+);
+ok(
+    $item2->permanent_location eq '',
+    q{UpdateItemLocationOnCheckin does not update permanent_location from '' with setting "PROC: _PERM_" }
+);
 
 # Bug 28472
 my $itemnumber3 = Koha::Item->new(
@@ -568,13 +625,14 @@ my $itemnumber3 = Koha::Item->new(
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', '_ALL_: CART' );
 AddReturn( 'barcode_5', $branchcode_1 );
-my $item3 = Koha::Items->find( $itemnumber3 );
-is( $item3->location, 'CART', q{UpdateItemLocationOnCheckin updates location value from NULL (i.e. the item has no shelving location set) to 'CART' with setting "_ALL_: CART"} );
-
-
+my $item3 = Koha::Items->find($itemnumber3);
+is(
+    $item3->location, 'CART',
+    q{UpdateItemLocationOnCheckin updates location value from NULL (i.e. the item has no shelving location set) to 'CART' with setting "_ALL_: CART"}
+);
 
 # Bug 14640 - Cancel the hold on checking out if asked
-Koha::Items->find({ barcode => $barcode_1 })->notforloan('0')->store;
+Koha::Items->find( { barcode => $barcode_1 } )->notforloan('0')->store;
 my $reserve_id = AddReserve(
     {
         branchcode     => $branchcode_1,
@@ -587,11 +645,12 @@ my $reserve_id = AddReserve(
 );
 ok( $reserve_id, 'The reserve should have been inserted' );
 AddIssue( $patron_2, $barcode_1, dt_from_string, 'cancel' );
-my $hold = Koha::Holds->find( $reserve_id );
+my $hold = Koha::Holds->find($reserve_id);
 is( $hold, undef, 'The reserve should have been correctly cancelled' );
 
 # Unseen rewnewals
-t::lib::Mocks::mock_preference('UnseenRenewals', 1);
+t::lib::Mocks::mock_preference( 'UnseenRenewals', 1 );
+
 # Add a default circ rule: 3 unseen renewals allowed
 Koha::CirculationRules->set_rules(
     {
@@ -599,7 +658,7 @@ Koha::CirculationRules->set_rules(
         itemtype     => undef,
         branchcode   => undef,
         rules        => {
-            renewalsallowed => 10,
+            renewalsallowed         => 10,
             unseen_renewals_allowed => 3
         }
     }
@@ -607,12 +666,11 @@ Koha::CirculationRules->set_rules(
 
 my $unseen_library = $builder->build_object( { class => 'Koha::Libraries' } );
 my $unseen_patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-my $unseen_item = $builder->build_sample_item(
-    { library => $unseen_library->branchcode, itype => $itemtype } );
-my $unseen_issue = C4::Circulation::AddIssue( $unseen_patron, $unseen_item->barcode );
+my $unseen_item    = $builder->build_sample_item( { library => $unseen_library->branchcode, itype => $itemtype } );
+my $unseen_issue   = C4::Circulation::AddIssue( $unseen_patron, $unseen_item->barcode );
 
 # Does an unseen renewal increment the issue's count
-my ( $unseen_before ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
+my ($unseen_before) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
 AddRenewal(
     {
         borrowernumber => $unseen_patron->borrowernumber,
@@ -621,7 +679,7 @@ AddRenewal(
         seen           => 0
     }
 );
-my ( $unseen_after ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
+my ($unseen_after) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
 is( $unseen_after, $unseen_before + 1, 'unseen_renewals increments' );
 
 # Does a seen renewal reset the unseen count
@@ -633,7 +691,7 @@ AddRenewal(
         seen           => 1
     }
 );
-my ( $unseen_reset ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
+my ($unseen_reset) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
 is( $unseen_reset, 0, 'seen renewal resets the unseen count' );
 
 my $itemnumber4 = Koha::Item->new(
@@ -651,19 +709,25 @@ my $itemnumber4 = Koha::Item->new(
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', q{} );
 AddIssue( $patron_2, 'barcode_6', dt_from_string );
-$item = Koha::Items->find( $itemnumber4 );
+$item = Koha::Items->find($itemnumber4);
 ok( $item->notforloan eq -1, 'UpdateNotForLoanStatusOnCheckout does not modify value when not enabled' );
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', '-1: 0' );
 AddReturn( 'barcode_6', $branchcode_1 );
 my $test = AddIssue( $patron_2, 'barcode_6', dt_from_string );
-$item = Koha::Items->find( $itemnumber4 );
-ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckout updates notforloan value from -1 to 0 with setting "-1: 0"} );
+$item = Koha::Items->find($itemnumber4);
+ok(
+    $item->notforloan eq 0,
+    q{UpdateNotForLoanStatusOnCheckout updates notforloan value from -1 to 0 with setting "-1: 0"}
+);
 
 AddIssue( $patron_2, 'barcode_6', dt_from_string );
 AddReturn( 'barcode_6', $branchcode_1 );
-$item = Koha::Items->find( $itemnumber4 );
-ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckout does not update notforloan value from 0 with setting "-1: 0"} );
+$item = Koha::Items->find($itemnumber4);
+ok(
+    $item->notforloan eq 0,
+    q{UpdateNotForLoanStatusOnCheckout does not update notforloan value from 0 with setting "-1: 0"}
+);
 
 # Bug 21159 - Update item shelving location on checkout
 my $itemnumber5 = Koha::Item->new(

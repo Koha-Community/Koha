@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("SMS cellular providers") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("SMS cellular providers") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -29,80 +30,73 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="new_provider" href="#"><i class="fa fa-plus"></i> New SMS provider</a>
+    </div>
 
-                <div id="toolbar" class="btn-toolbar">
-                    <a class="btn btn-default" id="new_provider" href="#"><i class="fa fa-plus"></i> New SMS provider</a>
-                </div>
+    <h1>SMS cellular providers</h1>
 
-                <h1>SMS cellular providers</h1>
+    [% IF providers.count %]
+        <div id="providers" class="page-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Domain</th>
+                        <th title="Patrons using this provider">Patrons</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
 
-                [% IF providers.count %]
-                    <div id="providers" class="page-section">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Domain</th>
-                                    <th title="Patrons using this provider">Patrons</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                            </thead>
+                <tbody>
+                    [% FOREACH p IN providers %]
+                        <tr>
+                            <td id="name_[% p.id | html %]">[% p.name | html %]</td>
+                            <td id="domain_[% p.id | html %]">[% p.domain | html %]</td>
+                            <td id="patrons_using_[% p.id | html %]">[% p.patrons_using | html %]</td>
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs edit" href="#" id="edit_[% p.id | html %]" data-providerid="[% p.id | html %]"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </a>
+                                <a class="btn btn-default btn-xs delete" href="#" data-providerid="[% p.id | html %]" data-patrons_using="[% p.patrons_using | html %]" id="delete_[% p.id | html %]">
+                                    <i class="fa fa-trash-can"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <div class="alert alert-info"> There are no SMS cellular providers defined. </div>
+    [% END %]
 
-                            <tbody>
-                                [% FOREACH p IN providers %]
-                                    <tr>
-                                        <td id="name_[% p.id | html %]">[% p.name | html %]</td>
-                                        <td id="domain_[% p.id | html %]">[% p.domain | html %]</td>
-                                        <td id="patrons_using_[% p.id | html %]">[% p.patrons_using | html %]</td>
-                                        <td class="actions">
-                                            <a class="btn btn-default btn-xs edit" href="#" id="edit_[% p.id | html %]" data-providerid="[% p.id | html %]">
-                                                <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
-                                            </a>
-                                            <a class="btn btn-default btn-xs delete" href="#" data-providerid="[% p.id | html %]" data-patrons_using="[% p.patrons_using | html %]" id="delete_[% p.id | html %]">
-                                                <i class="fa fa-trash-can"></i> Delete
-                                            </a>
-                                        </td>
-                                    </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
-                    </div> <!-- /.page-section -->
-                [% ELSE %]
-
-                    <div class="alert alert-info">
-                        There are no SMS cellular providers defined.
-                    </div>
-
-                [% END %]
-
-                <div id="sms_add_form">
-                    <form id="sms_form" action="sms_providers.pl" method="post" class="validated">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <fieldset class="rows">
-                            <legend>Add an SMS cellular provider</legend>
-                            <input type="hidden" id="id" name="id" value="" />
-                            <input type="hidden" id="op" name="op" value="cud-add_update" />
-                            <ol>
-                                <li>
-                                    <label for="name" class="required">Name: </label>
-                                    <input type="text" id="name" name="name" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="domain" class="required">Domain: </label>
-                                    <input type="text" id="domain" name="domain" required="required" size="40"/>
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <input type="submit" id="submit_save" class="btn btn-primary" value="Submit" />
-                            <input type="submit" id="submit_update" class="btn btn-primary" value="Submit" />
-                            <a class="cancel cancel_edit" id="cancel" href="sms_providers.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-                </div>
-
+    <div id="sms_add_form">
+        <form id="sms_form" action="sms_providers.pl" method="post" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows">
+                <legend>Add an SMS cellular provider</legend>
+                <input type="hidden" id="id" name="id" value="" />
+                <input type="hidden" id="op" name="op" value="cud-add_update" />
+                <ol>
+                    <li>
+                        <label for="name" class="required">Name: </label>
+                        <input type="text" id="name" name="name" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="domain" class="required">Domain: </label>
+                        <input type="text" id="domain" name="domain" required="required" size="40" />
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" id="submit_save" class="btn btn-primary" value="Submit" />
+                <input type="submit" id="submit_update" class="btn btn-primary" value="Submit" />
+                <a class="cancel cancel_edit" id="cancel" href="sms_providers.pl">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

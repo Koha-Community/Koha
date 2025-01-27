@@ -25,7 +25,7 @@ biblioitems.collectiontitle
 use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw( -utf8 );
+use CGI      qw( -utf8 );
 use C4::Context;
 
 use C4::Output qw( output_html_with_http_headers );
@@ -47,16 +47,18 @@ sub plugin_javascript {
 
 sub plugin {
     my ($input) = @_;
-    my $index   = $input->param('index');
+    my $index = $input->param('index');
 
-    my ($template, $loggedinuser, $cookie) = get_template_and_user({
-        template_name   => "cataloguing/value_builder/unimarc_field_225a_bis.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { editcatalogue => '*' },
-    });
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_225a_bis.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
-    $template->param(index => $index);
+    $template->param( index => $index );
 
     output_html_with_http_headers $input, $cookie, $template->output;
 }

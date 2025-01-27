@@ -36,7 +36,7 @@ It will replace characters that are not valid for HTML IDs with an underscore (_
 sub filter {
     my ( $self, $text ) = @_;
 
-    return $text =~ s/[^a-zA-Z0-9-]+/_/gr
+    return $text =~ s/[^a-zA-Z0-9-]+/_/gr;
 }
 
 1;

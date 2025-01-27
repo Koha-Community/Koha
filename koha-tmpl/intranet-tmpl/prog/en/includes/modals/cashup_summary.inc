@@ -18,16 +18,19 @@
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
+                    <tbody> </tbody>
+                    <tfoot> </tfoot>
                 </table>
-            </div> <!-- /.modal-body -->
+            </div>
+            <!-- /.modal-body -->
             <div class="modal-footer">
                 <button type="button" class="printModal btn btn-primary"><i class="fa fa-print"></i> Print</button>
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-            </div> <!-- /.modal-footer -->
-        </div> <!-- /.modal-content -->
-    </div> <!-- /.modal-dialog -->
-</div> <!-- /#cashupSummaryModal -->
+            </div>
+            <!-- /.modal-footer -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#cashupSummaryModal -->

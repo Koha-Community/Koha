@@ -1,16 +1,18 @@
 use Modern::Perl;
 
 return {
-    bug_number => "23659",
+    bug_number  => "23659",
     description => "Allow hold pickup location to default to item home branch for item-level holds",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('DefaultHoldPickupLocation','loggedinlibrary','loggedinlibrary|homebranch|holdingbranch','Which branch should a hold pickup location default to. ','choice')
-        });
+        }
+        );
 
         say $out "Added new system preference 'DefaultHoldPickupLocation'";
     },

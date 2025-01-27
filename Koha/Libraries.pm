@@ -19,7 +19,6 @@ package Koha::Libraries;
 
 use Modern::Perl;
 
-
 use C4::Context;
 
 use Koha::Biblios;
@@ -50,12 +49,12 @@ sub search_filtered {
     my $userenv = C4::Context->userenv;
     if ( $userenv and $userenv->{number} ) {
         my $only_from_group = $params->{only_from_group};
-        if ( $only_from_group ) {
+        if ($only_from_group) {
             my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
-            my @branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+            my @branchcodes    = $logged_in_user->libraries_where_can_see_patrons;
             $params->{branchcode} = { -in => \@branchcodes } if @branchcodes;
         } else {
-            if ( C4::Context::only_my_library ) {
+            if (C4::Context::only_my_library) {
                 $params->{branchcode} = C4::Context->userenv->{branch};
             }
         }

@@ -48,22 +48,20 @@ prints this help text
 use Modern::Perl;
 
 use C4::Context;
-use Cwd qw( getcwd );
+use Cwd          qw( getcwd );
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 my $help;
 
-GetOptions(
-    "h|help"      => \$help
-);
+GetOptions( "h|help" => \$help );
 
 pod2usage(1) if defined $help;
 
 #Die if you are not in your Koha src directory
 my $KOHA_PATH = C4::Context->config("intranetdir");
 die "ERROR : You are not in Koha src/ directory"
-  unless $KOHA_PATH eq getcwd;
+    unless $KOHA_PATH eq getcwd;
 
 # Delete old coverage
 system("cover -delete");
@@ -74,6 +72,6 @@ system("PERL5OPT=-MDevel::Cover /usr/bin/prove -r t/");
 #Create the HTML output
 system("cover");
 say("file://$KOHA_PATH/cover_db/coverage.html")
-  unless !-e "$KOHA_PATH/cover_db/coverage.html";
+    unless !-e "$KOHA_PATH/cover_db/coverage.html";
 
 1;

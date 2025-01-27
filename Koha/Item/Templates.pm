@@ -17,7 +17,6 @@ package Koha::Item::Templates;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Item::Template;
@@ -47,9 +46,7 @@ sub get_available {
 
     return {
         owned => Koha::Item::Templates->search(
-            {
-                patron_id => $patron_id
-            },
+            { patron_id => $patron_id },
             $params
         ),
         shared => Koha::Item::Templates->search(

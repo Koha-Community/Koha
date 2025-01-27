@@ -10,16 +10,14 @@
     [% USE JSConsents %]
 [% END %]
 [% UNLESS ( is_popup ) %]
-        [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-        [% IF ( opaccredits ) %]
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col">
-                        [% PROCESS koha_news_block news => opaccredits %]
-                    </div>
-                </div>
+    [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
+    [% IF ( opaccredits ) %]
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col"> [% PROCESS koha_news_block news => opaccredits %] </div>
             </div>
-        [% END #/ opaccredits %]
+        </div>
+    [% END #/ opaccredits %]
     <!-- prettier-ignore-start -->
     </div> <!-- / #wrapper in masthead.inc -->
     <!-- prettier-ignore-end -->
@@ -49,17 +47,26 @@
                             </a>
                         [% END %]
                     </div>
-                        [% IF OpacKohaUrl %]
-                            <div class="navbar-nav">
-                                <a id="koha_url" class="nav-link koha_url" href="http://koha-community.org">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" d="M7.394.75c.82-.45 1.75-.72 2.69-.75.5.015.99.1 1.45.27.92.35 1.68 1.05 2.15 1.9.53.865.76 1.875.87 2.875.25 3.315-.98 6.635-3.07 9.18-.825.82-1.835 1.52-3 1.735-.96.135-2-.07-2.775-.675-.48-.365-.67-1-.63-1.575.425.6 1.12 1.015 1.86 1.035.675.03 1.35-.275 1.8-.765.75-.825.835-2.21.12-3.08-.325-.375-.7-.715-1.15-.95-.44-.265-.95-.38-1.46-.45-.93-.06-1.9.11-2.72.57a3.22 3.22 0 0 0-1.565 2.15c-.2.7-.125 1.43-.05 2.14-.31-.81-.43-1.67-.5-2.53v-.64c.12-3.13 1.43-6.2 3.53-8.515.725-.75 1.53-1.43 2.45-1.92Zm0 0" style="stroke-width:.500008"/></svg>
-                                    <span class="koha_url_text">Powered by Koha</span>
-                                </a>
-                            </div>
-                        [% END # /IF OpacKohaUrl %]
-                </div> <!-- /.collapse.navbar-collapse -->
-            </div> <!-- /.container-fluid -->
-        </footer> <!-- / #changelanguage -->
+                    [% IF OpacKohaUrl %]
+                        <div class="navbar-nav">
+                            <a id="koha_url" class="nav-link koha_url" href="http://koha-community.org">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                    <path
+                                        fill="currentColor"
+                                        d="M7.394.75c.82-.45 1.75-.72 2.69-.75.5.015.99.1 1.45.27.92.35 1.68 1.05 2.15 1.9.53.865.76 1.875.87 2.875.25 3.315-.98 6.635-3.07 9.18-.825.82-1.835 1.52-3 1.735-.96.135-2-.07-2.775-.675-.48-.365-.67-1-.63-1.575.425.6 1.12 1.015 1.86 1.035.675.03 1.35-.275 1.8-.765.75-.825.835-2.21.12-3.08-.325-.375-.7-.715-1.15-.95-.44-.265-.95-.38-1.46-.45-.93-.06-1.9.11-2.72.57a3.22 3.22 0 0 0-1.565 2.15c-.2.7-.125 1.43-.05 2.14-.31-.81-.43-1.67-.5-2.53v-.64c.12-3.13 1.43-6.2 3.53-8.515.725-.75 1.53-1.43 2.45-1.92Zm0 0"
+                                        style="stroke-width:.500008"
+                                    />
+                                </svg>
+                                <span class="koha_url_text">Powered by Koha</span>
+                            </a>
+                        </div>
+                    [% END # /IF OpacKohaUrl %]
+                </div>
+                <!-- /.collapse.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </footer>
+        <!-- / #changelanguage -->
     [% END # /IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
 [% END # / UNLESS is_popup %]
 
@@ -71,7 +78,17 @@
 [% IF Koha.Preference( 'CookieConsent' ) && JSConsents.all('opacConsent').size %]
     [% consents = JSConsents.all('opacConsent') %]
     [% FOREACH consent IN consents %]
-        <div class="consentCode" style="display:none" aria-hidden="true" data-consent-id="[% consent.id | html %]" data-consent-code="[% consent.code | html %]" data-consent-match-pattern="[% consent.matchPattern | html %]" data-consent-cookie-domain="[% consent.cookieDomain | html  %]" data-consent-cookie-path="[% consent.cookiePath | html %]" data-requires-consent="[% consent.opacConsent ? 'true' : 'false' | html %]"></div>
+        <div
+            class="consentCode"
+            style="display:none"
+            aria-hidden="true"
+            data-consent-id="[% consent.id | html %]"
+            data-consent-code="[% consent.code | html %]"
+            data-consent-match-pattern="[% consent.matchPattern | html %]"
+            data-consent-cookie-domain="[% consent.cookieDomain | html %]"
+            data-consent-cookie-path="[% consent.cookiePath | html %]"
+            data-requires-consent="[% consent.opacConsent ? 'true' : 'false' | html %]"
+        ></div>
     [% END %]
 [% END %]
 
@@ -88,7 +105,6 @@
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
     [% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
-
 <script>
     [% IF (query_desc) %]
         var query_desc = "[% query_desc | html %]";
@@ -122,15 +138,15 @@
     $(".clearsh").on("click", function(){
         return confirmDelete( _("Are you sure you want to delete your search history?") );
     });
-
 </script>
-
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
     [% Asset.js("js/basket.js") | $raw %]
 [% ELSIF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
     [% Asset.js("js/basket.js") | $raw %]
 [% ELSE %]
-    <script>var readCookie;</script>
+    <script>
+        var readCookie;
+    </script>
 [% END %]
 
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") | $raw %][% END %][% END %]
@@ -148,32 +164,32 @@
 [% IF ( BakerTaylorEnabled ) %]
     [% Asset.js("js/bakertaylorimages.js") | $raw %]
     <script>
-        $(window).load(function(){
+        $(window).load(function () {
             bt_verify_images();
         });
     </script>
 [% END %]
 
 [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
-<script>
-    $("#news-branch-select").change(function() {
-        $( "#news-branch-select" ).submit();
-    });
-</script>
+    <script>
+        $("#news-branch-select").change(function () {
+            $("#news-branch-select").submit();
+        });
+    </script>
 [% END %]
 
 [% Asset.js("lib/js-cookie/js.cookie-3.0.1.min.js") | $raw %]
 [% Asset.js("js/show-password-toggle.js") | $raw %]
 <script>
-$(document).ready(function() {
-    if($('#searchsubmit').length) {
-        $(document).on("click", '#searchsubmit', function(e) {
-            Cookies.remove("form_serialized", { path: '/'});
-            Cookies.remove("form_serialized_limits", { path: '/'});
-            Cookies.remove("search_path_code", { path: '/'});
-        });
-    }
-});
+    $(document).ready(function () {
+        if ($("#searchsubmit").length) {
+            $(document).on("click", "#searchsubmit", function (e) {
+                Cookies.remove("form_serialized", { path: "/" });
+                Cookies.remove("form_serialized_limits", { path: "/" });
+                Cookies.remove("search_path_code", { path: "/" });
+            });
+        }
+    });
 </script>
 [% INCLUDE 'js-date-format.inc' %]
 [% INCLUDE 'js-biblio-format.inc' %]
@@ -192,9 +208,7 @@ $(document).ready(function() {
     [% SET SCOUserJS = Koha.Preference('SCOUserJS') %]
     [% IF ( SCOUserJS ) %]
         <script>
-
             [% SCOUserJS | $raw %]
-
         </script>
     [% END %]
 [% END %]

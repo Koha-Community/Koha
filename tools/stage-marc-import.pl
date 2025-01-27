@@ -34,7 +34,7 @@ use Try::Tiny;
 
 # Koha modules used
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Matcher;
 use Koha::UploadedFiles;
@@ -55,7 +55,7 @@ my $item_action                = $input->param('item_action');
 my $comments                   = $input->param('comments');
 my $record_type                = $input->param('record_type');
 my $encoding                   = $input->param('encoding') || 'UTF-8';
-my $format                     = $input->param('format') || 'ISO2709';
+my $format                     = $input->param('format')   || 'ISO2709';
 my $marc_modification_template = $input->param('marc_modification_template_id');
 my $basketno                   = $input->param('basketno');
 my $booksellerid               = $input->param('booksellerid');
@@ -64,10 +64,10 @@ my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/stage-marc-import.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'stage_marc_import' },
+        template_name => "tools/stage-marc-import.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'stage_marc_import' },
     }
 );
 
@@ -77,7 +77,7 @@ $template->param(
 );
 
 if ( $op eq 'cud-stage' && $fileID ) {
-    my $upload = Koha::UploadedFiles->find( $fileID );
+    my $upload   = Koha::UploadedFiles->find($fileID);
     my $filepath = $upload->full_path;
     my $filename = $upload->filename;
 
@@ -99,25 +99,25 @@ if ( $op eq 'cud-stage' && $fileID ) {
         profile_id                 => $profile_id,
     };
     try {
-        my $job_id = Koha::BackgroundJob::StageMARCForImport->new->enqueue( $params );
+        my $job_id = Koha::BackgroundJob::StageMARCForImport->new->enqueue($params);
         if ($job_id) {
             $template->param(
                 job_enqueued => 1,
-                job_id => $job_id,
+                job_id       => $job_id,
             );
         }
-    }
-    catch {
+    } catch {
         warn $_;
         push @messages,
-          {
+            {
             type  => 'error',
             code  => 'cannot_enqueue_job',
             error => $_,
-          };
+            };
     };
 
 } else {
+
     # initial form
     if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
         $template->param( "UNIMARC" => 1 );
@@ -130,9 +130,11 @@ if ( $op eq 'cud-stage' && $fileID ) {
 
     if ( C4::Context->config('enable_plugins') ) {
 
-        my @plugins = Koha::Plugins->new()->GetPlugins({
-            method => 'to_marc',
-        });
+        my @plugins = Koha::Plugins->new()->GetPlugins(
+            {
+                method => 'to_marc',
+            }
+        );
         $template->param( plugins => \@plugins );
     }
 }

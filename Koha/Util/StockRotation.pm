@@ -26,10 +26,11 @@ use Koha::StockRotationItems;
 use Koha::Database;
 
 our ( @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS );
+
 BEGIN {
     require Exporter;
-    @ISA = qw( Exporter );
-    @EXPORT = qw( );
+    @ISA       = qw( Exporter );
+    @EXPORT    = qw( );
     @EXPORT_OK = qw(
         get_branches
         get_stages
@@ -77,11 +78,11 @@ sub get_stages {
 
     my @out = ();
 
-    if ($rota->stockrotationstages->count > 0) {
+    if ( $rota->stockrotationstages->count > 0 ) {
 
         push @out, $rota->first_stage->unblessed;
 
-        push @out, @{$rota->first_stage->siblings->unblessed};
+        push @out, @{ $rota->first_stage->siblings->unblessed };
 
     }
 
@@ -118,7 +119,7 @@ sub toggle_indemand {
 
 sub move_to_next_stage {
 
-    my ($item_id, $stage_id) = shift;
+    my ( $item_id, $stage_id ) = shift;
 
     # Get the item object
     my $item = Koha::StockRotationItems->find(
@@ -140,7 +141,7 @@ sub move_to_next_stage {
 
 sub remove_from_stage {
 
-    my ($item_id, $stage_id) = @_;
+    my ( $item_id, $stage_id ) = @_;
 
     # Get the item object and delete it
     Koha::StockRotationItems->find(
@@ -160,21 +161,18 @@ sub remove_from_stage {
 
 sub get_barcodes_status {
 
-    my ($rota_id, $barcodes, $status) = @_;
+    my ( $rota_id, $barcodes, $status ) = @_;
 
     # Get the items associated with these barcodes
     my $items = Koha::Items->search(
-        {
-            barcode => { '-in' => $barcodes }
-        },
-        {
-            prefetch => 'stockrotationitem'
-        }
+        { barcode  => { '-in' => $barcodes } },
+        { prefetch => 'stockrotationitem' }
     );
+
     # Get an array of barcodes that were found
     # Assign each barcode's status
     my @found = ();
-    while (my $item = $items->next) {
+    while ( my $item = $items->next ) {
 
         push @found, $item->barcode if $item->barcode;
 
@@ -185,22 +183,22 @@ sub get_barcodes_status {
         if ($on_rota) {
 
             # Check if it's on this rota
-            if ($on_rota->stage->rota->rota_id == $rota_id) {
+            if ( $on_rota->stage->rota->rota_id == $rota_id ) {
 
                 # It's on this rota
-                push @{$status->{on_this}}, $item;
+                push @{ $status->{on_this} }, $item;
 
             } else {
 
                 # It's on another rota
-                push @{$status->{on_other}}, $item;
+                push @{ $status->{on_other} }, $item;
 
             }
 
         } else {
 
             # Item is not on a rota
-            push @{$status->{ok}}, $item;
+            push @{ $status->{ok} }, $item;
 
         }
 
@@ -208,10 +206,8 @@ sub get_barcodes_status {
 
     # Create an array of barcodes supplied in the file that
     # were not found in the catalogue
-    my %found_in_cat = map{ $_ => 1 } @found;
-    push @{$status->{not_found}}, grep(
-        !defined $found_in_cat{$_}, @{$barcodes}
-    );
+    my %found_in_cat = map { $_ => 1 } @found;
+    push @{ $status->{not_found} }, grep( !defined $found_in_cat{$_}, @{$barcodes} );
 
 }
 
@@ -223,9 +219,9 @@ sub get_barcodes_status {
 
 sub add_items_to_rota {
 
-    my ($rota_id, $items) = @_;
+    my ( $rota_id, $items ) = @_;
 
-    foreach my $item(@{$items}) {
+    foreach my $item ( @{$items} ) {
 
         $item->add_to_rota($rota_id);
 

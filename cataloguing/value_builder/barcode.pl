@@ -24,12 +24,12 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Barcodes::ValueBuilder;
-use C4::Biblio qw( GetMarcFromKohaField );
+use C4::Biblio      qw( GetMarcFromKohaField );
 use Koha::DateUtils qw( dt_from_string );
 
 use Algorithm::CheckDigits qw( CheckDigits );
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -40,50 +40,49 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $function_name = $params->{id};
     my %args;
 
-	# find today's date
-    ($args{year}, $args{mon}, $args{day}) = split('-', dt_from_string()->ymd());
-    ($args{tag},$args{subfield})       =  GetMarcFromKohaField( "items.barcode" );
+    # find today's date
+    ( $args{year}, $args{mon}, $args{day} ) = split( '-', dt_from_string()->ymd() );
+    ( $args{tag}, $args{subfield} ) = GetMarcFromKohaField("items.barcode");
 
-	my $nextnum;
+    my $nextnum;
     my $scr;
-	my $autoBarcodeType = C4::Context->preference("autoBarcode");
-	if ((not $autoBarcodeType) or $autoBarcodeType eq 'OFF') {
+    my $autoBarcodeType = C4::Context->preference("autoBarcode");
+    if ( ( not $autoBarcodeType ) or $autoBarcodeType eq 'OFF' ) {
+
         # don't return a value unless we have the appropriate syspref set
         return q|<script></script>|;
     }
-	if ($autoBarcodeType eq 'annual') {
-        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
-	}
-	elsif ($autoBarcodeType eq 'incremental') {
-        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
-    }
-    elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
-        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
-    }
-    elsif ($autoBarcodeType eq 'EAN13') {
+    if ( $autoBarcodeType eq 'annual' ) {
+        ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::annual::get_barcode( \%args );
+    } elsif ( $autoBarcodeType eq 'incremental' ) {
+        ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::incremental::get_barcode( \%args );
+    } elsif ( $autoBarcodeType eq 'hbyymmincr' )
+    { # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
+        ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode( \%args );
+    } elsif ( $autoBarcodeType eq 'EAN13' ) {
+
         # not the best, two catalogers could add the same barcode easily this way :/
         my $query = "select max(abs(barcode)) from items";
-    my $dbh = $params->{dbh};
-        my $sth = $dbh->prepare($query);
+        my $dbh   = $params->{dbh};
+        my $sth   = $dbh->prepare($query);
         $sth->execute();
-        while (my ($last)= $sth->fetchrow_array) {
+        while ( my ($last) = $sth->fetchrow_array ) {
             $nextnum = $last;
         }
         my $ean = CheckDigits('ean');
         if ( $ean->is_valid($nextnum) ) {
-            my $next = $ean->basenumber( $nextnum ) + 1;
-            $nextnum = $ean->complete( $next );
-            $nextnum = '0' x ( 13 - length($nextnum) ) . $nextnum; # pad zeros
+            my $next = $ean->basenumber($nextnum) + 1;
+            $nextnum = $ean->complete($next);
+            $nextnum = '0' x ( 13 - length($nextnum) ) . $nextnum;    # pad zeros
         } else {
             warn "ERROR: invalid EAN-13 $nextnum, using increment";
             $nextnum++;
         }
-    }
-    else {
+    } else {
         warn "ERROR: unknown autoBarcode: $autoBarcodeType";
     }
 
@@ -108,7 +107,7 @@ if (\$('#' + id).val() == '' || force) {
 };
 END_OF_JS
 
-    my $js  = <<END_OF_JS;
+    my $js = <<END_OF_JS;
 <script>
 if(typeof autobarcodetype == 'undefined') {
     var autobarcodetype = "$autoBarcodeType";

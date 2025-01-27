@@ -20,15 +20,15 @@
                         <td>[% job.progress | html %]</td>
                     </tr>
                     <tr>
-                    [% IF report.report_type.match( '^PR' ) %]
-                        <td>Platforms added</td>
-                    [% ELSIF report.report_type.match( '^DR' ) %]
-                        <td>Databases added</td>
-                    [% ELSIF report.report_type.match( '^IR' ) %]
-                        <td>Items added</td>
-                    [% ELSIF report.report_type.match( '^TR' ) %]
-                        <td>Titles added</td>
-                    [% END %]
+                        [% IF report.report_type.match( '^PR' ) %]
+                            <td>Platforms added</td>
+                        [% ELSIF report.report_type.match( '^DR' ) %]
+                            <td>Databases added</td>
+                        [% ELSIF report.report_type.match( '^IR' ) %]
+                            <td>Items added</td>
+                        [% ELSIF report.report_type.match( '^TR' ) %]
+                            <td>Titles added</td>
+                        [% END %]
                         <td>[% report.us_report_info.added_usage_objects | html %]</td>
                     </tr>
                     <tr>
@@ -85,30 +85,30 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% SWITCH m.code %]
-                [% CASE 'object_already_exists' %]
-                    <span><strong>[% m.title | html %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
-                [% CASE 'object_added' %]
-                    <span><strong>[% m.title | html %]</strong> successfully added</span>
-                [% CASE 'object_could_not_be_added' %]
-                    <span><strong>[% m.title | html %]</strong> could not be processed - please check the logs</span>
-                [% CASE 'payload_too_large' %]
-                    <span>COUNTER report file size exceeds limit defined by the database. Limit is [% m.message | html %] MB.</span><br>
-                    <span>Please increase this limit or harvest a shorter period.</span>
-                [% CASE 'no_items' %]
-                    <span>SUSHI response returned no items.</span><br>
-                    <span>Please try a different harvest period.</span>
-                [% CASE %]
-                    <span>SUSHI returned: [% m.message | html %] [% m.code | html %]</span>
+            [% CASE 'object_already_exists' %]
+                <span><strong>[% m.title | html %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
+            [% CASE 'object_added' %]
+                <span><strong>[% m.title | html %]</strong> successfully added</span>
+            [% CASE 'object_could_not_be_added' %]
+                <span><strong>[% m.title | html %]</strong> could not be processed - please check the logs</span>
+            [% CASE 'payload_too_large' %]
+                <span>COUNTER report file size exceeds limit defined by the database. Limit is [% m.message | html %] MB.</span><br />
+                <span>Please increase this limit or harvest a shorter period.</span>
+            [% CASE 'no_items' %]
+                <span>SUSHI response returned no items.</span><br />
+                <span>Please try a different harvest period.</span>
+            [% CASE %]
+                <span>SUSHI returned: [% m.message | html %] [% m.code | html %]</span>
             [% END %]
         </div>
     [% END %]
 [% END %]
-    [% Asset.js("js/job_progress.js") | $raw %]
+[% Asset.js("js/job_progress.js") | $raw %]
 
 [% BLOCK js %]
     [% INCLUDE 'str/job_progress.inc' job_id=job.id %]
     [% INCLUDE 'str/erm_sushi_harvester.inc' %]
-<script>
+    <script>
         $(document).ready(function(){
             let job_id = [% job.id | $raw %];
             updateProgress(job_id, {
@@ -136,6 +136,5 @@
             $('#failed_report_type').text(report_type);
             $('#failed_provider_name').text(ud_provider_name);
         });
-
-</script>
+    </script>
 [% END %]

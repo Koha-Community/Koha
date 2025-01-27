@@ -90,9 +90,9 @@ can be equal to
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use CGI             qw ( -utf8 );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Suggestions qw( ConnectSuggestionAndBiblio );
 use C4::Budgets;
 
@@ -103,24 +103,24 @@ my $input = CGI->new;
 
 # getting the CGI params
 my $basketno        = $input->param('basketno');
-my $booksellerid      = $input->param('booksellerid');
+my $booksellerid    = $input->param('booksellerid');
 my $author          = $input->param('author');
 my $title           = $input->param('title');
 my $publishercode   = $input->param('publishercode');
 my $op              = $input->param('op');
 my $suggestionid    = $input->param('suggestionid');
 my $duplicateNumber = $input->param('duplicateNumber');
-my $uncertainprice = $input->param('uncertainprice');
+my $uncertainprice  = $input->param('uncertainprice');
 
 $op = 'else' unless $op;
 
 my $dbh = C4::Context->dbh;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/newordersuggestion.tt",
-        type            => "intranet",
-        query           => $input,
-        flagsrequired   => { acquisition => 'order_manage' },
+        template_name => "acqui/newordersuggestion.tt",
+        type          => "intranet",
+        query         => $input,
+        flagsrequired => { acquisition => 'order_manage' },
     }
 );
 
@@ -128,23 +128,25 @@ if ( $op eq 'connectDuplicate' ) {
     ConnectSuggestionAndBiblio( $suggestionid, $duplicateNumber );
 }
 
-my $suggestions = [ Koha::Suggestions->search_limited(
-    {
-        ( $author        ? ( author        => $author )        : () ),
-        ( $title         ? ( title         => $title )         : () ),
-        ( $publishercode ? ( publishercode => $publishercode ) : () ),
-        STATUS => 'ACCEPTED'
-    },
-    { prefetch => ['managedby', 'suggestedby'] },
-)->as_list ];
+my $suggestions = [
+    Koha::Suggestions->search_limited(
+        {
+            ( $author        ? ( author        => $author )        : () ),
+            ( $title         ? ( title         => $title )         : () ),
+            ( $publishercode ? ( publishercode => $publishercode ) : () ),
+            STATUS => 'ACCEPTED'
+        },
+        { prefetch => [ 'managedby', 'suggestedby' ] },
+    )->as_list
+];
 
-my $vendor = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $vendor = Koha::Acquisition::Booksellers->find($booksellerid);
 $template->param(
-    suggestions             => $suggestions,
-    basketno                => $basketno,
-    booksellerid              => $booksellerid,
-    name                    => $vendor->name,
-    "op_$op"                => 1,
+    suggestions  => $suggestions,
+    basketno     => $basketno,
+    booksellerid => $booksellerid,
+    name         => $vendor->name,
+    "op_$op"     => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

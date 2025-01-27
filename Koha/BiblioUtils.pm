@@ -34,7 +34,6 @@ use Koha::MetadataIterator;
 use Koha::Database;
 use Modern::Perl;
 
-
 use base qw(Koha::MetadataRecord);
 
 __PACKAGE__->mk_accessors(qw( record schema id datatype ));
@@ -51,8 +50,8 @@ the biblionumber can be provided too.
 =cut
 
 sub new {
-    my $class = shift;
-    my $record = shift;
+    my $class        = shift;
+    my $record       = shift;
     my $biblionumber = shift;
 
     my $self = $class->SUPER::new(
@@ -89,10 +88,10 @@ It will return C<undef> if the biblio doesn't exist.
 =cut
 
 sub get_from_biblionumber {
-    my ($class, $bibnum, %options) = @_;
+    my ( $class, $bibnum, %options ) = @_;
 
-    my $marc = $class->get_marc_biblio($bibnum, %options);
-    return $class->new($marc, $bibnum);
+    my $marc = $class->get_marc_biblio( $bibnum, %options );
+    return $class->new( $marc, $bibnum );
 }
 
 =head2 get_all_biblios_iterator
@@ -120,39 +119,41 @@ records instead of all.
 =cut
 
 sub get_all_biblios_iterator {
-    my ($class, %options) = @_;
+    my ( $class, %options ) = @_;
 
     my $search_terms = {};
-    my ($slice_modulo, $slice_count);
-    if ($options{slice}) {
-        $slice_count = $options{slice}->{count};
+    my ( $slice_modulo, $slice_count );
+    if ( $options{slice} ) {
+        $slice_count  = $options{slice}->{count};
         $slice_modulo = $options{slice}->{index};
         $search_terms = \[ 'mod(biblionumber, ?) = ?', $slice_count, $slice_modulo ];
     }
 
     my $search_options = { columns => [qw/ biblionumber /] };
-    if ( $options{desc} ){
-        $search_options->{order_by}  = { -desc => 'biblionumber' };
+    if ( $options{desc} ) {
+        $search_options->{order_by} = { -desc => 'biblionumber' };
     }
 
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
-    my $rs = Koha::Biblios->search(
+    my $rs       = Koha::Biblios->search(
         $search_terms,
-        $search_options );
+        $search_options
+    );
 
     if ( my $sql = $options{where} ) {
         $rs = $rs->search( \[$sql] );
     }
 
     my $next_func = sub {
+
         # Warn and skip bad records, otherwise we break the loop
         while (1) {
             my $row = $rs->next();
             return if !$row;
             my $next = eval {
                 my $marc = $row->metadata_record( { embed_items => 1 } );
-                $class->new($marc, $row->biblionumber);
+                $class->new( $marc, $row->biblionumber );
             };
             if ($@) {
                 warn sprintf "Something went wrong reading record for biblio %s: %s\n", $row->biblionumber, $@;
@@ -185,7 +186,7 @@ If set to true, item data is embedded in the record. Default is to not do this.
 =cut
 
 sub get_marc_biblio {
-    my ($class, $bibnum, %options) = @_;
+    my ( $class, $bibnum, %options ) = @_;
 
     my $record = Koha::Biblios->find($bibnum)->metadata_record( { $options{item_data} ? ( embed_items => 1 ) : () } );
     return $record;

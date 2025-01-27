@@ -44,10 +44,12 @@ subtest 'domains() tests' => sub {
     my $domains  = $provider->domains;
 
     is( ref($domains),   'Koha::Auth::Identity::Provider::Domains', 'Type is correct' );
-    is( $domains->count, 0,                               'No domains defined' );
+    is( $domains->count, 0,                                         'No domains defined' );
 
-    $builder->build_object( { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id } } );
-    $builder->build_object( { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id } } );
+    $builder->build_object(
+        { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id } } );
+    $builder->build_object(
+        { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id } } );
 
     is( $provider->domains->count, 2, 'The provider has 2 domains defined' );
 
@@ -83,7 +85,8 @@ subtest 'set_config() tests' => sub {
 
         plan tests => 4;
 
-        my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { protocol => 'OIDC' } } );
+        my $provider =
+            $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { protocol => 'OIDC' } } );
         $provider = $provider->upgrade_class;
 
         my $config = {
@@ -108,7 +111,8 @@ subtest 'set_config() tests' => sub {
 
         plan tests => 4;
 
-        my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { protocol => 'OAuth' } } );
+        my $provider =
+            $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { protocol => 'OAuth' } } );
         $provider = $provider->upgrade_class;
 
         my $config = {
@@ -134,7 +138,8 @@ subtest 'set_config() tests' => sub {
 
         plan tests => 2;
 
-        my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { protocol => 'CAS' } } );
+        my $provider =
+            $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { protocol => 'CAS' } } );
 
         throws_ok { $provider->set_config() }
         'Koha::Exception', 'Exception thrown on unsupported protocol';
@@ -187,7 +192,7 @@ subtest 'upgrade_class() tests' => sub {
     $schema->storage->txn_begin;
 
     my $mapping   = Koha::Auth::Identity::Provider::protocol_to_class_mapping;
-    my @protocols = keys %{ $mapping };
+    my @protocols = keys %{$mapping};
 
     foreach my $protocol (@protocols) {
 
@@ -199,16 +204,19 @@ subtest 'upgrade_class() tests' => sub {
         );
 
         is( ref($provider), 'Koha::Auth::Identity::Provider', "Base class used for $protocol" );
+
         # upgrade
         $provider = $provider->upgrade_class;
-        is( ref($provider), $mapping->{$protocol}, "Class upgraded to " . $mapping->{$protocol} . "for protocol $protocol" );
+        is(
+            ref($provider), $mapping->{$protocol},
+            "Class upgraded to " . $mapping->{$protocol} . "for protocol $protocol"
+        );
     }
 
-    my $provider = Koha::Auth::Identity::Provider->new({ protocol => 'Invalid' });
-    throws_ok
-      { $provider->upgrade }
-      'Koha::Exception',
-      'Exception throw on invalid protocol';
+    my $provider = Koha::Auth::Identity::Provider->new( { protocol => 'Invalid' } );
+    throws_ok { $provider->upgrade }
+    'Koha::Exception',
+        'Exception throw on invalid protocol';
 
     $schema->storage->txn_rollback;
 };

@@ -55,28 +55,32 @@ subtest 'anonymize() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
-    throws_ok
-        { $hold_1->anonymize; }
-        'Koha::Exceptions::SysPref::NotSet',
+    throws_ok { $hold_1->anonymize; }
+    'Koha::Exceptions::SysPref::NotSet',
         'Exception thrown because AnonymousPatron not set';
 
-    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
-    is( $patron->old_holds->count, 2, 'No changes, patron has 2 linked completed holds' );
+    is( $@->syspref,               'AnonymousPatron', 'syspref parameter is correctly passed' );
+    is( $patron->old_holds->count, 2,                 'No changes, patron has 2 linked completed holds' );
 
-    is( $hold_1->borrowernumber, $patron->id,
-        'Anonymized hold not linked to patron' );
-    is( $hold_2->borrowernumber, $patron->id,
-        'Not anonymized hold still linked to patron' );
+    is(
+        $hold_1->borrowernumber, $patron->id,
+        'Anonymized hold not linked to patron'
+    );
+    is(
+        $hold_2->borrowernumber, $patron->id,
+        'Not anonymized hold still linked to patron'
+    );
 
-    my $anonymous_patron =
-      $builder->build_object( { class => 'Koha::Patrons' } );
+    my $anonymous_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
     # anonymize second hold
     $hold_2->anonymize;
     $hold_2->discard_changes;
-    is( $hold_2->borrowernumber, $anonymous_patron->id,
-        'Anonymized hold linked to anonymouspatron' );
+    is(
+        $hold_2->borrowernumber, $anonymous_patron->id,
+        'Anonymized hold linked to anonymouspatron'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -22,12 +22,12 @@ use Modern::Perl;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 my %db_defaults = (
     driver => 'mysql',
-    host => 'localhost',
-    port => '3306',
+    host   => 'localhost',
+    port   => '3306',
 );
 
 my $path = "./";
@@ -57,14 +57,14 @@ GetOptions(
 # If we were asked for usage instructions, do it
 pod2usage(1) if defined $help;
 
-if (defined $koha_conf) {
-    if ($koha_conf eq '' and not defined $ENV{KOHA_CONF}) {
+if ( defined $koha_conf ) {
+    if ( $koha_conf eq '' and not defined $ENV{KOHA_CONF} ) {
         print STDERR "Error: KOHA_CONF is not defined\n";
         exit(1);
     }
 
     $koha_conf ||= $ENV{KOHA_CONF};
-    unless (-r $koha_conf) {
+    unless ( -r $koha_conf ) {
         print STDERR "Error: File $koha_conf does not exist or is not readable\n";
         exit(1);
     }
@@ -78,21 +78,21 @@ if (defined $koha_conf) {
 
     $context->set_context;
     $db_defaults{driver} = $context->config('db_scheme');
-    $db_defaults{host} = $context->config('hostname');
-    $db_defaults{port} = $context->config('port');
-    $db_defaults{name} = $context->config('database');
-    $db_defaults{user} = $context->config('user');
+    $db_defaults{host}   = $context->config('hostname');
+    $db_defaults{port}   = $context->config('port');
+    $db_defaults{name}   = $context->config('database');
+    $db_defaults{user}   = $context->config('user');
     $db_defaults{passwd} = $context->config('pass');
 }
 
 $db_driver //= $db_defaults{driver};
-$db_host //= $db_defaults{host};
-$db_port //= $db_defaults{port};
-$db_name //= $db_defaults{name};
-$db_user //= $db_defaults{user};
+$db_host   //= $db_defaults{host};
+$db_port   //= $db_defaults{port};
+$db_name   //= $db_defaults{name};
+$db_user   //= $db_defaults{user};
 $db_passwd //= $db_defaults{passwd};
 
-if (! defined $db_name ) {
+if ( !defined $db_name ) {
     print "Error: \'db_name\' parameter is mandatory.\n";
     pod2usage(1);
 } else {

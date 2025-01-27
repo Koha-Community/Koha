@@ -29,16 +29,20 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder            = t::lib::TestBuilder->new;
 my $nb_of_record_auths = Koha::Import::Record::Auths->search->count;
 
-my $record_auth_1 = $builder->build({ source => 'ImportAuth' });
-my $record_auth_2 = $builder->build({ source => 'ImportAuth' });
+my $record_auth_1 = $builder->build( { source => 'ImportAuth' } );
+my $record_auth_2 = $builder->build( { source => 'ImportAuth' } );
 
 is( Koha::Import::Record::Auths->search->count, $nb_of_record_auths + 2, 'The 2 record auths should have been added' );
 
-my $retrieved_record_auth_1 = Koha::Import::Record::Auths->search({ import_record_id => $record_auth_1->{import_record_id}})->next;
-is_deeply( $retrieved_record_auth_1->unblessed, $record_auth_1, 'Find a record auth by import record id should return the correct record auth' );
+my $retrieved_record_auth_1 =
+    Koha::Import::Record::Auths->search( { import_record_id => $record_auth_1->{import_record_id} } )->next;
+is_deeply(
+    $retrieved_record_auth_1->unblessed, $record_auth_1,
+    'Find a record auth by import record id should return the correct record auth'
+);
 
 $retrieved_record_auth_1->delete;
 is( Koha::Import::Record::Auths->search->count, $nb_of_record_auths + 1, 'Delete should have deleted the record auth' );

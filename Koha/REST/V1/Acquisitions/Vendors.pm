@@ -42,13 +42,12 @@ sub list {
 
     return try {
         my $vendors_rs = Koha::Acquisition::Booksellers->new;
-        my $vendors    = $c->objects->search( $vendors_rs );
+        my $vendors    = $c->objects->search($vendors_rs);
         return $c->render(
             status  => 200,
             openapi => $vendors
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -72,8 +71,7 @@ sub get {
             status  => 200,
             openapi => $c->objects->to_api($vendor),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -91,13 +89,12 @@ sub add {
 
     return try {
         $vendor->store;
-        $c->res->headers->location($c->req->url->to_string . '/' . $vendor->id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $vendor->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($vendor),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

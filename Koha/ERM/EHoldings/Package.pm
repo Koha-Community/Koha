@@ -42,7 +42,7 @@ Returns the package agreements link for this package
 sub package_agreements {
     my ( $self, $package_agreements ) = @_;
 
-    if ( $package_agreements ) {
+    if ($package_agreements) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
@@ -66,7 +66,7 @@ Returns the resources from this package
 =cut
 
 sub resources {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->erm_eholdings_resources;
     return Koha::ERM::EHoldings::Resources->_new_from_dbic($rs);
 }
@@ -78,7 +78,7 @@ Returns the vendor
 =cut
 
 sub vendor {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->vendor;
     return unless $rs;
     return Koha::Acquisition::Bookseller->_new_from_dbic($rs);

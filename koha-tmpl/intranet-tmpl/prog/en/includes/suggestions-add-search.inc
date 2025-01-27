@@ -13,7 +13,7 @@
 
                 <div class="form-content">
                     <input type="text" id="searchtitle" class="head-searchbox form-control" placeholder="Title" name="title" size="10" value="[% title | html %]" />
-                    <input type="text" id="searchauthor" class="head-searchbox form-control" placeholder="Author"  name="author" size="10" value="[% author | html %]" />
+                    <input type="text" id="searchauthor" class="head-searchbox form-control" placeholder="Author" name="author" size="10" value="[% author | html %]" />
                     <input type="text" class="head-searchbox form-control" placeholder="Publisher" id="searchpublishercode" name="publishercode" size="10" value="[% publishercode | html %]" />
                 </div>
 

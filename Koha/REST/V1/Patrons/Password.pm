@@ -24,7 +24,7 @@ use C4::Auth qw(checkpw_internal);
 use Koha::Patrons;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -60,11 +60,10 @@ sub set {
     return try {
 
         ## Change password
-        $patron->set_password({ password => $password });
+        $patron->set_password( { password => $password } );
 
         return $c->render( status => 200, openapi => "" );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Password') ) {
             return $c->render(
                 status  => 400,
@@ -94,18 +93,14 @@ sub set_public {
     unless ( $user->borrowernumber == $patron_id ) {
         return $c->render(
             status  => 403,
-            openapi => {
-                error => "Changing other patron's password is forbidden"
-            }
+            openapi => { error => "Changing other patron's password is forbidden" }
         );
     }
 
     unless ( $user->category->effective_change_password ) {
         return $c->render(
             status  => 403,
-            openapi => {
-                error => "Changing password is forbidden"
-            }
+            openapi => { error => "Changing password is forbidden" }
         );
     }
 
@@ -118,7 +113,7 @@ sub set_public {
     }
 
     return try {
-        unless ( checkpw_internal($user->userid, $old_password ) ) {
+        unless ( checkpw_internal( $user->userid, $old_password ) ) {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Invalid password" }
@@ -126,11 +121,10 @@ sub set_public {
         }
 
         ## Change password
-        $user->set_password({ password => $password });
+        $user->set_password( { password => $password } );
 
         return $c->render( status => 200, openapi => "" );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Password') ) {
             return $c->render(
                 status  => 400,

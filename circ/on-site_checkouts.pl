@@ -18,24 +18,24 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth        qw( get_template_and_user );
 use C4::Circulation qw( GetPendingOnSiteCheckouts );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output      qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
 
 my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "circ/on-site_checkouts.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired => {circulate => "circulate_remaining_permissions"},
+        template_name => "circ/on-site_checkouts.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
 # Checking if there is a Fast Cataloging Framework
-$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
 my $pending_onsite_checkouts = C4::Circulation::GetPendingOnSiteCheckouts();
 

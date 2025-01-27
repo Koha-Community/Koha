@@ -56,7 +56,7 @@ subtest 'list() tests' => sub {
     );
 
     # Make sure we have at least 10 items
-    for ( 1..10 ) {
+    for ( 1 .. 10 ) {
         $builder->build_sample_item;
     }
 
@@ -69,40 +69,32 @@ subtest 'list() tests' => sub {
 
     my $password = 'thePassword123';
 
-    $nonprivilegedpatron->set_password(
-        { password => $password, skip_validation => 1 } );
+    $nonprivilegedpatron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $nonprivilegedpatron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items" )
-      ->status_is(403)
-      ->json_is(
-        '/error' => 'Authorization failure. Missing required permission(s).' );
+    $t->get_ok("//$userid:$password@/api/v1/items")->status_is(403)
+        ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items?_per_page=10" )
-      ->status_is( 200, 'REST3.2.2' );
+    $t->get_ok("//$userid:$password@/api/v1/items?_per_page=10")->status_is( 200, 'REST3.2.2' );
 
     my $response_count = scalar @{ $t->tx->res->json };
 
     is( $response_count, 10, 'The API returns 10 items' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
-      ->status_is(200)
-      ->json_is( '' => [ $item->to_api ], 'REST3.3.2');
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )->status_is(200)
+        ->json_is( '' => [ $item->to_api ], 'REST3.3.2' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode => {'x-koha-embed' => 'biblio'} )
-      ->status_is(200)
-      ->json_is( '' => [ { %{$item->to_api}, biblio => $item->biblio->to_api } ], 'REST3.3.2');
-
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode => { 'x-koha-embed' => 'biblio' } )
+        ->status_is(200)->json_is( '' => [ { %{ $item->to_api }, biblio => $item->biblio->to_api } ], 'REST3.3.2' );
 
     my $barcode = $item->barcode;
     $item->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
-      ->status_is(200)
-      ->json_is( '' => [] );
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )->status_is(200)
+        ->json_is( '' => [] );
 
     $schema->storage->txn_rollback;
 };
@@ -131,9 +123,11 @@ subtest 'list_public() tests' => sub {
 
     # have a fresh biblio
     my $biblio = $builder->build_sample_biblio;
+
     # have two itemtypes
-    my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' });
-    my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itype_1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $itype_2 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
     # have 5 items on that biblio
     my $item_1 = $builder->build_sample_item(
         {
@@ -190,13 +184,17 @@ subtest 'list_public() tests' => sub {
         }
     );
 
-    my $rules = undef;
+    my $rules          = undef;
     my $mocked_context = Test::MockModule->new('C4::Context');
-    $mocked_context->mock( 'yaml_preference', sub {
-        return $rules;
-    });
+    $mocked_context->mock(
+        'yaml_preference',
+        sub {
+            return $rules;
+        }
+    );
 
-    my $query = encode_json({ item_id => [ $item_1->id, $item_2->id, $item_3->id, $item_4->id, $item_5->id, $item_6->id ] });
+    my $query =
+        encode_json( { item_id => [ $item_1->id, $item_2->id, $item_3->id, $item_4->id, $item_5->id, $item_6->id ] } );
 
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     subtest 'anonymous access' => sub {
@@ -206,36 +204,34 @@ subtest 'list_public() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
         my $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
-        is( scalar @{ $res }, 6, 'No rules set, hidelostitems unset, all items returned');
+        is( scalar @{$res}, 6, 'No rules set, hidelostitems unset, all items returned' );
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
         $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
-        is( scalar @{ $res }, 3, 'No rules set, hidelostitems set, 3 items hidden');
+        is( scalar @{$res}, 3, 'No rules set, hidelostitems set, 3 items hidden' );
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
         $rules = { biblionumber => [ $biblio->biblionumber ] };
-        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
-        is( scalar @{ $res }, 0, 'Biblionumber rule set, hidelostitems unset, all items hidden');
+        $res   = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
+        is( scalar @{$res}, 0, 'Biblionumber rule set, hidelostitems unset, all items hidden' );
 
         $rules = { withdrawn => [ 1, 2 ] };
-        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
-        is( scalar @{ $res }, 4, 'Withdrawn rule set, hidelostitems unset, 2 items hidden');
+        $res   = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
+        is( scalar @{$res}, 4, 'Withdrawn rule set, hidelostitems unset, 2 items hidden' );
 
         $rules = { itype => [ $itype_1->itemtype ] };
-        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
-        is( scalar @{ $res }, 2, 'Itype rule set, hidelostitems unset, 4 items hidden');
+        $res   = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
+        is( scalar @{$res}, 2, 'Itype rule set, hidelostitems unset, 4 items hidden' );
 
-        $rules = { withdrawn => [ 1 ] };
-        $res = $t->get_ok( "/api/v1/public/items?external_id=" . $item_1->barcode )
-          ->status_is(200)->tx->res->json;
-        is( scalar @{ $res }, 0, 'Withdrawn rule set, hidelostitems unset, search on barcode returns no item');
+        $rules = { withdrawn => [1] };
+        $res   = $t->get_ok( "/api/v1/public/items?external_id=" . $item_1->barcode )->status_is(200)->tx->res->json;
+        is( scalar @{$res}, 0, 'Withdrawn rule set, hidelostitems unset, search on barcode returns no item' );
 
         $rules = undef;
-        $t->get_ok( "/api/v1/public/items?external_id=" . $item_1->barcode )
-          ->status_is(200)->json_is(
+        $t->get_ok( "/api/v1/public/items?external_id=" . $item_1->barcode )->status_is(200)->json_is(
             '/0' => $item_1->to_api( { public => 1 } ),
-'No rules set, hidelostitems unset, public form of item returned on barcode search'
-          );
+            'No rules set, hidelostitems unset, public form of item returned on barcode search'
+        );
     };
 
     subtest 'logged in user access' => sub {
@@ -243,12 +239,11 @@ subtest 'list_public() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
         $rules = { withdrawn => [ 1, 2 ] };
-        my $res = $t->get_ok("//$userid:$password@/api/v1/public/items?q=" . $query)
-          ->status_is(200)->tx->res->json;
+        my $res = $t->get_ok( "//$userid:$password@/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
         is(
             scalar @{$res},
             3,
-'Rules on withdrawn but patron with override passed, hidelostitems set'
+            'Rules on withdrawn but patron with override passed, hidelostitems set'
         );
     };
 
@@ -261,78 +256,74 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $item = $builder->build_sample_item;
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 4 }
-    });
+    my $item   = $builder->build_sample_item;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
 
-    my $nonprivilegedpatron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 0 }
-    });
+    my $nonprivilegedpatron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
 
     my $password = 'thePassword123';
 
-    $nonprivilegedpatron->set_password({ password => $password, skip_validation => 1 });
+    $nonprivilegedpatron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $nonprivilegedpatron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is(403)
-      ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is(403)
+        ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( '' => $item->to_api, 'REST3.3.2' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+        ->json_is( '' => $item->to_api, 'REST3.3.2' );
 
     my $non_existent_code = $item->itemnumber;
     $item->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $non_existent_code )
-      ->status_is(404)
-      ->json_is( '/error' => 'Item not found' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $non_existent_code )->status_is(404)
+        ->json_is( '/error' => 'Item not found' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
 
     my $biblio = $builder->build_sample_biblio;
-    my $itype =
-      $builder->build_object( { class => 'Koha::ItemTypes' } );
-    $item = $builder->build_sample_item(
-        { biblionumber => $biblio->biblionumber, itype => $itype->itemtype } );
+    my $itype  = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    $item = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype->itemtype } );
 
-    isnt( $biblio->itemtype, $itype->itemtype, "Test biblio level itemtype and item level itemtype do not match");
+    isnt( $biblio->itemtype, $itype->itemtype, "Test biblio level itemtype and item level itemtype do not match" );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( '/item_type_id' => $itype->itemtype, 'item-level_itypes:0' )
-      ->json_is( '/effective_item_type_id' => $biblio->itemtype, 'item-level_itypes:0' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/item_type_id'           => $itype->itemtype,  'item-level_itypes:0' )
+        ->json_is( '/effective_item_type_id' => $biblio->itemtype, 'item-level_itypes:0' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( '/item_type_id' => $itype->itemtype, 'item-level_itype:1' )
-      ->json_is( '/effective_item_type_id' => $itype->itemtype, 'item-level_itypes:1' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/item_type_id'           => $itype->itemtype, 'item-level_itype:1' )
+        ->json_is( '/effective_item_type_id' => $itype->itemtype, 'item-level_itypes:1' );
 
-
-    my $biblio_itype = Koha::ItemTypes->find($biblio->itemtype);
+    my $biblio_itype = Koha::ItemTypes->find( $biblio->itemtype );
     $biblio_itype->notforloan(3)->store();
     $itype->notforloan(2)->store();
     $item->notforloan(1)->store();
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( '/not_for_loan_status' => 1, 'not_for_loan_status is 1' )
-      ->json_is( '/effective_not_for_loan_status' => 1, 'effective_not_for_loan_status picks up item level' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/not_for_loan_status'           => 1, 'not_for_loan_status is 1' )
+        ->json_is( '/effective_not_for_loan_status' => 1, 'effective_not_for_loan_status picks up item level' );
 
     $item->notforloan(0)->store();
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
-      ->json_is( '/effective_not_for_loan_status' => 2, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
+        '/effective_not_for_loan_status' => 2,
+        'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1'
+        );
 
     $itype->notforloan(0)->store();
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
@@ -342,17 +333,23 @@ subtest 'get() tests' => sub {
         );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'REST3.2.2' )
-      ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
-      ->json_is( '/effective_not_for_loan_status' => 3, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
+        '/effective_not_for_loan_status' => 3,
+        'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0'
+        );
 
     my $module = Test::MockModule->new('C4::Languages');
     $module->mock( _get_language_dirs => sub { return 'en', 'de-DE' } );
-    $schema->resultset('Localization')->create({ entity => 'itemtypes', code => $itype->itemtype, lang => 'de-DE', translation => 'translated' });
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber, { 'X-Koha-Embed' => '+strings', Cookie => 'KohaOpacLanguage=de-DE', 'Accept-Language' => 'en' } )
-      ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '/_strings/item_type_id/str' => 'translated', 'translations in _strings use language set in KohaOpacLanguage cookie' );
+    $schema->resultset('Localization')
+        ->create( { entity => 'itemtypes', code => $itype->itemtype, lang => 'de-DE', translation => 'translated' } );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/items/" . $item->itemnumber,
+        { 'X-Koha-Embed' => '+strings', Cookie => 'KohaOpacLanguage=de-DE', 'Accept-Language' => 'en' }
+    )->status_is( 200, 'SWAGGER3.2.2' )->json_is(
+        '/_strings/item_type_id/str' => 'translated',
+        'translations in _strings use language set in KohaOpacLanguage cookie'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -368,14 +365,16 @@ subtest 'delete() tests' => sub {
 
     # we want to control all the safe_to_delete use cases
     my $item_class = Test::MockModule->new('Koha::Item');
-    $item_class->mock( 'safe_to_delete', sub {
-        if ( $fail ) {
-            return Koha::Result::Boolean->new(0)->add_message({ message => $expected_error });
+    $item_class->mock(
+        'safe_to_delete',
+        sub {
+            if ($fail) {
+                return Koha::Result::Boolean->new(0)->add_message( { message => $expected_error } );
+            } else {
+                return Koha::Result::Boolean->new(1);
+            }
         }
-        else {
-            return Koha::Result::Boolean->new(1);
-        }
-    });
+    );
 
     my $librarian = $builder->build_object(
         {
@@ -390,11 +389,14 @@ subtest 'delete() tests' => sub {
     my $item = $builder->build_sample_item;
 
     my $errors = {
-        book_on_loan       => { code => 'checked_out',        description => 'The item is checked out' },
-        book_reserved      => { code => 'found_hold',         description => 'Waiting or in-transit hold for the item' },
-        last_item_for_hold => { code => 'last_item_for_hold', description => 'The item is the last one on a record on which a biblio-level hold is placed' },
-        linked_analytics   => { code => 'linked_analytics',   description => 'The item has linked analytic records' },
-        not_same_branch    => { code => 'not_same_branch',    description => 'The item is blocked by independent branches' },
+        book_on_loan       => { code => 'checked_out', description => 'The item is checked out' },
+        book_reserved      => { code => 'found_hold',  description => 'Waiting or in-transit hold for the item' },
+        last_item_for_hold => {
+            code        => 'last_item_for_hold',
+            description => 'The item is the last one on a record on which a biblio-level hold is placed'
+        },
+        linked_analytics => { code => 'linked_analytics', description => 'The item has linked analytic records' },
+        not_same_branch  => { code => 'not_same_branch', description => 'The item is blocked by independent branches' },
     };
 
     $fail = 1;
@@ -403,32 +405,29 @@ subtest 'delete() tests' => sub {
 
         $expected_error = $error_code;
 
-        $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )
-          ->status_is(409)
-          ->json_is(
-            { error      => $errors->{$error_code}->{description},
-              error_code => $errors->{$error_code}->{code},
+        $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )->status_is(409)->json_is(
+            {
+                error      => $errors->{$error_code}->{description},
+                error_code => $errors->{$error_code}->{code},
             }
         );
     }
 
     $expected_error = 'unknown_error';
     $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )
-      ->status_is(500, 'unhandled error case generated default unhandled exception message')
-      ->json_is(
-        { error      => 'Something went wrong, check Koha logs for details.',
-          error_code => 'internal_server_error',
+        ->status_is( 500, 'unhandled error case generated default unhandled exception message' )->json_is(
+        {
+            error      => 'Something went wrong, check Koha logs for details.',
+            error_code => 'internal_server_error',
         }
-    );
+        );
 
     $fail = 0;
 
-    $t->delete_ok("//$userid:$password@/api/v1/items/" . $item->id)
-      ->status_is(204, 'REST3.2.4')
-      ->content_is('', 'REST3.3.4');
+    $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
-    $t->delete_ok("//$userid:$password@/api/v1/items/" . $item->id)
-      ->status_is(404);
+    $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )->status_is(404);
 
     $schema->storage->txn_rollback;
 };
@@ -442,11 +441,14 @@ subtest 'pickup_locations() tests' => sub {
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
 
     # Small trick to ease testing
-    Koha::Libraries->search->update({ pickup_location => 0 });
+    Koha::Libraries->search->update( { pickup_location => 0 } );
 
-    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'A', pickup_location => 1 } });
-    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'B', pickup_location => 1 } });
-    my $library_3 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'C', pickup_location => 1 } });
+    my $library_1 =
+        $builder->build_object( { class => 'Koha::Libraries', value => { marcorgcode => 'A', pickup_location => 1 } } );
+    my $library_2 =
+        $builder->build_object( { class => 'Koha::Libraries', value => { marcorgcode => 'B', pickup_location => 1 } } );
+    my $library_3 =
+        $builder->build_object( { class => 'Koha::Libraries', value => { marcorgcode => 'C', pickup_location => 1 } } );
 
     my $library_1_api = $library_1->to_api();
     my $library_2_api = $library_2->to_api();
@@ -484,8 +486,10 @@ subtest 'pickup_locations() tests' => sub {
         sub {
             my ( $self, $params ) = @_;
             my $mock_patron = $params->{patron};
-            is( $mock_patron->borrowernumber,
-                $patron->borrowernumber, 'Patron passed correctly' );
+            is(
+                $mock_patron->borrowernumber,
+                $patron->borrowernumber, 'Patron passed correctly'
+            );
             return Koha::Libraries->search(
                 {
                     branchcode => {
@@ -495,38 +499,41 @@ subtest 'pickup_locations() tests' => sub {
                         ]
                     }
                 },
-                {   # we make sure no surprises in the order of the result
+                {    # we make sure no surprises in the order of the result
                     order_by => { '-asc' => 'marcorgcode' }
                 }
             );
         }
     );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/"
-          . $item->id
-          . "/pickup_locations?patron_id=" . $patron->id )
-      ->json_is( [ $library_1_api, $library_2_api ] );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?patron_id=" . $patron->id )
+        ->json_is( [ $library_1_api, $library_2_api ] );
 
     # filtering works!
     $t->get_ok( "//$userid:$password@/api/v1/items/"
-          . $item->id
-          . '/pickup_locations?'
-          . 'patron_id=' . $patron->id . '&q={"marc_org_code": { "-like": "A%" }}' )
-      ->json_is( [ $library_1_api ] );
+            . $item->id
+            . '/pickup_locations?'
+            . 'patron_id='
+            . $patron->id
+            . '&q={"marc_org_code": { "-like": "A%" }}' )->json_is( [$library_1_api] );
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
-    my $library_4 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 0, marcorgcode => 'X' } });
-    my $library_5 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1, marcorgcode => 'Y' } });
+    my $library_4 =
+        $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0, marcorgcode => 'X' } } );
+    my $library_5 =
+        $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, marcorgcode => 'Y' } } );
 
     my $library_5_api = $library_5->to_api();
     $library_5_api->{needs_override} = Mojo::JSON->true;
 
     $t->get_ok( "//$userid:$password@/api/v1/items/"
-          . $item->id
-          . "/pickup_locations?"
-          . "patron_id=" . $patron->id . "&_order_by=marc_org_code" )
-      ->json_is( [ $library_1_api, $library_2_api, $library_3_api, $library_5_api ] );
+            . $item->id
+            . "/pickup_locations?"
+            . "patron_id="
+            . $patron->id
+            . "&_order_by=marc_org_code" )
+        ->json_is( [ $library_1_api, $library_2_api, $library_3_api, $library_5_api ] );
 
     subtest 'Pagination and AllowHoldPolicyOverride tests' => sub {
 
@@ -534,61 +541,62 @@ subtest 'pickup_locations() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
-        $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $patron->id . "&_order_by=marc_org_code" . "&_per_page=1" )
-          ->json_is( [$library_1_api] )
-          ->header_is( 'X-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
-          ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
-          ->header_unlike( 'Link', qr|rel="prev"| )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1).*>\; rel="last"# );
+        $t->get_ok( "//$userid:$password@/api/v1/items/"
+                . $item->id
+                . "/pickup_locations?"
+                . "patron_id="
+                . $patron->id
+                . "&_order_by=marc_org_code"
+                . "&_per_page=1" )->json_is( [$library_1_api] )
+            ->header_is( 'X-Total-Count',      '4', '4 is the count for libraries with pickup_location=1' )
+            ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
+            ->header_unlike( 'Link', qr|rel="prev"| )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1).*>\; rel="last"# );
 
         $t->get_ok( "//$userid:$password@/api/v1/items/"
-              . $item->id
-              . "/pickup_locations?"
-              . "patron_id="
-              . $patron->id
-              . "&_order_by=marc_org_code"
-              . "&_per_page=1&_page=3" )    # force the needs_override=1 check
-          ->json_is( [$library_3_api] )
-          ->header_is( 'X-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
-          ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="prev"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1.*)>\; rel="next"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1).*>\; rel="last"# );
+                . $item->id
+                . "/pickup_locations?"
+                . "patron_id="
+                . $patron->id
+                . "&_order_by=marc_org_code"
+                . "&_per_page=1&_page=3" )    # force the needs_override=1 check
+            ->json_is( [$library_3_api] )
+            ->header_is( 'X-Total-Count',      '4', '4 is the count for libraries with pickup_location=1' )
+            ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="prev"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1.*)>\; rel="next"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1).*>\; rel="last"# );
 
         t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
 
-        $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $patron->id . "&_order_by=marc_org_code" . "&_per_page=1" )
-          ->json_is( [$library_1_api] )
-          ->header_is( 'X-Total-Count', '2' )
-          ->header_is( 'X-Base-Total-Count', '2' )
-          ->header_unlike( 'Link', qr|rel="prev"| )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
-          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1).*>\; rel="last"# );
+        $t->get_ok( "//$userid:$password@/api/v1/items/"
+                . $item->id
+                . "/pickup_locations?"
+                . "patron_id="
+                . $patron->id
+                . "&_order_by=marc_org_code"
+                . "&_per_page=1" )->json_is( [$library_1_api] )->header_is( 'X-Total-Count', '2' )
+            ->header_is( 'X-Base-Total-Count', '2' )->header_unlike( 'Link', qr|rel="prev"| )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
+            ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1).*>\; rel="last"# );
     };
 
-    my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $deleted_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $deleted_patron_id = $deleted_patron->id;
     $deleted_patron->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/"
-          . $item->id
-          . "/pickup_locations?"
-          . "patron_id=" . $deleted_patron_id )
-      ->status_is( 400 )
-      ->json_is( '/error' => 'Patron not found' );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $deleted_patron_id )
+        ->status_is(400)->json_is( '/error' => 'Patron not found' );
 
     $item->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/"
-          . $item->id
-          . "/pickup_locations?"
-          . "patron_id=" . $patron->id )
-      ->status_is( 404 )
-      ->json_is( '/error' => 'Item not found' );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $patron->id )
+        ->status_is(404)->json_is( '/error' => 'Item not found' );
 
     $schema->storage->txn_rollback;
 };

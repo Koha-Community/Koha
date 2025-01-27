@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::Deep qw( cmp_deeply re );
+use Test::Deep     qw( cmp_deeply re );
 use Test::MockTime qw/set_fixed_time set_relative_time restore_time/;
 
 use Test::More tests => 35;
@@ -62,7 +62,7 @@ use constant NUMBER_OF_MARC_RECORDS => 10;
 # Mocked CGI module in order to be able to send CGI parameters to OAI Server
 my %param;
 my $module = Test::MockModule->new('CGI');
-$module->mock('Vars', sub { %param; });
+$module->mock( 'Vars', sub { %param; } );
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -76,69 +76,70 @@ $dbh->do('DELETE FROM deletedbiblioitems');
 $dbh->do('DELETE FROM deleteditems');
 $dbh->do('DELETE FROM oai_sets');
 
-set_fixed_time(CORE::time());
+set_fixed_time( CORE::time() );
 
-my $base_datetime = dt_from_string(undef, undef, 'UTC');
-my $date_added = $base_datetime->ymd . ' ' .$base_datetime->hms . 'Z';
-my $date_to = substr($date_added, 0, 10) . 'T23:59:59Z';
-my (@header, @marcxml, @oaidc, @marcxml_transformed);
-my $sth = $dbh->prepare('UPDATE biblioitems     SET timestamp=? WHERE biblionumber=?');
-my $sth2 = $dbh->prepare('UPDATE biblio_metadata SET timestamp=? WHERE biblionumber=?');
+my $base_datetime = dt_from_string( undef, undef, 'UTC' );
+my $date_added    = $base_datetime->ymd . ' ' . $base_datetime->hms . 'Z';
+my $date_to       = substr( $date_added, 0, 10 ) . 'T23:59:59Z';
+my ( @header, @marcxml, @oaidc, @marcxml_transformed );
+my $sth      = $dbh->prepare('UPDATE biblioitems     SET timestamp=? WHERE biblionumber=?');
+my $sth2     = $dbh->prepare('UPDATE biblio_metadata SET timestamp=? WHERE biblionumber=?');
 my $first_bn = 0;
 
 # Add biblio records
 foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     my $record = MARC::Record->new();
-    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
-        $record->append_fields( MARC::Field->new('101', '', '', 'a' => "lng" ) );
-        $record->append_fields( MARC::Field->new('200', '', '', 'a' => "Title $index" ) );
-        $record->append_fields( MARC::Field->new('952', '', '', 'a' => "Code" ) );
+    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+        $record->append_fields( MARC::Field->new( '101', '', '', 'a' => "lng" ) );
+        $record->append_fields( MARC::Field->new( '200', '', '', 'a' => "Title $index" ) );
+        $record->append_fields( MARC::Field->new( '952', '', '', 'a' => "Code" ) );
     } else {
-        $record->append_fields( MARC::Field->new('008', '                                   lng' ) );
-        $record->append_fields( MARC::Field->new('245', '', '', 'a' => "Title $index" ) );
-        $record->append_fields( MARC::Field->new('952', '', '', 'a' => "Code" ) );
+        $record->append_fields( MARC::Field->new( '008', '                                   lng' ) );
+        $record->append_fields( MARC::Field->new( '245', '', '', 'a' => "Title $index" ) );
+        $record->append_fields( MARC::Field->new( '952', '', '', 'a' => "Code" ) );
     }
-    my ($biblionumber) = AddBiblio($record, '');
+    my ($biblionumber) = AddBiblio( $record, '' );
     $first_bn = $biblionumber unless $first_bn;
-    my $timestamp = $base_datetime->ymd . ' ' .$base_datetime->hms;
-    $sth->execute($timestamp,$biblionumber);
-    $sth2->execute($timestamp,$biblionumber);
+    my $timestamp = $base_datetime->ymd . ' ' . $base_datetime->hms;
+    $sth->execute( $timestamp, $biblionumber );
+    $sth2->execute( $timestamp, $biblionumber );
     $timestamp .= 'Z';
     $timestamp =~ s/ /T/;
     my $biblio = Koha::Biblios->find($biblionumber);
     $record = $biblio->metadata_record;
     my $record_transformed = $record->clone;
-    $record_transformed->delete_fields( $record_transformed->field('952'));
-    $record_transformed = XMLin($record_transformed->as_xml_record);
-    $record = XMLin($record->as_xml_record);
+    $record_transformed->delete_fields( $record_transformed->field('952') );
+    $record_transformed = XMLin( $record_transformed->as_xml_record );
+    $record             = XMLin( $record->as_xml_record );
     push @header, { datestamp => $timestamp, identifier => "TEST:$biblionumber" };
     my $dc = {
-        'dc:title' => "Title $index",
-        'dc:language' => "lng",
-        'dc:type' => {},
-        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-        'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-        'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
-        'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+        'dc:title'           => "Title $index",
+        'dc:language'        => "lng",
+        'dc:type'            => {},
+        'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+        'xmlns:oai_dc'       => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+        'xmlns:dc'           => 'http://purl.org/dc/elements/1.1/',
+        'xsi:schemaLocation' =>
+            'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
     };
-    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
         $dc->{'dc:identifier'} = $biblionumber;
     }
     push @oaidc, {
-        header => $header[$index],
+        header   => $header[$index],
         metadata => {
             'oai_dc:dc' => $dc,
         },
     };
     push @marcxml, {
-        header => $header[$index],
+        header   => $header[$index],
         metadata => {
             record => $record,
         },
     };
 
     push @marcxml_transformed, {
-        header => $header[$index],
+        header   => $header[$index],
         metadata => {
             record => $record_transformed,
         },
@@ -153,21 +154,22 @@ my $syspref = {
     'OAI-PMH:MaxCount'      => 3,
     'OAI-PMH:DeletedRecord' => 'persistent',
 };
-while ( my ($name, $value) = each %$syspref ) {
+while ( my ( $name, $value ) = each %$syspref ) {
     t::lib::Mocks::mock_preference( $name => $value );
 }
 
 sub test_query {
-    my ($test, $param, $expected) = @_;
+    my ( $test, $param, $expected ) = @_;
 
     %param = %$param;
     my %full_expected = (
         %$expected,
         (
-            request      => 'http://localhost',
-            xmlns        => 'http://www.openarchives.org/OAI/2.0/',
-            'xmlns:xsi'  => 'http://www.w3.org/2001/XMLSchema-instance',
-            'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd',
+            request              => 'http://localhost',
+            xmlns                => 'http://www.openarchives.org/OAI/2.0/',
+            'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+            'xsi:schemaLocation' =>
+                'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd',
         )
     );
 
@@ -181,207 +183,263 @@ sub test_query {
     }
 
     delete $response->{responseDate};
-    unless (cmp_deeply($response, \%full_expected, $test)) {
-        diag
-            "PARAM:" . YAML::XS::Dump($param) .
-            "EXPECTED:" . YAML::XS::Dump(\%full_expected) .
-            "RESPONSE:" . YAML::XS::Dump($response);
+    unless ( cmp_deeply( $response, \%full_expected, $test ) ) {
+        diag "PARAM:"
+            . YAML::XS::Dump($param)
+            . "EXPECTED:"
+            . YAML::XS::Dump( \%full_expected )
+            . "RESPONSE:"
+            . YAML::XS::Dump($response);
     }
 }
 
-test_query('ListMetadataFormats', {verb => 'ListMetadataFormats'}, {
-    ListMetadataFormats => {
-        metadataFormat => [
-            {
-                metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                metadataPrefix=> 'oai_dc',
-                schema => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-            },
-            {
-                metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim',
-                metadataPrefix => 'marc21',
-                schema => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
-            },
-            {
-                metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim',
-                metadataPrefix => 'marcxml',
-                schema => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
-            },
-        ],
-    },
-});
-
-test_query('ListIdentifiers without metadataPrefix', {verb => 'ListIdentifiers'}, {
-    error => {
-        code => 'badArgument',
-        content => "Required argument 'metadataPrefix' was undefined",
-    },
-});
-
-test_query('ListIdentifiers', {verb => 'ListIdentifiers', metadataPrefix => 'marcxml'}, {
-    ListIdentifiers => {
-        header => [ @header[0..2] ],
-        resumptionToken => {
-            content => re( qr{^marcxml/3////0/0/\d+$} ),
-            cursor  => 3,
+test_query(
+    'ListMetadataFormats',
+    { verb => 'ListMetadataFormats' },
+    {
+        ListMetadataFormats => {
+            metadataFormat => [
+                {
+                    metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                    metadataPrefix    => 'oai_dc',
+                    schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+                },
+                {
+                    metadataNamespace =>
+                        'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim',
+                    metadataPrefix => 'marc21',
+                    schema         => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
+                },
+                {
+                    metadataNamespace =>
+                        'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim',
+                    metadataPrefix => 'marcxml',
+                    schema         => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
+                },
+            ],
         },
-    },
-});
+    }
+);
 
-test_query('ListIdentifiers', {verb => 'ListIdentifiers', metadataPrefix => 'marcxml'}, {
-    ListIdentifiers => {
-        header => [ @header[0..2] ],
-        resumptionToken => {
-            content => re( qr{^marcxml/3////0/0/\d+$} ),
-            cursor  => 3,
+test_query(
+    'ListIdentifiers without metadataPrefix',
+    { verb => 'ListIdentifiers' },
+    {
+        error => {
+            code    => 'badArgument',
+            content => "Required argument 'metadataPrefix' was undefined",
         },
-    },
-});
+    }
+);
+
+test_query(
+    'ListIdentifiers',
+    { verb => 'ListIdentifiers', metadataPrefix => 'marcxml' },
+    {
+        ListIdentifiers => {
+            header          => [ @header[ 0 .. 2 ] ],
+            resumptionToken => {
+                content => re(qr{^marcxml/3////0/0/\d+$}),
+                cursor  => 3,
+            },
+        },
+    }
+);
+
+test_query(
+    'ListIdentifiers',
+    { verb => 'ListIdentifiers', metadataPrefix => 'marcxml' },
+    {
+        ListIdentifiers => {
+            header          => [ @header[ 0 .. 2 ] ],
+            resumptionToken => {
+                content => re(qr{^marcxml/3////0/0/\d+$}),
+                cursor  => 3,
+            },
+        },
+    }
+);
 
 test_query(
     'ListIdentifiers with resumptionToken 1',
-    { verb => 'ListIdentifiers', resumptionToken => "marcxml/3/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 3) },
+    {
+        verb            => 'ListIdentifiers',
+        resumptionToken => "marcxml/3/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 3 )
+    },
     {
         ListIdentifiers => {
-            header => [ @header[3..5] ],
+            header          => [ @header[ 3 .. 5 ] ],
             resumptionToken => {
-              content => re( qr{^marcxml/6/1970-01-01T00:00:00Z/$date_to//0/0/\d+$} ),
-              cursor  => 6,
+                content => re(qr{^marcxml/6/1970-01-01T00:00:00Z/$date_to//0/0/\d+$}),
+                cursor  => 6,
             },
-          },
+        },
     },
 );
 
 test_query(
     'ListIdentifiers with resumptionToken 2',
-    { verb => 'ListIdentifiers', resumptionToken => "marcxml/6/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 6) },
+    {
+        verb            => 'ListIdentifiers',
+        resumptionToken => "marcxml/6/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 6 )
+    },
     {
         ListIdentifiers => {
-            header => [ @header[6..8] ],
+            header          => [ @header[ 6 .. 8 ] ],
             resumptionToken => {
-              content => re( qr{^marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/\d+$} ),
-              cursor  => 9,
+                content => re(qr{^marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/\d+$}),
+                cursor  => 9,
             },
-          },
+        },
     },
 );
 
 test_query(
     'ListIdentifiers with resumptionToken 3, response without resumption',
-    { verb => 'ListIdentifiers', resumptionToken => "marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 9) },
+    {
+        verb            => 'ListIdentifiers',
+        resumptionToken => "marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 9 )
+    },
     {
         ListIdentifiers => {
             header => $header[9],
-          },
+        },
     },
 );
 
-test_query('ListRecords marcxml without metadataPrefix', {verb => 'ListRecords'}, {
-    error => {
-        code => 'badArgument',
-        content => "Required argument 'metadataPrefix' was undefined",
-    },
-});
-
-test_query('ListRecords marcxml', {verb => 'ListRecords', metadataPrefix => 'marcxml'}, {
-    ListRecords => {
-        record => [ @marcxml[0..2] ],
-        resumptionToken => {
-          content => re( qr{^marcxml/3////0/0/\d+$} ),
-          cursor  => 3,
+test_query(
+    'ListRecords marcxml without metadataPrefix',
+    { verb => 'ListRecords' },
+    {
+        error => {
+            code    => 'badArgument',
+            content => "Required argument 'metadataPrefix' was undefined",
         },
-    },
-});
+    }
+);
+
+test_query(
+    'ListRecords marcxml',
+    { verb => 'ListRecords', metadataPrefix => 'marcxml' },
+    {
+        ListRecords => {
+            record          => [ @marcxml[ 0 .. 2 ] ],
+            resumptionToken => {
+                content => re(qr{^marcxml/3////0/0/\d+$}),
+                cursor  => 3,
+            },
+        },
+    }
+);
 
 test_query(
     'ListRecords marcxml with resumptionToken 1',
-    { verb => 'ListRecords', resumptionToken => "marcxml/3////0/0/" . ($first_bn + 3) },
-    { ListRecords => {
-        record => [ @marcxml[3..5] ],
-        resumptionToken => {
-          content => re( qr{^marcxml/6////0/0/\d+$} ),
-          cursor  => 6,
+    { verb => 'ListRecords', resumptionToken => "marcxml/3////0/0/" . ( $first_bn + 3 ) },
+    {
+        ListRecords => {
+            record          => [ @marcxml[ 3 .. 5 ] ],
+            resumptionToken => {
+                content => re(qr{^marcxml/6////0/0/\d+$}),
+                cursor  => 6,
+            },
         },
-    },
-});
+    }
+);
 
 test_query(
     'ListRecords marcxml with resumptionToken 2',
-    { verb => 'ListRecords', resumptionToken => "marcxml/6/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 6) },
-    { ListRecords => {
-        record => [ @marcxml[6..8] ],
-        resumptionToken => {
-          content => re( qr{^marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/\d+$} ),
-          cursor  => 9,
+    { verb => 'ListRecords', resumptionToken => "marcxml/6/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 6 ) },
+    {
+        ListRecords => {
+            record          => [ @marcxml[ 6 .. 8 ] ],
+            resumptionToken => {
+                content => re(qr{^marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/\d+$}),
+                cursor  => 9,
+            },
         },
-    },
-});
+    }
+);
 
 # Last record, so no resumption token
 test_query(
     'ListRecords marcxml with resumptionToken 3, response without resumption',
-    { verb => 'ListRecords', resumptionToken => "marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 9) },
-    { ListRecords => {
-        record => $marcxml[9],
-    },
-});
-
-test_query('ListRecords oai_dc', {verb => 'ListRecords', metadataPrefix => 'oai_dc'}, {
-    ListRecords => {
-        record => [ @oaidc[0..2] ],
-        resumptionToken => {
-          content => re( qr{^oai_dc/3////0/0/\d+$} ),
-          cursor  => 3,
+    { verb => 'ListRecords', resumptionToken => "marcxml/9/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 9 ) },
+    {
+        ListRecords => {
+            record => $marcxml[9],
         },
-    },
-});
+    }
+);
+
+test_query(
+    'ListRecords oai_dc',
+    { verb => 'ListRecords', metadataPrefix => 'oai_dc' },
+    {
+        ListRecords => {
+            record          => [ @oaidc[ 0 .. 2 ] ],
+            resumptionToken => {
+                content => re(qr{^oai_dc/3////0/0/\d+$}),
+                cursor  => 3,
+            },
+        },
+    }
+);
 
 test_query(
     'ListRecords oai_dc with resumptionToken 1',
-    { verb => 'ListRecords', resumptionToken => "oai_dc/3////0/0/" . ($first_bn + 3) },
-    { ListRecords => {
-        record => [ @oaidc[3..5] ],
-        resumptionToken => {
-          content => re( qr{^oai_dc/6////0/0/\d+$} ),
-          cursor  => 6,
+    { verb => 'ListRecords', resumptionToken => "oai_dc/3////0/0/" . ( $first_bn + 3 ) },
+    {
+        ListRecords => {
+            record          => [ @oaidc[ 3 .. 5 ] ],
+            resumptionToken => {
+                content => re(qr{^oai_dc/6////0/0/\d+$}),
+                cursor  => 6,
+            },
         },
-    },
-});
+    }
+);
 
 test_query(
     'ListRecords oai_dc with resumptionToken 2',
-    { verb => 'ListRecords', resumptionToken => "oai_dc/6/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 6) },
-    { ListRecords => {
-        record => [ @oaidc[6..8] ],
-        resumptionToken => {
-          content => re( qr{^oai_dc/9/1970-01-01T00:00:00Z/$date_to//0/0/\d+$} ),
-          cursor  => 9,
+    { verb => 'ListRecords', resumptionToken => "oai_dc/6/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 6 ) },
+    {
+        ListRecords => {
+            record          => [ @oaidc[ 6 .. 8 ] ],
+            resumptionToken => {
+                content => re(qr{^oai_dc/9/1970-01-01T00:00:00Z/$date_to//0/0/\d+$}),
+                cursor  => 9,
+            },
         },
-    },
-});
+    }
+);
 
 # Last record, so no resumption token
 test_query(
     'ListRecords oai_dc with resumptionToken 3, response without resumption',
-    { verb => 'ListRecords', resumptionToken => "oai_dc/9/1970-01-01T00:00:00Z/$date_to//0/0/" . ($first_bn + 9) },
-    { ListRecords => {
-        record => $oaidc[9],
-    },
-});
+    { verb => 'ListRecords', resumptionToken => "oai_dc/9/1970-01-01T00:00:00Z/$date_to//0/0/" . ( $first_bn + 9 ) },
+    {
+        ListRecords => {
+            record => $oaidc[9],
+        },
+    }
+);
 
 #  List records, but now transformed by XSLT
-t::lib::Mocks::mock_preference("OAI-PMH:ConfFile" =>  File::Spec->rel2abs(dirname(__FILE__)) . "/oaiconf.yaml");
-test_query('ListRecords marcxml with xsl transformation',
+t::lib::Mocks::mock_preference( "OAI-PMH:ConfFile" => File::Spec->rel2abs( dirname(__FILE__) ) . "/oaiconf.yaml" );
+test_query(
+    'ListRecords marcxml with xsl transformation',
     { verb => 'ListRecords', metadataPrefix => 'marcxml' },
-    { ListRecords => {
-        record => [ @marcxml_transformed[0..2] ],
-        resumptionToken => {
-            content => re( qr{^marcxml/3////0/0/\d+$} ),
-            cursor => 3,
-        }
-    },
-});
-t::lib::Mocks::mock_preference("OAI-PMH:ConfFile" => '');
+    {
+        ListRecords => {
+            record          => [ @marcxml_transformed[ 0 .. 2 ] ],
+            resumptionToken => {
+                content => re(qr{^marcxml/3////0/0/\d+$}),
+                cursor  => 3,
+            }
+        },
+    }
+);
+t::lib::Mocks::mock_preference( "OAI-PMH:ConfFile" => '' );
 
 restore_time();
 
@@ -392,24 +450,26 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
     sleep 1;
 
     # Modify record to trigger auto update of timestamp
-    (my $biblionumber = $marcxml[0]->{header}->{identifier}) =~ s/^.*:(.*)/$1/;
+    ( my $biblionumber = $marcxml[0]->{header}->{identifier} ) =~ s/^.*:(.*)/$1/;
     my $biblio = Koha::Biblios->find($biblionumber);
     my $record = $biblio->metadata_record;
-    $record->append_fields(MARC::Field->new(999, '', '', z => '_'));
+    $record->append_fields( MARC::Field->new( 999, '', '', z => '_' ) );
     ModBiblio( $record, $biblionumber );
     my $from_dt = dt_from_string(
-        Koha::Biblio::Metadatas->find({ biblionumber => $biblionumber, format => 'marcxml', schema => 'MARC21' })->timestamp
-    );
+        Koha::Biblio::Metadatas->find( { biblionumber => $biblionumber, format => 'marcxml', schema => 'MARC21' } )
+            ->timestamp );
     my $from = $from_dt->ymd . 'T' . $from_dt->hms . 'Z';
     $oaidc[0]->{header}->{datestamp} = $from;
 
     test_query(
         'ListRecords oai_dc with parameter from',
         { verb => 'ListRecords', metadataPrefix => 'oai_dc', from => $from },
-        { ListRecords => {
-            record => $oaidc[0],
-        },
-    });
+        {
+            ListRecords => {
+                record => $oaidc[0],
+            },
+        }
+    );
 };
 
 subtest 'Bug 20665: OAI-PMH Provider should reset the MySQL connection time zone' => sub {
@@ -418,21 +478,23 @@ subtest 'Bug 20665: OAI-PMH Provider should reset the MySQL connection time zone
     # Set time zone to SYSTEM so that it can be checked later
     $dbh->do("SET time_zone='SYSTEM'");
 
-
-    test_query('ListIdentifiers without metadataPrefix', {verb => 'ListIdentifiers'}, {
-        error => {
-            code => 'badArgument',
-            content => "Required argument 'metadataPrefix' was undefined",
-        },
-    });
+    test_query(
+        'ListIdentifiers without metadataPrefix',
+        { verb => 'ListIdentifiers' },
+        {
+            error => {
+                code    => 'badArgument',
+                content => "Required argument 'metadataPrefix' was undefined",
+            },
+        }
+    );
 
     my $sth = C4::Context->dbh->prepare('SELECT @@session.time_zone');
     $sth->execute();
-    my ( $tz ) = $sth->fetchrow();
+    my ($tz) = $sth->fetchrow();
 
-    ok ( $tz eq 'SYSTEM', 'MySQL connection time zone is SYSTEM' );
+    ok( $tz eq 'SYSTEM', 'MySQL connection time zone is SYSTEM' );
 };
-
 
 $schema->storage->txn_rollback;
 
@@ -452,7 +514,8 @@ subtest 'ListSets tests' => sub {
     for my $i ( 1 .. 3 ) {
 
         AddOAISet(
-            {   'spec' => "setSpec_$i",
+            {
+                'spec' => "setSpec_$i",
                 'name' => "setName_$i",
             }
         );
@@ -464,7 +527,8 @@ subtest 'ListSets tests' => sub {
     for my $i ( 4 .. 6 ) {
 
         AddOAISet(
-            {   'spec' => "setSpec_$i",
+            {
+                'spec' => "setSpec_$i",
                 'name' => "setName_$i",
             }
         );
@@ -472,7 +536,8 @@ subtest 'ListSets tests' => sub {
     }
 
     AddOAISet(
-        {   'spec' => "setSpec_7",
+        {
+            'spec' => "setSpec_7",
             'name' => "setName_7",
         }
     );
@@ -480,36 +545,35 @@ subtest 'ListSets tests' => sub {
     test_query(
         'ListSets',
         { verb => 'ListSets' },
-        { ListSets => {
-            resumptionToken => {
-                content => re( qr{^/3////1/0/4$} ),
-                cursor => 3,
-            },
-            set => \@first_page_sets
-          }
+        {
+            ListSets => {
+                resumptionToken => {
+                    content => re(qr{^/3////1/0/4$}),
+                    cursor  => 3,
+                },
+                set => \@first_page_sets
+            }
         }
     );
 
     test_query(
         'ListSets',
         { verb => 'ListSets', resumptionToken => '/3////1/0/4' },
-        { ListSets => {
-            resumptionToken => {
-                content => re( qr{^/6////1/0/7$} ),
-                cursor => 6,
-            },
-            set => \@second_page_sets
-          }
+        {
+            ListSets => {
+                resumptionToken => {
+                    content => re(qr{^/6////1/0/7$}),
+                    cursor  => 6,
+                },
+                set => \@second_page_sets
+            }
         }
     );
 
     test_query(
         'ListSets',
-        { verb => 'ListSets', resumptionToken => "/6////1/0/7" },
-        { ListSets => {
-            set => { setSpec => "setSpec_7", setName => "setName_7" }
-          }
-        }
+        { verb     => 'ListSets', resumptionToken => "/6////1/0/7" },
+        { ListSets => { set => { setSpec => "setSpec_7", setName => "setName_7" } } }
     );
 
     $schema->storage->txn_rollback;
@@ -596,55 +660,52 @@ subtest 'Tests for timestamp handling' => sub {
 
     t::lib::Mocks::mock_preference( 'OAI::PMH'         => 1 );
     t::lib::Mocks::mock_preference( 'OAI-PMH:MaxCount' => 3 );
-    t::lib::Mocks::mock_preference( 'OAI-PMH:ConfFile' =>  File::Spec->rel2abs(dirname(__FILE__)) . '/oaiconf_items.yaml' );
+    t::lib::Mocks::mock_preference(
+        'OAI-PMH:ConfFile' => File::Spec->rel2abs( dirname(__FILE__) ) . '/oaiconf_items.yaml' );
 
     $schema->storage->txn_begin;
 
-    my $sth_metadata = $dbh->prepare('UPDATE biblio_metadata SET timestamp=? WHERE biblionumber=?');
+    my $sth_metadata     = $dbh->prepare('UPDATE biblio_metadata SET timestamp=? WHERE biblionumber=?');
     my $sth_del_metadata = $dbh->prepare('UPDATE deletedbiblio_metadata SET timestamp=? WHERE biblionumber=?');
-    my $sth_item = $dbh->prepare('UPDATE items SET timestamp=? WHERE itemnumber=?');
-    my $sth_del_item = $dbh->prepare('UPDATE deleteditems SET timestamp=? WHERE itemnumber=?');
+    my $sth_item         = $dbh->prepare('UPDATE items SET timestamp=? WHERE itemnumber=?');
+    my $sth_del_item     = $dbh->prepare('UPDATE deleteditems SET timestamp=? WHERE itemnumber=?');
 
     my $builder = t::lib::TestBuilder->new;
 
-    set_fixed_time(CORE::time());
+    set_fixed_time( CORE::time() );
 
-    my $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    my $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     my $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    my $timestamp = dt_from_string(undef, 'sql');
+    my $timestamp     = dt_from_string( undef, 'sql' );
 
     # Test a bib with one item
     my $biblio1 = $builder->build_sample_biblio;
-    Koha::Biblios->find($biblio1->biblionumber)->timestamp('1970-05-07 13:36:23')->store;
+    Koha::Biblios->find( $biblio1->biblionumber )->timestamp('1970-05-07 13:36:23')->store;
 
-    $sth_metadata->execute($timestamp, $biblio1->biblionumber);
-    my $item1 = $builder->build_sample_item(
-        {
-            biblionumber => $biblio1->biblionumber
-        }
-    );
-    $sth_item->execute($timestamp, $item1->itemnumber);
+    $sth_metadata->execute( $timestamp, $biblio1->biblionumber );
+    my $item1 = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
+    $sth_item->execute( $timestamp, $item1->itemnumber );
 
     my $list_items = {
-        verb => 'ListRecords',
+        verb           => 'ListRecords',
         metadataPrefix => 'marc21',
-        from => $utc_timestamp
+        from           => $utc_timestamp
     };
     my $list_no_items = {
-        verb => 'ListRecords',
+        verb           => 'ListRecords',
         metadataPrefix => 'marcxml',
-        from => $utc_timestamp
+        from           => $utc_timestamp
     };
 
     my $get_items = {
-        verb => 'GetRecord',
+        verb           => 'GetRecord',
         metadataPrefix => 'marc21',
-        identifier => 'TEST:' . $biblio1->biblionumber
+        identifier     => 'TEST:' . $biblio1->biblionumber
     };
     my $get_no_items = {
-        verb => 'GetRecord',
+        verb           => 'GetRecord',
         metadataPrefix => 'marcxml',
-        identifier => 'TEST:' . $biblio1->biblionumber
+        identifier     => 'TEST:' . $biblio1->biblionumber
     };
 
     my $expected = {
@@ -689,11 +750,12 @@ subtest 'Tests for timestamp handling' => sub {
         $get_no_items,
         { GetRecord => $expected_no_items }
     );
-    t::lib::Mocks::mock_preference('KohaAdminEmailAddress', 'root@localhost');
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'root@localhost' );
     test_query(
         'Identify - earliestDatestamp in the right format',
         { verb => 'Identify' },
-        {   Identify => {
+        {
+            Identify => {
                 adminEmail        => 'root@localhost',
                 baseURL           => 'http://localhost',
                 compression       => 'gzip',
@@ -709,16 +771,12 @@ subtest 'Tests for timestamp handling' => sub {
     # Add an item 10 seconds later and check results
     set_relative_time(10);
 
-    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    $timestamp = dt_from_string(undef, 'sql');
+    $timestamp     = dt_from_string( undef, 'sql' );
 
-    my $item2 = $builder->build_sample_item(
-        {
-            biblionumber => $biblio1->biblionumber
-        }
-    );
-    $sth_item->execute($timestamp, $item2->itemnumber);
+    my $item2 = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
+    $sth_item->execute( $timestamp, $item2->itemnumber );
 
     $expected->{record}{header}{datestamp} = $utc_timestamp;
     $expected->{record}{metadata}{record} =
@@ -747,13 +805,13 @@ subtest 'Tests for timestamp handling' => sub {
 
     # Set biblio timestamp 10 seconds later and check results
     set_relative_time(10);
-    $utc_datetime = dt_from_string(undef, undef, 'UTC');
-    $utc_timestamp= $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    $timestamp = dt_from_string(undef, 'sql');
+    $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
+    $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+    $timestamp     = dt_from_string( undef, 'sql' );
 
-    $sth_metadata->execute($timestamp, $biblio1->biblionumber);
+    $sth_metadata->execute( $timestamp, $biblio1->biblionumber );
 
-    $expected->{record}{header}{datestamp} = $utc_timestamp;
+    $expected->{record}{header}{datestamp}          = $utc_timestamp;
     $expected_no_items->{record}{header}{datestamp} = $utc_timestamp;
 
     test_query(
@@ -779,11 +837,11 @@ subtest 'Tests for timestamp handling' => sub {
 
     # Delete an item 10 seconds later and check results
     set_relative_time(10);
-    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
 
-    $item1->safe_delete({ skip_record_index =>1 });
-    $sth_del_item->execute($timestamp, $item1->itemnumber);
+    $item1->safe_delete( { skip_record_index => 1 } );
+    $sth_del_item->execute( $timestamp, $item1->itemnumber );
 
     $expected->{record}{header}{datestamp} = $utc_timestamp;
     $expected->{record}{metadata}{record} =
@@ -811,8 +869,8 @@ subtest 'Tests for timestamp handling' => sub {
     );
 
     # Delete also the second item and verify results
-    $item2->safe_delete({ skip_record_index =>1 });
-    $sth_del_item->execute($timestamp, $item2->itemnumber);
+    $item2->safe_delete( { skip_record_index => 1 } );
+    $sth_del_item->execute( $timestamp, $item2->itemnumber );
 
     $expected->{record}{metadata}{record} =
         XMLin( $biblio1->metadata_record( { embed_items => 1, interface => 'opac' } )->as_xml_record() );
@@ -840,19 +898,19 @@ subtest 'Tests for timestamp handling' => sub {
 
     # Delete the biblio 10 seconds later and check results
     set_relative_time(10);
-    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    $timestamp = dt_from_string(undef, 'sql');
+    $timestamp     = dt_from_string( undef, 'sql' );
 
-    is(undef, DelBiblio($biblio1->biblionumber, { skip_record_index =>1 }), 'Biblio deleted');
-    $sth_del_metadata->execute($timestamp, $biblio1->biblionumber);
+    is( undef, DelBiblio( $biblio1->biblionumber, { skip_record_index => 1 } ), 'Biblio deleted' );
+    $sth_del_metadata->execute( $timestamp, $biblio1->biblionumber );
 
     my $expected_header = {
         record => {
             header => {
-                datestamp => $utc_timestamp,
+                datestamp  => $utc_timestamp,
                 identifier => 'TEST:' . $biblio1->biblionumber,
-                status => 'deleted'
+                status     => 'deleted'
             }
         }
     };
@@ -880,12 +938,12 @@ subtest 'Tests for timestamp handling' => sub {
 
     # Add a second biblio 10 seconds later and check that both are returned properly
     set_relative_time(10);
-    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    $timestamp = dt_from_string(undef, 'sql');
+    $timestamp     = dt_from_string( undef, 'sql' );
 
     my $biblio2 = $builder->build_sample_biblio();
-    $sth_metadata->execute($timestamp, $biblio2->biblionumber);
+    $sth_metadata->execute( $timestamp, $biblio2->biblionumber );
 
     my $expected2 = {
         record => [
@@ -953,8 +1011,8 @@ subtest 'ListSets() tests' => sub {
     );
 
     # Add a couple sets
-    AddOAISet({ spec => 'set_1', name => 'Set 1' });
-    AddOAISet({ spec => 'set_2', name => 'Set 2' });
+    AddOAISet( { spec => 'set_1', name => 'Set 1' } );
+    AddOAISet( { spec => 'set_2', name => 'Set 2' } );
 
     test_query(
         'ListSets - no sets should return a noSetHierarchy exception',

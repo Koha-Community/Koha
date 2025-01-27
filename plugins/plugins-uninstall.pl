@@ -31,10 +31,11 @@ die("Koha plugins are disabled!") unless C4::Context->config("enable_plugins");
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "plugins/plugins-upload.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { plugins => 'manage' },
+    {
+        template_name => "plugins/plugins-upload.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { plugins => 'manage' },
     }
 );
 

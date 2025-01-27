@@ -4,14 +4,16 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( TOTAL ) %]
-        [% t("Results") | html %] &rsaquo;
-    [% END %]
-    [% t("Upload patron images") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( TOTAL ) %]
+            [% t("Results") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Upload patron images") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -43,123 +45,157 @@
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
 
-[% IF ( TOTAL ) %]
-            [% IF ( ERRORS ) %]
-				[% IF ( TCOUNTS ) %]
-                    <div class="alert alert-warning">
+    [% IF ( TOTAL ) %]
+        [% IF ( ERRORS ) %]
+            [% IF ( TCOUNTS ) %]
+                <div class="alert alert-warning">
                     <h1>Patron image(s) uploaded with some errors</h1>
-                    </div>
-				[% ELSE %]
-                    <div class="alert alert-warning">
-                    <h1>Patron image failed to upload</h1>
-                    </div>
-				[% END %]
+                </div>
             [% ELSE %]
-                <div class="alert alert-info">
-                <h1>Patron image(s) successfully uploaded</h1>
+                <div class="alert alert-warning">
+                    <h1>Patron image failed to upload</h1>
                 </div>
             [% END %]
-            <div class="page-section">
-                <ul class="data">
-                    <li>Unpacking completed</li>
-                    <li>[% TOTAL | html %] directories scanned.</li>
-                    <li>[% HANDLED | html %] directories processed.</li>
-                </ul>
+        [% ELSE %]
+            <div class="alert alert-info">
+                <h1>Patron image(s) successfully uploaded</h1>
+            </div>
+        [% END %]
+        <div class="page-section">
+            <ul class="data">
+                <li>Unpacking completed</li>
+                <li>[% TOTAL | html %] directories scanned.</li>
+                <li>[% HANDLED | html %] directories processed.</li>
+            </ul>
 
-                [% FOREACH COUNT IN COUNTS %]
-                    <table>
-                        <caption>Results</caption>
-                        <thead>
-                            <tr><th>File name</th><th>Card number</th><th>Result</th></tr>
-                        </thead>
-                        <tbody>
+            [% FOREACH COUNT IN COUNTS %]
+                <table>
+                    <caption>Results</caption>
+                    <thead>
+                        <tr><th>File name</th><th>Card number</th><th>Result</th></tr>
+                    </thead>
+                    <tbody>
                         [% IF ( COUNT.TCOUNTS ) %]<li>[% COUNT.TCOUNTS | html %] image(s) moved into the database:</li>[% END %]
-                            [% FOREACH filename IN COUNT.filenames %]
-                                <tr>
+                        [% FOREACH filename IN COUNT.filenames %]
+                            <tr>
                                 <td>[% filename.source | html %]</td>
                                 <td><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% filename.cardnumber | url %]">[% filename.cardnumber | html %]</a></td>
                                 <td>
                                     [% IF ( filename.filerrors ) %]
-                                    [% FOREACH filerror IN filename.filerrors %]
-                                        [% IF ( filerror.DBERR ) %]<strong>ERROR:</strong> Image not imported because the database returned an error. Please refer to the error log for more details.
-                                        [% ELSIF ( filerror.IMGEXISTS ) %]<strong>ERROR:</strong> Image not imported because this patron does not exist in the database.
-                                        [% ELSIF ( filerror.MIMERR ) %]<strong>ERROR:</strong> Image not imported because the image format is unrecognized.
-                                        [% ELSIF ( filerror.CORERR ) %]<strong>ERROR:</strong> Image not imported because the image file is corrupted.
-                                        [% ELSIF ( filerror.OPNERR ) %]<strong>ERROR:</strong> Image not imported because Koha was unable to open the image for reading.
-                                        [% ELSIF ( filerror.OVRSIZ ) %]<strong>ERROR:</strong> Image not imported because the image file is too big (see online help for maximum size).
-                                        [% ELSIF ( filerror.CRDFIL ) %]<strong>ERROR:</strong> Image not imported ([% filerror.CRDFIL | html %] missing).
-                                        [% ELSIF ( filerror.CARDNUMBER_DOES_NOT_EXIST ) %]<strong>ERROR:</strong> Image not imported because this patron does not exist in the database.
-                                        [% ELSE %]<strong>ERROR:</strong> Image not imported because of an unknown error. Please refer to the error log for more details.
+                                        [% FOREACH filerror IN filename.filerrors %]
+                                            [% IF ( filerror.DBERR ) %]
+                                                <strong>ERROR:</strong> Image not imported because the database returned an error. Please refer to the error log for more details.
+                                            [% ELSIF ( filerror.IMGEXISTS ) %]
+                                                <strong>ERROR:</strong> Image not imported because this patron does not exist in the database.
+                                            [% ELSIF ( filerror.MIMERR ) %]
+                                                <strong>ERROR:</strong> Image not imported because the image format is unrecognized.
+                                            [% ELSIF ( filerror.CORERR ) %]
+                                                <strong>ERROR:</strong> Image not imported because the image file is corrupted.
+                                            [% ELSIF ( filerror.OPNERR ) %]
+                                                <strong>ERROR:</strong> Image not imported because Koha was unable to open the image for reading.
+                                            [% ELSIF ( filerror.OVRSIZ ) %]
+                                                <strong>ERROR:</strong> Image not imported because the image file is too big (see online help for maximum size).
+                                            [% ELSIF ( filerror.CRDFIL ) %]
+                                                <strong>ERROR:</strong> Image not imported ([% filerror.CRDFIL | html %] missing).
+                                            [% ELSIF ( filerror.CARDNUMBER_DOES_NOT_EXIST ) %]
+                                                <strong>ERROR:</strong> Image not imported because this patron does not exist in the database.
+                                            [% ELSE %]
+                                                <strong>ERROR:</strong> Image not imported because of an unknown error. Please refer to the error log for more details.
+                                            [% END %]
                                         [% END %]
-                                    [% END %]
-                                [% ELSE %] imported successfully.
-                                    [% END %]</td>
-                                </tr>
+                                    [% ELSE %]
+                                        imported successfully.
+                                    [% END %]</td
+                                >
+                            </tr>
                         [% END %]
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
+            [% END %]
+        </div>
+        <!-- /.page-section -->
+        <div class="page-section">
+            <ul>
+                [% IF ( borrowernumber ) %]
+                    <li><a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">Return to patron detail</a></li>
+                [% ELSE %]
+                    <li><a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload more images</a></li>
+                    <li><a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to tools</a></li>
                 [% END %]
-            </div> <!-- /.page-section -->
-            <div class="page-section">
-                <ul>
-                    [% IF ( borrowernumber ) %]
-                        <li><a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">Return to patron detail</a></li>
+            </ul>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <h1>Upload patron images</h1>
+        [% IF ( ERRORS ) %]
+            <div class="alert alert-warning">
+                [% FOREACH ERROR IN ERRORS %]
+                    [% IF ( ERROR.NOTZIP ) %]
+                        <li><strong>The upload file does not appear to be a zip file. The extension is not '.zip'.</strong></li>
+                    [% ELSIF ( ERROR.NOWRITETEMP ) %]
+                        <li><strong>This script is not able to create/write to the necessary temporary directory.</strong></li>
+                    [% ELSIF ( ERROR.EMPTYUPLOAD ) %]
+                        <li><strong>The upload file appears to be empty.</strong></li>
+                    [% ELSIF ( ERROR.OPNLINK ) %]
+                        <li
+                            ><strong>Cannot open [% ERROR.OPNLINK | html %] to read.<br />Please verify that it exists.</strong></li
+                        >
+                    [% ELSIF ( ERROR.OPNIMG ) %]
+                        <li
+                            ><strong>Cannot open [% ERROR.OPNIMG | html %] to read.<br />Please verify that it exists.</strong></li
+                        >
+                    [% ELSIF ( ERROR.DELERR ) %]
+                        <li
+                            ><strong>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</strong></li
+                        >
+                    [% ELSIF ( ERROR.UZIPFAIL ) %]
+                        <li
+                            ><strong>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the ZIP file and retry.</strong></li
+                        >
                     [% ELSE %]
-                        <li><a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload more images</a></li>
-                        <li><a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to tools</a></li>
+                        <li
+                            ><strong>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</strong></li
+                        >
                     [% END %]
-                </ul>
-            </div> <!-- /.page-section -->
-            [% ELSE %]
-                <h1>Upload patron images</h1>
-                [% IF ( ERRORS ) %]
-                <div class="alert alert-warning">
-                    [% FOREACH ERROR IN ERRORS %]
-                        [% IF ( ERROR.NOTZIP ) %]<li><strong>The upload file does not appear to be a zip file.  The extension is not '.zip'.</strong></li>
-                        [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><strong>This script is not able to create/write to the necessary temporary directory.</strong></li>
-                        [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><strong>The upload file appears to be empty.</strong></li>
-                        [% ELSIF ( ERROR.OPNLINK ) %]<li><strong>Cannot open [% ERROR.OPNLINK | html %] to read.<br />Please verify that it exists.</strong></li>
-                        [% ELSIF ( ERROR.OPNIMG ) %]<li><strong>Cannot open [% ERROR.OPNIMG | html %] to read.<br />Please verify that it exists.</strong></li>
-                        [% ELSIF ( ERROR.DELERR ) %]<li><strong>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</strong></li>
-                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><strong>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the ZIP file and retry.</strong></li>
-                        [% ELSE %]<li><strong>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</strong></li>[% END %]
-                    [% END %]
-                </div>
                 [% END %]
-            <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data" id="upload_form">
-                <fieldset class="rows">
-                    <p><strong>NOTE:</strong> Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 2MB.</p>
-                        <ol class="radio">
-                            <li>
-                                <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> Zip file</label></li>
-                            <li>
-                                <label for="image">
-                                [% IF ( filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %] Image file</label>
-                            </li>
-                            [% IF ( filetype != 'image' ) %]
-                                [% SET card_class = "d-none" %]
-                            [% END %]
-                            <li id="cardnum" class="[% card_class | html %]">
-                                <label for="cardnumber">Enter patron card number: </label>
-                                <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" size="15" />
-                                <span class="required">Required</span>
-                            </li>
-                            <li class="required">
-                                <label for="uploadfile">Select the file to upload: </label>
-                                <input type="file" id="uploadfile" name="uploadfile" class="required" required="required" />
-                                <span class="required">Required</span>
-                            </li>
-                        </ol>
-	            </fieldset>
-                    <fieldset class="action">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-Upload" />
-                        <input type="submit" class="btn btn-primary" value="Upload" />
-						<a href="/cgi-bin/koha/tools/tools-home.pl" class="cancel">Cancel</a>
-                    </fieldset>
-                </form>
-[% END %]
-
+            </div>
+        [% END %]
+        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data" id="upload_form">
+            <fieldset class="rows">
+                <p><strong>NOTE:</strong> Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 2MB.</p>
+                <ol class="radio">
+                    <li>
+                        <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> Zip file</label></li
+                    >
+                    <li>
+                        <label for="image">
+                            [% IF ( filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %] Image
+                            file</label
+                        >
+                    </li>
+                    [% IF ( filetype != 'image' ) %]
+                        [% SET card_class = "d-none" %]
+                    [% END %]
+                    <li id="cardnum" class="[% card_class | html %]">
+                        <label for="cardnumber">Enter patron card number: </label>
+                        <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" size="15" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li class="required">
+                        <label for="uploadfile">Select the file to upload: </label>
+                        <input type="file" id="uploadfile" name="uploadfile" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-Upload" />
+                <input type="submit" class="btn btn-primary" value="Upload" />
+                <a href="/cgi-bin/koha/tools/tools-home.pl" class="cancel">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -167,23 +203,23 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        $(document).ready(function() {
-            $("#zipfile").click(function(){
+        $(document).ready(function () {
+            $("#zipfile").click(function () {
                 $("#cardnum").hide();
             });
-            $("#image").click(function(){
+            $("#image").click(function () {
                 $("#cardnum").show();
             });
-            $( "#upload_form" ).validate({
+            $("#upload_form").validate({
                 rules: {
                     cardnumber: {
                         required: {
-                            depends: function(element) {
+                            depends: function (element) {
                                 return $("#image").is(":checked");
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             });
         });
     </script>

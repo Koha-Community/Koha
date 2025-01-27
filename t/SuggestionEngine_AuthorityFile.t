@@ -26,25 +26,35 @@ use Test::MockModule;
 use Koha::SuggestionEngine;
 
 my $module = Test::MockModule->new('C4::AuthoritiesMarc');
-$module->mock('SearchAuthorities', sub {
-        return [ { 'authid' => '1234',
-                    'reported_tag' => undef,
-                    'even' => 0,
-                    'summary' => {
-                        'authorized' => [ { 'heading' => 'Cooking' } ],
-                        'otherscript' => [],
-                        'seefrom' => [ 'Cookery' ],
-                        'notes' => [ 'Your quintessential poor heading selection' ],
-                        'seealso' => []
-                    },
-                    'used' => 1,
-                    'authtype' => 'Topical Term'
-                } ], 1
-});
+$module->mock(
+    'SearchAuthorities',
+    sub {
+        return [
+            {
+                'authid'       => '1234',
+                'reported_tag' => undef,
+                'even'         => 0,
+                'summary'      => {
+                    'authorized'  => [ { 'heading' => 'Cooking' } ],
+                    'otherscript' => [],
+                    'seefrom'     => ['Cookery'],
+                    'notes'       => ['Your quintessential poor heading selection'],
+                    'seealso'     => []
+                },
+                'used'     => 1,
+                'authtype' => 'Topical Term'
+            }
+            ],
+            1;
+    }
+);
 
-my $suggestor = Koha::SuggestionEngine->new( { plugins => [ 'AuthorityFile' ] } );
-is(ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine');
+my $suggestor = Koha::SuggestionEngine->new( { plugins => ['AuthorityFile'] } );
+is( ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine' );
 
-my $result = $suggestor->get_suggestions({search => 'Cookery'});
+my $result = $suggestor->get_suggestions( { search => 'Cookery' } );
 
-is_deeply($result, [ { 'search' => 'an:1234', 'relevance' => 1, 'label' => 'Cooking' } ], "Suggested correct alternative to 'Cookery'");
+is_deeply(
+    $result, [ { 'search' => 'an:1234', 'relevance' => 1, 'label' => 'Cooking' } ],
+    "Suggested correct alternative to 'Cookery'"
+);

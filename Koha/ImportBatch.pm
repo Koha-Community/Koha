@@ -175,7 +175,6 @@ sub new_from_file {
     return { report => $report, messages => \@messages };
 }
 
-
 =head3 _type
 
 =cut

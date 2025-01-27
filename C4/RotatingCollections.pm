@@ -31,7 +31,6 @@ use Try::Tiny qw( catch try );
 
 use vars qw(@ISA @EXPORT);
 
-
 =head1 NAME
 
 C4::RotatingCollections - Functions for managing rotating collections
@@ -44,22 +43,22 @@ BEGIN {
     require Exporter;
     @ISA    = qw( Exporter );
     @EXPORT = qw(
-      CreateCollection
-      UpdateCollection
-      DeleteCollection
+        CreateCollection
+        UpdateCollection
+        DeleteCollection
 
-      GetItemsInCollection
+        GetItemsInCollection
 
-      GetCollection
-      GetCollections
+        GetCollection
+        GetCollections
 
-      AddItemToCollection
-      RemoveItemFromCollection
-      TransferCollection
+        AddItemToCollection
+        RemoveItemFromCollection
+        TransferCollection
 
-      GetCollectionItemBranches
-      isItemInAnyCollection
-      isItemInThisCollection
+        GetCollectionItemBranches
+        isItemInAnyCollection
+        isItemInThisCollection
     );
 }
 
@@ -82,13 +81,13 @@ Creates a new collection
 sub CreateCollection {
     my ( $title, $description ) = @_;
 
-    my $schema = Koha::Database->new()->schema();
-    my $duplicate_titles = $schema->resultset('Collection')->count({ colTitle => $title });
+    my $schema           = Koha::Database->new()->schema();
+    my $duplicate_titles = $schema->resultset('Collection')->count( { colTitle => $title } );
 
     ## Check for all necessary parameters
     if ( !$title ) {
         return ( 0, 1, "NO_TITLE" );
-    } elsif ( $duplicate_titles ) {
+    } elsif ($duplicate_titles) {
         return ( 0, 2, "DUPLICATE_TITLE" );
     }
 
@@ -131,7 +130,8 @@ sub UpdateCollection {
     my ( $colId, $title, $description ) = @_;
 
     my $schema = Koha::Database->new()->schema();
-    my $duplicate_titles = $schema->resultset('Collection')->count({ colTitle => $title,  -not => { colId => $colId } });
+    my $duplicate_titles =
+        $schema->resultset('Collection')->count( { colTitle => $title, -not => { colId => $colId } } );
 
     ## Check for all necessary parameters
     if ( !$colId ) {
@@ -140,7 +140,7 @@ sub UpdateCollection {
     if ( !$title ) {
         return ( 0, 2, "NO_TITLE" );
     }
-    if ( $duplicate_titles ) {
+    if ($duplicate_titles) {
         return ( 0, 3, "DUPLICATE_TITLE" );
     }
 
@@ -156,7 +156,7 @@ sub UpdateCollection {
                         WHERE colId = ?"
     );
     $sth->execute( $title, $description, $colId )
-      or return ( 0, 4, $sth->errstr() );
+        or return ( 0, 4, $sth->errstr() );
 
     return 1;
 
@@ -335,20 +335,19 @@ sub AddItemToCollection {
 
     if ( isItemInThisCollection( $itemnumber, $colId ) ) {
         return ( 0, 2, "IN_COLLECTION" );
-    }
-    elsif ( isItemInAnyCollection($itemnumber) ) {
+    } elsif ( isItemInAnyCollection($itemnumber) ) {
         return ( 0, 3, "IN_COLLECTION_OTHER" );
     }
 
     my $dbh = C4::Context->dbh;
 
     my $sth;
-    $sth = $dbh->prepare("
+    $sth = $dbh->prepare( "
         INSERT INTO collections_tracking (
             colId,
             itemnumber
         ) VALUES ( ?, ? )
-    ");
+    " );
     $sth->execute( $colId, $itemnumber ) or return ( 0, 3, $sth->errstr() );
 
     return 1;
@@ -417,10 +416,10 @@ sub TransferCollection {
 
     ## Check for all necessary parameters
     if ( !$colId ) {
-        return ( 0, [{ type => 'error', code => 'NO_ID' }] );
+        return ( 0, [ { type => 'error', code => 'NO_ID' } ] );
     }
     if ( !$colBranchcode ) {
-        return ( 0, [{ type => 'error', code => 'NO_BRANCHCODE' }] );
+        return ( 0, [ { type => 'error', code => 'NO_BRANCHCODE' } ] );
     }
 
     my $dbh = C4::Context->dbh;
@@ -433,15 +432,17 @@ sub TransferCollection {
                         WHERE colId = ?"
     );
     $sth->execute( $colBranchcode, $colId ) or return 0;
-    my $to_library = Koha::Libraries->find( $colBranchcode );
+    my $to_library = Koha::Libraries->find($colBranchcode);
 
-    $sth = $dbh->prepare(q{
+    $sth = $dbh->prepare(
+        q{
         SELECT items.itemnumber, items.barcode FROM collections_tracking
         LEFT JOIN items ON collections_tracking.itemnumber = items.itemnumber
         LEFT JOIN issues ON items.itemnumber = issues.itemnumber
         WHERE issues.borrowernumber IS NULL
           AND collections_tracking.colId = ?
-    });
+    }
+    );
     $sth->execute($colId) or return 0;
     my $messages;
     while ( my $item = $sth->fetchrow_hashref ) {
@@ -454,8 +455,7 @@ sub TransferCollection {
                     ignore_limits => 0
                 }
             );    # Request transfer
-        }
-        catch {
+        } catch {
             if ( $_->isa('Koha::Exceptions::Item::Transfer::InQueue') ) {
                 my $exception      = $_;
                 my $found_transfer = $_->transfer;
@@ -471,14 +471,13 @@ sub TransferCollection {
                         }
                     );    # Queue transfer
                     push @{$messages},
-                      {
+                        {
                         type           => 'alert',
                         code           => 'enqueued',
                         item           => $item_object,
                         found_transfer => $found_transfer
-                      };
-                }
-                else {
+                        };
+                } else {
                     my $transfer = $item_object->request_transfer(
                         {
                             to            => $to_library,
@@ -493,22 +492,20 @@ sub TransferCollection {
                           # we were at the first stage.. then there won't be a datearrived
                           # to calculate against. See bug 35100
                 }
-            }
-            elsif ( $_->isa('Koha::Exceptions::Item::Transfer::Limit') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Item::Transfer::Limit') ) {
                 push @{$messages},
-                  {
+                    {
                     type => 'error',
                     code => 'limits',
                     item => $item_object
-                  };
-            }
-            else {
+                    };
+            } else {
                 $_->rethrow();
             }
         };
     }
 
-    return (1, $messages);
+    return ( 1, $messages );
 }
 
 =head2 GetCollectionItemBranches
@@ -528,7 +525,7 @@ sub GetCollectionItemBranches {
 
     my ( $sth, @results );
     $sth = $dbh->prepare(
-"SELECT holdingbranch, colBranchcode FROM items, collections, collections_tracking
+        "SELECT holdingbranch, colBranchcode FROM items, collections, collections_tracking
                         WHERE items.itemnumber = collections_tracking.itemnumber
                         AND collections.colId = collections_tracking.colId
                         AND items.itemnumber = ?"
@@ -551,9 +548,8 @@ sub isItemInThisCollection {
 
     my $dbh = C4::Context->dbh;
 
-    my $sth = $dbh->prepare(
-"SELECT COUNT(*) as inCollection FROM collections_tracking WHERE itemnumber = ? AND colId = ?"
-    );
+    my $sth =
+        $dbh->prepare("SELECT COUNT(*) as inCollection FROM collections_tracking WHERE itemnumber = ? AND colId = ?");
     $sth->execute( $itemnumber, $colId ) or return (0);
 
     my $row = $sth->fetchrow_hashref;
@@ -581,8 +577,7 @@ sub isItemInAnyCollection {
     $itemnumber = $row->{itemnumber};
     if ($itemnumber) {
         return 1;
-    }
-    else {
+    } else {
         return 0;
     }
 }

@@ -29,7 +29,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers output_and_exit_if_error output_and_exit );
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -40,10 +40,10 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/update-child.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+        template_name => "members/update-child.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
@@ -52,10 +52,12 @@ my $catcode        = $input->param('catcode');
 my $cattype        = $input->param('cattype');
 my $op             = $input->param('op');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
-my $patron_categories = Koha::Patron::Categories->search_with_library_limits({ category_type => 'A' }, {order_by => ['categorycode']});
+my $patron_categories =
+    Koha::Patron::Categories->search_with_library_limits( { category_type => 'A' }, { order_by => ['categorycode'] } );
 if ( $op eq 'multi' ) {
+
     # FIXME - what are the possible upgrade paths?  C -> A , C -> S ...
     #   currently just allowing C -> A
     $template->param(
@@ -64,16 +66,18 @@ if ( $op eq 'multi' ) {
         patron_categories => $patron_categories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
-}
-elsif ( $op eq 'cud-update' ) {
-    my $patron         = Koha::Patrons->find( $borrowernumber );
-    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+} elsif ( $op eq 'cud-update' ) {
+    my $patron = Koha::Patrons->find($borrowernumber);
+    output_and_exit_if_error(
+        $input, $cookie, $template,
+        { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+    );
 
     my $adult_category;
     if ( $patron_categories->count == 1 ) {
         $adult_category = $patron_categories->next;
     } else {
-        $adult_category = $patron_categories->search({'me.categorycode' => $catcode })->next;
+        $adult_category = $patron_categories->search( { 'me.categorycode' => $catcode } )->next;
     }
 
     # Just in case someone is trying something bad
@@ -82,7 +86,7 @@ elsif ( $op eq 'cud-update' ) {
 
     $_->delete() for $patron->guarantor_relationships->as_list;
 
-    $patron->categorycode($adult_category->categorycode);
+    $patron->categorycode( $adult_category->categorycode );
     $patron->store;
 
     # FIXME We should not need that
@@ -93,11 +97,8 @@ elsif ( $op eq 'cud-update' ) {
             borrowernumber => $borrowernumber,
         );
         output_html_with_http_headers $input, $cookie, $template->output;
-    }
-    else {
-        print $input->redirect(
-            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber"
-        );
+    } else {
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
     }
 }
 

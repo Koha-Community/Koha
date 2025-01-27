@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright (C) 2010 Galen Charlton
-# 
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -104,7 +104,9 @@ while (<$fh>) {
         unless ( exists $valid_tmpl_tags{$tmpl_tag} ) {
             print "ERROR (line $lineno): $tmpl_tag is not a valid HTML::Template::Pro tag\n";
         }
-        next unless exists $tmpl_structure_tags{$tmpl_tag};    # only care about tags that affect loop or conditional structure
+        next
+            unless exists $tmpl_structure_tags{$tmpl_tag}
+            ;    # only care about tags that affect loop or conditional structure
         if ( $tmpl_structure_tags{$tmpl_tag} ) {
 
             # we'll either be pushing or popping the tag stack
@@ -117,8 +119,8 @@ while (<$fh>) {
                 } else {
                     my ( $popped_tag, $target, $popped_lineno ) = @{ pop @tag_stack };
                     if ( $tmpl_tag ne $popped_tag ) {
-                        print "\nERROR (line $lineno): got /$tmpl_tag but expected /$popped_tag to", 
-                              " match $popped_tag from line $popped_lineno\n";
+                        print "\nERROR (line $lineno): got /$tmpl_tag but expected /$popped_tag to",
+                            " match $popped_tag from line $popped_lineno\n";
                     } else {
                         print " # $target from $popped_lineno\n";
                     }
@@ -140,7 +142,8 @@ while (<$fh>) {
             } else {
                 my ( $peeked_tag, $target, $peeked_lineno ) = @{ $tag_stack[0] };
                 if ( $peeked_tag ne "tmpl_if" and $peeked_tag ne "tmpl_unless" ) {
-                    print "ERROR: found $tmpl_tag, but it does not appear to match a tmpl_if.  Top of stack is $peeked_tag.\n";
+                    print
+                        "ERROR: found $tmpl_tag, but it does not appear to match a tmpl_if.  Top of stack is $peeked_tag.\n";
                 }
             }
         }
@@ -150,12 +153,12 @@ while (<$fh>) {
 close $fh;
 
 # anything left in the stack?
-if (scalar @tag_stack > 0) {
+if ( scalar @tag_stack > 0 ) {
     print "ERROR: tag stack is not empty - the following template structures have not been closed:\n";
     my $i = 0;
-    while (my $entry = pop @tag_stack) {
+    while ( my $entry = pop @tag_stack ) {
         $i++;
-        my ( $popped_tag, $target, $popped_lineno ) = @{ $entry };
+        my ( $popped_tag, $target, $popped_lineno ) = @{$entry};
         print "$i: $popped_tag $target (line $popped_lineno)\n";
     }
 }

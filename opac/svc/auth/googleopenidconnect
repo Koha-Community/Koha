@@ -31,7 +31,7 @@
 #
 
 use Modern::Perl;
-use CGI qw ( -utf8 escape );
+use CGI      qw ( -utf8 escape );
 use C4::Auth qw{ checkauth get_session get_template_and_user };
 use C4::Context;
 use C4::Output;
@@ -42,14 +42,12 @@ use HTTP::Request::Common qw{ POST };
 use JSON;
 use MIME::Base64 qw{ decode_base64url };
 
-my $discoveryDocURL =
-  'https://accounts.google.com/.well-known/openid-configuration';
+my $discoveryDocURL  = 'https://accounts.google.com/.well-known/openid-configuration';
 my $authendpoint     = '';
 my $tokenendpoint    = '';
 my $scope            = 'openid email profile';
-my $host             = C4::Context->preference('OPACBaseURL') // q{};
-my $restricttodomain = C4::Context->preference('GoogleOpenIDConnectDomain')
-  // q{};
+my $host             = C4::Context->preference('OPACBaseURL')               // q{};
+my $restricttodomain = C4::Context->preference('GoogleOpenIDConnectDomain') // q{};
 
 # protocol is assumed in OPACBaseURL see bug 5010.
 my $redirecturl  = $host . '/cgi-bin/koha/svc/auth/googleopenidconnect';
@@ -78,9 +76,9 @@ sub loginfailed {
     $cgi_query->param( 'OpenIDConnectFailed' => $reason );
     my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => 'opac-user.tt',
-            query           => $cgi_query,
-            type            => 'opac',
+            template_name => 'opac-user.tt',
+            query         => $cgi_query,
+            type          => 'opac',
         }
     );
     $template->param( 'invalidGoogleOpenIDConnectLogin' => $reason );
@@ -90,19 +88,20 @@ sub loginfailed {
 }
 
 if ( defined $query->param('error') ) {
-    loginfailed( $query,
-            'An authentication error occurred. (Error:'
-          . $query->param('error')
-          . ')' );
-}
-elsif ( defined $query->param('code') ) {
+    loginfailed(
+        $query,
+        'An authentication error occurred. (Error:' . $query->param('error') . ')'
+    );
+} elsif ( defined $query->param('code') ) {
     my $stateclaim = $query->param('state');
     my $session    = get_session( $query->cookie('CGISESSID') );
     if ( $session->param('google-openid-state') ne $stateclaim ) {
         $session->clear( ["google-openid-state"] );
         $session->flush();
-        loginfailed( $query,
-            'Authentication failed. Your session has an unexpected state.' );
+        loginfailed(
+            $query,
+            'Authentication failed. Your session has an unexpected state.'
+        );
     }
     $session->clear( ["google-openid-state"] );
     $session->flush();
@@ -127,17 +126,21 @@ elsif ( defined $query->param('code') ) {
     my $json     = decode_json($response);
     if ( exists( $json->{'id_token'} ) ) {
         if ( lc( $json->{'token_type'} ) ne 'bearer' ) {
-            loginfailed( $query,
-                'Authentication failed. Incorrect token type.' );
+            loginfailed(
+                $query,
+                'Authentication failed. Incorrect token type.'
+            );
         }
         my $idtoken = $json->{'id_token'};
 
-# Normally we'd have to validate the token - but google says not to worry here (Avoids another library!)
-# See https://developers.google.com/identity/protocols/OpenIDConnect#obtainuserinfo for rationale
+        # Normally we'd have to validate the token - but google says not to worry here (Avoids another library!)
+        # See https://developers.google.com/identity/protocols/OpenIDConnect#obtainuserinfo for rationale
         my @segments = split( '\.', $idtoken );
         unless ( scalar(@segments) == 3 ) {
-            loginfailed( $query,
-                'Login token broken: either too many or too few segments.' );
+            loginfailed(
+                $query,
+                'Login token broken: either too many or too few segments.'
+            );
         }
         my ( $header, $claims, $validation ) = @segments;
         $claims = decode_base64url($claims);
@@ -145,24 +148,27 @@ elsif ( defined $query->param('code') ) {
         if (   ( $claims_json->{'iss'} ne ( 'https://' . $issuer ) )
             && ( $claims_json->{'iss'} ne $issuer ) )
         {
-            loginfailed( $query,
+            loginfailed(
+                $query,
                 "Authentication failed. Issuer of authentication isn't Google."
             );
         }
         if ( ref( $claims_json->{'aud'} ) eq 'ARRAY' ) {
-            warn "Audience is an array of size: "
-              . scalar( @$claims_json->{'aud'} );
-            if ( scalar( @$claims_json->{'aud'} ) > 1 )
-            {    # We don't want any other audiences
-                loginfailed( $query,
-                    "Authentication failed. Unexpected audience provided." );
+            warn "Audience is an array of size: " . scalar( @$claims_json->{'aud'} );
+            if ( scalar( @$claims_json->{'aud'} ) > 1 ) {    # We don't want any other audiences
+                loginfailed(
+                    $query,
+                    "Authentication failed. Unexpected audience provided."
+                );
             }
         }
         if (   ( $claims_json->{'aud'} ne $clientid )
             || ( $claims_json->{'azp'} ne $clientid ) )
         {
-            loginfailed( $query,
-                "Authentication failed. Unexpected audience." );
+            loginfailed(
+                $query,
+                "Authentication failed. Unexpected audience."
+            );
         }
         if ( $claims_json->{'exp'} < time() ) {
             loginfailed( $query, 'Sorry, your authentication has timed out.' );
@@ -173,73 +179,75 @@ elsif ( defined $query->param('code') ) {
             if (   ( $restricttodomain ne q{} )
                 && ( index( $email, $restricttodomain ) < 0 ) )
             {
-                loginfailed( $query,
-'The email you have used is not valid for this library. Email addresses should conclude with '
-                      . $restricttodomain
-                      . ' .' );
-            }
-            else {
+                loginfailed(
+                    $query,
+                    'The email you have used is not valid for this library. Email addresses should conclude with '
+                        . $restricttodomain . ' .'
+                );
+            } else {
                 my $error_feedback =
-'The email address you are trying to use is not associated with a borrower at this library.';
+                    'The email address you are trying to use is not associated with a borrower at this library.';
                 my $auto_registration = C4::Context->preference('GoogleOpenIDConnectAutoRegister') // q{0};
-                my $borrower = Koha::Patrons->find( { email => $email } );
-                if (! $borrower && $auto_registration==1) {
-                    my $firstname = $claims_json->{'given_name'} // q{};
-                    my $surname = $claims_json->{'family_name'} // q{};
-                    my $delimiter = $firstname ? q{.} : q{};
-                    my $userid = $firstname . $delimiter . $surname;
-                    my $categorycode = C4::Context->preference('GoogleOpenIDConnectDefaultCategory') // q{};
-                    my $patron_category = Koha::Patron::Categories->find( $categorycode );
-                    my $branchcode = C4::Context->preference('GoogleOpenIDConnectDefaultBranch') // q{};
-                    my $library = Koha::Libraries->find( $branchcode );
-                    if (defined $patron_category && defined $library) {
+                my $borrower          = Koha::Patrons->find( { email => $email } );
+                if ( !$borrower && $auto_registration == 1 ) {
+                    my $firstname       = $claims_json->{'given_name'}  // q{};
+                    my $surname         = $claims_json->{'family_name'} // q{};
+                    my $delimiter       = $firstname ? q{.} : q{};
+                    my $userid          = $firstname . $delimiter . $surname;
+                    my $categorycode    = C4::Context->preference('GoogleOpenIDConnectDefaultCategory') // q{};
+                    my $patron_category = Koha::Patron::Categories->find($categorycode);
+                    my $branchcode      = C4::Context->preference('GoogleOpenIDConnectDefaultBranch') // q{};
+                    my $library         = Koha::Libraries->find($branchcode);
+
+                    if ( defined $patron_category && defined $library ) {
                         my $password = undef;
+
                         # TODO errors handling!
-                        my $borrower = Koha::Patron->new({
-                            firstname    => $firstname,
-                            surname      => $surname,
-                            email        => $email,
-                            categorycode => $categorycode,
-                            branchcode   => $branchcode,
-                            userid       => $userid,
-                            password     => $password
-                        })->store;
+                        my $borrower = Koha::Patron->new(
+                            {
+                                firstname    => $firstname,
+                                surname      => $surname,
+                                email        => $email,
+                                categorycode => $categorycode,
+                                branchcode   => $branchcode,
+                                userid       => $userid,
+                                password     => $password
+                            }
+                        )->store;
                     } else {
-                        $error_feedback = 'The GoogleOpenIDConnectDefaultBranch or GoogleOpenIDConnectDefaultCategory system preferences are not configured properly. Please contact the library with this error message.';
+                        $error_feedback =
+                            'The GoogleOpenIDConnectDefaultBranch or GoogleOpenIDConnectDefaultCategory system preferences are not configured properly. Please contact the library with this error message.';
                     }
                 }
                 my ( $userid, $cookie, $session_id ) =
-                  checkauth( $query, 1, {}, 'opac', $email );
+                    checkauth( $query, 1, {}, 'opac', $email );
                 if ($userid) {    # A user with this email is registered in koha
 
                     #handle redirect to main.pl, for private opac
                     my $uri;
-                    if (C4::Context->preference('OpacPublic') ) {
-                        $uri    =  '/cgi-bin/koha/opac-user.pl';
+                    if ( C4::Context->preference('OpacPublic') ) {
+                        $uri = '/cgi-bin/koha/opac-user.pl';
                     } else {
-                        $uri    =  '/cgi-bin/koha/opac-main.pl';
+                        $uri = '/cgi-bin/koha/opac-main.pl';
                     }
                     print $query->redirect(
                         -uri    => $uri,
                         -cookie => $cookie
                     );
-                }
-                else {
+                } else {
                     loginfailed( $query, $error_feedback );
                 }
             }
-        }
-        else {
-            loginfailed( $query,
-'Unexpectedly, no email seems to be associated with that acccount.'
+        } else {
+            loginfailed(
+                $query,
+                'Unexpectedly, no email seems to be associated with that acccount.'
             );
         }
-    }
-    else {
+    } else {
         loginfailed( $query, 'Failed to get proper credentials from Google.' );
     }
-}
-else {
+} else {
     my $session     = get_session( $query->cookie('CGISESSID') );
     my $openidstate = 'auth_';
     $openidstate .= sprintf( "%x", rand 16 ) for 1 .. 32;
@@ -251,16 +259,16 @@ else {
         loginfailed( $query, 'Unable to discover authorisation endpoint.' );
     }
     my $authorisationurl =
-        $authendpoint . '?'
-      . 'response_type=code&'
-      . 'redirect_uri='
-      . escape($redirecturl) . q{&}
-      . 'client_id='
-      . escape($clientid) . q{&}
-      . 'scope='
-      . escape($scope) . q{&}
-      . 'state='
-      . escape($openidstate);
+          $authendpoint . '?'
+        . 'response_type=code&'
+        . 'redirect_uri='
+        . escape($redirecturl) . q{&}
+        . 'client_id='
+        . escape($clientid) . q{&}
+        . 'scope='
+        . escape($scope) . q{&}
+        . 'state='
+        . escape($openidstate);
     if ( $prompt || ( defined $prompt && length $prompt > 0 ) ) {
         $authorisationurl .= '&prompt=' . escape($prompt);
     }

@@ -3,30 +3,32 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_with_http_headers );
+use C4::Auth                              qw( get_template_and_user );
+use C4::Output                            qw( output_with_http_headers );
 use C4::Utils::DataTables::VirtualShelves qw( search );
 
 my $input = CGI->new;
 
 exit unless $input->param('template_path');
 
-my ($template, $user, $cookie) = get_template_and_user({
-    template_name   => scalar $input->param('template_path'),
-    query           => $input,
-    type            => "intranet",
-    flagsrequired   => { catalogue => 1 }
-});
+my ( $template, $user, $cookie ) = get_template_and_user(
+    {
+        template_name => scalar $input->param('template_path'),
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 }
+    }
+);
 
-my $shelfname = $input->param('shelfname');
-my $count = $input->param('count');
-my $owner = $input->param('owner');
-my $public = $input->param('public');
-my $sortby = $input->param('sortby');
+my $shelfname      = $input->param('shelfname');
+my $count          = $input->param('count');
+my $owner          = $input->param('owner');
+my $public         = $input->param('public');
+my $sortby         = $input->param('sortby');
 my $allow_transfer = $input->param('allow_transfer');
-my $order_by = $input->param('order_by');
-my $start    = $input->param('start');
-my $length   = $input->param('length');
+my $order_by       = $input->param('order_by');
+my $start          = $input->param('start');
+my $length         = $input->param('length');
 
 # variable information for DataTables (id)
 my $draw = $input->param('draw');
@@ -45,12 +47,12 @@ my $results = C4::Utils::DataTables::VirtualShelves::search(
 );
 
 $template->param(
-    draw => $draw,
-    recordsTotal => $results->{recordsTotal},
+    draw            => $draw,
+    recordsTotal    => $results->{recordsTotal},
     recordsFiltered => $results->{recordsFiltered},
-    data => $results->{shelves},
-    public => $public,
-    allow_transfer => $allow_transfer,
+    data            => $results->{shelves},
+    public          => $public,
+    allow_transfer  => $allow_transfer,
 );
 
 output_with_http_headers $input, $cookie, $template->output, 'json';

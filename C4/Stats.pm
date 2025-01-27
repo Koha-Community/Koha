@@ -21,12 +21,13 @@ use Modern::Perl;
 
 use Koha::Statistics;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA    = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      UpdateStats
+        UpdateStats
     );
 }
 

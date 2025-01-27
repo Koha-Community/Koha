@@ -8,11 +8,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Recalls to pull") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Recalls to pull") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_recalls_to_pull" class="circ">
@@ -33,43 +34,45 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-
-        <h1>Recalls to pull</h1>
-        The following recalls could be fulfilled by available items.
-
-        [% IF Koha.Preference('UseRecalls') %]
-            [% IF recalls %]
-                <div id="recalls" class="page-section">
-                    <table id="recalls-table">
-                        <thead>
-                            <tr>
-                                <th class="recall-topull">Pull this many items</th>
-                                <th class="recall-items">Items available</th>
-                                <th class="recall-patrons">Patrons with recalls</th>
-                                <th class="recall-firstpatron">First patron</th>
-                                <th class="recall-title anti-the">Title</th>
-                                <th class="recall-libraries">Libraries</th>
-                                <th class="recall-callnumbers">Available call numbers</th>
-                                <th class="recall-copynumbers">Available copy numbers</th>
-                                <th class="recall-enumeration">Available enumeration</th>
-                                <th class="recall-itemtypes">Available item types</th>
-                                <th class="recall-locations">Available locations</th>
-                                <th class="recall-date title-string">Earliest recall date</th>
-                                <th class="recall-action nosort">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH recall IN recalls %]
+    <h1>Recalls to pull</h1>
+    The following recalls could be fulfilled by available items.
+    [% IF Koha.Preference('UseRecalls') %]
+        [% IF recalls %]
+            <div id="recalls" class="page-section">
+                <table id="recalls-table">
+                    <thead>
+                        <tr>
+                            <th class="recall-topull">Pull this many items</th>
+                            <th class="recall-items">Items available</th>
+                            <th class="recall-patrons">Patrons with recalls</th>
+                            <th class="recall-firstpatron">First patron</th>
+                            <th class="recall-title anti-the">Title</th>
+                            <th class="recall-libraries">Libraries</th>
+                            <th class="recall-callnumbers">Available call numbers</th>
+                            <th class="recall-copynumbers">Available copy numbers</th>
+                            <th class="recall-enumeration">Available enumeration</th>
+                            <th class="recall-itemtypes">Available item types</th>
+                            <th class="recall-locations">Available locations</th>
+                            <th class="recall-date title-string">Earliest recall date</th>
+                            <th class="recall-action nosort">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH recall IN recalls %]
                             <tr>
                                 <td class="recall-topull"><b>[% recall.pull_count | html %]</b></td>
                                 <td class="recall-items">[% recall.items_count | html %]</td>
                                 <td class="recall-patrons">[% recall.patrons_count | html %]</td>
-                                <td class="recall-firstpatron"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.patron_id | uri %]">[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a></td>
+                                <td class="recall-firstpatron"
+                                    ><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.patron_id | uri %]"
+                                        >[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a
+                                    ></td
+                                >
                                 <td class="recall-title">
                                     [% INCLUDE 'biblio-title.inc' biblio=recall.first_recall.biblio link=1 %]
-                                    [% IF recall.biblio.author %] by [% recall.biblio.author | html %][% END %]
+                                    [% IF recall.biblio.author %]by [% recall.biblio.author | html %][% END %]
                                     [% recall.item.enumchron | html %]
-                                    [% IF ( recall.item ) %]<br><em>Barcode: [% recall.item.barcode | html %]</em>[% END %]
+                                    [% IF ( recall.item ) %]<br /><em>Barcode: [% recall.item.barcode | html %]</em>[% END %]
                                 </td>
                                 <td class="recall-libraries">
                                     <ul>
@@ -119,48 +122,52 @@
                                 <td class="recall-action">
                                     <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]">
-                                        <input type="hidden" name="op" value="cud-cancel">
+                                        <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]" />
+                                        <input type="hidden" name="op" value="cud-cancel" />
                                         [% IF recall.first_recall.in_transit %]
-                                            <button type="submit" class="btn btn-default btn-sm cancelreturn"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.first_recall.item.homebranch) | html %]</button>
+                                            <button type="submit" class="btn btn-default btn-sm cancelreturn"
+                                                ><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.first_recall.item.homebranch) | html %]</button
+                                            >
                                         [% ELSE %]
                                             <button type="submit" class="btn btn-default btn-sm cancel"><i class="fa fa-times"></i> Cancel recall</button>
                                         [% END %]
                                     </form>
                                 </td>
                             </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
-                </div> <!-- /#recalls.page-section -->
-            [% ELSE %]
-                <div class="alert alert-info">There are no recalls to pull.</div>
-            [% END %]
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <!-- /#recalls.page-section -->
         [% ELSE %]
-            <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+            <div class="alert alert-info">There are no recalls to pull.</div>
         [% END %]
-
+    [% ELSE %]
+        <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        $(document).ready(function(){
-            $("#recalls-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "orderable": false, "targets": [ 'nosort' ] },
-                    { "type": "title-string", "targets":  [ "title-string" ] },
-                    { "type": "anti-the", "targets": [ "anti-the" ] }
-                ],
-                "pagingType": "full_numbers"
-            }));
+        $(document).ready(function () {
+            $("#recalls-table").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [
+                        { orderable: false, targets: ["nosort"] },
+                        { type: "title-string", targets: ["title-string"] },
+                        { type: "anti-the", targets: ["anti-the"] },
+                    ],
+                    pagingType: "full_numbers",
+                })
+            );
 
-            $(".cancelreturn").click(function(){
+            $(".cancelreturn").click(function () {
                 return confirmDelete(_("Are you sure you want to remove this recall and return the item to its home library?"));
             });
 
-            $(".cancel").click(function(){
+            $(".cancel").click(function () {
                 return confirmDelete(_("Are you sure you want to remove this recall?"));
             });
         });

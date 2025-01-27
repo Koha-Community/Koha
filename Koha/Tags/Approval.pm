@@ -17,7 +17,6 @@ package Koha::Tags::Approval;
 
 use Modern::Perl;
 
-
 use base qw(Koha::Object);
 
 =head1 NAME

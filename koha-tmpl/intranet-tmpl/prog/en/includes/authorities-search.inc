@@ -179,7 +179,6 @@
                 </div>
             </form>
         [% END # /tab_panel %]
-
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "mainmain_heading" bt_active= 1 %]

@@ -7,16 +7,17 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( order_loop ) %]
-        [% t("Orders search") | html %] &rsaquo;
-        [% t("Search results") | html %]
-    [% ELSE %]
-        [% t("Order search") | html %]
-    [% END %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( order_loop ) %]
+            [% t("Orders search") | html %]
+            &rsaquo; [% t("Search results") | html %]
+        [% ELSE %]
+            [% t("Order search") | html %]
+        [% END %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -54,113 +55,117 @@
                 <h1>Order search</h1>
 
                 [% IF !order_loop && search_done %]
-                    <div class="alert alert-info">
-                        Your search returned no results.
-                    </div>
+                    <div class="alert alert-info"> Your search returned no results. </div>
                 [% END %]
 
                 [% UNLESS ( order_loop ) %]
                     [% PROCESS acquisitions_filter_form context => "main" %]
                 [% END %]
 
+                [% IF ( order_loop ) %]
+                    <div id="acqui_histsearch" class="page-section">
+                        <h2>Search results</h2>
+                        <table id="histsearcht">
+                            <thead>
+                                <tr>
+                                    <th>Order line (parent)</th>
+                                    <th>Status</th>
+                                    <th>Basket</th>
+                                    <th>Basket creator</th>
+                                    <th>Basket group</th>
+                                    <th>Managing library</th>
+                                    <th>Invoice number</th>
+                                    <th class="anti-the">Summary</th>
+                                    <th>Vendor</th>
+                                    <th>Placed on</th>
+                                    <th>Received on</th>
+                                    <th>Quantity received</th>
+                                    <th>Quantity ordered</th>
+                                    <th>Unit cost</th>
+                                    <th>Fund</th>
+                                    <th>Internal note</th>
+                                    <th>Vendor note</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH order IN order_loop %]
+                                    <tr>
+                                        <td>
+                                            [% order.ordernumber | html %]
+                                            [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
+                                        </td>
+                                        <td>
+                                            [% SWITCH order.orderstatus %]
+                                            [% CASE 'new' %]
+                                                <span>New</span>
+                                            [% CASE 'ordered' %]
+                                                <span>Ordered</span>
+                                            [% CASE 'partial' %]
+                                                <span>Partially received</span>
+                                            [% CASE 'complete' %]
+                                                <span>Received</span>
+                                            [% CASE 'cancelled' %]
+                                                <span>Cancelled</span>
+                                            [% END %]
+                                            [% IF order.is_standing %](standing order)[% END %]
+                                        </td>
+                                        <td><a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketname | html %] ([% order.basketno | html %])</a></td>
+                                        <td>[% order.authorisedbyname | html %]</td>
+                                        <td>
+                                            [% IF ( order.basketgroupid ) %]
+                                                <a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.groupname | html %] ([% order.basketgroupid | html %])</a>
+                                            [% ELSE %]
+                                                &nbsp;
+                                            [% END %]
+                                        </td>
+                                        <td>[% Branches.GetName(order.managing_library) | html %]</td>
+                                        <td
+                                            >[% IF ( order.invoicenumber ) %]
+                                                <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
+                                            [% ELSE %]
+                                                &nbsp;
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
+                                            <br />[% order.author | html %] <br />
+                                            [% order.isbn | html %]
+                                        </td>
+                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
+                                        <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
+                                        <td data-order="[% order.datereceived | html %]"> [% order.datereceived | $KohaDates %] </td>
+                                        <td>[% order.quantityreceived | html %]</td>
+                                        <td>[% order.quantity | html %]</td>
+                                        <td>[% order.ecost | html %]</td>
+                                        <td>[% order.budget_name | html %]</td>
+                                        <td>[% order.order_internalnote | html %]</td>
+                                        <td>[% order.order_vendornote | html %]</td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
+                [% END %]
+            </main>
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
-    [% IF ( order_loop ) %]
-    <div id="acqui_histsearch" class="page-section">
-        <h2>Search results</h2>
-        <table id="histsearcht">
-            <thead>
-			<tr>
-                <th>Order line (parent)</th>
-                <th>Status</th>
-				<th>Basket</th>
-                <th>Basket creator</th>
-                <th>Basket group</th>
-                <th>Managing library</th>
-                <th>Invoice number</th>
-                <th class="anti-the">Summary</th>
-				<th>Vendor</th>
-                <th>Placed on</th>
-                <th>Received on</th>
-                <th>Quantity received</th>
-                <th>Quantity ordered</th>
-				<th>Unit cost</th>
-                <th>Fund</th>
-                <th>Internal note</th>
-                <th>Vendor note</th>
-			</tr>
-            </thead>
-            <tbody>
-            [% FOREACH order IN order_loop %]
-                <tr>
-                    <td>
-                        [% order.ordernumber | html %]
-                        [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
-                    </td>
-                    <td>
-                        [% SWITCH order.orderstatus %]
-                            [% CASE 'new' %]<span>New</span>
-                            [% CASE 'ordered' %]<span>Ordered</span>
-                            [% CASE 'partial' %]<span>Partially received</span>
-                            [% CASE 'complete' %]<span>Received</span>
-                            [% CASE 'cancelled' %]<span>Cancelled</span>
-                        [% END %]
-                        [% IF order.is_standing %](standing order)[% END %]
-                    </td>
-                    <td><a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketname | html %] ([% order.basketno | html %])</a></td>
-                    <td>[% order.authorisedbyname | html %]</td>
-                    <td>
-                        [% IF ( order.basketgroupid ) %]
-                        <a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.groupname | html %] ([% order.basketgroupid | html %])</a>
-                        [% ELSE %]
-                            &nbsp;
-                        [% END %]
-                    </td>
-                    <td>[% Branches.GetName(order.managing_library) | html %]</td>
-                    <td>[% IF ( order.invoicenumber ) %]
-                            <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
-                        [% ELSE %]
-                            &nbsp;
-                        [% END %]
-                    </td>
-                    <td>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
-                        <br />[% order.author | html %] <br /> [% order.isbn | html %]
-                    </td>
-                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
-                    <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
-                    <td data-order="[% order.datereceived | html %]">
-                        [% order.datereceived | $KohaDates %]
-                    </td>
-                    <td>[% order.quantityreceived | html %]</td>
-                    <td>[% order.quantity | html %]</td>
-                    <td>[% order.ecost | html %]</td>
-                    <td>[% order.budget_name | html %]</td>
-                    <td>[% order.order_internalnote | html %]</td>
-                    <td>[% order.order_vendornote | html %]</td>
-                </tr>
-            [% END %]
-            </tbody>
-        </table>
+        <div class="col-md-2 order-sm-2 order-md-1">
+            <aside>
+                [% IF ( order_loop ) %]
+                    [% PROCESS acquisitions_filter_form context => "sidebar" %]
+                [% END %]
+                [% INCLUDE 'acquisitions-menu.inc' %]
+            </aside>
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
     </div>
-    [% END %]
-
-</main>
-</div> <!-- /.col-md-10.order-md-2 -->
-
-<div class="col-md-2 order-sm-2 order-md-1">
-    <aside>
-        [% IF ( order_loop ) %]
-            [% PROCESS acquisitions_filter_form context => "sidebar" %]
-        [% END %]
-        [% INCLUDE 'acquisitions-menu.inc' %]
-    </aside>
-</div> <!-- /.col-md-2.order-md-1 -->
 </div>
-</div> <!-- /.main.container-fluid -->
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
-[% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>

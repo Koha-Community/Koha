@@ -2,69 +2,108 @@
 
 var importing = false;
 
-$(document).ready(function() {
-    $("#authtypes").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "columnDefs":  [
-            { "targets":  [ -1 ], "orderable":  false, "searchable":  false },
-            { "targets":  [ 0, 1 ], "type":  "natural" },
-        ],
-        "ordering": true,
-        "pagingType":  "full"
-    }));
+$(document).ready(function () {
+    $("#authtypes").dataTable(
+        $.extend(true, {}, dataTablesDefaults, {
+            columnDefs: [
+                { targets: [-1], orderable: false, searchable: false },
+                { targets: [0, 1], type: "natural" },
+            ],
+            ordering: true,
+            pagingType: "full",
+        })
+    );
 
     $("body").css("cursor", "auto");
-    $('.import_export_options').hide();
-    $('a.import_export_fw').click(function() {
+    $(".import_export_options").hide();
+    $("a.import_export_fw").click(function () {
         if (!importing) {
-            $('.import_export_options').hide();
-            $(this).next().show('slide');
+            $(".import_export_options").hide();
+            $(this).next().show("slide");
         }
         return false;
     });
 
-    $('.import_export_close').click(function() {
+    $(".import_export_close").click(function () {
         if (!importing) {
-            $('.import_export_options').fadeOut('fast');
+            $(".import_export_options").fadeOut("fast");
             $("body").css("cursor", "auto");
             return false;
         }
     });
 
-    $('.input_import').val("");
+    $(".input_import").val("");
 
-    var matches = new RegExp("\\?error_import_export=(.+)$").exec(window.location.search);
+    var matches = new RegExp("\\?error_import_export=(.+)$").exec(
+        window.location.search
+    );
     if (matches && matches.length > 1) {
-        alert(__("Error importing the authority type %s").format(decodeURIComponent(matches[1])));
+        alert(
+            __("Error importing the authority type %s").format(
+                decodeURIComponent(matches[1])
+            )
+        );
     }
 
-    $('input.input_import').change( function() {
+    $("input.input_import").change(function () {
         var filename = $(this).val();
-        if ( ! /(?:\.csv|\.ods)$/.test(filename)) {
-            $(this).css("background-color","yellow");
-            alert(__("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
+        if (!/(?:\.csv|\.ods)$/.test(filename)) {
+            $(this).css("background-color", "yellow");
+            alert(
+                __("Please select a CSV (.csv) or ODS (.ods) spreadsheet file.")
+            );
             $(this).val("");
-            $(this).css("background-color","white");
+            $(this).css("background-color", "white");
         }
     });
 
-    $('form.form_export').submit(function() {
-        $('.modal').modal("hide");
+    $("form.form_export").submit(function () {
+        $(".modal").modal("hide");
         return true;
     });
 
-    $('form.form_import').submit(function() {
-        var id = $(this).attr('id');
-        var obj = $('#' + id + ' input:file');
+    $("form.form_import").submit(function () {
+        var id = $(this).attr("id");
+        var obj = $("#" + id + " input:file");
         if (/(?:\.csv|\.ods)$/.test(obj.val())) {
-            if (confirm(__("Do you really want to import the authority type fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
-                var authtypecode = $('#' + id + ' input:hidden[name=authtypecode]').val();
-                $('#importing_' + authtypecode).find("span").html(__("Importing to authority type: %s. Importing from file: %s").format("<strong>" + authtypecode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
-                if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
+            if (
+                confirm(
+                    __(
+                        "Do you really want to import the authority type fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"
+                    )
+                )
+            ) {
+                var authtypecode = $(
+                    "#" + id + " input:hidden[name=authtypecode]"
+                ).val();
+                $("#importing_" + authtypecode)
+                    .find("span")
+                    .html(
+                        __(
+                            "Importing to authority type: %s. Importing from file: %s"
+                        ).format(
+                            "<strong>" + authtypecode + "</strong>",
+                            "<i>" +
+                                obj
+                                    .val()
+                                    .replace(new RegExp("^.+[/\\\\]"), "") +
+                                "</i>"
+                        )
+                    );
+                if (navigator.userAgent.toLowerCase().indexOf("msie") != -1) {
                     var timestamp = new Date().getTime();
-                    $('#importing_' + authtypecode).find("img").attr('src', '[% interface | html %]/[% theme | html %]/img/loading-small.gif' + '?' +timestamp);
+                    $("#importing_" + authtypecode)
+                        .find("img")
+                        .attr(
+                            "src",
+                            "[% interface | html %]/[% theme | html %]/img/loading-small.gif" +
+                                "?" +
+                                timestamp
+                        );
                 }
-                $('#importing_' + authtypecode).css('display', 'block');
-                if (navigator.userAgent.toLowerCase().indexOf('firefox') == -1) $("body").css("cursor", "progress");
+                $("#importing_" + authtypecode).css("display", "block");
+                if (navigator.userAgent.toLowerCase().indexOf("firefox") == -1)
+                    $("body").css("cursor", "progress");
                 importing = true;
                 $(".modal-footer,.btn-close").hide();
                 return true;
@@ -72,14 +111,13 @@ $(document).ready(function() {
                 return false;
             }
         }
-        obj.css("background-color","yellow");
+        obj.css("background-color", "yellow");
         alert(__("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
         obj.val("");
-        bj.css("background-color","white");
+        bj.css("background-color", "white");
         return false;
     });
-    $("#authtypecode").on("blur",function(){
+    $("#authtypecode").on("blur", function () {
         toUC(this);
     });
-
 });

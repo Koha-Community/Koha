@@ -29,7 +29,7 @@ use Koha::Tags::Approvals;
 use Koha::Tags::Indexes;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 =head1 NAME
 
@@ -74,7 +74,7 @@ GetOptions(
 pod2usage(1) if $help;
 
 fix_tags_approval($verbose);
-fix_tags_index( $verbose );
+fix_tags_index($verbose);
 
 sub fix_tags_approval {
 
@@ -83,6 +83,7 @@ sub fix_tags_approval {
     print "Fix tags_approval\n=================\n" if $verbose;
 
     my $dbh = C4::Context->dbh;
+
     # Search the terms in tags_all that don't exist in tags_approval
     my $sth = $dbh->prepare(
         q{
@@ -105,6 +106,7 @@ sub fix_tags_approval {
     }
 
     my $approvals = Koha::Tags::Approvals->search;
+
     # Recalculate weight_total for all tags_approval rows
     while ( my $approval = $approvals->next ) {
         my $count = Koha::Tags->search( { term => $approval->term } )->count;
@@ -122,14 +124,8 @@ sub fix_tags_index {
     print "Fix tags_index\n==============\n" if $verbose;
 
     while ( my $index = $indexes->next ) {
-        my $count
-            = Koha::Tags->search( { term => $index->term, biblionumber => $index->biblionumber } )
-            ->count;
-        print $index->term . "/"
-            . $index->biblionumber . "\t|\t"
-            . $index->weight
-            . "\t=>\t"
-            . $count . "\n"
+        my $count = Koha::Tags->search( { term => $index->term, biblionumber => $index->biblionumber } )->count;
+        print $index->term . "/" . $index->biblionumber . "\t|\t" . $index->weight . "\t=>\t" . $count . "\n"
             if $verbose;
         $index->weight($count)->store;
     }

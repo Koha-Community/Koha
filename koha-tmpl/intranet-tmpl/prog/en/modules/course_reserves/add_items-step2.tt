@@ -5,16 +5,16 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF is_edit || course_reserve %]
-        [% t("Edit reserve") | html %]
-    [% ELSE %]
-        [% t("Add reserves") | html %]
-    [% END %] &rsaquo;
-    [% course.course_name | html %] &rsaquo;
-    [% t("Course reserves") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF is_edit || course_reserve %]
+            [% t("Edit reserve") | html %]
+        [% ELSE %]
+            [% t("Add reserves") | html %]
+        [% END %]
+        &rsaquo; [% course.course_name | html %] &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -30,7 +30,7 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</a>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF is_edit || course_reserve %]
@@ -38,38 +38,35 @@
             [% ELSE %]
                 [% tp("Place course reserve", "Reserve") | html %]
             [% END %]
-                [% biblio.title | html | $HtmlTags tag="em" %]
+            [% biblio.title | html | $HtmlTags tag="em" %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-            <h1>
-                [% IF is_edit || course_reserve %]<span>Edit</span> [% ELSE %]<span>Reserve</span> [% END %]<em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em>
-            </h1>
+    <h1> [% IF is_edit || course_reserve %]<span>Edit</span>[% ELSE %]<span>Reserve</span>[% END %]<em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em> </h1>
 
-        [% IF course_reserve && !is_edit%]<div class="alert alert-info" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
-        [% IF course_item %]
-            [% IF item %]
-                <div class="alert alert-info" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.count | html %]</div>
-            [% ELSE %]
-                <div class="alert alert-info" id="already_on_reserve">Number of courses reserving this bibliographic record: [% course_item.course_reserves.count | html %]</div>
-            [% END %]
+    [% IF course_reserve && !is_edit %]<div class="alert alert-info" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
+    [% IF course_item %]
+        [% IF item %]
+            <div class="alert alert-info" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.count | html %]</div>
+        [% ELSE %]
+            <div class="alert alert-info" id="already_on_reserve">Number of courses reserving this bibliographic record: [% course_item.course_reserves.count | html %]</div>
         [% END %]
+    [% END %]
 
-        <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
-            <input type="hidden" name="return" value="[% return | html %]" />
-            <input type="hidden" name="op" value="cud-add" />
+    <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
+        <input type="hidden" name="return" value="[% return | html %]" />
+        <input type="hidden" name="op" value="cud-add" />
 
-            [% IF item # adding an item to course items %]
-
+        [% IF item # adding an item to course items %]
             <fieldset class="rows">
                 [% IF is_edit || course_reserve %]
-                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</em></legend>
+                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</em></legend>
                 [% ELSE %]
-                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</em></legend>
+                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</em></legend>
                 [% END %]
                 <ol>
                     <li>
@@ -79,26 +76,26 @@
                     </li>
 
                     [% IF item_level_itypes %]
-                    <li>
-                        <label class="required" for="itype">Item type:</label>
+                        <li>
+                            <label class="required" for="itype">Item type:</label>
 
-                        [% IF course_item.itype_enabled %]
-                            <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" checked="checked" />
-                        [% ELSE %]
-                            <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" />
-                        [% END %]
-
-                        <select id="itype" name="itype" [% UNLESS course_item.itype_enabled %]disabled="disabled"[% END %]>
-                            <option value=""></option>
-                            [% FOREACH it IN itypes %]
-                                [% IF it.itemtype == course_item.itype %]
-                                    <option value="[% it.itemtype | html %]" selected="selected">[% it.description | html %]</option>
-                                [% ELSE %]
-                                    <option value="[% it.itemtype | html %]">[% it.description | html %]</option>
-                                [% END %]
+                            [% IF course_item.itype_enabled %]
+                                <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" checked="checked" />
+                            [% ELSE %]
+                                <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" />
                             [% END %]
-                        </select>
-                    </li>
+
+                            <select id="itype" name="itype" [% UNLESS course_item.itype_enabled %]disabled="disabled"[% END %]>
+                                <option value=""></option>
+                                [% FOREACH it IN itypes %]
+                                    [% IF it.itemtype == course_item.itype %]
+                                        <option value="[% it.itemtype | html %]" selected="selected">[% it.description | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% it.itemtype | html %]">[% it.description | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
                     [% END %]
 
                     <li>
@@ -128,7 +125,7 @@
                         [% IF course_item.location_enabled %]
                             <input type="checkbox" class="field-toggle" data-pulldown="location" value="1" name="location_enabled" id="location_enabled" checked="checked" />
                         [% ELSE %]
-                            <input type="checkbox" class="field-toggle" data-pulldown="location"  value="1" name="location_enabled" id="location_enabled" />
+                            <input type="checkbox" class="field-toggle" data-pulldown="location" value="1" name="location_enabled" id="location_enabled" />
                         [% END %]
 
                         <select id="location" name="location" [% UNLESS course_item.location_enabled %]disabled="disabled"[% END %]>
@@ -194,16 +191,13 @@
                         <label for="public_note">Public note:</label>
                         <textarea name="public_note" id="public_note">[% course_reserve.public_note | html %]</textarea>
                     </li>
-
                 </ol>
             </fieldset>
-                 <p>
-                    Checking the box next to the field label will enable changes to that field. Leave boxes unchecked to make no change.<br>
-                    Any items with existing course reserves will have their <em>on reserve</em> values updated.
-                </p>
-
-            [% ELSE # adding a biblio to course items %]
-
+            <p>
+                Checking the box next to the field label will enable changes to that field. Leave boxes unchecked to make no change.<br />
+                Any items with existing course reserves will have their <em>on reserve</em> values updated.
+            </p>
+        [% ELSE # adding a biblio to course items %]
             <fieldset class="rows">
                 [% IF is_edit || course_reserve %]
                     <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %]</em></legend>
@@ -226,28 +220,26 @@
                         <label for="public_note">Public note:</label>
                         <textarea name="public_note" id="public_note">[% course_reserve.public_note | html %]</textarea>
                     </li>
-
                 </ol>
             </fieldset>
+        [% END %]
+        <fieldset class="action">
+            <input type="submit" id="submit" value="Save" class="btn btn-primary focus" />
 
-            [% END %]
-            <fieldset class="action">
-                <input type="submit" id="submit" value="Save" class="btn btn-primary focus" />
-
-                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]" class="cancel">Cancel</a>
-            </fieldset>
-        </form>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]" class="cancel">Cancel</a>
+        </fieldset>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
-            $('.field-toggle').change(function() {
-                if( this.checked ) {
-                    $('#' + $(this).data('pulldown') ).removeAttr('disabled');
+        $(document).ready(function () {
+            $(".field-toggle").change(function () {
+                if (this.checked) {
+                    $("#" + $(this).data("pulldown")).removeAttr("disabled");
                 } else {
-                    $('#' + $(this).data('pulldown') ).val('');
-                    $('#' + $(this).data('pulldown') ).attr('disabled', 'disabled');
+                    $("#" + $(this).data("pulldown")).val("");
+                    $("#" + $(this).data("pulldown")).attr("disabled", "disabled");
                 }
             });
         });

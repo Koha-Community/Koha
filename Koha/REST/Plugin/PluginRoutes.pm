@@ -46,8 +46,8 @@ sub register {
 
     my @plugins;
 
-    if ( C4::Context->config("enable_plugins") )
-    {
+    if ( C4::Context->config("enable_plugins") ) {
+
         # plugin needs to define a namespace
         @plugins = Koha::Plugins->new()->GetPlugins(
             {
@@ -55,7 +55,7 @@ sub register {
             }
         );
 
-        foreach my $plugin ( @plugins ) {
+        foreach my $plugin (@plugins) {
             $spec = $self->inject_routes( $spec, $plugin, $validate, $app->log );
         }
 
@@ -76,21 +76,18 @@ sub inject_routes {
     return try {
 
         my $backup_spec = merge_spec( clone($spec), $plugin );
-        if ( $self->spec_ok( $backup_spec ) ) {
+        if ( $self->spec_ok($backup_spec) ) {
             $spec = merge_spec( $spec, $plugin );
-        }
-        else {
+        } else {
             Koha::Exceptions::Plugin->throw(
-                "The resulting spec is invalid. Skipping " . $plugin->get_metadata->{name}
-            );
+                "The resulting spec is invalid. Skipping " . $plugin->get_metadata->{name} );
         }
 
         return $spec;
-    }
-    catch {
+    } catch {
         my $error = $_;
         my $class = ref $plugin;
-        $logger->error( "Plugin $class route injection failed: $error" );
+        $logger->error("Plugin $class route injection failed: $error");
         return $spec;
     };
 }
@@ -102,36 +99,34 @@ sub inject_routes {
 sub merge_spec {
     my ( $spec, $plugin ) = @_;
 
-    if($plugin->can('api_routes')) {
+    if ( $plugin->can('api_routes') ) {
         my $plugin_spec = $plugin->api_routes;
 
-        foreach my $route ( keys %{ $plugin_spec } ) {
+        foreach my $route ( keys %{$plugin_spec} ) {
             my $THE_route = '/contrib/' . $plugin->api_namespace . $route;
-            if ( exists $spec->{ $THE_route } ) {
+            if ( exists $spec->{$THE_route} ) {
+
                 # Route exists, overwriting is forbidden
-                Koha::Exceptions::Plugin::ForbiddenAction->throw(
-                    "Attempted to overwrite $THE_route"
-                );
+                Koha::Exceptions::Plugin::ForbiddenAction->throw("Attempted to overwrite $THE_route");
             }
 
-            $spec->{'paths'}->{ $THE_route } = $plugin_spec->{ $route };
+            $spec->{'paths'}->{$THE_route} = $plugin_spec->{$route};
         }
     }
 
-    if($plugin->can('static_routes')) {
+    if ( $plugin->can('static_routes') ) {
         my $plugin_spec = $plugin->static_routes;
 
-        foreach my $route ( keys %{ $plugin_spec } ) {
+        foreach my $route ( keys %{$plugin_spec} ) {
 
-            my $THE_route = '/contrib/' . $plugin->api_namespace . '/static'.$route;
-            if ( exists $spec->{ $THE_route } ) {
+            my $THE_route = '/contrib/' . $plugin->api_namespace . '/static' . $route;
+            if ( exists $spec->{$THE_route} ) {
+
                 # Route exists, overwriting is forbidden
-                Koha::Exceptions::Plugin::ForbiddenAction->throw(
-                    "Attempted to overwrite $THE_route"
-                );
+                Koha::Exceptions::Plugin::ForbiddenAction->throw("Attempted to overwrite $THE_route");
             }
 
-            $spec->{'paths'}->{ $THE_route } = $plugin_spec->{ $route };
+            $spec->{'paths'}->{$THE_route} = $plugin_spec->{$route};
         }
     }
     return $spec;
@@ -144,9 +139,9 @@ sub merge_spec {
 sub spec_ok {
     my ( $self, $spec ) = @_;
 
-    my $schema = JSON::Validator::Schema::OpenAPIv2->new( $spec );
+    my $schema = JSON::Validator::Schema::OpenAPIv2->new($spec);
 
-    if ($schema->is_invalid) {
+    if ( $schema->is_invalid ) {
         warn $schema->errors->[0];
     }
 

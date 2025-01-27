@@ -47,22 +47,20 @@ subtest 'to_api() tests' => sub {
     my $invoice = $builder->build_object(
         {
             class => 'Koha::Acquisition::Invoices',
-            value => {
-                closedate => undef
-            }
+            value => { closedate => undef }
         }
     );
 
     my $closed = $invoice->to_api->{closed};
     ok( defined $closed, 'closed is defined' );
-    ok( !$closed, 'closedate is undef, closed evaluates to false' );
+    ok( !$closed,        'closedate is undef, closed evaluates to false' );
 
-    $invoice->closedate( dt_from_string )->store->discard_changes;
+    $invoice->closedate(dt_from_string)->store->discard_changes;
     $closed = $invoice->to_api->{closed};
     ok( defined $closed, 'closed is defined' );
-    ok( $closed, 'closedate is defined, closed evaluates to true' );
+    ok( $closed,         'closedate is defined, closed evaluates to true' );
 
-    my $invoice_json = $invoice->to_api({ embed => { algo => {} } });
+    my $invoice_json = $invoice->to_api( { embed => { algo => {} } } );
     ok( exists $invoice_json->{algo} );
     is_deeply( $invoice_json->{algo}, 'algo' );
 

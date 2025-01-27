@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( checkauth );
 use C4::Output;
 use C4::Context;
@@ -27,39 +27,40 @@ use Koha::Patron::Modifications;
 
 my $query = CGI->new;
 
-my ( $userid, $cookie, $sessionID, $flags ) = checkauth($query, 0, { borrowers => 'edit_borrowers' }, 'intranet');
+my ( $userid, $cookie, $sessionID, $flags ) = checkauth( $query, 0, { borrowers => 'edit_borrowers' }, 'intranet' );
 
-my $op = $query->param('op') || q{};
-my $logged_in_user = Koha::Patrons->find({ userid => $userid });
+my $op             = $query->param('op') || q{};
+my $logged_in_user = Koha::Patrons->find( { userid => $userid } );
 
 my @params = $query->param;
 
 if ( $op eq 'cud-update' ) {
     foreach my $param (@params) {
         if ( $param =~ "^modify_" ) {
-            my (undef, $borrowernumber) = split( /_/, $param );
+            my ( undef, $borrowernumber ) = split( /_/, $param );
 
             my $patron = Koha::Patrons->find($borrowernumber);
-            next unless $logged_in_user->can_see_patron_infos( $patron );
+            next unless $logged_in_user->can_see_patron_infos($patron);
 
             my $action = $query->param($param);
 
             if ( $action eq 'approve' ) {
                 my $m = Koha::Patron::Modifications->find( { borrowernumber => $borrowernumber } );
 
-                if ($query->param("unset_gna_$borrowernumber")) {
+                if ( $query->param("unset_gna_$borrowernumber") ) {
+
                     # Unset gone no address
                     # FIXME Looks like this could go to $m->approve
-                    my $patron = Koha::Patrons->find( $borrowernumber );
+                    my $patron = Koha::Patrons->find($borrowernumber);
                     $patron->gonenoaddress(undef)->store;
                 }
 
                 $m->approve() if $m;
-            }
-            elsif ( $action eq 'deny' ) {
+            } elsif ( $action eq 'deny' ) {
                 my $m = Koha::Patron::Modifications->find( { borrowernumber => $borrowernumber } );
                 $m->delete() if $m;
             }
+
             # elsif ( $action eq 'ignore' ) { }
         }
     }

@@ -41,15 +41,15 @@ subtest 'generate_subfield_form default value' => sub {
 
     my $subfield = $builder->generate_subfield_form(
         {
-            tag => '999',
-            subfield => '9',
-            value => '',
-            index_tag => int(rand(1000000)),
-            tagslib => {
+            tag       => '999',
+            subfield  => '9',
+            value     => '',
+            index_tag => int( rand(1000000) ),
+            tagslib   => {
                 '999' => {
                     '9' => {
                         defaultvalue => 'The date is <<YYYY>>-<<MM>>-<<DD>> and user is <<USER>>',
-                        hidden => 0,
+                        hidden       => 0,
                     }
                 }
             },
@@ -57,7 +57,7 @@ subtest 'generate_subfield_form default value' => sub {
     );
 
     my $today = dt_from_string()->ymd;
-    is($subfield->{marc_value}->{value}, "The date is $today and user is superlibrarian");
+    is( $subfield->{marc_value}->{value}, "The date is $today and user is superlibrarian" );
 };
 
 subtest 'generate_subfield_form branches' => sub {
@@ -65,28 +65,28 @@ subtest 'generate_subfield_form branches' => sub {
 
     my $subfield = $builder->generate_subfield_form(
         {
-            tag => '999',
-            subfield => '9',
-            value => '',
-            index_tag => int(rand(1000000)),
-            tagslib => {
+            tag       => '999',
+            subfield  => '9',
+            value     => '',
+            index_tag => int( rand(1000000) ),
+            tagslib   => {
                 '999' => {
                     '9' => {
                         authorised_value => 'branches',
-                        hidden => 0,
+                        hidden           => 0,
                     }
                 }
             },
         },
     );
 
-    my @libraries = Koha::Libraries->search({}, {order_by => 'branchname'})->as_list;
-    my %labels = map { $_->branchcode => $_->branchname } @libraries;
-    my @values = map { $_->branchcode } @libraries;
+    my @libraries = Koha::Libraries->search( {}, { order_by => 'branchname' } )->as_list;
+    my %labels    = map { $_->branchcode => $_->branchname } @libraries;
+    my @values    = map { $_->branchcode } @libraries;
 
-    is($subfield->{marc_value}->{type}, 'select');
-    is_deeply($subfield->{marc_value}->{labels}, \%labels);
-    is_deeply($subfield->{marc_value}->{values}, \@values);
+    is( $subfield->{marc_value}->{type}, 'select' );
+    is_deeply( $subfield->{marc_value}->{labels}, \%labels );
+    is_deeply( $subfield->{marc_value}->{values}, \@values );
 };
 
 subtest 'generate_subfield_form itemtypes' => sub {
@@ -94,15 +94,15 @@ subtest 'generate_subfield_form itemtypes' => sub {
 
     my $subfield = $builder->generate_subfield_form(
         {
-            tag => '999',
-            subfield => '9',
-            value => '',
-            index_tag => int(rand(1000000)),
-            tagslib => {
+            tag       => '999',
+            subfield  => '9',
+            value     => '',
+            index_tag => int( rand(1000000) ),
+            tagslib   => {
                 '999' => {
                     '9' => {
                         authorised_value => 'itemtypes',
-                        hidden => 0,
+                        hidden           => 0,
                     }
                 }
             },
@@ -110,12 +110,12 @@ subtest 'generate_subfield_form itemtypes' => sub {
     );
 
     my @itemtypes = Koha::ItemTypes->search_with_localization()->as_list;
-    my %labels = map { $_->itemtype => $_->description } @itemtypes;
-    my @values = ('', map { $_->itemtype } @itemtypes);
+    my %labels    = map { $_->itemtype => $_->description } @itemtypes;
+    my @values    = ( '', map { $_->itemtype } @itemtypes );
 
-    is($subfield->{marc_value}->{type}, 'select');
-    is_deeply($subfield->{marc_value}->{labels}, \%labels);
-    is_deeply($subfield->{marc_value}->{values}, \@values);
+    is( $subfield->{marc_value}->{type}, 'select' );
+    is_deeply( $subfield->{marc_value}->{labels}, \%labels );
+    is_deeply( $subfield->{marc_value}->{values}, \@values );
 };
 
 subtest 'generate_subfield_form class sources' => sub {
@@ -123,15 +123,15 @@ subtest 'generate_subfield_form class sources' => sub {
 
     my $subfield = $builder->generate_subfield_form(
         {
-            tag => '999',
-            subfield => '9',
-            value => '',
-            index_tag => int(rand(1000000)),
-            tagslib => {
+            tag       => '999',
+            subfield  => '9',
+            value     => '',
+            index_tag => int( rand(1000000) ),
+            tagslib   => {
                 '999' => {
                     '9' => {
                         authorised_value => 'cn_source',
-                        hidden => 0,
+                        hidden           => 0,
                     }
                 }
             },
@@ -152,28 +152,29 @@ subtest 'generate_subfield_form authorised value' => sub {
 
     my $subfield = $builder->generate_subfield_form(
         {
-            tag => '999',
-            subfield => '9',
-            value => '',
-            index_tag => int(rand(1000000)),
-            tagslib => {
+            tag       => '999',
+            subfield  => '9',
+            value     => '',
+            index_tag => int( rand(1000000) ),
+            tagslib   => {
                 '999' => {
                     '9' => {
                         authorised_value => 'YES_NO',
-                        hidden => 0,
+                        hidden           => 0,
                     }
                 }
             },
         },
     );
 
-    my @authorised_values = Koha::AuthorisedValues->search({category => 'YES_NO'}, {order_by => ['lib', 'lib_opac']})->as_list;
+    my @authorised_values =
+        Koha::AuthorisedValues->search( { category => 'YES_NO' }, { order_by => [ 'lib', 'lib_opac' ] } )->as_list;
     my %labels = map { $_->authorised_value => $_->lib } @authorised_values;
-    my @values = ('', map { $_->authorised_value } @authorised_values);
+    my @values = ( '', map { $_->authorised_value } @authorised_values );
 
-    is($subfield->{marc_value}->{type}, 'select');
-    is_deeply($subfield->{marc_value}->{labels}, \%labels);
-    is_deeply($subfield->{marc_value}->{values}, \@values);
+    is( $subfield->{marc_value}->{type}, 'select' );
+    is_deeply( $subfield->{marc_value}->{labels}, \%labels );
+    is_deeply( $subfield->{marc_value}->{values}, \@values );
 };
 
 subtest 'generate_subfield_form framework plugin' => sub {
@@ -181,25 +182,25 @@ subtest 'generate_subfield_form framework plugin' => sub {
 
     my $subfield = $builder->generate_subfield_form(
         {
-            tag => '999',
-            subfield => '9',
-            value => '',
-            index_tag => int(rand(1000000)),
-            tagslib => {
+            tag       => '999',
+            subfield  => '9',
+            value     => '',
+            index_tag => int( rand(1000000) ),
+            tagslib   => {
                 '999' => {
                     '9' => {
                         value_builder => 'barcode.pl',
-                        hidden => 0,
+                        hidden        => 0,
                     }
                 }
             },
         },
     );
 
-    is($subfield->{marc_value}->{type}, 'text_complex');
-    is($subfield->{marc_value}->{plugin}, 'barcode.pl');
-    is($subfield->{marc_value}->{noclick}, 1);
-    like($subfield->{marc_value}->{javascript}, qr,<script>.*</script>,s);
+    is( $subfield->{marc_value}->{type},    'text_complex' );
+    is( $subfield->{marc_value}->{plugin},  'barcode.pl' );
+    is( $subfield->{marc_value}->{noclick}, 1 );
+    like( $subfield->{marc_value}->{javascript}, qr,<script>.*</script>,s );
 };
 
 $schema->storage->txn_rollback;

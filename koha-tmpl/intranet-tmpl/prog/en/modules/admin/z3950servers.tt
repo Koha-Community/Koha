@@ -12,18 +12,22 @@
     [% SET servertype = "Z39.50" %]
 [% END %]
 
-<title>[% FILTER collapse %]
-    [% IF op == 'edit' %]
-        [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %] &rsaquo;
-    [% ELSIF op ==  'add' %]
-        [% tx("New {servertype} server", { servertype = servertype }) | html %] &rsaquo;
-    [% ELSIF searchfield %]
-        [% tx("Search results for '{search_keyword}'", { search_keyword = searchfield }) | html %] &rsaquo;
-    [% END %]
-    [% t("Z39.50/SRU servers") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op == 'edit' %]
+            [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]
+            &rsaquo;
+        [% ELSIF op ==  'add' %]
+            [% tx("New {servertype} server", { servertype = servertype }) | html %]
+            &rsaquo;
+        [% ELSIF searchfield %]
+            [% tx("Search results for '{search_keyword}'", { search_keyword = searchfield }) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Z39.50/SRU servers") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -48,12 +52,10 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]
             [% END %]
-
         [% ELSIF op == 'add' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("New {servertype} server", { servertype = servertype }) | html %]
             [% END %]
-
         [% ELSIF searchfield %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("Search results for '{search_keyword}'", { search_keyword = searchfield }) | html %]
@@ -68,198 +70,201 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% IF msg_deleted %]
-    <div class="alert alert-warning">Z39.50/SRU server deleted ([% msg_add | html %])</div>
-[% ELSIF msg_updated %]
-    <div class="alert alert-info">Z39.50/SRU server updated ([% msg_add | html %])</div>
-[% ELSIF msg_added %]
-    <div class="alert alert-info">Z39.50/SRU server added ([% msg_add | html %])</div>
-[% ELSIF msg_notfound %]
-    <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
-[% END %]
-
-[% IF ( add_form ) %]
-    <form action="/cgi-bin/koha/admin/z3950servers.pl" name="Aform" method="post" id="serverentry">
-        [% INCLUDE 'csrf-token.inc' %]
-        [% IF op == 'edit' %]
-            <h1>[% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]</h1>
-            <input type="hidden" name="id" value="[% server.id | html %]" />
-        [% ELSE %]
-            <h1>[% tx("New {servertype} server", { servertype = servertype }) | html %]</h1>
-        [% END %]
-
-        <input type="hidden" name="op" value="cud-add_validated" />
-        <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' | html %]"/>
-        <fieldset class="rows">
-        <ol>
-        <li><label for="name" class="required">Server name: </label>
-            [% IF server.servername %]
-                <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
-            [% ELSE %]
-                <input type="text" name="servername" id="servername" class="focus" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
-            [% END %]
-             <span class="required">Required</span>
-        </li>
-
-        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host | html %]" required="required" /> <span class="required">Required</span>
-            [% IF (server.servertype||type) == 'sru' %]
-                <div class="hint">Includes the domain part, but the path part of the URL should go into Database.</div>
-            [% END %]
-        </li>
-        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% server.port | html %]" required="required" /> <span class="required">Required</span>
-        </li>
-        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% server.db | html %]" required="required" /> <span class="required">Required</span>
-        </li>
-        <li><label for="userid">Userid: </label> <input type="text" name="userid" id="userid" value="[% server.userid | html %]" />
-        </li>
-        <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password | html %]" />
-        </li>
-        <li>
-            <label for="checked">Preselected: </label>
-        [% IF ( server.checked ) %]
-            <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
-        [% ELSE %]
-            <input type="checkbox" name="checked" id="checked" value="1" />
-        [% END %]
-            <span class="hint">Searched by default.</span>
-        </li>
-        <li>
-            <label for="rank">Rank: </label>
-            <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
-            <div class="hint">Display order.</div>
-        </li>
-        [% IF (server.servertype||type) == 'zed' %]
-        <li>
-            <label for="attributes">Attributes: </label>
-            <input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes | html %]" />
-            <div class="hint">Additional PQF attributes added to each query.</div>
-        </li>
-        [% END %]
-
-        <li>
-            <label for="syntax">Syntax: </label>
-        <select name="syntax" id="syntax">
-            <option value="UNIMARC">UNIMARC</option>
-            <option value="INTERMARC">INTERMARC</option>
-            <option value="CCF">CCF</option>
-            <option value="USMARC">MARC21/USMARC</option>
-            <option value="UKMARC">UKMARC</option>
-            <option value="NORMARC">NORMARC</option>
-            <option value="LIBRISMARC">LIBRISMARC</option>
-            <option value="DANMARC">DANMARC</option>
-            <option value="FINMARC">FINMARC</option>
-            <option value="CANMARC">CANMARC</option>
-            <option value="SBN">SBN</option>
-            <option value="PICAMARC">PICAMARC</option>
-            <option value="AUSMARC">AUSMARC</option>
-            <option value="IBERMARC">IBERMARC</option>
-            <option value="CATMARC">CATMARC</option>
-            <option value="MALMARC">MALMARC</option>
-        </select>
-            <div class="hint">Z39.50 can send records in various formats. Choose one.</div>
-        </li>
-
-        <li>
-            <label for="encoding">Encoding: </label>
-        <select name="encoding" id="encoding">
-            [% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
-                <option value="[% enc | html %]">[% enc | html %]</option>
-            [% END %]
-        </select>
-            <div class="hint">Z39.50 can send records in various encodings. Choose one.</div>
-        </li>
-
-        <li>
-            <label for="timeout">Timeout: </label>
-        <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout | html %]" /> seconds
-            <div class="hint">Enter 0 to disable.</div>
-        </li>
-        <li><label for="recordtype">Record type: </label>
-        <select name="recordtype" id="recordtype">
-            <option value="biblio">Bibliographic</option>
-            <option value="authority">Authority</option>
-        </select>
-        </li>
-        [% IF (server.servertype||type) == 'sru' %]
-        <li>
-        <label for="sru_options">Additional SRU options: </label>
-        <input type="text" name="sru_options" id="sru_options" size="50" value="[% server.sru_options | html %]"/>
-        <div class="hint">Separate options by commas. Example: sru=get,sru_version=1.1. See also http://www.indexdata.com/yaz/doc/zoom.html.</div>
-        </li>
-        <li>
-        <label for="sru_fields">SRU Search fields mapping: </label>
-        <input type="hidden" name="sru_fields" id="sru_fields" value="[% server.sru_fields | html %]" />
-            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields | html %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
-        </li>
-        [% END %]
-        <li>
-        <label for="add_xslt">XSLT File(s) for transforming results: </label>
-        <input type="text" name="add_xslt" id="add_xslt" size="100" value="[% server.add_xslt | html %]"/>
-        <div class="hint">Separate multiple filenames by commas.</div>
-        </li>
-
-        </ol>
-        </fieldset>
-
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
-    </form>
-[% END %]
-
-[% IF op == 'list' %]
-    <div id="toolbar" class="btn-toolbar">
-        <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
-        <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
-    </div>
-    <h1>Z39.50/SRU servers</h1>
-    [% IF searchfield %]
-        <h2>
-            [% tx("Searching by target starting with '{search_keyword}'", { search_keyword = searchfield }) | html %]
-        </h2>
+    [% IF msg_deleted %]
+        <div class="alert alert-warning">Z39.50/SRU server deleted ([% msg_add | html %])</div>
+    [% ELSIF msg_updated %]
+        <div class="alert alert-info">Z39.50/SRU server updated ([% msg_add | html %])</div>
+    [% ELSIF msg_added %]
+        <div class="alert alert-info">Z39.50/SRU server added ([% msg_add | html %])</div>
+    [% ELSIF msg_notfound %]
+        <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
     [% END %]
 
-    <div class="page-section">
-    <table id="serverst">
+    [% IF ( add_form ) %]
+        <form action="/cgi-bin/koha/admin/z3950servers.pl" name="Aform" method="post" id="serverentry">
+            [% INCLUDE 'csrf-token.inc' %]
+            [% IF op == 'edit' %]
+                <h1>[% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]</h1>
+                <input type="hidden" name="id" value="[% server.id | html %]" />
+            [% ELSE %]
+                <h1>[% tx("New {servertype} server", { servertype = servertype }) | html %]</h1>
+            [% END %]
 
-        <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Attributes</th><th class="noExport">Actions</th>
-        </tr></thead>
-        <tbody>
-        [% FOREACH loo IN loop %]
-            <tr>
-            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.host | html %]:[% loo.port | html %]</td><td>[% loo.db | html %]</td><td>[% loo.userid | html %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank | html %]</td>
-            <td>[% loo.syntax | html %]</td><td>[% loo.encoding | html %]</td><td>[% loo.timeout | html %]</td>
-            <td>[% IF ( loo.recordtype == 'biblio' )  %]
-                <span>Bibliographic</span>
-                [% ELSIF ( loo.recordtype == 'authority' ) %]
-                <span>Authority</span>
-                [% END %]
-            </td>
-            <td>[% loo.attributes | html %]</td>
-            <td>
-                <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#">
-                        Actions
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
+            <input type="hidden" name="op" value="cud-add_validated" />
+            <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' | html %]" />
+            <fieldset class="rows">
+                <ol>
+                    <li
+                        ><label for="name" class="required">Server name: </label>
+                        [% IF server.servername %]
+                            <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
+                        [% ELSE %]
+                            <input type="text" name="servername" id="servername" class="focus" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
+                        [% END %]
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li
+                        ><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host | html %]" required="required" /> <span class="required">Required</span>
+                        [% IF (server.servertype||type) == 'sru' %]
+                            <div class="hint">Includes the domain part, but the path part of the URL should go into Database.</div>
+                        [% END %]
+                    </li>
+                    <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% server.port | html %]" required="required" /> <span class="required">Required</span> </li>
+                    <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% server.db | html %]" required="required" /> <span class="required">Required</span> </li>
+                    <li><label for="userid">Userid: </label> <input type="text" name="userid" id="userid" value="[% server.userid | html %]" /> </li>
+                    <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password | html %]" /> </li>
+                    <li>
+                        <label for="checked">Preselected: </label>
+                        [% IF ( server.checked ) %]
+                            <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="checked" id="checked" value="1" />
+                        [% END %]
+                        <span class="hint">Searched by default.</span>
+                    </li>
+                    <li>
+                        <label for="rank">Rank: </label>
+                        <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
+                        <div class="hint">Display order.</div>
+                    </li>
+                    [% IF (server.servertype||type) == 'zed' %]
                         <li>
-                            <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-delete_confirmed">
-                                <input type="hidden" name="id" value="[% loo.id | uri %]">
-                            </form>
+                            <label for="attributes">Attributes: </label>
+                            <input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes | html %]" />
+                            <div class="hint">Additional PQF attributes added to each query.</div>
                         </li>
-                    </ul>
-                </div>
-            </td>
-            </tr>
-        [% END %]
-        </tbody>
-    </table>
-    </div> <!-- /.page-section -->
-[% END %]
+                    [% END %]
 
+                    <li>
+                        <label for="syntax">Syntax: </label>
+                        <select name="syntax" id="syntax">
+                            <option value="UNIMARC">UNIMARC</option>
+                            <option value="INTERMARC">INTERMARC</option>
+                            <option value="CCF">CCF</option>
+                            <option value="USMARC">MARC21/USMARC</option>
+                            <option value="UKMARC">UKMARC</option>
+                            <option value="NORMARC">NORMARC</option>
+                            <option value="LIBRISMARC">LIBRISMARC</option>
+                            <option value="DANMARC">DANMARC</option>
+                            <option value="FINMARC">FINMARC</option>
+                            <option value="CANMARC">CANMARC</option>
+                            <option value="SBN">SBN</option>
+                            <option value="PICAMARC">PICAMARC</option>
+                            <option value="AUSMARC">AUSMARC</option>
+                            <option value="IBERMARC">IBERMARC</option>
+                            <option value="CATMARC">CATMARC</option>
+                            <option value="MALMARC">MALMARC</option>
+                        </select>
+                        <div class="hint">Z39.50 can send records in various formats. Choose one.</div>
+                    </li>
+
+                    <li>
+                        <label for="encoding">Encoding: </label>
+                        <select name="encoding" id="encoding">
+                            [% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
+                                <option value="[% enc | html %]">[% enc | html %]</option>
+                            [% END %]
+                        </select>
+                        <div class="hint">Z39.50 can send records in various encodings. Choose one.</div>
+                    </li>
+
+                    <li>
+                        <label for="timeout">Timeout: </label>
+                        <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout | html %]" /> seconds
+                        <div class="hint">Enter 0 to disable.</div>
+                    </li>
+                    <li
+                        ><label for="recordtype">Record type: </label>
+                        <select name="recordtype" id="recordtype">
+                            <option value="biblio">Bibliographic</option>
+                            <option value="authority">Authority</option>
+                        </select>
+                    </li>
+                    [% IF (server.servertype||type) == 'sru' %]
+                        <li>
+                            <label for="sru_options">Additional SRU options: </label>
+                            <input type="text" name="sru_options" id="sru_options" size="50" value="[% server.sru_options | html %]" />
+                            <div class="hint">Separate options by commas. Example: sru=get,sru_version=1.1. See also http://www.indexdata.com/yaz/doc/zoom.html.</div>
+                        </li>
+                        <li>
+                            <label for="sru_fields">SRU Search fields mapping: </label>
+                            <input type="hidden" name="sru_fields" id="sru_fields" value="[% server.sru_fields | html %]" />
+                            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields | html %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
+                        </li>
+                    [% END %]
+                    <li>
+                        <label for="add_xslt">XSLT File(s) for transforming results: </label>
+                        <input type="text" name="add_xslt" id="add_xslt" size="100" value="[% server.add_xslt | html %]" />
+                        <div class="hint">Separate multiple filenames by commas.</div>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
+            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
+        </div>
+        <h1>Z39.50/SRU servers</h1>
+        [% IF searchfield %]
+            <h2> [% tx("Searching by target starting with '{search_keyword}'", { search_keyword = searchfield }) | html %] </h2>
+        [% END %]
+
+        <div class="page-section">
+            <table id="serverst">
+                <thead
+                    ><tr
+                        ><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Attributes</th
+                        ><th class="noExport">Actions</th>
+                    </tr></thead
+                >
+                <tbody>
+                    [% FOREACH loo IN loop %]
+                        <tr>
+                            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td
+                            ><td>[% loo.host | html %]:[% loo.port | html %]</td><td>[% loo.db | html %]</td><td>[% loo.userid | html %]</td><td>[% IF loo.password %]########[% END %]</td
+                            ><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank | html %]</td> <td>[% loo.syntax | html %]</td><td>[% loo.encoding | html %]</td><td>[% loo.timeout | html %]</td>
+                            <td
+                                >[% IF ( loo.recordtype == 'biblio' ) %]
+                                    <span>Bibliographic</span>
+                                [% ELSIF ( loo.recordtype == 'authority' ) %]
+                                    <span>Authority</span>
+                                [% END %]
+                            </td>
+                            <td>[% loo.attributes | html %]</td>
+                            <td>
+                                <div class="btn-group dropup">
+                                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
+                                        >
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li
+                                        >
+                                        <li>
+                                            <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-delete_confirmed" />
+                                                <input type="hidden" name="id" value="[% loo.id | uri %]" />
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -267,7 +272,6 @@
     [% IF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
     [% END %]
-
     <script>
         [% IF ( add_form ) %]
             $(document).ready(function(){

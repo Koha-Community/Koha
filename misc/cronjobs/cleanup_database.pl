@@ -298,7 +298,6 @@ if ( $pDebarments && $allDebarments ) {
 
 say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
 
-
 my $dbh = C4::Context->dbh();
 my $sth;
 my $sth2;

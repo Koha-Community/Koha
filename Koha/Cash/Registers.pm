@@ -17,7 +17,6 @@ package Koha::Cash::Registers;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Cash::Register;

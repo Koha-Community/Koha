@@ -19,7 +19,6 @@ package Koha::Library;
 
 use Modern::Perl;
 
-
 use C4::Context;
 
 use Koha::Caches;
@@ -54,8 +53,7 @@ sub store {
 
     if ( !$self->in_storage ) {
         $flush = 1;
-    }
-    else {
+    } else {
         my $self_from_storage = $self->get_from_storage;
         $flush = 1 if ( $self_from_storage->branchname ne $self->branchname );
     }
@@ -90,9 +88,9 @@ Returns the stockrotation stages associated with this Library.
 =cut
 
 sub stockrotationstages {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->stockrotationstages;
-    return Koha::StockRotationStages->_new_from_dbic( $rs );
+    return Koha::StockRotationStages->_new_from_dbic($rs);
 }
 
 =head3 outgoing_transfers
@@ -104,9 +102,9 @@ Returns the outgoing item transfers associated with this Library.
 =cut
 
 sub outgoing_transfers {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->branchtransfers_frombranches;
-    return Koha::Item::Transfers->_new_from_dbic( $rs );
+    return Koha::Item::Transfers->_new_from_dbic($rs);
 }
 
 =head3 inbound_transfers
@@ -118,9 +116,9 @@ Returns the inbound item transfers associated with this Library.
 =cut
 
 sub inbound_transfers {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->branchtransfers_tobranches;
-    return Koha::Item::Transfers->_new_from_dbic( $rs );
+    return Koha::Item::Transfers->_new_from_dbic($rs);
 }
 
 =head3 get_effective_marcorgcode
@@ -133,7 +131,7 @@ from the I<MARCOrgCode> syspref if undefined for the library.
 =cut
 
 sub get_effective_marcorgcode {
-    my ( $self )  = @_;
+    my ($self) = @_;
 
     return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
 }
@@ -161,24 +159,26 @@ sub smtp_server {
 
     if ( exists $params->{smtp_server} ) {
 
-        $self->_result->result_source->schema->txn_do( sub {
-            $library_smtp_server_rs->delete
-                if $library_smtp_server_rs;
+        $self->_result->result_source->schema->txn_do(
+            sub {
+                $library_smtp_server_rs->delete
+                    if $library_smtp_server_rs;
 
-            if ( defined $params->{smtp_server} ) {
-                # Set the new server
-                # Remove any already set SMTP server
+                if ( defined $params->{smtp_server} ) {
 
-                my $smtp_server = $params->{smtp_server};
-                $smtp_server->_result->add_to_library_smtp_servers({ library_id => $self->id });
+                    # Set the new server
+                    # Remove any already set SMTP server
+
+                    my $smtp_server = $params->{smtp_server};
+                    $smtp_server->_result->add_to_library_smtp_servers( { library_id => $self->id } );
+                }
             }
-        });
-    } # else => reset to default
+        );
+    }    # else => reset to default
     else {
         # Getter
-        if ( $library_smtp_server_rs ) {
-            return Koha::SMTP::Servers->find(
-                $library_smtp_server_rs->smtp_server_id );
+        if ($library_smtp_server_rs) {
+            return Koha::SMTP::Servers->find( $library_smtp_server_rs->smtp_server_id );
         }
 
         return Koha::SMTP::Servers->get_default;
@@ -202,9 +202,9 @@ sub from_email_address {
     my ($self) = @_;
 
     return
-         $self->branchemail
-      || C4::Context->preference('KohaAdminEmailAddress')
-      || undef;
+           $self->branchemail
+        || C4::Context->preference('KohaAdminEmailAddress')
+        || undef;
 }
 
 =head3 inbound_email_address
@@ -222,11 +222,11 @@ sub inbound_email_address {
     my ($self) = @_;
 
     return
-         $self->branchreplyto
-      || $self->branchemail
-      || C4::Context->preference('ReplytoDefault')
-      || C4::Context->preference('KohaAdminEmailAddress')
-      || undef;
+           $self->branchreplyto
+        || $self->branchemail
+        || C4::Context->preference('ReplytoDefault')
+        || C4::Context->preference('KohaAdminEmailAddress')
+        || undef;
 }
 
 =head3 inbound_ill_address
@@ -242,9 +242,9 @@ sub inbound_ill_address {
     my ($self) = @_;
 
     return
-         $self->branchillemail
-      || C4::Context->preference('ILLDefaultStaffEmail')
-      || $self->inbound_email_address;
+           $self->branchillemail
+        || C4::Context->preference('ILLDefaultStaffEmail')
+        || $self->inbound_email_address;
 }
 
 =head3 library_groups
@@ -254,9 +254,9 @@ Return the Library groups of this library
 =cut
 
 sub library_groups {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->library_groups;
-    return Koha::Library::Groups->_new_from_dbic( $rs );
+    return Koha::Library::Groups->_new_from_dbic($rs);
 }
 
 =head3 cash_registers
@@ -266,9 +266,9 @@ Return Cash::Registers associated with this Library
 =cut
 
 sub cash_registers {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->cash_registers;
-    return Koha::Cash::Registers->_new_from_dbic( $rs );
+    return Koha::Cash::Registers->_new_from_dbic($rs);
 }
 
 =head3 desks
@@ -291,21 +291,21 @@ Return all libraries (including self) that belong to the same hold groups
 =cut
 
 sub get_hold_libraries {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $library_groups = $self->library_groups;
     my @hold_libraries;
     while ( my $library_group = $library_groups->next ) {
-        my $root = Koha::Library::Groups->get_root_ancestor({id => $library_group->id});
-        if($root->ft_local_hold_group) {
+        my $root = Koha::Library::Groups->get_root_ancestor( { id => $library_group->id } );
+        if ( $root->ft_local_hold_group ) {
             push @hold_libraries, $root->all_libraries;
         }
     }
 
     my %seen;
     @hold_libraries =
-      grep { !$seen{ $_->id }++ } @hold_libraries;
+        grep { !$seen{ $_->id }++ } @hold_libraries;
 
-    return Koha::Libraries->search({ branchcode => { '-in' => [ keys %seen ] } });
+    return Koha::Libraries->search( { branchcode => { '-in' => [ keys %seen ] } } );
 }
 
 =head3 validate_hold_sibling
@@ -320,8 +320,7 @@ sub validate_hold_sibling {
     return 1 if $params->{branchcode} eq $self->id;
 
     my $branchcode = $params->{branchcode};
-    return $self->get_hold_libraries->search( { branchcode => $branchcode } )
-      ->count > 0;
+    return $self->get_hold_libraries->search( { branchcode => $branchcode } )->count > 0;
 }
 
 =head3 public_read_list
@@ -386,14 +385,15 @@ Note: This replaces the former branches.opac_info column.
 
 sub opac_info {
     my ( $self, $params ) = @_;
-    return Koha::AdditionalContents->find_best_match({
-        category => 'html_customizations',
-        location => 'OpacLibraryInfo',
-        lang => $params->{lang},
-        library_id => $self->branchcode,
-    });
+    return Koha::AdditionalContents->find_best_match(
+        {
+            category   => 'html_customizations',
+            location   => 'OpacLibraryInfo',
+            lang       => $params->{lang},
+            library_id => $self->branchcode,
+        }
+    );
 }
-
 
 =head3 get_float_libraries
 

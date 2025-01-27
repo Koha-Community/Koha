@@ -7,11 +7,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Merge patron records") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Merge patron records") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
@@ -32,9 +33,9 @@
         #col-label,
         .col2,
         .col3 {
-            border-right: 1px solid #EEE;
+            border-right: 1px solid #eee;
             flex-grow: 1;
-            margin-right:1em;
+            margin-right: 1em;
         }
         #col-label {
             font-family: monospace;
@@ -58,31 +59,56 @@
 
 [% BLOCK display_names %]
     [% SWITCH rs %]
-        [% CASE 'Accountline'           %]<span>account lines</span>
-        [% CASE 'ArticleRequest'        %]<span>article requests</span>
-        [% CASE 'BorrowerAttribute'     %]<span>extended patron attributes</span>
-        [% CASE 'BorrowerDebarment'     %]<span>patron restrictions</span>
-        [% CASE 'BorrowerFile'          %]<span>patrons files</span>
-        [% CASE 'BorrowerModification'  %]<span>patron modification requests</span>
-        [% CASE 'ClubEnrollment'        %]<span>club enrollments</span>
-        [% CASE 'Issue'                 %]<span>checkouts</span>
-        [% CASE 'ItemsLastBorrower'     %]<span>marks as last borrower of item</span>
-        [% CASE 'Linktracker'           %]<span>tracked link clicks</span>
-        [% CASE 'Message'               %]<span>patron messages</span>
-        [% CASE 'MessageQueue'          %]<span>patron notices</span>
-        [% CASE 'OldIssue'              %]<span>previous checkouts</span>
-        [% CASE 'OldReserve'            %]<span>filled holds</span>
-        [% CASE 'Rating'                %]<span>ratings</span>
-        [% CASE 'Reserve'               %]<span>current holds</span>
-        [% CASE 'Review'                %]<span>reviews</span>
-        [% CASE 'Statistic'             %]<span>statistics</span>
-        [% CASE 'SearchHistory'         %]<span>historical searches</span>
-        [% CASE 'Suggestion'            %]<span>purchase suggestions</span>
-        [% CASE 'TagAll'                %]<span>tags</span>
-        [% CASE 'Virtualshelfcontent'   %]<span>list items</span>
-        [% CASE 'Virtualshelfshare'     %]<span>list shares</span>
-        [% CASE 'Virtualshelve'         %]<span>lists</span>
-        [% CASE %][% rs | html %]
+    [% CASE 'Accountline' %]
+        <span>account lines</span>
+    [% CASE 'ArticleRequest' %]
+        <span>article requests</span>
+    [% CASE 'BorrowerAttribute' %]
+        <span>extended patron attributes</span>
+    [% CASE 'BorrowerDebarment' %]
+        <span>patron restrictions</span>
+    [% CASE 'BorrowerFile' %]
+        <span>patrons files</span>
+    [% CASE 'BorrowerModification' %]
+        <span>patron modification requests</span>
+    [% CASE 'ClubEnrollment' %]
+        <span>club enrollments</span>
+    [% CASE 'Issue' %]
+        <span>checkouts</span>
+    [% CASE 'ItemsLastBorrower' %]
+        <span>marks as last borrower of item</span>
+    [% CASE 'Linktracker' %]
+        <span>tracked link clicks</span>
+    [% CASE 'Message' %]
+        <span>patron messages</span>
+    [% CASE 'MessageQueue' %]
+        <span>patron notices</span>
+    [% CASE 'OldIssue' %]
+        <span>previous checkouts</span>
+    [% CASE 'OldReserve' %]
+        <span>filled holds</span>
+    [% CASE 'Rating' %]
+        <span>ratings</span>
+    [% CASE 'Reserve' %]
+        <span>current holds</span>
+    [% CASE 'Review' %]
+        <span>reviews</span>
+    [% CASE 'Statistic' %]
+        <span>statistics</span>
+    [% CASE 'SearchHistory' %]
+        <span>historical searches</span>
+    [% CASE 'Suggestion' %]
+        <span>purchase suggestions</span>
+    [% CASE 'TagAll' %]
+        <span>tags</span>
+    [% CASE 'Virtualshelfcontent' %]
+        <span>list items</span>
+    [% CASE 'Virtualshelfshare' %]
+        <span>list shares</span>
+    [% CASE 'Virtualshelve' %]
+        <span>lists</span>
+    [% CASE %]
+        [% rs | html %]
     [% END %]
 [% END %]
 
@@ -98,156 +124,153 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-            <h1>Merge patron records</h1>
+    <h1>Merge patron records</h1>
 
-            [% IF op == 'show' %]
-                [% IF patrons.count > 1 %]
-                    [% IF ( patrons.count == 2 ) %]
-                        <div id="toolbar" class="btn-toolbar">
-                            <div class="btn-group">
-                                <button class="btn btn-default" id="compare_patrons">
-                                    <i class="fa fa-arrows-h"></i> Compare patrons
-                                </button>
-                            </div>
-                        </div>
-                    [% END %]
+    [% IF op == 'show' %]
+        [% IF patrons.count > 1 %]
+            [% IF ( patrons.count == 2 ) %]
+                <div id="toolbar" class="btn-toolbar">
+                    <div class="btn-group">
+                        <button class="btn btn-default" id="compare_patrons"> <i class="fa fa-arrows-h"></i> Compare patrons </button>
+                    </div>
+                </div>
+            [% END %]
 
-                    <p>Select patron to keep. Data from the other patrons will be transferred to this patron record and the remaining patron records will be deleted.</p>
+            <p>Select patron to keep. Data from the other patrons will be transferred to this patron record and the remaining patron records will be deleted.</p>
 
-                    <form method="post" action="merge-patrons.pl" id="patron-merge-form">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <table id="patron-merge-table" class="datatable">
-                            <thead>
-                                <tr>
-                                    <th>&nbsp;</th>
-                                    <th>Card</th>
-                                    <th>Name</th>
-                                    <th>Date of birth</th>
-                                    <th>Category</th>
-                                    <th>Library</th>
-                                    <th>Expires on</th>
-                                </tr>
-                            </thead>
+            <form method="post" action="merge-patrons.pl" id="patron-merge-form">
+                [% INCLUDE 'csrf-token.inc' %]
+                <table id="patron-merge-table" class="datatable">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Card</th>
+                            <th>Name</th>
+                            <th>Date of birth</th>
+                            <th>Category</th>
+                            <th>Library</th>
+                            <th>Expires on</th>
+                        </tr>
+                    </thead>
 
-                            <tbody>
-                                [% FOREACH p IN patrons %]
-                                    <tr>
-                                        <td><input class="keeper" type="radio" name="keeper" value="[% p.id | html %]" data-borrowernumber="[% p.id | html %]" id="keeper_[% p.id | html %]" /></td>
-                                        <td>
-                                            <label for="keeper_[% p.id | html %]">
-                                                <strong>[% p.cardnumber | html %]</strong>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber | uri %]">
-                                                [% INCLUDE 'patron-title.inc' patron = p %]
-                                                <i class="fa-solid fa-window-restore"></i>
-                                            </a>
-                                        </td>
-                                        <td>[% p.dateofbirth | $KohaDates %]</td>
-                                        <td>[% Categories.GetName( p.categorycode ) | html %] ([% p.categorycode | html %])</td>
-                                        <td>[% Branches.GetName( p.branchcode ) | html %]</td>
-                                        <td>[% p.dateexpiry | $KohaDates %]</td>
-                                [% END %]
-                            </tbody>
-                        </table>
-
-                        <fieldset class="action">
-                            [% FOREACH p IN patrons %]
-                                <input type="hidden" name="id" value="[% p.id | html %]" />
-                            [% END %]
-                            <input type="hidden" name="op" value="cud-merge" />
-                            <input type="submit" id="merge-patrons" class="btn btn-primary" value="Merge patrons" />
-                            [% PROCESS 'members-patron-selections.inc' id="patron-merge-form" %]
-                        </fieldset>
-                    </form>
-                [% ELSE %]
-                    <div class="alert alert-warning">Error: Two or more patrons need to be selected for merging</div>
-                [% END %]
-            [% ELSIF op == 'cud-merge' %]
-                <h4>Results</h4>
-                [% IF error %]
-                    [% IF error == 'INVALID_KEEPER' %]
-                        <div class="alert alert-warning">Merge failed! The patron to keep was invalid.</div>
-                    [% ELSE %]
-                        <div class="alert alert-warning">Merge failed! The following error was reported: [% error | html %].</div>
-                    [% END %]
-                [% ELSIF !results.merged.keys.size %]
-                    <div class="alert alert-warning">No valid patrons to merge were found.</div>
-                [% ELSE %]
-                    <p>
-                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id | uri %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
-                    </p>
-
-                    [% FOREACH pair IN results.merged.pairs %]
-                        [% SET patron = pair.value.patron %]
-
-                        <h5>[% INCLUDE 'patron-title.inc' %]</h5>
-
-                        [% FOREACH r IN pair.value.updated.pairs %]
-                            [% SET name = r.key %]
-                            [% SET count = r.value %]
-                            [% IF count %]
-                                <p>
-                                    <span>[% count | html %] [% PROCESS display_names rs = name %] transferred.</span>
-                                    [% IF name == 'Reserve' %]
-                                        <strong>It is advisable to check for and resolve duplicate holds due to merging.</strong>
-                                    [% END %]
-                                </p>
-                            [% END %]
+                    <tbody>
+                        [% FOREACH p IN patrons %]
+                            <tr>
+                                <td><input class="keeper" type="radio" name="keeper" value="[% p.id | html %]" data-borrowernumber="[% p.id | html %]" id="keeper_[% p.id | html %]" /></td>
+                                <td>
+                                    <label for="keeper_[% p.id | html %]">
+                                        <strong>[% p.cardnumber | html %]</strong>
+                                    </label>
+                                </td>
+                                <td>
+                                    <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber | uri %]">
+                                        [% INCLUDE 'patron-title.inc' patron = p %]
+                                        <i class="fa-solid fa-window-restore"></i>
+                                    </a>
+                                </td>
+                                <td>[% p.dateofbirth | $KohaDates %]</td>
+                                <td>[% Categories.GetName( p.categorycode ) | html %] ([% p.categorycode | html %])</td>
+                                <td>[% Branches.GetName( p.branchcode ) | html %]</td>
+                                <td>[% p.dateexpiry | $KohaDates %]</td>
+                            </tr>
                         [% END %]
-                    [% END %]
-                [% END %]
+                    </tbody>
+                </table>
 
-                [% UNLESS error %]
-                    <a class="btn btn-default" href="moremember.pl?borrowernumber=[% keeper.id | html %]">View patron record</a>
+                <fieldset class="action">
+                    [% FOREACH p IN patrons %]
+                        <input type="hidden" name="id" value="[% p.id | html %]" />
+                    [% END %]
+                    <input type="hidden" name="op" value="cud-merge" />
+                    <input type="submit" id="merge-patrons" class="btn btn-primary" value="Merge patrons" />
+                    [% PROCESS 'members-patron-selections.inc' id="patron-merge-form" %]
+                </fieldset>
+            </form>
+        [% ELSE %]
+            <div class="alert alert-warning">Error: Two or more patrons need to be selected for merging</div>
+        [% END %]
+    [% ELSIF op == 'cud-merge' %]
+        <h4>Results</h4>
+        [% IF error %]
+            [% IF error == 'INVALID_KEEPER' %]
+                <div class="alert alert-warning">Merge failed! The patron to keep was invalid.</div>
+            [% ELSE %]
+                <div class="alert alert-warning">Merge failed! The following error was reported: [% error | html %].</div>
+            [% END %]
+        [% ELSIF !results.merged.keys.size %]
+            <div class="alert alert-warning">No valid patrons to merge were found.</div>
+        [% ELSE %]
+            <p> Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id | uri %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a> </p>
+
+            [% FOREACH pair IN results.merged.pairs %]
+                [% SET patron = pair.value.patron %]
+
+                <h5>[% INCLUDE 'patron-title.inc' %]</h5>
+
+                [% FOREACH r IN pair.value.updated.pairs %]
+                    [% SET name = r.key %]
+                    [% SET count = r.value %]
+                    [% IF count %]
+                        <p>
+                            <span>[% count | html %] [% PROCESS display_names rs = name %] transferred.</span>
+                            [% IF name == 'Reserve' %]
+                                <strong>It is advisable to check for and resolve duplicate holds due to merging.</strong>
+                            [% END %]
+                        </p>
+                    [% END %]
                 [% END %]
             [% END %]
+        [% END %]
+
+        [% UNLESS error %]
+            <a class="btn btn-default" href="moremember.pl?borrowernumber=[% keeper.id | html %]">View patron record</a>
+        [% END %]
+    [% END %]
 [% END %]
 
-    <!-- Modal -->
-    <div class="modal" id="compareModal" tabindex="-1" role="dialog" aria-labelledby="compareModalLabel">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="compareModalLabel">Compare patrons for merging</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="compare">
-                        <div id="col-label">
-                            <div><strong>Name:</strong></div>
-                            <div><strong>Initials:</strong></div>
-                            <div><strong>Other name:</strong></div>
-                            <div><strong>Library:</strong></div>
-                            <div><strong>Card number:</strong></div>
-                            <div><strong>Category:</strong></div>
-                            <br />
-                            <div><strong>Address line 1:</strong></div>
-                            <div><strong>Address line 2:</strong></div>
-                            <div><strong>City:</strong></div>
-                            <div><strong>State:</strong></div>
-                            <div><strong>ZIP/Postal code:</strong></div>
-                            <div><strong>Country:</strong></div>
-                            <br />
-                            <div><strong>Registration date:</strong></div>
-                            <div><strong>Renewal date:</strong></div>
-                            <div><strong>Expiration date:</strong></div>
-                            <div><strong>Date of birth:</strong></div>
-                            <div><strong>Restricted:</strong></div>
-                            <div><strong>Primary email:</strong></div>
-                            <div><strong>Secondary email:</strong></div>
-                            <div><strong>Primary phone:</strong></div>
-                            <div><strong>Secondary phone:</strong></div>
-                            <div><strong>Other phone:</strong></div>
-                            <div><strong>Gender:</strong></div>
-                            <div><strong>Updated on:</strong></div>
-                            <div><strong>Username:</strong></div>
-                        </div>
+<!-- Modal -->
+<div class="modal" id="compareModal" tabindex="-1" role="dialog" aria-labelledby="compareModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="compareModalLabel">Compare patrons for merging</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="compare">
+                    <div id="col-label">
+                        <div><strong>Name:</strong></div>
+                        <div><strong>Initials:</strong></div>
+                        <div><strong>Other name:</strong></div>
+                        <div><strong>Library:</strong></div>
+                        <div><strong>Card number:</strong></div>
+                        <div><strong>Category:</strong></div>
+                        <br />
+                        <div><strong>Address line 1:</strong></div>
+                        <div><strong>Address line 2:</strong></div>
+                        <div><strong>City:</strong></div>
+                        <div><strong>State:</strong></div>
+                        <div><strong>ZIP/Postal code:</strong></div>
+                        <div><strong>Country:</strong></div>
+                        <br />
+                        <div><strong>Registration date:</strong></div>
+                        <div><strong>Renewal date:</strong></div>
+                        <div><strong>Expiration date:</strong></div>
+                        <div><strong>Date of birth:</strong></div>
+                        <div><strong>Restricted:</strong></div>
+                        <div><strong>Primary email:</strong></div>
+                        <div><strong>Secondary email:</strong></div>
+                        <div><strong>Primary phone:</strong></div>
+                        <div><strong>Secondary phone:</strong></div>
+                        <div><strong>Other phone:</strong></div>
+                        <div><strong>Gender:</strong></div>
+                        <div><strong>Updated on:</strong></div>
+                        <div><strong>Username:</strong></div>
+                    </div>
 
-                        [% FOREACH p IN patrons %]
-                            <div id="col-[% p.borrowernumber | html %]-orig"class="col[% loop.index | html %]">
-<!-- prettier-ignore-start -->
+                    [% FOREACH p IN patrons %]
+                        <div id="col-[% p.borrowernumber | html %]-orig" class="col[% loop.index | html %]">
+                            <!-- prettier-ignore-start -->
 <!-- <pre> block is unindented to avoid unwanted whitespace -->
 <pre>
 [% IF ( p.surname ) %][% p.surname | html %], [% p.firstname | html %][% ELSE %]-[% END %]
@@ -279,20 +302,23 @@
 [% IF ( p.userid ) %][% p.userid | html %][% ELSE %]-[% END %]
 </pre>
 <!-- prettier-ignore-end -->
-                            </div>
-                        [% END %]
-                        [% FOREACH p IN patrons %]
-                            <div id="col-[% p.borrowernumber | html %]-diff" class="col[% ( loop.index + 2 ) | html %]"><pre></pre></div>
-                        [% END %]
-                    </div>
+                        </div>
+                    [% END %]
+                    [% FOREACH p IN patrons %]
+                        <div id="col-[% p.borrowernumber | html %]-diff" class="col[% ( loop.index + 2 ) | html %]"><pre></pre></div>
+                    [% END %]
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="submit-merge-form"><i class="fa fa-compress" aria-hidden="true"></i> Merge patrons</button>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
-                </div>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#compareModal -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="submit-merge-form"><i class="fa fa-compress" aria-hidden="true"></i> Merge patrons</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#compareModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
@@ -300,40 +326,39 @@
     [% Asset.js("js/members-patron-selections.js") | $raw %]
     [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
     <script>
-    $(document).ready(function() {
-        var controls = $("#merge-patrons, #compare_patrons");
-        controls.prop('disabled', true);
-        $('#patron-merge-table').on('change', 'input', function() {
-            if ( $('.keeper:checked').length > 0 ) {
-                controls.prop('disabled', false);
-            } else {
-                controls.prop('disabled', true);
-            }
+        $(document).ready(function () {
+            var controls = $("#merge-patrons, #compare_patrons");
+            controls.prop("disabled", true);
+            $("#patron-merge-table").on("change", "input", function () {
+                if ($(".keeper:checked").length > 0) {
+                    controls.prop("disabled", false);
+                } else {
+                    controls.prop("disabled", true);
+                }
+            });
+
+            $("#compare_patrons").on("click", function (e) {
+                e.preventDefault();
+                $("#compareModal").modal("show");
+            });
+
+            $("#compareModal").on("shown.bs.modal", function () {
+                /* Find which column is the basis for merging */
+                var col0 = $(".keeper:checked").data("borrowernumber");
+                var col1 = $(".keeper:not(:checked)").data("borrowernumber");
+                /* Get the original patron data for comparison */
+                var diff1 = $("#col-" + col0 + "-orig pre").text();
+                var diff2 = $("#col-" + col1 + "-orig pre").text();
+
+                var diffs = diffString(diff2, diff1);
+                /* Load the diff HTML in the empty columns */
+                $(".col2 pre, .col3 pre").html(diffs);
+            });
+
+            $("#submit-merge-form").on("click", function () {
+                $("#patron-merge-form").submit();
+            });
         });
-
-        $("#compare_patrons").on("click", function(e){
-            e.preventDefault();
-            $("#compareModal").modal("show");
-        });
-
-        $("#compareModal").on("shown.bs.modal", function(){
-            /* Find which column is the basis for merging */
-            var col0 = $(".keeper:checked").data("borrowernumber");
-            var col1 = $(".keeper:not(:checked)").data("borrowernumber");
-            /* Get the original patron data for comparison */
-            var diff1 = $("#col-" + col0 + "-orig pre").text();
-            var diff2 = $("#col-" + col1 + "-orig pre").text();
-
-            var diffs = diffString(diff2, diff1);
-            /* Load the diff HTML in the empty columns */
-            $(".col2 pre, .col3 pre").html(diffs);
-        });
-
-        $("#submit-merge-form").on("click", function(){
-            $("#patron-merge-form").submit();
-        });
-    });
-
     </script>
 [% END %]
 

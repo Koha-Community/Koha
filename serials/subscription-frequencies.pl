@@ -31,35 +31,37 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth    qw( get_template_and_user );
+use C4::Output  qw( output_html_with_http_headers );
 use C4::Serials qw( GetSubscription ModSubscription DelSubscription );
 use C4::Serials::Frequency;
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'serials/subscription-frequencies.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'serials' => 1 },
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'serials/subscription-frequencies.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'serials' => 1 },
+    }
+);
 
 my $op = $input->param('op');
 
-if($op && ($op eq 'new' || $op eq 'modify')) {
+if ( $op && ( $op eq 'new' || $op eq 'modify' ) ) {
     my @units_loop;
-    push @units_loop, {val => $_} for (qw/ day week month year /);
+    push @units_loop, { val => $_ } for (qw/ day week month year /);
 
-    if($op eq 'modify') {
+    if ( $op eq 'modify' ) {
         my $frequencyid = $input->param('frequencyid');
-        my $frequency = GetSubscriptionFrequency($frequencyid);
+        my $frequency   = GetSubscriptionFrequency($frequencyid);
         foreach (@units_loop) {
-            if($frequency->{unit} and $_->{val} eq $frequency->{unit}) {
+            if ( $frequency->{unit} and $_->{val} eq $frequency->{unit} ) {
                 $_->{selected} = 1;
                 last;
             }
         }
-        $template->param( %$frequency );
+        $template->param(%$frequency);
     }
 
     $template->param(
@@ -70,7 +72,7 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
     exit;
 }
 
-if($op && ($op eq 'cud-savenew' || $op eq 'cud-savemod')) {
+if ( $op && ( $op eq 'cud-savenew' || $op eq 'cud-savemod' ) ) {
     my $frequency;
     foreach (qw/ description unit issuesperunit unitsperissue displayorder /) {
         $frequency->{$_} = $input->param($_);
@@ -83,13 +85,13 @@ if($op && ($op eq 'cud-savenew' || $op eq 'cud-savemod')) {
     $frequency->{issuesperunit} = 1 if $frequency->{issuesperunit} < 1;
     $frequency->{unitsperissue} = 1 if $frequency->{issuesperunit} != 1;
 
-    if($op eq 'cud-savemod') {
+    if ( $op eq 'cud-savemod' ) {
         $frequency->{id} = $input->param('id');
         ModSubscriptionFrequency($frequency);
     } else {
         AddSubscriptionFrequency($frequency);
     }
-} elsif($op && $op eq 'cud-del') {
+} elsif ( $op && $op eq 'cud-del' ) {
     my $frequencyid = $input->param('frequencyid');
 
     if ($frequencyid) {
@@ -100,8 +102,8 @@ if($op && ($op eq 'cud-savenew' || $op eq 'cud-savemod')) {
             my @subs = GetSubscriptionsWithFrequency($frequencyid);
             if (@subs) {
                 $template->param(
-                    frequencyid => $frequencyid,
-                    still_used => 1,
+                    frequencyid   => $frequencyid,
+                    still_used    => 1,
                     subscriptions => \@subs
                 );
             } else {
@@ -111,10 +113,9 @@ if($op && ($op eq 'cud-savenew' || $op eq 'cud-savemod')) {
     }
 }
 
-
 my @frequencies = GetSubscriptionFrequencies();
 
-$template->param(frequencies_loop => \@frequencies);
-$template->param($op => 1) if $op;
+$template->param( frequencies_loop => \@frequencies );
+$template->param( $op              => 1 ) if $op;
 
 output_html_with_http_headers $input, $cookie, $template->output;

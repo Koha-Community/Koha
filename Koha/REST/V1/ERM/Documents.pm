@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ERM::Documents;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -45,9 +45,8 @@ sub get {
         return $c->render_resource_not_found("Document")
             unless $document;
 
-        $c->render_file('data' => $document->file_content, 'filename' => $document->file_name);
-    }
-    catch {
+        $c->render_file( 'data' => $document->file_content, 'filename' => $document->file_name );
+    } catch {
         $c->unhandled_exception($_);
     };
 }

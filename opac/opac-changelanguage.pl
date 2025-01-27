@@ -20,8 +20,8 @@ use CGI qw ( -utf8 );
 use C4::Templates;
 use Koha::Util::Navigation;
 
-my $query = CGI->new;
+my $query    = CGI->new;
 my $language = $query->param('language');
-my $url = Koha::Util::Navigation::local_referer($query, { remove_language => 1 });
+my $url      = Koha::Util::Navigation::local_referer( $query, { remove_language => 1 } );
 
 C4::Templates::setlanguagecookie( $query, $language, $url );

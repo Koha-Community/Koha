@@ -92,17 +92,17 @@ Total records for the search with filters applied.
             my ( $c, $args ) = @_;
 
             my $base_total = $args->{base_total} // $c->stash('koha.pagination.base_total');
-            my $req_page   = $args->{page}         // $c->stash('koha.pagination.page')     // 1;
-            my $per_page   = $args->{per_page}     // $c->stash('koha.pagination.per_page') // C4::Context->preference('RESTdefaultPageSize') // 20;
-            my $params     = $args->{query_params} // $c->stash('koha.pagination.query_params');
-            my $total      = $args->{total}        // $c->stash('koha.pagination.total');
+            my $req_page   = $args->{page}     // $c->stash('koha.pagination.page') // 1;
+            my $per_page   = $args->{per_page} // $c->stash('koha.pagination.per_page')
+                // C4::Context->preference('RESTdefaultPageSize') // 20;
+            my $params = $args->{query_params} // $c->stash('koha.pagination.query_params');
+            my $total  = $args->{total}        // $c->stash('koha.pagination.total');
 
             my $pages;
             if ( $per_page == -1 ) {
                 $req_page = 1;
                 $pages    = 1;
-            }
-            else {
+            } else {
                 $pages = int $total / $per_page;
                 $pages++
                     if $total % $per_page > 0;
@@ -114,7 +114,8 @@ Total records for the search with filters applied.
                 push @links,
                     _build_link(
                     $c,
-                    {   page     => $req_page - 1,
+                    {
+                        page     => $req_page - 1,
                         per_page => $per_page,
                         rel      => 'prev',
                         params   => $params
@@ -126,7 +127,8 @@ Total records for the search with filters applied.
                 push @links,
                     _build_link(
                     $c,
-                    {   page     => $req_page + 1,
+                    {
+                        page     => $req_page + 1,
                         per_page => $per_page,
                         rel      => 'next',
                         params   => $params
@@ -135,11 +137,15 @@ Total records for the search with filters applied.
             }
 
             push @links,
-                _build_link( $c,
-                { page => 1, per_page => $per_page, rel => 'first', params => $params } );
+                _build_link(
+                $c,
+                { page => 1, per_page => $per_page, rel => 'first', params => $params }
+                );
             push @links,
-                _build_link( $c,
-                { page => $pages, per_page => $per_page, rel => 'last', params => $params } );
+                _build_link(
+                $c,
+                { page => $pages, per_page => $per_page, rel => 'last', params => $params }
+                );
 
             # Add Link header
             foreach my $link (@links) {
@@ -149,7 +155,7 @@ Total records for the search with filters applied.
             # Add X-Total-Count header
             $c->res->headers->add( 'X-Total-Count'      => $total );
             $c->res->headers->add( 'X-Base-Total-Count' => $base_total )
-              if defined $base_total;
+                if defined $base_total;
 
             return $c;
         }
@@ -200,12 +206,7 @@ sub _build_link {
     $params->{_page}     = $args->{page};
     $params->{_per_page} = $args->{per_page};
 
-    my $link = '<'
-        . $c->req->url->clone->query(
-            $params
-        )->to_abs
-        . '>; rel="'
-        . $args->{rel} . '"';
+    my $link = '<' . $c->req->url->clone->query($params)->to_abs . '>; rel="' . $args->{rel} . '"';
 
     # TODO: Find a better solution for this horrible (but needed) fix
     $link =~ s|api/v1/app\.pl/||;

@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Bytes::Random::Secure;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use String::Random;
 
 use Koha::Patrons;
@@ -29,55 +29,55 @@ use Koha::Script;
 
 my ( $help, $password, $cardnumber, $patron_id, $userid );
 GetOptions(
-    'help|?'         => \$help,
-    'userid=s'       => \$userid,
-    'password=s'     => \$password,
-    'patron_id=s'    => \$patron_id,
-    'cardnumber=s'   => \$cardnumber,
+    'help|?'       => \$help,
+    'userid=s'     => \$userid,
+    'password=s'   => \$password,
+    'patron_id=s'  => \$patron_id,
+    'cardnumber=s' => \$cardnumber,
 );
 
 pod2usage(1) if $help;
 
 unless ( $userid or $patron_id or $cardnumber ) {
-    pod2usage("userid is mandatory")       unless $userid;
-    pod2usage("patron_id is mandatory")    unless $patron_id;
-    pod2usage("cardnumber is mandatory")   unless $cardnumber;
+    pod2usage("userid is mandatory")     unless $userid;
+    pod2usage("patron_id is mandatory")  unless $patron_id;
+    pod2usage("cardnumber is mandatory") unless $cardnumber;
 }
 
 unless ($password) {
-    my $generator  = String::Random->new( rand_gen => \&alt_rand );
-    $password      = $generator->randregex('[A-Za-z][A-Za-z0-9_]{6}.[A-Za-z][A-Za-z0-9_]{6}\d');
+    my $generator = String::Random->new( rand_gen => \&alt_rand );
+    $password = $generator->randregex('[A-Za-z][A-Za-z0-9_]{6}.[A-Za-z][A-Za-z0-9_]{6}\d');
 }
 
 my $filter;
 
-if ( $userid ) {
+if ($userid) {
     $filter->{userid} = $userid;
 }
 
-if ( $cardnumber ) {
+if ($cardnumber) {
     $filter->{cardnumber} = $cardnumber;
 }
 
-if ( $patron_id ) {
+if ($patron_id) {
     $filter->{borrowernumber} = $patron_id;
 }
 
-my $patrons = Koha::Patrons->search( $filter );
+my $patrons = Koha::Patrons->search($filter);
 
 unless ( $patrons->count > 0 ) {
-    pod2usage( "No patron found matching the specified criteria" );
+    pod2usage("No patron found matching the specified criteria");
 }
 
 my $patron = $patrons->next;
-$patron->set_password({ password => $password, skip_validation => 1 });
+$patron->set_password( { password => $password, skip_validation => 1 } );
 
 print $patron->userid . " " . $password . "\n";
 
-sub alt_rand { # Alternative randomizer
-    my ($max) = @_;
+sub alt_rand {    # Alternative randomizer
+    my ($max)  = @_;
     my $random = Bytes::Random::Secure->new( NonBlocking => 1 );
-    my $r = $random->irand / 2**32;
+    my $r      = $random->irand / 2**32;
     return int( $r * $max );
 }
 

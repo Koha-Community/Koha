@@ -23,7 +23,7 @@ use Koha::Patron::Attributes;
 use Koha::Patrons;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -56,8 +56,7 @@ sub list_patron_attributes {
             status  => 200,
             openapi => $attributes
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -79,7 +78,7 @@ sub add {
     return try {
 
         my $attribute = $patron->add_extended_attribute(
-            Koha::Patron::Attribute->new_from_api( # new_from_api takes care of mapping attributes
+            Koha::Patron::Attribute->new_from_api(    # new_from_api takes care of mapping attributes
                 $c->req->json
             )->unblessed
         );
@@ -89,34 +88,19 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($attribute),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
-            if (
-                $_->isa(
-                    'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint')
-              )
-            {
+            if ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
                 return $c->render(
                     status  => 409,
-                    openapi => {
-                        error => "$_"
-                    }
+                    openapi => { error => "$_" }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
                 return $c->render(
                     status  => 409,
-                    openapi => {
-                        error => "$_"
-                    }
+                    openapi => { error => "$_" }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_" }
@@ -153,40 +137,30 @@ sub overwrite {
         }
 
         # Fetch the attributes, sorted by id
-        my $attributes = $patron->extended_attributes( \@attrs )->search( undef, { order_by => 'id' });
+        my $attributes = $patron->extended_attributes( \@attrs )->search( undef, { order_by => 'id' } );
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($attributes),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_" }
                 );
-            }
-            elsif (
-                $_->isa(
-                    'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint')
-              )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
                 return $c->render(
                     status  => 409,
                     openapi => { error => "$_" }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
                 return $c->render(
                     status  => 409,
                     openapi => { error => "$_" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_" }
@@ -198,7 +172,6 @@ sub overwrite {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 update
 
@@ -215,8 +188,7 @@ sub update {
         unless $patron;
 
     return try {
-        my $attribute = $patron->extended_attributes->find(
-            $c->param('extended_attribute_id') );
+        my $attribute = $patron->extended_attributes->find( $c->param('extended_attribute_id') );
 
         return $c->render_resource_not_found("Attribute")
             unless $attribute;
@@ -228,28 +200,19 @@ sub update {
             status  => 200,
             openapi => $c->objects->to_api($attribute),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "$_" }
                 );
-            }
-            elsif (
-                $_->isa(
-                    'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint')
-              )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
                 return $c->render(
                     status  => 409,
                     openapi => { error => "$_" }
                 );
-            }
-            elsif (
-                $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') )
-            {
+            } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
                 return $c->render(
                     status  => 409,
                     openapi => { error => "$_" }
@@ -278,16 +241,14 @@ sub delete {
 
     return try {
 
-        my $attribute = $patron->extended_attributes->find(
-            $c->param('extended_attribute_id') );
+        my $attribute = $patron->extended_attributes->find( $c->param('extended_attribute_id') );
 
         return $c->render_resource_not_found("Attribute")
             unless $attribute;
 
         $attribute->delete;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

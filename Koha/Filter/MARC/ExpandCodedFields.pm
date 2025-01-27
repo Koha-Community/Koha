@@ -86,10 +86,10 @@ sub filter {
                 if ( !( $tag eq '942' && $subfield->[0] eq 'n' )
                     || $marcflavour eq 'UNIMARC' )
                 {
-                    $value =
-                      GetAuthorisedValueDesc( $tag, $letter, $value, '',
-                        $coded_fields, undef, $opac )
-                      if $coded_fields->{$tag}->{$letter};
+                    $value = GetAuthorisedValueDesc(
+                        $tag,          $letter, $value, '',
+                        $coded_fields, undef,   $opac
+                    ) if $coded_fields->{$tag}->{$letter};
                 }
                 push( @new_subfields, $letter, $value );
             }
@@ -115,16 +115,16 @@ sub _getCodedFields {
     return $cached if $cached;
 
     my $coded_fields = {};
-    my @fields = Koha::MarcSubfieldStructures->search(
-            {
-                frameworkcode    => $frameworkcode,
-                authorised_value => { '>' => '' }
-            },
-            {
-                columns  => [ 'tagfield', 'tagsubfield', 'authorised_value' ],
-                order_by => [ 'tagfield', 'tagsubfield' ]
-            }
-        )->as_list;
+    my @fields       = Koha::MarcSubfieldStructures->search(
+        {
+            frameworkcode    => $frameworkcode,
+            authorised_value => { '>' => '' }
+        },
+        {
+            columns  => [ 'tagfield', 'tagsubfield', 'authorised_value' ],
+            order_by => [ 'tagfield', 'tagsubfield' ]
+        }
+    )->as_list;
     for my $field (@fields) {
         $coded_fields->{ $field->tagfield }->{ $field->tagsubfield }->{'authorised_value'} = $field->authorised_value;
     }

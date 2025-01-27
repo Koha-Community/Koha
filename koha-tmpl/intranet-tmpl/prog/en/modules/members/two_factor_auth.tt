@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Two-factor authentication") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Two-factor authentication") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_two_factor_auth" class="pat">
@@ -33,55 +34,53 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-                [% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-                <h1>Manage two-factor authentication</h1>
+    <h1>Manage two-factor authentication</h1>
 
-                [% IF ( missing_key ) %]
-                    <div id="error_message" class="alert alert-info">
-                        <p>
-                            Operation cannot proceed, please define an encryption key in your configuration.
-                        </p>
-                    </div>
-                [% ELSE %]
-                    [% PROCESS registration_form %]
+    [% IF ( missing_key ) %]
+        <div id="error_message" class="alert alert-info">
+            <p> Operation cannot proceed, please define an encryption key in your configuration. </p>
+        </div>
+    [% ELSE %]
+        [% PROCESS registration_form %]
 
-                    <div id="registration-status">
-                        <div id="registration-status-enabled" [% IF patron.auth_method != "two-factor" %]style="display: none;"[% END %]>
-                            <div class="alert alert-info two-factor-status">Status: Enabled</div>
+        <div id="registration-status">
+            <div id="registration-status-enabled" [% IF patron.auth_method != "two-factor" %]style="display: none;"[% END %]>
+                <div class="alert alert-info two-factor-status">Status: Enabled</div>
 
-                            <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-disable-2FA" />
-                                <input type="submit" value="Disable two-factor authentication" />
-                            </form>
-                        </div>
+                <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-disable-2FA" />
+                    <input type="submit" value="Disable two-factor authentication" />
+                </form>
+            </div>
 
-                        <div id="registration-status-disabled" [% IF patron.auth_method != "password" %]style="display: none;"[% END %]>
-                            <div class="alert alert-info two-factor-status">Status: Disabled</div>
-                            [% IF Koha.Preference('TwoFactorAuthentication') == 'enforced' %]
-                                <div>Two-factor authentication is mandatory to login. If you do not enable now it will be asked at your next login.</div>
-                            [% END %]
-
-                            <input id="enable-2FA" class="btn btn-primary" type="submit" value="Enable two-factor authentication" />
-                        </div>
-                    </div>
+            <div id="registration-status-disabled" [% IF patron.auth_method != "password" %]style="display: none;"[% END %]>
+                <div class="alert alert-info two-factor-status">Status: Disabled</div>
+                [% IF Koha.Preference('TwoFactorAuthentication') == 'enforced' %]
+                    <div>Two-factor authentication is mandatory to login. If you do not enable now it will be asked at your next login.</div>
                 [% END %]
+
+                <input id="enable-2FA" class="btn btn-primary" type="submit" value="Enable two-factor authentication" />
+            </div>
+        </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        $(document).ready(function(){
-            $("#enable-2FA").on("click", function(e){
+        $(document).ready(function () {
+            $("#enable-2FA").on("click", function (e) {
                 e.preventDefault();
                 $.ajax({
                     data: {},
-                    type: 'POST',
-                    url: '/api/v1/auth/two-factor/registration',
+                    type: "POST",
+                    url: "/api/v1/auth/two-factor/registration",
                     success: function (data) {
-                        $("#qr_code").attr('src', data.qr_code);
+                        $("#qr_code").attr("src", data.qr_code);
                         $("#secret32").val(data.secret32);
                         $("#issuer").html(data.issuer);
                         $("#key_id").html(data.key_id);
@@ -95,7 +94,7 @@
                 });
             });
 
-            $("#register-2FA").on("click", function(e){
+            $("#register-2FA").on("click", function (e) {
                 e.preventDefault();
                 const data = {
                     secret32: $("#secret32").val(),
@@ -105,14 +104,14 @@
 
                 $.ajax({
                     data: data,
-                    type: 'POST',
-                    url: '/api/v1/auth/two-factor/registration/verification',
+                    type: "POST",
+                    url: "/api/v1/auth/two-factor/registration/verification",
                     success: function (data) {
                         window.location = "/cgi-bin/koha/members/two_factor_auth.pl";
                     },
                     error: function (data) {
                         const error = data.responseJSON.error;
-                        if ( error == 'Invalid pin' ) {
+                        if (error == "Invalid pin") {
                             $("#errors").html(_("Invalid PIN code")).show();
                         } else {
                             alert(error);
@@ -120,7 +119,6 @@
                     },
                 });
             });
-
         });
     </script>
 [% END %]

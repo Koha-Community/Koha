@@ -38,15 +38,11 @@ subtest 'Koha::Old::Patrons' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron           = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron_unblessed = $patron->unblessed;
     $patron->move_to_deleted;
     $patron->delete;
-    my $deleted_patron = Koha::Old::Patrons->search(
-        {
-            borrowernumber => $patron->borrowernumber
-        }
-    )->next->unblessed;
+    my $deleted_patron = Koha::Old::Patrons->search( { borrowernumber => $patron->borrowernumber } )->next->unblessed;
     delete $deleted_patron->{updated_on};
     delete $patron_unblessed->{updated_on};
     is_deeply( $deleted_patron, $patron_unblessed );
@@ -55,6 +51,7 @@ subtest 'Koha::Old::Patrons' => sub {
 };
 
 subtest 'Koha::Old::Biblios and Koha::Old::Items' => sub {
+
     # Cannot be tested in a meaningful way so far
     ok(1);
 };
@@ -65,17 +62,15 @@ subtest 'Koha::Old::Checkout->library() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Old::Checkouts',
-            value => {
-                branchcode => $library->branchcode
-            }
+            value => { branchcode => $library->branchcode }
         }
     );
 
-    is( ref($checkout->library), 'Koha::Library', 'Object type is correct' );
+    is( ref( $checkout->library ),      'Koha::Library',      'Object type is correct' );
     is( $checkout->library->branchcode, $library->branchcode, 'Right library linked' );
 
     $library->delete;

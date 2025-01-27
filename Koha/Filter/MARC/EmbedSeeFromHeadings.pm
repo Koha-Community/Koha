@@ -48,20 +48,21 @@ In order to differentiate added headings from actual headings, a 'z' is
 put in the first indicator.
 
 =cut
+
 sub filter {
-    my $self = shift;
+    my $self   = shift;
     my $record = shift;
     my $newrecord;
 
     return unless defined $record;
 
-    if (ref $record eq 'ARRAY') {
+    if ( ref $record eq 'ARRAY' ) {
         my @recarray;
         foreach my $thisrec (@$record) {
             push @recarray, $self->_processrecord($thisrec);
         }
         $newrecord = \@recarray;
-    } elsif (ref $record eq 'MARC::Record') {
+    } elsif ( ref $record eq 'MARC::Record' ) {
         $newrecord = $self->_processrecord($record);
     }
 
@@ -69,9 +70,9 @@ sub filter {
 }
 
 sub _processrecord {
-    my ($self, $record) = @_;
+    my ( $self, $record ) = @_;
 
-    $record->append_fields($self->fields($record));
+    $record->append_fields( $self->fields($record) );
 
     return $record;
 }
@@ -85,6 +86,7 @@ Used during Elasticsearch indexing to give special treatment to these field (i.e
 include in facets, sorting, or suggestion fields)
 
 =cut
+
 sub fields {
     my ( $self, $record ) = @_;
 

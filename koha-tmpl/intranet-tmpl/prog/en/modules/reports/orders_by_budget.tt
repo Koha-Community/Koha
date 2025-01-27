@@ -7,11 +7,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Orders by fund") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Orders by fund") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rep_orders_by_budget" class="rep">
@@ -41,118 +42,128 @@
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
 
-[% IF ( current_budget_name ) %]<h1>Orders for fund '[% current_budget_name | html %]'</h1>
-[% ELSE %]<h1>Orders by fund</h1>
-[% END %]
+    [% IF ( current_budget_name ) %]
+        <h1>Orders for fund '[% current_budget_name | html %]'</h1>
+    [% ELSE %]
+        <h1>Orders by fund</h1>
+    [% END %]
 
-[% IF ( get_orders ) %]
-    [% IF ( ordersloop ) %]
-        <div class="page-section">
-            <table id="funds">
-                <thead>
-                <tr>
-                <th>Fund</th>
-                <th>Basket</th>
-                <th>Basket name</th>
-                <th>Basket by</th>
-                <th>Title</th>
-                <th>Currency</th>
-                <th>List price</th>
-                <th>RRP</th>
-                <th>Budgeted cost</th>
-                <th>Quantity</th>
-                <th>Total RRP</th>
-                <th>Total cost</th>
-                <th>Entry date</th>
-                <th>Date received</th>
-                <th>Internal note</th>
-                <th>Vendor note</th>
-                </tr>
-                </thead>
-                <tbody>
-                [% FOREACH ordersloo IN ordersloop %]
-                    <tr>
-                    <td>[% ordersloo.budget_name | html %]</td>
-                    <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | uri %]"> [% ordersloo.basketno | html %]</a></td>
-                    <td>[% ordersloo.basketname | html %]</td>
-                    <td>[% ordersloo.authorisedbyname | html %]</td>
-                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | uri %]"> [% ordersloo.title | html %]</a></td>
-                    <td>[% ordersloo.currency | html %]</td>
-                    <td>[% ordersloo.listprice | $Price %]</td>
-                    <td>[% ordersloo.rrp | $Price %]</td>
-                    <td>[% ordersloo.ecost | $Price %]</td>
-                    <td>[% ordersloo.quantity | html %]</td>
-                    <td>[% ordersloo.total_rrp | $Price %]</td>
-                    <td>[% ordersloo.total_ecost | $Price %]</td>
-                    <td data-order="[% ordersloo.entrydate | html %]">[% ordersloo.entrydate | $KohaDates %]</td>
-                    <td data-order="[% ordersloo.datereceived | html %]">[% ordersloo.datereceived | $KohaDates %]</td>
-                    <td>[% ordersloo.order_internalnote | html %]</td>
-                    <td>[% ordersloo.order_vendornote | html %]</td>
-                    </tr>
-                [% END %]
-                </tbody>
-                <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
+    [% IF ( get_orders ) %]
+        [% IF ( ordersloop ) %]
+            <div class="page-section">
+                <table id="funds">
+                    <thead>
+                        <tr>
+                            <th>Fund</th>
+                            <th>Basket</th>
+                            <th>Basket name</th>
+                            <th>Basket by</th>
+                            <th>Title</th>
+                            <th>Currency</th>
+                            <th>List price</th>
+                            <th>RRP</th>
+                            <th>Budgeted cost</th>
+                            <th>Quantity</th>
+                            <th>Total RRP</th>
+                            <th>Total cost</th>
+                            <th>Entry date</th>
+                            <th>Date received</th>
+                            <th>Internal note</th>
+                            <th>Vendor note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH ordersloo IN ordersloop %]
+                            <tr>
+                                <td>[% ordersloo.budget_name | html %]</td>
+                                <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | uri %]"> [% ordersloo.basketno | html %]</a></td>
+                                <td>[% ordersloo.basketname | html %]</td>
+                                <td>[% ordersloo.authorisedbyname | html %]</td>
+                                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | uri %]"> [% ordersloo.title | html %]</a></td>
+                                <td>[% ordersloo.currency | html %]</td>
+                                <td>[% ordersloo.listprice | $Price %]</td>
+                                <td>[% ordersloo.rrp | $Price %]</td>
+                                <td>[% ordersloo.ecost | $Price %]</td>
+                                <td>[% ordersloo.quantity | html %]</td>
+                                <td>[% ordersloo.total_rrp | $Price %]</td>
+                                <td>[% ordersloo.total_ecost | $Price %]</td>
+                                <td data-order="[% ordersloo.entrydate | html %]">[% ordersloo.entrydate | $KohaDates %]</td>
+                                <td data-order="[% ordersloo.datereceived | html %]">[% ordersloo.datereceived | $KohaDates %]</td>
+                                <td>[% ordersloo.order_internalnote | html %]</td>
+                                <td>[% ordersloo.order_vendornote | html %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                    <tfoot
+                        ><tr
+                            ><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th
+                            ><th></th><th></th></tr
+                    ></tfoot>
                 </table>
             </div>
-    [% END %]
-[% ELSE %]
-        <form name="f" action="/cgi-bin/koha/reports/orders_by_fund.pl" method="get">
-        <fieldset class="rows">
-        <legend>Filters</legend>
-        <ol><li><label for="budgetfilter">Fund: </label>
-        <select name="budgetfilter" id="budgetfilter">
-            <option value="">All funds</option>
-            <option value="activebudgets">All active funds</option>
-        [% FOREACH budgetsloo IN budgetsloop %]
-            [% SET option_class = '' %]
-            [% UNLESS budgetsloo.selected %]
-                [% option_class = budgetsloo.active ? "": "b_inactive" %]
-            [% END %]
-            <option value="[% budgetsloo.value | html %]" class="[% option_class | html %]" [% IF budgetsloo.selected %]selected="selected"[% END %]>
-                [% budgetsloo.description | html %] [% IF !budgetsloo.active %]<span>(inactive)</span>[% END %]
-            </option>
         [% END %]
-        </select>
-        <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
-        <input type="checkbox" id="showbudgets" />
-        </li></ol>
-        </fieldset>
+    [% ELSE %]
+        <form name="f" action="/cgi-bin/koha/reports/orders_by_fund.pl" method="get">
+            <fieldset class="rows">
+                <legend>Filters</legend>
+                <ol
+                    ><li
+                        ><label for="budgetfilter">Fund: </label>
+                        <select name="budgetfilter" id="budgetfilter">
+                            <option value="">All funds</option>
+                            <option value="activebudgets">All active funds</option>
+                            [% FOREACH budgetsloo IN budgetsloop %]
+                                [% SET option_class = '' %]
+                                [% UNLESS budgetsloo.selected %]
+                                    [% option_class = budgetsloo.active ? "": "b_inactive" %]
+                                [% END %]
+                                <option value="[% budgetsloo.value | html %]" class="[% option_class | html %]" [% IF budgetsloo.selected %]selected="selected"[% END %]>
+                                    [% budgetsloo.description | html %] [% IF !budgetsloo.active %]<span>(inactive)</span>[% END %]
+                                </option>
+                            [% END %]
+                        </select>
+                        <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
+                        <input type="checkbox" id="showbudgets" /> </li
+                ></ol>
+            </fieldset>
 
-        <fieldset class="rows">
-        <legend>Output</legend>
-        <ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-            <li><label for="outputfile">To a file:</label>
-                <input type="radio" name="output" value="file" id="outputfile" />
-                <label class="inline" for="basename">Named: </label>
-                <input type="text" name="basename" id="basename" value="Export" />
-                <label class="inline" for="MIME">Into an application </label>
-                <select id='MIME' name='MIME'>
-                [% FOREACH outputFormatloo IN outputFormatloop %]
-                    <option value="[% outputFormatloo | html %]">[% outputFormatloo | html %]</option>
-                [% END %]
-                </select>
-                <select id='sep' name='sep'>
-                [% FOREACH delimiterloo IN delimiterloop %]
-                    [% IF delimiterloo == delimiterPreference %]
-                        <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
-                    [% END %]
-                [% END %]
-                [% FOREACH delimiterloo IN delimiterloop %]
-                    [% IF delimiterloo != delimiterPreference %]
-                        <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
-                    [% END %]
-                [% END %]
-                </select>
-        </li></ol>
-        </fieldset>
+            <fieldset class="rows">
+                <legend>Output</legend>
+                <ol
+                    ><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+                    <li
+                        ><label for="outputfile">To a file:</label>
+                        <input type="radio" name="output" value="file" id="outputfile" />
+                        <label class="inline" for="basename">Named: </label>
+                        <input type="text" name="basename" id="basename" value="Export" />
+                        <label class="inline" for="MIME">Into an application </label>
+                        <select id="MIME" name="MIME">
+                            [% FOREACH outputFormatloo IN outputFormatloop %]
+                                <option value="[% outputFormatloo | html %]">[% outputFormatloo | html %]</option>
+                            [% END %]
+                        </select>
+                        <select id="sep" name="sep">
+                            [% FOREACH delimiterloo IN delimiterloop %]
+                                [% IF delimiterloo == delimiterPreference %]
+                                    <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
+                                [% END %]
+                            [% END %]
+                            [% FOREACH delimiterloo IN delimiterloop %]
+                                [% IF delimiterloo != delimiterPreference %]
+                                    <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li></ol
+                >
+            </fieldset>
 
-        <fieldset class="action">
-        <input type="submit" class="btn btn-primary" value="Submit" />
-        <input type="hidden" name="get_orders" value="1" /></fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="get_orders" value="1"
+            /></fieldset>
         </form>
-
-[% END %]
-
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -177,7 +188,6 @@
             });
         } );
     </script>
-
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

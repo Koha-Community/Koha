@@ -23,7 +23,7 @@ use JSON qw( decode_json );
 use Koha::ERM::Providers::EBSCO;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 sub list {
     my $c = shift or return;
@@ -36,8 +36,7 @@ sub list {
         my $base_total = $result->{totalResults};
 
         my ( $per_page, $page ) = $ebsco->build_query_pagination( $c->req->params->to_hash );
-        my $additional_params =
-          $ebsco->build_additional_params( $c->req->params->to_hash );
+        my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
 
         my $orderby = $additional_params->{name} ? 'relevance' : 'packagename';
         $params = sprintf '?orderby=%s&offset=%s&count=%s', $orderby, $page, $per_page;
@@ -50,24 +49,22 @@ sub list {
         my @packages;
         for my $p ( @{ $result->{packagesList} } ) {
             my $package = $ebsco->build_package($p);
-            $package =
-              $ebsco->embed( $package, $p, $c->req->headers->header('x-koha-embed') );
-              push @packages, $package;
+            $package = $ebsco->embed( $package, $p, $c->req->headers->header('x-koha-embed') );
+            push @packages, $package;
         }
         my $total = $result->{totalResults};
         $total = 10000 if $total > 10000;
 
         $c->add_pagination_headers(
             {
-                base_total   => $base_total,
-                page         => $page,
-                per_page     => $per_page,
-                total        => $total,
+                base_total => $base_total,
+                page       => $page,
+                per_page   => $per_page,
+                total      => $total,
             }
         );
         return $c->render( status => 200, openapi => \@packages );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Authorization::Unauthorized') ) {
                 return $c->render(
@@ -75,7 +72,8 @@ sub list {
                     openapi => {
                         errors => [
                             {
-                                message => "Check your ERMProviderEbscoApiKey/ERMProviderEbscoCustomerID system preferences."
+                                message =>
+                                    "Check your ERMProviderEbscoApiKey/ERMProviderEbscoCustomerID system preferences."
                             }
                         ]
                     }
@@ -93,8 +91,7 @@ sub get {
         my ( $vendor_id, $package_id ) = split '-',
             $c->param('package_id');
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
-        my $p     = $ebsco->request(
-            GET => '/vendors/' . $vendor_id . '/packages/' . $package_id );
+        my $p     = $ebsco->request( GET => '/vendors/' . $vendor_id . '/packages/' . $package_id );
         unless ($p) {
             return $c->render(
                 status  => 404,
@@ -104,16 +101,16 @@ sub get {
 
         my $package = $ebsco->build_package($p);
 
-        $package =
-          $ebsco->embed( $package, $p,
-            $c->req->headers->header('x-koha-embed') );
+        $package = $ebsco->embed(
+            $package, $p,
+            $c->req->headers->header('x-koha-embed')
+        );
 
-          return $c->render(
+        return $c->render(
             status  => 200,
             openapi => $package
-          );
-    }
-    catch {
+        );
+    } catch {
         return $c->unhandled_exception($_);
     };
 }
@@ -139,10 +136,10 @@ sub edit {
 
             return $c->render(
                 status  => 200,
-                openapi => { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
+                openapi => { is_selected =>
+                        $is_selected }    # We don't want to refetch the resource to make sure it has been updated
             );
-        }
-        catch {
+        } catch {
             if ( blessed $_ ) {
                 if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
                     return $c->render(
@@ -155,8 +152,7 @@ sub edit {
 
             return $c->unhandled_exception($_);
         };
-    }
-    catch {
+    } catch {
         return $c->unhandled_exception($_);
     };
 }

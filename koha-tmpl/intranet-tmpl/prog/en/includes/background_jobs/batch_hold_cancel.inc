@@ -3,9 +3,7 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_holds == report.total_success %]
-            <div class="alert alert-info">
-                All holds have successfully been cancelled!
-            </div>
+            <div class="alert alert-info"> All holds have successfully been cancelled! </div>
         [% ELSE %]
             <div class="alert alert-info">
                 <span>[% report.total_success | html %] / [% report.total_holds | html %] holds have successfully been modified. Some errors occurred.</span>
@@ -13,7 +11,6 @@
             </div>
         [% END %]
     [% END %]
-
 [% END %]
 
 [% BLOCK detail %]
@@ -29,13 +26,17 @@
             [% SWITCH m.code %]
             [% CASE 'hold_not_cancelled' %]
                 [% IF m.biblio && m.patron %]
-                    <span>Hold on <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio.biblionumber | uri %]">[% m.biblio.title | html %]</a> for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a> has not been cancelled.</span>
+                    <span
+                        >Hold on <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio.biblionumber | uri %]">[% m.biblio.title | html %]</a> for
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a> has not been cancelled.</span
+                    >
                 [% END %]
                 <span>An error occurred on cancelling.</span>
                 [% SWITCH m.error %]
                 [% CASE 'hold_not_found' %]
                     <span>No hold with id [% m.hold_id | html %] found.</span>
-                [% CASE %]<span>Unknown error '[% m.error | html %]'.</span>
+                [% CASE %]
+                    <span>Unknown error '[% m.error | html %]'.</span>
                 [% END %]
             [% CASE 'hold_cancelled' %]
                 [% biblio_link = BLOCK %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio_id | uri %]">[% m.biblio.title | html %]</a>[% END %]

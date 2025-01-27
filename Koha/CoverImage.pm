@@ -55,16 +55,15 @@ sub new {
 
     my $src_image = delete $params->{src_image};
 
-    if ( $src_image ) {
-          ; # GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to PNG which is lossless...
+    if ($src_image) {
+        ;    # GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to PNG which is lossless...
 
         # Check the pixel size of the image we are about to import...
-        my $thumbnail = $class->_scale_image( $src_image, 140, 200 )
-          ;    # MAX pixel dims are 140 X 200 for thumbnail...
-        my $fullsize = $class->_scale_image( $src_image, 600, 800 )
-          ;    # MAX pixel dims are 600 X 800 for full-size image...
+        my $thumbnail = $class->_scale_image( $src_image, 140, 200 );    # MAX pixel dims are 140 X 200 for thumbnail...
+        my $fullsize =
+            $class->_scale_image( $src_image, 600, 800 );    # MAX pixel dims are 600 X 800 for full-size image...
 
-        $params->{mimetype} = 'image/png';
+        $params->{mimetype}  = 'image/png';
         $params->{imagefile} = $fullsize->png();
         $params->{thumbnail} = $thumbnail->png();
     }
@@ -77,30 +76,25 @@ sub _scale_image {
     my ( $width, $height ) = $image->getBounds();
     if ( $width > $maxwidth || $height > $maxheight ) {
 
-        my $percent_reduce;  # Percent we will reduce the image dimensions by...
+        my $percent_reduce;    # Percent we will reduce the image dimensions by...
         if ( $width > $maxwidth ) {
             $percent_reduce =
-              sprintf( "%.5f", ( $maxwidth / $width ) )
-              ;    # If the width is oversize, scale based on width overage...
-        }
-        else {
-            $percent_reduce =
-              sprintf( "%.5f", ( $maxheight / $height ) )
-              ;    # otherwise scale based on height overage.
+                sprintf( "%.5f", ( $maxwidth / $width ) );   # If the width is oversize, scale based on width overage...
+        } else {
+            $percent_reduce = sprintf( "%.5f", ( $maxheight / $height ) );    # otherwise scale based on height overage.
         }
         my $width_reduce  = sprintf( "%.0f", ( $width * $percent_reduce ) );
         my $height_reduce = sprintf( "%.0f", ( $height * $percent_reduce ) );
-        my $newimage = GD::Image->new( $width_reduce, $height_reduce, 1 )
-          ;        #'1' creates true color image...
-        $newimage->copyResampled( $image, 0, 0, 0, 0, $width_reduce,
-            $height_reduce, $width, $height );
+        my $newimage      = GD::Image->new( $width_reduce, $height_reduce, 1 );    #'1' creates true color image...
+        $newimage->copyResampled(
+            $image, 0, 0, 0, 0, $width_reduce,
+            $height_reduce, $width, $height
+        );
         return $newimage;
-    }
-    else {
+    } else {
         return $image;
     }
 }
-
 
 =head2 Internal methods
 

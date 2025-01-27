@@ -19,7 +19,6 @@ package Koha::AuthorisedValues;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::AuthorisedValue;
@@ -47,12 +46,13 @@ sub search_by_marc_field {
     return unless $tagfield or $tagsubfield;
 
     return $self->SUPER::search(
-        {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
+        {
+            'marc_subfield_structures.frameworkcode' => $frameworkcode,
             ( defined $tagfield    ? ( 'marc_subfield_structures.tagfield'    => $tagfield )    : () ),
             ( defined $tagsubfield ? ( 'marc_subfield_structures.tagsubfield' => $tagsubfield ) : () ),
         },
         {
-            join => { category => 'marc_subfield_structures' },
+            join     => { category => 'marc_subfield_structures' },
             order_by => [ 'category', 'lib', 'lib_opac' ],
         }
     );
@@ -60,18 +60,20 @@ sub search_by_marc_field {
 
 sub search_by_koha_field {
     my ( $self, $params ) = @_;
-    my $frameworkcode    = $params->{frameworkcode} || '';
-    my $kohafield        = $params->{kohafield};
-    my $category         = $params->{category};
+    my $frameworkcode = $params->{frameworkcode} || '';
+    my $kohafield     = $params->{kohafield};
+    my $category      = $params->{category};
 
     return unless $kohafield;
 
     return $self->SUPER::search(
-        {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
+        {
+            'marc_subfield_structures.frameworkcode' => $frameworkcode,
             'marc_subfield_structures.kohafield'     => $kohafield,
-            ( defined $category ? ( category_name    => $category )         : () ),
+            ( defined $category ? ( category_name => $category ) : () ),
         },
-        {   join     => { category => 'marc_subfield_structures' },
+        {
+            join     => { category => 'marc_subfield_structures' },
             distinct => 1,
             order_by => [ 'category', 'lib', 'lib_opac' ],
         }
@@ -85,11 +87,13 @@ sub find_by_koha_field {
     my $authorised_value = $params->{authorised_value};
 
     my $av = $self->SUPER::search(
-        {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
+        {
+            'marc_subfield_structures.frameworkcode' => $frameworkcode,
             'marc_subfield_structures.kohafield'     => $kohafield,
             'me.authorised_value'                    => $authorised_value,
         },
-        {   join     => { category => 'marc_subfield_structures' },
+        {
+            join     => { category => 'marc_subfield_structures' },
             distinct => 1,
         }
     );
@@ -110,7 +114,7 @@ sub get_description_by_koha_field {
     return $cached if $cached;
 
     my $av = $self->find_by_koha_field($params);
-    if ( ! defined $av ){
+    if ( !defined $av ) {
         $memory_cache->set_in_cache( $cache_key, {} );
         return {};
     }
@@ -122,7 +126,7 @@ sub get_description_by_koha_field {
 sub get_descriptions_by_koha_field {
     my ( $self, $params ) = @_;
     my $frameworkcode = $params->{frameworkcode} || '';
-    my $kohafield = $params->{kohafield};
+    my $kohafield     = $params->{kohafield};
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
     my $cache_key    = "AV_descriptions:$frameworkcode:$kohafield";
@@ -174,11 +178,11 @@ sub get_descriptions_by_marc_field {
 }
 
 sub categories {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_resultset->search(
         undef,
         {
-            select => ['category'],
+            select   => ['category'],
             distinct => 1,
             order_by => 'category',
         },

@@ -4,16 +4,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Spine labels") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Spine labels") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' popup => 1 %]
 [% Asset.css("css/spinelabel.css") | $raw %]
 <style>
     @media print {
-        .noprint { display: none; }
+        .noprint {
+            display: none;
+        }
     }
 </style>
 <!-- prettier-ignore-start -->
@@ -21,33 +24,40 @@
 <!-- prettier-ignore-end -->
 </head>
 
-	[% IF ( BarcodeNotFound ) %]
-		<body id="labels_spinelabel-print" class="tools labels">
-            <div class="alert alert-info">The barcode [% Barcode | html %] was not found.</div>
+[% IF ( BarcodeNotFound ) %]
+    <body id="labels_spinelabel-print" class="tools labels">
+    <div class="alert alert-info">The barcode [% Barcode | html %] was not found.</div>
 
-            <nav class="navbar navbar-default fixed-bottom noprint">
-                <div class="container-fluid">
-                    <fieldset class="action">
-                        <button class="btn btn-default close-window">Close</button>
-                    </fieldset>
-                </div>
-            </nav>
-	[% ELSE %]
-            <body id="labels_spinelabel-print" class="tools labels">
-            <div id="spinelabel" class="[% Branches.GetLoggedInBranchcode | html %]" data-loggedinbranch="[% Branches.GetLoggedInBranchcode | html %]" data-homebranch="[% itemhomebranch | html %]" data-holdingbranch="[% itemholdingbranch | html %]">
-                [% content | $raw %]
+    <nav class="navbar navbar-default fixed-bottom noprint">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <button class="btn btn-default close-window">Close</button>
+            </fieldset>
+        </div>
+    </nav>
+[% ELSE %]
+    <body id="labels_spinelabel-print" class="tools labels">
+        <div
+            id="spinelabel"
+            class="[% Branches.GetLoggedInBranchcode | html %]"
+            data-loggedinbranch="[% Branches.GetLoggedInBranchcode | html %]"
+            data-homebranch="[% itemhomebranch | html %]"
+            data-holdingbranch="[% itemholdingbranch | html %]"
+        >
+            [% content | $raw %]
+        </div>
+
+        <nav class="navbar navbar-default fixed-bottom noprint">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <button class="btn btn-primary print-label"><i class="fa fa-print"></i> Print this label</button>
+                    <button class="btn btn-default edit-label"><i class="fa fa-lock"></i> Edit this label</button>
+                </fieldset>
             </div>
-
-            <nav class="navbar navbar-default fixed-bottom noprint">
-                <div class="container-fluid">
-                    <fieldset class="action">
-                        <button class="btn btn-primary print-label"><i class="fa fa-print"></i> Print this label</button>
-                        <button class="btn btn-default edit-label"><i class="fa fa-lock"></i> Edit this label</button>
-                    </fieldset>
-                </div>
-            </nav>
-
-	[% END %]
+        </nav>
+        </body>
+    </body>
+[% END %]
 
 [% Asset.js( "lib/jquery/jquery-3.6.0.min.js" ) | $raw %]
 [% Asset.js( "lib/jquery/jquery-migrate-3.3.2.min.js" ) | $raw %]
@@ -55,24 +65,23 @@
     [% INCLUDE 'slip-print.inc' #printThenClose %]
 [% END %]
 <script>
-    $(document).ready(function(){
-        $(".print-label").on("click", function(e){
+    $(document).ready(function () {
+        $(".print-label").on("click", function (e) {
             e.preventDefault();
             window.print();
             window.close();
         });
 
-        $(".close-window").on("click", function(e){
+        $(".close-window").on("click", function (e) {
             e.preventDefault();
             window.close();
         });
-        $('.edit-label').click( function() {
-                $('#spinelabel').attr('contenteditable', function(index, attr){
-                    return attr == 'true' ? null : 'true';
-                });
-                $('.edit-label .fa').toggleClass('fa-lock').toggleClass('fa-unlock');
+        $(".edit-label").click(function () {
+            $("#spinelabel").attr("contenteditable", function (index, attr) {
+                return attr == "true" ? null : "true";
+            });
+            $(".edit-label .fa").toggleClass("fa-lock").toggleClass("fa-unlock");
         });
     });
 </script>
-
 [% INCLUDE 'popup-bottom.inc' %]

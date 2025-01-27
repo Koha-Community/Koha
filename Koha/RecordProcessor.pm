@@ -89,34 +89,40 @@ Koha::Filter::${schema} namespace, as only the filter name, and
 =back
 
 =cut
+
 sub new {
 
     my $class = shift;
     my $param = shift;
 
-
     my $schema  = $param->{schema}  || 'MARC';
     my $options = $param->{options} || '';
 
-    my $req_filters = ( ref($param->{filters}) ne 'ARRAY' )
-                        ? [ $param->{filters} ]
-                        :   $param->{filters};
-    my @filters = ( );
+    my $req_filters =
+          ( ref( $param->{filters} ) ne 'ARRAY' )
+        ? [ $param->{filters} ]
+        : $param->{filters};
+    my @filters = ();
 
-    foreach my $filter_name (@{ $req_filters }) {
+    foreach my $filter_name ( @{$req_filters} ) {
         next unless $filter_name;
+
         # Fully qualify the module name.
         my $filter_module = $filter_name =~ m/:/ ? $filter_name : "Koha::Filter::${schema}::${filter_name}";
-        if (can_load( modules => { $filter_module => undef } )) {
+        if ( can_load( modules => { $filter_module => undef } ) ) {
             my $filter = $filter_module->new();
             $filter->initialize($param);
             push @filters, $filter;
         }
     }
 
-    my $self = $class->SUPER::new( { schema => $schema,
-                                     filters => \@filters,
-                                     options => $options });
+    my $self = $class->SUPER::new(
+        {
+            schema  => $schema,
+            filters => \@filters,
+            options => $options
+        }
+    );
     bless $self, $class;
     return $self;
 }
@@ -132,8 +138,8 @@ Overloaded accessor, that spreads the new options to the filter objects when set
 sub options {
     my ( $self, $options ) = @_;
 
-    if ( $options ) {  # Set
-        foreach my $filter ( @{$self->filters} ) {
+    if ($options) {    # Set
+        foreach my $filter ( @{ $self->filters } ) {
             $filter->params->{options} = $options;
         }
 
@@ -151,8 +157,9 @@ sub options {
 Bind a normalizer to a particular record.
 
 =cut
+
 sub bind {
-    my $self = shift;
+    my $self   = shift;
     my $record = shift;
 
     $self->{record} = $record;
@@ -169,13 +176,14 @@ Note that $record may be either a scalar or an arrayref, and the
 return value will be of the same type.
 
 =cut
+
 sub process {
-    my $self = shift;
+    my $self   = shift;
     my $record = shift || $self->record;
 
     return unless defined $record;
 
-    foreach my $filterobj (@{$self->filters}) {
+    foreach my $filterobj ( @{ $self->filters } ) {
         next unless $filterobj;
         $filterobj->filter($record);
     }
@@ -186,7 +194,7 @@ sub process {
 sub DESTROY {
     my $self = shift;
 
-    foreach my $filterobj (@{$self->filters}) {
+    foreach my $filterobj ( @{ $self->filters } ) {
         $filterobj->destroy();
     }
 }
@@ -199,11 +207,12 @@ Get a list of available filters. Optionally specify the metadata schema.
 At present only MARC is supported as a schema.
 
 =cut
+
 sub AvailableFilters {
     my $schema = pop || '';
-    my $path = 'Koha::Filter';
-    $path .= "::$schema" if ($schema eq 'MARC');
-    my $finder = Module::Pluggable::Object->new(search_path => $path);
+    my $path   = 'Koha::Filter';
+    $path .= "::$schema" if ( $schema eq 'MARC' );
+    my $finder = Module::Pluggable::Object->new( search_path => $path );
     return $finder->plugins;
 }
 

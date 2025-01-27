@@ -34,15 +34,14 @@ subtest 'periods' => sub {
 
     $schema->storage->txn_begin;
 
-    my $agreement =
-      $builder->build_object( { class => 'Koha::ERM::Agreements' } );
+    my $agreement = $builder->build_object( { class => 'Koha::ERM::Agreements' } );
     is( $agreement->periods->count, 0, "no period yet" );
 
     my $today   = dt_from_string;
     my $periods = [
         {
             started_on            => $today->ymd,
-            ended_on              => $today->clone->add( days => 1 )->ymd,
+            ended_on              => $today->clone->add( days  => 1 )->ymd,
             cancellation_deadline => $today->clone->add( years => 1 )->ymd,
             notes                 => 'just some notes'
         },
@@ -59,8 +58,7 @@ subtest 'periods' => sub {
     my $retrieved_periods = $agreement->periods;
     is( ref($retrieved_periods), 'Koha::ERM::Agreement::Periods' );
     $retrieved_periods =
-      [ map { delete $_->{agreement_id}; delete $_->{agreement_period_id}; $_ }
-          @{ $retrieved_periods->unblessed } ];
+        [ map { delete $_->{agreement_id}; delete $_->{agreement_period_id}; $_ } @{ $retrieved_periods->unblessed } ];
     is_deeply( $retrieved_periods, $periods );
     $agreement->periods( [] );
     is( $agreement->periods->count, 0 );
@@ -74,8 +72,7 @@ subtest 'user_role' => sub {
 
     $schema->storage->txn_begin;
 
-    my $agreement =
-      $builder->build_object( { class => 'Koha::ERM::Agreements' } );
+    my $agreement = $builder->build_object( { class => 'Koha::ERM::Agreements' } );
     is( $agreement->user_roles->count, 0, "no user yet" );
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -94,9 +91,9 @@ subtest 'user_role' => sub {
 
     my $user_roles = [
         {
-            user_id => $patron->borrowernumber,
+            user_id    => $patron->borrowernumber,
             license_id => undef,
-            role    => $role
+            role       => $role
         }
     ];
     $agreement->user_roles($user_roles);
@@ -104,8 +101,7 @@ subtest 'user_role' => sub {
     my $retrieved_user_roles = $agreement->user_roles;
     is( ref($retrieved_user_roles), 'Koha::ERM::UserRoles' );
     $retrieved_user_roles =
-      [ map { delete $_->{agreement_id}; delete $_->{user_role_id}; $_ }
-          @{ $retrieved_user_roles->unblessed } ];
+        [ map { delete $_->{agreement_id}; delete $_->{user_role_id}; $_ } @{ $retrieved_user_roles->unblessed } ];
     is_deeply( $retrieved_user_roles, $user_roles );
     $agreement->user_roles( [] );
     is( $agreement->user_roles->count, 0 );

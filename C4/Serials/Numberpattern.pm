@@ -40,7 +40,6 @@ BEGIN {
     );
 }
 
-
 =head1 NAME
 
 C4::Serials::Numberpattern - Serials numbering pattern module
@@ -55,7 +54,7 @@ this function get all subscription number patterns entered in table
 =cut
 
 sub GetSubscriptionNumberpatterns {
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM subscription_numberpatterns
@@ -63,7 +62,7 @@ sub GetSubscriptionNumberpatterns {
     };
     my $sth = $dbh->prepare($query);
     $sth->execute;
-    my $results = $sth->fetchall_arrayref({});
+    my $results = $sth->fetchall_arrayref( {} );
 
     return @$results;
 }
@@ -77,8 +76,8 @@ this function get the data of the subscription numberpatterns which id is $numbe
 
 sub GetSubscriptionNumberpattern {
     my $numberpatternid = shift;
-    my $dbh = C4::Context->dbh;
-    my $query = qq(
+    my $dbh             = C4::Context->dbh;
+    my $query           = qq(
         SELECT *
         FROM subscription_numberpatterns
         WHERE id = ?
@@ -97,15 +96,15 @@ this function get the data of the subscription numberpatterns which name is $nam
 =cut
 
 sub GetSubscriptionNumberpatternByName {
-    my $name = shift;
-    my $dbh = C4::Context->dbh;
+    my $name  = shift;
+    my $dbh   = C4::Context->dbh;
     my $query = qq(
         SELECT *
         FROM subscription_numberpatterns
         WHERE label = ?
     );
     my $sth = $dbh->prepare($query);
-    my $rv = $sth->execute($name);
+    my $rv  = $sth->execute($name);
 
     return $sth->fetchrow_hashref;
 }
@@ -129,38 +128,40 @@ Add a new numberpattern
 sub AddSubscriptionNumberpattern {
     my $numberpattern = shift;
 
-    unless(
-      ref($numberpattern) eq 'HASH'
-      && defined $numberpattern->{'label'}
-      && $numberpattern->{'label'} ne ''
-      && defined $numberpattern->{'numberingmethod'}
-      && $numberpattern->{'numberingmethod'} ne ''
-    ) {
+    unless ( ref($numberpattern) eq 'HASH'
+        && defined $numberpattern->{'label'}
+        && $numberpattern->{'label'} ne ''
+        && defined $numberpattern->{'numberingmethod'}
+        && $numberpattern->{'numberingmethod'} ne '' )
+    {
         return;
     }
 
     # FIXME label, description and numberingmethod must be mandatory
     my @keys;
     my @values;
-    foreach (qw/ label description numberingmethod displayorder
-      label1 label2 label3 add1 add2 add3 every1 every2 every3
-      setto1 setto2 setto3 whenmorethan1 whenmorethan2 whenmorethan3
-      numbering1 numbering2 numbering3 /) {
-        if(exists $numberpattern->{$_}) {
-            push @keys, $_;
+    foreach (
+        qw/ label description numberingmethod displayorder
+        label1 label2 label3 add1 add2 add3 every1 every2 every3
+        setto1 setto2 setto3 whenmorethan1 whenmorethan2 whenmorethan3
+        numbering1 numbering2 numbering3 /
+        )
+    {
+        if ( exists $numberpattern->{$_} ) {
+            push @keys,   $_;
             push @values, $numberpattern->{$_};
         }
     }
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "INSERT INTO subscription_numberpatterns";
-    $query .= '(' . join(',', @keys) . ')';
-    $query .= ' VALUES (' . ('?,' x (scalar(@keys)-1)) . '?)';
+    $query .= '(' . join( ',', @keys ) . ')';
+    $query .= ' VALUES (' . ( '?,' x ( scalar(@keys) - 1 ) ) . '?)';
     my $sth = $dbh->prepare($query);
-    my $rv = $sth->execute(@values);
+    my $rv  = $sth->execute(@values);
 
-    if(defined $rv) {
-        return $dbh->last_insert_id(undef, undef, "subscription_numberpatterns", undef);
+    if ( defined $rv ) {
+        return $dbh->last_insert_id( undef, undef, "subscription_numberpatterns", undef );
     }
 
     return $rv;
@@ -185,43 +186,41 @@ Modifies a numberpattern
 sub ModSubscriptionNumberpattern {
     my $numberpattern = shift;
 
-    unless(
-      ref($numberpattern) eq 'HASH'
-      && defined $numberpattern->{'id'}
-      && $numberpattern->{'id'} > 0
-      && (
-        (defined $numberpattern->{'label'}
-        && $numberpattern->{'label'} ne '')
-        || !defined $numberpattern->{'label'}
-      )
-      && (
-        (defined $numberpattern->{'numberingmethod'}
-        && $numberpattern->{'numberingmethod'} ne '')
-        || !defined $numberpattern->{'numberingmethod'}
-      )
-    ) {
+    unless (
+           ref($numberpattern) eq 'HASH'
+        && defined $numberpattern->{'id'}
+        && $numberpattern->{'id'} > 0
+        && ( ( defined $numberpattern->{'label'} && $numberpattern->{'label'} ne '' )
+            || !defined $numberpattern->{'label'} )
+        && ( ( defined $numberpattern->{'numberingmethod'} && $numberpattern->{'numberingmethod'} ne '' )
+            || !defined $numberpattern->{'numberingmethod'} )
+        )
+    {
         return;
     }
 
     my @keys;
     my @values;
-    foreach (qw/ label description numberingmethod displayorder
-      label1 label2 label3 add1 add2 add3 every1 every2 every3
-      setto1 setto2 setto3 whenmorethan1 whenmorethan2 whenmorethan3
-      numbering1 numbering2 numbering3 /) {
-        if(exists $numberpattern->{$_}) {
-            push @keys, $_;
+    foreach (
+        qw/ label description numberingmethod displayorder
+        label1 label2 label3 add1 add2 add3 every1 every2 every3
+        setto1 setto2 setto3 whenmorethan1 whenmorethan2 whenmorethan3
+        numbering1 numbering2 numbering3 /
+        )
+    {
+        if ( exists $numberpattern->{$_} ) {
+            push @keys,   $_;
             push @values, $numberpattern->{$_};
         }
     }
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "UPDATE subscription_numberpatterns";
-    $query .= ' SET ' . join(' = ?,', @keys) . ' = ?';
+    $query .= ' SET ' . join( ' = ?,', @keys ) . ' = ?';
     $query .= ' WHERE id = ?';
     my $sth = $dbh->prepare($query);
 
-    return $sth->execute(@values, $numberpattern->{'id'});
+    return $sth->execute( @values, $numberpattern->{'id'} );
 }
 
 =head2 DelSubscriptionNumberpattern
@@ -239,7 +238,7 @@ Delete a number pattern
 sub DelSubscriptionNumberpattern {
     my $numberpatternid = shift;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         DELETE FROM subscription_numberpatterns
         WHERE id = ?
@@ -261,7 +260,7 @@ sub GetSubscriptionsWithNumberpattern {
 
     return unless $numberpatternid;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM subscription
@@ -270,12 +269,11 @@ sub GetSubscriptionsWithNumberpattern {
     };
     my $sth = $dbh->prepare($query);
     my @results;
-    if ($sth->execute($numberpatternid)) {
-        @results = @{ $sth->fetchall_arrayref({}) };
+    if ( $sth->execute($numberpatternid) ) {
+        @results = @{ $sth->fetchall_arrayref( {} ) };
     }
     return @results;
 }
-
 
 1;
 

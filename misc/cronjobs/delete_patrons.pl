@@ -2,31 +2,33 @@
 
 use Modern::Perl;
 
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
-use C4::Members qw( GetBorrowersToExpunge );
+use C4::Members     qw( GetBorrowersToExpunge );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use C4::Log qw( cronlogaction );
 
-my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
-    @category_code, $branchcode, $file, $confirm );
+my (
+    $help,          $verbose,    $not_borrowed_since, $expired_before, $last_seen,
+    @category_code, $branchcode, $file, $confirm
+);
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'h|help'                 => \$help,
-    'v|verbose'              => \$verbose,
-    'not_borrowed_since:s'   => \$not_borrowed_since,
-    'expired_before:s'       => \$expired_before,
-    'last_seen:s'            => \$last_seen,
-    'category_code:s'        => \@category_code,
-    'library:s'              => \$branchcode,
-    'file:s'                 => \$file,
-    'c|confirm'              => \$confirm,
+    'h|help'               => \$help,
+    'v|verbose'            => \$verbose,
+    'not_borrowed_since:s' => \$not_borrowed_since,
+    'expired_before:s'     => \$expired_before,
+    'last_seen:s'          => \$last_seen,
+    'category_code:s'      => \@category_code,
+    'library:s'            => \$branchcode,
+    'file:s'               => \$file,
+    'c|confirm'            => \$confirm,
 ) || pod2usage(1);
 
 if ($help) {
@@ -34,10 +36,10 @@ if ($help) {
 }
 
 $not_borrowed_since = dt_from_string( $not_borrowed_since, 'iso' )
-  if $not_borrowed_since;
+    if $not_borrowed_since;
 
 $expired_before = dt_from_string( $expired_before, 'iso' )
-  if $expired_before;
+    if $expired_before;
 
 if ( $last_seen and not C4::Context->preference('TrackLastPatronActivityTriggers') ) {
     pod2usage(q{The option --last_seen will be ineffective if preference TrackLastPatronActivityTriggers is empty});
@@ -49,10 +51,10 @@ unless ( $not_borrowed_since or $expired_before or $last_seen or @category_code 
 
 my @file_members;
 if ($file) {
-    open(my $fh, '<:encoding(UTF-8)', $file) or die "Could not open file $file' $!";
-    while (my $line = <$fh>) {
+    open( my $fh, '<:encoding(UTF-8)', $file ) or die "Could not open file $file' $!";
+    while ( my $line = <$fh> ) {
         chomp($line);
-        my %fm = ('borrowernumber' => $line);
+        my %fm     = ( 'borrowernumber' => $line );
         my $fm_ref = \%fm;
         push @file_members, $fm_ref;
     }
@@ -63,20 +65,20 @@ my $members;
 if ( $not_borrowed_since or $expired_before or $last_seen or @category_code or $branchcode ) {
     $members = GetBorrowersToExpunge(
         {
-            not_borrowed_since   => $not_borrowed_since,
-            expired_before       => $expired_before,
-            last_seen            => $last_seen,
-            category_code        => \@category_code,
-            branchcode           => $branchcode,
+            not_borrowed_since => $not_borrowed_since,
+            expired_before     => $expired_before,
+            last_seen          => $last_seen,
+            category_code      => \@category_code,
+            branchcode         => $branchcode,
         }
     );
 }
 
-if ($members and @file_members) {
+if ( $members and @file_members ) {
     my @filtered_members;
     for my $member (@$members) {
         for my $fm (@file_members) {
-            if ($member->{borrowernumber} eq $fm->{borrowernumber}) {
+            if ( $member->{borrowernumber} eq $fm->{borrowernumber} ) {
                 push @filtered_members, $fm;
             }
         }
@@ -84,8 +86,8 @@ if ($members and @file_members) {
     $members = \@filtered_members;
 }
 
-if (!defined $members and @file_members) {
-   $members = \@file_members;
+if ( !defined $members and @file_members ) {
+    $members = \@file_members;
 }
 
 unless ($confirm) {
@@ -94,35 +96,35 @@ unless ($confirm) {
     $verbose ||= 1;
 }
 
-say scalar(@$members) . " patrons match conditions" if $verbose;;
+say scalar(@$members) . " patrons match conditions" if $verbose;
 
 my $anonymous_patron = C4::Context->preference("AnonymousPatron");
-my $deleted = 0;
+my $deleted          = 0;
 for my $member (@$members) {
     print "Testing that we can delete patron $member->{borrowernumber}... "
-      if $verbose;
+        if $verbose;
 
     my $borrowernumber = $member->{borrowernumber};
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    unless ( $patron ) {
+    my $patron         = Koha::Patrons->find($borrowernumber);
+    unless ($patron) {
         say "Cannot delete: Patron with borrowernumber $borrowernumber does not exist";
         next;
     }
-    if ( my $charges = $patron->account->non_issues_charges ) { # And what if we owe to this patron?
+    if ( my $charges = $patron->account->non_issues_charges ) {    # And what if we owe to this patron?
         say "Cannot delete patron $borrowernumber: patron has $charges in fines" if $verbose;
         next;
     }
 
-    if ( $anonymous_patron ) {
+    if ($anonymous_patron) {
         if ( $patron->id eq $anonymous_patron ) {
             say "Cannot delete patron $borrowernumber: patron is AnonymousPatron";
             next;
         }
     }
 
-    if ( $confirm ) {
+    if ($confirm) {
         my $deleted = eval { $patron->move_to_deleted; };
-        if ($@ or not $deleted) {
+        if ( $@ or not $deleted ) {
             say "Cannot delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" ) if $verbose;
             next;
         }
@@ -137,10 +139,9 @@ for my $member (@$members) {
     say "OK" if $verbose;
 }
 
-
 say $confirm ? "$deleted patrons deleted" : "$deleted patrons would have been deleted" if $verbose;
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 =head1 NAME
 

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 # Example of framework plugin new style.
@@ -57,9 +57,9 @@ use C4::Output qw( output_html_with_http_headers );
 # event.data.id. This makes a difference when the field is cloned or has
 # been created dynamically (as in additem.js).
 
-my $builder= sub {
+my $builder = sub {
     my $params = shift;
-    my $id = $params->{id};
+    my $id     = $params->{id};
 
     return qq|
 <script>
@@ -99,6 +99,7 @@ function Click$id(event) {
 }
 </script>|;
 };
+
 # NOTE: Did you see the last semicolon? This was just an assignment!
 
 # We continue now with the example launcher.
@@ -112,17 +113,19 @@ function Click$id(event) {
 # When you look at the template EXAMPLE.tt, you can see that the javascript
 # code there puts a new value back into the input field (referenced by index).
 
-my $launcher= sub {
+my $launcher = sub {
     my $params = shift;
-    my $cgi = $params->{cgi};
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name => "cataloguing/value_builder/EXAMPLE.tt",
-        query => $cgi,
-        type => "intranet",
-        flagsrequired => {editcatalogue => '*'},
-    });
+    my $cgi    = $params->{cgi};
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/EXAMPLE.tt",
+            query         => $cgi,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
     $template->param(
-        index => scalar $cgi->param('index'),
+        index  => scalar $cgi->param('index'),
         result => scalar $cgi->param('result'),
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;

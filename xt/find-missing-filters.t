@@ -32,12 +32,12 @@ push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 
 my @errors;
-for my $file ( @files ) {
+for my $file (@files) {
     chomp $file;
     my $content = read_file($file);
-    my @e = t::lib::QA::TemplateFilters::missing_filters($content);
+    my @e       = t::lib::QA::TemplateFilters::missing_filters($content);
     push @errors, { file => $file, errors => \@e } if @e;
 }
 
 is( @errors, 0, "Template variables should be correctly escaped" )
-    or diag(Dumper @errors);
+    or diag( Dumper @errors );

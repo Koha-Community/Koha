@@ -30,21 +30,19 @@ use LWP::UserAgent;
 
 BEGIN {
     require Exporter;
-    our @ISA = qw( Exporter ) ;
+    our @ISA    = qw( Exporter );
     our @EXPORT = qw(
         GetOverDriveToken
     );
 }
 
 sub _request {
-    my ( $request ) = @_;
+    my ($request) = @_;
     my $ua = LWP::UserAgent->new( agent => "Koha " . $Koha::VERSION );
 
     my $response;
-    eval {
-        $response = $ua->request( $request ) ;
-    };
-    if ( $@ )  {
+    eval { $response = $ua->request($request); };
+    if ($@) {
         warn "OverDrive request failed: $@";
         return;
     }
@@ -74,24 +72,23 @@ Returns the token ( as "bearer ..." )  or undef on failure.
 =cut
 
 sub GetOverDriveToken {
-    my $key = C4::Context->preference( 'OverDriveClientKey' );
-    my $secret = C4::Context->preference( 'OverDriveClientSecret' );
+    my $key    = C4::Context->preference('OverDriveClientKey');
+    my $secret = C4::Context->preference('OverDriveClientSecret');
 
-    return unless ( $key && $secret ) ;
+    return unless ( $key && $secret );
 
     my $cache;
 
     eval { $cache = Koha::Caches->get_instance() };
 
     my $token;
-    $cache and $token = $cache->get_from_cache( "overdrive_token" ) and return $token;
+    $cache and $token = $cache->get_from_cache("overdrive_token") and return $token;
 
-    my $request = HTTP::Request::Common::POST( 'https://oauth.overdrive.com/token', [
-        grant_type => 'client_credentials'
-    ] ) ;
+    my $request =
+        HTTP::Request::Common::POST( 'https://oauth.overdrive.com/token', [ grant_type => 'client_credentials' ] );
     $request->header( Authorization => LWP::Authen::Basic->auth_header( $key, $secret ) );
 
-    my $response = _request( $request ) or return;
+    my $response = _request($request) or return;
     if ( $response->header('Content-Type') !~ m!application/json! ) {
         warn "Could not connect to OverDrive: " . $response->message;
         return;
@@ -99,7 +96,8 @@ sub GetOverDriveToken {
     my $contents = from_json( $response->decoded_content );
 
     if ( !$response->is_success ) {
-        warn "Could not log into OverDrive: " . ( $contents ? $contents->{'error_description'} : $response->decoded_content );
+        warn "Could not log into OverDrive: "
+            . ( $contents ? $contents->{'error_description'} : $response->decoded_content );
         return;
     }
 
@@ -107,8 +105,10 @@ sub GetOverDriveToken {
 
     # Fudge factor to prevent spurious failures
     $cache
-      and $cache->set_in_cache( 'overdrive_token', $token,
-        { expiry => $contents->{'expires_in'} - 5 } );
+        and $cache->set_in_cache(
+        'overdrive_token', $token,
+        { expiry => $contents->{'expires_in'} - 5 }
+        );
 
     return $token;
 }

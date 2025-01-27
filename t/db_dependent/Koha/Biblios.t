@@ -28,7 +28,7 @@ use MARC::Field;
 use Mojo::JSON qw(encode_json);
 
 use C4::Items;
-use C4::Biblio qw( AddBiblio ModBiblio GetMarcFromKohaField );
+use C4::Biblio   qw( AddBiblio ModBiblio GetMarcFromKohaField );
 use C4::Reserves qw( AddReserve );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -41,27 +41,21 @@ use t::lib::Mocks;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $dbh     = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
-my $patron = $builder->build( { source => 'Borrower' } );
+my $patron  = $builder->build( { source => 'Borrower' } );
 $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
 my $biblio = Koha::Biblio->new()->store();
 
-my $biblioitem = $schema->resultset('Biblioitem')->new(
-    {
-        biblionumber => $biblio->id
-    }
-)->insert();
+my $biblioitem = $schema->resultset('Biblioitem')->new( { biblionumber => $biblio->id } )->insert();
 
 subtest 'store' => sub {
     plan tests => 1;
     is(
         Koha::Biblios->find( $biblio->biblionumber )->datecreated,
-        output_pref(
-            { dt => dt_from_string, dateformat => 'iso', dateonly => 1 }
-        ),
+        output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } ),
         "datecreated must be set to today if not passed to the constructor"
     );
 };
@@ -76,8 +70,8 @@ subtest 'holds + current_holds' => sub {
         }
     );
     my $holds = $biblio->holds;
-    is( ref($holds), 'Koha::Holds', '->holds should return a Koha::Holds object' );
-    is( $holds->count, 1, '->holds should only return 1 hold' );
+    is( ref($holds),                  'Koha::Holds',           '->holds should return a Koha::Holds object' );
+    is( $holds->count,                1,                       '->holds should only return 1 hold' );
     is( $holds->next->borrowernumber, $patron->borrowernumber, '->holds should return the correct hold' );
     $holds->delete;
 
@@ -100,82 +94,106 @@ subtest 'holds + current_holds' => sub {
 
 subtest 'waiting_or_in_transit' => sub {
     plan tests => 4;
-    my $item = $builder->build_sample_item;
-    my $reserve = $builder->build({
-        source => 'Reserve',
-        value => {
-            biblionumber => $item->biblionumber,
-            found => undef
+    my $item    = $builder->build_sample_item;
+    my $reserve = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                biblionumber => $item->biblionumber,
+                found        => undef
+            }
         }
-    });
+    );
 
-    $reserve = Koha::Holds->find($reserve->{reserve_id});
-    $biblio = $item->biblio;
+    $reserve = Koha::Holds->find( $reserve->{reserve_id} );
+    $biblio  = $item->biblio;
 
-    is($biblio->has_items_waiting_or_intransit, 0, 'Item is neither waiting nor in transit');
+    is( $biblio->has_items_waiting_or_intransit, 0, 'Item is neither waiting nor in transit' );
 
     $reserve->found('W')->store;
-    is($biblio->has_items_waiting_or_intransit, 1, 'Item is waiting');
+    is( $biblio->has_items_waiting_or_intransit, 1, 'Item is waiting' );
 
     $reserve->found('T')->store;
-    is($biblio->has_items_waiting_or_intransit, 1, 'Item is in transit');
+    is( $biblio->has_items_waiting_or_intransit, 1, 'Item is in transit' );
 
-    my $transfer = $builder->build({
-        source => 'Branchtransfer',
-        value => {
-            itemnumber => $item->itemnumber,
-            datearrived => undef,
-            datecancelled => undef,
+    my $transfer = $builder->build(
+        {
+            source => 'Branchtransfer',
+            value  => {
+                itemnumber    => $item->itemnumber,
+                datearrived   => undef,
+                datecancelled => undef,
+            }
         }
-    });
-    my $t = Koha::Database->new()->schema()->resultset( 'Branchtransfer' )->find($transfer->{branchtransfer_id});
+    );
+    my $t = Koha::Database->new()->schema()->resultset('Branchtransfer')->find( $transfer->{branchtransfer_id} );
     $reserve->found(undef)->store;
-    is($biblio->has_items_waiting_or_intransit, 1, 'Item has transfer');
+    is( $biblio->has_items_waiting_or_intransit, 1, 'Item has transfer' );
 };
 
 subtest 'can_be_transferred' => sub {
     plan tests => 8;
 
-    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
-    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  1 );
+    t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
-    my $item = $builder->build_sample_item(
+    my $biblio   = $builder->build_sample_biblio( { itemtype => 'ONLY1' } );
+    my $item     = $builder->build_sample_item(
         {
             biblionumber => $biblio->biblionumber,
             library      => $library1->branchcode
         }
     );
 
-    is(Koha::Item::Transfer::Limits->search({
-        fromBranch => $library1->branchcode,
-        toBranch => $library2->branchcode,
-    })->count, 0, 'There are no transfer limits between libraries.');
-    ok($biblio->can_be_transferred({ to => $library2 }),
-        'Some items of this biblio can be transferred between libraries.');
+    is(
+        Koha::Item::Transfer::Limits->search(
+            {
+                fromBranch => $library1->branchcode,
+                toBranch   => $library2->branchcode,
+            }
+        )->count,
+        0,
+        'There are no transfer limits between libraries.'
+    );
+    ok(
+        $biblio->can_be_transferred( { to => $library2 } ),
+        'Some items of this biblio can be transferred between libraries.'
+    );
 
-    my $limit = Koha::Item::Transfer::Limit->new({
-        fromBranch => $library1->branchcode,
-        toBranch => $library2->branchcode,
-        itemtype => $item->effective_itemtype,
-    })->store;
-    is(Koha::Item::Transfer::Limits->search({
-        fromBranch => $library1->branchcode,
-        toBranch => $library2->branchcode,
-    })->count, 1, 'Given we have added a transfer limit that applies for all '
-        .'of this biblio\s items,');
-    is($biblio->can_be_transferred({ to => $library2 }), 0,
-        'None of the items of biblio can no longer be transferred between '
-        .'libraries.');
-    is($biblio->can_be_transferred({ to => $library2, from => $library1 }), 0,
-         'We get the same result also if we pass the from-library parameter.');
-    $item->holdingbranch($library2->branchcode)->store;
-    is($biblio->can_be_transferred({ to => $library2 }), 1, 'Given one of the '
-         .'items is already located at to-library, then the transfer is possible.');
-    $item->holdingbranch($library1->branchcode)->store;
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $library1->branchcode,
+            toBranch   => $library2->branchcode,
+            itemtype   => $item->effective_itemtype,
+        }
+    )->store;
+    is(
+        Koha::Item::Transfer::Limits->search(
+            {
+                fromBranch => $library1->branchcode,
+                toBranch   => $library2->branchcode,
+            }
+        )->count,
+        1,
+        'Given we have added a transfer limit that applies for all ' . 'of this biblio\s items,'
+    );
+    is(
+        $biblio->can_be_transferred( { to => $library2 } ), 0,
+        'None of the items of biblio can no longer be transferred between ' . 'libraries.'
+    );
+    is(
+        $biblio->can_be_transferred( { to => $library2, from => $library1 } ), 0,
+        'We get the same result also if we pass the from-library parameter.'
+    );
+    $item->holdingbranch( $library2->branchcode )->store;
+    is(
+        $biblio->can_be_transferred( { to => $library2 } ), 1,
+        'Given one of the ' . 'items is already located at to-library, then the transfer is possible.'
+    );
+    $item->holdingbranch( $library1->branchcode )->store;
 
     my $item2 = $builder->build_sample_item(
         {
@@ -184,13 +202,19 @@ subtest 'can_be_transferred' => sub {
             holdingbranch => $library3->branchcode,
         }
     );
-    is($biblio->can_be_transferred({ to => $library2 }), 1, 'Given we added '
-        .'another item that should have no transfer limits applying on, then '
-        .'the transfer is possible.');
-    $item2->holdingbranch($library1->branchcode)->store;
-    is($biblio->can_be_transferred({ to => $library2 }), 0, 'Given all of items'
-        .' of the biblio are from same, transfer limited library, then transfer'
-        .' is not possible.');
+    is(
+        $biblio->can_be_transferred( { to => $library2 } ), 1,
+        'Given we added '
+            . 'another item that should have no transfer limits applying on, then '
+            . 'the transfer is possible.'
+    );
+    $item2->holdingbranch( $library1->branchcode )->store;
+    is(
+        $biblio->can_be_transferred( { to => $library2 } ), 0,
+        'Given all of items'
+            . ' of the biblio are from same, transfer limited library, then transfer'
+            . ' is not possible.'
+    );
 };
 
 subtest 'custom_cover_image_url' => sub {
@@ -198,13 +222,13 @@ subtest 'custom_cover_image_url' => sub {
 
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{isbn}_{issn}.png' );
 
-    my $isbn       = '0553573403 | 9780553573404 (pbk.).png';
-    my $issn       = 'my_issn';
-    my $cf_value   = 'from_control_field';
-    my $biblio     = $builder->build_sample_biblio;
+    my $isbn        = '0553573403 | 9780553573404 (pbk.).png';
+    my $issn        = 'my_issn';
+    my $cf_value    = 'from_control_field';
+    my $biblio      = $builder->build_sample_biblio;
     my $marc_record = $biblio->metadata->record;
-    my ( $isbn_tag, $isbn_subfield ) =  GetMarcFromKohaField( 'biblioitems.isbn' );
-    my ( $issn_tag, $issn_subfield ) =  GetMarcFromKohaField( 'biblioitems.issn' );
+    my ( $isbn_tag, $isbn_subfield ) = GetMarcFromKohaField('biblioitems.isbn');
+    my ( $issn_tag, $issn_subfield ) = GetMarcFromKohaField('biblioitems.issn');
     $marc_record->append_fields(
         MARC::Field->new( $isbn_tag, '', '', $isbn_subfield => $isbn ),
         MARC::Field->new( $issn_tag, '', '', $issn_subfield => $issn ),
@@ -225,11 +249,14 @@ subtest 'custom_cover_image_url' => sub {
     is( $biblio->custom_cover_image_url, "https://my_url/$normalized_isbn.png" );
 
     $biblio->biblioitem->isbn('')->store;
-    is( $biblio->custom_cover_image_url, undef, "Don't generate the url if the biblio does not have the value needed to generate it" );
+    is(
+        $biblio->custom_cover_image_url, undef,
+        "Don't generate the url if the biblio does not have the value needed to generate it"
+    );
 
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{001}.png' );
     is( $biblio->custom_cover_image_url, undef, 'Record does not have 001' );
-    $marc_record->append_fields(MARC::Field->new('001', $cf_value));
+    $marc_record->append_fields( MARC::Field->new( '001', $cf_value ) );
     C4::Biblio::ModBiblio( $marc_record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
     is( $biblio->get_from_storage->custom_cover_image_url, "https://my_url/$cf_value.png", 'URL generated using 001' );
@@ -244,14 +271,14 @@ subtest 'pickup_locations() tests' => sub {
     $schema->storage->txn_begin;
 
     # Build 8 libraries
-    my $l_1 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_2 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_3 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_4 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_5 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_6 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_7 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $l_8 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_5 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_6 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_7 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $l_8 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
 
     # Mock Koha::Item->pickup_locations so we have control on the output
     # The $switch variable controls the output.
@@ -278,23 +305,18 @@ subtest 'pickup_locations() tests' => sub {
     my $biblio_2 = $builder->build_sample_biblio;
 
     # Two items each
-    my $item_1_1 = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber });
-    my $item_1_2 = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber });
-    my $item_2_1 = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
-    my $item_2_2 = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
+    my $item_1_1 = $builder->build_sample_item( { biblionumber => $biblio_1->biblionumber } );
+    my $item_1_2 = $builder->build_sample_item( { biblionumber => $biblio_1->biblionumber } );
+    my $item_2_1 = $builder->build_sample_item( { biblionumber => $biblio_2->biblionumber } );
+    my $item_2_2 = $builder->build_sample_item( { biblionumber => $biblio_2->biblionumber } );
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $biblios = Koha::Biblios->search(
-        {
-            biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ]
-        }
-    );
+    my $biblios = Koha::Biblios->search( { biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ] } );
 
-    throws_ok
-      { $biblios->pickup_locations }
-      'Koha::Exceptions::MissingParameter',
-      'Exception thrown on missing parameter';
+    throws_ok { $biblios->pickup_locations }
+    'Koha::Exceptions::MissingParameter',
+        'Exception thrown on missing parameter';
 
     is( $@->parameter, 'patron', 'Exception param correctly set' );
 
@@ -311,9 +333,8 @@ subtest 'pickup_locations() tests' => sub {
         )->_resultset->get_column('branchcode')->all
     ];
 
-    my $pickup_locations_ids = [
-        $biblios->pickup_locations({ patron => $patron })->_resultset->get_column('branchcode')->all
-    ];
+    my $pickup_locations_ids =
+        [ $biblios->pickup_locations( { patron => $patron } )->_resultset->get_column('branchcode')->all ];
 
     is_deeply(
         $library_ids,

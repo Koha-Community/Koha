@@ -44,7 +44,7 @@ use File::Temp;
 use CGI qw ( -utf8 );
 use GD;
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Biblios;
 use Koha::CoverImages;
@@ -57,17 +57,17 @@ my $input = CGI->new;
 my $fileID = $input->param('uploadedfileid');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/upload-images.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'upload_local_cover_images' },
+        template_name => "tools/upload-images.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'upload_local_cover_images' },
     }
 );
 
-my $filetype       = $input->param('filetype');
-my $biblionumber   = $input->param('biblionumber');
-my $itemnumber     = $input->param('itemnumber');
-my $replace = !C4::Context->preference("AllowMultipleCovers")
+my $filetype     = $input->param('filetype');
+my $biblionumber = $input->param('biblionumber');
+my $itemnumber   = $input->param('itemnumber');
+my $replace      = !C4::Context->preference("AllowMultipleCovers")
     || $input->param('replace');
 my $op = $input->param('op') // q{};
 
@@ -77,13 +77,13 @@ my $biblio;
 my $cover_images;
 my $item;
 
-if ( $itemnumber ) {
-    $item = Koha::Items->find($itemnumber);
+if ($itemnumber) {
+    $item         = Koha::Items->find($itemnumber);
     $biblionumber = $item->biblionumber;
-    $biblio = Koha::Biblios->find( $biblionumber );
+    $biblio       = Koha::Biblios->find($biblionumber);
     $cover_images = $item->cover_images->as_list;
-} elsif ( $biblionumber ){
-    $biblio = Koha::Biblios->find( $biblionumber );
+} elsif ($biblionumber) {
+    $biblio       = Koha::Biblios->find($biblionumber);
     $cover_images = $biblio->cover_images->as_list;
 }
 
@@ -99,18 +99,18 @@ my $total = 0;
 my @results;
 
 if ( $op eq 'cud-process' && $fileID ) {
-    my $upload = Koha::UploadedFiles->find( $fileID );
+    my $upload = Koha::UploadedFiles->find($fileID);
     if ( $filetype eq 'image' ) {
         my $fh       = $upload->file_handle;
         my $srcimage = GD::Image->new($fh);
         $fh->close if $fh;
         if ( defined $srcimage ) {
             eval {
-                if ( $replace ) {
-                    if ( $itemnumber ) {
+                if ($replace) {
+                    if ($itemnumber) {
                         Koha::Items->find($itemnumber)->cover_images->delete;
-                    } elsif ( $biblionumber ) {
-                        Koha::Biblios->find($biblionumber)->cover_images->search({ itemnumber => undef })->delete;
+                    } elsif ($biblionumber) {
+                        Koha::Biblios->find($biblionumber)->cover_images->search( { itemnumber => undef } )->delete;
                     }
                 }
 
@@ -126,25 +126,21 @@ if ( $op eq 'cud-process' && $fileID ) {
             if ($@) {
                 warn $@;
                 $error = 'DBERR';
-            }
-            else {
+            } else {
                 $total = 1;
             }
-        }
-        else {
+        } else {
             $error = 'OPNIMG';
         }
         undef $srcimage;
-    }
-    else {
+    } else {
         my $filename = $upload->full_path;
-        my $dirname = File::Temp::tempdir( CLEANUP => 1 );
+        my $dirname  = File::Temp::tempdir( CLEANUP => 1 );
         qx/unzip $filename -d $dirname/;
         my $exit_code = $?;
         unless ( $exit_code == 0 ) {
             $error = 'UZIPFAIL';
-        }
-        else {
+        } else {
             my @directories;
             push @directories, "$dirname";
             foreach my $recursive_dir (@directories) {
@@ -152,7 +148,7 @@ if ( $op eq 'cud-process' && $fileID ) {
                 opendir $dir, $recursive_dir;
                 while ( my $entry = readdir $dir ) {
                     push @directories, "$recursive_dir/$entry"
-                      if ( -d "$recursive_dir/$entry" and $entry !~ /^[._]/ );
+                        if ( -d "$recursive_dir/$entry" and $entry !~ /^[._]/ );
                 }
                 closedir $dir;
             }
@@ -164,32 +160,31 @@ if ( $op eq 'cud-process' && $fileID ) {
                     $file = $idlink;
                 } elsif ( -e $datalink && !-l $datalink ) {
                     $file = $datalink;
-                }
-                else {
+                } else {
                     next;
                 }
                 if ( open( my $fh, '<', $file ) ) {
                     while ( my $line = <$fh> ) {
                         my $delim =
-                            ( $line =~ /\t/ ) ? "\t"
-                          : ( $line =~ /,/ )  ? ","
-                          :                     "";
+                              ( $line =~ /\t/ ) ? "\t"
+                            : ( $line =~ /,/ )  ? ","
+                            :                     "";
 
                         unless ( $delim eq "," || $delim eq "\t" ) {
-                            warn "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
+                            warn
+                                "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
                             $error = 'DELERR';
                             next;
-                        }
-                        else {
+                        } else {
                             ( $biblionumber, $filename ) = split $delim, $line, 2;
-                            $biblionumber =~
-                              s/[\"\r\n]//g;    # remove offensive characters
-                            $filename =~ s/[\"\r\n]//g;
-                            $filename =~ s/^\s+//;
-                            $filename =~ s/\s+$//;
-                            my $full_filename = Cwd::abs_path("$dir/$filename"); #Resolve any relative filepath references
+                            $biblionumber =~ s/[\"\r\n]//g;    # remove offensive characters
+                            $filename     =~ s/[\"\r\n]//g;
+                            $filename     =~ s/^\s+//;
+                            $filename     =~ s/\s+$//;
+                            my $full_filename =
+                                Cwd::abs_path("$dir/$filename");    #Resolve any relative filepath references
                             my $srcimage;
-                            if ( $full_filename =~ /^\Q$dir\E/ ){
+                            if ( $full_filename =~ /^\Q$dir\E/ ) {
                                 $srcimage = GD::Image->new($full_filename);
                             }
                             my $biblio;
@@ -197,20 +192,20 @@ if ( $op eq 'cud-process' && $fileID ) {
                             if ( defined $srcimage ) {
                                 $total++;
                                 eval {
-                                    if ( $replace ) {
-                                        if ( $biblionumber ) {
-                                            $biblio = Koha::Biblios->find( $biblionumber );
+                                    if ($replace) {
+                                        if ($biblionumber) {
+                                            $biblio = Koha::Biblios->find($biblionumber);
                                             $biblio->cover_images->delete;
-                                        } elsif ( $itemnumber ) {
+                                        } elsif ($itemnumber) {
                                             $item = Koha::Items->find($itemnumber);
                                             $item->cover_images->delete;
                                             $biblio = Koha::Biblios->find( $item->{biblionumber} );
                                         }
                                     } else {
-                                        if( $biblionumber ){
-                                            $biblio = Koha::Biblios->find( $biblionumber );
-                                        } elsif ( $itemnumber ){
-                                            $item = Koha::Items->find($itemnumber);
+                                        if ($biblionumber) {
+                                            $biblio = Koha::Biblios->find($biblionumber);
+                                        } elsif ($itemnumber) {
+                                            $item   = Koha::Items->find($itemnumber);
                                             $biblio = Koha::Biblios->find( $item->{biblionumber} );
                                         } else {
                                             warn "Problem.";
@@ -219,8 +214,8 @@ if ( $op eq 'cud-process' && $fileID ) {
 
                                     push @results, {
                                         biblionumber => $biblionumber,
-                                        itemnumber => $itemnumber,
-                                        title => $biblio->title
+                                        itemnumber   => $itemnumber,
+                                        title        => $biblio->title
                                     };
 
                                     Koha::CoverImage->new(
@@ -235,8 +230,7 @@ if ( $op eq 'cud-process' && $fileID ) {
                                 if ($@) {
                                     $error = 'DBERR';
                                 }
-                            }
-                            else {
+                            } else {
                                 $error = 'OPNIMG';
                             }
                             undef $srcimage;
@@ -248,14 +242,13 @@ if ( $op eq 'cud-process' && $fileID ) {
                         }
                     }
                     close($fh);
-                }
-                else {
+                } else {
                     $error = 'OPNLINK';
                 }
             }
         }
     }
-    if( $error ){
+    if ($error) {
         $template->param(
             total        => $total,
             uploadimage  => 1,
@@ -263,14 +256,15 @@ if ( $op eq 'cud-process' && $fileID ) {
             biblionumber => $biblionumber || Koha::Items->find($itemnumber)->biblionumber,
             itemnumber   => $itemnumber,
         );
-    } elsif ( @results ){
+    } elsif (@results) {
         $template->param(
-            total        => $total,
-            uploadimage  => 1,
-            results      => \@results
+            total       => $total,
+            uploadimage => 1,
+            results     => \@results
         );
     } else {
-        print $input->redirect("/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
+        print $input->redirect(
+            "/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
     }
 }
 

@@ -21,7 +21,7 @@ use Modern::Perl;
 use Carp qw( carp );
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw( -utf8 );
+use CGI      qw( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Patrons;
@@ -37,41 +37,47 @@ unless ( C4::Context->preference('useDischarge') ) {
 my $op = $input->param("op") // '';
 
 # Getting the template and auth
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-    template_name => "opac-discharge.tt",
-    query         => $input,
-    type          => "opac",
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "opac-discharge.tt",
+        query         => $input,
+        type          => "opac",
+    }
+);
 
-my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({ borrowernumber => $loggedinuser });
-if ($can_be_discharged == 0) {
+my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $loggedinuser } );
+if ( $can_be_discharged == 0 ) {
     $template->param( has_checkouts => 1 );
 }
 
-my $pending = Koha::Patron::Discharge::count({
-    borrowernumber => $loggedinuser,
-    pending        => 1,
-});
-my $available = Koha::Patron::Discharge::is_discharged({borrowernumber => $loggedinuser});
+my $pending = Koha::Patron::Discharge::count(
+    {
+        borrowernumber => $loggedinuser,
+        pending        => 1,
+    }
+);
+my $available = Koha::Patron::Discharge::is_discharged( { borrowernumber => $loggedinuser } );
 
 if ( $op eq 'cud-request' ) {
-    if ($pending || $available) {
+    if ( $pending || $available ) {
+
         # Request already done
         print $input->redirect("/cgi-bin/koha/opac-discharge.pl");
         exit;
     }
-    my $success = Koha::Patron::Discharge::request({
-        borrowernumber => $loggedinuser,
-    });
+    my $success = Koha::Patron::Discharge::request(
+        {
+            borrowernumber => $loggedinuser,
+        }
+    );
     if ($success) {
         $template->param( success => 1 );
-    }
-    else {
+    } else {
         $template->param( has_issues => 1 );
     }
-}
-elsif ( $op eq 'get' ) {
+} elsif ( $op eq 'get' ) {
     unless ($available) {
+
         # No valid discharge to get
         print $input->redirect("/cgi-bin/koha/opac-discharge.pl");
         exit;
@@ -79,11 +85,13 @@ elsif ( $op eq 'get' ) {
     eval {
 
         # Getting member data
-        my $patron = Koha::Patrons->find( $loggedinuser );
-        my $pdf_path = Koha::Patron::Discharge::generate_as_pdf({
-            borrowernumber => $loggedinuser,
-            branchcode => $patron->branchcode,
-        });
+        my $patron   = Koha::Patrons->find($loggedinuser);
+        my $pdf_path = Koha::Patron::Discharge::generate_as_pdf(
+            {
+                borrowernumber => $loggedinuser,
+                branchcode     => $patron->branchcode,
+            }
+        );
 
         binmode(STDOUT);
         print $input->header(
@@ -96,15 +104,15 @@ elsif ( $op eq 'get' ) {
         close $fh;
         print @lines;
     };
-    if ( $@ ) {
+    if ($@) {
         carp $@;
-        $template->param( messages => [ {type => 'error', code => 'unable_to_generate_pdf'} ] );
+        $template->param( messages => [ { type => 'error', code => 'unable_to_generate_pdf' } ] );
     } else {
+
         # no error, pdf is sent, so stop sending data to browser
         exit;
     }
-}
-else {
+} else {
     $template->param(
         available => $available,
         pending   => $pending,

@@ -15,8 +15,7 @@
                             <ol>
                                 <li id="batch_name">
                                     <label class="required" for="name">Batch name:</label>
-                                    <input type="text" autocomplete="off" name="name" id="name" type="text"
-                                    value="" />
+                                    <input type="text" autocomplete="off" name="name" id="name" type="text" value="" />
                                 </li>
                                 <li id="batch_patron">
                                     <label class="required" for="batchcardnumber">Card number, username or surname:</label>
@@ -56,13 +55,9 @@
                         </fieldset>
                     </form>
                     <div id="create-progress" class="alert alert-info" role="alert" style="display:none">
-                        <span id="progress-label"><strong></strong></span> -
-                        Items processed: <span id="processed_count">0</span> out of <span id="processed_total">0</span>.
-                        Items failed: <span id="processed_failed">0</span>.
+                        <span id="progress-label"><strong></strong></span> - Items processed: <span id="processed_count">0</span> out of <span id="processed_total">0</span>. Items failed: <span id="processed_failed">0</span>.
                         <div class="progress">
-                            <div id="processed_progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
-                                0%
-                            </div>
+                            <div id="processed_progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;"> 0% </div>
                         </div>
                     </div>
                     <table id="identifier-table" style="display:none">
@@ -74,13 +69,12 @@
                                 <th scope="col">Request ID</th>
                                 <th scope="col">Request status</th>
                                 [% IF Koha.Preference('ILLCheckAvailability') %]
-                                <th scope="col">Availability</th>
+                                    <th scope="col">Availability</th>
                                 [% END %]
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody id="identifier-table-body">
-                        </tbody>
+                        <tbody id="identifier-table-body"> </tbody>
                     </table>
                 </div>
                 <div id="create-requests" style="display:none">

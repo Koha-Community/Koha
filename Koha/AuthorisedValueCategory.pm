@@ -17,7 +17,6 @@ package Koha::AuthorisedValueCategory;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Exceptions;
 
@@ -40,7 +39,7 @@ Returns the authorised values for this authorised value category
 =cut
 
 sub authorised_values {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $authorised_values_rs = $self->_result->authorised_values;
     return Koha::AuthorisedValues->_new_from_dbic($authorised_values_rs);

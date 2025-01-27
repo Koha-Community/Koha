@@ -2,65 +2,61 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 127 builder") | html %] &rsaquo;
-    [% t("Cataloguing") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 127 builder") | html %]
+        &rsaquo; [% t("Cataloguing") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_127" class="cat value_builder">
-    <h1>UNIMARC field 127 builder</h1>
-    <form method="get" name="f_pop" action="">
-        <div class="page-section">
-            <table>
-                <tr><th colspan="9">(Complete with 0 on the left)</th></tr>
-                <tr><td><label for="f1">Hours:</label></td>
-                    <td><input type="text" name="f1" id="f1" maxlength="2"
-                        size="3"
-                        value="[% f1 | html %]" /></td>
-                    <td><label for="f2">Minutes:</label></td>
-                    <td><input type="text" name="f2" id="f2" maxlength="2"
-                        size="3"
-                        value="[% f2 | html %]" /></td>
-                    <td><label for="f3">Seconds:</label></td>
-                    <td><input type="text" name="f3" id="f3" maxlength="2"
-                        size="3"
-                        value="[% f3 | html %]" /></td>
-                </tr>
-            </table>
-        </div> <!-- /.page-section -->
+<h1>UNIMARC field 127 builder</h1>
+<form method="get" name="f_pop" action="">
+    <div class="page-section">
+        <table>
+            <tr><th colspan="9">(Complete with 0 on the left)</th></tr>
+            <tr
+                ><td><label for="f1">Hours:</label></td>
+                <td><input type="text" name="f1" id="f1" maxlength="2" size="3" value="[% f1 | html %]" /></td>
+                <td><label for="f2">Minutes:</label></td>
+                <td><input type="text" name="f2" id="f2" maxlength="2" size="3" value="[% f2 | html %]" /></td>
+                <td><label for="f3">Seconds:</label></td>
+                <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" /></td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.page-section -->
 
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
-                    <button class="btn btn-default close_window">Cancel</button>
-                </fieldset>
-            </div>
-        </nav>
-
-    </form>
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
+</form>
 
 [% MACRO jsinclude BLOCK %]
     <script>
         function report() {
-            document.f_pop.f1.value=document.f_pop.f1.value+'   ';
-            document.f_pop.f2.value=document.f_pop.f2.value+'  ';
-            document.f_pop.f3.value=document.f_pop.f3.value+'  ';
+          document.f_pop.f1.value=document.f_pop.f1.value+'   ';
+          document.f_pop.f2.value=document.f_pop.f2.value+'  ';
+          document.f_pop.f3.value=document.f_pop.f3.value+'  ';
 
-            document.f_pop.f1.value=document.f_pop.f1.value.substring(0,2);
-            document.f_pop.f2.value=document.f_pop.f2.value.substring(0,2);
-            document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
+          document.f_pop.f1.value=document.f_pop.f1.value.substring(0,2);
+          document.f_pop.f2.value=document.f_pop.f2.value.substring(0,2);
+          document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
 
-            var doc = opener.document;
-            var field = doc.getElementById("[% index | html %]");
+          var doc = opener.document;
+          var field = doc.getElementById("[% index | html %]");
 
-            field.value = document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value;
-            self.close();
-            return false;
-          }
+          field.value = document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value;
+          self.close();
+          return false;
+        }
     </script>
 [% END %]
 

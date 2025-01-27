@@ -18,10 +18,10 @@ package Koha::Template::Plugin::JSConsents;
 use Modern::Perl;
 
 use Template::Plugin;
-use base qw( Template::Plugin );
+use base         qw( Template::Plugin );
 use MIME::Base64 qw{ decode_base64 };
-use JSON qw{ decode_json };
-use Encode qw{ encode_utf8 };
+use JSON         qw{ decode_json };
+use Encode       qw{ encode_utf8 };
 
 use C4::Context;
 

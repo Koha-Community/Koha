@@ -19,7 +19,6 @@ package Koha::Checkouts::ReturnClaims;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Checkouts::ReturnClaim;
@@ -45,7 +44,7 @@ sub unresolved {
 
     my $results = $self->_resultset()->search_rs( { resolved_on => undef } );
 
-    return Koha::Checkouts::ReturnClaims->_new_from_dbic( $results );
+    return Koha::Checkouts::ReturnClaims->_new_from_dbic($results);
 }
 
 =head3 resolved
@@ -57,7 +56,7 @@ sub resolved {
 
     my $results = $self->_resultset()->search_rs( { resolved_on => { '!=' => undef } } );
 
-    return Koha::Checkouts::ReturnClaims->_new_from_dbic( $results );
+    return Koha::Checkouts::ReturnClaims->_new_from_dbic($results);
 }
 
 =head3 _type

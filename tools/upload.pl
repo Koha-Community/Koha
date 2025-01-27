@@ -21,35 +21,36 @@ use Modern::Perl;
 use CGI qw/-utf8/;
 use JSON;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::UploadedFiles;
 
 use constant ERR_READING     => 'UPLERR_FILE_NOT_READ';
-use constant ALERT_DELETED   => 'UPL_FILE_DELETED'; # alert, no error
+use constant ALERT_DELETED   => 'UPL_FILE_DELETED';          # alert, no error
 use constant ERR_NOT_DELETED => 'UPLERR_FILE_NOT_DELETED';
 
-my $input  = CGI::->new;
-my $op     = $input->param('op') // 'new';
-my $plugin = $input->param('plugin');
-my $index  = $input->param('index');         # MARC editor input field id
-my $term   = $input->param('term');
-my $id     = $input->param('id');
-my $msg    = $input->param('msg');
+my $input          = CGI::->new;
+my $op             = $input->param('op') // 'new';
+my $plugin         = $input->param('plugin');
+my $index          = $input->param('index');                 # MARC editor input field id
+my $term           = $input->param('term');
+my $id             = $input->param('id');
+my $msg            = $input->param('msg');
 my $browsecategory = $input->param('browsecategory');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "tools/upload.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'upload_general_files' },
+    {
+        template_name => "tools/upload.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'upload_general_files' },
     }
 );
 
 $template->param(
-    index      => $index,
-    owner      => $loggedinuser,
-    plugin     => $plugin,
+    index            => $index,
+    owner            => $loggedinuser,
+    plugin           => $plugin,
     uploadcategories => Koha::UploadedFiles->getCategories,
 );
 
@@ -61,11 +62,13 @@ if ( $op eq 'new' ) {
 
 } elsif ( $op eq 'browse' ) {
     my $uploads;
-    if ($browsecategory){
-        $uploads = Koha::UploadedFiles->search({
-            uploadcategorycode => $browsecategory,
-            $plugin? ( public => 1 ): (),
-        })->unblessed;
+    if ($browsecategory) {
+        $uploads = Koha::UploadedFiles->search(
+            {
+                uploadcategorycode => $browsecategory,
+                $plugin ? ( public => 1 ) : (),
+            }
+        )->unblessed;
     }
 
     $template->param(
@@ -78,19 +81,22 @@ if ( $op eq 'new' ) {
 
 } elsif ( $op eq 'search' ) {
     my $uploads;
-    if( $id ) { # might be a comma separated list
+    if ($id) {    # might be a comma separated list
         my @id = split /,/, $id;
         foreach my $recid (@id) {
-            my $rec = Koha::UploadedFiles->find( $recid );
+            my $rec = Koha::UploadedFiles->find($recid);
             push @$uploads, $rec->unblessed
                 if $rec && ( $rec->public || !$plugin );
-                # Do not show private uploads in the plugin mode (:editor)
+
+            # Do not show private uploads in the plugin mode (:editor)
         }
     } else {
-        $uploads = Koha::UploadedFiles->search_term({
-            term => $term,
-            $plugin? (): ( include_private => 1 ),
-        })->unblessed;
+        $uploads = Koha::UploadedFiles->search_term(
+            {
+                term => $term,
+                $plugin ? () : ( include_private => 1 ),
+            }
+        )->unblessed;
     }
 
     $template->param(
@@ -101,31 +107,32 @@ if ( $op eq 'new' ) {
     output_html_with_http_headers $input, $cookie, $template->output;
 
 } elsif ( $op eq 'cud-delete' ) {
+
     # delete only takes the id parameter
     my $rec = Koha::UploadedFiles->find($id);
     undef $rec if $rec && $plugin && !$rec->public;
-    my $fn = $rec ? $rec->filename : '';
-    my $delete = $rec ? $rec->delete : undef;
+    my $fn     = $rec ? $rec->filename : '';
+    my $delete = $rec ? $rec->delete   : undef;
+
     #TODO Improve error handling
-    my $msg = $delete
-        ? JSON::to_json({ $fn => { code => ALERT_DELETED }})
-        : $id
-        ? JSON::to_json({ $fn || $id, { code => ERR_NOT_DELETED }})
-        : '';
+    my $msg =
+          $delete ? JSON::to_json( { $fn => { code => ALERT_DELETED } } )
+        : $id     ? JSON::to_json( { $fn || $id, { code => ERR_NOT_DELETED } } )
+        :           '';
     $template->param(
-        op               => 'new',
-        msg              => $msg,
+        op  => 'new',
+        msg => $msg,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
 } elsif ( $op eq 'download' ) {
-    my $rec = Koha::UploadedFiles->find( $id );
+    my $rec = Koha::UploadedFiles->find($id);
     undef $rec if $rec && $plugin && !$rec->public;
-    my $fh  = $rec? $rec->file_handle:  undef;
+    my $fh = $rec ? $rec->file_handle : undef;
     if ( !$rec || !$fh ) {
         $template->param(
-            op               => 'new',
-            msg              => JSON::to_json({ $id => { code => ERR_READING }}),
+            op  => 'new',
+            msg => JSON::to_json( { $id => { code => ERR_READING } } ),
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {

@@ -40,9 +40,9 @@ associated to the fund.
 =cut
 
 sub budget {
-    my ( $self )  = @_;
+    my ($self) = @_;
     my $budget_rs = $self->_result->budget;
-    return Koha::Acquisition::Budget->_new_from_dbic( $budget_rs );
+    return Koha::Acquisition::Budget->_new_from_dbic($budget_rs);
 }
 
 =head3 to_api

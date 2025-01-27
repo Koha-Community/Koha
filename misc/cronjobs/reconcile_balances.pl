@@ -52,8 +52,8 @@ Makes the process print information about the taken actions.
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
-use Try::Tiny qw( catch try );
+use Pod::Usage   qw( pod2usage );
+use Try::Tiny    qw( catch try );
 
 use Koha::Script -cron;
 use C4::Log qw( cronlogaction );
@@ -64,8 +64,8 @@ use Koha::Patrons;
 my $help    = 0;
 my $verbose = 0;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help'    => \$help,
@@ -75,45 +75,48 @@ GetOptions(
 pod2usage(1) if $help;
 
 my @patron_ids = Koha::Account::Lines->search(
-        {
-            amountoutstanding => { '<' => 0 },
-            borrowernumber => { '!=' => undef }
-        },
-        {
-            columns  => [ qw/borrowernumber/ ],
-            distinct => 1,
-        }
-    )->get_column('borrowernumber');
+    {
+        amountoutstanding => { '<'  => 0 },
+        borrowernumber    => { '!=' => undef }
+    },
+    {
+        columns  => [qw/borrowernumber/],
+        distinct => 1,
+    }
+)->get_column('borrowernumber');
 
-my $patrons = Koha::Patrons->search({ borrowernumber => { -in => \@patron_ids } });
+my $patrons = Koha::Patrons->search( { borrowernumber => { -in => \@patron_ids } } );
 
-while (my $patron = $patrons->next) {
+while ( my $patron = $patrons->next ) {
 
-    my $account = $patron->account;
+    my $account                  = $patron->account;
     my $total_outstanding_credit = $account->outstanding_credits->total_outstanding;
     my $total_outstanding_debit  = $account->outstanding_debits->total_outstanding;
 
-    if ( $total_outstanding_credit < 0
-         and $total_outstanding_debit > 0) {
+    if (    $total_outstanding_credit < 0
+        and $total_outstanding_debit > 0 )
+    {
 
         try {
 
             $account->reconcile_balance;
 
-            print $patron->id . ": credit: $total_outstanding_credit " .
-                                  "debit: $total_outstanding_debit " .
-                                  "=> outstanding " .
-                                  "credit: " . $account->outstanding_credits->total_outstanding .
-                                 " debit: " .  $account->outstanding_debits->total_outstanding . "\n"
+            print $patron->id
+                . ": credit: $total_outstanding_credit "
+                . "debit: $total_outstanding_debit "
+                . "=> outstanding "
+                . "credit: "
+                . $account->outstanding_credits->total_outstanding
+                . " debit: "
+                . $account->outstanding_debits->total_outstanding . "\n"
                 if $verbose;
-        }
-        catch {
+        } catch {
             print "Problem with patron " . $patron->borrowernumber . ": $_";
         };
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 1;
 

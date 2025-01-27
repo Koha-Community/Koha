@@ -22,7 +22,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Authorities;
@@ -33,16 +33,17 @@ my $authtypecode = $input->param('authtypecode');
 my $op           = $input->param('op') || 'list';
 my @messages;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/authtypes.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_marc_frameworks' },
+    {
+        template_name => "admin/authtypes.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_marc_frameworks' },
     }
 );
 
 if ( $op eq 'add_form' ) {
     my $authority_type;
-    if (defined $authtypecode) {
+    if ( defined $authtypecode ) {
         $authority_type = Koha::Authority::Types->find($authtypecode);
     }
 
@@ -67,7 +68,8 @@ if ( $op eq 'add_form' ) {
         }
     } else {
         my $authority_type = Koha::Authority::Type->new(
-            {   authtypecode       => $authtypecode,
+            {
+                authtypecode       => $authtypecode,
                 authtypetext       => $authtypetext,
                 auth_tag_to_report => $auth_tag_to_report,
                 summary            => $summary,
@@ -83,7 +85,7 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 
 } elsif ( $op eq 'delete_confirm' ) {
-    my $authority_type = Koha::Authority::Types->find($authtypecode);
+    my $authority_type       = Koha::Authority::Types->find($authtypecode);
     my $authorities_using_it = Koha::Authorities->search( { authtypecode => $authtypecode } )->count;
     $template->param(
         authority_type       => $authority_type,
@@ -93,7 +95,7 @@ if ( $op eq 'add_form' ) {
     my $authorities_using_it = Koha::Authorities->search( { authtypecode => $authtypecode } )->count;
     if ( $authorities_using_it == 0 ) {
         my $authority_type = Koha::Authority::Types->find($authtypecode);
-        my $deleted = eval { $authority_type->delete; };
+        my $deleted        = eval { $authority_type->delete; };
 
         if ( $@ or not $deleted ) {
             push @messages, { type => 'error', code => 'error_on_delete' };

@@ -82,9 +82,8 @@ sub check_repeatables {
         }
     )->count;
 
-    Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty->throw(
-        property => 'repeatable' )
-      if $count;
+    Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty->throw( property => 'repeatable' )
+        if $count;
 
     return $self;
 }
@@ -107,14 +106,11 @@ sub check_unique_ids {
         }
     )->count;
 
-    Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty->throw(
-        property => 'unique_id' )
-      if $count;
+    Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty->throw( property => 'unique_id' )
+        if $count;
 
     return $self;
 }
-
-
 
 =head3 _type
 

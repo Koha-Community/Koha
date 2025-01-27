@@ -32,21 +32,21 @@ use t::lib::Mocks;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
-my $dbh = C4::Context->dbh;
+my $dbh     = C4::Context->dbh;
 
 $dbh->do("DELETE FROM reserves");
 $dbh->do("DELETE FROM old_reserves");
 
 my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-my $itemtype = $builder->build( { source => 'Itemtype', value => { notforloan => 0 } } )->{itemtype};
+my $itemtype   = $builder->build( { source => 'Itemtype', value => { notforloan => 0 } } )->{itemtype};
 
-t::lib::Mocks::mock_userenv({ flags => 1, userid => '1', branchcode => $branchcode });
+t::lib::Mocks::mock_userenv( { flags => 1, userid => '1', branchcode => $branchcode } );
 
 my $borrowers_count = 3;
 
-my $biblio = $builder->build_sample_biblio();
+my $biblio       = $builder->build_sample_biblio();
 my $item_barcode = 'my_barcode';
-my $itemnumber = Koha::Item->new(
+my $itemnumber   = Koha::Item->new(
     {
         biblionumber  => $biblio->biblionumber,
         homebranch    => $branchcode,
@@ -57,15 +57,17 @@ my $itemnumber = Koha::Item->new(
 )->store->itemnumber;
 
 # Create some borrowers
-my $patron_category = $builder->build({ source => 'Category' });
+my $patron_category = $builder->build( { source => 'Category' } );
 my @borrowernumbers;
 foreach my $i ( 1 .. $borrowers_count ) {
-    my $borrowernumber = Koha::Patron->new({
-        firstname    => 'my firstname',
-        surname      => 'my surname ' . $i,
-        categorycode => $patron_category->{categorycode},
-        branchcode   => $branchcode,
-    })->store->borrowernumber;
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname    => 'my firstname',
+            surname      => 'my surname ' . $i,
+            categorycode => $patron_category->{categorycode},
+            branchcode   => $branchcode,
+        }
+    )->store->borrowernumber;
     push @borrowernumbers, $borrowernumber;
 }
 
@@ -84,8 +86,7 @@ ModReserveAffect( $itemnumber, $borrowernumbers[0] );
 my $patron = Koha::Patrons->find( $borrowernumbers[1] );
 C4::Circulation::AddIssue( $patron, $item_barcode, undef, 'revert' );
 
-my $priorities = $dbh->selectall_arrayref(
-    "SELECT priority FROM reserves ORDER BY priority ASC");
+my $priorities = $dbh->selectall_arrayref("SELECT priority FROM reserves ORDER BY priority ASC");
 ok( scalar @$priorities == 2,   'Only 2 holds remain in the reserves table' );
 ok( $priorities->[0]->[0] == 1, 'First hold has a priority of 1' );
 ok( $priorities->[1]->[0] == 2, 'Second hold has a priority of 2' );

@@ -26,60 +26,61 @@ use Koha::Acquisition::Invoice::Adjustments;
 use C4::Acquisition;
 use C4::Log qw(logaction);
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
 
-      GetBudget
-      GetBudgetByOrderNumber
-      GetBudgetByCode
-      GetBudgets
-      BudgetsByActivity
-      GetBudgetsReport
-      GetBudgetReport
-      GetBudgetsByActivity
-      GetBudgetHierarchy
-      AddBudget
-      ModBudget
-      DelBudget
-      GetBudgetSpent
-      GetBudgetOrdered
-      GetBudgetName
-      GetPeriodsCount
-      GetBudgetHierarchySpent
-      GetBudgetHierarchyOrdered
+        GetBudget
+        GetBudgetByOrderNumber
+        GetBudgetByCode
+        GetBudgets
+        BudgetsByActivity
+        GetBudgetsReport
+        GetBudgetReport
+        GetBudgetsByActivity
+        GetBudgetHierarchy
+        AddBudget
+        ModBudget
+        DelBudget
+        GetBudgetSpent
+        GetBudgetOrdered
+        GetBudgetName
+        GetPeriodsCount
+        GetBudgetHierarchySpent
+        GetBudgetHierarchyOrdered
 
-      GetBudgetUsers
-      ModBudgetUsers
-      CanUserUseBudget
-      CanUserModifyBudget
+        GetBudgetUsers
+        ModBudgetUsers
+        CanUserUseBudget
+        CanUserModifyBudget
 
-      GetBudgetPeriod
-      GetBudgetPeriods
-      ModBudgetPeriod
-      AddBudgetPeriod
-      DelBudgetPeriod
+        GetBudgetPeriod
+        GetBudgetPeriods
+        ModBudgetPeriod
+        AddBudgetPeriod
+        DelBudgetPeriod
 
-      ModBudgetPlan
+        ModBudgetPlan
 
-      GetBudgetsPlanCell
-      AddBudgetPlanValue
-      GetBudgetAuthCats
-      BudgetHasChildren
-      GetBudgetChildren
-      SetOwnerToFundHierarchy
-      CheckBudgetParent
-      CheckBudgetParentPerm
+        GetBudgetsPlanCell
+        AddBudgetPlanValue
+        GetBudgetAuthCats
+        BudgetHasChildren
+        GetBudgetChildren
+        SetOwnerToFundHierarchy
+        CheckBudgetParent
+        CheckBudgetParentPerm
 
-      HideCols
-      GetCols
+        HideCols
+        GetCols
 
-      CloneBudgetPeriod
-      CloneBudgetHierarchy
-      MoveOrders
-      FieldsForCalculatingFundValues
+        CloneBudgetPeriod
+        CloneBudgetHierarchy
+        MoveOrders
+        FieldsForCalculatingFundValues
     );
 }
 
@@ -100,8 +101,9 @@ sub HideCols {
         AND  authvalue = ? |
     );
     foreach my $authvalue (@hide_cols) {
-#        $sth1->{TraceLevel} = 3;
-        $sth1->execute(  $authcat, $authvalue );
+
+        #        $sth1->{TraceLevel} = 3;
+        $sth1->execute( $authcat, $authvalue );
     }
 }
 
@@ -116,17 +118,17 @@ sub GetCols {
         AND authvalue = ? and display  = 0   |
     );
 
-#    $sth->{TraceLevel} = 3;
+    #    $sth->{TraceLevel} = 3;
     $sth->execute( $authcat, $authvalue );
-    my $res  = $sth->fetchrow_hashref;
+    my $res = $sth->fetchrow_hashref;
 
-    return  $res->{cnt} > 0 ? 0: 1
+    return $res->{cnt} > 0 ? 0 : 1;
 
 }
 
 sub CheckBudgetParentPerm {
     my ( $budget, $borrower_id ) = @_;
-    my $depth = $budget->{depth};
+    my $depth     = $budget->{depth};
     my $parent_id = $budget->{budget_parent_id};
     while ($depth) {
         my $parent = GetBudget($parent_id);
@@ -134,24 +136,25 @@ sub CheckBudgetParentPerm {
         if ( $parent->{budget_owner_id} == $borrower_id ) {
             return 1;
         }
-        $depth--
+        $depth--;
     }
     return 0;
 }
 
 sub AddBudgetPeriod {
     my ($budgetperiod) = @_;
-    return unless($budgetperiod->{budget_period_startdate} && $budgetperiod->{budget_period_enddate});
+    return unless ( $budgetperiod->{budget_period_startdate} && $budgetperiod->{budget_period_enddate} );
 
     undef $budgetperiod->{budget_period_id};
     my $resultset = Koha::Database->new()->schema->resultset('Aqbudgetperiod');
     return $resultset->create($budgetperiod)->id;
 }
+
 # -------------------------------------------------------------------
 sub GetPeriodsCount {
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("
-        SELECT COUNT(*) AS sum FROM aqbudgetperiods ");
+    my $sth = $dbh->prepare( "
+        SELECT COUNT(*) AS sum FROM aqbudgetperiods " );
     $sth->execute();
     my $res = $sth->fetchrow_hashref;
     return $res->{'sum'};
@@ -166,9 +169,11 @@ sub CheckBudgetParent {
     my $parent_id_tmp = $new_parent_id;
 
     # check new-parent is not a child (or a child's child ;)
-    my $sth = $dbh->prepare(qq|
+    my $sth = $dbh->prepare(
+        qq|
         SELECT budget_parent_id FROM
-            aqbudgets where budget_id = ? | );
+            aqbudgets where budget_id = ? |
+    );
     while (1) {
         $sth->execute($parent_id_tmp);
         my $res = $sth->fetchrow_hashref;
@@ -184,82 +189,97 @@ sub CheckBudgetParent {
 
 # -------------------------------------------------------------------
 sub BudgetHasChildren {
-    my ( $budget_id  ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(qq|
+    my ($budget_id) = @_;
+    my $dbh         = C4::Context->dbh;
+    my $sth         = $dbh->prepare(
+        qq|
        SELECT count(*) as sum FROM  aqbudgets
-        WHERE budget_parent_id = ?   | );
-    $sth->execute( $budget_id );
+        WHERE budget_parent_id = ?   |
+    );
+    $sth->execute($budget_id);
     my $sum = $sth->fetchrow_hashref;
     return $sum->{'sum'};
 }
 
 sub GetBudgetChildren {
-    my ( $budget_id ) = @_;
+    my ($budget_id) = @_;
     my $dbh = C4::Context->dbh;
-    return $dbh->selectall_arrayref(q|
+    return $dbh->selectall_arrayref(
+        q|
        SELECT  * FROM  aqbudgets
         WHERE budget_parent_id = ?
-    |, { Slice => {} }, $budget_id );
+    |, { Slice => {} }, $budget_id
+    );
 }
 
 sub SetOwnerToFundHierarchy {
     my ( $budget_id, $borrowernumber ) = @_;
 
-    my $budget = GetBudget( $budget_id );
+    my $budget = GetBudget($budget_id);
     $budget->{budget_owner_id} = $borrowernumber;
-    ModBudget( $budget );
-    my $children = GetBudgetChildren( $budget_id );
-    for my $child ( @$children ) {
+    ModBudget($budget);
+    my $children = GetBudgetChildren($budget_id);
+    for my $child (@$children) {
         SetOwnerToFundHierarchy( $child->{budget_id}, $borrowernumber );
     }
 }
 
 # -------------------------------------------------------------------
 sub GetBudgetsPlanCell {
-    my ( $cell, $period, $budget ) = @_; #FIXME we don't use $period
-    my ($actual, $sth);
-    my $dbh = C4::Context->dbh;
+    my ( $cell, $period, $budget ) = @_;    #FIXME we don't use $period
+    my ( $actual, $sth );
+    my $dbh      = C4::Context->dbh;
     my $roundsql = C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|);
     if ( $cell->{'authcat'} eq 'MONTHS' ) {
+
         # get the actual amount
         # FIXME we should consider quantity
-        $sth = $dbh->prepare( qq|
+        $sth = $dbh->prepare(
+            qq|
 
-            SELECT SUM(| .  $roundsql . qq|) AS actual FROM aqorders
+            SELECT SUM(| . $roundsql . qq|) AS actual FROM aqorders
                 WHERE    budget_id = ? AND
                 entrydate like "$cell->{'authvalue'}%"  |
         );
         $sth->execute( $cell->{'budget_id'} );
     } elsif ( $cell->{'authcat'} eq 'BRANCHES' ) {
+
         # get the actual amount
         # FIXME we should consider quantity
-        $sth = $dbh->prepare( qq|
+        $sth = $dbh->prepare(
+            qq|
 
             SELECT SUM(| . $roundsql . qq|) FROM aqorders
                 LEFT JOIN aqorders_items
                 ON (aqorders.ordernumber = aqorders_items.ordernumber)
                 LEFT JOIN items
                 ON (aqorders_items.itemnumber = items.itemnumber)
-                WHERE budget_id = ? AND homebranch = ? |          );
+                WHERE budget_id = ? AND homebranch = ? |
+        );
 
         $sth->execute( $cell->{'budget_id'}, $cell->{'authvalue'} );
     } elsif ( $cell->{'authcat'} eq 'ITEMTYPES' ) {
+
         # get the actual amount
-        $sth = $dbh->prepare(  qq|
+        $sth = $dbh->prepare(
+            qq|
 
             SELECT SUM( | . $roundsql . qq| *  quantity) AS actual
                 FROM aqorders JOIN biblioitems
                 ON (biblioitems.biblionumber = aqorders.biblionumber )
                 WHERE aqorders.budget_id = ? and itemtype  = ? |
         );
-        $sth->execute(  $cell->{'budget_id'},
-                        $cell->{'authvalue'} );
+        $sth->execute(
+            $cell->{'budget_id'},
+            $cell->{'authvalue'}
+        );
     }
+
     # ELSE GENERIC ORDERS SORT1/SORT2 STAT COUNT.
     else {
         # get the actual amount
-        $sth = $dbh->prepare( qq|
+        $sth = $dbh->prepare(
+            qq|
 
         SELECT  SUM(| . $roundsql . qq| * quantity) AS actual
             FROM aqorders
@@ -268,17 +288,19 @@ sub GetBudgetsPlanCell {
                 ((aqbudgets.sort1_authcat = ? AND sort1 =?) OR
                 (aqbudgets.sort2_authcat = ? AND sort2 =?))    |
         );
-        $sth->execute(  $cell->{'budget_id'},
-                        $budget->{'sort1_authcat'},
-                        $cell->{'authvalue'},
-                        $budget->{'sort2_authcat'},
-                        $cell->{'authvalue'}
+        $sth->execute(
+            $cell->{'budget_id'},
+            $budget->{'sort1_authcat'},
+            $cell->{'authvalue'},
+            $budget->{'sort2_authcat'},
+            $cell->{'authvalue'}
         );
     }
     $actual = $sth->fetchrow_array;
 
     # get the estimated amount
-    $sth = $dbh->prepare( qq|
+    $sth = $dbh->prepare(
+        qq|
 
         SELECT estimated_amount AS estimated, display FROM aqbudgets_planning
             WHERE budget_period_id = ? AND
@@ -286,17 +308,17 @@ sub GetBudgetsPlanCell {
                 authvalue = ? AND
                 authcat = ?         |
     );
-    $sth->execute(  $cell->{'budget_period_id'},
-                    $cell->{'budget_id'},
-                    $cell->{'authvalue'},
-                    $cell->{'authcat'},
+    $sth->execute(
+        $cell->{'budget_period_id'},
+        $cell->{'budget_id'},
+        $cell->{'authvalue'},
+        $cell->{'authcat'},
     );
 
+    my $res = $sth->fetchrow_hashref;
 
-    my $res  = $sth->fetchrow_hashref;
-  #  my $display = $res->{'display'};
+    #  my $display = $res->{'display'};
     my $estimated = $res->{'estimated'};
-
 
     return $actual, $estimated;
 }
@@ -307,18 +329,21 @@ sub ModBudgetPlan {
     my $dbh = C4::Context->dbh;
     foreach my $buds (@$budget_plan) {
         my $lines = $buds->{lines};
-        my $sth = $dbh->prepare( qq|
+        my $sth   = $dbh->prepare(
+            qq|
                 DELETE FROM aqbudgets_planning
                     WHERE   budget_period_id   = ? AND
                             budget_id   = ? AND
                             authcat            = ? |
         );
-    #delete a aqplan line of cells, then insert new cells, 
-    # these could be UPDATES rather than DEL/INSERTS...
-        $sth->execute( $budget_period_id,  $lines->[0]{budget_id}   , $authcat );
+
+        #delete a aqplan line of cells, then insert new cells,
+        # these could be UPDATES rather than DEL/INSERTS...
+        $sth->execute( $budget_period_id, $lines->[0]{budget_id}, $authcat );
 
         foreach my $cell (@$lines) {
-            my $sth = $dbh->prepare( qq|
+            my $sth = $dbh->prepare(
+                qq|
 
                 INSERT INTO aqbudgets_planning
                      SET   budget_id     = ?,
@@ -328,11 +353,11 @@ sub ModBudgetPlan {
                      authvalue       = ?  |
             );
             $sth->execute(
-                            $cell->{'budget_id'},
-                            $cell->{'budget_period_id'},
-                            $cell->{'authcat'},
-                            $cell->{'estimated_amount'},
-                            $cell->{'authvalue'},
+                $cell->{'budget_id'},
+                $cell->{'budget_period_id'},
+                $cell->{'authcat'},
+                $cell->{'estimated_amount'},
+                $cell->{'authvalue'},
             );
         }
     }
@@ -346,27 +371,36 @@ sub GetBudgetSpent {
     # Choose correct unitprice and ecost fields
     my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
 
-    my $sth = $dbh->prepare(qq|
-        SELECT SUM( | . C4::Acquisition::get_rounding_sql("COALESCE($unitprice_field, $ecost_field)") . qq| * quantity ) AS sum FROM aqorders
+    my $sth = $dbh->prepare(
+        qq|
+        SELECT SUM( |
+            . C4::Acquisition::get_rounding_sql("COALESCE($unitprice_field, $ecost_field)")
+            . qq| * quantity ) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived > 0 AND
             datecancellationprinted IS NULL
-    |);
+    |
+    );
     $sth->execute($budget_id);
     my $sum = ( $sth->fetchrow_array || 0 ) + 0;
 
-    $sth = $dbh->prepare(qq|
+    $sth = $dbh->prepare(
+        qq|
         SELECT SUM(shipmentcost) AS sum
         FROM aqinvoices
         WHERE shipmentcost_budgetid = ?
-    |);
+    |
+    );
 
     $sth->execute($budget_id);
     my ($shipmentcost_sum) = $sth->fetchrow_array;
     $sum += ( $shipmentcost_sum || 0 ) + 0;
 
-    my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $budget_id, closedate => { '!=' => undef } },{ join => 'invoiceid' });
-    while ( my $adj = $adjustments->next ){
+    my $adjustments = Koha::Acquisition::Invoice::Adjustments->search(
+        { budget_id => $budget_id, closedate => { '!=' => undef } },
+        { join      => 'invoiceid' }
+    );
+    while ( my $adj = $adjustments->next ) {
         $sum += $adj->adjustment;
     }
 
@@ -381,17 +415,20 @@ sub GetBudgetOrdered {
     # Get correct unitprice and ecost prices as possible
     my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
 
-    my $sth = $dbh->prepare(qq|
+    my $sth = $dbh->prepare(
+        qq|
         SELECT SUM(| . C4::Acquisition::get_rounding_sql(qq|$ecost_field|) . qq| *  quantity) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived = 0 AND
             datecancellationprinted IS NULL
-    |);
+    |
+    );
     $sth->execute($budget_id);
-    my $sum =  ( $sth->fetchrow_array || 0 ) + 0;
+    my $sum = ( $sth->fetchrow_array || 0 ) + 0;
 
-    my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $budget_id, encumber_open => 1, closedate => undef},{ join => 'invoiceid' });
-    while ( my $adj = $adjustments->next ){
+    my $adjustments = Koha::Acquisition::Invoice::Adjustments->search(
+        { budget_id => $budget_id, encumber_open => 1, closedate => undef }, { join => 'invoiceid' } );
+    while ( my $adj = $adjustments->next ) {
         $sum += $adj->adjustment;
     }
 
@@ -407,14 +444,15 @@ get the budget_name for a given budget_id
 =cut
 
 sub GetBudgetName {
-    my ( $budget_id ) = @_;
+    my ($budget_id) = @_;
     my $dbh         = C4::Context->dbh;
     my $sth         = $dbh->prepare(
         qq|
         SELECT budget_name
         FROM aqbudgets
         WHERE budget_id = ?
-    |);
+    |
+    );
 
     $sth->execute($budget_id);
     return $sth->fetchrow_array;
@@ -428,35 +466,38 @@ Return the list of authcat for a given budget_period_id
 
 =cut
 
-sub GetBudgetAuthCats  {
+sub GetBudgetAuthCats {
     my ($budget_period_id) = shift;
+
     # now, populate the auth_cats_loop used in the budget planning button
     # we must retrieve all auth values used by at least one budget
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("SELECT sort1_authcat,sort2_authcat FROM aqbudgets WHERE budget_period_id=?");
+    my $sth = $dbh->prepare("SELECT sort1_authcat,sort2_authcat FROM aqbudgets WHERE budget_period_id=?");
     $sth->execute($budget_period_id);
     my %authcats;
-    while (my ($sort1_authcat,$sort2_authcat) = $sth->fetchrow) {
-        $authcats{$sort1_authcat}=1 if $sort1_authcat;
-        $authcats{$sort2_authcat}=1 if $sort2_authcat;
+    while ( my ( $sort1_authcat, $sort2_authcat ) = $sth->fetchrow ) {
+        $authcats{$sort1_authcat} = 1 if $sort1_authcat;
+        $authcats{$sort2_authcat} = 1 if $sort2_authcat;
     }
     return [ sort keys %authcats ];
 }
 
 # -------------------------------------------------------------------
 sub GetBudgetPeriods {
-	my ($filters,$orderby) = @_;
+    my ( $filters, $orderby ) = @_;
 
     my $rs = Koha::Database->new()->schema->resultset('Aqbudgetperiod');
     $rs = $rs->search( $filters, { order_by => $orderby } );
     $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
     return [ $rs->all ];
 }
+
 # -------------------------------------------------------------------
 sub GetBudgetPeriod {
     my ($budget_period_id) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq|
+    my $dbh                = C4::Context->dbh;
+    my $sth                = $dbh->prepare(
+        qq|
         SELECT      *
         FROM aqbudgetperiods
         WHERE budget_period_id=? |
@@ -465,26 +506,27 @@ sub GetBudgetPeriod {
     return $sth->fetchrow_hashref;
 }
 
-sub DelBudgetPeriod{
-	my ($budget_period_id) = @_;
-	my $dbh = C4::Context->dbh;
-	  ; ## $total = number of records linked to the record that must be deleted
+sub DelBudgetPeriod {
+    my ($budget_period_id) = @_;
+    my $dbh = C4::Context->dbh;
+    ;    ## $total = number of records linked to the record that must be deleted
     my $total = 0;
 
-	## get information about the record that will be deleted
-	my $sth = $dbh->prepare(qq|
+    ## get information about the record that will be deleted
+    my $sth = $dbh->prepare(
+        qq|
 		DELETE 
          FROM aqbudgetperiods
          WHERE budget_period_id=? |
-	);
-	return $sth->execute($budget_period_id);
+    );
+    return $sth->execute($budget_period_id);
 }
 
 # -------------------------------------------------------------------
 sub ModBudgetPeriod {
     my ($budget_period) = @_;
     my $result = Koha::Database->new()->schema->resultset('Aqbudgetperiod')->find($budget_period);
-    return unless($result);
+    return unless ($result);
 
     $result = $result->update($budget_period);
     return $result->in_storage;
@@ -502,33 +544,36 @@ sub GetBudgetHierarchy {
                     LEFT JOIN borrowers b on b.borrowernumber = aqbudgets.budget_owner_id
                     JOIN aqbudgetperiods USING (budget_period_id)|;
 
-	my @where_strings;
+    my @where_strings;
+
     # show only period X if requested
     if ($budget_period_id) {
-        push @where_strings," aqbudgets.budget_period_id = ?";
-        push @bind_params, $budget_period_id;
+        push @where_strings, " aqbudgets.budget_period_id = ?";
+        push @bind_params,   $budget_period_id;
     }
-	# show only budgets owned by me, my branch or everyone
+
+    # show only budgets owned by me, my branch or everyone
     if ($owner) {
         if ($branchcode) {
             push @where_strings,
-            qq{ (budget_owner_id = ? OR budget_branchcode = ? OR ((budget_branchcode IS NULL or budget_branchcode="") AND (budget_owner_id IS NULL OR budget_owner_id="")))};
+                qq{ (budget_owner_id = ? OR budget_branchcode = ? OR ((budget_branchcode IS NULL or budget_branchcode="") AND (budget_owner_id IS NULL OR budget_owner_id="")))};
             push @bind_params, ( $owner, $branchcode );
         } else {
             push @where_strings, ' (budget_owner_id = ? OR budget_owner_id IS NULL or budget_owner_id ="") ';
-            push @bind_params, $owner;
+            push @bind_params,   $owner;
         }
     } else {
         if ($branchcode) {
-            push @where_strings," (budget_branchcode =? or budget_branchcode is NULL OR budget_branchcode='')";
-            push @bind_params, $branchcode;
+            push @where_strings, " (budget_branchcode =? or budget_branchcode is NULL OR budget_branchcode='')";
+            push @bind_params,   $branchcode;
         }
     }
-	$query.=" WHERE ".join(' AND ', @where_strings) if @where_strings;
-	my $sth = $dbh->prepare($query);
-	$sth->execute(@bind_params);
+    $query .= " WHERE " . join( ' AND ', @where_strings ) if @where_strings;
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bind_params);
 
     my %links;
+
     # create hash with budget_id has key
     while ( my $data = $sth->fetchrow_hashref ) {
         $links{ $data->{'budget_id'} } = $data;
@@ -537,14 +582,16 @@ sub GetBudgetHierarchy {
     # link child to parent
     my @first_parents;
     foreach my $budget ( sort { $a->{budget_code} cmp $b->{budget_code} } values %links ) {
-        my $child = $links{$budget->{budget_id}};
+        my $child = $links{ $budget->{budget_id} };
         if ( $child->{'budget_parent_id'} ) {
             my $parent = $links{ $child->{'budget_parent_id'} };
             if ($parent) {
                 unless ( $parent->{'children'} ) {
+
                     # init child arrayref
                     $parent->{'children'} = [];
                 }
+
                 # add as child
                 push @{ $parent->{'children'} }, $child;
             }
@@ -555,55 +602,70 @@ sub GetBudgetHierarchy {
 
     my @sort = ();
     foreach my $first_parent (@first_parents) {
-        _add_budget_children(\@sort, $first_parent, 0);
+        _add_budget_children( \@sort, $first_parent, 0 );
     }
 
     # Get correct unitprice and ecost prices as possible
     my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
 
-    if (!$skiptotals) {
+    if ( !$skiptotals ) {
+
         # Get all the budgets totals in as few queries as possible
-        my $hr_budget_spent = $dbh->selectall_hashref(q|
+        my $hr_budget_spent = $dbh->selectall_hashref(
+            q|
             SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-                SUM( | . C4::Acquisition::get_rounding_sql(qq|COALESCE($unitprice_field, $ecost_field)|) . q| * quantity ) AS budget_spent
+                SUM( |
+                . C4::Acquisition::get_rounding_sql(qq|COALESCE($unitprice_field, $ecost_field)|)
+                . q| * quantity ) AS budget_spent
             FROM aqorders JOIN aqbudgets USING (budget_id)
             WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
             GROUP BY budget_id, budget_parent_id
-            |, 'budget_id');
-        my $hr_budget_ordered = $dbh->selectall_hashref(q|
+            |, 'budget_id'
+        );
+        my $hr_budget_ordered = $dbh->selectall_hashref(
+            q|
             SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
                 SUM( | . C4::Acquisition::get_rounding_sql(qq|$ecost_field|) . q| *  quantity) AS budget_ordered
             FROM aqorders JOIN aqbudgets USING (budget_id)
             WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
             GROUP BY budget_id, budget_parent_id
-            |, 'budget_id');
-        my $hr_budget_spent_shipment = $dbh->selectall_hashref(q|
+            |, 'budget_id'
+        );
+        my $hr_budget_spent_shipment = $dbh->selectall_hashref(
+            q|
             SELECT shipmentcost_budgetid as budget_id,
                 SUM(shipmentcost) as shipmentcost
             FROM aqinvoices
             GROUP BY shipmentcost_budgetid
-            |, 'budget_id');
-        my $hr_budget_spent_adjustment = $dbh->selectall_hashref(q|
+            |, 'budget_id'
+        );
+        my $hr_budget_spent_adjustment = $dbh->selectall_hashref(
+            q|
             SELECT budget_id,
                 SUM(adjustment) as adjustments
             FROM aqinvoice_adjustments
             JOIN aqinvoices USING (invoiceid)
             WHERE closedate IS NOT NULL
             GROUP BY budget_id
-            |, 'budget_id');
-        my $hr_budget_ordered_adjustment = $dbh->selectall_hashref(q|
+            |, 'budget_id'
+        );
+        my $hr_budget_ordered_adjustment = $dbh->selectall_hashref(
+            q|
             SELECT budget_id,
                 SUM(adjustment) as adjustments
             FROM aqinvoice_adjustments
             JOIN aqinvoices USING (invoiceid)
             WHERE closedate IS NULL AND encumber_open = 1
             GROUP BY budget_id
-            |, 'budget_id');
-
+            |, 'budget_id'
+        );
 
         foreach my $budget (@sort) {
             if ( not defined $budget->{budget_parent_id} ) {
-                _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
+                _recursiveAdd(
+                    $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered,
+                    $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment
+                );
             }
         }
     }
@@ -611,37 +673,43 @@ sub GetBudgetHierarchy {
 }
 
 sub _recursiveAdd {
-    my ($budget, $parent, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment ) = @_;
+    my (
+        $budget, $parent, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered,
+        $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment
+    ) = @_;
 
-    foreach my $child (@{$budget->{children}}){
-        _recursiveAdd($child, $budget, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
+    foreach my $child ( @{ $budget->{children} } ) {
+        _recursiveAdd(
+            $child, $budget, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered,
+            $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment
+        );
     }
 
-    $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent}               || 0;
-    $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost}      || 0;
-    $budget->{budget_spent} += $hr_budget_spent_adjustment->{$budget->{budget_id}}->{adjustments}     || 0;
-    $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered}         || 0;
-    $budget->{budget_ordered} += $hr_budget_ordered_adjustment->{$budget->{budget_id}}->{adjustments} || 0;
+    $budget->{budget_spent}   += $hr_budget_spent->{ $budget->{budget_id} }->{budget_spent}             || 0;
+    $budget->{budget_spent}   += $hr_budget_spent_shipment->{ $budget->{budget_id} }->{shipmentcost}    || 0;
+    $budget->{budget_spent}   += $hr_budget_spent_adjustment->{ $budget->{budget_id} }->{adjustments}   || 0;
+    $budget->{budget_ordered} += $hr_budget_ordered->{ $budget->{budget_id} }->{budget_ordered}         || 0;
+    $budget->{budget_ordered} += $hr_budget_ordered_adjustment->{ $budget->{budget_id} }->{adjustments} || 0;
 
-    $budget->{total_spent} += $budget->{budget_spent};
+    $budget->{total_spent}   += $budget->{budget_spent};
     $budget->{total_ordered} += $budget->{budget_ordered};
 
     if ($parent) {
-        $parent->{total_spent} += $budget->{total_spent};
+        $parent->{total_spent}   += $budget->{total_spent};
         $parent->{total_ordered} += $budget->{total_ordered};
     }
 }
 
 # Recursive method to add a budget and its chidren to an array
 sub _add_budget_children {
-    my $res = shift;
+    my $res    = shift;
     my $budget = shift;
     $budget->{budget_level} = shift;
     push @$res, $budget;
     my $children = $budget->{'children'} || [];
-    return unless @$children; # break recursivity
+    return unless @$children;    # break recursivity
     foreach my $child (@$children) {
-        _add_budget_children($res, $child, $budget->{budget_level} + 1);
+        _add_budget_children( $res, $child, $budget->{budget_level} + 1 );
     }
 }
 
@@ -651,13 +719,13 @@ sub AddBudget {
     my ($budget) = @_;
     return unless ($budget);
 
-    undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb}   eq '';
+    undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb} eq '';
     undef $budget->{budget_owner_id} if defined $budget->{budget_owner_id} && $budget->{budget_owner_id} eq '';
     my $resultset = Koha::Database->new()->schema->resultset('Aqbudget');
-    my $id = $resultset->create($budget)->id;
+    my $id        = $resultset->create($budget)->id;
 
     # Log the addition
-    if (C4::Context->preference("AcquisitionLog")) {
+    if ( C4::Context->preference("AcquisitionLog") ) {
         my $infos = {
             budget_amount => $budget->{budget_amount},
             budget_encumb => $budget->{budget_encumb},
@@ -678,10 +746,10 @@ sub AddBudget {
 sub ModBudget {
     my ($budget) = @_;
     my $result = Koha::Database->new()->schema->resultset('Aqbudget')->find($budget);
-    return unless($result);
+    return unless ($result);
 
     # Log this modification
-    if (C4::Context->preference("AcquisitionLog")) {
+    if ( C4::Context->preference("AcquisitionLog") ) {
         my $infos = {
             budget_amount_new    => $budget->{budget_amount},
             budget_encumb_new    => $budget->{budget_encumb},
@@ -689,7 +757,7 @@ sub ModBudget {
             budget_amount_old    => $result->budget_amount,
             budget_encumb_old    => $result->budget_encumb,
             budget_expend_old    => $result->budget_expend,
-            budget_amount_change => 0 - ($result->budget_amount - $budget->{budget_amount})
+            budget_amount_change => 0 - ( $result->budget_amount - $budget->{budget_amount} )
         };
         logaction(
             'ACQUISITIONS',
@@ -699,7 +767,7 @@ sub ModBudget {
         );
     }
 
-    undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb}   eq '';
+    undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb} eq '';
     undef $budget->{budget_owner_id} if defined $budget->{budget_owner_id} && $budget->{budget_owner_id} eq '';
     $result = $result->update($budget);
     return $result->in_storage;
@@ -708,21 +776,21 @@ sub ModBudget {
 # -------------------------------------------------------------------
 # FIXME Must be replaced by Koha::Acquisition::Fund->delete
 sub DelBudget {
-	my ($budget_id) = @_;
-	my $dbh         = C4::Context->dbh;
-	my $sth         = $dbh->prepare("delete from aqbudgets where budget_id=?");
-	my $rc          = $sth->execute($budget_id);
+    my ($budget_id) = @_;
+    my $dbh         = C4::Context->dbh;
+    my $sth         = $dbh->prepare("delete from aqbudgets where budget_id=?");
+    my $rc          = $sth->execute($budget_id);
+
     # Log the deletion
-    if (C4::Context->preference("AcquisitionLog")) {
+    if ( C4::Context->preference("AcquisitionLog") ) {
         logaction(
             'ACQUISITIONS',
             'DELETE_FUND',
             $budget_id
         );
     }
-	return $rc;
+    return $rc;
 }
-
 
 # -------------------------------------------------------------------
 
@@ -735,15 +803,15 @@ get a specific budget
 =cut
 
 sub GetBudget {
-    my ( $budget_id ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
+    my ($budget_id) = @_;
+    my $dbh         = C4::Context->dbh;
+    my $query       = "
         SELECT *
         FROM   aqbudgets
         WHERE  budget_id=?
         ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $budget_id );
+    $sth->execute($budget_id);
     my $result = $sth->fetchrow_hashref;
     return $result;
 }
@@ -759,16 +827,16 @@ get a specific budget by order number
 =cut
 
 sub GetBudgetByOrderNumber {
-    my ( $ordernumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
+    my ($ordernumber) = @_;
+    my $dbh           = C4::Context->dbh;
+    my $query         = "
         SELECT aqbudgets.*
         FROM   aqbudgets, aqorders
         WHERE  ordernumber=?
         AND    aqorders.budget_id = aqbudgets.budget_id
         ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $ordernumber );
+    $sth->execute($ordernumber);
     my $result = $sth->fetchrow_hashref;
     return $result;
 }
@@ -785,9 +853,9 @@ Returns an array of hashrefs.
 
 # --------------------------------------------------------------------
 sub GetBudgetReport {
-    my ( $budget_id ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = '
+    my ($budget_id) = @_;
+    my $dbh         = C4::Context->dbh;
+    my $query       = '
         SELECT o.*, b.budget_name
         FROM   aqbudgets b
         INNER JOIN aqorders o
@@ -797,7 +865,7 @@ sub GetBudgetReport {
         ORDER BY b.budget_name';
 
     my $sth = $dbh->prepare($query);
-    $sth->execute( $budget_id );
+    $sth->execute($budget_id);
 
     my @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
@@ -820,9 +888,9 @@ of the parameter.
 
 # --------------------------------------------------------------------
 sub GetBudgetsByActivity {
-    my ( $budget_period_active ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
+    my ($budget_period_active) = @_;
+    my $dbh                    = C4::Context->dbh;
+    my $query                  = "
         SELECT DISTINCT b.*
         FROM   aqbudgetperiods bp
         INNER JOIN aqbudgets b
@@ -830,13 +898,14 @@ sub GetBudgetsByActivity {
         WHERE  bp.budget_period_active=?
         ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $budget_period_active );
+    $sth->execute($budget_period_active);
     my @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
     }
     return @results;
 }
+
 # --------------------------------------------------------------------
 
 =head2 GetBudgetsReport
@@ -856,8 +925,8 @@ Returns an array of hashrefs.
 
 sub GetBudgetsReport {
     my ($activity) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = '
+    my $dbh        = C4::Context->dbh;
+    my $query      = '
         SELECT o.*, b.budget_name
         FROM   aqbudgetperiods bp
         INNER JOIN aqbudgets b
@@ -873,8 +942,7 @@ sub GetBudgetsReport {
     my $sth = $dbh->prepare($query);
     if ( $activity && $activity ne '' ) {
         $sth->execute($activity);
-    }
-    else{
+    } else {
         $sth->execute;
     }
     my @results = ();
@@ -894,9 +962,9 @@ given budget_code
 =cut
 
 sub GetBudgetByCode {
-    my ( $budget_code ) = @_;
+    my ($budget_code) = @_;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT aqbudgets.*
         FROM aqbudgets
@@ -905,8 +973,8 @@ sub GetBudgetByCode {
         ORDER BY budget_period_active DESC, budget_id DESC
         LIMIT 1
     };
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( $budget_code );
+    my $sth = $dbh->prepare($query);
+    $sth->execute($budget_code);
     return $sth->fetchrow_hashref;
 }
 
@@ -919,17 +987,19 @@ Gets the total spent of the level and sublevels of $budget_id
 =cut
 
 sub GetBudgetHierarchySpent {
-    my ( $budget_id ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $children_ids = $dbh->selectcol_arrayref(q|
+    my ($budget_id)  = @_;
+    my $dbh          = C4::Context->dbh;
+    my $children_ids = $dbh->selectcol_arrayref(
+        q|
         SELECT budget_id
         FROM   aqbudgets
         WHERE  budget_parent_id = ?
-    |, {}, $budget_id );
+    |, {}, $budget_id
+    );
 
-    my $total_spent = GetBudgetSpent( $budget_id );
-    for my $child_id ( @$children_ids ) {
-        $total_spent += GetBudgetHierarchySpent( $child_id );
+    my $total_spent = GetBudgetSpent($budget_id);
+    for my $child_id (@$children_ids) {
+        $total_spent += GetBudgetHierarchySpent($child_id);
     }
     return $total_spent;
 }
@@ -943,17 +1013,19 @@ Gets the total ordered of the level and sublevels of $budget_id
 =cut
 
 sub GetBudgetHierarchyOrdered {
-    my ( $budget_id ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $children_ids = $dbh->selectcol_arrayref(q|
+    my ($budget_id)  = @_;
+    my $dbh          = C4::Context->dbh;
+    my $children_ids = $dbh->selectcol_arrayref(
+        q|
         SELECT budget_id
         FROM   aqbudgets
         WHERE  budget_parent_id = ?
-    |, {}, $budget_id );
+    |, {}, $budget_id
+    );
 
-    my $total_ordered = GetBudgetOrdered( $budget_id );
-    for my $child_id ( @$children_ids ) {
-        $total_ordered += GetBudgetHierarchyOrdered( $child_id );
+    my $total_ordered = GetBudgetOrdered($budget_id);
+    for my $child_id (@$children_ids) {
+        $total_ordered += GetBudgetHierarchyOrdered($child_id);
     }
     return $total_ordered;
 }
@@ -968,13 +1040,13 @@ gets all budgets
 
 # -------------------------------------------------------------------
 sub GetBudgets {
-    my ($filters, $orderby) = @_;
-    $orderby = 'budget_name' unless($orderby);
+    my ( $filters, $orderby ) = @_;
+    $orderby = 'budget_name' unless ($orderby);
 
     my $rs = Koha::Database->new()->schema->resultset('Aqbudget');
     $rs = $rs->search( $filters, { order_by => $orderby } );
     $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
-    return [ $rs->all  ];
+    return [ $rs->all ];
 }
 
 =head2 GetBudgetUsers
@@ -988,7 +1060,7 @@ Return the list of borrowernumbers linked to a budget
 sub GetBudgetUsers {
     my ($budget_id) = @_;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT borrowernumber
         FROM aqbudgetborrowers
@@ -998,8 +1070,8 @@ sub GetBudgetUsers {
     $sth->execute($budget_id);
 
     my @borrowernumbers;
-    while (my ($borrowernumber) = $sth->fetchrow_array) {
-        push @borrowernumbers, $borrowernumber
+    while ( my ($borrowernumber) = $sth->fetchrow_array ) {
+        push @borrowernumbers, $borrowernumber;
     }
 
     return @borrowernumbers;
@@ -1014,13 +1086,13 @@ Modify the list of borrowernumbers linked to a budget
 =cut
 
 sub ModBudgetUsers {
-    my ($budget_id, @budget_users_id) = @_;
+    my ( $budget_id, @budget_users_id ) = @_;
 
     return unless $budget_id;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "DELETE FROM aqbudgetborrowers WHERE budget_id = ?";
-    my $sth = $dbh->prepare($query);
+    my $sth   = $dbh->prepare($query);
     $sth->execute($budget_id);
 
     $query = qq{
@@ -1030,39 +1102,43 @@ sub ModBudgetUsers {
     $sth = $dbh->prepare($query);
     foreach my $borrowernumber (@budget_users_id) {
         next unless $borrowernumber;
-        $sth->execute($budget_id, $borrowernumber);
+        $sth->execute( $budget_id, $borrowernumber );
     }
 }
 
 sub CanUserUseBudget {
-    my ($borrower, $budget, $userflags) = @_;
+    my ( $borrower, $budget, $userflags ) = @_;
 
-    if (not ref $borrower) {
-        $borrower = Koha::Patrons->find( $borrower );
+    if ( not ref $borrower ) {
+        $borrower = Koha::Patrons->find($borrower);
         return 0 unless $borrower;
         $borrower = $borrower->unblessed;
     }
-    if (not ref $budget) {
+    if ( not ref $budget ) {
         $budget = GetBudget($budget);
     }
 
-    return 0 unless ($borrower and $budget);
+    return 0 unless ( $borrower and $budget );
 
-    if (not defined $userflags) {
-        $userflags = C4::Auth::getuserflags($borrower->{flags},
-            $borrower->{userid});
+    if ( not defined $userflags ) {
+        $userflags = C4::Auth::getuserflags(
+            $borrower->{flags},
+            $borrower->{userid}
+        );
     }
 
-    unless ($userflags->{superlibrarian}
-    || (ref $userflags->{acquisition}
-        && $userflags->{acquisition}->{budget_manage_all})
-    || (!ref $userflags->{acquisition} && $userflags->{acquisition}))
+    unless (
+        $userflags->{superlibrarian}
+        || ( ref $userflags->{acquisition}
+            && $userflags->{acquisition}->{budget_manage_all} )
+        || ( !ref $userflags->{acquisition} && $userflags->{acquisition} )
+        )
     {
-        if (not exists $userflags->{acquisition}) {
+        if ( not exists $userflags->{acquisition} ) {
             return 0;
         }
 
-        if (!ref $userflags->{acquisition} && !$userflags->{acquisition}) {
+        if ( !ref $userflags->{acquisition} && !$userflags->{acquisition} ) {
             return 0;
         }
 
@@ -1081,17 +1157,13 @@ sub CanUserUseBudget {
 
             if (
                 (
-                        $budget->{budget_owner_id}
-                    and $budget->{budget_owner_id} !=
-                    $borrower->{borrowernumber}
+                    $budget->{budget_owner_id} and $budget->{budget_owner_id} != $borrower->{borrowernumber}
                     or not $budget->{budget_owner_id}
                 )
-                and ( 0 == grep { $borrower->{borrowernumber} == $_ }
-                    @budget_users )
+                and ( 0 == grep { $borrower->{borrowernumber} == $_ } @budget_users )
                 and defined $budget->{budget_branchcode}
-                and $budget->{budget_branchcode} ne
-                C4::Context->userenv->{branch}
-              )
+                and $budget->{budget_branchcode} ne C4::Context->userenv->{branch}
+                )
             {
                 return 0;
             }
@@ -1102,14 +1174,11 @@ sub CanUserUseBudget {
             my @budget_users = GetBudgetUsers( $budget->{budget_id} );
             if (
                 (
-                        $budget->{budget_owner_id}
-                    and $budget->{budget_owner_id} !=
-                    $borrower->{borrowernumber}
+                    $budget->{budget_owner_id} and $budget->{budget_owner_id} != $borrower->{borrowernumber}
                     or not $budget->{budget_owner_id}
                 )
-                and ( 0 == grep { $borrower->{borrowernumber} == $_ }
-                    @budget_users )
-              )
+                and ( 0 == grep { $borrower->{borrowernumber} == $_ } @budget_users )
+                )
             {
                 return 0;
             }
@@ -1120,35 +1189,40 @@ sub CanUserUseBudget {
 }
 
 sub CanUserModifyBudget {
-    my ($borrower, $budget, $userflags) = @_;
+    my ( $borrower, $budget, $userflags ) = @_;
 
-    if (not ref $borrower) {
-        $borrower = Koha::Patrons->find( $borrower );
+    if ( not ref $borrower ) {
+        $borrower = Koha::Patrons->find($borrower);
         return 0 unless $borrower;
         $borrower = $borrower->unblessed;
     }
-    if (not ref $budget) {
+    if ( not ref $budget ) {
         $budget = GetBudget($budget);
     }
 
-    return 0 unless ($borrower and $budget);
+    return 0 unless ( $borrower and $budget );
 
-    if (not defined $userflags) {
-        $userflags = C4::Auth::getuserflags($borrower->{flags},
-            $borrower->{userid});
+    if ( not defined $userflags ) {
+        $userflags = C4::Auth::getuserflags(
+            $borrower->{flags},
+            $borrower->{userid}
+        );
     }
 
-    unless ($userflags->{superlibrarian}
-    || (ref $userflags->{acquisition}
-        && $userflags->{acquisition}->{budget_manage_all})
-    || (!ref $userflags->{acquisition} && $userflags->{acquisition}))
+    unless (
+        $userflags->{superlibrarian}
+        || ( ref $userflags->{acquisition}
+            && $userflags->{acquisition}->{budget_manage_all} )
+        || ( !ref $userflags->{acquisition} && $userflags->{acquisition} )
+        )
     {
-        if (!CanUserUseBudget($borrower, $budget, $userflags)) {
+        if ( !CanUserUseBudget( $borrower, $budget, $userflags ) ) {
             return 0;
         }
 
-        if (ref $userflags->{acquisition}
-        && !$userflags->{acquisition}->{budget_modify}) {
+        if ( ref $userflags->{acquisition}
+            && !$userflags->{acquisition}->{budget_modify} )
+        {
             return 0;
         }
     }
@@ -1157,10 +1231,10 @@ sub CanUserModifyBudget {
 }
 
 sub _round {
-    my ($value, $increment) = @_;
+    my ( $value, $increment ) = @_;
 
-    if ($increment && $increment != 0) {
-        $value = int($value / $increment) * $increment;
+    if ( $increment && $increment != 0 ) {
+        $value = int( $value / $increment ) * $increment;
     }
 
     return $value;
@@ -1186,35 +1260,35 @@ amounts will be reset.
 =cut
 
 sub CloneBudgetPeriod {
-    my ($params)                  = @_;
-    my $budget_period_id          = $params->{budget_period_id};
-    my $budget_period_startdate   = $params->{budget_period_startdate};
-    my $budget_period_enddate     = $params->{budget_period_enddate};
-    my $budget_period_description = $params->{budget_period_description};
-    my $amount_change_percentage  = $params->{amount_change_percentage};
-    my $amount_change_round_increment = $params->{amount_change_round_increment};
-    my $mark_original_budget_as_inactive =
-      $params->{mark_original_budget_as_inactive} || 0;
-    my $reset_all_budgets = $params->{reset_all_budgets} || 0;
+    my ($params)                         = @_;
+    my $budget_period_id                 = $params->{budget_period_id};
+    my $budget_period_startdate          = $params->{budget_period_startdate};
+    my $budget_period_enddate            = $params->{budget_period_enddate};
+    my $budget_period_description        = $params->{budget_period_description};
+    my $amount_change_percentage         = $params->{amount_change_percentage};
+    my $amount_change_round_increment    = $params->{amount_change_round_increment};
+    my $mark_original_budget_as_inactive = $params->{mark_original_budget_as_inactive} || 0;
+    my $reset_all_budgets                = $params->{reset_all_budgets}                || 0;
 
     my $budget_period = GetBudgetPeriod($budget_period_id);
 
     $budget_period->{budget_period_startdate}   = $budget_period_startdate;
     $budget_period->{budget_period_enddate}     = $budget_period_enddate;
     $budget_period->{budget_period_description} = $budget_period_description;
+
     # The new budget (budget_period) should be active by default
-    $budget_period->{budget_period_active}    = 1;
+    $budget_period->{budget_period_active} = 1;
 
     if ($amount_change_percentage) {
         my $total = $budget_period->{budget_period_total};
         $total += $total * $amount_change_percentage / 100;
-        $total = _round($total, $amount_change_round_increment);
+        $total = _round( $total, $amount_change_round_increment );
         $budget_period->{budget_period_total} = $total;
     }
 
     my $original_budget_period_id = $budget_period->{budget_period_id};
     delete $budget_period->{budget_period_id};
-    my $new_budget_period_id = AddBudgetPeriod( $budget_period );
+    my $new_budget_period_id = AddBudgetPeriod($budget_period);
 
     my $budgets = GetBudgetHierarchy($budget_period_id);
     CloneBudgetHierarchy(
@@ -1233,20 +1307,20 @@ sub CloneBudgetPeriod {
         );
     }
 
-    if ( $reset_all_budgets ) {
-        my $budgets = GetBudgets({ budget_period_id => $new_budget_period_id });
-        for my $budget ( @$budgets ) {
+    if ($reset_all_budgets) {
+        my $budgets = GetBudgets( { budget_period_id => $new_budget_period_id } );
+        for my $budget (@$budgets) {
             $budget->{budget_amount} = 0;
-            ModBudget( $budget );
+            ModBudget($budget);
         }
     } elsif ($amount_change_percentage) {
-        my $budgets = GetBudgets({ budget_period_id => $new_budget_period_id });
-        for my $budget ( @$budgets ) {
+        my $budgets = GetBudgets( { budget_period_id => $new_budget_period_id } );
+        for my $budget (@$budgets) {
             my $amount = $budget->{budget_amount};
             $amount += $amount * $amount_change_percentage / 100;
-            $amount = _round($amount, $amount_change_round_increment);
+            $amount = _round( $amount, $amount_change_round_increment );
             $budget->{budget_amount} = $amount;
-            ModBudget( $budget );
+            ModBudget($budget);
         }
     }
 
@@ -1274,20 +1348,19 @@ sub CloneBudgetHierarchy {
     my $new_parent_id = $params->{new_parent_id};
 
     my @first_level_budgets =
-      ( not defined $children_of )
-      ? map { ( not $_->{budget_parent_id} )             ? $_ : () } @$budgets
-      : map { ( defined $_->{budget_parent_id} && $_->{budget_parent_id} == $children_of ) ? $_ : () } @$budgets;
+        ( not defined $children_of )
+        ? map { ( not $_->{budget_parent_id} )                                               ? $_ : () } @$budgets
+        : map { ( defined $_->{budget_parent_id} && $_->{budget_parent_id} == $children_of ) ? $_ : () } @$budgets;
 
     # get only the columns of aqbudgets
     my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
 
-    for my $budget ( sort { $a->{budget_id} <=> $b->{budget_id} }
-        @first_level_budgets )
-    {
+    for my $budget ( sort { $a->{budget_id} <=> $b->{budget_id} } @first_level_budgets ) {
 
-        my $tidy_budget =
-          { map { join( ' ', @columns ) =~ /$_/ ? ( $_ => $budget->{$_} ) : () }
-              keys %$budget };
+        my $tidy_budget = {
+            map { join( ' ', @columns ) =~ /$_/ ? ( $_ => $budget->{$_} ) : () }
+                keys %$budget
+        };
         delete $tidy_budget->{timestamp};
         my $new_budget_id = AddBudget(
             {
@@ -1297,8 +1370,8 @@ sub CloneBudgetHierarchy {
                 budget_period_id => $new_budget_period_id
             }
         );
-        my @borrowernumbers = GetBudgetUsers($budget->{budget_id});
-        ModBudgetUsers($new_budget_id, @borrowernumbers);
+        my @borrowernumbers = GetBudgetUsers( $budget->{budget_id} );
+        ModBudgetUsers( $new_budget_id, @borrowernumbers );
         CloneBudgetHierarchy(
             {
                 budgets              => $budgets,
@@ -1322,21 +1395,21 @@ Move orders from one budget period to another.
 =cut
 
 sub MoveOrders {
-    my ($params)              = @_;
-    my $from_budget_period_id = $params->{from_budget_period_id};
-    my $to_budget_period_id   = $params->{to_budget_period_id};
+    my ($params)               = @_;
+    my $from_budget_period_id  = $params->{from_budget_period_id};
+    my $to_budget_period_id    = $params->{to_budget_period_id};
     my $move_remaining_unspent = $params->{move_remaining_unspent};
     return
-      if not $from_budget_period_id
-          or not $to_budget_period_id
-          or $from_budget_period_id == $to_budget_period_id;
+           if not $from_budget_period_id
+        or not $to_budget_period_id
+        or $from_budget_period_id == $to_budget_period_id;
 
     # Can't move orders to an inactive budget (budgetperiod)
     my $budget_period = GetBudgetPeriod($to_budget_period_id);
     return unless $budget_period->{budget_period_active};
 
     my @report;
-    my $dbh     = C4::Context->dbh;
+    my $dbh                 = C4::Context->dbh;
     my $sth_update_aqorders = $dbh->prepare(
         q|
             UPDATE aqorders
@@ -1352,6 +1425,7 @@ sub MoveOrders {
         |
     );
     my $from_budgets = GetBudgetHierarchy($from_budget_period_id);
+
     for my $from_budget (@$from_budgets) {
         my $new_budget_id = $dbh->selectcol_arrayref(
             q|
@@ -1362,14 +1436,14 @@ sub MoveOrders {
             |, {}, $to_budget_period_id, $from_budget->{budget_code}
         );
         $new_budget_id = $new_budget_id->[0];
-        my $new_budget = GetBudget( $new_budget_id );
-        unless ( $new_budget ) {
+        my $new_budget = GetBudget($new_budget_id);
+        unless ($new_budget) {
             push @report,
-              {
-                moved       => 0,
-                budget      => $from_budget,
-                error       => 'budget_code_not_exists',
-              };
+                {
+                moved  => 0,
+                budget => $from_budget,
+                error  => 'budget_code_not_exists',
+                };
             next;
         }
         my $orders_to_move = C4::Acquisition::SearchOrders(
@@ -1387,25 +1461,27 @@ sub MoveOrders {
 
         my $unspent_moved = 0;
         if ($move_remaining_unspent) {
-            my $spent   = GetBudgetHierarchySpent( $from_budget->{budget_id} );
-            my $unspent = $from_budget->{budget_amount} - $spent;
+            my $spent             = GetBudgetHierarchySpent( $from_budget->{budget_id} );
+            my $unspent           = $from_budget->{budget_amount} - $spent;
             my $new_budget_amount = $new_budget->{budget_amount};
             if ( $unspent > 0 ) {
                 $new_budget_amount += $unspent;
                 $unspent_moved = $unspent;
             }
             $new_budget->{budget_amount} = $new_budget_amount;
-            $sth_update_budget_amount->execute( $new_budget_amount,
-                $new_budget->{budget_id} );
+            $sth_update_budget_amount->execute(
+                $new_budget_amount,
+                $new_budget->{budget_id}
+            );
         }
 
         push @report,
-          {
+            {
             budget        => $new_budget,
             orders_moved  => \@orders_moved,
             moved         => 1,
             unspent_moved => $unspent_moved,
-          };
+            };
     }
     return \@report;
 }
@@ -1426,11 +1502,11 @@ sub FieldsForCalculatingFundValues {
     my $ecost_field     = 'ecost_tax_included';
 
     if ( !C4::Context->preference('CalculateFundValuesIncludingTax') ) {
-       $unitprice_field = 'unitprice_tax_excluded';
-       $ecost_field     = 'ecost_tax_excluded';
+        $unitprice_field = 'unitprice_tax_excluded';
+        $ecost_field     = 'ecost_tax_excluded';
     }
 
-    return ( $unitprice_field, $ecost_field);
+    return ( $unitprice_field, $ecost_field );
 }
 
 END { }    # module clean-up code here (global destructor)

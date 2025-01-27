@@ -24,45 +24,57 @@ use Test::More;
 use_ok('Koha::SearchEngine::Elasticsearch::Browse');
 
 # testing browse itself not implemented as it'll require a running ES
-can_ok('Koha::SearchEngine::Elasticsearch::Browse',
-    qw/ _build_query browse /);
+can_ok(
+    'Koha::SearchEngine::Elasticsearch::Browse',
+    qw/ _build_query browse /
+);
 
 subtest "_build_query tests" => sub {
     plan tests => 2;
 
-    my $browse = Koha::SearchEngine::Elasticsearch::Browse->new({index=>'dummy'});
-    my $q = $browse->_build_query('foo', 'title');
-    is_deeply($q, { size => 1,
-        suggest => {
-            suggestions => {
-                text       => 'foo',
-                completion => {
-                    field => 'title__suggestion',
-                    size  => 500,
-                    fuzzy => {
-                        fuzziness => 1,
+    my $browse = Koha::SearchEngine::Elasticsearch::Browse->new( { index => 'dummy' } );
+    my $q      = $browse->_build_query( 'foo', 'title' );
+    is_deeply(
+        $q,
+        {
+            size    => 1,
+            suggest => {
+                suggestions => {
+                    text       => 'foo',
+                    completion => {
+                        field => 'title__suggestion',
+                        size  => 500,
+                        fuzzy => {
+                            fuzziness => 1,
+                        }
                     }
                 }
             }
-        }
-    }, 'No fuzziness or size specified');
+        },
+        'No fuzziness or size specified'
+    );
 
     # Note that a fuzziness of 4 will get reduced to 2.
-    $q = $browse->_build_query('foo', 'title', { fuzziness => 4, count => 400 });
-    is_deeply($q, { size => 1,
-        suggest => {
-            suggestions => {
-                text       => 'foo',
-                completion => {
-                    field => 'title__suggestion',
-                    size  => 400,
-                    fuzzy => {
-                        fuzziness => 2,
+    $q = $browse->_build_query( 'foo', 'title', { fuzziness => 4, count => 400 } );
+    is_deeply(
+        $q,
+        {
+            size    => 1,
+            suggest => {
+                suggestions => {
+                    text       => 'foo',
+                    completion => {
+                        field => 'title__suggestion',
+                        size  => 400,
+                        fuzzy => {
+                            fuzziness => 2,
+                        }
                     }
                 }
             }
-        }
-    }, 'Fuzziness and size specified');
+        },
+        'Fuzziness and size specified'
+    );
 };
 
 done_testing();

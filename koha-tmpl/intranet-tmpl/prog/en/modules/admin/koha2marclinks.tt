@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Koha to MARC mapping") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Koha to MARC mapping") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -29,52 +30,52 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <h1>Koha to MARC mapping</h1>
 
-<h1>Koha to MARC mapping</h1>
+    <div class="alert alert-info">If you make any change to the mappings, you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</div>
+    <form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
+        [% INCLUDE 'csrf-token.inc' %]
 
-<div class="alert alert-info">If you make any change to the mappings, you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</div>
-<form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
-    [% INCLUDE 'csrf-token.inc' %]
-
-[% IF error_add %]
-    <div class="alert alert-warning">Failed to add mapping for [% error_info | html %]</div>
-[% END %]
-
-<div class="page-section">
-<table id="kohafields">
-<thead><tr>
-    <th>Koha field</th>
-    <th>Tag</th>
-    <th>Subfield</th>
-    <th>Lib</th>
-    <th>&nbsp;</th>
-</tr></thead>
-<tbody>
-[% FOREACH loo IN loop %]
-<tr>
-    <td>[% loo.kohafield | html %]</td>
-    <td>[% loo.tagfield | html %]</td>
-    <td>[% loo.tagsubfield | html %]</td>
-    <td>[% loo.liblibrarian | html %]</td>
-    <td class="actions">
-        [% IF !loo.readonly %]
-            <a href="#" data-kohafield="[% loo.kohafield | html %]" class="addfld btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
-            [% IF loo.tagfield %]
-                <a href="#" data-tagfield="[% loo.tagfield | html %]" data-tagsubfield="[% loo.tagsubfield | html %]" class="remfld btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Remove</a>
-            [% END %]
+        [% IF error_add %]
+            <div class="alert alert-warning">Failed to add mapping for [% error_info | html %]</div>
         [% END %]
-    </td>
-</tr>
-[% END %]
-</tbody>
-</table>
-</div> <!-- /.page-section -->
-<input id="remove_field" name="remove_field" type="hidden" value=""/>
-<input id="add_field" name="add_field" type="hidden" value=""/>
-<input type="hidden" name="op" value="cud-save" />
 
-</form>
-
+        <div class="page-section">
+            <table id="kohafields">
+                <thead
+                    ><tr>
+                        <th>Koha field</th>
+                        <th>Tag</th>
+                        <th>Subfield</th>
+                        <th>Lib</th>
+                        <th>&nbsp;</th>
+                    </tr></thead
+                >
+                <tbody>
+                    [% FOREACH loo IN loop %]
+                        <tr>
+                            <td>[% loo.kohafield | html %]</td>
+                            <td>[% loo.tagfield | html %]</td>
+                            <td>[% loo.tagsubfield | html %]</td>
+                            <td>[% loo.liblibrarian | html %]</td>
+                            <td class="actions">
+                                [% IF !loo.readonly %]
+                                    <a href="#" data-kohafield="[% loo.kohafield | html %]" class="addfld btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
+                                    [% IF loo.tagfield %]
+                                        <a href="#" data-tagfield="[% loo.tagfield | html %]" data-tagsubfield="[% loo.tagsubfield | html %]" class="remfld btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Remove</a>
+                                    [% END %]
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+        <input id="remove_field" name="remove_field" type="hidden" value="" />
+        <input id="add_field" name="add_field" type="hidden" value="" />
+        <input type="hidden" name="op" value="cud-save" />
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -82,45 +83,51 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         function AddFld(kohafield) {
-            var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)") + "\n" + _("The change will be applied immediately.") );
-            if( fieldstr ){
-                var temp = fieldstr.split(',');
-                if( temp.length == 2 ) {
-                    $('#add_field').val( kohafield+','+fieldstr );
-                    $('#koha2marc').submit();
+            var fieldstr = prompt(
+                _("Adding a mapping for: %s.").format(kohafield) +
+                    "\n" +
+                    _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)") +
+                    "\n" +
+                    _("The change will be applied immediately.")
+            );
+            if (fieldstr) {
+                var temp = fieldstr.split(",");
+                if (temp.length == 2) {
+                    $("#add_field").val(kohafield + "," + fieldstr);
+                    $("#koha2marc").submit();
                 } else {
-                    alert( _("Invalid input. Enter something like: 245,a") );
+                    alert(_("Invalid input. Enter something like: 245,a"));
                 }
             }
         }
 
-        function RemFld(tagfield, subfield ) {
-            if( confirm( _("Mapping will be removed for: %s.").format(tagfield + subfield) + "\n" + _("The change will be applied immediately." ))) {
-                $('#remove_field').val(tagfield+','+subfield);
-                $('#koha2marc').submit();
+        function RemFld(tagfield, subfield) {
+            if (confirm(_("Mapping will be removed for: %s.").format(tagfield + subfield) + "\n" + _("The change will be applied immediately."))) {
+                $("#remove_field").val(tagfield + "," + subfield);
+                $("#koha2marc").submit();
             }
         }
-        $(document).ready(function() {
-            $("#kohafields").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ],
-                "paging":   false
-            } ));
+        $(document).ready(function () {
+            $("#kohafields").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                    paging: false,
+                })
+            );
 
-            $(".addfld").on("click", function(e){
+            $(".addfld").on("click", function (e) {
                 e.preventDefault();
                 const kohafield = $(this).data("kohafield");
-                AddFld( kohafield );
+                AddFld(kohafield);
             });
 
-            $(".remfld").on("click", function(e){
+            $(".remfld").on("click", function (e) {
                 e.preventDefault();
                 const tagfield = $(this).data("tagfield");
                 const tagsubfield = $(this).data("tagsubfield");
-                RemFld( tagfield, tagsubfield );
+                RemFld(tagfield, tagsubfield);
             });
-         });
+        });
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

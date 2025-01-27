@@ -20,7 +20,6 @@ package Koha::Patrons;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -70,11 +69,13 @@ Returns all Patrons which are Housebound choosers.
 =cut
 
 sub search_housebound_choosers {
-    my ( $self ) = @_;
-    my $cho = $self->_resultset
-        ->search_related('housebound_role', {
+    my ($self) = @_;
+    my $cho = $self->_resultset->search_related(
+        'housebound_role',
+        {
             housebound_chooser => 1,
-        })->search_related('borrowernumber');
+        }
+    )->search_related('borrowernumber');
     return Koha::Patrons->_new_from_dbic($cho);
 }
 
@@ -85,11 +86,13 @@ Returns all Patrons which are Housebound deliverers.
 =cut
 
 sub search_housebound_deliverers {
-    my ( $self ) = @_;
-    my $del = $self->_resultset
-        ->search_related('housebound_role', {
+    my ($self) = @_;
+    my $del = $self->_resultset->search_related(
+        'housebound_role',
+        {
             housebound_deliverer => 1,
-        })->search_related('borrowernumber');
+        }
+    )->search_related('borrowernumber');
     return Koha::Patrons->_new_from_dbic($del);
 }
 
@@ -107,22 +110,20 @@ from 12 to 17 days.
 sub search_upcoming_membership_expires {
     my ( $self, $params ) = @_;
     my $before = $params->{before} || 0;
-    my $after  = $params->{after} || 0;
+    my $after  = $params->{after}  || 0;
     delete $params->{before};
     delete $params->{after};
 
-    my $days = C4::Context->preference("MembershipExpiryDaysNotice") || 0;
+    my $days        = C4::Context->preference("MembershipExpiryDaysNotice") || 0;
     my $date_before = dt_from_string->add( days => $days - $before );
-    my $date_after = dt_from_string->add( days => $days + $after );
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $date_after  = dt_from_string->add( days => $days + $after );
+    my $dtf         = Koha::Database->new->schema->storage->datetime_parser;
 
     $params->{dateexpiry} = {
-        ">=" => $dtf->format_date( $date_before ),
-        "<=" => $dtf->format_date( $date_after ),
+        ">=" => $dtf->format_date($date_before),
+        "<=" => $dtf->format_date($date_after),
     };
-    return $self->SUPER::search(
-        $params, { join => ['branchcode', 'categorycode'] }
-    );
+    return $self->SUPER::search( $params, { join => [ 'branchcode', 'categorycode' ] } );
 }
 
 =head3 search_patrons_to_anonymise
@@ -139,20 +140,25 @@ sub search_patrons_to_anonymise {
     my $library         = $params->{library};
     $older_than_date = $older_than_date ? dt_from_string($older_than_date) : dt_from_string;
     $library ||=
-      ( C4::Context->preference('IndependentBranches') && C4::Context->userenv && !C4::Context->IsSuperLibrarian() && C4::Context->userenv->{branch} )
-      ? C4::Context->userenv->{branch}
-      : undef;
+        (      C4::Context->preference('IndependentBranches')
+            && C4::Context->userenv
+            && !C4::Context->IsSuperLibrarian()
+            && C4::Context->userenv->{branch} )
+        ? C4::Context->userenv->{branch}
+        : undef;
     my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $rs = $class->_resultset->search(
-        {   returndate                  => { '<'   =>  $dtf->format_datetime($older_than_date), },
+    my $rs  = $class->_resultset->search(
+        {
+            returndate                  => { '<'   => $dtf->format_datetime($older_than_date), },
             'old_issues.borrowernumber' => { 'not' => undef },
-            privacy                     => { '<>'  => 0 },                  # Keep forever
-            ( $library ? ( 'old_issues.branchcode' => $library ) : () ),
+            privacy                     => { '<>'  => 0 },                                          # Keep forever
+            ( $library          ? ( 'old_issues.branchcode'     => $library )                      : () ),
             ( $anonymous_patron ? ( 'old_issues.borrowernumber' => { '!=' => $anonymous_patron } ) : () ),
         },
-        {   join     => ["old_issues"],
+        {
+            join     => ["old_issues"],
             distinct => 1,
         }
     );
@@ -176,19 +182,23 @@ sub search_patrons_to_anonymise {
 sub delete {
     my ( $self, $params ) = @_;
     my $patrons_deleted;
-    $self->_resultset->result_source->schema->txn_do( sub {
-        my ( $set, $params ) = @_;
-        my $count = $set->count;
-        while ( my $patron = $set->next ) {
+    $self->_resultset->result_source->schema->txn_do(
+        sub {
+            my ( $set, $params ) = @_;
+            my $count = $set->count;
+            while ( my $patron = $set->next ) {
 
-            next unless $patron->in_storage;
+                next unless $patron->in_storage;
 
-            $patron->move_to_deleted if $params->{move};
-            $patron->delete;
+                $patron->move_to_deleted if $params->{move};
+                $patron->delete;
 
-            $patrons_deleted++;
-        }
-    }, $self, $params );
+                $patrons_deleted++;
+            }
+        },
+        $self,
+        $params
+    );
     return $patrons_deleted;
 }
 
@@ -222,23 +232,24 @@ sub filter_by_expiration_date {
 =cut
 
 sub search_unsubscribed {
-    my ( $class ) = @_;
+    my ($class) = @_;
 
     my $delay = C4::Context->preference('UnsubscribeReflectionDelay');
-    if( !defined($delay) || $delay eq q{} ) {
+    if ( !defined($delay) || $delay eq q{} ) {
+
         # return empty set
-        return $class->search({ borrowernumber => undef });
+        return $class->search( { borrowernumber => undef } );
     }
     my $parser = Koha::Database->new->schema->storage->datetime_parser;
-    my $dt = dt_from_string()->subtract( days => $delay );
-    my $str = $parser->format_datetime($dt);
-    my $fails = C4::Context->preference('FailedLoginAttempts') || 0;
-    my $cond = [ undef, 0, 1..$fails-1 ]; # NULL, 0, 1..fails-1 (if fails>0)
+    my $dt     = dt_from_string()->subtract( days => $delay );
+    my $str    = $parser->format_datetime($dt);
+    my $fails  = C4::Context->preference('FailedLoginAttempts') || 0;
+    my $cond   = [ undef, 0, 1 .. $fails - 1 ];                           # NULL, 0, 1..fails-1 (if fails>0)
     return $class->search(
         {
             'patron_consents.refused_on' => { '<=' => $str },
-            'patron_consents.type' => 'GDPR_PROCESSING',
-            'login_attempts' => $cond,
+            'patron_consents.type'       => 'GDPR_PROCESSING',
+            'login_attempts'             => $cond,
         },
         { join => 'patron_consents' },
     );
@@ -258,21 +269,23 @@ sub search_anonymize_candidates {
     my ( $class, $params ) = @_;
 
     my $delay = C4::Context->preference('PatronAnonymizeDelay');
-    if( !defined($delay) || $delay eq q{} ) {
+    if ( !defined($delay) || $delay eq q{} ) {
+
         # return empty set
-        return $class->search({ borrowernumber => undef });
+        return $class->search( { borrowernumber => undef } );
     }
-    my $cond = {};
+    my $cond   = {};
     my $parser = Koha::Database->new->schema->storage->datetime_parser;
-    my $dt = dt_from_string()->subtract( days => $delay );
-    my $str = $parser->format_datetime($dt);
+    my $dt     = dt_from_string()->subtract( days => $delay );
+    my $str    = $parser->format_datetime($dt);
     $cond->{dateexpiry} = { '<=' => $str };
-    $cond->{anonymized} = 0; # not yet done
-    if( $params->{locked} ) {
+    $cond->{anonymized} = 0;                  # not yet done
+    if ( $params->{locked} ) {
         my $fails = C4::Context->preference('FailedLoginAttempts') || 0;
-        $cond->{login_attempts} = [ -and => { '!=' => undef }, { -not_in => [0, 1..$fails-1 ] } ]; # -not_in does not like undef
+        $cond->{login_attempts} =
+            [ -and => { '!=' => undef }, { -not_in => [ 0, 1 .. $fails - 1 ] } ];    # -not_in does not like undef
     }
-    return $class->search( $cond );
+    return $class->search($cond);
 }
 
 =head3 search_anonymized
@@ -286,20 +299,21 @@ sub search_anonymize_candidates {
 =cut
 
 sub search_anonymized {
-    my ( $class ) = @_;
+    my ($class) = @_;
 
     my $delay = C4::Context->preference('PatronRemovalDelay');
-    if( !defined($delay) || $delay eq q{} ) {
+    if ( !defined($delay) || $delay eq q{} ) {
+
         # return empty set
-        return $class->search({ borrowernumber => undef });
+        return $class->search( { borrowernumber => undef } );
     }
-    my $cond = {};
+    my $cond   = {};
     my $parser = Koha::Database->new->schema->storage->datetime_parser;
-    my $dt = dt_from_string()->subtract( days => $delay );
-    my $str = $parser->format_datetime($dt);
+    my $dt     = dt_from_string()->subtract( days => $delay );
+    my $str    = $parser->format_datetime($dt);
     $cond->{dateexpiry} = { '<=' => $str };
     $cond->{anonymized} = 1;
-    return $class->search( $cond );
+    return $class->search($cond);
 }
 
 =head3 lock
@@ -314,7 +328,7 @@ sub search_anonymized {
 sub lock {
     my ( $self, $params ) = @_;
     my $count = $self->count;
-    while( my $patron = $self->next ) {
+    while ( my $patron = $self->next ) {
         $patron->lock($params);
     }
 }
@@ -329,9 +343,9 @@ sub lock {
 =cut
 
 sub anonymize {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $count = $self->count;
-    while( my $patron = $self->next ) {
+    while ( my $patron = $self->next ) {
         $patron->anonymize;
     }
 }
@@ -361,27 +375,29 @@ sub search_patrons_to_update_category {
     my %query;
     my $search_params;
 
-    my $cat_from = Koha::Patron::Categories->find($params->{from});
-    $search_params->{categorycode}=$params->{from};
-    if ($params->{too_young} || $params->{too_old}){
+    my $cat_from = Koha::Patron::Categories->find( $params->{from} );
+    $search_params->{categorycode} = $params->{from};
+    if ( $params->{too_young} || $params->{too_old} ) {
         my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-        if( $cat_from->dateofbirthrequired && $params->{too_young} ) {
-            my $date_after = dt_from_string()->subtract( years => $cat_from->dateofbirthrequired);
-            $search_params->{dateofbirth}{'>'} = $dtf->format_datetime( $date_after );
+        if ( $cat_from->dateofbirthrequired && $params->{too_young} ) {
+            my $date_after = dt_from_string()->subtract( years => $cat_from->dateofbirthrequired );
+            $search_params->{dateofbirth}{'>'} = $dtf->format_datetime($date_after);
         }
-        if( $cat_from->upperagelimit && $params->{too_old} ) {
-            my $date_before = dt_from_string()->subtract( years => $cat_from->upperagelimit);
-            $search_params->{dateofbirth}{'<'} = $dtf->format_datetime( $date_before );
+        if ( $cat_from->upperagelimit && $params->{too_old} ) {
+            my $date_before = dt_from_string()->subtract( years => $cat_from->upperagelimit );
+            $search_params->{dateofbirth}{'<'} = $dtf->format_datetime($date_before);
         }
     }
-    if ($params->{fine_min} || $params->{fine_max}) {
-        $query{join} = ["accountlines"];
-        $query{columns} = ["borrowernumber"];
+    if ( $params->{fine_min} || $params->{fine_max} ) {
+        $query{join}     = ["accountlines"];
+        $query{columns}  = ["borrowernumber"];
         $query{group_by} = ["borrowernumber"];
-        $query{having} = \['COALESCE(sum(accountlines.amountoutstanding),0) <= ?',$params->{fine_max}] if defined $params->{fine_max};
-        $query{having} = \['COALESCE(sum(accountlines.amountoutstanding),0) >= ?',$params->{fine_min}] if defined $params->{fine_min};
+        $query{having}   = \[ 'COALESCE(sum(accountlines.amountoutstanding),0) <= ?', $params->{fine_max} ]
+            if defined $params->{fine_max};
+        $query{having} = \[ 'COALESCE(sum(accountlines.amountoutstanding),0) >= ?', $params->{fine_min} ]
+            if defined $params->{fine_min};
     }
-    return $self->search($search_params,\%query);
+    return $self->search( $search_params, \%query );
 }
 
 =head3 update_category_to
@@ -399,10 +415,10 @@ call search_patrons_to_update to filter the Koha::Patrons set
 sub update_category_to {
     my ( $self, $params ) = @_;
     my $counter = 0;
-    while( my $patron = $self->next ) {
+    while ( my $patron = $self->next ) {
         $patron->discard_changes;
         $counter++;
-        $patron->categorycode($params->{category})->store();
+        $patron->categorycode( $params->{category} )->store();
     }
     return $counter;
 }
@@ -417,8 +433,8 @@ Return a Koha::Patrons set with patrons having the attribute defined.
 
 sub filter_by_attribute_type {
     my ( $self, $attribute_type ) = @_;
-    my $rs = Koha::Patron::Attributes->search( { code => $attribute_type } )
-      ->_resultset()->search_related('borrowernumber');
+    my $rs =
+        Koha::Patron::Attributes->search( { code => $attribute_type } )->_resultset()->search_related('borrowernumber');
     return Koha::Patrons->_new_from_dbic($rs);
 }
 
@@ -435,7 +451,7 @@ sub filter_by_attribute_value {
     my $rs = Koha::Patron::Attributes->search(
         {
             'borrower_attribute_types.staff_searchable' => 1,
-            attribute => { like => "%$attribute_value%" }
+            attribute                                   => { like => "%$attribute_value%" }
         },
         { join => 'borrower_attribute_types' }
     )->_resultset()->search_related('borrowernumber');
@@ -477,46 +493,44 @@ sub filter_by_amount_owed {
     my ( $self, $options ) = @_;
 
     return $self
-      unless (
+        unless (
         defined($options)
         && (   defined( $options->{less_than} )
             || defined( $options->{more_than} ) )
-      );
+        );
 
-    my $where = {};
-    my $group_by =
-      [ map { 'me.' . $_ } $self->_resultset->result_source->columns ];
+    my $where    = {};
+    my $group_by = [ map { 'me.' . $_ } $self->_resultset->result_source->columns ];
 
     my $attrs = {
-        join     => 'accountlines',
-        group_by => $group_by,
-        '+select' =>
-          { sum => 'accountlines.amountoutstanding', '-as' => 'outstanding' },
-        '+as' => 'outstanding'
+        join      => 'accountlines',
+        group_by  => $group_by,
+        '+select' => { sum => 'accountlines.amountoutstanding', '-as' => 'outstanding' },
+        '+as'     => 'outstanding'
     };
 
     $where->{'accountlines.debit_type_code'} = $options->{debit_type}
-      if defined( $options->{debit_type} );
+        if defined( $options->{debit_type} );
 
     $where->{'accountlines.branchcode'} = $options->{library}
-      if defined( $options->{library} );
+        if defined( $options->{library} );
 
     $attrs->{'having'} = [
         { 'outstanding' => { '<' => $options->{less_than} } },
         { 'outstanding' => undef }
-      ]
-      if ( defined( $options->{less_than} )
+        ]
+        if ( defined( $options->{less_than} )
         && !defined( $options->{more_than} ) );
 
     $attrs->{'having'} = { 'outstanding' => { '>' => $options->{more_than} } }
-      if (!defined( $options->{less_than} )
+        if ( !defined( $options->{less_than} )
         && defined( $options->{more_than} ) );
 
     $attrs->{'having'}->{'-and'} = [
         { 'outstanding' => { '>' => $options->{more_than} } },
         { 'outstanding' => { '<' => $options->{less_than} } }
-      ]
-      if ( defined( $options->{less_than} )
+        ]
+        if ( defined( $options->{less_than} )
         && defined( $options->{more_than} ) );
 
     return $self->search( $where, $attrs );
@@ -533,14 +547,14 @@ Filter patrons who have a given subpermission or the whole permission.
 =cut
 
 sub filter_by_have_permission {
-    my ($self, $subpermission) = @_;
+    my ( $self, $subpermission ) = @_;
 
-    my ($p, $sp) = split '\.', $subpermission;
+    my ( $p, $sp ) = split '\.', $subpermission;
 
-    my $perm = Koha::Database->new()->schema()->resultset('Userflag')->find({flag => $p});
+    my $perm = Koha::Database->new()->schema()->resultset('Userflag')->find( { flag => $p } );
 
     Koha::Exceptions::ObjectNotFound->throw( sprintf( "Permission %s not found", $p ) )
-      unless $perm;
+        unless $perm;
 
     my $bit = $perm->bit;
 
@@ -557,7 +571,7 @@ sub filter_by_have_permission {
                                 { 'user_permissions.module_bit' => $bit },
                                 { 'user_permissions.code'       => $sp }
                             ]
-                          }
+                            }
                         : ()
                     )
                 ]

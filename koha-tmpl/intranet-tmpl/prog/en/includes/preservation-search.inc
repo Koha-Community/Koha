@@ -15,8 +15,10 @@
     </div>
 
     <ul>
-        <li><a title="Preservation search" href="#preservation_search"><i class="fa fa-upload"></i> <span class="tab-title">Preservation search</span></a></li>
-    </ul>
-</div><!-- /header_search -->
+        <li
+            ><a title="Preservation search" href="#preservation_search"><i class="fa fa-upload"></i> <span class="tab-title">Preservation search</span></a></li
+        >
+    </ul> </div
+><!-- /header_search -->
 
 <!-- End Main page Resident Search Box -->

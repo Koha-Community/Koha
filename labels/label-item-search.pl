@@ -19,14 +19,14 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI   qw ( -utf8 );
 use POSIX qw( ceil );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use C4::Search qw( new_record_from_zebra );
-use C4::Biblio qw( TransformMarcToKoha );
+use C4::Search        qw( new_record_from_zebra );
+use C4::Biblio        qw( TransformMarcToKoha );
 use C4::Creators::Lib qw( html_table );
 
 use Koha::Logger;
@@ -40,21 +40,22 @@ my $query = CGI->new;
 my $type      = $query->param('type');
 my $op        = $query->param('op') || '';
 my $batch_id  = $query->param('batch_id');
-my @limits = split( " AND ", $query->param('limits') || "" );
+my @limits    = split( " AND ", $query->param('limits') || "" );
 my $startfrom = $query->param('startfrom') || 1;
-my ($template, $loggedinuser, $cookie) = (undef, undef, undef);
+my ( $template, $loggedinuser, $cookie ) = ( undef, undef, undef );
 my (
-    $total_hits,  $total,  $error,
-    $marcresults, $idx,     $datefrom, $dateto, $ccl_textbox
+    $total_hits,  $total, $error,
+    $marcresults, $idx,   $datefrom, $dateto, $ccl_textbox
 );
-my $resultsperpage = C4::Context->preference('numSearchResults') || '20';
-my $show_results = 0;
-my $display_columns = [ {_add                   => {label => "Add Item", link_field => 1}},
-                        {_item_call_number      => {label => "Call Number", link_field => 0}},
-                        {_date_accessioned      => {label => "Accession Date", link_field => 0}},
-                        {_barcode               => {label => "Barcode", link_field => 0}},
-                        {select                 => {label => "Select", value => "_item_number"}},
-                      ];
+my $resultsperpage  = C4::Context->preference('numSearchResults') || '20';
+my $show_results    = 0;
+my $display_columns = [
+    { _add              => { label => "Add Item",       link_field => 1 } },
+    { _item_call_number => { label => "Call Number",    link_field => 0 } },
+    { _date_accessioned => { label => "Accession Date", link_field => 0 } },
+    { _barcode          => { label => "Barcode",        link_field => 0 } },
+    { select            => { label => "Select",         value      => "_item_number" } },
+];
 
 if ( $op eq "do_search" ) {
     $idx         = $query->param('idx');
@@ -95,22 +96,28 @@ if ( $op eq "do_search" ) {
 }
 
 if ($show_results) {
-    my $hits = $show_results;
+    my $hits        = $show_results;
     my @results_set = ();
-    my @items =();
+    my @items       = ();
     for ( my $i = 0 ; $i < $hits ; $i++ ) {
-        my @row_data= ();
+        my @row_data = ();
+
         #DEBUG Notes: Decode the MARC record from each resulting MARC record...
         my $marcrecord = C4::Search::new_record_from_zebra( 'biblioserver', $marcresults->[$i] );
+
         #DEBUG Notes: Transform it to Koha form...
-        my $biblio = TransformMarcToKoha({ record => $marcrecord });
+        my $biblio = TransformMarcToKoha( { record => $marcrecord } );
+
         #DEBUG Notes: Stuff the bib into @biblio_data...
-        push (@results_set, $biblio);
+        push( @results_set, $biblio );
         my $biblionumber = $biblio->{'biblionumber'};
+
         #DEBUG Notes: Grab the item numbers associated with this MARC record...
-        my $items = Koha::Items->search({ biblionumber => $biblionumber }, { order_by => { -desc => 'itemnumber' }});
+        my $items = Koha::Items->search( { biblionumber => $biblionumber }, { order_by => { -desc => 'itemnumber' } } );
+
         #DEBUG Notes: Retrieve the item data for each number...
         while ( my $item = $items->next ) {
+
             #DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
             if ( $item->biblionumber eq $results_set[$i]->{'biblionumber'} ) {
                 my $item_data;
@@ -121,17 +128,17 @@ if ($show_results) {
                 $item_data->{'_add'}              = $item->itemnumber;
                 push @row_data, $item_data;
             }
-            $results_set[$i]->{'item_table'} = html_table($display_columns, \@row_data);
+            $results_set[$i]->{'item_table'} = html_table( $display_columns, \@row_data );
         }
     }
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "labels/result.tt",
-            query           => $query,
-            type            => "intranet",
-            flagsrequired   => { borrowers => 'edit_borrowers' },
-            flagsrequired   => { catalogue => 1 },
+            template_name => "labels/result.tt",
+            query         => $query,
+            type          => "intranet",
+            flagsrequired => { borrowers => 'edit_borrowers' },
+            flagsrequired => { catalogue => 1 },
         }
     );
 
@@ -139,18 +146,20 @@ if ($show_results) {
     my @numbers;
     $total = $total_hits;
 
-    my ( $from, $to, $startfromnext, $startfromprev, $displaynext,
-        $displayprev );
+    my (
+        $from, $to, $startfromnext, $startfromprev, $displaynext,
+        $displayprev
+    );
 
     if ( $total > $resultsperpage ) {
         my $num_of_pages = ceil( $total / $resultsperpage + 1 );
         for ( my $page = 1 ; $page < $num_of_pages ; $page++ ) {
             my $startfrm = ( ( $page - 1 ) * $resultsperpage ) + 1;
             push @numbers,
-              {
+                {
                 number    => $page,
                 startfrom => $startfrm
-              };
+                };
         }
 
         $from          = $startfrom;
@@ -158,9 +167,9 @@ if ($show_results) {
         $startfromnext = $startfrom + $resultsperpage;
 
         $to =
-            $startfrom + $resultsperpage > $total
-          ? $total
-          : $startfrom + $resultsperpage - 1;
+              $startfrom + $resultsperpage > $total
+            ? $total
+            : $startfrom + $resultsperpage - 1;
 
         # multi page display
         $displaynext = 0;
@@ -168,10 +177,9 @@ if ($show_results) {
 
         $displaynext = 1 if $to < $total_hits;
 
-    }
-    else {
-        $from = 1;
-        $to = $total_hits;
+    } else {
+        $from        = 1;
+        $to          = $total_hits;
         $displayprev = 0;
         $displaynext = 0;
     }
@@ -207,15 +215,16 @@ if ($show_results) {
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "labels/search.tt",
-            query           => $query,
-            type            => "intranet",
-            flagsrequired   => { catalogue => 1 },
+            template_name => "labels/search.tt",
+            query         => $query,
+            type          => "intranet",
+            flagsrequired => { catalogue => 1 },
         }
     );
     my $itemtypes = Koha::ItemTypes->search;
     my @itemtypeloop;
     while ( my $itemtype = $itemtypes->next ) {
+
         # FIXME This must be improved:
         # - pass the iterator to the template
         # - display the translated_description

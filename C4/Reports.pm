@@ -22,10 +22,11 @@ use CGI qw ( -utf8 );
 
 use C4::Context;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
         GetDelimiterChoices
     );
@@ -52,15 +53,15 @@ This will return a list of all the available delimiters.
 sub GetDelimiterChoices {
     my $dbh = C4::Context->dbh;
 
-    my $sth = $dbh->prepare("
+    my $sth = $dbh->prepare( "
       SELECT options, value
       FROM systempreferences
       WHERE variable = 'CSVDelimiter'
-    ");
+    " );
 
     $sth->execute();
 
-    my ($choices, $default) = $sth->fetchrow;
+    my ( $choices, $default ) = $sth->fetchrow;
     my @dels = split /\|/, $choices;
 
     return {

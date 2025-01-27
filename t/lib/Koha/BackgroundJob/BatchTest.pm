@@ -31,13 +31,10 @@ sub process {
 
     # FIXME: This should happen when $self->SUPER::process is called instead
     return
-      unless $self->status ne 'cancelled';
+        unless $self->status ne 'cancelled';
 
     my $job_progress = 0;
-    $self->started_on(dt_from_string)
-        ->progress($job_progress)
-        ->status('started')
-        ->store;
+    $self->started_on(dt_from_string)->progress($job_progress)->status('started')->store;
 
     my $report = {
         total_records => $self->size,
@@ -50,29 +47,30 @@ sub process {
 
         push @messages, {
             type => 'success',
-            i => $i,
+            i    => $i,
         };
         $report->{total_success}++;
         $self->progress( ++$job_progress )->store;
     }
 
-    my $job_data = $self->json->decode($self->data);
+    my $job_data = $self->json->decode( $self->data );
     $job_data->{messages} = \@messages;
-    $job_data->{report} = $report;
+    $job_data->{report}   = $report;
 
-    $self->ended_on(dt_from_string)
-        ->data( $self->json->encode($job_data) );
+    $self->ended_on(dt_from_string)->data( $self->json->encode($job_data) );
     $self->status('finished') if $self->status ne 'cancelled';
     $self->store;
 }
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
-    $self->SUPER::enqueue({
-        job_size => $args->{size},
-        job_args => {a => $args->{a}, b => $args->{b}}
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size => $args->{size},
+            job_args => { a => $args->{a}, b => $args->{b} }
+        }
+    );
 }
 
 1;

@@ -1,25 +1,29 @@
 use Modern::Perl;
 
 return {
-    bug_number => "25936",
+    bug_number  => "25936",
     description => "A password change notification feature",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         # Add PASSWORD_CHANGE notice
-        $dbh->do( q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('members', 'PASSWORD_CHANGE', 'Notification of password change', 'Library account password change notification',
             "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nWe want to notify you that your password has been changed. If you did not change it yourself (or requested that change), please contact library staff.\r\n\r\nYour library.", 'email');
-        });
+        }
+        );
 
         say $out "Added new letter 'PASSWORD_CHANGE' (email)";
 
         # Add systempreference
-        $dbh->do(q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
             VALUES ('NotifyPasswordChange','0','','Notify patrons whenever their password is changed.','YesNo')
-        });
+        }
+        );
 
         say $out "Added new system preference 'NotifyPasswordChange'";
     },

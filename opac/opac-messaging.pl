@@ -29,24 +29,25 @@ use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::SMS::Providers;
 
-my $query = CGI->new();
+my $query          = CGI->new();
 my $opac_messaging = C4::Context->preference('EnhancedMessagingPreferencesOPAC');
 
-unless ( ( $opac_messaging or C4::Context->preference('TranslateNotices') ) and
-         C4::Context->preference('EnhancedMessagingPreferences') ) {
+unless ( ( $opac_messaging or C4::Context->preference('TranslateNotices') )
+    and C4::Context->preference('EnhancedMessagingPreferences') )
+{
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => 'opac-messaging.tt',
-        query           => $query,
-        type            => 'opac',
+        template_name => 'opac-messaging.tt',
+        query         => $query,
+        type          => 'opac',
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber ); # FIXME and if borrowernumber is invalid?
+my $patron = Koha::Patrons->find($borrowernumber);    # FIXME and if borrowernumber is invalid?
 
 my $messaging_options;
 $messaging_options = C4::Members::Messaging::GetMessagingOptions() if $opac_messaging;
@@ -54,35 +55,41 @@ $messaging_options = C4::Members::Messaging::GetMessagingOptions() if $opac_mess
 my $op = $query->param('op') || q{};
 
 if ( $op eq 'cud-modify' ) {
-    if( $opac_messaging ) {
-        my $sms = $query->param('SMSnumber');
+    if ($opac_messaging) {
+        my $sms             = $query->param('SMSnumber');
         my $sms_provider_id = $query->param('sms_provider_id');
-        $patron->set({
-            smsalertnumber  => $sms,
-            sms_provider_id => $sms_provider_id,
-        })->store;
+        $patron->set(
+            {
+                smsalertnumber  => $sms,
+                sms_provider_id => $sms_provider_id,
+            }
+        )->store;
 
-        C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $patron->borrowernumber }, $template);
+        C4::Form::MessagingPreferences::handle_form_action(
+            $query, { borrowernumber => $patron->borrowernumber },
+            $template
+        );
     }
 
     if ( C4::Context->preference('TranslateNotices') ) {
-        $patron->set({ lang => scalar $query->param('lang') })->store;
+        $patron->set( { lang => scalar $query->param('lang') } )->store;
     }
 }
 
-C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $patron->borrowernumber }, $template) if $opac_messaging;
+C4::Form::MessagingPreferences::set_form_values( { borrowernumber => $patron->borrowernumber }, $template )
+    if $opac_messaging;
 
 $template->param(
     messagingview         => 1,
-    SMSnumber             => $patron->smsalertnumber, # FIXME This is already sent 2 lines above
+    SMSnumber             => $patron->smsalertnumber,                    # FIXME This is already sent 2 lines above
     SMSSendDriver         => C4::Context->preference("SMSSendDriver"),
     TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
 );
 
-if( $opac_messaging && C4::Context->preference("SMSSendDriver") eq 'Email' ) {
+if ( $opac_messaging && C4::Context->preference("SMSSendDriver") eq 'Email' ) {
     my @providers = Koha::SMS::Providers->search( {}, { order_by => 'name' } )->as_list;
     $template->param(
-        sms_providers => \@providers,
+        sms_providers   => \@providers,
         sms_provider_id => $patron->sms_provider_id,
     );
 }
@@ -92,7 +99,7 @@ my $new_session_id = $query->cookie('CGISESSID');
 if ( C4::Context->preference('TranslateNotices') ) {
     my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
     $template->param(
-        languages => $translated_languages,
+        languages   => $translated_languages,
         patron_lang => $patron->lang,
     );
 }

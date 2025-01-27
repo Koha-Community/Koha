@@ -20,7 +20,8 @@
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Search suggestions</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% BLOCK cssinclude %][% END %]
+    [% BLOCK cssinclude %]
+    [% END %]
     </head>
     <body id="opac-suggestion" class="opac">
     [% INCLUDE 'masthead.inc' %]
@@ -38,26 +39,28 @@
                 [% IF ( OpacNav || OpacNavBottom ) %]
                     [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                     <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
+                        <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
                     </div>
                 [% END %]
 
                 <div class="[% column_class | html %]">
+                    <div id="searchsuggestions">
+                        <h1 class="title">Suggestions</h1>
 
-                   <div id="searchsuggestions">
-            <h1 class="title">Suggestions</h1>
-
-            [% PROCESS didyoumean  %]
-
-                    </div> <!-- / #searchsuggestions -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                        [% PROCESS didyoumean %]
+                    </div>
+                    <!-- / #searchsuggestions -->
+                </div>
+                <!-- / .span10/12 -->
+            </div>
+            <!-- / .row -->
+        </div>
+        <!-- / .container-fluid -->
+    </div>
+    <!-- / .main -->
     [% INCLUDE 'opac-bottom.inc' %]
-    [% BLOCK jsinclude %][% END %]
+    [% BLOCK jsinclude %]
+    [% END %]
 [% ELSE %]
-    [% PROCESS didyoumean  %]
+    [% PROCESS didyoumean %]
 [% END %]

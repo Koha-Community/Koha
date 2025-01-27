@@ -3,75 +3,83 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( typeissue ) %]
-        [% t("Subscribe to a subscription alert") | html %]
-    [% ELSIF ( typeissuecancel ) %]
-        [% t("Unsubscribe from a subscription alert") | html %]
-    [% END %] &rsaquo;
-    [% bibliotitle | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( typeissue ) %]
+            [% t("Subscribe to a subscription alert") | html %]
+        [% ELSIF ( typeissuecancel ) %]
+            [% t("Unsubscribe from a subscription alert") | html %]
+        [% END %]
+        &rsaquo; [% bibliotitle | html %] &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-alert-subscribe' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a>
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF ( typeissue ) %]
+                <span>Subscribe to a subscription alert</span>
+            [% ELSIF ( typeissuecancel ) %]
+                <span>Unsubscribe from a subscription alert</span>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% IF ( typeissue ) %]
-                    <span>Subscribe to a subscription alert</span>
-                [% ELSIF ( typeissuecancel ) %]
-                    <span>Unsubscribe from a subscription alert</span>
-                [% END %]
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col order-first order-md-first order-lg-2">
-                    <div id="useralertsubscribe" class="maincontent">
-                            <h1>Subscription alerts</h1>
-                        [% IF ( typeissue ) %]
-                            <h2>Subscribe to a subscription alert</h2>
-                            <form action="opac-alert-subscribe.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
-                                <h3>[% bibliotitle | html %]</h3>
-                                [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
-                                <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]">
-                                <input type="hidden" name="referer" value="[% referer | html %]">
-                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
-                                <input type="hidden" name="op" value="cud-alert_confirmed">
-                                <input type="submit" class="btn btn-primary" value="Yes">
-                                <a class="cancel" href="opac-serial-issues.pl?biblionumber=[% biblionumber | html %]" >No</a>
-                            </form>
-                        [% END %]
-                        [% IF ( typeissuecancel ) %]
-                            <h2>Unsubscribe from a subscription alert</h2>
-                            <form action="opac-alert-subscribe.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
-                                <h3>[% bibliotitle | html %]</h3>
-                                [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
-                                <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]">
-                                <input type="hidden" name="referer" value="[% referer | html %]">
-                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
-                                <input type="hidden" name="op" value="cud-cancel_confirmed">
-                                <input type="submit" value="Yes" class="btn btn-primary">
-                                <a href="opac-serial-issues.pl?biblionumber=[% biblionumber | uri %]" class="cancel">No</a>
-                            </form>
-                        [% END %]
-                    </div> <!-- / #useralertsubscribe -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col order-first order-md-first order-lg-2">
+                <div id="useralertsubscribe" class="maincontent">
+                    <h1>Subscription alerts</h1>
+                    [% IF ( typeissue ) %]
+                        <h2>Subscribe to a subscription alert</h2>
+                        <form action="opac-alert-subscribe.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
+                            <h3>[% bibliotitle | html %]</h3>
+                            [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                            <input type="hidden" name="referer" value="[% referer | html %]" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="op" value="cud-alert_confirmed" />
+                            <input type="submit" class="btn btn-primary" value="Yes" />
+                            <a class="cancel" href="opac-serial-issues.pl?biblionumber=[% biblionumber | html %]">No</a>
+                        </form>
+                    [% END %]
+                    [% IF ( typeissuecancel ) %]
+                        <h2>Unsubscribe from a subscription alert</h2>
+                        <form action="opac-alert-subscribe.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
+                            <h3>[% bibliotitle | html %]</h3>
+                            [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                            <input type="hidden" name="referer" value="[% referer | html %]" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="op" value="cud-cancel_confirmed" />
+                            <input type="submit" value="Yes" class="btn btn-primary" />
+                            <a href="opac-serial-issues.pl?biblionumber=[% biblionumber | uri %]" class="cancel">No</a>
+                        </form>
+                    [% END %]
+                </div>
+                <!-- / #useralertsubscribe -->
+            </div>
+            <!-- / .span10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

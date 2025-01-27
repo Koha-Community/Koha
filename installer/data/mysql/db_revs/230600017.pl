@@ -1,16 +1,16 @@
 use Modern::Perl;
 
 return {
-    bug_number => "32911",
+    bug_number  => "32911",
     description => "Remove ILL partner_code config from koha-conf.xml and turn it into a system preference",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        my $xml_config = C4::Context->config("interlibrary_loans");
+        my $xml_config            = C4::Context->config("interlibrary_loans");
         my $existing_partner_code = $xml_config->{partner_code};
 
-        if ( $existing_partner_code ) {
+        if ($existing_partner_code) {
             $dbh->do(
                 qq{
                     INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)

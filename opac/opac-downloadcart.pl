@@ -19,10 +19,10 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI    qw ( -utf8 );
 use Encode qw( encode );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw( GetFrameworkCode GetISBDView );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Record;
@@ -34,7 +34,7 @@ use Koha::RecordProcessor;
 use utf8;
 my $query = CGI->new();
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-downloadcart.tt",
         query           => $query,
@@ -44,10 +44,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 );
 
 my $bib_list = $query->param('bib_list');
-my $format  = $query->param('format');
-my $dbh     = C4::Context->dbh;
+my $format   = $query->param('format');
+my $dbh      = C4::Context->dbh;
 
-if ($bib_list && $format) {
+if ( $bib_list && $format ) {
 
     my $patron = Koha::Patrons->find($borrowernumber);
 
@@ -58,8 +58,8 @@ if ($bib_list && $format) {
     my $extension;
     my $type;
 
-    # CSV   
-    if ($format =~ /^\d+$/) {
+    # CSV
+    if ( $format =~ /^\d+$/ ) {
 
         my $csv_profile = Koha::CsvProfiles->find($format);
         if ( not $csv_profile or $csv_profile->staff_only ) {
@@ -67,13 +67,11 @@ if ($bib_list && $format) {
             exit;
         }
 
-        $output = marc2csv(\@bibs, $format);
+        $output = marc2csv( \@bibs, $format );
 
         # Other formats
     } else {
-        my $record_processor = Koha::RecordProcessor->new({
-            filters => 'ViewPolicy'
-        });
+        my $record_processor = Koha::RecordProcessor->new( { filters => 'ViewPolicy' } );
         foreach my $biblionumber (@bibs) {
 
             my $biblio = Koha::Biblios->find($biblionumber);
@@ -84,33 +82,35 @@ if ($bib_list && $format) {
                     patron      => $patron,
                 }
             );
-            my $framework = &GetFrameworkCode( $biblio );
-            $record_processor->options({
-                interface => 'opac',
-                frameworkcode => $framework
-            });
+            my $framework = &GetFrameworkCode($biblio);
+            $record_processor->options(
+                {
+                    interface     => 'opac',
+                    frameworkcode => $framework
+                }
+            );
             $record_processor->process($record);
 
             next unless $record;
 
-            if ($format eq 'iso2709') {
+            if ( $format eq 'iso2709' ) {
+
                 #NOTE: If we don't explicitly UTF-8 encode the output,
                 #the browser will guess the encoding, and it won't always choose UTF-8.
-                $output .= encode("UTF-8", $record->as_usmarc()) // q{};
-            }
-            elsif ($format eq 'ris') {
+                $output .= encode( "UTF-8", $record->as_usmarc() ) // q{};
+            } elsif ( $format eq 'ris' ) {
                 $output .= marc2ris($record);
-            }
-            elsif ($format eq 'bibtex') {
-                $output .= marc2bibtex($record, $biblio->biblionumber);
-            }
-            elsif ( $format eq 'isbd' ) {
-                my $framework = GetFrameworkCode( $biblio );
-                $output   .= GetISBDView({
-                    'record'    => $record,
-                    'template'  => 'opac',
-                    'framework' => $framework,
-                });
+            } elsif ( $format eq 'bibtex' ) {
+                $output .= marc2bibtex( $record, $biblio->biblionumber );
+            } elsif ( $format eq 'isbd' ) {
+                my $framework = GetFrameworkCode($biblio);
+                $output .= GetISBDView(
+                    {
+                        'record'    => $record,
+                        'template'  => 'opac',
+                        'framework' => $framework,
+                    }
+                );
                 $extension = "txt";
                 $type      = "text/plain";
             }
@@ -118,16 +118,16 @@ if ($bib_list && $format) {
     }
 
     # If it was a CSV export we change the format after the export so the file extension is fine
-    $format = "csv" if ($format =~ m/^\d+$/);
+    $format = "csv" if ( $format =~ m/^\d+$/ );
 
     print $query->header(
-                               -type => ($type) ? $type : 'application/octet-stream',
+        -type                        => ($type) ? $type : 'application/octet-stream',
         -'Content-Transfer-Encoding' => 'binary',
-                         -attachment => ($extension) ? "cart.$format.$extension" : "cart.$format"
+        -attachment                  => ($extension) ? "cart.$format.$extension" : "cart.$format"
     );
     print $output;
 
-} else { 
+} else {
     $template->param(
         csv_profiles => Koha::CsvProfiles->search(
             {

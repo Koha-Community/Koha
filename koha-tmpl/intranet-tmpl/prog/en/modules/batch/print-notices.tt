@@ -1,12 +1,14 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
+<title
+    >[% FILTER collapse %]
         [% tx("Print notices for {today}", { today = today }) | html %]
-    [% END %]</title>
+    [% END %]</title
+>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- prettier-ignore-start -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- prettier-ignore-start -->
     <style>
         <!--
         .message { page-break-after: always }
@@ -18,12 +20,12 @@
         -->
     </style>
     <!-- prettier-ignore-end -->
-    [% IF ( stylesheet ) %]
-    <link rel="stylesheet" type="text/css" href="[% stylesheet | url %]">
-    [% END %]
+[% IF ( stylesheet ) %]
+    <link rel="stylesheet" type="text/css" href="[% stylesheet | url %]" />
+[% END %]
 </head>
 <body id="batch_print-notices" class="batch">
-    [% FOREACH message IN messages %]
+[% FOREACH message IN messages %]
     <div class="message">
         [% IF ( message.is_html ) %]
             [% message.content | $raw %]
@@ -31,7 +33,7 @@
             <pre>[% message.content | $raw %]</pre>
         [% END %]
     </div>
-    [% END %]
+[% END %]
 </body>
 <!-- prettier-ignore-start -->
 </html>

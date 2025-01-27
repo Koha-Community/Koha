@@ -5,6 +5,7 @@ use Koha;
 
 sub kohaversion {
     our $VERSION = $Koha::VERSION;
+
     # version needs to be set this way
     # so that it can be picked up by Makefile.PL
     # during install

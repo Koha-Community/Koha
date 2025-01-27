@@ -336,8 +336,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/preservation/processings/$processing_id")->status_is(403);
 
     # Delete existing processing
-    $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent processing
     $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")->status_is(404);

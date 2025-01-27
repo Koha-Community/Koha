@@ -21,14 +21,14 @@ use CGI qw ( -utf8 );
 use Try::Tiny;
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::ImportBatch;
 use Koha::MarcOverlayRules;
 use Koha::Patron::Categories;
 
-my $input = CGI->new;
-my $op = $input->param('op') || '';
+my $input  = CGI->new;
+my $op     = $input->param('op') || '';
 my $errors = [];
 
 my $rule_from_cgi = sub {
@@ -52,12 +52,12 @@ my $rule_from_cgi = sub {
     return \%rule;
 };
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/marc-overlay-rules.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_marc_overlay_rules' },
+        template_name => "admin/marc-overlay-rules.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_marc_overlay_rules' },
     }
 );
 
@@ -66,63 +66,63 @@ my $get_rules = sub {
 };
 my $rules = $get_rules->();
 
-if ($op eq 'cud-remove') {
+if ( $op eq 'cud-remove' ) {
     my @remove_ids = $input->multi_param('batchremove');
     push @remove_ids, scalar $input->param('id') if $input->param('id');
-    Koha::MarcOverlayRules->search({ id => { in => \@remove_ids } })->delete();
+    Koha::MarcOverlayRules->search( { id => { in => \@remove_ids } } )->delete();
+
     # Update $rules after deletion
     $rules = $get_rules->();
-}
-elsif ($op eq 'edit') {
+} elsif ( $op eq 'edit' ) {
     $template->param( edit => 1 );
     my $id = $input->param('id');
-    for my $rule(@{$rules}) {
-        if ($rule->{id} == $id) {
+    for my $rule ( @{$rules} ) {
+        if ( $rule->{id} == $id ) {
             $rule->{'edit'} = 1;
             last;
         }
     }
-}
-elsif ($op eq 'cud-edit' || $op eq 'cud-add') {
+} elsif ( $op eq 'cud-edit' || $op eq 'cud-add' ) {
     my $rule_data = $rule_from_cgi->($input);
-    if (!@{$errors}) {
+    if ( !@{$errors} ) {
         try {
             Koha::MarcOverlayRules->validate($rule_data);
-        }
-        catch {
+        } catch {
             die $_ unless blessed $_ && $_->can('rethrow');
 
-            if ($_->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp')) {
+            if ( $_->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp') ) {
                 push @{$errors}, {
                     type => 'error',
                     code => 'invalid_tag_regexp',
-                    tag => $rule_data->{tag},
+                    tag  => $rule_data->{tag},
                 };
-            }
-            elsif ($_->isa('Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions')) {
+            } elsif ( $_->isa('Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions') ) {
                 push @{$errors}, {
                     type => 'error',
                     code => 'invalid_control_field_actions',
-                    tag => $rule_data->{tag},
+                    tag  => $rule_data->{tag},
                 };
-            }
-            else {
+            } else {
                 $_->rethrow;
             }
         };
-        if (!@{$errors}) {
+        if ( !@{$errors} ) {
             my $rule = Koha::MarcOverlayRules->find_or_create($rule_data);
+
             # Need to call set and store here in case we have an update
             $rule->set($rule_data);
             $rule->store();
         }
+
         # Update $rules after edit/add
         $rules = $get_rules->();
     }
 }
 
-my $categories = Koha::Patron::Categories->search_with_library_limits( {},
-    { order_by => ['description'], columns => [ 'categorycode', 'description' ] } )->unblessed;
+my $categories = Koha::Patron::Categories->search_with_library_limits(
+    {},
+    { order_by => ['description'], columns => [ 'categorycode', 'description' ] }
+)->unblessed;
 
 $template->param(
     rules      => $rules,

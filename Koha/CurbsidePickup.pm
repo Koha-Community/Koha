@@ -23,9 +23,9 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
-use C4::Circulation qw( CanBookBeIssued AddIssue );
+use C4::Circulation        qw( CanBookBeIssued AddIssue );
 use C4::Members::Messaging qw( GetMessagingPreferences );
-use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use C4::Letters            qw( GetPreparedLetter EnqueueLetter );
 use Koha::Calendar;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron;
@@ -51,27 +51,27 @@ sub new {
     my ( $self, $params ) = @_;
 
     my $policy =
-      Koha::CurbsidePickupPolicies->find( { branchcode => $params->{branchcode} } );
+        Koha::CurbsidePickupPolicies->find( { branchcode => $params->{branchcode} } );
 
     Koha::Exceptions::CurbsidePickup::NotEnabled->throw
-      unless $policy && $policy->enabled;
+        unless $policy && $policy->enabled;
 
     my $calendar = Koha::Calendar->new( branchcode => $params->{branchcode} );
     Koha::Exceptions::CurbsidePickup::LibraryIsClosed->throw
-      if $calendar->is_holiday( $params->{scheduled_pickup_datetime} );
+        if $calendar->is_holiday( $params->{scheduled_pickup_datetime} );
 
     if ( $policy->enable_waiting_holds_only ) {
         my $patron        = Koha::Patrons->find( $params->{borrowernumber} );
         my $waiting_holds = $patron->holds->waiting->search( { branchcode => $params->{branchcode} } );
 
         Koha::Exceptions::CurbsidePickup::NoWaitingHolds->throw
-          unless $waiting_holds->count;
+            unless $waiting_holds->count;
     }
     my $existing_curbside_pickups = Koha::CurbsidePickups->search(
         {
-            branchcode                => $params->{branchcode},
-            borrowernumber            => $params->{borrowernumber},
-            delivered_datetime        => undef,
+            branchcode         => $params->{branchcode},
+            borrowernumber     => $params->{borrowernumber},
+            delivered_datetime => undef,
         }
     )->filter_by_scheduled_today;
     Koha::Exceptions::CurbsidePickup::TooManyPickups->throw(
@@ -79,16 +79,14 @@ sub new {
         borrowernumber => $params->{borrowernumber}
     ) if $existing_curbside_pickups->count;
 
-    my $is_valid =
-      $policy->is_valid_pickup_datetime( $params->{scheduled_pickup_datetime} );
+    my $is_valid = $policy->is_valid_pickup_datetime( $params->{scheduled_pickup_datetime} );
     unless ($is_valid) {
         my $error = @{ $is_valid->messages }[0]->message;
         Koha::Exceptions::CurbsidePickup::NoMatchingSlots->throw
-          if $error eq 'no_matching_slots';
+            if $error eq 'no_matching_slots';
         Koha::Exceptions::CurbsidePickup::NoMorePickupsAvailable->throw
-          if $error eq 'no_more_available';
-        Koha::Exceptions->throw(
-            "Error message must raise the appropriate exception");
+            if $error eq 'no_more_available';
+        Koha::Exceptions->throw("Error message must raise the appropriate exception");
     }
 
     return $self->SUPER::new($params);
@@ -104,25 +102,30 @@ Letter 'NEW_CURBSIDE_PICKUP will be used', and depending on 'Hold_Filled' config
 =cut
 
 sub notify_new_pickup {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $patron = $self->patron;
 
     my $library = $self->library;
 
-    $patron->queue_notice({ letter_params => {
-        module     => 'reserves',
-        letter_code => 'NEW_CURBSIDE_PICKUP',
-        borrowernumber => $patron->borrowernumber,
-        branchcode => $self->branchcode,
-        tables     => {
-            'branches'  => $library->unblessed,
-            'borrowers' => $patron->unblessed,
-        },
-        substitute => {
-            curbside_pickup => $self,
+    $patron->queue_notice(
+        {
+            letter_params => {
+                module         => 'reserves',
+                letter_code    => 'NEW_CURBSIDE_PICKUP',
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $self->branchcode,
+                tables         => {
+                    'branches'  => $library->unblessed,
+                    'borrowers' => $patron->unblessed,
+                },
+                substitute => {
+                    curbside_pickup => $self,
+                }
+            },
+            message_name => 'Hold_Filled'
         }
-    }, message_name => 'Hold_Filled' });
+    );
 }
 
 =head3 checkouts
@@ -132,9 +135,9 @@ Return the checkouts linked to this pickup
 =cut
 
 sub checkouts {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my @pi = Koha::CurbsidePickupIssues->search({ curbside_pickup_id => $self->id })->as_list;
+    my @pi = Koha::CurbsidePickupIssues->search( { curbside_pickup_id => $self->id } )->as_list;
 
     my @checkouts = map { $_->checkout } @pi;
     @checkouts = grep { defined $_ } @checkouts;
@@ -149,10 +152,10 @@ Return the patron linked to this pickup
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->borrowernumber;
     return unless $rs;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 staged_by_staff
@@ -162,10 +165,10 @@ Return the staff member that staged this pickup
 =cut
 
 sub staged_by_staff {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->staged_by;
     return unless $rs;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 library
@@ -175,10 +178,10 @@ Return the branch associated with this pickup
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->branchcode;
     return unless $rs;
-    return Koha::Library->_new_from_dbic( $rs );
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head3 mark_as_staged
@@ -188,7 +191,7 @@ Mark the pickup as staged
 =cut
 
 sub mark_as_staged {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $staged_by = C4::Context->userenv ? C4::Context->userenv->{number} : undef;
     $self->set(
         {
@@ -206,7 +209,7 @@ Mark the pickup as unstaged
 =cut
 
 sub mark_as_unstaged {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->set(
         {
@@ -224,7 +227,7 @@ Set the arrival time of the patron
 =cut
 
 sub mark_patron_has_arrived {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->set(
         {
             arrival_datetime => dt_from_string(),
@@ -239,18 +242,17 @@ Mark the pickup as delivered. The waiting holds will be filled.
 =cut
 
 sub mark_as_delivered {
-    my ( $self ) = @_;
-    my $patron          = $self->patron;
-    my $holds           = $patron->holds;
+    my ($self)     = @_;
+    my $patron     = $self->patron;
+    my $holds      = $patron->holds;
     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
     foreach my $hold ( $holds->as_list ) {
         if ( $hold->is_waiting && $branchcode && $hold->branchcode eq $branchcode ) {
             my ( $issuingimpossible, $needsconfirmation ) =
-              C4::Circulation::CanBookBeIssued( $patron, $hold->item->barcode );
+                C4::Circulation::CanBookBeIssued( $patron, $hold->item->barcode );
 
             unless ( keys %$issuingimpossible ) {
-                my $issue =
-                  C4::Circulation::AddIssue( $patron, $hold->item->barcode );
+                my $issue = C4::Circulation::AddIssue( $patron, $hold->item->barcode );
                 if ($issue) {
                     Koha::CurbsidePickupIssue->new(
                         {
@@ -259,9 +261,13 @@ sub mark_as_delivered {
                             reserve_id         => $hold->id,
                         }
                     )->store();
-                }
-                else {
-                    Koha::Exceptions->throw(sprintf("Cannot checkout hold %s for patron %s: %s", $patron->id, $hold->id, join(", ", keys %$issuingimpossible)));
+                } else {
+                    Koha::Exceptions->throw(
+                        sprintf(
+                            "Cannot checkout hold %s for patron %s: %s", $patron->id, $hold->id,
+                            join( ", ", keys %$issuingimpossible )
+                        )
+                    );
                 }
             }
         }
@@ -286,10 +292,10 @@ Return the status of the pickup, can be 'to-be-staged', 'staged-and-ready', 'pat
 sub status {
     my ($self) = @_;
     return
-        !defined $self->staged_datetime    ? 'to-be-staged'
-      : !defined $self->arrival_datetime   ? 'staged-and-ready'
-      : !defined $self->delivered_datetime ? 'patron-is-outside'
-      :                                      'delivered';
+          !defined $self->staged_datetime    ? 'to-be-staged'
+        : !defined $self->arrival_datetime   ? 'staged-and-ready'
+        : !defined $self->delivered_datetime ? 'patron-is-outside'
+        :                                      'delivered';
 }
 
 =head2 Internal methods

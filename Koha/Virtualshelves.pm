@@ -23,7 +23,6 @@ use Koha::Exceptions;
 use Koha::Patrons;
 use Koha::Virtualshelf;
 
-
 use base qw(Koha::Objects);
 
 =head1 NAME
@@ -52,10 +51,10 @@ sub disown_or_delete {
                 my $new_owner;
 
                 $new_owner = C4::Context->preference('ListOwnerDesignated')
-                  if C4::Context->preference('ListOwnerDesignated')
-                  and Koha::Patrons->find( C4::Context->preference('ListOwnerDesignated') );
+                    if C4::Context->preference('ListOwnerDesignated')
+                    and Koha::Patrons->find( C4::Context->preference('ListOwnerDesignated') );
 
-                if( !$new_owner && C4::Context->userenv ) {
+                if ( !$new_owner && C4::Context->userenv ) {
                     $new_owner = C4::Context->userenv->{number};
                 }
 
@@ -81,20 +80,20 @@ sub disown_or_delete {
 
 sub get_private_shelves {
     my ( $self, $params ) = @_;
-    my $page = $params->{page};
-    my $rows = $params->{rows};
+    my $page           = $params->{page};
+    my $rows           = $params->{rows};
     my $borrowernumber = $params->{borrowernumber} || 0;
 
     $self->search(
         {
             public => 0,
-            -or => {
+            -or    => {
                 'virtualshelfshares.borrowernumber' => $borrowernumber,
-                'me.owner' => $borrowernumber,
+                'me.owner'                          => $borrowernumber,
             }
         },
         {
-            join => [ 'virtualshelfshares' ],
+            join     => ['virtualshelfshares'],
             distinct => 'shelfnumber',
             order_by => 'shelfname',
             ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
@@ -130,25 +129,24 @@ sub get_public_shelves {
 sub get_some_shelves {
     my ( $self, $params ) = @_;
     my $borrowernumber = $params->{borrowernumber} || 0;
-    my $public = $params->{public} || 0;
-    my $add_allowed = $params->{add_allowed};
+    my $public         = $params->{public}         || 0;
+    my $add_allowed    = $params->{add_allowed};
 
     my @conditions;
     my $patron;
-    my $staffuser = 0;
+    my $staffuser     = 0;
     my $permitteduser = 0;
     if ( $borrowernumber != 0 ) {
-        $patron = Koha::Patrons->find( $borrowernumber );
-        $staffuser = $patron->can_patron_change_staff_only_lists;
+        $patron        = Koha::Patrons->find($borrowernumber);
+        $staffuser     = $patron->can_patron_change_staff_only_lists;
         $permitteduser = $patron->can_patron_change_permitted_staff_lists;
     }
-    if ( $add_allowed ) {
-        if ( $permitteduser ) {
+    if ($add_allowed) {
+        if ($permitteduser) {
             push @conditions, {
-                -or =>
-                [
+                -or => [
                     {
-                        "me.owner" => $borrowernumber,
+                        "me.owner"                   => $borrowernumber,
                         "me.allow_change_from_owner" => 1,
                     },
                     "me.allow_change_from_others"          => 1,
@@ -156,24 +154,22 @@ sub get_some_shelves {
                     "me.allow_change_from_permitted_staff" => 1
                 ]
             };
-        } elsif ( $staffuser ) {
+        } elsif ($staffuser) {
             push @conditions, {
-                -or =>
-                [
+                -or => [
                     {
-                        "me.owner" => $borrowernumber,
+                        "me.owner"                   => $borrowernumber,
                         "me.allow_change_from_owner" => 1,
                     },
-                    "me.allow_change_from_others"          => 1,
-                    "me.allow_change_from_staff"           => 1
+                    "me.allow_change_from_others" => 1,
+                    "me.allow_change_from_staff"  => 1
                 ]
             };
         } else {
             push @conditions, {
-                -or =>
-                [
+                -or => [
                     {
-                        "me.owner" => $borrowernumber,
+                        "me.owner"                   => $borrowernumber,
                         "me.allow_change_from_owner" => 1,
                     },
                     "me.allow_change_from_others" => 1,
@@ -183,10 +179,9 @@ sub get_some_shelves {
     }
     if ( !$public ) {
         push @conditions, {
-            -or =>
-            {
+            -or => {
                 "virtualshelfshares.borrowernumber" => $borrowernumber,
-                "me.owner" => $borrowernumber,
+                "me.owner"                          => $borrowernumber,
             }
         };
     }
@@ -197,7 +192,7 @@ sub get_some_shelves {
             ( @conditions ? ( -and => \@conditions ) : () ),
         },
         {
-            join => [ 'virtualshelfshares' ],
+            join     => ['virtualshelfshares'],
             distinct => 'shelfnumber',
             order_by => { -desc => 'lastmodified' },
         }
@@ -216,11 +211,11 @@ sub get_shelves_containing_record {
     my @conditions = ( 'virtualshelfcontents.biblionumber' => $biblionumber );
     if ($borrowernumber) {
         push @conditions,
-          {
-              -or => [
+            {
+            -or => [
                 {
                     public => 0,
-                    -or      => {
+                    -or    => {
                         'me.owner' => $borrowernumber,
                         -or        => {
                             'virtualshelfshares.borrowernumber' => $borrowernumber,
@@ -229,15 +224,13 @@ sub get_shelves_containing_record {
                 },
                 { public => 1 },
             ]
-          };
+            };
     } else {
         push @conditions, { public => 1 };
     }
 
     return Koha::Virtualshelves->search(
-        {
-            -and => \@conditions
-        },
+        { -and => \@conditions },
         {
             join     => [ 'virtualshelfcontents', 'virtualshelfshares' ],
             distinct => 'shelfnumber',
@@ -276,7 +269,6 @@ sub filter_by_readable {
 
     return $self->search( { '-or' => { public => 1, owner => $params->{patron_id} } } );
 }
-
 
 =head2 Internal methods
 

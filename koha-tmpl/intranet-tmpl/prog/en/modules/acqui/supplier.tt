@@ -8,20 +8,13 @@
 [% BLOCK edit_contact %]
     <ol id="contact-form">
         <input type="hidden" name="contact_id" value="[% contact.id | html %]" />
-        <li><label for="contact_name[% contact.id | html %]">Contact name: </label>
-            <input type="text" size="40" id="contact_name[% contact.id | html %]" name="contact_name" value="[% contact.name | html %]" /></li>
-        <li><label for="contact_position[% contact.id | html %]">Position: </label>
-            <input type="text" size="40" id="contact_position[% contact.id | html %]" name="contact_position" value="[% contact.position | html %]" /></li>
-        <li><label for="contact_phone[% contact.id | html %]">Phone: </label>
-                <input type="tel" size="20" id="contact_phone[% contact.id | html %]" name="contact_phone" value="[% contact.phone | html %]" /> </li>
-        <li><label for="contact_altphone[% contact.id | html %]">Alternative phone: </label>
-            <input type="tel" size="20" id="contact_altphone[% contact.id | html %]" name="contact_altphone" value="[% contact.altphone | html %]" /></li>
-        <li><label for="contact_fax[% contact.id | html %]">Fax: </label>
-            <input type="tel" size="20" id="contact_fax[% contact.id | html %]" name="contact_fax" value="[% contact.fax | html %]" /></li>
-        <li><label for="contact_email[% contact.id | html %]">Email: </label>
-            <input type="email" size="40" id="contact_email[% contact.id | html %]" name="contact_email" value="[% contact.email | html %]" class="email" /></li>
-        <li><label for="contact_notes[% contact.id | html %]">Notes: </label>
-            <textarea id="contact_notes[% contact.id | html %]" name="contact_notes" cols="40" rows="4">[% contact.notes | html %]</textarea></li>
+        <li><label for="contact_name[% contact.id | html %]">Contact name: </label> <input type="text" size="40" id="contact_name[% contact.id | html %]" name="contact_name" value="[% contact.name | html %]" /></li>
+        <li><label for="contact_position[% contact.id | html %]">Position: </label> <input type="text" size="40" id="contact_position[% contact.id | html %]" name="contact_position" value="[% contact.position | html %]" /></li>
+        <li><label for="contact_phone[% contact.id | html %]">Phone: </label> <input type="tel" size="20" id="contact_phone[% contact.id | html %]" name="contact_phone" value="[% contact.phone | html %]" /> </li>
+        <li><label for="contact_altphone[% contact.id | html %]">Alternative phone: </label> <input type="tel" size="20" id="contact_altphone[% contact.id | html %]" name="contact_altphone" value="[% contact.altphone | html %]" /></li>
+        <li><label for="contact_fax[% contact.id | html %]">Fax: </label> <input type="tel" size="20" id="contact_fax[% contact.id | html %]" name="contact_fax" value="[% contact.fax | html %]" /></li>
+        <li><label for="contact_email[% contact.id | html %]">Email: </label> <input type="email" size="40" id="contact_email[% contact.id | html %]" name="contact_email" value="[% contact.email | html %]" class="email" /></li>
+        <li><label for="contact_notes[% contact.id | html %]">Notes: </label> <textarea id="contact_notes[% contact.id | html %]" name="contact_notes" cols="40" rows="4">[% contact.notes | html %]</textarea></li>
     </ol>
     <div style="display:flex">
         <div>
@@ -96,9 +89,12 @@
     </div>
 
     [% IF contact.id %]
-        <ol><li><button class="btn btn-default delete-contact"><i class="fa fa-trash-can"></i> Delete contact</button></li></ol>
+        <ol
+            ><li
+                ><button class="btn btn-default delete-contact"><i class="fa fa-trash-can"></i> Delete contact</button></li
+            ></ol
+        >
     [% END %]
-
 [% END %]
 
 [% BLOCK show_contact %]
@@ -148,19 +144,20 @@
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( enter ) %]
-        [% IF ( booksellerid ) %]
-            [% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]
+<title
+    >[% FILTER collapse %]
+        [% IF ( enter ) %]
+            [% IF ( booksellerid ) %]
+                [% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]
+            [% ELSE %]
+                [% t("Add vendor") | html %]
+            [% END %]
         [% ELSE %]
-            [% t("Add vendor") | html %]
+            [% tx("Vendor '{vendor}'", { vendor = name }) | html %]
         [% END %]
-    [% ELSE %]
-        [% tx("Vendor '{vendor}'", { vendor = name }) | html %]
-    [% END %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -198,212 +195,215 @@
 [% WRAPPER 'main-container.inc' aside='vendor-menu' %]
 
     [% IF ( enter ) %]
-                [% INCLUDE 'messages.inc' %]
-                [% IF ( booksellerid ) %]
-                    <h1>Modify vendor '[% name | html %]'</h1>
-                [% ELSE %]
-                    <h1>Add vendor</h1>
-                [% END %]
+        [% INCLUDE 'messages.inc' %]
+        [% IF ( booksellerid ) %]
+            <h1>Modify vendor '[% name | html %]'</h1>
+        [% ELSE %]
+            <h1>Add vendor</h1>
+        [% END %]
     [% END %]
-[% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
-[% IF ( enter ) %]
-    <form action="updatesupplier.pl" name="updatesupplier" class="validated" method="post">
-        <input type="hidden" name="op" value="cud-add"/>
-        [% INCLUDE 'csrf-token.inc' %]
-        <div id="toolbar" class="btn-toolbar sticky">
-            <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
-            [% IF ( booksellerid ) %]
-                [% SET a_href = '/cgi-bin/koha/acqui/supplier.pl?booksellerid=' _ booksellerid %]
-            [% ELSE %]
-                [% SET a_href = '/cgi-bin/koha/acqui/acqui-home.pl' %]
-            [% END %]
-            <a class="btn btn-default cancel" href="[% a_href | url %]"><i class="fa fa-times"></i> Cancel</a>
-        </div>
+    [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
+    [% IF ( enter ) %]
+        <form action="updatesupplier.pl" name="updatesupplier" class="validated" method="post">
+            <input type="hidden" name="op" value="cud-add" />
+            [% INCLUDE 'csrf-token.inc' %]
+            <div id="toolbar" class="btn-toolbar sticky">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
+                [% IF ( booksellerid ) %]
+                    [% SET a_href = '/cgi-bin/koha/acqui/supplier.pl?booksellerid=' _ booksellerid %]
+                [% ELSE %]
+                    [% SET a_href = '/cgi-bin/koha/acqui/acqui-home.pl' %]
+                [% END %]
+                <a class="btn btn-default cancel" href="[% a_href | url %]"><i class="fa fa-times"></i> Cancel</a>
+            </div>
 
-        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-        <fieldset class="rows">
-            <legend>Company details</legend>
-            <ol><li><label for="company" class="required">Name:</label>
-                <input type="text" size="40" id="company" name="company" value="[% name | html %]" required="required" class="required focus" /><span class="required">Required</span></li>
-            <li><label for="company_postal">Postal address: </label>
-                    <textarea id="company_postal" name="company_postal" cols="40" rows="3">[% postal | html %]</textarea></li>
-            <li><label for="physical">Physical address: </label>
-                <textarea id="physical" name="physical" cols="40" rows="3">[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</textarea></li>
-            <li><label for="company_phone">Phone: </label>
-                <input type="tel" size="20" id="company_phone" name="company_phone" value="[% phone | html %]" /></li>
-            <li><label for="company_fax">Fax: </label>
-                <input type="tel" size="20" id="company_fax" name="company_fax" value="[% fax | html %]" /></li>
-            <li><label for="website">Website: </label>
-                <input type="url" size="40" id="website" name="website" value="[% url | html %]" class="url" /></li>
-            <li><label for="accountnumber">Account number: </label>
-                <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber | html %]" /></li>
-                <li>
-                    <label for="vendor_type">Vendor type: </label>
-                    [% PROCESS 'av-build-dropbox.inc' name="vendor_type", category="VENDOR_TYPE", default=type, empty=1, size = 20 %]
-                </li>
-                <li>
-                    <label for="aliases">Aliases: </label>
-                    <div id="aliases" style="padding-left: 11rem;"></div>
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="rows">
-            <legend>Contacts</legend>
-            <fieldset id="contact-template" class="supplier-contact">
-                <legend>Contact details</legend>
-                [% INCLUDE edit_contact %]
+            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+            <fieldset class="rows">
+                <legend>Company details</legend>
+                <ol
+                    ><li
+                        ><label for="company" class="required">Name:</label> <input type="text" size="40" id="company" name="company" value="[% name | html %]" required="required" class="required focus" /><span class="required"
+                            >Required</span
+                        ></li
+                    >
+                    <li><label for="company_postal">Postal address: </label> <textarea id="company_postal" name="company_postal" cols="40" rows="3">[% postal | html %]</textarea></li>
+                    <li><label for="physical">Physical address: </label> <textarea id="physical" name="physical" cols="40" rows="3">[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</textarea></li>
+                    <li><label for="company_phone">Phone: </label> <input type="tel" size="20" id="company_phone" name="company_phone" value="[% phone | html %]" /></li>
+                    <li><label for="company_fax">Fax: </label> <input type="tel" size="20" id="company_fax" name="company_fax" value="[% fax | html %]" /></li>
+                    <li><label for="website">Website: </label> <input type="url" size="40" id="website" name="website" value="[% url | html %]" class="url" /></li>
+                    <li><label for="accountnumber">Account number: </label> <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber | html %]" /></li>
+                    <li>
+                        <label for="vendor_type">Vendor type: </label>
+                        [% PROCESS 'av-build-dropbox.inc' name="vendor_type", category="VENDOR_TYPE", default=type, empty=1, size = 20 %]
+                    </li>
+                    <li>
+                        <label for="aliases">Aliases: </label>
+                        <div id="aliases" style="padding-left: 11rem;"></div>
+                    </li>
+                </ol>
             </fieldset>
-            [% FOREACH contact IN contacts %]
-                <fieldset class="supplier-contact">
+            <fieldset class="rows">
+                <legend>Contacts</legend>
+                <fieldset id="contact-template" class="supplier-contact">
                     <legend>Contact details</legend>
                     [% INCLUDE edit_contact %]
                 </fieldset>
-            [% END %]
-            <button id="add-contact" class="btn btn-default"><i class="fa fa-plus"></i> Add another contact</button>
-        </fieldset>
+                [% FOREACH contact IN contacts %]
+                    <fieldset class="supplier-contact">
+                        <legend>Contact details</legend>
+                        [% INCLUDE edit_contact %]
+                    </fieldset>
+                [% END %]
+                <button id="add-contact" class="btn btn-default"><i class="fa fa-plus"></i> Add another contact</button>
+            </fieldset>
 
-        <fieldset class="rows">
-            <legend>Interfaces</legend>
-            <div id="interfaces"></div>
-        </fieldset>
+            <fieldset class="rows">
+                <legend>Interfaces</legend>
+                <div id="interfaces"></div>
+            </fieldset>
 
-        <fieldset class="rows">
-            <legend>Ordering information</legend>
-            <ol><li><label for="activestatus">Vendor is:</label>
-                    [% IF ( active ) %]
-                        <input type="radio" id="activestatus" name="status" value="1" checked="checked" />
-                        <label class="radio" for="activestatus">Active</label>
-                        <input type="radio" id="inactivestatus" name="status" value="0" />
-                        <label class="radio" for="inactivestatus">Inactive</label>
+            <fieldset class="rows">
+                <legend>Ordering information</legend>
+                <ol
+                    ><li
+                        ><label for="activestatus">Vendor is:</label> [% IF ( active ) %]
+                            <input type="radio" id="activestatus" name="status" value="1" checked="checked" />
+                            <label class="radio" for="activestatus">Active</label>
+                            <input type="radio" id="inactivestatus" name="status" value="0" />
+                            <label class="radio" for="inactivestatus">Inactive</label>
+                        [% ELSE %]
+                            <input type="radio" id="activestatus" name="status" value="1" />
+                            <label class="radio" for="activestatus">Active</label>
+                            <input type="radio" id="inactivestatus" name="status" value="0" checked="checked" />
+                            <label class="radio" for="inactivestatus">Inactive</label>
+                        [% END %]</li
+                    >
+                    <li
+                        ><label for="list_currency">List prices are: </label>
+                        <select name="list_currency" id="list_currency">
+                            [% FOREACH c IN currencies %]
+                                [% IF booksellerid and c.currency == listprice or not booksellerid and c.active %]
+                                    <option value="[% c.currency | html %]" selected="selected">[% c.currency | html %]</option>
+                                [% ELSIF not c.archived %]
+                                    <option value="[% c.currency | html %]">[% c.currency | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                    <li
+                        ><label for="invoice_currency">Invoice prices are: </label>
+                        <select name="invoice_currency" id="invoice_currency">
+                            [% FOREACH c IN currencies %]
+                                [% IF booksellerid and c.currency == invoiceprice or not booksellerid and c.active %]
+                                    <option value="[% c.currency | html %]" selected="selected">[% c.currency | html %]</option>
+                                [% ELSIF not c.archived %]
+                                    <option value="[% c.currency | html %]">[% c.currency | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                    <li
+                        ><label for="gstyes">Tax number registered:</label> [% IF ( gstreg ) %]
+                            <label class="radio" for="gstyes">Yes</label>
+                            <input type="radio" name="gst" id="gstyes" value="1" checked="checked" />
+                            <label class="radio" for="gstno">No</label>
+                            <input type="radio" name="gst" id="gstno" value="0" />
+                        [% ELSE %]
+                            <label class="radio" for="gstyes">Yes</label>
+                            <input type="radio" name="gst" id="gstyes" value="1" />
+                            <label class="radio" for="gstno">No</label>
+                            <input type="radio" name="gst" id="gstno" value="0" checked="checked" />
+                        [% END %]</li
+                    >
+
+                    <li
+                        ><label for="list_gstyes">List prices:</label> [% IF ( listincgst ) %]
+                            <label class="radio" for="list_gstyes">Include tax</label>
+                            <input type="radio" id="list_gstyes" name="list_gst" value="1" checked="checked" />
+                            <label class="radio" for="list_gstno">Don't include tax</label>
+                            <input type="radio" id="list_gstno" name="list_gst" value="0" />
+                        [% ELSE %]
+                            <label class="radio" for="list_gstyes">Include tax</label>
+                            <input type="radio" id="list_gstyes" name="list_gst" value="1" />
+                            <label class="radio" for="list_gstno">Don't include tax</label>
+                            <input type="radio" id="list_gstno" name="list_gst" value="0" checked="checked" />
+                        [% END %]</li
+                    >
+
+                    <li
+                        ><label for="invoice_gstyes">Invoice prices:</label> [% IF ( invoiceincgst ) %]
+                            <label class="radio" for="invoice_gstyes">Include tax</label>
+                            <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" checked="checked" />
+                            <label class="radio" for="invoice_gstno">Don't include tax</label>
+                            <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" />
+                        [% ELSE %]
+                            <label class="radio" for="invoice_gstyes">Include tax</label>
+                            <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" />
+                            <label class="radio" for="invoice_gstno">Don't include tax</label>
+                            <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
+                        [% END %]</li
+                    >
+
+                    [% IF gst_values %]
+                        <li>
+                            <label for="tax_rate">Tax rate: </label>
+                            <select name="tax_rate" id="tax_rate">
+                                [% FOREACH gst IN gst_values %]
+                                    [% IF ( tax_rate == gst.option ) %]
+                                        <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %] %</option>
+                                    [% ELSE %]
+                                        <option value="[% gst.option | html %]">[% gst.option * 100 | html %] %</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
                     [% ELSE %]
-                        <input type="radio" id="activestatus" name="status" value="1" />
-                        <label class="radio" for="activestatus">Active</label>
-                        <input type="radio" id="inactivestatus" name="status" value="0" checked="checked" />
-                        <label class="radio" for="inactivestatus">Inactive</label>
-                    [% END %]</li>
-            <li><label for="list_currency">List prices are: </label>
-                <select name="list_currency" id="list_currency">
-                    [% FOREACH c IN currencies %]
-                        [% IF booksellerid and c.currency == listprice or not booksellerid and c.active %]
-                            <option value="[% c.currency | html %]" selected="selected">[% c.currency | html %]</option>
-                        [% ELSIF not c.archived %]
-                            <option value="[% c.currency | html %]">[% c.currency | html %]</option>
-                        [% END %]
+                        <input type="hidden" name="tax_rate" value="0" />
                     [% END %]
-                </select>
-            </li>
-            <li><label for="invoice_currency">Invoice prices are: </label>
-                <select name="invoice_currency" id="invoice_currency">
-                    [% FOREACH c IN currencies %]
-                        [% IF booksellerid and c.currency == invoiceprice or not booksellerid and c.active %]
-                            <option value="[% c.currency | html %]" selected="selected">[% c.currency | html %]</option>
-                        [% ELSIF not c.archived %]
-                            <option value="[% c.currency | html %]">[% c.currency | html %]</option>
-                        [% END %]
-                    [% END %]
-                </select>
-            </li>
-            <li><label for="gstyes">Tax number registered:</label>
-                [% IF ( gstreg ) %]
-                    <label class="radio" for="gstyes">Yes</label>
-                    <input type="radio" name="gst" id="gstyes" value="1" checked="checked" />
-                    <label class="radio" for="gstno">No</label>
-                    <input type="radio" name="gst" id="gstno" value="0" />
-                [% ELSE %]
-                    <label class="radio" for="gstyes">Yes</label>
-                    <input type="radio" name="gst" id="gstyes" value="1" />
-                    <label class="radio" for="gstno">No</label>
-                    <input type="radio" name="gst" id="gstno" value="0" checked="checked" />
-                [% END %]</li>
-
-            <li><label for="list_gstyes">List prices:</label>
-                [% IF ( listincgst ) %]
-                    <label class="radio" for="list_gstyes">Include tax</label>
-                    <input type="radio" id="list_gstyes" name="list_gst" value="1" checked="checked" />
-                    <label class="radio" for="list_gstno">Don't include tax</label>
-                    <input type="radio" id="list_gstno" name="list_gst" value="0" />
-                [% ELSE %]
-                    <label class="radio" for="list_gstyes">Include tax</label>
-                    <input type="radio" id="list_gstyes" name="list_gst" value="1" />
-                    <label class="radio" for="list_gstno">Don't include tax</label>
-                    <input type="radio" id="list_gstno" name="list_gst" value="0" checked="checked" />
-                [% END %]</li>
-
-            <li><label for="invoice_gstyes">Invoice prices:</label>
-                [% IF ( invoiceincgst ) %]
-                    <label class="radio" for="invoice_gstyes">Include tax</label>
-                    <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" checked="checked" />
-                    <label class="radio" for="invoice_gstno">Don't include tax</label>
-                    <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" />
-                    [% ELSE %]
-                    <label class="radio" for="invoice_gstyes">Include tax</label>
-                    <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" />
-                    <label class="radio" for="invoice_gstno">Don't include tax</label>
-                    <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
-                [% END %]</li>
-
-            [% IF gst_values %]
-                <li>
-                  <label for="tax_rate">Tax rate: </label>
-                  <select name="tax_rate" id="tax_rate">
-                  [% FOREACH gst IN gst_values %]
-                    [% IF ( tax_rate == gst.option ) %]
-                      <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %] %</option>
-                    [% ELSE %]
-                      <option value="[% gst.option | html %]">[% gst.option * 100 | html %] %</option>
-                    [% END %]
-                  [% END %]
-                  </select>
-                </li>
-            [% ELSE %]
-                <input type="hidden" name="tax_rate" value="0" />
-            [% END %]
-            <li><label for="discount">Discount: </label>
-                <input class="rate" type="text" size="6" id="discount" name="discount" value="[% discount | html %]" />%</li>
-            <li>
-                <label for="deliverytime">Delivery time: </label>
-                <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime | html %]" /> days
-            </li>
-            <li><label for="notes">Notes: </label>
-                <textarea cols="40" rows="4" id="notes" name="notes" >[% notes | html %]</textarea></li>
-            </ol>
-        </fieldset>
-
-    </form>
-[% ELSE %]
-    <h1>[% name | html %]</h1>
+                    <li><label for="discount">Discount: </label> <input class="rate" type="text" size="6" id="discount" name="discount" value="[% discount | html %]" />%</li>
+                    <li>
+                        <label for="deliverytime">Delivery time: </label>
+                        <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime | html %]" /> days
+                    </li>
+                    <li><label for="notes">Notes: </label> <textarea cols="40" rows="4" id="notes" name="notes">[% notes | html %]</textarea></li>
+                </ol>
+            </fieldset>
+        </form>
+    [% ELSE %]
+        <h1>[% name | html %]</h1>
         <div class="row">
             <div class="col">
                 <div id="supplier-company-details" class="page-section rows">
                     <h2>Vendor details</h2>
                     <ol>
-                    <li>
-                        <span class="label">Type: </span>
-                        [% IF (type) %][% AuthorisedValues.GetByCode( 'VENDOR_TYPE', type ) | html %][% END %]
-                    </li>
-                    <li><span class="label">Company name: </span>[% name | html %]</li>
-                    <li><span class="label">Postal address: </span>[% postal | html %]</li>
-                    <li><span class="label">Physical address: </span>[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</li>
-                    <li><span class="label">Phone: </span>[% phone | html %]</li>
-                    <li><span class="label">Fax: </span>[% fax | html %]</li>
-                    [% IF ( url ) %]
-                        <li><span class="label">Website: </span><a href="[% url | url %]" target="_blank">[% url | html %]</a></li>
-                    [% END %]
-                    [% IF ( accountnumber ) %]
-                        <li><span class="label">Account number: </span>[% accountnumber | html %]</li>
-                    [% END %]
-                    [% IF vendor.aliases.count %]
                         <li>
-                            <span class="label">Aliases: </span>
-                            <ul>
-                            [% FOR alias IN vendor.aliases %]
-                                <li>[% alias.alias | html %]</li>
-                            [% END %]
-                            </ul>
+                            <span class="label">Type: </span>
+                            [% IF (type) %][% AuthorisedValues.GetByCode( 'VENDOR_TYPE', type ) | html %][% END %]
                         </li>
-                    [% END %]
+                        <li><span class="label">Company name: </span>[% name | html %]</li>
+                        <li><span class="label">Postal address: </span>[% postal | html %]</li>
+                        <li><span class="label">Physical address: </span>[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</li>
+                        <li><span class="label">Phone: </span>[% phone | html %]</li>
+                        <li><span class="label">Fax: </span>[% fax | html %]</li>
+                        [% IF ( url ) %]
+                            <li><span class="label">Website: </span><a href="[% url | url %]" target="_blank">[% url | html %]</a></li>
+                        [% END %]
+                        [% IF ( accountnumber ) %]
+                            <li><span class="label">Account number: </span>[% accountnumber | html %]</li>
+                        [% END %]
+                        [% IF vendor.aliases.count %]
+                            <li>
+                                <span class="label">Aliases: </span>
+                                <ul>
+                                    [% FOR alias IN vendor.aliases %]
+                                        <li>[% alias.alias | html %]</li>
+                                    [% END %]
+                                </ul>
+                            </li>
+                        [% END %]
                     </ol>
-                </div> <!-- /#supplier-company-details -->
+                </div>
+                <!-- /#supplier-company-details -->
 
                 <div id="supplier-ordering-information" class="page-section rows">
                     <h2>Ordering information</h2>
@@ -423,39 +423,40 @@
                     [% IF ( notes ) %]
                         <li><span class="label">Notes: </span>[% notes | html %]</li>
                     [% END %]
-                </div> <!-- #supplier-ordering-information -->
+                </div>
+                <!-- #supplier-ordering-information -->
 
                 [% IF vendor.interfaces.count %]
-                <div id="supplier-interfaces" class="page-section rows">
-                    <h2>Interfaces</h2>
+                    <div id="supplier-interfaces" class="page-section rows">
+                        <h2>Interfaces</h2>
 
-                    [% FOR i IN vendor.interfaces %]
-                        <h3>[% i.name | html %]</h3>
-                        [% IF i.type %]
-                            <li><span class="label">Type: </span>[% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</li>
+                        [% FOR i IN vendor.interfaces %]
+                            <h3>[% i.name | html %]</h3>
+                            [% IF i.type %]
+                                <li><span class="label">Type: </span>[% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</li>
+                            [% END %]
+                            [% IF i.uri %]
+                                <li> <span class="label">URI: </span><a href="[% i.uri | url %]" target="_blank">[% i.uri | html %]</a> </li>
+                            [% END %]
+                            [% IF i.login %]
+                                <li><span class="label">Login: </span>[% i.login | html %]</li>
+                            [% END %]
+                            [% IF i.password %]
+                                <li
+                                    ><span class="label">Password: </span><span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></li
+                                >
+                            [% END %]
+                            [% IF i.account_email %]
+                                <li><span class="label">Account email: </span>[% i.account_email | html %]</li>
+                            [% END %]
+                            [% IF i.notes %]
+                                <li><span class="label">Notes: </span>[% i.notes | html %]</li>
+                            [% END %]
                         [% END %]
-                        [% IF i.uri %]
-                            <li>
-                                <span class="label">URI: </span><a href="[% i.uri | url %]" target="_blank">[% i.uri | html %]</a>
-                            </li>
-                        [% END %]
-                        [% IF i.login %]
-                            <li><span class="label">Login: </span>[% i.login | html %]</li>
-                        [% END %]
-                        [% IF i.password %]
-                            <li><span class="label">Password: </span><span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></li>
-                        [% END %]
-                        [% IF i.account_email %]
-                            <li><span class="label">Account email: </span>[% i.account_email | html %]</li>
-                        [% END %]
-                        [% IF i.notes %]
-                            <li><span class="label">Notes: </span>[% i.notes | html %]</li>
-                        [% END %]
-                    [% END %]
-                </div>
+                    </div>
                 [% END %]
-
-            </div> <!-- /.col -->
+            </div>
+            <!-- /.col -->
 
             <div class="col">
                 <div id="supplier-contact-details" class="page-section rows">
@@ -463,61 +464,68 @@
                     [% FOREACH contact IN contacts %]
                         [% INCLUDE show_contact %]
                     [% END %]
-                </div> <!-- /#supplier-contact-details -->
+                </div>
+                <!-- /#supplier-contact-details -->
 
                 <div id="subscription-details" class="page-section">
                     <h2>Subscription details</h2>
-                    <p><strong>Number of subscriptions: </strong>
+                    <p
+                        ><strong>Number of subscriptions: </strong>
                         [% IF (  CAN_user_serials ) %]
                             <a href="/cgi-bin/koha/serials/serials-search.pl?bookseller_filter=[% name | uri %]&searched=1">[% subscriptioncount | html %]</a>
                         [% ELSE %]
                             [% subscriptioncount | html %]
                         [% END %]
                     </p>
-                </div> <!-- /#subscription-details -->
-            </div> <!-- /.col -->
-
-        </div> <!-- /.row -->
+                </div>
+                <!-- /#subscription-details -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
 
         [% IF ( contracts ) %]
             <div id="supplier-contracts" class="page-section rows">
                 <h2>Contract(s)</h2>
                 <table id="contractst">
-                  <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Start date</th>
-                        <th scope="col">End date</th>
-                        [% IF CAN_user_acquisition_contracts_manage %]
-                            <th scope="col" class="NoSort noExport">Actions</th>
-                        [% END %]
-                    </tr>
-                  </thead>
-                  <tbody>
-                    [% FOREACH contract IN contracts %]
+                    <thead>
                         <tr>
-                        <td>
-                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | uri %]&amp;booksellerid=[% contract.booksellerid | uri %]">[% contract.contractname | html %]</a>
-                        </td>
-                        <td>[% contract.contractdescription | html %]</td>
-                        <td data-order="[% contract.contractstartdate | html %]">[% contract.contractstartdate | $KohaDates %]</td>
-                        <td data-order="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</td>
-                        [% IF CAN_user_acquisition_contracts_manage %]
-                            <td class="actions">
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                            </td>
-                        [% END %]
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Start date</th>
+                            <th scope="col">End date</th>
+                            [% IF CAN_user_acquisition_contracts_manage %]
+                                <th scope="col" class="NoSort noExport">Actions</th>
+                            [% END %]
                         </tr>
-                    [% END %]
-                  </tbody>
+                    </thead>
+                    <tbody>
+                        [% FOREACH contract IN contracts %]
+                            <tr>
+                                <td>
+                                    <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | uri %]&amp;booksellerid=[% contract.booksellerid | uri %]">[% contract.contractname | html %]</a>
+                                </td>
+                                <td>[% contract.contractdescription | html %]</td>
+                                <td data-order="[% contract.contractstartdate | html %]">[% contract.contractstartdate | $KohaDates %]</td>
+                                <td data-order="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</td>
+                                [% IF CAN_user_acquisition_contracts_manage %]
+                                    <td class="actions">
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"
+                                            ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                                        >
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"
+                                            ><i class="fa fa-trash-can"></i> Delete</a
+                                        >
+                                    </td>
+                                [% END %]
+                            </tr>
+                        [% END %]
+                    </tbody>
                 </table>
-            </div> <!-- /#supplier-contracts -->
+            </div>
+            <!-- /#supplier-contracts -->
         [% END %]
-
-[% END %]
-
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

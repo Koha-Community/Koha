@@ -35,11 +35,11 @@ our @tt_methods = (
 );
 
 sub fix_filters {
-    return _process_tt_content( @_ )->{new_content};
+    return _process_tt_content(@_)->{new_content};
 }
 
 sub missing_filters {
-    return @{_process_tt_content( @_ )->{errors}};
+    return @{ _process_tt_content(@_)->{errors} };
 
 }
 
@@ -62,11 +62,11 @@ sub _process_tt_content {
             # Do we have Asset without the raw filter?
             if ( $line =~ m{^\s*\[% Asset} && $line !~ m{\|\s*\$raw} ) {
                 push @errors,
-                  {
+                    {
                     error       => 'asset_must_be_raw',
                     line        => $line,
                     line_number => $line_number
-                  };
+                    };
                 $new_line =~ s/\)\s*%]/) | \$raw %]/;
                 $use_raw = 1;
                 push @new_lines, $new_line;
@@ -74,7 +74,7 @@ sub _process_tt_content {
             }
 
             $has_use_raw++
-              if $line =~ m{\[%(\s|-|~)*USE raw(\s|-|~)*%\]};    # Does [% Use raw %] exist?
+                if $line =~ m{\[%(\s|-|~)*USE raw(\s|-|~)*%\]};    # Does [% Use raw %] exist?
 
             my $e;
             while ( $line =~ m{<a href="([^"]+)}g ) {
@@ -86,9 +86,9 @@ sub _process_tt_content {
                         (?<tt_block>[^%\-~]+)
                         (?<post_chomp>(\s|\-|~)*)
                         %\]}gmxs
-                  )
+                    )
                 {
-                    ( $new_line, $e ) = process_tt_block($new_line, { %+, filter => 'uri' });
+                    ( $new_line, $e ) = process_tt_block( $new_line, { %+, filter => 'uri' } );
                     push @errors, { line => $line, line_number => $line_number, error => $e } if $e;
                 }
             }
@@ -101,15 +101,14 @@ sub _process_tt_content {
                     (?<tt_block>[^%\-~]+)
                     (?<post_chomp>(\s|\-|~)*)
                     %\]}gmxs
-              )
+                )
             {
-                ( $new_line, $e ) = process_tt_block($new_line, \%+);
+                ( $new_line, $e ) = process_tt_block( $new_line, \%+ );
                 push @errors, { line => $line, line_number => $line_number, error => $e } if $e;
             }
 
             push @new_lines, $new_line;
-        }
-        else {
+        } else {
             push @new_lines, $new_line;
         }
 
@@ -117,7 +116,7 @@ sub _process_tt_content {
 
     # Adding [% USE raw %] on top if the filter is used
     @new_lines = ( '[% USE raw %]', @new_lines )
-      if $use_raw and not $has_use_raw;
+        if $use_raw and not $has_use_raw;
 
     my $new_content = join "\n", @new_lines;
     return { errors => \@errors, new_content => $new_content };
@@ -132,6 +131,7 @@ sub process_tt_block {
     my $error;
 
     return ( $line, $error ) if
+
         # It's a TT directive, no filters needed
         grep { $tt_block =~ $_ } @tt_directives
 
@@ -165,33 +165,29 @@ sub process_tt_block {
         or $tt_block =~ m{\|\s?safe_url}
 
         # Specific for [% foo UNLESS bar %]
-        or $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)}
-    ;
+        or $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)};
 
     $pre_chomp =
-        $pre_chomp
-      ? $pre_chomp =~ m|-|
-          ? q|- |
-          : $pre_chomp =~ m|~|
-            ? q|~ |
-            : q| |
-      : q| |;
+          $pre_chomp
+        ? $pre_chomp =~ m|-|
+            ? q|- |
+            : $pre_chomp =~ m|~| ? q|~ |
+        : q| |
+        : q| |;
     $post_chomp =
-        $post_chomp
-      ? $post_chomp =~ m|-|
-          ? q| -|
-          : $post_chomp =~ m|~|
-            ? q| ~|
-            : q| |
-      : q| |;
+          $post_chomp
+        ? $post_chomp =~ m|-|
+            ? q| -|
+            : $post_chomp =~ m|~| ? q| ~|
+        : q| |
+        : q| |;
 
     if (   $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*\|.*$}
         or $tt_block =~ m{\s?\|\s?\$Price[^\|]*\|.*$}
-        or $tt_block =~ m{\s?\|\s?\$HtmlTags[^\|]*\|.*$}
-    ) {
-        $tt_block =~
-          s/\s*\|\s*(uri|url|html)\s*$//;    # Could be another filter...
-        $line =~ s{
+        or $tt_block =~ m{\s?\|\s?\$HtmlTags[^\|]*\|.*$} )
+    {
+        $tt_block =~ s/\s*\|\s*(uri|url|html)\s*$//;    # Could be another filter...
+        $line     =~ s{
             \[%
             \s*$pre_chomp\s*
             \Q$tt_block\E\s*\|\s*(uri|url|html)
@@ -205,16 +201,14 @@ sub process_tt_block {
     if (
         # Use the uri filter is needed
         # If html filtered or not filtered
-        $filter ne 'html'
-            and (
-                    $tt_block !~ m{\|}
-                or ($tt_block =~ m{\|\s?html} and not $tt_block =~ m{\|\s?html_entity})
-                or $tt_block !~ m{\s*|\s*(uri|url)}
-      )
-    ) {
-        $tt_block =~ s/^\s*|\s*$//g;    # trim
+        $filter ne 'html' and ( $tt_block !~ m{\|}
+            or ( $tt_block =~ m{\|\s?html} and not $tt_block =~ m{\|\s?html_entity} )
+            or $tt_block !~ m{\s*|\s*(uri|url)} )
+        )
+    {
+        $tt_block =~ s/^\s*|\s*$//g;        # trim
         $tt_block =~ s/\s*\|\s*html\s*//;
-        $line =~ s{
+        $line     =~ s{
                 \[%
                 \s*$pre_chomp\s*
                 \Q$tt_block\E(\s*\|\s*html)?
@@ -223,13 +217,12 @@ sub process_tt_block {
             }{[%$pre_chomp$tt_block | uri$post_chomp%]}xms;
 
         $error = 'wrong_html_filter';
-    }
-    elsif (
-        $tt_block !~ m{\|\s?html} # already has html filter
-      )
+    } elsif (
+        $tt_block !~ m{\|\s?html}           # already has html filter
+        )
     {
-        $tt_block =~ s/^\s*|\s*$//g; # trim
-        $line =~ s{
+        $tt_block =~ s/^\s*|\s*$//g;        # trim
+        $line     =~ s{
             \[%
             \s*$pre_chomp\s*
             \Q$tt_block\E

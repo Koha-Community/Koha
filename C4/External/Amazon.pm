@@ -1,4 +1,5 @@
 package C4::External::Amazon;
+
 # Copyright (C) 2006 LibLime
 # <jmf at liblime dot com>
 #
@@ -17,7 +18,6 @@ package C4::External::Amazon;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use strict;
 use warnings;
 
@@ -25,12 +25,11 @@ use vars qw(@ISA @EXPORT);
 
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA    = qw(Exporter);
     @EXPORT = qw(
         get_amazon_tld
     );
 }
-
 
 sub get_amazon_tld {
     my %tld = (
@@ -44,10 +43,9 @@ sub get_amazon_tld {
     );
 
     my $locale = C4::Context->preference('AmazonLocale');
-    my $tld = $tld{ $locale } || '.com'; # default top level domain is .com
+    my $tld    = $tld{$locale} || '.com';                   # default top level domain is .com
     return $tld;
 }
-
 
 =head1 NAME
 

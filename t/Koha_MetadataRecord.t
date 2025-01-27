@@ -32,13 +32,13 @@ BEGIN {
 my $marcrecord = MARC::Record->new;
 
 $marcrecord->add_fields(
-        [ '001', '1234' ],
-        [ '150', ' ', ' ', a => 'Cooking' ],
-        [ '450', ' ', ' ', a => 'Cookery', z => 'Instructional manuals' ],
-        );
-my $record = Koha::MetadataRecord->new({ 'record' => $marcrecord, 'schema' => 'marc21' });
+    [ '001', '1234' ],
+    [ '150', ' ', ' ', a => 'Cooking' ],
+    [ '450', ' ', ' ', a => 'Cookery', z => 'Instructional manuals' ],
+);
+my $record = Koha::MetadataRecord->new( { 'record' => $marcrecord, 'schema' => 'marc21' } );
 
-is(ref($record), 'Koha::MetadataRecord', 'Created valid Koha::MetadataRecord object');
+is( ref($record), 'Koha::MetadataRecord', 'Created valid Koha::MetadataRecord object' );
 
 my $samplehash = [
     {
@@ -76,18 +76,17 @@ my $samplehash = [
 my $hash = $record->createMergeHash();
 my %fieldkeys;
 foreach my $field (@$hash) {
-    $fieldkeys{delete $field->{'key'}}++;
-    if (defined $field->{'subfield'}) {
-        foreach my $subfield (@{$field->{'subfield'}}) {
-            $fieldkeys{delete $subfield->{'subkey'}}++;
+    $fieldkeys{ delete $field->{'key'} }++;
+    if ( defined $field->{'subfield'} ) {
+        foreach my $subfield ( @{ $field->{'subfield'} } ) {
+            $fieldkeys{ delete $subfield->{'subkey'} }++;
         }
     }
 }
 
-is_deeply($hash, $samplehash, 'Generated hash correctly');
+is_deeply( $hash, $samplehash, 'Generated hash correctly' );
 my $dupkeys = grep { $_ > 1 } values %fieldkeys;
-is($dupkeys, 0, 'No duplicate keys');
-
+is( $dupkeys, 0, 'No duplicate keys' );
 
 subtest "new() tests" => sub {
 
@@ -97,49 +96,58 @@ subtest "new() tests" => sub {
     my $record = MARC::Record->new();
     my $metadata_record;
 
-    warning_is { $metadata_record = Koha::MetadataRecord->new({
-                        record => $record }) }
-               { carped => 'No schema passed' },
+    warning_is {
+        $metadata_record = Koha::MetadataRecord->new( { record => $record } )
+    }
+    { carped => 'No schema passed' },
         "Metadata schema is mandatory, raise a carped warning if omitted";
-    is( $metadata_record, undef, "Metadata schema is mandatory, return undef if omitted");
+    is( $metadata_record, undef, "Metadata schema is mandatory, return undef if omitted" );
 
-    $metadata_record = Koha::MetadataRecord->new({
-        record => $record,
-        schema => 'marc21'
-    });
+    $metadata_record = Koha::MetadataRecord->new(
+        {
+            record => $record,
+            schema => 'marc21'
+        }
+    );
 
-    is( ref($metadata_record), 'Koha::MetadataRecord', 'Type correct');
-    is( ref($metadata_record->record), 'MARC::Record', 'Record type preserved');
-    is( $metadata_record->schema, 'marc21', 'Metadata schema is set to marc21');
-    is( $metadata_record->format, 'MARC', 'Serializacion format defaults to marc');
-    is( $metadata_record->id, undef, 'id is optional, undef if unspecifid');
+    is( ref($metadata_record),           'Koha::MetadataRecord', 'Type correct' );
+    is( ref( $metadata_record->record ), 'MARC::Record',         'Record type preserved' );
+    is( $metadata_record->schema,        'marc21',               'Metadata schema is set to marc21' );
+    is( $metadata_record->format,        'MARC',                 'Serializacion format defaults to marc' );
+    is( $metadata_record->id,            undef,                  'id is optional, undef if unspecifid' );
 
     # Test passed values, also no constraint on record type
     my $weird_record = {};
     bless $weird_record, 'Weird::Class';
 
-    $metadata_record = Koha::MetadataRecord->new({
-        record => $weird_record,
-        schema => 'something',
-        format => 'else',
-        id     => 'an id'
-    });
+    $metadata_record = Koha::MetadataRecord->new(
+        {
+            record => $weird_record,
+            schema => 'something',
+            format => 'else',
+            id     => 'an id'
+        }
+    );
 
-    is( ref($metadata_record), 'Koha::MetadataRecord', 'Type correct');
-    is( ref($metadata_record->record), 'Weird::Class', 'Record type preserved');
-    is( $metadata_record->schema, 'something', 'Metadata schema correctly set');
-    is( $metadata_record->format, 'else', 'Serializacion format correctly set');
-    is( $metadata_record->id, 'an id', 'The id correctly set');
+    is( ref($metadata_record),           'Koha::MetadataRecord', 'Type correct' );
+    is( ref( $metadata_record->record ), 'Weird::Class',         'Record type preserved' );
+    is( $metadata_record->schema,        'something',            'Metadata schema correctly set' );
+    is( $metadata_record->format,        'else',                 'Serializacion format correctly set' );
+    is( $metadata_record->id,            'an id',                'The id correctly set' );
 
     # Having a record object is mandatory
-    warning_is { $metadata_record = Koha::MetadataRecord->new({
-                                        record => undef,
-                                        schema => 'something',
-                                        format => 'else',
-                                        id     => 'an id'
-                                    }) }
-                { carped => 'No record passed' },
-                'Undefined record raises carped warning';
+    warning_is {
+        $metadata_record = Koha::MetadataRecord->new(
+            {
+                record => undef,
+                schema => 'something',
+                format => 'else',
+                id     => 'an id'
+            }
+        )
+    }
+    { carped => 'No record passed' },
+        'Undefined record raises carped warning';
 
-    is( $metadata_record, undef, 'record object mandatory')
+    is( $metadata_record, undef, 'record object mandatory' );
 };

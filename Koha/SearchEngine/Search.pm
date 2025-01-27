@@ -50,8 +50,8 @@ use POSIX qw( ceil );
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine") // 'Zebra';
-    my $file = "Koha/SearchEngine/${engine}/Search.pm";
-    my $class = "Koha::SearchEngine::${engine}::Search";
+    my $file   = "Koha/SearchEngine/${engine}/Search.pm";
+    my $class  = "Koha::SearchEngine::${engine}::Search";
     require $file;
     shift @_;
     return $class->new(@_);
@@ -67,11 +67,11 @@ extract_biblionumber method of the specific search engine.
 =cut
 
 sub extract_biblionumber {
-    my ( $record ) = @_;
+    my ($record) = @_;
     return if ref($record) ne 'MARC::Record';
-    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( 'biblio.biblionumber' );
-    if( $biblionumbertagfield < 10 ) {
-        my $controlfield = $record->field( $biblionumbertagfield );
+    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField('biblio.biblionumber');
+    if ( $biblionumbertagfield < 10 ) {
+        my $controlfield = $record->field($biblionumbertagfield);
         return $controlfield ? $controlfield->data : undef;
     }
     return $record->subfield( $biblionumbertagfield, $biblionumbertagsubfield );
@@ -103,9 +103,9 @@ sub pagination_bar {
     my @page_numbers;
     my $max_result_window = $params->{max_result_window};
     my $hits_to_paginate =
-      ( $max_result_window && $max_result_window < $hits )
-      ? $max_result_window
-      : $hits;
+        ( $max_result_window && $max_result_window < $hits )
+        ? $max_result_window
+        : $hits;
 
     # total number of pages there will be
     my $pages            = ceil( $hits_to_paginate / $results_per_page );
@@ -130,8 +130,7 @@ sub pagination_bar {
         for ( my $i = 1 ; $i <= $pages_to_show ; $i++ ) {
 
             # the offset for this page
-            my $this_offset =
-              ( ( $i * $results_per_page ) - $results_per_page );
+            my $this_offset = ( ( $i * $results_per_page ) - $results_per_page );
 
             # the page number for this page
             my $this_page_number = $i;
@@ -152,30 +151,27 @@ sub pagination_bar {
     # now, show up to twenty pages, with the current one smack in the middle
     # near the end of search results we will show 10 below and as many remaining above
     else {
-        for (
-            my $i = $current_page_number ;
-            $i <= ( $current_page_number + 19 ) ;
-            $i++
-          )
-        {
+        for ( my $i = $current_page_number ; $i <= ( $current_page_number + 19 ) ; $i++ ) {
             my $this_offset =
-              ( ( ( $i - 9 ) * $results_per_page ) - $results_per_page );
+                ( ( ( $i - 9 ) * $results_per_page ) - $results_per_page );
             my $this_page_number = $i - 9;
             if ( $this_page_number <= $pages ) {
                 push @page_numbers,
-                  {
+                    {
                     offset    => $this_offset,
                     pg        => $this_page_number,
                     highlight => $this_page_number == $current_page_number,
                     sort_by   => join ' ',
                     @$sort_by
-                  };
+                    };
             }
         }
     }
 
-    return ( \@page_numbers, $hits_to_paginate, $pages, $current_page_number,
-        $previous_page_offset, $next_page_offset, $last_page_offset );
+    return (
+        \@page_numbers,        $hits_to_paginate, $pages, $current_page_number,
+        $previous_page_offset, $next_page_offset, $last_page_offset
+    );
 
 }
 

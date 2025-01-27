@@ -62,15 +62,13 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No resources, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")
-      ->status_is(200)->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")->status_is(200)->json_is( [] );
 
-    my $resource =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
+    my $resource = $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
 
     # One resource created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")
-      ->status_is(200)->json_is( [ $resource->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")->status_is(200)
+        ->json_is( [ $resource->to_api ] );
 
     my $another_resource = $builder->build_object(
         {
@@ -78,36 +76,27 @@ subtest 'list() tests' => sub {
             value => { vendor_id => $resource->vendor_id }
         }
     );
-    my $resource_with_another_vendor_id =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
+    my $resource_with_another_vendor_id = $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
 
     # Two resources created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")
-      ->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")->status_is(200)->json_is(
         [
             $resource->to_api,
             $another_resource->to_api,
             $resource_with_another_vendor_id->to_api
         ]
-      );
+    );
 
     # Filtering works, two resources sharing vendor_id
-    $t->get_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/resources?vendor_id="
-          . $resource->vendor_id )->status_is(200)
-      ->json_is( [ $resource->to_api, $another_resource->to_api ] );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/resources?vendor_id=" . $resource->vendor_id )
+        ->status_is(200)->json_is( [ $resource->to_api, $another_resource->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/resources?blah=blah")
-      ->status_is(400)
-      ->json_is(
-        [ { path => '/query/blah', message => 'Malformed query string' } ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
-    $t->get_ok(
-        "//$unauth_userid:$password@/api/v1/erm/eholdings/local/resources")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/eholdings/local/resources")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -118,8 +107,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $resource =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
+    my $resource  = $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -141,24 +129,20 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This resource exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/resources/"
-          . $resource->resource_id )->status_is(200)
-      ->json_is( $resource->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/resources/" . $resource->resource_id )->status_is(200)
+        ->json_is( $resource->to_api );
 
     # Unauthorized access
-    $t->get_ok(
-        "//$unauth_userid:$password@/api/v1/erm/eholdings/local/resources/"
-          . $resource->resource_id )->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/eholdings/local/resources/" . $resource->resource_id )
+        ->status_is(403);
 
     # Attempt to get non-existent resource
-    my $resource_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
-    my $non_existent_id = $resource_to_delete->resource_id;
+    my $resource_to_delete = $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
+    my $non_existent_id    = $resource_to_delete->resource_id;
     $resource_to_delete->delete;
 
-    $t->get_ok(
-"//$userid:$password@/api/v1/erm/eholdings/local/resources/$non_existent_id"
-    )->status_is(404)->json_is( '/error' => 'eHolding resource not found' );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources/$non_existent_id")->status_is(404)
+        ->json_is( '/error' => 'eHolding resource not found' );
 
     $schema->storage->txn_rollback;
 };

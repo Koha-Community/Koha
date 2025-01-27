@@ -57,8 +57,8 @@ BEGIN {
 sub get {
     my ( $class, $params ) = @_;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
-    my $category = $params ? ( $params->{category} || caller ) : caller;
-    my $prefix = $params->{prefix} // 1;
+    my $category  = $params ? ( $params->{category}  || caller )                 : caller;
+    my $prefix    = $params->{prefix} // 1;
 
     my $l4pcat = ( ( $prefix && C4::Context->psgi_env ) ? 'plack-' : q{} ) . $interface . '.' . $category;
 
@@ -99,7 +99,7 @@ Retrieves the stored mdc value from the stored map.
 sub get_mdc {
     my ( $self, $key ) = @_;
 
-    return Log::Log4perl::MDC->get( $key );
+    return Log::Log4perl::MDC->get($key);
 }
 
 =head2 clear_mdc
@@ -113,7 +113,7 @@ Removes *all* stored key/value pairs from the MDC map.
 sub clear_mdc {
     my ( $self, $key ) = @_;
 
-    return Log::Log4perl::MDC->remove( $key );
+    return Log::Log4perl::MDC->remove($key);
 }
 
 =head1 INTERNALS
@@ -133,8 +133,7 @@ sub AUTOLOAD {
 
     if ( $self->{logger}->can($method) ) {    #use log4perl
         return $self->{logger}->$method($line);
-    }
-    else {                                       # we should not really get here
+    } else {                                  # we should not really get here
         warn "ERROR: Unsupported method $method";
     }
     return;
@@ -155,14 +154,15 @@ sub DESTROY { }
 sub _init {
 
     my $log4perl_config =
-          exists $ENV{"LOG4PERL_CONF"}
-              && $ENV{'LOG4PERL_CONF'}
-           && -s $ENV{"LOG4PERL_CONF"}
-      # Check for web server level configuration first
-      # In this case we ASSUME that you correctly arranged logfile
-      # permissions. If not, log4perl will crash on you.
-      ? $ENV{"LOG4PERL_CONF"}
-      : C4::Context->config("log4perl_conf");
+           exists $ENV{"LOG4PERL_CONF"}
+        && $ENV{'LOG4PERL_CONF'}
+        && -s $ENV{"LOG4PERL_CONF"}
+
+        # Check for web server level configuration first
+        # In this case we ASSUME that you correctly arranged logfile
+        # permissions. If not, log4perl will crash on you.
+        ? $ENV{"LOG4PERL_CONF"}
+        : C4::Context->config("log4perl_conf");
 
     # This will explode with the relevant error message if something is wrong in the config file
     return Log::Log4perl->init_once($log4perl_config);
@@ -183,13 +183,13 @@ sub debug_to_screen {
     my $appender = Log::Log4perl::Appender->new(
         'Log::Log4perl::Appender::Screen',
         stderr => 1,
-        utf8 => 1,
-        name => 'debug_to_screen' # We need a specific name to prevent duplicates
+        utf8   => 1,
+        name   => 'debug_to_screen'    # We need a specific name to prevent duplicates
     );
 
-    $appender->threshold( $Log::Log4perl::DEBUG );
-    $self->{logger}->add_appender( $appender );
-    $self->{logger}->level( $Log::Log4perl::DEBUG );
+    $appender->threshold($Log::Log4perl::DEBUG);
+    $self->{logger}->add_appender($appender);
+    $self->{logger}->level($Log::Log4perl::DEBUG);
 }
 
 =head2 context
@@ -217,8 +217,8 @@ Note: We are just preventing a crash here not returning a new history logger.
 =cut
 
 sub history {
-    my ( $self, @history) = @_;
-    if ( @history ) {
+    my ( $self, @history ) = @_;
+    if (@history) {
         $self->{history} = \@history;
     }
     return $self->{history} || [];

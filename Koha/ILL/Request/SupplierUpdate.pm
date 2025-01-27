@@ -51,13 +51,13 @@ Create a new Koha::ILL::Request::SupplierUpdate object .
 
 sub new {
     my ( $class, $source_type, $source_name, $update, $request ) = @_;
-    my $self  = {};
+    my $self = {};
 
     $self->{source_type} = $source_type;
     $self->{source_name} = $source_name;
-    $self->{update} = $update;
-    $self->{request} = $request;
-    $self->{processors} = [];
+    $self->{update}      = $update;
+    $self->{request}     = $request;
+    $self->{processors}  = [];
 
     bless $self, $class;
 
@@ -74,7 +74,7 @@ Pushes a processor function onto the 'processors' arrayref
 
 sub attach_processor {
     my ( $self, $processor ) = @_;
-    push(@{$self->{processors}}, $processor);
+    push( @{ $self->{processors} }, $processor );
 }
 
 =head3 run_processors
@@ -88,7 +88,7 @@ Iterates all processors on this object and runs each
 sub run_processors {
     my ( $self, $options ) = @_;
     my $results = [];
-    foreach my $processor(@{$self->{processors}}) {
+    foreach my $processor ( @{ $self->{processors} } ) {
         my $processor_result = {
             name   => $processor->{name},
             result => {
@@ -96,7 +96,7 @@ sub run_processors {
                 error   => []
             }
         };
-        $processor->run($self, $options, $processor_result->{result});
+        $processor->run( $self, $options, $processor_result->{result} );
         push @{$results}, $processor_result;
     }
     return $results;

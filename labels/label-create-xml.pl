@@ -37,59 +37,56 @@ if ( $auth_status ne "ok" ) {
 my $batch_id;
 my @label_ids;
 my @item_numbers;
-$batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
+$batch_id = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
-my $layout_id   = $cgi->param('layout_id') || undef;
-@label_ids   = $cgi->multi_param('label_id') if $cgi->param('label_id');
-@item_numbers  = $cgi->multi_param('item_number') if $cgi->param('item_number');
+my $layout_id   = $cgi->param('layout_id')   || undef;
+@label_ids    = $cgi->multi_param('label_id')    if $cgi->param('label_id');
+@item_numbers = $cgi->multi_param('item_number') if $cgi->param('item_number');
 
 my $items = undef;
 
-my $xml_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
-print $cgi->header(-type        => 'text/xml',
-                   -encoding    => 'utf-8',
-                   -attachment  => "$xml_file.xml",
-                    );
+my $xml_file =
+    ( @label_ids || @item_numbers ? "label_single_" . scalar( @label_ids || @item_numbers ) : "label_batch_$batch_id" );
+print $cgi->header(
+    -type       => 'text/xml',
+    -encoding   => 'utf-8',
+    -attachment => "$xml_file.xml",
+);
 
-my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
-my $template = C4::Labels::Template->retrieve(template_id => $template_id, profile_id => 1);
-my $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
-
+my $batch    = C4::Labels::Batch->retrieve( batch_id => $batch_id );
+my $template = C4::Labels::Template->retrieve( template_id => $template_id, profile_id => 1 );
+my $layout   = C4::Labels::Layout->retrieve( layout_id => $layout_id );
 
 if (@label_ids) {
     my $batch_items = $batch->get_attr('items');
     grep {
         my $label_id = $_;
-        push(@{$items}, grep{$_->{'label_id'} == $label_id;} @{$batch_items});
+        push( @{$items}, grep { $_->{'label_id'} == $label_id; } @{$batch_items} );
     } @label_ids;
-}
-elsif (@item_numbers) {
-    grep {
-        push(@{$items}, {item_number => $_});
-    } @item_numbers;
-}
-else {
+} elsif (@item_numbers) {
+    grep { push( @{$items}, { item_number => $_ } ); } @item_numbers;
+} else {
     $items = $batch->get_attr('items');
 }
 
-my $xml = XML::Simple->new();
-my $xml_data = {'label' => []};
+my $xml      = XML::Simple->new();
+my $xml_data = { 'label' => [] };
 
 my $item_count = 0;
 
 foreach my $item (@$items) {
-    push(@{$xml_data->{'label'}}, {'item_number' => $item->{'item_number'}});
+    push( @{ $xml_data->{'label'} }, { 'item_number' => $item->{'item_number'} } );
     my $label = C4::Labels::Label->new(
-                                    batch_id            => $batch_id,
-                                    item_number         => $item->{'item_number'},
-                                    format_string       => $layout->get_attr('format_string'),
-                                      );
+        batch_id      => $batch_id,
+        item_number   => $item->{'item_number'},
+        format_string => $layout->get_attr('format_string'),
+    );
     my $format_string = $layout->get_attr('format_string');
-    my @data_fields = map { $_ eq 'callnumber' ? 'itemcallnumber' : $_ } # see bug 5653 
-                      split(/, /, $format_string);
+    my @data_fields   = map { $_ eq 'callnumber' ? 'itemcallnumber' : $_ }    # see bug 5653
+        split( /, /, $format_string );
     my $csv_data = $label->csv_data();
-    for (my $i = 0; $i <= (scalar(@data_fields) - 1); $i++) {
-        push(@{$xml_data->{'label'}[$item_count]->{$data_fields[$i]}}, $$csv_data[$i]);
+    for ( my $i = 0 ; $i <= ( scalar(@data_fields) - 1 ) ; $i++ ) {
+        push( @{ $xml_data->{'label'}[$item_count]->{ $data_fields[$i] } }, $$csv_data[$i] );
     }
     $item_count++;
 }
@@ -97,6 +94,7 @@ foreach my $item (@$items) {
 #die "XML DATA:\n" . Dumper($xml_data);
 
 my $xml_out = $xml->XMLout($xml_data);
+
 #die "XML OUT:\n" . Dumper($xml_out);
 print $xml_out;
 

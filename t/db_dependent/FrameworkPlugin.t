@@ -10,21 +10,21 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Auth qw( checkauth );
+use C4::Auth   qw( checkauth );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
 use Koha::FrameworkPlugin;
 use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our @includes;
-GetOptions( 'include=s{,}' => \@includes ); #not used by default !
+GetOptions( 'include=s{,}' => \@includes );    #not used by default !
 
 # Because of CGI::Session being buggy (see bug 17427) and a use of get_session somewhere here
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-our $dbh = C4::Context->dbh;
+our $dbh     = C4::Context->dbh;
 our $builder = t::lib::TestBuilder->new;
 
 subtest 'Test01 -- Simple tests for new and name' => sub {
@@ -48,18 +48,18 @@ subtest 'Test05 -- tests with build and launch for default plugins' => sub {
 
 subtest 'Test06 -- test biblio_008' => sub {
     plan tests => 5;
-    t::lib::Mocks::mock_preference('DefaultCountryField008', 'nl' ); # deliberately shorter than 3 pos
-    t::lib::Mocks::mock_preference('DefaultLanguageField008', 'dutch' ); # deliberately too long
+    t::lib::Mocks::mock_preference( 'DefaultCountryField008',  'nl' );       # deliberately shorter than 3 pos
+    t::lib::Mocks::mock_preference( 'DefaultLanguageField008', 'dutch' );    # deliberately too long
     my $field = biblio_008();
     is( length($field), 40, 'Check length' );
-    is( substr($field, 15, 3), 'nl ', 'Check country right padded' );
-    is( substr($field, 35, 3), 'dut', 'Check language' );
-    t::lib::Mocks::mock_preference('DefaultCountryField008', '' );
+    is( substr( $field, 15, 3 ), 'nl ', 'Check country right padded' );
+    is( substr( $field, 35, 3 ), 'dut', 'Check language' );
+    t::lib::Mocks::mock_preference( 'DefaultCountryField008', '' );
     $field = biblio_008();
-    is( substr($field, 15, 3), '|||', 'Check country fallback for empty string' );
-    t::lib::Mocks::mock_preference('DefaultCountryField008', undef );
+    is( substr( $field, 15, 3 ), '|||', 'Check country fallback for empty string' );
+    t::lib::Mocks::mock_preference( 'DefaultCountryField008', undef );
     $field = biblio_008();
-    is( substr($field, 15, 3), '|||', 'Check country fallback for undefined' );
+    is( substr( $field, 15, 3 ), '|||', 'Check country fallback for undefined' );
 };
 
 subtest 'Test07 -- validate input' => sub {
@@ -78,167 +78,186 @@ subtest 'Test07 -- validate input' => sub {
 $schema->storage->txn_rollback;
 
 sub test01 {
+
     #empty plugin
-    my $plugin= Koha::FrameworkPlugin->new;
+    my $plugin = Koha::FrameworkPlugin->new;
     is( ref($plugin), 'Koha::FrameworkPlugin', 'Got an object' );
-    isnt( $plugin->errstr, undef, 'We should have an error for missing name');
-    is( $plugin->build, undef, 'Build returns undef');
+    isnt( $plugin->errstr, undef, 'We should have an error for missing name' );
+    is( $plugin->build, undef, 'Build returns undef' );
 
     #tests for name and path, with/without hashref
-    $plugin= Koha::FrameworkPlugin->new( { name => 'marc21_leader.pl' } );
+    $plugin = Koha::FrameworkPlugin->new( { name => 'marc21_leader.pl' } );
     is( $plugin->name, 'marc21_leader.pl', 'Check name without path in hash' );
-    $plugin= Koha::FrameworkPlugin->new( 'marc21_leader.pl' );
+    $plugin = Koha::FrameworkPlugin->new('marc21_leader.pl');
     is( $plugin->name, 'marc21_leader.pl', 'Check name without path' );
-    $plugin= Koha::FrameworkPlugin->new( 'cataloguing/value_builder/marc21_leader.pl' );
+    $plugin = Koha::FrameworkPlugin->new('cataloguing/value_builder/marc21_leader.pl');
     is( $plugin->name, 'marc21_leader.pl', 'Check name with path' );
-    $plugin= Koha::FrameworkPlugin->new({ path => 'cataloguing/value_builder', name => 'marc21_leader.pl' });
+    $plugin = Koha::FrameworkPlugin->new( { path => 'cataloguing/value_builder', name => 'marc21_leader.pl' } );
     is( $plugin->name, 'marc21_leader.pl', 'Check name and path in hash' );
 }
 
 sub test02 {
+
     # first test an old style item plugin
-    my $old = old01(); # plugin filename
+    my $old = old01();    # plugin filename
     my $path;
-    if( $old =~ /^(.*)\/([^\/]+)$/ ) { # extract path
+    if ( $old =~ /^(.*)\/([^\/]+)$/ ) {    # extract path
         $path = $1;
-        $old = $2;
+        $old  = $2;
     }
-    my $plugin= Koha::FrameworkPlugin->new({
-        name => $old, path => $path, item_style => 1,
-    });
-    my $pars= { id => '234567' };
+    my $plugin = Koha::FrameworkPlugin->new(
+        {
+            name => $old, path => $path, item_style => 1,
+        }
+    );
+    my $pars = { id => '234567' };
     is( $plugin->build($pars), 1, 'Build oldstyler successful' );
-    is( length($plugin->javascript)>0 && !$plugin->noclick, 1,
-        'Checked javascript and noclick' );
+    is(
+        length( $plugin->javascript ) > 0 && !$plugin->noclick, 1,
+        'Checked javascript and noclick'
+    );
 
     # now test marc21_leader
-    $plugin= Koha::FrameworkPlugin->new( { name => 'marc21_leader.pl' } );
-    $pars= { dbh => $dbh, id => '123456' };
+    $plugin = Koha::FrameworkPlugin->new( { name => 'marc21_leader.pl' } );
+    $pars   = { dbh => $dbh, id => '123456' };
     is( $plugin->build($pars), 1, 'Build marc21_leader successful' );
-    is( $plugin->javascript =~ /<script.*function.*\<\/script\>/s, 1,
-        'Javascript looks ok' );
-    is( $plugin->noclick, '', 'marc21_leader should have a popup');
+    is(
+        $plugin->javascript =~ /<script.*function.*\<\/script\>/s, 1,
+        'Javascript looks ok'
+    );
+    is( $plugin->noclick, '', 'marc21_leader should have a popup' );
 }
 
 sub test03 {
+
     #file not found
-    my $plugin= Koha::FrameworkPlugin->new('file_does_not_exist');
+    my $plugin = Koha::FrameworkPlugin->new('file_does_not_exist');
     $plugin->build;
-    is( $plugin->errstr =~ /not found/i, 1, 'File not found-message');
+    is( $plugin->errstr =~ /not found/i, 1, 'File not found-message' );
 
     #three bad ones: no perl, syntax error, bad return value
     foreach my $f ( bad01(), bad02(), bad03() ) {
         next if !$f;
-        $plugin= Koha::FrameworkPlugin->new( $f );
-        $plugin->build({ id => '998877' });
-        is( defined($plugin->errstr), 1,
-            "Saw: ". ( $plugin->errstr//'no error??' ));
+        $plugin = Koha::FrameworkPlugin->new($f);
+        $plugin->build( { id => '998877' } );
+        is(
+            defined( $plugin->errstr ), 1,
+            "Saw: " . ( $plugin->errstr // 'no error??' )
+        );
     }
     done_testing();
 }
 
 sub test04 {
+
     #two simple new style plugins
-    my $plugin= Koha::FrameworkPlugin->new( good01() );
-    my $pars= { id => 'example_345' };
-    is( $plugin->build($pars), 1, 'Build 1 ok');
+    my $plugin = Koha::FrameworkPlugin->new( good01() );
+    my $pars   = { id => 'example_345' };
+    is( $plugin->build($pars), 1, 'Build 1 ok' );
     isnt( $plugin->javascript, '', 'Checked javascript property' );
 
-    $plugin= Koha::FrameworkPlugin->new( ugly01() );
-    $pars= { id => 'example_456' };
-    is( $plugin->build($pars), 1, 'Build 2 ok');
-    is( $plugin->build($pars), 1, 'Second build 2 ok');
+    $plugin = Koha::FrameworkPlugin->new( ugly01() );
+    $pars   = { id => 'example_456' };
+    is( $plugin->build($pars),  1,     'Build 2 ok' );
+    is( $plugin->build($pars),  1,     'Second build 2 ok' );
     is( $plugin->launch($pars), 'abc', 'Launcher returned something' );
-        #note: normally you will not call build and launch like that
+
+    #note: normally you will not call build and launch like that
 }
 
 sub test05 {
-    my ( $incl ) = @_;
+    my ($incl) = @_;
+
     #mock to simulate some authorization and eliminate lots of output
     my $launched = 0;
     my $mContext = Test::MockModule->new('C4::Context');
-    my $mAuth = Test::MockModule->new('C4::Auth');
-    my $mOutput = Test::MockModule->new('C4::Output');
+    my $mAuth    = Test::MockModule->new('C4::Auth');
+    my $mOutput  = Test::MockModule->new('C4::Output');
     $mContext->mock( 'userenv', \&mock_userenv );
-    $mAuth->mock( 'checkauth', sub { return ( 1, undef, 1, all_perms() ); } );
+    $mAuth->mock( 'checkauth',         sub { return ( 1, undef, 1, all_perms() ); } );
     $mAuth->mock( 'check_cookie_auth', sub { return ('ok') } );
-    $mOutput->mock('output_html_with_http_headers',  sub { ++$launched; } );
+    $mOutput->mock( 'output_html_with_http_headers', sub { ++$launched; } );
 
-    my $cgi=CGI->new;
-    my ( $plugins, $min ) = selected_plugins( $incl );
+    my $cgi = CGI->new;
+    my ( $plugins, $min ) = selected_plugins($incl);
 
     # test building them
     my $objs;
-    foreach my $f ( @$plugins ) {
-        $objs->{$f} = Koha::FrameworkPlugin->new( $f );
-        my $pars= { dbh => $dbh, id => $f };
-        is( $objs->{$f}->build($pars), 1, "Builded ".$objs->{$f}->name );
+    foreach my $f (@$plugins) {
+        $objs->{$f} = Koha::FrameworkPlugin->new($f);
+        my $pars = { dbh => $dbh, id => $f };
+        is( $objs->{$f}->build($pars), 1, "Builded " . $objs->{$f}->name );
     }
 
     # test launching them (but we cannot verify returned results here)
     undef $objs;
-    foreach my $f ( @$plugins ) {
-        $objs->{$f} = Koha::FrameworkPlugin->new( $f );
-        my $pars= { dbh => $dbh, id => $f };
-        $objs->{$f}->launch({ cgi => $cgi });
-            # may generate some uninitialized warnings for missing params
-        is( $objs->{$f}->errstr, undef, "Launched ".$objs->{$f}->name );
+    foreach my $f (@$plugins) {
+        $objs->{$f} = Koha::FrameworkPlugin->new($f);
+        my $pars = { dbh => $dbh, id => $f };
+        $objs->{$f}->launch( { cgi => $cgi } );
+
+        # may generate some uninitialized warnings for missing params
+        is( $objs->{$f}->errstr, undef, "Launched " . $objs->{$f}->name );
     }
-    is( $launched >= $min, 1,
-            "$launched of ". scalar @$plugins.' plugins generated output ');
+    is(
+        $launched >= $min, 1,
+        "$launched of " . scalar @$plugins . ' plugins generated output '
+    );
     done_testing();
 }
 
 sub selected_plugins {
-    my ( $incl ) = @_;
+    my ($incl) = @_;
+
     #if you use includes, FIRST assure yourself that you do not
     #include any destructive perl scripts! You know what you are doing..
 
-    my ( @fi, $min);
-    if( $incl && @$incl ) {
-        @fi = @$incl;
-        $min = 0; #not sure how many will output
-    } else { # some default MARC, UNIMARC and item plugins
+    my ( @fi, $min );
+    if ( $incl && @$incl ) {
+        @fi  = @$incl;
+        $min = 0;        #not sure how many will output
+    } else {    # some default MARC, UNIMARC and item plugins
         @fi = qw| barcode.pl dateaccessioned.pl marc21_orgcode.pl
-marc21_field_005.pl marc21_field_006.pl marc21_field_007.pl marc21_field_008.pl
-marc21_field_008_authorities.pl marc21_leader.pl marc21_leader_authorities.pl
-unimarc_leader.pl unimarc_field_100.pl unimarc_field_105.pl
-unimarc_field_106.pl unimarc_field_110.pl unimarc_field_120.pl
-unimarc_field_130.pl unimarc_field_140.pl unimarc_field_225a.pl
-unimarc_field_4XX.pl |;
-        $min = 16; # the first four generate no output
+            marc21_field_005.pl marc21_field_006.pl marc21_field_007.pl marc21_field_008.pl
+            marc21_field_008_authorities.pl marc21_leader.pl marc21_leader_authorities.pl
+            unimarc_leader.pl unimarc_field_100.pl unimarc_field_105.pl
+            unimarc_field_106.pl unimarc_field_110.pl unimarc_field_120.pl
+            unimarc_field_130.pl unimarc_field_140.pl unimarc_field_225a.pl
+            unimarc_field_4XX.pl |;
+        $min = 16;    # the first four generate no output
     }
-    @fi = grep
-        { !/ajax|callnumber(-KU)?\.pl|labs_theses/ } # skip these
+    @fi = grep { !/ajax|callnumber(-KU)?\.pl|labs_theses/ }    # skip these
         @fi;
-    return ( \@fi, $min);
+    return ( \@fi, $min );
 }
 
 sub mock_userenv {
-    my $branch = $builder->build({ source => 'Branch' });
+    my $branch = $builder->build( { source => 'Branch' } );
     return { branch => $branch->{branchcode}, flags => 1, id => 1 };
 }
 
 sub all_perms {
-    my $p = $dbh->selectcol_arrayref("SELECT flag FROM userflags");
-    my $rv= {};
-    foreach my $module ( @$p ) {
-        $rv->{ $module } = 1;
+    my $p  = $dbh->selectcol_arrayref("SELECT flag FROM userflags");
+    my $rv = {};
+    foreach my $module (@$p) {
+        $rv->{$module} = 1;
     }
     return $rv;
 }
 
 sub mytempfile {
     my ( $fh, $fn ) = tempfile( SUFFIX => '.plugin', UNLINK => 1 );
-    print $fh $_[0]//'';
+    print $fh $_[0] // '';
     close $fh;
     return $fn;
 }
 
 sub old01 {
-# simple old style item plugin: note that Focus has two pars
-# includes a typical empty Clic function and plugin subroutine
-    return mytempfile( <<'HERE'
+
+    # simple old style item plugin: note that Focus has two pars
+    # includes a typical empty Clic function and plugin subroutine
+    return mytempfile(
+        <<'HERE'
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number) = @_;
     my $function_name = $field_number;
@@ -263,8 +282,9 @@ HERE
     );
 }
 
-sub good01 { #very simple new style plugin, no launcher
-    return mytempfile( <<'HERE'
+sub good01 {    #very simple new style plugin, no launcher
+    return mytempfile(
+        <<'HERE'
 my $builder = sub {
     my $params = shift;
     return qq|
@@ -281,12 +301,13 @@ HERE
     );
 }
 
-sub bad01 { # this is no plugin
-    return mytempfile( 'Just nonsense' );
+sub bad01 {    # this is no plugin
+    return mytempfile('Just nonsense');
 }
 
-sub bad02 { # common syntax error: you forgot the semicolon of sub1 declare
-    return mytempfile( <<'HERE'
+sub bad02 {    # common syntax error: you forgot the semicolon of sub1 declare
+    return mytempfile(
+        <<'HERE'
 my $sub1= sub {
     my $params = shift;
     return qq|<script type="text/javascript">function Change$params->{id}(event) { alert("Changed"); }</script>|;
@@ -296,8 +317,9 @@ HERE
     );
 }
 
-sub bad03 { # badscript tag should trigger an error
-    return mytempfile( <<'HERE'
+sub bad03 {    # badscript tag should trigger an error
+    return mytempfile(
+        <<'HERE'
 my $sub1= sub {
     my $params = shift;
     return qq|<badscript type="text/javascript">function Click$params->{id} (event) { alert("Hi there"); return false; }</badscript>|;
@@ -307,8 +329,9 @@ HERE
     );
 }
 
-sub ugly01 { #works, but not very readable..
-    return mytempfile( <<'HERE'
+sub ugly01 {    #works, but not very readable..
+    return mytempfile(
+        <<'HERE'
 return {builder=>sub{return qq|<script type="text/javascript">function Blur$_[0]->{id}(event){alert('Bye');}</script>|;},launcher=>sub{'abc'}};
 HERE
     );

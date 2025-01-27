@@ -41,7 +41,7 @@ Return the agreement linked to this package agreement
 =cut
 
 sub agreement {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $agreement_rs = $self->_result->agreement;
     return Koha::ERM::Agreement->_new_from_dbic($agreement_rs);
 }
@@ -53,7 +53,7 @@ Return the package linked to this package package
 =cut
 
 sub package {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $package_rs = $self->_result->package;
     return Koha::ERM::EHoldings::Package->_new_from_dbic($package_rs);
 }

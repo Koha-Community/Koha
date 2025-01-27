@@ -14,36 +14,26 @@
     [%~ IF ( library.branchaddress1 or library.branchaddress2 ) ~%]
         <span property="streetAddress">
             [%~ IF ( library.branchaddress1 ) ~%]
-                <div class="branchaddress1">
-                    [% library.branchaddress1 | html %]
-                </div>
+                <div class="branchaddress1"> [% library.branchaddress1 | html %] </div>
             [%~ END ~%]
             [%~ IF ( library.branchaddress2 ) ~%]
-                <div class="branchaddress2">
-                    [%~ library.branchaddress2 |html  ~%]
-                </div>
+                <div class="branchaddress2"> [%~ library.branchaddress2 |html ~%] </div>
             [%~ END ~%]
             [%~ IF ( library.branchaddress3 ) ~%]
-                <span class="branchaddress3">
-                    [%~ library.branchaddress3 | html ~%]
-                </span>
+                <span class="branchaddress3"> [%~ library.branchaddress3 | html ~%] </span>
                 [% line_break | $raw %]
             [%~ END ~%]
         </span>
     [%~ END ~%]
     [%~ IF ( library.branchcity ) ~%]
         <div class="branchcity">
-            <span property="addressLocality">[%~ library.branchcity |html  ~%]</span>
-            [%~ IF ( library.branchstate ) %]<span property="addressRegion">, [% library.branchstate |html  ~%]</span>[%~ END ~%]
+            <span property="addressLocality">[%~ library.branchcity |html ~%]</span>
+            [%~ IF ( library.branchstate ) %]<span property="addressRegion">, [% library.branchstate |html ~%]</span>[%~ END ~%]
             [%~ IF ( library.branchzip ) %]
-                <span property="postalCode">
-                    [%~ library.branchzip |html  ~%]
-                </span>
+                <span property="postalCode"> [%~ library.branchzip |html ~%] </span>
             [%~ END ~%]
             [%~ IF ( library.branchcountry ) %]
-                <div property="addressCountry">
-                    [% library.branchcountry |html  ~%]
-                </div>
+                <div property="addressCountry"> [% library.branchcountry |html ~%] </div>
             [%~ END ~%]
         </div>
     [%~ END ~%]
@@ -53,28 +43,23 @@
     [%~ IF ( library.branchaddress1 or library.branchaddress2 ) ~%]
         <span property="streetAddress">
             [%~ IF ( library.branchaddress1 ) ~%]
-                <span class="branchaddress1">
-                    [%~ library.branchaddress1 | html ~%]
-                </span>
+                <span class="branchaddress1"> [%~ library.branchaddress1 | html ~%] </span>
                 [% line_break | $raw %]
             [%~ END ~%]
             [%~ IF ( library.branchaddress2 ) ~%]
-                <span class="branchaddress2">
-                    [%~ library.branchaddress2 | html ~%]
-                </span>
+                <span class="branchaddress2"> [%~ library.branchaddress2 | html ~%] </span>
                 [% line_break | $raw %]
             [%~ END ~%]
             [%~ IF ( library.branchaddress3 ) ~%]
-                <span class="branchaddress3">
-                    [%~ library.branchaddress3 | html ~%]
-                </span>
+                <span class="branchaddress3"> [%~ library.branchaddress3 | html ~%] </span>
                 [% line_break | $raw %]
             [%~ END ~%]
         </span>
     [%~ END ~%]
     [%~ IF ( library.branchcity ) ~%]
         <span class="branchcity">
-            [%~ IF ( library.branchzip ) ~%]<span property="postalCode">[%~ library.branchzip | html %]</span> [% END ~%]<span property="addressLocality">[%~ library.branchcity | html ~%]</span>[%~ IF ( library.branchstate ) ~%][% line_break | $raw %]<span property="addressRegion">[%~ library.branchstate | html ~%]</span>[%~ END ~%]
+            [%~ IF ( library.branchzip ) ~%]<span property="postalCode">[%~ library.branchzip | html %]</span>[% END ~%]<span property="addressLocality">[%~ library.branchcity | html ~%]</span
+            >[%~ IF ( library.branchstate ) ~%][% line_break | $raw %]<span property="addressRegion">[%~ library.branchstate | html ~%]</span>[%~ END ~%]
             [%~ IF ( library.branchcountry ) ~%][% line_break | $raw %]<span property="addressCountry">[%~ library.branchcountry | html ~%]</span>[%~ END ~%]
         </span>
     [%~ END ~%]

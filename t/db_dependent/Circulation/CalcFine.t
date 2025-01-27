@@ -19,7 +19,7 @@ $schema->storage->txn_begin;
 our $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM issues|);
 
-t::lib::Mocks::mock_preference('item-level_itypes', '1');
+t::lib::Mocks::mock_preference( 'item-level_itypes', '1' );
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -48,7 +48,7 @@ my $patron = $builder->build(
 my $itemtype = $builder->build(
     {
         source => 'Itemtype',
-        value => {
+        value  => {
             defaultreplacecost => 6,
         },
     }
@@ -83,15 +83,15 @@ subtest 'Test basic functionality' => sub {
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 30,
+        year  => 2000,
+        month => 1,
+        day   => 30,
     );
 
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
@@ -179,7 +179,6 @@ subtest 'Overdue fines cap should be disabled when value is 0.00' => sub {
     teardown();
 };
 
-
 subtest 'Test with fine amount empty' => sub {
     plan tests => 1;
 
@@ -201,19 +200,19 @@ subtest 'Test with fine amount empty' => sub {
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 30,
+        year  => 2000,
+        month => 1,
+        day   => 30,
     );
 
     warning_is {
-    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+        my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     }
     undef, "No warning when fine amount is ''";
 
@@ -223,7 +222,7 @@ subtest 'Test with fine amount empty' => sub {
 subtest 'Test cap_fine_to_replacement_price' => sub {
     plan tests => 2;
 
-    t::lib::Mocks::mock_preference('useDefaultReplacementCost', '1');
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', '1' );
     Koha::CirculationRules->set_rules(
         {
             branchcode   => undef,
@@ -242,15 +241,15 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 30,
+        year  => 2000,
+        month => 1,
+        day   => 30,
     );
 
     my $item = $builder->build_sample_item(
@@ -276,7 +275,7 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
 subtest 'Test cap_fine_to_replacement_pricew with overduefinescap' => sub {
     plan tests => 2;
 
-    t::lib::Mocks::mock_preference('useDefaultReplacementCost', '1');
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', '1' );
     Koha::CirculationRules->set_rules(
         {
             branchcode   => undef,
@@ -295,23 +294,34 @@ subtest 'Test cap_fine_to_replacement_pricew with overduefinescap' => sub {
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 30,
+        year  => 2000,
+        month => 1,
+        day   => 30,
     );
 
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
-    is( int($amount), 3, 'Got the lesser of overduefinescap and replacement price where overduefinescap < replacement price' );
+    is(
+        int($amount), 3,
+        'Got the lesser of overduefinescap and replacement price where overduefinescap < replacement price'
+    );
 
-    Koha::CirculationRules->set_rule({ rule_name => 'overduefinescap', rule_value => 6, branchcode => undef, categorycode => undef, itemtype => undef });
+    Koha::CirculationRules->set_rule(
+        {
+            rule_name => 'overduefinescap', rule_value => 6, branchcode => undef, categorycode => undef,
+            itemtype  => undef
+        }
+    );
     ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
-    is( int($amount), 5, 'Get the lesser of overduefinescap and replacement price where overduefinescap > replacement price' );
+    is(
+        int($amount), 5,
+        'Get the lesser of overduefinescap and replacement price where overduefinescap > replacement price'
+    );
 
     teardown();
 };
@@ -325,37 +335,39 @@ subtest 'Recall overdue fines' => sub {
             categorycode => undef,
             itemtype     => undef,
             rules        => {
-                fine                          => '1.00',
-                lengthunit                    => 'days',
-                finedays                      => 0,
-                firstremind                   => 0,
-                chargeperiod                  => 1,
-                recall_overdue_fine           => '5.00',
+                fine                => '1.00',
+                lengthunit          => 'days',
+                finedays            => 0,
+                firstremind         => 0,
+                chargeperiod        => 1,
+                recall_overdue_fine => '5.00',
             },
         }
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 6,
+        year  => 2000,
+        month => 1,
+        day   => 6,
     );
 
-    my $recall = Koha::Recall->new({
-        patron_id => $patron->{borrowernumber},
-        created_date => dt_from_string,
-        biblio_id => $item->biblionumber,
-        pickup_library_id => $branch->{branchcode},
-        item_id => $item->itemnumber,
-        expiration_date => undef,
-        item_level => 1
-    })->store;
+    my $recall = Koha::Recall->new(
+        {
+            patron_id         => $patron->{borrowernumber},
+            created_date      => dt_from_string,
+            biblio_id         => $item->biblionumber,
+            pickup_library_id => $branch->{branchcode},
+            item_id           => $item->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
+        }
+    )->store;
     $recall->set_overdue;
 
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
@@ -364,7 +376,6 @@ subtest 'Recall overdue fines' => sub {
     $recall->set_fulfilled;
     ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 5, 'With no recall, use normal fine amount' );
-
 
     teardown();
 };

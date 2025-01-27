@@ -23,7 +23,7 @@
 
 use Modern::Perl;
 
-use C4::Output qw(output_with_http_headers);
+use C4::Output          qw(output_with_http_headers);
 use C4::Reports::Guided qw( execute_query );
 use Koha::Reports;
 use JSON;
@@ -31,9 +31,9 @@ use CGI qw ( -utf8 );
 
 use Koha::Caches;
 
-my $query       = CGI->new();
-my $report_id   = $query->param('id');
-my $report_name = $query->param('name');
+my $query             = CGI->new();
+my $report_id         = $query->param('id');
+my $report_name       = $query->param('name');
 my $report_annotation = $query->param('annotated');
 
 my $report_recs = Koha::Reports->search( $report_name ? { 'report_name' => $report_name } : { 'id' => $report_id } );
@@ -46,17 +46,17 @@ $report_id = $report_rec->id;
 die "Sorry this report is not public\n" unless $report_rec->public;
 
 my @sql_params  = $query->multi_param('sql_params');
-my @param_names  = $query->multi_param('param_names');
+my @param_names = $query->multi_param('param_names');
 
-my $cache = Koha::Caches->get_instance();
+my $cache        = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;
-my ($cache_key, $json_text);
+my ( $cache_key, $json_text );
 if ($cache_active) {
     $cache_key =
-        "opac:report:"
-      . ( $report_name ? "name:$report_name:" : "id:$report_id:" )
-      . join( '-', @sql_params )
-      . join( '_'. @param_names );
+          "opac:report:"
+        . ( $report_name ? "name:$report_name:" : "id:$report_id:" )
+        . join( '-', @sql_params )
+        . join( '_' . @param_names );
     $json_text = $cache->get_from_cache($cache_key);
 }
 
@@ -67,30 +67,30 @@ unless ($json_text) {
 
     my ( $sth, $errors ) = execute_query(
         {
-            sql        => $sql,
-            offset     => 0,
-            limit      => $limit,
-            report_id  => $report_id,
+            sql       => $sql,
+            offset    => 0,
+            limit     => $limit,
+            report_id => $report_id,
         }
     );
     if ($sth) {
         my $lines;
         if ($report_annotation) {
-            $lines = $sth->fetchall_arrayref({});
-        }
-        else {
+            $lines = $sth->fetchall_arrayref( {} );
+        } else {
             $lines = $sth->fetchall_arrayref;
         }
         $json_text = encode_json($lines);
 
         if ($cache_active) {
-            $cache->set_in_cache( $cache_key, $json_text,
-                { expiry => $report_rec->cache_expiry } );
+            $cache->set_in_cache(
+                $cache_key, $json_text,
+                { expiry => $report_rec->cache_expiry }
+            );
         }
-    }
-    else {
+    } else {
         $json_text = encode_json($errors);
     }
 }
 
-output_with_http_headers( $query, undef, $json_text, 'json');
+output_with_http_headers( $query, undef, $json_text, 'json' );

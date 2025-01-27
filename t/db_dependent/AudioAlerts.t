@@ -95,6 +95,7 @@ is( $c->precedence, 3, "Alert C has a precedence of 3" );
 ## Test searching, should be ordered by precedence by default
 # Test searching, default search should be ordered by precedence
 $a->move('bottom');
+
 # Changed precedence order from database insert order
 # Insert order was a, b, c. Precedence order is now b, c, a.
 ( $b, $c, $a ) = Koha::AudioAlerts->search->as_list;
@@ -110,11 +111,11 @@ is( $a->precedence, 3,   "Alert A has a precedence of 3" );
 
 ## Test fix precedences, should remove gaps in precedences
 # Testing precedence fixing. Should remove gaps from precedence list.
-$a->precedence( 0 )->store();
-$b->precedence( 50 )->store();
-$c->precedence( 100 )->store();
-is( $a->precedence, 0, "Alert A has a precedence of 0" );
-is( $b->precedence, 50, "Alert B has a precedence of 50" );
+$a->precedence(0)->store();
+$b->precedence(50)->store();
+$c->precedence(100)->store();
+is( $a->precedence, 0,   "Alert A has a precedence of 0" );
+is( $b->precedence, 50,  "Alert B has a precedence of 50" );
 is( $c->precedence, 100, "Alert C has a precedence of 100" );
 
 # Running fix_precedences()
@@ -125,6 +126,5 @@ $c = Koha::AudioAlerts->find( $c->id );
 is( $a->precedence, 1, "Alert A has a precedence of 1" );
 is( $b->precedence, 2, "Alert B has a precedence of 2" );
 is( $c->precedence, 3, "Alert C has a precedence of 3" );
-
 
 $schema->storage->txn_rollback();

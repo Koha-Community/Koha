@@ -45,11 +45,12 @@ subtest 'enqueue() tests' => sub {
 
     my $record_ids = [ 1, 2 ];
 
-    $job_id = Koha::BackgroundJob::UpdateElasticIndex->new->enqueue( { record_ids => $record_ids, record_server => 'thing' } );
+    $job_id = Koha::BackgroundJob::UpdateElasticIndex->new->enqueue(
+        { record_ids => $record_ids, record_server => 'thing' } );
     my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
 
-    is( $job->size,   1,         'Size is correct' );
-    is( $job->status, 'new',     'Initial status set correctly' );
+    is( $job->size,   1,               'Size is correct' );
+    is( $job->status, 'new',           'Initial status set correctly' );
     is( $job->queue,  'elastic_index', 'BatchUpdateItem should use the default queue' );
 
     $schema->storage->txn_rollback;

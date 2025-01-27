@@ -26,18 +26,18 @@ my $sth = C4::Context->dbh;
 # NOTE: As long as we die on error *before* the DROP TABLE instructions are executed, the script may simply be rerun after addressing whatever errors occur; If we get past the data conversion without error, the DROPs and ALTERs could be executed manually if need be.
 
 # Turn off key checks for duration of script...
-$sth->do("
+$sth->do( "
     SET UNIQUE_CHECKS = 0;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
+$sth->do( "
     SET FOREIGN_KEY_CHECKS = 0;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
 # Create new tables with temporary names...
-$sth->do("
-    DROP TABLE IF EXISTS creator_batches_tmp;");
-$sth->do("
+$sth->do( "
+    DROP TABLE IF EXISTS creator_batches_tmp;" );
+$sth->do( "
     CREATE TABLE `creator_batches_tmp` (
       `label_id` int(11) NOT NULL AUTO_INCREMENT,
       `batch_id` int(10) NOT NULL DEFAULT '1',
@@ -54,11 +54,11 @@ $sth->do("
       FOREIGN KEY (`branch_code`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE,
       FOREIGN KEY (`item_number`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
-    DROP TABLE IF EXISTS creator_layouts_tmp;");
-$sth->do("
+$sth->do( "
+    DROP TABLE IF EXISTS creator_layouts_tmp;" );
+$sth->do( "
     CREATE TABLE `creator_layouts_tmp` (
       `layout_id` int(4) NOT NULL AUTO_INCREMENT,
       `barcode_type` char(100) NOT NULL DEFAULT 'CODE39',
@@ -76,11 +76,11 @@ $sth->do("
       `creator` char(15) NOT NULL DEFAULT 'Labels',
       PRIMARY KEY (`layout_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
-    DROP TABLE IF EXISTS creator_templates_tmp;");
-$sth->do("
+$sth->do( "
+    DROP TABLE IF EXISTS creator_templates_tmp;" );
+$sth->do( "
     CREATE TABLE `creator_templates_tmp` (
       `template_id` int(4) NOT NULL AUTO_INCREMENT,
       `profile_id` int(4) DEFAULT NULL,
@@ -103,11 +103,11 @@ $sth->do("
       PRIMARY KEY (`template_id`),
       KEY `template_profile_fk_constraint` (`profile_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
-    DROP TABLE IF EXISTS `creator_images`;");
-$sth->do("
+$sth->do( "
+    DROP TABLE IF EXISTS `creator_images`;" );
+$sth->do( "
 CREATE TABLE `creator_images` (
       `image_id` int(4) NOT NULL AUTO_INCREMENT,
       `imagefile` mediumblob,
@@ -115,45 +115,51 @@ CREATE TABLE `creator_images` (
       PRIMARY KEY (`image_id`),
       UNIQUE KEY `image_name_index` (`image_name`)
     ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
+$sth->do( "
     ALTER TABLE printers_profile ADD COLUMN `creator` char(15) NOT NULL DEFAULT 'Labels';
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
+$sth->do( "
     ALTER TABLE printers_profile DROP KEY printername;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
+$sth->do( "
     ALTER TABLE printers_profile ADD UNIQUE KEY `printername` (`printer_name`,`template_id`,`paper_bin`,`creator`);
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
 # Migrate data from existing tables to new tables...
 
-$sth->do("INSERT INTO `creator_batches_tmp` (label_id, batch_id, item_number, timestamp, branch_code) SELECT label_id, batch_id, item_number, timestamp, branch_code FROM labels_batches;") or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do(
+    "INSERT INTO `creator_batches_tmp` (label_id, batch_id, item_number, timestamp, branch_code) SELECT label_id, batch_id, item_number, timestamp, branch_code FROM labels_batches;"
+) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("INSERT INTO `creator_layouts_tmp` (layout_id, barcode_type, printing_type, layout_name, guidebox, callnum_split, text_justify, format_string) SELECT layout_id, barcode_type, printing_type, layout_name, guidebox, callnum_split, text_justify, format_string FROM labels_layouts;") or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do(
+    "INSERT INTO `creator_layouts_tmp` (layout_id, barcode_type, printing_type, layout_name, guidebox, callnum_split, text_justify, format_string) SELECT layout_id, barcode_type, printing_type, layout_name, guidebox, callnum_split, text_justify, format_string FROM labels_layouts;"
+) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("INSERT INTO `creator_templates_tmp` (template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, `rows`, col_gap, row_gap, units) SELECT template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, `rows`, col_gap, row_gap, units FROM labels_templates;") or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do(
+    "INSERT INTO `creator_templates_tmp` (template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, `rows`, col_gap, row_gap, units) SELECT template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, `rows`, col_gap, row_gap, units FROM labels_templates;"
+) or die "DB ERROR: " . $sth->errstr . "\n";
 
 # Drop old tables....
 
-$sth->do("DROP TABLE IF EXISTS labels_batches;") or die "DB ERROR: " . $sth->errstr . "\n";
-$sth->do("DROP TABLE IF EXISTS labels_layouts;") or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do("DROP TABLE IF EXISTS labels_batches;")   or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do("DROP TABLE IF EXISTS labels_layouts;")   or die "DB ERROR: " . $sth->errstr . "\n";
 $sth->do("DROP TABLE IF EXISTS labels_templates;") or die "DB ERROR: " . $sth->errstr . "\n";
 
 # Rename temporary tables to permenant names...
 
-$sth->do("ALTER TABLE creator_batches_tmp RENAME TO creator_batches;") or die "DB ERROR: " . $sth->errstr . "\n";
-$sth->do("ALTER TABLE creator_layouts_tmp RENAME TO creator_layouts;") or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do("ALTER TABLE creator_batches_tmp RENAME TO creator_batches;")     or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do("ALTER TABLE creator_layouts_tmp RENAME TO creator_layouts;")     or die "DB ERROR: " . $sth->errstr . "\n";
 $sth->do("ALTER TABLE creator_templates_tmp RENAME TO creator_templates;") or die "DB ERROR: " . $sth->errstr . "\n";
 
 # Re-enable key checks...
-$sth->do("
+$sth->do( "
     SET UNIQUE_CHECKS = 1;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("
+$sth->do( "
     SET  FOREIGN_KEY_CHECKS = 1;
-") or die "DB ERROR: " . $sth->errstr . "\n";
+" ) or die "DB ERROR: " . $sth->errstr . "\n";

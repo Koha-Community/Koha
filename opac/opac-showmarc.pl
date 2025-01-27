@@ -26,36 +26,38 @@ use Encode;
 # Koha modules used
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::ImportBatch;
 use C4::XSLT;
 use C4::Templates;
 use Koha::RecordProcessor;
 
-my $input       = CGI->new;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-    template_name   => "opac-showmarc.tt",
-    query           => $input,
-    type            => "opac",
-    authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-});
+my $input = CGI->new;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "opac-showmarc.tt",
+        query           => $input,
+        type            => "opac",
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+    }
+);
 
 my $biblionumber = $input->param('id');
 
-unless ( $biblionumber ) {
+unless ($biblionumber) {
     print $input->redirect("/cgi-bin/koha/errors/400.pl");
     exit;
 }
 
 my $biblio;
-$biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata' ] } );
+$biblio = Koha::Biblios->find( $biblionumber, { prefetch => ['metadata'] } );
 
-unless ( $biblio ) {
+unless ($biblio) {
     print $input->redirect('/cgi-bin/koha/errors/404.pl');
     exit;
 }
 
-my $view= $input->param('viewas') || 'marc';
+my $view = $input->param('viewas') || 'marc';
 
 my $record_processor = Koha::RecordProcessor->new(
     {
@@ -69,22 +71,21 @@ my $record_processor = Koha::RecordProcessor->new(
 
 my $record = $biblio->metadata->record;
 
-if(!ref $record) {
+if ( !ref $record ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 $record_processor->process($record);
 
-if ($view eq 'card' || $view eq 'html') {
-    my $xml = $record->as_xml;
-    my $xsl = $view eq 'card' ? 'compact.xsl' : 'plainMARC.xsl';
+if ( $view eq 'card' || $view eq 'html' ) {
+    my $xml    = $record->as_xml;
+    my $xsl    = $view eq 'card' ? 'compact.xsl' : 'plainMARC.xsl';
     my $htdocs = C4::Context->config('opachtdocs');
-    my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'opac', $input);
+    my ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $xsl, 'opac', $input );
     $xsl = "$htdocs/$theme/$lang/xslt/$xsl";
-    output_html_with_http_headers $input, undef, Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
-}
-else { #view eq marc
+    output_html_with_http_headers $input, undef, Encode::encode_utf8( C4::XSLT::engine->transform( $xml, $xsl ) );
+} else {    #view eq marc
     $template->param( MARC_FORMATTED => $record->as_formatted );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

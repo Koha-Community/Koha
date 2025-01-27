@@ -27,26 +27,31 @@ use C4::Output qw( output_html_with_http_headers );
 use Koha::UploadedFiles;
 
 my $input = CGI::->new;
-my $hash = $input->param('id'); # historically called id (used in URLs?)
+my $hash  = $input->param('id');    # historically called id (used in URLs?)
 
-my $rec = Koha::UploadedFiles->search({
-    hashvalue => $hash, public => 1,
-    # DO NOT REMOVE the public flag: this is an opac script !
-})->next;
-my $fh = $rec? $rec->file_handle: undef;
+my $rec = Koha::UploadedFiles->search(
+    {
+        hashvalue => $hash, public => 1,
 
-if( !$rec || !$fh ) {
-    my ( $template, $user, $cookie ) = get_template_and_user({
-        query           => $input,
-        template_name   => 'opac-retrieve-file.tt',
-        type            => 'opac',
-        authnotrequired => 1,
-    });
+        # DO NOT REMOVE the public flag: this is an opac script !
+    }
+)->next;
+my $fh = $rec ? $rec->file_handle : undef;
+
+if ( !$rec || !$fh ) {
+    my ( $template, $user, $cookie ) = get_template_and_user(
+        {
+            query           => $input,
+            template_name   => 'opac-retrieve-file.tt',
+            type            => 'opac',
+            authnotrequired => 1,
+        }
+    );
     $template->param( hash => $hash );
     output_html_with_http_headers $input, $cookie, $template->output;
 } else {
     print Encode::encode_utf8( $input->header( $rec->httpheaders ) );
-    while( <$fh> ) {
+    while (<$fh>) {
         print $_;
     }
     $fh->close;

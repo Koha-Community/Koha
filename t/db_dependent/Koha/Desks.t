@@ -33,22 +33,26 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Add CPL if missing.
-if (not defined Koha::Libraries->find('CPL')) {
-    Koha::Library->new({ branchcode => 'CPL', branchname => 'Centerville' })->store;
+if ( not defined Koha::Libraries->find('CPL') ) {
+    Koha::Library->new( { branchcode => 'CPL', branchname => 'Centerville' } )->store;
 }
 
-my $builder = t::lib::TestBuilder->new;
+my $builder     = t::lib::TestBuilder->new;
 my $nb_of_desks = Koha::Desks->search->count;
-my $new_desk_1 = Koha::Desk->new({
-    desk_name  => 'my_desk_name_for_test_1',
-    branchcode => 'CPL',
-})->store;
-my $new_desk_2 = Koha::Desk->new({
-    desk_name  => 'my_desk_name_for_test_2',
-    branchcode => 'CPL',
-})->store;
+my $new_desk_1  = Koha::Desk->new(
+    {
+        desk_name  => 'my_desk_name_for_test_1',
+        branchcode => 'CPL',
+    }
+)->store;
+my $new_desk_2 = Koha::Desk->new(
+    {
+        desk_name  => 'my_desk_name_for_test_2',
+        branchcode => 'CPL',
+    }
+)->store;
 
-like( $new_desk_1->desk_id, qr|^\d+$|, 'Adding a new desk should have set the desk_id');
+like( $new_desk_1->desk_id, qr|^\d+$|, 'Adding a new desk should have set the desk_id' );
 is( Koha::Desks->search->count, $nb_of_desks + 2, 'The 2 desks should have been added' );
 
 my $retrieved_desk_1 = Koha::Desks->find( $new_desk_1->desk_id );

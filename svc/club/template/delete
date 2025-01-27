@@ -29,7 +29,7 @@ use Koha::Club::Templates;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) = check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'edit_templates' } );
+my ($auth_status) = check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'edit_templates' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -40,7 +40,7 @@ my $op = $cgi->param('op') || q{};
 my $id = $cgi->param('id');
 
 my $club_template = Koha::Club::Templates->find($id);
-if ($club_template && $op eq 'cud-delete') {
+if ( $club_template && $op eq 'cud-delete' ) {
     $success = $club_template->delete();
 }
 

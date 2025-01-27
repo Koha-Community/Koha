@@ -49,8 +49,8 @@ use Carp qw( croak );
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine");
-    my $file = "Koha/SearchEngine/${engine}/QueryBuilder.pm";
-    my $class = "Koha::SearchEngine::${engine}::QueryBuilder";
+    my $file   = "Koha/SearchEngine/${engine}/QueryBuilder.pm";
+    my $class  = "Koha::SearchEngine::${engine}::QueryBuilder";
     croak "SearchEngine system preference not set" unless $engine;
     require $file;
     shift @_;

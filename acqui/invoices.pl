@@ -28,12 +28,12 @@ Search for invoices
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::Acquisition qw( GetInvoices GetInvoice );
-use C4::Budgets qw( GetBudget GetBudgets CanUserUseBudget );
+use C4::Budgets     qw( GetBudget GetBudgets CanUserUseBudget );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Booksellers;
 use Koha::AdditionalFields;
@@ -41,10 +41,10 @@ use Koha::AdditionalFields;
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => 'acqui/invoices.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { 'acquisition' => '*' },
+        template_name => 'acqui/invoices.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'acquisition' => '*' },
     }
 );
 
@@ -64,7 +64,8 @@ my $message_id       = $input->param('message_id');
 my $op               = $input->param('op');
 
 my @additional_fields = Koha::AdditionalFields->search(
-    {   tablename  => 'aqinvoices',
+    {
+        tablename  => 'aqinvoices',
         searchable => 1
     }
 )->as_list;
@@ -73,9 +74,10 @@ for my $field (@additional_fields) {
     my $value = $input->param( 'additional_field_' . $field->id );
     if ( defined $value and $value ne '' ) {
         push @additional_field_filters,
-          { id    => $field->id,
+            {
+            id    => $field->id,
             value => $value,
-          };
+            };
     }
 }
 
@@ -114,12 +116,12 @@ foreach my $budget (@$budgets) {
     push @budgets_loop, $budget if CanUserUseBudget( $loggedinuser, $budget, $flags );
 }
 
-my (@openedinvoices, @closedinvoices);
+my ( @openedinvoices, @closedinvoices );
 for my $sub ( @{$invoices} ) {
     unless ( $sub->{closedate} ) {
-        push @openedinvoices, $sub
+        push @openedinvoices, $sub;
     } else {
-        push @closedinvoices, $sub
+        push @closedinvoices, $sub;
     }
 }
 

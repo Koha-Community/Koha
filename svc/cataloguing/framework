@@ -13,21 +13,21 @@ use Koha::Libraries;
 
 my ( $query, $response ) = C4::Service->init( editcatalogue => 'edit_catalogue' );
 
-my $frameworkcode = $query->param( 'frameworkcode' ) // '';
+my $frameworkcode = $query->param('frameworkcode') // '';
 
 my $tagslib = C4::Biblio::GetMarcStructure( 1, $frameworkcode );
 
 my @tags;
 
 foreach my $tag ( sort keys %$tagslib ) {
-    my $taglib = $tagslib->{$tag};
+    my $taglib  = $tagslib->{$tag};
     my $taginfo = { map { $_, $taglib->{$_} } grep { length $_ > 1 } keys %$taglib };
     $taginfo->{subfields} = [ map { [ $_, $taglib->{$_} ] } grep { length $_ == 1 } sort keys %$taglib ];
 
     push @tags, [ $tag, $taginfo ];
 }
 
-my $schema = Koha::Database->new->schema;
+my $schema            = Koha::Database->new->schema;
 my $authorised_values = {};
 
 my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search_filtered->as_list };
@@ -36,27 +36,34 @@ foreach my $thisbranch ( sort keys %$branches ) {
     push @{ $authorised_values->{branches} }, { value => $thisbranch, lib => $branches->{$thisbranch} };
 }
 
-$authorised_values->{itemtypes} = [ $schema->resultset( "Itemtype" )->search( undef, {
-    columns => [ { value => 'itemtype' }, { lib => "description" } ],
-    order_by => "description",
-    result_class => 'DBIx::Class::ResultClass::HashRefInflator'
-} ) ];
+$authorised_values->{itemtypes} = [
+    $schema->resultset("Itemtype")->search(
+        undef,
+        {
+            columns      => [ { value => 'itemtype' }, { lib => "description" } ],
+            order_by     => "description",
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator'
+        }
+    )
+];
 
 my $class_sources = C4::ClassSource::GetClassSources();
 
 my $default_source = C4::Context->preference("DefaultClassificationSource");
 
-foreach my $class_source (sort keys %$class_sources) {
-    next unless $class_sources->{$class_source}->{'used'} or
-                ($class_source eq $default_source);
-    push @{ $authorised_values->{cn_source} }, { value => $class_source, lib => $class_sources->{$class_source}->{'description'} };
+foreach my $class_source ( sort keys %$class_sources ) {
+    next
+        unless $class_sources->{$class_source}->{'used'}
+        or ( $class_source eq $default_source );
+    push @{ $authorised_values->{cn_source} },
+        { value => $class_source, lib => $class_sources->{$class_source}->{'description'} };
 }
 
 my $avs = C4::Koha::GetAuthorisedValues();
-for my $av ( @$avs ) {
-    push @{ $authorised_values->{$av->{category}} }, { value => $av->{authorised_value}, lib => $av->{lib} };
+for my $av (@$avs) {
+    push @{ $authorised_values->{ $av->{category} } }, { value => $av->{authorised_value}, lib => $av->{lib} };
 }
 
 $response->param( framework => \@tags, authorised_values => $authorised_values );
 
-C4::Service->return_success( $response );
+C4::Service->return_success($response);

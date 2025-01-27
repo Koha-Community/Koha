@@ -24,7 +24,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use C4::Circulation qw( AddIssue GetTopIssues );
-use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
+use C4::Biblio      qw( GetMarcFromKohaField AddBiblio );
 use C4::Items;
 
 use Koha::Database;
@@ -37,77 +37,88 @@ my $builder = t::lib::TestBuilder->new();
 # Start transaction
 $schema->storage->txn_begin();
 
-my $itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };
-my $category = $builder->build({ source => 'Category' })->{ categorycode };
-my $branch_1 = $builder->build({ source => 'Branch' });
-my $branch_2 = $builder->build({ source => 'Branch' });
+my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
+my $category = $builder->build( { source => 'Category' } )->{categorycode};
+my $branch_1 = $builder->build( { source => 'Branch' } );
+my $branch_2 = $builder->build( { source => 'Branch' } );
 
 my $c4_context = Test::MockModule->new('C4::Context');
-$c4_context->mock('userenv', sub {
-    { branch => $branch_1->{ branchcode } }
-});
-t::lib::Mocks::mock_preference('item-level_itypes', '0');
+$c4_context->mock(
+    'userenv',
+    sub {
+        { branch => $branch_1->{branchcode} }
+    }
+);
+t::lib::Mocks::mock_preference( 'item-level_itypes', '0' );
 
-my $biblionumber = create_biblio('Test 1', $itemtype);
-Koha::Item->new({
-    biblionumber => $biblionumber,
-    barcode => 'GTI_BARCODE_001',
-    homebranch => $branch_1->{ branchcode },
-    ccode => 'GTI_CCODE',
-})->store;
+my $biblionumber = create_biblio( 'Test 1', $itemtype );
+Koha::Item->new(
+    {
+        biblionumber => $biblionumber,
+        barcode      => 'GTI_BARCODE_001',
+        homebranch   => $branch_1->{branchcode},
+        ccode        => 'GTI_CCODE',
+    }
+)->store;
 
-$biblionumber = create_biblio('Test 2', $itemtype);
-Koha::Item->new({
-    biblionumber => $biblionumber,
-    barcode => 'GTI_BARCODE_002',
-    homebranch => $branch_2->{ branchcode },
-})->store;
+$biblionumber = create_biblio( 'Test 2', $itemtype );
+Koha::Item->new(
+    {
+        biblionumber => $biblionumber,
+        barcode      => 'GTI_BARCODE_002',
+        homebranch   => $branch_2->{branchcode},
+    }
+)->store;
 
-my $borrowernumber = Koha::Patron->new({
-    userid => 'gti.test',
-    categorycode => $category,
-    branchcode => $branch_1->{ branchcode }
-})->store->borrowernumber;
-my $borrower = Koha::Patrons->find( $borrowernumber );
+my $borrowernumber = Koha::Patron->new(
+    {
+        userid       => 'gti.test',
+        categorycode => $category,
+        branchcode   => $branch_1->{branchcode}
+    }
+)->store->borrowernumber;
+my $borrower = Koha::Patrons->find($borrowernumber);
 
-AddIssue($borrower, 'GTI_BARCODE_001');
-AddIssue($borrower, 'GTI_BARCODE_002');
+AddIssue( $borrower, 'GTI_BARCODE_001' );
+AddIssue( $borrower, 'GTI_BARCODE_002' );
 
 #
 # Start of tests
 #
 
-my @issues = GetTopIssues({count => 10, itemtype => $itemtype});
-is(scalar @issues, 2);
-is($issues[0]->{title}, 'Test 1');
-is($issues[1]->{title}, 'Test 2');
+my @issues = GetTopIssues( { count => 10, itemtype => $itemtype } );
+is( scalar @issues,      2 );
+is( $issues[0]->{title}, 'Test 1' );
+is( $issues[1]->{title}, 'Test 2' );
 
-@issues = GetTopIssues({count => 1, itemtype => $itemtype});
-is(scalar @issues, 1);
-is($issues[0]->{title}, 'Test 1');
+@issues = GetTopIssues( { count => 1, itemtype => $itemtype } );
+is( scalar @issues,      1 );
+is( $issues[0]->{title}, 'Test 1' );
 
-@issues = GetTopIssues({count => 10, branch => $branch_2->{ branchcode }});
-is(scalar @issues, 1);
-is($issues[0]->{title}, 'Test 2');
+@issues = GetTopIssues( { count => 10, branch => $branch_2->{branchcode} } );
+is( scalar @issues,      1 );
+is( $issues[0]->{title}, 'Test 2' );
 
-@issues = GetTopIssues({count => 10, ccode => 'GTI_CCODE'});
-is(scalar @issues, 1);
-is($issues[0]->{title}, 'Test 1');
+@issues = GetTopIssues( { count => 10, ccode => 'GTI_CCODE' } );
+is( scalar @issues,      1 );
+is( $issues[0]->{title}, 'Test 1' );
 
-@issues = GetTopIssues({count => 10, itemtype => $itemtype, newness => 1});
-is(scalar @issues, 2);
-is($issues[0]->{title}, 'Test 1');
-is($issues[1]->{title}, 'Test 2');
+@issues = GetTopIssues( { count => 10, itemtype => $itemtype, newness => 1 } );
+is( scalar @issues,      2 );
+is( $issues[0]->{title}, 'Test 1' );
+is( $issues[1]->{title}, 'Test 2' );
 
-$dbh->do(q{
+$dbh->do(
+    q{
     UPDATE biblio
     SET datecreated = DATE_SUB(datecreated, INTERVAL 2 DAY)
     WHERE biblionumber = ?
-}, undef, $biblionumber);
+}, undef, $biblionumber
+);
 
-@issues = GetTopIssues({count => 10, itemtype => $itemtype, newness => 1});
-is(scalar @issues, 1);
-is($issues[0]->{title}, 'Test 1');
+@issues = GetTopIssues( { count => 10, itemtype => $itemtype, newness => 1 } );
+is( scalar @issues,      1 );
+is( $issues[0]->{title}, 'Test 1' );
 
 #
 # End of tests
@@ -116,18 +127,18 @@ is($issues[0]->{title}, 'Test 1');
 $schema->storage->txn_rollback();
 
 sub create_biblio {
-    my ($title, $itemtype) = @_;
+    my ( $title, $itemtype ) = @_;
 
-    my ($title_tag, $title_subfield) = GetMarcFromKohaField( 'biblio.title' );
-    my ($it_tag, $it_subfield) = GetMarcFromKohaField( 'biblioitems.itemtype' );
+    my ( $title_tag, $title_subfield ) = GetMarcFromKohaField('biblio.title');
+    my ( $it_tag,    $it_subfield )    = GetMarcFromKohaField('biblioitems.itemtype');
 
     my $record = MARC::Record->new();
     $record->append_fields(
-        MARC::Field->new($title_tag, ' ', ' ', $title_subfield => $title),
-        MARC::Field->new($it_tag, ' ', ' ', $it_subfield => $itemtype),
+        MARC::Field->new( $title_tag, ' ', ' ', $title_subfield => $title ),
+        MARC::Field->new( $it_tag,    ' ', ' ', $it_subfield    => $itemtype ),
     );
 
-    my ($biblionumber) = AddBiblio($record, '');
+    my ($biblionumber) = AddBiblio( $record, '' );
 
     return $biblionumber;
 }

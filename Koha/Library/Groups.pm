@@ -19,7 +19,6 @@ package Koha::Library::Groups;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Library::Group;
@@ -41,7 +40,7 @@ my @root_groups = $self->get_root_group()
 =cut
 
 sub get_root_groups {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search( { parent_id => undef }, { order_by => 'title' } );
 }
@@ -64,7 +63,6 @@ sub get_search_groups {
     return $self->search( { $field => 1 }, { order_by => 'title' } );
 }
 
-
 =head3 get_root_ancestor
 
 my $root_ancestor = $self->get_root_ancestor( {id => $group_id } )
@@ -79,7 +77,6 @@ sub get_root_ancestor {
     return $row unless $row->parent_id;
     return $self->get_root_ancestor( { id => $row->parent_id } );
 }
-
 
 =head3 type
 

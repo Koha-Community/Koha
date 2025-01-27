@@ -17,7 +17,6 @@ package Koha::Cash::Register;
 
 use Modern::Perl;
 
-
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Cash::Register::Actions;
@@ -46,7 +45,7 @@ Return the library linked to this cash register
 
 sub library {
     my ($self) = @_;
-    return Koha::Library->_new_from_dbic($self->_result->branch);
+    return Koha::Library->_new_from_dbic( $self->_result->branch );
 }
 
 =head3 cashups
@@ -62,9 +61,10 @@ sub cashups {
     $conditions //= {};
     my $merged_conditions = { %{$conditions}, %{$local_conditions} };
 
-    my $rs =
-      $self->_result->search_related( 'cash_register_actions',
-        $merged_conditions, $attrs );
+    my $rs = $self->_result->search_related(
+        'cash_register_actions',
+        $merged_conditions, $attrs
+    );
 
     return Koha::Cash::Register::Cashups->_new_from_dbic($rs);
 }
@@ -122,17 +122,18 @@ sub outstanding_accountlines {
     );
 
     my $local_conditions =
-      $since->count
-      ? { 'date' => { '>' => $since->get_column('timestamp')->as_query } }
-      : {};
+        $since->count
+        ? { 'date' => { '>' => $since->get_column('timestamp')->as_query } }
+        : {};
     my $merged_conditions =
-      $conditions
-      ? { %{$conditions}, %{$local_conditions} }
-      : $local_conditions;
+        $conditions
+        ? { %{$conditions}, %{$local_conditions} }
+        : $local_conditions;
 
-    my $rs =
-      $self->_result->search_related( 'accountlines', $merged_conditions,
-        $attrs );
+    my $rs = $self->_result->search_related(
+        'accountlines', $merged_conditions,
+        $attrs
+    );
 
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
@@ -149,10 +150,8 @@ sub store {
     $self->_result->result_source->schema->txn_do(
         sub {
             if ( $self->_result->is_column_changed('branch_default') ) {
-                Koha::Exceptions::Object::ReadOnlyProperty->throw(
-                    property => 'branch_default' );
-            }
-            else {
+                Koha::Exceptions::Object::ReadOnlyProperty->throw( property => 'branch_default' );
+            } else {
                 if (   $self->_result->is_column_changed('branch')
                     && $self->branch_default )
                 {
@@ -176,8 +175,7 @@ sub make_default {
 
     $self->_result->result_source->schema->txn_do(
         sub {
-            my $registers =
-              Koha::Cash::Registers->search( { branch => $self->branch } );
+            my $registers = Koha::Cash::Registers->search( { branch => $self->branch } );
             $registers->update( { branch_default => 0 }, { no_triggers => 1 } );
             $self->set( { branch_default => 1 } );
             $self->SUPER::store;

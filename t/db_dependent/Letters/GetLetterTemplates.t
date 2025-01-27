@@ -95,42 +95,51 @@ my $letters = [
 ];
 
 my $sth = $dbh->prepare(
-q|INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type, lang) VALUES (?, ?, ?, ?, ?, ?, ?, ?)|
+    q|INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type, lang) VALUES (?, ?, ?, ?, ?, ?, ?, ?)|
 );
 for my $l (@$letters) {
-    $sth->execute( $l->{module}, $l->{code}, $l->{branchcode}, $l->{name},
-        $l->{title}, $l->{content}, $l->{message_transport_type}, $l->{lang} );
+    $sth->execute(
+        $l->{module}, $l->{code},    $l->{branchcode},             $l->{name},
+        $l->{title},  $l->{content}, $l->{message_transport_type}, $l->{lang}
+    );
 }
 
-t::lib::Mocks::mock_preference('TranslateNotices', 1);
+t::lib::Mocks::mock_preference( 'TranslateNotices', 1 );
 my $letter_templates;
 $letter_templates = C4::Letters::GetLetterTemplates;
-is_deeply( $letter_templates, [],
-    'GetLetterTemplates should not return templates if not param is given' );
+is_deeply(
+    $letter_templates, [],
+    'GetLetterTemplates should not return templates if not param is given'
+);
 
-$letter_templates = C4::Letters::GetLetterTemplates(
-    { module => 'circulation', code => 'code1', branchcode => '' } );
-is( scalar( @$letter_templates ),
-    2, '2 default templates should exist for circulation code1' );
+$letter_templates = C4::Letters::GetLetterTemplates( { module => 'circulation', code => 'code1', branchcode => '' } );
+is(
+    scalar(@$letter_templates),
+    2, '2 default templates should exist for circulation code1'
+);
 my $has_email = grep { $_->{message_transport_type} eq 'email' } @$letter_templates;
 is( $has_email, 1, 'The mtt email should exist for circulation code1' );
 my $has_sms = grep { $_->{message_transport_type} eq 'sms' } @$letter_templates;
 is( $has_sms, 1, 'The mtt sms should exist for circulation code1' );
 
-$letter_templates = C4::Letters::GetLetterTemplates(
-    { module => 'circulation', code => 'code1', branchcode => 'CPL' } );
-is( scalar( @$letter_templates ),
-    1, '1 template should exist for circulation CPL code1' );
+$letter_templates =
+    C4::Letters::GetLetterTemplates( { module => 'circulation', code => 'code1', branchcode => 'CPL' } );
+is(
+    scalar(@$letter_templates),
+    1, '1 template should exist for circulation CPL code1'
+);
 $has_email = grep { $_->{message_transport_type} eq 'email' } @$letter_templates;
 is( $has_email, 1, 'The mtt should be email for circulation CPL code1' );
 
-$letter_templates = C4::Letters::GetLetterTemplates(
-    { module => 'circulation', code => 'code1' } );
-is( scalar( @$letter_templates ),
-    2, '2 default templates should exist for circulation code1 (even if branchcode is not given)' );
+$letter_templates = C4::Letters::GetLetterTemplates( { module => 'circulation', code => 'code1' } );
+is(
+    scalar(@$letter_templates),
+    2, '2 default templates should exist for circulation code1 (even if branchcode is not given)'
+);
 
-t::lib::Mocks::mock_preference('TranslateNotices', 0);
-$letter_templates = C4::Letters::GetLetterTemplates(
-    { module => 'circulation', code => 'code1' } );
-is( scalar( @$letter_templates ),
-    1, 'There should exist only 1 template circulation code1 for default language' );
+t::lib::Mocks::mock_preference( 'TranslateNotices', 0 );
+$letter_templates = C4::Letters::GetLetterTemplates( { module => 'circulation', code => 'code1' } );
+is(
+    scalar(@$letter_templates),
+    1, 'There should exist only 1 template circulation code1 for default language'
+);

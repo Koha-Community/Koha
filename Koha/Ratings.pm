@@ -17,7 +17,6 @@ package Koha::Ratings;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Rating;
@@ -39,7 +38,7 @@ Koha::Ratings - Koha Rating Object set class
 =cut
 
 sub get_avg_rating {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $sum   = $self->_resultset->get_column('rating_value')->sum();
     my $total = $self->count();

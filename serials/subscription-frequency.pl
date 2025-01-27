@@ -21,16 +21,16 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Serials::Frequency qw( GetSubscriptionFrequency );
-use C4::Auth qw( check_cookie_auth );
-use JSON qw( to_json );
+use C4::Auth               qw( check_cookie_auth );
+use JSON                   qw( to_json );
 
-my $input=CGI->new;
-my $frqid=$input->param("frequency_id");
-my ($auth_status) = check_cookie_auth($input->cookie('CGISESSID'), { serials => '*' });
-if ($auth_status ne "ok") {
+my $input         = CGI->new;
+my $frqid         = $input->param("frequency_id");
+my ($auth_status) = check_cookie_auth( $input->cookie('CGISESSID'), { serials => '*' } );
+if ( $auth_status ne "ok" ) {
     exit 0;
 }
-my $frequencyrecord=GetSubscriptionFrequency($frqid);
+my $frequencyrecord = GetSubscriptionFrequency($frqid);
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header(-type => 'text/plain', -charset => 'UTF-8');
-print to_json( $frequencyrecord );
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+print to_json($frequencyrecord);

@@ -41,7 +41,6 @@ use base qw(Class::Accessor);
 
 __PACKAGE__->mk_accessors(qw( record schema format id ));
 
-
 =head2 new
 
     my $metadata_record = new Koha::MetadataRecord({
@@ -77,12 +76,12 @@ sub new {
     my $class  = shift;
     my $params = shift;
 
-    if (!defined $params->{ record }) {
+    if ( !defined $params->{record} ) {
         carp 'No record passed';
         return;
     }
 
-    if (!defined $params->{ schema }) {
+    if ( !defined $params->{schema} ) {
         carp 'No schema passed';
         return;
     }
@@ -102,9 +101,9 @@ metadata schema supported is MARC.
 =cut
 
 sub createMergeHash {
-    my ($self, $tagslib) = @_;
-    if ($self->schema =~ m/marc/) {
-        return Koha::Util::MARC::createMergeHash($self->record, $tagslib);
+    my ( $self, $tagslib ) = @_;
+    if ( $self->schema =~ m/marc/ ) {
+        return Koha::Util::MARC::createMergeHash( $self->record, $tagslib );
     }
 }
 

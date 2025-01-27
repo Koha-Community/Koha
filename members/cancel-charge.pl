@@ -24,13 +24,13 @@ use C4::Auth qw( checkauth );
 my $cgi = CGI->new;
 
 my $authnotrequired = 0;
-my $flags = {
+my $flags           = {
     borrowers     => 'edit_borrowers',
     updatecharges => 'remaining_permissions'
 };
 
 my $type = 'intranet';
-my ($user, $cookie) = C4::Auth::checkauth($cgi, $authnotrequired, $flags, $type);
+my ( $user, $cookie ) = C4::Auth::checkauth( $cgi, $authnotrequired, $flags, $type );
 
 my $op = $cgi->param('op') // q{};
 

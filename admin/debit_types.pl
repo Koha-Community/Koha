@@ -18,11 +18,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( catch try );
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Account::DebitType;
@@ -35,10 +35,10 @@ my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/debit_types.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_accounts' },
+        template_name => "admin/debit_types.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_accounts' },
     }
 );
 
@@ -49,36 +49,34 @@ if ($code) {
 
 if ( $op eq 'add_form' ) {
 
-    my $selected_branches =
-      $debit_type ? $debit_type->get_library_limits : undef;
+    my $selected_branches = $debit_type ? $debit_type->get_library_limits : undef;
     my $branches =
-      Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+        Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
     foreach my $branch (@$branches) {
         my $selected =
-          ( $selected_branches
-              && grep { $_->branchcode eq $branch->{branchcode} }
-              @{ $selected_branches->as_list } ) ? 1 : 0;
+            ( $selected_branches && grep { $_->branchcode eq $branch->{branchcode} } @{ $selected_branches->as_list } )
+            ? 1
+            : 0;
         push @branches_loop,
-          {
+            {
             branchcode => $branch->{branchcode},
             branchname => $branch->{branchname},
             selected   => $selected,
-          };
+            };
     }
 
     $template->param(
         debit_type    => $debit_type,
         branches_loop => \@branches_loop
     );
-}
-elsif ( $op eq 'cud-add_validate' ) {
-    my $description           = $input->param('description');
-    my $can_be_invoiced = $input->param('can_be_invoiced') || 0;
-    my $can_be_sold = $input->param('can_be_sold') || 0;
-    my $default_amount        = $input->param('default_amount') || undef;
+} elsif ( $op eq 'cud-add_validate' ) {
+    my $description         = $input->param('description');
+    my $can_be_invoiced     = $input->param('can_be_invoiced')     || 0;
+    my $can_be_sold         = $input->param('can_be_sold')         || 0;
+    my $default_amount      = $input->param('default_amount')      || undef;
     my $restricts_checkouts = $input->param('restricts_checkouts') || 0;
-    my @branches = grep { $_ ne q{} } $input->multi_param('branches');
+    my @branches            = grep { $_ ne q{} } $input->multi_param('branches');
 
     if ( not defined $debit_type ) {
         $debit_type = Koha::Account::DebitType->new( { code => $code } );
@@ -93,29 +91,24 @@ elsif ( $op eq 'cud-add_validate' ) {
         $debit_type->store;
         $debit_type->replace_library_limits( \@branches );
         push @messages, { type => 'message', code => 'success_on_saving' };
-    }
-    catch {
+    } catch {
         push @messages, { type => 'error', code => 'error_on_saving' };
     };
     $op = 'list';
-}
-elsif ( $op eq 'cud-archive' ) {
+} elsif ( $op eq 'cud-archive' ) {
     try {
         $debit_type->archived(1)->store();
         push @messages, { code => 'success_on_archive', type => 'message' };
-    }
-    catch {
+    } catch {
         push @messages, { code => 'error_on_archive', type => 'alert' };
 
     };
     $op = 'list';
-}
-elsif ( $op eq 'cud-unarchive' ) {
+} elsif ( $op eq 'cud-unarchive' ) {
     try {
         $debit_type->archived(0)->store();
         push @messages, { code => 'success_on_restore', type => 'message' };
-    }
-    catch {
+    } catch {
         push @messages, { code => 'error_on_restore', type => 'alert' };
     };
     $op = 'list';

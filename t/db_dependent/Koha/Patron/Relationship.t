@@ -45,47 +45,48 @@ subtest 'store() tests' => sub {
     my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $relationship_1 = Koha::Patron::Relationship->new(
-        {   guarantor_id => $patron_2->borrowernumber,
+        {
+            guarantor_id => $patron_2->borrowernumber,
             guarantee_id => $patron_1->borrowernumber
         }
     );
 
-    throws_ok
-        { $relationship_1->store; }
-        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+    throws_ok { $relationship_1->store; }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown as no relationship passed';
 
     is( "$@", "No relationship passed.", 'Exception stringified correctly' );
 
-    is( Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
+    is(
+        Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
         0,
         'No guarantors added'
     );
 
     my $relationship = 'father';
 
-    throws_ok
-        { $relationship_1->relationship($relationship)->store; }
-        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+    throws_ok { $relationship_1->relationship($relationship)->store; }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown as a wrong relationship was passed';
 
     is( "$@", "Invalid relationship passed, '$relationship' is not defined.", 'Exception stringified correctly' );
 
-    is( Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
+    is(
+        Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
         0,
         'No guarantors added'
     );
 
     $relationship = '';
 
-    throws_ok
-        { $relationship_1->relationship($relationship)->store; }
-        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+    throws_ok { $relationship_1->relationship($relationship)->store; }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown as a wrong relationship was passed';
 
     is( "$@", "Invalid relationship passed, '$relationship' is not defined.", 'Exception stringified correctly' );
 
-    is( Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
+    is(
+        Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
         0,
         'No guarantors added when empty relationship passed and not defined'
     );
@@ -94,13 +95,15 @@ subtest 'store() tests' => sub {
 
     $relationship_1->relationship($relationship)->store;
 
-    is( Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
+    is(
+        Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
         1,
         'Guarantor added'
     );
 
     my $relationship_2 = Koha::Patron::Relationship->new(
-        {   guarantor_id => $patron_2->borrowernumber,
+        {
+            guarantor_id => $patron_2->borrowernumber,
             guarantee_id => $patron_1->borrowernumber,
             relationship => 'father2'
         }
@@ -109,12 +112,12 @@ subtest 'store() tests' => sub {
     {
         local *STDERR;
         open STDERR, '>', '/dev/null';
-        throws_ok
-            { $relationship_2->store; }
-            'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+        throws_ok { $relationship_2->store; }
+        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
             'Exception is thrown for duplicated relationship';
 
-        is( "$@",
+        is(
+            "$@",
             "There already exists a relationship for the same guarantor ("
                 . $patron_2->borrowernumber
                 . ") and guarantee ("

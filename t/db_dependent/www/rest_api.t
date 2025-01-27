@@ -17,21 +17,17 @@
 
 use Modern::Perl;
 
-use Test::More; #See plan tests => \d+ below
+use Test::More;    #See plan tests => \d+ below
 use LWP::UserAgent;
 
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
-eval{
-    use C4::Context;
-};
+eval { use C4::Context; };
 if ($@) {
     plan skip_all => "Tests skip. You must have a working Context\n";
-}
-elsif (not defined $intranet) {
+} elsif ( not defined $intranet ) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
-}
-else {
+} else {
     plan tests => 1;
 }
 
@@ -40,6 +36,6 @@ $intranet =~ s#/$##;
 my $api_base_url = "$intranet/api/v1";
 subtest 'non-existent routes' => sub {
     plan tests => 1;
-    my $response = LWP::UserAgent->new->get($api_base_url . "/does_not_exist");
+    my $response = LWP::UserAgent->new->get( $api_base_url . "/does_not_exist" );
     is( $response->code, 404, "REST API should return 404 on non-existent routes" );
 };

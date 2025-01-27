@@ -66,7 +66,7 @@ use constant ERR_ROOT     => 'UPLERR_NO_ROOT_DIR';
 use constant ERR_TEMP     => 'UPLERR_NO_TEMP_DIR';
 
 use Modern::Perl;
-use CGI; # no utf8 flag, since it may interfere with binary uploads
+use CGI;    # no utf8 flag, since it may interfere with binary uploads
 use Digest::MD5;
 use Encode;
 use IO::File;
@@ -79,7 +79,7 @@ use C4::Koha;
 use Koha::UploadedFile;
 use Koha::UploadedFiles;
 
-__PACKAGE__->mk_ro_accessors( qw|| );
+__PACKAGE__->mk_ro_accessors(qw||);
 
 =head1 INSTANCE METHODS
 
@@ -95,7 +95,7 @@ __PACKAGE__->mk_ro_accessors( qw|| );
 sub new {
     my ( $class, $params ) = @_;
     my $self = $class->SUPER::new();
-    $self->_init( $params );
+    $self->_init($params);
     return $self;
 }
 
@@ -106,14 +106,14 @@ sub new {
 =cut
 
 sub cgi {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # Next call handles the actual upload via CGI hook.
     # The third parameter (0) below means: no CGI temporary storage.
     # Cancelling an upload will make CGI abort the script; no problem,
     # the file(s) without db entry will be removed later.
     my $query = CGI::->new( sub { $self->_hook(@_); }, {}, 0 );
-    if( $query ) {
+    if ($query) {
         $self->_done;
         return $query;
     }
@@ -126,7 +126,7 @@ sub cgi {
 =cut
 
 sub count {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return scalar grep { !exists $self->{files}->{$_}->{errcode} } keys %{ $self->{files} };
 }
 
@@ -137,11 +137,11 @@ sub count {
 =cut
 
 sub result {
-    my ( $self ) = @_;
-    my @a = map { $self->{files}->{$_}->{id} }
+    my ($self) = @_;
+    my @a      = map { $self->{files}->{$_}->{id} }
         grep { !exists $self->{files}->{$_}->{errcode} }
         keys %{ $self->{files} };
-    return @a? ( join ',', @a ): undef;
+    return @a ? ( join ',', @a ) : undef;
 }
 
 =head2 err
@@ -152,11 +152,11 @@ sub result {
 =cut
 
 sub err {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $err;
     foreach my $f ( keys %{ $self->{files} } ) {
         my $e = $self->{files}->{$f}->{errcode};
-        $err->{ $f }->{code} = $e if $e;
+        $err->{$f}->{code} = $e if $e;
     }
     return $err;
 }
@@ -170,15 +170,15 @@ sub err {
 =cut
 
 sub allows_add_by {
-    my ( $class, $userid ) = @_; # do not confuse with borrowernumber
+    my ( $class, $userid ) = @_;    # do not confuse with borrowernumber
     my $flags = [
-        { tools      => 'upload_general_files' },
-        { circulate  => 'circulate_remaining_permissions' },
-        { tools      => 'stage_marc_import' },
-        { tools      => 'upload_local_cover_images' },
+        { tools     => 'upload_general_files' },
+        { circulate => 'circulate_remaining_permissions' },
+        { tools     => 'stage_marc_import' },
+        { tools     => 'upload_local_cover_images' },
     ];
     require C4::Auth;
-    foreach( @$flags ) {
+    foreach (@$flags) {
         return 1 if C4::Auth::haspermission( $userid, $_ );
     }
     return;
@@ -192,26 +192,26 @@ sub _init {
     my ( $self, $params ) = @_;
 
     $self->{rootdir} = Koha::UploadedFile->permanent_directory;
-    $self->{tmpdir} = C4::Context::temporary_directory;
+    $self->{tmpdir}  = C4::Context::temporary_directory;
 
-    $params->{tmp} = $params->{temp} if !exists $params->{tmp};
-    $self->{temporary} = $params->{tmp}? 1: 0; #default false
-    if( $params->{tmp} ) {
-        my $db =  C4::Context->config('database');
+    $params->{tmp}     = $params->{temp} if !exists $params->{tmp};
+    $self->{temporary} = $params->{tmp} ? 1 : 0;                      #default false
+    if ( $params->{tmp} ) {
+        my $db = C4::Context->config('database');
         $self->{category} = KOHA_UPLOAD;
         $self->{category} =~ s/koha/$db/;
     } else {
         $self->{category} = $params->{category} || KOHA_UPLOAD;
     }
 
-    $self->{files} = {};
-    $self->{uid} = C4::Context->userenv->{number} if C4::Context->userenv;
-    $self->{public} = $params->{public}? 1: undef;
+    $self->{files}  = {};
+    $self->{uid}    = C4::Context->userenv->{number} if C4::Context->userenv;
+    $self->{public} = $params->{public} ? 1 : undef;
 }
 
 sub _fh {
     my ( $self, $filename ) = @_;
-    if( $self->{files}->{$filename} ) {
+    if ( $self->{files}->{$filename} ) {
         return $self->{files}->{$filename}->{fh};
     }
 }
@@ -219,33 +219,39 @@ sub _fh {
 sub _create_file {
     my ( $self, $filename ) = @_;
     my $fh;
-    if( $self->{files}->{$filename} &&
-            $self->{files}->{$filename}->{errcode} ) {
+    if (   $self->{files}->{$filename}
+        && $self->{files}->{$filename}->{errcode} )
+    {
         #skip
-    } elsif( !$self->{temporary} && !$self->{rootdir} ) {
-        $self->{files}->{$filename}->{errcode} = ERR_ROOT; #no rootdir
-    } elsif( $self->{temporary} && !$self->{tmpdir} ) {
-        $self->{files}->{$filename}->{errcode} = ERR_TEMP; #no tempdir
+    } elsif ( !$self->{temporary} && !$self->{rootdir} ) {
+        $self->{files}->{$filename}->{errcode} = ERR_ROOT;    #no rootdir
+    } elsif ( $self->{temporary} && !$self->{tmpdir} ) {
+        $self->{files}->{$filename}->{errcode} = ERR_TEMP;    #no tempdir
     } else {
-        my $dir = $self->_dir;
+        my $dir     = $self->_dir;
         my $hashval = $self->{files}->{$filename}->{hash};
-        my $fn = $hashval. '_'. $filename;
+        my $fn      = $hashval . '_' . $filename;
 
         # if the file exists and it is registered, then set error
         # if it exists, but is not in the database, we will overwrite
-        if( -e "$dir/$fn" &&
-        Koha::UploadedFiles->search({
-            hashvalue          => $hashval,
-            uploadcategorycode => $self->{category},
-        })->count ) {
+        if (
+            -e "$dir/$fn"
+            && Koha::UploadedFiles->search(
+                {
+                    hashvalue          => $hashval,
+                    uploadcategorycode => $self->{category},
+                }
+            )->count
+            )
+        {
             $self->{files}->{$filename}->{errcode} = ERR_EXISTS;
             return;
         }
 
-        $fh = IO::File->new( "$dir/$fn", "w");
-        if( $fh ) {
+        $fh = IO::File->new( "$dir/$fn", "w" );
+        if ($fh) {
             $fh->binmode;
-            $self->{files}->{$filename}->{fh}= $fh;
+            $self->{files}->{$filename}->{fh} = $fh;
         } else {
             $self->{files}->{$filename}->{errcode} = ERR_PERMS;
         }
@@ -254,28 +260,28 @@ sub _create_file {
 }
 
 sub _dir {
-    my ( $self ) = @_;
-    my $dir = $self->{temporary}? $self->{tmpdir}: $self->{rootdir};
-    $dir.= '/'. $self->{category};
+    my ($self) = @_;
+    my $dir = $self->{temporary} ? $self->{tmpdir} : $self->{rootdir};
+    $dir .= '/' . $self->{category};
     mkdir $dir if !-d $dir;
     return $dir;
 }
 
 sub _hook {
     my ( $self, $filename, $buffer, $bytes_read, $data ) = @_;
-    $filename= Encode::decode_utf8( $filename ); # UTF8 chars in filename
+    $filename = Encode::decode_utf8($filename);    # UTF8 chars in filename
     $filename =~ s/[^A-Za-z0-9\-\.]//g;
     $self->_compute( $filename, $buffer );
-    my $fh = $self->_fh( $filename ) // $self->_create_file( $filename );
+    my $fh = $self->_fh($filename) // $self->_create_file($filename);
     print $fh $buffer if $fh;
 }
 
 sub _done {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->{done} = 1;
     foreach my $f ( keys %{ $self->{files} } ) {
         my $fh = $self->_fh($f);
-        $self->_register( $f, $fh? tell( $fh ): undef )
+        $self->_register( $f, $fh ? tell($fh) : undef )
             if !$self->{files}->{$f}->{errcode};
         $fh->close if $fh;
     }
@@ -283,30 +289,37 @@ sub _done {
 
 sub _register {
     my ( $self, $filename, $size ) = @_;
-    my $rec = Koha::UploadedFile->new({
-        hashvalue => $self->{files}->{$filename}->{hash},
-        filename  => $filename,
-        dir       => $self->{category},
-        filesize  => $size,
-        owner     => $self->{uid},
-        uploadcategorycode => $self->{category},
-        public    => $self->{public},
-        permanent => $self->{temporary}? 0: 1,
-    })->store;
+    my $rec = Koha::UploadedFile->new(
+        {
+            hashvalue          => $self->{files}->{$filename}->{hash},
+            filename           => $filename,
+            dir                => $self->{category},
+            filesize           => $size,
+            owner              => $self->{uid},
+            uploadcategorycode => $self->{category},
+            public             => $self->{public},
+            permanent          => $self->{temporary} ? 0 : 1,
+        }
+    )->store;
     $self->{files}->{$filename}->{id} = $rec->id if $rec;
 }
 
 sub _compute {
-# Computes hash value when sub hook feeds the first block
-# For temporary files, the id is made unique with time
+
+    # Computes hash value when sub hook feeds the first block
+    # For temporary files, the id is made unique with time
     my ( $self, $name, $block ) = @_;
-    if( !$self->{files}->{$name}->{hash} ) {
-        my $str = $name. ( $self->{uid} // '0' ).
-            ( $self->{temporary}? Time::HiRes::time(): '' ).
-            $self->{category}. substr( $block, 0, BYTES_DIGEST );
+    if ( !$self->{files}->{$name}->{hash} ) {
+        my $str =
+              $name
+            . ( $self->{uid} // '0' )
+            . ( $self->{temporary} ? Time::HiRes::time() : '' )
+            . $self->{category}
+            . substr( $block, 0, BYTES_DIGEST );
+
         # since Digest cannot handle wide chars, we need to encode here
         # there could be a wide char in the filename or the category
-        my $h = Digest::MD5::md5_hex( Encode::encode_utf8( $str ) );
+        my $h = Digest::MD5::md5_hex( Encode::encode_utf8($str) );
         $self->{files}->{$name}->{hash} = $h;
     }
 }

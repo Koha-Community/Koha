@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ERM::Licenses;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -38,8 +38,7 @@ sub list {
     return try {
         my $licenses = $c->objects->search( Koha::ERM::Licenses->new );
         return $c->render( status => 200, openapi => $licenses );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -64,8 +63,7 @@ sub get {
             status  => 200,
             openapi => $license
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -97,15 +95,14 @@ sub add {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $license->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $license->license_id );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($license),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::ERM::License->new->to_api_mapping;
 
@@ -115,28 +112,17 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -180,39 +166,28 @@ sub update {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $license->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $license->license_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($license),
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::ERM::License->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -222,7 +197,7 @@ sub update {
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 
@@ -239,8 +214,7 @@ sub delete {
     return try {
         $license->delete;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

@@ -37,13 +37,13 @@ Koha::SubscriptionNumberpatterns - Koha SubscriptionNumberpattern object set cla
 =cut
 
 sub uniqueLabel {
-    my ($self, $label) = @_;
+    my ( $self, $label ) = @_;
 
-    my $samelabel = Koha::Subscription::Numberpatterns->search({label => $label})->next();
+    my $samelabel = Koha::Subscription::Numberpatterns->search( { label => $label } )->next();
     if ($samelabel) {
-        my $i = 2;
+        my $i        = 2;
         my $newlabel = $samelabel->label . " ($i)";
-        while (my $othersamelabel = $self->search({label => $newlabel})->next()) {
+        while ( my $othersamelabel = $self->search( { label => $newlabel } )->next() ) {
             $i++;
             $newlabel = $samelabel->label . " ($i)";
         }
@@ -57,13 +57,16 @@ sub uniqueLabel {
 =cut
 
 sub new_or_existing {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $params_np;
     if ( $params->{'numbering_pattern'} eq 'mana' ) {
-        foreach (qw/numberingmethod label1 add1 every1 whenmorethan1 setto1
-                   numbering1 label2 add2 every2 whenmorethan2 setto2 numbering2
-                   label3 add3 every3 whenmorethan3 setto3 numbering3/) {
+        foreach (
+            qw/numberingmethod label1 add1 every1 whenmorethan1 setto1
+            numbering1 label2 add2 every2 whenmorethan2 setto2 numbering2
+            label3 add3 every3 whenmorethan3 setto3 numbering3/
+            )
+        {
             $params_np->{$_} = $params->{$_} if $params->{$_};
         }
 
@@ -73,9 +76,8 @@ sub new_or_existing {
             return $existing->id;
         }
 
-        $params_np->{label} = Koha::Subscription::Numberpatterns->uniqueLabel($params->{'patternname'});
+        $params_np->{label}       = Koha::Subscription::Numberpatterns->uniqueLabel( $params->{'patternname'} );
         $params_np->{description} = $params->{'sndescription'};
-
 
         my $subscription_np = Koha::Subscription::Numberpattern->new()->set($params_np)->store();
         return $subscription_np->id;

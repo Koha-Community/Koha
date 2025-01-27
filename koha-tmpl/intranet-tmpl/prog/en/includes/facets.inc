@@ -29,25 +29,26 @@
                 <li id="availability_facet">
                     Availability
                     <ul>
-                            [% IF ( available ) %]
-                                <li>
+                        [% IF ( available ) %]
+                            <li>
                                 <strong>Showing only records with available items</strong>
-                                </li>
-                                <li>
-                                    <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all records</a>
-                                </li>
-                            [% ELSE %]
-                                <li>
-                                <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to records with available items</a>
-                                </li>
-                            [% END # /IF available %]
+                            </li>
+                            <li>
+                                <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all records</a>
+                            </li>
+                        [% ELSE %]
+                            <li>
+                                <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available"
+                                    >Limit to records with available items</a
+                                >
+                            </li>
+                        [% END # /IF available %]
                     </ul>
                     [% IF ( related ) %]
-                        <li>
-                            (related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])
-                        </li>
+                        <li> (related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %]) </li>
                     [% END %]
-                </li> <!-- /#availability_facet -->
+                </li>
+                <!-- /#availability_facet -->
 
                 [% FOREACH facets_loo IN facets_loop %]
                     [% IF facets_loo.facets.size > 0 %]
@@ -129,6 +130,7 @@
                     [% END # /IF facets_loo.facets.size %]
                 [% END # /FOREACH facets_loo %]
             </ul>
-        </div> <!-- /#search-facets -->
+        </div>
+        <!-- /#search-facets -->
     [% END # /IF ( facets_loop ) %]
 [% END # /IF ( opacfacets ) %]

@@ -9,18 +9,28 @@
 [% END %]
 <nav class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid">
-        <a id="logo" class="navbar-brand" href="/cgi-bin/koha/mainpage.pl"><img src="[% interface | html %]/[% theme | html %]/img/picto-koha.svg" alt="Koha"></a>
+        <a id="logo" class="navbar-brand" href="/cgi-bin/koha/mainpage.pl"><img src="[% interface | html %]/[% theme | html %]/img/picto-koha.svg" alt="Koha" /></a>
 
         <div class="collapse navbar-collapse" id="header">
             <ul id="toplevelmenu" class="navbar-nav me-auto">
                 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                    <li class="nav-item"><a class="nav-link" href="/cgi-bin/koha/circ/circulation-home.pl"><span class="nav-link-icon"><i class="fa fa-fw fa-exchange" title="Circulation"></i></span> <span class="nav-link-text">Circulation</span></a></li>
+                    <li class="nav-item"
+                        ><a class="nav-link" href="/cgi-bin/koha/circ/circulation-home.pl"
+                            ><span class="nav-link-icon"><i class="fa fa-fw fa-exchange" title="Circulation"></i></span> <span class="nav-link-text">Circulation</span></a
+                        ></li
+                    >
                 [% END %]
                 [% IF CAN_user_borrowers_edit_borrowers || CAN_user_borrowers_list_borrowers %]
-                    <li class="nav-item"><a class="nav-link" href="/cgi-bin/koha/members/members-home.pl"><span class="nav-link-icon"><i class="fa fa-fw fa-id-card" title="Patrons"></i></span> <span class="nav-link-text">Patrons</span></a></li>
+                    <li class="nav-item"
+                        ><a class="nav-link" href="/cgi-bin/koha/members/members-home.pl"
+                            ><span class="nav-link-icon"><i class="fa fa-fw fa-id-card" title="Patrons"></i></span> <span class="nav-link-text">Patrons</span></a
+                        ></li
+                    >
                 [% END %]
                 <li class="nav-item" id="catalog-search-link">
-                    <a class="nav-link" href="/cgi-bin/koha/catalogue/search.pl"><span class="nav-link-icon"><i class="fa fa-fw fa-search" title="Search"></i></span> <span class="nav-link-text">Search</span></a>
+                    <a class="nav-link" href="/cgi-bin/koha/catalogue/search.pl"
+                        ><span class="nav-link-icon"><i class="fa fa-fw fa-search" title="Search"></i></span> <span class="nav-link-text">Search</span></a
+                    >
                 </li>
                 [% IF ( CAN_user_catalogue ) %]
                     <li class="nav-item dropdown" id="catalog-search-dropdown">
@@ -33,7 +43,9 @@
                 [% END %]
                 [% Koha.Preference('IntranetNav') | $raw %]
                 <li class="nav-item dropdown">
-                    <a href="/cgi-bin/koha/mainpage.pl" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="nav-link-icon"><i class="fa fa-fw fa-bars" title="More"></i></span> <span class="nav-link-text">More</span></a>
+                    <a href="/cgi-bin/koha/mainpage.pl" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        ><span class="nav-link-icon"><i class="fa fa-fw fa-bars" title="More"></i></span> <span class="nav-link-text">More</span></a
+                    >
                     <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                         <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
                         [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || can_see_cataloguing_module  ) %]
@@ -83,7 +95,6 @@
                 [% END %]
             </ul>
 
-
             <ul id="user-menu" class="nav navbar-nav">
                 [% IF ( loggedinusername ) %]
                     <li class="nav-item dropdown" id="logged-in-dropdown">
@@ -94,11 +105,9 @@
                             <span id="logged-in-info-full">
                                 [% SET is_superlibrarian = CAN_user_superlibrarian ? 'is_superlibrarian' : '' %]
                                 <span class="loggedinusername [% is_superlibrarian | html %]">[% logged_in_user.userid | html %]</span>
-                                 <span class="loggedincategorycode content_hidden">[% logged_in_user.categorycode | html %]</span>
+                                <span class="loggedincategorycode content_hidden">[% logged_in_user.categorycode | html %]</span>
                                 [% IF ( StaffLoginRestrictLibraryByIP ) %]
-                                    <brand>
-                                        [% Branches.GetLoggedInBranchname | html %]
-                                    </brand>
+                                    <brand> [% Branches.GetLoggedInBranchname | html %] </brand>
                                 [% ELSE %]
                                     <strong>
                                         <span class="logged-in-branch-name">[% Branches.GetLoggedInBranchname | html %]</span>
@@ -109,7 +118,7 @@
                                     <span class="separator">|</span>
                                     <strong>
                                         [% IF ( Desks.GetLoggedInDeskName == '' ) %]
-                                        <span class="logged-in-desk-name">NO DESK SET</span>
+                                            <span class="logged-in-desk-name">NO DESK SET</span>
                                         [% ELSE %]
                                             <span class="logged-in-desk-name">[% Desks.GetLoggedInDeskName | html %]</span>
                                             <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
@@ -134,9 +143,7 @@
                             </li>
                             <li class="loggedin-menu-label">
                                 [% IF ( StaffLoginRestrictLibraryByIP ) %]
-                                    <brand>
-                                        [% Branches.GetLoggedInBranchname | html %]
-                                    </brand>
+                                    <brand> [% Branches.GetLoggedInBranchname | html %] </brand>
                                 [% ELSE %]
                                     Location: <br />
                                     <span class="logged-in-branch-name">[% Branches.GetLoggedInBranchname | html %]</span>
@@ -165,7 +172,7 @@
                             [% END %]
 
                             [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary || Koha.Preference('UseCirculationDesks') || Koha.Preference('UseCashRegisters') ) %]
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <div id="set_library_controls">
                                         <div>
@@ -199,17 +206,17 @@
 
                                 <li id="setlibrary_panel" style="display:none"></li>
                             [% ELSIF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set desk and cash register</a>
                                 </li>
                             [% ELSIF Koha.Preference('UseCirculationDesks') %]
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set desk</a>
                                 </li>
                             [% ELSIF Koha.Preference('UseCashRegisters') %]
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set cash register</a>
                                 </li>
@@ -240,7 +247,6 @@
                         </ul>
                     </li>
                     [% INCLUDE 'langmenu-staff-top.inc' %]
-
                 [% ELSE %]
                     <li class="nav-item loggedout">
                         <a href="/cgi-bin/koha/mainpage.pl" id="login">Log in</a>
@@ -251,7 +257,6 @@
     </div>
 
     [% IF ( Koha.Preference('intranetbookbag') ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
-
 </nav>
 
 [% content | $raw %]

@@ -34,15 +34,16 @@
         [% t("HTML customizations") | html %]
     [% END %]
 [% END %]
-<title>[% FILTER collapse %]
-    [% IF op == 'add_form' %]
-        [% PROCESS page_heading %] &rsaquo;
-    [% END %]
-    [% PROCESS page_section %] &rsaquo;
-    [% t("Additional content") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op == 'add_form' %]
+            [% PROCESS page_heading %]
+            &rsaquo;
+        [% END %]
+        [% PROCESS page_section %]
+        &rsaquo; [% t("Additional content") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( wysiwyg ) %]
     [% SET editmode = "wysiwyg" %]
@@ -57,24 +58,24 @@
         }
     </style>
 [% END %]
-    <style>
-        .syspref-link::before {
-            content: " | ";
-        }
-        .customization-link::before {
-            content: " | ";
-        }
-        .customization-link:first-child::before {
-            content: none;
-        }
-        label[for^="title_"],
-        label[for^="content_"] {
-            font-weight: 700;
-        }
-        .customization_note {
-            display: none;
-        }
-    </style>
+<style>
+    .syspref-link::before {
+        content: " | ";
+    }
+    .customization-link::before {
+        content: " | ";
+    }
+    .customization-link:first-child::before {
+        content: none;
+    }
+    label[for^="title_"],
+    label[for^="content_"] {
+        font-weight: 700;
+    }
+    .customization_note {
+        display: none;
+    }
+</style>
 </head>
 
 <body id="tools_additional-contents" class="tools">
@@ -119,44 +120,41 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="[% div_class | html %]">
-<main>
-    [% INCLUDE 'messages.inc' %]
+            <main>
+                [% INCLUDE 'messages.inc' %]
 
-    [% FOR m IN messages %]
-        <div class="alert alert-[% m.type | html %]">
-            [% SWITCH m.code %]
-            [% CASE 'error_on_update' %]
-                <span>An error occurred when updating this content. Perhaps it already exists.</span>
-            [% CASE 'error_on_insert' %]
-                <span>An error occurred when adding this content. Check the logs for details.</span>
-            [% CASE 'error_on_delete' %]
-                <span>An error occurred when deleting this content. Check the logs for details.</span>
-            [% CASE 'success_on_update' %]
-                <span>Content updated successfully.</span>
-            [% CASE 'success_on_insert' %]
-                <span>Content added successfully.</span>
-            [% CASE 'success_on_delete' %]
-                <span>Content deleted successfully.</span>
-            [% CASE %]
-                <span>[% m.code | html %]</span>
-            [% END %]
+                [% FOR m IN messages %]
+                    <div class="alert alert-[% m.type | html %]">
+                        [% SWITCH m.code %]
+                        [% CASE 'error_on_update' %]
+                            <span>An error occurred when updating this content. Perhaps it already exists.</span>
+                        [% CASE 'error_on_insert' %]
+                            <span>An error occurred when adding this content. Check the logs for details.</span>
+                        [% CASE 'error_on_delete' %]
+                            <span>An error occurred when deleting this content. Check the logs for details.</span>
+                        [% CASE 'success_on_update' %]
+                            <span>Content updated successfully.</span>
+                        [% CASE 'success_on_insert' %]
+                            <span>Content added successfully.</span>
+                        [% CASE 'success_on_delete' %]
+                            <span>Content deleted successfully.</span>
+                        [% CASE %]
+                            <span>[% m.code | html %]</span>
+                        [% END %]
+                    </div>
+                [% END %]
+
+                [% IF op == 'add_form' %]
+                    [% PROCESS add_form %]
+                [% ELSE %]
+                    [% PROCESS list %]
+                [% END %]
+            </main>
         </div>
-    [% END %]
-
-    [% IF op == 'add_form' %]
-        [% PROCESS add_form %]
-    [% ELSE %]
-        [% PROCESS list %]
-    [% END %]
-
-</main>
-
-        </div> <!-- /.col-md-10.order-md-2 -->
+        <!-- /.col-md-10.order-md-2 -->
         [% IF op != 'add_form' %]
-
             <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
-
                     <div id="news-filter">
                         <form action="/cgi-bin/koha/tools/additional-contents.pl" method="get">
                             <h4>Filter</h4>
@@ -182,9 +180,7 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <label>
-                                            <input type="checkbox" name="show_expired" id="show_expired" /> Show expired
-                                        </label>
+                                        <label> <input type="checkbox" name="show_expired" id="show_expired" /> Show expired </label>
                                     </li>
                                 </ol>
                             </fieldset>
@@ -193,10 +189,13 @@
 
                     [% INCLUDE 'tools-menu.inc' %]
                 </aside>
-            </div> <!-- /.col-md-2.order-md-1 -->
+            </div>
+            <!-- /.col-md-2.order-md-1 -->
         [% END %]
-    </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% BLOCK add_form %]
     <h1>[% PROCESS page_heading %]</h1>
@@ -269,19 +268,19 @@
                     <div class="hint">
                         [% INCLUDE 'date-format.inc' %]
                         [% IF category == 'news' %]
-                            <br>News will still be accessible by direct URL if expired.
+                            <br />News will still be accessible by direct URL if expired.
                         [% END %]
                     </div>
                 </li>
                 [% UNLESS category == 'pages' %]
-                <li>
-                    <label for="number">Appear in position: </label>
-                    [% IF ( additional_content.number ) %]
-                        <input id="number" size="3" name="number" type="text" value="[% additional_content.number | html %]" />
-                    [% ELSE %]
-                        <input id="number" size="3" name="number" type="text" />
-                    [% END %]
-                </li>
+                    <li>
+                        <label for="number">Appear in position: </label>
+                        [% IF ( additional_content.number ) %]
+                            <input id="number" size="3" name="number" type="text" value="[% additional_content.number | html %]" />
+                        [% ELSE %]
+                            <input id="number" size="3" name="number" type="text" />
+                        [% END %]
+                    </li>
                 [% END %]
             </ol>
         </fieldset>
@@ -293,9 +292,9 @@
                 [% WRAPPER tabs_nav %]
                     [% FOR language IN languages %]
                         [% IF language.lang == 'default' %]
-                            [% WRAPPER tab_item tabname= "lang_default" %] <span>Default</span> [% END %]
+                            [% WRAPPER tab_item tabname= "lang_default" %]<span>Default</span>[% END %]
                         [% ELSE %]
-                            [% WRAPPER tab_item tabname= "lang_${language.lang}" %] [% language.description | html %] [% END %]
+                            [% WRAPPER tab_item tabname= "lang_${language.lang}" %][% language.description | html %][% END %]
                         [% END %]
                     [% END %]
                 [% END # /WRAPPER tabs_nav %]
@@ -308,11 +307,13 @@
                                 <ol>
                                     <li>
                                         <label for="title_[% language.lang | html %]">Title: </label>
-                                        <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title_[% language.lang | html %]" value="[% translated_content.title | html %]">
+                                        <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title_[% language.lang | html %]" value="[% translated_content.title | html %]" />
                                     </li>
                                     <li>
                                         <label for="content_[% language.lang | html %]">Content: </label>
-                                        <textarea name="content_[% language.lang | html %]" id="content_[% language.lang | html %]" data-lang="[% language.lang | html%]" cols="75" rows="10">[% translated_content.content | html %]</textarea>
+                                        <textarea name="content_[% language.lang | html %]" id="content_[% language.lang | html %]" data-lang="[% language.lang | html %]" cols="75" rows="10">
+[% translated_content.content | html %]</textarea
+                                        >
                                         <input type="hidden" name="id_[% language.lang | html %]" value="[% translated_content.id | html %]" />
                                         <input type="hidden" name="lang" value="[% language.lang | html %]" />
                                     </li>
@@ -325,7 +326,7 @@
         [% ELSE %]
             <div id="lang_default">
                 <div class="clearfix">
-                    <textarea name="content" id="content_default" data-lang="[% language.lang | html %]"  cols="75" rows="10">[% additional_content.content | html %]</textarea>
+                    <textarea name="content" id="content_default" data-lang="[% language.lang | html %]" cols="75" rows="10">[% additional_content.content | html %]</textarea>
                 </div>
             </div>
         [% END # /IF languages.size %]
@@ -333,12 +334,10 @@
 [% END %]
 
 [% BLOCK list %]
-
     <div id="toolbar" class="btn-toolbar">
         <div class="btn-group">
-            <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&category=[% category | uri %]&editmode=[% editmode | uri %]" class="btn btn-default" id="newentry"> <i class="fa fa-plus"></i> New entry</a><button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-
-            </button>
+            <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&category=[% category | uri %]&editmode=[% editmode | uri %]" class="btn btn-default" id="newentry"> <i class="fa fa-plus"></i> New entry</a
+            ><button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
             <ul class="dropdown-menu">
                 <li>
                     [% IF ( wysiwyg ) %]
@@ -367,8 +366,8 @@
         <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
         <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-            <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
-            <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>
+            <a class="syspref-link" href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS">OPACUserJS</a>
+            <a class="syspref-link" href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS">OPACUserCSS</a>
         [% END %]
     </span>
 
@@ -397,89 +396,94 @@
                         </tr>
                     </thead>
                     <tbody>
-                        [% FOREACH c IN additional_contents%]
+                        [% FOREACH c IN additional_contents %]
                             [% SET default_localization = c.default_localization %]
                             <tr [% IF c.is_expired %]class="expired"[% END %]>
-                            <td>
-                                <input type="checkbox" name="ids" value="[% c.id | html %]" />
-                            </td>
-                            <td>
-                                [% IF c.category == 'news' || c.category == 'pages' %]
-                                    [% IF c.location == 'staff_and_opac' %]<span>All</span>
-                                    [% ELSIF c.location == 'staff_only' %]<span>Staff interface</span>
-                                    [% ELSIF c.location == 'opac_only' %]<span>OPAC</span>
-                                    [% ELSIF c.location == 'slip' %]<span>Slip</span>
-                                    [% ELSE %]<span>Unknown ('[% location | html %]')</span>
-                                    [% END %]
-                                [% ELSE %]
-                                    [% c.location | html %]
-                                [% END %]
-                            </td>
-                            <td>
-                                [% IF ( c.branchcode == "" ) -%]
-                                All libraries
-                                [% ELSE %][% c.library.branchname | html %]
-                                [% END %]
-                            </td>
-                            <td>[% c.number | html %]</td>
-                            <td data-order="[% c.published_on | html %]">[% c.published_on | $KohaDates %]</td>
-                            <td data-order="[% c.expirationdate | html %]">[% c.expirationdate | $KohaDates %] [% IF ( c.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
-                            <td>[% default_localization.title | html %]</td>
-                            <td>[% IF ( c.author) %][% INCLUDE 'patron-title.inc' patron=c.author %][% END %]</td>
-                            [% IF category == 'pages' %]
-                                <td class="actions">
-                                    [% IF c.location == 'opac_only' OR c.location == 'staff_and_opac' %]
-                                        <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.id | uri %]" title="View on OPAC"><strong>OPAC</strong></a>
-                                    [% END %]
-                                    [% IF c.location == 'staff_only' OR c.location == 'staff_and_opac' %]
-                                        [% IF c.location == 'staff_and_opac' %]<br/>[% END %]
-                                        <a target="_blank" href="/cgi-bin/koha/tools/page.pl?page_id=[% c.id | uri %]" title="View on staff interface"><strong>Staff</strong></a>
+                                <td>
+                                    <input type="checkbox" name="ids" value="[% c.id | html %]" />
+                                </td>
+                                <td>
+                                    [% IF c.category == 'news' || c.category == 'pages' %]
+                                        [% IF c.location == 'staff_and_opac' %]
+                                            <span>All</span>
+                                        [% ELSIF c.location == 'staff_only' %]
+                                            <span>Staff interface</span>
+                                        [% ELSIF c.location == 'opac_only' %]
+                                            <span>OPAC</span>
+                                        [% ELSIF c.location == 'slip' %]
+                                            <span>Slip</span>
+                                        [% ELSE %]
+                                            <span>Unknown ('[% location | html %]')</span>
+                                        [% END %]
+                                    [% ELSE %]
+                                        [% c.location | html %]
                                     [% END %]
                                 </td>
-                            [% END %]
-                            <td>
-                                <div class="btn-group">
-                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview content</a>
-                                </div>
-                                <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content modal-lg">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title">Preview of: "[% default_localization.title | html %]"</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <template shadowrootmode="open">
-                                                   [% default_localization.content | $raw %]
-                                                </template>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                                <td>
+                                    [% IF ( c.branchcode == "" ) -%]
+                                        All libraries
+                                    [% ELSE %]
+                                        [% c.library.branchname | html %]
+                                    [% END %]
+                                </td>
+                                <td>[% c.number | html %]</td>
+                                <td data-order="[% c.published_on | html %]">[% c.published_on | $KohaDates %]</td>
+                                <td data-order="[% c.expirationdate | html %]">[% c.expirationdate | $KohaDates %] [% IF ( c.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
+                                <td>[% default_localization.title | html %]</td>
+                                <td>[% IF ( c.author) %][% INCLUDE 'patron-title.inc' patron=c.author %][% END %]</td>
+                                [% IF category == 'pages' %]
+                                    <td class="actions">
+                                        [% IF c.location == 'opac_only' OR c.location == 'staff_and_opac' %]
+                                            <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.id | uri %]" title="View on OPAC"><strong>OPAC</strong></a>
+                                        [% END %]
+                                        [% IF c.location == 'staff_only' OR c.location == 'staff_and_opac' %]
+                                            [% IF c.location == 'staff_and_opac' %]<br />[% END %]
+                                            <a target="_blank" href="/cgi-bin/koha/tools/page.pl?page_id=[% c.id | uri %]" title="View on staff interface"><strong>Staff</strong></a>
+                                        [% END %]
+                                    </td>
+                                [% END %]
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview content</a>
+                                    </div>
+                                    <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content modal-lg">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title">Preview of: "[% default_localization.title | html %]"</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <template shadowrootmode="open"> [% default_localization.content | $raw %] </template>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="actions">
-                                <div class="btn-group dropup">
-                                    <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa-solid fa-pencil"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            [% IF ( wysiwyg ) %]
-                                                <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=text"><i class="fa-solid fa-pencil"></i> Edit with text editor</a>
-                                            [% ELSE %]
-                                                <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=wysiwyg"><i class="fa-solid fa-pencil"></i> Edit with WYSIWYG editor</a>
-                                            [% END %]
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="btn-group">
-                                    <a href="#" class="delete_news btn btn-default btn-xs" data-id="[% c.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="actions">
+                                    <div class="btn-group dropup">
+                                        <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa-solid fa-pencil"></i> Edit</a
+                                        ><button class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                [% IF ( wysiwyg ) %]
+                                                    <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=text"><i class="fa-solid fa-pencil"></i> Edit with text editor</a>
+                                                [% ELSE %]
+                                                    <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=wysiwyg"
+                                                        ><i class="fa-solid fa-pencil"></i> Edit with WYSIWYG editor</a
+                                                    >
+                                                [% END %]
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a href="#" class="delete_news btn btn-default btn-xs" data-id="[% c.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
                         [% END %]
                     </tbody>
                 </table>
@@ -493,7 +497,8 @@
                 <input type="hidden" id="del_category" name="category" value="[% category | html %]" />
                 <input type="hidden" id="del_ids" name="ids" />
             </form>
-        </div> <!-- /.page-section -->
+        </div>
+        <!-- /.page-section -->
     [% ELSE %]
         <div class="alert alert-info">There are no additional contents.</div>
     [% END %]
@@ -555,7 +560,7 @@
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
-        $("#saveandcontinue").on("click",function(e){
+        $("#saveandcontinue").on("click", function (e) {
             e.preventDefault();
             $("#redirect").val("just_save");
             $("#submit_form").click();
@@ -564,22 +569,22 @@
     [% IF additional_contents.count %]
         [% INCLUDE 'datatables.inc' %]
         <script>
-            $('.preview_news').click( function() {
-                modalNumber = $(this).attr('data-number');
-                $('.modal[data-number="'+modalNumber+'"]').modal('show');
-            })
+            $(".preview_news").click(function () {
+                modalNumber = $(this).attr("data-number");
+                $('.modal[data-number="' + modalNumber + '"]').modal("show");
+            });
 
-            function filterDataTable( table, column, term ){
-                if( column ){
-                    table.column( column ).search( term ).draw();
+            function filterDataTable(table, column, term) {
+                if (column) {
+                    table.column(column).search(term).draw();
                 } else {
-                    table.search( term ).draw();
+                    table.search(term).draw();
                 }
-                clearFilter( term );
+                clearFilter(term);
             }
 
-            function clearFilter( term ){
-                if( term == "" ){
+            function clearFilter(term) {
+                if (term == "") {
                     $(".dt_button_clear_filter").addClass("disabled");
                 } else {
                     $(".dt_button_clear_filter").removeClass("disabled");
@@ -589,74 +594,73 @@
             /* Custom table search configuration: If a table row
                has an "expired" class, hide it UNLESS the
                show_expired checkbox is checked */
-            $.fn.dataTable.ext.search.push(
-                function( settings, searchData, index, rowData, counter ) {
-                    var row = $(settings.aoData[index].nTr);
-                    if( row.hasClass("expired") && !$("#show_expired").prop("checked") ){
-                        return false;
-                    } else {
-                        return true;
-                    }
+            $.fn.dataTable.ext.search.push(function (settings, searchData, index, rowData, counter) {
+                var row = $(settings.aoData[index].nTr);
+                if (row.hasClass("expired") && !$("#show_expired").prop("checked")) {
+                    return false;
+                } else {
+                    return true;
                 }
-            );
+            });
 
-            $(document).ready(function() {
+            $(document).ready(function () {
+                var table = $("#table_additional_contents").DataTable(
+                    $.extend(true, {}, dataTablesDefaults, {
+                        order: [[4, "desc"]],
+                        columnDefs: [
+                            { sortable: false, searchable: false, targets: ["NoSort"] },
+                            { type: "anti-the", targets: ["anti-the"] },
+                        ],
+                        pagingType: "full_numbers",
+                    })
+                );
 
-                var table = $("#table_additional_contents").DataTable($.extend(true, {}, dataTablesDefaults, {
-                    "order": [[ 4, "desc" ]],
-                    "columnDefs": [
-                        { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                        { "type": "anti-the", "targets": [ "anti-the" ] }
-                    ],
-                    "pagingType": "full_numbers"
-                }));
-
-                $("#del_form").on("click", ".delete_news", function(e){
+                $("#del_form").on("click", ".delete_news", function (e) {
                     e.preventDefault();
-                    if( confirmDelete( _("Are you sure you want to delete this content? This cannot be undone.") ) ){
-                        $("#del_ids").val( $(this).data("id") );
+                    if (confirmDelete(_("Are you sure you want to delete this content? This cannot be undone."))) {
+                        $("#del_ids").val($(this).data("id"));
                         $("#delete_single").submit();
                     }
                 });
 
-                $("#del_form").on("submit",function(){
-                    if ( $('#del_form input[type="checkbox"][name="ids"]:checked').length ) {
-                        return confirmDelete( _("Are you sure you want to delete the selected content?") );
+                $("#del_form").on("submit", function () {
+                    if ($('#del_form input[type="checkbox"][name="ids"]:checked').length) {
+                        return confirmDelete(_("Are you sure you want to delete the selected content?"));
                     } else {
                         alert(_("Please select content to delete."));
                         return false;
                     }
                 });
 
-                $("#show_expired").on("change", function(){
+                $("#show_expired").on("change", function () {
                     /* redraw the DataTable according to the custom search function */
                     table.draw();
                 });
 
-                table.on( 'search.dt', function () {
+                table.on("search.dt", function () {
                     var term = table.search();
-                    $("#news_keyword").val( term );
+                    $("#news_keyword").val(term);
                 });
 
-                $("#news_keyword").on("keyup", function(){
+                $("#news_keyword").on("keyup", function () {
                     var term = $(this).val();
-                    filterDataTable( table, null, term );
+                    filterDataTable(table, null, term);
                 });
 
-                $("#news_display_location").on("change", function(){
+                $("#news_display_location").on("change", function () {
                     var term = $(this).val();
-                    filterDataTable( table, 1, term );
+                    filterDataTable(table, 1, term);
                 });
 
-                $("#news_library").on("change", function(){
+                $("#news_library").on("change", function () {
                     // Table must be filtered by the <option>'s text, not its value
                     var opt = $(this).find("option:selected").text();
-                    filterDataTable( table, 2, opt );
+                    filterDataTable(table, 2, opt);
                 });
 
-                $(".dt_button_clear_filter").on("click", function(){
-                    table.search('').columns().search('').draw();
-                    $("#news-filter select").each(function(){
+                $(".dt_button_clear_filter").on("click", function () {
+                    table.search("").columns().search("").draw();
+                    $("#news-filter select").each(function () {
                         $(this).val("");
                     });
                 });
@@ -717,29 +721,28 @@
         [% Asset.js( "lib/codemirror/html-lint.min.js" ) | $raw %]
         <script>
             let editors = new Object(); /* Keeps track of initialized CodeMirror instances */
-            $(document).ready(function(){
-
-                if( $("#tabs .tab-pane.active").length < 1 ){
+            $(document).ready(function () {
+                if ($("#tabs .tab-pane.active").length < 1) {
                     /* Activate first tab and initialize its CodeMirror instance */
                     let firstTab = $("#tabs a:first");
                     firstTab.tab("show");
-                    if ( firstTab[0] ) {
-                        initCodeMirror( firstTab[0].hash );
+                    if (firstTab[0]) {
+                        initCodeMirror(firstTab[0].hash);
                     }
                 }
 
                 $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                     /* Try to initialize CodeMirror instance when tab opens */
-                    initCodeMirror( e.target.hash );
+                    initCodeMirror(e.target.hash);
                 });
             });
 
-            function initCodeMirror( container ){
+            function initCodeMirror(container) {
                 /* Initialize CodeMirror instance only if it doesn't exist */
-                if( !editors[ container ] ){
-                    let textarea = $( container ).find("textarea[name^='content_']");
-                    let this_lang = textarea.attr('data-lang');
-                    let editor = CodeMirror.fromTextArea( document.getElementById('content_' + this_lang), {
+                if (!editors[container]) {
+                    let textarea = $(container).find("textarea[name^='content_']");
+                    let this_lang = textarea.attr("data-lang");
+                    let editor = CodeMirror.fromTextArea(document.getElementById("content_" + this_lang), {
                         lineNumbers: true,
                         lineWrapping: true,
                         lint: true,
@@ -747,7 +750,7 @@
                         gutters: ["CodeMirror-lint-markers"],
                         viewportMargin: Infinity,
                     });
-                    editors[ container ] = editor;
+                    editors[container] = editor;
                     return editor;
                 }
             }
@@ -756,7 +759,6 @@
         [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
         [% INCLUDE 'str/tinymce_i18n.inc' %]
         <script>
-
             $(document).ready(function(){
                 if( $("#tabs").length > 0 && $("#tabs .tab-pane.active").length < 1 ){
                     /* Activate first tab and initialize its tinyMCE instance */

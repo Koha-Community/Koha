@@ -35,10 +35,10 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'cataloguing/editor.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => {
+        template_name => 'cataloguing/editor.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => {
             editcatalogue => {
                 'edit_catalogue'  => 1,
                 'advanced_editor' => 1
@@ -55,30 +55,35 @@ $template->param(
 );
 
 # Available import batches
-$template->{VARS}->{editable_batches} = [ $schema->resultset('ImportBatch')->search(
-    {
-        batch_type => [ 'batch', 'webservice' ],
-        import_status => 'staged',
-    },
-    { result_class => 'DBIx::Class::ResultClass::HashRefInflator' },
-) ];
+$template->{VARS}->{editable_batches} = [
+    $schema->resultset('ImportBatch')->search(
+        {
+            batch_type    => [ 'batch', 'webservice' ],
+            import_status => 'staged',
+        },
+        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' },
+    )
+];
 
 # Needed information for cataloging plugins
-$template->{VARS}->{DefaultLanguageField008} = pack( 'A3', C4::Context->preference('DefaultLanguageField008') || 'eng' );
+$template->{VARS}->{DefaultLanguageField008} =
+    pack( 'A3', C4::Context->preference('DefaultLanguageField008') || 'eng' );
 $template->{VARS}->{DefaultCountryField008} = pack( 'A3', C4::Context->preference('DefaultCountryField008') || '|||' );
 
-my $authtags = Koha::MarcSubfieldStructures->search({ authtypecode => { '!=' => '' }, 'frameworkcode' => '' });
+my $authtags = Koha::MarcSubfieldStructures->search( { authtypecode => { '!=' => '' }, 'frameworkcode' => '' } );
 $template->{VARS}->{authtags} = $authtags;
 
-my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+my $frameworks = Koha::BiblioFrameworks->search( {}, { order_by => ['frameworktext'] } );
 $template->{VARS}->{frameworks} = $frameworks;
 
 # Z39.50 servers
 my $dbh = C4::Context->dbh;
-$template->{VARS}->{z3950_servers} = $dbh->selectall_arrayref( q{
+$template->{VARS}->{z3950_servers} = $dbh->selectall_arrayref(
+    q{
     SELECT * FROM z3950servers
     WHERE recordtype != 'authority' AND servertype = 'zed'
     ORDER BY `rank`,servername
-}, { Slice => {} } );
+}, { Slice => {} }
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;

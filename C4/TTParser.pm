@@ -29,50 +29,56 @@ use warnings;
 #);
 
 #tokens found so far (used like a stack)
-my ( @tokens );
+my (@tokens);
 
 #shiftnext token or undef
-sub next_token{
+sub next_token {
     return shift @tokens;
 }
 
 #unshift token back on @tokens
-sub unshift_token{
+sub unshift_token {
     my $self = shift;
     unshift @tokens, shift;
 }
 
 #have a peep at next token
-sub peep_token{
+sub peep_token {
     return $tokens[0];
 }
 
 #wrapper for parse
 #please use this method INSTEAD of the HTML::Parser->parse_file method (and HTML::Parser->parse)
 #signature build_tokens( self, filename)
-sub build_tokens{
-    my ($self, $filename) = @_;
+sub build_tokens {
+    my ( $self, $filename ) = @_;
     $self->{filename} = $filename;
-    $self->handler(start => "start", "self, line, tagname, attr, text"); #signature is start( self, linenumber, tagname, hash of attributes, original text )
-    $self->handler(text => "text", "self, line, text, is_cdata"); #signature is text( self, linenumber, original text, is_cdata )
-    $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, original text )
-    $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
-    $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
-    $self->handler(process => "process", "self, line, text, is_cdata"); # processing statement <?...?>
-#    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
-    $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a C4::TmplTokenType::CDATA
-    $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
-    open(my $fh, "<:encoding(utf8)", $filename) || die "Cannot open $filename ($!)";
+    $self->handler( start => "start", "self, line, tagname, attr, text" )
+        ;    #signature is start( self, linenumber, tagname, hash of attributes, original text )
+    $self->handler( text => "text", "self, line, text, is_cdata" )
+        ;    #signature is text( self, linenumber, original text, is_cdata )
+    $self->handler( end => "end", "self, line, tag, attr, text" )
+        ;    #signature is end( self, linenumber, tagename, original text )
+    $self->handler( declaration => "declaration", "self, line, text, is_cdata" );    # declaration
+    $self->handler( comment     => "comment",     "self, line, text, is_cdata" );    # comments
+    $self->handler( process     => "process",     "self, line, text, is_cdata" );    # processing statement <?...?>
+
+    #    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
+    $self->marked_sections(1)
+        ;    #treat anything inside CDATA tags as text, should really make it a C4::TmplTokenType::CDATA
+    $self->unbroken_text(1);    #make contiguous whitespace into a single token (can span multiple lines)
+    open( my $fh, "<:encoding(utf8)", $filename ) || die "Cannot open $filename ($!)";
     $self->parse_file($fh);
     return $self;
 }
 
 #handle parsing of text
-sub text{
-    my $self = shift;
-    my $line = shift;
-    my $work = shift; # original text
+sub text {
+    my $self     = shift;
+    my $line     = shift;
+    my $work     = shift;       # original text
     my $is_cdata = shift;
+
     # If there is a split template toolkit tag
     if ( $work =~ m/^(?:(?!\[%).)*?%\]/s ) {
         my @strings = ($&);
@@ -93,12 +99,17 @@ sub text{
             $token ? $token->line_number : $line, $self->{filename}
             );
     }
-    while($work){
+    while ($work) {
+
         # if there is a template_toolkit tag
-        if( $work =~ m/\[%.*?%\]/ ){
+        if ( $work =~ m/\[%.*?%\]/ ) {
+
             #everything before this tag is text (or possibly CDATA), add a text token to tokens if $`
-            if( $` ){
-                my $t = C4::TmplToken->new( $`, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
+            if ($`) {
+                my $t = C4::TmplToken->new(
+                    $`, ( $is_cdata ? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT ), $line,
+                    $self->{filename}
+                );
                 push @tokens, $t;
             }
 
@@ -109,9 +120,13 @@ sub text{
             # put work still to do back into work
             $work = $' ? $' : 0;
         } else {
+
             # If there is some left over work, treat it as text token
-            my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
-	    
+            my $t = C4::TmplToken->new(
+                $work, ( $is_cdata ? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT ), $line,
+                $self->{filename}
+            );
+
             push @tokens, $t;
             last;
         }
@@ -119,79 +134,92 @@ sub text{
 }
 
 sub declaration {
-    my $self = shift;
-    my $line = shift;
-    my $work = shift; #original text
+    my $self     = shift;
+    my $line     = shift;
+    my $work     = shift;                #original text
     my $is_cdata = shift;
-    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
-    push @tokens, $t;  
-}      
+    my $t        = C4::TmplToken->new(
+        $work, ( $is_cdata ? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT ), $line,
+        $self->{filename}
+    );
+    push @tokens, $t;
+}
 
 sub comment {
-    my $self = shift;
-    my $line = shift;
-    my $work = shift; #original text
+    my $self     = shift;
+    my $line     = shift;
+    my $work     = shift;                #original text
     my $is_cdata = shift;
-    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
-    push @tokens, $t;  
-}      
+    my $t        = C4::TmplToken->new(
+        $work, ( $is_cdata ? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT ), $line,
+        $self->{filename}
+    );
+    push @tokens, $t;
+}
 
 sub process {
-    my $self = shift;
-    my $line = shift;
-    my $work = shift; #original text
+    my $self     = shift;
+    my $line     = shift;
+    my $work     = shift;                #original text
     my $is_cdata = shift;
-    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
+    my $t        = C4::TmplToken->new(
+        $work, ( $is_cdata ? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT ), $line,
+        $self->{filename}
+    );
     push @tokens, $t;
 }
 
 sub default {
-    my $self = shift;
-    my $line = shift;
-    my $work = shift; #original text
+    my $self     = shift;
+    my $line     = shift;
+    my $work     = shift;                #original text
     my $is_cdata = shift;
-    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
-    push @tokens, $t;  
-}      
-
+    my $t        = C4::TmplToken->new(
+        $work, ( $is_cdata ? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT ), $line,
+        $self->{filename}
+    );
+    push @tokens, $t;
+}
 
 #handle opening html tags
-sub start{
+sub start {
     my $self = shift;
     my $line = shift;
-    my $tag = shift;
-    my $hash = shift; #hash of attr/value pairs
-    my $text = shift; #original text
-    my $t = C4::TmplToken->new( $text, C4::TmplTokenType::TAG, $line, $self->{filename});
+    my $tag  = shift;
+    my $hash = shift;                                                                          #hash of attr/value pairs
+    my $text = shift;                                                                          #original text
+    my $t    = C4::TmplToken->new( $text, C4::TmplTokenType::TAG, $line, $self->{filename} );
     my %attr;
+
     # tags seem to be uses in an 'interesting' way elsewhere..
-    for my $key( %$hash ) {
+    for my $key (%$hash) {
         next unless defined $hash->{$key};
-        if ($key eq "/"){
-            $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 1 ];
-            }
-        else {
-        $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 0 ];
-            }
+        if ( $key eq "/" ) {
+            $attr{ +lc($key) } = [ $key, $hash->{$key}, $key . "=" . $hash->{$key}, 1 ];
+        } else {
+            $attr{ +lc($key) } = [ $key, $hash->{$key}, $key . "=" . $hash->{$key}, 0 ];
+        }
     }
     $t->set_attributes( \%attr );
     push @tokens, $t;
 }
 
 #handle closing html tags
-sub end{
+sub end {
     my $self = shift;
     my $line = shift;
-    my $tag = shift;
+    my $tag  = shift;
     my $hash = shift;
     my $text = shift;
+
     # what format should this be in?
     my $t = C4::TmplToken->new( $text, C4::TmplTokenType::TAG, $line, $self->{filename} );
     my %attr;
+
     # tags seem to be uses in an 'interesting' way elsewhere..
-    for my $key( %$hash ) {
+    for my $key (%$hash) {
         next unless defined $hash->{$key};
-        $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 0 ];
+        $attr{ +lc($key) } = [ $key, $hash->{$key}, $key . "=" . $hash->{$key}, 0 ];
     }
     $t->set_attributes( \%attr );
     push @tokens, $t;

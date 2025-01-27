@@ -17,8 +17,7 @@ sub _read_marc_code {
     my ( $field, $subfield );
     if ( $input =~ /^(\d{3})$/ ) {
         $field = $1;
-    }
-    elsif ( $input =~ /^(\d{3})(\w)$/ ) {
+    } elsif ( $input =~ /^(\d{3})(\w)$/ ) {
         $field    = $1;
         $subfield = $2;
     }
@@ -34,7 +33,7 @@ GetOptions(
     'date-created-marc|c:s'  => \$date_created_marc,
     'date-modified-marc|m:s' => \$date_modified_marc,
 );
-my $debug = 0; # FIXME pass an option for that?
+my $debug = 0;    # FIXME pass an option for that?
 $verbose = 1 if $debug;
 
 # display help ?
@@ -50,9 +49,9 @@ $date_created_marc = '099c' unless $date_created_marc;
 my ( $c_field, $c_subfield ) = _read_marc_code($date_created_marc);
 die "date-created-marc '$date_created_marc' is not correct." unless $c_field;
 die "date-created-marc field is greated that 009, it should have a subfield."
-  if ( $c_field > 9 && !defined $c_subfield );
+    if ( $c_field > 9 && !defined $c_subfield );
 die "date-created-marc field is lower that 010, it should not have a subfield."
-  if ( $c_field < 10 && defined $c_subfield );
+    if ( $c_field < 10 && defined $c_subfield );
 if ($verbose) {
     print "Date created on $c_field";
     print $c_subfield if defined $c_subfield;    # use of defined to allow 0
@@ -64,13 +63,12 @@ $date_modified_marc = '099d' unless $date_modified_marc;
 my ( $m_field, $m_subfield ) = _read_marc_code($date_modified_marc);
 die "date-modified-marc '$date_modified_marc' is not correct." unless $m_field;
 die "date-modified-marc field is greated that 009, it should have a subfield."
-  if ( $m_field > 9 && !defined $m_subfield );
+    if ( $m_field > 9 && !defined $m_subfield );
 die "date-modified-marc field is lower that 010, it should not have a subfield."
-  if ( $m_field < 10 && defined $m_subfield );
-die
-"When date-created-marc and date-modified-marc are on same field, they should have distinct subfields"
-  if ( $c_field eq $m_field )
-  && ( !defined $c_subfield
+    if ( $m_field < 10 && defined $m_subfield );
+die "When date-created-marc and date-modified-marc are on same field, they should have distinct subfields"
+    if ( $c_field eq $m_field )
+    && ( !defined $c_subfield
     || !defined $m_subfield
     || $c_subfield eq $m_subfield );
 if ($verbose) {
@@ -85,7 +83,7 @@ my $sth_prepared;
 sub updateMarc {
     my $id     = shift;
     my $biblio = Koha::Biblios->find($id);
-    $biblio  &&= $biblio->metadata->record;
+    $biblio &&= $biblio->metadata->record;
 
     unless ($biblio) {
         $debug and warn '[ERROR] Bibliographic record not found.';
@@ -98,18 +96,18 @@ sub updateMarc {
     my $c_marc_value;
     if ($c_marc_field) {
         $c_marc_value =
-          defined $c_subfield
-          ? $c_marc_field->subfield($c_subfield)
-          : $c_marc_field->data();
+            defined $c_subfield
+            ? $c_marc_field->subfield($c_subfield)
+            : $c_marc_field->data();
     }
     $c_marc_value = '' unless defined $c_marc_value;
 
     my $m_marc_value;
     if ($m_marc_field) {
         $m_marc_value =
-          defined $m_subfield
-          ? $m_marc_field->subfield($m_subfield)
-          : $m_marc_field->data();
+            defined $m_subfield
+            ? $m_marc_field->subfield($m_subfield)
+            : $m_marc_field->data();
     }
     $m_marc_value ||= '';
 
@@ -126,7 +124,7 @@ sub updateMarc {
     $sth_prepared->execute($id);
     my $bibliorow     = $sth_prepared->fetchrow_hashref;
     my $frameworkcode = $bibliorow->{'frameworkcode'};
-    my $c_db_value    = $bibliorow->{'datecreatediso'} || '';
+    my $c_db_value    = $bibliorow->{'datecreatediso'}  || '';
     my $m_db_value    = $bibliorow->{'datemodifiediso'} || '';
 
     # do nothing if already sync
@@ -140,13 +138,8 @@ sub updateMarc {
     # date created field
     unless ($c_marc_field) {
         if ( defined $c_subfield ) {
-            $biblio->add_fields(
-                MARC::Field->new(
-                    $c_field, ' ', ' ', $c_subfield => $c_db_value
-                )
-            );
-        }
-        else {
+            $biblio->add_fields( MARC::Field->new( $c_field, ' ', ' ', $c_subfield => $c_db_value ) );
+        } else {
             $biblio->add_fields( MARC::Field->new( $c_field, $c_db_value ) );
         }
         $debug and warn "[WARN] $c_field did not exist.";
@@ -156,12 +149,10 @@ sub updateMarc {
         if ( $m_field eq $c_field ) {
             $m_marc_field = $c_marc_field;
         }
-    }
-    else {
+    } else {
         if ( defined $c_subfield ) {
             $c_marc_field->update( $c_subfield, $c_db_value );
-        }
-        else {
+        } else {
             $c_marc_field->update($c_db_value);
         }
     }
@@ -169,24 +160,17 @@ sub updateMarc {
     # date last modified field
     unless ($m_marc_field) {
         if ( defined $m_subfield ) {
-            $biblio->add_fields(
-                MARC::Field->new(
-                    $m_field, ' ', ' ', $m_subfield => $m_db_value
-                )
-            );
-        }
-        else {
+            $biblio->add_fields( MARC::Field->new( $m_field, ' ', ' ', $m_subfield => $m_db_value ) );
+        } else {
             $biblio->add_fields( MARC::Field->new( $m_field, $m_db_value ) );
         }
 
         $debug and warn "[WARN] $m_field did not exist.";
         $m_marc_field = $biblio->field($m_field);
-    }
-    else {
+    } else {
         if ( defined $m_subfield ) {
             $m_marc_field->update( $m_subfield, $m_db_value );
-        }
-        else {
+        } else {
             $m_marc_field->update($m_db_value);
         }
     }
@@ -231,15 +215,13 @@ sub process {
 
 if ( lc( C4::Context->preference('marcflavour') ) eq "unimarc" ) {
     $verbose
-      and !$run
-      and print "*** Not in run mode, modifications will not be applyed ***\n";
+        and !$run
+        and print "*** Not in run mode, modifications will not be applyed ***\n";
 
     $verbose and print "================================\n";
     process();
-}
-else {
-    print
-"This script is UNIMARC only and should be used only on UNIMARC databases\n";
+} else {
+    print "This script is UNIMARC only and should be used only on UNIMARC databases\n";
 }
 
 sub print_usage {

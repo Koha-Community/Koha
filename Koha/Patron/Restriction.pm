@@ -56,6 +56,7 @@ Returns 1 if the restriction is expired or 0;
 sub is_expired {
     my ($self) = @_;
     return 0 unless $self->expiration;
+
     # This condition must be consistent with Koha::Patron->is_debarred
     my $makes_patron_debarred = dt_from_string( $self->expiration ) > dt_from_string;
     return 1 unless $makes_patron_debarred;

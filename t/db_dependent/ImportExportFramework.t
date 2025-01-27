@@ -87,27 +87,27 @@ sub run_biblio_tests {
     $schema->storage->txn_begin;
 
     my $data_filepath = dirname(__FILE__) . "/data/frameworks/biblio_framework.$format";
-    my $fw_1 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    my $fw_1          = $builder->build_object( { class => 'Koha::BiblioFrameworks' } );
 
     my $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id, 0, $type );
     is( $result, 0, 'Import successful, no tags removed' );
 
-    my $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_1->id })->count;
+    my $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_tags, 4, "4 tags should have been imported" );
 
-    my $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_1->id })->count;
+    my $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_subfields, 12, "12 subfields should have been imported" );
 
     # bad file tests
-    my $fw_2 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    my $fw_2 = $builder->build_object( { class => 'Koha::BiblioFrameworks' } );
     $result = C4::ImportExportFramework::ImportFramework( '', $fw_2->id, 0, $type );
 
     is( $result, -1, 'Bad file makes it return -1' );
 
-    $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_2->id })->count;
+    $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_2->id } )->count;
     is( $nb_tags, 0, "0 tags should have been imported" );
 
-    $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_2->id })->count;
+    $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_2->id } )->count;
     is( $nb_subfields, 0, "0 subfields should have been imported" );
 
     # framework overwrite
@@ -116,45 +116,45 @@ sub run_biblio_tests {
     $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id, 0, $type );
     is( $result, 5, 'Smaller fw import successful, 4 tags removed' );
 
-    $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_1->id })->count;
+    $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_tags, 3, "3 tags should have been imported" );
 
-    $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_1->id })->count;
+    $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_subfields, 8, "8 subfields should have been imported" );
 
     $schema->storage->txn_rollback;
-};
+}
 
 sub run_csv_no_quoted {
 
     $schema->storage->txn_begin;
 
     my $data_filepath = dirname(__FILE__) . "/data/frameworks/biblio_framework_no_quoted.csv";
-    my $fw_1 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    my $fw_1          = $builder->build_object( { class => 'Koha::BiblioFrameworks' } );
 
     my $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id );
     is( $result, 0, 'Import successful, no tags removed' );
 
-    my $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_1->id })->count;
+    my $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_tags, 4, "4 tags should have been imported" );
 
-    my $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_1->id })->count;
+    my $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_subfields, 12, "12 subfields should have been imported" );
 
     # bad file tests
-    my $fw_2 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    my $fw_2 = $builder->build_object( { class => 'Koha::BiblioFrameworks' } );
     $result = C4::ImportExportFramework::ImportFramework( '', $fw_2->id );
 
     is( $result, -1, 'Bad file makes it return -1' );
 
-    $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_2->id })->count;
+    $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_2->id } )->count;
     is( $nb_tags, 0, "0 tags should have been imported" );
 
-    $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_2->id })->count;
+    $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_2->id } )->count;
     is( $nb_subfields, 0, "0 subfields should have been imported" );
 
     $schema->storage->txn_rollback;
-};
+}
 
 sub run_ods_new {
 
@@ -163,32 +163,31 @@ sub run_ods_new {
     $schema->storage->txn_begin;
 
     my $data_filepath = dirname(__FILE__) . "/data/frameworks/biblio_framework_new.ods";
-    my $fw_1 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    my $fw_1          = $builder->build_object( { class => 'Koha::BiblioFrameworks' } );
 
     my $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id );
     is( $result, 0, 'Import successful, no tags removed' );
 
-    my $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_1->id })->count;
+    my $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_tags, 5, "5 tags should have been imported" );
 
-    my $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_1->id })->count;
+    my $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_1->id } )->count;
     is( $nb_subfields, 16, "16 subfields should have been imported" );
 
     # bad file tests
-    my $fw_2 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    my $fw_2 = $builder->build_object( { class => 'Koha::BiblioFrameworks' } );
     $result = C4::ImportExportFramework::ImportFramework( '', $fw_2->id );
 
     is( $result, -1, 'Bad file makes it return -1' );
 
-    $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_2->id })->count;
+    $nb_tags = $schema->resultset('MarcTagStructure')->search( { frameworkcode => $fw_2->id } )->count;
     is( $nb_tags, 0, "0 tags should have been imported" );
 
-    $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_2->id })->count;
+    $nb_subfields = Koha::MarcSubfieldStructures->search( { frameworkcode => $fw_2->id } )->count;
     is( $nb_subfields, 0, "0 subfields should have been imported" );
 
-
     $schema->storage->txn_rollback;
-};
+}
 
 sub run_auth_tests {
 
@@ -198,27 +197,27 @@ sub run_auth_tests {
     $schema->storage->txn_begin;
 
     my $data_filepath = dirname(__FILE__) . "/data/frameworks/auth_type.$format";
-    my $fw_1 = $builder->build_object({ class => 'Koha::Authority::Types' });
+    my $fw_1          = $builder->build_object( { class => 'Koha::Authority::Types' } );
 
     my $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id, '', $type );
     is( $result, 0, 'Import successful, no tags removed' );
 
-    my $nb_tags = $schema->resultset('AuthTagStructure')->search({ authtypecode => $fw_1->id })->count;
+    my $nb_tags = $schema->resultset('AuthTagStructure')->search( { authtypecode => $fw_1->id } )->count;
     is( $nb_tags, 6, "6 tags should have been imported" );
 
-    my $nb_subfields = Koha::Authority::Subfields->search({ authtypecode => $fw_1->id })->count;
+    my $nb_subfields = Koha::Authority::Subfields->search( { authtypecode => $fw_1->id } )->count;
     is( $nb_subfields, 8, "8 subfields should have been imported" );
 
     # bad file tests
-    my $fw_2 = $builder->build_object({ class => 'Koha::Authority::Types' });
+    my $fw_2 = $builder->build_object( { class => 'Koha::Authority::Types' } );
     $result = C4::ImportExportFramework::ImportFramework( '', $fw_2->id, '', $type );
 
     is( $result, -1, 'Bad file makes it return -1' );
 
-    $nb_tags = $schema->resultset('AuthTagStructure')->search({ authtypecode => $fw_2->id })->count;
+    $nb_tags = $schema->resultset('AuthTagStructure')->search( { authtypecode => $fw_2->id } )->count;
     is( $nb_tags, 0, "0 tags should have been imported" );
 
-    $nb_subfields = Koha::Authority::Subfields->search({ authtypecode => $fw_2->id })->count;
+    $nb_subfields = Koha::Authority::Subfields->search( { authtypecode => $fw_2->id } )->count;
     is( $nb_subfields, 0, "0 subfields should have been imported" );
 
     # framework overwrite
@@ -227,11 +226,11 @@ sub run_auth_tests {
     $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id, '', $type );
     is( $result, 8, 'Smaller fw import successful, 6 tags removed' );
 
-    $nb_tags = $schema->resultset('AuthTagStructure')->search({ authtypecode => $fw_1->id })->count;
+    $nb_tags = $schema->resultset('AuthTagStructure')->search( { authtypecode => $fw_1->id } )->count;
     is( $nb_tags, 3, "3 tags should have been imported" );
 
-    $nb_subfields = Koha::Authority::Subfields->search({ authtypecode => $fw_1->id })->count;
+    $nb_subfields = Koha::Authority::Subfields->search( { authtypecode => $fw_1->id } )->count;
     is( $nb_subfields, 3, "3 subfields should have been imported" );
 
     $schema->storage->txn_rollback;
-};
+}

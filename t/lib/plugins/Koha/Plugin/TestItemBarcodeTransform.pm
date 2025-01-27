@@ -11,7 +11,7 @@ use Mojo::JSON qw( decode_json );
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
 
-our $VERSION = 1.01;
+our $VERSION  = 1.01;
 our $metadata = {
     name            => 'Test Plugin for item_barcode_transform',
     author          => 'Kyle M Hall',
@@ -35,8 +35,8 @@ sub new {
 sub item_barcode_transform {
     my ( $self, $barcode ) = @_;
     my $param = $$barcode;
-    if ( Scalar::Util::looks_like_number( $$barcode ) ) {
-        $$barcode = $$barcode * 4
+    if ( Scalar::Util::looks_like_number($$barcode) ) {
+        $$barcode = $$barcode * 4;
     }
     Koha::Exception->throw("item_barcode_transform called with parameter: $param");
 }

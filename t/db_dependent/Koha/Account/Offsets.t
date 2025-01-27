@@ -47,16 +47,16 @@ subtest 'total() tests' => sub {
     my $amount_4 = -300;
     my $amount_5 = 500;
 
-    my $offset_1 = Koha::Account::Offset->new(
-        { type => 'OVERDUE_INCREASE', amount => $amount_1, debit_id => $line->id } )->store;
-    my $offset_2 = Koha::Account::Offset->new(
-        { type => 'OVERDUE_INCREASE', amount => $amount_2, debit_id => $line->id } )->store;
-    my $offset_3 = Koha::Account::Offset->new(
-        { type => 'OVERDUE_DECREASE', amount => $amount_3, debit_id => $line->id } )->store;
-    my $offset_4 = Koha::Account::Offset->new(
-        { type => 'OVERDUE_DECREASE', amount => $amount_4, debit_id => $line->id } )->store;
-    my $offset_5 = Koha::Account::Offset->new(
-        { type => 'OVERDUE_INCREASE', amount => $amount_5, debit_id => $line->id } )->store;
+    my $offset_1 =
+        Koha::Account::Offset->new( { type => 'OVERDUE_INCREASE', amount => $amount_1, debit_id => $line->id } )->store;
+    my $offset_2 =
+        Koha::Account::Offset->new( { type => 'OVERDUE_INCREASE', amount => $amount_2, debit_id => $line->id } )->store;
+    my $offset_3 =
+        Koha::Account::Offset->new( { type => 'OVERDUE_DECREASE', amount => $amount_3, debit_id => $line->id } )->store;
+    my $offset_4 =
+        Koha::Account::Offset->new( { type => 'OVERDUE_DECREASE', amount => $amount_4, debit_id => $line->id } )->store;
+    my $offset_5 =
+        Koha::Account::Offset->new( { type => 'OVERDUE_INCREASE', amount => $amount_5, debit_id => $line->id } )->store;
 
     my $debits = Koha::Account::Offsets->search( { type => 'OVERDUE_INCREASE', debit_id => $line->id } );
     is( $debits->total, $amount_1 + $amount_2 + $amount_5 );
@@ -82,7 +82,7 @@ subtest 'filter_by_non_reversible() and filter_by_reversible() tests' => sub {
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $account = $patron->account;
 
-    my $manual_fee = $account->add_debit({ amount => 11, interface => 'intranet', type => 'MANUAL' });
+    my $manual_fee = $account->add_debit( { amount => 11, interface => 'intranet', type => 'MANUAL' } );
 
     $account->pay( { amount => 1, type => 'WRITEOFF' } );
     $account->pay( { amount => 2, type => 'DISCOUNT' } );
@@ -91,15 +91,24 @@ subtest 'filter_by_non_reversible() and filter_by_reversible() tests' => sub {
     $account->pay( { amount => 5, type => 'CREDIT' } );
 
     # non-reversible offsets
-    is( $manual_fee->debit_offsets->filter_by_non_reversible->count,
-        3, '3 non-reversible offsets' );
-    is( $manual_fee->debit_offsets->filter_by_non_reversible->total,
-        -6, '-6 the total amount of the non-reversible offsets' );
+    is(
+        $manual_fee->debit_offsets->filter_by_non_reversible->count,
+        3, '3 non-reversible offsets'
+    );
+    is(
+        $manual_fee->debit_offsets->filter_by_non_reversible->total,
+        -6, '-6 the total amount of the non-reversible offsets'
+    );
+
     # reversible offsets
-    is( $manual_fee->debit_offsets->filter_by_reversible->count,
-        2, 'The right reversible offsets count' );
-    is( $manual_fee->debit_offsets->filter_by_reversible->total,
-        -5, 'The right total amount of the reversible offsets' );
+    is(
+        $manual_fee->debit_offsets->filter_by_reversible->count,
+        2, 'The right reversible offsets count'
+    );
+    is(
+        $manual_fee->debit_offsets->filter_by_reversible->total,
+        -5, 'The right total amount of the reversible offsets'
+    );
 
     $schema->storage->txn_rollback;
 };

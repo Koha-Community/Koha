@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw/check_api_auth/;
 use C4::Biblio;
 use C4::Items;
@@ -32,17 +32,17 @@ use Koha::Biblios;
 my $query = CGI->new;
 binmode STDOUT, ':encoding(UTF-8)';
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
-unless ($status eq "ok") {
-    print $query->header(-type => 'text/xml', -status => '403 Forbidden');
-    print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { editcatalogue => 'edit_catalogue' } );
+unless ( $status eq "ok" ) {
+    print $query->header( -type => 'text/xml', -status => '403 Forbidden' );
+    print XMLout( { auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
     exit 0;
 }
 
-if ($query->request_method eq "POST") {
+if ( $query->request_method eq "POST" ) {
     add_bib($query);
 } else {
-    print $query->header(-type => 'text/xml', -status => '400 Bad Request');
+    print $query->header( -type => 'text/xml', -status => '400 Bad Request' );
 }
 
 exit 0;
@@ -50,34 +50,34 @@ exit 0;
 sub add_bib {
     my $query = shift;
 
-    my $result = {};
-    my $inxml = $query->param('POSTDATA');
+    my $result        = {};
+    my $inxml         = $query->param('POSTDATA');
     my $frameworkcode = $query->url_param('frameworkcode') // '';
-    print $query->header(-type => 'text/xml', -charset => 'utf-8');
+    print $query->header( -type => 'text/xml', -charset => 'utf-8' );
 
-    my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
-    my $record = eval {MARC::Record::new_from_xml( $inxml, "UTF-8", $marcflavour)};
+    my $marcflavour   = C4::Context->preference('marcflavour') || 'MARC21';
+    my $record        = eval { MARC::Record::new_from_xml( $inxml, "UTF-8", $marcflavour ) };
     my $do_not_escape = 0;
     if ($@) {
         $result->{'status'} = "failed";
-        $result->{'error'} = $@;
+        $result->{'error'}  = $@;
     } else {
+
         # fix character set
-        if ($record->encoding() eq 'MARC-8') {
-            my ($guessed_charset, $charset_errors);
-            ($record, $guessed_charset, $charset_errors) = C4::Charset::MarcToUTF8Record($record, $marcflavour);
+        if ( $record->encoding() eq 'MARC-8' ) {
+            my ( $guessed_charset, $charset_errors );
+            ( $record, $guessed_charset, $charset_errors ) = C4::Charset::MarcToUTF8Record( $record, $marcflavour );
         }
 
         my $fullrecord = $record->clone();
 
         # delete any item tags
-        my ( $itemtag, $itemsubfield ) =
-          C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+        my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
         foreach my $field ( $record->field($itemtag) ) {
             $record->delete_field($field);
         }
         my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, $frameworkcode );
-        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblio     = Koha::Biblios->find($biblionumber);
         my $new_record = $biblio->metadata->record;
         if ( $query->url_param('items') ) {
             foreach my $field ( $fullrecord->field($itemtag) ) {
@@ -87,15 +87,15 @@ sub add_bib {
             }
         }
 
-        $biblio     = Koha::Biblios->find($biblionumber);
-        $new_record = $biblio->metadata_record( { embed_items => scalar $query->url_param('items') } );
-        $result->{'status'} = "ok";
+        $biblio                   = Koha::Biblios->find($biblionumber);
+        $new_record               = $biblio->metadata_record( { embed_items => scalar $query->url_param('items') } );
+        $result->{'status'}       = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();
         $xml =~ s/<\?xml.*?\?>//i;
-        $result->{'marcxml'} =  $xml;
+        $result->{'marcxml'} = $xml;
         $do_not_escape = 1;
     }
-   
-    print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1, NoEscape => $do_not_escape); 
+
+    print XMLout( $result, NoAttr => 1, RootName => 'response', XMLDecl => 1, NoEscape => $do_not_escape );
 }

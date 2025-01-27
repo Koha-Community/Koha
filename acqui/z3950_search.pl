@@ -22,7 +22,7 @@
 use Modern::Perl;
 use CGI qw/-utf8/;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Breeding qw( Z3950Search );
@@ -31,7 +31,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::BiblioFrameworks;
 
 my $input           = CGI->new;
-my $biblionumber    = $input->param('biblionumber')||0;
+my $biblionumber    = $input->param('biblionumber')  || 0;
 my $frameworkcode   = $input->param('frameworkcode') || q{};
 my $title           = $input->param('title');
 my $author          = $input->param('author');
@@ -45,87 +45,88 @@ my $stdid           = $input->param('stdid');
 my $dewey           = $input->param('dewey');
 my $controlnumber   = $input->param('controlnumber');
 my $publicationyear = $input->param('publicationyear');
-my $op              = $input->param('op')||'';
+my $op              = $input->param('op') || '';
 my $booksellerid    = $input->param('booksellerid');
 my $basketno        = $input->param('basketno');
 my $page            = $input->param('current_page') || 1;
-$page               = $input->param('goto_page') if $input->param('changepage_goto');
+$page = $input->param('goto_page') if $input->param('changepage_goto');
 
 # get framework list
-my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+my $frameworks = Koha::BiblioFrameworks->search( {}, { order_by => ['frameworktext'] } );
 
-my $vendor = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $vendor = Koha::Acquisition::Booksellers->find($booksellerid);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/z3950_search.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => 'order_manage' },
+        template_name => "acqui/z3950_search.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
     }
 );
 $template->param(
-        frameworkcode => $frameworkcode,
-        frameworks   => $frameworks,
-        booksellerid => $booksellerid,
-        basketno     => $basketno,
-        name         => $vendor->name,
-        isbn         => $isbn,
-        issn         => $issn,
-        lccn         => $lccn,
-        lccall       => $lccall,
-        title        => $title,
-        author       => $author,
-        controlnumber=> $controlnumber,
-        biblionumber => $biblionumber,
-        dewey        => $dewey,
-        subject      => $subject,
-        srchany      => $srchany,
-        stdid        => $stdid,
-        publicationyear => $publicationyear,
+    frameworkcode   => $frameworkcode,
+    frameworks      => $frameworks,
+    booksellerid    => $booksellerid,
+    basketno        => $basketno,
+    name            => $vendor->name,
+    isbn            => $isbn,
+    issn            => $issn,
+    lccn            => $lccn,
+    lccall          => $lccall,
+    title           => $title,
+    author          => $author,
+    controlnumber   => $controlnumber,
+    biblionumber    => $biblionumber,
+    dewey           => $dewey,
+    subject         => $subject,
+    srchany         => $srchany,
+    stdid           => $stdid,
+    publicationyear => $publicationyear,
 );
 
 if ( $op ne "cud-do_search" ) {
     my $schema = Koha::Database->new()->schema();
-    my $rs = $schema->resultset('Z3950server')->search(
+    my $rs     = $schema->resultset('Z3950server')->search(
         {
             recordtype => 'biblio',
-            servertype => ['zed', 'sru'],
+            servertype => [ 'zed', 'sru' ],
         },
-        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-            order_by     => ['rank', 'servername'],
+        {
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+            order_by     => [ 'rank', 'servername' ],
         },
     );
     $template->param(
-        serverloop   => [ $rs->all ],
-        opsearch     => "cud-search",
+        serverloop => [ $rs->all ],
+        opsearch   => "cud-search",
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
 my @id = $input->multi_param('id');
-if (@id==0) {
+if ( @id == 0 ) {
     $template->param( emptyserverlist => 1 );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
-my $pars= {
-        biblionumber => $biblionumber,
-        page => $page,
-        id => \@id,
-        isbn => $isbn,
-        issn => $issn,
-        title => $title,
-        author => $author,
-        dewey => $dewey,
-        subject => $subject,
-        lccall => $lccall,
-        controlnumber => $controlnumber,
-        stdid => $stdid,
-        srchany => $srchany,
-        publicationyear => $publicationyear,
+my $pars = {
+    biblionumber    => $biblionumber,
+    page            => $page,
+    id              => \@id,
+    isbn            => $isbn,
+    issn            => $issn,
+    title           => $title,
+    author          => $author,
+    dewey           => $dewey,
+    subject         => $subject,
+    lccall          => $lccall,
+    controlnumber   => $controlnumber,
+    stdid           => $stdid,
+    srchany         => $srchany,
+    publicationyear => $publicationyear,
 };
-Z3950Search($pars, $template);
+Z3950Search( $pars, $template );
 output_html_with_http_headers $input, $cookie, $template->output;

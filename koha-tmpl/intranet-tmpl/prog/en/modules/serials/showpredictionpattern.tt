@@ -1,15 +1,12 @@
 [% USE KohaDates %]
 <h2>Prediction pattern</h2>
 [% IF (not_consistent_end_date) %]
-  <p><em>End date is not consistent with subscription length.</em></p>
+    <p><em>End date is not consistent with subscription length.</em></p>
 [% END %]
 [% IF (ask_for_irregularities) %]
     <p><em>Please check issues that are NOT published (irregularities)</em></p>
     [% IF (daily_options) %]
-        <p><em>
-            If there is a day (or more) in the week where issues are never
-            published, you can check corresponding boxes below.
-        </em></p>
+        <p><em> If there is a day (or more) in the week where issues are never published, you can check corresponding boxes below. </em></p>
         <input type="checkbox" id="monday" data-dow="1" class="skipday" />
         <label for="monday">Monday</label>
         <input type="checkbox" id="tuesday" data-dow="2" class="skipday" />
@@ -27,65 +24,64 @@
     [% END %]
 [% END %]
 [% IF (predictions_loop) %]
-<table id="predictionst">
-  <thead>
-    <tr>
-      <th>Number</th>
-      <th>Publication date</th>
-      [% IF (ask_for_irregularities) %]
-      <th>Not published</th>
-      [% END %]
-    </tr>
-  </thead>
-  <tbody>
-    [% FOREACH prediction IN predictions_loop %]
-      <tr>
-        <td>
-            [% IF ( matches = prediction.number.match('(.*)Spring(.*)') ) %]
-                [% matches.0 | html %]Spring[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Summer(.*)') ) %]
-                [% matches.0 | html %]Summer[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Fall(.*)') ) %]
-                [% matches.0 | html %]Fall[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Winter(.*)') ) %]
-                [% matches.0 | html %]Winter[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) %]
-                [% matches.0 | html %]Spr[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) %]
-                [% matches.0 | html %]Sum[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) %]
-                [% matches.0 | html %]Fal[% matches.1 | html %]
-            [% ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) %]
-                [% matches.0 | html %]Win[% matches.1 | html %]
-            [% ELSE %]
-                [% prediction.number | html %]
+    <table id="predictionst">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Publication date</th>
+                [% IF (ask_for_irregularities) %]
+                    <th>Not published</th>
+                [% END %]
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH prediction IN predictions_loop %]
+                <tr>
+                    <td>
+                        [% IF ( matches = prediction.number.match('(.*)Spring(.*)') ) %]
+                            [% matches.0 | html %]Spring[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Summer(.*)') ) %]
+                            [% matches.0 | html %]Summer[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Fall(.*)') ) %]
+                            [% matches.0 | html %]Fall[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Winter(.*)') ) %]
+                            [% matches.0 | html %]Winter[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) %]
+                            [% matches.0 | html %]Spr[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) %]
+                            [% matches.0 | html %]Sum[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) %]
+                            [% matches.0 | html %]Fal[% matches.1 | html %]
+                        [% ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) %]
+                            [% matches.0 | html %]Win[% matches.1 | html %]
+                        [% ELSE %]
+                            [% prediction.number | html %]
+                        [% END %]
+                    </td>
+                    <td>
+                        [% IF (prediction.publicationdate) %]
+                            [% prediction.publicationdate | $KohaDates %]
+                        [% ELSE %]
+                            <span>unknown</span>
+                        [% END %]
+                    </td>
+                    [% IF (ask_for_irregularities) %]
+                        <td style="text-align:center">
+                            [% UNLESS (loop.first) %]
+                                [% IF (prediction.not_published) %]
+                                    <input type="checkbox" name="irregularity" value="[% prediction.issuenumber | html %]" data-dow="[% prediction.dow | html %]" checked="checked" />
+                                [% ELSE %]
+                                    <input type="checkbox" name="irregularity" value="[% prediction.issuenumber | html %]" data-dow="[% prediction.dow | html %]" />
+                                [% END %]
+                            [% END %]
+                        </td>
+                    [% END %]
+                </tr>
             [% END %]
-        </td>
-        <td>
-          [% IF (prediction.publicationdate) %]
-            [% prediction.publicationdate | $KohaDates %]
-          [% ELSE %]
-            <span>unknown</span>
-          [% END %]
-        </td>
-        [% IF (ask_for_irregularities) %]
-         <td style="text-align:center">
-         [% UNLESS (loop.first) %]
-          [% IF (prediction.not_published) %]
-            <input type="checkbox" name="irregularity" value="[% prediction.issuenumber | html %]" data-dow="[% prediction.dow | html %]" checked="checked" />
-          [% ELSE %]
-            <input type="checkbox" name="irregularity" value="[% prediction.issuenumber | html %]" data-dow="[% prediction.dow | html %]" />
-          [% END %]
-         [% END %]
-         </td>
-        [% END %]
-      </tr>
-    [% END %]
-  </tbody>
-</table>
+        </tbody>
+    </table>
 
-<fieldset class="action">
-    <button class="btn btn-default btn-sm" id="hidepredictionpattern">Done</button>
-</fieldset>
-
+    <fieldset class="action">
+        <button class="btn btn-default btn-sm" id="hidepredictionpattern">Done</button>
+    </fieldset>
 [% END %]

@@ -18,10 +18,10 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( catch try );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use Koha::Patrons;
@@ -30,34 +30,33 @@ my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "members/merge-patrons.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+        template_name => "members/merge-patrons.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
-my $op = $cgi->param('op') || 'show';
-my @ids    = $cgi->multi_param('id');
+my $op  = $cgi->param('op') || 'show';
+my @ids = $cgi->multi_param('id');
 
 if ( $op eq 'show' ) {
-    my $patrons = Koha::Patrons->search({ borrowernumber => { -in => \@ids } });
+    my $patrons = Koha::Patrons->search( { borrowernumber => { -in => \@ids } } );
     $template->param( patrons => $patrons );
 } elsif ( $op eq 'cud-merge' ) {
     my $keeper_id = $cgi->param('keeper');
     my $results;
 
-    my $keeper = Koha::Patrons->find( $keeper_id );
+    my $keeper = Koha::Patrons->find($keeper_id);
 
-    if ( $keeper ) {
+    if ($keeper) {
         try {
             $results = $keeper->merge_with( \@ids );
             $template->param(
                 keeper  => $keeper,
                 results => $results
             );
-        }
-        catch {
+        } catch {
             $template->param( error => $_ );
         }
     } else {

@@ -22,11 +22,11 @@ use Modern::Perl;
 use parent qw( Exporter );
 
 our @EXPORT = qw(
-  legacy_default
-  remove_spaces
-  upper_case
-  lower_case
-  ISBN
+    legacy_default
+    remove_spaces
+    upper_case
+    lower_case
+    ISBN
 );
 
 =head1 NAME
@@ -42,8 +42,8 @@ Default normalization function
 =cut
 
 sub legacy_default {
-    my ( $string ) = @_;
-    return if !defined( $string );
+    my ($string) = @_;
+    return if !defined($string);
 
     $string = uc $string;
 
@@ -62,8 +62,8 @@ Normalization function removing spaces
 =cut
 
 sub remove_spaces {
-    my ( $string ) = @_;
-    return if !defined( $string );
+    my ($string) = @_;
+    return if !defined($string);
 
     $string =~ s/\s+//g;
 
@@ -77,8 +77,8 @@ Normalization function converting characters into upper-case
 =cut
 
 sub upper_case {
-    my ( $string ) = @_;
-    return if !defined( $string );
+    my ($string) = @_;
+    return if !defined($string);
 
     $string = uc $string;
 
@@ -92,8 +92,8 @@ Normalization function converting characters into lower-case
 =cut
 
 sub lower_case {
-    my ( $string ) = @_;
-    return if !defined( $string );
+    my ($string) = @_;
+    return if !defined($string);
 
     $string = lc $string;
 
@@ -108,15 +108,17 @@ If string is not a valid ISBN we pass it through unaltered
 =cut
 
 sub ISBN {
-    my ( $string ) = @_;
-    return if !defined( $string );
+    my ($string) = @_;
+    return if !defined($string);
 
-    my $isbn = C4::Koha::NormalizeISBN({
-        isbn => $string,
-        format => 'ISBN-13',
-        strip_hyphens  => 1,
-        return_invalid => 1,
-    });
+    my $isbn = C4::Koha::NormalizeISBN(
+        {
+            isbn           => $string,
+            format         => 'ISBN-13',
+            strip_hyphens  => 1,
+            return_invalid => 1,
+        }
+    );
 
     return $isbn;
 }

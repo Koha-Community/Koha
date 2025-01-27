@@ -62,23 +62,23 @@ clause.
 
 sub special_search {
     my ( $self, $params, $attributes ) = @_;
-    unless (exists $attributes->{prefetch}) {
+    unless ( exists $attributes->{prefetch} ) {
+
         # No explicit prefetch has been passed in -> automatic optimisation.
-        $attributes->{prefetch} = [
-            'chooser_brwnumber', 'deliverer_brwnumber'
-        ];
+        $attributes->{prefetch} = [ 'chooser_brwnumber', 'deliverer_brwnumber' ];
+
         # So we must ensure our $params use the 'me.' prefix.
         my $oldparams = $params;
         $params = {};
-        while (my ($k, $v) = each %{$oldparams}) {
-            if ($k =~ /^me\..*/) {
+        while ( my ( $k, $v ) = each %{$oldparams} ) {
+            if ( $k =~ /^me\..*/ ) {
                 $params->{$k} = $v;
             } else {
-                $params->{"me." . $k} = $v;
+                $params->{ "me." . $k } = $v;
             }
         }
     }
-    $self->SUPER::search($params, $attributes);
+    $self->SUPER::search( $params, $attributes );
 }
 
 =head3 _type

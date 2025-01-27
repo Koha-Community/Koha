@@ -4,16 +4,16 @@ use Modern::Perl;
 
 use File::Slurp;
 use File::Temp qw(tempdir);
-use FindBin qw($Bin);
+use FindBin    qw($Bin);
 use Locale::PO;
 use Test::More tests => 36;
 
-my $tempdir = tempdir(CLEANUP => 1);
+my $tempdir = tempdir( CLEANUP => 1 );
 
-write_file("$tempdir/files", "$Bin/sample.tt");
+write_file( "$tempdir/files", "$Bin/sample.tt" );
 
-my $xgettext_cmd = "$Bin/../../../../misc/translator/xgettext-tt2 --from-code=UTF-8 "
-    . "-o $tempdir/Koha.pot -f $tempdir/files";
+my $xgettext_cmd =
+    "$Bin/../../../../misc/translator/xgettext-tt2 --from-code=UTF-8 " . "-o $tempdir/Koha.pot -f $tempdir/files";
 
 system($xgettext_cmd);
 my $pot = Locale::PO->load_file_asarray("$tempdir/Koha.pot");
@@ -26,30 +26,30 @@ my @expected = (
         msgid => '"hello {name}"',
     },
     {
-        msgid => '"item"',
+        msgid        => '"item"',
         msgid_plural => '"items"',
     },
     {
-        msgid => '"{count} item"',
+        msgid        => '"{count} item"',
         msgid_plural => '"{count} items"',
     },
     {
-        msgid => '"hello"',
+        msgid   => '"hello"',
         msgctxt => '"context"',
     },
     {
-        msgid => '"hello {name}"',
+        msgid   => '"hello {name}"',
         msgctxt => '"context"',
     },
     {
-        msgid => '"item"',
+        msgid        => '"item"',
         msgid_plural => '"items"',
-        msgctxt => '"context"',
+        msgctxt      => '"context"',
     },
     {
-        msgid => '"{count} item"',
+        msgid        => '"{count} item"',
         msgid_plural => '"{count} items"',
-        msgctxt => '"context"',
+        msgctxt      => '"context"',
     },
     {
         msgid => '"status is {status}"',
@@ -65,10 +65,10 @@ my @expected = (
     },
 );
 
-for (my $i = 0; $i < @expected; $i++) {
+for ( my $i = 0 ; $i < @expected ; $i++ ) {
     for my $key (qw(msgid msgid_plural msgctxt)) {
-        my $expected = $expected[$i]->{$key};
+        my $expected     = $expected[$i]->{$key};
         my $expected_str = defined $expected ? $expected : 'not defined';
-        is($pot->[$i + 1]->$key, $expected, "$i: $key is $expected_str");
+        is( $pot->[ $i + 1 ]->$key, $expected, "$i: $key is $expected_str" );
     }
 }

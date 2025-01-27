@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw( GetFrameworkCode GetISBDView );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Record;
@@ -35,12 +35,12 @@ use utf8;
 my $query = CGI->new;
 
 # if virtualshelves is disabled, leave immediately
-if ( ! C4::Context->preference('virtualshelves') ) {
+if ( !C4::Context->preference('virtualshelves') ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-downloadshelf.tt",
         query           => $query,
@@ -49,26 +49,25 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron = Koha::Patrons->find($borrowernumber);
 
 my $shelfnumber = $query->param('shelfnumber');
-my $format  = $query->param('format');
-my $context = $query->param('context');
+my $format      = $query->param('format');
+my $context     = $query->param('context');
 
-my $shelf = Koha::Virtualshelves->find( $shelfnumber );
-if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
+my $shelf = Koha::Virtualshelves->find($shelfnumber);
+if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
 
-    if ($shelfnumber && $format) {
+    if ( $shelfnumber && $format ) {
 
-
-        my $contents = $shelf->get_contents;
+        my $contents    = $shelf->get_contents;
         my $marcflavour = C4::Context->preference('marcflavour');
         my $output;
         my $extension;
         my $type;
 
-       # CSV
-        if ($format =~ /^\d+$/) {
+        # CSV
+        if ( $format =~ /^\d+$/ ) {
 
             my $csv_profile = Koha::CsvProfiles->find($format);
             if ( not $csv_profile or $csv_profile->staff_only ) {
@@ -80,12 +79,11 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             while ( my $content = $contents->next ) {
                 push @biblios, $content->biblionumber;
             }
-            $output = marc2csv(\@biblios, $format);
-        # Other formats
+            $output = marc2csv( \@biblios, $format );
+
+            # Other formats
         } else {
-            my $record_processor = Koha::RecordProcessor->new({
-                filters => 'ViewPolicy'
-            });
+            my $record_processor = Koha::RecordProcessor->new( { filters => 'ViewPolicy' } );
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
 
@@ -98,28 +96,29 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
                     }
                 );
                 my $framework = $biblio->frameworkcode;
-                $record_processor->options({
-                    interface => 'opac',
-                    frameworkcode => $framework
-                });
+                $record_processor->options(
+                    {
+                        interface     => 'opac',
+                        frameworkcode => $framework
+                    }
+                );
                 $record_processor->process($record);
                 next unless $record;
 
-                if ($format eq 'iso2709') {
+                if ( $format eq 'iso2709' ) {
                     $output .= $record->as_usmarc();
-                }
-                elsif ($format eq 'ris' ) {
+                } elsif ( $format eq 'ris' ) {
                     $output .= marc2ris($record);
-                }
-                elsif ($format eq 'bibtex') {
-                    $output .= marc2bibtex($record, $biblionumber);
-                }
-                elsif ( $format eq 'isbd' ) {
-                    $output   .= GetISBDView({
-                        'record'    => $record,
-                        'template'  => 'opac',
-                        'framework' => $framework,
-                    });
+                } elsif ( $format eq 'bibtex' ) {
+                    $output .= marc2bibtex( $record, $biblionumber );
+                } elsif ( $format eq 'isbd' ) {
+                    $output .= GetISBDView(
+                        {
+                            'record'    => $record,
+                            'template'  => 'opac',
+                            'framework' => $framework,
+                        }
+                    );
                     $extension = "txt";
                     $type      = "text/plain";
                 }
@@ -127,22 +126,22 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         }
 
         # If it was a CSV export we change the format after the export so the file extension is fine
-        $format = "csv" if ($format =~ m/^\d+$/);
+        $format = "csv" if ( $format =~ m/^\d+$/ );
 
         print $query->header(
-                                   -type => ($type) ? $type : 'application/octet-stream',
+            -type                        => ($type) ? $type : 'application/octet-stream',
             -'Content-Transfer-Encoding' => 'binary',
-                             -attachment => ($extension) ? "shelf.$format.$extension" : "shelf.$format"
+            -attachment                  => ($extension) ? "shelf.$format.$extension" : "shelf.$format"
         );
         print $output;
 
     } else {
 
         # if modal context is passed set a variable so that page markup can be different
-        if($context eq "modal"){
-            $template->param(modal => 1);
+        if ( $context eq "modal" ) {
+            $template->param( modal => 1 );
         } else {
-            $template->param(fullpage => 1);
+            $template->param( fullpage => 1 );
         }
         $template->param(
             csv_profiles => Koha::CsvProfiles->search(
@@ -158,6 +157,6 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
     }
 
 } else {
-    $template->param(invalidlist => 1); 
+    $template->param( invalidlist => 1 );
     output_html_with_http_headers $query, $cookie, $template->output;
 }

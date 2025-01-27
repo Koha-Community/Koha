@@ -49,14 +49,13 @@ sub new_from_marcxml {
 
     my $self = {};
     if ($more_subfields_xml) {
+
         # FIXME MARC::Record->new_from_xml (vs MARC::Record::new_from_xml) does not return the correctly encoded subfield code (??)
-        my $marc_more =
-          MARC::Record::new_from_xml(
-            C4::Charset::StripNonXmlChars($more_subfields_xml), 'UTF-8' );
+        my $marc_more = MARC::Record::new_from_xml( C4::Charset::StripNonXmlChars($more_subfields_xml), 'UTF-8' );
 
         # use of tag 999 is arbitrary, and doesn't need to match the item tag
         # used in the framework
-        my $field = $marc_more->field('999');
+        my $field          = $marc_more->field('999');
         my $more_subfields = [ uniq map { $_->[0] } $field->subfields ];
         for my $more_subfield (@$more_subfields) {
             my @s = $field->subfield($more_subfield);
@@ -95,28 +94,25 @@ sub to_marcxml {
 
     return unless keys %$self;
 
-    my $tagslib =
-      C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
+    my $tagslib = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
 
-    my ( $itemtag, $itemtagsubfield ) =
-      C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+    my ( $itemtag, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
     my @subfields;
     for my $tagsubfield (
         sort {
-            $tagslib->{$itemtag}->{$a}->{display_order} <=> $tagslib->{$itemtag}->{$b}->{display_order}
-              || $tagslib->{$itemtag}->{$a}->{subfield} cmp $tagslib->{$itemtag}->{$b}->{subfield}
+                   $tagslib->{$itemtag}->{$a}->{display_order} <=> $tagslib->{$itemtag}->{$b}->{display_order}
+                || $tagslib->{$itemtag}->{$a}->{subfield} cmp $tagslib->{$itemtag}->{$b}->{subfield}
         } keys %$self
-      )
+        )
     {
         next
-          if not defined $self->{$tagsubfield}
-          or $self->{$tagsubfield} eq "";
+            if not defined $self->{$tagsubfield}
+            or $self->{$tagsubfield} eq "";
 
         if ( $tagslib->{$itemtag}->{$tagsubfield}->{repeatable} ) {
             my @values = split ' \| ', $self->{$tagsubfield};
             push @subfields, ( $tagsubfield => $_ ) for @values;
-        }
-        else {
+        } else {
             push @subfields, ( $tagsubfield => $self->{$tagsubfield} );
         }
     }
@@ -127,8 +123,7 @@ sub to_marcxml {
 
     # use of tag 999 is arbitrary, and doesn't need to match the item tag
     # used in the framework
-    $marc_more->append_fields(
-        MARC::Field->new( '999', ' ', ' ', @subfields ) );
+    $marc_more->append_fields( MARC::Field->new( '999', ' ', ' ', @subfields ) );
     $marc_more->encoding("UTF-8");
     return $marc_more->as_xml("USMARC");
 }

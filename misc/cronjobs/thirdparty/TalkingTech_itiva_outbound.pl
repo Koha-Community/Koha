@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use C4::Context;
@@ -38,7 +38,7 @@ sub usage {
 }
 
 die "TalkingTechItivaPhoneNotification system preference not activated... dying\n"
-  unless ( C4::Context->preference("TalkingTechItivaPhoneNotification") );
+    unless ( C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 # Database handle
 my $dbh = C4::Context->dbh;
@@ -88,7 +88,7 @@ pod2usage( -verbose => 1 ) if $help;
 
 if ($patron_branchcode) {
     die("Invalid branchcode '$patron_branchcode' passed in -pb --patron-branchcode parameter")
-      unless Koha::Libraries->search( { branchcode => $patron_branchcode } )->count;
+        unless Koha::Libraries->search( { branchcode => $patron_branchcode } )->count;
 }
 
 # output log or STDOUT
@@ -97,7 +97,7 @@ if ( defined $outfile ) {
     open( $OUT, '>', "$outfile" ) || die("Cannot open output file");
 } else {
     print "No output file defined; printing to STDOUT\n"
-      if ( defined $verbose );
+        if ( defined $verbose );
     $OUT = *STDOUT || die "Couldn't duplicate STDOUT: $!";
 }
 
@@ -108,38 +108,39 @@ my ( $if_patron_field_equals_field, $if_patron_field_equals_value );
     if $skip_patrons_with_field_match;
 
 foreach my $type (@types) {
-    $type = uc($type);    #just in case lower or mixed-case was supplied
+    $type = uc($type);                         #just in case lower or mixed-case was supplied
     my $module = $type_module_map->{$type};    #since the module is required to get the letter
     my $code   = $type_notice_map->{$type};    #to get the Koha name of the notice
 
     my @loop;
     if ( $type eq 'OVERDUE' ) {
-        @loop = GetOverdueIssues( $patron_branchcode );
+        @loop = GetOverdueIssues($patron_branchcode);
     } elsif ( $type eq 'PREOVERDUE' ) {
-        @loop = GetPredueIssues( $patron_branchcode );
+        @loop = GetPredueIssues($patron_branchcode);
     } elsif ( $type eq 'RESERVE' ) {
-        @loop = GetWaitingHolds( $patron_branchcode );
+        @loop = GetWaitingHolds($patron_branchcode);
     } else {
         print "Unknown or unsupported message type $type; skipping...\n"
-          if ( defined $verbose );
+            if ( defined $verbose );
         next;
     }
 
     my $patrons;
     foreach my $issues (@loop) {
-        $patrons->{$issues->{borrowernumber}} ||= Koha::Patrons->find( $issues->{borrowernumber} ) if $skip_patrons_with_email;
+        $patrons->{ $issues->{borrowernumber} } ||= Koha::Patrons->find( $issues->{borrowernumber} )
+            if $skip_patrons_with_email;
         next if $skip_patrons_with_email && $patrons->{ $issues->{borrowernumber} }->notice_email_address;
         next
             if $skip_patrons_with_field_match
             && $patrons->{ $issues->{borrowernumber} }->$if_patron_field_equals_field eq $if_patron_field_equals_value;
 
-        my $date_dt = dt_from_string ( $issues->{'date_due'} );
-        my $due_date = output_pref( { dt => $date_dt, dateonly => 1, dateformat =>'metric' } );
+        my $date_dt  = dt_from_string( $issues->{'date_due'} );
+        my $due_date = output_pref( { dt => $date_dt, dateonly => 1, dateformat => 'metric' } );
 
         my $letter = C4::Letters::GetPreparedLetter(
             module      => $module,
             letter_code => $code,
-            lang        => 'default', # It does not sound useful to send a lang here
+            lang        => 'default',    # It does not sound useful to send a lang here
             tables      => {
                 borrowers   => $issues->{'borrowernumber'},
                 biblio      => $issues->{'biblionumber'},
@@ -153,7 +154,8 @@ foreach my $type (@types) {
         my $message_id = 0;
         if ($outfile) {
             $message_id = C4::Letters::EnqueueLetter(
-                {   letter                 => $letter,
+                {
+                    letter                 => $letter,
                     borrowernumber         => $issues->{'borrowernumber'},
                     message_transport_type => 'itiva',
                 }
@@ -163,9 +165,11 @@ foreach my $type (@types) {
         $issues->{title} =~ s/'//g;
         $issues->{title} =~ s/"//g;
 
-        print $OUT "\"$format\",\"$language\",\"$type\",\"$issues->{level}\",\"$issues->{cardnumber}\",\"$issues->{patron_title}\",\"$issues->{firstname}\",";
+        print $OUT
+            "\"$format\",\"$language\",\"$type\",\"$issues->{level}\",\"$issues->{cardnumber}\",\"$issues->{patron_title}\",\"$issues->{firstname}\",";
         print $OUT "\"$issues->{surname}\",\"$issues->{phone}\",\"$issues->{email}\",\"$library_code\",";
-        print $OUT "\"$issues->{site}\",\"$issues->{site_name}\",\"$issues->{barcode}\",\"$due_date\",\"$issues->{title}\",\"$message_id\"\n";
+        print $OUT
+            "\"$issues->{site}\",\"$issues->{site_name}\",\"$issues->{barcode}\",\"$due_date\",\"$issues->{title}\",\"$message_id\"\n";
     }
 }
 
@@ -251,11 +255,12 @@ Items and holds from other libraries will still be included for the given patron
 =cut
 
 sub GetOverdueIssues {
-    my ( $patron_branchcode ) = @_;
+    my ($patron_branchcode) = @_;
 
     my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
 
-    my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
+    my $query =
+        "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, issues.date_due,
                 max(overduerules.branchcode) as rulebranch, TO_DAYS(NOW())-TO_DAYS(date_due) as daysoverdue, delay1, delay2, delay3,
                 issues.branchcode as site, branches.branchname as site_name
@@ -293,11 +298,12 @@ sub GetOverdueIssues {
 }
 
 sub GetPredueIssues {
-    my ( $patron_branchcode ) = @_;
+    my ($patron_branchcode) = @_;
 
     my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
 
-    my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
+    my $query =
+        "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, issues.date_due,
                 issues.branchcode as site, branches.branchname as site_name
                 FROM borrowers JOIN issues USING (borrowernumber)
@@ -323,11 +329,12 @@ sub GetPredueIssues {
 }
 
 sub GetWaitingHolds {
-    my ( $patron_branchcode ) = @_;
+    my ($patron_branchcode) = @_;
 
     my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
 
-    my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname, borrowers.categorycode,
+    my $query =
+        "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname, borrowers.categorycode,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, reserves.waitingdate,
                 reserves.branchcode AS site, branches.branchname AS site_name,
                 TO_DAYS(NOW())-TO_DAYS(reserves.waitingdate) AS days_since_waiting,
@@ -344,11 +351,11 @@ sub GetWaitingHolds {
                 AND message_name = 'Hold_Filled'
                 $patron_branchcode_filter
                 ";
-    my $sth         = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute();
     my @results;
     while ( my $issue = $sth->fetchrow_hashref() ) {
-        my $item = Koha::Items->find({ barcode => $issue->{barcode} });
+        my $item     = Koha::Items->find( { barcode => $issue->{barcode} } );
         my $daysmode = Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => $issue->{categorycode},
@@ -361,19 +368,20 @@ sub GetWaitingHolds {
 
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
 
-        $issue->{'date_due'} = output_pref({dt => dt_from_string($issue->{expirationdate}), dateformat => 'iso' });
-        $issue->{'level'} = 1;    # only one level for Hold Waiting notifications
+        $issue->{'date_due'} = output_pref( { dt => dt_from_string( $issue->{expirationdate} ), dateformat => 'iso' } );
+        $issue->{'level'}    = 1;    # only one level for Hold Waiting notifications
 
         my $days_to_subtract = 0;
         if ( $calendar->is_holiday($waiting_date) ) {
             my $next_open_day = $calendar->next_open_days( $waiting_date, 1 );
-            $days_to_subtract = $calendar->days_between($waiting_date, $next_open_day)->days;
+            $days_to_subtract = $calendar->days_between( $waiting_date, $next_open_day )->days;
         }
 
         $issue->{'days_since_waiting'} = $issue->{'days_since_waiting'} - $days_to_subtract;
 
         if ( ( grep $_ eq $issue->{'days_since_waiting'}, @holds_waiting_days_to_call )
-            || !scalar(@holds_waiting_days_to_call) ) {
+            || !scalar(@holds_waiting_days_to_call) )
+        {
             push @results, $issue;
         }
     }

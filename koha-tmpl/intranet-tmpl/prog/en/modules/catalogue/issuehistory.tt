@@ -7,12 +7,13 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
-    [% tx("Checkout history for {title}", { title = title_in_title }) | html %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+        [% tx("Checkout history for {title}", { title = title_in_title }) | html %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -37,92 +38,96 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
-<h1>Checkout history for [% INCLUDE 'biblio-title.inc' %]</h1>
-[% IF biblio.author %]<h3>by [% biblio.author | html %]</h3>[% END %]
+    <h1>Checkout history for [% INCLUDE 'biblio-title.inc' %]</h1>
+    [% IF biblio.author %]<h3>by [% biblio.author | html %]</h3>[% END %]
 
-[% SET show_patron_column = Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
+    [% SET show_patron_column = Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
 
-<div class="searchresults page-section">
-    [% IF checkouts %]
-        <h2>Checked out [% checkouts.size | html %] times</h2>
-        <table id="table_issues">
-            <thead><tr>
-            [% IF show_patron_column %]
-            <th>Patron</th>
-            [% END %]
-            <th>Barcode</th>
-            <th>Checked out from</th>
-            [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-            <th>Checked out by</th>
-            [% ELSE %]
-            <th class="NoVisible">Checked out by</th>
-            [% END %]
-            <th>Renewed</th>
-            <th>Checkout on</th>
-            <th>Due date</th>
-            <th>Checkin on</th>
-            </tr></thead>
-            <tbody>
-        [% SET anonymous_patron_id = Koha.Preference('AnonymousPatron') || 0 %]
-        [% FOREACH checkout IN checkouts %]
-            <tr>
-                [% IF show_patron_column %]
-                    <td>
-                        [% IF checkout.patron %][%# Not set for deleted patron records %]
-                            [% IF checkout.patron.id == anonymous_patron_id %]
-                                <em>Anonymized</em>
-                            [% ELSE %]
-                                [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]
-                            [% END %]
+    <div class="searchresults page-section">
+        [% IF checkouts %]
+            <h2>Checked out [% checkouts.size | html %] times</h2>
+            <table id="table_issues">
+                <thead
+                    ><tr>
+                        [% IF show_patron_column %]
+                            <th>Patron</th>
                         [% END %]
-                    </td>
-                [% END %]
-                <td>
-                    [% IF checkout.item.barcode %] [%# FIXME This test is not mandatory I think %]
-                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber | uri %]&amp;itemnumber=[% checkout.item.itemnumber | uri %]">[% checkout.item.barcode | html %]</a>
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]</td>
-                <td>[% IF checkout.branchcode %]
-                        [% Branches.GetName( checkout.branchcode ) | html %]
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]</td>
-                <td>[% IF checkout.issuer_id %]
-                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkout.issuer_id | uri %]">
-                    [% INCLUDE 'patron-title.inc' patron=checkout.issuer %]
-                    </a>
-                    [% END %]</td>
-                <td>[% IF checkout.renewals_count %]
-                        Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates  with_hours => 1 %]</small>
+                        <th>Barcode</th>
+                        <th>Checked out from</th>
+                        [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
+                            <th>Checked out by</th>
+                        [% ELSE %]
+                            <th class="NoVisible">Checked out by</th>
+                        [% END %]
+                        <th>Renewed</th>
+                        <th>Checkout on</th>
+                        <th>Due date</th>
+                        <th>Checkin on</th>
+                    </tr></thead
+                >
+                <tbody>
+                    [% SET anonymous_patron_id = Koha.Preference('AnonymousPatron') || 0 %]
+                    [% FOREACH checkout IN checkouts %]
+                        <tr>
+                            [% IF show_patron_column %]
+                                <td>
+                                    [% IF checkout.patron %]
+                                        [%# Not set for deleted patron records %]
+                                        [% IF checkout.patron.id == anonymous_patron_id %]
+                                            <em>Anonymized</em>
+                                        [% ELSE %]
+                                            [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]
+                                        [% END %]
+                                    [% END %]
+                                </td>
                             [% END %]
-                    [% ELSE %]
-                        No
-                    [% END %]</td>
-                <td data-order="[% checkout.issuedate | html %]">
-                    [% checkout.issuedate |$KohaDates  with_hours => 1 %]
-                </td>
-                <td data-order="[% checkout.date_due | html %]">
-                    [% checkout.date_due | $KohaDates as_due_date => 1 %]
-                </td>
-                <td data-order="[% checkout.returndate | html %]">
-                    [% checkout.returndate |$KohaDates  with_hours => 1 %]
-                </td>
-           </tr>
+                            <td>
+                                [% IF checkout.item.barcode %]
+                                    [%# FIXME This test is not mandatory I think %]
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber | uri %]&amp;itemnumber=[% checkout.item.itemnumber | uri %]">[% checkout.item.barcode | html %]</a>
+                                [% ELSE %]
+                                    &nbsp;
+                                [% END %]</td
+                            >
+                            <td
+                                >[% IF checkout.branchcode %]
+                                    [% Branches.GetName( checkout.branchcode ) | html %]
+                                [% ELSE %]
+                                    &nbsp;
+                                [% END %]</td
+                            >
+                            <td
+                                >[% IF checkout.issuer_id %]
+                                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkout.issuer_id | uri %]"> [% INCLUDE 'patron-title.inc' patron=checkout.issuer %] </a>
+                                [% END %]</td
+                            >
+                            <td
+                                >[% IF checkout.renewals_count %]
+                                    Yes[% IF checkout.lastreneweddate %]
+                                        , <small>last on: [% checkout.lastreneweddate |$KohaDates  with_hours => 1 %]</small>
+                                    [% END %]
+                                [% ELSE %]
+                                    No
+                                [% END %]</td
+                            >
+                            <td data-order="[% checkout.issuedate | html %]"> [% checkout.issuedate |$KohaDates  with_hours => 1 %] </td>
+                            <td data-order="[% checkout.date_due | html %]"> [% checkout.date_due | $KohaDates as_due_date => 1 %] </td>
+                            <td data-order="[% checkout.returndate | html %]"> [% checkout.returndate |$KohaDates  with_hours => 1 %] </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        [% ELSE %]
+            <div class="alert alert-info"
+                ><p> <strong>[% biblio.title | html %][% IF biblio.author %], by [% biblio.author | html %][% END %]</strong> has never been checked out.</p></div
+            >
         [% END %]
-        </tbody>
-		</table>
-    [% ELSE %]
-        <div class="alert alert-info"><p>
-        <strong>[% biblio.title | html %][% IF biblio.author %], by [% biblio.author | html %][% END %]</strong> has never been checked out.</p></div>
-
-    [% END %]
-</div>
+    </div>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'checkoutshistory-table', 'json') | $raw %];

@@ -78,15 +78,15 @@ sub run {
         )->compute_differences->produce_diff_sql;
 
         my $diff_found = 1;
-        my $message = __(
+        my $message    = __(
             "These commands are only suggestions. They are not a replacement for the database update scripts run during installations and updates.\nReview the database, the atomic update files and the table definitions in kohastructure.sql before running any of the commands below:"
         );
         my $title = __("Warning!");
 
         if ( $diff =~ /No differences found/ ) {
             $diff_found = 0;
-            $message = __("The installed database schema is correct.");
-            $title   = __("All is well");
+            $message    = __("The installed database schema is correct.");
+            $title      = __("All is well");
         }
 
         return {

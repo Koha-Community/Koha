@@ -24,43 +24,40 @@ use Koha::Script;
 use C4::Context;
 use C4::Members::Messaging;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
-
+use Pod::Usage   qw( pod2usage );
 
 sub usage {
     pod2usage( -verbose => 2 );
     exit;
 }
 
-
 sub force_borrower_messaging_defaults {
-    my ($doit, $since, $not_expired, $no_overwrite, $category, $branchcode, $message_name ) = @_;
+    my ( $doit, $since, $not_expired, $no_overwrite, $category, $branchcode, $message_name ) = @_;
 
     print "Since: $since\n" if $since;
 
     my $dbh = C4::Context->dbh;
     $dbh->{AutoCommit} = 0;
 
-    my $sql =
-q|SELECT DISTINCT bo.borrowernumber, bo.categorycode FROM borrowers bo
+    my $sql = q|SELECT DISTINCT bo.borrowernumber, bo.categorycode FROM borrowers bo
 LEFT JOIN borrower_message_preferences mp USING (borrowernumber)
 WHERE 1|;
 
-    if ( $since ) {
+    if ($since) {
         $sql .= " AND bo.dateenrolled >= ?";
     }
     if ($not_expired) {
-        $sql .= " AND bo.dateexpiry >= NOW()"
+        $sql .= " AND bo.dateexpiry >= NOW()";
     }
-    if( $no_overwrite ) {
+    if ($no_overwrite) {
         $sql .= " AND mp.borrowernumber IS NULL";
     }
     $sql .= " AND bo.categorycode = ?" if $category;
-    $sql .= " AND bo.branchcode = ?" if $branchcode;
+    $sql .= " AND bo.branchcode = ?"   if $branchcode;
     my $sth = $dbh->prepare($sql);
-    $sth->execute($since || (), $category || (), $branchcode || () );
+    $sth->execute( $since || (), $category || (), $branchcode || () );
     my $cnt = 0;
-    while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
+    while ( my ( $borrowernumber, $categorycode ) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
         next unless $doit;
         my $options = {
@@ -74,7 +71,6 @@ WHERE 1|;
     $dbh->commit();
     print "Total borrowers updated: $cnt\n" if $doit;
 }
-
 
 my ( $doit, $since, $help, $not_expired, $no_overwrite, $category, $branchcode, $message_name );
 my $result = GetOptions(

@@ -6,7 +6,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Discharge &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 <body id="opac-discharge" class="scrollto">
 [% INCLUDE 'masthead.inc' %]
@@ -21,19 +22,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="discharge" class="maincontent">
                     <h1>Discharge</h1>
                     [% FOR message IN messages %]
                         <div class="alert alert-[% message.type | html %]">
-                        [% IF message.code == "unable_to_generate_pdf" %]
-                            An error occurs when generating the pdf file.
-                            Please contact the staff to resolve this problem.
-                        [% END %]
+                            [% IF message.code == "unable_to_generate_pdf" %]
+                                An error occurs when generating the pdf file. Please contact the staff to resolve this problem.
+                            [% END %]
                         </div>
                     [% END %]
 
@@ -47,7 +45,10 @@
                         <p>You cannot be discharged, you have checked out items. Please return items before asking for a discharge.</p>
                     [% ELSIF not messages %]
                         <h2>What is a discharge?</h2>
-                        <p>This document certifies that you have returned all borrowed items. It is sometimes asked during a file transfer from a school to another. The discharge is sent by us to your school. You will also find it available on your reader account.</p>
+                        <p
+                            >This document certifies that you have returned all borrowed items. It is sometimes asked during a file transfer from a school to another. The discharge is sent by us to your school. You will also find it
+                            available on your reader account.</p
+                        >
                         <p><strong>Warning</strong>: This request is only valid if you are in good standing with the library. Once the application is made, you can not borrow library materials.</p>
                         [% IF has_checkouts %]
                             <div class="alert alert-info">You cannot be discharged, you have checked out items. Please return items before asking for a discharge.</div>
@@ -58,13 +59,18 @@
                                 <button class="btn btn-primary" type="submit">Ask for a discharge</button>
                             </form>
                         [% END %]
-
                     [% END %]
-                </div> <!-- / #discharge -->
-            </div> <!-- / .col-10 -->
-        </div> <!-- / .row -->
-    </div>  <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #discharge -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

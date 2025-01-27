@@ -25,14 +25,14 @@ use Modern::Perl;
 use Koha::Script;
 use C4::Context;
 use C4::AuthoritiesMarc qw( DelAuthority );
-use C4::Log qw( cronlogaction );
-use Getopt::Long qw( GetOptions );
+use C4::Log             qw( cronlogaction );
+use Getopt::Long        qw( GetOptions );
 
 use Koha::SearchEngine::Search;
 
 my @authtypes;
-my ($confirm, $test, $want_help);
-my $command_line_options = join(" ", @ARGV);
+my ( $confirm, $test, $want_help );
+my $command_line_options = join( " ", @ARGV );
 GetOptions(
     'aut|authtypecode:s' => \@authtypes,
     'c|confirm'          => \$confirm,
@@ -40,7 +40,7 @@ GetOptions(
     'h|help'             => \$want_help,
 );
 
-if ( $want_help || !($test || $confirm) ) {
+if ( $want_help || !( $test || $confirm ) ) {
     print_usage();
     exit 0;
 }
@@ -51,56 +51,59 @@ if ($test) {
     print "*** Testing only, authorities will not be deleted. ***\n";
 }
 if (@authtypes) {
-    print "Restricted to authority type(s) : ".join(',', @authtypes).".\n";
+    print "Restricted to authority type(s) : " . join( ',', @authtypes ) . ".\n";
 }
 
 my $searcher = Koha::SearchEngine::Search->new( { index => 'biblios' } );
 my $checksearch;
 if ( C4::Context->preference("SearchEngine") eq 'Zebra' ) {
+
     # Check server state
-    my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
+    my $errZebraConnection = C4::Context->Zconn( "biblioserver", 0 )->errcode();
     if ( $errZebraConnection == 10000 ) {
         die "Zebra server seems not to be available. This script needs Zebra runs.";
-    } elsif ( $errZebraConnection ) {
+    } elsif ($errZebraConnection) {
         die "Error from Zebra: $errZebraConnection";
     }
     $checksearch = q{an,alwaysmatches=''};
-}
-else {
+} else {
     $checksearch = q{an:*};
 }
+
 # Check search on authority number as at least one result
-my ($err,$res,$nb) = $searcher->simple_search_compat($checksearch,0,10);
-unless ($nb > 0) {
+my ( $err, $res, $nb ) = $searcher->simple_search_compat( $checksearch, 0, 10 );
+unless ( $nb > 0 ) {
     die "Searching authority number in biblio records seems not to be available : $checksearch";
 }
 
-my $dbh=C4::Context->dbh;
+my $dbh = C4::Context->dbh;
+
 # prepare the request to retrieve all authorities of the requested types
 my $rqsql = q{ SELECT authid,authtypecode FROM auth_header };
-$rqsql .= q{ WHERE authtypecode IN (}.join(',',map{ '?' }@authtypes).')' if @authtypes;
+$rqsql .= q{ WHERE authtypecode IN (} . join( ',', map { '?' } @authtypes ) . ')' if @authtypes;
 my $rqselect = $dbh->prepare($rqsql);
-$|=1;
+$| = 1;
 
 $rqselect->execute(@authtypes);
-my $counter=0;
-my $totdeleted=0;
-my $totundeleted=0;
-while (my $data=$rqselect->fetchrow_hashref){
+my $counter      = 0;
+my $totdeleted   = 0;
+my $totundeleted = 0;
+while ( my $data = $rqselect->fetchrow_hashref ) {
     $counter++;
-    print 'authid='.$data->{'authid'};
-    print ' type='.$data->{'authtypecode'};
-    my $bibliosearch = 'an:'.$data->{'authid'};
+    print 'authid=' . $data->{'authid'};
+    print ' type=' . $data->{'authtypecode'};
+    my $bibliosearch = 'an:' . $data->{'authid'};
+
     # search for biblios mapped
-    my ($err,$res,$used) = $searcher->simple_search_compat($bibliosearch,0,10);
-    if (defined $err) {
+    my ( $err, $res, $used ) = $searcher->simple_search_compat( $bibliosearch, 0, 10 );
+    if ( defined $err ) {
         print "\n";
         warn "Error: $err on search for biblios $bibliosearch\n";
         next;
     }
-    unless ($used > 0){
+    unless ( $used > 0 ) {
         unless ($test) {
-            DelAuthority({ authid => $data->{'authid'}, skip_merge => 1 });
+            DelAuthority( { authid => $data->{'authid'}, skip_merge => 1 } );
             print " : deleted";
         } else {
             print " : can be deleted";

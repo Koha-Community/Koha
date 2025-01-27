@@ -9,16 +9,16 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF type == 'credit' %]
-        [% t("Details of credit") | html %]
-    [% ELSE %]
-        [% t("Details of debit") | html %]
-    [% END %] &rsaquo;
-    [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF type == 'credit' %]
+            [% t("Details of credit") | html %]
+        [% ELSE %]
+            [% t("Details of debit") | html %]
+        [% END %]
+        &rsaquo; [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -58,172 +58,164 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-            [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
+    [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
-            <h1>Transaction details</h1>
+    <h1>Transaction details</h1>
 
-            [% IF accountline %]
-
-                <div class="page-section">
-                    [% IF accountline.credit_type_code %]
-                        <h2>Details of credit</h2>
-                    [% ELSIF accountline.debit_type_code %]
-                        <h2>Details of debit</h2>
-                    [% END %]
-
-                    <table id="table_account_fines">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Barcode</th>
-                                <th>Due date</th>
-                                <th>Return date</th>
-                                <th>Note</th>
-                                [% FOREACH field IN available_additional_fields %]
-                                    <th>[% field.name | html %]</th>
-                                [% END %]
-                                <th>Amount</th>
-                                <th>Outstanding</th>
-                                <th>Librarian</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>
-                                    [% accountline.date | $KohaDates %]
-                                </td>
-                                <td>
-                                    [%- PROCESS account_type_description account=accountline -%]
-                                    [%- IF accountline.payment_type -%]
-                                        , [% AuthorisedValues.GetByCode('PAYMENT_TYPE', accountline.payment_type) | html %]
-                                    [%- END =%]
-                                    [%- IF accountline.description -%]
-                                        , [% accountline.description | html %]
-                                    [%- END -%]
-
-                                    &nbsp;
-                                    [% IF ( accountline.itemnumber ) %]
-                                        [% SET biblio = accountline.item.biblio %]
-                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% accountline.itemnumber | uri %]">[% biblio.title | html %]</a>
-                                    [% END %]
-                                </td>
-
-                                <td>
-                                    [% IF ( accountline.itemnumber ) %]
-                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% accountline.item.biblionumber | uri %]&amp;itemnumber=[% accountline.itemnumber | uri %]#item[% accountline.itemnumber | uri %]">[% accountline.item.barcode | html %]</a>
-                                    [% END %]
-                                </td>
-
-                                <td>
-                                    [% IF ( accountline.issue_id ) %]
-                                        [% accountline.checkout.date_due | $KohaDates as_due_date => 1 %]
-                                    [% END %]
-                                </td>
-
-                                <td>
-                                    [% IF ( accountline.issue_id ) %]
-                                        [% accountline.checkout.returndate | $KohaDates with_hours => 1 %]
-                                    [% END %]
-                                </td>
-
-                                <td>
-                                    [% accountline.note | html_line_break %]
-                                </td>
-                                [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values value_only=1 is_table_cell=1 %]
-
-                                <td>
-                                    [% accountline.amount | $Price %]
-                                </td>
-
-                                <td>
-                                    [% accountline.amountoutstanding | $Price %]
-                                </td>
-                                <td>
-                                    [% IF accountline.manager_id %]
-                                        [% INCLUDE 'patron-title.inc' patron => accountline.manager, hide_patron_infos_if_needed => 1, no_cardnumber => 1 %]
-                                    [% END %]
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> <!-- /.page-section -->
-
-                <div class="page-section">
-                    <h3>History</h3>
-
-                    <table class="accountline-offsets-table" id="accountline-debits-table">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">Date</th>
-                                <th colspan="2">Change</th>
-                                <th rowspan="2">Action</th>
-                                <th colspan="4">Related transaction</th>
-                            </tr>
-                            <tr>
-                                <th>Increase</th>
-                                <th>Decrease</th>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Librarian</th>
-                                <th>Note</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            [% FOREACH ao IN account_offsets %]
-                                    [% IF ao.credit_id == accountline.accountlines_id %]
-                                        [% SET offset_accountline = ao.debit %]
-                                    [% ELSIF ao.debit_id == accountline.accountlines_id %]
-                                        [% SET offset_accountline = ao.credit %]
-                                    [% END %]
-
-                                    [%- BLOCK ao_description -%]
-                                        [%- SWITCH ao.type -%]
-                                            [%- CASE 'CREATE'           -%]<span>Created</span>
-                                            [%- CASE 'OVERDUE_INCREASE' -%]<span>Increase</span>
-                                            [%- CASE 'OVERDUE_DECREASE' -%]<span>Decrease</span>
-                                            [%- CASE 'APPLY'            -%]<span>Applied</span>
-                                            [%- CASE 'VOID'             -%]<span>Reversed</span>
-                                        [%- END -%]
-                                    [%- END -%]
-
-                                    <tr>
-                                        <td>[% ao.created_on | $KohaDates with_hours => 1%]</td>
-                                        <td>[%- IF ao.amount > 0 -%][% ao.amount | $Price %][% END %]</td>
-                                        <td>[%- IF ao.amount < 0 -%][% ao.amount | $Price %][% END %]</td>
-                                        <td>
-                                            [% PROCESS ao_description ao=ao %]
-                                        </td>
-                                        [%- IF offset_accountline -%]
-                                        <td>
-                                            [% PROCESS account_type_description account=offset_accountline %] (<a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | uri %]">[% offset_accountline.id | html %]</a>)
-                                        </td>
-                                        <td>
-                                            [% offset_accountline.amount | $Price %]
-                                        </td>
-                                        <td>
-                                            [% IF offset_accountline.manager_id %]
-                                                [% INCLUDE 'patron-title.inc' patron => offset_accountline.manager, hide_patron_infos_if_needed => 1, no_cardnumber => 1 %]
-                                            [% END %]
-                                        </td>
-                                        [%- ELSE -%]
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        [%- END -%]
-                                        <td>[% offset_accountline.note | html %]</td>
-                                    </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
-                </div> <!-- /.page-section -->
-            [% ELSE %]
-                <div class="alert alert-info">
-                    Account not found
-                </div>
+    [% IF accountline %]
+        <div class="page-section">
+            [% IF accountline.credit_type_code %]
+                <h2>Details of credit</h2>
+            [% ELSIF accountline.debit_type_code %]
+                <h2>Details of debit</h2>
             [% END %]
+
+            <table id="table_account_fines">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Barcode</th>
+                        <th>Due date</th>
+                        <th>Return date</th>
+                        <th>Note</th>
+                        [% FOREACH field IN available_additional_fields %]
+                            <th>[% field.name | html %]</th>
+                        [% END %]
+                        <th>Amount</th>
+                        <th>Outstanding</th>
+                        <th>Librarian</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td> [% accountline.date | $KohaDates %] </td>
+                        <td>
+                            [%- PROCESS account_type_description account=accountline -%]
+                            [%- IF accountline.payment_type -%]
+                                , [% AuthorisedValues.GetByCode('PAYMENT_TYPE', accountline.payment_type) | html %]
+                            [%- END = %]
+                            [%- IF accountline.description -%]
+                                , [% accountline.description | html %]
+                            [%- END -%]
+                            &nbsp;
+                            [% IF ( accountline.itemnumber ) %]
+                                [% SET biblio = accountline.item.biblio %]
+                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% accountline.itemnumber | uri %]">[% biblio.title | html %]</a>
+                            [% END %]
+                        </td>
+
+                        <td>
+                            [% IF ( accountline.itemnumber ) %]
+                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% accountline.item.biblionumber | uri %]&amp;itemnumber=[% accountline.itemnumber | uri %]#item[% accountline.itemnumber | uri %]"
+                                    >[% accountline.item.barcode | html %]</a
+                                >
+                            [% END %]
+                        </td>
+
+                        <td>
+                            [% IF ( accountline.issue_id ) %]
+                                [% accountline.checkout.date_due | $KohaDates as_due_date => 1 %]
+                            [% END %]
+                        </td>
+
+                        <td>
+                            [% IF ( accountline.issue_id ) %]
+                                [% accountline.checkout.returndate | $KohaDates with_hours => 1 %]
+                            [% END %]
+                        </td>
+
+                        <td> [% accountline.note | html_line_break %] </td>
+                        [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values value_only=1 is_table_cell=1 %]
+
+                        <td> [% accountline.amount | $Price %] </td>
+
+                        <td> [% accountline.amountoutstanding | $Price %] </td>
+                        <td>
+                            [% IF accountline.manager_id %]
+                                [% INCLUDE 'patron-title.inc' patron => accountline.manager, hide_patron_infos_if_needed => 1, no_cardnumber => 1 %]
+                            [% END %]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+
+        <div class="page-section">
+            <h3>History</h3>
+
+            <table class="accountline-offsets-table" id="accountline-debits-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Date</th>
+                        <th colspan="2">Change</th>
+                        <th rowspan="2">Action</th>
+                        <th colspan="4">Related transaction</th>
+                    </tr>
+                    <tr>
+                        <th>Increase</th>
+                        <th>Decrease</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Librarian</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    [% FOREACH ao IN account_offsets %]
+                        [% IF ao.credit_id == accountline.accountlines_id %]
+                            [% SET offset_accountline = ao.debit %]
+                        [% ELSIF ao.debit_id == accountline.accountlines_id %]
+                            [% SET offset_accountline = ao.credit %]
+                        [% END %]
+
+                        [%- BLOCK ao_description -%]
+                            [%- SWITCH ao.type -%]
+
+                            [%- CASE 'CREATE' -%]
+                                <span>Created</span>
+                            [%- CASE 'OVERDUE_INCREASE' -%]
+                                <span>Increase</span>
+                            [%- CASE 'OVERDUE_DECREASE' -%]
+                                <span>Decrease</span>
+                            [%- CASE 'APPLY' -%]
+                                <span>Applied</span>
+                            [%- CASE 'VOID' -%]
+                                <span>Reversed</span>
+                            [%- END -%]
+                        [%- END -%]
+
+                        <tr>
+                            <td>[% ao.created_on | $KohaDates with_hours => 1 %]</td>
+                            <td>[%- IF ao.amount > 0 -%][% ao.amount | $Price %][% END %]</td>
+                            <td>[%- IF ao.amount < 0 -%][% ao.amount | $Price %][% END %]</td>
+                            <td> [% PROCESS ao_description ao=ao %] </td>
+                            [%- IF offset_accountline -%]
+                                <td> [% PROCESS account_type_description account=offset_accountline %] (<a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | uri %]">[% offset_accountline.id | html %]</a>) </td>
+                                <td> [% offset_accountline.amount | $Price %] </td>
+                                <td>
+                                    [% IF offset_accountline.manager_id %]
+                                        [% INCLUDE 'patron-title.inc' patron => offset_accountline.manager, hide_patron_infos_if_needed => 1, no_cardnumber => 1 %]
+                                    [% END %]
+                                </td>
+                            [%- ELSE -%]
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            [%- END -%]
+                            <td>[% offset_accountline.note | html %]</td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <div class="alert alert-info"> Account not found </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -67,7 +67,7 @@ sub process {
     $self->start;
 
     my $import_args = { %$args, job => $self };
-    my $result = Koha::ImportBatch->new_from_file($import_args);
+    my $result      = Koha::ImportBatch->new_from_file($import_args);
 
     my $data = $self->decoded_data;
     $data->{messages} = $result->{messages};
@@ -83,14 +83,16 @@ Enqueue the new job
 =cut
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     # FIXME: no $args validation
-    $self->SUPER::enqueue({
-        job_size  => 0, # TODO Unknown for now?
-        job_args  => $args,
-        job_queue => 'long_tasks',
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size  => 0,              # TODO Unknown for now?
+            job_args  => $args,
+            job_queue => 'long_tasks',
+        }
+    );
 }
 
 1;

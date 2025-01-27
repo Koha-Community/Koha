@@ -10,28 +10,27 @@
                     <h4 class="modal-title" id="claims-returned-modal-label">Claim returned</h4>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
                         <label for="claims-returned-notes" class="control-label">Notes</label>
                         <div>
-                        <textarea id="claims-returned-notes" class="form-control" rows="3"></textarea>
+                            <textarea id="claims-returned-notes" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
 
                     [% IF Koha.Preference('ClaimReturnedChargeFee') == 'ask' %]
                         <div class="form-group">
-                        <div class="checkbox">
-                            <label for="claims-returned-charge-lost-fee">
-                            <input id="claims-returned-charge-lost-fee" type="checkbox" value="1">
-                            Charge lost fee
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label for="claims-returned-refund-lost-fee">
-                            <input id="claims-returned-refund-lost-fee" type="checkbox" value="1">
-                            Refund previous lost fee
-                            </label>
-                        </div>
+                            <div class="checkbox">
+                                <label for="claims-returned-charge-lost-fee">
+                                    <input id="claims-returned-charge-lost-fee" type="checkbox" value="1" />
+                                    Charge lost fee
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label for="claims-returned-refund-lost-fee">
+                                    <input id="claims-returned-refund-lost-fee" type="checkbox" value="1" />
+                                    Refund previous lost fee
+                                </label>
+                            </div>
                         </div>
                     [% END %]
 
@@ -47,64 +46,63 @@
 [% END %]
 
 [% BLOCK 'modal-claims-js' %]
-<script>
+    <script>
+        // Verify if the syspref is defined
+        var ClaimReturnedLostValue = "[% Koha.Preference('ClaimReturnedLostValue') | html %]";
 
-    // Verify if the syspref is defined
-    var ClaimReturnedLostValue = "[% Koha.Preference('ClaimReturnedLostValue') | html %]";
+        var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        var interface = "[% interface | html %]";
+        var theme = "[% theme | html %]";
 
-    var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
-    var interface = "[% interface | html %]";
-    var theme = "[% theme | html %]";
+        // Handle return claims
+        $(document).on("click", '.claim-returned-btn', function(e){
+            e.preventDefault();
+            itemnumber = $(this).data('itemnumber');
 
-    // Handle return claims
-    $(document).on("click", '.claim-returned-btn', function(e){
-        e.preventDefault();
-        itemnumber = $(this).data('itemnumber');
+            $('#claims-returned-itemnumber').val(itemnumber);
+            $('#claims-returned-notes').val("");
+            $('#claims-returned-charge-lost-fee').attr('checked', false);
+            $('#claims-returned-modal').modal("show");
+        });
+        $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
+            let itemnumber = $('#claims-returned-itemnumber').val();
+            let notes = $('#claims-returned-notes').val();
+            let charge_lost_fee = $('#claims-returned-charge-lost-fee').prop('checked') ? true : false;
+            let refund_lost_fee = $('#claims-returned-refund-lost-fee').prop('checked') ? true : false;
 
-        $('#claims-returned-itemnumber').val(itemnumber);
-        $('#claims-returned-notes').val("");
-        $('#claims-returned-charge-lost-fee').attr('checked', false);
-        $('#claims-returned-modal').modal("show");
-    });
-    $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
-        let itemnumber = $('#claims-returned-itemnumber').val();
-        let notes = $('#claims-returned-notes').val();
-        let charge_lost_fee = $('#claims-returned-charge-lost-fee').prop('checked') ? true : false;
-        let refund_lost_fee = $('#claims-returned-refund-lost-fee').prop('checked') ? true : false;
+            $('#claims-returned-modal').modal('hide');
 
-        $('#claims-returned-modal').modal('hide');
+            const button = $('.claim-returned-btn[data-itemnumber="' + itemnumber + '"]');
+            const img = '<img id="return_claim_spinner_' + itemnumber + '" src="' + interface + '/' + theme + '/img/spinner-small.gif" />';
+            button.replaceWith(img);
 
-        const button = $('.claim-returned-btn[data-itemnumber="' + itemnumber + '"]');
-        const img = '<img id="return_claim_spinner_' + itemnumber + '" src="' + interface + '/' + theme + '/img/spinner-small.gif" />';
-        button.replaceWith(img);
+            params = {
+                item_id: itemnumber,
+                notes: notes,
+                charge_lost_fee,
+                refund_lost_fee,
+                created_by: logged_in_user_borrowernumber,
+            };
 
-        params = {
-            item_id: itemnumber,
-            notes: notes,
-            charge_lost_fee,
-            refund_lost_fee,
-            created_by: logged_in_user_borrowernumber,
-        };
+            $.post( '/api/v1/return_claims', JSON.stringify(params), function( data ) {
 
-        $.post( '/api/v1/return_claims', JSON.stringify(params), function( data ) {
+                id = "#return_claim_spinner_" + data.item_id;
 
-            id = "#return_claim_spinner_" + data.item_id;
+                let formatted_date = $datetime(data.created_on);
 
-            let formatted_date = $datetime(data.created_on);
+                let content = "";
+                if ( data.claim_id ) {
+                    content = '<span class="badge">' + formatted_date + '</span>';
+                    $(id).parent().parent().addClass('ok');
+                } else {
+                    content = _("Unable to claim as returned");
+                    $(id).parent().parent().addClass('warn');
+                }
 
-            let content = "";
-            if ( data.claim_id ) {
-                content = '<span class="badge">' + formatted_date + '</span>';
-                $(id).parent().parent().addClass('ok');
-            } else {
-                content = _("Unable to claim as returned");
-                $(id).parent().parent().addClass('warn');
-            }
+                $(id).replaceWith( content );
 
-            $(id).replaceWith( content );
-
-            $('body').trigger('refreshClaimModal');
-        }, "json")
-    });
-</script>
+                $('body').trigger('refreshClaimModal');
+            }, "json")
+        });
+    </script>
 [% END %]

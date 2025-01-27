@@ -8,7 +8,7 @@
             </div>
 
             <div class="form-content">
-                <input name="barcode" id="ret_barcode" class="head-searchbox form-control" accesskey="r" type="text" placeholder="Scan a barcode to check in" size="40"/>
+                <input name="barcode" id="ret_barcode" class="head-searchbox form-control" accesskey="r" type="text" placeholder="Scan a barcode to check in" size="40" />
                 <input type="hidden" name="op" value="cud-checkin" />
             </div>
             <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>

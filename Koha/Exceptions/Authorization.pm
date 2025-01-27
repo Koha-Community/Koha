@@ -10,9 +10,9 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Authorization::Unauthorized' => {
-        isa => 'Koha::Exceptions::Authorization',
+        isa         => 'Koha::Exceptions::Authorization',
         description => 'Unauthorized',
-        fields => ['required_permissions']
+        fields      => ['required_permissions']
     },
 
 );

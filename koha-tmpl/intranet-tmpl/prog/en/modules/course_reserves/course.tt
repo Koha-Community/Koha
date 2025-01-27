@@ -4,22 +4,23 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( course_name ) %]
-        [% tx("Edit {course_name}", { course_name = course_name }) | html %][% IF course.section %] - [% course.section | html %][% END %]
-    [% ELSE %]
-        [% t("New course") | html %]
-    [% END %] &rsaquo;
-    [% t("Course reserves") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( course_name ) %]
+            [% tx("Edit {course_name}", { course_name = course_name }) | html %][% IF course.section %]- [% course.section | html %][% END %]
+        [% ELSE %]
+            [% t("New course") | html %]
+        [% END %]
+        &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #course_instructors {
         float: left;
     }
     .instructor_line {
-        padding: .3em;
+        padding: 0.3em;
     }
 </style>
 </head>
@@ -37,7 +38,7 @@
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF course_name %]
-                <span>Edit [% course_name | html | $HtmlTags tag="em" %][%- IF course.section -%] - [% course.section | html | $HtmlTags tag="em" %][%- END -%]</span>
+                <span>Edit [% course_name | html | $HtmlTags tag="em" %][%- IF course.section -%]- [% course.section | html | $HtmlTags tag="em" %][%- END -%]</span>
             [% ELSE %]
                 <span>New course</span>
             [% END %]
@@ -48,182 +49,191 @@
 [% IF ( departments ) %]
 
     [% WRAPPER 'main-container.inc' %]
-                <h1>
-                    [% IF course_name %]
-                        <span>Edit [% course_name | html | $HtmlTags tag="em" %]</span>
-                    [% ELSE %]
-                        <span>New course</span>
-                    [% END %]
-                </h1>
+        <h1>
+            [% IF course_name %]
+                <span>Edit [% course_name | html | $HtmlTags tag="em" %]</span>
+            [% ELSE %]
+                <span>New course</span>
+            [% END %]
+        </h1>
 
-            <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl" class="validated">
-                [% INCLUDE 'csrf-token.inc' %]
-                [% IF course_id %]
-                    <input type="hidden" name="course_id" value="[% course_id | html %]" />
-                    <input type="hidden" name="op" value="cud-update" />
-                [% ELSE %]
-                    <input type="hidden" name="op" value="cud-add" />
-                [% END %]
-                <fieldset class="rows">
-                    <legend>[% IF course_id %]Edit course[% ELSE %]Create course[% END %]</legend>
-                    <ol>
-                        <li>
-                            <label class="required" for="department">Department:</label>
-                            <select id="department" name="department" required="required" class="required">
-                                <option value="">Select a department</option>
+        <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
+            [% IF course_id %]
+                <input type="hidden" name="course_id" value="[% course_id | html %]" />
+                <input type="hidden" name="op" value="cud-update" />
+            [% ELSE %]
+                <input type="hidden" name="op" value="cud-add" />
+            [% END %]
+            <fieldset class="rows">
+                <legend>[% IF course_id %]Edit course[% ELSE %]Create course[% END %]</legend>
+                <ol>
+                    <li>
+                        <label class="required" for="department">Department:</label>
+                        <select id="department" name="department" required="required" class="required">
+                            <option value="">Select a department</option>
 
-                                [% FOREACH d IN departments %]
-                                    [% IF d.authorised_value == department %]
-                                        <option value="[% d.authorised_value | html %]" selected="selected">[% d.lib | html %]</option>
+                            [% FOREACH d IN departments %]
+                                [% IF d.authorised_value == department %]
+                                    <option value="[% d.authorised_value | html %]" selected="selected">[% d.lib | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% d.authorised_value | html %]">[% d.lib | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label class="required" for="course_number">Course number:</label>
+                        <input id="course_number" name="course_number" type="text" value="[% course_number | html %]" required="required" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="section">Section:</label>
+                        <input id="section" name="section" type="text" value="[% section | html %]" />
+                    </li>
+
+                    <li>
+                        <label class="required" for="course_name">Course name:</label>
+                        <input id="course_name" name="course_name" type="text" value="[% course_name | html %]" required="required" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        [% IF terms %]
+                            <label for="term">[% tp('Semester', 'Term:') | html %]</label>
+                            <select id="term" name="term">
+                                <option value=""></option>
+
+                                [% FOREACH t IN terms %]
+                                    [% IF t.authorised_value == term %]
+                                        <option value="[% t.authorised_value | html %]" selected="selected">[% t.lib | html %]</option>
                                     [% ELSE %]
-                                        <option value="[% d.authorised_value | html %]">[% d.lib | html %]</option>
+                                        <option value="[% t.authorised_value | html %]">[% t.lib | html %]</option>
                                     [% END %]
                                 [% END %]
                             </select>
-                            <span class="required">Required</span>
-                        </li>
+                        [% ELSE %]
+                            <span class="label">[% tp('Semester', 'Term:') | html %] </span>
+                            <span id="term">No TERM authorised values found! Please create one or more authorised values with the category TERM.</span>
+                        [% END %]
+                    </li>
 
-                        <li>
-                            <label class="required" for="course_number">Course number:</label>
-                            <input id="course_number" name="course_number" type="text" value="[% course_number | html %]" required="required" class="required" />
-                            <span class="required">Required</span>
-                        </li>
+                    <li>
+                        <span class="label">Instructors:</span>
 
-                        <li>
-                            <label for="section">Section:</label>
-                            <input id="section" name="section" type="text" value="[% section | html %]"/>
-                        </li>
-
-                        <li>
-                            <label class="required" for="course_name">Course name:</label>
-                            <input id="course_name" name="course_name" type="text" value="[% course_name | html %]" required="required" class="required" />
-                            <span class="required">Required</span>
-                        </li>
-
-                        <li>
-                            [% IF terms %]
-                                <label for="term">[% tp('Semester', 'Term:') | html %]</label>
-                                <select id="term" name="term">
-                                    <option value=""></option>
-
-                                    [% FOREACH t IN terms %]
-                                        [% IF t.authorised_value == term %]
-                                            <option value="[% t.authorised_value | html %]" selected="selected">[% t.lib | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% t.authorised_value | html %]">[% t.lib | html %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
-                            [% ELSE %]
-                                <span class="label">[% tp('Semester', 'Term:') | html %] </span>
-                                <span id="term">No TERM authorised values found! Please create one or more authorised values with the category TERM.</span>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            <span class="label">Instructors:</span>
-
-                            <div id="course_instructors">
-                                 <div id="instructors">
-                                    [% FOREACH i IN instructors %]
-                                        <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"><i class="fa fa-trash-can"></i> Remove </a> )
-                                             <input type='hidden' name='instructors' value='[% i.borrowernumber | html %]' />
-                                         </div>
-                                     [% END %]
-                                 </div>
-                                <p>
-                                    <label for="find_instructor">Instructor search:</label>
-                                    <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit"/>
-                                </p>
-                                <div id="find_instructor_container"></div>
+                        <div id="course_instructors">
+                            <div id="instructors">
+                                [% FOREACH i IN instructors %]
+                                    <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]"
+                                        >[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"><i class="fa fa-trash-can"></i> Remove </a> )
+                                        <input type="hidden" name="instructors" value="[% i.borrowernumber | html %]" />
+                                    </div>
+                                [% END %]
                             </div>
-                        <li>
-                            <label for="staff_note">Staff note:</label>
-                            <textarea name="staff_note" id="staff_note">[% staff_note | html %]</textarea>
-                        </li>
+                            <p>
+                                <label for="find_instructor">Instructor search:</label>
+                                <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit" />
+                            </p>
+                            <div id="find_instructor_container"></div>
+                        </div> </li
+                    ><li>
+                        <label for="staff_note">Staff note:</label>
+                        <textarea name="staff_note" id="staff_note">[% staff_note | html %]</textarea>
+                    </li>
 
-                        <li>
-                            <label for="public_note">Public note:</label>
-                            <textarea name="public_note" id="public_note">[% public_note | html %]</textarea>
-                        </li>
+                    <li>
+                        <label for="public_note">Public note:</label>
+                        <textarea name="public_note" id="public_note">[% public_note | html %]</textarea>
+                    </li>
 
-                        <li>
-                            <label for="students_count">Number of students:</label>
-                            <input id="students_count" name="students_count" type="text" value="[% students_count | html %]" />
-                        </li>
+                    <li>
+                        <label for="students_count">Number of students:</label>
+                        <input id="students_count" name="students_count" type="text" value="[% students_count | html %]" />
+                    </li>
 
-                        <li>
-                            <label for="enabled">Enabled?</label>
-                            [% IF enabled == 'no' %]
-                                <input type="checkbox" name="enabled" id="enabled" />
-                            [% ELSE %]
-                                <input type="checkbox" name="enabled" id="enabled" checked="checked" />
-                            [% END %]
-                        </li>
-                    </ol>
-                </fieldset>
+                    <li>
+                        <label for="enabled">Enabled?</label>
+                        [% IF enabled == 'no' %]
+                            <input type="checkbox" name="enabled" id="enabled" />
+                        [% ELSE %]
+                            <input type="checkbox" name="enabled" id="enabled" checked="checked" />
+                        [% END %]
+                    </li>
+                </ol>
+            </fieldset>
 
-                <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Save" />
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" />
 
-                    [% IF course_id %]
-                        <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | uri %]" class="cancel">Cancel</a>
-                    [% ELSE %]
-                        <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
-                    [% END %]
-                </fieldset>
-            </form>
+                [% IF course_id %]
+                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | uri %]" class="cancel">Cancel</a>
+                [% ELSE %]
+                    <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
+                [% END %]
+            </fieldset>
+        </form>
     [% END %]
 [% ELSE %]
-
-<div class="alert alert-warning">
-    <h1>No DEPARTMENT authorized values found!</h1>
-    <p>
-        [% IF ( CAN_user_parameters ) %]
-            <span>Please <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=DEPARTMENT">create one or more authorized values</a> with the category DEPARTMENT.</span>
-        [% ELSE %]
-            <span>An administrator must create one or more authorized values with the category DEPARTMENT.</span>
-        [% END %]
-    </p>
-</div>
-
+    <div class="alert alert-warning">
+        <h1>No DEPARTMENT authorized values found!</h1>
+        <p>
+            [% IF ( CAN_user_parameters ) %]
+                <span>Please <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=DEPARTMENT">create one or more authorized values</a> with the category DEPARTMENT.</span>
+            [% ELSE %]
+                <span>An administrator must create one or more authorized values with the category DEPARTMENT.</span>
+            [% END %]
+        </p>
+    </div>
 [% END %]
 
 [% IF ( departments ) %]
     [% MACRO jsinclude BLOCK %]
         <script>
-            $(document).ready(function(){
-                patron_autocomplete($("#find_instructor"), { 'on-select-callback': function( event, ui ) {
-                        AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.patron_id );
+            $(document).ready(function () {
+                patron_autocomplete($("#find_instructor"), {
+                    "on-select-callback": function (event, ui) {
+                        AddInstructor(ui.item.surname + ", " + ui.item.firstname, ui.item.patron_id);
                         return false;
-                    }
+                    },
                 });
 
-                if ( ! $('#instructors').html() ) {
-                    $('#course_instructors').hide();
+                if (!$("#instructors").html()) {
+                    $("#course_instructors").hide();
                 }
 
-                $("body").on("click",".removeInstructor",function(e){
+                $("body").on("click", ".removeInstructor", function (e) {
                     e.preventDefault();
                     var divid = $(this).parent().attr("id");
-                    var borrowernumber = divid.replace("borrower_","");
+                    var borrowernumber = divid.replace("borrower_", "");
                     RemoveInstructor(borrowernumber);
                 });
             });
 
-            function AddInstructor( name, borrowernumber ) {
-                div = "<div class='instructor_line' id='borrower_" + borrowernumber + "'>" + ( name ? name.escapeHtml() : "" ) + " ( <a href='#' class='removeInstructor'><i class='fa fa-trash-can'></i> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
-                $('#instructors').append( div );
+            function AddInstructor(name, borrowernumber) {
+                div =
+                    "<div class='instructor_line' id='borrower_" +
+                    borrowernumber +
+                    "'>" +
+                    (name ? name.escapeHtml() : "") +
+                    " ( <a href='#' class='removeInstructor'><i class='fa fa-trash-can'></i> " +
+                    _("Remove") +
+                    " </a> ) <input type='hidden' name='instructors' value='" +
+                    borrowernumber +
+                    "' /></div>";
+                $("#instructors").append(div);
 
-                $('#find_instructor').val('').focus();
-                $('#course_instructors').show();
+                $("#find_instructor").val("").focus();
+                $("#course_instructors").show();
             }
 
-            function RemoveInstructor( borrowernumber ) {
-                $( '#borrower_' + borrowernumber ).remove();
+            function RemoveInstructor(borrowernumber) {
+                $("#borrower_" + borrowernumber).remove();
 
-                if ( ! $('#instructors').html() ) {
-                    $('#course_instructors').hide( 800 );
+                if (!$("#instructors").html()) {
+                    $("#course_instructors").hide(800);
                 }
             }
         </script>

@@ -3,9 +3,7 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_records == report.total_success %]
-            <div class="alert alert-info">
-                All records have successfully been modified! <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
-            </div>
+            <div class="alert alert-info"> All records have successfully been modified! <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a> </div>
         [% ELSE %]
             <div class="alert alert-info">
                 <span>[% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred.</span>
@@ -30,7 +28,7 @@
             [% SWITCH m.code %]
             [% CASE 'authority_not_modified' %]
                 <span>Authority record [% authority_link | $raw | $KohaSpan %] has not been modified. An error occurred on modifying it</span>
-                [% IF m.error %] ([% m.error | html %])[% END %].
+                [% IF m.error %]([% m.error | html %])[% END %].
             [% CASE 'authority_modified' %]
                 <span>Authority record [% authority_link | $raw | $KohaSpan %] has successfully been modified.</span>
             [% END %]

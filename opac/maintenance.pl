@@ -17,8 +17,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha;
@@ -36,16 +36,19 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $koha_db_version = C4::Context->preference('Version');
 my $kohaversion     = Koha::version();
+
 # Strip dots from version
 $kohaversion     =~ s/\.//g if defined $kohaversion;
 $koha_db_version =~ s/\.//g if defined $koha_db_version;
 
-if ( !defined $koha_db_version || # DB not populated
-     $kohaversion > $koha_db_version || # Update needed
-     C4::Context->preference('OpacMaintenance') ) { # Maintenance mode enabled
+if (
+    !defined $koha_db_version ||          # DB not populated
+    $kohaversion > $koha_db_version ||    # Update needed
+    C4::Context->preference('OpacMaintenance')
+    )
+{    # Maintenance mode enabled
     output_html_with_http_headers $query, '', $template->output;
-}
-else {
+} else {
     print $query->redirect("/cgi-bin/koha/opac-main.pl");
 }
 

@@ -44,7 +44,7 @@ Koha::Objects::Mixin::AdditionalFields
 =cut
 
 sub filter_by_additional_fields {
-    my ($class, $additional_fields) = @_;
+    my ( $class, $additional_fields ) = @_;
 
     my %conditions;
     my $idx = 0;
@@ -52,10 +52,10 @@ sub filter_by_additional_fields {
         ++$idx;
         my $alias = $idx > 1 ? "additional_field_values_$idx" : "additional_field_values";
         $conditions{"$alias.field_id"} = $additional_field->{id};
-        $conditions{"$alias.value"} = { -like => '%' . $additional_field->{value} . '%'};
+        $conditions{"$alias.value"}    = { -like => '%' . $additional_field->{value} . '%' };
     }
 
-    return $class->search(\%conditions, { join => [ ('additional_field_values') x $idx ] });
+    return $class->search( \%conditions, { join => [ ('additional_field_values') x $idx ] } );
 }
 
 =head3 extended_attributes_config

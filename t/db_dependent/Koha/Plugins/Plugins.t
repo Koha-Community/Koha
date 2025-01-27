@@ -20,8 +20,8 @@ use CGI;
 use Cwd qw(abs_path);
 use File::Basename;
 use File::Spec;
-use File::Temp qw( tempdir tempfile );
-use FindBin qw($Bin);
+use File::Temp                qw( tempdir tempfile );
+use FindBin                   qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
 use Test::More tests => 18;
@@ -56,11 +56,12 @@ subtest 'call() tests' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
+
     # Temporarily remove any installed plugins data
     Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
-    t::lib::Mocks::mock_config('enable_plugins', 1);
-    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    my $plugins = Koha::Plugins->new( { enable_plugins => 1 } );
 
     my @plugins;
 
@@ -70,20 +71,20 @@ subtest 'call() tests' => sub {
         $plugin->enable();
     }
 
-    my @responses = Koha::Plugins->call('check_password', { password => 'foo' });
+    my @responses = Koha::Plugins->call( 'check_password', { password => 'foo' } );
 
     my $expected = [ { error => 1, msg => 'PIN should be four digits' } ];
-    is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
+    is_deeply( \@responses, $expected, 'call() should return all responses from plugins' );
 
     # Make sure parameters are correctly passed to the plugin method
-    @responses = Koha::Plugins->call('check_password', { password => '1234' });
+    @responses = Koha::Plugins->call( 'check_password', { password => '1234' } );
 
     $expected = [ { error => 0 } ];
-    is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
+    is_deeply( \@responses, $expected, 'call() should return all responses from plugins' );
 
-    t::lib::Mocks::mock_config('enable_plugins', 0);
-    @responses = Koha::Plugins->call('check_password', { password => '1234' });
-    is_deeply(\@responses, [], 'call() should return an empty array if plugins are disabled');
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+    @responses = Koha::Plugins->call( 'check_password', { password => '1234' } );
+    is_deeply( \@responses, [], 'call() should return an empty array if plugins are disabled' );
 
     $schema->storage->txn_rollback;
 };
@@ -93,11 +94,12 @@ subtest 'more call() tests' => sub {
     plan tests => 6;
 
     $schema->storage->txn_begin;
+
     # Temporarily remove any installed plugins data
     Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
-    t::lib::Mocks::mock_config('enable_plugins', 1);
-    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    my $plugins = Koha::Plugins->new( { enable_plugins => 1 } );
     my @plugins;
 
     warning_is { @plugins = $plugins->InstallPlugins; } undef;
@@ -109,22 +111,24 @@ subtest 'more call() tests' => sub {
     # Barcode is multiplied by 2 by Koha::Plugin::Test, and again by 4 by Koha::Plugin::TestItemBarcodeTransform
     # showing that call has passed the same ref to multiple plugins to operate on
     my $bc = 1;
-    warnings_are
-        { Koha::Plugins->call('item_barcode_transform', \$bc); }
-        [ qq{Plugin error (Test Plugin): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 1'\n},
-          qq{Plugin error (Test Plugin for item_barcode_transform): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 2'\n} ];
+    warnings_are { Koha::Plugins->call( 'item_barcode_transform', \$bc ); }
+    [
+        qq{Plugin error (Test Plugin): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 1'\n},
+        qq{Plugin error (Test Plugin for item_barcode_transform): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 2'\n}
+    ];
     is( $bc, 8, "Got expected response" );
 
     my $cn = 'abcd';
-    warnings_are
-        { Koha::Plugins->call('item_barcode_transform', \$bc); }
-        [ qq{Plugin error (Test Plugin): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 8'\n},
-          qq{Plugin error (Test Plugin for item_barcode_transform): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 16'\n} ];
+    warnings_are { Koha::Plugins->call( 'item_barcode_transform', \$bc ); }
+    [
+        qq{Plugin error (Test Plugin): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 8'\n},
+        qq{Plugin error (Test Plugin for item_barcode_transform): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 16'\n}
+    ];
     is( $cn, 'abcd', "Got expected response" );
 
-    t::lib::Mocks::mock_config('enable_plugins', 0);
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
     $bc = 1;
-    Koha::Plugins->call('item_barcode_transform', \$bc);
+    Koha::Plugins->call( 'item_barcode_transform', \$bc );
     is( $bc, 1, "call should return the original arguments if plugins are disabled" );
 
     $schema->storage->txn_rollback;
@@ -166,20 +170,21 @@ subtest 'GetPlugins() tests' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
+
     # Temporarily remove any installed plugins data (FIXME not done)
     Koha::Plugins->RemovePlugins;
 
-    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
+    my $plugins = Koha::Plugins->new( { enable_plugins => 1 } );
 
     warning_is { $plugins->InstallPlugins; } undef;
 
-    my @plugins = $plugins->GetPlugins({ method => 'report', all => 1 });
+    my @plugins = $plugins->GetPlugins( { method => 'report', all => 1 } );
 
     my @names = map { $_->get_metadata()->{'name'} } @plugins;
-    is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
+    is( scalar grep( /^Test Plugin$/, @names ), 1, "Koha::Plugins::GetPlugins functions correctly" );
 
-    @plugins = $plugins->GetPlugins({ metadata => { my_example_tag  => 'find_me' }, all => 1 });
-    @names = map { $_->get_metadata()->{'name'} } @plugins;
+    @plugins = $plugins->GetPlugins( { metadata => { my_example_tag => 'find_me' }, all => 1 } );
+    @names   = map { $_->get_metadata()->{'name'} } @plugins;
     is( scalar @names, 2, "Only two plugins found via a metadata tag" );
 
     $schema->storage->txn_rollback;
@@ -212,7 +217,7 @@ subtest 'is_enabled() tests' => sub {
     # Make sure there's no previous installs or leftovers on DB
     Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
-    my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
+    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
     ok( $plugin->is_enabled, 'Plugins enabled by default' );
 
     # disable
@@ -232,50 +237,66 @@ subtest 'Koha::Plugin::Test' => sub {
 
     warning_is { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); } undef;
 
-    ok( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count, 'Test plugin methods added to database' );
-    is( Koha::Plugins::Methods->search({ plugin_class => 'Koha::Plugin::Test', plugin_method => '_private_sub' })->count, 0, 'Private methods are skipped' );
+    ok(
+        Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count,
+        'Test plugin methods added to database'
+    );
+    is( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test', plugin_method => '_private_sub' } )
+            ->count, 0, 'Private methods are skipped' );
 
-    my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
-    $mock_plugin->mock( 'test_template', sub {
-        my ( $self, $file ) = @_;
-        my $template = $self->get_template({ file => $file });
-        $template->param( filename => $file );
-        return $template->output;
-    });
+    my $mock_plugin = Test::MockModule->new('Koha::Plugin::Test');
+    $mock_plugin->mock(
+        'test_template',
+        sub {
+            my ( $self, $file ) = @_;
+            my $template = $self->get_template( { file => $file } );
+            $template->param( filename => $file );
+            return $template->output;
+        }
+    );
 
     ok( can_load( modules => { "Koha::Plugin::Test" => undef } ), 'Test can_load' );
 
-    my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
+    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
 
-    isa_ok( $plugin, "Koha::Plugin::Test", 'Test plugin class' );
+    isa_ok( $plugin, "Koha::Plugin::Test",  'Test plugin class' );
     isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
 
-    ok( $plugin->can('report'), 'Test plugin can report' );
-    ok( $plugin->can('tool'), 'Test plugin can tool' );
-    ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
-    ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements');
-    ok( $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'), 'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button' );
-    ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
-    ok( $plugin->can('after_hold_create'), 'Test plugin can after_hold_create' );
-    ok( $plugin->can('before_send_messages'), 'Test plugin can before_send_messages' );
+    ok( $plugin->can('report'),                               'Test plugin can report' );
+    ok( $plugin->can('tool'),                                 'Test plugin can tool' );
+    ok( $plugin->can('to_marc'),                              'Test plugin can to_marc' );
+    ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements' );
+    ok(
+        $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'),
+        'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button'
+    );
+    ok( $plugin->can('opac_online_payment'),       'Test plugin can opac_online_payment' );
+    ok( $plugin->can('after_hold_create'),         'Test plugin can after_hold_create' );
+    ok( $plugin->can('before_send_messages'),      'Test plugin can before_send_messages' );
     ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
-    ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
-    ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
-    ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
-    ok( $plugin->can('intranet_head'), 'Test plugin can intranet_head' );
-    ok( $plugin->can('intranet_js'), 'Test plugin can intranet_js' );
-    ok( $plugin->can('item_barcode_transform'), 'Test plugin can barcode_transform' );
-    ok( $plugin->can('configure'), 'Test plugin can configure' );
-    ok( $plugin->can('install'), 'Test plugin can install' );
-    ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );
-    ok( $plugin->can('uninstall'), 'Test plugin can install' );
+    ok( $plugin->can('opac_online_payment_end'),   'Test plugin can opac_online_payment_end' );
+    ok( $plugin->can('opac_head'),                 'Test plugin can opac_head' );
+    ok( $plugin->can('opac_js'),                   'Test plugin can opac_js' );
+    ok( $plugin->can('intranet_head'),             'Test plugin can intranet_head' );
+    ok( $plugin->can('intranet_js'),               'Test plugin can intranet_js' );
+    ok( $plugin->can('item_barcode_transform'),    'Test plugin can barcode_transform' );
+    ok( $plugin->can('configure'),                 'Test plugin can configure' );
+    ok( $plugin->can('install'),                   'Test plugin can install' );
+    ok( $plugin->can('upgrade'),                   'Test plugin can upgrade' );
+    ok( $plugin->can('uninstall'),                 'Test plugin can install' );
 
-    is( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 }), "Koha::Plugin::Test::report", 'Test run plugin report method' );
+    is(
+        Koha::Plugins::Handler->run( { class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 } ),
+        "Koha::Plugin::Test::report", 'Test run plugin report method'
+    );
 
     my $metadata = $plugin->get_metadata();
     is( $metadata->{'name'}, 'Test Plugin', 'Test $plugin->get_metadata()' );
 
-    is( $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
+    is(
+        $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable',
+        'Test $plugin->get_qualified_table_name()'
+    );
     is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
 
     # test absolute path change in get_template with Koha::Plugin::Test
@@ -292,29 +313,29 @@ subtest 'Koha::Plugin::Test' => sub {
     is( ref($result), 'Koha::Plugin::Test' );
 
     # testing GetPlugins
-    my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
-        method => 'report'
-    });
+    my @plugins = Koha::Plugins->new( { enable_plugins => 1 } )->GetPlugins( { method => 'report' } );
 
     my @names = map { $_->get_metadata()->{'name'} } @plugins;
-    is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
-    @plugins =  Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
-        metadata => { my_example_tag  => 'find_me' },
-    });
+    is( scalar grep( /^Test Plugin$/, @names ), 1, "Koha::Plugins::GetPlugins functions correctly" );
+    @plugins = Koha::Plugins->new( { enable_plugins => 1 } )->GetPlugins(
+        {
+            metadata => { my_example_tag => 'find_me' },
+        }
+    );
 
     @names = map { $_->get_metadata()->{'name'} } @plugins;
-    is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
+    is( scalar grep( /^Test Plugin$/, @names ), 1, "GetPlugins also found Test Plugin via a metadata tag" );
 
     $result = $plugin->disable;
     is( ref($result), 'Koha::Plugin::Test' );
 
-    @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins();
-    @names = map { $_->get_metadata()->{'name'} } @plugins;
-    is( scalar grep( /^Test Plugin$/, @names), 0, "GetPlugins does not found disabled Test Plugin" );
+    @plugins = Koha::Plugins->new( { enable_plugins => 1 } )->GetPlugins();
+    @names   = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names ), 0, "GetPlugins does not found disabled Test Plugin" );
 
-    @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({ all => 1 });
-    @names = map { $_->get_metadata()->{'name'} } @plugins;
-    is( scalar grep( /^Test Plugin$/, @names), 1, "With all param, GetPlugins found disabled Test Plugin" );
+    @plugins = Koha::Plugins->new( { enable_plugins => 1 } )->GetPlugins( { all => 1 } );
+    @names   = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names ), 1, "With all param, GetPlugins found disabled Test Plugin" );
 
     $schema->storage->txn_rollback;
 };
@@ -442,12 +463,12 @@ subtest 'output and output_html tests' => sub {
     my $stdout;
     open STDOUT, '>', \$stdout;
 
-    my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
+    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
     $plugin->test_output;
 
-    like($stdout, qr/Cache-control: no-cache/, 'force_no_caching sets Cache-control as desired');
-    like($stdout, qr{Content-Type: application/json; charset=UTF-8}, 'Correct content-type');
-    like($stdout, qr{¡Hola output!}, 'Correct data');
+    like( $stdout, qr/Cache-control: no-cache/, 'force_no_caching sets Cache-control as desired' );
+    like( $stdout, qr{Content-Type: application/json; charset=UTF-8}, 'Correct content-type' );
+    like( $stdout, qr{¡Hola output!},                                 'Correct data' );
 
     # reset the stdout buffer
     $stdout = '';
@@ -456,9 +477,9 @@ subtest 'output and output_html tests' => sub {
 
     $plugin->test_output_html;
 
-    like($stdout, qr/Cache-control: no-cache/, 'force_no_caching sets Cache-control as desired');
-    like($stdout, qr{Content-Type: text/html; charset=UTF-8}, 'Correct content-type');
-    like($stdout, qr{¡Hola output_html!}, 'Correct data');
+    like( $stdout, qr/Cache-control: no-cache/,                'force_no_caching sets Cache-control as desired' );
+    like( $stdout, qr{Content-Type: text/html; charset=UTF-8}, 'Correct content-type' );
+    like( $stdout, qr{¡Hola output_html!},                     'Correct data' );
 };
 
 subtest 'Test _version_compare' => sub {
@@ -468,20 +489,20 @@ subtest 'Test _version_compare' => sub {
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
     is( Koha::Plugins::Base::_version_compare( '1.1.1',    '2.2.2' ), -1, "1.1.1 is less then 2.2.2" );
-    is( Koha::Plugins::Base::_version_compare( '2.2.2',    '1.1.1' ),  1, "1.1.1 is greater then 2.2.2" );
-    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '1.1.1' ),  0, "1.1.1 is equal to 1.1.1" );
-    is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ),  0, "1.01.001 is equal to 1.1.1" );
-    is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ),  0, "1 is equal to 1.0.0" );
-    is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ),  0, "1.0 is equal to 1.0.0" );
+    is( Koha::Plugins::Base::_version_compare( '2.2.2',    '1.1.1' ), 1,  "1.1.1 is greater then 2.2.2" );
+    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '1.1.1' ), 0,  "1.1.1 is equal to 1.1.1" );
+    is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ), 0,  "1.01.001 is equal to 1.1.1" );
+    is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ), 0,  "1 is equal to 1.0.0" );
+    is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ), 0,  "1.0 is equal to 1.0.0" );
 
     # OO tests
     my $plugin = Koha::Plugin::Test->new;
     is( $plugin->_version_compare( '1.1.1',    '2.2.2' ), -1, "1.1.1 is less then 2.2.2" );
-    is( $plugin->_version_compare( '2.2.2',    '1.1.1' ),  1, "1.1.1 is greater then 2.2.2" );
-    is( $plugin->_version_compare( '1.1.1',    '1.1.1' ),  0, "1.1.1 is equal to 1.1.1" );
-    is( $plugin->_version_compare( '1.01.001', '1.1.1' ),  0, "1.01.001 is equal to 1.1.1" );
-    is( $plugin->_version_compare( '1',        '1.0.0' ),  0, "1 is equal to 1.0.0" );
-    is( $plugin->_version_compare( '1.0',      '1.0.0' ),  0, "1.0 is equal to 1.0.0" );
+    is( $plugin->_version_compare( '2.2.2',    '1.1.1' ), 1,  "1.1.1 is greater then 2.2.2" );
+    is( $plugin->_version_compare( '1.1.1',    '1.1.1' ), 0,  "1.1.1 is equal to 1.1.1" );
+    is( $plugin->_version_compare( '1.01.001', '1.1.1' ), 0,  "1.01.001 is equal to 1.1.1" );
+    is( $plugin->_version_compare( '1',        '1.0.0' ), 0,  "1 is equal to 1.0.0" );
+    is( $plugin->_version_compare( '1.0',      '1.0.0' ), 0,  "1.0 is equal to 1.0.0" );
 };
 
 subtest 'bundle_path() tests' => sub {
@@ -490,13 +511,17 @@ subtest 'bundle_path() tests' => sub {
 
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
-    my @current_dir = File::Spec->splitdir(abs_path(__FILE__));
+    my @current_dir = File::Spec->splitdir( abs_path(__FILE__) );
+
     # remote Plugins.t
     pop @current_dir;
+
     # remove /Plugins
     pop @current_dir;
+
     # remove /Koha
     pop @current_dir;
+
     # remove db_dependent
     pop @current_dir;
 
@@ -510,15 +535,16 @@ subtest 'new() tests' => sub {
 
     plan tests => 2;
 
-    t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context->temporary_directory ] );
+    t::lib::Mocks::mock_config( 'pluginsdir',     [ C4::Context->temporary_directory ] );
     t::lib::Mocks::mock_config( 'enable_plugins', 0 );
 
     my $result = Koha::Plugins->new();
     is( $result, undef, 'calling new() on disabled plugins returns undef' );
 
-    $result = Koha::Plugins->new({ enable_plugins => 1 });
+    $result = Koha::Plugins->new( { enable_plugins => 1 } );
     is( ref($result), 'Koha::Plugins', 'calling new with enable_plugins makes it override the config' );
 };
 
 $schema->storage->txn_rollback;
+
 #!/usr/bin/perl

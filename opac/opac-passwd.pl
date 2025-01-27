@@ -30,17 +30,17 @@ use Koha::Patrons;
 use Try::Tiny qw( catch try );
 
 my $query = CGI->new;
-my $op = $query->param('op') || q{};
+my $op    = $query->param('op') || q{};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-passwd.tt",
-        query           => $query,
-        type            => "opac",
+        template_name => "opac-passwd.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron = Koha::Patrons->find($borrowernumber);
 if ( $patron->category->effective_change_password ) {
     if (   $query->param('Oldkey')
         && $query->param('Newkey')
@@ -48,21 +48,20 @@ if ( $patron->category->effective_change_password ) {
     {
         die "op must be set" unless $op eq 'cud-change_password';
         my $error;
-        my $new_password = $query->param('Newkey');
+        my $new_password     = $query->param('Newkey');
         my $confirm_password = $query->param('Confirm');
         if ( C4::Auth::checkpw_hash( scalar $query->param('Oldkey'), $patron->password ) ) {
 
             if ( $new_password ne $confirm_password ) {
-                $template->param( 'Ask_data'       => '1' );
-                $template->param( 'Error_messages' => '1' );
-                $template->param( 'passwords_mismatch'   => '1' );
+                $template->param( 'Ask_data'           => '1' );
+                $template->param( 'Error_messages'     => '1' );
+                $template->param( 'passwords_mismatch' => '1' );
             } else {
                 try {
-                    $patron->set_password({ password => $new_password });
+                    $patron->set_password( { password => $new_password } );
                     $template->param( 'password_updated' => '1' );
                     $template->param( 'borrowernumber'   => $borrowernumber );
-                }
-                catch {
+                } catch {
                     $error = 'password_too_short'
                         if $_->isa('Koha::Exceptions::Password::TooShort');
                     $error = 'password_too_weak'
@@ -71,8 +70,7 @@ if ( $patron->category->effective_change_password ) {
                         if $_->isa('Koha::Exceptions::Password::WhitespaceCharacters');
                 };
             }
-        }
-        else {
+        } else {
             $error = 'WrongPass';
         }
         if ($error) {
@@ -83,17 +81,17 @@ if ( $patron->category->effective_change_password ) {
             );
 
         }
-    }
-    else {
+    } else {
 
         # Called Empty, Ask for data.
         $template->param( 'Ask_data' => '1' );
-        if (!$query->param('Oldkey') && ($query->param('Newkey') || $query->param('Confirm'))){
+        if ( !$query->param('Oldkey') && ( $query->param('Newkey') || $query->param('Confirm') ) ) {
+
             # Old password is empty but one of the others isn't
             $template->param( 'Error_messages' => '1' );
             $template->param( 'WrongPass'      => '1' );
-        }
-        elsif ($query->param('Oldkey') && (!$query->param('Newkey') || !$query->param('Confirm'))){
+        } elsif ( $query->param('Oldkey') && ( !$query->param('Newkey') || !$query->param('Confirm') ) ) {
+
             # Oldpassword is entered but one of the other fields is empty
             $template->param( 'Error_messages' => '1' );
             $template->param( 'PassMismatch'   => '1' );
@@ -105,6 +103,5 @@ $template->param(
     surname    => $patron->surname,
     passwdview => 1,
 );
-
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

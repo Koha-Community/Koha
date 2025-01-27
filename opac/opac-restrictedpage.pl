@@ -20,15 +20,14 @@
 use Modern::Perl;
 
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
-my $localNetwork  = C4::Context->preference('RestrictedPageLocalIPs');
-my $userIP = $ENV{'REMOTE_ADDR'};
+my $localNetwork = C4::Context->preference('RestrictedPageLocalIPs');
+my $userIP       = $ENV{'REMOTE_ADDR'};
 
 my $withinNetwork = 0;
-foreach my $IPRange ( split( ',', $localNetwork ) )
-{
+foreach my $IPRange ( split( ',', $localNetwork ) ) {
     $withinNetwork = ( $userIP =~ /^$IPRange/ );
     last if $withinNetwork;
 }

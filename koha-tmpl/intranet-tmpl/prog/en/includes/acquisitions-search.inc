@@ -56,7 +56,6 @@
                 <i class="fa fa-download" aria-hidden="true"></i> <span class="tab-title">Orders search</span>
             [% END %]
         [% END # /WRAPPER tabs_nav %]
-
     [% END # /WRAPPER tabs %]
 [% END %]
 

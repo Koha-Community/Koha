@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 NAME
 
 uncertainprice.pl
@@ -42,75 +41,81 @@ The bookseller who we want to display the orders of.
 
 =cut
 
-
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 
 use C4::Acquisition qw( SearchOrders GetOrder ModOrder );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Baskets;
 
-my $input=CGI->new;
+my $input = CGI->new;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/uncertainprice.tt",
-			     query => $input,
-			     type => "intranet",
-			     flagsrequired   => { acquisition => 'order_manage' },
-                });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "acqui/uncertainprice.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
+    }
+);
 
 my $booksellerid = $input->param('booksellerid');
 my $basketno     = $input->param('basketno');
-my $op = $input->param('op');
-my $owner = $input->param('owner') || 0 ; # flag to see only "my" orders, or everyone orders
-my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $op           = $input->param('op');
+my $owner        = $input->param('owner') || 0;     # flag to see only "my" orders, or everyone orders
+my $bookseller   = Koha::Acquisition::Booksellers->find($booksellerid);
 
 $template->param( basket => Koha::Acquisition::Baskets->find($basketno) );
 
 #show all orders that have uncertain price for the bookseller
-my $pendingorders = SearchOrders({
-    booksellerid => $booksellerid,
-    owner => $owner,
-    basketno => $basketno,
-    pending => 1,
-});
+my $pendingorders = SearchOrders(
+    {
+        booksellerid => $booksellerid,
+        owner        => $owner,
+        basketno     => $basketno,
+        pending      => 1,
+    }
+);
 my @orders = grep { $_->{'uncertainprice'} } @$pendingorders;
 
 if ( $op eq 'cud-validate' ) {
-    $template->param( validate => 1);
+    $template->param( validate => 1 );
     my $count = scalar(@orders);
-    for (my $i=0; $i < $count; $i++) {
-        my $order = pop(@orders);
+    for ( my $i = 0 ; $i < $count ; $i++ ) {
+        my $order       = pop(@orders);
         my $ordernumber = $order->{ordernumber};
-        next unless ($input->param('qty'.$ordernumber));
-        my $order_as_from_db=GetOrder($order->{ordernumber});
-        $order->{'listprice'} = $input->param('price'.$ordernumber);
-        $order->{'ecost'}= $input->param('price'.$ordernumber) - (($input->param('price'.$ordernumber) /100) * $bookseller->discount);
-        $order->{'rrp'} = $input->param('price'.$ordernumber);
-        $order->{'quantity'}=$input->param('qty'.$ordernumber);
-        $order->{'uncertainprice'}=$input->param('uncertainprice'.$ordernumber);
+        next unless ( $input->param( 'qty' . $ordernumber ) );
+        my $order_as_from_db = GetOrder( $order->{ordernumber} );
+        $order->{'listprice'} = $input->param( 'price' . $ordernumber );
+        $order->{'ecost'}     = $input->param( 'price' . $ordernumber ) -
+            ( ( $input->param( 'price' . $ordernumber ) / 100 ) * $bookseller->discount );
+        $order->{'rrp'}            = $input->param( 'price' . $ordernumber );
+        $order->{'quantity'}       = $input->param( 'qty' . $ordernumber );
+        $order->{'uncertainprice'} = $input->param( 'uncertainprice' . $ordernumber );
         ModOrder($order);
     }
 }
 
-$template->param( uncertainpriceorders => \@orders,
-                                   booksellername => "".$bookseller->name,
-                                   booksellerid => $bookseller->id,
-                                   booksellerpostal =>$bookseller->postal,
-                                   bookselleraddress1 => $bookseller->address1,
-                                   bookselleraddress2 => $bookseller->address2,
-                                   bookselleraddress3 => $bookseller->address3,
-                                   bookselleraddress4 => $bookseller->address4,
-                                   booksellerphone =>$bookseller->phone,
-                                   booksellernotes => $bookseller->notes,
-                                   basketcount   => $bookseller->baskets->count,
-                                   subscriptioncount   => $bookseller->subscriptions->count,
-                                   active => $bookseller->active,
-                                   owner => $owner,
-                                   scriptname => "/cgi-bin/koha/acqui/uncertainprice.pl");
+$template->param(
+    uncertainpriceorders => \@orders,
+    booksellername       => "" . $bookseller->name,
+    booksellerid         => $bookseller->id,
+    booksellerpostal     => $bookseller->postal,
+    bookselleraddress1   => $bookseller->address1,
+    bookselleraddress2   => $bookseller->address2,
+    bookselleraddress3   => $bookseller->address3,
+    bookselleraddress4   => $bookseller->address4,
+    booksellerphone      => $bookseller->phone,
+    booksellernotes      => $bookseller->notes,
+    basketcount          => $bookseller->baskets->count,
+    subscriptioncount    => $bookseller->subscriptions->count,
+    active               => $bookseller->active,
+    owner                => $owner,
+    scriptname           => "/cgi-bin/koha/acqui/uncertainprice.pl"
+);
 $template->{'VARS'}->{'contacts'} = $bookseller->contacts;
 output_html_with_http_headers $input, $cookie, $template->output;

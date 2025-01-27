@@ -51,57 +51,46 @@ if ( $op eq 'cud-update' ) {
     if ( $patron && $patron->password_expiration_date ) {
         if ( $patron->account_locked ) {
             $template->param( error => 'account_locked' );
-        }
-        elsif ( $currentpassword && $newpassword && $confirmpassword ) {
+        } elsif ( $currentpassword && $newpassword && $confirmpassword ) {
             my $error;
             if ( C4::Auth::checkpw_hash( $currentpassword, $patron->password ) ) {
 
                 if ( $newpassword ne $confirmpassword ) {
                     $template->param( 'error' => 'passwords_mismatch' );
-                }
-                elsif ( $currentpassword eq $newpassword ) {
+                } elsif ( $currentpassword eq $newpassword ) {
                     $template->param( 'error' => 'no_change' );
-                }
-                else {
+                } else {
                     try {
                         $patron->set_password( { password => $newpassword } );
                         $template->param( 'password_updated' => '1' );
                         $template->param( 'staff_access'     => 1 )
-                          if $patron->has_permission( { catalogue => 1 } );
-                    }
-                    catch {
+                            if $patron->has_permission( { catalogue => 1 } );
+                    } catch {
                         $error = 'password_too_short'
-                          if $_->isa('Koha::Exceptions::Password::TooShort');
+                            if $_->isa('Koha::Exceptions::Password::TooShort');
                         $error = 'password_too_weak'
-                          if $_->isa('Koha::Exceptions::Password::TooWeak');
+                            if $_->isa('Koha::Exceptions::Password::TooWeak');
                         $error = 'password_has_whitespaces'
-                          if $_->isa(
-                            'Koha::Exceptions::Password::WhitespaceCharacters');
+                            if $_->isa('Koha::Exceptions::Password::WhitespaceCharacters');
                         $template->param( 'error' => $error );
                     };
                 }
-            }
-            else {
+            } else {
                 $template->param( 'error' => 'invalid_credentials' );
-                $patron->update(
-                    { login_attempts => $patron->login_attempts + 1 } )
-                  if !$patron->account_locked;
+                $patron->update( { login_attempts => $patron->login_attempts + 1 } )
+                    if !$patron->account_locked;
             }
-        }
-        else {
+        } else {
             $template->param( 'incomplete_form' => '1' );
         }
-    }
-    elsif ( !$patron ) {
+    } elsif ( !$patron ) {
         template->param( 'error' => 'invalid_credentials' );
-    }
-    elsif ( !$patron->password_expiration_date ) {
+    } elsif ( !$patron->password_expiration_date ) {
         $template->param( 'error' => 'no_expire' );
-    }
-    else {
+    } else {
         $template->param( 'error' => 'unknown' );
     }
 }
 
 output_html_with_http_headers $query, $cookie, $template->output, undef,
-  { force_no_caching => 1 };
+    { force_no_caching => 1 };

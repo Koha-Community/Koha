@@ -24,7 +24,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Members;
@@ -40,18 +40,22 @@ use Koha::Patron::Categories;
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/statistics.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+    {
+        template_name => "members/statistics.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
 my $borrowernumber = $input->param('borrowernumber');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 my $category = $patron->category;
 
@@ -59,38 +63,35 @@ my $category = $patron->category;
 my $fields = C4::Members::Statistics::get_fields();
 our @statistic_column_names = split '\|', $fields;
 our @value_column_names = ( 'count_precedent_state', 'count_total_issues_today', 'count_total_issues_returned_today' );
-our @column_names = ( @statistic_column_names, @value_column_names );
+our @column_names       = ( @statistic_column_names, @value_column_names );
 
 # Get statistics
-my $precedent_state = GetPrecedentStateByBorrower( $borrowernumber );
-my $total_issues_today = GetTotalIssuesTodayByBorrower( $borrowernumber );
-my $total_issues_returned_today = GetTotalIssuesReturnedTodayByBorrower( $borrowernumber );
-my $r = merge (
-    @$precedent_state, @$total_issues_today, @$total_issues_returned_today
-);
+my $precedent_state             = GetPrecedentStateByBorrower($borrowernumber);
+my $total_issues_today          = GetTotalIssuesTodayByBorrower($borrowernumber);
+my $total_issues_returned_today = GetTotalIssuesReturnedTodayByBorrower($borrowernumber);
+my $r                           = merge( @$precedent_state, @$total_issues_today, @$total_issues_returned_today );
 
-add_actual_state( $r );
-my ( $total, $datas ) = build_array( $r );
+add_actual_state($r);
+my ( $total, $datas ) = build_array($r);
 
 # Gettings sums
-my $count_total_precedent_state = $total->{count_precedent_state} || 0;
-my $count_total_issues = $total->{count_total_issues_today} || 0;
+my $count_total_precedent_state = $total->{count_precedent_state}             || 0;
+my $count_total_issues          = $total->{count_total_issues_today}          || 0;
 my $count_total_issues_returned = $total->{count_total_issues_returned_today} || 0;
-my $count_total_actual_state = ($count_total_precedent_state - $count_total_issues_returned + $count_total_issues);
+my $count_total_actual_state    = ( $count_total_precedent_state - $count_total_issues_returned + $count_total_issues );
 
 $template->param(
-    patron             => $patron,
-    statisticsview     => 1,
-    datas              => $datas,
-    column_names       => \@statistic_column_names,
-    count_total_issues => $count_total_issues,
+    patron                      => $patron,
+    statisticsview              => 1,
+    datas                       => $datas,
+    column_names                => \@statistic_column_names,
+    count_total_issues          => $count_total_issues,
     count_total_issues_returned => $count_total_issues_returned,
     count_total_precedent_state => $count_total_precedent_state,
-    count_total_actual_state => $count_total_actual_state,
+    count_total_actual_state    => $count_total_actual_state,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
 
 =head1 FUNCTIONS
 
@@ -102,9 +103,12 @@ output_html_with_http_headers $input, $cookie, $template->output;
 =cut
 
 sub add_actual_state {
-    my ( $array ) = @_;
-    for my $hash ( @$array ) {
-        $hash->{count_actual_state} = ( $hash->{count_precedent_state} // 0 ) - ( $hash->{count_total_issues_returned_today} // 0 ) + ( $hash->{count_total_issues_today} // 0 );
+    my ($array) = @_;
+    for my $hash (@$array) {
+        $hash->{count_actual_state} =
+            ( $hash->{count_precedent_state}             // 0 ) -
+            ( $hash->{count_total_issues_returned_today} // 0 ) +
+            ( $hash->{count_total_issues_today}          // 0 );
     }
 }
 
@@ -140,12 +144,12 @@ sub add_actual_state {
 =cut
 
 sub build_array {
-    my ( $array ) = @_;
+    my ($array) = @_;
     my ( @r, $total );
-    for my $hash ( @$array) {
+    for my $hash (@$array) {
         my @line;
-        for my $cn ( ( @column_names, 'count_actual_state') ) {
-            if ( grep /$cn/, ( @value_column_names, 'count_actual_state') ) {
+        for my $cn ( ( @column_names, 'count_actual_state' ) ) {
+            if ( grep /$cn/, ( @value_column_names, 'count_actual_state' ) ) {
                 $hash->{$cn} //= 0;
                 if ( exists $total->{$cn} ) {
                     $total->{$cn} += $hash->{$cn} if $hash->{$cn};
@@ -195,11 +199,11 @@ sub build_array {
 sub merge {
     my @array = @_;
     my @r;
-    for my $h ( @array ) {
+    for my $h (@array) {
         my $exists = 0;
-        for my $ch ( @r ) {
+        for my $ch (@r) {
             $exists = 1;
-            for my $cn ( @statistic_column_names ) {
+            for my $cn (@statistic_column_names) {
                 if (   ( not defined $ch->{$cn} && defined $h->{$cn} )
                     || ( defined $ch->{$cn} && not defined $h->{$cn} )
                     || ( $ch->{$cn} ne $h->{$cn} ) )
@@ -208,8 +212,8 @@ sub merge {
                     last;
                 }
             }
-            if ($exists){
-                for my $cn ( @value_column_names ) {
+            if ($exists) {
+                for my $cn (@value_column_names) {
                     next if not exists $h->{$cn};
                     $ch->{$cn} = $h->{$cn} ? $h->{$cn} : 0;
                 }
@@ -217,7 +221,7 @@ sub merge {
             }
         }
 
-        if ( not $exists ) {push @r, $h;}
+        if ( not $exists ) { push @r, $h; }
     }
     return \@r;
 }

@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw(-utf8);
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 
 use Koha::Patrons;
@@ -47,8 +47,7 @@ my $op             = $cgi->param('op') // '';
 
 if ( !C4::Context->config('encryption_key') ) {
     $template->param( missing_key => 1 );
-}
-else {
+} else {
 
     my $csrf_pars = {
         session_id => scalar $cgi->cookie('CGISESSID'),
@@ -56,8 +55,7 @@ else {
     };
 
     if ( $op eq 'cud-disable-2FA' ) {
-        my $auth =
-          Koha::Auth::TwoFactorAuth->new( { patron => $logged_in_user } );
+        my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $logged_in_user } );
         $logged_in_user->secret(undef);
         $logged_in_user->auth_method('password')->store;
         if ( $logged_in_user->notice_email_address ) {

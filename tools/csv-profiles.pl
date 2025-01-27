@@ -40,7 +40,7 @@ use Encode;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use Koha::CsvProfiles;
 
 my $input            = CGI->new;
@@ -49,10 +49,11 @@ my $op               = $input->param('op') || 'list';
 my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "tools/csv-profiles.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'manage_csv_profiles' },
+    {
+        template_name => "tools/csv-profiles.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'manage_csv_profiles' },
     }
 );
 
@@ -69,14 +70,14 @@ if ( $op eq 'add_form' ) {
     my $profile     = $input->param("profile");
     my $description = $input->param("description");
     my $type        = $input->param("type");
-    my $used_for    =
-        $type eq "marc"
-      ? $input->param("used_for_marc")
-      : $input->param("used_for_sql");
+    my $used_for =
+          $type eq "marc"
+        ? $input->param("used_for_marc")
+        : $input->param("used_for_sql");
     my $content =
-        $type eq "marc"
-      ? $input->param("marc_content")
-      : $input->param("sql_content");
+          $type eq "marc"
+        ? $input->param("marc_content")
+        : $input->param("sql_content");
     my $csv_separator      = $input->param("csv_separator");
     my $field_separator    = $input->param("field_separator");
     my $subfield_separator = $input->param("subfield_separator");
@@ -105,7 +106,8 @@ if ( $op eq 'add_form' ) {
         }
     } else {
         my $csv_profile = Koha::CsvProfile->new(
-            {   profile            => $profile,
+            {
+                profile            => $profile,
                 description        => $description,
                 content            => $content,
                 csv_separator      => $csv_separator,
@@ -130,7 +132,7 @@ if ( $op eq 'add_form' ) {
     $template->param( csv_profile => $csv_profile, );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
     my $csv_profile = Koha::CsvProfiles->find($export_format_id);
-    my $deleted = eval { $csv_profile->delete; };
+    my $deleted     = eval { $csv_profile->delete; };
 
     if ( $@ or not $deleted ) {
         push @messages, { type => 'error', code => 'error_on_delete' };

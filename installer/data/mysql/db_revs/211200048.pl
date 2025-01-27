@@ -1,13 +1,13 @@
 use Modern::Perl;
 
 return {
-    bug_number => "30291",
+    bug_number  => "30291",
     description => "Renaming recalls table columns",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        if( TableExists( 'recalls' ) and column_exists( 'recalls', 'borrowernumber' ) ) {
+        if ( TableExists('recalls') and column_exists( 'recalls', 'borrowernumber' ) ) {
             $dbh->do(q{ ALTER TABLE recalls CHANGE COLUMN borrowernumber patron_id int(11) NOT NULL DEFAULT 0 });
             $dbh->do(q{ ALTER TABLE recalls CHANGE COLUMN recalldate created_date datetime DEFAULT NULL });
             $dbh->do(q{ ALTER TABLE recalls CHANGE COLUMN biblionumber biblio_id int(11) NOT NULL DEFAULT 0 });

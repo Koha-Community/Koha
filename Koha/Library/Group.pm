@@ -19,7 +19,6 @@ package Koha::Library::Group;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
@@ -55,7 +54,7 @@ sub children {
     my ($self) = @_;
 
     my $children =
-      Koha::Library::Groups->search( { parent_id => $self->id }, { order_by => [ 'title', 'branchcode' ] } );
+        Koha::Library::Groups->search( { parent_id => $self->id }, { order_by => [ 'title', 'branchcode' ] } );
 
     return wantarray ? $children->as_list : $children;
 }
@@ -70,9 +69,8 @@ Return true if the given branchcode library is a child of this group.
 
 sub has_child {
     my ( $self, $branchcode ) = @_;
-    return unless $branchcode; # Does not support group of libraries.
-    return ( grep { $_ and $_ eq $branchcode }
-          $self->children->get_column('branchcode') ) ? 1 : 0;
+    return unless $branchcode;    # Does not support group of libraries.
+    return ( grep { $_ and $_ eq $branchcode } $self->children->get_column('branchcode') ) ? 1 : 0;
 }
 
 =head3 library
@@ -102,7 +100,7 @@ that are *not* direct children of this group.
 =cut
 
 sub libraries {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
     my $invert = $params->{invert};
 
     my $in_or_not = $invert ? '-not_in' : '-in';
@@ -116,12 +114,8 @@ sub libraries {
     )->get_column('branchcode');
 
     return Koha::Libraries->search(
-        {
-            branchcode => { $in_or_not => \@branchcodes }
-        },
-        {
-            order_by => 'branchname'
-        }
+        { branchcode => { $in_or_not => \@branchcodes } },
+        { order_by   => 'branchname' }
     );
 }
 
@@ -138,15 +132,15 @@ sub all_libraries {
 
     my @libraries;
 
-    push (@libraries, $self->libraries->as_list);
-    my @children = $self->children->search({ branchcode => undef })->as_list;
+    push( @libraries, $self->libraries->as_list );
+    my @children = $self->children->search( { branchcode => undef } )->as_list;
     foreach my $c (@children) {
         push( @libraries, $c->all_libraries );
     }
 
     my %seen;
     @libraries =
-      grep { !$seen{ $_->id }++ } @libraries;
+        grep { !$seen{ $_->id }++ } @libraries;
 
     return @libraries;
 }

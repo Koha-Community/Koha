@@ -22,17 +22,17 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use Koha::Checkouts;
 
 my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/checkout-notes.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { circulate => "manage_checkout_notes" },
+        template_name => "circ/checkout-notes.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { circulate => "manage_checkout_notes" },
     }
 );
 
@@ -41,18 +41,21 @@ my $op = $query->param("op") || 'none';
 my @issue_ids = $query->multi_param('issue_ids');
 
 if ( $op eq 'cud-seen' ) {
-    foreach my $issue_id ( @issue_ids ) {
+    foreach my $issue_id (@issue_ids) {
         my $issue = Koha::Checkouts->find($issue_id);
-        $issue->set({ noteseen => 1 })->store;
-                                }
+        $issue->set( { noteseen => 1 } )->store;
+    }
 } elsif ( $op eq 'cud-notseen' ) {
-    foreach my $issue_id ( @issue_ids ) {
+    foreach my $issue_id (@issue_ids) {
         my $issue = Koha::Checkouts->find($issue_id);
-        $issue->set({ noteseen => 0 })->store;
+        $issue->set( { noteseen => 0 } )->store;
     }
 }
 
-my $notes = Koha::Checkouts->search({ 'me.note' => { '!=', undef } }, { prefetch => [ 'patron', { item => 'biblionumber' } ] });
+my $notes = Koha::Checkouts->search(
+    { 'me.note' => { '!=', undef } },
+    { prefetch  => [ 'patron', { item => 'biblionumber' } ] }
+);
 $template->param(
     selected_count => scalar(@issue_ids),
     op             => $op,

@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 
 use Koha::FrameworkPlugin;
@@ -31,7 +31,9 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-my $plugin= Koha::FrameworkPlugin->new( {
-    name => scalar $input->param("plugin_name"),
-});
-$plugin->launch({ cgi => $input });
+my $plugin = Koha::FrameworkPlugin->new(
+    {
+        name => scalar $input->param("plugin_name"),
+    }
+);
+$plugin->launch( { cgi => $input } );

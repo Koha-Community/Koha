@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -45,13 +45,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $library;
-if( $template->{VARS}->{singleBranchMode} ) {
-    $library = Koha::Libraries->search({ public => 1 })->next;
-} elsif( $branchcode ) {
-    $library = Koha::Libraries->search({ branchcode => $branchcode, public => 1 })->next;
+if ( $template->{VARS}->{singleBranchMode} ) {
+    $library = Koha::Libraries->search( { public => 1 } )->next;
+} elsif ($branchcode) {
+    $library = Koha::Libraries->search( { branchcode => $branchcode, public => 1 } )->next;
 }
 
-if( $library ) {
+if ($library) {
     $template->param( library => $library );
 } else {
     my $libraries = Koha::Libraries->search( { public => 1 }, { order_by => ['branchname'] } );

@@ -70,19 +70,19 @@ $SIG{'PIPE'} = 'IGNORE';    # See BZ 35111; added to ignore PIPE error when conn
 my ( $help, @queues );
 
 my $max_processes = $ENV{MAX_PROCESSES};
-$max_processes ||= C4::Context->config('background_jobs_worker')->{max_processes} if C4::Context->config('background_jobs_worker');
+$max_processes ||= C4::Context->config('background_jobs_worker')->{max_processes}
+    if C4::Context->config('background_jobs_worker');
 $max_processes ||= 1;
 my $mq_timeout = $ENV{MQ_TIMEOUT} // 10;
 
 my $not_found_retries = {};
-my $max_retries = $ENV{MAX_RETRIES} || 10;
+my $max_retries       = $ENV{MAX_RETRIES} || 10;
 
 GetOptions(
     'm|max-processes=i' => \$max_processes,
-    'h|help' => \$help,
-    'queue=s' => \@queues,
+    'h|help'            => \$help,
+    'queue=s'           => \@queues,
 ) || pod2usage(1);
-
 
 pod2usage(0) if $help;
 
@@ -99,7 +99,8 @@ try {
 
 my $pm = Parallel::ForkManager->new($max_processes);
 
-if ( $conn ) {
+if ($conn) {
+
     # FIXME cf note in Koha::BackgroundJob about $namespace
     my $namespace = C4::Context->config('memcached_namespace');
     for my $queue (@queues) {
@@ -113,9 +114,10 @@ if ( $conn ) {
     }
 }
 while (1) {
-    if ( $conn ) {
+    if ($conn) {
         my $frame = $conn->receive_frame( { timeout => $mq_timeout } );
         if ( !defined $frame ) {
+
             # timeout or connection issue?
             $pm->reap_finished_children;
             next;    # will reconnect automatically
@@ -123,14 +125,15 @@ while (1) {
 
         my $args = try {
             my $body = $frame->body;
-            decode_json($body); # TODO Should this be from_json? Check utf8 flag.
+            decode_json($body);    # TODO Should this be from_json? Check utf8 flag.
         } catch {
-            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame not processed - %s", $_);
+            Koha::Logger->get( { interface => 'worker' } )->warn( sprintf "Frame not processed - %s", $_ );
             return;
         };
 
-        unless ( $args ) {
-            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame does not have correct args, ignoring it");
+        unless ($args) {
+            Koha::Logger->get( { interface => 'worker' } )
+                ->warn( sprintf "Frame does not have correct args, ignoring it" );
             $conn->nack( { frame => $frame, requeue => 'false' } );
             next;
         }
@@ -173,12 +176,13 @@ while (1) {
         $pm->finish;
 
     } else {
-        my $jobs = Koha::BackgroundJobs->search({ status => 'new', queue => \@queues });
+        my $jobs = Koha::BackgroundJobs->search( { status => 'new', queue => \@queues } );
         while ( my $job = $jobs->next ) {
             my $args = try {
-                $job->json->decode($job->data);
+                $job->json->decode( $job->data );
             } catch {
-                Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Cannot decode data for job id=%s", $job->id);
+                Koha::Logger->get( { interface => 'worker' } )
+                    ->warn( sprintf "Cannot decode data for job id=%s", $job->id );
                 $job->status('failed')->store;
                 return;
             };

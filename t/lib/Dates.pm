@@ -23,7 +23,7 @@ sub compare {
     my ( $got, $expected ) = @_;
     my $dt_got      = dt_from_string($got);
     my $dt_expected = dt_from_string($expected);
-    my $diff = $dt_got->epoch - $dt_expected->epoch;
+    my $diff        = $dt_got->epoch - $dt_expected->epoch;
     if ( abs($diff) <= 5 ) { return 0 }
     return $diff > 0 ? 1 : -1;
 }

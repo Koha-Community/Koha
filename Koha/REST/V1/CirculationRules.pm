@@ -50,7 +50,7 @@ sub list_rules {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $effective       = $c->param('effective') // 1;
+        my $effective = $c->param('effective') // 1;
         my $kinds =
             defined( $c->param('rules') )
             ? [ split /\s*,\s*/, $c->param('rules') ]

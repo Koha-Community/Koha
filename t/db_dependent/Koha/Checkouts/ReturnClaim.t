@@ -35,8 +35,8 @@ subtest "store() tests" => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item      = $builder->build_sample_item;
 
     my $checkout = $builder->build_object(
@@ -50,16 +50,17 @@ subtest "store() tests" => sub {
         }
     );
 
-    throws_ok
-        { Koha::Checkouts::ReturnClaim->new(
+    throws_ok {
+        Koha::Checkouts::ReturnClaim->new(
             {
                 issue_id       => $checkout->id,
                 itemnumber     => $checkout->itemnumber,
                 borrowernumber => $checkout->borrowernumber,
                 notes          => 'Some notes'
             }
-          )->store }
-        'Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy',
+        )->store
+    }
+    'Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy',
         'Exception thrown if no created_by passed on creation';
 
     my $old_checkout = $builder->build_object(
@@ -89,12 +90,12 @@ subtest "store() tests" => sub {
     is( $nullable_created_by->created_by, undef, 'Deletion was deleted' );
     ok( $nullable_created_by->in_storage, 'In storage' );
     is(
-        ref($nullable_created_by->notes('Some other note')->store),
+        ref( $nullable_created_by->notes('Some other note')->store ),
         'Koha::Checkouts::ReturnClaim',
         'Subsequent store succeeds after created_by has been unset'
     );
 
-    is( Koha::Checkouts::ReturnClaims->search({ issue_id => $checkout->id })->count, 0, 'No claims stored' );
+    is( Koha::Checkouts::ReturnClaims->search( { issue_id => $checkout->id } )->count, 0, 'No claims stored' );
 
     my $claim = Koha::Checkouts::ReturnClaim->new(
         {
@@ -106,8 +107,8 @@ subtest "store() tests" => sub {
         }
     )->store;
 
-    is( ref($claim), 'Koha::Checkouts::ReturnClaim', 'Object type is correct' );
-    is( Koha::Checkouts::ReturnClaims->search( { issue_id => $checkout->id } )->count, 1, 'Claim stored on the DB');
+    is( ref($claim), 'Koha::Checkouts::ReturnClaim',                                      'Object type is correct' );
+    is( Koha::Checkouts::ReturnClaims->search( { issue_id => $checkout->id } )->count, 1, 'Claim stored on the DB' );
 
     $schema->storage->txn_rollback;
 };
@@ -119,9 +120,9 @@ subtest "resolve() tests" => sub {
     $schema->storage->txn_begin;
 
     my $itemlost  = 1;
-    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
-    my $item      = $builder->build_sample_item({ itemlost => $itemlost });
+    my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item      = $builder->build_sample_item( { itemlost => $itemlost } );
 
     my $checkout = $builder->build_object(
         {
@@ -144,27 +145,24 @@ subtest "resolve() tests" => sub {
         }
     )->store;
 
-    throws_ok
-        { $claim->resolve({ resolution => 1 }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $claim->resolve( { resolution => 1 } ); }
+    'Koha::Exceptions::MissingParameter',
         "Not passing 'resolved_by' makes it throw an exception";
 
-    throws_ok
-        { $claim->resolve({ resolved_by => 1 }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $claim->resolve( { resolved_by => 1 } ); }
+    'Koha::Exceptions::MissingParameter',
         "Not passing 'resolution' makes it throw an exception";
 
-    my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $deleted_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $deleted_patron_id = $deleted_patron->id;
     $deleted_patron->delete;
 
-    {   # hide useless warnings
+    {    # hide useless warnings
         local *STDERR;
         open STDERR, '>', '/dev/null';
 
-        throws_ok
-            { $claim->resolve({ resolution => "X", resolved_by => $deleted_patron_id }) }
-            'Koha::Exceptions::Object::FKConstraint',
+        throws_ok { $claim->resolve( { resolution => "X", resolved_by => $deleted_patron_id } ) }
+        'Koha::Exceptions::Object::FKConstraint',
             "Exception thrown on invalid resolver";
 
         close STDERR;
@@ -181,7 +179,10 @@ subtest "resolve() tests" => sub {
         }
     )->discard_changes;
 
-    is( output_pref( { str => $claim->resolved_on } ), output_pref( { dt => $tomorrow } ), 'resolved_on set to the passed param' );
+    is(
+        output_pref( { str => $claim->resolved_on } ), output_pref( { dt => $tomorrow } ),
+        'resolved_on set to the passed param'
+    );
     is( $claim->updated_by, $librarian->id, 'updated_by set to the passed resolved_by' );
 
     # Make sure $item is refreshed
@@ -222,7 +223,10 @@ subtest "resolve() tests" => sub {
         }
     )->discard_changes;
 
-    is( output_pref( { str => $claim->resolved_on } ), output_pref( { dt => $tomorrow } ), 'resolved_on set to the passed param' );
+    is(
+        output_pref( { str => $claim->resolved_on } ), output_pref( { dt => $tomorrow } ),
+        'resolved_on set to the passed param'
+    );
     is( $claim->updated_by, $librarian->id, 'updated_by set to the passed resolved_by' );
 
     # Make sure $item is refreshed
@@ -274,10 +278,10 @@ subtest 'item() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item      = $builder->build_sample_item;
-    my $checkout = $builder->build_object(
+    my $checkout  = $builder->build_object(
         {
             class => 'Koha::Checkouts',
             value => {
@@ -299,14 +303,17 @@ subtest 'item() tests' => sub {
     )->store;
 
     my $return_claim_item = $claim->item;
-    is( ref( $return_claim_item ), 'Koha::Item', 'Koha::Checkouts::ReturnClaim->item should return a Koha::Item' );
-    is( $claim->itemnumber, $return_claim_item->itemnumber, 'Koha::Checkouts::ReturnClaim->item should return the correct item' );
+    is( ref($return_claim_item), 'Koha::Item', 'Koha::Checkouts::ReturnClaim->item should return a Koha::Item' );
+    is(
+        $claim->itemnumber, $return_claim_item->itemnumber,
+        'Koha::Checkouts::ReturnClaim->item should return the correct item'
+    );
 
     my $itemnumber = $item->itemnumber;
-    $checkout->delete; # Required to allow deletion of item
+    $checkout->delete;    # Required to allow deletion of item
     $item->delete;
 
-    my $claims = Koha::Checkouts::ReturnClaims->search({ itemnumber => $itemnumber });
+    my $claims = Koha::Checkouts::ReturnClaims->search( { itemnumber => $itemnumber } );
     is( $claims->count, 0, 'Koha::Checkouts::ReturnClaim is deleted on item deletion' );
 
     $schema->storage->txn_rollback;
@@ -318,10 +325,10 @@ subtest 'patron() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item      = $builder->build_sample_item;
-    my $checkout = $builder->build_object(
+    my $checkout  = $builder->build_object(
         {
             class => 'Koha::Checkouts',
             value => {
@@ -343,14 +350,20 @@ subtest 'patron() tests' => sub {
     )->store;
 
     my $return_claim_patron = $claim->patron;
-    is( ref( $return_claim_patron ), 'Koha::Patron', 'Koha::Checkouts::ReturnClaim->patron should return a Koha::Patron' );
-    is( $claim->borrowernumber, $return_claim_patron->borrowernumber, 'Koha::Checkouts::ReturnClaim->patron should return the correct borrower' );
+    is(
+        ref($return_claim_patron), 'Koha::Patron',
+        'Koha::Checkouts::ReturnClaim->patron should return a Koha::Patron'
+    );
+    is(
+        $claim->borrowernumber, $return_claim_patron->borrowernumber,
+        'Koha::Checkouts::ReturnClaim->patron should return the correct borrower'
+    );
 
     my $borrowernumber = $patron->borrowernumber;
-    $checkout->delete; # Required to allow deletion of patron
+    $checkout->delete;    # Required to allow deletion of patron
     $patron->delete;
 
-    my $claims = Koha::Checkouts::ReturnClaims->search({ borrowernumber => $borrowernumber });
+    my $claims = Koha::Checkouts::ReturnClaims->search( { borrowernumber => $borrowernumber } );
     is( $claims->count, 0, 'Koha::Checkouts::ReturnClaim is deleted on borrower deletion' );
 
     $schema->storage->txn_rollback;
@@ -362,9 +375,9 @@ subtest 'old_checkout() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
-    my $item      = $builder->build_sample_item;
+    my $librarian    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron       = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item         = $builder->build_sample_item;
     my $old_checkout = $builder->build_object(
         {
             class => 'Koha::Old::Checkouts',
@@ -387,18 +400,28 @@ subtest 'old_checkout() tests' => sub {
     )->store;
 
     my $return_claim_old_checkout = $claim->old_checkout;
-    is( ref( $return_claim_old_checkout ), 'Koha::Old::Checkout', 'Koha::Checkouts::ReturnClaim->old_checkout should return a Koha::Old::Checkout' );
-    is( $claim->issue_id, $return_claim_old_checkout->issue_id, 'Koha::Checkouts::ReturnClaim->old_checkout should return the correct borrower' );
+    is(
+        ref($return_claim_old_checkout), 'Koha::Old::Checkout',
+        'Koha::Checkouts::ReturnClaim->old_checkout should return a Koha::Old::Checkout'
+    );
+    is(
+        $claim->issue_id, $return_claim_old_checkout->issue_id,
+        'Koha::Checkouts::ReturnClaim->old_checkout should return the correct borrower'
+    );
 
     my $issue_id = $old_checkout->issue_id;
     $old_checkout->delete;
 
-    my $claims = Koha::Checkouts::ReturnClaims->search({ issue_id => $issue_id });
+    my $claims = Koha::Checkouts::ReturnClaims->search( { issue_id => $issue_id } );
     is( $claims->count, 1, 'Koha::Checkouts::ReturnClaim remains on old_checkout deletion' );
+
     # FIXME: Should we actually set null on OldCheckout deletion?
 
     $claim->issue_id(undef)->store;
-    is( $claim->old_checkout, undef, 'Koha::Checkouts::ReturnClaim->old_checkout should return undef if no old_checkout linked' );
+    is(
+        $claim->old_checkout, undef,
+        'Koha::Checkouts::ReturnClaim->old_checkout should return undef if no old_checkout linked'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -409,10 +432,10 @@ subtest 'checkout() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item      = $builder->build_sample_item;
-    my $checkout = $builder->build_object(
+    my $checkout  = $builder->build_object(
         {
             class => 'Koha::Checkouts',
             value => {
@@ -434,13 +457,19 @@ subtest 'checkout() tests' => sub {
     )->store;
 
     my $return_claim_checkout = $claim->checkout;
-    is( ref( $return_claim_checkout ), 'Koha::Checkout', 'Koha::Checkouts::ReturnClaim->checkout should return a Koha::Checkout' );
-    is( $claim->issue_id, $return_claim_checkout->issue_id, 'Koha::Checkouts::ReturnClaim->checkout should return the correct borrower' );
+    is(
+        ref($return_claim_checkout), 'Koha::Checkout',
+        'Koha::Checkouts::ReturnClaim->checkout should return a Koha::Checkout'
+    );
+    is(
+        $claim->issue_id, $return_claim_checkout->issue_id,
+        'Koha::Checkouts::ReturnClaim->checkout should return the correct borrower'
+    );
 
     my $issue_id = $checkout->issue_id;
     $checkout->delete;
 
-    my $claims = Koha::Checkouts::ReturnClaims->search({ issue_id => $issue_id });
+    my $claims = Koha::Checkouts::ReturnClaims->search( { issue_id => $issue_id } );
     is( $claims->count, 1, 'Koha::Checkouts::ReturnClaim remains on checkout deletion' );
 
     $claim->issue_id(undef)->store;

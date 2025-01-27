@@ -19,8 +19,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Biblios;
@@ -38,14 +38,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
-my $imagenumber = $query->param('imagenumber');
-unless ( $biblionumber ) {
+my $imagenumber  = $query->param('imagenumber');
+unless ($biblionumber) {
+
     # Retrieving the biblio from the imagenumber
     my $image = Koha::CoverImages->find($imagenumber);
-    my $item  = Koha::Items->find($image->{itemnumber});
+    my $item  = Koha::Items->find( $image->{itemnumber} );
     $biblionumber = $item->biblionumber;
 }
-my $biblio = Koha::Biblios->find( $biblionumber );
+my $biblio = Koha::Biblios->find($biblionumber);
 
 if ( C4::Context->preference("OPACLocalCoverImages") ) {
     my $images = !$imagenumber ? Koha::Biblios->find($biblionumber)->cover_images->as_list : [];
@@ -53,7 +54,7 @@ if ( C4::Context->preference("OPACLocalCoverImages") ) {
         OPACLocalCoverImages => 1,
         images               => $images,
         biblionumber         => $biblionumber,
-        imagenumber          => (@$images ? $images->[0]->imagenumber : $imagenumber),
+        imagenumber          => ( @$images ? $images->[0]->imagenumber : $imagenumber ),
     );
 }
 

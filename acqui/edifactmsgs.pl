@@ -20,7 +20,7 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
 use Koha::EDI qw( process_invoice );
@@ -28,10 +28,10 @@ use Koha::EDI qw( process_invoice );
 my $q = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
-        template_name   => 'acqui/edifactmsgs.tt',
-        query           => $q,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => 'edi_manage' },
+        template_name => 'acqui/edifactmsgs.tt',
+        query         => $q,
+        type          => 'intranet',
+        flagsrequired => { acquisition => 'edi_manage' },
     }
 );
 
@@ -45,7 +45,7 @@ if ( $cmd && $cmd eq 'cud-delete' ) {
 }
 
 if ( $cmd && $cmd eq 'import' ) {
-    my $id  = $q->param('message_id');
+    my $id      = $q->param('message_id');
     my $invoice = $schema->resultset('EdifactMessage')->find($id);
     process_invoice($invoice);
 }

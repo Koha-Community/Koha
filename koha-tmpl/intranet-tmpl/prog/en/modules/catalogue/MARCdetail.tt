@@ -4,16 +4,17 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( unknownbiblionumber ) %]
-        [% t("Unknown record") | html %]
-    [% ELSE %]
-        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
-        [% tx("MARC details for {title}", { title = title_in_title }) | html %]
-    [% END %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( unknownbiblionumber ) %]
+            [% t("Unknown record") | html %]
+        [% ELSE %]
+            [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+            [% tx("MARC details for {title}", { title = title_in_title }) | html %]
+        [% END %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -46,156 +47,165 @@
 
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
 
-[% INCLUDE 'cat-toolbar.inc' %]
+    [% INCLUDE 'cat-toolbar.inc' %]
 
-[% UNLESS ( popup ) %]
-    <h1>MARC record: [% biblionumber | html %]  ( [% bibliotitle | html %] )</h1>
-[% END %]
-
-    <p><strong>With framework : <select name="Frameworks" id="Frameworks">
-                            <option value="">Default</option>
-                            [% FOREACH framework IN frameworks %]
-                                [% IF framework.frameworkcode == frameworkcode %]
-                                    <option value="[% framework.frameworkcode | html %]" selected="selected">[% framework.frameworktext | html %]</option>
-                                [% ELSE %]
-                                    <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
-                                [% END %]
-                            [% END %]
-            </select> </strong></p>
-[% IF ( ocoins ) %]
-<!-- COinS / OpenURL -->
-<span class="Z3988" title="[% ocoins | html %]"></span>
-[% END %]
-
-
-[% BLOCK show_tab_html %]
-    [% WRAPPER tab_panel tabname="${ tab_id }" %]
-        [% FOREACH tab0X IN tab_data %]
-            <div class="tag">
-            [% IF ( tab0X.tag ) %]
-                <div class="tag_title">
-                    <span class="tag_num">[% tab0X.tag | html %]</span>
-                    [% IF ( tab0X.tag_ind ) %]
-                        <span class="tag_ind1">[% tab0X.tag_ind.substr(0, 1) | html %]</span><span class="tag_ind2">[% tab0X.tag_ind.substr(1, 1) | html %]</span>
-                    [% END %]
-                    [% IF (tab0X.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% tab0X.tag_desc | html %]</span>[% END %]
-                </div>
-            [% END %]
-            [% FOREACH subfiel IN tab0X.subfield %]
-                <p class="subfield_line">
-                    <span class="subfield-label">&nbsp;
-                    [% UNLESS ( subfiel.hide_marc ) %]<span class="subfield-code">[% subfiel.marc_subfield | html %]</span>[% END %]
-                    <span class="desc" title="[% subfiel.long_desc | html %]">[% subfiel.short_desc | html %]</span></span>
-                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>[% ELSE %][% subfiel.marc_value | html %][% END %]
-                    [% IF ( subfiel.link ) %]
-                        <a class="authlink" href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link | uri %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |uri %]">
-                            <i class="fa fa-link" aria-label="Search on [% subfiel.marc_value | html %]" title="Search on [% subfiel.marc_value | html %]"></i>
-                        </a>
-                    [% END %]
-                    [% IF ( subfiel.authority ) %]
-                        <a class="authlink" href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | uri %]">
-                            <i class="fa fa-search" area-label="View authority record" title="View authority record"></i>
-                        </a>
-                    [% END %]
-                </p>
-            [% END %]
-            </div> <!-- class='tag' -->
-        [% END %]
-    [% END # /tab_panel#tab${tab_id} %]
-[% END %]
-
-                [% WRAPPER tabs id= "bibliotabs" %]
-                    [% WRAPPER tabs_nav %]
-                        [% IF ( tab0XX ) %]
-                            [% WRAPPER tab_item tabname= "tab0XX" %] &#48; [% END %]
-                        [% END %]
-                        [% IF ( tab1XX ) %]
-                            [% WRAPPER tab_item tabname= "tab1XX" %] 1 [% END %]
-                        [% END %]
-                        [% IF ( tab2XX ) %]
-                            [% WRAPPER tab_item tabname= "tab2XX" %] 2 [% END %]
-                        [% END %]
-                        [% IF ( tab3XX ) %]
-                            [% WRAPPER tab_item tabname= "tab3XX" %] 3 [% END %]
-                        [% END %]
-                        [% IF ( tab4XX ) %]
-                            [% WRAPPER tab_item tabname= "tab4XX" %] 4 [% END %]
-                        [% END %]
-                        [% IF ( tab5XX ) %]
-                            [% WRAPPER tab_item tabname= "tab5XX" %] 5 [% END %]
-                        [% END %]
-                        [% IF ( tab6XX ) %]
-                            [% WRAPPER tab_item tabname= "tab6XX" %] 6 [% END %]
-                        [% END %]
-                        [% IF ( tab7XX ) %]
-                            [% WRAPPER tab_item tabname= "tab7XX" %] 7 [% END %]
-                        [% END %]
-                        [% IF ( tab8XX ) %]
-                            [% WRAPPER tab_item tabname= "tab8XX" %] 8 [% END %]
-                        [% END %]
-                        [% IF ( tab9XX ) %]
-                            [% WRAPPER tab_item tabname= "tab9XX" %] 9 [% END %]
-                        [% END %]
-                        [% IF ( tab10XX ) %]
-                            [% WRAPPER tab_item tabname= "tab10XX" %] <span>Item(s)</span> [% END %]
-                        [% END %]
-                    [% END # /WRAPPER tabs_nav %]
-
-                    [% WRAPPER tab_panels %]
-                        [% PROCESS show_tab_html tab_id="tab0XX" tab_data=tab0XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab1XX" tab_data=tab1XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab2XX" tab_data=tab2XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab3XX" tab_data=tab3XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab4XX" tab_data=tab4XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab5XX" tab_data=tab5XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab6XX" tab_data=tab6XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab7XX" tab_data=tab7XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab8XX" tab_data=tab8XX %]
-
-                        [% PROCESS show_tab_html tab_id="tab9XX" tab_data=tab9XX %]
-
-                        [% IF ( tab10XX ) %]
-                            [% WRAPPER tab_panel tabname="tab10XX" %]
-                                <table>
-                                        <tr>
-                                            [% FOREACH header IN item_header_loop %]
-                                                <th>[% header | html %]</th>
-                                            [% END %]
-                                        </tr>
-                                        [% FOREACH item IN item_loop %]
-                                            <tr>
-                                                [% FOREACH sf_code IN item_subfield_codes %]
-                                                    <td>[% item.$sf_code | $raw %]</td>
-                                                [% END %]
-                                            </tr>
-                                        [% END %]
-                                </table>
-                            [% END # /tab_panel#tab10XX %]
-                        [% END # /IF tab10XX %]
-                    [% END # /tab_panels %]
-                [% END # /WRAPPER tabs %]
-
-[% END %]
-
-    [% IF ( Koha.Preference('CatalogConcerns') ) %]
-    [% INCLUDE 'modals/add_catalog_concern.inc' %]
+    [% UNLESS ( popup ) %]
+        <h1>MARC record: [% biblionumber | html %] ( [% bibliotitle | html %] )</h1>
     [% END %]
+
+    <p
+        ><strong
+            >With framework :
+            <select name="Frameworks" id="Frameworks">
+                <option value="">Default</option>
+                [% FOREACH framework IN frameworks %]
+                    [% IF framework.frameworkcode == frameworkcode %]
+                        <option value="[% framework.frameworkcode | html %]" selected="selected">[% framework.frameworktext | html %]</option>
+                    [% ELSE %]
+                        <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
+                    [% END %]
+                [% END %]
+            </select>
+        </strong></p
+    >
+    [% IF ( ocoins ) %]
+        <!-- COinS / OpenURL -->
+        <span class="Z3988" title="[% ocoins | html %]"></span>
+    [% END %]
+
+    [% BLOCK show_tab_html %]
+        [% WRAPPER tab_panel tabname="${ tab_id }" %]
+            [% FOREACH tab0X IN tab_data %]
+                <div class="tag">
+                    [% IF ( tab0X.tag ) %]
+                        <div class="tag_title">
+                            <span class="tag_num">[% tab0X.tag | html %]</span>
+                            [% IF ( tab0X.tag_ind ) %]
+                                <span class="tag_ind1">[% tab0X.tag_ind.substr(0, 1) | html %]</span><span class="tag_ind2">[% tab0X.tag_ind.substr(1, 1) | html %]</span>
+                            [% END %]
+                            [% IF (tab0X.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% tab0X.tag_desc | html %]</span>[% END %]
+                        </div>
+                    [% END %]
+                    [% FOREACH subfiel IN tab0X.subfield %]
+                        <p class="subfield_line">
+                            <span class="subfield-label"
+                                >&nbsp; [% UNLESS ( subfiel.hide_marc ) %]<span class="subfield-code">[% subfiel.marc_subfield | html %]</span>[% END %]
+                                <span class="desc" title="[% subfiel.long_desc | html %]">[% subfiel.short_desc | html %]</span></span
+                            >
+                            [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>[% ELSE %][% subfiel.marc_value | html %][% END %]
+                            [% IF ( subfiel.link ) %]
+                                <a class="authlink" href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link | uri %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |uri %]">
+                                    <i class="fa fa-link" aria-label="Search on [% subfiel.marc_value | html %]" title="Search on [% subfiel.marc_value | html %]"></i>
+                                </a>
+                            [% END %]
+                            [% IF ( subfiel.authority ) %]
+                                <a class="authlink" href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | uri %]">
+                                    <i class="fa fa-search" area-label="View authority record" title="View authority record"></i>
+                                </a>
+                            [% END %]
+                        </p>
+                    [% END %]
+                </div>
+                <!-- class='tag' -->
+            [% END %]
+        [% END # /tab_panel#tab${tab_id} %]
+    [% END %]
+
+    [% WRAPPER tabs id= "bibliotabs" %]
+        [% WRAPPER tabs_nav %]
+            [% IF ( tab0XX ) %]
+                [% WRAPPER tab_item tabname= "tab0XX" %]&#48;[% END %]
+            [% END %]
+            [% IF ( tab1XX ) %]
+                [% WRAPPER tab_item tabname= "tab1XX" %]1[% END %]
+            [% END %]
+            [% IF ( tab2XX ) %]
+                [% WRAPPER tab_item tabname= "tab2XX" %]2[% END %]
+            [% END %]
+            [% IF ( tab3XX ) %]
+                [% WRAPPER tab_item tabname= "tab3XX" %]3[% END %]
+            [% END %]
+            [% IF ( tab4XX ) %]
+                [% WRAPPER tab_item tabname= "tab4XX" %]4[% END %]
+            [% END %]
+            [% IF ( tab5XX ) %]
+                [% WRAPPER tab_item tabname= "tab5XX" %]5[% END %]
+            [% END %]
+            [% IF ( tab6XX ) %]
+                [% WRAPPER tab_item tabname= "tab6XX" %]6[% END %]
+            [% END %]
+            [% IF ( tab7XX ) %]
+                [% WRAPPER tab_item tabname= "tab7XX" %]7[% END %]
+            [% END %]
+            [% IF ( tab8XX ) %]
+                [% WRAPPER tab_item tabname= "tab8XX" %]8[% END %]
+            [% END %]
+            [% IF ( tab9XX ) %]
+                [% WRAPPER tab_item tabname= "tab9XX" %]9[% END %]
+            [% END %]
+            [% IF ( tab10XX ) %]
+                [% WRAPPER tab_item tabname= "tab10XX" %]<span>Item(s)</span>[% END %]
+            [% END %]
+        [% END # /WRAPPER tabs_nav %]
+
+        [% WRAPPER tab_panels %]
+            [% PROCESS show_tab_html tab_id="tab0XX" tab_data=tab0XX %]
+
+            [% PROCESS show_tab_html tab_id="tab1XX" tab_data=tab1XX %]
+
+            [% PROCESS show_tab_html tab_id="tab2XX" tab_data=tab2XX %]
+
+            [% PROCESS show_tab_html tab_id="tab3XX" tab_data=tab3XX %]
+
+            [% PROCESS show_tab_html tab_id="tab4XX" tab_data=tab4XX %]
+
+            [% PROCESS show_tab_html tab_id="tab5XX" tab_data=tab5XX %]
+
+            [% PROCESS show_tab_html tab_id="tab6XX" tab_data=tab6XX %]
+
+            [% PROCESS show_tab_html tab_id="tab7XX" tab_data=tab7XX %]
+
+            [% PROCESS show_tab_html tab_id="tab8XX" tab_data=tab8XX %]
+
+            [% PROCESS show_tab_html tab_id="tab9XX" tab_data=tab9XX %]
+
+            [% IF ( tab10XX ) %]
+                [% WRAPPER tab_panel tabname="tab10XX" %]
+                    <table>
+                        <tr>
+                            [% FOREACH header IN item_header_loop %]
+                                <th>[% header | html %]</th>
+                            [% END %]
+                        </tr>
+                        [% FOREACH item IN item_loop %]
+                            <tr>
+                                [% FOREACH sf_code IN item_subfield_codes %]
+                                    <td>[% item.$sf_code | $raw %]</td>
+                                [% END %]
+                            </tr>
+                        [% END %]
+                    </table>
+                [% END # /tab_panel#tab10XX %]
+            [% END # /IF tab10XX %]
+        [% END # /tab_panels %]
+    [% END # /WRAPPER tabs %]
+[% END %]
+
+[% IF ( Koha.Preference('CatalogConcerns') ) %]
+    [% INCLUDE 'modals/add_catalog_concern.inc' %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
-    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+    </script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+    </script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]

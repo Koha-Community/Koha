@@ -1,4 +1,5 @@
 package Koha::SuggestionEngine::Plugin::LibrisSpellcheck;
+
 # Copyright (C) 2015 Eivin Giske Skaaren
 #
 # This file is part of Koha.
@@ -27,34 +28,35 @@ sub NAME {
 }
 
 sub get_suggestions {
-    my ($self, $query) = @_;
-    my $key = C4::Context->preference('LibrisKey');
-    my $base = C4::Context->preference('LibrisURL');
-    my $search = $query->{'search'};
-    my $response = LWP::UserAgent->new->get($base."spell?query={$search}&key=$key");
-    my $xml = XMLin($response->content, NoAttr => 1, ForceArray => qr/term/);
+    my ( $self, $query ) = @_;
+    my $key      = C4::Context->preference('LibrisKey');
+    my $base     = C4::Context->preference('LibrisURL');
+    my $search   = $query->{'search'};
+    my $response = LWP::UserAgent->new->get( $base . "spell?query={$search}&key=$key" );
+    my $xml      = XMLin( $response->content, NoAttr => 1, ForceArray => qr/term/ );
 
     my @terms;
     my $label;
 
-    if ($xml->{suggestion}->{term}) {
-        for (@{$xml->{suggestion}->{term}}) {
+    if ( $xml->{suggestion}->{term} ) {
+        for ( @{ $xml->{suggestion}->{term} } ) {
             push @terms, $_;
         }
-        $label = join(' ', @terms);
+        $label = join( ' ', @terms );
     } else {
-        return; # No result from LIBRIS
+        return;    # No result from LIBRIS
     }
 
     my @results;
     push @results,
-    {
-        'search'  => $label,  #$thissearch,
+        {
+        'search'  => $label,    #$thissearch,
         relevance => 100,
-            # FIXME: it'd be nice to have some empirical measure of
-            #        "relevance" in this case, but we don't.
+
+        # FIXME: it'd be nice to have some empirical measure of
+        #        "relevance" in this case, but we don't.
         label => $label
-    };
+        };
     return \@results;
 }
 

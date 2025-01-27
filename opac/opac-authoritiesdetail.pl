@@ -38,13 +38,13 @@ parameters tables.
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw( GetMarcUrls );
 use C4::Context;
 use C4::Languages;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output          qw( output_html_with_http_headers );
 use C4::AuthoritiesMarc qw( GetAuthority BuildSummary GetTagsLabels GenerateHierarchy );
-use CGI qw ( -utf8 );
+use CGI                 qw ( -utf8 );
 use C4::Koha;
 
 use Koha::Authorities;
@@ -57,7 +57,7 @@ my $dbh = C4::Context->dbh;
 
 my $display_hierarchy = C4::Context->preference("AuthDisplayHierarchy");
 my $marcflavour       = C4::Context->preference("marcflavour");
-my $show_marc = $query->param('marc');
+my $show_marc         = $query->param('marc');
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -71,24 +71,24 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $authid = $query->param('authid');
 $authid = int($authid);
-my $record = GetAuthority( $authid );
-if ( ! $record ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+my $record = GetAuthority($authid);
+if ( !$record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
     exit;
 }
 
-my $authority = Koha::Authorities->find( $authid );
+my $authority    = Koha::Authorities->find($authid);
 my $authtypecode = $authority ? $authority->authtypecode : q{};
 
-if ($display_hierarchy){
+if ($display_hierarchy) {
     $template->{VARS}->{'displayhierarchy'} = $display_hierarchy;
-    $template->{VARS}->{'loophierarchies'} = GenerateHierarchy($authid);
+    $template->{VARS}->{'loophierarchies'}  = GenerateHierarchy($authid);
 }
 
 my $count = $authority ? $authority->get_usage_count : 0;
 
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
-my $marcurlsarray = GetMarcUrls( $record, $marcflavour );
+my $marcurlsarray   = GetMarcUrls( $record, $marcflavour );
 
 $template->param(
     authority_types => $authority_types,
@@ -101,10 +101,7 @@ $template->param(
 # find the marc field/subfield used in biblio by this authority
 if ($show_marc) {
     my $tagslib = GetTagsLabels( 0, $authtypecode );
-    my $sth =
-        $dbh->prepare(
-                "select distinct tagfield from marc_subfield_structure where authtypecode=?"
-                );
+    my $sth     = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
     $sth->execute($authtypecode);
     my $biblio_fields;
     while ( my ($tagfield) = $sth->fetchrow ) {
@@ -112,56 +109,55 @@ if ($show_marc) {
     }
     chop $biblio_fields;
 
-# fill arrays
+    # fill arrays
     my @loop_data = ();
 
-# loop through each tag
-    my @fields    = $record->fields();
+    # loop through each tag
+    my @fields = $record->fields();
     foreach my $field (@fields) {
         my @subfields_data;
 
-# skip UNIMARC fields <200, they are useless for a patron
-        next if $marcflavour eq 'UNIMARC' && $field->tag() <200;
+        # skip UNIMARC fields <200, they are useless for a patron
+        next if $marcflavour eq 'UNIMARC' && $field->tag() < 200;
 
-# if tag <10, there's no subfield, use the "@" trick
+        # if tag <10, there's no subfield, use the "@" trick
         if ( $field->tag() < 10 ) {
             next if ( $tagslib->{ $field->tag() }->{'@'}->{hidden} );
             my %subfield_data;
-            $subfield_data{marc_lib}   = $tagslib->{ $field->tag() }->{'@'}->{lib};
-            $subfield_data{marc_value} = $field->data();
+            $subfield_data{marc_lib}      = $tagslib->{ $field->tag() }->{'@'}->{lib};
+            $subfield_data{marc_value}    = $field->data();
             $subfield_data{marc_subfield} = '@';
             $subfield_data{marc_tag}      = $field->tag();
             push( @subfields_data, \%subfield_data );
-        }
-        elsif ( $marcflavour eq 'MARC21' && $field->tag() eq 667 ) {
+        } elsif ( $marcflavour eq 'MARC21' && $field->tag() eq 667 ) {
+
             # tagfield 667 is a nonpublic general note in MARC21, which shouldn't be shown in the OPAC
-        }
-        else {
+        } else {
             my @subf = $field->subfields;
 
-# loop through each subfield
+            # loop through each subfield
             for my $i ( 0 .. $#subf ) {
                 $subf[$i][0] = "@" unless defined $subf[$i][0];
                 next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} );
-# skip useless subfields (for patrons)
+
+                # skip useless subfields (for patrons)
                 next if $subf[$i][0] =~ /7|8|9/;
                 my %subfield_data;
                 $subfield_data{marc_lib} =
                     $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
                 $subfield_data{marc_subfield} = $subf[$i][0];
                 $subfield_data{marc_tag}      = $field->tag();
-                $subfield_data{isurl} =  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{isurl};
-                $subfield_data{marc_value} = $subf[$i][1];
+                $subfield_data{isurl}         = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{isurl};
+                $subfield_data{marc_value}    = $subf[$i][1];
                 push( @subfields_data, \%subfield_data );
             }
         }
         if ( $#subfields_data >= 0 ) {
             my %tag_data;
             $tag_data{tag} =
-                $field->tag()
-                . ' '
-                . C4::Koha::display_marc_indicators($field)
-                . ' - ' . $tagslib->{ $field->tag() }->{lib};
+                  $field->tag() . ' '
+                . C4::Koha::display_marc_indicators($field) . ' - '
+                . $tagslib->{ $field->tag() }->{lib};
             $tag_data{subfield} = \@subfields_data;
             push( @loop_data, \%tag_data );
         }
@@ -179,19 +175,19 @@ if ($show_marc) {
         $xsl =~ s/\{langcode\}/$lang/g;
         $xsl =~ s/\{authtypecode\}/$authtypecode/g;
         my $xslt_engine = Koha::XSLT::Base->new;
-        my $output = $xslt_engine->transform({ xml => $authority->marcxml, file => $xsl });
-        if ($xslt_engine->err) {
+        my $output      = $xslt_engine->transform( { xml => $authority->marcxml, file => $xsl } );
+        if ( $xslt_engine->err ) {
             warn "XSL transformation failed ($xsl): " . $xslt_engine->err;
             next;
         }
-        $template->param(html => $output);
+        $template->param( html => $output );
     } else {
-        my $summary = BuildSummary($record, $authid, $authtypecode);
-        $template->param(summary => $summary);
+        my $summary = BuildSummary( $record, $authid, $authtypecode );
+        $template->param( summary => $summary );
     }
 
     if ( C4::Context->preference('OPACAuthorIdentifiersAndInformation') ) {
-        my $authority = Koha::Authorities->find($authid);
+        my $authority   = Koha::Authorities->find($authid);
         my $information = $authority->get_identifiers_and_information;
         $template->param( author_information => $information );
     }

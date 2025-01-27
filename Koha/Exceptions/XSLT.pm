@@ -24,11 +24,11 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::XSLT::MissingFilename' => {
-        isa => 'Koha::Exceptions::XSLT',
+        isa         => 'Koha::Exceptions::XSLT',
         description => 'File name required',
     },
     'Koha::Exceptions::XSLT::FetchFailed' => {
-        isa => 'Koha::Exceptions::XSLT',
+        isa         => 'Koha::Exceptions::XSLT',
         description => 'Fetching xslt file failed',
     },
 );

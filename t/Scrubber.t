@@ -13,17 +13,17 @@ BEGIN {
 }
 
 sub pretty_line {
-	my $max = 54;
-	(@_) or return "#" x $max . "\n";
-	my $phrase = "  " . shift() . "  ";
-	my $half = "#" x (($max - length($phrase))/2);
-	return $half . $phrase . $half . "\n";
+    my $max = 54;
+    (@_) or return "#" x $max . "\n";
+    my $phrase = "  " . shift() . "  ";
+    my $half   = "#" x ( ( $max - length($phrase) ) / 2 );
+    return $half . $phrase . $half . "\n";
 }
 
-my ($scrubber,$html,$result,@types,$collapse);
+my ( $scrubber, $html, $result, @types, $collapse );
 $collapse = 1;
-@types = qw(default comment tag staff);
-$html = q|
+@types    = qw(default comment tag staff);
+$html     = q|
 <![CDATA[selfdestruct]]&#x5d;>
 <?php  echo(" EVIL EVIL EVIL "); ?>    <!-- COMMENT -->
 <hr> <!-- TMPL_VAR NAME="password" -->
@@ -45,38 +45,38 @@ $html = q|
 At the end here, I actually have some regular text.
 |;
 
-ok($scrubber = C4::Scrubber->new(), "Constructor: C4::Scrubber->new()");
+ok( $scrubber = C4::Scrubber->new(), "Constructor: C4::Scrubber->new()" );
 
-isa_ok($scrubber, 'HTML::Scrubber', 'Constructor returns HTML::Scrubber object');
+isa_ok( $scrubber, 'HTML::Scrubber', 'Constructor returns HTML::Scrubber object' );
 
 warning_like { $scrubber->default() } '', "\$scrubber->default ran without fault.";
 warning_like { $scrubber->comment() } '', "\$scrubber->comment ran without fault.";
 warning_like { $scrubber->process() } '', "\$scrubber->process ran without fault.";
 
-ok($result = $scrubber->scrub($html), "Getting scrubbed text (type: [default])");
+ok( $result = $scrubber->scrub($html), "Getting scrubbed text (type: [default])" );
 
-foreach(@types) {
-	ok($scrubber = C4::Scrubber->new($_), "testing Constructor: C4::Scrubber->new($_)");
+foreach (@types) {
+    ok( $scrubber = C4::Scrubber->new($_), "testing Constructor: C4::Scrubber->new($_)" );
 
-        warning_like { $scrubber->default() } '', "\$scrubber->default ran without fault.";
-        warning_like { $scrubber->comment() } '', "\$scrubber->comment ran without fault.";
-        warning_like { $scrubber->process() } '', "\$scrubber->process ran without fault.";
+    warning_like { $scrubber->default() } '', "\$scrubber->default ran without fault.";
+    warning_like { $scrubber->comment() } '', "\$scrubber->comment ran without fault.";
+    warning_like { $scrubber->process() } '', "\$scrubber->process ran without fault.";
 
-	ok($result = $scrubber->scrub($html), "Getting scrubbed text (type: $_)");
+    ok( $result = $scrubber->scrub($html), "Getting scrubbed text (type: $_)" );
 }
 
 #Test for invalid new entry
-eval{
-	C4::Scrubber->new("");
-	fail("test should fail on entry of ''");
+eval {
+    C4::Scrubber->new("");
+    fail("test should fail on entry of ''");
 };
 if ($@) {
     pass("Test should have failed on entry of '' (empty string) and it did. YAY!");
 }
 
-eval{
-	C4::Scrubber->new("Client");
-	fail("test should fail on entry of 'Client'");
+eval {
+    C4::Scrubber->new("Client");
+    fail("test should fail on entry of 'Client'");
 };
 if ($@) {
     pass("Test should have failed on entry of 'Client' and it did. YAY!");

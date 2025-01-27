@@ -25,7 +25,7 @@ use t::lib::TestBuilder;
 
 use Koha::Database;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'ModBiblio() + holds_queue update tests' => sub {
@@ -39,22 +39,25 @@ subtest 'ModBiblio() + holds_queue update tests' => sub {
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $mock->mock( 'enqueue', sub {
-        my ( $self, $args ) = @_;
-        my ($package, $filename, $line) = caller;
-        is_deeply(
-            $args->{biblio_ids},
-            [ $biblio->id ],
-            'ModBiblio triggers a holds queue update for the related biblio'
-        );
-    } );
+    $mock->mock(
+        'enqueue',
+        sub {
+            my ( $self, $args ) = @_;
+            my ( $package, $filename, $line ) = caller;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                'ModBiblio triggers a holds queue update for the related biblio'
+            );
+        }
+    );
 
     # add a hold
     $builder->build_object(
         {
             class => 'Koha::Holds',
             value => {
-                biblionumber   => $biblio->id,
+                biblionumber => $biblio->id,
             }
         }
     );
@@ -99,21 +102,24 @@ subtest 'DelBiblio + holds_queue update tests' => sub {
     my $biblio = $builder->build_sample_biblio;
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $mock->mock( 'enqueue', sub {
-        my ( $self, $args ) = @_;
-        is_deeply(
-            $args->{biblio_ids},
-            [ $biblio->id ],
-            'DelBiblio triggers a holds queue update for the related biblio'
-        );
-    } );
+    $mock->mock(
+        'enqueue',
+        sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                'DelBiblio triggers a holds queue update for the related biblio'
+            );
+        }
+    );
 
     # add a hold
     $builder->build_object(
         {
             class => 'Koha::Holds',
             value => {
-                biblionumber   => $biblio->id,
+                biblionumber => $biblio->id,
             }
         }
     );

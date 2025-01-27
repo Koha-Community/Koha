@@ -1,11 +1,12 @@
 use Modern::Perl;
 
 return {
-    bug_number => "33489",
+    bug_number  => "33489",
     description => "Add indices to default patron search fields",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
+
         # Do you stuffs here
         unless ( index_exists( 'borrowers', 'cardnumber_idx' ) ) {
             $dbh->do(q{CREATE INDEX cardnumber_idx ON borrowers ( cardnumber )});

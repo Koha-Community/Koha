@@ -42,29 +42,37 @@ subtest 'Test Koha::Patron::MessagePreference::Transports' => sub {
 
     $schema->storage->txn_begin;
 
-    my $attribute = $builder->build_object({ class => 'Koha::Patron::MessagePreference::Attributes' });
-    my $mtt       = $builder->build_object({ class => 'Koha::Patron::MessagePreference::Transport::Types' });
-    my $letter    = build_a_test_letter({
-        mtt => $mtt->message_transport_type
-    });
+    my $attribute = $builder->build_object( { class => 'Koha::Patron::MessagePreference::Attributes' } );
+    my $mtt       = $builder->build_object( { class => 'Koha::Patron::MessagePreference::Transport::Types' } );
+    my $letter    = build_a_test_letter( { mtt => $mtt->message_transport_type } );
 
-    my $transport = Koha::Patron::MessagePreference::Transport->new({
-        message_attribute_id   => $attribute->message_attribute_id,
-        message_transport_type => $mtt->message_transport_type,
-        is_digest              => 0,
-        letter_module          => $letter->module,
-        letter_code            => $letter->code,
-    })->store;
+    my $transport = Koha::Patron::MessagePreference::Transport->new(
+        {
+            message_attribute_id   => $attribute->message_attribute_id,
+            message_transport_type => $mtt->message_transport_type,
+            is_digest              => 0,
+            letter_module          => $letter->module,
+            letter_code            => $letter->code,
+        }
+    )->store;
 
-    is($transport->message_attribute_id, $attribute->message_attribute_id,
-       'Added a new messaging transport.');
+    is(
+        $transport->message_attribute_id, $attribute->message_attribute_id,
+        'Added a new messaging transport.'
+    );
 
     $transport->delete;
-    is(Koha::Patron::MessagePreference::Transports->search({
-        message_attribute_id => $attribute->message_attribute_id,
-        message_transport_type => $mtt->message_transport_type,
-        is_digest => 0
-    })->count, 0, 'Deleted the messaging transport.');
+    is(
+        Koha::Patron::MessagePreference::Transports->search(
+            {
+                message_attribute_id   => $attribute->message_attribute_id,
+                message_transport_type => $mtt->message_transport_type,
+                is_digest              => 0
+            }
+        )->count,
+        0,
+        'Deleted the messaging transport.'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -72,23 +80,26 @@ subtest 'Test Koha::Patron::MessagePreference::Transports' => sub {
 sub build_a_test_letter {
     my ($params) = @_;
 
-    my $mtt = $params->{mtt} ? $params->{mtt} : 'email';
-    my $branchcode     = $builder->build({
-        source => 'Branch' })->{branchcode};
-    my $letter = $builder->build({
-        source => 'Letter',
-        value => {
-            branchcode => '',
-            is_html => 0,
-            message_transport_type => $mtt
+    my $mtt        = $params->{mtt} ? $params->{mtt} : 'email';
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $letter     = $builder->build(
+        {
+            source => 'Letter',
+            value  => {
+                branchcode             => '',
+                is_html                => 0,
+                message_transport_type => $mtt
+            }
         }
-    });
+    );
 
-    return Koha::Notice::Templates->find({
-        module => $letter->{module},
-        code   => $letter->{code},
-        branchcode => $letter->{branchcode},
-    });
+    return Koha::Notice::Templates->find(
+        {
+            module     => $letter->{module},
+            code       => $letter->{code},
+            branchcode => $letter->{branchcode},
+        }
+    );
 }
 
 1;

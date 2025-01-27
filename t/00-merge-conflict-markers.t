@@ -23,30 +23,37 @@ use File::Find;
 use IO::File;
 
 my @failures;
-find({
-    bydepth => 1,
-    no_chdir => 1,
-    wanted => sub {
-        my $file = $_;
+find(
+    {
+        bydepth  => 1,
+        no_chdir => 1,
+        wanted   => sub {
+            my $file = $_;
 
-        return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip|.*\~)$/;
-        return unless -f $file;
+            return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip|.*\~)$/;
+            return unless -f $file;
 
-        my @name_parts = File::Spec->splitpath($file);
-        my %dirs = map { $_ => 1 } File::Spec->splitdir($name_parts[1]);
-        return if exists $dirs{'.git'};
+            my @name_parts = File::Spec->splitpath($file);
+            my %dirs       = map { $_ => 1 } File::Spec->splitdir( $name_parts[1] );
+            return if exists $dirs{'.git'};
 
-        my $fh = IO::File->new($file, 'r');
-        my $marker_found = 0;
-        while (my $line = <$fh>) {
-            # could check for ^=====, but that's often used in text files
-            $marker_found++ if $line =~ m|^<<<<<<|;
-            $marker_found++ if $line =~ m|^>>>>>>|;
-            last if $marker_found;
-        }
-        close $fh;
-        push @failures, $file if $marker_found;
-},
-}, File::Spec->curdir());
+            my $fh           = IO::File->new( $file, 'r' );
+            my $marker_found = 0;
+            while ( my $line = <$fh> ) {
 
-is( @failures, 0, 'Files should not contain merge markers' . ( @failures ? ( ' (' . join( ', ', @failures ) . ' )' ) : '' ) );
+                # could check for ^=====, but that's often used in text files
+                $marker_found++ if $line =~ m|^<<<<<<|;
+                $marker_found++ if $line =~ m|^>>>>>>|;
+                last            if $marker_found;
+            }
+            close $fh;
+            push @failures, $file if $marker_found;
+        },
+    },
+    File::Spec->curdir()
+);
+
+is(
+    @failures, 0,
+    'Files should not contain merge markers' . ( @failures ? ( ' (' . join( ', ', @failures ) . ' )' ) : '' )
+);

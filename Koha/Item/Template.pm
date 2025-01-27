@@ -55,7 +55,7 @@ Returns a deserilized perl structure of the JSON formatted contents
 sub decoded_contents {
     my ($self) = @_;
 
-    return $self->_json->decode($self->contents) if $self->contents;
+    return $self->_json->decode( $self->contents ) if $self->contents;
 }
 
 =head2 Internal methods
@@ -66,7 +66,7 @@ sub decoded_contents {
 
 sub _json {
     my $self = shift;
-    $self->{_json} //= JSON->new; # Keep utf8 off !
+    $self->{_json} //= JSON->new;    # Keep utf8 off !
 }
 
 =head3 _type

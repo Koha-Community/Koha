@@ -40,16 +40,17 @@ subtest 'pass undef' => sub {
     warning_is { lower_case() } undef, 'no warn from lower_case';
 };
 
-
 subtest 'legacy_default() normalizer' => sub {
 
     plan tests => 1;
 
     my $string = '  .; kY[]:,  (l)/E\'"';
 
-    is( Koha::Util::Normalize::legacy_default( $string ), 'KY LE',
+    is(
+        Koha::Util::Normalize::legacy_default($string), 'KY LE',
         'The \'legacy_default\' normalizer removes: .;:,][)(/\'" and shifts characters upper-case.
-         Also removes spaces from the beginning and ending, and replaces multiple spaces with a single one.' );
+         Also removes spaces from the beginning and ending, and replaces multiple spaces with a single one.'
+    );
 };
 
 subtest 'remove_spaces() normalizer' => sub {
@@ -58,8 +59,10 @@ subtest 'remove_spaces() normalizer' => sub {
 
     my $string = '  .; kY[]:,  (l)/E\'"';
 
-    is( Koha::Util::Normalize::remove_spaces( $string ), '.;kY[]:,(l)/E\'"',
-        'The \'remove_spaces\' normalizer removes all spaces' );
+    is(
+        Koha::Util::Normalize::remove_spaces($string), '.;kY[]:,(l)/E\'"',
+        'The \'remove_spaces\' normalizer removes all spaces'
+    );
 };
 
 subtest 'upper_case() normalizer' => sub {
@@ -68,8 +71,10 @@ subtest 'upper_case() normalizer' => sub {
 
     my $string = '  .; kY[]:,  (l)/E\'"';
 
-    is( Koha::Util::Normalize::upper_case( $string ), '  .; KY[]:,  (L)/E\'"',
-        'The \'upper_case\' normalizer only makes characters upper-case' );
+    is(
+        Koha::Util::Normalize::upper_case($string), '  .; KY[]:,  (L)/E\'"',
+        'The \'upper_case\' normalizer only makes characters upper-case'
+    );
 };
 
 subtest 'lower_case() normalizer' => sub {
@@ -78,7 +83,9 @@ subtest 'lower_case() normalizer' => sub {
 
     my $string = '  .; kY[]:,  (l)/E\'"';
 
-    is( Koha::Util::Normalize::lower_case( $string ), '  .; ky[]:,  (l)/e\'"',
-        'The \'lower_case\' normalizer only makes characters lower-case' );
+    is(
+        Koha::Util::Normalize::lower_case($string), '  .; ky[]:,  (l)/e\'"',
+        'The \'lower_case\' normalizer only makes characters lower-case'
+    );
 };
 

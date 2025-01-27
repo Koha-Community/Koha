@@ -21,22 +21,22 @@
 
 use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output                  qw( output_html_with_http_headers );
 use Koha::Util::FrameworkPlugin qw|date_entered|;
 
 use constant FIXLEN_DATA_ELTS => '|| aca||aabn           | a|a     d';
-use constant PREF_008 => 'MARCAuthorityControlField008';
+use constant PREF_008         => 'MARCAuthorityControlField008';
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
-    my $dateentered = date_entered();
-    my $defaultval = substr( C4::Context->preference(PREF_008) || FIXLEN_DATA_ELTS, 0, 34 );
-    my $res="
+    my $dateentered   = date_entered();
+    my $defaultval    = substr( C4::Context->preference(PREF_008) || FIXLEN_DATA_ELTS, 0, 34 );
+    my $res           = "
 <script>
 
 function Focus$function_name(event) {
@@ -64,38 +64,40 @@ function Click$function_name(event) {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $input = $params->{cgi};
-    my $index= $input->param('index');
-    my $result= $input->param('result');
-    my $authtype= $input->param('authtypecode')||'';
+    my ($params) = @_;
+    my $input    = $params->{cgi};
+    my $index    = $input->param('index');
+    my $result   = $input->param('result');
+    my $authtype = $input->param('authtypecode') || '';
 
     my $defaultval = substr( C4::Context->preference(PREF_008) || FIXLEN_DATA_ELTS, 0, 34 );
-    substr($defaultval,14-6,1)='b' if $authtype=~ /TOPIC_TERM|GENRE.FORM|CHRON_TERM/;
+    substr( $defaultval, 14 - 6, 1 ) = 'b' if $authtype =~ /TOPIC_TERM|GENRE.FORM|CHRON_TERM/;
 
     my $dbh = C4::Context->dbh;
 
-    my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_field_008_authorities.tt",
-                 query => $input,
-                 type => "intranet",
-                 flagsrequired => {editcatalogue => '*'},
-                 });
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/marc21_field_008_authorities.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
     my $dateentered = date_entered();
     $result = "$dateentered$defaultval" unless $result;
     my @f;
-    for(0,6..17,28,29,31..33,38,39) {
-        $f[$_]=substr($result,$_,$_==0?6:1);
+    for ( 0, 6 .. 17, 28, 29, 31 .. 33, 38, 39 ) {
+        $f[$_] = substr( $result, $_, $_ == 0 ? 6 : 1 );
     }
-    $template->param(index => $index);
+    $template->param( index => $index );
 
-    $f[0]= $dateentered if !$f[0] || $f[0]=~/\s/;
-    $template->param(f1 => $f[0]);
+    $f[0] = $dateentered if !$f[0] || $f[0] =~ /\s/;
+    $template->param( f1 => $f[0] );
 
-    for(6..17,28,29,31..33,38,39) {
+    for ( 6 .. 17, 28, 29, 31 .. 33, 38, 39 ) {
         $template->param(
-            "f$_" => $f[$_],
-            "f$_".($f[$_] eq '|'? 'pipe': $f[$_]) => $f[$_],
+            "f$_"                                       => $f[$_],
+            "f$_" . ( $f[$_] eq '|' ? 'pipe' : $f[$_] ) => $f[$_],
         );
     }
     output_html_with_http_headers $input, $cookie, $template->output;

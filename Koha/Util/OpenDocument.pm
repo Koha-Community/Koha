@@ -19,13 +19,13 @@ package Koha::Util::OpenDocument;
 
 use Modern::Perl;
 
-use File::Basename qw( dirname );
+use File::Basename    qw( dirname );
 use OpenOffice::OODoc qw( odfDocument odfWorkingDirectory );
 
 use parent qw( Exporter );
 
 our @EXPORT = qw(
-  generate_ods
+    generate_ods
 );
 
 =head1 NAME
@@ -42,7 +42,6 @@ Arguments are file path and content as an arrayref of lines containing arrayrefs
 
 =cut
 
-
 sub generate_ods {
     my ( $filepath, $content ) = @_;
 
@@ -53,7 +52,7 @@ sub generate_ods {
     my $nb_rows    = scalar @input_rows;
     my $nb_cols;
     if ($nb_rows) {
-        $nb_cols= scalar @{ $input_rows[0] };
+        $nb_cols = scalar @{ $input_rows[0] };
     }
 
     # Create document
@@ -62,9 +61,10 @@ sub generate_ods {
     my $odf_doc = odfDocument( file => $filepath, create => 'spreadsheet' );
 
     if ($nb_rows) {
+
         # Prepare sheet
         my $odf_sheet = $odf_doc->expandTable( 0, $nb_rows + 1, $nb_cols );
-        my @odf_rows = $odf_doc->getTableRows($odf_sheet);
+        my @odf_rows  = $odf_doc->getTableRows($odf_sheet);
 
         # Writing
         for ( my $i = 0 ; $i < $nb_rows ; $i++ ) {

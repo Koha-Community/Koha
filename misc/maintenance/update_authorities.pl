@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 
-use Getopt::Long qw( GetOptions );
+use Getopt::Long    qw( GetOptions );
 use List::MoreUtils qw( uniq );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage      qw( pod2usage );
 
 use Koha::Script;
 use C4::AuthoritiesMarc qw/AddAuthority DelAuthority GetAuthority merge/;
@@ -46,22 +46,22 @@ if ( $delete and $merge and $renumber ) {
     pod2usage(q|Only one action parameter can be passed (delete, merge or renumber)|);
 }
 
-if( $delete ) {
+if ($delete) {
     delete_auth( \@authid );
-} elsif( $merge ) {
+} elsif ($merge) {
     pod2usage(q|Reference parameter is missing|) unless $reference;
     merge_auth( \@authid, $reference );
-} elsif( $renumber ) {
+} elsif ($renumber) {
     renumber( \@authid );
 } else {
     pod2usage(1);
 }
 
 sub delete_auth {
-    my ( $auths ) = @_;
+    my ($auths) = @_;
     foreach my $authid ( uniq(@$auths) ) {
-        if( $confirm ) {
-            DelAuthority({ authid => $authid }); # triggers a merge (read: cleanup)
+        if ($confirm) {
+            DelAuthority( { authid => $authid } );    # triggers a merge (read: cleanup)
             print "Removing $authid\n" if $verbose;
         } else {
             print "Would have removed $authid\n" if $verbose;
@@ -74,28 +74,36 @@ sub merge_auth {
 
     return unless $reference;
 
-    my $marc_ref = GetAuthority( $reference ) || die "Reference record $reference not found\n";
+    my $marc_ref = GetAuthority($reference) || die "Reference record $reference not found\n";
+
     # First update all linked biblios of reference
-    merge({ mergefrom => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 }) if $confirm;
+    merge(
+        {
+            mergefrom      => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref,
+            override_limit => 1
+        }
+    ) if $confirm;
 
     # Merge all authid's into reference
     my $marc;
     foreach my $authid ( uniq(@$auths) ) {
         next if $authid == $reference;
         $marc = GetAuthority($authid);
-        if( !$marc ) {
+        if ( !$marc ) {
             print "Authority id $authid ignored, does not exist.\n";
             next;
         }
-        if( $confirm ) {
-            merge({
-                mergefrom      => $authid,
-                MARCfrom       => $marc,
-                mergeto        => $reference,
-                MARCto         => $marc_ref,
-                override_limit => 1
-            });
-            DelAuthority({ authid => $authid, skip_merge => 1 });
+        if ($confirm) {
+            merge(
+                {
+                    mergefrom      => $authid,
+                    MARCfrom       => $marc,
+                    mergeto        => $reference,
+                    MARCto         => $marc_ref,
+                    override_limit => 1
+                }
+            );
+            DelAuthority( { authid => $authid, skip_merge => 1 } );
             print "Record $authid merged into reference $reference.\n" if $verbose;
         } else {
             print "Would have merged record $authid into reference $reference.\n" if $verbose;
@@ -104,19 +112,20 @@ sub merge_auth {
 }
 
 sub renumber {
-    my ( $auths ) = @_;
+    my ($auths) = @_;
     foreach my $authid ( uniq(@$auths) ) {
-        if( my $authority = Koha::Authorities->find($authid) ) {
-            my $marc = GetAuthority( $authid );
-            if( $confirm ) {
+        if ( my $authority = Koha::Authorities->find($authid) ) {
+            my $marc = GetAuthority($authid);
+            if ($confirm) {
                 AddAuthority( $marc, $authid, $authority->authtypecode );
-                    # AddAuthority contains an update of 001, 005 etc.
+
+                # AddAuthority contains an update of 001, 005 etc.
                 print "Renumbered $authid\n" if $verbose;
             } else {
                 print "Would have renumbered $authid\n" if $verbose;
             }
         } else {
-            print "Record $authid not found!\n"  if $verbose;
+            print "Record $authid not found!\n" if $verbose;
         }
     }
 }

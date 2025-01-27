@@ -7,7 +7,7 @@
             </div>
 
             <div class="form-content">
-                <input autocomplete="off" id="findborrower" name="findborrower" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="40"/>
+                <input autocomplete="off" id="findborrower" name="findborrower" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="40" />
 
                 [% IF ( stickyduedate ) %]
                     <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />

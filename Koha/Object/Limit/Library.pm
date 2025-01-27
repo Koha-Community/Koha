@@ -61,8 +61,7 @@ sub library_limits {
 
     if ($branchcodes) {
         return $self->replace_library_limits($branchcodes);
-    }
-    else {
+    } else {
         return $self->get_library_limits();
     }
 }
@@ -79,17 +78,15 @@ It returns undef if no library limits defined.
 sub get_library_limits {
     my ($self) = @_;
 
-    my @branchcodes
-        = $self->_library_limit_rs->search(
-        { $self->_library_limits->{id} => $self->id } )
+    my @branchcodes = $self->_library_limit_rs->search( { $self->_library_limits->{id} => $self->id } )
         ->get_column( $self->_library_limits->{library} )->all();
 
     return unless @branchcodes;
 
     require Koha::Libraries;
 
-    my $filter = [ map { { branchcode => $_ } } @branchcodes ];
-    my $libraries = Koha::Libraries->search( $filter );
+    my $filter    = [ map { { branchcode => $_ } } @branchcodes ];
+    my $libraries = Koha::Libraries->search($filter);
 
     return $libraries;
 }
@@ -103,18 +100,17 @@ $object->add_library_limit( $branchcode );
 sub add_library_limit {
     my ( $self, $branchcode ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Required parameter 'branchcode' missing")
+    Koha::Exceptions::MissingParameter->throw("Required parameter 'branchcode' missing")
         unless $branchcode;
 
     try {
         $self->_library_limit_rs->update_or_create(
-            {   $self->_library_limits->{id}      => $self->id,
+            {
+                $self->_library_limits->{id}      => $self->id,
                 $self->_library_limits->{library} => $branchcode
             }
         );
-    }
-    catch {
+    } catch {
         Koha::Exceptions::CannotAddLibraryLimit->throw( $_->{msg} );
     };
 
@@ -130,21 +126,19 @@ $object->del_library_limit( $branchcode );
 sub del_library_limit {
     my ( $self, $branchcode ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Required parameter 'branchcode' missing")
+    Koha::Exceptions::MissingParameter->throw("Required parameter 'branchcode' missing")
         unless $branchcode;
 
     my $limitation = $self->_library_limit_rs->search(
-        {   $self->_library_limits->{id}      => $self->id,
+        {
+            $self->_library_limits->{id}      => $self->id,
             $self->_library_limits->{library} => $branchcode
         }
     );
 
     Koha::Exceptions::ObjectNotFound->throw(
-              "No branch limit for branch $branchcode found for id "
-            . $self->id
-            . " to delete!" )
-        unless ($limitation->count);
+        "No branch limit for branch $branchcode found for id " . $self->id . " to delete!" )
+        unless ( $limitation->count );
 
     return $limitation->delete();
 }
@@ -160,8 +154,7 @@ sub replace_library_limits {
 
     $self->_result->result_source->schema->txn_do(
         sub {
-            $self->_library_limit_rs->search(
-                { $self->_library_limits->{id} => $self->id } )->delete;
+            $self->_library_limit_rs->search( { $self->_library_limits->{id} => $self->id } )->delete;
 
             map { $self->add_library_limit($_) } @$branchcodes;
         }
@@ -169,7 +162,6 @@ sub replace_library_limits {
 
     return $self;
 }
-
 
 =head3 Koha::Objects->_library_limit_rs
 

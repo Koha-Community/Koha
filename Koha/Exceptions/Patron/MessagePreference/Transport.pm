@@ -19,13 +19,11 @@ use Modern::Perl;
 
 use Exception::Class (
 
-    'Koha::Exceptions::Patron::MessagePreference::Transport' => {
-        description => 'Something went wrong'
-    },
+    'Koha::Exceptions::Patron::MessagePreference::Transport'               => { description => 'Something went wrong' },
     'Koha::Exceptions::Patron::MessagePreference::Transport::TypeNotFound' => {
-        isa => 'Koha::Exceptions::Patron::MessagePreference::Transport',
+        isa         => 'Koha::Exceptions::Patron::MessagePreference::Transport',
         description => "Transport type does not exist.",
-        fields => ['transport_type']
+        fields      => ['transport_type']
     },
 );
 

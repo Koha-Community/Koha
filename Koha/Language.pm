@@ -53,11 +53,11 @@ use constant REQUESTED_LANGUAGE_CACHE_KEY => 'requested_language';
 =cut
 
 sub set_requested_language {
-    my ($class, $language) = @_;
+    my ( $class, $language ) = @_;
 
     my $cache = Koha::Cache::Memory::Lite->get_instance;
 
-    $cache->set_in_cache(REQUESTED_LANGUAGE_CACHE_KEY, $language);
+    $cache->set_in_cache( REQUESTED_LANGUAGE_CACHE_KEY, $language );
 }
 
 =head2 get_requested_language

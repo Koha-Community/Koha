@@ -33,7 +33,6 @@ This test checks all staff and OPAC templates and includes for syntax errors
 
 =cut
 
-
 use File::Find;
 use File::Spec;
 use Template;
@@ -42,55 +41,55 @@ use Test::More;
 my @themes;
 
 # OPAC themes
-my $opac_dir  = 'koha-tmpl/opac-tmpl';
-opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
+my $opac_dir = 'koha-tmpl/opac-tmpl';
+opendir( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
 for my $theme ( grep { not /^\.|lib|js|xslt/ } readdir($dh) ) {
     push @themes, {
         type     => "opac",
         theme    => $theme,
         modules  => "$opac_dir/$theme/en/modules",
         includes => "$opac_dir/$theme/en/includes",
-    }
+    };
 }
 close $dh;
 
 # STAFF themes
 my $staff_dir = 'koha-tmpl/intranet-tmpl';
-opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
+opendir( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
 for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
     push @themes, {
         type     => "staff",
         theme    => $theme,
         modules  => "$staff_dir/$theme/en/modules",
         includes => "$staff_dir/$theme/en/includes",
-    }
+    };
 }
 close $dh;
 
 my $ncpu;
 if ( $ENV{KOHA_PROVE_CPUS} ) {
-    $ncpu = $ENV{KOHA_PROVE_CPUS} ; # set number of cpus to use
+    $ncpu = $ENV{KOHA_PROVE_CPUS};    # set number of cpus to use
 } else {
     $ncpu = Sys::CPU::cpu_count();
 }
 
-my $pm   = Parallel::ForkManager->new($ncpu);
+my $pm = Parallel::ForkManager->new($ncpu);
 
 # Tests
-foreach my $theme ( @themes ) {
-    $pm->start and next;    # do the fork
+foreach my $theme (@themes) {
+    $pm->start and next;              # do the fork
     print "Testing $theme->{'type'} $theme->{'theme'} templates\n";
     if ( $theme->{'theme'} eq 'bootstrap' ) {
         run_template_test(
             $theme->{'modules'},
             $theme->{'includes'},
+
             # templates to exclude from testing because
             # they cannot stand alone
             'doc-head-close.inc',
             'opac-bottom.inc',
         );
-    }
-    else {
+    } else {
         run_template_test(
             $theme->{'modules'},
             $theme->{'includes'},
@@ -106,20 +105,22 @@ done_testing();
 sub run_template_test {
     my $template_path = shift;
     my $include_path  = shift;
-    my @exclusions = @_;
+    my @exclusions    = @_;
     my $template_dir  = File::Spec->rel2abs($template_path);
     my $include_dir   = File::Spec->rel2abs($include_path);
-    my $template_test = create_template_test($include_dir, @exclusions);
-    find( { wanted => $template_test, no_chdir => 1 },
-        $template_dir, $include_dir );
+    my $template_test = create_template_test( $include_dir, @exclusions );
+    find(
+        { wanted => $template_test, no_chdir => 1 },
+        $template_dir, $include_dir
+    );
 }
 
 sub create_template_test {
-    my $includes = shift;
+    my $includes   = shift;
     my @exclusions = @_;
 
     my $interface = $includes =~ s|^.*/([^/]*-tmpl).*$|$1|r;
-    my $theme = ($interface =~ /opac/) ? 'bootstrap' : 'prog';
+    my $theme     = ( $interface =~ /opac/ ) ? 'bootstrap' : 'prog';
 
     return sub {
         my $tt = Template->new(
@@ -130,14 +131,14 @@ sub create_template_test {
             }
         );
         foreach my $exclusion (@exclusions) {
-            if ($_ =~ /${exclusion}$/) {
+            if ( $_ =~ /${exclusion}$/ ) {
                 diag("excluding template $_ because it cannot stand on its own");
                 return;
             }
         }
         my $vars = { interface => $interface, theme => $theme };
         my $output;
-        if ( ! -d $_ ) {    # skip dirs
+        if ( !-d $_ ) {    # skip dirs
             if ( !ok( $tt->process( $_, $vars, \$output ), $_ ) ) {
                 diag( $tt->error );
             }

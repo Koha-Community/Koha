@@ -70,14 +70,11 @@ sub print_collection {
         $start = '[';
         $glue  = ',';
         $end   = ']';
-    }
-    elsif ( $format eq 'marc' ) {
+    } elsif ( $format eq 'marc' ) {
         $glue = "\n";
-    }
-    elsif ( $format eq 'txt' ) {
+    } elsif ( $format eq 'txt' ) {
         $glue = "\n\n";
-    }
-    else {
+    } else {
         $glue   = '';
         $format = 'marcxml';
         $start  = MARC::File::XML::header();
@@ -85,17 +82,14 @@ sub print_collection {
     }
     while ( my $element = $self->next ) {
         my $schema = C4::Context->preference("marcflavour");
-        if ($element->can('record_schema')) {
+        if ( $element->can('record_schema') ) {
             $schema = $element->record_schema;
         }
-        MARC::File::XML->default_record_format( $schema )
-          if $format eq 'marcxml';
+        MARC::File::XML->default_record_format($schema)
+            if $format eq 'marcxml';
         push @parts, $serializers{$format}->( $element->record );
     }
-    return
-        ( defined $start ? $start : '' )
-      . join( $glue, @parts )
-      . ( defined $end ? $end : '' );
+    return ( defined $start ? $start : '' ) . join( $glue, @parts ) . ( defined $end ? $end : '' );
 }
 
 1;

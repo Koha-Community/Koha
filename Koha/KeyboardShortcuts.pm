@@ -17,7 +17,6 @@ package Koha::KeyboardShortcuts;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::KeyboardShortcut;

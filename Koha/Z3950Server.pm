@@ -17,7 +17,6 @@ package Koha::Z3950Server;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);

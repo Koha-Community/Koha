@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 use Koha::REST::V1::ERM::EHoldings::Titles::Local;
 use Koha::REST::V1::ERM::EHoldings::Titles::EBSCO;
@@ -67,7 +67,7 @@ Controller function that handles adding a new Koha::ERM::EHoldings::Title object
 
 =cut
 
-sub add{
+sub add {
     my $c = shift->openapi->valid_input or return;
 
     my $provider = $c->param('provider');
@@ -77,7 +77,6 @@ sub add{
         return Koha::REST::V1::ERM::EHoldings::Titles::Local::add($c);
     }
 }
-
 
 =head3 update
 

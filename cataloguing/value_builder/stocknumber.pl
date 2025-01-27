@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 use C4::Context;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -32,20 +32,21 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
-    my $dbh = $params->{dbh};
+    my $dbh           = $params->{dbh};
 
-	my $branchcode = C4::Context->userenv->{'branch'};
+    my $branchcode = C4::Context->userenv->{'branch'};
 
-	my $query = "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,'_',-1) AS SIGNED))+1 FROM items WHERE homebranch = ? AND stocknumber LIKE ?";
-	my $sth=$dbh->prepare($query);
+    my $query =
+        "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,'_',-1) AS SIGNED))+1 FROM items WHERE homebranch = ? AND stocknumber LIKE ?";
+    my $sth = $dbh->prepare($query);
 
-	$sth->execute($branchcode,$branchcode."_%");
-	my ($nextnum) = $sth->fetchrow;
-	$nextnum = $branchcode.'_'.$nextnum;
+    $sth->execute( $branchcode, $branchcode . "_%" );
+    my ($nextnum) = $sth->fetchrow;
+    $nextnum = $branchcode . '_' . $nextnum;
 
-    my $js  = <<END_OF_JS;
+    my $js = <<END_OF_JS;
 <script>
 
 function set_stocknumber(id, force) {

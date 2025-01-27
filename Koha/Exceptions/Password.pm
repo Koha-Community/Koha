@@ -25,28 +25,28 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Password::Invalid' => {
-        isa => 'Koha::Exceptions::Password',
+        isa         => 'Koha::Exceptions::Password',
         description => 'Invalid password'
     },
     'Koha::Exceptions::Password::TooShort' => {
-        isa => 'Koha::Exceptions::Password',
+        isa         => 'Koha::Exceptions::Password',
         description => 'Password is too short',
-        fields => ['length','min_length']
+        fields      => [ 'length', 'min_length' ]
     },
     'Koha::Exceptions::Password::TooWeak' => {
-        isa => 'Koha::Exceptions::Password',
+        isa         => 'Koha::Exceptions::Password',
         description => 'Password is too weak'
     },
     'Koha::Exceptions::Password::WhitespaceCharacters' => {
-        isa => 'Koha::Exceptions::Password',
+        isa         => 'Koha::Exceptions::Password',
         description => 'Password contains leading/trailing whitespace character(s)'
     },
     'Koha::Exceptions::Password::Plugin' => {
-        isa => 'Koha::Exceptions::Password',
+        isa         => 'Koha::Exceptions::Password',
         description => 'The password was rejected by a plugin'
     },
     'Koha::Exceptions::Password::NoCategoryProvided' => {
-        isa => 'Koha::Exceptions::Password',
+        isa         => 'Koha::Exceptions::Password',
         description => 'You must provide a patron\'s category to validate password\'s strength and length'
     }
 );
@@ -56,9 +56,9 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Password::TooShort') ) {
-            $msg = sprintf("Password length (%s) is shorter than required (%s)", $self->length, $self->min_length );
+            $msg = sprintf( "Password length (%s) is shorter than required (%s)", $self->length, $self->min_length );
         }
     }
 

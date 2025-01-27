@@ -53,9 +53,9 @@ It's based on Crypt::CBC
 =cut
 
 sub new {
-    my ( $class ) = @_;
+    my ($class) = @_;
     my $encryption_key = C4::Context->config('encryption_key');
-    if ( !$encryption_key || $encryption_key eq '__ENCRYPTION_KEY__') {
+    if ( !$encryption_key || $encryption_key eq '__ENCRYPTION_KEY__' ) {
         Koha::Exceptions::MissingParameter->throw(
             q{No encryption_key in koha-conf.xml. Please generate a key. We recommend one of at least 32 bytes. (You might use 'pwgen 32' to do so.)}
         );

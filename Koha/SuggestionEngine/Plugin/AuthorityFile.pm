@@ -83,19 +83,19 @@ sub get_suggestions {
     # FIXME: calling into C4
     require C4::AuthoritiesMarc;
     my ( $searchresults, $count ) = C4::AuthoritiesMarc::SearchAuthorities(
-        @marclist,  @and_or, @excluding,       @operator,
-        @value,      0,        $param->{'count'}, '',
+        @marclist,   @and_or, @excluding,        @operator,
+        @value,      0,       $param->{'count'}, '',
         'Relevance', 0
     );
 
     my @results;
     foreach my $auth (@$searchresults) {
         push @results,
-          {
+            {
             'search'  => "an:$auth->{'authid'}",
             relevance => $count--,
             label     => $auth->{summary}->{authorized}->[0]->{heading}
-          };
+            };
     }
     return \@results;
 }

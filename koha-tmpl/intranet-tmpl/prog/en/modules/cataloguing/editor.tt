@@ -3,11 +3,12 @@
 [% PROCESS 'i18n.inc' %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Editor") | html %] &rsaquo;
-    [% t("Cataloging") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Editor") | html %]
+        &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/cateditor.css") | $raw %]
 [% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
@@ -17,9 +18,9 @@
 </head>
 <body id="cat_addbiblio" class="cat">
 
-   <div id="loading">
-       <div>Loading, please wait...</div>
-   </div>
+<div id="loading">
+    <div>Loading, please wait...</div>
+</div>
 
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -43,111 +44,108 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-[% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
-    <div id="toggle-editor">
-        <label for="toggle-editor">Advanced editor: </label>
-        <label class="switch">
-            <input id="toggleEditor" type="checkbox" checked="checked">
-            <span class="slider"></span>
-        </label>
-    </div>
-[% END %]
-
-<h1 id="title">Cataloging editor</h1>
-
-
-<div id="editor">
-    <input id="import-records-input" type="file" style="display: none">
-    <div id="toolbar" class="btn-toolbar">
-        <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
-        <div class="btn-group">
-            <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa-solid fa-hard-drive"></i> <span>Save</span></button>
-            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-
-            </button>
-            <ul class="dropdown-menu" id="save-dropdown">
-            </ul>
-        </div>
-        <button class="btn btn-default" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
-        <button class="btn btn-default" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
-        <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
-            <ul id="prefs-menu" class="dropdown-menu">
-                <li><a class="dropdown-item" id="switch-editor" href="#">Switch to basic editor</a></li>
-                <li><a class="dropdown-item" id="set-field-widgets" href="#"></a></li>
-                <li><h6 class="dropdown-header">Change framework</h6></li>
-                <li>
-                    <a class="change-framework dropdown-item" data-frameworkcode="">
-                        <i class="fa fa-fw unselected">&nbsp;</i>
-                        <i class="fa fa-fw fa-check selected">&nbsp;</i>
-                        Default
-                    </a>
-                </li>
-                [% FOREACH framework IN frameworks %]
-                    <li>
-                        <a class="change-framework dropdown-item" data-frameworkcode="[% framework.frameworkcode | html %]">
-                            <i class="fa fa-fw fa-check selected"></i>
-                            <i class="fa fa-fw unselected">&nbsp;</i>
-                            [% framework.frameworktext | html %]
-                        </a>
-                    </li>
+                [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
+                    <div id="toggle-editor">
+                        <label for="toggle-editor">Advanced editor: </label>
+                        <label class="switch">
+                            <input id="toggleEditor" type="checkbox" checked="checked" />
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 [% END %]
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="set-fontSize dropdown-item" style="font-size: .92em" href="#">Small text</a></li>
-                <li><a class="set-fontSize dropdown-item" style="font-size: 1em" href="#">Normal text</a></li>
-                <li><a class="set-fontSize dropdown-item" style="font-size: 1.08em" href="#">Large text</a></li>
-                <li><a class="set-fontSize dropdown-item" style="font-size: 1.18em" href="#">Huge text</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="set-font dropdown-item" style="font-family: monospace" href="#">Default font</a></li>
-                <li><a class="set-font dropdown-item" style="font-family: Consolas" href="#">Consolas</a></li>
-                <li><a class="set-font dropdown-item" style="font-family: 'Courier New'" href="#">Courier New</a></li>
-                <li><a class="set-font dropdown-item" style="font-family: 'DejaVu Sans Mono'" href="#">DejaVu Sans Mono</a></li>
-                <li><a class="set-font dropdown-item" style="font-family: 'Lucida Console'" href="#">Lucida Console</a></li>
-                <li><a class="set-font dropdown-item" style="font-family: Monaco" href="#">Monaco</a></li>
-            </ul>
-        </div>
-        <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts</button>
-        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts</button>
-        <button class="btn btn-default hide" id="set-keyboard-layout" data-bs-target="#keyboard-layout" data-bs-toggle="modal" title="Set virtual keyboard layout"><i class="fa-solid fa-keyboard"></i> Keyboard layout </button>
-    </div>
-    [%# CodeMirror instance will be inserted here %]
-    <div id="statusbar">
-        <div id="status-tag-info">
-        </div>
-        <div id="status-subfield-info">
-        </div>
-    </div>
-</div>
+
+                <h1 id="title">Cataloging editor</h1>
+
+                <div id="editor">
+                    <input id="import-records-input" type="file" style="display: none" />
+                    <div id="toolbar" class="btn-toolbar">
+                        <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
+                        <div class="btn-group">
+                            <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa-solid fa-hard-drive"></i> <span>Save</span></button>
+                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
+                            <ul class="dropdown-menu" id="save-dropdown"> </ul>
+                        </div>
+                        <button class="btn btn-default" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
+                        <button class="btn btn-default" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
+                            <ul id="prefs-menu" class="dropdown-menu">
+                                <li><a class="dropdown-item" id="switch-editor" href="#">Switch to basic editor</a></li>
+                                <li><a class="dropdown-item" id="set-field-widgets" href="#"></a></li>
+                                <li><h6 class="dropdown-header">Change framework</h6></li>
+                                <li>
+                                    <a class="change-framework dropdown-item" data-frameworkcode="">
+                                        <i class="fa fa-fw unselected">&nbsp;</i>
+                                        <i class="fa fa-fw fa-check selected">&nbsp;</i>
+                                        Default
+                                    </a>
+                                </li>
+                                [% FOREACH framework IN frameworks %]
+                                    <li>
+                                        <a class="change-framework dropdown-item" data-frameworkcode="[% framework.frameworkcode | html %]">
+                                            <i class="fa fa-fw fa-check selected"></i>
+                                            <i class="fa fa-fw unselected">&nbsp;</i>
+                                            [% framework.frameworktext | html %]
+                                        </a>
+                                    </li>
+                                [% END %]
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="set-fontSize dropdown-item" style="font-size: .92em" href="#">Small text</a></li>
+                                <li><a class="set-fontSize dropdown-item" style="font-size: 1em" href="#">Normal text</a></li>
+                                <li><a class="set-fontSize dropdown-item" style="font-size: 1.08em" href="#">Large text</a></li>
+                                <li><a class="set-fontSize dropdown-item" style="font-size: 1.18em" href="#">Huge text</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="set-font dropdown-item" style="font-family: monospace" href="#">Default font</a></li>
+                                <li><a class="set-font dropdown-item" style="font-family: Consolas" href="#">Consolas</a></li>
+                                <li><a class="set-font dropdown-item" style="font-family: 'Courier New'" href="#">Courier New</a></li>
+                                <li><a class="set-font dropdown-item" style="font-family: 'DejaVu Sans Mono'" href="#">DejaVu Sans Mono</a></li>
+                                <li><a class="set-font dropdown-item" style="font-family: 'Lucida Console'" href="#">Lucida Console</a></li>
+                                <li><a class="set-font dropdown-item" style="font-family: Monaco" href="#">Monaco</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts</button>
+                        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts</button>
+                        <button class="btn btn-default hide" id="set-keyboard-layout" data-bs-target="#keyboard-layout" data-bs-toggle="modal" title="Set virtual keyboard layout"
+                            ><i class="fa-solid fa-keyboard"></i> Keyboard layout
+                        </button>
+                    </div>
+                    [%# CodeMirror instance will be inserted here %]
+                    <div id="statusbar">
+                        <div id="status-tag-info"> </div>
+                        <div id="status-subfield-info"> </div>
+                    </div>
+                </div>
             </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 <h3>Search</h3>
                 <form method="get" id="quicksearch">
                     <fieldset class="brief">
-                    <ol>
-                        <li><label for="search-by-keywords">Keywords:</label></li>
-                        <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
-                        <li><label for="search-by-author">Author:</label></li>
-                        <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
-                        <li><label for="search-by-isbn">ISBN:</label></li>
-                        <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
-                        <li><label for="search-by-title">Title:</label></li>
-                        <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
-                        <li><a href="#" id="show-advanced-search" title="Show advanced search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
-                    </ol>
+                        <ol>
+                            <li><label for="search-by-keywords">Keywords:</label></li>
+                            <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
+                            <li><label for="search-by-author">Author:</label></li>
+                            <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
+                            <li><label for="search-by-isbn">ISBN:</label></li>
+                            <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
+                            <li><label for="search-by-title">Title:</label></li>
+                            <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
+                            <li><a href="#" id="show-advanced-search" title="Show advanced search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
+                        </ol>
                     </fieldset>
                 </form>
                 <h3>Clipboard</h3>
                 <fieldset class="brief">
-                    <select id="clipboard" name="clipboard" size=10>
-                    </select>
+                    <select id="clipboard" name="clipboard" size="10"> </select>
                 </fieldset>
             </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
+    </div>
+    <!-- /.row -->
 </div>
 
 <div id="advanced-search-ui" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
@@ -218,8 +216,10 @@
                                     <input class="search-box" data-qualifier="date" id="advanced-search-by-publication-date" />
                                 </li>
                             </ul>
-                        </div> <!-- /.col-md-9 -->
-                    </div> <!-- /.row -->
+                        </div>
+                        <!-- /.col-md-9 -->
+                    </div>
+                    <!-- /.row -->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
@@ -240,36 +240,37 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                <div class="col-md-3">
-                    <div id="search-facets">
-                        <ul>
-                            <li>Servers:<ul id="search-serversinfo"></ul></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                    <!-- tabindex attribute allows JS-controlled focus -->
-                    <div id="searchresults" tabindex="-1">
-                        <div id="search-top-pages">
-                            <nav aria-label="Search results navigation">
-                            </nav>
-                        </div>
-
-                        <table class="dataTable"> <!-- This is not a real dataTable but we want to inherit the CSS rules -->
-                            <thead>
-                                <tr></tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-
-                        <div id="search-bottom-pages">
-                            <nav aria-label="Search results navigation">
-                            </nav>
+                    <div class="col-md-3">
+                        <div id="search-facets">
+                            <ul>
+                                <li>Servers:<ul id="search-serversinfo"></ul></li>
+                            </ul>
                         </div>
                     </div>
+                    <div class="col-md-9">
+                        <!-- tabindex attribute allows JS-controlled focus -->
+                        <div id="searchresults" tabindex="-1">
+                            <div id="search-top-pages">
+                                <nav aria-label="Search results navigation"> </nav>
+                            </div>
+
+                            <table class="dataTable">
+                                <!-- This is not a real dataTable but we want to inherit the CSS rules -->
+                                <thead>
+                                    <tr></tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                            <div id="search-bottom-pages">
+                                <nav aria-label="Search results navigation"> </nav>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                </div>
-                <div id="search-overlay"><span>Loading...</span><div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div></div></div>
+                <div id="search-overlay"
+                    ><span>Loading...</span><div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div></div
+                ></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
@@ -287,20 +288,20 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                <div class="col-md-3"><ul id="macro-list"></ul></div>
-                <div class="col-md-9" id="macro-editor">
-                    <div id="macro-toolbar" class="btn-toolbar">
-                        <button class="btn btn-default" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
-                        <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash-can"></i> Delete macro</button>
-                        <label class="macro_shared" for="public" style="display:none;">Public macro:</label>
-                        [% IF CAN_user_editcatalogue_create_shared_macros %]
-                            <input class="macro_shared" type="checkbox" name="public" style="display:none;"/>
-                        [% ELSE %]
-                            <input class="macro_shared" type="checkbox" name="public" style="display:none;" disabled/>
-                        [% END %]
-                        <div id="macro-save-message"></div>
+                    <div class="col-md-3"><ul id="macro-list"></ul></div>
+                    <div class="col-md-9" id="macro-editor">
+                        <div id="macro-toolbar" class="btn-toolbar">
+                            <button class="btn btn-default" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
+                            <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash-can"></i> Delete macro</button>
+                            <label class="macro_shared" for="public" style="display:none;">Public macro:</label>
+                            [% IF CAN_user_editcatalogue_create_shared_macros %]
+                                <input class="macro_shared" type="checkbox" name="public" style="display:none;" />
+                            [% ELSE %]
+                                <input class="macro_shared" type="checkbox" name="public" style="display:none;" disabled />
+                            [% END %]
+                            <div id="macro-save-message"></div>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -320,9 +321,9 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Filter layouts</label>
-                    <input type="search" class="form-control filter"/>
+                    <input type="search" class="form-control filter" />
                 </div>
-                <hr/>
+                <hr />
                 <div class="layouts"></div>
             </div>
             <div class="modal-footer">
@@ -333,29 +334,29 @@
 </div>
 
 <div id="shortcuts-contents" style="display: none">
-[% IF ( CAN_user_parameters_manage_keyboard_shortcuts ) %]
-    <a id="redefine_shortcuts" href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Redefine shortcuts</a>
-[% END %]
-<table class="table table-condensed">
-    <thead>
-        <tr>
-            <th>Shortcut</th>
-            <th>Behavior</th>
-        </tr>
-    </thead>
-    <tbody>
-        [% FOREACH shortcut IN shortcuts %]
+    [% IF ( CAN_user_parameters_manage_keyboard_shortcuts ) %]
+        <a id="redefine_shortcuts" href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Redefine shortcuts</a>
+    [% END %]
+    <table class="table table-condensed">
+        <thead>
             <tr>
-                <td>[% shortcut.shortcut_keys | html %]</td>
-                <td>[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</td>
+                <th>Shortcut</th>
+                <th>Behavior</th>
             </tr>
-        [% END %]
-        <tr>
-            <td>Ctrl-S</td>
-            <td>Save record (cannot be remapped)</td>
-        </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            [% FOREACH shortcut IN shortcuts %]
+                <tr>
+                    <td>[% shortcut.shortcut_keys | html %]</td>
+                    <td>[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</td>
+                </tr>
+            [% END %]
+            <tr>
+                <td>Ctrl-S</td>
+                <td>Save record (cannot be remapped)</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 [% PROCESS 'cateditor-ui.inc' %]

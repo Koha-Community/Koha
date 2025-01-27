@@ -3,7 +3,7 @@ package C4::Labels::Label;
 use strict;
 use warnings;
 
-use Text::Wrap qw( wrap );
+use Text::Wrap             qw( wrap );
 use Algorithm::CheckDigits qw( CheckDigits );
 use Text::CSV_XS;
 use Text::Bidi qw( log2vis );
@@ -20,8 +20,8 @@ use C4::ClassSplitRoutine::Generic;
 use C4::ClassSplitRoutine::RegEx;
 
 sub _check_params {
-    my $given_params = {};
-    my $exit_code = 0;
+    my $given_params       = {};
+    my $exit_code          = 0;
     my @valid_label_params = (
         'batch_id',
         'item_number',
@@ -45,18 +45,17 @@ sub _check_params {
         'text_wrap_cols',
         'barcode',
     );
-    if (scalar(@_) >1) {
+    if ( scalar(@_) > 1 ) {
         $given_params = {@_};
-        foreach my $key (keys %{$given_params}) {
-            if (!(grep m/$key/, @valid_label_params)) {
-                warn sprintf('Unrecognized parameter type of "%s".', $key);
+        foreach my $key ( keys %{$given_params} ) {
+            if ( !( grep m/$key/, @valid_label_params ) ) {
+                warn sprintf( 'Unrecognized parameter type of "%s".', $key );
                 $exit_code = 1;
             }
         }
-    }
-    else {
-        if (!(grep m/$_/, @valid_label_params)) {
-            warn sprintf('Unrecognized parameter type of "%s".', $_);
+    } else {
+        if ( !( grep m/$_/, @valid_label_params ) ) {
+            warn sprintf( 'Unrecognized parameter type of "%s".', $_ );
             $exit_code = 1;
         }
     }
@@ -65,8 +64,10 @@ sub _check_params {
 
 sub _guide_box {
     my ( $llx, $lly, $width, $height ) = @_;
-    return unless ( defined $llx and defined $lly and
-                    defined $width and defined $height );
+    return unless ( defined $llx
+        and defined $lly
+        and defined $width
+        and defined $height );
     my $obj_stream = "q\n";                            # save the graphic state
     $obj_stream .= "0.5 w\n";                          # border line width
     $obj_stream .= "1.0 0.0 0.0  RG\n";                # border color red
@@ -78,57 +79,70 @@ sub _guide_box {
 }
 
 sub _get_label_item {
-    my $item_number = shift;
+    my $item_number  = shift;
     my $barcode_only = shift || 0;
-    my $dbh = C4::Context->dbh;
-#        FIXME This makes for a very bulky data structure; data from tables w/duplicate col names also gets overwritten.
-#        Something like this, perhaps, but this also causes problems because we need more fields sometimes.
-#        SELECT i.barcode, i.itemcallnumber, i.itype, bi.isbn, bi.issn, b.title, b.author
-    my $sth = $dbh->prepare("SELECT bi.*, i.*, b.*,br.* FROM items AS i, biblioitems AS bi ,biblio AS b, branches AS br WHERE itemnumber=? AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber AND i.homebranch=br.branchcode;");
+    my $dbh          = C4::Context->dbh;
+
+    #        FIXME This makes for a very bulky data structure; data from tables w/duplicate col names also gets overwritten.
+    #        Something like this, perhaps, but this also causes problems because we need more fields sometimes.
+    #        SELECT i.barcode, i.itemcallnumber, i.itype, bi.isbn, bi.issn, b.title, b.author
+    my $sth = $dbh->prepare(
+        "SELECT bi.*, i.*, b.*,br.* FROM items AS i, biblioitems AS bi ,biblio AS b, branches AS br WHERE itemnumber=? AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber AND i.homebranch=br.branchcode;"
+    );
     $sth->execute($item_number);
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth->errstr );
     }
     my $data = $sth->fetchrow_hashref;
+
     # Replaced item's itemtype with the more user-friendly description...
     my $sth1 = $dbh->prepare("SELECT itemtype,description FROM itemtypes WHERE itemtype = ?");
-    $sth1->execute($data->{'itemtype'});
-    if ($sth1->err) {
-        warn sprintf('Database returned the following error: %s', $sth1->errstr);
+    $sth1->execute( $data->{'itemtype'} );
+    if ( $sth1->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth1->errstr );
     }
     my $data1 = $sth1->fetchrow_hashref;
     $data->{'itemtype'} = $data1->{'description'};
-    $data->{'itype'} = $data1->{'description'};
+    $data->{'itype'}    = $data1->{'description'};
+
     # add *_description fields
-    if ($data->{'homebranch'} || $data->{'holdingbranch'}){
+    if ( $data->{'homebranch'} || $data->{'holdingbranch'} ) {
         require Koha::Libraries;
+
         # FIXME Is this used??
-        $data->{'homebranch_description'} = Koha::Libraries->find($data->{'homebranch'})->branchname if $data->{'homebranch'};
-        $data->{'holdingbranch_description'} = Koha::Libraries->find($data->{'holdingbranch'})->branchname if $data->{'holdingbranch'};
+        $data->{'homebranch_description'} = Koha::Libraries->find( $data->{'homebranch'} )->branchname
+            if $data->{'homebranch'};
+        $data->{'holdingbranch_description'} = Koha::Libraries->find( $data->{'holdingbranch'} )->branchname
+            if $data->{'holdingbranch'};
     }
-    $data->{'ccode_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'ccode'} ,'','','CCODE', 1) if $data->{'ccode'};
-    $data->{'location_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'location'} ,'','','LOC', 1) if $data->{'location'};
-    $data->{'permanent_location_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'permanent_location'} ,'','','LOC', 1) if $data->{'permanent_location'};
+    $data->{'ccode_description'} = C4::Biblio::GetAuthorisedValueDesc( '', '', $data->{'ccode'}, '', '', 'CCODE', 1 )
+        if $data->{'ccode'};
+    $data->{'location_description'} =
+        C4::Biblio::GetAuthorisedValueDesc( '', '', $data->{'location'}, '', '', 'LOC', 1 )
+        if $data->{'location'};
+    $data->{'permanent_location_description'} =
+        C4::Biblio::GetAuthorisedValueDesc( '', '', $data->{'permanent_location'}, '', '', 'LOC', 1 )
+        if $data->{'permanent_location'};
 
     $barcode_only ? return $data->{'barcode'} : return $data;
 }
 
 sub _get_text_fields {
     my $format_string = shift;
-    my $csv = Text::CSV_XS->new( { allow_whitespace => 1, formula => "empty" } );
-    my $status = $csv->parse($format_string);
-    my @sorted_fields = map {{ 'code' => $_, desc => $_ }} 
-                        map { $_ && $_ eq 'callnumber' ? 'itemcallnumber' : $_ } # see bug 5653
-                        $csv->fields();
+    my $csv           = Text::CSV_XS->new( { allow_whitespace => 1, formula => "empty" } );
+    my $status        = $csv->parse($format_string);
+    my @sorted_fields = map { { 'code' => $_, desc => $_ } }
+        map { $_ && $_ eq 'callnumber' ? 'itemcallnumber' : $_ }    # see bug 5653
+        $csv->fields();
     my $error = $csv->error_input();
-    warn sprintf('Text field sort failed with this error: %s', $error) if $error;
+    warn sprintf( 'Text field sort failed with this error: %s', $error ) if $error;
     return \@sorted_fields;
 }
 
 sub _get_barcode_data {
     my ( $f, $item, $record ) = @_;
-    my $kohatables = _desc_koha_tables();
-    my $datastring = '';
+    my $kohatables      = _desc_koha_tables();
+    my $datastring      = '';
     my $match_kohatable = join(
         '|',
         (
@@ -138,60 +152,56 @@ sub _get_barcode_data {
             @{ $kohatables->{'branches'} }
         )
     );
-    FIELD_LIST:
+FIELD_LIST:
     while ($f) {
         my $err = '';
         $f =~ s/^\s?//;
         if ( $f =~ /^'(.*)'.*/ ) {
+
             # single quotes indicate a static text string.
             $datastring .= $1;
             $f = $';
             next FIELD_LIST;
-        }
-        elsif ( $f =~ /^($match_kohatable).*/ ) {
+        } elsif ( $f =~ /^($match_kohatable).*/ ) {
             my @fields = split ' ', $f;
             my @data;
-            for my $field ( @fields ) {
-                if ($item->{$field}) {
+            for my $field (@fields) {
+                if ( $item->{$field} ) {
                     push @data, $item->{$field};
                 }
             }
             $datastring .= join ' ', @data;
             $f = $';
             next FIELD_LIST;
-        }
-        elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W?).*?/ ) {
-            my ($field,$subf,$ws) = ($1,$2,$3);
-            my ($itemtag, $itemsubfieldcode) = &GetMarcFromKohaField( "items.itemnumber" );
+        } elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W?).*?/ ) {
+            my ( $field, $subf, $ws ) = ( $1, $2, $3 );
+            my ( $itemtag, $itemsubfieldcode ) = &GetMarcFromKohaField("items.itemnumber");
             my @marcfield = $record->field($field);
-            if(@marcfield) {
-                if($field eq $itemtag) {  # item-level data, we need to get the right item.
-                    ITEM_FIELDS:
+            if (@marcfield) {
+                if ( $field eq $itemtag ) {    # item-level data, we need to get the right item.
+                ITEM_FIELDS:
                     foreach my $itemfield (@marcfield) {
                         if ( $itemfield->subfield($itemsubfieldcode) eq $item->{'itemnumber'} ) {
-                            if ($itemfield->subfield($subf)) {
+                            if ( $itemfield->subfield($subf) ) {
                                 $datastring .= $itemfield->subfield($subf) . $ws;
-                            }
-                            else {
-                                warn sprintf("The '%s' field contains no data.", $f);
+                            } else {
+                                warn sprintf( "The '%s' field contains no data.", $f );
                             }
                             last ITEM_FIELDS;
                         }
                     }
-                } else {  # bib-level data, we'll take the first matching tag/subfield.
-                    if ($marcfield[0]->subfield($subf)) {
+                } else {                       # bib-level data, we'll take the first matching tag/subfield.
+                    if ( $marcfield[0]->subfield($subf) ) {
                         $datastring .= $marcfield[0]->subfield($subf) . $ws;
-                    }
-                    else {
-                        warn sprintf("The '%s' field contains no data.", $f);
+                    } else {
+                        warn sprintf( "The '%s' field contains no data.", $f );
                     }
                 }
             }
             $f = $';
             next FIELD_LIST;
-        }
-        else {
-            warn sprintf('Failed to parse label format string: %s', $f);
+        } else {
+            warn sprintf( 'Failed to parse label format string: %s', $f );
             last FIELD_LIST;    # Failed to match
         }
     }
@@ -199,16 +209,16 @@ sub _get_barcode_data {
 }
 
 sub _desc_koha_tables {
-	my $dbh = C4::Context->dbh();
-	my $kohatables;
-	for my $table ( 'biblio','biblioitems','items','branches' ) {
-		my $sth = $dbh->column_info(undef,undef,$table,'%');
-		while (my $info = $sth->fetchrow_hashref()){
-		        push @{$kohatables->{$table}} , $info->{'COLUMN_NAME'} ;
-		}
-		$sth->finish;
-	}
-	return $kohatables;
+    my $dbh = C4::Context->dbh();
+    my $kohatables;
+    for my $table ( 'biblio', 'biblioitems', 'items', 'branches' ) {
+        my $sth = $dbh->column_info( undef, undef, $table, '%' );
+        while ( my $info = $sth->fetchrow_hashref() ) {
+            push @{ $kohatables->{$table} }, $info->{'COLUMN_NAME'};
+        }
+        $sth->finish;
+    }
+    return $kohatables;
 }
 
 ### This series of functions calculates the position of text and barcode on individual labels
@@ -217,9 +227,10 @@ sub _desc_koha_tables {
 ### NOTE: Each function must be passed seven parameters and return seven even if some are 0 or undef
 
 sub _BIB {
-    my $self = shift;
-    my $line_spacer = ($self->{'font_size'} * 1);       # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
-    my $text_lly = ($self->{'lly'} + ($self->{'height'} - $self->{'top_text_margin'}));
+    my $self        = shift;
+    my $line_spacer = ( $self->{'font_size'} * 1 )
+        ; # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
+    my $text_lly = ( $self->{'lly'} + ( $self->{'height'} - $self->{'top_text_margin'} ) );
     return $self->{'llx'}, $text_lly, $line_spacer, 0, 0, 0, 0;
 }
 
@@ -284,7 +295,7 @@ sub _BARBIB {
 }
 
 sub new {
-    my ($invocant, %params) = @_;
+    my ( $invocant, %params ) = @_;
     my $type = ref($invocant) || $invocant;
     my $self = {
         batch_id         => $params{'batch_id'},
@@ -310,10 +321,10 @@ sub new {
         barcode          => $params{'barcode'},
     };
 
-    if ($self->{'guidebox'}) {
-        $self->{'guidebox'} = _guide_box($self->{'llx'}, $self->{'lly'}, $self->{'width'}, $self->{'height'});
+    if ( $self->{'guidebox'} ) {
+        $self->{'guidebox'} = _guide_box( $self->{'llx'}, $self->{'lly'}, $self->{'width'}, $self->{'height'} );
     }
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
@@ -324,40 +335,42 @@ sub get_label_type {
 
 sub get_attr {
     my $self = shift;
-    if (_check_params(@_) eq 1) {
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my ($attr) = @_;
-    if (exists($self->{$attr})) {
+    if ( exists( $self->{$attr} ) ) {
         return $self->{$attr};
-    }
-    else {
+    } else {
         return -1;
     }
     return;
 }
 
 sub create_label {
-    my $self = shift;
+    my $self       = shift;
     my $label_text = '';
-    my ($text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor);
+    my ( $text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor );
     {
-        my $sub = \&{'_' . $self->{printing_type}};
-        ($text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = $sub->($self); # an obfuscated call to the correct printing type sub
+        my $sub = \&{ '_' . $self->{printing_type} };
+        ( $text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor ) =
+            $sub->($self);    # an obfuscated call to the correct printing type sub
     }
-    if ($self->{'printing_type'} =~ /BIB/) {
-        $label_text = draw_label_text(  $self,
-                                        llx             => $text_llx,
-                                        lly             => $text_lly,
-                                        line_spacer     => $line_spacer,
-                                    );
+    if ( $self->{'printing_type'} =~ /BIB/ ) {
+        $label_text = draw_label_text(
+            $self,
+            llx         => $text_llx,
+            lly         => $text_lly,
+            line_spacer => $line_spacer,
+        );
     }
-    if ($self->{'printing_type'} =~ /BAR/) {
-        barcode(    $self,
-                    llx                 => $barcode_llx,
-                    lly                 => $barcode_lly,
-                    width               => $barcode_width,
-                    y_scale_factor      => $barcode_y_scale_factor,
+    if ( $self->{'printing_type'} =~ /BAR/ ) {
+        barcode(
+            $self,
+            llx            => $barcode_llx,
+            lly            => $barcode_lly,
+            width          => $barcode_width,
+            y_scale_factor => $barcode_y_scale_factor,
         );
     }
     return $label_text if $label_text;
@@ -365,43 +378,44 @@ sub create_label {
 }
 
 sub draw_label_text {
-    my ($self, %params) = @_;
-    my @label_text = ();
-    my $text_llx = 0;
-    my $text_lly = $params{'lly'};
-    my $font = $self->{'font'};
-    my $item = _get_label_item($self->{'item_number'});
-    my $label_fields = _get_text_fields($self->{'format_string'});
-    my $biblio = Koha::Biblios->find($item->{biblionumber});
-    my $record = $biblio->metadata->record;
+    my ( $self, %params ) = @_;
+    my @label_text   = ();
+    my $text_llx     = 0;
+    my $text_lly     = $params{'lly'};
+    my $font         = $self->{'font'};
+    my $item         = _get_label_item( $self->{'item_number'} );
+    my $label_fields = _get_text_fields( $self->{'format_string'} );
+    my $biblio       = Koha::Biblios->find( $item->{biblionumber} );
+    my $record       = $biblio->metadata->record;
+
     # FIXME - returns all items, so you can't get data from an embedded holdings field.
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
-    my $cn_source = ($item->{'cn_source'} ? $item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource'));
-    my $class_source = Koha::ClassSources->find( $cn_source );
+    my $cn_source =
+        ( $item->{'cn_source'} ? $item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource') );
+    my $class_source = Koha::ClassSources->find($cn_source);
     my ( $split_routine, $regexs );
     if ($class_source) {
         my $class_split_rule = Koha::ClassSplitRules->find( $class_source->class_split_rule );
         $split_routine = $class_split_rule->split_routine;
         $regexs        = $class_split_rule->regexs;
+    } else {
+        $split_routine = $cn_source;
     }
-    else { $split_routine = $cn_source }
-    LABEL_FIELDS:       # process data for requested fields on current label
+LABEL_FIELDS:    # process data for requested fields on current label
     for my $field (@$label_fields) {
-        if ($field->{'code'} eq 'itemtype') {
+        if ( $field->{'code'} eq 'itemtype' ) {
             $field->{'data'} = C4::Context->preference('item-level_itypes') ? $item->{'itype'} : $item->{'itemtype'};
+        } else {
+            $field->{'data'} = _get_barcode_data( $field->{'code'}, $item, $record );
         }
-        else {
-            $field->{'data'} = _get_barcode_data($field->{'code'},$item,$record);
-        }
+
         # Find appropriate font it oblique title selected, except main font is oblique
         if ( ( $field->{'code'} eq 'title' ) and ( $self->{'oblique_title'} == 1 ) ) {
             if ( $font =~ /^TB$/ ) {
                 $font .= 'I';
-            }
-            elsif ( $font =~ /^TR$/ ) {
+            } elsif ( $font =~ /^TR$/ ) {
                 $font = 'TI';
-            }
-            elsif ( $font !~ /^T/ and $font !~ /O$/ ) {
+            } elsif ( $font !~ /^T/ and $font !~ /O$/ ) {
                 $font .= 'O';
             }
         }
@@ -411,74 +425,82 @@ sub draw_label_text {
             $field_data =~ s/\r//g;
         }
         my @label_lines;
+
         # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
         my @callnumber_list = qw(itemcallnumber 050a 050b 082a 952o 995k);
-        if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} ne 'BAR') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
-            if ($split_routine eq 'LCC' || $split_routine eq 'nlm') { # NLM and LCC should be split the same way
+        if (    ( grep { $field->{'code'} =~ m/$_/ } @callnumber_list )
+            and ( $self->{'printing_type'} ne 'BAR' )
+            and ( $self->{'callnum_split'} ) )
+        {    # If the field contains the call number, we do some sp
+            if ( $split_routine eq 'LCC' || $split_routine eq 'nlm' ) {    # NLM and LCC should be split the same way
                 @label_lines = C4::ClassSplitRoutine::LCC::split_callnumber($field_data);
-                @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data) unless @label_lines; # If it was not a true lccn, try it as a custom call number
-                push (@label_lines, $field_data) unless @label_lines;         # If it was not that, send it on unsplit
-            } elsif ($split_routine eq 'Dewey') {
+                @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data)
+                    unless @label_lines;    # If it was not a true lccn, try it as a custom call number
+                push( @label_lines, $field_data ) unless @label_lines;    # If it was not that, send it on unsplit
+            } elsif ( $split_routine eq 'Dewey' ) {
                 @label_lines = C4::ClassSplitRoutine::Dewey::split_callnumber($field_data);
                 @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data) unless @label_lines;
-                push (@label_lines, $field_data) unless @label_lines;
-            } elsif ($split_routine eq 'RegEx' ) {
-                @label_lines = C4::ClassSplitRoutine::RegEx::split_callnumber($field_data, $regexs);
+                push( @label_lines, $field_data ) unless @label_lines;
+            } elsif ( $split_routine eq 'RegEx' ) {
+                @label_lines = C4::ClassSplitRoutine::RegEx::split_callnumber( $field_data, $regexs );
                 @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data) unless @label_lines;
-                push (@label_lines, $field_data) unless @label_lines;
+                push( @label_lines, $field_data ) unless @label_lines;
             } else {
-                warn sprintf('Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha-community.org', $field_data);
+                warn sprintf(
+                    'Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha-community.org',
+                    $field_data
+                );
                 push @label_lines, $field_data;
             }
-        }
-        else {
+        } else {
             if ($field_data) {
-                $field_data =~ s/\/$//g;       # Here we will strip out all trailing '/' in fields other than the call number...
-                # Escaping the parens was causing odd output, see bug 13124
-                # $field_data =~ s/\(/\\\(/g;    # Escape '(' and ')' for the pdf object stream...
-                # $field_data =~ s/\)/\\\)/g;
+                $field_data =~
+                    s/\/$//g;    # Here we will strip out all trailing '/' in fields other than the call number...
+                                 # Escaping the parens was causing odd output, see bug 13124
+                                 # $field_data =~ s/\(/\\\(/g;    # Escape '(' and ')' for the pdf object stream...
+                                 # $field_data =~ s/\)/\\\)/g;
             }
-            eval{$Text::Wrap::columns = $self->{'text_wrap_cols'};};
-            my @line = split(/\n/ ,wrap('', '', $field_data));
+            eval { $Text::Wrap::columns = $self->{'text_wrap_cols'}; };
+            my @line = split( /\n/, wrap( '', '', $field_data ) );
+
             # If this is a title field, limit to two lines; all others limit to one... FIXME: this is rather arbitrary
-            if ($field->{'code'} eq 'title' && scalar(@line) >= 2) {
-                while (scalar(@line) > 2) {
+            if ( $field->{'code'} eq 'title' && scalar(@line) >= 2 ) {
+                while ( scalar(@line) > 2 ) {
                     pop @line;
                 }
             } else {
-                while (scalar(@line) > 1) {
+                while ( scalar(@line) > 1 ) {
                     pop @line;
                 }
             }
-            push(@label_lines, @line);
+            push( @label_lines, @line );
         }
-        LABEL_LINES:    # generate lines of label text for current field
+    LABEL_LINES:    # generate lines of label text for current field
         foreach my $line (@label_lines) {
             next LABEL_LINES if $line eq '';
-            $line = log2vis( $line );
-            my $string_width = C4::Creators::PDF->StrWidth($line, $font, $self->{'font_size'});
-            if ($self->{'justify'} eq 'R') {
-                $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
+            $line = log2vis($line);
+            my $string_width = C4::Creators::PDF->StrWidth( $line, $font, $self->{'font_size'} );
+            if ( $self->{'justify'} eq 'R' ) {
+                $text_llx = $params{'llx'} + $self->{'width'} - ( $self->{'left_text_margin'} + $string_width );
+            } elsif ( $self->{'justify'} eq 'C' ) {
+
+                # some code to try and center each line on the label based on font size and string point width...
+                my $whitespace = ( $self->{'width'} - ( $string_width + ( 2 * $self->{'left_text_margin'} ) ) );
+                $text_llx = ( ( $whitespace / 2 ) + $params{'llx'} + $self->{'left_text_margin'} );
+            } else {
+                $text_llx = ( $params{'llx'} + $self->{'left_text_margin'} );
             }
-            elsif($self->{'justify'} eq 'C') {
-                 # some code to try and center each line on the label based on font size and string point width...
-                 my $whitespace = ($self->{'width'} - ($string_width + (2 * $self->{'left_text_margin'})));
-                 $text_llx = (($whitespace  / 2) + $params{'llx'} + $self->{'left_text_margin'});
-            }
-            else {
-                $text_llx = ($params{'llx'} + $self->{'left_text_margin'});
-            }
-            push @label_text,   {
-                                text_llx        => $text_llx,
-                                text_lly        => $text_lly,
-                                font            => $font,
-                                font_size       => $self->{'font_size'},
-                                line            => $line,
-                                };
+            push @label_text, {
+                text_llx  => $text_llx,
+                text_lly  => $text_lly,
+                font      => $font,
+                font_size => $self->{'font_size'},
+                line      => $line,
+            };
             $text_lly = $text_lly - $params{'line_spacer'};
         }
-        $font = $self->{'font'};        # reset font for next field
-    }	#foreach field
+        $font = $self->{'font'};    # reset font for next field
+    }    #foreach field
     return \@label_text;
 }
 
@@ -487,112 +509,110 @@ sub draw_guide_box {
 }
 
 sub barcode {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
-    $params{'barcode_data'} = ($self->{'barcode'} || _get_label_item($self->{'item_number'}, 1)) if !$params{'barcode_data'};
+    $params{'barcode_data'} = ( $self->{'barcode'} || _get_label_item( $self->{'item_number'}, 1 ) )
+        if !$params{'barcode_data'};
     $params{'barcode_type'} = $self->{'barcode_type'} if !$params{'barcode_type'};
     my $x_scale_factor = 1;
-    my $num_of_bars = length($params{'barcode_data'});
+    my $num_of_bars    = length( $params{'barcode_data'} );
     my $tot_bar_length = 0;
-    my $bar_length = 0;
-    my $guard_length = 10;
-    my $hide_text = 'yes';
-    if ($params{'barcode_type'} =~ m/CODE39/) {
-        $bar_length = '17.5';
-        $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
-        $x_scale_factor = ($params{'width'} / $tot_bar_length);
-        if ($params{'barcode_type'} eq 'CODE39MOD') {
-            my $c39 = CheckDigits('code_39');   # get modulo43 checksum
-            $params{'barcode_data'} = $c39->complete($params{'barcode_data'});
-        }
-        elsif ($params{'barcode_type'} eq 'CODE39MOD10') {
-            my $c39_10 = CheckDigits('siret');   # get modulo43 checksum
-            $params{'barcode_data'} = $c39_10->complete($params{'barcode_data'});
+    my $bar_length     = 0;
+    my $guard_length   = 10;
+    my $hide_text      = 'yes';
+
+    if ( $params{'barcode_type'} =~ m/CODE39/ ) {
+        $bar_length     = '17.5';
+        $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
+        $x_scale_factor = ( $params{'width'} / $tot_bar_length );
+        if ( $params{'barcode_type'} eq 'CODE39MOD' ) {
+            my $c39 = CheckDigits('code_39');    # get modulo43 checksum
+            $params{'barcode_data'} = $c39->complete( $params{'barcode_data'} );
+        } elsif ( $params{'barcode_type'} eq 'CODE39MOD10' ) {
+            my $c39_10 = CheckDigits('siret');    # get modulo43 checksum
+            $params{'barcode_data'} = $c39_10->complete( $params{'barcode_data'} );
             $hide_text = '';
         }
         eval {
             PDF::Reuse::Barcode::Code39(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
-                value               => "*$params{barcode_data}*",
-                xSize               => $x_scale_factor,
-                ySize               => $params{'y_scale_factor'},
-                hide_asterisk       => 1,
-                text                => $hide_text,
-                mode                => 'graphic',
+                x             => $params{'llx'},
+                y             => $params{'lly'},
+                value         => "*$params{barcode_data}*",
+                xSize         => $x_scale_factor,
+                ySize         => $params{'y_scale_factor'},
+                hide_asterisk => 1,
+                text          => $hide_text,
+                mode          => 'graphic',
             );
         };
         if ($@) {
-            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
+            warn sprintf( 'Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@ );
         }
-    }
-    elsif ($params{'barcode_type'} eq 'COOP2OF5') {
-        $bar_length = '9.43333333333333';
-        $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
-        $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
+    } elsif ( $params{'barcode_type'} eq 'COOP2OF5' ) {
+        $bar_length     = '9.43333333333333';
+        $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
+        $x_scale_factor = ( $params{'width'} / $tot_bar_length ) * 0.9;
         eval {
             PDF::Reuse::Barcode::COOP2of5(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
-                value               => $params{barcode_data},
-                xSize               => $x_scale_factor,
-                ySize               => $params{'y_scale_factor'},
-                mode                    => 'graphic',
+                x     => $params{'llx'},
+                y     => $params{'lly'},
+                value => $params{barcode_data},
+                xSize => $x_scale_factor,
+                ySize => $params{'y_scale_factor'},
+                mode  => 'graphic',
             );
         };
         if ($@) {
-            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
+            warn sprintf( 'Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@ );
         }
-    }
-    elsif ( $params{'barcode_type'} eq 'INDUSTRIAL2OF5' ) {
-        $bar_length = '13.1333333333333';
-        $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
-        $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
+    } elsif ( $params{'barcode_type'} eq 'INDUSTRIAL2OF5' ) {
+        $bar_length     = '13.1333333333333';
+        $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
+        $x_scale_factor = ( $params{'width'} / $tot_bar_length ) * 0.9;
         eval {
             PDF::Reuse::Barcode::Industrial2of5(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
-                value               => $params{barcode_data},
-                xSize               => $x_scale_factor,
-                ySize               => $params{'y_scale_factor'},
-                mode                    => 'graphic',
+                x     => $params{'llx'},
+                y     => $params{'lly'},
+                value => $params{barcode_data},
+                xSize => $x_scale_factor,
+                ySize => $params{'y_scale_factor'},
+                mode  => 'graphic',
             );
         };
         if ($@) {
-            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
+            warn sprintf( 'Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@ );
         }
-    }
-    elsif ($params{'barcode_type'} eq 'EAN13') {
-        $bar_length = 4; # FIXME
-    $num_of_bars = 13;
-        $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
-        $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
+    } elsif ( $params{'barcode_type'} eq 'EAN13' ) {
+        $bar_length     = 4;                                                        # FIXME
+        $num_of_bars    = 13;
+        $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
+        $x_scale_factor = ( $params{'width'} / $tot_bar_length ) * 0.9;
         eval {
             PDF::Reuse::Barcode::EAN13(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
-                value               => sprintf('%013d',$params{barcode_data}),
-#                xSize               => $x_scale_factor,
-#                ySize               => $params{'y_scale_factor'},
-                mode                    => 'graphic',
+                x     => $params{'llx'},
+                y     => $params{'lly'},
+                value => sprintf( '%013d', $params{barcode_data} ),
+
+                #                xSize               => $x_scale_factor,
+                #                ySize               => $params{'y_scale_factor'},
+                mode => 'graphic',
             );
         };
         if ($@) {
-            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
+            warn sprintf( 'Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@ );
         }
-    }
-    else {
-    warn "unknown barcode_type: $params{barcode_type}";
+    } else {
+        warn "unknown barcode_type: $params{barcode_type}";
     }
 }
 
 sub csv_data {
-    my $self = shift;
-    my $label_fields = _get_text_fields($self->{'format_string'});
-    my $item = _get_label_item($self->{'item_number'});
-    my $biblio = Koha::Biblios->find($item->{biblionumber});
-    my $bib_record = $biblio->metadata->record;
-    my @csv_data = (map { _get_barcode_data($_->{'code'},$item,$bib_record) } @$label_fields);
+    my $self         = shift;
+    my $label_fields = _get_text_fields( $self->{'format_string'} );
+    my $item         = _get_label_item( $self->{'item_number'} );
+    my $biblio       = Koha::Biblios->find( $item->{biblionumber} );
+    my $bib_record   = $biblio->metadata->record;
+    my @csv_data     = ( map { _get_barcode_data( $_->{'code'}, $item, $bib_record ) } @$label_fields );
     return \@csv_data;
 }
 

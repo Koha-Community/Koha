@@ -24,12 +24,12 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Serials qw( GetSubscription GetNextDate ModSerialStatus );
 use C4::Serials::Frequency;
-use C4::Log qw( cronlogaction );
+use C4::Log         qw( cronlogaction );
 use Koha::DateUtils qw( dt_from_string );
 
-use Date::Calc qw( check_date Date_to_Days );
+use Date::Calc   qw( check_date Date_to_Days );
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 =head1 NAME
 
@@ -59,8 +59,8 @@ my $verbose = 0;
 my $note    = '';
 my $nonote  = 0;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help|h|?'  => \$help,
@@ -71,7 +71,7 @@ GetOptions(
     'no-note'   => \$nonote,
 ) or pod2usage(2);
 
-pod2usage(1) if $help;
+pod2usage(1)               if $help;
 pod2usage( -verbose => 2 ) if $man;
 
 $verbose and !$confirm and print "### Database will not be modified ###\n";
@@ -108,14 +108,16 @@ my $sth = $dbh->prepare(
 $sth->execute();
 
 while ( my $issue = $sth->fetchrow_hashref ) {
-    if ( $confirm ){
-        ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
+    if ($confirm) {
+        ModSerialStatus(
+            $issue->{serialid},    $issue->{serialseq},
             $issue->{planneddate}, $issue->{publisheddate}, $issue->{publisheddatetext},
-            3, $note );
+            3,                     $note
+        );
         $verbose and print "Serial issue with id=" . $issue->{serialid} . " marked late\n";
     } else {
         print "Serial issue with id=" . $issue->{serialid} . " would have been marked late\n";
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

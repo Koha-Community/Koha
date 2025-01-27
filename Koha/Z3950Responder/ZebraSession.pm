@@ -53,9 +53,10 @@ sub start_search {
 
     eval {
         $connection = C4::Context->Zconn(
+
             # We're depending on the caller to have done some validation.
             $database eq 'biblios' ? 'biblioserver' : 'authorityserver',
-            0 # No, no async, doesn't really help much for single-server searching
+            0    # No, no async, doesn't really help much for single-server searching
         );
 
         $results = $connection->search_pqf( $args->{QUERY} );
@@ -74,13 +75,13 @@ sub start_search {
         $connection = undef;
     }
 
-    my $hits = $results ? $results->size() : -1;
+    my $hits      = $results ? $results->size() : -1;
     my $resultset = {
-        database => $database,
+        database   => $database,
         connection => $connection,
-        results => $results,
-        query => $args->{QUERY},
-        hits => $hits
+        results    => $results,
+        query      => $args->{QUERY},
+        hits       => $hits
     };
 
     return ( $resultset, $hits );
@@ -100,7 +101,7 @@ sub fetch_record {
     my $record;
 
     eval {
-        if ( !$resultset->{results}->record_immediate( $index ) ) {
+        if ( !$resultset->{results}->record_immediate($index) ) {
             my $start = $num_to_prefetch ? int( $index / $num_to_prefetch ) * $num_to_prefetch : $index;
 
             if ( $start + $num_to_prefetch >= $resultset->{results}->size() ) {
@@ -112,7 +113,7 @@ sub fetch_record {
             $resultset->{results}->records( $start, $num_to_prefetch, 0 );
         }
 
-        $record = $resultset->{results}->record_immediate( $index )->raw();
+        $record = $resultset->{results}->record_immediate($index)->raw();
     };
     if ($@) {
         die $@ if ( ref($@) ne 'ZOOM::Exception' );
@@ -149,13 +150,11 @@ sub _set_error_from_zoom {
     my ( $self, $args, $exception ) = @_;
 
     $self->set_error( $args, $self->ERR_TEMPORARY_ERROR, 'Cannot connect to upstream server' );
-    $self->log_error(
-        "Zebra upstream error: " .
-        $exception->message() . " (" .
-        $exception->code() . ") " .
-        ( $exception->addinfo() // '' ) . " " .
-        $exception->diagset()
-    );
+    $self->log_error( "Zebra upstream error: "
+            . $exception->message() . " ("
+            . $exception->code() . ") "
+            . ( $exception->addinfo() // '' ) . " "
+            . $exception->diagset() );
 }
 
 1;

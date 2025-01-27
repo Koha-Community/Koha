@@ -18,11 +18,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use CGI                 qw ( -utf8 );
+use C4::Output          qw( output_html_with_http_headers );
+use C4::Auth            qw( get_template_and_user );
 use C4::AuthoritiesMarc qw( GetAuthority ModAuthority DelAuthority GetTagsLabels merge );
-use C4::Biblio qw( TransformHtmlToMarc );
+use C4::Biblio          qw( TransformHtmlToMarc );
 
 use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
@@ -36,40 +36,40 @@ my @errors;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "authorities/merge.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { editauthorities => 1 },
+        template_name => "authorities/merge.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { editauthorities => 1 },
     }
 );
 
 #------------------------
 # Merging
 #------------------------
-if ($op eq 'cud-merge') {
+if ( $op eq 'cud-merge' ) {
 
     # Creating a new record from the html code
-    my $record   = TransformHtmlToMarc($input, 0);
-    my $recordid1   = $input->param('recordid1') // q{};
-    my $recordid2   = $input->param('recordid2') // q{};
-    my $typecode = $input->param('frameworkcode');
+    my $record    = TransformHtmlToMarc( $input, 0 );
+    my $recordid1 = $input->param('recordid1') // q{};
+    my $recordid2 = $input->param('recordid2') // q{};
+    my $typecode  = $input->param('frameworkcode');
 
     # Some error checking
-    if( $recordid1 eq $recordid2 ) {
+    if ( $recordid1 eq $recordid2 ) {
         push @errors, { code => 'DESTRUCTIVE_MERGE' };
-    } elsif( !$typecode || !Koha::Authority::Types->find($typecode) ) {
+    } elsif ( !$typecode || !Koha::Authority::Types->find($typecode) ) {
         push @errors, { code => 'WRONG_FRAMEWORK' };
-    } elsif( scalar $record->fields == 0 ) {
+    } elsif ( scalar $record->fields == 0 ) {
         push @errors, { code => 'EMPTY_MARC' };
     }
-    if( @errors ) {
+    if (@errors) {
         $template->param( errors => \@errors );
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
 
     # Rewriting the leader
-    if( my $authrec = GetAuthority($recordid1) ) {
+    if ( my $authrec = GetAuthority($recordid1) ) {
         $record->leader( $authrec->leader() );
     }
 
@@ -78,44 +78,42 @@ if ($op eq 'cud-merge') {
     ModAuthority( $recordid1, $record, $typecode );
 
     # Now merge for biblios attached to $recordid2
-    my $MARCfrom = GetAuthority( $recordid2 );
-    merge({ mergefrom => $recordid2, MARCfrom => $MARCfrom, mergeto => $recordid1, MARCto => $record });
+    my $MARCfrom = GetAuthority($recordid2);
+    merge( { mergefrom => $recordid2, MARCfrom => $MARCfrom, mergeto => $recordid1, MARCto => $record } );
 
     # Delete the other record. No need to merge.
-    DelAuthority({ authid => $recordid2, skip_merge => 1 });
+    DelAuthority( { authid => $recordid2, skip_merge => 1 } );
 
     # Parameters
     $template->param(
-        result  => 1,
+        result    => 1,
         recordid1 => $recordid1
     );
 
     #-------------------------
     # Show records to merge
     #-------------------------
-}
-else {
+} else {
     my $mergereference = $input->param('mergereference');
     $template->{'VARS'}->{'mergereference'} = $mergereference;
 
     if ( scalar(@authid) != 2 ) {
         push @errors, { code => "WRONG_COUNT", value => scalar(@authid) };
-    } elsif( $authid[0] eq $authid[1] ) {
+    } elsif ( $authid[0] eq $authid[1] ) {
         push @errors, { code => 'DESTRUCTIVE_MERGE' };
     } else {
-        my $recordObj1 = Koha::MetadataRecord::Authority->get_from_authid($authid[0]);
-        if (!$recordObj1) {
+        my $recordObj1 = Koha::MetadataRecord::Authority->get_from_authid( $authid[0] );
+        if ( !$recordObj1 ) {
             push @errors, { code => "MISSING_RECORD", value => $authid[0] };
         }
 
-
         my $recordObj2;
-        if (defined $mergereference && $mergereference eq 'breeding') {
-            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_breeding($authid[1]);
+        if ( defined $mergereference && $mergereference eq 'breeding' ) {
+            $recordObj2 = Koha::MetadataRecord::Authority->get_from_breeding( $authid[1] );
         } else {
-            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_authid($authid[1]);
+            $recordObj2 = Koha::MetadataRecord::Authority->get_from_authid( $authid[1] );
         }
-        if (!$recordObj2) {
+        if ( !$recordObj2 ) {
             push @errors, { code => "MISSING_RECORD", value => $authid[1] };
         }
 
@@ -127,16 +125,15 @@ else {
             exit;
         }
 
-        if ($mergereference ) {
+        if ($mergereference) {
 
             my $framework;
             if ( $recordObj1->authtypecode ne $recordObj2->authtypecode && $mergereference ne 'breeding' ) {
                 $framework = $input->param('frameworkcode');
-            }
-            else {
+            } else {
                 $framework = $recordObj1->authtypecode;
             }
-            if ($mergereference eq 'breeding') {
+            if ( $mergereference eq 'breeding' ) {
                 $mergereference = $authid[0];
             }
 
@@ -150,10 +147,11 @@ else {
 
             #Setting $notreference
             my $notreference = $authid[1];
-            if($mergereference == $notreference){
+            if ( $mergereference == $notreference ) {
                 $notreference = $authid[0];
+
                 #Swap so $recordObj1 is always the correct merge reference
-                ($recordObj1, $recordObj2) = ($recordObj2, $recordObj1);
+                ( $recordObj1, $recordObj2 ) = ( $recordObj2, $recordObj1 );
             }
 
             # Getting frameworktext
@@ -190,19 +188,21 @@ else {
                 frameworktext     => $frameworktextdestination->authtypetext,
                 multipleauthtypes => ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) ? 1 : 0,
             );
-        }
-        else {
+        } else {
 
             # Ask the user to choose which record will be the kept
             $template->param(
                 choosereference => 1,
-                recordid1         => $authid[0],
-                recordid2         => $authid[1],
+                recordid1       => $authid[0],
+                recordid2       => $authid[1],
                 title1          => $recordObj1->authorized_heading,
                 title2          => $recordObj2->authorized_heading,
             );
             if ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) {
-                my $authority_types = Koha::Authority::Types->search( { authtypecode => { '!=' => '' } }, { order_by => ['authtypetext'] } );
+                my $authority_types = Koha::Authority::Types->search(
+                    { authtypecode => { '!=' => '' } },
+                    { order_by     => ['authtypetext'] }
+                );
                 my $frameworktext1 = Koha::Authority::Types->find( $recordObj1->authtypecode );
                 my $frameworktext2 = Koha::Authority::Types->find( $recordObj2->authtypecode );
                 $template->param(

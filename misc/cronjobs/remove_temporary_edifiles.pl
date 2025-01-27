@@ -8,15 +8,14 @@ use C4::Context;
 # this script will remove those older than 5 days
 my $tmpdir = '/tmp';
 #
-opendir( my $dh, $tmpdir) || die "Cannot open $tmpdir : $!";
+opendir( my $dh, $tmpdir ) || die "Cannot open $tmpdir : $!";
 
 my @files_in_tmp = grep { /\.CE[IQ]$/ && -f "$tmpdir/$_" } readdir($dh);
 closedir $dh;
 
-
 my $dbh = C4::Context->dbh;
 
-my $query =<<'ENDSQL';
+my $query = <<'ENDSQL';
 select filename from edifact_messages
 where message_type IN ('QUOTE','INVOICE')
 and datediff( CURDATE(), transfer_date ) > 5
@@ -36,7 +35,7 @@ foreach (@files_in_tmp) {
     }
 }
 
-if ( @delete_list ) {
+if (@delete_list) {
     chdir $tmpdir;
     unlink @delete_list;
 }

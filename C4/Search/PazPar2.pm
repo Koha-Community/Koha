@@ -40,13 +40,13 @@ C4::Search::PazPar2 - implement client for PazPar2
 =cut
 
 sub new {
-    my $class = shift;
+    my $class    = shift;
     my $endpoint = shift;
 
     my $self = {};
     $self->{'endpoint'} = $endpoint;
-    $self->{'session'} = '';
-    $self->{'ua'} = LWP::UserAgent->new;
+    $self->{'session'}  = '';
+    $self->{'ua'}       = LWP::UserAgent->new;
     bless $self, $class;
 
     return $self;
@@ -55,12 +55,12 @@ sub new {
 sub init {
     my $self = shift;
 
-    my $uri = URI->new($self->{'endpoint'});
-    $uri->query_param(command => 'init');
+    my $uri = URI->new( $self->{'endpoint'} );
+    $uri->query_param( command => 'init' );
     my $response = $self->{'ua'}->get($uri);
-    if ($response->is_success) {
-        my $message = XMLin($response->content);
-        if ($message->{'status'} eq 'OK') {
+    if ( $response->is_success ) {
+        my $message = XMLin( $response->content );
+        if ( $message->{'status'} eq 'OK' ) {
             $self->{'session'} = $message->{'session'};
         }
     } else {
@@ -69,15 +69,16 @@ sub init {
 }
 
 sub search {
-    my $self = shift;
+    my $self  = shift;
     my $query = shift;
 
-    my $uri = URI->new($self->{'endpoint'});
-    $uri->query_param(command => 'search');
-    $uri->query_param(session => $self->{'session'});
-    $uri->query_param(query => $query);
+    my $uri = URI->new( $self->{'endpoint'} );
+    $uri->query_param( command => 'search' );
+    $uri->query_param( session => $self->{'session'} );
+    $uri->query_param( query   => $query );
     my $response = $self->{'ua'}->get($uri);
-    if ($response->is_success) {
+    if ( $response->is_success ) {
+
         #print $response->content, "\n";
     } else {
         warn $response->status_line;
@@ -88,11 +89,11 @@ sub search {
 sub stat {
     my $self = shift;
 
-    my $uri = URI->new($self->{'endpoint'});
-    $uri->query_param(command => 'stat');
-    $uri->query_param(session => $self->{'session'});
+    my $uri = URI->new( $self->{'endpoint'} );
+    $uri->query_param( command => 'stat' );
+    $uri->query_param( session => $self->{'session'} );
     my $response = $self->{'ua'}->get($uri);
-    if ($response->is_success) {
+    if ( $response->is_success ) {
         return $response->content;
     } else {
         warn $response->status_line;
@@ -101,41 +102,42 @@ sub stat {
 }
 
 sub show {
-    my $self = shift;
+    my $self  = shift;
     my $start = shift;
     my $count = shift;
-    my $sort = shift;
+    my $sort  = shift;
 
-    my $uri = URI->new($self->{'endpoint'});
-    $uri->query_param(command => 'show');
-    $uri->query_param(start => $start);
-    $uri->query_param(num => $count);
-    $uri->query_param(block => 1);
-    $uri->query_param(session => $self->{'session'});
-    $uri->query_param(sort => $sort);
+    my $uri = URI->new( $self->{'endpoint'} );
+    $uri->query_param( command => 'show' );
+    $uri->query_param( start   => $start );
+    $uri->query_param( num     => $count );
+    $uri->query_param( block   => 1 );
+    $uri->query_param( session => $self->{'session'} );
+    $uri->query_param( sort    => $sort );
     my $response = $self->{'ua'}->get($uri);
-    if ($response->is_success) {
+
+    if ( $response->is_success ) {
         return $response->content;
     } else {
         warn $response->status_line;
         return;
     }
-    
+
 }
 
 sub record {
-    my $self = shift;
-    my $id = shift;
+    my $self   = shift;
+    my $id     = shift;
     my $offset = shift;
 
-    my $uri = URI->new($self->{'endpoint'});
-    $uri->query_param(command => 'record');
-    $uri->query_param(id => $id);
-    $uri->query_param(offset => $offset);
-    $uri->query_param(binary => 1);
-    $uri->query_param(session => $self->{'session'});
+    my $uri = URI->new( $self->{'endpoint'} );
+    $uri->query_param( command => 'record' );
+    $uri->query_param( id      => $id );
+    $uri->query_param( offset  => $offset );
+    $uri->query_param( binary  => 1 );
+    $uri->query_param( session => $self->{'session'} );
     my $response = $self->{'ua'}->get($uri);
-    if ($response->is_success) {
+    if ( $response->is_success ) {
         return $response->content;
     } else {
         warn $response->status_line;
@@ -147,12 +149,12 @@ sub termlist {
     my $self = shift;
     my $name = shift;
 
-    my $uri = URI->new($self->{'endpoint'});
-    $uri->query_param(command => 'termlist');
-    $uri->query_param(name => $name);
-    $uri->query_param(session => $self->{'session'});
+    my $uri = URI->new( $self->{'endpoint'} );
+    $uri->query_param( command => 'termlist' );
+    $uri->query_param( name    => $name );
+    $uri->query_param( session => $self->{'session'} );
     my $response = $self->{'ua'}->get($uri);
-    if ($response->is_success) {
+    if ( $response->is_success ) {
         return $response->content;
     } else {
         warn $response->status_line;

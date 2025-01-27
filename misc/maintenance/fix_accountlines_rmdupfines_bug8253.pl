@@ -27,7 +27,7 @@ use Getopt::Long qw( GetOptions );
 use Data::Dumper;
 
 sub print_usage {
-    print <<_USAGE_
+    print <<_USAGE_;
 $0: Remove duplicate fines
 
 Due to bug 8253, upgrading from Koha 3.6 to 3.8 may introduce duplicate fines.
@@ -44,13 +44,12 @@ my $help;
 my $confirm;
 my $result = GetOptions(
     'confirm|c' => \$confirm,
-    'help|h'   => \$help,
+    'help|h'    => \$help,
 );
 if ( $help || !$confirm ) {
     print_usage();
     exit 0;
 }
-
 
 my $dbh = C4::Context->dbh;
 
@@ -64,13 +63,12 @@ my $sth = $dbh->prepare($query);
 $sth->execute();
 my $results = $sth->fetchall_arrayref( {} );
 
-$query =
-"SELECT * FROM accountlines WHERE description LIKE ? AND description NOT LIKE ?";
-$sth = $dbh->prepare($query);
+$query = "SELECT * FROM accountlines WHERE description LIKE ? AND description NOT LIKE ?";
+$sth   = $dbh->prepare($query);
 
 foreach my $keeper (@$results) {
 
-    warn "WORKING ON KEEPER: " . Data::Dumper::Dumper( $keeper );
+    warn "WORKING ON KEEPER: " . Data::Dumper::Dumper($keeper);
     my ($description_to_match) = split( / 23:59/, $keeper->{'description'} );
     $description_to_match .= '%';
 
@@ -82,21 +80,19 @@ foreach my $keeper (@$results) {
 
     while ( my $f = $sth->fetchrow_hashref() ) {
 
-        warn "DELETING: " . Data::Dumper::Dumper( $f );
+        warn "DELETING: " . Data::Dumper::Dumper($f);
 
         if ( $f->{'amountoutstanding'} < $keeper->{'amountoutstanding'} ) {
             $keeper->{'amountoutstanding'} = $f->{'amountoutstanding'};
             $has_changed = 1;
         }
 
-        my $sql =
-            "DELETE FROM accountlines WHERE accountlines_id = ?";
+        my $sql = "DELETE FROM accountlines WHERE accountlines_id = ?";
         $dbh->do( $sql, undef, $f->{'accountlines_id'} );
     }
 
     if ($has_changed) {
-        my $sql =
-            "UPDATE accountlines SET amountoutstanding = ? WHERE accountlines_id = ?";
+        my $sql = "UPDATE accountlines SET amountoutstanding = ? WHERE accountlines_id = ?";
         $dbh->do(
             $sql,                           undef,
             $keeper->{'amountoutstanding'}, $keeper->{'accountlines_id'}

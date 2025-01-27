@@ -19,7 +19,6 @@ package Koha::Club::Hold;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Club::Template::Fields;
@@ -53,25 +52,24 @@ Class (static) method that returns a new Koha::Club::Hold instance
 =cut
 
 sub add {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $itemnumber = $params->{item_id};
 
     # check for mandatory params
     my @mandatory = ( 'biblio_id', 'club_id' );
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
 
-    my $club = Koha::Clubs->find($params->{club_id});
+    my $club        = Koha::Clubs->find( $params->{club_id} );
     my @enrollments = $club->club_enrollments->as_list;
 
     Koha::Exceptions::ClubHold::NoPatrons->throw()
         unless scalar @enrollments;
 
-    my $biblio = Koha::Biblios->find($params->{biblio_id});
+    my $biblio = Koha::Biblios->find( $params->{biblio_id} );
 
     my $club_params = {
         club_id   => $params->{club_id},
@@ -90,35 +88,42 @@ sub add {
 
         my $can_place_hold;
         my $patron = Koha::Patrons->find($patron_id);
-        my $item = $itemnumber ? Koha::Items->find( $itemnumber ) : undef;
-        if($params->{default_patron_home}) {
+        my $item   = $itemnumber ? Koha::Items->find($itemnumber) : undef;
+        if ( $params->{default_patron_home} ) {
             my $patron_home = $patron->branchcode;
-            $can_place_hold = $itemnumber
+            $can_place_hold =
+                $itemnumber
                 ? C4::Reserves::CanItemBeReserved( $patron, $item, $patron_home )
                 : C4::Reserves::CanBookBeReserved( $patron_id, $params->{biblio_id}, $patron_home );
             $pickup_id = $patron_home if $can_place_hold->{status} eq 'OK';
             unless ( $can_place_hold->{status} eq 'OK' ) {
-                warn "Patron(".$patron_id.") Hold cannot be placed with patron's homebranch ($patron_home). Reason: " . $can_place_hold->{status};
+                warn "Patron("
+                    . $patron_id
+                    . ") Hold cannot be placed with patron's homebranch ($patron_home). Reason: "
+                    . $can_place_hold->{status};
             }
         }
 
         unless ( defined $can_place_hold && $can_place_hold->{status} eq 'OK' ) {
-            $can_place_hold = $itemnumber
+            $can_place_hold =
+                $itemnumber
                 ? C4::Reserves::CanItemBeReserved( $patron, $item, $pickup_id )
                 : C4::Reserves::CanBookBeReserved( $patron_id, $params->{biblio_id}, $pickup_id );
         }
 
         unless ( $can_place_hold->{status} eq 'OK' ) {
-            warn "Patron(".$patron_id.") Hold cannot be placed. Reason: " . $can_place_hold->{status};
-            Koha::Club::Hold::PatronHold->new({
-                patron_id => $patron_id,
-                club_hold_id => $club_hold->id,
-                error_code => $can_place_hold->{status}
-            })->store();
+            warn "Patron(" . $patron_id . ") Hold cannot be placed. Reason: " . $can_place_hold->{status};
+            Koha::Club::Hold::PatronHold->new(
+                {
+                    patron_id    => $patron_id,
+                    club_hold_id => $club_hold->id,
+                    error_code   => $can_place_hold->{status}
+                }
+            )->store();
             next;
         }
 
-        my $priority = C4::Reserves::CalculatePriority($params->{biblio_id});
+        my $priority = C4::Reserves::CalculatePriority( $params->{biblio_id} );
 
         my $hold_id = C4::Reserves::AddReserve(
             {
@@ -130,30 +135,33 @@ sub add {
                 notes           => $params->{notes},
                 title           => $biblio->title,
                 itemnumber      => $params->{item_id},
-                found           => undef,                       # TODO: Why not?
+                found           => undef,                        # TODO: Why not?
                 itemtype        => $params->{item_type},
             }
         );
         if ($hold_id) {
-            Koha::Club::Hold::PatronHold->new({
-                patron_id => $patron_id,
-                club_hold_id => $club_hold->id,
-                hold_id => $hold_id
-            })->store();
+            Koha::Club::Hold::PatronHold->new(
+                {
+                    patron_id    => $patron_id,
+                    club_hold_id => $club_hold->id,
+                    hold_id      => $hold_id
+                }
+            )->store();
         } else {
-            warn "Could not create hold for Patron(".$patron_id.")";
-            Koha::Club::Hold::PatronHold->new({
-                patron_id => $patron_id,
-                club_hold_id => $club_hold->id,
-                error_message => "Could not create hold for Patron(".$patron_id.")"
-            })->store();
+            warn "Could not create hold for Patron(" . $patron_id . ")";
+            Koha::Club::Hold::PatronHold->new(
+                {
+                    patron_id     => $patron_id,
+                    club_hold_id  => $club_hold->id,
+                    error_message => "Could not create hold for Patron(" . $patron_id . ")"
+                }
+            )->store();
         }
     }
 
     return $club_hold;
 
 }
-
 
 =head3 to_api_mapping
 
@@ -163,9 +171,7 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return {
-        id => 'club_hold_id'
-    };
+    return { id => 'club_hold_id' };
 }
 
 =head2 Internal methods

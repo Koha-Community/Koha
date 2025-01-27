@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::DateUtils qw( dt_from_string );
@@ -37,10 +37,10 @@ my $cgi = CGI->new;
 my $op = $cgi->param('op') || q{};
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'clubs/templates-add-modify.tt',
-        query           => $cgi,
-        type            => 'intranet',
-        flagsrequired   => { clubs => 'edit_templates' },
+        template_name => 'clubs/templates-add-modify.tt',
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { clubs => 'edit_templates' },
     }
 );
 
@@ -53,20 +53,19 @@ if ( $cgi->param('name') && $op eq 'cud-update' ) {    # Update or create club
     if ($id) {
         $club_template = Koha::Club::Templates->find($id);
         $stored        = 'updated';
-    }
-    else {
+    } else {
         $club_template = Koha::Club::Template->new();
-        $stored = 'created';
+        $stored        = 'created';
     }
 
     $club_template->set(
         {
-            id          => $id                        || undef,
-            name        => scalar $cgi->param('name')        || undef,
-            description => scalar $cgi->param('description') || undef,
-            branchcode  => scalar $cgi->param('branchcode')  || undef,
+            id                      => $id                               || undef,
+            name                    => scalar $cgi->param('name')        || undef,
+            description             => scalar $cgi->param('description') || undef,
+            branchcode              => scalar $cgi->param('branchcode')  || undef,
             date_updated            => dt_from_string(),
-            is_email_required       => scalar $cgi->param('is_email_required') ? 1 : 0,
+            is_email_required       => scalar $cgi->param('is_email_required')       ? 1 : 0,
             is_enrollable_from_opac => scalar $cgi->param('is_enrollable_from_opac') ? 1 : 0,
         }
     )->store();
@@ -88,14 +87,13 @@ if ( $cgi->param('name') && $op eq 'cud-update' ) {    # Update or create club
         my $field_authorised_value_category = $field_authorised_value_category[$i];
 
         my $field =
-          $field_id
-          ? Koha::Club::Template::Fields->find($field_id)
-          : Koha::Club::Template::Field->new();
+            $field_id
+            ? Koha::Club::Template::Fields->find($field_id)
+            : Koha::Club::Template::Field->new();
 
         if ( grep { $_ eq $field_id } @field_delete ) {
             $field->delete();
-        }
-        else {
+        } else {
             $field->set(
                 {
                     club_template_id          => $id,
@@ -122,14 +120,13 @@ if ( $cgi->param('name') && $op eq 'cud-update' ) {    # Update or create club
         my $field_authorised_value_category = $field_authorised_value_category[$i];
 
         my $field =
-          $field_id
-          ? Koha::Club::Template::EnrollmentFields->find($field_id)
-          : Koha::Club::Template::EnrollmentField->new();
+            $field_id
+            ? Koha::Club::Template::EnrollmentFields->find($field_id)
+            : Koha::Club::Template::EnrollmentField->new();
 
         if ( grep { $_ eq $field_id } @field_delete ) {
             $field->delete();
-        }
-        else {
+        } else {
             $field->set(
                 {
                     id                        => $field_id,

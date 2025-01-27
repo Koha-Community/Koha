@@ -66,8 +66,7 @@ sub get {
                 }
             }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -87,8 +86,7 @@ sub list_credits {
     return try {
         my $credits = $c->objects->search( $patron->account->credits );
         return $c->render( status => 200, openapi => $credits );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -112,12 +110,10 @@ sub add_credit {
     my $body    = $c->req->json;
 
     return try {
-        my $credit_type =
-          $body->{credit_type} || 'PAYMENT';    # default to 'PAYMENT'
-        my $amount = $body->{amount};    # mandatory, validated by openapi
+        my $credit_type = $body->{credit_type} || 'PAYMENT';    # default to 'PAYMENT'
+        my $amount      = $body->{amount};                      # mandatory, validated by openapi
 
-        unless ( $amount > 0 )
-        {    # until we support newer JSON::Validator and thus minimumExclusive
+        unless ( $amount > 0 ) {    # until we support newer JSON::Validator and thus minimumExclusive
             Koha::Exceptions::BadParameter->throw( { parameter => 'amount' } );
         }
 
@@ -147,13 +143,12 @@ sub add_credit {
 
         my $date = $body->{date};
         $credit->date($date)->store
-          if $date;
+            if $date;
 
         my $debits_ids = $body->{account_lines_ids};
         my $debits;
-        $debits = Koha::Account::Lines->search(
-            { accountlines_id => { -in => $debits_ids } } )
-          if $debits_ids;
+        $debits = Koha::Account::Lines->search( { accountlines_id => { -in => $debits_ids } } )
+            if $debits_ids;
 
         if ($debits) {
 
@@ -174,8 +169,7 @@ sub add_credit {
             status  => 201,
             openapi => $c->objects->to_api($credit),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -195,8 +189,7 @@ sub list_debits {
     return try {
         my $debits = $c->objects->search( $patron->account->debits );
         return $c->render( status => 200, openapi => $debits );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -212,48 +205,42 @@ sub add_debit {
     my $user   = $c->stash('koha.user');
 
     return $c->render_resource_not_found("Patron")
-      unless $patron;
+        unless $patron;
 
     return try {
-        my $data =
-          Koha::Account::Debit->new_from_api( $c->req->json )->unblessed;
+        my $data = Koha::Account::Debit->new_from_api( $c->req->json )->unblessed;
 
         $data->{library_id}       = delete $data->{branchcode};
         $data->{type}             = delete $data->{debit_type_code};
         $data->{cash_register}    = delete $data->{register_id};
         $data->{item_id}          = delete $data->{itemnumber};
         $data->{transaction_type} = delete $data->{payment_type};
-        $data->{interface}        = 'api'
-          ; # Should this always be API, or should we allow the API consumer to choose?
-        $data->{user_id} = delete $data->{manager_id} || $user->id;
+        $data->{interface}        = 'api';   # Should this always be API, or should we allow the API consumer to choose?
+        $data->{user_id}          = delete $data->{manager_id} || $user->id;
 
         my $debit = $patron->account->add_debit($data);
         $debit = Koha::Account::Debit->_new_from_dbic( $debit->{_result} );
 
-        $c->res->headers->location(
-            $c->req->url->to_string . '/' . $debit->id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $debit->id );
         $debit->discard_changes;
 
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($debit),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Account::RegisterRequired') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => $_->description }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Account::AmountNotPositive') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Account::AmountNotPositive') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => $_->description }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Account::UnrecognisedType') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Account::UnrecognisedType') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => $_->description }

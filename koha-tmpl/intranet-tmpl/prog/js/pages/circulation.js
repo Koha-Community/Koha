@@ -1,37 +1,40 @@
 /* global borrowernumber selectBsTabByHash */
-$(document).ready(function() {
-    $("#CheckAllExports").on("click",function(){
+$(document).ready(function () {
+    $("#CheckAllExports").on("click", function () {
         $(".export:visible").prop("checked", true);
         return false;
     });
-    $("#UncheckAllExports").on("click",function(){
+    $("#UncheckAllExports").on("click", function () {
         $(".export:visible").prop("checked", false);
         return false;
     });
 
-    $("#finesholdsissues a[data-bs-toggle='tab']").on("shown.bs.tab", function(e){
-        $(this).click();
-    });
+    $("#finesholdsissues a[data-bs-toggle='tab']").on(
+        "shown.bs.tab",
+        function (e) {
+            $(this).click();
+        }
+    );
 
-    $("#borrower_messages .cancel").on("click",function(){
+    $("#borrower_messages .cancel").on("click", function () {
         $("#add_message_form").hide();
         $("#addmessage").show();
     });
 
-    $("#addmessage").on("click",function(){
+    $("#addmessage").on("click", function () {
         $(this).hide();
         $("#add_message_form").show();
-     });
+    });
 
-    $("input.radio").on("click",function(){
+    $("input.radio").on("click", function () {
         radioCheckBox($(this));
     });
 
-    $(".clear_date").on("click", function(){
-        $("#stickyduedate").prop( "checked", false );
+    $(".clear_date").on("click", function () {
+        $("#stickyduedate").prop("checked", false);
     });
 
-    $("#export_submit").on("click",function(){
+    $("#export_submit").on("click", function () {
         export_checkouts($("#issues-table-output-format").val());
         return false;
     });
@@ -40,93 +43,107 @@ $(document).ready(function() {
     var circ_settings_icon = $(".circ-settings-icon");
 
     // If any checkboxes in the circ settings are selected, show the settings by default
-    if ( $(".circ-settings input:checked,#duedatespec[value!='']").length ) {
+    if ($(".circ-settings input:checked,#duedatespec[value!='']").length) {
         circ_settings.show();
-        circ_settings_icon.removeClass("fa-caret-right").addClass("fa-caret-down");
+        circ_settings_icon
+            .removeClass("fa-caret-right")
+            .addClass("fa-caret-down");
     } else {
         circ_settings.hide();
-        circ_settings_icon.removeClass("fa-caret-down").addClass("fa-caret-right");
+        circ_settings_icon
+            .removeClass("fa-caret-down")
+            .addClass("fa-caret-right");
     }
 
-    $("#show-circ-settings a").on("click",function(){
-        if( circ_settings.is(":hidden")){
+    $("#show-circ-settings a").on("click", function () {
+        if (circ_settings.is(":hidden")) {
             circ_settings.show();
-            circ_settings_icon.removeClass("fa-caret-right").addClass("fa-caret-down");
+            circ_settings_icon
+                .removeClass("fa-caret-right")
+                .addClass("fa-caret-down");
         } else {
             $("#barcode").focus();
             circ_settings.hide();
-            circ_settings_icon.removeClass("fa-caret-down").addClass("fa-caret-right");
+            circ_settings_icon
+                .removeClass("fa-caret-down")
+                .addClass("fa-caret-right");
         }
     });
 
-    $(".circ_setting").on("click",function(){
+    $(".circ_setting").on("click", function () {
         $("#barcode").focus();
     });
 
-    $("#itemSearchFallback").ready(function(){
+    $("#itemSearchFallback").ready(function () {
         $("#itemSearchFallback").modal("show");
     });
 
     // Debarments
-    $("#reldebarments_panel .remove_restriction").on("click",function(){
-        return confirm( __("Remove restriction?") );
+    $("#reldebarments_panel .remove_restriction").on("click", function () {
+        return confirm(__("Remove restriction?"));
     });
     var mrform = $("#manual_restriction_form");
     var mrlink = $("#add_manual_restriction");
     mrform.hide();
-    mrlink.on("click",function(e){
+    mrlink.on("click", function (e) {
         $(this).hide();
         mrform.show();
         e.preventDefault();
     });
-    $("#cancel_manual_restriction").on("click",function(e){
+    $("#cancel_manual_restriction").on("click", function (e) {
         mrlink.show();
         mrform.hide();
         e.preventDefault();
     });
-    $(".clear-date").on("click",function(e){
+    $(".clear-date").on("click", function (e) {
         e.preventDefault();
-        var fieldID = this.id.replace("clear-date-","");
+        var fieldID = this.id.replace("clear-date-", "");
         $("#" + fieldID).val("");
     });
 
     /* Preselect Bootstrap tab based on location hash */
     selectBsTabByHash("finesholdsissues");
 
-    if ( $('#clubs_panel').length ) {
-        $('#clubs-tab').on('click', function() {
-            $('#clubs_panel').text(__("Loading..."));
-            $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=' + borrowernumber );
+    if ($("#clubs_panel").length) {
+        $("#clubs-tab").on("click", function () {
+            $("#clubs_panel").text(__("Loading..."));
+            $("#clubs_panel").load(
+                "/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=" +
+                    borrowernumber
+            );
         });
     }
 
-    if ( $('#pat_lists_panel').length ) {
-        $('#pat_lists-tab').on('click', function() {
-            $('#pat_lists_panel').text(__("Loading..."));
-            $('#pat_lists_panel').load('/cgi-bin/koha/patron_lists/patron-lists-tab.pl?borrowernumber=' + borrowernumber );
+    if ($("#pat_lists_panel").length) {
+        $("#pat_lists-tab").on("click", function () {
+            $("#pat_lists_panel").text(__("Loading..."));
+            $("#pat_lists_panel").load(
+                "/cgi-bin/koha/patron_lists/patron-lists-tab.pl?borrowernumber=" +
+                    borrowernumber
+            );
         });
     }
 });
 
 function export_checkouts(format) {
-    if ($("input:checkbox[name='biblionumbers']:checked").length < 1){
-        alert( __("You must select checkout(s) to export") );
+    if ($("input:checkbox[name='biblionumbers']:checked").length < 1) {
+        alert(__("You must select checkout(s) to export"));
         return;
     }
 
-    $("input:checkbox[name='biblionumbers']").each( function(){
+    $("input:checkbox[name='biblionumbers']").each(function () {
         var input_item = $(this).siblings("input:checkbox");
-        if ( $(this).is(":checked") ) {
+        if ($(this).is(":checked")) {
             $(input_item).prop("checked", true);
         } else {
             $(input_item).prop("checked", false);
         }
-    } );
+    });
 
-    if (format == 'iso2709_995') {
-        format = 'iso2709';
+    if (format == "iso2709_995") {
+        format = "iso2709";
         $("#dont_export_item").val(0);
-    } else if (format == 'iso2709') {
+    } else if (format == "iso2709") {
         $("#dont_export_item").val(1);
     }
 

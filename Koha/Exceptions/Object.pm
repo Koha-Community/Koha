@@ -21,17 +21,17 @@ use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Object' => {
-        isa         => 'Koha::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Object::DuplicateID' => {
         isa         => 'Koha::Exceptions::Object',
         description => "Duplicate ID passed",
-        fields      =>  ['duplicate_id']
+        fields      => ['duplicate_id']
     },
     'Koha::Exceptions::Object::FKConstraint' => {
         isa         => 'Koha::Exceptions::Object',
         description => "Foreign key constraint broken",
-        fields      =>  ['broken_fk', 'value'],
+        fields      => [ 'broken_fk', 'value' ],
     },
     'Koha::Exceptions::Object::FKConstraintDeletion' => {
         isa         => 'Koha::Exceptions::Object',
@@ -39,31 +39,31 @@ use Exception::Class (
         fields      => [ 'column', 'fk', 'table', 'constraint' ],
     },
     'Koha::Exceptions::Object::MethodNotFound' => {
-        isa => 'Koha::Exceptions::Object',
+        isa         => 'Koha::Exceptions::Object',
         description => "Invalid method",
     },
     'Koha::Exceptions::Object::PropertyNotFound' => {
-        isa => 'Koha::Exceptions::Object',
+        isa         => 'Koha::Exceptions::Object',
         description => "Invalid property",
     },
     'Koha::Exceptions::Object::ReadOnlyProperty' => {
-        isa => 'Koha::Exceptions::Object',
+        isa         => 'Koha::Exceptions::Object',
         description => "Change of readonly property attempted",
-        fields => [ 'property' ],
+        fields      => ['property'],
     },
     'Koha::Exceptions::Object::MethodNotCoveredByTests' => {
-        isa => 'Koha::Exceptions::Object',
+        isa         => 'Koha::Exceptions::Object',
         description => "Method not covered by tests",
     },
     'Koha::Exceptions::Object::BadValue' => {
         isa         => 'Koha::Exceptions::Object',
         description => 'Invalid data passed',
-        fields      => ['type', 'property', 'value'],
+        fields      => [ 'type', 'property', 'value' ],
     },
     'Koha::Exceptions::Object::NotInstantiated' => {
         isa         => 'Koha::Exceptions::Object',
         description => 'Tried to access a method on an uninstantiated object',
-        fields      => ['class','method']
+        fields      => [ 'class', 'method' ]
     },
     'Koha::Exceptions::Object::NotInStorage' => {
         isa         => 'Koha::Exceptions::Object',
@@ -76,18 +76,19 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Object::FKConstraint') ) {
-            $msg = sprintf("Invalid parameter passed, %s=%s does not exist", $self->broken_fk, $self->value );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Object::BadValue') ) {
-            $msg = sprintf("Invalid value passed, %s=%s expected type is %s", $self->property, $self->value, $self->type );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Object::ReadOnlyProperty') ) {
-            $msg = sprintf("Invalid attempt to change readonly property: %s", $self->property );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Object::NotInstantiated') ) {
-            $msg = sprintf("Tried to access the '%s' method, but %s is not instantiated", $self->method, $self->class );
+            $msg = sprintf( "Invalid parameter passed, %s=%s does not exist", $self->broken_fk, $self->value );
+        } elsif ( $self->isa('Koha::Exceptions::Object::BadValue') ) {
+            $msg = sprintf(
+                "Invalid value passed, %s=%s expected type is %s", $self->property, $self->value,
+                $self->type
+            );
+        } elsif ( $self->isa('Koha::Exceptions::Object::ReadOnlyProperty') ) {
+            $msg = sprintf( "Invalid attempt to change readonly property: %s", $self->property );
+        } elsif ( $self->isa('Koha::Exceptions::Object::NotInstantiated') ) {
+            $msg =
+                sprintf( "Tried to access the '%s' method, but %s is not instantiated", $self->method, $self->class );
         }
     }
 

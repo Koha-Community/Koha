@@ -49,9 +49,8 @@ sub list {
     return try {
         my $limits = $c->objects->search( Koha::Item::Transfer::Limits->new );
         return $c->render( status => 200, openapi => $limits );
-    }
-    catch {
-        $c->unhandled_exception( $_ );
+    } catch {
+        $c->unhandled_exception($_);
     };
 }
 
@@ -65,8 +64,8 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $params = $c->req->json;
-        my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api( $params );
+        my $params         = $c->req->json;
+        my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api($params);
 
         if ( Koha::Item::Transfer::Limits->search( $transfer_limit->attributes_from_api($params) )->count == 0 ) {
             $transfer_limit->store;
@@ -80,8 +79,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($transfer_limit),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ && $_->isa('Koha::Exceptions::TransferLimit::Duplicate') ) {
             return $c->render(
                 status  => 409,
@@ -103,7 +101,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $transfer_limit = Koha::Item::Transfer::Limits->find( $c->param( 'limit_id' ) );
+    my $transfer_limit = Koha::Item::Transfer::Limits->find( $c->param('limit_id') );
 
     return $c->render_resource_not_found("Transfer limit")
         unless $transfer_limit;
@@ -111,8 +109,7 @@ sub delete {
     return try {
         $transfer_limit->delete;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -212,15 +209,14 @@ sub batch_delete {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $params = $c->req->json;
-        my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api( $params );
-        my $search_params = $transfer_limit->unblessed;
+        my $params         = $c->req->json;
+        my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api($params);
+        my $search_params  = $transfer_limit->unblessed;
 
         Koha::Item::Transfer::Limits->search($search_params)->delete;
 
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

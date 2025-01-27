@@ -6,41 +6,41 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Share a list &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-shareshelf' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Share a list</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Share a list</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">
             [% IF ( OpacNav ) %]
                 <div class="col-lg-2">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                    </div>
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
                 </div>
             [% END %]
 
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="shareshelf" class="maincontent">
-
                     [%# This section contains the essential code for error messages and operations: show, invited and accept. %]
                     <h1>
-                        [% IF op == 'show' || op == 'invited' %]Share a list with another patron
-                        [% ELSIF op == 'accept' %]Accept a shared list from another patron
+                        [% IF op == 'show' || op == 'invited' %]
+                            Share a list with another patron
+                        [% ELSIF op == 'accept' %]
+                            Accept a shared list from another patron
                         [% END %]
                     </h1>
 
@@ -73,19 +73,16 @@
                             <div class="alert alert-warning">As owner of a list you cannot accept an invitation for sharing it.</div>
                         [% END %]
                         <p><a href="/cgi-bin/koha/opac-shelves.pl?op=list">Return to your lists</a></p>
-
                     [% ELSIF op == 'show' %]
                         <div id="invite">
                             <form method="post" id="share_list">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Share list</legend>
                                 <fieldset class="rows">
-                                    <input type="hidden" name="op" value="cud-invite"/>
-                                    <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
+                                    <input type="hidden" name="op" value="cud-invite" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                                     <ol>
-                                        <li>
-                                            <label for="name">List name:</label> [% shelfname | html %]
-                                        </li>
+                                        <li> <label for="name">List name:</label> [% shelfname | html %] </li>
                                         <li>
                                             <label for="invite_address">Email address:</label>
                                             <input type="text" id="invite_address" name="invite_address" size="40" />
@@ -96,9 +93,10 @@
                                     <input type="submit" value="Send" class="btn btn-primary" />
                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=list" class="cancel">Cancel</a>
                                 </fieldset>
-                            </form> <!-- /#share_list -->
-                        </div> <!-- /#invite -->
-
+                            </form>
+                            <!-- /#share_list -->
+                        </div>
+                        <!-- /#invite -->
                     [% ELSIF op == 'invited' %]
                         <div id="conf_invite">
                             [% IF approvedaddress %]
@@ -112,39 +110,43 @@
                             [% END %]
                             <p><a href="/cgi-bin/koha/opac-shelves.pl?op=list">Return to your lists</a></p>
                         </div>
-
                     [% ELSIF op == 'accept' %]
                         <div id="accept">
                             <form method="post" id="accept_share">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Accept shared list</legend>
                                 <p>One of our patrons invited you to share their list [% shelfname | html %].</p>
-                                <input type="hidden" name="op" value="cud-accept"/>
-                                <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
-                                <input type="hidden" name="key" value="[% key | html %]"/>
+                                <input type="hidden" name="op" value="cud-accept" />
+                                <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
+                                <input type="hidden" name="key" value="[% key | html %]" />
                                 <fieldset class="action">
                                     <input type="submit" value="Accept" class="btn btn-primary" />
                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=list" class="cancel">Cancel</a>
                                 </fieldset>
-                            </form> <!-- /#accept_share -->
-                        </div> <!-- /#accept -->
-
+                            </form>
+                            <!-- /#accept_share -->
+                        </div>
+                        <!-- /#accept -->
                     [% END %]
                     [%# End of essential part %]
-
-                </div> <!-- / #shareshelf.maincontent -->
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #shareshelf.maincontent -->
+            </div>
+            <!-- / .span10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     <script>
-        $(document).ready(function(){
-            $("#share_list").on('submit', function(e) {
+        $(document).ready(function () {
+            $("#share_list").on("submit", function (e) {
                 var address = $("#invite_address").val();
-                if ( address.length == 0) {
+                if (address.length == 0) {
                     e.preventDefault();
                 }
             });

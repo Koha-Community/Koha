@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw( -utf8 );
+use CGI      qw( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -32,11 +32,11 @@ my $input = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/preview_letter.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'edit_notices' },
-        debug           => 1,
+        template_name => "tools/preview_letter.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'edit_notices' },
+        debug         => 1,
     }
 );
 
@@ -47,8 +47,8 @@ my $title        = $input->param('title');
 my $is_html      = $input->param('is_html');
 my $data_preview = $input->param('data_preview');
 
-unless ( $data_preview ) {
-    $template->param( messages => [{ code => 'no_data_for_preview', type => 'error' }]);
+unless ($data_preview) {
+    $template->param( messages => [ { code => 'no_data_for_preview', type => 'error' } ] );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
@@ -78,60 +78,63 @@ if ( $content =~ m/[^\n]*<<.*>>[^\n]*/so ) {
     # Today
     $tt_content =~ s#<<today>>#[% today| \$KohaDates with_hours => 1 %]#sg;
 
-
-    for my $date_field ( qw(
-            borrowers.dateofbirth
-            borrowers.dateenrolled
-            borrowers.dateexpiry
-            borrowers.debarred
-            items.dateaccessioned
-            items.datelastborrowed
-            items.datelastseen
-            items.onloan
-            serials.planneddate
-            serials.publisheddate
-            serials.claimdate
-            reserves.reservedate
-            reserves.waitingdate
-            reserves.expirationdate
-            suggestions.suggesteddate
-            suggestions.manageddate
-            suggestions.accepteddate
-            suggestions.rejecteddate
-            aqorders.entrydate
-            aqorders.datereceived
-            aqorders.datecancellationprinted
-            aqorders.budgetdate
-            aqorders.claimed_date
-    ) ) {
+    for my $date_field (
+        qw(
+        borrowers.dateofbirth
+        borrowers.dateenrolled
+        borrowers.dateexpiry
+        borrowers.debarred
+        items.dateaccessioned
+        items.datelastborrowed
+        items.datelastseen
+        items.onloan
+        serials.planneddate
+        serials.publisheddate
+        serials.claimdate
+        reserves.reservedate
+        reserves.waitingdate
+        reserves.expirationdate
+        suggestions.suggesteddate
+        suggestions.manageddate
+        suggestions.accepteddate
+        suggestions.rejecteddate
+        aqorders.entrydate
+        aqorders.datereceived
+        aqorders.datecancellationprinted
+        aqorders.budgetdate
+        aqorders.claimed_date
+        )
+        )
+    {
         my ( $table, $field ) = split '\.', $date_field;
         my $new_field =
-          exists $table_mapping->{$table}
-          ? $table_mapping->{$table} . ".$field"
-          : "$table.$field";
+            exists $table_mapping->{$table}
+            ? $table_mapping->{$table} . ".$field"
+            : "$table.$field";
         $tt_content =~ s#<<$table\.$field>>#[% $new_field | \$KohaDates %]#sg;
         $tt_content =~ s#<<$table\.$field\s*|\s*dateonly>>#[% $new_field | \$KohaDates %]#sg;
     }
 
-    for my $datetime_field ( qw(
-            items.itemlost_on
-            items.withdrawn_on
-            issues.date_due
-            issues.returndate
-            issues.lastreneweddate
-            issues.issuedate
-            reserves.suspend_until
-    ) ) {
+    for my $datetime_field (
+        qw(
+        items.itemlost_on
+        items.withdrawn_on
+        issues.date_due
+        issues.returndate
+        issues.lastreneweddate
+        issues.issuedate
+        reserves.suspend_until
+        )
+        )
+    {
         my ( $table, $field ) = split '\.', $datetime_field;
         my $new_field =
-          exists $table_mapping->{$table}
-          ? $table_mapping->{$table} . ".$field"
-          : "$table.$field";
+            exists $table_mapping->{$table}
+            ? $table_mapping->{$table} . ".$field"
+            : "$table.$field";
         $tt_content =~ s#<<$table\.$field>>#[% $new_field | \$KohaDates with_hours => 1 %]#sg;
         $tt_content =~ s#<<$table\.$field\s*|\s*dateonly>>#[% $new_field | \$KohaDates %]#sg;
     }
-
-
 
     while ( my ( $key, $value ) = each %$table_mapping ) {
         $tt_content =~ s|<<$key\.|<<$value.|sg;
@@ -139,18 +142,17 @@ if ( $content =~ m/[^\n]*<<.*>>[^\n]*/so ) {
 
     $tt_content =~ s|<<|[% |sg;
     $tt_content =~ s|>>| %]|sg;
-    $fake_tt_letter =
-      { content => $tt_content, title => $title, is_html => $is_html };
+    $fake_tt_letter = { content => $tt_content, title => $title, is_html => $is_html };
 }
 
 my ( $rendered_message, $rendered_tt_message ) = (q||) x 2;
 my $messages_are_similar;
 my $letter_params = {};
 if ( $code eq 'CHECKIN' ) {
-    my $item = Koha::Items->find( { barcode => $data_preview } );
+    my $item     = Koha::Items->find( { barcode => $data_preview } );
     my $checkout = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     if ($checkout) {
-        my $patron = Koha::Patrons->find( $checkout->borrowernumber );
+        my $patron     = Koha::Patrons->find( $checkout->borrowernumber );
         my $branchcode = C4::Circulation::_GetCircControlBranch( $item, $patron );
         $letter_params = {
             tables => {
@@ -163,19 +165,16 @@ if ( $code eq 'CHECKIN' ) {
             }
         };
         push @messages, { code => 'not_checked_in_yet', type => 'message' };
-    }
-    else {
+    } else {
         push @messages, { code => 'no_checkout', type => 'alert' };
         $letter_params = {};
     }
-}
-elsif ( $code eq 'CHECKOUT' ) {
+} elsif ( $code eq 'CHECKOUT' ) {
     my ( $barcode, $borrowernumber ) = split '\|', $data_preview;
-    my $item = Koha::Items->find( { barcode => $barcode } );
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    if ($item and $patron) {
-        my $branchcode =
-          C4::Circulation::_GetCircControlBranch( $item, $patron );
+    my $item   = Koha::Items->find( { barcode => $barcode } );
+    my $patron = Koha::Patrons->find($borrowernumber);
+    if ( $item and $patron ) {
+        my $branchcode = C4::Circulation::_GetCircControlBranch( $item, $patron );
         $letter_params = {
             tables => {
                 issues      => $item->itemnumber,
@@ -187,13 +186,11 @@ elsif ( $code eq 'CHECKOUT' ) {
             }
         };
         push @messages, { code => 'not_checked_out_yet', type => 'message' };
-    }
-    else {
+    } else {
         push @messages, { code => 'no_item_or_no_patron', type => 'alert' };
         $letter_params = {};
     }
-}
-elsif ( $code eq 'HOLD_SLIP' ) {
+} elsif ( $code eq 'HOLD_SLIP' ) {
     my ( $biblionumber, $borrowernumber ) = split '\|', $data_preview;
     my $hold = Koha::Holds->find( { borrowernumber => $borrowernumber, biblionumber => $biblionumber } );
     if ($hold) {
@@ -207,17 +204,16 @@ elsif ( $code eq 'HOLD_SLIP' ) {
                 items       => $hold->itemnumber,
             }
         };
-    }
-    else {
+    } else {
         push @messages, { code => 'no_hold', type => 'alert' };
         $letter_params = {};
     }
-}
-else {
+} else {
     push @messages, { type => 'alert', code => 'preview_not_available', letter_code => $code, };
 }
 
-if ( %$letter_params ) {
+if (%$letter_params) {
+
     # FIXME Be case here GetPreparedLetter modify $fake_letter
     $rendered_message = C4::Letters::GetPreparedLetter(
         letter => $fake_letter,
@@ -228,8 +224,7 @@ if ( %$letter_params ) {
             letter => $fake_tt_letter,
             %$letter_params,
         );
-        $messages_are_similar =
-          $rendered_message->{content} eq $rendered_tt_message->{content};
+        $messages_are_similar = $rendered_message->{content} eq $rendered_tt_message->{content};
     }
 }
 

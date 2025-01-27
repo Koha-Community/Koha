@@ -4,43 +4,44 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Barcode image generator") | html %] &rsaquo;
-    [% t("Cataloging") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Barcode image generator") | html %]
+        &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 [% FILTER collapse %]
     <style>
-        input[type='range'] {
+        input[type="range"] {
             display: inline-block;
             width: auto;
         }
         #barcode_container {
-            background-color:#FFF;
-            min-height:200px;
+            background-color: #fff;
+            min-height: 200px;
             overflow: scroll;
-            padding:2em;
-            text-align:center;
+            padding: 2em;
+            text-align: center;
         }
         #barcode_image {
-            border:1px dashed #B9D8D9;
+            border: 1px dashed #b9d8d9;
             display: block;
             margin: 1em auto;
             padding: 1em;
         }
         #modulesize_text {
-            background-color: #FFF;
-            border: 1px solid #EEE;
+            background-color: #fff;
+            border: 1px solid #eee;
             border-radius: 2px;
-            padding: .2em .4em;
+            padding: 0.2em 0.4em;
         }
         #urltext {
-            border:1px solid #B9D8D9;
-            border-radius:2px;
-            margin:1em 0;
-            padding:.5em;
+            border: 1px solid #b9d8d9;
+            border-radius: 2px;
+            margin: 1em 0;
+            padding: 0.5em;
         }
     </style>
 [% END %]
@@ -63,64 +64,64 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='cat-menu' %]
-                <h2>Barcode image generator</h2>
+    <h2>Barcode image generator</h2>
 
-                <form action="/cgi-bin/koha/svc/barcode" id="barcodegen" method="get" >
-                    <fieldset class="brief">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <ol>
-                                    <li>
-                                        <label for="type">Barcode type:</label>
-                                        <select name="type" id="type">
-                                            <option value="Code39">Code39</option>
-                                            <option value="COOP2of5">COOP2of5</option>
-                                            <option value="EAN13">EAN13</option>
-                                            <option value="EAN8">EAN8</option>
-                                            <option value="IATA2of5">IATA2of5</option>
-                                            <option value="Industrial2of5">Industrial2of5</option>
-                                            <option value="ITF">ITF</option>
-                                            <option value="Matrix2of5">Matrix2of5</option>
-                                            <option value="NW7">NW7</option>
-                                            <option value="QRcode">QRcode</option>
-                                            <option value="UPCA">UPCA</option>
-                                            <option value="UPCE">UPCE</option>
-                                        </select>
-                                    </li>
-                                    <li class="qrcode">
-                                        <label for="modulesize">QR Code module size:</label>
-                                        <input name="modulesize" id="modulesize" type="range" min="1" max="10" value="3" />
-                                        <span id="modulesize_text">3</span>
-                                        <div class="hint">Module size refers to the pixel dimensions of each black or white square in the generated QR code.</div>
-                                    </li>
-                                    <li class="bcode">
-                                        <label for="notext">Hide text <input type="checkbox" id="notext" name="notext" value="1" /></label>
-                                    </li>
-                                    <li class="bcode">
-                                        <label for="height">Barcode height:</label>
-                                        <input type="text" id="height" name="height" value="50" />
-                                    </li>
-                                    <li>
-                                        <label class="bcode" for="barcode">Barcode: </label>
-                                        <label class="qrcode" for="barcode">Text, URL, or barcode, etc: </label>
-                                        <input type="text" name="barcode" id="barcode" size="50" />
-                                        <div class="hint qrcode">Actual dimensions of the QR code depend on the amount of characters being encoded.</div>
-                                        <div class="hint bcode">Barcode text must be numeric (0-9)</div>
-                                    </li>
-                                </ol>
-                                <fieldset class="action">
-                                    <input type="submit" class="btn btn-primary" value="Show barcode" />
-                                </fieldset>
-                            </div>
-                            <div class="col-sm-6">
-                                <div id="barcode_container">
-                                    <img id="barcode_image" />
-                                    <textarea readonly="readonly" rows="5" cols="40" id="urltext"></textarea>
-                                </div>
-                            </div>
-                        </div>
+    <form action="/cgi-bin/koha/svc/barcode" id="barcodegen" method="get">
+        <fieldset class="brief">
+            <div class="row">
+                <div class="col-sm-6">
+                    <ol>
+                        <li>
+                            <label for="type">Barcode type:</label>
+                            <select name="type" id="type">
+                                <option value="Code39">Code39</option>
+                                <option value="COOP2of5">COOP2of5</option>
+                                <option value="EAN13">EAN13</option>
+                                <option value="EAN8">EAN8</option>
+                                <option value="IATA2of5">IATA2of5</option>
+                                <option value="Industrial2of5">Industrial2of5</option>
+                                <option value="ITF">ITF</option>
+                                <option value="Matrix2of5">Matrix2of5</option>
+                                <option value="NW7">NW7</option>
+                                <option value="QRcode">QRcode</option>
+                                <option value="UPCA">UPCA</option>
+                                <option value="UPCE">UPCE</option>
+                            </select>
+                        </li>
+                        <li class="qrcode">
+                            <label for="modulesize">QR Code module size:</label>
+                            <input name="modulesize" id="modulesize" type="range" min="1" max="10" value="3" />
+                            <span id="modulesize_text">3</span>
+                            <div class="hint">Module size refers to the pixel dimensions of each black or white square in the generated QR code.</div>
+                        </li>
+                        <li class="bcode">
+                            <label for="notext">Hide text <input type="checkbox" id="notext" name="notext" value="1" /></label>
+                        </li>
+                        <li class="bcode">
+                            <label for="height">Barcode height:</label>
+                            <input type="text" id="height" name="height" value="50" />
+                        </li>
+                        <li>
+                            <label class="bcode" for="barcode">Barcode: </label>
+                            <label class="qrcode" for="barcode">Text, URL, or barcode, etc: </label>
+                            <input type="text" name="barcode" id="barcode" size="50" />
+                            <div class="hint qrcode">Actual dimensions of the QR code depend on the amount of characters being encoded.</div>
+                            <div class="hint bcode">Barcode text must be numeric (0-9)</div>
+                        </li>
+                    </ol>
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Show barcode" />
                     </fieldset>
-                </form>
+                </div>
+                <div class="col-sm-6">
+                    <div id="barcode_container">
+                        <img id="barcode_image" />
+                        <textarea readonly="readonly" rows="5" cols="40" id="urltext"></textarea>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

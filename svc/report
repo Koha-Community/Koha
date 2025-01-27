@@ -20,58 +20,59 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( check_api_auth );
+use C4::Auth            qw( check_api_auth );
 use C4::Reports::Guided qw( execute_query );
 use Koha::Reports;
 use JSON qw( encode_json decode_json to_json );
-use CGI qw ( -utf8 );
+use CGI  qw ( -utf8 );
 
 use Koha::Caches;
 
-
-my $query  = CGI->new();
-my $report_id = $query->param('id');
-my $report_name = $query->param('name');
+my $query             = CGI->new();
+my $report_id         = $query->param('id');
+my $report_name       = $query->param('name');
 my $report_annotation = $query->param('annotated');
 
 my $report_recs = Koha::Reports->search( $report_name ? { 'report_name' => $report_name } : { 'id' => $report_id } );
 
-if (!$report_recs || $report_recs->count == 0 ) { die "There is no such report.\n"; }
+if ( !$report_recs || $report_recs->count == 0 ) { die "There is no such report.\n"; }
 my $report_rec = $report_recs->next();
 
 $report_id = $report_rec->id;
 
 my @sql_params  = $query->multi_param('sql_params');
-my @param_names  = $query->multi_param('param_names');
+my @param_names = $query->multi_param('param_names');
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { catalogue => '1'} );
-unless ($status eq "ok") {
-    print $query->header(-type => 'application/json', -status => '401 Unauthorized');
-    print to_json({ auth_status => $status });
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { catalogue => '1' } );
+unless ( $status eq "ok" ) {
+    print $query->header( -type => 'application/json', -status => '401 Unauthorized' );
+    print to_json( { auth_status => $status } );
     exit 0;
 }
 
-my $cache = Koha::Caches->get_instance();
+my $cache        = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;
-my ($cache_key, $json_text);
+my ( $cache_key, $json_text );
 if ($cache_active) {
-    $cache_key = "intranet:report:".($report_name ? "report_name:$report_name:" : "id:$report_id:")
-    . join( '-', @sql_params )
-      . join( '_'. @param_names );
+    $cache_key =
+          "intranet:report:"
+        . ( $report_name ? "report_name:$report_name:" : "id:$report_id:" )
+        . join( '-', @sql_params )
+        . join( '_' . @param_names );
     $json_text = $cache->get_from_cache($cache_key);
 }
 
 unless ($json_text) {
-    my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
+    my $limit = C4::Context->preference("SvcMaxReportRows") || 10;
 
     my ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params );
 
     my ( $sth, $errors ) = execute_query(
         {
-            sql        => $sql,
-            offset     => 0,
-            limit      => $limit,
-            report_id  => $report_id,
+            sql       => $sql,
+            offset    => 0,
+            limit     => $limit,
+            report_id => $report_id,
         }
     );
     if ($errors) {
@@ -79,9 +80,8 @@ unless ($json_text) {
     } else {
         my $lines;
         if ($report_annotation) {
-            $lines = $sth->fetchall_arrayref({});
-        }
-        else {
+            $lines = $sth->fetchall_arrayref( {} );
+        } else {
             $lines = $sth->fetchall_arrayref;
         }
         $json_text = encode_json($lines);
@@ -93,7 +93,7 @@ unless ($json_text) {
 }
 
 print $query->header(
-    -charset    => 'UTF-8',
-    -type       => 'application/json'
+    -charset => 'UTF-8',
+    -type    => 'application/json'
 );
 print $json_text;

@@ -7,11 +7,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Spent") | html %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Spent") | html %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -32,126 +33,109 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
+    <h1>Spent - Fund: [% fund_code | html %]</h1>
 
-<h1>Spent - Fund: [% fund_code | html %]</h1>
-
-<div class="page-section">
-
-    <table id="spent">
-        <thead>
-            <tr>
-            <th class="anti-the">Title</th>
-            <th>[% tp('noun', 'Order') | html %]</th>
-            <th>Vendor</th>
-            <th>Invoice</th>
-            <th>Item types</th>
-            <th>Received</th>
-            <th>Unit price</th>
-            <th>Date ordered</th>
-            <th>Date received</th>
-            <th>Subtotal</th>
-            </tr>
-        </thead>
-
-        [% FOREACH order IN spent %]
-            <tr>
-                <td class="cell">
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">
-                        [% order.title | html %]
-                    </a>
-                </td>
-                <td class="cell">
-                    [% order.ordernumber | html %]
-                </td>
-                <td class="cell">
-                    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
-                </td>
-                <td class="cell">
-                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
-                </td>
-                <td class="cell">
-                    [% FOREACH itemtype IN order.itemtypes %]
-                        [% ItemTypes.GetDescription( itemtype ) | html %]
-                        [% IF !loop.last() %] | [% END %]
-                    [% END %]
-                </td>
-                <td class="cell">
-                    [% order.quantityreceived | html %]
-                </td>
-                <td class="cell">
-                    [% IF Koha.Preference('CalculateFundValuesIncludingTax') %]
-                        [% order.unitprice_tax_included | $Price %]
-                    [% ELSE %]
-                        [% order.unitprice_tax_excluded | $Price %]
-                    [% END %]
-                </td>
-                <td class="cell" data-order="[% order.entrydate | html %]">
-                    [% order.entrydate | $KohaDates %]
-                </td>
-                <td class="cell" data-order="[% order.datereceived | html %]">
-                    [% order.datereceived | $KohaDates %]
-                </td>
-                <td class="data cell">
-                    [% order.rowtotal | $Price %]
-                </td>
-            </tr>
-        [% END %]
-
-        <tfoot>
-            [% IF shipmentcosts.size || ( adjustments && adjustments.count > 0 ) %]
+    <div class="page-section">
+        <table id="spent">
+            <thead>
                 <tr>
-                    <td colspan="9"> Sub total </td>
-                    <td class="data"> [% subtotal | $Price %] </td>
+                    <th class="anti-the">Title</th>
+                    <th>[% tp('noun', 'Order') | html %]</th>
+                    <th>Vendor</th>
+                    <th>Invoice</th>
+                    <th>Item types</th>
+                    <th>Received</th>
+                    <th>Unit price</th>
+                    <th>Date ordered</th>
+                    <th>Date received</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+
+            [% FOREACH order IN spent %]
+                <tr>
+                    <td class="cell">
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]"> [% order.title | html %] </a>
+                    </td>
+                    <td class="cell"> [% order.ordernumber | html %] </td>
+                    <td class="cell">
+                        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
+                    </td>
+                    <td class="cell">
+                        <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
+                    </td>
+                    <td class="cell">
+                        [% FOREACH itemtype IN order.itemtypes %]
+                            [% ItemTypes.GetDescription( itemtype ) | html %]
+                            [% IF !loop.last() %]|[% END %]
+                        [% END %]
+                    </td>
+                    <td class="cell"> [% order.quantityreceived | html %] </td>
+                    <td class="cell">
+                        [% IF Koha.Preference('CalculateFundValuesIncludingTax') %]
+                            [% order.unitprice_tax_included | $Price %]
+                        [% ELSE %]
+                            [% order.unitprice_tax_excluded | $Price %]
+                        [% END %]
+                    </td>
+                    <td class="cell" data-order="[% order.entrydate | html %]"> [% order.entrydate | $KohaDates %] </td>
+                    <td class="cell" data-order="[% order.datereceived | html %]"> [% order.datereceived | $KohaDates %] </td>
+                    <td class="data cell"> [% order.rowtotal | $Price %] </td>
                 </tr>
             [% END %]
-            [% IF shipmentcosts.size %]
-                [% FOREACH shipmentcost IN shipmentcosts %]
+
+            <tfoot>
+                [% IF shipmentcosts.size || ( adjustments && adjustments.count > 0 ) %]
                     <tr>
-                        <td></td>
-                        <td colspan="8">Shipping cost for invoice
-                            <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% shipmentcost.invoiceid | uri %]">
-                                [% shipmentcost.invoicenumber | html %]
-                            </a>
-                        </td>
-                        <td class="data total">[% shipmentcost.shipmentcost | $Price %]</td>
+                        <td colspan="9"> Sub total </td>
+                        <td class="data"> [% subtotal | $Price %] </td>
                     </tr>
                 [% END %]
-            [% END %]
-            [% IF ( adjustments && adjustments.count > 0 ) %]
-                [% FOREACH adjustment IN adjustments %]
-                    <tr>
-                        <td></td>
-                        <td colspan="8">Adjustment cost for invoice
-                            <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% adjustment.invoiceid | uri %]">
-                                [% adjustment.invoice.invoicenumber | html %]
-                            </a>
-                        </td>
-                        <td class="data total">[% adjustment.adjustment | $Price %]</td>
-                    </tr>
+                [% IF shipmentcosts.size %]
+                    [% FOREACH shipmentcost IN shipmentcosts %]
+                        <tr>
+                            <td></td>
+                            <td colspan="8"
+                                >Shipping cost for invoice
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% shipmentcost.invoiceid | uri %]"> [% shipmentcost.invoicenumber | html %] </a>
+                            </td>
+                            <td class="data total">[% shipmentcost.shipmentcost | $Price %]</td>
+                        </tr>
+                    [% END %]
                 [% END %]
-            [% END %]
-            <tr>
-                <td colspan="9">TOTAL</td>
-                <td class="data total">[% total | $Price %]</td>
-            </tr>
-        </tfoot>
-    </table>
-
-</div> <!-- /.page-section -->
-
+                [% IF ( adjustments && adjustments.count > 0 ) %]
+                    [% FOREACH adjustment IN adjustments %]
+                        <tr>
+                            <td></td>
+                            <td colspan="8"
+                                >Adjustment cost for invoice
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% adjustment.invoiceid | uri %]"> [% adjustment.invoice.invoicenumber | html %] </a>
+                            </td>
+                            <td class="data total">[% adjustment.adjustment | $Price %]</td>
+                        </tr>
+                    [% END %]
+                [% END %]
+                <tr>
+                    <td colspan="9">TOTAL</td>
+                    <td class="data total">[% total | $Price %]</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /.page-section -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-            $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "type": "anti-the", "targets":  [ "anti-the" ] }
-                ],
-                "pagingType": "full"
-            } ) );
+        $(document).ready(function () {
+            $("#spent").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
+                    pagingType: "full",
+                })
+            );
         });
     </script>
 [% END %]

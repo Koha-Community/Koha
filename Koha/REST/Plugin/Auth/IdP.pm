@@ -59,8 +59,8 @@ to do so for the domain.
     $app->helper(
         'auth.register' => sub {
             my ( $c, $params ) = @_;
-            my $data = $params->{data};
-            my $domain = $params->{domain};
+            my $data      = $params->{data};
+            my $domain    = $params->{domain};
             my $interface = $params->{interface};
 
             unless ( $interface eq 'opac' && $domain->auto_register ) {
@@ -82,12 +82,12 @@ Generates a new session.
     $app->helper(
         'auth.session' => sub {
             my ( $c, $params ) = @_;
-            my $patron      = $params->{patron};
-            my $interface   = $params->{interface};
-            my $provider    = $params->{provider};
+            my $patron    = $params->{patron};
+            my $interface = $params->{interface};
+            my $provider  = $params->{provider};
 
-            my $session = C4::Auth::create_basic_session({ patron => $patron, interface => $interface });
-            $session->param('idp_code', $provider);
+            my $session = C4::Auth::create_basic_session( { patron => $patron, interface => $interface } );
+            $session->param( 'idp_code', $provider );
 
             return $session->id;
         }

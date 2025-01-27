@@ -47,10 +47,10 @@ Returns the related Koha::Biblio object for this recall.
 =cut
 
 sub biblio {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $biblio_rs = $self->_result->biblio;
     return unless $biblio_rs;
-    return Koha::Biblio->_new_from_dbic( $biblio_rs );
+    return Koha::Biblio->_new_from_dbic($biblio_rs);
 }
 
 =head3 item
@@ -62,10 +62,10 @@ Returns the related Koha::Item object for this recall.
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $item_rs = $self->_result->item;
     return unless $item_rs;
-    return Koha::Item->_new_from_dbic( $item_rs );
+    return Koha::Item->_new_from_dbic($item_rs);
 }
 
 =head3 patron
@@ -77,10 +77,10 @@ Returns the related Koha::Patron object for this recall.
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $patron_rs = $self->_result->patron;
     return unless $patron_rs;
-    return Koha::Patron->_new_from_dbic( $patron_rs );
+    return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
 =head3 library
@@ -92,10 +92,10 @@ Returns the related Koha::Library object for this recall.
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $library_rs = $self->_result->library;
     return unless $library_rs;
-    return Koha::Library->_new_from_dbic( $library_rs );
+    return Koha::Library->_new_from_dbic($library_rs);
 }
 
 =head3 checkout
@@ -107,25 +107,29 @@ Returns the related Koha::Checkout object for this recall.
 =cut
 
 sub checkout {
-    my ( $self ) = @_;
-    $self->{_checkout} ||= Koha::Checkouts->find({ itemnumber => $self->item_id });
+    my ($self) = @_;
+    $self->{_checkout} ||= Koha::Checkouts->find( { itemnumber => $self->item_id } );
 
     unless ( $self->item_level ) {
+
         # Only look at checkouts of items that are allowed to be recalled, and get the oldest one
-        my @items = Koha::Items->search({ biblionumber => $self->biblio_id })->as_list;
+        my @items = Koha::Items->search( { biblionumber => $self->biblio_id } )->as_list;
         my @itemnumbers;
         foreach (@items) {
-            my $recalls_allowed = Koha::CirculationRules->get_effective_rule({
-                branchcode => C4::Context->userenv->{'branch'},
-                categorycode => $self->patron->categorycode,
-                itemtype => $_->effective_itemtype,
-                rule_name => 'recalls_allowed',
-            });
+            my $recalls_allowed = Koha::CirculationRules->get_effective_rule(
+                {
+                    branchcode   => C4::Context->userenv->{'branch'},
+                    categorycode => $self->patron->categorycode,
+                    itemtype     => $_->effective_itemtype,
+                    rule_name    => 'recalls_allowed',
+                }
+            );
             if ( defined $recalls_allowed and $recalls_allowed->rule_value > 0 ) {
-                push ( @itemnumbers, $_->itemnumber );
+                push( @itemnumbers, $_->itemnumber );
             }
         }
-        my $checkouts = Koha::Checkouts->search({ itemnumber => [ @itemnumbers ] }, { order_by => { -asc => 'date_due' } });
+        my $checkouts =
+            Koha::Checkouts->search( { itemnumber => [@itemnumbers] }, { order_by => { -asc => 'date_due' } } );
         $self->{_checkout} = $checkouts->next;
     }
 
@@ -143,7 +147,7 @@ Return true if recall status is requested.
 =cut
 
 sub requested {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'requested';
 }
 
@@ -158,7 +162,7 @@ Return true if recall is awaiting pickup.
 =cut
 
 sub waiting {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'waiting';
 }
 
@@ -173,7 +177,7 @@ Return true if recall is overdue to be returned.
 =cut
 
 sub overdue {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'overdue';
 }
 
@@ -188,7 +192,7 @@ Return true if recall is in transit.
 =cut
 
 sub in_transit {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'in_transit';
 }
 
@@ -203,7 +207,7 @@ Return true if recall has expired.
 =cut
 
 sub expired {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'expired';
 }
 
@@ -218,7 +222,7 @@ Return true if recall has been cancelled.
 =cut
 
 sub cancelled {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'cancelled';
 }
 
@@ -233,7 +237,7 @@ Return true if the recall has been fulfilled.
 =cut
 
 sub fulfilled {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->status eq 'fulfilled';
 }
 
@@ -247,7 +251,7 @@ Calculate the expirationdate to set based on circulation rules and system prefer
 =cut
 
 sub calc_expirationdate {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $item;
     if ( $self->item_level ) {
@@ -257,16 +261,18 @@ sub calc_expirationdate {
     }
 
     my $branchcode = $self->patron->branchcode;
-    if ( $item ) {
+    if ($item) {
         $branchcode = C4::Circulation::_GetCircControlBranch( $item, $self->patron );
     }
 
-    my $rule = Koha::CirculationRules->get_effective_rule({
-        categorycode => $self->patron->categorycode,
-        branchcode => $branchcode,
-        itemtype => $item ? $item->effective_itemtype : undef,
-        rule_name => 'recall_shelf_time'
-    });
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            categorycode => $self->patron->categorycode,
+            branchcode   => $branchcode,
+            itemtype     => $item ? $item->effective_itemtype : undef,
+            rule_name    => 'recall_shelf_time'
+        }
+    );
 
     my $shelf_time = defined $rule ? $rule->rule_value : C4::Context->preference('RecallsMaxPickUpDelay');
 
@@ -286,14 +292,20 @@ sub start_transfer {
     my ( $self, $params ) = @_;
 
     if ( $self->item_level ) {
+
         # already has an itemnumber
-        $self->update({ status => 'in_transit' });
+        $self->update( { status => 'in_transit' } );
     } else {
         my $itemnumber = $params->{item}->itemnumber;
-        $self->update({ status => 'in_transit', item_id => $itemnumber });
+        $self->update( { status => 'in_transit', item_id => $itemnumber } );
     }
 
-    my ( $dotransfer, $messages ) = C4::Circulation::transferbook({ to_branch => $self->pickup_library_id, from_branch => $self->item->holdingbranch, barcode => $self->item->barcode, trigger => 'Recall' });
+    my ( $dotransfer, $messages ) = C4::Circulation::transferbook(
+        {
+            to_branch => $self->pickup_library_id, from_branch => $self->item->holdingbranch,
+            barcode   => $self->item->barcode,     trigger     => 'Recall'
+        }
+    );
 
     return ( $self, $dotransfer, $messages );
 }
@@ -307,12 +319,12 @@ If a transfer is cancelled, revert the recall to requested.
 =cut
 
 sub revert_transfer {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     if ( $self->item_level ) {
-        $self->update({ status => 'requested' });
+        $self->update( { status => 'requested' } );
     } else {
-        $self->update({ status => 'requested', item_id => undef });
+        $self->update( { status => 'requested', item_id => undef } );
     }
 
     return $self;
@@ -337,24 +349,31 @@ sub set_waiting {
     my $itemnumber;
     if ( $self->item_level ) {
         $itemnumber = $self->item_id;
-        $self->update({ status => 'waiting', waiting_date => dt_from_string, expiration_date => $params->{expirationdate} });
+        $self->update(
+            { status => 'waiting', waiting_date => dt_from_string, expiration_date => $params->{expirationdate} } );
     } else {
+
         # biblio-level recall with no itemnumber. need to set itemnumber
         $itemnumber = $params->{item}->itemnumber;
-        $self->update({ status => 'waiting', waiting_date => dt_from_string, expiration_date => $params->{expirationdate}, item_id => $itemnumber });
+        $self->update(
+            {
+                status  => 'waiting', waiting_date => dt_from_string, expiration_date => $params->{expirationdate},
+                item_id => $itemnumber
+            }
+        );
     }
 
     # send notice to recaller to pick up item
     my $letter = C4::Letters::GetPreparedLetter(
-        module => 'circulation',
-        letter_code => 'PICKUP_RECALLED_ITEM',
-        branchcode => $self->pickup_library_id,
+        module         => 'circulation',
+        letter_code    => 'PICKUP_RECALLED_ITEM',
+        branchcode     => $self->pickup_library_id,
         want_librarian => 0,
-        tables => {
-            biblio => $self->biblio_id,
+        tables         => {
+            biblio    => $self->biblio_id,
             borrowers => $self->patron_id,
-            items => $itemnumber,
-            recalls => $self->recall_id,
+            items     => $itemnumber,
+            recalls   => $self->recall_id,
         },
     );
 
@@ -376,11 +395,11 @@ Revert recall waiting status.
 =cut
 
 sub revert_waiting {
-    my ( $self ) = @_;
-    if ( $self->item_level ){
-        $self->update({ status => 'requested', waiting_date => undef });
+    my ($self) = @_;
+    if ( $self->item_level ) {
+        $self->update( { status => 'requested', waiting_date => undef } );
     } else {
-        $self->update({ status => 'requested', waiting_date => undef, item_id => undef });
+        $self->update( { status => 'requested', waiting_date => undef, item_id => undef } );
     }
     return $self;
 }
@@ -396,7 +415,7 @@ Return true if this recall should be marked overdue
 =cut
 
 sub should_be_overdue {
-    my ( $self ) = @_;
+    my ($self) = @_;
     if ( $self->requested and $self->checkout and dt_from_string( $self->checkout->date_due ) <= dt_from_string ) {
         return 1;
     }
@@ -414,8 +433,9 @@ Set a recall as overdue when the recall has been requested and the borrower who 
 sub set_overdue {
     my ( $self, $params ) = @_;
     my $interface = $params->{interface} || 'COMMANDLINE';
-    $self->update({ status => 'overdue' });
-    C4::Log::logaction( 'RECALLS', 'OVERDUE', $self->id, "Recall status set to overdue", $interface ) if ( C4::Context->preference('RecallsLog') );
+    $self->update( { status => 'overdue' } );
+    C4::Log::logaction( 'RECALLS', 'OVERDUE', $self->id, "Recall status set to overdue", $interface )
+        if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
 
@@ -430,8 +450,9 @@ Set a recall as expired. This may be done manually or by a cronjob, either when 
 sub set_expired {
     my ( $self, $params ) = @_;
     my $interface = $params->{interface} || 'COMMANDLINE';
-    $self->update({ status => 'expired', completed => 1, completed_date => dt_from_string });
-    C4::Log::logaction( 'RECALLS', 'EXPIRE', $self->id, "Recall expired", $interface ) if ( C4::Context->preference('RecallsLog') );
+    $self->update( { status => 'expired', completed => 1, completed_date => dt_from_string } );
+    C4::Log::logaction( 'RECALLS', 'EXPIRE', $self->id, "Recall expired", $interface )
+        if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
 
@@ -444,9 +465,10 @@ Set a recall as cancelled. This may be done manually, either by the borrower tha
 =cut
 
 sub set_cancelled {
-    my ( $self ) = @_;
-    $self->update({ status => 'cancelled', completed => 1, completed_date => dt_from_string });
-    C4::Log::logaction( 'RECALLS', 'CANCEL', $self->id, "Recall cancelled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
+    my ($self) = @_;
+    $self->update( { status => 'cancelled', completed => 1, completed_date => dt_from_string } );
+    C4::Log::logaction( 'RECALLS', 'CANCEL', $self->id, "Recall cancelled", 'INTRANET' )
+        if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
 
@@ -459,9 +481,10 @@ Set a recall as finished. This should only be called when the item allocated to 
 =cut
 
 sub set_fulfilled {
-    my ( $self ) = @_;
-    $self->update({ status => 'fulfilled', completed => 1, completed_date => dt_from_string });
-    C4::Log::logaction( 'RECALLS', 'FILL', $self->id, "Recall fulfilled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
+    my ($self) = @_;
+    $self->update( { status => 'fulfilled', completed => 1, completed_date => dt_from_string } );
+    C4::Log::logaction( 'RECALLS', 'FILL', $self->id, "Recall fulfilled", 'INTRANET' )
+        if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
 
@@ -477,8 +500,6 @@ sub strings_map {
         pickup_library_id => { str => $self->library->branchname, type => 'library' },
     };
 }
-
-
 
 =head2 Internal methods
 

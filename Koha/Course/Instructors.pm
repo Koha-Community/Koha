@@ -17,7 +17,6 @@ package Koha::Course::Instructors;
 
 use Modern::Perl;
 
-
 use Koha::Course::Instructor;
 
 use base qw(Koha::Objects);

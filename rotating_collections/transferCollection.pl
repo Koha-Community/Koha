@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 use C4::RotatingCollections;
 
@@ -33,26 +33,24 @@ my $toBranch = $query->param('toBranch');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "rotating_collections/transferCollection.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { tools => 'rotating_collections' },
+        template_name => "rotating_collections/transferCollection.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { tools => 'rotating_collections' },
     }
 );
 
 ## Transfer collection
 my ( $success, $messages );
-if ( $op eq 'cud-transfer' && $toBranch) {
-    ( $success, $messages ) =
-      TransferCollection( $colId, $toBranch );
+if ( $op eq 'cud-transfer' && $toBranch ) {
+    ( $success, $messages ) = TransferCollection( $colId, $toBranch );
 
     if ($success) {
         $template->param(
             transferSuccess => 1,
             messages        => $messages
         );
-    }
-    else {
+    } else {
         $template->param(
             transferFailure => 1,
             messages        => $messages
@@ -64,10 +62,10 @@ if ( $op eq 'cud-transfer' && $toBranch) {
 my ( $colTitle, $colDesc, $colBranchcode );
 ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
 $template->param(
-    colId            => $colId,
-    colTitle         => $colTitle,
-    colDesc          => $colDesc,
-    colBranchcode    => $colBranchcode,
+    colId         => $colId,
+    colTitle      => $colTitle,
+    colDesc       => $colDesc,
+    colBranchcode => $colBranchcode,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -30,24 +30,24 @@ this script is designed to show the spent amount in budgets
 =cut
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use C4::Acquisition qw( get_rounded_price );
 use Koha::Acquisition::Invoice::Adjustments;
 
-my $dbh      = C4::Context->dbh;
-my $input    = CGI->new;
-my $bookfund = $input->param('fund');
+my $dbh       = C4::Context->dbh;
+my $input     = CGI->new;
+my $bookfund  = $input->param('fund');
 my $fund_code = $input->param('fund_code');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/spent.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { acquisition => '*' },
+        template_name => "acqui/spent.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => '*' },
     }
 );
 
@@ -106,10 +106,10 @@ my $subtotal = 0;
 my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
-    $data->{'itemtypes'} = [split('\|', $data->{itypes})];
+    $data->{'itemtypes'} = [ split( '\|', $data->{itypes} ) ];
     if ( $recv > 0 ) {
-        my $rowtotal = $recv * get_rounded_price($data->{$unitprice_field});
-        $data->{'rowtotal'}  = sprintf( "%.2f", $rowtotal );
+        my $rowtotal = $recv * get_rounded_price( $data->{$unitprice_field} );
+        $data->{'rowtotal'}               = sprintf( "%.2f", $rowtotal );
         $data->{'unitprice_tax_included'} = sprintf( "%.2f", $data->{$unitprice_field} );
         $subtotal += $rowtotal;
         push @spent, $data;
@@ -126,31 +126,34 @@ $query = qq{
 $sth = $dbh->prepare($query);
 $sth->execute($bookfund);
 my @shipmentcosts;
-while (my $data = $sth->fetchrow_hashref) {
+while ( my $data = $sth->fetchrow_hashref ) {
     push @shipmentcosts, {
-        shipmentcost => sprintf("%.2f", $data->{shipmentcost}),
-        invoiceid => $data->{invoiceid},
+        shipmentcost  => sprintf( "%.2f", $data->{shipmentcost} ),
+        invoiceid     => $data->{invoiceid},
         invoicenumber => $data->{invoicenumber}
     };
     $total += $data->{shipmentcost};
 }
 $sth->finish;
 
-my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $bookfund, closedate => { '!=' => undef } }, { prefetch => 'invoiceid' },  );
-while ( my $adj = $adjustments->next ){
+my $adjustments = Koha::Acquisition::Invoice::Adjustments->search(
+    { budget_id => $bookfund, closedate => { '!=' => undef } },
+    { prefetch  => 'invoiceid' },
+);
+while ( my $adj = $adjustments->next ) {
     $total += $adj->adjustment;
 }
 
 $total = sprintf( "%.2f", $total );
 
 $template->param(
-    fund => $bookfund,
-    spent => \@spent,
-    subtotal => $subtotal,
+    fund          => $bookfund,
+    spent         => \@spent,
+    subtotal      => $subtotal,
     shipmentcosts => \@shipmentcosts,
-    adjustments => $adjustments,
-    total => $total,
-    fund_code => $fund_code
+    adjustments   => $adjustments,
+    total         => $total,
+    fund_code     => $fund_code
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

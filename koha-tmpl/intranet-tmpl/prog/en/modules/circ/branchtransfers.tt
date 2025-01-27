@@ -7,11 +7,12 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'member-display-address-style.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Transfers") | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Transfers") | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
@@ -25,7 +26,7 @@
         #transfer_confirm .modal-footer {
             display: flex;
             flex-wrap: wrap;
-            gap: .5rem;
+            gap: 0.5rem;
             justify-content: center;
         }
     </style>
@@ -37,244 +38,259 @@
 [% END %]
 
 <body id="circ_branchtransfers" class="circ">
-    [% WRAPPER 'header.inc' %]
-        [% INCLUDE 'circ-search.inc' %]
-    [% END %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'circ-search.inc' %]
+[% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Transfers</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
+[% WRAPPER 'main-container.inc' aside=aside %]
+
+    [% IF ( found ) %]
+        [% BLOCK transfer_hidden_fields %]
+            [% FOREACH trsfitemloo IN trsfitemloop %]
+                <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
+                <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
+                <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Transfers</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
+        [% END %]
 
-    [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
-    [% WRAPPER 'main-container.inc' aside=aside %]
+        <h1>Transfers</h1>
 
-                    [% IF ( found ) %]
-                        [% BLOCK transfer_hidden_fields %]
-                            [% FOREACH trsfitemloo IN trsfitemloop %]
-                                <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
-                                <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
-                                <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
+        <!-- Modal -->
+        <div class="modal block in" id="transfer_confirm" tabindex="-1" role="dialog" aria-labelledby="transfer_confirmLabel" data-backdrop="static" data-show="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="transfer_confirmLabel">
+                            [% IF ( reserved ) %]
+                                <span>Hold found:</span>
+                            [% ELSIF ( waiting ) %]
+                                <span>Hold found (item is already waiting):</span>
+                            [% ELSIF ( transferred) %]
+                                <span>Hold found (item is waiting and in transit):</span>
                             [% END %]
-                        [% END %]
-
-                        <h1>Transfers</h1>
-
-                        <!-- Modal -->
-                        <div class="modal block in" id="transfer_confirm" tabindex="-1" role="dialog" aria-labelledby="transfer_confirmLabel" data-backdrop="static" data-show="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title" id="transfer_confirmLabel">
-                                            [% IF ( reserved ) %]
-                                                <span>Hold found:</span>
-                                            [% ELSIF ( waiting ) %]
-                                                <span>Hold found (item is already waiting):</span>
-                                            [% ELSIF ( transferred) %]
-                                                <span>Hold found (item is waiting and in transit):</span>
-                                            [% END %]
-                                                <br />
-                                                [% INCLUDE 'biblio-title.inc' biblio=found_biblio link=1 %]
-                                                [% IF ( barcode ) %]
-                                                    (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]#item[% itemnumber | uri %]">[% barcode | html %]</a>)
-                                                [% END %]
-                                        </h1>
-                                    </div>
-                                    <div class="modal-body">
-                                        [% IF ( reserved || waiting || transferred ) %]
-                                            <h5>Hold for:</h5>
-                                            <ul>
-                                                <li>
-                                                    [% INCLUDE 'patron-title.inc' patron=hold.patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
-                                                    <span class="patron-category"> - [% patron.category.description | html %]</span>
-                                                </li>
-                                                [% INCLUDE display_holdpatron_address %]
-                                                [% IF ( patron.phone ) %]
-                                                    <li> [% patron.phone | html %]</li>
-                                                [% END %]
-
-                                                [% IF ( patron.email ) %]
-                                                    <li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
-                                                [% END %]
-
-                                                [% IF ( patron.is_debarred ) %]
-                                                    <li class="error">Patron is RESTRICTED</li>
-                                                [% END %]
-
-                                                [% IF ( patron.gonenoaddress ) %]
-                                                    <li class="error">Patron's address is in doubt</li>
-                                                [% END %]
-                                            </ul>
-                                            <h4>Transfer to: [% Branches.GetName( hold.branchcode ) | html %]</h4>
-                                        [% END %]
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <div>
-                                            <form method="post" action="branchtransfers.pl">
-                                                [% INCLUDE 'csrf-token.inc' %]
-                                                [% PROCESS transfer_hidden_fields %]
-                                                <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
-                                                <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
-                                                <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                                                <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
-                                                <input type="hidden" name="barcode" value="[% barcode | html %]" />
-                                                [% IF ( waiting or transferred or processing ) %]
-                                                    <input type="hidden" name="op" value="cud-KillWaiting" />
-                                                    <button type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Cancel hold and attempt transfer</button>
-                                                [% END %]
-                                                [% IF ( reserved ) %]
-                                                    <input type="hidden" name="op" value="cud-SetTransit" />
-                                                    <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Transfer to [% Branches.GetName( hold.branchcode ) | html %]</button>
-                                                [% END %]
-                                            </form>
-                                        </div>
-
-                                        [% IF ( reserved ) %]
-                                            <div>
-                                                <form method="post" action="branchtransfers.pl">
-                                                    [% INCLUDE 'csrf-token.inc' %]
-                                                    [% PROCESS transfer_hidden_fields %]
-                                                    <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
-                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                                                    <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
-                                                    <input type="hidden" name="barcode" value="[% barcode | html %]">
-                                                    <input type="hidden" name="op" value="cud-KillReserved" />
-                                                    <button type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Cancel hold and attempt transfer</button>
-                                                </form>
-                                            </div>
-                                        [% END # /IF reserved  %]
-
-                                        <div>
-                                            <form method="get" action="branchtransfers.pl">
-                                                <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
-                                                <input type="hidden" name="barcode" />
-                                                [% PROCESS transfer_hidden_fields %]
-                                                <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> Ignore and return to transfers</button>
-                                            </form>
-                                        </div>
-                                    </div> <!-- /.modal-footer -->
-                                </div> <!-- /.modal-content -->
-                            </div> <!-- /.modal-dialog -->
-                        </div> <!-- /.modal -->
-
-                    [% ELSE # /IF found %]
-                        [% IF ( reqmessage ) %]
-                            <div class="alert alert-info">
-                                [% IF ( cancelled ) %]
-                                    <p>Hold cancelled</p>
+                            <br />
+                            [% INCLUDE 'biblio-title.inc' biblio=found_biblio link=1 %]
+                            [% IF ( barcode ) %]
+                                (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]#item[% itemnumber | uri %]">[% barcode | html %]</a>)
+                            [% END %]
+                        </h1>
+                    </div>
+                    <div class="modal-body">
+                        [% IF ( reserved || waiting || transferred ) %]
+                            <h5>Hold for:</h5>
+                            <ul>
+                                <li>
+                                    [% INCLUDE 'patron-title.inc' patron=hold.patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
+                                    <span class="patron-category"> - [% patron.category.description | html %]</span>
+                                </li>
+                                [% INCLUDE display_holdpatron_address %]
+                                [% IF ( patron.phone ) %]
+                                    <li> [% patron.phone | html %]</li>
                                 [% END %]
-                                [% IF ( settransit ) %]
-                                    <p>Item is now in transit to [% Branches.GetName(tobranchcd) | html %]</p>
+
+                                [% IF ( patron.email ) %]
+                                    <li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
                                 [% END %]
-                            </div>
+
+                                [% IF ( patron.is_debarred ) %]
+                                    <li class="error">Patron is RESTRICTED</li>
+                                [% END %]
+
+                                [% IF ( patron.gonenoaddress ) %]
+                                    <li class="error">Patron's address is in doubt</li>
+                                [% END %]
+                            </ul>
+                            <h4>Transfer to: [% Branches.GetName( hold.branchcode ) | html %]</h4>
                         [% END %]
+                    </div>
 
-                        [% IF ( errmsgloop ) %]
-                            <div class="alert alert-info">
-                                <ul>
-                                    [% FOREACH errmsgloo IN errmsgloop %]
-                                        [% IF ( errmsgloo.errbadcode ) %]
-                                            <li>No item with barcode: [% errmsgloo.msg | html %]</li>
-                                        [% END %]
-                                        [% IF ( errmsgloo.errnotallowed ) %]
-                                            <li>Transfer is not allowed for:
-                                                <ol>
-                                                    [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
-                                                        <li>Item type: <strong>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</strong></li>
-                                                    [% ELSE %]
-                                                        <li>Collection: <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => errmsgloo.code ) | html %]</strong></li>
-                                                    [% END %]
-                                                    <li>Originating library: <strong>[% Branches.GetName( errmsgloo.fbr ) | html %]</strong></li>
-                                                    <li>Destination library: <strong>[% Branches.GetName( errmsgloo.tbr ) | html %]</strong></li>
-                                                </ol>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( errmsgloo.errdesteqholding ) %]
-                                            <li>Item is already at destination library.</li>
-                                        [% END %]
-                                        [% IF ( errmsgloo.errwasreturned ) %]
-                                            <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | uri %]">
-                                            [% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %]
-                                            ([% errmsgloo.patron.cardnumber | html %])</a> and has been returned.</li>
-                                        [% END %]
-                                    [% END # /FOREACH errmsgloo %]
-                                </ul>
-                            </div> <!-- /.dialog.message -->
-                        [% END # /errmsgloop %]
-
-                        <div id="branchtransfers">
-                            <form method="post" action="/cgi-bin/koha/circ/branchtransfers.pl" class="validated">
+                    <div class="modal-footer">
+                        <div>
+                            <form method="post" action="branchtransfers.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <fieldset class="barcode_input">
-                                    <h1>Transfers</h1>
-                                    <div class="form-control-group">
-                                        <label for="tobranchcd" class="hint">Destination library: </label>
-                                        <select name="tobranchcd" id="tobranchcd" class="required select2" required="required">
-                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => tobranchcd, unfiltered => 1) %]
-                                        </select>
-                                        <span class="required">Required</span>
-                                    </div>
-                                    <div class="form-control-group">
-                                        <label class="hint" for="barcode">Enter item barcode: </label>
-                                        <input name="barcode" id="barcode" size="15" class="barcode focus" placeholder="Enter item barcode" type="text" />
-                                        <input class="btn btn-default" type="submit" value="Transfer" />
-                                    </div>
-                                </fieldset>
-                                [% FOREACH trsfitemloo IN trsfitemloop %]
-                                    <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
-                                    <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
-                                    <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
+                                [% PROCESS transfer_hidden_fields %]
+                                <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
+                                <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+                                <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                                <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
+                                <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                [% IF ( waiting or transferred or processing ) %]
+                                    <input type="hidden" name="op" value="cud-KillWaiting" />
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Cancel hold and attempt transfer</button>
                                 [% END %]
-                                <input type="hidden" name="op" value="cud-transfer" />
+                                [% IF ( reserved ) %]
+                                    <input type="hidden" name="op" value="cud-SetTransit" />
+                                    <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Transfer to [% Branches.GetName( hold.branchcode ) | html %]</button>
+                                [% END %]
                             </form>
-                        </div> <!-- /#branchtransfers -->
+                        </div>
 
-                        [% IF ( trsfitemloop ) %]
-                            <div class="page-section">
-                                <table>
-                                    <caption>Transferred items</caption>
-                                    <tr>
-                                        <th class="tf-title">Title</th>
-                                        <th class="tf-author">Author</th>
-                                        <th class="tf-barcode">Barcode</th>
-                                        <th class="tf-location">Shelving location</th>
-                                        <th class="tf-itemcallnumber">Call number</th>
-                                        <th class="tf-itemtype">Item type</th>
-                                        <th class="tf-ccode">Collection</th>
-                                        <th class="tf-origin">Origin</th>
-                                        <th class="tf-destination">Destination</th>
-                                        <th class="tf-printslip">Actions</th>
-                                    </tr>
-                                    [% FOREACH trsfitemloo IN trsfitemloop %]
-                                        <tr>
-                                            <td class="tf-title">
-                                                [% INCLUDE 'biblio-title.inc' biblio=trsfitemloo.item.biblio link=1 %]
-                                            </td>
-                                            <td class="tf-author">[% trsfitemloo.item.biblio.author | html %]</td>
-                                            <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.item.biblionumber | uri %]&amp;itemnumber=[% trsfitemloo.item.itemnumber | uri %]#item[% trsfitemloo.item.itemnumber | uri %]">[% trsfitemloo.item.barcode | html %]</a></td>
-                                            <td class="tf-location"><span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => trsfitemloo.item.location ) | html %]</span></td>
-                                            <td class="tf-itemcallnumber">[% trsfitemloo.item.itemcallnumber | html %]</td>
-                                            <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.item.effective_itemtype ) | html %]</td>
-                                            <td class="tf-ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => trsfitemloo.item.ccode ) | html %]</td>
-                                            <td class="tf-origin">[% Branches.GetName( trsfitemloo.frombrcd ) | html %]</td>
-                                            <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
-                                            <td class="tf-printslip">
-                                                <button type="button" class="btn btn-default btn-sm printtransferslip" data-itemnumber="[% trsfitemloo.item.itemnumber | html %]" data-tobranch="[% trsfitemloo.tobrcd | html %]"><i class="fa fa-print"></i> Print slip</button>
-                                            </td>
-                                        </tr>
-                                    [% END # /FOREACH trsfitemloo %]
-                                </table>
-                            </div> <!-- /.page-section -->
-                        [% END # /IF trsfitemloop%]
-                    [% END # /IF found %]
+                        [% IF ( reserved ) %]
+                            <div>
+                                <form method="post" action="branchtransfers.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    [% PROCESS transfer_hidden_fields %]
+                                    <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
+                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                                    <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="op" value="cud-KillReserved" />
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Cancel hold and attempt transfer</button>
+                                </form>
+                            </div>
+                        [% END # /IF reserved %]
+
+                        <div>
+                            <form method="get" action="branchtransfers.pl">
+                                <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
+                                <input type="hidden" name="barcode" />
+                                [% PROCESS transfer_hidden_fields %]
+                                <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> Ignore and return to transfers</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.modal-footer -->
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    [% ELSE # /IF found %]
+        [% IF ( reqmessage ) %]
+            <div class="alert alert-info">
+                [% IF ( cancelled ) %]
+                    <p>Hold cancelled</p>
+                [% END %]
+                [% IF ( settransit ) %]
+                    <p>Item is now in transit to [% Branches.GetName(tobranchcd) | html %]</p>
+                [% END %]
+            </div>
+        [% END %]
+
+        [% IF ( errmsgloop ) %]
+            <div class="alert alert-info">
+                <ul>
+                    [% FOREACH errmsgloo IN errmsgloop %]
+                        [% IF ( errmsgloo.errbadcode ) %]
+                            <li>No item with barcode: [% errmsgloo.msg | html %]</li>
+                        [% END %]
+                        [% IF ( errmsgloo.errnotallowed ) %]
+                            <li
+                                >Transfer is not allowed for:
+                                <ol>
+                                    [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
+                                        <li>Item type: <strong>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</strong></li>
+                                    [% ELSE %]
+                                        <li>Collection: <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => errmsgloo.code ) | html %]</strong></li>
+                                    [% END %]
+                                    <li>Originating library: <strong>[% Branches.GetName( errmsgloo.fbr ) | html %]</strong></li>
+                                    <li>Destination library: <strong>[% Branches.GetName( errmsgloo.tbr ) | html %]</strong></li>
+                                </ol>
+                            </li>
+                        [% END %]
+                        [% IF ( errmsgloo.errdesteqholding ) %]
+                            <li>Item is already at destination library.</li>
+                        [% END %]
+                        [% IF ( errmsgloo.errwasreturned ) %]
+                            <li
+                                >Item was on loan to
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | uri %]">
+                                    [% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %] ([% errmsgloo.patron.cardnumber | html %])</a
+                                >
+                                and has been returned.</li
+                            >
+                        [% END %]
+                    [% END # /FOREACH errmsgloo %]
+                </ul>
+            </div>
+            <!-- /.dialog.message -->
+        [% END # /errmsgloop %]
+
+        <div id="branchtransfers">
+            <form method="post" action="/cgi-bin/koha/circ/branchtransfers.pl" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
+                <fieldset class="barcode_input">
+                    <h1>Transfers</h1>
+                    <div class="form-control-group">
+                        <label for="tobranchcd" class="hint">Destination library: </label>
+                        <select name="tobranchcd" id="tobranchcd" class="required select2" required="required">
+                            [% PROCESS options_for_libraries libraries => Branches.all( selected => tobranchcd, unfiltered => 1) %]
+                        </select>
+                        <span class="required">Required</span>
+                    </div>
+                    <div class="form-control-group">
+                        <label class="hint" for="barcode">Enter item barcode: </label>
+                        <input name="barcode" id="barcode" size="15" class="barcode focus" placeholder="Enter item barcode" type="text" />
+                        <input class="btn btn-default" type="submit" value="Transfer" />
+                    </div>
+                </fieldset>
+                [% FOREACH trsfitemloo IN trsfitemloop %]
+                    <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
+                    <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
+                    <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
+                [% END %]
+                <input type="hidden" name="op" value="cud-transfer" />
+            </form>
+        </div>
+        <!-- /#branchtransfers -->
+
+        [% IF ( trsfitemloop ) %]
+            <div class="page-section">
+                <table>
+                    <caption>Transferred items</caption>
+                    <tr>
+                        <th class="tf-title">Title</th>
+                        <th class="tf-author">Author</th>
+                        <th class="tf-barcode">Barcode</th>
+                        <th class="tf-location">Shelving location</th>
+                        <th class="tf-itemcallnumber">Call number</th>
+                        <th class="tf-itemtype">Item type</th>
+                        <th class="tf-ccode">Collection</th>
+                        <th class="tf-origin">Origin</th>
+                        <th class="tf-destination">Destination</th>
+                        <th class="tf-printslip">Actions</th>
+                    </tr>
+                    [% FOREACH trsfitemloo IN trsfitemloop %]
+                        <tr>
+                            <td class="tf-title"> [% INCLUDE 'biblio-title.inc' biblio=trsfitemloo.item.biblio link=1 %] </td>
+                            <td class="tf-author">[% trsfitemloo.item.biblio.author | html %]</td>
+                            <td class="tf-barcode"
+                                ><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.item.biblionumber | uri %]&amp;itemnumber=[% trsfitemloo.item.itemnumber | uri %]#item[% trsfitemloo.item.itemnumber | uri %]"
+                                    >[% trsfitemloo.item.barcode | html %]</a
+                                ></td
+                            >
+                            <td class="tf-location"><span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => trsfitemloo.item.location ) | html %]</span></td>
+                            <td class="tf-itemcallnumber">[% trsfitemloo.item.itemcallnumber | html %]</td>
+                            <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.item.effective_itemtype ) | html %]</td>
+                            <td class="tf-ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => trsfitemloo.item.ccode ) | html %]</td>
+                            <td class="tf-origin">[% Branches.GetName( trsfitemloo.frombrcd ) | html %]</td>
+                            <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
+                            <td class="tf-printslip">
+                                <button type="button" class="btn btn-default btn-sm printtransferslip" data-itemnumber="[% trsfitemloo.item.itemnumber | html %]" data-tobranch="[% trsfitemloo.tobrcd | html %]"
+                                    ><i class="fa fa-print"></i> Print slip</button
+                                >
+                            </td>
+                        </tr>
+                    [% END # /FOREACH trsfitemloo %]
+                </table>
+            </div>
+            <!-- /.page-section -->
+        [% END # /IF trsfitemloop %]
+    [% END # /IF found %]
 [% END %]
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'select2.inc' %]

@@ -49,7 +49,7 @@ sub process {
 
     $self->start;
 
-    my $mmtid = $args->{mmtid};
+    my $mmtid      = $args->{mmtid};
     my @record_ids = @{ $args->{record_ids} };
 
     my $report = {
@@ -58,7 +58,7 @@ sub process {
     };
     my @messages;
     my $schema = Koha::Database->new->schema;
-    RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
+RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
 
         last if $self->get_from_storage->status eq 'cancelled';
 
@@ -67,15 +67,16 @@ sub process {
         $schema->storage->txn_begin;
 
         my $biblionumber = $record_id;
+
         # First, checking if issues exist.
         # If yes, nothing to do
-        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblio = Koha::Biblios->find($biblionumber);
 
         # TODO Replace with $biblio->get_issues->count
-        if ( C4::Biblio::CountItemsIssued( $biblionumber ) ) {
+        if ( C4::Biblio::CountItemsIssued($biblionumber) ) {
             push @messages, {
-                type => 'warning',
-                code => 'item_issued',
+                type         => 'warning',
+                code         => 'item_issued',
                 biblionumber => $biblionumber,
             };
             $schema->storage->txn_rollback;
@@ -87,16 +88,14 @@ sub process {
         # Cancel reserves
         my $holds = $biblio->holds;
         while ( my $hold = $holds->next ) {
-            eval{
-                $hold->cancel({ skip_holds_queue => 1 });
-            };
-            if ( $@ ) {
+            eval { $hold->cancel( { skip_holds_queue => 1 } ); };
+            if ($@) {
                 push @messages, {
-                    type => 'error',
-                    code => 'reserve_not_cancelled',
+                    type         => 'error',
+                    code         => 'reserve_not_cancelled',
                     biblionumber => $biblionumber,
-                    reserve_id => $hold->reserve_id,
-                    error => "$@",
+                    reserve_id   => $hold->reserve_id,
+                    error        => "$@",
                 };
                 $schema->storage->txn_rollback;
 
@@ -106,16 +105,16 @@ sub process {
         }
 
         # Delete items
-        my $items = Koha::Items->search({ biblionumber => $biblionumber });
+        my $items = Koha::Items->search( { biblionumber => $biblionumber } );
         while ( my $item = $items->next ) {
-            my $deleted = $item->safe_delete({ skip_record_index => 1, skip_holds_queue => 1 });
-            unless ( $deleted ) {
+            my $deleted = $item->safe_delete( { skip_record_index => 1, skip_holds_queue => 1 } );
+            unless ($deleted) {
                 push @messages, {
-                    type => 'error',
-                    code => 'item_not_deleted',
+                    type         => 'error',
+                    code         => 'item_not_deleted',
                     biblionumber => $biblionumber,
-                    itemnumber => $item->itemnumber,
-                    error => @{$deleted->messages}[0]->message,
+                    itemnumber   => $item->itemnumber,
+                    error        => @{ $deleted->messages }[0]->message,
                 };
                 $schema->storage->txn_rollback;
 
@@ -132,15 +131,13 @@ sub process {
         }
 
         # Finally, delete the biblio
-        my $error = eval {
-            C4::Biblio::DelBiblio( $biblionumber, { skip_record_index => 1, skip_holds_queue => 1 } );
-        };
+        my $error = eval { C4::Biblio::DelBiblio( $biblionumber, { skip_record_index => 1, skip_holds_queue => 1 } ); };
         if ( $error or $@ ) {
             push @messages, {
-                type => 'error',
-                code => 'biblio_not_deleted',
+                type         => 'error',
+                code         => 'biblio_not_deleted',
                 biblionumber => $biblionumber,
-                error => ($@ ? $@ : $error),
+                error        => ( $@ ? $@ : $error ),
             };
             $schema->storage->txn_rollback;
 
@@ -149,8 +146,8 @@ sub process {
         }
 
         push @messages, {
-            type => 'success',
-            code => 'biblio_deleted',
+            type         => 'success',
+            code         => 'biblio_deleted',
             biblionumber => $biblionumber,
         };
         $report->{total_success}++;
@@ -160,25 +157,21 @@ sub process {
     }
 
     my @deleted_biblionumbers =
-      map { $_->{code} eq 'biblio_deleted' ? $_->{biblionumber} : () }
-          @messages;
+        map { $_->{code} eq 'biblio_deleted' ? $_->{biblionumber} : () } @messages;
 
-    if ( @deleted_biblionumbers ) {
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    if (@deleted_biblionumbers) {
+        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
         $indexer->index_records( \@deleted_biblionumbers, "recordDelete", "biblioserver" );
 
-        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
-            {
-                biblio_ids => \@deleted_biblionumbers
-            }
-        ) if C4::Context->preference('RealTimeHoldsQueue');
+        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => \@deleted_biblionumbers } )
+            if C4::Context->preference('RealTimeHoldsQueue');
     }
 
     my $data = $self->decoded_data;
     $data->{messages} = \@messages;
-    $data->{report} = $report;
+    $data->{report}   = $report;
 
-    $self->finish( $data );
+    $self->finish($data);
 }
 
 =head3 enqueue
@@ -188,18 +181,20 @@ Enqueue the new job
 =cut
 
 sub enqueue {
-    my ( $self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     # TODO Raise exception instead
     return unless exists $args->{record_ids};
 
     my @record_ids = @{ $args->{record_ids} };
 
-    $self->SUPER::enqueue({
-        job_size  => scalar @record_ids,
-        job_args  => {record_ids => \@record_ids,},
-        job_queue => 'long_tasks',
-    });
+    $self->SUPER::enqueue(
+        {
+            job_size  => scalar @record_ids,
+            job_args  => { record_ids => \@record_ids, },
+            job_queue => 'long_tasks',
+        }
+    );
 }
 
 1;

@@ -20,40 +20,40 @@
 use Modern::Perl;
 
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Context;
 use Koha::Patron::Discharge;
 
 my $input = CGI->new;
-my $op = $input->param('op') // 'list';
+my $op    = $input->param('op') // 'list';
 
-my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
-    template_name   => "members/discharges.tt",
-    query           => $input,
-    type            => "intranet",
-    flagsrequired   => { borrowers => 'edit_borrowers' },
-});
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => "members/discharges.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
+    }
+);
 
 my $branchcode =
-  ( C4::Context->preference("IndependentBranches")
-      and not C4::Context->IsSuperLibrarian() )
-  ? C4::Context->userenv()->{'branch'}
-  : undef;
+    ( C4::Context->preference("IndependentBranches") and not C4::Context->IsSuperLibrarian() )
+    ? C4::Context->userenv()->{'branch'}
+    : undef;
 
-if( $op eq 'allow' ) {
+if ( $op eq 'allow' ) {
     my $borrowernumber = $input->param('borrowernumber');
-    my $logged_in_user = Koha::Patrons->find( $loggedinuser );
+    my $logged_in_user = Koha::Patrons->find($loggedinuser);
     my $patron         = Koha::Patrons->find($borrowernumber);
-    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
-    Koha::Patron::Discharge::discharge({
-        borrowernumber => $borrowernumber
-    }) if $borrowernumber;
+    output_and_exit_if_error(
+        $input, $cookie, $template,
+        { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+    );
+    Koha::Patron::Discharge::discharge( { borrowernumber => $borrowernumber } ) if $borrowernumber;
 }
 
-my @pending_discharges = Koha::Patron::Discharge::get_pendings({
-    branchcode => $branchcode
-});
+my @pending_discharges = Koha::Patron::Discharge::get_pendings( { branchcode => $branchcode } );
 $template->param( pending_discharges => \@pending_discharges );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -32,7 +32,7 @@ use Koha::Old::Checkouts;
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( AddUniqueDebarment );
 
-my $schema = Koha::Database->schema;
+my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'Failure tests' => sub {
@@ -41,10 +41,12 @@ subtest 'Failure tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
-    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron   = $builder->build_object(
-        {   class => 'Koha::Patrons',
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
@@ -57,9 +59,10 @@ subtest 'Failure tests' => sub {
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
     my ( $issue_id, $issue );
+
     # The next call will return undef for invalid item number
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, 'invalid_itemnumber', undef, 0 ) };
-    is( $@, '', 'No die triggered by invalid itemnumber' );
+    is( $@,        '',    'No die triggered by invalid itemnumber' );
     is( $issue_id, undef, 'No issue_id returned' );
 
     # In the next call we return the item and try it another time
@@ -67,9 +70,8 @@ subtest 'Failure tests' => sub {
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0 ) };
     is( $issue_id, $issue->issue_id, "Item has been returned (issue $issue_id)" );
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0 ) };
-    is( $@, '', 'No crash on returning item twice' );
+    is( $@,        '',    'No crash on returning item twice' );
     is( $issue_id, undef, 'Cannot return an item twice' );
-
 
     $schema->storage->txn_rollback;
 };
@@ -80,10 +82,12 @@ subtest 'Anonymous patron tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
-    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron   = $builder->build_object(
-        {   class => 'Koha::Patrons',
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
@@ -100,27 +104,28 @@ subtest 'Anonymous patron tests' => sub {
 
     my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
-    throws_ok
-        { C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 2 ); }
-        'Koha::Exceptions::SysPref::NotSet',
+    throws_ok { C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 2 ); }
+    'Koha::Exceptions::SysPref::NotSet',
         'AnonymousPatron not set causes an exception';
 
     is( $@->syspref, 'AnonymousPatron', 'AnonymousPatron is not set - Fatal error on anonymization' );
     Koha::Checkouts->find( $issue->issue_id )->delete;
 
     # Create a valid anonymous user
-    my $anonymous = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => {
-            categorycode => $category->categorycode,
-            branchcode => $library->branchcode
+    my $anonymous = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category->categorycode,
+                branchcode   => $library->branchcode
+            }
         }
-    });
-    t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous->borrowernumber);
+    );
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->borrowernumber );
     $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
     eval { C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 2 ) };
-    is ( $@, q||, 'AnonymousPatron is set correctly - no error expected');
+    is( $@, q||, 'AnonymousPatron is set correctly - no error expected' );
 
     $schema->storage->txn_rollback;
 };
@@ -131,10 +136,12 @@ subtest 'Manually pass a return date' => sub {
 
     $schema->storage->txn_begin;
 
-    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object(
-        {   class => 'Koha::Patrons',
+        {
+            class => 'Koha::Patrons',
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
@@ -144,15 +151,15 @@ subtest 'Manually pass a return date' => sub {
         }
     );
 
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
     my ( $issue, $issue_id );
 
-    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+    $issue    = C4::Circulation::AddIssue( $patron, $item->barcode );
     $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, '2018-12-25', 0 );
 
     is( $issue_id, $issue->issue_id, "Item has been returned" );
-    my $old_checkout = Koha::Old::Checkouts->find( $issue_id );
+    my $old_checkout = Koha::Old::Checkouts->find($issue_id);
     is( $old_checkout->returndate, '2018-12-25 00:00:00', 'Manually passed date stored correctly' );
 
     $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
@@ -162,9 +169,10 @@ subtest 'Manually pass a return date' => sub {
         # DBD::mysql::st execute failed: Incorrect datetime value: 'bad_date' for column 'returndate'
         local *STDERR;
         open STDERR, '>', '/dev/null';
-        throws_ok
-            { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 ); }
-            'Koha::Exceptions::Object::BadValue',
+        throws_ok {
+            $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 );
+        }
+        'Koha::Exceptions::Object::BadValue',
             'An exception is thrown on bad date';
         close STDERR;
     }
@@ -204,12 +212,9 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     my $item_2        = $builder->build_sample_item;
     my $item_3        = $builder->build_sample_item;
     my $nine_days_ago = dt_from_string->subtract( days => 9 );
-    my $checkout_1 =
-        AddIssue( $patron, $item_1->barcode, $nine_days_ago );    # overdue, but would not trigger debarment
-    my $checkout_2 =
-        AddIssue( $patron, $item_2->barcode, $nine_days_ago );    # overdue, but would not trigger debarment
-    my $checkout_3 = AddIssue( $patron, $item_3->barcode );       # not overdue
-
+    my $checkout_1 = AddIssue( $patron, $item_1->barcode, $nine_days_ago );   # overdue, but would not trigger debarment
+    my $checkout_2 = AddIssue( $patron, $item_2->barcode, $nine_days_ago );   # overdue, but would not trigger debarment
+    my $checkout_3 = AddIssue( $patron, $item_3->barcode );                   # not overdue
 
     Koha::Patron::Debarments::AddUniqueDebarment(
         {
@@ -234,9 +239,8 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     my $ten_days_ago = dt_from_string->subtract( days => 10 );
 
-    $checkout_1 = AddIssue( $patron, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
-    $checkout_2 =
-        AddIssue( $patron, $item_2->barcode, $nine_days_ago );    # overdue, but would not trigger debarment
+    $checkout_1 = AddIssue( $patron, $item_1->barcode, $ten_days_ago );     # overdue and would trigger debarment
+    $checkout_2 = AddIssue( $patron, $item_2->barcode, $nine_days_ago );    # overdue, but would not trigger debarment
 
     Koha::Patron::Debarments::AddUniqueDebarment(
         {
@@ -254,7 +258,7 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
         'OVERDUES debarment is removed if remaining items would not result in patron debarment'
     );
 
-    $checkout_1 = AddIssue( $patron, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
+    $checkout_1 = AddIssue( $patron, $item_1->barcode, $ten_days_ago );    # overdue and would trigger debarment
 
     Koha::Patron::Debarments::AddUniqueDebarment(
         {
@@ -310,10 +314,12 @@ subtest 'Pass checkin_library to old_issues' => sub {
 
     $schema->storage->txn_begin;
 
-    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
-    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron   = $builder->build_object(
-        {   class => 'Koha::Patrons',
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
@@ -325,12 +331,12 @@ subtest 'Pass checkin_library to old_issues' => sub {
 
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
-    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+    my $issue    = C4::Circulation::AddIssue( $patron, $item->barcode );
     my $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber );
 
     is( $issue_id, $issue->issue_id, 'Item has been returned' );
-    my $old_issue = Koha::Old::Checkouts->find( $issue_id );
+    my $old_issue = Koha::Old::Checkouts->find($issue_id);
     is( $old_issue->checkin_library, $library->branchcode, 'Return branch is passed correctly' );
 
-    $schema->storage->txn_rollback
+    $schema->storage->txn_rollback;
 };

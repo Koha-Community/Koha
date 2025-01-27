@@ -31,19 +31,20 @@ use Carp qw( carp croak );
 
 use Koha::Database;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA    = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      GetPatronLists
+        GetPatronLists
 
-      DelPatronList
-      AddPatronList
-      ModPatronList
+        DelPatronList
+        AddPatronList
+        ModPatronList
 
-      AddPatronsToList
-      DelPatronsFromList
+        AddPatronsToList
+        DelPatronsFromList
     );
 }
 
@@ -70,7 +71,7 @@ sub GetPatronLists {
     if ( my $owner = $params->{owner} ) {
         delete $params->{owner};
         $params->{'-or'} = [
-            owner => $owner,
+            owner  => $owner,
             shared => 1,
         ];
     }
@@ -103,8 +104,7 @@ sub DelPatronList {
 
     delete( $params->{owner} ) if ( C4::Context->IsSuperLibrarian() );
 
-    return Koha::Database->new()->schema()->resultset('PatronList')
-      ->search($params)->single()->delete();
+    return Koha::Database->new()->schema()->resultset('PatronList')->search($params)->single()->delete();
 }
 
 =head2 AddPatronList
@@ -128,8 +128,7 @@ sub AddPatronList {
         return;
     }
 
-    return Koha::Database->new()->schema()->resultset('PatronList')
-      ->create($params);
+    return Koha::Database->new()->schema()->resultset('PatronList')->create($params);
 }
 
 =head2 ModPatronList
@@ -180,11 +179,10 @@ sub AddPatronsToList {
         $search_param{borrowernumber} = { 'IN' => $borrowernumbers };
     }
 
-    @borrowernumbers =
-      Koha::Database->new()->schema()->resultset('Borrower')->search(
+    @borrowernumbers = Koha::Database->new()->schema()->resultset('Borrower')->search(
         \%search_param,
-        { columns    => [qw/ borrowernumber /] }
-      )->get_column('borrowernumber')->all();
+        { columns => [qw/ borrowernumber /] }
+    )->get_column('borrowernumber')->all();
 
     my $patron_list_id = $list->patron_list_id();
 
@@ -219,8 +217,7 @@ sub DelPatronsFromList {
     return unless ( $list && $patron_list_patrons );
 
     return Koha::Database->new()->schema()->resultset('PatronListPatron')
-      ->search( { patron_list_patron_id => { 'IN' => $patron_list_patrons } } )
-      ->delete();
+        ->search( { patron_list_patron_id => { 'IN' => $patron_list_patrons } } )->delete();
 }
 
 =head1 AUTHOR

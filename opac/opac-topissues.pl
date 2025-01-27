@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 # Parts Copyright Catalyst IT 2011
 #
@@ -21,11 +20,11 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Search;
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Circulation qw( GetTopIssues );
 
 =head1 NAME
@@ -39,12 +38,12 @@ plugin that shows a stats on borrowers
 my $input = CGI->new;
 
 # if OpacTopissue is disabled, leave immediately
-if ( ! C4::Context->preference('OpacTopissue') ) {
+if ( !C4::Context->preference('OpacTopissue') ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user(
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => 'opac-topissues.tt',
         query           => $input,
@@ -53,42 +52,43 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user(
     }
 );
 my $dbh = C4::Context->dbh;
+
 # Displaying results
-my $do_it = $input->param('do_it') || 0; # as form been posted
+my $do_it = $input->param('do_it') || 0;               # as form been posted
 my $limit = $input->param('limit');
-$limit = 10 unless ($limit && $limit =~ /^\d+$/); # control user input for SQL query
+$limit = 10 unless ( $limit && $limit =~ /^\d+$/ );    # control user input for SQL query
 $limit = 100 if $limit > 100;
 my $branch = $input->param('branch') || '';
-if (!$do_it && C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
-    $branch = C4::Context->userenv->{'branch'}; # select user branch by default
+if ( !$do_it && C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
+    $branch = C4::Context->userenv->{'branch'};        # select user branch by default
 }
-my $itemtype = $input->param('itemtype') || '';
-my $timeLimit = $input->param('timeLimit') || 3;
+my $itemtype              = $input->param('itemtype')  || '';
+my $timeLimit             = $input->param('timeLimit') || 3;
 my $advanced_search_types = C4::Context->preference('OpacAdvancedSearchTypes');
 my @advanced_search_types = split /\|/, $advanced_search_types;
 
 my $params = {
-    count => $limit,
-    branch => $branch,
+    count   => $limit,
+    branch  => $branch,
     newness => $timeLimit < 999 ? $timeLimit * 30 : undef,
 };
 
 @advanced_search_types = grep /^(ccode|itemtypes)$/, @advanced_search_types;
 foreach my $type (@advanced_search_types) {
-    if ($type eq 'itemtypes') {
+    if ( $type eq 'itemtypes' ) {
         $type = 'itemtype';
     }
     $params->{$type} = $input->param($type);
-    $template->param('selected_' . $type => scalar $input->param($type));
+    $template->param( 'selected_' . $type => scalar $input->param($type) );
 }
 
 my @results = GetTopIssues($params);
 
 $template->param(
-    limit => $limit,
-    branch => $branch,
+    limit     => $limit,
+    branch    => $branch,
     timeLimit => $timeLimit,
-    results => \@results,
+    results   => \@results,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -62,7 +62,7 @@ Connect to the message broker using default guest/guest credential
 =cut
 
 sub connect {
-    my ( $self );
+    my ($self);
 
     my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
 
@@ -72,24 +72,24 @@ sub connect {
     my $hostname = $ENV{KOHA_STOMP_HOSTNAME} // 'localhost';
     my $port     = $ENV{KOHA_STOMP_PORT}     // '61613';
 
-    my $config = C4::Context->config('message_broker');
+    my $config      = C4::Context->config('message_broker');
     my $credentials = {
-        login => 'guest',
+        login    => 'guest',
         passcode => 'guest',
     };
-    if ($config){
-        $hostname = $config->{hostname} if $config->{hostname};
-        $port = $config->{port} if $config->{port};
-        $credentials->{login} = $config->{username} if $config->{username};
+    if ($config) {
+        $hostname                = $config->{hostname} if $config->{hostname};
+        $port                    = $config->{port}     if $config->{port};
+        $credentials->{login}    = $config->{username} if $config->{username};
         $credentials->{passcode} = $config->{password} if $config->{password};
-        $credentials->{host} = $config->{vhost} if $config->{vhost};
+        $credentials->{host}     = $config->{vhost}    if $config->{vhost};
     }
 
     my $stomp;
 
     try {
         $stomp = Net::Stomp->new( { hostname => $hostname, port => $port } );
-        $stomp->connect( $credentials );
+        $stomp->connect($credentials);
     } catch {
         warn "Cannot connect to broker " . $_;
         $stomp = undef;
@@ -116,13 +116,13 @@ sub enqueue {
     my $job_size    = $params->{job_size};
     my $job_args    = $params->{job_args};
     my $job_context = $params->{job_context} // C4::Context->userenv;
-    my $job_queue   = $params->{job_queue}  // 'default';
-    my $json = $self->json;
+    my $job_queue   = $params->{job_queue}   // 'default';
+    my $json        = $self->json;
 
-    my $borrowernumber = (C4::Context->userenv) ? C4::Context->userenv->{number} : undef;
+    my $borrowernumber = ( C4::Context->userenv ) ? C4::Context->userenv->{number} : undef;
     $job_context->{interface} = C4::Context->interface;
     my $json_context = $json->encode($job_context);
-    my $json_args = $json->encode($job_args);
+    my $json_args    = $json->encode($job_args);
 
     $self->set(
         {
@@ -148,11 +148,11 @@ sub enqueue {
         # But to do so it needs to be created on the server => much more work when a new Koha instance is created.
         # Also, here we just want the Koha instance's name, but it's not in the config...
         # Picking a random id (memcached_namespace) from the config
-        my $namespace = C4::Context->config('memcached_namespace');
-        my $encoded_args = Encode::encode_utf8( $json_args ); # FIXME We should better leave this to Net::Stomp?
-        my $destination = sprintf( "/queue/%s-%s", $namespace, $job_queue );
+        my $namespace    = C4::Context->config('memcached_namespace');
+        my $encoded_args = Encode::encode_utf8($json_args);           # FIXME We should better leave this to Net::Stomp?
+        my $destination  = sprintf( "/queue/%s-%s", $namespace, $job_queue );
         $conn->send_with_receipt( { destination => $destination, body => $encoded_args, persistent => 'true' } )
-          or Koha::Exceptions::BackgroundJob->throw('Job has not been enqueued');
+            or Koha::Exceptions::BackgroundJob->throw('Job has not been enqueued');
     } catch {
         $self->status('failed')->store;
         if ( ref($_) eq 'Koha::Exceptions::BackgroundJob' ) {
@@ -187,7 +187,7 @@ sub process {
     $args ||= {};
 
     if ( $self->context ) {
-        my $context = $self->json->decode($self->context);
+        my $context = $self->json->decode( $self->context );
         C4::Context->interface( $context->{interface} );
         C4::Context->set_userenv(
             $context->{number},       $context->{id},
@@ -198,12 +198,11 @@ sub process {
             $context->{desk_id},      $context->{desk_name},
             $context->{register_id},  $context->{register_name}
         );
-    }
-    else {
-        Koha::Logger->get->warn("A background job didn't have context defined (" . $self->id . ")");
+    } else {
+        Koha::Logger->get->warn( "A background job didn't have context defined (" . $self->id . ")" );
     }
 
-    return $derived_class->process( $args );
+    return $derived_class->process($args);
 }
 
 =head3 start
@@ -285,8 +284,8 @@ done later.
 =cut
 
 sub json {
-    my ( $self ) = @_;
-    $self->{_json} //= JSON->new->utf8(0); # TODO Should we allow_nonref ?
+    my ($self) = @_;
+    $self->{_json} //= JSON->new->utf8(0);    # TODO Should we allow_nonref ?
     return $self->{_json};
 }
 
@@ -333,10 +332,10 @@ Messages let during the processing of the job.
 =cut
 
 sub messages {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my @messages;
-    my $data_dump = $self->json->decode($self->data);
+    my $data_dump = $self->json->decode( $self->data );
     if ( exists $data_dump->{messages} ) {
         @messages = @{ $data_dump->{messages} };
     }
@@ -351,9 +350,9 @@ Report of the job.
 =cut
 
 sub report {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $data_dump = $self->json->decode($self->data);
+    my $data_dump = $self->json->decode( $self->data );
     return $data_dump->{report} || {};
 }
 
@@ -364,7 +363,7 @@ Build additional variables for the job detail view.
 =cut
 
 sub additional_report {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return {} if ref($self) ne 'Koha::BackgroundJob';
 
@@ -380,7 +379,7 @@ Cancel a job.
 =cut
 
 sub cancel {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->status('cancelled')->store;
 }
 
@@ -391,12 +390,12 @@ sub cancel {
 =cut
 
 sub _derived_class {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $job_type = $self->type;
 
     my $class = $self->type_to_class_mapping->{$job_type};
 
-    Koha::Exception->throw($job_type . ' is not a valid job_type')
+    Koha::Exception->throw( $job_type . ' is not a valid job_type' )
         unless $class;
 
     eval "require $class";
@@ -417,8 +416,8 @@ sub type_to_class_mapping {
     my $plugins_mapping = ( C4::Context->config("enable_plugins") ) ? $self->plugin_types_to_classes : {};
 
     return ($plugins_mapping)
-      ? { %{ $self->core_types_to_classes }, %$plugins_mapping }
-      : $self->core_types_to_classes;
+        ? { %{ $self->core_types_to_classes }, %$plugins_mapping }
+        : $self->core_types_to_classes;
 }
 
 =head3 core_types_to_classes
@@ -471,10 +470,9 @@ sub plugin_types_to_classes {
             my $metadata = $plugin->get_metadata;
 
             unless ( $metadata->{namespace} ) {
-                Koha::Logger->get->warn(
-                        q{A plugin includes the 'background_tasks' method, }
-                      . q{but doesn't provide the required 'namespace' }
-                      . qq{method ($plugin->{class})} );
+                Koha::Logger->get->warn( q{A plugin includes the 'background_tasks' method, }
+                        . q{but doesn't provide the required 'namespace' }
+                        . qq{method ($plugin->{class})} );
                 next;
             }
 
@@ -508,10 +506,10 @@ suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    my $json = $self->SUPER::to_api( $params );
+    my $json = $self->SUPER::to_api($params);
 
-    $json->{context} = $self->json->decode($self->context)
-      if defined $self->context;
+    $json->{context} = $self->json->decode( $self->context )
+        if defined $self->context;
     $json->{data} = $self->decoded_data;
 
     return $json;

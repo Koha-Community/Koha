@@ -57,10 +57,10 @@ returns:
 =cut
 
 sub get_data {
-    my ( $isbn ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq{SELECT * FROM social_data WHERE isbn = ? LIMIT 1} );
-    $sth->execute( $isbn );
+    my ($isbn) = @_;
+    my $dbh    = C4::Context->dbh;
+    my $sth    = $dbh->prepare(qq{SELECT * FROM social_data WHERE isbn = ? LIMIT 1});
+    $sth->execute($isbn);
     my $results = $sth->fetchrow_hashref;
 
     return $results;
@@ -79,28 +79,32 @@ data order : isbn ; active ; critics number , critics pro number ; quotations nu
 =cut
 
 sub update_data {
-    my ( $output_filepath ) = @_;
+    my ($output_filepath) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq{INSERT INTO social_data (
+    my $sth = $dbh->prepare(
+        qq{INSERT INTO social_data (
             `isbn`, `num_critics`, `num_critics_pro`, `num_quotations`, `num_videos`, `score_avg`, `num_scores`
         ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
         ON DUPLICATE KEY UPDATE `num_critics`=?, `num_critics_pro`=?, `num_quotations`=?, `num_videos`=?, `score_avg`=?, `num_scores`=?
-    } );
+    }
+    );
 
     open my $file, '<', $output_filepath or die "File $output_filepath can not be read";
-    my $sep = qq{;};
-    my $i = 0;
+    my $sep     = qq{;};
+    my $i       = 0;
     my $unknown = 0;
     while ( my $line = <$file> ) {
-        my ( $isbn, $active, $num_critics, $num_critics_pro, $num_quotations, $num_videos, $score_avg, $num_scores ) = split $sep, $line;
+        my ( $isbn, $active, $num_critics, $num_critics_pro, $num_quotations, $num_videos, $score_avg, $num_scores ) =
+            split $sep, $line;
         next if not $active;
         eval {
-            $sth->execute( $isbn, $num_critics, $num_critics_pro, $num_quotations, $num_videos, $score_avg, $num_scores,
-                $num_critics, $num_critics_pro, $num_quotations, $num_videos, $score_avg, $num_scores
+            $sth->execute(
+                $isbn,        $num_critics,     $num_critics_pro, $num_quotations, $num_videos, $score_avg, $num_scores,
+                $num_critics, $num_critics_pro, $num_quotations,  $num_videos,     $score_avg,  $num_scores
             );
         };
-        if ( $@ ) {
+        if ($@) {
             warn "Can't insert $isbn ($@)";
         } else {
             $i++;
@@ -118,9 +122,11 @@ Get social data report
 sub get_report {
     my $dbh = C4::Context->dbh;
 
-    my $sth = $dbh->prepare( qq{
+    my $sth = $dbh->prepare(
+        qq{
         SELECT biblionumber, isbn FROM biblioitems
-    } ); # FIXME We could better join socialdata here than call get_data for each record?
+    }
+    );    # FIXME We could better join socialdata here than call get_data for each record?
     $sth->execute;
     my %results;
     while ( my ( $biblionumber, $isbn ) = $sth->fetchrow() ) {
@@ -128,15 +134,14 @@ sub get_report {
         my $original_isbn = $isbn;
         $isbn =~ s/^\s*(\S*)\s*$/$1/;
         $isbn = GetNormalizedISBN( $isbn, undef, undef );
-        $isbn = Business::ISBN->new( $isbn );
+        $isbn = Business::ISBN->new($isbn);
         next if not $isbn;
-        eval{
-            $isbn = $isbn->as_isbn13->as_string;
-        };
+        eval { $isbn = $isbn->as_isbn13->as_string; };
         next if $@;
         $isbn =~ s/-//g;
-        my $social_datas = C4::SocialData::get_data( $isbn ); # FIXME Why is data not included in $results ?
-        if ( $social_datas ) {
+        my $social_datas = C4::SocialData::get_data($isbn);    # FIXME Why is data not included in $results ?
+
+        if ($social_datas) {
             push @{ $results{with} }, { biblionumber => $biblionumber, isbn => $isbn, original => $original_isbn };
         } else {
             push @{ $results{without} }, { biblionumber => $biblionumber, isbn => $isbn, original => $original_isbn };

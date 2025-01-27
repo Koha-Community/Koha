@@ -32,13 +32,9 @@ $schema->storage->txn_begin;
 
 my $count = Koha::SMS::Providers->search->count;
 
-my $builder = t::lib::TestBuilder->new;
-my $provider1 =
-  Koha::SMS::Provider->new( { name => 'Test 1', domain => 'test1.com' } )
-  ->store();
-my $provider2 =
-  Koha::SMS::Provider->new( { name => 'Test 2', domain => 'test2.com' } )
-  ->store();
+my $builder   = t::lib::TestBuilder->new;
+my $provider1 = Koha::SMS::Provider->new( { name => 'Test 1', domain => 'test1.com' } )->store();
+my $provider2 = Koha::SMS::Provider->new( { name => 'Test 2', domain => 'test2.com' } )->store();
 
 my $patron1 = $builder->build(
     {
@@ -54,21 +50,29 @@ my $patron2 = $builder->build(
     }
 );
 
-like( $provider1->id, qr|^\d+$|,
-    'Adding a new provider should have set the id' );
-is( Koha::SMS::Providers->search->count,
-    $count + 2, 'The 2 providers should have been added' );
+like(
+    $provider1->id, qr|^\d+$|,
+    'Adding a new provider should have set the id'
+);
+is(
+    Koha::SMS::Providers->search->count,
+    $count + 2, 'The 2 providers should have been added'
+);
 
-is ( $provider1->patrons_using(), 2, 'Found the correct number of patrons using provider' );
-is ( $provider2->patrons_using(), 0, 'Found the correct number of patrons using unused provider' );
+is( $provider1->patrons_using(), 2, 'Found the correct number of patrons using provider' );
+is( $provider2->patrons_using(), 0, 'Found the correct number of patrons using unused provider' );
 
 my $provider = Koha::SMS::Providers->find( $provider1->id );
-is( $provider->name, $provider1->name,
-    'Find a provider by id should return the correct provider' );
+is(
+    $provider->name, $provider1->name,
+    'Find a provider by id should return the correct provider'
+);
 
 $provider1->delete;
-is( Koha::SMS::Providers->search->count,
-    $count + 1, 'Delete should have deleted the provider' );
+is(
+    Koha::SMS::Providers->search->count,
+    $count + 1, 'Delete should have deleted the provider'
+);
 
 $schema->storage->txn_rollback;
 

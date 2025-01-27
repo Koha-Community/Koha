@@ -41,7 +41,7 @@ my $attributes = Koha::Patron::Attributes->search( $params );
 sub search {
     my ( $self, $params, $attributes ) = @_;
 
-    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['me.code', 'attribute'] }
+    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = [ 'me.code', 'attribute' ] }
 
     return $self->SUPER::search( $params, $attributes );
 }
@@ -62,28 +62,27 @@ sub filter_by_branch_limitations {
     my ( $self, $branchcode ) = @_;
 
     # Maybe we should not limit if logged in user is superlibrarian?
-    my $branch_limit =
-        $branchcode          ? $branchcode
+    my $branch_limit = $branchcode
+        ? $branchcode
+
         # Do we raise an exception if no userenv defined?
-      : C4::Context->userenv ? C4::Context->userenv->{"branch"}
-      :                        undef;
+        : C4::Context->userenv ? C4::Context->userenv->{"branch"}
+        :                        undef;
 
     my $or = $branch_limit
-      ? {
+        ? {
         '-or' => [
             'borrower_attribute_types_branches.b_branchcode' => undef,
             'borrower_attribute_types_branches.b_branchcode' => $branch_limit,
         ]
-      }
-      : {};
+        }
+        : {};
 
     my $join = $branch_limit
-      ? {
-        join => {
-            code => 'borrower_attribute_types_branches'
-        },
-      }
-      : {};
+        ? {
+        join => { code => 'borrower_attribute_types_branches' },
+        }
+        : {};
     return $self->search( $or, $join );
 }
 
@@ -96,19 +95,20 @@ $new_attributes is an arrayref of hashrefs
 sub merge_and_replace_with {
     my ( $self, $new_attributes ) = @_;
 
-    my @existing_attributes = @{$self->unblessed};
-    my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search->as_list };
+    my @existing_attributes = @{ $self->unblessed };
+    my $attribute_types     = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search->as_list };
     my @new_attributes;
-    for my $attr ( @$new_attributes ) {
+    for my $attr (@$new_attributes) {
 
-        my $attribute_type = $attribute_types->{$attr->{code}};
+        my $attribute_type = $attribute_types->{ $attr->{code} };
 
         Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $attr->{code} )
-            unless $attribute_types->{$attr->{code}};
+            unless $attribute_types->{ $attr->{code} };
 
         unless ( $attribute_type->{repeatable} ) {
+
             # filter out any existing attributes of the same code
-            @existing_attributes = grep {$attr->{code} ne $_->{code}} @existing_attributes;
+            @existing_attributes = grep { $attr->{code} ne $_->{code} } @existing_attributes;
         }
 
         push @new_attributes, $attr;

@@ -4,16 +4,16 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF( status ) %]
-        [% t("Approved comments") | html %]
-    [% ELSE %]
-        [% t("Comments awaiting moderation") | html %]
-    [% END %] &rsaquo;
-    [% t("Comments") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF( status ) %]
+            [% t("Approved comments") | html %]
+        [% ELSE %]
+            [% t("Comments awaiting moderation") | html %]
+        [% END %]
+        &rsaquo; [% t("Comments") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="tools_reviewswaiting" class="tools">
@@ -42,99 +42,98 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
+    <h1>Comments</h1>
 
-<h1>Comments</h1>
-
-<!-- The manual invoice and credit buttons -->
-<div class="toptabs">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="nav-item">
-            [% IF ( status ) %]
-                <a class="nav-link active" href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
-            [% ELSE %]
-                <a class="nav-link" href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
-            [% END %]
-        </li>
-        <li role="presentation" class="nav-item">
-            [% IF ( status ) %]
-                <a class="nav-link" href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a>
-            [% ELSE %]
-                <a class="nav-link active" href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a>
-            [% END %]
-        </li>
-    </ul> <!-- /.nav.nav-tabs -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active">
-
-[% IF ( reviews ) %]
-<table id="commentst">
-    <thead><tr>
-        <th>
-            Commenter
-        </th>
-        <th>
-            On title
-        </th>
-        <th>
-            Comment
-        </th>
-        <th>
-            &nbsp;
-        </th>
-    </tr></thead>
-    <tbody>[% FOREACH review IN reviews %]
-    <tr>
-        <td>
-            [% IF ( review.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% review.borrowernumber | uri %]">[% review.patron.surname | html %], [% review.patron.firstname | html %]</a>[% ELSE %](deleted patron)[% END %]
-        </td>
-        <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber | uri %]">[% review.bibliotitle | html %]</a>
-        </td>
-        <td>
-            [% review.review | html %]
-        </td>
-        <td class="actions">
-            [% IF ( review.approved ) %]
-                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="cud-unapprove" />
-                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
-                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Unapprove</button>
-                </form>
-            [% ELSE %]
-                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="cud-approve" />
-                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
-                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
-                </form>
-            [% END %]
-            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op" value="cud-delete" />
-                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
-                <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
-            </form>
-        </td>
-    </tr>
-    [% END %]</tbody>
-</table>
- <div class="pages">[% pagination_bar | $raw %]</div>
-[% ELSE %]
-[% IF ( status ) %]<p><strong>No comments have been approved.</strong></p>[% ELSE %]<p><strong>No comments to moderate.</strong></p>[% END %]
-[% END %]
-        </div> <!-- /.tab-pane -->
-    </div> <!-- /.tab-content -->
-</div> <!-- /.toptabs -->
-
+    <!-- The manual invoice and credit buttons -->
+    <div class="toptabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="nav-item">
+                [% IF ( status ) %]
+                    <a class="nav-link active" href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
+                [% ELSE %]
+                    <a class="nav-link" href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
+                [% END %]
+            </li>
+            <li role="presentation" class="nav-item">
+                [% IF ( status ) %]
+                    <a class="nav-link" href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments awaiting moderation</a>
+                [% ELSE %]
+                    <a class="nav-link active" href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments awaiting moderation</a>
+                [% END %]
+            </li>
+        </ul>
+        <!-- /.nav.nav-tabs -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
+                [% IF ( reviews ) %]
+                    <table id="commentst">
+                        <thead
+                            ><tr>
+                                <th> Commenter </th>
+                                <th> On title </th>
+                                <th> Comment </th>
+                                <th> &nbsp; </th>
+                            </tr></thead
+                        >
+                        <tbody
+                            >[% FOREACH review IN reviews %]
+                                <tr>
+                                    <td>
+                                        [% IF ( review.borrowernumber ) %]
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% review.borrowernumber | uri %]">[% review.patron.surname | html %], [% review.patron.firstname | html %]</a>
+                                        [% ELSE %]
+                                            (deleted patron)
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber | uri %]">[% review.bibliotitle | html %]</a>
+                                    </td>
+                                    <td> [% review.review | html %] </td>
+                                    <td class="actions">
+                                        [% IF ( review.approved ) %]
+                                            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-unapprove" />
+                                                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Unapprove</button>
+                                            </form>
+                                        [% ELSE %]
+                                            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-approve" />
+                                                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+                                            </form>
+                                        [% END %]
+                                        <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-delete" />
+                                            <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                            <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            [% END %]</tbody
+                        >
+                    </table>
+                    <div class="pages">[% pagination_bar | $raw %]</div>
+                [% ELSE %]
+                    [% IF ( status ) %]<p><strong>No comments have been approved.</strong></p>[% ELSE %]<p><strong>No comments to moderate.</strong></p>[% END %]
+                [% END %]
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+    <!-- /.toptabs -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
-        $(document).ready(function(){
-            $(".delete-comment").on("click", function(){
-                return confirm( _("Are you sure you want to delete this comment?") );
+        $(document).ready(function () {
+            $(".delete-comment").on("click", function () {
+                return confirm(_("Are you sure you want to delete this comment?"));
             });
         });
     </script>

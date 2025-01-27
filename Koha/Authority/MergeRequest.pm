@@ -60,13 +60,14 @@ Description
 sub new {
     my ( $class, $params ) = @_;
     my $oldrecord = delete $params->{oldrecord};
-    delete $params->{reportxml}; # just making sure it is empty
-    my $self = $class->SUPER::new( $params );
+    delete $params->{reportxml};    # just making sure it is empty
+    my $self = $class->SUPER::new($params);
 
-    if( $self->authid && $oldrecord ) {
+    if ( $self->authid && $oldrecord ) {
         my $auth = Koha::Authorities->find( $self->authid );
-        my $type = $auth ? Koha::Authority::Types->find($auth->authtypecode) : undef;
-        $self->reportxml( $self->reporting_tag_xml({ record => $oldrecord, tag => $type->auth_tag_to_report })) if $type;
+        my $type = $auth ? Koha::Authority::Types->find( $auth->authtypecode ) : undef;
+        $self->reportxml( $self->reporting_tag_xml( { record => $oldrecord, tag => $type->auth_tag_to_report } ) )
+            if $type;
     }
     return $self;
 }
@@ -80,7 +81,7 @@ sub new {
 =cut
 
 sub oldmarc {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return if !$self->reportxml;
     return MARC::Record->new_from_xml( $self->reportxml, 'UTF-8' );
 }
@@ -100,23 +101,23 @@ sub reporting_tag_xml {
     return if !$params->{record} || !$params->{tag};
 
     my $newrecord = MARC::Record->new;
-    $newrecord->encoding( 'UTF-8' );
+    $newrecord->encoding('UTF-8');
     my $reportfield = $params->{record}->field( $params->{tag} );
     return if !$reportfield;
 
     # For UNIMARC we need a field 100 that includes the encoding
     # at position 13 and 14
-    if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
         $newrecord->append_fields(
-            MARC::Field->new( '100', '', '', a => ' 'x13 . '50' ),
+            MARC::Field->new( '100', '', '', a => ' ' x 13 . '50' ),
         );
     }
 
-    $newrecord->append_fields( $reportfield );
+    $newrecord->append_fields($reportfield);
     return $newrecord->as_xml(
-        C4::Context->preference('marcflavour') eq 'UNIMARC' ?
-        'UNIMARCAUTH' :
-        'MARC21'
+        C4::Context->preference('marcflavour') eq 'UNIMARC'
+        ? 'UNIMARCAUTH'
+        : 'MARC21'
     );
 }
 

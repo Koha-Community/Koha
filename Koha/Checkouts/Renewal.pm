@@ -46,7 +46,7 @@ exceptions as needed.
 =cut
 
 sub store {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     unless ( ( !$self->checkout_id && $self->in_storage )
         || Koha::Checkouts->find( $self->checkout_id )
@@ -90,10 +90,10 @@ sub old_checkout {
 =cut
 
 sub renewer {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $renewer = $self->_result->renewer;
-    return Koha::Patron->_new_from_dbic( $renewer ) if $renewer;
+    return Koha::Patron->_new_from_dbic($renewer) if $renewer;
 }
 
 =head2 Internal methods

@@ -30,11 +30,14 @@ use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
     use_ok('Koha::Calendar');
-    use_ok('C4::Calendar', qw( insert_exception_holiday insert_week_day_holiday insert_day_month_holiday insert_single_holiday copy_to_branch get_exception_holidays isHoliday ));
+    use_ok(
+        'C4::Calendar',
+        qw( insert_exception_holiday insert_week_day_holiday insert_day_month_holiday insert_single_holiday copy_to_branch get_exception_holidays isHoliday )
+    );
 }
 
-my $schema = Koha::Database->new->schema;
-my $dbh = C4::Context->dbh;
+my $schema  = Koha::Database->new->schema;
+my $dbh     = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'is_holiday timezone tests' => sub {
@@ -44,6 +47,7 @@ subtest 'is_holiday timezone tests' => sub {
     $schema->storage->txn_begin;
 
     $dbh->do("DELETE FROM special_holidays");
+
     # Clear cache
     Koha::Caches->get_instance->flush_all;
 
@@ -53,7 +57,7 @@ subtest 'is_holiday timezone tests' => sub {
     use POSIX qw(tzset);
     tzset;
 
-    my $branch = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $branch   = $builder->build( { source => 'Branch' } )->{branchcode};
     my $calendar = Koha::Calendar->new( branchcode => $branch );
 
     C4::Calendar->new( branchcode => $branch )->insert_exception_holiday(
@@ -81,8 +85,8 @@ subtest 'is_holiday timezone tests' => sub {
 $schema->storage->txn_begin;
 
 # Create two fresh branches for the tests
-my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
-my $branch_2 = $builder->build({ source => 'Branch' })->{ branchcode };
+my $branch_1 = $builder->build( { source => 'Branch' } )->{branchcode};
+my $branch_2 = $builder->build( { source => 'Branch' } )->{branchcode};
 
 C4::Calendar->new( branchcode => $branch_1 )->insert_week_day_holiday(
     weekday     => 0,
@@ -108,7 +112,7 @@ C4::Calendar->new( branchcode => $branch_1 )->insert_day_month_holiday(
 );
 
 my $koha_calendar = Koha::Calendar->new( branchcode => $branch_1 );
-my $c4_calendar = C4::Calendar->new( branchcode => $branch_1 );
+my $c4_calendar   = C4::Calendar->new( branchcode => $branch_1 );
 
 isa_ok( $koha_calendar, 'Koha::Calendar', 'Koha::Calendar class returned' );
 isa_ok( $c4_calendar,   'C4::Calendar',   'C4::Calendar class returned' );
@@ -157,8 +161,8 @@ C4::Calendar->new( branchcode => $branch_2 )->insert_single_holiday(
     description => "$today",
 );
 
-is( Koha::Calendar->new( branchcode => $branch_2 )->is_holiday( $today ), 1, "Today is a holiday for $branch_2" );
-is( Koha::Calendar->new( branchcode => $branch_1 )->is_holiday( $today ), 0, "Today is not a holiday for $branch_1");
+is( Koha::Calendar->new( branchcode => $branch_2 )->is_holiday($today), 1, "Today is a holiday for $branch_2" );
+is( Koha::Calendar->new( branchcode => $branch_1 )->is_holiday($today), 0, "Today is not a holiday for $branch_1" );
 
 $schema->storage->txn_rollback;
 
@@ -168,9 +172,9 @@ subtest 'copy_to_branch' => sub {
 
     $schema->storage->txn_begin;
 
-    my $branch1 = $builder->build( { source => 'Branch' } )->{ branchcode };
+    my $branch1   = $builder->build( { source => 'Branch' } )->{branchcode};
     my $calendar1 = C4::Calendar->new( branchcode => $branch1 );
-    my $sunday = dt_from_string("2020-03-15");
+    my $sunday    = dt_from_string("2020-03-15");
     $calendar1->insert_week_day_holiday(
         weekday     => 0,
         title       => '',
@@ -224,22 +228,31 @@ subtest 'copy_to_branch' => sub {
 
     my $branch2 = $builder->build( { source => 'Branch' } )->{branchcode};
 
-    C4::Calendar->new( branchcode => $branch1 )->copy_to_branch( $branch2 );
+    C4::Calendar->new( branchcode => $branch1 )->copy_to_branch($branch2);
 
-    my $calendar2 = C4::Calendar->new( branchcode => $branch2 );
+    my $calendar2  = C4::Calendar->new( branchcode => $branch2 );
     my $exceptions = $calendar2->get_exception_holidays;
 
     is( $calendar2->isHoliday( $sunday->day, $sunday->month, $sunday->year ), 1, "Weekday holiday copied to branch 2" );
-    is( $calendar2->isHoliday( $day_month->day, $day_month->month, $day_month->year ), 1, "Day/month holiday copied to branch 2" );
-    is( $calendar2->isHoliday( $future_date->day, $future_date->month, $future_date->year ), 1, "Single holiday copied to branch 2" );
-    is( ( grep { $_->{date} eq "9999-12-30"} values %$exceptions ), 1, "Exception holiday copied to branch 2" );
-    is( $calendar2->isHoliday( $past_date->day, $past_date->month, $past_date->year ), 0, "Don't copy past single holidays" );
-    is( ( grep { $_->{date} eq "2020-03-09"} values %$exceptions ), 0, "Don't copy past exception holidays " );
+    is(
+        $calendar2->isHoliday( $day_month->day, $day_month->month, $day_month->year ), 1,
+        "Day/month holiday copied to branch 2"
+    );
+    is(
+        $calendar2->isHoliday( $future_date->day, $future_date->month, $future_date->year ), 1,
+        "Single holiday copied to branch 2"
+    );
+    is( ( grep { $_->{date} eq "9999-12-30" } values %$exceptions ), 1, "Exception holiday copied to branch 2" );
+    is(
+        $calendar2->isHoliday( $past_date->day, $past_date->month, $past_date->year ), 0,
+        "Don't copy past single holidays"
+    );
+    is( ( grep { $_->{date} eq "2020-03-09" } values %$exceptions ), 0, "Don't copy past exception holidays " );
 
-    C4::Calendar->new( branchcode => $branch1 )->copy_to_branch( $branch2 );
+    C4::Calendar->new( branchcode => $branch1 )->copy_to_branch($branch2);
 
     #Select all rows with same values from database
-    my $dbh = C4::Context->dbh;
+    my $dbh                     = C4::Context->dbh;
     my $get_repeatable_holidays = "SELECT a.* FROM repeatable_holidays a
         JOIN (SELECT branchcode, weekday, day, month, COUNT(*)
         FROM repeatable_holidays
@@ -247,15 +260,15 @@ subtest 'copy_to_branch' => sub {
         ON a.branchcode = b.branchcode
         AND ( a.weekday = b.weekday OR (a.day = b.day AND a.month = b.month))
         ORDER BY a.branchcode;";
-    my $sth  = $dbh->prepare($get_repeatable_holidays);
+    my $sth = $dbh->prepare($get_repeatable_holidays);
     $sth->execute;
 
     my @repeatable_holidays;
-    while(my $row = $sth->fetchrow_hashref){
-        push @repeatable_holidays, $row
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @repeatable_holidays, $row;
     }
 
-    is( scalar(@repeatable_holidays), 0, "None of the repeatable holidays were doubled");
+    is( scalar(@repeatable_holidays), 0, "None of the repeatable holidays were doubled" );
 
     my $get_special_holidays = "SELECT a.* FROM special_holidays a
     JOIN (SELECT branchcode, day, month, year, isexception, COUNT(*)
@@ -264,15 +277,15 @@ subtest 'copy_to_branch' => sub {
     ON a.branchcode = b.branchcode
     AND a.day = b.day AND a.month = b.month AND a.year = b.year AND a.isexception = b.isexception
     ORDER BY a.branchcode;";
-    $sth  = $dbh->prepare($get_special_holidays);
+    $sth = $dbh->prepare($get_special_holidays);
     $sth->execute;
 
     my @special_holidays;
-    while(my $row = $sth->fetchrow_hashref){
-        push @special_holidays, $row
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @special_holidays, $row;
     }
 
-    is( scalar(@special_holidays), 0, "None of the special holidays were doubled");
+    is( scalar(@special_holidays), 0, "None of the special holidays were doubled" );
 
     $schema->storage->txn_rollback;
 

@@ -6,11 +6,13 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Delete patron") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Delete patron") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_deletemem" class="pat">
@@ -37,19 +39,19 @@
     [% INCLUDE 'members-toolbar.inc' %]
     [% IF ItemsOnIssues || debits || is_guarantor %]
         <div class="alert alert-warning">
-        <h1>Cannot delete patron</h1>
+            <h1>Cannot delete patron</h1>
             <ul>
-            [% IF ( ItemsOnIssues ) %]
-                <li>Patron has [% ItemsOnIssues | html %] item(s) checked out.</li>
-            [% END %]
-            [% IF debits %]
-                <li>Patron has [% debits | $Price %] in fines.</li>
-            [% END %]
-            [% IF is_guarantor %]
-                <li>Patron's record has guaranteed accounts attached.</li>
-            [% END %]
+                [% IF ( ItemsOnIssues ) %]
+                    <li>Patron has [% ItemsOnIssues | html %] item(s) checked out.</li>
+                [% END %]
+                [% IF debits %]
+                    <li>Patron has [% debits | $Price %] in fines.</li>
+                [% END %]
+                [% IF is_guarantor %]
+                    <li>Patron's record has guaranteed accounts attached.</li>
+                [% END %]
             </ul>
-    </div>
+        </div>
     [% ELSIF op == 'delete_confirm' and patron %]
         [%# TODO add "patron does not exist" unless patron %]
         <div class="alert alert-warning">
@@ -70,12 +72,12 @@
             <p>This cannot be undone.</p>
             <form method="post" action="/cgi-bin/koha/members/deletemem.pl">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="member" value="[% patron.borrowernumber | html %]"/>
+                <input type="hidden" name="member" value="[% patron.borrowernumber | html %]" />
                 <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form method="get" action="/cgi-bin/koha/members/moremember.pl">
-                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
             </form>
         </div>

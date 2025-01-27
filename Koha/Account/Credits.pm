@@ -41,7 +41,7 @@ Returns a list of credit lines.
 sub search {
     my ( $self, $where, $attr ) = @_;
 
-    my $rs = $self->SUPER::search({ debit_type_code => undef });
+    my $rs = $self->SUPER::search( { debit_type_code => undef } );
     return $rs->SUPER::search( $where, $attr );
 }
 

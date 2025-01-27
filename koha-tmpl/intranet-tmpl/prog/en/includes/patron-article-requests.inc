@@ -30,52 +30,34 @@
                             [% ar.item.enumchron | html %]
                         </a>
                         [% ar.biblio.author | html %]
-                        [% IF ar.itemnumber %] <em>(only [% ar.item.barcode | html %])</em>[% END %]
+                        [% IF ar.itemnumber %]<em>(only [% ar.item.barcode | html %])</em>[% END %]
                     </td>
 
-                    <td class="article-request-created_on">
-                        [% ar.created_on | $KohaDates %]
-                    </td>
+                    <td class="article-request-created_on"> [% ar.created_on | $KohaDates %] </td>
 
-                    <td class="article-request-title">
-                        [% ar.title | html %]
-                    </td>
+                    <td class="article-request-title"> [% ar.title | html %] </td>
 
-                    <td class="article-request-author">
-                        [% ar.author | html %]
-                    </td>
+                    <td class="article-request-author"> [% ar.author | html %] </td>
 
-                    <td class="article-request-volume">
-                        [% ar.volume | html %]
-                    </td>
+                    <td class="article-request-volume"> [% ar.volume | html %] </td>
 
-                    <td class="article-request-issue">
-                        [% ar.issue | html %]
-                    </td>
+                    <td class="article-request-issue"> [% ar.issue | html %] </td>
 
-                    <td class="article-request-date">
-                        [% ar.date | html %]
-                    </td>
+                    <td class="article-request-date"> [% ar.date | html %] </td>
 
-                    <td class="article-request-toc">
-                        [% IF ar.toc_request %]<span>Yes</span>[% END %]
-                    </td>
+                    <td class="article-request-toc"> [% IF ar.toc_request %]<span>Yes</span>[% END %] </td>
 
-                    <td class="article-request-pages">
-                        [% ar.pages | html %]
-                    </td>
+                    <td class="article-request-pages"> [% ar.pages | html %] </td>
 
-                    <td class="article-request-chapters">
-                        [% ar.chapters | html %]
-                    </td>
+                    <td class="article-request-chapters"> [% ar.chapters | html %] </td>
 
-                    <td class="article-request-patron-notes">
-                        [% ar.patron_notes | html %]
-                    </td>
+                    <td class="article-request-patron-notes"> [% ar.patron_notes | html %] </td>
 
                     <td class="article-request-format">
-                        [% IF ar.format == 'PHOTOCOPY' %]<span>Copy</span>
-                        [% ELSIF ar.format == 'SCAN' %]<span>Scan</span>
+                        [% IF ar.format == 'PHOTOCOPY' %]
+                            <span>Copy</span>
+                        [% ELSIF ar.format == 'SCAN' %]
+                            <span>Scan</span>
                         [% END %]
                     </td>
 
@@ -91,13 +73,11 @@
                         [% END %]
                     </td>
 
-                    <td class="article-request-branchcode">
-                        [% ar.branch.branchname | html %]
-                    </td>
+                    <td class="article-request-branchcode"> [% ar.branch.branchname | html %] </td>
                 </tr>
             [% END %]
         </tbody>
     </table>
-    [% ELSE %]
-        <span>Patron has no current article requests.</span>
-    [% END %]
+[% ELSE %]
+    <span>Patron has no current article requests.</span>
+[% END %]

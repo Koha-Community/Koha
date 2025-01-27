@@ -26,29 +26,28 @@ use C4::Output qw( output_error );
 use Koha::Biblios;
 use Koha::Items;
 use Koha::Linktracker;
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use List::MoreUtils qw( any );
 
-my $cgi = CGI->new;
-my $uri = $cgi->param('uri') || '';
-my $biblionumber = $cgi->param('biblionumber');;
+my $cgi          = CGI->new;
+my $uri          = $cgi->param('uri') || '';
+my $biblionumber = $cgi->param('biblionumber');
 my $itemnumber   = $cgi->param('itemnumber');
-$uri =~ s/^\s+|\s+$//g if $uri; # trim
+$uri =~ s/^\s+|\s+$//g if $uri;    # trim
 
 my $tracking_method = C4::Context->preference('TrackClicks');
-unless ( $tracking_method ) {
+unless ($tracking_method) {
     output_error( $cgi, '404' );
     exit;
 }
-my $tracker = Koha::Linktracker->new(
-    { trackingmethod => $tracking_method } );
-if ($uri && ($biblionumber || $itemnumber) ) {
+my $tracker = Koha::Linktracker->new( { trackingmethod => $tracking_method } );
+if ( $uri && ( $biblionumber || $itemnumber ) ) {
     my $borrowernumber;
 
     # we have a uri and we want to track
     if ( $tracker->trackingmethod() eq 'track' ) {
         my ( $user, $cookie, $sessionID, $flags ) =
-          checkauth( $cgi, 1, {}, 'opac' );
+            checkauth( $cgi, 1, {}, 'opac' );
         my $userenv = C4::Context->userenv;
 
         if (   defined($userenv)
@@ -61,17 +60,17 @@ if ($uri && ($biblionumber || $itemnumber) ) {
         # get borrower info
     }
 
-    my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = eval{ $biblio->metadata->record };
-    my $marc_urls = $record ? C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour')) : [];
+    my $biblio      = Koha::Biblios->find($biblionumber);
+    my $record      = eval { $biblio->metadata->record };
+    my $marc_urls   = $record ? C4::Biblio::GetMarcUrls( $record, C4::Context->preference('marcflavour') ) : [];
     my $search_crit = { uri => { -like => "%$uri%" } };
-    if( $itemnumber ) { # itemnumber is leading over biblionumber
+    if ($itemnumber) {    # itemnumber is leading over biblionumber
         $search_crit->{itemnumber} = $itemnumber;
-    } elsif( $biblionumber ) {
+    } elsif ($biblionumber) {
         $search_crit->{biblionumber} = $biblionumber;
     }
     if ( ( any { $_ eq $uri } map { $_->{MARCURL} } @$marc_urls )
-        || Koha::Items->search( $search_crit )->count )
+        || Koha::Items->search($search_crit)->count )
     {
         $tracker->trackclick(
             {
@@ -80,7 +79,7 @@ if ($uri && ($biblionumber || $itemnumber) ) {
                 borrowernumber => $borrowernumber,
                 itemnumber     => $itemnumber
             }
-        ) if (   $tracker->trackingmethod() eq 'track' || $tracker->trackingmethod() eq 'anonymous' );
+        ) if ( $tracker->trackingmethod() eq 'track' || $tracker->trackingmethod() eq 'anonymous' );
         print $cgi->redirect($uri);
         exit;
     }

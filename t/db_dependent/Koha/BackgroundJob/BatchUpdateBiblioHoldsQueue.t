@@ -45,9 +45,8 @@ subtest 'enqueue() tests' => sub {
     );
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
-    throws_ok
-        { Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue() }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue() }
+    'Koha::Exceptions::MissingParameter',
         "Exception thrown if 'biblio_ids' param is missing";
 
     like( "$@", qr/Missing biblio_ids parameter is mandatory/, 'Expected exception message' );

@@ -8,7 +8,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your consents &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-patron-consent' %]
 [% INCLUDE 'masthead.inc' %]
@@ -26,16 +27,14 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-lg-10 order-first order-md-first order-lg-2">
                 <div id="patronconsents" class="maincontent">
                     <form action="/cgi-bin/koha/opac-patron-consent.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-save"/>
-                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
+                        <input type="hidden" name="op" value="cud-save" />
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                         <h1>Your consents</h1>
                         [% FOREACH consent IN consents %]
                             [% SET consent_type = consent.type %]
@@ -48,7 +47,7 @@
                                 <p>I have read the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a> and agree with your processing of my personal data as outlined therein.</p>
                             [% ELSIF consent_types.$consent_type %]
                                 [% SET consent_title = ( consent_types.$consent_type.title.$lang || consent_types.$consent_type.title.en ) %]
-                                [% SET consent_desc  = ( consent_types.$consent_type.description.$lang || consent_types.$consent_type.description.en )  %]
+                                [% SET consent_desc  = ( consent_types.$consent_type.description.$lang || consent_types.$consent_type.description.en ) %]
                                 <legend><h2>[% consent_title | html %]</h2></legend>
                                 <p>[% consent_desc | html %]</p>
                                 <p>Do you agree?</p>
@@ -58,14 +57,14 @@
                             [% END %]
                             <fieldset>
                                 [% IF consent.given_on %]
-                                    <input type="radio" name="check_[% consent_type | html %]" value="1" checked="checked"> Yes<br>
-                                    <input type="radio" name="check_[% consent_type | html %]" value="0"> No
+                                    <input type="radio" name="check_[% consent_type | html %]" value="1" checked="checked" /> Yes<br />
+                                    <input type="radio" name="check_[% consent_type | html %]" value="0" /> No
                                 [% ELSIF consent.refused_on %]
-                                    <input type="radio" name="check_[% consent_type | html %]" value="1"> Yes<br>
-                                    <input type="radio" name="check_[% consent_type | html %]" value="0" checked="checked"> No
+                                    <input type="radio" name="check_[% consent_type | html %]" value="1" /> Yes<br />
+                                    <input type="radio" name="check_[% consent_type | html %]" value="0" checked="checked" /> No
                                 [% ELSE %]
-                                    <input type="radio" name="check_[% consent_type | html %]" value="1"> Yes<br>
-                                    <input type="radio" name="check_[% consent_type | html %]" value="0"> No
+                                    <input type="radio" name="check_[% consent_type | html %]" value="1" /> Yes<br />
+                                    <input type="radio" name="check_[% consent_type | html %]" value="0" /> No
                                 [% END %]
                                 [% IF consent.given_on %]
                                     <p class="consent_info"><strong>Your consent was registered on [% consent.given_on | html %].</strong></p>
@@ -78,29 +77,34 @@
                             <input id="saveconsent" type="submit" value="Save" class="btn btn-primary" />
                         </fieldset>
                     </form>
-                </div> <!-- / #patronconsents -->
-            </div> <!-- / .col-lg-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #patronconsents -->
+            </div>
+            <!-- / .col-lg-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initially no choice is made or no change, so disable button
-            $("#saveconsent").prop('disabled', true);
+            $("#saveconsent").prop("disabled", true);
 
-            $("input[type='radio']").click(function() {
-                $("#saveconsent").prop('disabled', false);
+            $("input[type='radio']").click(function () {
+                $("#saveconsent").prop("disabled", false);
                 var v = $(this).val();
                 // If former registration info present, toggle
-                if( v == 1 ) {
-                    $(this).siblings('.consent_info').show();
-                    $(this).siblings('.dissent_info').hide();
+                if (v == 1) {
+                    $(this).siblings(".consent_info").show();
+                    $(this).siblings(".dissent_info").hide();
                 } else {
-                    $(this).siblings('.consent_info').hide();
-                    $(this).siblings('.dissent_info').show();
+                    $(this).siblings(".consent_info").hide();
+                    $(this).siblings(".dissent_info").show();
                 }
             });
         });

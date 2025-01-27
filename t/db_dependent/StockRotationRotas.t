@@ -37,30 +37,36 @@ subtest 'Basic object tests' => sub {
 
     my $builder = t::lib::TestBuilder->new;
 
-    my $rota = $builder->build({ source => 'Stockrotationrota' });
+    my $rota = $builder->build( { source => 'Stockrotationrota' } );
 
-    my $srrota = Koha::StockRotationRotas->find($rota->{rota_id});
+    my $srrota = Koha::StockRotationRotas->find( $rota->{rota_id} );
     isa_ok(
         $srrota,
         'Koha::StockRotationRota',
         "Correctly create and load a stock rotation rota."
     );
 
-    $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
-    $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
-    $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
+    $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
+    $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
+    $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
 
     my $srstages = $srrota->stockrotationstages;
-    is( $srstages->count, 3, 'Correctly fetched stockrotationstages associated with this rota');
+    is( $srstages->count, 3, 'Correctly fetched stockrotationstages associated with this rota' );
 
     isa_ok( $srstages->next, 'Koha::StockRotationStage', "Relationship correctly creates Koha::Objects." );
 
@@ -68,27 +74,29 @@ subtest 'Basic object tests' => sub {
 
     my $item = $builder->build_sample_item;
 
-    $srrota->add_item($item->itemnumber);
+    $srrota->add_item( $item->itemnumber );
 
     is(
-        Koha::StockRotationItems->find($item->itemnumber)->stage_id,
+        Koha::StockRotationItems->find( $item->itemnumber )->stage_id,
         $srrota->first_stage->stage_id,
         "Adding an item results in a new sritem item being assigned to the first stage."
     );
 
-    my $newrota = $builder->build({ source => 'Stockrotationrota' });
+    my $newrota = $builder->build( { source => 'Stockrotationrota' } );
 
-    my $srnewrota = Koha::StockRotationRotas->find($newrota->{rota_id});
+    my $srnewrota = Koha::StockRotationRotas->find( $newrota->{rota_id} );
 
-    $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $newrota->{rota_id} },
-    });
+    $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $newrota->{rota_id} },
+        }
+    );
 
-    $srnewrota->add_item($item->itemnumber);
+    $srnewrota->add_item( $item->itemnumber );
 
     is(
-        Koha::StockRotationItems->find($item->itemnumber)->stage_id,
+        Koha::StockRotationItems->find( $item->itemnumber )->stage_id,
         $srnewrota->stockrotationstages->next->stage_id,
         "Moving an item results in that sritem being assigned to the new first stage."
     );
@@ -103,30 +111,39 @@ subtest '->first_stage test' => sub {
 
     my $builder = t::lib::TestBuilder->new;
 
-    my $rota = $builder->build({ source => 'Stockrotationrota' });
+    my $rota = $builder->build( { source => 'Stockrotationrota' } );
 
-    my $stage1 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
-    my $stage2 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
-    my $stage3 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
+    my $stage1 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
+    my $stage2 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
+    my $stage3 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
 
-    my $srrota = Koha::StockRotationRotas->find($rota->{rota_id});
-    my $srstage2 = Koha::StockRotationStages->find($stage2->{stage_id});
+    my $srrota     = Koha::StockRotationRotas->find( $rota->{rota_id} );
+    my $srstage2   = Koha::StockRotationStages->find( $stage2->{stage_id} );
     my $firststage = $srstage2->first_sibling || $srstage2;
 
     is( $srrota->first_stage->stage_id, $firststage->stage_id, "First stage works" );
 
     $srstage2->move_first;
 
-    is( Koha::StockRotationRotas->find($rota->{rota_id})->first_stage->stage_id, $stage2->{stage_id}, "Stage re-organized" );
+    is(
+        Koha::StockRotationRotas->find( $rota->{rota_id} )->first_stage->stage_id, $stage2->{stage_id},
+        "Stage re-organized"
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -138,31 +155,41 @@ subtest '->items test' => sub {
 
     my $builder = t::lib::TestBuilder->new;
 
-    my $rota = $builder->build({ source => 'Stockrotationrota' });
+    my $rota = $builder->build( { source => 'Stockrotationrota' } );
 
-    my $stage1 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
-    my $stage2 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
-    my $stage3 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id} },
-    });
+    my $stage1 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
+    my $stage2 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
+    my $stage3 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id} },
+        }
+    );
 
-    map { $builder->build({
-        source => 'Stockrotationitem',
-        value => { stage_id => $_ },
-    }) } (
+    map {
+        $builder->build(
+            {
+                source => 'Stockrotationitem',
+                value  => { stage_id => $_ },
+            }
+        )
+    } (
         $stage1->{stage_id}, $stage1->{stage_id},
         $stage2->{stage_id}, $stage2->{stage_id},
         $stage3->{stage_id}, $stage3->{stage_id},
     );
 
-    my $srrota = Koha::StockRotationRotas->find($rota->{rota_id});
+    my $srrota = Koha::StockRotationRotas->find( $rota->{rota_id} );
 
     is(
         $srrota->stockrotationitems->count,

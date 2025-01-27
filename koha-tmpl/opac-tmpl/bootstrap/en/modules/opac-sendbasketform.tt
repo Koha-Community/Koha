@@ -2,61 +2,66 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Sending your cart &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='addtolist' bodyclass='popup' %]
-    <div class="main">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col order-first order-md-first order-lg-2">
-                    <div id="usersendbasket" class="maincontent">
-                        [% IF ( email_add ) %]
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col order-first order-md-first order-lg-2">
+                <div id="usersendbasket" class="maincontent">
+                    [% IF ( email_add ) %]
 
-                            [% IF ( SENT ) %]
-                                <h1>Message sent</h1>
-                                <div class="alert alert-info">
-                                    <p>The cart was sent to: [% email_add | html %]</p>
-                                </div>
-                                <p><a class="focus close" href="#">Close window</a></p>
-                            [% END %]
+                        [% IF ( SENT ) %]
+                            <h1>Message sent</h1>
+                            <div class="alert alert-info">
+                                <p>The cart was sent to: [% email_add | html %]</p>
+                            </div>
+                            <p><a class="focus close" href="#">Close window</a></p>
+                        [% END %]
 
-                            [% IF ( error ) %]
-                                <div class="alert alert-warning">
-                                    [% IF error == 'NO_BODY' %]
-                                        <p>There was an error sending the cart: No valid records were found.</p>
-                                    [% ELSIF error == 'NO_REPLY_ADDRESS' %]
-                                        <p>There was an error sending the cart: We cannot send an email as there is no email address recorded for your account (your email address is used for the reply to address).</p>
-                                    [% ELSE %]
-                                        <p>There was an error sending the cart.</p>
-                                    [% END %]
-                                </div>
-                            [% END %]
-
-                        [% ELSE %]
-                            <form action="/cgi-bin/koha/opac-sendbasket.pl" method="post" id="sendbasketform">
-                                <fieldset class="brief">
-                                    <legend><h1>Sending your cart</h1></legend>
-                                    <label for="email_add">Email address:</label>
-                                    <input type="text" id="email_add" name="email_add" size="43" class="focus form-control" />
-                                    <label for="comment">Comment:</label>
-                                    <textarea id="comment" name="comment" rows="4" cols="40" class="form-control"></textarea>
-                                    <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                </fieldset>
-                                [% IF Koha.Preference('OPACHoldRequests') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
-                                <fieldset class="action">
-                                    <input type="hidden" name="op" value="cud-send" />
-                                    <input type="submit" class="btn btn-primary" value="Send" />
-                                    <a class="cancel close" href="#">Cancel</a>
-                                </fieldset>
-                            </form>
-
-                        [% END # / IF email_add %]
-                    </div> <!-- / #usersendbasket -->
-                </div> <!-- / .span12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                        [% IF ( error ) %]
+                            <div class="alert alert-warning">
+                                [% IF error == 'NO_BODY' %]
+                                    <p>There was an error sending the cart: No valid records were found.</p>
+                                [% ELSIF error == 'NO_REPLY_ADDRESS' %]
+                                    <p>There was an error sending the cart: We cannot send an email as there is no email address recorded for your account (your email address is used for the reply to address).</p>
+                                [% ELSE %]
+                                    <p>There was an error sending the cart.</p>
+                                [% END %]
+                            </div>
+                        [% END %]
+                    [% ELSE %]
+                        <form action="/cgi-bin/koha/opac-sendbasket.pl" method="post" id="sendbasketform">
+                            <fieldset class="brief">
+                                <legend><h1>Sending your cart</h1></legend>
+                                <label for="email_add">Email address:</label>
+                                <input type="text" id="email_add" name="email_add" size="43" class="focus form-control" />
+                                <label for="comment">Comment:</label>
+                                <textarea id="comment" name="comment" rows="4" cols="40" class="form-control"></textarea>
+                                <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
+                                [% INCLUDE 'csrf-token.inc' %]
+                            </fieldset>
+                            [% IF Koha.Preference('OPACHoldRequests') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
+                            <fieldset class="action">
+                                <input type="hidden" name="op" value="cud-send" />
+                                <input type="submit" class="btn btn-primary" value="Send" />
+                                <a class="cancel close" href="#">Cancel</a>
+                            </fieldset>
+                        </form>
+                    [% END # / IF email_add %]
+                </div>
+                <!-- / #usersendbasket -->
+            </div>
+            <!-- / .span12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' is_popup=1 %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

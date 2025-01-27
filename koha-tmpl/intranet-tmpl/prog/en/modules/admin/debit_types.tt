@@ -7,18 +7,20 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF op =='add_form' %]
-       [% IF debit_type.code %]
-           [% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]
-       [% ELSE %]
-           [% t("New debit type") | html %]
-       [% END %] &rsaquo;
-    [% END %]
-    [% t("Debit types") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op =='add_form' %]
+            [% IF debit_type.code %]
+                [% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]
+            [% ELSE %]
+                [% t("New debit type") | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% t("Debit types") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -44,7 +46,6 @@
                     <span>New debit type</span>
                 [% END %]
             [% END %]
-
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Debit types</span>
@@ -55,235 +56,239 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-                [% FOREACH m IN messages %]
-                <div class="alert alert-[% m.type | html %]">
-                    [% SWITCH m.code %]
-                    [% CASE 'success_on_saving' %]
-                        <span>Debit type saved successfully.</span>
-                    [% CASE 'error_on_saving' %]
-                        <span>An error occurred when saving this debit type. Check the logs for details.</span>
-                    [% CASE 'success_on_archive' %]
-                        <span>Debit type archived successfully.</span>
-                    [% CASE 'success_on_restore' %]
-                        <span>Debit type restored successfully.</span>
-                    [% CASE %]
-                        <span>[% m.code | html %]</span>
-                    [% END %]
-                </div>
-                [% END %]
+    [% FOREACH m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'success_on_saving' %]
+                <span>Debit type saved successfully.</span>
+            [% CASE 'error_on_saving' %]
+                <span>An error occurred when saving this debit type. Check the logs for details.</span>
+            [% CASE 'success_on_archive' %]
+                <span>Debit type archived successfully.</span>
+            [% CASE 'success_on_restore' %]
+                <span>Debit type restored successfully.</span>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
 
-                [% IF op == 'add_form' %]
-                    [% IF debit_type %]
-                        <h1>[% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]</h1>
-                    [% ELSE %]
-                        <h1>New debit type</h1>
-                    [% END %]
+    [% IF op == 'add_form' %]
+        [% IF debit_type %]
+            <h1>[% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]</h1>
+        [% ELSE %]
+            <h1>New debit type</h1>
+        [% END %]
 
-                    <form action="/cgi-bin/koha/admin/debit_types.pl" name="Aform" method="post" class="validated">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-add_validate" />
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="code" class="required">Debit type code: </label>
-                                    [% IF debit_type %]
-                                        <strong>[% debit_type.code | html %]</strong>
-                                        <input type="hidden" name="code" value="[% code | html %]" />
-                                    [% ELSE %]
-                                    <input type="text" name="code" id="code" size="80" maxlength="64" class="required focus" required="required"><span class="required">Required. Maximum length is 64 letters</span>
+        <form action="/cgi-bin/koha/admin/debit_types.pl" name="Aform" method="post" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-add_validate" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="code" class="required">Debit type code: </label>
+                        [% IF debit_type %]
+                            <strong>[% debit_type.code | html %]</strong>
+                            <input type="hidden" name="code" value="[% code | html %]" />
+                        [% ELSE %]
+                            <input type="text" name="code" id="code" size="80" maxlength="64" class="required focus" required="required" /><span class="required">Required. Maximum length is 64 letters</span>
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="default_amount">Default amount: </label>
+                        <input type="text" pattern="^\d+(\.\d{2})?$" name="default_amount" id="default_amount" size="80" maxlength="100" value="[% debit_type.default_amount | $Price on_editing => 1 %]" step="any" min="0" />
+                    </li>
+                    <li>
+                        <label for="description" class="required">Description: </label>
+                        [% IF debit_type && debit_type.is_system %]
+                            <span>[%- PROCESS debit_type_description debit_type = debit_type -%]</span>
+                        [% ELSE %]
+                            <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" /> <span class="required">Required</span>
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="can_be_invoiced">Can be manually invoiced? </label>
+                        [% IF debit_type.can_be_invoiced %]
+                            <input type="checkbox" name="can_be_invoiced" id="can_be_invoiced" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" name="can_be_invoiced" id="can_be_invoiced" value="1" />
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="can_be_sold">Can be sold? </label>
+                        [% IF debit_type.can_be_sold %]
+                            <input type="checkbox" name="can_be_sold" id="can_be_sold" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" name="can_be_sold" id="can_be_sold" value="1" />
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="restricts_checkouts">Included in noissuescharge? </label>
+                        [% IF debit_type.restricts_checkouts %]
+                            <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" value="1" />
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="branches">Libraries limitation: </label>
+                        <select id="branches" name="branches" multiple size="10">
+                            <option value="">All libraries</option>
+                            [% FOREACH branch IN branches_loop %]
+                                [% IF ( branch.selected ) %]
+                                    <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <div class="hint">Select 'All libraries' if this debit type should be available at all libraries. Otherwise select libraries you want to associate debit type with.</div>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <button id="save_debit_type" class="btn btn-primary">Save</button>
+                <a class="cancel" href="/cgi-bin/koha/admin/debit_types.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="newdebittype" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form"><i class="fa fa-plus"></i> New debit type</a>
+        </div>
+
+        <h1>Debit types</h1>
+        [% IF debit_types.count %]
+            <div class="page-section">
+                <table id="table_debit_types">
+                    <thead>
+                        <th>Archived</th>
+                        <th>System</th>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>Default amount</th>
+                        <th>Available for</th>
+                        <th>Library limitations</th>
+                        <th>Blocks checkouts?</th>
+                        <th class="noExport">Actions</th>
+                    </thead>
+                    <tbody>
+                        [% FOREACH debit_type IN debit_types %]
+                            <tr>
+                                <td>[% debit_type.archived | html %]</td>
+                                <td>[% debit_type.is_system | html %]</td>
+                                <td>[% debit_type.code | html %]</td>
+                                <td>[%- PROCESS debit_type_description debit_type = debit_type -%]</td>
+                                <td>[% debit_type.default_amount | $Price %]</td>
+                                <td
+                                    >[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]
+                                        <i class="fa fa-id-card"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
+                                    [% ELSIF debit_type.can_be_invoiced %]
+                                        <i class="fa fa-id-card"></i> Invoicing
+                                    [% ELSIF debit_type.can_be_sold %]
+                                        <i class="fa fa-shopping-cart"></i> Sale
                                     [% END %]
-                                </li>
-                                <li>
-                                    <label for="default_amount">Default amount: </label>
-                                    <input type="text" pattern="^\d+(\.\d{2})?$" name="default_amount" id="default_amount" size="80" maxlength="100" value="[% debit_type.default_amount | $Price on_editing => 1 %]" step="any" min="0"/>
-                                </li>
-                                <li>
-                                    <label for="description" class="required">Description: </label>
-                                    [% IF debit_type && debit_type.is_system %]
-                                        <span>[%- PROCESS debit_type_description debit_type = debit_type -%]</span>
+                                </td>
+                                <td>
+                                    [% IF debit_type.library_limits.count > 0 %]
+                                        [% library_limits_str = "" %]
+                                        [% FOREACH library IN debit_type.library_limits %]
+                                            [%- IF loop.first -%]
+                                                [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                                            [% ELSE %]
+                                                [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                            [% END %]
+                                        [% END %]
+                                        <span class="library_limitation" title="[% library_limits_str | html %]">
+                                            [% IF debit_type.library_limits.count > 1 %]
+                                                <span>[% debit_type.library_limits.count | html %] library limitations</span>
+                                            [% ELSE %]
+                                                <span>[% debit_type.library_limits.count | html %] library limitation</span>
+                                            [% END %]
+                                        </span>
                                     [% ELSE %]
-                                        <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" /> <span class="required">Required</span>
+                                        <span>No limitation</span>
                                     [% END %]
-                                </li>
-                                <li>
-                                    <label for="can_be_invoiced">Can be manually invoiced? </label>
-                                    [% IF debit_type.can_be_invoiced %]
-                                        <input type="checkbox" name="can_be_invoiced" id="can_be_invoiced" checked="checked" value="1" />
-                                    [% ELSE %]
-                                        <input type="checkbox" name="can_be_invoiced" id="can_be_invoiced" value="1" />
-                                    [% END %]
-                                </li>
-                                <li>
-                                    <label for="can_be_sold">Can be sold? </label>
-                                    [% IF debit_type.can_be_sold %]
-                                        <input type="checkbox" name="can_be_sold" id="can_be_sold" checked="checked" value="1" />
-                                    [% ELSE %]
-                                        <input type="checkbox" name="can_be_sold" id="can_be_sold" value="1" />
-                                    [% END %]
-                                </li>
-                                <li>
-                                    <label for="restricts_checkouts">Included in noissuescharge? </label>
+                                </td>
+                                <td>
                                     [% IF debit_type.restricts_checkouts %]
-                                        <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" checked="checked" value="1" />
+                                        <span>Yes</span>
                                     [% ELSE %]
-                                        <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" value="1" />
+                                        <span>No</span>
                                     [% END %]
-                                </li>
-                                <li>
-                                    <label for="branches">Libraries limitation: </label>
-                                    <select id="branches" name="branches" multiple size="10">
-                                        <option value="">All libraries</option>
-                                        [% FOREACH branch IN branches_loop %]
-                                        [% IF ( branch.selected ) %]
-                                        <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                                        [% ELSE %]
-                                        <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                </td>
+                                <td class="actions">
+                                    [% IF !debit_type.archived %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        [% IF !debit_type.is_system %]
+                                            <form id="archive_[% debit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/debit_types.pl">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-archive" />
+                                                <input type="hidden" name="code" value="[% debit_type.code | html %]" />
+                                                <button type="submit" class="btn btn-default btn-xs archive_button" href="#" data-code="[% debit_type.code | html %]"><i class="fa fa-archive"></i> Archive</button>
+                                            </form>
                                         [% END %]
-                                        [% END %]
-                                    </select>
-                                    <div class="hint">Select 'All libraries' if this debit type should be available at all libraries. Otherwise select libraries you want to associate debit type with.</div>
-                                </li>
-                            </ol>
-                        </fieldset>
-
-                        <fieldset class="action">
-                            <button id="save_debit_type" class="btn btn-primary">Save</button>
-                            <a class="cancel" href="/cgi-bin/koha/admin/debit_types.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-                [% END %]
-
-                [% IF op == 'list' %]
-                    <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="newdebittype" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form"><i class="fa fa-plus"></i> New debit type</a>
-                    </div>
-
-                    <h1>Debit types</h1>
-                    [% IF debit_types.count %]
-                        <div class="page-section">
-                            <table id="table_debit_types">
-                                <thead>
-                                    <th>Archived</th>
-                                    <th>System</th>
-                                    <th>Code</th>
-                                    <th>Description</th>
-                                    <th>Default amount</th>
-                                    <th>Available for</th>
-                                    <th>Library limitations</th>
-                                    <th>Blocks checkouts?</th>
-                                    <th class="noExport">Actions</th>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH debit_type IN debit_types %]
-                                    <tr>
-                                        <td>[% debit_type.archived | html %]</td>
-                                        <td>[% debit_type.is_system | html %]</td>
-                                        <td>[% debit_type.code | html %]</td>
-                                        <td>[%- PROCESS debit_type_description debit_type = debit_type -%]</td>
-                                        <td>[% debit_type.default_amount | $Price %]</td>
-                                        <td>[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]
-                                            <i class="fa fa-id-card"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
-                                            [% ELSIF debit_type.can_be_invoiced %]
-                                            <i class="fa fa-id-card"></i> Invoicing
-                                            [% ELSIF debit_type.can_be_sold %]
-                                            <i class="fa fa-shopping-cart"></i> Sale
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% IF debit_type.library_limits.count > 0 %]
-                                                [% library_limits_str = "" %]
-                                                [% FOREACH library IN debit_type.library_limits %]
-                                                    [%- IF loop.first -%]
-                                                    [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                    [% ELSE %]
-                                                    [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                    [% END %]
-                                                [% END %]
-                                                <span class="library_limitation" title="[% library_limits_str | html %]">
-                                                    [% IF debit_type.library_limits.count > 1 %]
-                                                        <span>[% debit_type.library_limits.count | html %] library limitations</span>
-                                                    [% ELSE %]
-                                                        <span>[% debit_type.library_limits.count | html %] library limitation</span>
-                                                    [% END %]
-                                            [% ELSE %]
-                                                <span>No limitation</span>
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% IF debit_type.restricts_checkouts %]
-                                                <span>Yes</span>
-                                            [% ELSE %]
-                                                <span>No</span>
-                                            [% END %]
-                                        </td>
-                                        <td class="actions">
-                                            [% IF !debit_type.archived %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                [% IF !debit_type.is_system %]
-                                                    <form id="archive_[% debit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/debit_types.pl">
-                                                        [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="cud-archive" />
-                                                        <input type="hidden" name="code" value="[% debit_type.code | html %]" />
-                                                        <button type="submit" class="btn btn-default btn-xs archive_button" href="#" data-code="[% debit_type.code | html %]"><i class="fa fa-archive"></i> Archive</button>
-                                                    </form>
-                                                [% END %]
-                                            [% ELSIF debit_type.archived %]
-                                                <form id="unarchive_[% debit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/debit_types.pl">
-                                                    [% INCLUDE 'csrf-token.inc' %]
-                                                    <input type="hidden" name="op" value="cud-unarchive" />
-                                                    <input type="hidden" name="code" value="[% debit_type.code | html %]" />
-                                                    <button type="submit" class="btn btn-default btn-xs unarchive_button" href="#" data-code="[% debit_type.code | html %]"><i class="fa fa-undo"></i> Restore</button>
-                                                </form>
-                                            [% END %]
-                                        </td>
-                                    </tr>
+                                    [% ELSIF debit_type.archived %]
+                                        <form id="unarchive_[% debit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/debit_types.pl">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-unarchive" />
+                                            <input type="hidden" name="code" value="[% debit_type.code | html %]" />
+                                            <button type="submit" class="btn btn-default btn-xs unarchive_button" href="#" data-code="[% debit_type.code | html %]"><i class="fa fa-undo"></i> Restore</button>
+                                        </form>
                                     [% END %]
-                                </tbody>
-                            </table>
-                        </div><!-- /.page-section -->
-                    [% ELSE %]
-                        <div class="alert alert-info">
-                            There are no account debit types defined. <a href="/cgi-bin/koha/admin/debit_types.pl?op=add_form">Create new debit type</a>
-                        </div>
-                    [% END %]
-                [% END %]
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table> </div
+            ><!-- /.page-section -->
+        [% ELSE %]
+            <div class="alert alert-info"> There are no account debit types defined. <a href="/cgi-bin/koha/admin/debit_types.pl?op=add_form">Create new debit type</a> </div>
+        [% END %]
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var txtActivefilter = _("Filter system debit types");
             var txtInactivefilter = _("Show all debit types");
-            var table_debit_types = $("#table_debit_types").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                    { "targets": [ 0, 1 ], "orderable": false, "visible": false },
-                ],
-                "order": [[ 0, "asc" ],[ 2, "asc" ]],
-                "dom": 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
-                "pageLength": 20,
-                "pagingType": "full_numbers"
-            }));
-            $("#filter_s").html('<p><a href="#" id="filter_system"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
-            $('#filter_system').click(function(e) {
+            var table_debit_types = $("#table_debit_types").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [
+                        { targets: [-1], orderable: false, searchable: false },
+                        { targets: [0, 1], orderable: false, visible: false },
+                    ],
+                    order: [
+                        [0, "asc"],
+                        [2, "asc"],
+                    ],
+                    dom: 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
+                    pageLength: 20,
+                    pagingType: "full_numbers",
+                })
+            );
+            $("#filter_s").html('<p><a href="#" id="filter_system"><i class="fa fa-filter"></i> ' + txtActivefilter + "</a>");
+            $("#filter_system").click(function (e) {
                 e.preventDefault();
-                if ($(this).hasClass('filtered')) {
-                    var filteredValue = '';
-                    $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
-                } else { // Not filtered. Let's do it!
-                    var filteredValue = '0';
-                    $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+                if ($(this).hasClass("filtered")) {
+                    var filteredValue = "";
+                    $(this).html('<i class="fa fa-filter"></i> ' + txtActivefilter);
+                } else {
+                    // Not filtered. Let's do it!
+                    var filteredValue = "0";
+                    $(this).html('<i class="fa fa-filter"></i> ' + txtInactivefilter);
                 }
                 table_debit_types.DataTable().columns(1).search(filteredValue, false, false).draw();
-                $(this).toggleClass('filtered');
+                $(this).toggleClass("filtered");
             });
 
             //Start filtered
-            $('#filter_system').click();
-
+            $("#filter_system").click();
         });
     </script>
 [% END %]

@@ -9,8 +9,7 @@
 [%#- not use an API to fetch items that populates item.datedue. -%]
 
 [% UNLESS item.isa('Koha::Item') %]
-    <div>Programming error, item-status.inc must be called with a Koha::Item object.<div>
-    [% STOP %]
+    <div>Programming error, item-status.inc must be called with a Koha::Item object.<div> [% STOP %] </div></div>
 [% END %]
 
 [% SET transfer = item.get_transfer %]
@@ -51,7 +50,9 @@
     [% SET itemavailable = 0 %]
     [% IF onsite_checkout %]
         [% IF ( Koha.Preference('OPACShowCheckoutName') ) %]
-            <span class="item-status checkedout">Currently in local use by [% checkout_patron.firstname | html %] [% checkout_patron.surname | html %] [% IF ( checkout_patron.cardnumber ) %]([% checkout_patron.cardnumber | html %])[% END %]</span>
+            <span class="item-status checkedout"
+                >Currently in local use by [% checkout_patron.firstname | html %] [% checkout_patron.surname | html %] [% IF ( checkout_patron.cardnumber ) %]([% checkout_patron.cardnumber | html %])[% END %]</span
+            >
         [% ELSE %]
             <span class="item-status checkedout">Currently in local use</span>
         [% END %]
@@ -69,10 +70,10 @@
     [% END %]
 [% END %]
 
-[% IF transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
+[% IF transfertwhen %]
+    [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
     [% SET itemavailable = 0 %]
-    <span class="item-status intransit">In transit from [% Branches.GetName( transfertfrom ) | html %]
-    to [% Branches.GetName( transfertto ) | html %] since [% transfertwhen | $KohaDates %]</span>
+    <span class="item-status intransit">In transit from [% Branches.GetName( transfertfrom ) | html %] to [% Branches.GetName( transfertto ) | html %] since [% transfertwhen | $KohaDates %]</span>
 [% END %]
 
 [% IF waiting OR item.holds.processing.count %]
@@ -89,7 +90,6 @@
         <span class="item-status withdrawn">Item withdrawn</span>
     [% END %]
 [% END %]
-
 
 [% SET restricted_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted, opac => 1 ) %]
 [% IF item.notforloan %]

@@ -30,18 +30,21 @@ $schema->storage->txn_begin;
 
 subtest "Some supertrivial tests for Subfield" => sub {
     plan tests => 3;
-    my $authtype = t::lib::TestBuilder->new->build({
-        source => 'AuthType'
-    });
-    my $cnt =  Koha::Authority::Subfields->count;
-    my $rec = Koha::Authority::Subfield->new({
-        authtypecode => $authtype->{authtypecode},
-        tagfield     => '100',
-        tagsubfield  => 'a',
-    })->store;
+    my $authtype = t::lib::TestBuilder->new->build( { source => 'AuthType' } );
+    my $cnt      = Koha::Authority::Subfields->count;
+    my $rec      = Koha::Authority::Subfield->new(
+        {
+            authtypecode => $authtype->{authtypecode},
+            tagfield     => '100',
+            tagsubfield  => 'a',
+        }
+    )->store;
     is( Koha::Authority::Subfields->count, $cnt + 1, 'One record added' );
-    $rec->update({ liblibrarian => 'intelligent text' });
-    is( Koha::Authority::Subfields->find( $authtype->{authtypecode}, '100', 'a' )->liblibrarian, 'intelligent text', 'Found record' );
+    $rec->update( { liblibrarian => 'intelligent text' } );
+    is(
+        Koha::Authority::Subfields->find( $authtype->{authtypecode}, '100', 'a' )->liblibrarian, 'intelligent text',
+        'Found record'
+    );
     $rec->delete;
     is( Koha::Authority::Subfields->count, $cnt, 'One record deleted' );
 };

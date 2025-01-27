@@ -22,10 +22,10 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth        qw( get_template_and_user );
 use C4::Circulation qw( barcodedecode );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Koha qw( GetAuthorisedValues );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Koha        qw( GetAuthorisedValues );
 
 use C4::CourseReserves qw( GetCourse GetCourseReserve ModCourse ModCourseItem ModCourseReserve );
 
@@ -43,50 +43,52 @@ my $is_edit      = $cgi->param('is_edit')      || '';
 my $biblionumber = $cgi->param('biblionumber') || '';
 
 $barcode = barcodedecode($barcode) if $barcode;
-$biblionumber =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
+$biblionumber =~ s/^\s*|\s*$//g;    #remove leading/trailing whitespace
 
 my ( $item, $biblio );
 
 if ( $barcode || $itemnumber ) {
+
     # adding an item to course items
-    $item = $itemnumber ? Koha::Items->find( $itemnumber ) : Koha::Items->find({ barcode => $barcode });
-    if ( $item ) {
+    $item = $itemnumber ? Koha::Items->find($itemnumber) : Koha::Items->find( { barcode => $barcode } );
+    if ($item) {
         $itemnumber = $item->id;
-        $biblio = $item->biblio;
+        $biblio     = $item->biblio;
     }
 } else {
+
     # adding a biblio to course items
-    $biblio = Koha::Biblios->find( $biblionumber );
+    $biblio = Koha::Biblios->find($biblionumber);
 }
 
 my $step = ( $op eq 'lookup' && ( $item or $biblio ) ) ? '2' : '1';
 
 my $tmpl = ($course_id) ? "add_items-step$step.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "course_reserves/$tmpl",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { coursereserves => 'add_reserves' },
+    {
+        template_name => "course_reserves/$tmpl",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { coursereserves => 'add_reserves' },
     }
 );
 
-if ( !$item && !$biblio && $op eq 'lookup' ){
+if ( !$item && !$biblio && $op eq 'lookup' ) {
     $template->param( ERROR_ITEM_NOT_FOUND => 1 );
-    $template->param( UNKNOWN_BARCODE => $barcode ) if $barcode;
+    $template->param( UNKNOWN_BARCODE      => $barcode )      if $barcode;
     $template->param( UNKNOWN_BIBLIONUMBER => $biblionumber ) if $biblionumber;
 }
 
 $template->param( course => GetCourse($course_id) );
 
 if ( $op eq 'lookup' and $item ) {
-    my $course_item = Koha::Course::Items->find({ itemnumber => $item->id });
-    my $course_reserve =
-      ($course_item)
-      ? GetCourseReserve(
+    my $course_item    = Koha::Course::Items->find( { itemnumber => $item->id } );
+    my $course_reserve = ($course_item)
+        ? GetCourseReserve(
         course_id => $course_id,
         ci_id     => $course_item->ci_id,
-      )
-      : undef;
+        )
+        : undef;
 
     my $itemtypes = Koha::ItemTypes->search;
     $template->param(
@@ -98,19 +100,18 @@ if ( $op eq 'lookup' and $item ) {
 
         ccodes    => GetAuthorisedValues('CCODE'),
         locations => GetAuthorisedValues('LOC'),
-        itypes    => $itemtypes, # FIXME We certainly want to display the translated_description in the template
+        itypes    => $itemtypes,    # FIXME We certainly want to display the translated_description in the template
         return    => $return,
     );
 
 } elsif ( $op eq 'lookup' and $biblio ) {
-    my $course_item = Koha::Course::Items->find({ biblionumber => $biblio->biblionumber });
-    my $course_reserve =
-      ($course_item)
-      ? GetCourseReserve(
+    my $course_item    = Koha::Course::Items->find( { biblionumber => $biblio->biblionumber } );
+    my $course_reserve = ($course_item)
+        ? GetCourseReserve(
         course_id => $course_id,
         ci_id     => $course_item->ci_id,
-      )
-      : undef;
+        )
+        : undef;
 
     my $itemtypes = Koha::ItemTypes->search;
     $template->param(
@@ -119,7 +120,7 @@ if ( $op eq 'lookup' and $item ) {
         course_reserve => $course_reserve,
         is_edit        => $is_edit,
 
-        return    => $return,
+        return => $return,
     );
 
 } elsif ( $op eq 'cud-add' ) {
@@ -129,25 +130,25 @@ if ( $op eq 'lookup' and $item ) {
     my $holdingbranch = scalar $cgi->param('holdingbranch');
     my $location      = scalar $cgi->param('location');
 
-    my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
-    my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
-    my $homebranch_enabled    = $cgi->param('homebranch_enabled') ? 1 : 0;
+    my $itype_enabled         = scalar $cgi->param('itype_enabled')         ? 1 : 0;
+    my $ccode_enabled         = scalar $cgi->param('ccode_enabled')         ? 1 : 0;
+    my $homebranch_enabled    = $cgi->param('homebranch_enabled')           ? 1 : 0;
     my $holdingbranch_enabled = scalar $cgi->param('holdingbranch_enabled') ? 1 : 0;
-    my $location_enabled      = scalar $cgi->param('location_enabled') ? 1 : 0;
+    my $location_enabled      = scalar $cgi->param('location_enabled')      ? 1 : 0;
 
     my $ci_id = ModCourseItem(
-            itemnumber    => $itemnumber,
-            biblionumber  => $biblionumber,
-            itype         => $itype,
-            ccode         => $ccode,
-            homebranch    => $homebranch,
-            holdingbranch => $holdingbranch,
-            location      => $location,
-            itype_enabled         => $itype_enabled,
-            ccode_enabled         => $ccode_enabled,
-            homebranch_enabled    => $homebranch_enabled,
-            holdingbranch_enabled => $holdingbranch_enabled,
-            location_enabled      => $location_enabled,
+        itemnumber            => $itemnumber,
+        biblionumber          => $biblionumber,
+        itype                 => $itype,
+        ccode                 => $ccode,
+        homebranch            => $homebranch,
+        holdingbranch         => $holdingbranch,
+        location              => $location,
+        itype_enabled         => $itype_enabled,
+        ccode_enabled         => $ccode_enabled,
+        homebranch_enabled    => $homebranch_enabled,
+        holdingbranch_enabled => $holdingbranch_enabled,
+        location_enabled      => $location_enabled,
     );
 
     my $cr_id = ModCourseReserve(
@@ -157,7 +158,7 @@ if ( $op eq 'lookup' and $item ) {
         public_note => scalar $cgi->param('public_note'),
     );
 
-    if ( $return ) {
+    if ($return) {
         print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$return");
         exit;
     }

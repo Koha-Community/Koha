@@ -22,133 +22,140 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth     qw( get_template_and_user );
+use C4::Output   qw( output_html_with_http_headers );
 use C4::Creators qw( get_all_profiles get_unit_values );
 use C4::Labels;
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "labels/label-edit-template.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "labels/label-edit-template.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
-my $op = $cgi->param('op');
-my $template_id = $cgi->param('template_id') || $cgi->param('element_id');
+my $op             = $cgi->param('op');
+my $template_id    = $cgi->param('template_id') || $cgi->param('element_id');
 my $label_template = undef;
-my $profile_list = undef;
+my $profile_list   = undef;
 
 my $units = get_unit_values();
 
-if ($op eq 'edit_form') {
-    $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
-    $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => { template_id => [ $template_id, '' ], creator => 'Labels'} } );
-    push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
-    foreach my $profile (@$profile_list) {
-        if ($profile->{'profile_id'} == $label_template->get_attr('profile_id')) {
-            $profile->{'selected'} = 1;
+if ( $op eq 'edit_form' ) {
+    $label_template = C4::Labels::Template->retrieve( template_id => $template_id );
+    $profile_list   = get_all_profiles(
+        {
+            fields  => [qw( profile_id printer_name paper_bin )],
+            filters => { template_id => [ $template_id, '' ], creator => 'Labels' }
         }
-        else {
+    );
+    push @$profile_list, { paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile' };
+    foreach my $profile (@$profile_list) {
+        if ( $profile->{'profile_id'} == $label_template->get_attr('profile_id') ) {
+            $profile->{'selected'} = 1;
+        } else {
             $profile->{'selected'} = 0;
         }
     }
-}
-elsif ($op eq 'cud-save') {
-    my @params = (      profile_id      => scalar $cgi->param('profile_id'),
-                        template_code   => scalar $cgi->param('template_code') || 'DEFAULT_TEMPLATE',
-                        template_desc   => scalar $cgi->param('template_desc') || 'Default description',
-                        page_width      => scalar $cgi->param('page_width') || 0,
-                        page_height     => scalar $cgi->param('page_height') || 0,
-                        label_width     => scalar $cgi->param('label_width') || 0,
-                        label_height    => scalar $cgi->param('label_height') || 0,
-                        top_text_margin => scalar $cgi->param('top_text_margin') || 0,
-                        left_text_margin=> scalar $cgi->param('left_text_margin') || 0,
-                        top_margin      => scalar $cgi->param('top_margin') || 0,
-                        left_margin     => scalar $cgi->param('left_margin') || 0,
-                        cols            => scalar $cgi->param('cols') || 0,
-                        rows            => scalar $cgi->param('rows') || 0,
-                        col_gap         => scalar $cgi->param('col_gap') || 0,
-                        row_gap         => scalar $cgi->param('row_gap') || 0,
-                        units           => scalar $cgi->param('units') || 'POINT',
-                        );
-    if ($template_id) {   # if a template_id was passed in, this is an update to an existing template
-        $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
-        if ($cgi->param('profile_id') && ($label_template->get_attr('template_id') != $cgi->param('profile_id'))) {
+} elsif ( $op eq 'cud-save' ) {
+    my @params = (
+        profile_id       => scalar $cgi->param('profile_id'),
+        template_code    => scalar $cgi->param('template_code')    || 'DEFAULT_TEMPLATE',
+        template_desc    => scalar $cgi->param('template_desc')    || 'Default description',
+        page_width       => scalar $cgi->param('page_width')       || 0,
+        page_height      => scalar $cgi->param('page_height')      || 0,
+        label_width      => scalar $cgi->param('label_width')      || 0,
+        label_height     => scalar $cgi->param('label_height')     || 0,
+        top_text_margin  => scalar $cgi->param('top_text_margin')  || 0,
+        left_text_margin => scalar $cgi->param('left_text_margin') || 0,
+        top_margin       => scalar $cgi->param('top_margin')       || 0,
+        left_margin      => scalar $cgi->param('left_margin')      || 0,
+        cols             => scalar $cgi->param('cols')             || 0,
+        rows             => scalar $cgi->param('rows')             || 0,
+        col_gap          => scalar $cgi->param('col_gap')          || 0,
+        row_gap          => scalar $cgi->param('row_gap')          || 0,
+        units            => scalar $cgi->param('units')            || 'POINT',
+    );
+    if ($template_id) {    # if a template_id was passed in, this is an update to an existing template
+        $label_template = C4::Labels::Template->retrieve( template_id => $template_id );
+        if ( $cgi->param('profile_id') && ( $label_template->get_attr('template_id') != $cgi->param('profile_id') ) ) {
+
             # Release the old profile if one is currently associated
-            if ($label_template->get_attr('profile_id') > 0) {
-                my $old_profile = C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id'));
-                $old_profile->set_attr(template_id => 0);
+            if ( $label_template->get_attr('profile_id') > 0 ) {
+                my $old_profile =
+                    C4::Labels::Profile->retrieve( profile_id => $label_template->get_attr('profile_id') );
+                $old_profile->set_attr( template_id => 0 );
                 $old_profile->save();
             }
-            my $new_profile = C4::Labels::Profile->retrieve(profile_id => scalar $cgi->param('profile_id'));
-            $new_profile->set_attr(template_id => $label_template->get_attr('template_id'));
+            my $new_profile = C4::Labels::Profile->retrieve( profile_id => scalar $cgi->param('profile_id') );
+            $new_profile->set_attr( template_id => $label_template->get_attr('template_id') );
             $new_profile->save();
-        }
-        elsif ($cgi->param('profile_id') == 0) { # Disassociate any printer profile from the template
-            if ($label_template->get_attr('profile_id') > 0) {
-                my $old_profile = C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id'));
-                $old_profile->set_attr(template_id => 0);
+        } elsif ( $cgi->param('profile_id') == 0 ) {    # Disassociate any printer profile from the template
+            if ( $label_template->get_attr('profile_id') > 0 ) {
+                my $old_profile =
+                    C4::Labels::Profile->retrieve( profile_id => $label_template->get_attr('profile_id') );
+                $old_profile->set_attr( template_id => 0 );
                 $old_profile->save();
             }
         }
 
         $label_template->set_attr(@params);
         $label_template->save();
-    }
-    else {      # if no template_id, this is a new template so insert it
+    } else {    # if no template_id, this is a new template so insert it
         $label_template = C4::Labels::Template->new(@params);
         my $template_id = $label_template->save();
-        if ($cgi->param('profile_id')) {
-            my $profile = C4::Labels::Profile->retrieve(profile_id => scalar $cgi->param('profile_id'));
-            $profile->set_attr(template_id => $template_id) if $template_id != $profile->get_attr('template_id');
+        if ( $cgi->param('profile_id') ) {
+            my $profile = C4::Labels::Profile->retrieve( profile_id => scalar $cgi->param('profile_id') );
+            $profile->set_attr( template_id => $template_id ) if $template_id != $profile->get_attr('template_id');
             $profile->save();
         }
     }
     print $cgi->redirect("label-manage.pl?label_element=template");
     exit;
-}
-else {  # if we get here, this is a new layout
+} else {    # if we get here, this is a new layout
     $label_template = C4::Labels::Template->new();
-    $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => { template_id => [''], creator => 'Labels' } });
-    push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
-    foreach my $profile (@$profile_list) {
-        if ($profile->{'profile_id'} == 0) {
-            $profile->{'selected'} = 1;
+    $profile_list   = get_all_profiles(
+        {
+            fields => [qw( profile_id printer_name paper_bin )], filters => { template_id => [''], creator => 'Labels' }
         }
-        else {
+    );
+    push @$profile_list, { paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile' };
+    foreach my $profile (@$profile_list) {
+        if ( $profile->{'profile_id'} == 0 ) {
+            $profile->{'selected'} = 1;
+        } else {
             $profile->{'selected'} = 0;
         }
     }
 }
 
 foreach my $unit (@$units) {
-    if ($unit->{'type'} eq $label_template->get_attr('units')) {
+    if ( $unit->{'type'} eq $label_template->get_attr('units') ) {
         $unit->{'selected'} = 1;
     }
 }
 
 $template->param(
-    profile_list         => $profile_list,
-    template_id          => ($label_template->get_attr('template_id') > 0) ? $label_template->get_attr('template_id') : '',
-    template_code        => $label_template->get_attr('template_code'),
-    template_desc        => $label_template->get_attr('template_desc'),
-    page_width           => $label_template->get_attr('page_width'),
-    page_height          => $label_template->get_attr('page_height'),
-    label_width          => $label_template->get_attr('label_width'),
-    label_height         => $label_template->get_attr('label_height'),
-    top_text_margin      => $label_template->get_attr('top_text_margin'),
-    left_text_margin     => $label_template->get_attr('left_text_margin'),
-    top_margin           => $label_template->get_attr('top_margin'),
-    left_margin          => $label_template->get_attr('left_margin'),
-    cols                 => $label_template->get_attr('cols'),
-    rows                 => $label_template->get_attr('rows'),
-    col_gap              => $label_template->get_attr('col_gap'),
-    row_gap              => $label_template->get_attr('row_gap'),
-    units                => $units,
+    profile_list    => $profile_list,
+    template_id     => ( $label_template->get_attr('template_id') > 0 ) ? $label_template->get_attr('template_id') : '',
+    template_code   => $label_template->get_attr('template_code'),
+    template_desc   => $label_template->get_attr('template_desc'),
+    page_width      => $label_template->get_attr('page_width'),
+    page_height     => $label_template->get_attr('page_height'),
+    label_width     => $label_template->get_attr('label_width'),
+    label_height    => $label_template->get_attr('label_height'),
+    top_text_margin => $label_template->get_attr('top_text_margin'),
+    left_text_margin => $label_template->get_attr('left_text_margin'),
+    top_margin       => $label_template->get_attr('top_margin'),
+    left_margin      => $label_template->get_attr('left_margin'),
+    cols             => $label_template->get_attr('cols'),
+    rows             => $label_template->get_attr('rows'),
+    col_gap          => $label_template->get_attr('col_gap'),
+    row_gap          => $label_template->get_attr('row_gap'),
+    units            => $units,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests=> 10;
+use Test::More tests => 10;
 use utf8;
 
 use Koha::Database;
@@ -32,8 +32,8 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
-my $biblio = $builder->build_sample_biblio({ frameworkcode => '' });
-my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+my $biblio  = $builder->build_sample_biblio( { frameworkcode => '' } );
+my $item    = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
 my $cache = Koha::Caches->get_instance;
 $cache->clear_from_cache("MarcStructure-0-");
@@ -45,11 +45,11 @@ $cache->clear_from_cache("MarcSubfieldStructure-");
 # $952$y is not repeatable
 setup_mss();
 
-$item->more_subfields_xml(undef)->store; # Shouldn't be needed, but we want to make sure
+$item->more_subfields_xml(undef)->store;    # Shouldn't be needed, but we want to make sure
 my $attributes = $item->additional_attributes;
-is( ref($attributes), 'Koha::Item::Attributes' );
+is( ref($attributes),        'Koha::Item::Attributes' );
 is( $attributes->to_marcxml, undef );
-is_deeply($attributes->to_hashref, {});
+is_deeply( $attributes->to_hashref, {} );
 
 my $some_marc_xml = q{<?xml version="1.0" encoding="UTF-8"?>
 <collection
@@ -74,11 +74,11 @@ my $some_marc_xml = q{<?xml version="1.0" encoding="UTF-8"?>
 $item->more_subfields_xml($some_marc_xml)->store;
 
 $attributes = $item->additional_attributes;
-is( ref($attributes), 'Koha::Item::Attributes' );
-is( $attributes->{'x'}, "value for x 1 | value for x 2");
-is( $attributes->{'y'}, "value for y");
-is( $attributes->{'é'}, "value for é 1 | value for é 2");
-is( $attributes->{'z'}, "value for z 1 | value for z 2");
+is( ref($attributes),   'Koha::Item::Attributes' );
+is( $attributes->{'x'}, "value for x 1 | value for x 2" );
+is( $attributes->{'y'}, "value for y" );
+is( $attributes->{'é'}, "value for é 1 | value for é 2" );
+is( $attributes->{'z'}, "value for z 1 | value for z 2" );
 
 is( $attributes->to_marcxml, $some_marc_xml );
 is_deeply(
@@ -91,17 +91,17 @@ is_deeply(
     }
 );
 
-Koha::Caches->get_instance->clear_from_cache( "MarcStructure-1-" );
+Koha::Caches->get_instance->clear_from_cache("MarcStructure-1-");
 
 sub setup_mss {
 
-    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
 
     Koha::MarcSubfieldStructures->search(
         {
             frameworkcode => '',
-            tagfield => $itemtag,
-            tagsubfield => 'é',
+            tagfield      => $itemtag,
+            tagsubfield   => 'é',
         }
     )->delete;    # In case it exist already
 
@@ -127,24 +127,23 @@ sub setup_mss {
     Koha::MarcSubfieldStructures->search(
         {
             frameworkcode => '',
-            tagfield => $itemtag,
-            tagsubfield => [ 'x', 'é' ],
+            tagfield      => $itemtag,
+            tagsubfield   => [ 'x', 'é' ],
         }
     )->update( { repeatable => 1 } );
 
     Koha::MarcSubfieldStructures->search(
         {
             frameworkcode => '',
-            tagfield => $itemtag,
-            tagsubfield => ['y'],
+            tagfield      => $itemtag,
+            tagsubfield   => ['y'],
         }
     )->update( { repeatable => 0 } );
 
     my $i = 0;
-    for my $sf ( qw( x y é z ) ) {
-        Koha::MarcSubfieldStructures->search(
-            { frameworkcode => '', tagfield => $itemtag, tagsubfield => $sf } )
-          ->update( { display_order => $i++ } );
+    for my $sf (qw( x y é z )) {
+        Koha::MarcSubfieldStructures->search( { frameworkcode => '', tagfield => $itemtag, tagsubfield => $sf } )
+            ->update( { display_order => $i++ } );
     }
 
 }

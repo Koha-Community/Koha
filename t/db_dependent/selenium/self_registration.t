@@ -30,7 +30,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 eval { require Selenium::Remote::Driver; };
-if ( $@ ) {
+if ($@) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
     plan tests => 2;
@@ -38,12 +38,12 @@ if ( $@ ) {
 
 my $s = t::lib::Selenium->new;
 
-my $driver = $s->driver;
+my $driver        = $s->driver;
 my $opac_base_url = $s->opac_base_url;
-my $builder = t::lib::TestBuilder->new;
+my $builder       = t::lib::TestBuilder->new;
 
 my $PatronSelfRegistration_value = C4::Context->preference('PatronSelfRegistration');
-C4::Context->set_preference('PatronSelfRegistration', '1');
+C4::Context->set_preference( 'PatronSelfRegistration', '1' );
 
 my $PatronSelfRegistrationDefaultCategory_value = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
 
@@ -62,7 +62,7 @@ subtest 'Set flags' => sub {
     my $default_category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
     C4::Context->set_preference( 'PatronSelfRegistrationDefaultCategory', $default_category->categorycode );
 
-    $driver->get($opac_base_url . 'opac-memberentry.pl');
+    $driver->get( $opac_base_url . 'opac-memberentry.pl' );
     like( $driver->get_title(), qr(Register a new account), );
 
     $driver->find_element('//*[@id="borrower_surname"]')->send_keys("a surname");
@@ -73,17 +73,16 @@ subtest 'Set flags' => sub {
     $driver->find_element('//*[@id="captcha"]')->send_keys($captcha);
     $s->submit_form;
 
-    my $patron = Koha::Patrons->search({ surname => "a surname" })->next;
+    my $patron = Koha::Patrons->search( { surname => "a surname" } )->next;
     is( $patron->flags, undef, 'flags must be undef even if user tried to pass it' );
     push @cleanup, $patron;
     push @cleanup, $default_category;
 };
 
-
 $driver->quit();
 
 END {
-    C4::Context->set_preference('PatronSelfRegistration', $PatronSelfRegistration_value);
-    C4::Context->set_preference('PatronSelfRegistration', $PatronSelfRegistrationDefaultCategory_value);
+    C4::Context->set_preference( 'PatronSelfRegistration', $PatronSelfRegistration_value );
+    C4::Context->set_preference( 'PatronSelfRegistration', $PatronSelfRegistrationDefaultCategory_value );
     $_->delete for @cleanup;
-};
+}

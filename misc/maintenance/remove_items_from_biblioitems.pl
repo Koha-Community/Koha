@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-$|=1;
+$| = 1;
 
 use Koha::Script;
 use C4::Context;
@@ -28,12 +28,12 @@ use C4::Biblio qw( GetFrameworkCode ModBiblio );
 use Koha::Biblios;
 use Getopt::Long qw( GetOptions );
 
-my ($wherestring, $run, $silent, $want_help);
+my ( $wherestring, $run, $silent, $want_help );
 my $result = GetOptions(
-    'where:s'      => \$wherestring,
-    '--run'        => \$run,
-    '--silent'     => \$silent,
-    'help|h'       => \$want_help,
+    'where:s'  => \$wherestring,
+    '--run'    => \$run,
+    '--silent' => \$silent,
+    'help|h'   => \$want_help,
 );
 
 if ( not $result or not $run or $want_help ) {
@@ -41,23 +41,22 @@ if ( not $result or not $run or $want_help ) {
     exit 0;
 }
 
-my $dbh = C4::Context->dbh;
-my $count = 0;
-my $querysth =  qq{SELECT biblionumber from biblioitems };
-$querysth    .= " WHERE $wherestring " if ($wherestring);
+my $dbh      = C4::Context->dbh;
+my $count    = 0;
+my $querysth = qq{SELECT biblionumber from biblioitems };
+$querysth .= " WHERE $wherestring " if ($wherestring);
 my $query = $dbh->prepare($querysth);
 $query->execute;
-while (my $biblionumber = $query->fetchrow){
+while ( my $biblionumber = $query->fetchrow ) {
     $count++;
-    print "." unless $silent;
-    print "\r$count" unless ($silent or ($count % 100)); 
+    print "."        unless $silent;
+    print "\r$count" unless ( $silent or ( $count % 100 ) );
     my $biblio = Koha::Biblios->find($biblionumber);
     my $record = $biblio->metadata->record;
 
     if ($record) {
-        ModBiblio($record, $biblionumber, GetFrameworkCode($biblionumber)) ;
-    }
-    else {
+        ModBiblio( $record, $biblionumber, GetFrameworkCode($biblionumber) );
+    } else {
         print "error in $biblionumber : can't parse biblio";
     }
 }

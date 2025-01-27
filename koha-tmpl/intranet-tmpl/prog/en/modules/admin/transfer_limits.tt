@@ -8,13 +8,21 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Library transfer limits") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Library transfer limits") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>td { text-align: center; } .sorted { min-width: 50%; }</style>
+<style>
+    td {
+        text-align: center;
+    }
+    .sorted {
+        min-width: 50%;
+    }
+</style>
 </head>
 
 [% SET BranchTransferLimitsType = Koha.Preference('BranchTransferLimitsType') %]
@@ -37,91 +45,102 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <h1>Library transfer limits</h1>
 
-                <h1>Library transfer limits</h1>
+    <p>
+        [% IF BranchTransferLimitsType == "itemtype" %]
+            <label for="value_selector">Select an item type:</label>
+            <select id="value_selector">
+                <option value="" selected></option>
+                [% SET itemtypes = ItemTypes.Get %]
+                [% FOREACH i IN itemtypes %]
+                    <option value="[% i.itemtype | html %]">[% i.description | html %]</option>
+                [% END %]
+            </select>
+        [% ELSE #BranchTransferLimitsType == "ccode" %]
+            <label for="value_selector">Select a collection:</label>
+            <select id="value_selector">
+                <option value="" selected></option>
+                [% SET ccodes = AuthorisedValues.Get('CCODE') %]
+                [% FOREACH c IN ccodes %]
+                    <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
+                [% END %]
+            </select>
+        [% END %]
 
-                <p>
-                    [% IF BranchTransferLimitsType == "itemtype" %]
-                        <label for="value_selector">Select an item type:</label>
-                        <select id="value_selector">
-                            <option value="" selected></option>
-                            [% SET itemtypes = ItemTypes.Get %]
-                            [%  FOREACH i IN itemtypes %]
-                                <option value="[% i.itemtype | html %]">[% i.description | html %]</option>
+        <span id="loading_limits">
+            <i class="fa fa-spinner fa-pulse fa-fw"></i>
+            <span>Loading...</span>
+        </span>
+    </p>
+
+    <p class="help">Check the boxes for the libraries you allow your items to be transferred to.</p>
+    <fieldset>
+        <a id="check-all" class="limit-action" href="#"><i class="fa fa-check"></i> Check all</a>
+        |
+        <a id="uncheck-all" class="limit-action" href="#"><i class="fa fa-times"></i> Uncheck all</a>
+        |
+        <a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Switch to basic editor</a>
+    </fieldset>
+
+    <table id="transfer_limits" class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                [% FOREACH to IN branches %]
+                    <td>
+                        <p
+                            ><a class="btn btn-default btn-xs check-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p
+                        >
+                        <p
+                            ><a class="btn btn-default btn-xs uncheck-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-times"></i> Uncheck</a></p
+                        >
+                    </td>
+                [% END %]
+            </tr>
+
+            <tr>
+                <td>&nbsp;</td>
+                <th>From / To</th>
+                [% FOREACH b IN branches %]
+                    <th style="word-break: break-all !important" title="[% b.branchname | html %]">[% b.branchname | html %]</th>
+                [% END %]
+            </tr>
+        </thead>
+
+        <tbody>
+            [% FOREACH from IN branches %]
+                <tr>
+                    <td>
+                        <p
+                            ><a class="btn btn-default btn-xs check-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p
+                        >
+                        <p
+                            ><a class="btn btn-default btn-xs uncheck-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-times"></i> Uncheck</a></p
+                        >
+                    </td>
+                    <th>[% from.branchname | html %]</th>
+                    [% FOREACH to IN branches %]
+                        <td class="checkbox-cell">
+                            [% IF to.branchcode == from.branchcode %]
+                                &nbsp;
+                            [% ELSE %]
+                                <input
+                                    class="limit-checkboxes from-[% from.branchcode | html %] to-[% to.branchcode | html %]"
+                                    id="limit-[% from.branchcode | html %]-[% to.branchcode | html %]"
+                                    type="checkbox"
+                                    title="From: [% from.branchname | html %], To: [% to.branchname | html %]"
+                                    checked
+                                />
+                                <i id="spinner-limit-[% from.branchcode | html %]-[% to.branchcode | html %]" class="spinner fa fa-spinner fa-pulse fa-fw"></i>
                             [% END %]
-                        </select>
-                    [% ELSE #BranchTransferLimitsType == "ccode" %]
-                        <label for="value_selector">Select a collection:</label>
-                        <select id="value_selector">
-                            <option value="" selected></option>
-                            [% SET ccodes = AuthorisedValues.Get('CCODE') %]
-                            [%  FOREACH c IN ccodes %]
-                                <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
-                            [% END %]
-                        </select>
+                        </td>
                     [% END %]
-
-                    <span id="loading_limits">
-                        <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                        <span>Loading...</span>
-                    </span>
-                </p>
-
-                <p class="help">Check the boxes for the libraries you allow your items to be transferred to.</p>
-                <fieldset>
-                    <a id="check-all" class="limit-action" href="#"><i class="fa fa-check"></i> Check all</a>
-                    |
-                    <a id="uncheck-all" class="limit-action" href="#"><i class="fa fa-times"></i> Uncheck all</a>
-                    |
-                    <a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Switch to basic editor</a>
-                </fieldset>
-
-                <table id="transfer_limits" class="table table-striped table-bordered table-hover table-condensed">
-
-                    <thead>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            [% FOREACH to IN branches %]
-                                <td>
-                                    <p><a class="btn btn-default btn-xs check-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p>
-                                    <p><a class="btn btn-default btn-xs uncheck-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-times"></i> Uncheck</a></p>
-                                </td>
-                            [% END %]
-                        </tr>
-
-                        <tr>
-                            <td>&nbsp;</td>
-                            <th>From / To</th>
-                            [% FOREACH b IN branches %]
-                                <th style="word-break: break-all !important" title="[% b.branchname | html %]">[% b.branchname | html %]</th>
-                            [% END %]
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        [% FOREACH from IN branches %]
-                            <tr>
-                                <td>
-                                    <p><a class="btn btn-default btn-xs check-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p>
-                                    <p><a class="btn btn-default btn-xs uncheck-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-times"></i> Uncheck</a></p>
-                                </td>
-                                <th>[% from.branchname | html %]</th>
-                                [% FOREACH to IN branches %]
-                                    <td class="checkbox-cell">
-                                        [% IF to.branchcode == from.branchcode %]
-                                            &nbsp;
-                                        [% ELSE %]
-                                            <input class="limit-checkboxes from-[% from.branchcode | html %] to-[% to.branchcode | html %]" id="limit-[% from.branchcode | html %]-[% to.branchcode | html %]" type="checkbox" title="From: [%  from.branchname | html %], To: [%  to.branchname | html %]" checked/>
-                                            <i id="spinner-limit-[% from.branchcode | html %]-[% to.branchcode | html %]" class="spinner fa fa-spinner fa-pulse fa-fw"></i>
-                                        [% END %]
-                                    </td>
-                                [% END %]
-                            </tr>
-                        [% END %]
-                    </tbody>
-                </table>
-
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

@@ -25,21 +25,24 @@ use XML::LibXML;
 
 my $parser = XML::LibXML->new();
 
-find({
-    bydepth => 1,
-    no_chdir => 1,
-    wanted => sub {
-        my $file = $_;
-        return if $file =~ m|/node_modules/|i;
-        return unless $file =~ /(\.xml|\.xsl|\.xslt|\.xsd)$/i;
-        my $dom;
-        eval { $dom = $parser->parse_file($file); };
-        if ($@) {
-            fail("$file parses");
-            diag($@);
-        } else {
-            pass("$file parses");
-        }
+find(
+    {
+        bydepth  => 1,
+        no_chdir => 1,
+        wanted   => sub {
+            my $file = $_;
+            return if $file     =~ m|/node_modules/|i;
+            return unless $file =~ /(\.xml|\.xsl|\.xslt|\.xsd)$/i;
+            my $dom;
+            eval { $dom = $parser->parse_file($file); };
+            if ($@) {
+                fail("$file parses");
+                diag($@);
+            } else {
+                pass("$file parses");
+            }
+        },
     },
-}, File::Spec->curdir());
+    File::Spec->curdir()
+);
 done_testing();

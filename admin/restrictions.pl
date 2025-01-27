@@ -19,37 +19,34 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( try catch );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Patron::Restriction::Types;
 
-my $input = CGI->new;
-my $op    = $input->param('op') // 'list';
-my $code  = uc $input->param('code');
+my $input    = CGI->new;
+my $op       = $input->param('op') // 'list';
+my $code     = uc $input->param('code');
 my @messages = ();
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/restrictions.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_patron_restrictions' },
-        debug           => 1,
+        template_name => "admin/restrictions.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_patron_restrictions' },
+        debug         => 1,
     }
 );
 
-if ( $op eq 'add_form') {
+if ( $op eq 'add_form' ) {
+
     # Get all existing restrictions, so we can do client-side validation
-    $template->param(
-        existing => scalar Koha::Patron::Restriction::Types->search()
-    );
+    $template->param( existing => scalar Koha::Patron::Restriction::Types->search() );
     if ($code) {
-        $template->param(
-            restriction => scalar Koha::Patron::Restriction::Types->find($code)
-        );
+        $template->param( restriction => scalar Koha::Patron::Restriction::Types->find($code) );
     }
 } elsif ( $op eq 'cud-add_validate' ) {
 
@@ -59,6 +56,7 @@ if ( $op eq 'add_form') {
     my $is_a_modif         = $input->param("is_a_modif");
 
     if ($is_a_modif) {
+
         # Check whether another restriction already has this display text
         my $dupe = Koha::Patron::Restriction::Types->search(
             {
@@ -67,9 +65,7 @@ if ( $op eq 'add_form') {
             }
         );
         if ( $dupe->count ) {
-            push @messages, {
-                type => 'error', code => 'duplicate_display_text'
-            };
+            push @messages, { type => 'error', code => 'duplicate_display_text' };
         } else {
             my $restriction = Koha::Patron::Restriction::Types->find($code);
             $restriction->display_text($display_text);
@@ -79,12 +75,11 @@ if ( $op eq 'add_form') {
             push @messages, { type => 'message', code => 'update_success' };
         }
     } else {
+
         # Check whether another restriction already has this code
         my $dupe = Koha::Patron::Restriction::Types->find($code);
         if ($dupe) {
-            push @messages, {
-                type => 'error', code => 'duplicate_code'
-            };
+            push @messages, { type => 'error', code => 'duplicate_code' };
         } else {
             my $restriction = Koha::Patron::Restriction::Type->new(
                 {
@@ -104,20 +99,16 @@ if ( $op eq 'add_form') {
     $restriction->make_default;
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
-    $template->param(
-        restriction => scalar Koha::Patron::Restriction::Types->find($code)
-    );
+    $template->param( restriction => scalar Koha::Patron::Restriction::Types->find($code) );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
     try {
         Koha::Patron::Restriction::Types->find($code)->delete;
         push @messages, { type => 'message', code => 'delete_success' };
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::CannotDeleteDefault') ) {
                 push @messages, { type => 'error', code => 'delete_default' };
-            }
-            elsif ( $_->isa('Koha::Exceptions::CannotDeleteSystem') ) {
+            } elsif ( $_->isa('Koha::Exceptions::CannotDeleteSystem') ) {
                 push @messages, { type => 'error', code => 'delete_system' };
             }
         }
@@ -134,7 +125,7 @@ if ( $op eq 'list' ) {
     my $restrictions = Koha::Patron::Restriction::Types->search();
     $template->param(
         restrictions => $restrictions,
-    )
+    );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

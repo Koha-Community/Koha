@@ -26,10 +26,10 @@ use C4::Biblio qw(
 );
 use C4::Log qw( cronlogaction );
 use Koha::Biblios;
-use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
-use Time::HiRes qw( time );
-use POSIX qw( ceil strftime );
+use Getopt::Long              qw( GetOptions );
+use Pod::Usage                qw( pod2usage );
+use Time::HiRes               qw( time );
+use POSIX                     qw( ceil strftime );
 use Module::Load::Conditional qw( can_load );
 
 use Koha::Database;
@@ -54,8 +54,8 @@ my $commit = 100;
 my $tagtolink;
 my $allowrelink = C4::Context->preference("LinkerRelink") // '';
 
-my $command_line_options = join(" ", @ARGV);
-my $result = GetOptions(
+my $command_line_options = join( " ", @ARGV );
+my $result               = GetOptions(
     'v|verbose'      => \$verbose,
     't|test'         => \$test_only,
     'l|link-report'  => \$link_report,
@@ -74,8 +74,7 @@ if ( not $result or $want_help ) {
 
 cronlogaction( { info => $command_line_options } );
 
-my $linker_module =
-  "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
+my $linker_module = "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
 unless ( can_load( modules => { $linker_module => undef } ) ) {
     $linker_module = 'C4::Linker::Default';
     unless ( can_load( modules => { $linker_module => undef } ) ) {
@@ -96,27 +95,26 @@ my $num_bad_bibs       = 0;
 my %unlinked_headings;
 my %linked_headings;
 my %fuzzy_headings;
-my $dbh = C4::Context->dbh;
+my $dbh             = C4::Context->dbh;
 my @updated_biblios = ();
-my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+my $indexer         = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
 my $schema = Koha::Database->schema;
 $schema->txn_begin;
-process_bibs( $linker, $bib_limit, $auth_limit, $commit, { tagtolink => $tagtolink, allowrelink => $allowrelink });
+process_bibs( $linker, $bib_limit, $auth_limit, $commit, { tagtolink => $tagtolink, allowrelink => $allowrelink } );
 
 exit 0;
 
 sub process_bibs {
     my ( $linker, $bib_limit, $auth_limit, $commit, $args ) = @_;
-    my $tagtolink = $args->{tagtolink};
+    my $tagtolink   = $args->{tagtolink};
     my $allowrelink = $args->{allowrelink};
-    my $bib_where = '';
-    my $starttime = time();
+    my $bib_where   = '';
+    my $starttime   = time();
     if ($bib_limit) {
         $bib_where = "WHERE $bib_limit";
     }
-    my $sql =
-      "SELECT biblionumber FROM biblio $bib_where ORDER BY biblionumber ASC";
+    my $sql = "SELECT biblionumber FROM biblio $bib_where ORDER BY biblionumber ASC";
     my $sth = $dbh->prepare($sql);
     $sth->execute();
     my $linker_args = { tagtolink => $tagtolink, allowrelink => $allowrelink };
@@ -141,10 +139,10 @@ sub process_bibs {
     for ( values %unlinked_headings ) { $headings_unlinked += $_; }
     for ( values %fuzzy_headings )    { $headings_fuzzy    += $_; }
 
-    my $endtime = time();
-    my $totaltime = ceil (($endtime - $starttime) * 1000);
-    $starttime = strftime('%D %T', localtime($starttime));
-    $endtime = strftime('%D %T', localtime($endtime));
+    my $endtime   = time();
+    my $totaltime = ceil( ( $endtime - $starttime ) * 1000 );
+    $starttime = strftime( '%D %T', localtime($starttime) );
+    $endtime   = strftime( '%D %T', localtime($endtime) );
 
     my $summary = <<_SUMMARY_;
 
@@ -173,9 +171,7 @@ Linked headings (from most frequent to least):
 
 _LINKED_HEADER_
 
-        @keys = sort {
-            $linked_headings{$b} <=> $linked_headings{$a} or "\L$a" cmp "\L$b"
-        } keys %linked_headings;
+        @keys = sort { $linked_headings{$b} <=> $linked_headings{$a} or "\L$a" cmp "\L$b" } keys %linked_headings;
         foreach my $key (@keys) {
             print "$key:\t" . $linked_headings{$key} . " occurrences\n";
         }
@@ -187,10 +183,7 @@ Unlinked headings (from most frequent to least):
 
 _UNLINKED_HEADER_
 
-        @keys = sort {
-            $unlinked_headings{$b} <=> $unlinked_headings{$a}
-              or "\L$a" cmp "\L$b"
-        } keys %unlinked_headings;
+        @keys = sort { $unlinked_headings{$b} <=> $unlinked_headings{$a} or "\L$a" cmp "\L$b" } keys %unlinked_headings;
         foreach my $key (@keys) {
             print "$key:\t" . $unlinked_headings{$key} . " occurrences\n";
         }
@@ -202,9 +195,7 @@ Fuzzily-matched headings (from most frequent to least):
 
 _FUZZY_HEADER_
 
-        @keys = sort {
-            $fuzzy_headings{$b} <=> $fuzzy_headings{$a} or "\L$a" cmp "\L$b"
-        } keys %fuzzy_headings;
+        @keys = sort { $fuzzy_headings{$b} <=> $fuzzy_headings{$a} or "\L$a" cmp "\L$b" } keys %fuzzy_headings;
         foreach my $key (@keys) {
             print "$key:\t" . $fuzzy_headings{$key} . " occurrences\n";
         }
@@ -215,12 +206,13 @@ _FUZZY_HEADER_
 sub process_bib {
     my $linker       = shift;
     my $biblionumber = shift;
-    my $args = shift;
+    my $args         = shift;
     my $tagtolink    = $args->{tagtolink};
-    my $allowrelink = $args->{allowrelink};
-    my $biblio = Koha::Biblios->find($biblionumber);
+    my $allowrelink  = $args->{allowrelink};
+    my $biblio       = Koha::Biblios->find($biblionumber);
     my $record;
     eval { $record = $biblio->metadata->record; };
+
     unless ( defined $record ) {
         warn "Could not retrieve bib $biblionumber from the database - record is corrupt.";
         $num_bad_bibs++;
@@ -262,12 +254,18 @@ sub process_bib {
             );
         }
         if ( not $test_only ) {
-            ModBiblio( $record, $biblionumber, $frameworkcode, {
-                disable_autolink => 1,
-                skip_holds_queue => 1,
-                skip_record_index =>1
-            });
+            ModBiblio(
+                $record,
+                $biblionumber,
+                $frameworkcode,
+                {
+                    disable_autolink  => 1,
+                    skip_holds_queue  => 1,
+                    skip_record_index => 1
+                }
+            );
             push @updated_biblios, $biblionumber;
+
             #Last param is to note ModBiblio was called from linking script and bib should not be linked again
             $num_bibs_modified++;
         }

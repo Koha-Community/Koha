@@ -18,7 +18,7 @@ package Koha::Items;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Array::Utils qw( array_minus );
+use Array::Utils    qw( array_minus );
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
@@ -66,11 +66,12 @@ sub filter_by_for_hold {
 
     my $default_rule = Koha::CirculationRules->get_effective_rule(
         {
-            rule_name    => 'holdallowed',
+            rule_name => 'holdallowed',
         }
     );
     my @hold_not_allowed_itypes;
     if ( defined $default_rule && $default_rule->rule_value eq 'not_allowed' ) {
+
         # If the default rule is not allowed we get all itemtypes as not allowed
         @hold_not_allowed_itypes = Koha::ItemTypes->search->get_column('itemtype');
         my @hold_allowed_itypes = Koha::CirculationRules->search(
@@ -81,9 +82,11 @@ sub filter_by_for_hold {
                 categorycode => undef,
             }
         )->get_column('itemtype');
+
         # We then only allow those explicitly defined in hold policies at the all libraries level
         @hold_not_allowed_itypes = array_minus( @hold_not_allowed_itypes, @hold_allowed_itypes );
     } else {
+
         # If there is no default 'not_allowed' rule, then only those explicitly forbidden at the all libraries level are forbidden
         @hold_not_allowed_itypes = Koha::CirculationRules->search(
             {
@@ -96,22 +99,22 @@ sub filter_by_for_hold {
     }
 
     # We also forbid holds on any marked not for loan at the item level
-    push @hold_not_allowed_itypes, Koha::ItemTypes->search({ notforloan => 1 })->get_column('itemtype');
+    push @hold_not_allowed_itypes, Koha::ItemTypes->search( { notforloan => 1 } )->get_column('itemtype');
     @hold_not_allowed_itypes = uniq @hold_not_allowed_itypes;
 
     my $params = {
         itemlost   => 0,
         withdrawn  => 0,
         notforloan => { '<=' => 0 },    # items with negative or zero notforloan value are holdable
-        ( C4::Context->preference('AllowHoldsOnDamagedItems')? (): ( damaged => 0 ) ),
-        ( C4::Context->only_my_library() ? ( homebranch => C4::Context::mybranch() ) : () ),
+        ( C4::Context->preference('AllowHoldsOnDamagedItems') ? () : ( damaged => 0 ) ),
+        ( C4::Context->only_my_library()                      ? ( homebranch => C4::Context::mybranch() ) : () ),
     };
 
     if ( C4::Context->preference("item-level_itypes") ) {
         return $self->search(
             {
                 %$params,
-                itype        => { -not_in => \@hold_not_allowed_itypes },
+                itype => { -not_in => \@hold_not_allowed_itypes },
             }
         );
     } else {
@@ -144,7 +147,7 @@ are honoured.
 =cut
 
 sub filter_by_visible_in_opac {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $patron = $params->{patron};
 
@@ -156,14 +159,14 @@ sub filter_by_visible_in_opac {
 
         my $rules_params;
         foreach my $field ( keys %$rules ) {
-            $rules_params->{'me.'.$field} =
-              [ { '-not_in' => $rules->{$field} }, undef ];
+            $rules_params->{ 'me.' . $field } =
+                [ { '-not_in' => $rules->{$field} }, undef ];
         }
 
-        $result = $result->search( $rules_params );
+        $result = $result->search($rules_params);
     }
 
-    if (C4::Context->preference('hidelostitems')) {
+    if ( C4::Context->preference('hidelostitems') ) {
         $result = $result->filter_out_lost;
     }
 
@@ -183,7 +186,7 @@ sub filter_out_lost {
 
     my $params = { itemlost => 0 };
 
-    return $self->search( $params );
+    return $self->search($params);
 }
 
 =head3 filter_by_bookable
@@ -238,7 +241,7 @@ sub move_to_biblio {
         $biblionumbers->{ $item->biblionumber } = 1;
         $item->move_to_biblio( $to_biblio, { skip_record_index => 1 } );
     }
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     for my $biblionumber ( keys %{$biblionumbers} ) {
         $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
     }
@@ -306,146 +309,152 @@ Callback function to call after an item has been modified
 sub batch_update {
     my ( $self, $params ) = @_;
 
-    my $regex_mod = $params->{regex_mod} || {};
-    my $new_values = $params->{new_values} || {};
+    my $regex_mod                         = $params->{regex_mod}  || {};
+    my $new_values                        = $params->{new_values} || {};
     my $exclude_from_local_holds_priority = $params->{exclude_from_local_holds_priority};
-    my $mark_items_returned = $params->{mark_items_returned};
-    my $callback = $params->{callback};
+    my $mark_items_returned               = $params->{mark_items_returned};
+    my $callback                          = $params->{callback};
 
-    my (@modified_itemnumbers, $modified_fields);
+    my ( @modified_itemnumbers, $modified_fields );
     my $i;
     my $schema = Koha::Database->new->schema;
     while ( my $item = $self->next ) {
 
-        try {$schema->txn_do(sub {
-            my $modified_holds_priority = 0;
-            my $item_returned = 0;
-            if ( defined $exclude_from_local_holds_priority ) {
-                if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
-                    $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
-                    $modified_holds_priority = 1;
-                }
-            }
-
-            my $modified = 0;
-            my $new_values = {%$new_values};    # Don't modify the original
-
-            my $old_values = $item->unblessed;
-            if ( $item->more_subfields_xml ) {
-                $old_values = {
-                    %$old_values,
-                    %{$item->additional_attributes->to_hashref},
-                };
-            }
-
-            for my $attr ( keys %$regex_mod ) {
-                my $old_value = $old_values->{$attr};
-
-                next unless $old_value;
-
-                my $value = apply_regex(
-                    {
-                        %{ $regex_mod->{$attr} },
-                        value => $old_value,
-                    }
-                );
-
-                $new_values->{$attr} = $value;
-            }
-
-            for my $attribute ( keys %$new_values ) {
-                next if $attribute eq 'more_subfields_xml'; # Already counted before
-
-                my $old = $old_values->{$attribute};
-                my $new = $new_values->{$attribute};
-                $modified++
-                  if ( defined $old xor defined $new )
-                  || ( defined $old && defined $new && $new ne $old );
-            }
-
-            { # Dealing with more_subfields_xml
-
-                my $frameworkcode = $item->biblio->frameworkcode;
-                my $tagslib = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 });
-                my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
-
-                my @more_subfield_tags = map {
-                    (
-                             ref($_)
-                          && %$_
-                          && !$_->{kohafield}    # Get subfields that are not mapped
-                      )
-                      ? $_->{tagsubfield}
-                      : ()
-                } values %{ $tagslib->{$itemtag} };
-
-                my $more_subfields_xml = Koha::Item::Attributes->new(
-                    {
-                        map {
-                            exists $new_values->{$_} ? ( $_ => $new_values->{$_} )
-                              : exists $old_values->{$_}
-                              ? ( $_ => $old_values->{$_} )
-                              : ()
-                        } @more_subfield_tags
-                    }
-                )->to_marcxml($frameworkcode);
-
-                $new_values->{more_subfields_xml} = $more_subfields_xml;
-
-                delete $new_values->{$_} for @more_subfield_tags; # Clean the hash
-
-            }
-
-            if ( $modified ) {
-                my $itemlost_pre = $item->itemlost;
-                $item->set($new_values)->store({skip_record_index => 1});
-
-                C4::Circulation::LostItem(
-                    $item->itemnumber, 'batchmod', undef,
-                    { skip_record_index => 1 }
-                ) if $item->itemlost
-                      and not $itemlost_pre;
-            }
-            if ( $mark_items_returned ){
-                my $issue = $item->checkout;
-                if( $issue ){
-                        $item_returned = 1;
-                        C4::Circulation::MarkIssueReturned(
-                        $issue->borrowernumber,
-                        $item->itemnumber,
-                        undef,
-                        $issue->patron->privacy,
+        try {
+            $schema->txn_do(
+                sub {
+                    my $modified_holds_priority = 0;
+                    my $item_returned           = 0;
+                    if ( defined $exclude_from_local_holds_priority ) {
+                        if ( !defined $item->exclude_from_local_holds_priority
+                            || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority )
                         {
-                            skip_record_index => 1,
-                            skip_holds_queue  => 1,
+                            $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
+                            $modified_holds_priority = 1;
                         }
-                    );
-                }
-            }
+                    }
 
-            push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority || $item_returned;
-            $modified_fields += $modified + $modified_holds_priority + $item_returned;
-        })}
-        catch {
+                    my $modified   = 0;
+                    my $new_values = {%$new_values};    # Don't modify the original
+
+                    my $old_values = $item->unblessed;
+                    if ( $item->more_subfields_xml ) {
+                        $old_values = {
+                            %$old_values,
+                            %{ $item->additional_attributes->to_hashref },
+                        };
+                    }
+
+                    for my $attr ( keys %$regex_mod ) {
+                        my $old_value = $old_values->{$attr};
+
+                        next unless $old_value;
+
+                        my $value = apply_regex(
+                            {
+                                %{ $regex_mod->{$attr} },
+                                value => $old_value,
+                            }
+                        );
+
+                        $new_values->{$attr} = $value;
+                    }
+
+                    for my $attribute ( keys %$new_values ) {
+                        next if $attribute eq 'more_subfields_xml';    # Already counted before
+
+                        my $old = $old_values->{$attribute};
+                        my $new = $new_values->{$attribute};
+                        $modified++
+                            if ( defined $old xor defined $new )
+                            || ( defined $old && defined $new && $new ne $old );
+                    }
+
+                    {    # Dealing with more_subfields_xml
+
+                        my $frameworkcode = $item->biblio->frameworkcode;
+                        my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
+                        my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+
+                        my @more_subfield_tags = map {
+                            (
+                                       ref($_)
+                                    && %$_
+                                    && !$_->{kohafield}    # Get subfields that are not mapped
+                                )
+                                ? $_->{tagsubfield}
+                                : ()
+                        } values %{ $tagslib->{$itemtag} };
+
+                        my $more_subfields_xml = Koha::Item::Attributes->new(
+                            {
+                                map {
+                                          exists $new_values->{$_} ? ( $_ => $new_values->{$_} )
+                                        : exists $old_values->{$_} ? ( $_ => $old_values->{$_} )
+                                        : ()
+                                } @more_subfield_tags
+                            }
+                        )->to_marcxml($frameworkcode);
+
+                        $new_values->{more_subfields_xml} = $more_subfields_xml;
+
+                        delete $new_values->{$_} for @more_subfield_tags;    # Clean the hash
+
+                    }
+
+                    if ($modified) {
+                        my $itemlost_pre = $item->itemlost;
+                        $item->set($new_values)->store( { skip_record_index => 1 } );
+
+                        C4::Circulation::LostItem(
+                            $item->itemnumber, 'batchmod', undef,
+                            { skip_record_index => 1 }
+                            )
+                            if $item->itemlost
+                            and not $itemlost_pre;
+                    }
+                    if ($mark_items_returned) {
+                        my $issue = $item->checkout;
+                        if ($issue) {
+                            $item_returned = 1;
+                            C4::Circulation::MarkIssueReturned(
+                                $issue->borrowernumber,
+                                $item->itemnumber,
+                                undef,
+                                $issue->patron->privacy,
+                                {
+                                    skip_record_index => 1,
+                                    skip_holds_queue  => 1,
+                                }
+                            );
+                        }
+                    }
+
+                    push @modified_itemnumbers, $item->itemnumber
+                        if $modified || $modified_holds_priority || $item_returned;
+                    $modified_fields += $modified + $modified_holds_priority + $item_returned;
+                }
+            )
+        } catch {
             warn $_
         };
 
-        if ( $callback ) {
-            $callback->(++$i);
+        if ($callback) {
+            $callback->( ++$i );
         }
     }
 
     if (@modified_itemnumbers) {
-        my @biblionumbers = uniq(
-            Koha::Items->search( { itemnumber => \@modified_itemnumbers } )
-                       ->get_column('biblionumber'));
+        my @biblionumbers =
+            uniq( Koha::Items->search( { itemnumber => \@modified_itemnumbers } )->get_column('biblionumber') );
 
-        if ( @biblionumbers ) {
-            my $indexer = Koha::SearchEngine::Indexer->new(
-                { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+        if (@biblionumbers) {
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-            $indexer->index_records( \@biblionumbers, 'specialUpdate',
-                "biblioserver", undef );
+            $indexer->index_records(
+                \@biblionumbers, 'specialUpdate',
+                "biblioserver",  undef
+            );
         }
     }
 
@@ -453,32 +462,30 @@ sub batch_update {
 }
 
 sub apply_regex {
+
     # FIXME Should be moved outside of Koha::Items
     # FIXME This is nearly identical to Koha::SimpleMARC::_modify_values
-    my ($params) = @_;
-    my $search   = $params->{search};
-    my $replace  = $params->{replace};
+    my ($params)  = @_;
+    my $search    = $params->{search};
+    my $replace   = $params->{replace};
     my $modifiers = $params->{modifiers} || q{};
-    my $value = $params->{value};
+    my $value     = $params->{value};
 
-    $replace =~ s/"/\\"/g;                    # Protection from embedded code
-    $replace = '"' . $replace . '"'; # Put in a string for /ee
+    $replace =~ s/"/\\"/g;              # Protection from embedded code
+    $replace = '"' . $replace . '"';    # Put in a string for /ee
     my @available_modifiers = qw( i g );
     my $retained_modifiers  = q||;
     for my $modifier ( split //, $modifiers ) {
         $retained_modifiers .= $modifier
-          if grep { /$modifier/ } @available_modifiers;
+            if grep { /$modifier/ } @available_modifiers;
     }
     if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
         $value =~ s/$search/$replace/igee;
-    }
-    elsif ( $retained_modifiers eq 'i' ) {
+    } elsif ( $retained_modifiers eq 'i' ) {
         $value =~ s/$search/$replace/iee;
-    }
-    elsif ( $retained_modifiers eq 'g' ) {
+    } elsif ( $retained_modifiers eq 'g' ) {
         $value =~ s/$search/$replace/gee;
-    }
-    else {
+    } else {
         $value =~ s/$search/$replace/ee;
     }
 
@@ -494,13 +501,13 @@ Search and sort items in a specific order, depending if serials are present or n
 =cut
 
 sub search_ordered {
-    my ($self, $params, $attributes) = @_;
+    my ( $self, $params, $attributes ) = @_;
 
-    $self = $self->search($params, $attributes);
+    $self = $self->search( $params, $attributes );
 
-    my @biblionumbers = uniq $self->search(undef,{distinct=>1})->get_column('biblionumber');
+    my @biblionumbers = uniq $self->search( undef, { distinct => 1 } )->get_column('biblionumber');
 
-    if ( scalar ( @biblionumbers ) == 1
+    if ( scalar(@biblionumbers) == 1
         && Koha::Biblios->find( $biblionumbers[0] )->serial )
     {
         return $self->search(
@@ -517,7 +524,7 @@ sub search_ordered {
                 order_by => [
                     'homebranch.branchname',
                     'me.enumchron',
-                    {-desc => 'me.dateaccessioned'}
+                    { -desc => 'me.dateaccessioned' }
                 ],
                 join => ['homebranch']
             }

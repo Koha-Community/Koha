@@ -43,7 +43,7 @@ my $attributes = Koha::ILL::Request::Attributes->search( $params );
 sub search {
     my ( $self, $params, $attributes ) = @_;
 
-    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['me.type', 'value'] }
+    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = [ 'me.type', 'value' ] }
 
     return $self->SUPER::search( $params, $attributes );
 }

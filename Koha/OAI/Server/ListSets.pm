@@ -26,14 +26,13 @@ use C4::OAI::Sets qw( GetOAISets );
 
 use base ("HTTP::OAI::ListSets");
 
-
 sub new {
     my ( $class, $repository, %args ) = @_;
 
-    my $self = HTTP::OAI::ListSets->new(%args);
+    my $self  = HTTP::OAI::ListSets->new(%args);
     my $token = Koha::OAI::Server::ResumptionToken->new(%args);
-    my $sets = GetOAISets;
-    my $pos = 0;
+    my $sets  = GetOAISets;
+    my $pos   = 0;
 
     return HTTP::OAI::Response->new(
         requestURL => $repository->self_url(),
@@ -46,22 +45,21 @@ sub new {
     ) unless @$sets;
 
     foreach my $set (@$sets) {
-        if ($pos < $token->{cursor}) {
+        if ( $pos < $token->{cursor} ) {
             $pos++;
             next;
         }
-        my @descriptions = map {
-            Koha::OAI::Server::Description->new( setDescription => $_ );
-        } @{$set->{'descriptions'}};
+        my @descriptions =
+            map { Koha::OAI::Server::Description->new( setDescription => $_ ); } @{ $set->{'descriptions'} };
         $self->set(
             HTTP::OAI::Set->new(
-                setSpec => $set->{'spec'},
-                setName => $set->{'name'},
+                setSpec        => $set->{'spec'},
+                setName        => $set->{'name'},
                 setDescription => \@descriptions,
             )
         );
         $pos++;
-        last if ($pos + 1 - $token->{cursor}) > $repository->{koha_max_count};
+        last if ( $pos + 1 - $token->{cursor} ) > $repository->{koha_max_count};
     }
 
     $self->resumptionToken(

@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ERM::EHoldings::Packages;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -35,12 +35,10 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift or return;
     return try {
-        my $packages_set =
-          Koha::ERM::EHoldings::Packages->search( { 'me.external_id' => undef } );
+        my $packages_set = Koha::ERM::EHoldings::Packages->search( { 'me.external_id' => undef } );
         my $packages     = $c->objects->search($packages_set);
         return $c->render( status => 200, openapi => $packages );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -66,8 +64,7 @@ sub get {
             status  => 200,
             openapi => $package
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -98,15 +95,14 @@ sub add {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $package->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $package->package_id );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($package),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::ERM::EHoldings::Package->new->to_api_mapping;
 
@@ -116,25 +112,15 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }
@@ -153,7 +139,7 @@ sub update {
     my $c = shift or return;
 
     my $package_id = $c->param('package_id');
-    my $package = Koha::ERM::EHoldings::Packages->find( $package_id );
+    my $package    = Koha::ERM::EHoldings::Packages->find($package_id);
 
     return $c->render_resource_not_found("Package")
         unless $package;
@@ -178,43 +164,33 @@ sub update {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $package->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $package->package_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($package),
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::ERM::EHoldings::Package->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 

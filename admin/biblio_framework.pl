@@ -21,7 +21,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Biblios;
 use Koha::BiblioFramework;
@@ -30,15 +30,16 @@ use Koha::Caches;
 
 my $input         = CGI->new;
 my $frameworkcode = $input->param('frameworkcode') || q||;
-my $op            = $input->param('op') || q|list|;
+my $op            = $input->param('op')            || q|list|;
 my $cache         = Koha::Caches->get_instance();
 my @messages;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/biblio_framework.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_marc_frameworks' },
+    {
+        template_name => "admin/biblio_framework.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_marc_frameworks' },
     }
 );
 
@@ -65,7 +66,8 @@ if ( $op eq 'add_form' ) {
         }
     } else {
         my $framework = Koha::BiblioFramework->new(
-            {   frameworkcode => $frameworkcode,
+            {
+                frameworkcode => $frameworkcode,
                 frameworktext => $frameworktext,
             }
         );
@@ -83,7 +85,7 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
     my $framework = Koha::BiblioFrameworks->find($frameworkcode);
-    my $count = Koha::Biblios->search( { frameworkcode => $frameworkcode, } )->count;
+    my $count     = Koha::Biblios->search( { frameworkcode => $frameworkcode, } )->count;
 
     $template->param(
         framework                  => $framework,
@@ -91,7 +93,7 @@ if ( $op eq 'add_form' ) {
     );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
     my $framework = Koha::BiblioFrameworks->find($frameworkcode);
-    my $deleted = eval { $framework->delete; };
+    my $deleted   = eval { $framework->delete; };
 
     if ( $@ or not $deleted ) {
         push @messages, { type => 'error', code => 'error_on_delete' };

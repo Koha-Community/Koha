@@ -36,6 +36,6 @@ SKIP: {
         next if $f eq 'skeleton.pl';
         unlike( $f, qr/.*pl$/, "check for unhandled atomic updates: $f" );
     }
-};
+}
 
 done_testing();

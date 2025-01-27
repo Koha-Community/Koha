@@ -13,716 +13,736 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% UNLESS blocking_error %]
-        [% t("Patron details for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %]
-    [% END %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% UNLESS blocking_error %]
+            [% t("Patron details for") | html %]
+            [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        [% END %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_moremember" class="pat">
-    [% WRAPPER 'header.inc' %]
-        [% INCLUDE 'patron-search-header.inc' %]
-    [% END %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'patron-search-header.inc' %]
+[% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+        [% END %]
+        [% UNLESS blocking_error %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]"> [% INCLUDE 'patron-title.inc' %] </a>
             [% END %]
-            [% UNLESS blocking_error %]
-                [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
-                        [% INCLUDE 'patron-title.inc' %]
-                    </a>
-                [% END %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Details</span>
-                [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Details</span>
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
-    [% WRAPPER 'main-container.inc' aside='circ-menu' %]
+[% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-                    [% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-                    [% IF is_anonymous %]
-                        <div class="alert alert-warning">This is the anonymous patron.</div>
-                    [% END %]
-
-                    [% IF ( error ) %]
-                        <div class="alert alert-warning">
-                            [% IF ( error == 'CANT_DELETE_STAFF' ) %]
-                                <h3>Unable to delete staff user</h3>
-                                <p>Insufficient privileges.</p>
-                            [% END %]
-                            [% IF ( error == 'CANT_DELETE_YOURSELF' ) %]
-                                <h3>Not allowed to delete own account</h3>
-                                <p>Deleting your own account would lock you out of Koha.</p>
-                            [% END %]
-                            [% IF ( error == 'CANT_DELETE_OTHERLIBRARY' ) %]
-                                <h3>Unable to delete patrons from other libraries with current settings</h3>
-                                <p>Insufficient privileges.</p>
-                            [% END %]
-                            [% IF ( error == 'CANT_DELETE_ANONYMOUS_PATRON' ) %]
-                                <h3>Unable to delete patron that is set as AnonymousPatron</h3>
-                                <p>This patron cannot be deleted while set as AnonymousPatron in the system preferences.</p>
-                            [% END %]
-                            [% IF ( error == 'CANT_DELETE' ) %]
-                                <h3>Unable to delete patron</h3>
-                                <p>Insufficient privileges.</p>
-                            [% END %]
-                        </div>
-                    [% END %]
-
-                    <div class="row">
-
-                        [% IF ( was_renewed ) %]
-                            <div class="alert alert-info">
-                                Patron's account has been renewed until [% patron.dateexpiry | $KohaDates %]
-                            </div>
-                        [% END %]
-
-                        [% messages = INCLUDE 'patron_messages.inc' moremember = 1 | trim %]
-                        [% IF messages %]
-                            <div class="col-sm-12">
-                                <div id="patron_messages" class="circmessage attention">
-                                    [% messages | $raw %]
-                                </div>
-                            </div>
-                        [% END %]
-
-                        <div class="col-sm-12">
-                            <h1>[% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
-
-                            [% IF patron.pronouns %]
-                                <div class="patronpronouns">([% patron.pronouns | html %])</div>
-                            [% END %]
-                        </div>
-
-                        <div class="col-sm-6">
-
-                            <div id="patron-information" class="patroninfo-section">
-
-                                <div class="patroninfo-heading">
-                                    <h3>Contact information</h3>
-                                    [% IF CAN_user_borrowers_edit_borrowers %]
-                                        [% IF ( guarantor.borrowernumber ) %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                        [% ELSE %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                        [% END %]
-                                    [% END %]
-                                </div>
-
-                                [% IF ( patron.othernames ) %]<div>&ldquo;[% patron.othernames | html %]&rdquo;</div>[% END %]
-
-                                <div class="address">
-                                    <ul>
-                                        [% PROCESS 'display-address-style' %]
-                                    </ul>
-                                </div>
-
-                                <div class="rows">
-                                    <ol>
-                                        [% IF ( patron.preferred_name && patron.firstname ) %]
-                                            <li id="patron_first_name">
-                                                <span class="label patron_first_name">First name: </span>
-                                                [% patron.firstname | html %]
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.phone ) %]
-                                            <li>
-                                                <span class="label">Primary phone: </span>
-                                                <a href="tel:[% patron.phone | uri %]">[% patron.phone | html %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.phonepro ) %]
-                                            <li>
-                                                <span class="label">Secondary phone: </span>
-                                                <a href="tel:[% patron.phonepro | uri %]">[% patron.phonepro | html %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.mobile ) %]
-                                            <li>
-                                                <span class="label">Other phone: </span>
-                                                <a href="tel:[% patron.mobile | uri %]">[% patron.mobile | html %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.fax ) %]
-                                            <li>
-                                                <span class="label">Fax: </span>
-                                                [% patron.fax | html %]
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.email ) %]
-                                            <li class="email">
-                                                <span class="label">Primary email:</span>
-                                                <a title="[% patron.email | html %]" href="mailto:[% patron.email | url %]">[% patron.email | html %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.emailpro ) %]
-                                            <li class="email">
-                                                <span class="label">Secondary email: </span>
-                                                <a title="[% patron.emailpro | html %]" href="mailto:[% patron.emailpro | url %]">[% patron.emailpro | html %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% UNLESS ( I ) %]
-                                            [% IF ( patron.initials ) %]
-                                                <li>
-                                                    <span class="label">Initials: </span>
-                                                    [% patron.initials | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.dateofbirth ) %]
-                                                <li>
-                                                    <span class="label">Date of birth:</span>
-                                                    [% INCLUDE 'patron-age.inc' %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.sex ) %]
-                                                <li>
-                                                    <span class="label">Gender:</span>
-                                                    [% IF ( patron.sex == 'F' ) %]<span class="patronsex-female">Female</span>[% ELSIF ( patron.sex == 'M' ) %]<span class="patronsex-male">Male</span>[% ELSIF (patron.sex == 'O' ) %]<span class="patronsex-other">[% tp('gender', 'Other') | html %]</span>[% ELSE %][% patron.sex | html %][% END %]
-                                                </li>
-                                            [% END %]
-                                        [% END %]
-                                        [% IF Koha.Preference("borrowerRelationship") %]
-                                             <li id="patron-privacyguarantor">
-                                                <span class="label">Show checkouts to guarantor:</span>
-                                                [% IF patron.privacy_guarantor_checkouts %]
-                                                    Yes
-                                                [% ELSE %]
-                                                    No
-                                                [% END %]
-                                            </li>
-
-                                            <li id="patron-privacy_guarantor_fines">
-                                                <span class="label">Show charges to guarantor:</span>
-                                                [% IF patron.privacy_guarantor_fines %]
-                                                    Yes
-                                                [% ELSE %]
-                                                    No
-                                                [% END %]
-                                            </li>
-                                        [% END %]
-                                        [% IF guarantees %]
-                                            <li>
-                                                <span class="label">Guarantees:</span>
-                                                <ul>
-                                                    [% IF guarantees_fines and guarantees_fines > 0 %]
-                                                        <li class="guarantees-fines">
-                                                            <span class="circ-hlt">Charges:</span>
-                                                            Patron's guarantees collectively owe [% guarantees_fines | $Price %].
-                                                            <a id="view_guarantees_finesandcharges" href="#guarantees_finesandcharges_panel" >See all charges.</a>
-                                                        </li>
-                                                    [% END %]
-                                                    [% FOREACH guarantee IN guarantees %]
-                                                        [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
-                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
-                                                        [% ELSE %]
-                                                            <li>[% guarantee.preferred_name | html %] [% guarantee.surname | html %]</li>
-                                                        [% END %]
-                                                    [% END %]
-                                                </ul>
-                                            </li>
-                                        [% ELSIF guarantor_relationships.count > 0 OR ( patron.contactfirstname OR patron.contactname ) %]
-                                                <li>
-                                                [% IF guarantor_relationships.count > 1 OR guarantor_relationships.count == 0 AND ( patron.contactfirstname OR patron.contactname ) %]
-                                                    <span class="label">Guarantors:</span>
-                                                [% ELSE %]
-                                                    <span class="label">Guarantor:</span>
-                                                [% END %]
-                                                    <ul>
-                                                    [% FOREACH gr IN guarantor_relationships %]
-                                                        [% SET guarantor = gr.guarantor %]
-                                                        [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.preferred_name | html %] [% guarantor.surname | html %][% IF gr.relationship %] ([% gr.relationship | html %])[% END %]</a></li>
-                                                        [% END %]
-                                                    [% END %]
-                                                    [% IF patron.contactfirstname OR patron.contactname %]
-                                                        <li>[% patron.contactfirstname | html %] [% patron.contactname | html %][% IF patron.relationship %] ([% patron.relationship | html %])[% END %]</li>
-                                                    [% END %]
-                                                    </ul>
-                                                </li>
-                                        [% END %]
-
-                                        [% IF ( patron.primary_contact_method ) %]
-                                            <li>
-                                                <span class="label">Main contact method: </span>
-                                                [% SWITCH patron.primary_contact_method %]
-                                                    [% CASE 'phone' %]
-                                                        <span>Primary phone</span>
-                                                    [% CASE 'phonepro' %]
-                                                        <span>Secondary phone</span>
-                                                    [% CASE 'mobile' %]
-                                                        <span>Other phone</span>
-                                                    [% CASE 'email' %]
-                                                        <span>Primary email</span>
-                                                    [% CASE 'emailpro' %]
-                                                        <span>Secondary email</span>
-                                                    [% CASE 'fax' %]
-                                                        <span>Fax</span>
-                                                [% END %]
-                                            </li>
-                                        [% END %]
-                                    </ol>
-                                </div> [%# /div.rows %]
-                            </div> [%# /div#patron-information %]
-
-                            [% IF Koha.Preference('HouseboundModule') %]
-                                <div id="houseboundroles" class="patroninfo-section">
-                                    [% IF ( housebound_role.housebound_chooser == 1 OR housebound_role.housebound_deliverer == 1 ) %]
-                                        <div class="patroninfo-heading">
-                                            <h3>Housebound roles</h3>
-                                            [% IF CAN_user_borrowers_edit_borrowers %]
-                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                            [% END %]
-                                        </div>
-                                        <div class="rows">
-                                            <ol>
-                                                <li>
-                                                    <span class="label">Chooser:</span>
-                                                    [% IF ( housebound_role.housebound_chooser == 1 ) %]
-                                                        Yes
-                                                    [% ELSE %]
-                                                        No
-                                                    [% END %]
-                                                </li>
-                                                <li>
-                                                    <span class="label">Deliverer:</span>
-                                                    [% IF ( housebound_role.housebound_deliverer == 1 ) %]
-                                                        Yes
-                                                    [% ELSE %]
-                                                        No
-                                                    [% END %]
-                                                </li>
-                                            </ol>
-                                        </div>
-                                    [% ELSE %]
-                                        <div class="patroninfo-heading">
-                                            <h3>Housebound roles</h3>
-                                            [% IF CAN_user_borrowers_edit_borrowers %]
-                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa fa-plus"></i> Add</a>
-                                            [% END %]
-                                        </div>
-                                    [% END %]
-                                </div> [%#/ div#houseboundroles %]
-                            [% END %]
-
-                            [% IF Koha.Preference('ExtendedPatronAttributes') %]
-                                [% UNLESS ( no_patron_attribute_types ) %]
-                                    <div id="patron-extended-attributes" class="patroninfo-section">
-                                        [% IF ( attributes_loop ) %]
-                                            <div class="patroninfo-heading">
-                                                <h3>Additional attributes and identifiers</h3>
-                                                [% IF CAN_user_borrowers_edit_borrowers %]
-                                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                [% END %]
-                                            </div>
-                                            [% FOREACH attribute IN attributes_loop %]
-                                                [% IF attribute.class %]
-                                                    [% SET div_id = 'aai_' _ attribute.class %]
-                                                [% ELSE %]
-                                                    [% SET div_id = 'aai' %]
-                                                [% END %]
-                                                <div id="[% div_id | html %]" class="rows">
-                                                    <h4>[% attribute.lib | html %]</h4>
-                                                    <ol>
-                                                        [% FOREACH item IN attribute.items %]
-                                                            <li data-pa_code="[% item.type.code | replace('[^a-zA-Z0-9_-]', '') %]">
-                                                                <span class="label">[% item.type.description | html %]: </span>
-                                                                [% IF item.type.is_date %]
-                                                                    [% item.description | $KohaDates %]
-                                                                [% ELSE %]
-                                                                    [% item.description | html_line_break %]
-                                                                [% END %]
-                                                            </li>
-                                                        [% END %]
-                                                    </ol>
-                                                </div>
-                                            [% END %]
-                                            <div class="action">
-                                            </div>
-                                        [% ELSE %]
-                                            <div class="patroninfo-heading">
-                                                <h3>Additional attributes and identifiers</h3>
-                                                [% IF CAN_user_borrowers_edit_borrowers %]
-                                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa fa-plus"></i> Add</a>
-                                                [% END %]
-                                            </div>
-                                        [% END %]
-                                    </div> [%# /div#patron-extended-attributes %]
-                                [% END %]
-                            [% END %]
-
-                            [% IF ( EnhancedMessagingPreferences ) %]
-                                <div id="patron-messaging-prefs" class="patroninfo-section">
-                                    <div class="patroninfo-heading">
-                                        <h3>Patron messaging preferences</h3>
-                                        [% IF CAN_user_borrowers_edit_borrowers %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=5"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                        [% END %]
-                                    </div>
-                                    [% INCLUDE 'messaging-preference-form.inc' %]
-                                    [% IF Koha.Preference('SMSSendDriver') %]
-                                        <div class="rows">
-                                            <ol>
-                                                [% IF patron.smsalertnumber %]
-                                                    <li>
-                                                        <span class="label">SMS number:</span>
-                                                        <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
-                                                    </li>
-                                                [% END %]
-                                                [% IF Koha.Preference( 'SMSSendDriver') == 'Email' && patron.sms_provider.name %]
-                                                <li>
-                                                    <span class="label">SMS provider:</span>
-                                                    [% patron.sms_provider.name | html %]
-                                                </li>
-                                                [% END %]
-                                            </ol>
-                                        </div>
-                                    [% END %]
-                                </div> [%# /div#patron-messaging-prefs %]
-                            [% END %]
-
-                        </div> <!-- /.col-sm-6 -->
-
-                        <div class="col-sm-6">
-                            <div id="patron-library-details" class="patroninfo-section">
-                                <div class="patroninfo-heading">
-                                    <h3>Library use</h3>
-                                    [% IF CAN_user_borrowers_edit_borrowers %]
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=3"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                    [% END %]
-                                </div>
-                                <div class="rows">
-                                    <ol>
-                                        <li id="patron-cardnumber">
-                                            <span class="label">Card number: </span>
-                                            [% patron.cardnumber | html %]
-                                        </li>
-                                        <li id="patron-borrowernumber">
-                                            <span class="label">Borrowernumber: </span>
-                                            [% patron.borrowernumber | html %]
-                                        </li>
-                                        <li id="patron-categorydescription">
-                                            <span class="label">Category: </span>
-                                            [% patron.category.description | html %] ([% patron.categorycode | html %])
-                                        </li>
-                                        <li id="patron-dateenrolled">
-                                            <span class="label">Registration date: </span>
-                                            [% patron.dateenrolled | $KohaDates %]
-                                        </li>
-
-                                        [% IF ( patron.date_renewed ) %]
-                                            <li id="patron-daterenewed">
-                                                <span class="label">Renewal date: </span>
-                                                [% patron.date_renewed | $KohaDates %]
-                                            </li>
-                                        [% END %]
-
-                                        <li id="patron-expirationdate">
-                                            <span class="label">Expiration date: </span>
-                                            [% IF ( was_renewed ) %]
-                                                <strong class="reregistrinfo">[% patron.dateexpiry | $KohaDates %]</strong>
-                                            [% ELSIF ( patron.is_expired ) %]
-                                                <span class="blocker">
-                                                    [% patron.dateexpiry | $KohaDates %]
-                                                    <strong><em>Expired</em></strong>
-                                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
-                                                </span>
-                                            [% ELSIF ( patron.is_going_to_expire ) %]
-                                                [% patron.dateexpiry | $KohaDates %]
-                                                <strong><em>Patron expires soon</em></strong>
-                                                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
-                                            [% ELSE %]
-                                                [% patron.dateexpiry | $KohaDates %]
-                                            [% END %]
-                                        </li>
-                                        <li id="patron-branchname">
-                                            <span class="label">Library: </span>
-                                            [% Branches.GetName( patron.branchcode ) | html %]
-                                        </li>
-
-                                        [% IF Koha.Preference( 'OPACPrivacy') %]
-                                            <li id="patron-privacypref">
-                                                <span class="label">Privacy pref:</span>
-                                                    [% IF ( patron.privacy == 0 ) %]<span>Forever</span>[% END %]
-                                                    [% IF ( patron.privacy == 1 ) %]<span>Default</span>[% END %]
-                                                    [% IF ( patron.privacy == 2 ) %]<span>Never</span>[% END %]
-                                            </li>
-                                        [% END %]
-
-                                        [% IF ( patron.sort1 ) %]
-                                            <li id="patron-sort1">
-                                                <span class="label">Sort field 1:</span>
-                                                [% AuthorisedValues.GetByCode('Bsort1', patron.sort1) | html %]
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.sort2 ) %]
-                                            <li id="patron-sort2">
-                                                <span class="label">Sort field 2:</span>
-                                                [% AuthorisedValues.GetByCode('Bsort2', patron.sort2) | html %]
-                                            </li>
-                                        [% END %]
-                                        [% UNLESS ( patron.autorenew_checkouts ) %]
-                                            <li id="patron-autorenew_checkouts">
-                                                <span class="label">Auto-renewal:</span>
-                                                Patron has opted out
-                                            </li>
-                                        [% END %]
-                                        <li id="patron-username">
-                                            <span class="label">Username: </span>
-                                            [% patron.userid | html %]
-                                        </li>
-                                        <li id="patron-password">
-                                            <span class="label">Password: </span>
-                                            [% IF ( patron.password ) %]
-                                                *******
-                                            [% ELSE %]
-                                                <i class="fa fa-exclamation-circle problem" aria-hidden="true"></i> <a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Undefined</a>
-                                            [% END %]
-                                        </li>
-                                        [% IF CAN_user_superlibrarian %]
-                                            <li id="patron-password_expiration_date">
-                                                <span class="label">Password expires:</span>
-                                                [% IF ( patron.password_expiration_date ) %]
-                                                    [% patron.password_expiration_date | $KohaDates %]
-                                                [% ELSE %]
-                                                    <span>Never</span>
-                                                [% END %]
-                                            </li>
-                                        [% END %]
-                                        <li id="patron-protected">
-                                            <span class="label">Protected: </span>
-                                            [% IF ( patron.protected == 1 ) %]
-                                                Yes
-                                            [% ELSE %]
-                                                No
-                                            [% END %]
-                                        </li>
-
-                                        [% IF ( patron.borrowernotes ) %]
-                                            <li id="patron-borrowernotes">
-                                                <span class="label">Circulation note: </span><br />
-                                                [% patron.borrowernotes | $raw | html_line_break %]
-                                            </li>
-                                        [% END %]
-
-                                        [% IF ( patron.opacnote ) %]
-                                            <li id="patron-opacnote">
-                                                <span class="label">OPAC note:</span><br />
-                                                [% patron.opacnote | html | html_line_break %]
-                                            </li>
-                                        [% END %]
-
-                                        [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
-                                            <li id="patron-checkprev">
-                                                <span class="label">Check previous checkouts: </span>
-                                                [% IF ( patron.checkprevcheckout == 'yes' ) %]
-                                                    <span>Yes</span>
-                                                [% ELSIF ( patron.checkprevcheckout == 'no' ) %]
-                                                    <span>No</span>
-                                                [% ELSE %]
-                                                    <span>Inherited</span>
-                                                [% END %]
-                                            </li>
-                                        [% END %]
-
-                                        [% IF Koha.Preference('TranslateNotices') %]
-                                            <li id="patron-translatenotices">
-                                                <span class="label">Preferred language for notices: </span>
-                                                [% translated_language | html %]
-                                            </li>
-                                        [% END %]
-
-                                        <li id="patron-flags-gonenoaddress">
-                                            [% IF patron.gonenoaddress %]
-                                                <span class="label error">Address in doubt:</span>
-                                                <span class="error">Yes</span>
-                                            [% ELSE %]
-                                                <span class="label">Address in doubt:</span>
-                                                <span>No</span>
-                                            [% END %]
-                                        </li>
-
-                                        <li id="patron-flags-lostcard">
-                                            [% IF patron.lost %]
-                                                <span class="label error">Card lost:</span>
-                                                <span class="error">Yes</span>
-                                            [% ELSE %]
-                                                <span class="label">Card lost:</span>
-                                                <span>No</span>
-                                            [% END %]
-                                        </li>
-                                    </ol>
-                                </div> [%# /div.rows %]
-                            </div> [%# /div#patron-library-details %]
-
-                            <div id="patron-alternate-address" class="patroninfo-section">
-                                [% IF ( patron.B_phone || patron.B_email || patron.contactnote || patron.B_address || patron.B_address2 || patron.B_city || patron.B_zipcode || patron.B_country ) %]
-                                    <div class="patroninfo-heading">
-                                        <h3>Alternate address</h3>
-                                        [% IF CAN_user_borrowers_edit_borrowers %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                        [% END %]
-                                    </div>
-                                    <div class="address">
-                                        <ul>
-                                            [% PROCESS 'display-alt-address-style' %]
-                                        </ul>
-                                    </div>
-                                    <div class="rows">
-                                        <ol>
-                                            [% IF ( patron.B_phone ) %]
-                                                <li id="patron-bphone">
-                                                    <span class="label">Phone: </span>
-                                                    <a href="tel:[% patron.B_phone | uri %]">[% patron.B_phone |html  %]</a>
-                                                </li>
-                                            [% END %]
-
-                                            [% IF ( patron.B_email ) %]
-                                                <li id="patron-bemail" class="email">
-                                                    <span class="label">Email: </span>
-                                                    <a title="[% patron.B_email | html %]" href="mailto:[% patron.B_email | url %]">[% patron.B_email |html %]</a>
-                                                </li>
-                                            [% END %]
-
-                                            [% IF ( patron.contactnote ) %]
-                                                <li id="patron-contactnote">
-                                                    <span class="label">Contact note: </span>
-                                                    [% patron.contactnote |html %]
-                                                </li>
-                                            [% END %]
-                                        </ol>
-                                    </div>
-                                [% ELSE %]
-                                    <div class="patroninfo-heading">
-                                      <h3 class="inline">Alternate address</h3>
-                                        [% IF CAN_user_borrowers_edit_borrowers %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa fa-plus"></i> Add</a>
-                                        [% END %]
-                                    </div>
-                                [% END %]
-                            </div> [%# /div#patron-alternate-address %]
-
-                            <div id="patron-alternative-contact" class="patroninfo-section">
-                                [% IF ( patron.altcontactsurname || patron.altcontactfirstname || patron.altcontactaddress1 || patron.altcontactaddress2 || patron.altcontactaddress3 || patron.altcontactstate || patron.altcontactzipcode || patron.altcontactcountry || patron.altcontactphone ) %]
-                                    <div class="patroninfo-heading">
-                                        <h3>Alternative contact</h3>
-                                        [% IF CAN_user_borrowers_edit_borrowers %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                        [% END %]
-                                    </div>
-                                    <div class="rows">
-                                        <ol>
-                                            [% IF ( patron.altcontactsurname ) %]
-                                                <li id="patron-altcontactsurname">
-                                                    <span class="label">Surname: </span>
-                                                    [% patron.altcontactsurname | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactfirstname ) %]
-                                                <li id="patron-altcontactfirstname">
-                                                    <span class="label">First name: </span>
-                                                    [% patron.altcontactfirstname | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactaddress1 ) %]
-                                                <li id="patron-altcontactaddress1">
-                                                    <span class="label">Address: </span>
-                                                    [% patron.altcontactaddress1 | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactaddress2 ) %]
-                                                <li id="patron-altcontactaddress2">
-                                                    <span class="label">Address 2: </span>
-                                                    [% patron.altcontactaddress2 | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactaddress3 ) %]
-                                                <li id="patron-altcontactaddress3">
-                                                    <span class="label">City: </span>
-                                                    [% patron.altcontactaddress3 | html %]
-                                                </li>
-                                            [% END %]
-
-                                            [% IF ( patron.altcontactstate ) %]
-                                                <li id="patron-altcontactstate">
-                                                    <span class="label">State: </span>
-                                                    [% patron.altcontactstate | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactzipcode ) %]
-                                                <li id="patron-altcontactzipcode">
-                                                    <span class="label">ZIP/Postal code: </span>
-                                                    [% patron.altcontactzipcode | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactcountry ) %]
-                                                <li id="patron-altcontactcountry">
-                                                    <span class="label">Country: </span>
-                                                    [% patron.altcontactcountry | html %]
-                                                </li>
-                                            [% END %]
-                                            [% IF ( patron.altcontactphone ) %]
-                                                <li id="patron-altcontactphone">
-                                                    <span class="label">Phone: </span>
-                                                    <a href="tel:[% patron.altcontactphone | url %]">[% patron.altcontactphone | html %]</a>
-                                                </li>
-                                            [% END %]
-                                        </ol>
-                                    </div> [%# /div.rows %]
-                                [% ELSE %]
-                                    <div class="patroninfo-heading">
-                                        <h3>Alternative contact</h3>
-                                        [% IF CAN_user_borrowers_edit_borrowers %]
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa fa-plus"></i> Add</a>
-                                        [% END %]
-                                    </div>
-                                [% END %]
-                            </div> [%# /div#patron-alternative-contact %]
-
-                            [% IF Koha.Preference('EnableBorrowerFiles') %]
-                                <div id="patron-files" class="patroninfo-section">
-                                    <div class="patroninfo-heading">
-                                        <h3>Files</h3>
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]"><i class="fa fa-list"></i> Manage</a>
-
-                                        [% IF ( files ) %]
-                                            <div class="rows">
-                                                <ol>
-                                                    [% FOREACH f IN files %]
-                                                        <li>
-                                                            <a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a>
-                                                            [% IF ( f.file_description ) %]
-                                                                - [% f.file_description | html %]
-                                                            [% END %]
-                                                        </li>
-                                                    [% END # /FOREACH f %]
-                                                </ol>
-                                            </div>
-                                        [% END # /IF files %]
-
-                                    </div> <!-- /.patroninfo-heading -->
-                                </div> <!-- /#patron-files -->
-                            [% END # /IF EnableBorrowerFiles %]
-
-                        </div> <!-- /div.col-sm-6 -->
-                    </div> <!-- /div.row -->
-
-                    [% INCLUDE 'patron-detail-tabs.inc' patronpage = "borrower" %]
+    [% IF is_anonymous %]
+        <div class="alert alert-warning">This is the anonymous patron.</div>
     [% END %]
-        [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
-            [% INCLUDE 'modals/resolve_return_claim.inc' %]
+
+    [% IF ( error ) %]
+        <div class="alert alert-warning">
+            [% IF ( error == 'CANT_DELETE_STAFF' ) %]
+                <h3>Unable to delete staff user</h3>
+                <p>Insufficient privileges.</p>
+            [% END %]
+            [% IF ( error == 'CANT_DELETE_YOURSELF' ) %]
+                <h3>Not allowed to delete own account</h3>
+                <p>Deleting your own account would lock you out of Koha.</p>
+            [% END %]
+            [% IF ( error == 'CANT_DELETE_OTHERLIBRARY' ) %]
+                <h3>Unable to delete patrons from other libraries with current settings</h3>
+                <p>Insufficient privileges.</p>
+            [% END %]
+            [% IF ( error == 'CANT_DELETE_ANONYMOUS_PATRON' ) %]
+                <h3>Unable to delete patron that is set as AnonymousPatron</h3>
+                <p>This patron cannot be deleted while set as AnonymousPatron in the system preferences.</p>
+            [% END %]
+            [% IF ( error == 'CANT_DELETE' ) %]
+                <h3>Unable to delete patron</h3>
+                <p>Insufficient privileges.</p>
+            [% END %]
+        </div>
+    [% END %]
+
+    <div class="row">
+        [% IF ( was_renewed ) %]
+            <div class="alert alert-info"> Patron's account has been renewed until [% patron.dateexpiry | $KohaDates %] </div>
         [% END %]
 
-        [% INCLUDE modals/cancel_booking.inc %]
+        [% messages = INCLUDE 'patron_messages.inc' moremember = 1 | trim %]
+        [% IF messages %]
+            <div class="col-sm-12">
+                <div id="patron_messages" class="circmessage attention"> [% messages | $raw %] </div>
+            </div>
+        [% END %]
+
+        <div class="col-sm-12">
+            <h1>[% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
+
+            [% IF patron.pronouns %]
+                <div class="patronpronouns">([% patron.pronouns | html %])</div>
+            [% END %]
+        </div>
+
+        <div class="col-sm-6">
+            <div id="patron-information" class="patroninfo-section">
+                <div class="patroninfo-heading">
+                    <h3>Contact information</h3>
+                    [% IF CAN_user_borrowers_edit_borrowers %]
+                        [% IF ( guarantor.borrowernumber ) %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber | html %]"
+                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                            >
+                        [% ELSE %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                        [% END %]
+                    [% END %]
+                </div>
+
+                [% IF ( patron.othernames ) %]<div>&ldquo;[% patron.othernames | html %]&rdquo;</div>[% END %]
+
+                <div class="address">
+                    <ul>
+                        [% PROCESS 'display-address-style' %]
+                    </ul>
+                </div>
+
+                <div class="rows">
+                    <ol>
+                        [% IF ( patron.preferred_name && patron.firstname ) %]
+                            <li id="patron_first_name">
+                                <span class="label patron_first_name">First name: </span>
+                                [% patron.firstname | html %]
+                            </li>
+                        [% END %]
+                        [% IF ( patron.phone ) %]
+                            <li>
+                                <span class="label">Primary phone: </span>
+                                <a href="tel:[% patron.phone | uri %]">[% patron.phone | html %]</a>
+                            </li>
+                        [% END %]
+                        [% IF ( patron.phonepro ) %]
+                            <li>
+                                <span class="label">Secondary phone: </span>
+                                <a href="tel:[% patron.phonepro | uri %]">[% patron.phonepro | html %]</a>
+                            </li>
+                        [% END %]
+                        [% IF ( patron.mobile ) %]
+                            <li>
+                                <span class="label">Other phone: </span>
+                                <a href="tel:[% patron.mobile | uri %]">[% patron.mobile | html %]</a>
+                            </li>
+                        [% END %]
+                        [% IF ( patron.fax ) %]
+                            <li>
+                                <span class="label">Fax: </span>
+                                [% patron.fax | html %]
+                            </li>
+                        [% END %]
+                        [% IF ( patron.email ) %]
+                            <li class="email">
+                                <span class="label">Primary email:</span>
+                                <a title="[% patron.email | html %]" href="mailto:[% patron.email | url %]">[% patron.email | html %]</a>
+                            </li>
+                        [% END %]
+                        [% IF ( patron.emailpro ) %]
+                            <li class="email">
+                                <span class="label">Secondary email: </span>
+                                <a title="[% patron.emailpro | html %]" href="mailto:[% patron.emailpro | url %]">[% patron.emailpro | html %]</a>
+                            </li>
+                        [% END %]
+                        [% UNLESS ( I ) %]
+                            [% IF ( patron.initials ) %]
+                                <li>
+                                    <span class="label">Initials: </span>
+                                    [% patron.initials | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.dateofbirth ) %]
+                                <li>
+                                    <span class="label">Date of birth:</span>
+                                    [% INCLUDE 'patron-age.inc' %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.sex ) %]
+                                <li>
+                                    <span class="label">Gender:</span>
+                                    [% IF ( patron.sex == 'F' ) %]
+                                        <span class="patronsex-female">Female</span>
+                                    [% ELSIF ( patron.sex == 'M' ) %]
+                                        <span class="patronsex-male">Male</span>
+                                    [% ELSIF (patron.sex == 'O' ) %]
+                                        <span class="patronsex-other">[% tp('gender', 'Other') | html %]</span>
+                                    [% ELSE %]
+                                        [% patron.sex | html %]
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        [% END %]
+                        [% IF Koha.Preference("borrowerRelationship") %]
+                            <li id="patron-privacyguarantor">
+                                <span class="label">Show checkouts to guarantor:</span>
+                                [% IF patron.privacy_guarantor_checkouts %]
+                                    Yes
+                                [% ELSE %]
+                                    No
+                                [% END %]
+                            </li>
+
+                            <li id="patron-privacy_guarantor_fines">
+                                <span class="label">Show charges to guarantor:</span>
+                                [% IF patron.privacy_guarantor_fines %]
+                                    Yes
+                                [% ELSE %]
+                                    No
+                                [% END %]
+                            </li>
+                        [% END %]
+                        [% IF guarantees %]
+                            <li>
+                                <span class="label">Guarantees:</span>
+                                <ul>
+                                    [% IF guarantees_fines and guarantees_fines > 0 %]
+                                        <li class="guarantees-fines">
+                                            <span class="circ-hlt">Charges:</span>
+                                            Patron's guarantees collectively owe [% guarantees_fines | $Price %].
+                                            <a id="view_guarantees_finesandcharges" href="#guarantees_finesandcharges_panel">See all charges.</a>
+                                        </li>
+                                    [% END %]
+                                    [% FOREACH guarantee IN guarantees %]
+                                        [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
+                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+                                        [% ELSE %]
+                                            <li>[% guarantee.preferred_name | html %] [% guarantee.surname | html %]</li>
+                                        [% END %]
+                                    [% END %]
+                                </ul>
+                            </li>
+                        [% ELSIF guarantor_relationships.count > 0 OR ( patron.contactfirstname OR patron.contactname ) %]
+                            <li>
+                                [% IF guarantor_relationships.count > 1 OR guarantor_relationships.count == 0 AND ( patron.contactfirstname OR patron.contactname ) %]
+                                    <span class="label">Guarantors:</span>
+                                [% ELSE %]
+                                    <span class="label">Guarantor:</span>
+                                [% END %]
+                                <ul>
+                                    [% FOREACH gr IN guarantor_relationships %]
+                                        [% SET guarantor = gr.guarantor %]
+                                        [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
+                                            <li
+                                                ><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]"
+                                                    >[% guarantor.preferred_name | html %] [% guarantor.surname | html %][% IF gr.relationship %]([% gr.relationship | html %])[% END %]</a
+                                                ></li
+                                            >
+                                        [% END %]
+                                    [% END %]
+                                    [% IF patron.contactfirstname OR patron.contactname %]
+                                        <li>[% patron.contactfirstname | html %] [% patron.contactname | html %][% IF patron.relationship %]([% patron.relationship | html %])[% END %]</li>
+                                    [% END %]
+                                </ul>
+                            </li>
+                        [% END %]
+
+                        [% IF ( patron.primary_contact_method ) %]
+                            <li>
+                                <span class="label">Main contact method: </span>
+                                [% SWITCH patron.primary_contact_method %]
+                                [% CASE 'phone' %]
+                                    <span>Primary phone</span>
+                                [% CASE 'phonepro' %]
+                                    <span>Secondary phone</span>
+                                [% CASE 'mobile' %]
+                                    <span>Other phone</span>
+                                [% CASE 'email' %]
+                                    <span>Primary email</span>
+                                [% CASE 'emailpro' %]
+                                    <span>Secondary email</span>
+                                [% CASE 'fax' %]
+                                    <span>Fax</span>
+                                [% END %]
+                            </li>
+                        [% END %]
+                    </ol>
+                </div>
+                [%# /div.rows %]
+            </div>
+            [%# /div#patron-information %]
+
+            [% IF Koha.Preference('HouseboundModule') %]
+                <div id="houseboundroles" class="patroninfo-section">
+                    [% IF ( housebound_role.housebound_chooser == 1 OR housebound_role.housebound_deliverer == 1 ) %]
+                        <div class="patroninfo-heading">
+                            <h3>Housebound roles</h3>
+                            [% IF CAN_user_borrowers_edit_borrowers %]
+                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            [% END %]
+                        </div>
+                        <div class="rows">
+                            <ol>
+                                <li>
+                                    <span class="label">Chooser:</span>
+                                    [% IF ( housebound_role.housebound_chooser == 1 ) %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <span class="label">Deliverer:</span>
+                                    [% IF ( housebound_role.housebound_deliverer == 1 ) %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </li>
+                            </ol>
+                        </div>
+                    [% ELSE %]
+                        <div class="patroninfo-heading">
+                            <h3>Housebound roles</h3>
+                            [% IF CAN_user_borrowers_edit_borrowers %]
+                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa fa-plus"></i> Add</a>
+                            [% END %]
+                        </div>
+                    [% END %]
+                </div>
+                [%#/ div#houseboundroles %]
+            [% END %]
+
+            [% IF Koha.Preference('ExtendedPatronAttributes') %]
+                [% UNLESS ( no_patron_attribute_types ) %]
+                    <div id="patron-extended-attributes" class="patroninfo-section">
+                        [% IF ( attributes_loop ) %]
+                            <div class="patroninfo-heading">
+                                <h3>Additional attributes and identifiers</h3>
+                                [% IF CAN_user_borrowers_edit_borrowers %]
+                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                [% END %]
+                            </div>
+                            [% FOREACH attribute IN attributes_loop %]
+                                [% IF attribute.class %]
+                                    [% SET div_id = 'aai_' _ attribute.class %]
+                                [% ELSE %]
+                                    [% SET div_id = 'aai' %]
+                                [% END %]
+                                <div id="[% div_id | html %]" class="rows">
+                                    <h4>[% attribute.lib | html %]</h4>
+                                    <ol>
+                                        [% FOREACH item IN attribute.items %]
+                                            <li data-pa_code="[% item.type.code | replace('[^a-zA-Z0-9_-]', '') %]">
+                                                <span class="label">[% item.type.description | html %]: </span>
+                                                [% IF item.type.is_date %]
+                                                    [% item.description | $KohaDates %]
+                                                [% ELSE %]
+                                                    [% item.description | html_line_break %]
+                                                [% END %]
+                                            </li>
+                                        [% END %]
+                                    </ol>
+                                </div>
+                            [% END %]
+                            <div class="action"> </div>
+                        [% ELSE %]
+                            <div class="patroninfo-heading">
+                                <h3>Additional attributes and identifiers</h3>
+                                [% IF CAN_user_borrowers_edit_borrowers %]
+                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa fa-plus"></i> Add</a>
+                                [% END %]
+                            </div>
+                        [% END %]
+                    </div>
+                    [%# /div#patron-extended-attributes %]
+                [% END %]
+            [% END %]
+
+            [% IF ( EnhancedMessagingPreferences ) %]
+                <div id="patron-messaging-prefs" class="patroninfo-section">
+                    <div class="patroninfo-heading">
+                        <h3>Patron messaging preferences</h3>
+                        [% IF CAN_user_borrowers_edit_borrowers %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=5"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                        [% END %]
+                    </div>
+                    [% INCLUDE 'messaging-preference-form.inc' %]
+                    [% IF Koha.Preference('SMSSendDriver') %]
+                        <div class="rows">
+                            <ol>
+                                [% IF patron.smsalertnumber %]
+                                    <li>
+                                        <span class="label">SMS number:</span>
+                                        <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
+                                    </li>
+                                [% END %]
+                                [% IF Koha.Preference( 'SMSSendDriver') == 'Email' && patron.sms_provider.name %]
+                                    <li>
+                                        <span class="label">SMS provider:</span>
+                                        [% patron.sms_provider.name | html %]
+                                    </li>
+                                [% END %]
+                            </ol>
+                        </div>
+                    [% END %]
+                </div>
+                [%# /div#patron-messaging-prefs %]
+            [% END %]
+        </div>
+        <!-- /.col-sm-6 -->
+
+        <div class="col-sm-6">
+            <div id="patron-library-details" class="patroninfo-section">
+                <div class="patroninfo-heading">
+                    <h3>Library use</h3>
+                    [% IF CAN_user_borrowers_edit_borrowers %]
+                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=3"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                    [% END %]
+                </div>
+                <div class="rows">
+                    <ol>
+                        <li id="patron-cardnumber">
+                            <span class="label">Card number: </span>
+                            [% patron.cardnumber | html %]
+                        </li>
+                        <li id="patron-borrowernumber">
+                            <span class="label">Borrowernumber: </span>
+                            [% patron.borrowernumber | html %]
+                        </li>
+                        <li id="patron-categorydescription">
+                            <span class="label">Category: </span>
+                            [% patron.category.description | html %] ([% patron.categorycode | html %])
+                        </li>
+                        <li id="patron-dateenrolled">
+                            <span class="label">Registration date: </span>
+                            [% patron.dateenrolled | $KohaDates %]
+                        </li>
+
+                        [% IF ( patron.date_renewed ) %]
+                            <li id="patron-daterenewed">
+                                <span class="label">Renewal date: </span>
+                                [% patron.date_renewed | $KohaDates %]
+                            </li>
+                        [% END %]
+
+                        <li id="patron-expirationdate">
+                            <span class="label">Expiration date: </span>
+                            [% IF ( was_renewed ) %]
+                                <strong class="reregistrinfo">[% patron.dateexpiry | $KohaDates %]</strong>
+                            [% ELSIF ( patron.is_expired ) %]
+                                <span class="blocker">
+                                    [% patron.dateexpiry | $KohaDates %]
+                                    <strong><em>Expired</em></strong>
+                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or
+                                    <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
+                                </span>
+                            [% ELSIF ( patron.is_going_to_expire ) %]
+                                [% patron.dateexpiry | $KohaDates %]
+                                <strong><em>Patron expires soon</em></strong>
+                                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or
+                                <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
+                            [% ELSE %]
+                                [% patron.dateexpiry | $KohaDates %]
+                            [% END %]
+                        </li>
+                        <li id="patron-branchname">
+                            <span class="label">Library: </span>
+                            [% Branches.GetName( patron.branchcode ) | html %]
+                        </li>
+
+                        [% IF Koha.Preference( 'OPACPrivacy') %]
+                            <li id="patron-privacypref">
+                                <span class="label">Privacy pref:</span>
+                                [% IF ( patron.privacy == 0 ) %]<span>Forever</span>[% END %]
+                                [% IF ( patron.privacy == 1 ) %]<span>Default</span>[% END %]
+                                [% IF ( patron.privacy == 2 ) %]<span>Never</span>[% END %]
+                            </li>
+                        [% END %]
+
+                        [% IF ( patron.sort1 ) %]
+                            <li id="patron-sort1">
+                                <span class="label">Sort field 1:</span>
+                                [% AuthorisedValues.GetByCode('Bsort1', patron.sort1) | html %]
+                            </li>
+                        [% END %]
+                        [% IF ( patron.sort2 ) %]
+                            <li id="patron-sort2">
+                                <span class="label">Sort field 2:</span>
+                                [% AuthorisedValues.GetByCode('Bsort2', patron.sort2) | html %]
+                            </li>
+                        [% END %]
+                        [% UNLESS ( patron.autorenew_checkouts ) %]
+                            <li id="patron-autorenew_checkouts">
+                                <span class="label">Auto-renewal:</span>
+                                Patron has opted out
+                            </li>
+                        [% END %]
+                        <li id="patron-username">
+                            <span class="label">Username: </span>
+                            [% patron.userid | html %]
+                        </li>
+                        <li id="patron-password">
+                            <span class="label">Password: </span>
+                            [% IF ( patron.password ) %]
+                                *******
+                            [% ELSE %]
+                                <i class="fa fa-exclamation-circle problem" aria-hidden="true"></i> <a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Undefined</a>
+                            [% END %]
+                        </li>
+                        [% IF CAN_user_superlibrarian %]
+                            <li id="patron-password_expiration_date">
+                                <span class="label">Password expires:</span>
+                                [% IF ( patron.password_expiration_date ) %]
+                                    [% patron.password_expiration_date | $KohaDates %]
+                                [% ELSE %]
+                                    <span>Never</span>
+                                [% END %]
+                            </li>
+                        [% END %]
+                        <li id="patron-protected">
+                            <span class="label">Protected: </span>
+                            [% IF ( patron.protected == 1 ) %]
+                                Yes
+                            [% ELSE %]
+                                No
+                            [% END %]
+                        </li>
+
+                        [% IF ( patron.borrowernotes ) %]
+                            <li id="patron-borrowernotes">
+                                <span class="label">Circulation note: </span><br />
+                                [% patron.borrowernotes | $raw | html_line_break %]
+                            </li>
+                        [% END %]
+
+                        [% IF ( patron.opacnote ) %]
+                            <li id="patron-opacnote">
+                                <span class="label">OPAC note:</span><br />
+                                [% patron.opacnote | html | html_line_break %]
+                            </li>
+                        [% END %]
+
+                        [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
+                            <li id="patron-checkprev">
+                                <span class="label">Check previous checkouts: </span>
+                                [% IF ( patron.checkprevcheckout == 'yes' ) %]
+                                    <span>Yes</span>
+                                [% ELSIF ( patron.checkprevcheckout == 'no' ) %]
+                                    <span>No</span>
+                                [% ELSE %]
+                                    <span>Inherited</span>
+                                [% END %]
+                            </li>
+                        [% END %]
+
+                        [% IF Koha.Preference('TranslateNotices') %]
+                            <li id="patron-translatenotices">
+                                <span class="label">Preferred language for notices: </span>
+                                [% translated_language | html %]
+                            </li>
+                        [% END %]
+
+                        <li id="patron-flags-gonenoaddress">
+                            [% IF patron.gonenoaddress %]
+                                <span class="label error">Address in doubt:</span>
+                                <span class="error">Yes</span>
+                            [% ELSE %]
+                                <span class="label">Address in doubt:</span>
+                                <span>No</span>
+                            [% END %]
+                        </li>
+
+                        <li id="patron-flags-lostcard">
+                            [% IF patron.lost %]
+                                <span class="label error">Card lost:</span>
+                                <span class="error">Yes</span>
+                            [% ELSE %]
+                                <span class="label">Card lost:</span>
+                                <span>No</span>
+                            [% END %]
+                        </li>
+                    </ol>
+                </div>
+                [%# /div.rows %]
+            </div>
+            [%# /div#patron-library-details %]
+
+            <div id="patron-alternate-address" class="patroninfo-section">
+                [% IF ( patron.B_phone || patron.B_email || patron.contactnote || patron.B_address || patron.B_address2 || patron.B_city || patron.B_zipcode || patron.B_country ) %]
+                    <div class="patroninfo-heading">
+                        <h3>Alternate address</h3>
+                        [% IF CAN_user_borrowers_edit_borrowers %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                        [% END %]
+                    </div>
+                    <div class="address">
+                        <ul>
+                            [% PROCESS 'display-alt-address-style' %]
+                        </ul>
+                    </div>
+                    <div class="rows">
+                        <ol>
+                            [% IF ( patron.B_phone ) %]
+                                <li id="patron-bphone">
+                                    <span class="label">Phone: </span>
+                                    <a href="tel:[% patron.B_phone | uri %]">[% patron.B_phone |html %]</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( patron.B_email ) %]
+                                <li id="patron-bemail" class="email">
+                                    <span class="label">Email: </span>
+                                    <a title="[% patron.B_email | html %]" href="mailto:[% patron.B_email | url %]">[% patron.B_email |html %]</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( patron.contactnote ) %]
+                                <li id="patron-contactnote">
+                                    <span class="label">Contact note: </span>
+                                    [% patron.contactnote |html %]
+                                </li>
+                            [% END %]
+                        </ol>
+                    </div>
+                [% ELSE %]
+                    <div class="patroninfo-heading">
+                        <h3 class="inline">Alternate address</h3>
+                        [% IF CAN_user_borrowers_edit_borrowers %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa fa-plus"></i> Add</a>
+                        [% END %]
+                    </div>
+                [% END %]
+            </div>
+            [%# /div#patron-alternate-address %]
+
+            <div id="patron-alternative-contact" class="patroninfo-section">
+                [% IF ( patron.altcontactsurname || patron.altcontactfirstname || patron.altcontactaddress1 || patron.altcontactaddress2 || patron.altcontactaddress3 || patron.altcontactstate || patron.altcontactzipcode || patron.altcontactcountry || patron.altcontactphone ) %]
+                    <div class="patroninfo-heading">
+                        <h3>Alternative contact</h3>
+                        [% IF CAN_user_borrowers_edit_borrowers %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                        [% END %]
+                    </div>
+                    <div class="rows">
+                        <ol>
+                            [% IF ( patron.altcontactsurname ) %]
+                                <li id="patron-altcontactsurname">
+                                    <span class="label">Surname: </span>
+                                    [% patron.altcontactsurname | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactfirstname ) %]
+                                <li id="patron-altcontactfirstname">
+                                    <span class="label">First name: </span>
+                                    [% patron.altcontactfirstname | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactaddress1 ) %]
+                                <li id="patron-altcontactaddress1">
+                                    <span class="label">Address: </span>
+                                    [% patron.altcontactaddress1 | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactaddress2 ) %]
+                                <li id="patron-altcontactaddress2">
+                                    <span class="label">Address 2: </span>
+                                    [% patron.altcontactaddress2 | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactaddress3 ) %]
+                                <li id="patron-altcontactaddress3">
+                                    <span class="label">City: </span>
+                                    [% patron.altcontactaddress3 | html %]
+                                </li>
+                            [% END %]
+
+                            [% IF ( patron.altcontactstate ) %]
+                                <li id="patron-altcontactstate">
+                                    <span class="label">State: </span>
+                                    [% patron.altcontactstate | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactzipcode ) %]
+                                <li id="patron-altcontactzipcode">
+                                    <span class="label">ZIP/Postal code: </span>
+                                    [% patron.altcontactzipcode | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactcountry ) %]
+                                <li id="patron-altcontactcountry">
+                                    <span class="label">Country: </span>
+                                    [% patron.altcontactcountry | html %]
+                                </li>
+                            [% END %]
+                            [% IF ( patron.altcontactphone ) %]
+                                <li id="patron-altcontactphone">
+                                    <span class="label">Phone: </span>
+                                    <a href="tel:[% patron.altcontactphone | url %]">[% patron.altcontactphone | html %]</a>
+                                </li>
+                            [% END %]
+                        </ol>
+                    </div>
+                    [%# /div.rows %]
+                [% ELSE %]
+                    <div class="patroninfo-heading">
+                        <h3>Alternative contact</h3>
+                        [% IF CAN_user_borrowers_edit_borrowers %]
+                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa fa-plus"></i> Add</a>
+                        [% END %]
+                    </div>
+                [% END %]
+            </div>
+            [%# /div#patron-alternative-contact %]
+
+            [% IF Koha.Preference('EnableBorrowerFiles') %]
+                <div id="patron-files" class="patroninfo-section">
+                    <div class="patroninfo-heading">
+                        <h3>Files</h3>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]"><i class="fa fa-list"></i> Manage</a>
+
+                        [% IF ( files ) %]
+                            <div class="rows">
+                                <ol>
+                                    [% FOREACH f IN files %]
+                                        <li>
+                                            <a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a>
+                                            [% IF ( f.file_description ) %]
+                                                - [% f.file_description | html %]
+                                            [% END %]
+                                        </li>
+                                    [% END # /FOREACH f %]
+                                </ol>
+                            </div>
+                        [% END # /IF files %]
+                    </div>
+                    <!-- /.patroninfo-heading -->
+                </div>
+                <!-- /#patron-files -->
+            [% END # /IF EnableBorrowerFiles %]
+        </div>
+        <!-- /div.col-sm-6 -->
+    </div>
+    <!-- /div.row -->
+
+    [% INCLUDE 'patron-detail-tabs.inc' patronpage = "borrower" %]
+[% END %]
+[% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
+    [% INCLUDE 'modals/resolve_return_claim.inc' %]
+[% END %]
+
+[% INCLUDE modals/cancel_booking.inc %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

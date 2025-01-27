@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Localization;
@@ -29,10 +28,11 @@ use CGI qw( -utf8 );
 my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/localization.tt",
-        flagsrequired   => { parameters => 'manage_itemtypes' },
-        query           => $query,
-        type            => "intranet",
+    {
+        template_name => "admin/localization.tt",
+        flagsrequired => { parameters => 'manage_itemtypes' },
+        query         => $query,
+        type          => "intranet",
     }
 );
 
@@ -42,12 +42,13 @@ my $rs     = Koha::Localizations->search( { entity => $entity, code => $code } )
 my @translations;
 while ( my $s = $rs->next ) {
     push @translations,
-      { id          => $s->localization_id,
+        {
+        id          => $s->localization_id,
         entity      => $s->entity,
         code        => $s->code,
         lang        => $s->lang,
         translation => $s->translation,
-      };
+        };
 }
 
 my $translated_languages = C4::Languages::getTranslatedLanguages( 'intranet', C4::Context->preference('template') );

@@ -30,7 +30,7 @@ my $query = CGI->new;
 # for the language
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "intranet-main.tt", # Just a valid template path
+        template_name   => "intranet-main.tt",    # Just a valid template path
         query           => $query,
         type            => "intranet",
         authnotrequired => 1,
@@ -39,9 +39,9 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 # find the script that called the online help using the CGI referer()
 our $refer = $query->param('url');
-$refer = $query->referer()  if !$refer || $refer eq 'undefined';
+$refer = $query->referer() if !$refer || $refer eq 'undefined';
 
-my $language = C4::Languages::getlanguage( $query );
-my $manual_url = Koha::Manual::get_url($refer, $language);
+my $language   = C4::Languages::getlanguage($query);
+my $manual_url = Koha::Manual::get_url( $refer, $language );
 
 print $query->redirect($manual_url);

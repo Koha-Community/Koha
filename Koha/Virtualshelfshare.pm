@@ -27,7 +27,7 @@ use Koha::Patron;
 
 use base qw(Koha::Object);
 
-use constant SHARE_INVITATION_EXPIRY_DAYS => 14; #two weeks to accept
+use constant SHARE_INVITATION_EXPIRY_DAYS => 14;    #two weeks to accept
 
 =head1 NAME
 
@@ -54,8 +54,9 @@ sub accept {
 
     # If this borrower already has a share, there is no need to accept twice
     # We solve this by 'pretending' to reaccept, but delete instead
-    my $search = Koha::Virtualshelfshares->search({ shelfnumber => $self->shelfnumber, borrowernumber => $borrowernumber, invitekey => undef });
-    if( $search->count ) {
+    my $search = Koha::Virtualshelfshares->search(
+        { shelfnumber => $self->shelfnumber, borrowernumber => $borrowernumber, invitekey => undef } );
+    if ( $search->count ) {
         $self->delete;
         return $search->next;
     } else {
@@ -72,13 +73,14 @@ sub accept {
 =cut
 
 sub has_expired {
-    my ($self) = @_;
+    my ($self)           = @_;
     my $dt_sharedate     = dt_from_string( $self->sharedate, 'sql' );
     my $today            = dt_from_string;
     my $expiration_delay = DateTime::Duration->new( days => SHARE_INVITATION_EXPIRY_DAYS );
-    my $has_expired = DateTime->compare( $today, $dt_sharedate->add_duration($expiration_delay) );
+    my $has_expired      = DateTime->compare( $today, $dt_sharedate->add_duration($expiration_delay) );
+
     # Note: has_expired = 0 if the share expires today
-    return $has_expired == 1 ? 1 : 0
+    return $has_expired == 1 ? 1 : 0;
 }
 
 =head3 sharee
@@ -89,8 +91,8 @@ sub has_expired {
 
 sub sharee {
     my $self = shift;
-    my $rs = $self->_result->borrowernumber;
-    return Koha::Patron->_new_from_dbic( $rs );
+    my $rs   = $self->_result->borrowernumber;
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 _type

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2008 Biblibre SARL
 #
 # This file is part of Koha.
@@ -20,14 +19,13 @@
 
 use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 
-
 sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number) = @_;
-    my $res="
+    my ( $dbh, $record, $tagslib, $field_number ) = @_;
+    my $res = "
     <script>
         function Blur$field_number(ev) {
                 var isbn = document.getElementById(ev.data.id);
@@ -49,81 +47,77 @@ sub plugin_javascript {
     </script>
     ";
 
-    return ($field_number,$res);
+    return ( $field_number, $res );
 }
 
 sub plugin {
     my ($input) = @_;
     my $isbn = $input->param('isbn');
 
-    my ($template, $loggedinuser, $cookie)
-            = get_template_and_user({template_name => "cataloguing/value_builder/ajax.tt",
-                                    query => $input,
-                                    type => "intranet",
-                                    flagsrequired => {editcatalogue => '*'},
-                                    });
-
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/ajax.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
     my $dbh = C4::Context->dbh;
     my $len = 0;
-    my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE REPLACE(isbn, "-", "") LIKE ? OR isbn LIKE ? LIMIT 1');
-    
+    my $sth = $dbh->prepare(
+        'SELECT publishercode FROM biblioitems WHERE REPLACE(isbn, "-", "") LIKE ? OR isbn LIKE ? LIMIT 1');
+
     $isbn =~ s/-//g;
-    if (length ($isbn) == 13){
-        $isbn = substr($isbn, 3, length($isbn)-3);
+    if ( length($isbn) == 13 ) {
+        $isbn = substr( $isbn, 3, length($isbn) - 3 );
     }
-    
-    if(length($isbn) <= 10){
+
+    if ( length($isbn) <= 10 ) {
 
         $len = 5;
-        if ( substr( $isbn, 0, 1 ) <= 7 ){
+        if ( substr( $isbn, 0, 1 ) <= 7 ) {
             $len = 1;
-        }elsif ( substr( $isbn, 0, 2 ) <= 94 ){
+        } elsif ( substr( $isbn, 0, 2 ) <= 94 ) {
             $len = 2;
-        }elsif ( substr( $isbn, 0, 3 ) <= 995 ){
+        } elsif ( substr( $isbn, 0, 3 ) <= 995 ) {
             $len = 3;
-        }elsif ( substr( $isbn, 0, 4 ) <= 9989 ){
-            $len = 4 ;
+        } elsif ( substr( $isbn, 0, 4 ) <= 9989 ) {
+            $len = 4;
         }
 
-        my $x = substr( $isbn, $len );
+        my $x    = substr( $isbn, $len );
         my $seg2 = "";
-        
-        if ( substr( $x, 0, 2 ) <= 19 ) {    
+
+        if ( substr( $x, 0, 2 ) <= 19 ) {
             $seg2 = substr( $x, 0, 2 );
-        }
-        elsif ( substr( $x, 0, 3 ) <= 699 ) {
+        } elsif ( substr( $x, 0, 3 ) <= 699 ) {
             $seg2 = substr( $x, 0, 3 );
-        }
-        elsif ( substr( $x, 0, 4 ) <= 8399 ) {
+        } elsif ( substr( $x, 0, 4 ) <= 8399 ) {
             $seg2 = substr( $x, 0, 4 );
-        }
-        elsif ( substr( $x, 0, 5 ) <= 89999 ) {
+        } elsif ( substr( $x, 0, 5 ) <= 89999 ) {
             $seg2 = substr( $x, 0, 5 );
-        }
-        elsif ( substr( $x, 0, 6 ) <= 9499999 ) {
+        } elsif ( substr( $x, 0, 6 ) <= 9499999 ) {
             $seg2 = substr( $x, 0, 6 );
-        }
-        else {
+        } else {
             $seg2 = substr( $x, 0, 7 );
         }
 
-        while($len--){
-            $seg2 = "_".$seg2;
+        while ( $len-- ) {
+            $seg2 = "_" . $seg2;
         }
-        
-        $len = 10 -length($seg2);
-        
-        while($len--){
+
+        $len = 10 - length($seg2);
+
+        while ( $len-- ) {
             $seg2 .= "_";
         }
 
-        $sth->execute($seg2, "978$seg2");
+        $sth->execute( $seg2, "978$seg2" );
     }
-    
-    if( (my $publishercode) = $sth->fetchrow )
-    {
-        $template->param(return => $publishercode);
+
+    if ( ( my $publishercode ) = $sth->fetchrow ) {
+        $template->param( return => $publishercode );
     }
     output_html_with_http_headers $input, $cookie, $template->output;
 }

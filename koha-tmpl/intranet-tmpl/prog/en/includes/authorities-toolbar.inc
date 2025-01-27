@@ -1,11 +1,8 @@
 [% IF ( authid || CAN_user_editauthorities) %]
-
     <div id="toolbar" class="btn-toolbar sticky">
         [% IF ( CAN_user_editauthorities ) %]
             <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-plus"></i> New authority
-                </button>
+                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-plus"></i> New authority </button>
                 <ul class="dropdown-menu">
                     [% FOREACH authority_type IN authority_types %]
                         <li><a class="dropdown-item" href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authority_type.authtypecode | uri %]">[% authority_type.authtypetext | html %]</a></li>
@@ -14,9 +11,7 @@
             </div>
             [% IF servers.count > 0 %]
                 <div class="btn-group">
-                    <button id="z3950_new" class="btn btn-default">
-                        <i class="fa fa-search"></i> New from Z39.50/SRU
-                    </button>
+                    <button id="z3950_new" class="btn btn-default"> <i class="fa fa-search"></i> New from Z39.50/SRU </button>
                 </div>
             [% END %]
         [% END %]
@@ -24,9 +19,7 @@
         [% IF ( authid ) %]
             [% IF ( CAN_user_editauthorities ) %]
                 <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
-                    </button>
+                    <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" id="editAuth" href="/cgi-bin/koha/authorities/authorities.pl?authid=[% authid | html %]">Edit record</a></li>
                         <li><a class="dropdown-item" id="dupAuth" href="/cgi-bin/koha/authorities/authorities.pl?authid=[% authid | html %]&amp;op=duplicate">Edit as new (duplicate)</a></li>
@@ -51,5 +44,4 @@
             </div>
         [% END %]
     </div>
-
 [% END %]

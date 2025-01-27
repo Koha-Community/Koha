@@ -36,7 +36,7 @@ use Koha::Ratings;
 my $query = CGI->new();
 
 # auth required to add ratings
-my ($userid, $cookie, $sessionID) = checkauth( $query, 0, {}, 'opac' );
+my ( $userid, $cookie, $sessionID ) = checkauth( $query, 0, {}, 'opac' );
 my $loggedinuser = C4::Context->userenv->{'number'};
 
 my $op               = $query->param('op') || q{};
@@ -46,21 +46,19 @@ my $rating_value     = $query->param('rating');
 
 # If JS is disabled and a user click on "Rate me" without selecting a rate
 unless ( $biblionumber and $rating_value ) {
-    print $query->redirect(
-        "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
+    print $query->redirect("/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
     exit;
 }
 
 if ( $op eq 'cud-add' ) {
     if ( !$rating_old_value ) {
-        my $rating = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, });
+        my $rating = Koha::Rating->new(
+            { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, } );
         $rating->store if $rating;
-    }
-    else {
-        my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser });
+    } else {
+        my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser } );
         $rating->rating_value($rating_value)->store if $rating;
     }
 }
 
-print $query->redirect(
-    "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
+print $query->redirect("/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");

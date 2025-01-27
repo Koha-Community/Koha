@@ -8,14 +8,16 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("MARC view") | html %] &rsaquo;
-    [% summary.mainentry | html %]
-    [% IF authtypetext %]
-        ([% authtypetext | html %])
-    [% END %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("MARC view") | html %]
+        &rsaquo; [% summary.mainentry | html %]
+        [% IF authtypetext %]
+            ([% authtypetext | html %])
+        [% END %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     [% IF ( displayhierarchy ) %]
@@ -26,64 +28,69 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-authoritiesdetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | uri %]">[% summary.mainentry | html %] [% IF authtypetext %] ([% authtypetext | html %]) [% END %]</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% t("MARC view") | html %]
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | uri %]">[% summary.mainentry | html %] [% IF authtypetext %]([% authtypetext | html %])[% END %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% t("MARC view") | html %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    [% column_class = "col-lg-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                [% column_class = "col-lg-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
+            [% END %]
+            <div class="[% column_class | html %]">
+                <div id="userauthMARCdetails" class="maincontent">
+                    <div id="views">
+                        <span class="view">
+                            <a id="Normalview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]">Normal view</a>
+                        </span>
+                        <span class="view">
+                            <span id="MARCview">MARC view</span>
+                        </span>
                     </div>
-                [% END %]
-                <div class="[% column_class | html %]">
-                    <div id="userauthMARCdetails" class="maincontent">
-                        <div id="views">
-                            <span class="view">
-                                <a id="Normalview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]">Normal view</a>
-                            </span>
-                            <span class="view">
-                                <span id="MARCview">MARC view</span>
-                            </span>
-                        </div>
 
-                        [% IF ( displayhierarchy ) %]
-                            <div id="hierarchies">
-                                [% PROCESS showhierarchy trees = loophierarchies marc = 1 %]
-                            </div>
-                        [% END %]
+                    [% IF ( displayhierarchy ) %]
+                        <div id="hierarchies"> [% PROCESS showhierarchy trees = loophierarchies marc = 1 %] </div>
+                    [% END %]
 
-                        <h1>Entry [% authtypetext | html %]</h1>
-                        <p><a href="opac-search.pl?type=opac&amp;q=[% authid | uri %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a></p>
-                            [% FOREACH Tag0X IN Tab0XX %]
-                                <p><strong>[% Tag0X.tag | html %]</strong></p>
-                                <ul>
-                                [% FOREACH subfiel IN Tag0X.subfield %]
-                                    <li><strong>[% subfiel.marc_lib | $raw %]:</strong>
-                                    [% IF subfiel.isurl %]<a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
-                                    [% ELSE %][% subfiel.marc_value | html %][% END %]</li>
-                                [% END %]
-                                </ul>
+                    <h1>Entry [% authtypetext | html %]</h1>
+                    <p><a href="opac-search.pl?type=opac&amp;q=[% authid | uri %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a></p>
+                    [% FOREACH Tag0X IN Tab0XX %]
+                        <p><strong>[% Tag0X.tag | html %]</strong></p>
+                        <ul>
+                            [% FOREACH subfiel IN Tag0X.subfield %]
+                                <li
+                                    ><strong>[% subfiel.marc_lib | $raw %]:</strong> [% IF subfiel.isurl %]
+                                        <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
+                                    [% ELSE %]
+                                        [% subfiel.marc_value | html %]
+                                    [% END %]</li
+                                >
                             [% END %]
-                    </div> <!-- / #userauthMARCdetails -->
-                </div> <!-- / .col-lg-10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                        </ul>
+                    [% END %]
+                </div>
+                <!-- / #userauthMARCdetails -->
+            </div>
+            <!-- / .col-lg-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

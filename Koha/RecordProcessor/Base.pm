@@ -67,7 +67,6 @@ __PACKAGE__->mk_ro_accessors(qw( name version ));
 __PACKAGE__->mk_accessors(qw( params ));
 our $NAME = 'Base';
 
-
 =head2 new
 
     my $filter = Koha::RecordProcessor::Base->new;
@@ -75,16 +74,16 @@ our $NAME = 'Base';
 Create a new filter;
 
 =cut
+
 sub new {
     my $class = shift;
 
-    my $self = $class->SUPER::new( { });#name => $class->NAME,
-                                     #version => $class->VERSION });
+    my $self = $class->SUPER::new( {} );    #name => $class->NAME,
+                                            #version => $class->VERSION });
 
     bless $self, $class;
     return $self;
 }
-
 
 =head2 initialize
 
@@ -93,15 +92,15 @@ sub new {
 Initialize a filter using the specified parameters.
 
 =cut
+
 sub initialize {
-    my $self = shift;
+    my $self   = shift;
     my $params = shift;
 
     $self->params($params);
 
     return $self;
 }
-
 
 =head2 destroy
 
@@ -110,6 +109,7 @@ sub initialize {
 Destroy the filter.
 
 =cut
+
 sub destroy {
     my $self = shift;
     return;
@@ -123,8 +123,9 @@ sub destroy {
 Filter the specified record(s) and return the result.
 
 =cut
+
 sub filter {
-    my $self = shift;
+    my $self   = shift;
     my $record = shift;
     return $record;
 }

@@ -8,10 +8,9 @@ use autouse 'Data::Dumper' => qw(Dumper);
 use C4::Context;
 use C4::Creators::Lib qw( get_unit_values );
 
-
 sub _check_params {
-    my $given_params = {};
-    my $exit_code = 0;
+    my $given_params         = {};
+    my $exit_code            = 0;
     my @valid_profile_params = (
         'printer_name',
         'template_id',
@@ -23,18 +22,17 @@ sub _check_params {
         'units',
         'creator',
     );
-    if (scalar(@_) >1) {
+    if ( scalar(@_) > 1 ) {
         $given_params = {@_};
-        foreach my $key (keys %{$given_params}) {
-            if (!(grep m/$key/, @valid_profile_params)) {
-                warn sprintf('Unrecognized parameter type of "%s".', $key);
+        foreach my $key ( keys %{$given_params} ) {
+            if ( !( grep m/$key/, @valid_profile_params ) ) {
+                warn sprintf( 'Unrecognized parameter type of "%s".', $key );
                 $exit_code = 1;
             }
         }
-    }
-    else {
-        if (!(grep m/$_/, @valid_profile_params)) {
-            warn sprintf('Unrecognized parameter type of "%s".', $_);
+    } else {
+        if ( !( grep m/$_/, @valid_profile_params ) ) {
+            warn sprintf( 'Unrecognized parameter type of "%s".', $_ );
             $exit_code = 1;
         }
     }
@@ -42,80 +40,82 @@ sub _check_params {
 }
 
 sub _conv_points {
-    my $self = shift;
-    my @unit_value = grep {$_->{'type'} eq $self->{units}} @{get_unit_values()};
-    $self->{offset_horz}        = $self->{offset_horz} * $unit_value[0]->{'value'};
-    $self->{offset_vert}        = $self->{offset_vert} * $unit_value[0]->{'value'};
-    $self->{creep_horz}         = $self->{creep_horz} * $unit_value[0]->{'value'};
-    $self->{creep_vert}         = $self->{creep_vert} * $unit_value[0]->{'value'};
+    my $self       = shift;
+    my @unit_value = grep { $_->{'type'} eq $self->{units} } @{ get_unit_values() };
+    $self->{offset_horz} = $self->{offset_horz} * $unit_value[0]->{'value'};
+    $self->{offset_vert} = $self->{offset_vert} * $unit_value[0]->{'value'};
+    $self->{creep_horz}  = $self->{creep_horz} * $unit_value[0]->{'value'};
+    $self->{creep_vert}  = $self->{creep_vert} * $unit_value[0]->{'value'};
     return $self;
 }
 
 sub new {
     my $invocant = shift;
-    if (_check_params(@_) eq 1) {
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my $type = ref($invocant) || $invocant;
     my $self = {
-        printer_name    => 'Default Printer',
-        template_id     => 0,
-        paper_bin       => 'Tray 1',
-        offset_horz     => 0,
-        offset_vert     => 0,
-        creep_horz      => 0,
-        creep_vert      => 0,
-        units           => 'POINT',
+        printer_name => 'Default Printer',
+        template_id  => 0,
+        paper_bin    => 'Tray 1',
+        offset_horz  => 0,
+        offset_vert  => 0,
+        creep_horz   => 0,
+        creep_vert   => 0,
+        units        => 'POINT',
         @_,
     };
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
 sub retrieve {
     my $invocant = shift;
-    my %opts = @_;
-    my $type = ref($invocant) || $invocant;
-    my $query = "SELECT * FROM printers_profile WHERE profile_id = ? AND creator = ?";
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($opts{'profile_id'}, $opts{'creator'});
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
+    my %opts     = @_;
+    my $type     = ref($invocant) || $invocant;
+    my $query    = "SELECT * FROM printers_profile WHERE profile_id = ? AND creator = ?";
+    my $sth      = C4::Context->dbh->prepare($query);
+    $sth->execute( $opts{'profile_id'}, $opts{'creator'} );
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth->errstr );
         return -1;
     }
     my $self = $sth->fetchrow_hashref;
-    $self = _conv_points($self) if ($opts{convert} && $opts{convert} == 1);
-    bless ($self, $type);
+    $self = _conv_points($self) if ( $opts{convert} && $opts{convert} == 1 );
+    bless( $self, $type );
     return $self;
 }
 
 sub delete {
-    my $self = {};
-    my %opts = ();
+    my $self      = {};
+    my %opts      = ();
     my $call_type = '';
-    my @params = ();
-    if (ref($_[0])) {
-        $self = shift;  # check to see if this is a method call
-        $call_type = 'C4::'. $self->{'creator'} .'::Profile->delete';
+    my @params    = ();
+    if ( ref( $_[0] ) ) {
+        $self      = shift;                                               # check to see if this is a method call
+        $call_type = 'C4::' . $self->{'creator'} . '::Profile->delete';
         push @params, $self->{'profile_id'}, $self->{'creator'};
-    }
-    else {
-        my $class = shift; #XXX: is this too hackish?
-        %opts = @_;
+    } else {
+        my $class = shift;                                                #XXX: is this too hackish?
+        %opts      = @_;
         $call_type = $class . "::delete";
         push @params, $opts{'profile_id'}, $opts{'creator'};
     }
-    if (scalar(@params) < 2) {   # If there is no profile id or creator type then we cannot delete it
-        warn sprintf('%s : Cannot delete profile as the profile ID is invalid or non-existent.', $call_type) if !$params[0];
-        warn sprintf('%s : Cannot delete profile as the creator type is invalid or non-existent.', $call_type) if !$params[1];
+    if ( scalar(@params) < 2 ) {    # If there is no profile id or creator type then we cannot delete it
+        warn sprintf( '%s : Cannot delete profile as the profile ID is invalid or non-existent.', $call_type )
+            if !$params[0];
+        warn sprintf( '%s : Cannot delete profile as the creator type is invalid or non-existent.', $call_type )
+            if !$params[1];
         return -1;
     }
     my $query = "DELETE FROM printers_profile WHERE profile_id = ? AND creator = ?";
-    my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
+    my $sth   = C4::Context->dbh->prepare($query);
+
+    #    $sth->{'TraceLevel'} = 3;
     $sth->execute(@params);
-    if ($sth->err) {
-        warn sprintf('Database returned the following error on attempted DELETE: %s', $sth->errstr);
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error on attempted DELETE: %s', $sth->errstr );
         return -1;
     }
     return 0;
@@ -123,44 +123,44 @@ sub delete {
 
 sub save {
     my $self = shift;
-    if ($self->{'profile_id'}) {        # if we have an profile_id, the record exists and needs UPDATE
+    if ( $self->{'profile_id'} ) {    # if we have an profile_id, the record exists and needs UPDATE
         my @params;
         my $query = "UPDATE printers_profile SET ";
-        foreach my $key (keys %{$self}) {
-            next if ($key eq 'profile_id') || ($key eq 'creator');
-            push (@params, $self->{$key});
+        foreach my $key ( keys %{$self} ) {
+            next if ( $key eq 'profile_id' ) || ( $key eq 'creator' );
+            push( @params, $self->{$key} );
             $query .= "$key=?, ";
         }
-        $query = substr($query, 0, (length($query)-2));
-        push (@params, $self->{'profile_id'}, $self->{'creator'});
+        $query = substr( $query, 0, ( length($query) - 2 ) );
+        push( @params, $self->{'profile_id'}, $self->{'creator'} );
         $query .= " WHERE profile_id=? AND creator=?;";
         my $sth = C4::Context->dbh->prepare($query);
-#        $sth->{'TraceLevel'} = 3;
+
+        #        $sth->{'TraceLevel'} = 3;
         $sth->execute(@params);
-        if ($sth->err) {
-            warn sprintf('Database returned the following error on attempted UPDATE: %s', $sth->errstr);
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error on attempted UPDATE: %s', $sth->errstr );
             return -1;
         }
         return $self->{'profile_id'};
-    }
-    else {                      # otherwise create a new record
+    } else {    # otherwise create a new record
         my @params;
         my $query = "INSERT INTO printers_profile (";
-        foreach my $key (keys %{$self}) {
-            push (@params, $self->{$key});
+        foreach my $key ( keys %{$self} ) {
+            push( @params, $self->{$key} );
             $query .= "$key, ";
         }
-        $query = substr($query, 0, (length($query)-2));
+        $query = substr( $query, 0, ( length($query) - 2 ) );
         $query .= ") VALUES (";
-        for (my $i=1; $i<=(scalar keys %$self); $i++) {
+        for ( my $i = 1 ; $i <= ( scalar keys %$self ) ; $i++ ) {
             $query .= "?,";
         }
-        $query = substr($query, 0, (length($query)-1));
+        $query = substr( $query, 0, ( length($query) - 1 ) );
         $query .= ");";
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
-        if ($sth->err) {
-            warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error on attempted INSERT: %s', $sth->errstr );
             return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(profile_id) FROM printers_profile;");
@@ -172,28 +172,27 @@ sub save {
 
 sub get_attr {
     my $self = shift;
-    if (_check_params(@_) eq 1) {
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my ($attr) = @_;
-    if (exists($self->{$attr})) {
+    if ( exists( $self->{$attr} ) ) {
         return $self->{$attr};
-    }
-    else {
-        warn sprintf('%s is currently undefined.', $attr);
+    } else {
+        warn sprintf( '%s is currently undefined.', $attr );
         return -1;
     }
 }
 
 sub set_attr {
     my $self = shift;
-    if (_check_params(@_) eq 1) {
+    if ( _check_params(@_) eq 1 ) {
         return -1;
     }
     my %attrs = @_;
-    foreach my $attrib (keys(%attrs)) {
+    foreach my $attrib ( keys(%attrs) ) {
         $self->{$attrib} = $attrs{$attrib};
-    };
+    }
     return 0;
 }
 

@@ -8,11 +8,13 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        say $dbh->do(q{
+        say $dbh->do(
+            q{
             UPDATE columns_settings
             SET columnname = REGEXP_REPLACE(columnname, '.*holdings_', '')
             WHERE module="catalogue" AND page="detail" AND ( tablename="holdings_table" OR tablename="otherholdings_table")
-        });
+        }
+        );
         say_success( $out, "Column names renamed" );
     },
 };

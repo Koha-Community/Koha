@@ -122,33 +122,28 @@ subtest 'failure tests' => sub {
 
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-    my $patron = $builder->build_object(
-        { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
-    $patron->set_password({ password => $password });
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
+    $patron->set_password( { password => $password } );
     my $userid = $patron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons")
-      ->status_is( 200, 'All good' );
+    $t->get_ok("//$userid:$password@/api/v1/patrons")->status_is( 200, 'All good' );
 
     # expire patron's password
     $patron->password_expiration_date( dt_from_string->subtract( days => 1 ) )->store;
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons")
-      ->status_is( 403 )
-      ->json_is( '/error' => 'Password has expired', 'Password expired' );
+    $t->get_ok("//$userid:$password@/api/v1/patrons")->status_is(403)
+        ->json_is( '/error' => 'Password has expired', 'Password expired' );
 
-    $t->get_ok("//@/api/v1/patrons")
-      ->status_is( 401, 'No credentials passed' );
+    $t->get_ok("//@/api/v1/patrons")->status_is( 401, 'No credentials passed' );
 
-    $t->get_ok("//$userid:$bad_password@/api/v1/patrons")
-      ->status_is( 403, 'Failed authentication, invalid password' )
-      ->json_is( '/error' => 'Invalid password', 'Error message returned' );
+    $t->get_ok("//$userid:$bad_password@/api/v1/patrons")->status_is( 403, 'Failed authentication, invalid password' )
+        ->json_is( '/error' => 'Invalid password', 'Error message returned' );
 
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 0 );
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons")
-      ->status_is( 401, 'Basic authentication is disabled' )
-      ->json_is( '/error' => 'Basic authentication disabled', 'Expected error message rendered' );
+    $t->get_ok("//$userid:$password@/api/v1/patrons")->status_is( 401, 'Basic authentication is disabled' )
+        ->json_is( '/error' => 'Basic authentication disabled', 'Expected error message rendered' );
 
     $schema->storage->txn_rollback;
 };

@@ -19,7 +19,6 @@ package Koha::Subscriptions;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Subscription;

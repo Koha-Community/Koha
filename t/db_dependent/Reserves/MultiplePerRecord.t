@@ -52,20 +52,12 @@ my $patron = $builder->build(
     }
 );
 
-my $itemtype1 = $builder->build(
-    {
-        source => 'Itemtype'
-    }
-);
+my $itemtype1 = $builder->build( { source => 'Itemtype' } );
 
-my $itemtype2 = $builder->build(
-    {
-        source => 'Itemtype'
-    }
-);
+my $itemtype2 = $builder->build( { source => 'Itemtype' } );
 
 my $biblio = $builder->build_sample_biblio;
-my $item1 = $builder->build_sample_item(
+my $item1  = $builder->build_sample_item(
     {
         biblionumber => $biblio->biblionumber,
         itype        => $itemtype1->{itemtype},
@@ -102,7 +94,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type is defined at item level
+t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );    # Assuming the item type is defined at item level
 
 my $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $max, 1, 'GetMaxPatronHoldsForRecord returns max of 1' );
@@ -180,7 +172,10 @@ Koha::CirculationRules->set_rules(
 );
 
 $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
-is( $max, 9, 'GetMaxPatronHoldsForRecord returns max of 9 because Library specific all itemtypes all categories rule comes before All libraries specific type and specific category' );
+is(
+    $max, 9,
+    'GetMaxPatronHoldsForRecord returns max of 9 because Library specific all itemtypes all categories rule comes before All libraries specific type and specific category'
+);
 
 Koha::CirculationRules->delete();
 
@@ -188,13 +183,15 @@ my $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} }
 is( $holds->forced_hold_level, undef, "No holds does not force an item or record level hold" );
 
 # Test Koha::Holds::forced_hold_level
-my $hold = Koha::Hold->new({
-    borrowernumber => $patron->{borrowernumber},
-    reservedate => '1981-06-10',
-    biblionumber => $biblio->biblionumber,
-    branchcode => $library->{branchcode},
-    priority => 1,
-})->store();
+my $hold = Koha::Hold->new(
+    {
+        borrowernumber => $patron->{borrowernumber},
+        reservedate    => '1981-06-10',
+        biblionumber   => $biblio->biblionumber,
+        branchcode     => $library->{branchcode},
+        priority       => 1,
+    }
+)->store();
 
 $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
 is( $holds->forced_hold_level, 'record', "Record level hold forces record level holds" );
@@ -206,7 +203,7 @@ $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
 is( $holds->forced_hold_level, 'item', "Item level hold forces item level holds" );
 
 my $item_group = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
-$hold->itemnumber( undef );
+$hold->itemnumber(undef);
 $hold->item_group_id( $item_group->id );
 $hold->store();
 
@@ -228,7 +225,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-my $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
+my $can = CanBookBeReserved( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $can->{status}, 'OK', 'Hold can be placed with 0 holds' );
 my $hold_id = AddReserve(
     {
@@ -240,7 +237,7 @@ my $hold_id = AddReserve(
 );
 ok( $hold_id, 'First hold was placed' );
 
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
+$can = CanBookBeReserved( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $can->{status}, 'OK', 'Hold can be placed with 1 hold' );
 $hold_id = AddReserve(
     {
@@ -252,11 +249,11 @@ $hold_id = AddReserve(
 );
 ok( $hold_id, 'Second hold was placed' );
 
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
+$can = CanBookBeReserved( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
 Koha::Holds->find($hold_id)->found("W")->store;
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
+$can = CanBookBeReserved( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
 $schema->storage->txn_rollback;

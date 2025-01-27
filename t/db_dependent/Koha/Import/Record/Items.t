@@ -29,16 +29,20 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder            = t::lib::TestBuilder->new;
 my $nb_of_record_items = Koha::Import::Record::Items->search->count;
 
-my $record_item_1 = $builder->build({ source => 'ImportItem' });
-my $record_item_2 = $builder->build({ source => 'ImportItem' });
+my $record_item_1 = $builder->build( { source => 'ImportItem' } );
+my $record_item_2 = $builder->build( { source => 'ImportItem' } );
 
 is( Koha::Import::Record::Items->search->count, $nb_of_record_items + 2, 'The 2 record items should have been added' );
 
-my $retrieved_record_item_1 = Koha::Import::Record::Items->search({ import_items_id => $record_item_1->{import_items_id}})->next;
-is_deeply( $retrieved_record_item_1->unblessed, $record_item_1, 'Find a record item by import items id should return the correct record item' );
+my $retrieved_record_item_1 =
+    Koha::Import::Record::Items->search( { import_items_id => $record_item_1->{import_items_id} } )->next;
+is_deeply(
+    $retrieved_record_item_1->unblessed, $record_item_1,
+    'Find a record item by import items id should return the correct record item'
+);
 
 $retrieved_record_item_1->delete;
 is( Koha::Import::Record::Items->search->count, $nb_of_record_items + 1, 'Delete should have deleted the record item' );

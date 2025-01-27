@@ -20,7 +20,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Members;
@@ -34,15 +34,16 @@ use List::MoreUtils qw( uniq );
 my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
-    {   template_name   => "members/members-update.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+    {
+        template_name => "members/members-update.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
-my $branch
-    = (    C4::Context->preference("IndependentBranchesPatronModifications")
+my $branch =
+    (      C4::Context->preference("IndependentBranchesPatronModifications")
         || C4::Context->preference("IndependentBranches") )
     && !$flags->{'superlibrarian'}
     ? C4::Context->userenv()->{'branch'}
@@ -58,13 +59,13 @@ foreach my $pm (@$pending_modifications) {
 
     foreach my $type (@modified_atypes) {
         my $type_obj = Koha::Patron::Attribute::Types->find($type);
-        my @before   = Koha::Patron::Attributes->search(
-            { borrowernumber => $pm->{borrowernumber}, code => $type } )->as_list;
+        my @before =
+            Koha::Patron::Attributes->search( { borrowernumber => $pm->{borrowernumber}, code => $type } )->as_list;
         my @after = grep { $_->code eq $type } @{ $pm->{extended_attributes} };
         push @{$modified_attributes}, { type => $type_obj, before => \@before, after => \@after };
     }
 
-    $borrowers->{ $pm->{borrowernumber} } = Koha::Patrons->find($pm->{borrowernumber})->unblessed;
+    $borrowers->{ $pm->{borrowernumber} } = Koha::Patrons->find( $pm->{borrowernumber} )->unblessed;
     $borrowers->{ $pm->{borrowernumber} }->{modified_attributes} = $modified_attributes;
 }
 

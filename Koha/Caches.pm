@@ -46,9 +46,9 @@ persistent across multiple instances.
 =cut
 
 sub get_instance {
-    my ($class, $subnamespace) = @_;
+    my ( $class, $subnamespace ) = @_;
     $subnamespace //= '';
-    $singleton_caches->{$subnamespace} = Koha::Cache->new({}, { subnamespace => $subnamespace } )
+    $singleton_caches->{$subnamespace} = Koha::Cache->new( {}, { subnamespace => $subnamespace } )
         unless $singleton_caches->{$subnamespace};
     return $singleton_caches->{$subnamespace};
 }

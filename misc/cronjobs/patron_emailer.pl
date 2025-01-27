@@ -20,9 +20,9 @@ use Modern::Perl;
 
 use Koha::Script -cron;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
-use C4::Log qw( cronlogaction );
+use C4::Log             qw( cronlogaction );
 use C4::Reports::Guided qw( EmailReport );
 
 =head1 NAME
@@ -96,15 +96,15 @@ Send emails, if omitted script will report as verbose.
 
 binmode( STDOUT, ":encoding(UTF-8)" );
 
-my $help     = 0;
+my $help = 0;
 my $report_id;
 my $notice;
-my $module;  #this is only for selecting correct notice - report itself defines available columns, not module
-my $library; #as above, determines which notice to use, will use 'all libraries' if not specified
-my $email;   #to specify which column should be used as email in report will use 'email' from borrwers table
-my $from;    #to specify from address, will expect 'from' column in report if not specified
-my $verbose  = 0;
-my $commit   = 0;
+my $module;     #this is only for selecting correct notice - report itself defines available columns, not module
+my $library;    #as above, determines which notice to use, will use 'all libraries' if not specified
+my $email;      #to specify which column should be used as email in report will use 'email' from borrwers table
+my $from;       #to specify from address, will expect 'from' column in report if not specified
+my $verbose = 0;
+my $commit  = 0;
 
 my $error_msgs = {
     MISSING_PARAMS => "You must supply a report ID, letter module and code at minimum\n",
@@ -117,58 +117,62 @@ my $error_msgs = {
     NO_BOR         => "There is no borrower with borrowernumber "
 };
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'help|?'      => \$help,
-    'report=i'    => \$report_id,
-    'notice=s'    => \$notice,
-    'module=s'    => \$module,
-    'library=s'   => \$library,
-    'email=s'     => \$email,
-    'from=s'      => \$from,
-    'verbose'     => \$verbose,
-    'commit'      => \$commit
+    'help|?'    => \$help,
+    'report=i'  => \$report_id,
+    'notice=s'  => \$notice,
+    'module=s'  => \$module,
+    'library=s' => \$library,
+    'email=s'   => \$email,
+    'from=s'    => \$from,
+    'verbose'   => \$verbose,
+    'commit'    => \$commit
 ) or pod2usage(1);
 pod2usage(1) if $help;
 pod2usage(1) unless $report_id && $notice && $module;
 
-my ( $emails, $errors ) = C4::Reports::Guided::EmailReport({
-    email      => $email,
-    from       => $from,
-    report_id  => $report_id,
-    module     => $module,
-    code       => $notice,
-    branch     => $library,
-    verbose    => $verbose,
-    commit     => $commit,
-});
+my ( $emails, $errors ) = C4::Reports::Guided::EmailReport(
+    {
+        email     => $email,
+        from      => $from,
+        report_id => $report_id,
+        module    => $module,
+        code      => $notice,
+        branch    => $library,
+        verbose   => $verbose,
+        commit    => $commit,
+    }
+);
 
-foreach my $email (@$emails){
+foreach my $email (@$emails) {
     print "No emails will be sent!\n" unless $commit;
-    if( $verbose || !$commit ){
+    if ( $verbose || !$commit ) {
         print "Email generated to $email->{to_address} from $email->{from_address}\n";
         print "Content:\n";
-        print $email->{letter}->{content} ."\n";
+        print $email->{letter}->{content} . "\n";
     }
-    C4::Letters::EnqueueLetter({
-        letter => $email->{letter},
-        borrowernumber         => $email->{borrowernumber},
-        message_transport_type => 'email',
-        from_address           => $email->{from_address},
-        to_address             => $email->{to_address},
-    }) if $commit;
+    C4::Letters::EnqueueLetter(
+        {
+            letter                 => $email->{letter},
+            borrowernumber         => $email->{borrowernumber},
+            message_transport_type => 'email',
+            from_address           => $email->{from_address},
+            to_address             => $email->{to_address},
+        }
+    ) if $commit;
 }
 
-if( $verbose || !$commit ){
-    foreach my $error ( @$errors ){
-        foreach ( keys %{$error} ){
+if ( $verbose || !$commit ) {
+    foreach my $error (@$errors) {
+        foreach ( keys %{$error} ) {
             print "$_\n";
-            if ( $_ eq 'FATAL' ) { print $error_msgs->{ ${$error}{$_} } }
-            else { print $error_msgs->{$_} . ${$error}{$_} . "\n" }
+            if   ( $_ eq 'FATAL' ) { print $error_msgs->{ ${$error}{$_} } }
+            else                   { print $error_msgs->{$_} . ${$error}{$_} . "\n" }
         }
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

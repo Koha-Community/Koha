@@ -20,9 +20,7 @@ package Koha::Exception;
 use Modern::Perl;
 
 use Exception::Class (
-    'Koha::Exception' => {
-        description => "Something went wrong!"
-    },
+    'Koha::Exception' => { description => "Something went wrong!" },
 );
 
 sub full_message {
@@ -30,7 +28,7 @@ sub full_message {
 
     # If a message was passed manually, use it
     return sprintf "Exception '%s' thrown '%s'\n", ref($self), $self->message
-      if $self->message;
+        if $self->message;
 
     my $field_hash = $self->field_hash;
 
@@ -39,12 +37,12 @@ sub full_message {
 
     foreach my $key ( sort keys %$field_hash ) {
         push @fields, $key . " => " . $field_hash->{$key}
-          if defined $field_hash->{$key};
+            if defined $field_hash->{$key};
     }
 
     return
-      sprintf "Exception '%s' thrown '%s'" . ( @fields ? " with %s" : "" ) . "\n",
-      ref($self), $description, ( @fields ? join ', ', @fields : () );
+        sprintf "Exception '%s' thrown '%s'" . ( @fields ? " with %s" : "" ) . "\n",
+        ref($self), $description, ( @fields ? join ', ', @fields : () );
 }
 
 =head1 NAME

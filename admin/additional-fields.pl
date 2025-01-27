@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::AdditionalFields;
 
@@ -28,19 +28,19 @@ my %flagsrequired;
 $flagsrequired{parameters} = 'manage_additional_fields';
 
 my $tablename = $input->param('tablename');
-my $op = $input->param('op') // ( $tablename ? 'list' : 'list_tables' );
+my $op        = $input->param('op') // ( $tablename ? 'list' : 'list_tables' );
 
-if( $op ne 'list_tables' ){
-    $flagsrequired{acquisition} = 'order_manage' if $tablename eq 'aqbasket';
-    $flagsrequired{serials} = 'edit_subscription' if $tablename eq 'subscription';
+if ( $op ne 'list_tables' ) {
+    $flagsrequired{acquisition} = 'order_manage'      if $tablename eq 'aqbasket';
+    $flagsrequired{serials}     = 'edit_subscription' if $tablename eq 'subscription';
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/additional-fields.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => \%flagsrequired,
+        template_name => "admin/additional-fields.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => \%flagsrequired,
     }
 );
 
@@ -48,12 +48,12 @@ my $field_id = $input->param('field_id');
 my @messages;
 
 if ( $op eq 'cud-add' ) {
-    my $name = $input->param('name') // q{};
+    my $name                      = $input->param('name') // q{};
     my $authorised_value_category = $input->param('authorised_value_category');
-    my $marcfield = $input->param('marcfield') // q{};
-    my $marcfield_mode = $input->param('marcfield_mode') // 'get';
-    my $searchable = $input->param('searchable') ? 1 : 0;
-    my $repeatable = $input->param('repeatable') ? 1 : 0;
+    my $marcfield                 = $input->param('marcfield')      // q{};
+    my $marcfield_mode            = $input->param('marcfield_mode') // 'get';
+    my $searchable                = $input->param('searchable') ? 1 : 0;
+    my $repeatable                = $input->param('repeatable') ? 1 : 0;
     if ( $field_id and $name ) {
         my $updated    = 0;
         my $set_fields = {
@@ -71,10 +71,10 @@ if ( $op eq 'cud-add' ) {
             $updated = $af->store ? 1 : 0;
         };
         push @messages, {
-            code => 'cud-update',
+            code   => 'cud-update',
             number => $updated,
         };
-    } elsif ( $name ) {
+    } elsif ($name) {
         my $inserted   = 0;
         my $set_fields = {
             tablename      => $tablename,
@@ -91,12 +91,12 @@ if ( $op eq 'cud-add' ) {
             $inserted = $af->store ? 1 : 0;
         };
         push @messages, {
-            code => 'cud-insert',
+            code   => 'cud-insert',
             number => $inserted,
         };
     } else {
         push @messages, {
-            code => 'cud-insert',
+            code   => 'cud-insert',
             number => 0,
         };
     }
@@ -110,7 +110,7 @@ if ( $op eq 'cud-delete' ) {
         $deleted = $af->delete;
     };
     push @messages, {
-        code => 'cud-delete',
+        code   => 'cud-delete',
         number => $deleted,
     };
     $op = 'list';
@@ -118,7 +118,7 @@ if ( $op eq 'cud-delete' ) {
 
 if ( $op eq 'add_form' ) {
     my $field;
-    if ( $field_id ) {
+    if ($field_id) {
         $field = Koha::AdditionalFields->find($field_id);
     }
 
@@ -135,9 +135,9 @@ if ( $op eq 'list' ) {
 }
 
 $template->param(
-    op => $op,
+    op        => $op,
     tablename => $tablename,
-    messages => \@messages,
+    messages  => \@messages,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

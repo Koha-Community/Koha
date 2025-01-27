@@ -62,12 +62,10 @@ ILL configuration file.
 =cut
 
 sub new {
-    my ( $class ) = @_;
-    my $self  = {};
+    my ($class) = @_;
+    my $self = {};
 
-    $self->{configuration} = _load_configuration(
-        C4::Context->config("interlibrary_loans")
-      );
+    $self->{configuration} = _load_configuration( C4::Context->config("interlibrary_loans") );
 
     bless $self, $class;
 
@@ -148,7 +146,7 @@ sub available_backends {
     my $backend_dir = $self->backend_dir;
     my @backends    = ();
     @backends = glob "$backend_dir/*" if ($backend_dir);
-    @backends = map  { basename($_) } @backends;
+    @backends = map { basename($_) } @backends;
 
     my @all_backends = ( @backends, @backend_plugins_names, 'Standard' );
     @all_backends = grep { $_ =~ /$reduce/ } @all_backends if $reduce;
@@ -167,7 +165,7 @@ Return whether a 'branch' block is defined
 =cut
 
 sub has_branch {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->{configuration}->{raw_config}->{branch};
 }
 
@@ -211,7 +209,7 @@ Return the branch prefix for ILLs defined by our config.
 =cut
 
 sub getPrefixes {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->{configuration}->{prefixes}->{branch};
 }
 
@@ -280,15 +278,15 @@ file to ensure we have only valid input there.
 =cut
 
 sub _load_configuration {
-    my ( $xml_config ) = @_;
+    my ($xml_config) = @_;
     my $xml_backend_dir = $xml_config->{backend_directory};
 
     # Default data structure to be returned
     my $configuration = {
-        backend_directory  => $xml_backend_dir,
-        censorship         => {
+        backend_directory => $xml_backend_dir,
+        censorship        => {
             censor_notes_staff => 0,
-            censor_reply_date => 0,
+            censor_reply_date  => 0,
         },
         limits             => {},
         digital_recipients => {},
@@ -299,53 +297,67 @@ sub _load_configuration {
     # Per Branch Configuration
     my $branches = $xml_config->{branch};
     if ( ref($branches) eq "ARRAY" ) {
+
         # Multiple branch overrides defined
         map {
-            _load_unit_config({
-                unit   => $_,
-                id     => $_->{code},
-                config => $configuration,
-                type   => 'branch'
-            })
+            _load_unit_config(
+                {
+                    unit   => $_,
+                    id     => $_->{code},
+                    config => $configuration,
+                    type   => 'branch'
+                }
+            )
         } @{$branches};
     } elsif ( ref($branches) eq "HASH" ) {
+
         # Single branch override defined
-        _load_unit_config({
-            unit   => $branches,
-            id     => $branches->{code},
-            config => $configuration,
-            type   => 'branch'
-        });
+        _load_unit_config(
+            {
+                unit   => $branches,
+                id     => $branches->{code},
+                config => $configuration,
+                type   => 'branch'
+            }
+        );
     }
 
     # Per Borrower Category Configuration
     my $brw_cats = $xml_config->{borrower_category};
     if ( ref($brw_cats) eq "ARRAY" ) {
+
         # Multiple borrower category overrides defined
         map {
-            _load_unit_config({
-                unit   => $_,
-                id     => $_->{code},
-                config => $configuration,
-                type   => 'brw_cat'
-            })
+            _load_unit_config(
+                {
+                    unit   => $_,
+                    id     => $_->{code},
+                    config => $configuration,
+                    type   => 'brw_cat'
+                }
+            )
         } @{$brw_cats};
     } elsif ( ref($brw_cats) eq "HASH" ) {
+
         # Single branch override defined
-        _load_unit_config({
-            unit   => $brw_cats,
-            id     => $brw_cats->{code},
-            config => $configuration,
-            type   => 'brw_cat'
-        });
+        _load_unit_config(
+            {
+                unit   => $brw_cats,
+                id     => $brw_cats->{code},
+                config => $configuration,
+                type   => 'brw_cat'
+            }
+        );
     }
 
     # Default Configuration
-    _load_unit_config({
-        unit   => $xml_config,
-        id     => 'default',
-        config => $configuration
-    });
+    _load_unit_config(
+        {
+            unit   => $xml_config,
+            id     => 'default',
+            config => $configuration
+        }
+    );
 
     # Censorship
     my $staff_comments = $xml_config->{staff_request_comments} || 0;
@@ -381,13 +393,13 @@ file to ensure we have only valid input there.
 =cut
 
 sub _load_unit_config {
-    my ( $params ) = @_;
-    my $unit = $params->{unit};
-    my $id = $params->{id};
-    my $config = $params->{config};
-    my $type = $params->{type};
+    my ($params) = @_;
+    my $unit     = $params->{unit};
+    my $id       = $params->{id};
+    my $config   = $params->{config};
+    my $type     = $params->{type};
     die "TYPE should be either 'branch' or 'brw_cat' if ID is not 'default'."
-        if ( $id ne 'default' && ( $type ne 'branch' && $type ne 'brw_cat') );
+        if ( $id ne 'default' && ( $type ne 'branch' && $type ne 'brw_cat' ) );
     return $config unless $id;
 
     if ( $unit->{api_key} && $unit->{api_auth} ) {
@@ -396,19 +408,20 @@ sub _load_unit_config {
             api_auth => $unit->{api_auth},
         };
     }
+
     # Add request_limit rules.
     # METHOD := 'annual' || 'active'
     # COUNT  := x >= -1
     if ( ref $unit->{request_limit} eq 'HASH' ) {
-        my $method  = $unit->{request_limit}->{method};
-        my $count = $unit->{request_limit}->{count};
+        my $method = $unit->{request_limit}->{method};
+        my $count  = $unit->{request_limit}->{count};
         if ( 'default' eq $id ) {
-            $config->{limits}->{$id}->{method}  = $method
+            $config->{limits}->{$id}->{method} = $method
                 if ( $method && ( 'annual' eq $method || 'active' eq $method ) );
             $config->{limits}->{$id}->{count} = $count
                 if ( $count && ( -1 <= $count ) );
         } else {
-            $config->{limits}->{$type}->{$id}->{method}  = $method
+            $config->{limits}->{$type}->{$id}->{method} = $method
                 if ( $method && ( 'annual' eq $method || 'active' eq $method ) );
             $config->{limits}->{$type}->{$id}->{count} = $count
                 if ( $count && ( -1 <= $count ) );

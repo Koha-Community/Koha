@@ -42,19 +42,24 @@ $dbh->do(q|DELETE FROM circulation_rules|);
 
 my $builder = t::lib::TestBuilder->new();
 
-my $branch = $builder->build({
-    source => 'Branch',
-});
+my $branch = $builder->build(
+    {
+        source => 'Branch',
+    }
+);
 
-my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
-my $patron = $builder->build_object({
-    class => 'Koha::Patrons',
-    value => {
-        branchcode => $branch->{branchcode},
-        debarred => undef,
-        categorycode => $patron_category->{categorycode},
-    },
-});
+my $patron_category = $builder->build(
+    { source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } } );
+my $patron = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            branchcode   => $branch->{branchcode},
+            debarred     => undef,
+            categorycode => $patron_category->{categorycode},
+        },
+    }
+);
 
 my $item = $builder->build_sample_item(
     {
@@ -69,40 +74,46 @@ Koha::CirculationRules->set_rules(
         categorycode => undef,
         itemtype     => undef,
         rules        => {
-            maxissueqty       => 2,
-            maxonsiteissueqty => 1,
-            lengthunit        => 'days',
-            issuelength       => 5,
+            maxissueqty        => 2,
+            maxonsiteissueqty  => 1,
+            lengthunit         => 'days',
+            issuelength        => 5,
             hardduedate        => undef,
             hardduedatecompare => 0,
         }
     }
 );
 
-t::lib::Mocks::mock_userenv({ patron => $patron });
+t::lib::Mocks::mock_userenv( { patron => $patron } );
 
-t::lib::Mocks::mock_preference('AllowTooManyOverride', 0);
+t::lib::Mocks::mock_preference( 'AllowTooManyOverride', 0 );
 
 # Add onsite checkout
-C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
+C4::Circulation::AddIssue(
+    $patron, $item->barcode, dt_from_string, undef, dt_from_string, undef,
+    { onsite_checkout => 1 }
+);
 
 my ( $impossible, $messages );
-t::lib::Mocks::mock_preference('SwitchOnSiteCheckouts', 0);
+t::lib::Mocks::mock_preference( 'SwitchOnSiteCheckouts', 0 );
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
 is( $impossible->{NO_RENEWAL_FOR_ONSITE_CHECKOUTS}, 1, 'Do not renew on-site checkouts' );
 
-t::lib::Mocks::mock_preference('SwitchOnSiteCheckouts', 1);
+t::lib::Mocks::mock_preference( 'SwitchOnSiteCheckouts', 1 );
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
-is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
-is( exists $impossible->{TOO_MANY}, '', 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
+is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1,  'If SwitchOnSiteCheckouts, switch the on-site checkout' );
+is( exists $impossible->{TOO_MANY},                '', 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
 C4::Circulation::AddIssue( $patron, $item->barcode, undef, undef, undef, undef, { switch_onsite_checkout => 1 } );
 my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
 is( $issue->onsite_checkout, 0, 'The issue should have been switched to a regular checkout' );
 my $five_days_after = dt_from_string->add( days => 5 )->set( hour => 23, minute => 59, second => 0 );
-is( dt_from_string($issue->date_due, 'sql'), $five_days_after, 'The date_due should have been set depending on the circ rules when the on-site checkout has been switched' );
+is(
+    dt_from_string( $issue->date_due, 'sql' ), $five_days_after,
+    'The date_due should have been set depending on the circ rules when the on-site checkout has been switched'
+);
 
 # Specific case
-t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
+t::lib::Mocks::mock_preference( 'ConsiderOnSiteCheckoutsAsNormalCheckouts', 1 );
 my $another_item = $builder->build_sample_item(
     {
         biblionumber => $item->biblionumber,
@@ -110,10 +121,13 @@ my $another_item = $builder->build_sample_item(
     }
 );
 
-C4::Circulation::AddIssue( $patron, $another_item->barcode, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
+C4::Circulation::AddIssue(
+    $patron, $another_item->barcode, dt_from_string, undef, dt_from_string, undef,
+    { onsite_checkout => 1 }
+);
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->barcode );
-is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'Specific case 1 - Switch is allowed' );
-is( exists $impossible->{TOO_MANY}, '', 'Specific case 1 - Switch is allowed' );
+is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1,  'Specific case 1 - Switch is allowed' );
+is( exists $impossible->{TOO_MANY},                '', 'Specific case 1 - Switch is allowed' );
 
 my $yet_another_item = $builder->build_sample_item(
     {
@@ -138,8 +152,8 @@ Koha::CirculationRules->set_rules(
     }
 );
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->barcode );
-is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'Specific case 2 - Switch is allowed' );
-is( exists $impossible->{TOO_MANY}, '', 'Specific case 2 - Switch is allowed' );
+is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1,  'Specific case 2 - Switch is allowed' );
+is( exists $impossible->{TOO_MANY},                '', 'Specific case 2 - Switch is allowed' );
 
 $schema->storage->txn_rollback;
 

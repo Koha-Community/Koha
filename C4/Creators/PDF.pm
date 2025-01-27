@@ -55,30 +55,29 @@ use PDF::Reuse::Barcode;
 use File::Temp;
 use List::Util qw( first );
 
-
 sub _InitVars {
-    my $self = shift;
+    my $self  = shift;
     my $param = shift;
     prInitVars($param);
 }
 
 sub new {
     my $invocant = shift;
-    my $type = ref($invocant) || $invocant;
-    my %opts = @_;
-    my $self = {};
-    _InitVars() if ($opts{InitVars} == 0);
-    _InitVars($opts{InitVars}) if ($opts{InitVars} > 0);
-    delete($opts{InitVars});
-    prDocDir($opts{'DocDir'}) if $opts{'DocDir'};
-    delete($opts{'DocDir'});
+    my $type     = ref($invocant) || $invocant;
+    my %opts     = @_;
+    my $self     = {};
+    _InitVars()                  if ( $opts{InitVars} == 0 );
+    _InitVars( $opts{InitVars} ) if ( $opts{InitVars} > 0 );
+    delete( $opts{InitVars} );
+    prDocDir( $opts{'DocDir'} ) if $opts{'DocDir'};
+    delete( $opts{'DocDir'} );
 
     my $fh = File::Temp->new( UNLINK => 0, SUFFIX => '.pdf' );
-    $opts{Name} = $self->{filename} = "$fh"; # filename
-    close $fh; # we need just filename
+    $opts{Name} = $self->{filename} = "$fh";    # filename
+    close $fh;                                  # we need just filename
 
-    prFile(\%opts);
-    bless ($self, $type);
+    prFile( \%opts );
+    bless( $self, $type );
     return $self;
 }
 
@@ -89,64 +88,64 @@ sub End {
 
     # slurp temporary filename and print it out for plack to pick up
     local $/ = undef;
-    open(my $fh, '<', $self->{filename}) || die "$self->{filename}: $!";
+    open( my $fh, '<', $self->{filename} ) || die "$self->{filename}: $!";
     print <$fh>;
     close $fh;
     unlink $self->{filename};
 }
 
 sub Add {
-    my $self = shift;
+    my $self   = shift;
     my $string = shift;
     prAdd($string);
 }
 
 sub Bookmark {
-    my $self = shift;
+    my $self      = shift;
     my $reference = shift;
     prBookmark($reference);
 }
 
 sub Compress {
-    my $self = shift;
+    my $self      = shift;
     my $directive = shift;
     prCompress($directive);
 }
 
 sub Doc {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
     prDoc(%params);
 }
 
 sub DocForm {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
     return prDocForm(%params);
 }
 
 sub Extract {
     my $self = shift;
-    my ($pdfFile, $pageNo, $oldInternalName) = @_;
-    return prExtract($pdfFile, $pageNo, $oldInternalName);
+    my ( $pdfFile, $pageNo, $oldInternalName ) = @_;
+    return prExtract( $pdfFile, $pageNo, $oldInternalName );
 }
 
 sub Field {
     my $self = shift;
-    my ($fieldName, $value) = @_;
-    prField($fieldName, $value);
+    my ( $fieldName, $value ) = @_;
+    prField( $fieldName, $value );
 }
 
 sub Font {
-    my $self = shift;
+    my $self     = shift;
     my $fontName = shift;
 
     my $ttf = C4::Context->config('ttf');
 
-    if ( $ttf ) {
+    if ($ttf) {
         my $ttf_path = first { $_->{type} eq $fontName } @{ $ttf->{font} };
         if ( -e $ttf_path->{content} ) {
-            return prTTFont($ttf_path->{content});
+            return prTTFont( $ttf_path->{content} );
         } else {
             warn "ERROR in koha-conf.xml -- missing <font type=\"$fontName\">/path/to/font.ttf</font>";
         }
@@ -161,7 +160,7 @@ sub FontSize {
 }
 
 sub Form {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
     return prForm(%params);
 }
@@ -172,91 +171,95 @@ sub GetLogBuffer {
 }
 
 sub GraphState {
-    my $self = shift;
+    my $self   = shift;
     my $string = shift;
     prGraphState($string);
 }
 
 sub Image {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
     return prImage(%params);
 }
 
 sub Init {
     my $self = shift;
-    my ($string, $duplicateCode) = @_;
-    prInit($string, $duplicateCode);
+    my ( $string, $duplicateCode ) = @_;
+    prInit( $string, $duplicateCode );
 }
 
 sub AltJpeg {
     my $self = shift;
-    my ($imageData, $width, $height, $imageFormat, $altImageData, $altImageWidth, $altImageHeight, $altImageFormat) = @_;
-    return prAltJpeg($imageData, $width, $height, $imageFormat, $altImageData, $altImageWidth, $altImageHeight, $altImageFormat);
+    my ( $imageData, $width, $height, $imageFormat, $altImageData, $altImageWidth, $altImageHeight, $altImageFormat ) =
+        @_;
+    return prAltJpeg(
+        $imageData, $width, $height, $imageFormat, $altImageData, $altImageWidth, $altImageHeight,
+        $altImageFormat
+    );
 }
 
 sub Jpeg {
     my $self = shift;
-    my ($imageData, $width, $height, $imageFormat) = @_;
-    return prJpeg($imageData, $width, $height, $imageFormat);
+    my ( $imageData, $width, $height, $imageFormat ) = @_;
+    return prJpeg( $imageData, $width, $height, $imageFormat );
 }
 
 sub Js {
-    my $self = shift;
+    my $self               = shift;
     my $string_or_fileName = shift;
     prJs($string_or_fileName);
 }
 
 sub Link {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
     prLink(%params);
 }
 
 sub Log {
-    my $self = shift;
+    my $self   = shift;
     my $string = shift;
     prLog($string);
 }
 
 sub LogDir {
-    my $self = shift;
+    my $self      = shift;
     my $directory = shift;
     prLogDir($directory);
 }
 
 sub Mbox {
     my $self = shift;
-    my ($lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY) = @_;
-    prMbox($lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY);
+    my ( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY ) = @_;
+    prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 }
 
 sub Page {
-    my $self = shift;
+    my $self  = shift;
     my $noLog = shift;
     prPage($noLog);
 }
 
 sub SinglePage {
     my $self = shift;
-    my ($file, $pageNumber) = @_;
-    return prSinglePage($file, $pageNumber);
+    my ( $file, $pageNumber ) = @_;
+    return prSinglePage( $file, $pageNumber );
 }
 
 sub StrWidth {
     my $self = shift;
-    my ($string, $font, $fontSize) = @_;
+    my ( $string, $font, $fontSize ) = @_;
 
     # replace font code with correct internal font
     $font = C4::Creators::PDF->Font($font);
 
-    return prStrWidth($string, $font, $fontSize);
+    return prStrWidth( $string, $font, $fontSize );
 }
 
 sub Text {
     my $self = shift;
-    my ($x, $y, $string, $align, $rotation) = @_;
-    return prText($x, $y, $string, $align, $rotation);
+    my ( $x, $y, $string, $align, $rotation ) = @_;
+    return prText( $x, $y, $string, $align, $rotation );
 }
 
 sub TTFont {

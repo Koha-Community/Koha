@@ -8,138 +8,162 @@
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [%- BLOCK form_label -%]
-  [%- SWITCH label -%]
-    [%- CASE 'barcode' %]<span>Barcode</span>
-    [%- CASE 'itemcallnumber' %]<span>Call number</span>
-    [%- CASE 'stocknumber' %]<span>Inventory number</span>
-    [%- CASE 'title' %]<span>Title</span>
-    [%- CASE 'author' %]<span>Author</span>
-    [%- CASE 'publishercode' %]<span>Publisher</span>
-    [%- CASE 'publicationyear' %]<span>Publication date</span>
-    [%- CASE 'collectiontitle' %]<span>Collection title</span>
-    [%- CASE 'isbn' %]<span>ISBN</span>
-    [%- CASE 'issn' %]<span>ISSN</span>
-    [%- CASE 'homebranch' %]<span>Home library</span>
-    [%- CASE 'holdingbranch' %]<span>Current library</span>
-    [%- CASE 'All libraries' %]<span>All libraries</span>
-    [%- CASE 'location' %]<span>Shelving location</span>
-    [%- CASE 'All locations' %]<span>All locations</span>
-    [%- CASE 'itype' %]<span>Item type</span>
-    [%- CASE 'All item types' %]<span>All item types</span>
-    [%- CASE 'ccode' %]<span>Collection</span>
-    [%- CASE 'All collection codes' %]<span>All collections</span>
-    [%- CASE 'notforloan' %]<span>Status</span>
-    [%- CASE 'All statuses' %]<span>All statuses</span>
-    [%- CASE 'itemlost' %]<span>Lost</span>
-    [%- CASE 'withdrawn' %]<span>Withdrawn</span>
-    [%- CASE 'damaged' %]<span>Damaged</span>
-    [%- CASE 'new_status' %]<span>Is new</span>
-  [%- END -%]
+    [%- SWITCH label -%]
+
+    [%- CASE 'barcode' %]
+        <span>Barcode</span>
+    [%- CASE 'itemcallnumber' %]
+        <span>Call number</span>
+    [%- CASE 'stocknumber' %]
+        <span>Inventory number</span>
+    [%- CASE 'title' %]
+        <span>Title</span>
+    [%- CASE 'author' %]
+        <span>Author</span>
+    [%- CASE 'publishercode' %]
+        <span>Publisher</span>
+    [%- CASE 'publicationyear' %]
+        <span>Publication date</span>
+    [%- CASE 'collectiontitle' %]
+        <span>Collection title</span>
+    [%- CASE 'isbn' %]
+        <span>ISBN</span>
+    [%- CASE 'issn' %]
+        <span>ISSN</span>
+    [%- CASE 'homebranch' %]
+        <span>Home library</span>
+    [%- CASE 'holdingbranch' %]
+        <span>Current library</span>
+    [%- CASE 'All libraries' %]
+        <span>All libraries</span>
+    [%- CASE 'location' %]
+        <span>Shelving location</span>
+    [%- CASE 'All locations' %]
+        <span>All locations</span>
+    [%- CASE 'itype' %]
+        <span>Item type</span>
+    [%- CASE 'All item types' %]
+        <span>All item types</span>
+    [%- CASE 'ccode' %]
+        <span>Collection</span>
+    [%- CASE 'All collection codes' %]
+        <span>All collections</span>
+    [%- CASE 'notforloan' %]
+        <span>Status</span>
+    [%- CASE 'All statuses' %]
+        <span>All statuses</span>
+    [%- CASE 'itemlost' %]
+        <span>Lost</span>
+    [%- CASE 'withdrawn' %]
+        <span>Withdrawn</span>
+    [%- CASE 'damaged' %]
+        <span>Damaged</span>
+    [%- CASE 'new_status' %]
+        <span>Is new</span>
+    [%- END -%]
 [%- END -%]
 
 [% BLOCK form_field_select %]
-  <div class="form-field form-field-select">
-    <label class="form-field-label" for="[% name | html %]">[% INCLUDE form_label label=name %]</label>
-    <select id="[% name | html %]_op" name="[% name | html %]_op">
-      [% IF query.param(name _ '_op') == '=' || !query.param(name _ '_op') %]
-        <option value="=" selected="selected">is</option>
-        <option value="!=" >is not</option>
-      [% ELSE %]
-        <option value="=">is</option>
-        <option value="!=" selected="selected">is not</option>
-      [% END %]
-    </select>
-    <select id="[% name | html %]" name="[% name | html %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 | html %]">
-      [% IF query.param(name).size == 0 %]
-        <option value="" selected="selected">
-            [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %]
-        </option>
-      [% END %]
-      [% FOREACH option IN options %]
-        [% IF query.param(name).grep(option.value).size %]
-            <option value="[% option.value | html %]" selected="selected">[% option.label | html %]</option>
-        [% ELSE %]
-        <option value="[% option.value | html %]">[% option.label | html %]</option>
-        [% END %]
-      [% END %]
-    </select>
-  </div>
+    <div class="form-field form-field-select">
+        <label class="form-field-label" for="[% name | html %]">[% INCLUDE form_label label=name %]</label>
+        <select id="[% name | html %]_op" name="[% name | html %]_op">
+            [% IF query.param(name _ '_op') == '=' || !query.param(name _ '_op') %]
+                <option value="=" selected="selected">is</option>
+                <option value="!=">is not</option>
+            [% ELSE %]
+                <option value="=">is</option>
+                <option value="!=" selected="selected">is not</option>
+            [% END %]
+        </select>
+        <select id="[% name | html %]" name="[% name | html %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 | html %]">
+            [% IF query.param(name).size == 0 %]
+                <option value="" selected="selected"> [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %] </option>
+            [% END %]
+            [% FOREACH option IN options %]
+                [% IF query.param(name).grep(option.value).size %]
+                    <option value="[% option.value | html %]" selected="selected">[% option.label | html %]</option>
+                [% ELSE %]
+                    <option value="[% option.value | html %]">[% option.label | html %]</option>
+                [% END %]
+            [% END %]
+        </select>
+    </div>
 [% END %]
 
 [% BLOCK form_field_select_option %]
-  [% IF query.param('f').$i == value || query.param('f') == value %]
-    <option value="[% value | html %]" selected="selected">[% INCLUDE form_label label=value %]</option>
-  [% ELSE %]
-    <option value="[% value | html %]">[% INCLUDE form_label label=value %]</option>
-  [% END %]
+    [% IF query.param('f').$i == value || query.param('f') == value %]
+        <option value="[% value | html %]" selected="selected">[% INCLUDE form_label label=value %]</option>
+    [% ELSE %]
+        <option value="[% value | html %]">[% INCLUDE form_label label=value %]</option>
+    [% END %]
 [% END %]
 
 [% BLOCK form_field_select_text %]
-  [% SET i = loop.index %]
-  <div class="form-field form-field-select-text">
-    [% IF loop.first || !query.param('f') %]
-        <select name="c" class="form-field-conjunction" disabled="disabled">
-        <option value="and">AND</option>
-        <option value="or">OR</option>
-        </select>
-    [% ELSE %]
-        [% SET j = i - 1 %]
-        <select name="c" class="form-field-conjunction">
-            [% IF query.param('c').$j == 'and' || query.param('c') == 'and' %]
-                <option value="and" selected="selected">AND</option>
-                <option value="or">OR</option>
-            [% ELSE %]
+    [% SET i = loop.index %]
+    <div class="form-field form-field-select-text">
+        [% IF loop.first || !query.param('f') %]
+            <select name="c" class="form-field-conjunction" disabled="disabled">
                 <option value="and">AND</option>
-                <option value="or" selected="selected">OR</option>
+                <option value="or">OR</option>
+            </select>
+        [% ELSE %]
+            [% SET j = i - 1 %]
+            <select name="c" class="form-field-conjunction">
+                [% IF query.param('c').$j == 'and' || query.param('c') == 'and' %]
+                    <option value="and" selected="selected">AND</option>
+                    <option value="or">OR</option>
+                [% ELSE %]
+                    <option value="and">AND</option>
+                    <option value="or" selected="selected">OR</option>
+                [% END %]
+            </select>
+        [% END %]
+        <select name="f" class="form-field-column">
+            [% INCLUDE form_field_select_option value='barcode' %]
+            [% INCLUDE form_field_select_option value='itemcallnumber' %]
+            [% INCLUDE form_field_select_option value='stocknumber' %]
+            [% INCLUDE form_field_select_option value='title' %]
+            [% INCLUDE form_field_select_option value='author' %]
+            [% INCLUDE form_field_select_option value='publishercode' %]
+            [% INCLUDE form_field_select_option value='publicationyear' %]
+            [% INCLUDE form_field_select_option value='collectiontitle' %]
+            [% INCLUDE form_field_select_option value='isbn' %]
+            [% INCLUDE form_field_select_option value='issn' %]
+            [% IF items_search_fields.size %]
+                <optgroup label="Custom search fields">
+                    [% FOREACH field IN items_search_fields %]
+                        [% marcfield = field.tagfield %]
+                        [% IF field.tagsubfield.defined AND field.tagsubfield != "" %]
+                            [% marcfield = marcfield _ '$' _ field.tagsubfield %]
+                        [% END %]
+                        <option value="marc:[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]">[% field.label | html %] ([% marcfield | html %])</option>
+                    [% END %]
+                </optgroup>
             [% END %]
         </select>
-    [% END %]
-    <select name="f" class="form-field-column">
-      [% INCLUDE form_field_select_option value='barcode' %]
-      [% INCLUDE form_field_select_option value='itemcallnumber' %]
-      [% INCLUDE form_field_select_option value='stocknumber' %]
-      [% INCLUDE form_field_select_option value='title' %]
-      [% INCLUDE form_field_select_option value='author' %]
-      [% INCLUDE form_field_select_option value='publishercode' %]
-      [% INCLUDE form_field_select_option value='publicationyear' %]
-      [% INCLUDE form_field_select_option value='collectiontitle' %]
-      [% INCLUDE form_field_select_option value='isbn' %]
-      [% INCLUDE form_field_select_option value='issn' %]
-      [% IF items_search_fields.size %]
-        <optgroup label="Custom search fields">
-          [% FOREACH field IN items_search_fields %]
-            [% marcfield = field.tagfield %]
-            [% IF field.tagsubfield.defined AND field.tagsubfield != "" %]
-              [% marcfield = marcfield _ '$' _ field.tagsubfield %]
+        <select name="op" class="form-field-not">
+            [% IF query.param('op').$i == 'not like' || query.param('op') == 'not like' %]
+                <option value="like">is</option>
+                <option value="not like" selected="selected">is not</option>
+            [% ELSE %]
+                <option value="like">is</option>
+                <option value="not like">is not</option>
             [% END %]
-            <option value="marc:[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]">[% field.label | html %] ([% marcfield | html %])</option>
-          [% END %]
-        </optgroup>
-      [% END %]
-    </select>
-    <select name="op" class="form-field-not">
-        [% IF query.param('op').$i == 'not like' || query.param('op') == 'not like' %]
-            <option value="like">is</option>
-            <option value="not like" selected="selected">is not</option>
-        [% ELSE %]
-            <option value="like">is</option>
-            <option value="not like">is not</option>
-        [% END %]
-    </select>
-    <input type="text" name="q" class="form-field-value" value="[% query.param('q').$i ? query.param('q').$i : query.param('q') | html %]"/>
-  </div>
+        </select>
+        <input type="text" name="q" class="form-field-value" value="[% query.param('q').$i ? query.param('q').$i : query.param('q') | html %]" />
+    </div>
 [% END %]
 
 [% BLOCK form_field_radio_yes_no %]
-  <div class="form-field [% divclass | html %]">
-    <label class="form-field-label">[% INCLUDE form_label label=name %]:</label>
-    <input type="radio" name="[% name | html %]" id="[% name | html %]_indifferent" value="" checked="checked"/>
-    <label for="[% name | html %]_indifferent">Ignore</label>
-    <input type="radio" name="[% name | html %]" id="[% name | html %]_yes" value="yes" />
-    <label for="[% name | html %]_yes">Yes</label>
-    <input type="radio" name="[% name | html %]" id="[% name | html %]_no" value="no" />
-    <label for="[% name | html %]_no">No</label>
-  </div>
+    <div class="form-field [% divclass | html %]">
+        <label class="form-field-label">[% INCLUDE form_label label=name %]:</label>
+        <input type="radio" name="[% name | html %]" id="[% name | html %]_indifferent" value="" checked="checked" />
+        <label for="[% name | html %]_indifferent">Ignore</label>
+        <input type="radio" name="[% name | html %]" id="[% name | html %]_yes" value="yes" />
+        <label for="[% name | html %]_yes">Yes</label>
+        <input type="radio" name="[% name | html %]" id="[% name | html %]_no" value="no" />
+        <label for="[% name | html %]_no">No</label>
+    </div>
 [% END %]
 
 [%# We need to escape html characters for 'value' and 'label' %]
@@ -169,17 +193,18 @@
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Item search") | html %] &rsaquo;
-    [% t("Catalog") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
-  [% INCLUDE 'doc-head-close.inc' %]
-  [% Asset.css("css/itemsearchform.css") | $raw %]
+<title
+    >[% FILTER collapse %]
+        [% t("Item search") | html %]
+        &rsaquo; [% t("Catalog") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/itemsearchform.css") | $raw %]
 </head>
 
 <body id="catalog_itemsearch" class="catalog">
-  [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'home-search.inc' %]
 [% END %]
 
@@ -195,148 +220,146 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' wide_full => 1 %]
-
     <div id="item-search-block">
-      <h1>Item search</h1>
+        <h1>Item search</h1>
 
-      <form action="/cgi-bin/koha/catalogue/itemsearch.pl" method="get" id="itemsearchform">
-          <div id="toolbar" class="btn-toolbar sticky">
+        <form action="/cgi-bin/koha/catalogue/itemsearch.pl" method="get" id="itemsearchform">
+            <div id="toolbar" class="btn-toolbar sticky">
                 <div class="btn-group">
                     <button class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
                 </div>
                 <div class="btn-group">
                     <a href="/cgi-bin/koha/catalogue/search.pl" class="btn btn-default"><i class="fa fa-search"></i> Go to advanced search</a>
                 </div>
-          </div>
-          <fieldset>
-            [% INCLUDE form_field_select name="homebranch" options = branches %]
-            [% INCLUDE form_field_select name="holdingbranch" options = branches %]
-            [% IF locations.size %]
-                [% INCLUDE form_field_select name="location" options = locations %]
-            [% END %]
-          </fieldset>
-          <fieldset>
-            [% INCLUDE form_field_select name="itype" options = itemtypes style="min-width:300px" %]
-            [% IF ccodes.size %]
-                [% INCLUDE form_field_select name="ccode" options = ccodes %]
-            [% END %]
-            [% IF notforloans.size %]
-                [% INCLUDE form_field_select name="notforloan" options = notforloans %]
-            [% END %]
-            [% IF itemlosts.size %]
-                [% INCLUDE form_field_select name="itemlost" options = itemlosts %]
-            [% END %]
-            [% IF withdrawns.size %]
-                [% INCLUDE form_field_select name="withdrawn" options = withdrawns %]
-            [% END %]
-            [% IF damageds.size %]
-                [% INCLUDE form_field_select name="damaged" options = damageds %]
-            [% END %]
-            <div class="form-field">
-                <label class="form-field-label">Availability:</label>
-                [% IF query.param('onloan') == '' %]
-                    <input type="radio" name="onloan" id="onloan_indifferent" value="" checked="checked"/>
-                [% ELSE %]
-                    <input type="radio" name="onloan" id="onloan_indifferent" value=""/>
-                [% END %]
-                <label for="onloan_indifferent">Ignore</label>
-                [% IF query.param('onloan') == 'IS NOT NULL' %]
-                    <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL" checked="checked"/>
-                [% ELSE %]
-                    <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL"/>
-                [% END %]
-                <label for="onloan_yes">Checked out</label>
-                [% IF query.param('onloan') == 'IS NULL' %]
-                    <input type="radio" name="onloan" id="onloan_no" value="IS NULL" checked="checked"/>
-                [% ELSE %]
-                    <input type="radio" name="onloan" id="onloan_no" value="IS NULL"/>
-                [% END %]
-                <label for="onloan_no">Not checked out</label>
             </div>
-          </fieldset>
-          <fieldset>
-            [% IF !query.param('f') %]
-                [% INCLUDE form_field_select_text %]
-            [% ELSE %]
-                [% FOREACH field IN query.param('f') %]
+            <fieldset>
+                [% INCLUDE form_field_select name="homebranch" options = branches %]
+                [% INCLUDE form_field_select name="holdingbranch" options = branches %]
+                [% IF locations.size %]
+                    [% INCLUDE form_field_select name="location" options = locations %]
+                [% END %]
+            </fieldset>
+            <fieldset>
+                [% INCLUDE form_field_select name="itype" options = itemtypes style="min-width:300px" %]
+                [% IF ccodes.size %]
+                    [% INCLUDE form_field_select name="ccode" options = ccodes %]
+                [% END %]
+                [% IF notforloans.size %]
+                    [% INCLUDE form_field_select name="notforloan" options = notforloans %]
+                [% END %]
+                [% IF itemlosts.size %]
+                    [% INCLUDE form_field_select name="itemlost" options = itemlosts %]
+                [% END %]
+                [% IF withdrawns.size %]
+                    [% INCLUDE form_field_select name="withdrawn" options = withdrawns %]
+                [% END %]
+                [% IF damageds.size %]
+                    [% INCLUDE form_field_select name="damaged" options = damageds %]
+                [% END %]
+                <div class="form-field">
+                    <label class="form-field-label">Availability:</label>
+                    [% IF query.param('onloan') == '' %]
+                        <input type="radio" name="onloan" id="onloan_indifferent" value="" checked="checked" />
+                    [% ELSE %]
+                        <input type="radio" name="onloan" id="onloan_indifferent" value="" />
+                    [% END %]
+                    <label for="onloan_indifferent">Ignore</label>
+                    [% IF query.param('onloan') == 'IS NOT NULL' %]
+                        <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL" checked="checked" />
+                    [% ELSE %]
+                        <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL" />
+                    [% END %]
+                    <label for="onloan_yes">Checked out</label>
+                    [% IF query.param('onloan') == 'IS NULL' %]
+                        <input type="radio" name="onloan" id="onloan_no" value="IS NULL" checked="checked" />
+                    [% ELSE %]
+                        <input type="radio" name="onloan" id="onloan_no" value="IS NULL" />
+                    [% END %]
+                    <label for="onloan_no">Not checked out</label>
+                </div>
+            </fieldset>
+            <fieldset>
+                [% IF !query.param('f') %]
                     [% INCLUDE form_field_select_text %]
-                [% END  %]
-            [% END %]
-            <p class="hint">You can use the following wildcard characters: % _</p>
-            <p class="hint">% matches any number of characters</p>
-            <p class="hint">_ matches only a single character</p>
-          </fieldset>
-          <fieldset>
-            <div class="form-field">
-              <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
-              <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="[% query.param('itemcallnumber_from') | html %]" />
-              <span class="hint">(inclusive)</span>
-            </div>
-            <div class="form-field">
-              <label class="form-field-label" for="itemcallnumber_to">To call number:</label>
-              <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="[% query.param('itemcallnumber_to') | html %]" />
-              <span class="hint">(inclusive)</span>
-            </div>
-            [% IF ( has_new_status ) %]
-                [% INCLUDE form_field_radio_yes_no name="new_status" divclass='item-new-status' %]
-            [% END %]
-            <div class="form-field">
-              <label class="form-field-label" for="issues_op">Checkout count:</label>
-              <select id="issues_op" name="issues_op">
-                [% IF query.param('issues_op') == '>' %]
-                  <option value=">" selected="selected">&gt;</option>
                 [% ELSE %]
-                  <option value=">">&gt;</option>
+                    [% FOREACH field IN query.param('f') %]
+                        [% INCLUDE form_field_select_text %]
+                    [% END %]
                 [% END %]
-                [% IF query.param('issues_op') == '<' %]
-                  <option value="<" selected="selected">&lt;</option>
-                [% ELSE %]
-                  <option value="<">&lt;</option>
+                <p class="hint">You can use the following wildcard characters: % _</p>
+                <p class="hint">% matches any number of characters</p>
+                <p class="hint">_ matches only a single character</p>
+            </fieldset>
+            <fieldset>
+                <div class="form-field">
+                    <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
+                    <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="[% query.param('itemcallnumber_from') | html %]" />
+                    <span class="hint">(inclusive)</span>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="itemcallnumber_to">To call number:</label>
+                    <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="[% query.param('itemcallnumber_to') | html %]" />
+                    <span class="hint">(inclusive)</span>
+                </div>
+                [% IF ( has_new_status ) %]
+                    [% INCLUDE form_field_radio_yes_no name="new_status" divclass='item-new-status' %]
                 [% END %]
-                [% IF query.param('issues_op') == '=' %]
-                  <option value="=" selected="selected">=</option>
-                [% ELSE %]
-                  <option value="=">=</option>
-                [% END %]
-                [% IF query.param('issues_op') == '!=' %]
-                  <option value="!=" selected="selected">!=</option>
-                [% ELSE %]
-                  <option value="!=">!=</option>
-                [% END %]
-              </select>
-              <input type="text" name="issues" value="[% query.param('issues') | html %]"/>
-            </div>
-            <div class="form-field">
-              <label class="form-field-label" for="datelastborrowed_op">Last checkout date:</label>
-              <select id="datelastborrowed_op" name="datelastborrowed_op">
-                [% IF query.param('datelastborrowed_op') == '>' %]
-                  <option value=">" selected="selected">After</option>
-                [% ELSE %]
-                  <option value=">">After</option>
-                [% END %]
-                [% IF query.param('datelastborrowed_op') == '<' %]
-                  <option value="<" selected="selected">Before</option>
-                [% ELSE %]
-                  <option value="<">Before</option>
-                [% END %]
-                [% IF query.param('datelastborrowed_op') == '=' %]
-                  <option value="=" selected="selected">[% tp('On specific date', 'On') | html %]</option>
-                [% ELSE %]
-                  <option value="=">[% tp('On specific date', 'On') | html %]</option>
-                [% END %]
-              </select>
-              <input class="flatpickr flatpickr-input" type="text" name="datelastborrowed" value="[% query.param('datelastborrowed') | html %]"/>
-            </div>
-          </fieldset>
-          <fieldset>
-            <div class="form-field-radio">
-              <label>Output:</label>
-              <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">Screen</label>
-              <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label>
-              <input type="radio" id="format-barcodes" name="format" value="barcodes"/> <label for="format-barcodes">Barcodes file</label>
-            </div>
-          </fieldset>
-      </form>
+                <div class="form-field">
+                    <label class="form-field-label" for="issues_op">Checkout count:</label>
+                    <select id="issues_op" name="issues_op">
+                        [% IF query.param('issues_op') == '>' %]
+                            <option value=">" selected="selected">&gt;</option>
+                        [% ELSE %]
+                            <option value=">">&gt;</option>
+                        [% END %]
+                        [% IF query.param('issues_op') == '<' %]
+                            <option value="<" selected="selected">&lt;</option>
+                        [% ELSE %]
+                            <option value="<">&lt;</option>
+                        [% END %]
+                        [% IF query.param('issues_op') == '=' %]
+                            <option value="=" selected="selected">=</option>
+                        [% ELSE %]
+                            <option value="=">=</option>
+                        [% END %]
+                        [% IF query.param('issues_op') == '!=' %]
+                            <option value="!=" selected="selected">!=</option>
+                        [% ELSE %]
+                            <option value="!=">!=</option>
+                        [% END %]
+                    </select>
+                    <input type="text" name="issues" value="[% query.param('issues') | html %]" />
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="datelastborrowed_op">Last checkout date:</label>
+                    <select id="datelastborrowed_op" name="datelastborrowed_op">
+                        [% IF query.param('datelastborrowed_op') == '>' %]
+                            <option value=">" selected="selected">After</option>
+                        [% ELSE %]
+                            <option value=">">After</option>
+                        [% END %]
+                        [% IF query.param('datelastborrowed_op') == '<' %]
+                            <option value="<" selected="selected">Before</option>
+                        [% ELSE %]
+                            <option value="<">Before</option>
+                        [% END %]
+                        [% IF query.param('datelastborrowed_op') == '=' %]
+                            <option value="=" selected="selected">[% tp('On specific date', 'On') | html %]</option>
+                        [% ELSE %]
+                            <option value="=">[% tp('On specific date', 'On') | html %]</option>
+                        [% END %]
+                    </select>
+                    <input class="flatpickr flatpickr-input" type="text" name="datelastborrowed" value="[% query.param('datelastborrowed') | html %]" />
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="form-field-radio">
+                    <label>Output:</label>
+                    <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">Screen</label> <input type="radio" id="format-csv" name="format" value="csv" />
+                    <label for="format-csv">CSV</label> <input type="radio" id="format-barcodes" name="format" value="barcodes" /> <label for="format-barcodes">Barcodes file</label>
+                </div>
+            </fieldset>
+        </form>
     </div>
 
     <div id="results-wrapper"></div>
@@ -348,7 +371,6 @@
         <input type="hidden" id="batch_mod_del" name="del" value="0" />
     </form>
 [% END %]
-
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

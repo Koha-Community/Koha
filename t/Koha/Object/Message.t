@@ -32,24 +32,23 @@ subtest 'new() tests' => sub {
 
     my $some_error = 'Some error';
 
-    my $message = Koha::Object::Message->new({ message => $some_error });
-    is( ref($message), 'Koha::Object::Message', 'Type is correct' );
-    is( $message->message, $some_error, 'The message attribute has the right value' );
-    is( $message->type, 'error', 'If omitted, the type is error' );
+    my $message = Koha::Object::Message->new( { message => $some_error } );
+    is( ref($message),     'Koha::Object::Message', 'Type is correct' );
+    is( $message->message, $some_error,             'The message attribute has the right value' );
+    is( $message->type,    'error',                 'If omitted, the type is error' );
 
-    $message = Koha::Object::Message->new({ message => $some_error, type => 'callback' });
-    is( ref($message), 'Koha::Object::Message', 'Type is correct' );
-    is( $message->message, $some_error, 'The message attribute has the right value' );
-    is( $message->type, 'callback', 'type is correct' );
+    $message = Koha::Object::Message->new( { message => $some_error, type => 'callback' } );
+    is( ref($message),     'Koha::Object::Message', 'Type is correct' );
+    is( $message->message, $some_error,             'The message attribute has the right value' );
+    is( $message->type,    'callback',              'type is correct' );
 
-    $message = Koha::Object::Message->new({ message => $some_error, payload => { some => 'structure' } });
-    is( ref($message), 'Koha::Object::Message', 'Type is correct' );
-    is( $message->message, $some_error, 'The message attribute has the right value' );
+    $message = Koha::Object::Message->new( { message => $some_error, payload => { some => 'structure' } } );
+    is( ref($message),     'Koha::Object::Message', 'Type is correct' );
+    is( $message->message, $some_error,             'The message attribute has the right value' );
     is_deeply( $message->payload, { some => 'structure' }, 'payload is correct' );
 
-    throws_ok
-        { Koha::Object::Message->new({ blah => 'ohh' }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { Koha::Object::Message->new( { blah => 'ohh' } ); }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown if required parameter missing';
 
     like( "$@", qr/Mandatory parameter missing: 'message'/, 'Expected exception message' );

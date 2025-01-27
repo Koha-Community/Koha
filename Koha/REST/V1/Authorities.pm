@@ -52,8 +52,7 @@ sub get {
                 status => 200,
                 json   => $c->objects->to_api($authority),
             );
-        }
-        else {
+        } else {
             my $record = $authority->record;
 
             $c->respond_to(
@@ -89,8 +88,7 @@ sub get {
                 }
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -159,7 +157,8 @@ sub add {
         }
 
         unless ( $overrides->{any} || $overrides->{duplicate} ) {
-            my ( $duplicateauthid, $duplicateauthvalue ) = C4::AuthoritiesMarc::FindDuplicateAuthority( $record, $authtypecode );
+            my ( $duplicateauthid, $duplicateauthvalue ) =
+                C4::AuthoritiesMarc::FindDuplicateAuthority( $record, $authtypecode );
 
             return $c->render(
                 status  => 409,
@@ -172,17 +171,15 @@ sub add {
 
         my $authid = AddAuthority( $record, undef, $authtypecode );
 
-        $c->res->headers->location($c->req->url->to_string . '/' . $authid);
+        $c->res->headers->location( $c->req->url->to_string . '/' . $authid );
         $c->render(
             status  => 201,
             openapi => q{},
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 update
 
@@ -193,7 +190,7 @@ Controller function that handles modifying an authority object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $authid = $c->param('authority_id');
+    my $authid    = $c->param('authority_id');
     my $authority = Koha::Authorities->find( { authid => $authid } );
 
     return $c->render_resource_not_found("Authority record")
@@ -233,8 +230,7 @@ sub update {
             status  => 200,
             openapi => { id => $authid }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -257,39 +253,30 @@ sub list {
                 status => 200,
                 json   => $c->objects->to_api($authorities),
             );
-        }
-        elsif (
-            $c->req->headers->accept =~ m/application\/marcxml\+xml(;.*)?$/ )
-        {
+        } elsif ( $c->req->headers->accept =~ m/application\/marcxml\+xml(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marcxml+xml' );
             return $c->render(
                 status => 200,
                 text   => $authorities->print_collection('marcxml')
             );
-        }
-        elsif (
-            $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ )
-        {
+        } elsif ( $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc-in-json' );
             return $c->render(
                 status => 200,
                 data   => $authorities->print_collection('mij')
             );
-        }
-        elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
+        } elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc' );
             return $c->render(
                 status => 200,
                 text   => $authorities->print_collection('marc')
             );
-        }
-        elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
+        } elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
             return $c->render(
                 status => 200,
                 text   => $authorities->print_collection('txt')
             );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 406,
                 openapi => [
@@ -299,8 +286,7 @@ sub list {
                 ]
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

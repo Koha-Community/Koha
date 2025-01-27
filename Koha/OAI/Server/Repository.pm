@@ -36,7 +36,7 @@ use XML::SAX::Writer;
 use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
-use C4::Biblio qw( GetFrameworkCode );
+use C4::Biblio  qw( GetFrameworkCode );
 use C4::Charset qw( StripNonXmlChars );
 use Koha::XSLT::Base;
 use Koha::Biblios;
@@ -102,29 +102,28 @@ Note the 'include_items' parameter which is the only mean to return item-level i
 
 =cut
 
-
 sub new {
-    my ($class, %args) = @_;
+    my ( $class, %args ) = @_;
     my $self = $class->SUPER::new(%args);
 
-    $self->{ koha_identifier      } = C4::Context->preference("OAI-PMH:archiveID");
-    $self->{ koha_max_count       } = C4::Context->preference("OAI-PMH:MaxCount");
-    $self->{ koha_metadata_format } = ['oai_dc', 'marc21', 'marcxml'];
-    $self->{ xslt_engine          } = Koha::XSLT::Base->new;
+    $self->{koha_identifier}      = C4::Context->preference("OAI-PMH:archiveID");
+    $self->{koha_max_count}       = C4::Context->preference("OAI-PMH:MaxCount");
+    $self->{koha_metadata_format} = [ 'oai_dc', 'marc21', 'marcxml' ];
+    $self->{xslt_engine}          = Koha::XSLT::Base->new;
 
     # Load configuration file if defined in OAI-PMH:ConfFile syspref
     if ( my $file = C4::Context->preference("OAI-PMH:ConfFile") ) {
-        $self->{ conf } = YAML::XS::LoadFile( $file );
+        $self->{conf} = YAML::XS::LoadFile($file);
         my @formats = keys %{ $self->{conf}->{format} };
-        $self->{ koha_metadata_format } =  \@formats;
+        $self->{koha_metadata_format} = \@formats;
     }
 
     # OAI-PMH handles dates in UTC, so do that on the database level to avoid need for
     # any conversions
     my $sth = C4::Context->dbh->prepare('SELECT @@session.time_zone');
     $sth->execute();
-    my ( $orig_tz ) = $sth->fetchrow();
-    $self->{ mysql_orig_tz } = $orig_tz;
+    my ($orig_tz) = $sth->fetchrow();
+    $self->{mysql_orig_tz} = $orig_tz;
     C4::Context->dbh->prepare("SET time_zone='+00:00'")->execute();
 
     # Check for grammatical errors in the request
@@ -132,7 +131,7 @@ sub new {
 
     # Is metadataPrefix supported by the repository?
     my $mdp = param('metadataPrefix') || '';
-    if ( $mdp && !grep { $_ eq $mdp } @{$self->{ koha_metadata_format }} ) {
+    if ( $mdp && !grep { $_ eq $mdp } @{ $self->{koha_metadata_format} } ) {
         push @errs, HTTP::OAI::Error->new(
             code    => 'cannotDisseminateFormat',
             message => "Dissemination as '$mdp' is not supported",
@@ -140,43 +139,40 @@ sub new {
     }
 
     my $response;
-    if ( @errs ) {
+    if (@errs) {
         $response = HTTP::OAI::Response->new(
-            requestURL  => self_url(),
-            errors      => \@errs,
+            requestURL => self_url(),
+            errors     => \@errs,
         );
-    }
-    else {
-        my %attr = CGI::Vars();
-        my $verb = delete $attr{verb};
+    } else {
+        my %attr  = CGI::Vars();
+        my $verb  = delete $attr{verb};
         my $class = "Koha::OAI::Server::$verb";
-        $response = $class->new($self, %attr);
+        $response = $class->new( $self, %attr );
     }
 
     $response->set_handler( XML::SAX::Writer->new( Output => *STDOUT ) );
-    $response->xslt( "/opac-tmpl/xslt/OAI.xslt" );
+    $response->xslt("/opac-tmpl/xslt/OAI.xslt");
     $response->generate;
 
     bless $self, $class;
     return $self;
 }
 
-
 sub DESTROY {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # Reset time zone to the original value
-    C4::Context->dbh->prepare("SET time_zone='" . $self->{ mysql_orig_tz } . "'")->execute()
-        if $self->{ mysql_orig_tz };
+    C4::Context->dbh->prepare( "SET time_zone='" . $self->{mysql_orig_tz} . "'" )->execute()
+        if $self->{mysql_orig_tz};
 }
-
 
 sub get_biblio_marcxml {
     my ( $self, $biblionumber, $format ) = @_;
     my $with_items   = 0;
     my $expanded_avs = 0;
     if ( my $conf = $self->{conf} ) {
-        $with_items   = $conf->{format}->{$format}->{include_items  };
+        $with_items   = $conf->{format}->{$format}->{include_items};
         $expanded_avs = $conf->{format}->{$format}->{expanded_avs};
     }
 
@@ -214,25 +210,23 @@ sub get_biblio_marcxml {
     return ( $record ? $record->as_xml_record( C4::Context->preference('marcflavour') ) : undef, $decoding_error );
 }
 
-
 sub stylesheet {
     my ( $self, $format ) = @_;
-    my $xsl_file = $self->{ conf }
-        ? $self->{ conf }->{ format }->{ $format }->{ xsl_file }
-        : ( C4::Context->config('intrahtdocs') .
-            '/prog/en/xslt/' .
-            C4::Context->preference('marcflavour') .
-            'slim2OAIDC.xsl'
-    );
+    my $xsl_file =
+          $self->{conf}
+        ? $self->{conf}->{format}->{$format}->{xsl_file}
+        : (   C4::Context->config('intrahtdocs')
+            . '/prog/en/xslt/'
+            . C4::Context->preference('marcflavour')
+            . 'slim2OAIDC.xsl' );
     return $xsl_file;
 }
-
 
 sub items_included {
     my ( $self, $format ) = @_;
 
-    if ( my $conf = $self->{ conf } ) {
-        return $conf->{ format }->{ $format }->{ include_items };
+    if ( my $conf = $self->{conf} ) {
+        return $conf->{format}->{$format}->{include_items};
     }
     return 0;
 }

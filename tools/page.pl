@@ -17,18 +17,18 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::AdditionalContents;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/page.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "tools/page.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
@@ -38,7 +38,11 @@ my $branch = C4::Context->userenv->{'branch'};
 
 my $page = Koha::AdditionalContents->find($page_id);
 
-if ( !$page || $page->category ne 'pages' || $page->branchcode && $page->branchcode != $branch || $page->location ne 'staff_only' && $page->location ne 'staff_and_opac' ) {
+if (  !$page
+    || $page->category ne 'pages'
+    || $page->branchcode && $page->branchcode != $branch
+    || $page->location ne 'staff_only' && $page->location ne 'staff_and_opac' )
+{
     print $query->redirect('/cgi-bin/koha/errors/404.pl');
     exit;
 }

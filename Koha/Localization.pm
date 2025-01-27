@@ -43,8 +43,8 @@ sub store {
     my ($self) = @_;
     $self = $self->SUPER::store;
 
-    if ($self->entity eq 'itemtypes') {
-        my $key = "itemtype:description:".$self->lang;
+    if ( $self->entity eq 'itemtypes' ) {
+        my $key = "itemtype:description:" . $self->lang;
         $cache->clear_from_cache($key);
     }
 
@@ -59,8 +59,8 @@ Localization specific C<delete> to clear relevant caches on delete.
 
 sub delete {
     my $self = shift @_;
-    if ($self->entity eq 'itemtypes') {
-        my $key = "itemtype:description:".$self->lang;
+    if ( $self->entity eq 'itemtypes' ) {
+        my $key = "itemtype:description:" . $self->lang;
         $cache->clear_from_cache($key);
     }
     $self->SUPER::delete(@_);

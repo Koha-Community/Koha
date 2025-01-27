@@ -22,8 +22,8 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Koha qw( GetAuthorisedValues );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Koha    qw( GetAuthorisedValues );
+use C4::Output  qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
 
 use Koha::AuthorisedValues;
@@ -41,147 +41,156 @@ plugin that shows a stats on borrowers
 
 =cut
 
-my $input = CGI->new;
-my $do_it=$input->param('do_it');
+my $input          = CGI->new;
+my $do_it          = $input->param('do_it');
 my $fullreportname = "reports/borrowers_stats.tt";
-my $line = $input->param("Line");
-my $column = $input->param("Column");
-my @filters = $input->multi_param("Filter");
-my $digits = $input->param("digits");
+my $line           = $input->param("Line");
+my $column         = $input->param("Column");
+my @filters        = $input->multi_param("Filter");
+my $digits         = $input->param("digits");
 our $period = $input->param("period");
-my $borstat = $input->param("status");
+my $borstat  = $input->param("status");
 my $borstat1 = $input->param("activity");
-my $output = $input->param("output");
+my $output   = $input->param("output");
 my $basename = $input->param("basename");
-our $sep     = C4::Context->csv_delimiter(scalar $input->param("sep"));
+our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 
-my ($template, $borrowernumber, $cookie)
-	= get_template_and_user({template_name => $fullreportname,
-				query => $input,
-				type => "intranet",
-				flagsrequired => {reports => '*'},
-				});
-$template->param(do_it => $do_it);
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
+$template->param( do_it => $do_it );
 if ($do_it) {
-        my $attributes;
-        if (C4::Context->preference('ExtendedPatronAttributes')) {
-            $attributes = parse_extended_patron_attributes($input);
+    my $attributes;
+    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+        $attributes = parse_extended_patron_attributes($input);
+    }
+    my $results = calculate( $line, $column, $digits, $borstat, $borstat1, \@filters, $attributes );
+    if ( $output eq "screen" ) {
+        $template->param( mainloop => $results );
+        output_html_with_http_headers $input, $cookie, $template->output;
+    } else {
+        print $input->header(
+            -type       => 'application/vnd.sun.xml.calc',
+            -encoding   => 'utf-8',
+            -name       => "$basename.csv",
+            -attachment => "$basename.csv"
+        );
+        my $cols  = @$results[0]->{loopcol};
+        my $lines = @$results[0]->{looprow};
+        print @$results[0]->{line} . "/" . @$results[0]->{column} . $sep;
+        foreach my $col (@$cols) {
+            print $col->{coltitle} . $sep;
         }
-	my $results = calculate($line, $column, $digits, $borstat,$borstat1 ,\@filters, $attributes);
-	if ($output eq "screen"){
-		$template->param(mainloop => $results);
-		output_html_with_http_headers $input, $cookie, $template->output;
-	} else {
-		print $input->header(-type => 'application/vnd.sun.xml.calc',
-                         -encoding => 'utf-8',
-                             -name => "$basename.csv",
-                       -attachment => "$basename.csv");
-		my $cols = @$results[0]->{loopcol};
-		my $lines = @$results[0]->{looprow};
-		print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
-		foreach my $col ( @$cols ) {
-			print $col->{coltitle}.$sep;
-		}
-		print "Total\n";
-		foreach my $line ( @$lines ) {
-			my $x = $line->{loopcell};
-			print $line->{rowtitle}.$sep;
-			foreach my $cell (@$x) {
-				print $cell->{value}.$sep;
-			}
-			print $line->{totalrow};
- 			print "\n";
-	 	}
-		print "TOTAL";
-		$cols = @$results[0]->{loopfooter};
-		foreach my $col ( @$cols ) {
-			print $sep.$col->{totalcol};
-		}
-		print $sep.@$results[0]->{total};
-	}
-	exit;	# exit after do_it, regardless
+        print "Total\n";
+        foreach my $line (@$lines) {
+            my $x = $line->{loopcell};
+            print $line->{rowtitle} . $sep;
+            foreach my $cell (@$x) {
+                print $cell->{value} . $sep;
+            }
+            print $line->{totalrow};
+            print "\n";
+        }
+        print "TOTAL";
+        $cols = @$results[0]->{loopfooter};
+        foreach my $col (@$cols) {
+            print $sep. $col->{totalcol};
+        }
+        print $sep. @$results[0]->{total};
+    }
+    exit;    # exit after do_it, regardless
 } else {
-	my $dbh = C4::Context->dbh;
-	my $req;
-    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
+    my $dbh = C4::Context->dbh;
+    my $req;
+    my $patron_categories = Koha::Patron::Categories->search( {}, { order_by => ['description'] } );
     $template->param( patron_categories => $patron_categories );
- 	$req = $dbh->prepare("SELECT DISTINCTROW zipcode FROM borrowers WHERE zipcode IS NOT NULL AND zipcode <> '' ORDER BY zipcode");
- 	$req->execute;
-	$template->param(   ZIP_LOOP => $req->fetchall_arrayref({}));
-	$req = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category='Bsort1' ORDER BY lib");
- 	$req->execute;
-	$template->param( SORT1_LOOP => $req->fetchall_arrayref({}));
-	$req = $dbh->prepare("SELECT DISTINCTROW sort2 AS value FROM borrowers WHERE sort2 IS NOT NULL AND sort2 <> '' ORDER BY sort2 LIMIT 200");
-    # More than 200 items in a dropdown is not going to be useful anyway, and w/ 50,000 patrons we can destroy DB performance.
-	$req->execute;
-	$template->param( SORT2_LOOP => $req->fetchall_arrayref({}));
-	
-    my $CGIextChoice = ( 'CSV' ); # FIXME translation
-	my $CGIsepChoice=GetDelimiterChoices;
-	$template->param(
-		CGIextChoice => $CGIextChoice,
-		CGIsepChoice => $CGIsepChoice,
+    $req = $dbh->prepare(
+        "SELECT DISTINCTROW zipcode FROM borrowers WHERE zipcode IS NOT NULL AND zipcode <> '' ORDER BY zipcode");
+    $req->execute;
+    $template->param( ZIP_LOOP => $req->fetchall_arrayref( {} ) );
+    $req = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category='Bsort1' ORDER BY lib");
+    $req->execute;
+    $template->param( SORT1_LOOP => $req->fetchall_arrayref( {} ) );
+    $req = $dbh->prepare(
+        "SELECT DISTINCTROW sort2 AS value FROM borrowers WHERE sort2 IS NOT NULL AND sort2 <> '' ORDER BY sort2 LIMIT 200"
     );
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
+
+    # More than 200 items in a dropdown is not going to be useful anyway, and w/ 50,000 patrons we can destroy DB performance.
+    $req->execute;
+    $template->param( SORT2_LOOP => $req->fetchall_arrayref( {} ) );
+
+    my $CGIextChoice = ('CSV');               # FIXME translation
+    my $CGIsepChoice = GetDelimiterChoices;
+    $template->param(
+        CGIextChoice => $CGIextChoice,
+        CGIsepChoice => $CGIsepChoice,
+    );
+    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
         patron_attributes_form($template);
     }
 }
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub calculate {
-	my ($line, $column, $digits, $status, $activity, $filters, $attr_filters) = @_;
+    my ( $line, $column, $digits, $status, $activity, $filters, $attr_filters ) = @_;
 
-	my @mainloop;
-	my @loopfooter;
-	my @loopcol;
-	my @loopline;
-	my @looprow;
-	my %globalline;
-	my $grantotal =0;
-# extract parameters
-	my $dbh = C4::Context->dbh;
+    my @mainloop;
+    my @loopfooter;
+    my @loopcol;
+    my @loopline;
+    my @looprow;
+    my %globalline;
+    my $grantotal = 0;
+
+    # extract parameters
+    my $dbh = C4::Context->dbh;
 
     # check parameters
     my @valid_names = qw(categorycode zipcode branchcode sex sort1 sort2);
-    if ($line =~ /^patron_attr\.(.*)/) {
+    if ( $line =~ /^patron_attr\.(.*)/ ) {
         my $attribute_type = $1;
         return unless Koha::Patron::Attribute::Types->find($attribute_type);
     } else {
-        return unless (grep { $_ eq $line } @valid_names);
+        return unless ( grep { $_ eq $line } @valid_names );
     }
-    if ($column =~ /^patron_attr\.(.*)/) {
+    if ( $column =~ /^patron_attr\.(.*)/ ) {
         my $attribute_type = $1;
         return unless Koha::Patron::Attribute::Types->find($attribute_type);
     } else {
-        return unless (grep { $_ eq $column } @valid_names);
+        return unless ( grep { $_ eq $column } @valid_names );
     }
-    return if ($digits and $digits !~ /^\d+$/);
-    return if ($status and (grep { $_ eq $status } qw(debarred gonenoaddress lost)) == 0);
-    return if ($activity and (grep { $_ eq $activity } qw(active nonactive)) == 0);
+    return if ( $digits   and $digits !~ /^\d+$/ );
+    return if ( $status   and ( grep { $_ eq $status } qw(debarred gonenoaddress lost) ) == 0 );
+    return if ( $activity and ( grep { $_ eq $activity } qw(active nonactive) ) == 0 );
 
     # Filters
     my $linefilter;
-    if    ( $line =~ /categorycode/ ) { $linefilter = @$filters[0]; }
-    elsif ( $line =~ /zipcode/ )      { $linefilter = @$filters[1]; }
-    elsif ( $line =~ /branchcode/ )   { $linefilter = @$filters[2]; }
-    elsif ( $line =~ /sex/ )          { $linefilter = @$filters[5]; }
-    elsif ( $line =~ /sort1/ )        { $linefilter = @$filters[6]; }
-    elsif ( $line =~ /sort2/ )        { $linefilter = @$filters[7]; }
+    if    ( $line =~ /categorycode/ )        { $linefilter = @$filters[0]; }
+    elsif ( $line =~ /zipcode/ )             { $linefilter = @$filters[1]; }
+    elsif ( $line =~ /branchcode/ )          { $linefilter = @$filters[2]; }
+    elsif ( $line =~ /sex/ )                 { $linefilter = @$filters[5]; }
+    elsif ( $line =~ /sort1/ )               { $linefilter = @$filters[6]; }
+    elsif ( $line =~ /sort2/ )               { $linefilter = @$filters[7]; }
     elsif ( $line =~ /^patron_attr\.(.*)$/ ) { $linefilter = $attr_filters->{$1}; }
-    else  { $linefilter = ''; }
+    else                                     { $linefilter = ''; }
 
     my $colfilter;
-    if    ( $column =~ /categorycode/ ) { $colfilter = @$filters[0]; }
-    elsif ( $column =~ /zipcode/ )      { $colfilter = @$filters[1]; }
-    elsif ( $column =~ /branchcode/)    { $colfilter = @$filters[2]; }
-    elsif ( $column =~ /sex/)           { $colfilter = @$filters[5]; }
-    elsif ( $column =~ /sort1/)         { $colfilter = @$filters[6]; }
-    elsif ( $column =~ /sort2/)         { $colfilter = @$filters[7]; }
-    elsif ( $column =~ /^patron_attr\.(.*)$/) { $colfilter = $attr_filters->{$1}; }
-    else  { $colfilter = ''; }
+    if    ( $column =~ /categorycode/ )        { $colfilter = @$filters[0]; }
+    elsif ( $column =~ /zipcode/ )             { $colfilter = @$filters[1]; }
+    elsif ( $column =~ /branchcode/ )          { $colfilter = @$filters[2]; }
+    elsif ( $column =~ /sex/ )                 { $colfilter = @$filters[5]; }
+    elsif ( $column =~ /sort1/ )               { $colfilter = @$filters[6]; }
+    elsif ( $column =~ /sort2/ )               { $colfilter = @$filters[7]; }
+    elsif ( $column =~ /^patron_attr\.(.*)$/ ) { $colfilter = $attr_filters->{$1}; }
+    else                                       { $colfilter = ''; }
 
     my @loopfilter;
-    foreach my $i (0 .. scalar @$filters) {
+    foreach my $i ( 0 .. scalar @$filters ) {
         my %cell;
         if ( @$filters[$i] ) {
             if    ( $i == 0 )            { $cell{crit} = "Cat code";        $cell{filter} = @$filters[$i]; }
@@ -196,39 +205,41 @@ sub calculate {
             push @loopfilter, \%cell;
         }
     }
-    foreach my $type (keys %$attr_filters) {
-        if($attr_filters->{$type}) {
+    foreach my $type ( keys %$attr_filters ) {
+        if ( $attr_filters->{$type} ) {
             push @loopfilter, {
-                crit => "Attribute $type",
+                crit   => "Attribute $type",
                 filter => $attr_filters->{$type}
-            }
+            };
         }
     }
 
     my @branchcodes = Koha::Libraries->search->get_column('branchcode');
-	($status  ) and push @loopfilter,{crit=>"Status",  filter=>$status  };
-	($activity) and push @loopfilter,{crit=>"Activity",filter=>$activity};
-# year of activity
-	my ( $period_year, $period_month, $period_day )=Add_Delta_YM( Today(),-$period, 0);
-	my $newperioddate=$period_year."-".$period_month."-".$period_day;
-# 1st, loop rows.
-	my $linefield;
+    ($status)   and push @loopfilter, { crit => "Status",   filter => $status };
+    ($activity) and push @loopfilter, { crit => "Activity", filter => $activity };
+
+    # year of activity
+    my ( $period_year, $period_month, $period_day ) = Add_Delta_YM( Today(), -$period, 0 );
+    my $newperioddate = $period_year . "-" . $period_month . "-" . $period_day;
+
+    # 1st, loop rows.
+    my $linefield;
 
     my $line_attribute_type;
-    if ($line  =~/^patron_attr\.(.*)$/) {
+    if ( $line =~ /^patron_attr\.(.*)$/ ) {
         $line_attribute_type = $1;
-        $line = 'borrower_attributes.attribute';
+        $line                = 'borrower_attributes.attribute';
     }
 
-    if (($line =~/zipcode/) and ($digits)) {
+    if ( ( $line =~ /zipcode/ ) and ($digits) ) {
         $linefield = "left($line,$digits)";
     } else {
         $linefield = $line;
     }
-    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['categorycode']});
+    my $patron_categories = Koha::Patron::Categories->search( {}, { order_by => ['categorycode'] } );
 
     my $strsth;
-    my @strparams; # bind parameters for the query
+    my @strparams;    # bind parameters for the query
     if ($line_attribute_type) {
         $strsth = "SELECT distinct attribute FROM borrower_attributes
             WHERE attribute IS NOT NULL AND code=?";
@@ -238,43 +249,44 @@ sub calculate {
             WHERE $line IS NOT NULL ";
     }
 
-	$linefilter =~ s/\*/%/g;
-	if ( $linefilter ) {
-		$strsth .= " AND $linefield LIKE ? " ;
-                push @strparams, $linefilter;
-	}
-	$strsth .= " AND $status='1' " if ($status);
-    $strsth .=" order by $linefield";
-	
-	my $sth = $dbh->prepare($strsth);
+    $linefilter =~ s/\*/%/g;
+    if ($linefilter) {
+        $strsth .= " AND $linefield LIKE ? ";
+        push @strparams, $linefilter;
+    }
+    $strsth .= " AND $status='1' " if ($status);
+    $strsth .= " order by $linefield";
+
+    my $sth = $dbh->prepare($strsth);
     $sth->execute(@strparams);
- 	while (my ($celvalue) = $sth->fetchrow) {
- 		my %cell;
-		if ($celvalue) {
-			$cell{rowtitle} = $celvalue;
-            $cell{rowtitle_display} = ($patron_categories->find($celvalue)->description || "$celvalue\*") if ($line eq 'categorycode');
-		}
- 		$cell{totalrow} = 0;
-		push @loopline, \%cell;
- 	}
-
-# 2nd, loop cols.
-	my $colfield;
-
-    my $column_attribute_type;
-    if ($column  =~/^patron_attr.(.*)$/) {
-        $column_attribute_type = $1;
-        $column = 'borrower_attributes.attribute';
+    while ( my ($celvalue) = $sth->fetchrow ) {
+        my %cell;
+        if ($celvalue) {
+            $cell{rowtitle}         = $celvalue;
+            $cell{rowtitle_display} = ( $patron_categories->find($celvalue)->description || "$celvalue\*" )
+                if ( $line eq 'categorycode' );
+        }
+        $cell{totalrow} = 0;
+        push @loopline, \%cell;
     }
 
-    if (($column =~/zipcode/) and ($digits)) {
+    # 2nd, loop cols.
+    my $colfield;
+
+    my $column_attribute_type;
+    if ( $column =~ /^patron_attr.(.*)$/ ) {
+        $column_attribute_type = $1;
+        $column                = 'borrower_attributes.attribute';
+    }
+
+    if ( ( $column =~ /zipcode/ ) and ($digits) ) {
         $colfield = "left($column,$digits)";
     } else {
         $colfield = $column;
     }
 
     my $strsth2;
-    my @strparams2; # bind parameters for the query
+    my @strparams2;    # bind parameters for the query
     if ($column_attribute_type) {
         $strsth2 = "SELECT DISTINCT attribute FROM borrower_attributes
             WHERE attribute IS NOT NULL AND code=?";
@@ -284,40 +296,43 @@ sub calculate {
             WHERE $column IS NOT NULL";
     }
 
-	if ($colfilter) {
-		$colfilter =~ s/\*/%/g;
-		$strsth2 .= " AND $colfield LIKE ? ";
+    if ($colfilter) {
+        $colfilter =~ s/\*/%/g;
+        $strsth2 .= " AND $colfield LIKE ? ";
         push @strparams2, $colfield;
-	}
-	$strsth2 .= " AND $status='1' " if ($status);
+    }
+    $strsth2 .= " AND $status='1' " if ($status);
 
     $strsth2 .= " order by $colfield";
-	my $sth2 = $dbh->prepare($strsth2);
+    my $sth2 = $dbh->prepare($strsth2);
     $sth2->execute(@strparams2);
- 	while (my ($celvalue) = $sth2->fetchrow) {
- 		my %cell;
-             if (defined $celvalue) {
-			$cell{coltitle} = $celvalue;
-			# $cell{coltitle_display} = ($colfield eq 'branchcode') ? $branches->{$celvalue}->{branchname} : $celvalue;
-            $cell{coltitle_display} = $patron_categories->find($celvalue)->description if ($column eq 'categorycode');
-		}
-		push @loopcol, \%cell;
- 	}
+    while ( my ($celvalue) = $sth2->fetchrow ) {
+        my %cell;
+        if ( defined $celvalue ) {
+            $cell{coltitle} = $celvalue;
 
-	my $i=0;
-	#Initialization of cell values.....
-	my %table;
-#	warn "init table";
-	foreach my $row (@loopline) {
-		foreach my $col ( @loopcol ) {
+            # $cell{coltitle_display} = ($colfield eq 'branchcode') ? $branches->{$celvalue}->{branchname} : $celvalue;
+            $cell{coltitle_display} = $patron_categories->find($celvalue)->description if ( $column eq 'categorycode' );
+        }
+        push @loopcol, \%cell;
+    }
+
+    my $i = 0;
+
+    #Initialization of cell values.....
+    my %table;
+
+    #	warn "init table";
+    foreach my $row (@loopline) {
+        foreach my $col (@loopcol) {
             my $rowtitle = $row->{rowtitle} // '';
             my $coltitle = $row->{coltitle} // '';
             $table{$rowtitle}->{$coltitle} = 0;
-		}
+        }
         $row->{rowtitle} ||= '';
-		$table{$row->{rowtitle}}->{totalrow}=0;
-		$table{$row->{rowtitle}}->{rowtitle_display} = $row->{rowtitle_display};
-	}
+        $table{ $row->{rowtitle} }->{totalrow}         = 0;
+        $table{ $row->{rowtitle} }->{rowtitle_display} = $row->{rowtitle_display};
+    }
 
     # preparing calculation
     my $strcalc;
@@ -335,12 +350,11 @@ sub calculate {
     }
 
     $strcalc .= " COUNT(*) FROM borrowers ";
-    foreach my $type (keys %$attr_filters) {
-        if (
-            ($line_attribute_type and $line_attribute_type eq $type)
-         or ($column_attribute_type and $column_attribute_type eq $type)
-         or ($attr_filters->{$type})
-        ) {
+    foreach my $type ( keys %$attr_filters ) {
+        if (   ( $line_attribute_type and $line_attribute_type eq $type )
+            or ( $column_attribute_type and $column_attribute_type eq $type )
+            or ( $attr_filters->{$type} ) )
+        {
             $strcalc .= " LEFT JOIN borrower_attributes AS attribute_$type
                 ON (borrowers.borrowernumber = attribute_$type.borrowernumber
                     AND attribute_$type.code = " . $dbh->quote($type) . ") ";
@@ -348,33 +362,40 @@ sub calculate {
     }
     $strcalc .= " WHERE 1 ";
 
-	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
-	$strcalc .= " AND categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
-	$strcalc .= " AND zipcode like '" . @$filters[1] ."'" if ( @$filters[1] );
-	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
-	$strcalc .= " AND branchcode like '" . @$filters[2] ."'" if ( @$filters[2] );
-	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
-	$strcalc .= " AND dateofbirth > '" . @$filters[3] ."'" if ( @$filters[3] );
-	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
-	$strcalc .= " AND dateofbirth < '" . @$filters[4] ."'" if ( @$filters[4] );
-    @$filters[5]=~ s/\*/%/g if (@$filters[5]);
-    $strcalc .= " AND sex like '" . @$filters[5] ."'" if ( @$filters[5] );
-    @$filters[6]=~ s/\*/%/g if (@$filters[6]);
-	$strcalc .= " AND sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
-	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
-	$strcalc .= " AND sort2 like '" . @$filters[7] ."'" if ( @$filters[7] );
+    @$filters[0] =~ s/\*/%/g                                    if ( @$filters[0] );
+    $strcalc .= " AND categorycode like '" . @$filters[0] . "'" if ( @$filters[0] );
+    @$filters[1] =~ s/\*/%/g                                    if ( @$filters[1] );
+    $strcalc .= " AND zipcode like '" . @$filters[1] . "'"      if ( @$filters[1] );
+    @$filters[2] =~ s/\*/%/g                                    if ( @$filters[2] );
+    $strcalc .= " AND branchcode like '" . @$filters[2] . "'"   if ( @$filters[2] );
+    @$filters[3] =~ s/\*/%/g                                    if ( @$filters[3] );
+    $strcalc .= " AND dateofbirth > '" . @$filters[3] . "'"     if ( @$filters[3] );
+    @$filters[4] =~ s/\*/%/g                                    if ( @$filters[4] );
+    $strcalc .= " AND dateofbirth < '" . @$filters[4] . "'"     if ( @$filters[4] );
+    @$filters[5] =~ s/\*/%/g                                    if ( @$filters[5] );
+    $strcalc .= " AND sex like '" . @$filters[5] . "'"          if ( @$filters[5] );
+    @$filters[6] =~ s/\*/%/g                                    if ( @$filters[6] );
+    $strcalc .= " AND sort1 like '" . @$filters[6] . "'"        if ( @$filters[6] );
+    @$filters[7] =~ s/\*/%/g                                    if ( @$filters[7] );
+    $strcalc .= " AND sort2 like '" . @$filters[7] . "'"        if ( @$filters[7] );
 
-    foreach my $type (keys %$attr_filters) {
-        if($attr_filters->{$type}) {
+    foreach my $type ( keys %$attr_filters ) {
+        if ( $attr_filters->{$type} ) {
             my $filter = $attr_filters->{$type};
             $filter =~ s/\*/%/g;
             $strcalc .= " AND attribute_$type.attribute LIKE '" . $filter . "' ";
         }
     }
-    $strcalc .= " AND borrowers.borrowernumber in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
-    $strcalc .= " AND borrowers.borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "' AND borrowernumber IS NOT NULL)" if ($activity eq 'nonactive');
-	$strcalc .= " AND $status='1' " if ($status);
+    $strcalc .=
+        " AND borrowers.borrowernumber in (select distinct(borrowernumber) from old_issues where issuedate > '"
+        . $newperioddate . "')"
+        if ( $activity eq 'active' );
+    $strcalc .=
+          " AND borrowers.borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '"
+        . $newperioddate
+        . "' AND borrowernumber IS NOT NULL)"
+        if ( $activity eq 'nonactive' );
+    $strcalc .= " AND $status='1' " if ($status);
 
     $strcalc .= " GROUP BY ";
     if ($line_attribute_type) {
@@ -388,69 +409,74 @@ sub calculate {
         $strcalc .= " $colfield ";
     }
 
-	my $dbcalc = $dbh->prepare($strcalc);
-	(scalar(@calcparams)) ? $dbcalc->execute(@calcparams) : $dbcalc->execute();
-	
-	my $emptycol; 
-	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-#		warn "filling table $row / $col / $value ";
-		$emptycol = 1 if (!defined($col));
-		$col = "zzEMPTY" if (!defined($col));
-		$row = "zzEMPTY" if (!defined($row));
-		
-		$table{$row}->{$col}+=$value;
-		$table{$row}->{totalrow}+=$value;
-		$grantotal += $value;
-	}
-	
- 	push @loopcol,{coltitle => "NULL"} if ($emptycol);
-	
-	foreach my $row (sort keys %table) {
-		my @loopcell;
-		#@loopcol ensures the order for columns is common with column titles
-		# and the number matches the number of columns
-		foreach my $col ( @loopcol ) {
+    my $dbcalc = $dbh->prepare($strcalc);
+    ( scalar(@calcparams) ) ? $dbcalc->execute(@calcparams) : $dbcalc->execute();
+
+    my $emptycol;
+    while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
+
+        #		warn "filling table $row / $col / $value ";
+        $emptycol = 1         if ( !defined($col) );
+        $col      = "zzEMPTY" if ( !defined($col) );
+        $row      = "zzEMPTY" if ( !defined($row) );
+
+        $table{$row}->{$col}     += $value;
+        $table{$row}->{totalrow} += $value;
+        $grantotal               += $value;
+    }
+
+    push @loopcol, { coltitle => "NULL" } if ($emptycol);
+
+    foreach my $row ( sort keys %table ) {
+        my @loopcell;
+
+        #@loopcol ensures the order for columns is common with column titles
+        # and the number matches the number of columns
+        foreach my $col (@loopcol) {
             my $coltitle = $col->{coltitle} // '';
             $coltitle = $coltitle eq "NULL" ? "zzEMPTY" : $coltitle;
-			my $value =$table{$row}->{$coltitle};
-			push @loopcell, {value => $value};
-		}
-		push @looprow,{
-			'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
-			'rowtitle_display' => $table{$row}->{rowtitle_display} || ($row eq "zzEMPTY" ? "NULL" : $row),
-			'loopcell' => \@loopcell,
-			'totalrow' => $table{$row}->{totalrow}
-		};
-	}
-	
-	foreach my $col ( @loopcol ) {
-		my $total=0;
-		foreach my $row ( @looprow ) {
+            my $value = $table{$row}->{$coltitle};
+            push @loopcell, { value => $value };
+        }
+        push @looprow, {
+            'rowtitle'         => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
+            'rowtitle_display' => $table{$row}->{rowtitle_display} || ( $row eq "zzEMPTY" ? "NULL" : $row ),
+            'loopcell'         => \@loopcell,
+            'totalrow'         => $table{$row}->{totalrow}
+        };
+    }
+
+    foreach my $col (@loopcol) {
+        my $total = 0;
+        foreach my $row (@looprow) {
             my $rowtitle = $row->{rowtitle} // '';
-            $rowtitle = ($rowtitle eq "NULL") ? "zzEMPTY" : $rowtitle;
+            $rowtitle = ( $rowtitle eq "NULL" ) ? "zzEMPTY" : $rowtitle;
             my $coltitle = $col->{coltitle} // '';
-            $coltitle = ($coltitle eq "NULL") ? "zzEMPTY" : $coltitle;
+            $coltitle = ( $coltitle eq "NULL" ) ? "zzEMPTY" : $coltitle;
 
             $total += $table{$rowtitle}->{$coltitle} || 0;
-#			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
-		}
-#		warn "summ for column ".$col->{coltitle}."  = ".$total;
-		push @loopfooter, {'totalcol' => $total};
-	}
-			
 
-	# the header of the table
-	$globalline{loopfilter}=\@loopfilter;
-	# the core of the table
-	$globalline{looprow} = \@looprow;
- 	$globalline{loopcol} = \@loopcol;
-# 	# the foot (totals by borrower type)
- 	$globalline{loopfooter} = \@loopfooter;
- 	$globalline{total}= $grantotal;
-	$globalline{line} = ($line_attribute_type) ? $line_attribute_type : $line;
-	$globalline{column} = ($column_attribute_type) ? $column_attribute_type : $column;
-	push @mainloop,\%globalline;
-	return \@mainloop;
+            #			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
+        }
+
+        #		warn "summ for column ".$col->{coltitle}."  = ".$total;
+        push @loopfooter, { 'totalcol' => $total };
+    }
+
+    # the header of the table
+    $globalline{loopfilter} = \@loopfilter;
+
+    # the core of the table
+    $globalline{looprow} = \@looprow;
+    $globalline{loopcol} = \@loopcol;
+
+    # 	# the foot (totals by borrower type)
+    $globalline{loopfooter} = \@loopfooter;
+    $globalline{total}      = $grantotal;
+    $globalline{line}       = ($line_attribute_type)   ? $line_attribute_type   : $line;
+    $globalline{column}     = ($column_attribute_type) ? $column_attribute_type : $column;
+    push @mainloop, \%globalline;
+    return \@mainloop;
 }
 
 sub parse_extended_patron_attributes {
@@ -459,8 +485,8 @@ sub parse_extended_patron_attributes {
     my @params_names = $input->param;
     my %attr;
     foreach my $name (@params_names) {
-        if ($name =~ /^Filter_patron_attr\.(.*)$/) {
-            my $code = $1;
+        if ( $name =~ /^Filter_patron_attr\.(.*)$/ ) {
+            my $code  = $1;
             my $value = $input->param($name);
             $attr{$code} = $value;
         }
@@ -469,38 +495,36 @@ sub parse_extended_patron_attributes {
     return \%attr;
 }
 
-
 sub patron_attributes_form {
     my $template = shift;
 
-    my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
+    my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
 
     my %items_by_class;
     while ( my $attr_type = $attribute_types->next ) {
+
         # TODO The following can be simplified easily
         my $entry = {
-            class             => $attr_type->class(),
-            code              => $attr_type->code(),
-            description       => $attr_type->description(),
-            repeatable        => $attr_type->repeatable(),
-            category          => $attr_type->authorised_value_category(),
-            category_code     => $attr_type->category_code(),
+            class         => $attr_type->class(),
+            code          => $attr_type->code(),
+            description   => $attr_type->description(),
+            repeatable    => $attr_type->repeatable(),
+            category      => $attr_type->authorised_value_category(),
+            category_code => $attr_type->category_code(),
         };
 
-        my $newentry = { %$entry };
-        if ($attr_type->authorised_value_category()) {
-            $newentry->{use_dropdown} = 1;
-            $newentry->{auth_val_loop} = GetAuthorisedValues(
-                $attr_type->authorised_value_category()
-            );
+        my $newentry = {%$entry};
+        if ( $attr_type->authorised_value_category() ) {
+            $newentry->{use_dropdown}  = 1;
+            $newentry->{auth_val_loop} = GetAuthorisedValues( $attr_type->authorised_value_category() );
         }
         push @{ $items_by_class{ $attr_type->class() } }, $newentry;
     }
 
     my @attribute_loop;
     foreach my $class ( sort keys %items_by_class ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
+        my $av  = Koha::AuthorisedValues->search( { category => 'PA_CLASS', authorised_value => $class } );
         my $lib = $av->count ? $av->next->lib : $class;
         push @attribute_loop, {
             class => $class,
@@ -509,6 +533,6 @@ sub patron_attributes_form {
         };
     }
 
-    $template->param(patron_attributes => \@attribute_loop);
+    $template->param( patron_attributes => \@attribute_loop );
 
 }

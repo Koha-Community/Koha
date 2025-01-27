@@ -25,15 +25,15 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Ill::InvalidBackendId' => {
-        isa => 'Koha::Exceptions::Ill',
+        isa         => 'Koha::Exceptions::Ill',
         description => "Invalid backend name required",
     },
     'Koha::Exceptions::Ill::NoTargetEmail' => {
-        isa => 'Koha::Exceptions::Ill',
+        isa         => 'Koha::Exceptions::Ill',
         description => "ILL partner library has no email address configured",
     },
     'Koha::Exceptions::Ill::NoLibraryEmail' => {
-        isa => 'Koha::Exceptions::Ill',
+        isa         => 'Koha::Exceptions::Ill',
         description => "Invalid backend name required",
     }
 );

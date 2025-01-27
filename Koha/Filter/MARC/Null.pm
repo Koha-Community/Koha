@@ -45,8 +45,9 @@ our $NAME = 'Null';
 Return the original record.
 
 =cut
+
 sub filter {
-    my $self = shift;
+    my $self   = shift;
     my $record = shift;
 
     return $record;

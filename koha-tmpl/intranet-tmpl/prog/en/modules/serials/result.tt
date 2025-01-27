@@ -2,11 +2,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Search results") | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Search results") | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -15,82 +16,69 @@
 <div class="main container-fluid">
     [% INCLUDE 'messages.inc' %]
 
-[% IF ( total ) %]
-<h1>Search results from [% from | html %] to [% to | html %] of [% total | html %]</h1>
-<div class="page-section">
-<table>
-    <tr>
-       <th>Title</th>
-       <th>Author</th>
-       <th>Publisher</th>
-       <th>Publication year</th>
-       <th>ISSN</th>
-	   <th>&nbsp;</th>
-    </tr>
-    [% FOREACH resultsloo IN resultsloop %]
-        <tr>
-            <td class="title">
-                [% INCLUDE 'biblio-title.inc' biblio=resultsloo %]
-            </td>
-            <td>
-                [% resultsloo.author | html %]
-            </td>
-            <td>
-                [% resultsloo.publishercode | html %]
-            </td>
-            <td>
-                [% resultsloo.publicationyear | html %]
-            </td>
-            <td>
-                [% resultsloo.issn | html %]
-            </td>
-            <td><a class="btn btn-default btn-xs select_title" data-biblionumber="[% resultsloo.biblionumber | html %]" href="#" title="Choose this record">Choose</a></td>
-        </tr>
+    [% IF ( total ) %]
+        <h1>Search results from [% from | html %] to [% to | html %] of [% total | html %]</h1>
+        <div class="page-section">
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Publisher</th>
+                    <th>Publication year</th>
+                    <th>ISSN</th>
+                    <th>&nbsp;</th>
+                </tr>
+                [% FOREACH resultsloo IN resultsloop %]
+                    <tr>
+                        <td class="title"> [% INCLUDE 'biblio-title.inc' biblio=resultsloo %] </td>
+                        <td> [% resultsloo.author | html %] </td>
+                        <td> [% resultsloo.publishercode | html %] </td>
+                        <td> [% resultsloo.publicationyear | html %] </td>
+                        <td> [% resultsloo.issn | html %] </td>
+                        <td><a class="btn btn-default btn-xs select_title" data-biblionumber="[% resultsloo.biblionumber | html %]" href="#" title="Choose this record">Choose</a></td>
+                    </tr>
+                [% END %]
+            </table>
+        </div>
+    [% ELSE %]
+        <div class="alert alert-info">
+            <p>No results found for <strong>[% query | html %]</strong></p>
+        </div>
     [% END %]
-    </table>
-</div>
-[% ELSE %]
 
-    <div class="alert alert-info">
-        <p>No results found for <strong>[% query | html %]</strong></p>
+    <div class="pages">
+        [% IF ( displayprev ) %]
+            <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromprev |url %]&amp;q=[% query |url %]">&lt;&lt; Previous</a>
+        [% END %]
+        [% IF ( displaynext ) %]
+            <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromnext |url %]&amp;q=[% query |url %]">Next &gt;&gt;</a>
+        [% END %]
     </div>
 
-[% END %]
-
-
-
-<div class="pages">
-    [% IF ( displayprev ) %]
-        <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromprev |url %]&amp;q=[% query |url %]">&lt;&lt; Previous</a>
-    [% END %]
-    [% IF ( displaynext ) %]
-        <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromnext |url %]&amp;q=[% query |url %]">Next  &gt;&gt;</a>
-    [% END %]
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <form action="/cgi-bin/koha/serials/subscription-bib-search.pl">
+                    <button class="btn btn-default" type="submit"><i class="fa fa-arrow-left"></i> Perform a new search</button>
+                </form>
+                <button type="button" class="btn btn-default close_window">Close window</button>
+            </fieldset>
+        </div>
+    </nav>
 </div>
-
-<nav class="navbar navbar-default fixed-bottom">
-    <div class="container-fluid">
-        <fieldset class="action">
-            <form action="/cgi-bin/koha/serials/subscription-bib-search.pl">
-                <button class="btn btn-default" type="submit"><i class="fa fa-arrow-left"></i> Perform a new search</button>
-            </form>
-            <button type="button" class="btn btn-default close_window">Close window</button>
-        </fieldset>
-    </div>
-</nav>
-</div> <!-- /.main.container-fluid -->
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
-            $(".select_title").on("click",function(e){
+        $(document).ready(function () {
+            $(".select_title").on("click", function (e) {
                 e.preventDefault();
                 var biblionumber = $(this).data("biblionumber");
-                GetIt( biblionumber, $(this) );
+                GetIt(biblionumber, $(this));
             });
         });
-        function GetIt(bibno,title) {
-            title = title.parents('tr').find('.title').text();
+        function GetIt(bibno, title) {
+            title = title.parents("tr").find(".title").text();
             opener.document.f.biblionumber.value = bibno;
             opener.document.f.title.value = title;
             window.close();

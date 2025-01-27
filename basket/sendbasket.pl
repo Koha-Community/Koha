@@ -19,13 +19,13 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Encode;
-use Carp qw( carp );
+use Carp      qw( carp );
 use Try::Tiny qw( catch try );
 
 use C4::Biblio qw(
-  GetMarcSubjects
+    GetMarcSubjects
 );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Templates;
 use Koha::Biblios;
@@ -42,7 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $op        = $query->param('op') || q{};
+my $op        = $query->param('op')       || q{};
 my $bib_list  = $query->param('bib_list') || '';
 my $email_add = $query->param('email_add');
 
@@ -66,12 +66,10 @@ if ( $op eq "cud-send" && $email_add ) {
     if ( !defined $iso2709 ) {
         carp "Error sending mail: empty basket";
         $template->param( error => 1 );
-    }
-    elsif ( !defined $user_email or $user_email eq '' ) {
+    } elsif ( !defined $user_email or $user_email eq '' ) {
         carp "Error sending mail: sender's email address is invalid";
         $template->param( error => 1 );
-    }
-    else {
+    } else {
         my %loops = ( biblio => \@bibs, );
 
         my %substitute = ( comment => $comment, );
@@ -110,8 +108,7 @@ if ( $op eq "cud-send" && $email_add ) {
     }
     $template->param( email_add => $email_add );
     output_html_with_http_headers $query, $cookie, $template->output;
-}
-else {
+} else {
     $template->param(
         bib_list       => $bib_list,
         url            => "/cgi-bin/koha/basket/sendbasket.pl",

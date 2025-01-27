@@ -8,11 +8,12 @@
 
 <title>
     [% IF op == 'edit' %]
-        Modify OAI repository [% server.servername | html %] &rsaquo; [% END %]
+        Modify OAI repository [% server.servername | html %] &rsaquo;
+    [% END %]
 
     [% IF op ==  'add' %]
-        New OAI repository &rsaquo; [% END %]
-
+        New OAI repository &rsaquo;
+    [% END %]
     OAI repositories &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -32,148 +33,150 @@
         [% IF op == 'edit' || op == 'add' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/oai_servers.pl">OAI repositories</a>
-           [% END %]
+            [% END %]
         [% END %]
 
         [% IF op == 'edit' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Modify OAI repository [% server.servername | html %]</span>
-           [% END %]
-
+            [% END %]
         [% ELSIF op == 'add' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>New OAI repository</span>
-           [% END %]
-
+            [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>OAI repositories</span>
-           [% END %]
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% IF msg_deleted %]
-    <div class="alert alert-warning">OAI repository deleted ([% msg_add | html %])</div>
-[% ELSIF msg_updated %]
-    <div class="alert alert-info">OAI repository updated ([% msg_add | html %])</div>
-[% ELSIF msg_added %]
-    <div class="alert alert-info">OAI repository added ([% msg_add | html %])</div>
-[% ELSIF msg_notfound %]
-    <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
-[% END %]
-
-[% IF ( add_form ) %]
-    <form action="/cgi-bin/koha/admin/oai_servers.pl" name="Aform" method="post" id="serverentry">
-        [% INCLUDE 'csrf-token.inc' %]
-        [% IF op == 'edit' %]
-            <h1>Modify OAI repository</h1>
-            <input type="hidden" name="id" value="[% server.oai_server_id | html %]" />
-        [% ELSE %]
-            <h1>New OAI repository</h1>
-        [% END %]
-
-        <input type="hidden" name="op" value="cud-add_validated" />
-        <fieldset class="rows">
-        <ol>
-        <li><label for="name" class="required">Repository name: </label>
-            [% IF server.servername %]
-                <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
-            [% ELSE %]
-                <input type="text" name="servername" id="servername" class="focus" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
-            [% END %]
-             <span class="required">Required</span>
-        </li>
-
-        <li><label for="endpoint" class="required">Endpoint: </label> <input type="text" name="endpoint" id="endpoint" size="30" value="[% server.endpoint | html %]" required="required" /> <span class="required">Required</span>
-        </li>
-        <li><label for="oai_set">[% I18N.tp('OAI', 'Set:') | html %] </label> <input type="text" name="oai_set" id="oai_set" value="[% server.oai_set | html %]" />
-        </li>
-        <li>
-            <label for="dataformat">Data format: </label>
-        <select name="dataformat" id="dataformat">
-            <option value="oai_dc">Dublin Core (oai_dc)</option>
-            <option value="marc-xml">Marcxml (marc-xml)</option>
-            <option value="marcxml">Marcxml (marcxml)</option>
-        </select>
-            <div class="hint">OAI can send records in various formats. Choose one.</div>
-        </li>
-
-        <li><label for="recordtype">Record type: </label>
-        <select name="recordtype" id="recordtype">
-            <option value="biblio">Bibliographic</option>
-            <option value="authority">Authority</option>
-        </select>
-        </li>
-        <li>
-        <label for="add_xslt">XSLT file for transforming results: </label>
-        <input type="text" name="add_xslt" id="add_xslt" size="100" placeholder="[% xslt_path | html %]" value="[% server.add_xslt | html %]"/>
-        </li>
-
-        </ol>
-        </fieldset>
-
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_servers.pl">Cancel</a></fieldset>
-    </form>
-[% END %]
-
-[% IF op == 'list' %]
-    <div id="toolbar" class="btn-toolbar">
-        <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oai_servers.pl?op=add"><i class="fa fa-plus"></i> New OAI repository</a>
-    </div>
-    <h1>OAI repositories</h1>
-    [% IF id %]
-        <span>You searched for record [% id | html %]</span>
-    [% ELSIF searchfield %]
-        <span>You searched for [% searchfield | html %]</span>
+    [% IF msg_deleted %]
+        <div class="alert alert-warning">OAI repository deleted ([% msg_add | html %])</div>
+    [% ELSIF msg_updated %]
+        <div class="alert alert-info">OAI repository updated ([% msg_add | html %])</div>
+    [% ELSIF msg_added %]
+        <div class="alert alert-info">OAI repository added ([% msg_add | html %])</div>
+    [% ELSIF msg_notfound %]
+        <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
     [% END %]
 
-    <div class="page-section">
-    <table id="serverst">
+    [% IF ( add_form ) %]
+        <form action="/cgi-bin/koha/admin/oai_servers.pl" name="Aform" method="post" id="serverentry">
+            [% INCLUDE 'csrf-token.inc' %]
+            [% IF op == 'edit' %]
+                <h1>Modify OAI repository</h1>
+                <input type="hidden" name="id" value="[% server.oai_server_id | html %]" />
+            [% ELSE %]
+                <h1>New OAI repository</h1>
+            [% END %]
 
-        <thead><tr><th>ID</th><th>Repository name</th><th>Endpoint</th><th>[% tp('OAI', 'Set') | html %]</th><th>Data format</th><th>Record type</th><th class="noExport NoSort">Actions</th>
-        </tr></thead>
-        <tbody>
-        [% FOREACH loo IN loop %]
-            <tr>
-            <td>[% loo.oai_server_id | html %]</td>
-            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
-            <td>[% loo.dataformat | html %]</td>
-            <td>[% IF ( loo.recordtype == 'biblio' )  %]
-                <span>Bibliographic</span>
-                [% ELSIF ( loo.recordtype == 'authority' ) %]
-                <span>Authority</span>
-                [% END %]
-            </td>
-            <td>
-                <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#">
-                        Actions
-                    </a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
-                        <li>
-                            <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.oai_server_id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                            <form id="server_row_[% loo.oai_server_id | uri %]" action="/cgi-bin/koha/admin/oai_servers.pl" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-delete_confirmed">
-                                <input type="hidden" name="id" value="[% loo.oai_server_id | uri %]">
-                            </form>
-                        </li>
+            <input type="hidden" name="op" value="cud-add_validated" />
+            <fieldset class="rows">
+                <ol>
+                    <li
+                        ><label for="name" class="required">Repository name: </label>
+                        [% IF server.servername %]
+                            <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
+                        [% ELSE %]
+                            <input type="text" name="servername" id="servername" class="focus" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
+                        [% END %]
+                        <span class="required">Required</span>
+                    </li>
 
-                    </ul>
-                </div>
-            </td>
-            </tr>
+                    <li
+                        ><label for="endpoint" class="required">Endpoint: </label> <input type="text" name="endpoint" id="endpoint" size="30" value="[% server.endpoint | html %]" required="required" /> <span class="required">Required</span>
+                    </li>
+                    <li><label for="oai_set">[% I18N.tp('OAI', 'Set:') | html %] </label> <input type="text" name="oai_set" id="oai_set" value="[% server.oai_set | html %]" /> </li>
+                    <li>
+                        <label for="dataformat">Data format: </label>
+                        <select name="dataformat" id="dataformat">
+                            <option value="oai_dc">Dublin Core (oai_dc)</option>
+                            <option value="marc-xml">Marcxml (marc-xml)</option>
+                            <option value="marcxml">Marcxml (marcxml)</option>
+                        </select>
+                        <div class="hint">OAI can send records in various formats. Choose one.</div>
+                    </li>
+
+                    <li
+                        ><label for="recordtype">Record type: </label>
+                        <select name="recordtype" id="recordtype">
+                            <option value="biblio">Bibliographic</option>
+                            <option value="authority">Authority</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="add_xslt">XSLT file for transforming results: </label>
+                        <input type="text" name="add_xslt" id="add_xslt" size="100" placeholder="[% xslt_path | html %]" value="[% server.add_xslt | html %]" />
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_servers.pl">Cancel</a></fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oai_servers.pl?op=add"><i class="fa fa-plus"></i> New OAI repository</a>
+        </div>
+        <h1>OAI repositories</h1>
+        [% IF id %]
+            <span>You searched for record [% id | html %]</span>
+        [% ELSIF searchfield %]
+            <span>You searched for [% searchfield | html %]</span>
         [% END %]
-        </tbody>
-    </table>
-    </div> <!-- /.page-section -->
-[% END %]
 
+        <div class="page-section">
+            <table id="serverst">
+                <thead
+                    ><tr><th>ID</th><th>Repository name</th><th>Endpoint</th><th>[% tp('OAI', 'Set') | html %]</th><th>Data format</th><th>Record type</th><th class="noExport NoSort">Actions</th> </tr></thead
+                >
+                <tbody>
+                    [% FOREACH loo IN loop %]
+                        <tr>
+                            <td>[% loo.oai_server_id | html %]</td>
+                            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]">[% loo.servername | html %]</a></td
+                            ><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
+                            <td>[% loo.dataformat | html %]</td>
+                            <td
+                                >[% IF ( loo.recordtype == 'biblio' ) %]
+                                    <span>Bibliographic</span>
+                                [% ELSIF ( loo.recordtype == 'authority' ) %]
+                                    <span>Authority</span>
+                                [% END %]
+                            </td>
+                            <td>
+                                <div class="btn-group dropup">
+                                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
+                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
+                                        >
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li
+                                        >
+                                        <li>
+                                            <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.oai_server_id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                            <form id="server_row_[% loo.oai_server_id | uri %]" action="/cgi-bin/koha/admin/oai_servers.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-delete_confirmed" />
+                                                <input type="hidden" name="id" value="[% loo.oai_server_id | uri %]" />
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -181,7 +184,6 @@
     [% IF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
     [% END %]
-
     <script>
         [% IF ( add_form ) %]
             $(document).ready(function(){

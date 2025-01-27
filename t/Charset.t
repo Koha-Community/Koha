@@ -26,47 +26,56 @@ use utf8;
 use open ':std', ':encoding(utf8)';
 
 BEGIN {
-    use_ok('C4::Charset', qw( NormalizeString SetUTF8Flag IsStringUTF8ish nsb_clean ));
+    use_ok( 'C4::Charset', qw( NormalizeString SetUTF8Flag IsStringUTF8ish nsb_clean ) );
 }
 
 my $string;
-ok(!defined(NormalizeString($string,undef,1)),'Uninitialized string case 1 normalizes to uninitialized string.');
+ok(
+    !defined( NormalizeString( $string, undef, 1 ) ),
+    'Uninitialized string case 1 normalizes to uninitialized string.'
+);
 
 $string = 'Sample';
-ok(defined(NormalizeString($string,undef,0)), 'Initialized string case 1 normalizes to some string.');
-ok(defined(NormalizeString($string,undef,1)), 'Initialized string case 2 normalizes to some string.');
-ok(defined(NormalizeString($string,1,0)),     'Initialized string case 3 normalizes to some string.');
-ok(defined(NormalizeString($string,1,1)),     'Initialized string case 4 normalizes to some string.');
+ok( defined( NormalizeString( $string, undef, 0 ) ), 'Initialized string case 1 normalizes to some string.' );
+ok( defined( NormalizeString( $string, undef, 1 ) ), 'Initialized string case 2 normalizes to some string.' );
+ok( defined( NormalizeString( $string, 1,     0 ) ), 'Initialized string case 3 normalizes to some string.' );
+ok( defined( NormalizeString( $string, 1,     1 ) ), 'Initialized string case 4 normalizes to some string.' );
 
 my $octets = "abc";
-ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (ASCII)");
+ok( IsStringUTF8ish($octets), "verify octets are valid UTF-8 (ASCII)" );
 
 $octets = "flamb\xc3\xa9";
-ok(!Encode::is_utf8($octets), "verify that string does not have Perl UTF-8 flag on");
-ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (LATIN SMALL LETTER E WITH ACUTE)");
-ok(!Encode::is_utf8($octets), "verify that IsStringUTF8ish does not magically turn Perl UTF-8 flag on");
+ok( !Encode::is_utf8($octets), "verify that string does not have Perl UTF-8 flag on" );
+ok( IsStringUTF8ish($octets),  "verify octets are valid UTF-8 (LATIN SMALL LETTER E WITH ACUTE)" );
+ok( !Encode::is_utf8($octets), "verify that IsStringUTF8ish does not magically turn Perl UTF-8 flag on" );
 
 $octets = "a\xc2" . "c";
-ok(!IsStringUTF8ish($octets), "verify octets are not valid UTF-8");
+ok( !IsStringUTF8ish($octets), "verify octets are not valid UTF-8" );
 
 ok( !SetUTF8Flag(), 'SetUTF8Flag returns undef if no record passed' );
 
 my $record = MARC::Record->new();
 ok( !SetUTF8Flag($record), 'SetUTF8Flag returns undef if the record has no subfields' );
+
 # Add some fields/subfields
 $record->append_fields(
-    MARC::Field->new('100', ' ', ' ', a => 'Julio Cortazar'),
-    MARC::Field->new('245', ' ', ' ', a => 'Rayuela'),
+    MARC::Field->new( '100', ' ', ' ', a => 'Julio Cortazar' ),
+    MARC::Field->new( '245', ' ', ' ', a => 'Rayuela' ),
 );
+
 # Verify our data serves its purpose
-ok( !Encode::is_utf8($record->subfield('100','a')) &&
-    !Encode::is_utf8($record->subfield('245','a')),
-    'Verify that the subfields are NOT set the UTF-8 flag yet' );
+ok(
+           !Encode::is_utf8( $record->subfield( '100', 'a' ) )
+        && !Encode::is_utf8( $record->subfield( '245', 'a' ) ),
+    'Verify that the subfields are NOT set the UTF-8 flag yet'
+);
 
 SetUTF8Flag($record);
 
-ok( Encode::is_utf8($record->subfield('100','a')) &&
-    Encode::is_utf8($record->subfield('245','a')),
-    'SetUTF8Flag sets the UTF-8 flag to all subfields' );
+ok(
+           Encode::is_utf8( $record->subfield( '100', 'a' ) )
+        && Encode::is_utf8( $record->subfield( '245', 'a' ) ),
+    'SetUTF8Flag sets the UTF-8 flag to all subfields'
+);
 
 is( nsb_clean("Le Moyen Âge"), "Le Moyen Âge", "nsb_clean removes  and " );

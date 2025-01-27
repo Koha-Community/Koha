@@ -134,7 +134,7 @@ sub store {
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Items->find( $self->itemnumber );
 }
 

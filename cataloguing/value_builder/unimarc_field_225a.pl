@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -40,13 +39,14 @@ It need :
 =cut
 
 use strict;
+
 #use warnings; FIXME - Bug 2505
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth            qw( get_template_and_user );
+use C4::Output          qw( output_html_with_http_headers );
 use C4::AuthoritiesMarc qw( SearchAuthorities GetAuthority );
 
 =head1 DESCRIPTION
@@ -58,7 +58,7 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number ) = @_;
     my $function_name = $field_number;
-    my $res = "
+    my $res           = "
     <script>
     
     
@@ -93,48 +93,49 @@ sub plugin_javascript {
 }
 
 sub plugin {
-    my ($input)      = @_;
-    my $index        = $input->param('index');
-    my $result       = $input->param('result');
-    my $editor_found = $input->param('editor_found');
+    my ($input)            = @_;
+    my $index              = $input->param('index');
+    my $result             = $input->param('result');
+    my $editor_found       = $input->param('editor_found');
     my $AuthoritySeparator = C4::Context->preference("AuthoritySeparator");
-    
+
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name =>
-              "cataloguing/value_builder/unimarc_field_225a.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { editcatalogue => '*' },
+            template_name => "cataloguing/value_builder/unimarc_field_225a.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
         }
     );
 
-# builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
-# if there is an isbn, complete search
+    # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
+    # if there is an isbn, complete search
     my @collections;
-    
-    my @value     = ($editor_found,"","");
-    my @tags      = ("mainentry","","");
-    my @and_or    = ('and','','');
-    my @operator  = ('is','','');
-    my @excluding = ('','','');
-    
-    
-    my ($results,$total) = SearchAuthorities( \@tags,\@and_or,
-                                            \@excluding, \@operator, \@value,
-                                            0, 20,"EDITORS", "HeadingAsc");
-    foreach my $editor (@$results){
-        my $authority = GetAuthority($editor->{authid});
-        foreach my $col ($authority->subfield('200','c')){
+
+    my @value     = ( $editor_found, "", "" );
+    my @tags      = ( "mainentry", "", "" );
+    my @and_or    = ( 'and',       '', '' );
+    my @operator  = ( 'is',        '', '' );
+    my @excluding = ( '',          '', '' );
+
+    my ( $results, $total ) = SearchAuthorities(
+        \@tags,      \@and_or,
+        \@excluding, \@operator, \@value,
+        0,           20, "EDITORS", "HeadingAsc"
+    );
+    foreach my $editor (@$results) {
+        my $authority = GetAuthority( $editor->{authid} );
+        foreach my $col ( $authority->subfield( '200', 'c' ) ) {
             push @collections, $col;
         }
-            
-    } 
+
+    }
     @collections = sort @collections;
+
     # my @collections = ( "test" );
     my $collection = {
-            values  => \@collections,
-            default => "$result",
+        values  => \@collections,
+        default => "$result",
     };
 
     $template->param(

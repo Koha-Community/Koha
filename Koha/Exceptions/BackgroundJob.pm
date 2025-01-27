@@ -27,7 +27,7 @@ use Exception::Class (
     'Koha::Exceptions::BackgroundJob::InconsistentStatus' => {
         isa         => 'Koha::Exceptions::BackgroundJob',
         description => 'Status change requested but an invalid status found',
-        fields      => ['current_status', 'expected_status']
+        fields      => [ 'current_status', 'expected_status' ]
     },
     'Koha::Exceptions::BackgroundJob::StepOutOfBounds' => {
         isa         => 'Koha::Exceptions::BackgroundJob',

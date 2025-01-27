@@ -7,13 +7,17 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% UNLESS blocking_error  %]
-        [% t("Discharge for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% END %]
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% UNLESS blocking_error %]
+            [% t("Discharge for") | html %]
+            [% INCLUDE 'patron-title.inc' no_html = 1 %]
+            &rsaquo;
+        [% END %]
+        [% t("Patrons") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="discharge" class="discharge">
@@ -37,55 +41,53 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-[% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-<h1>Discharge</h1>
-[% FOR message IN messages %]
-    <div class="alert alert-[% message.type | html %]">
-    [% IF message.code == "unable_to_generate_pdf" %]
-        An error occurs when generating the PDF file.
-        Please contact the administrator to resolve this problem.
+    <h1>Discharge</h1>
+    [% FOR message IN messages %]
+        <div class="alert alert-[% message.type | html %]">
+            [% IF message.code == "unable_to_generate_pdf" %]
+                An error occurs when generating the PDF file. Please contact the administrator to resolve this problem.
+            [% END %]
+        </div>
     [% END %]
-    </div>
-[% END %]
-[% UNLESS can_be_discharged %]
-    <p>Cannot edit discharge: the patron has checked out items.</p>
-[% ELSE %]
-    [% IF patron.holds.count %]
-        <p>Patron has holds. They will be cancelled if the discharge is generated.</p>
+    [% UNLESS can_be_discharged %]
+        <p>Cannot edit discharge: the patron has checked out items.</p>
+    [% ELSE %]
+        [% IF patron.holds.count %]
+            <p>Patron has holds. They will be cancelled if the discharge is generated.</p>
+        [% END %]
+        <div class="btn-toolbar">
+            <form method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-discharge" />
+                <input type="submit" name="discharge" class="btn btn-primary" value="Generate discharge" />
+                <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
+            </form>
+        </div>
     [% END %]
-    <div class="btn-toolbar">
-        <form method="post">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-discharge" />
-            <input type="submit" name="discharge" class="btn btn-primary" value="Generate discharge" />
-            <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
-        </form>
-    </div>
-[% END %]
 
-[% IF validated_discharges %]
-    <div class="page-section">
-        <h2>Already validated discharges</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Requested</th>
-                    <th>Validated</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOR d IN validated_discharges %]
+    [% IF validated_discharges %]
+        <div class="page-section">
+            <h2>Already validated discharges</h2>
+            <table>
+                <thead>
                     <tr>
-                        <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
-                        <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
+                        <th>Requested</th>
+                        <th>Validated</th>
                     </tr>
-                [% END %]
-            </tbody>
-        </table>
-    </div>
-[% END %]
-
+                </thead>
+                <tbody>
+                    [% FOR d IN validated_discharges %]
+                        <tr>
+                            <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
+                            <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

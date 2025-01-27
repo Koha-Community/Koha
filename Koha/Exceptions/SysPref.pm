@@ -26,7 +26,7 @@ use Exception::Class (
     'Koha::Exceptions::SysPref::NotSet' => {
         isa         => 'Koha::Exceptions::SysPref',
         description => 'Required syspref is not set',
-        fields      =>  ['syspref']
+        fields      => ['syspref']
     }
 );
 

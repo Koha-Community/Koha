@@ -4,131 +4,136 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF subscription %]
-        [% t("Renew subscription") | html %] &rsaquo;
-        [% subscription.bibliotitle | html %] &rsaquo;
-    [% ELSE %]
-        [% t("Renew subscriptions") | html %] &rsaquo;
-    [% END %]
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF subscription %]
+            [% t("Renew subscription") | html %]
+            &rsaquo; [% subscription.bibliotitle | html %] &rsaquo;
+        [% ELSE %]
+            [% t("Renew subscriptions") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Serials") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="ser_subscription-renew" class="ser">
-    <div class="container-fluid">
+<div class="container-fluid">
+    <h1>Serials subscription renew</h1>
 
-        <h1>Serials subscription renew</h1>
+    [% INCLUDE 'blocking_errors.inc' %]
 
-[% INCLUDE 'blocking_errors.inc' %]
+    [% IF op == 'cud-renew' OR op =='cud-multi_renew' %]
+        [% IF op == 'cud-renew' %]
+            <span>Subscription renewed.</span>
+        [% ELSE %]
+            <span>Subscriptions renewed.</span>
+        [% END %]
 
-[% IF op == 'cud-renew' OR op =='cud-multi_renew' %]
-    [% IF op == 'cud-renew' %]
-        <span>Subscription renewed.</span>
-    [% ELSE %]
-        <span>Subscriptions renewed.</span>
+        <nav class="navbar navbar-default fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <button type="button" class="btn btn-default close_window">Close window</button>
+                </fieldset>
+            </div>
+        </nav>
+    [% ELSIF op == 'multi_renew' %]
+        <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-multi_renew" />
+            Subscription renewal for:
+            <ul>
+                [% FOR subscription IN subscriptions %]
+                    <li>
+                        <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
+                        [% subscription.bibliotitle | html %]
+                    </li>
+                [% END %]
+            </ul>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
+        </form>
+    [% ELSIF op == 'renew' %]
+        <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-renew" />
+            <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
+            <fieldset class="rows"
+                ><legend>Subscription renewal for [% subscription.bibliotitle | html %]</legend>
+                <ol>
+                    <li>
+                        <label for="startdate">Start date: </label>
+                        <input type="text" size="10" id="startdate" name="startdate" value="[% startdate | html %]" class="flatpickr" />
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                    <li>
+                        <label>Subscription length:</label>
+                        <select name="subtype" id="subtype">
+                            [% FOREACH st IN [['numberlength', 'issues'], ['weeklength', 'weeks'], ['monthlength', 'months']] %]
+                                [% SET subtype = st.0 %]
+                                [% SET value = st.1 %]
+                                <option value="[% value | html %]" [% IF subscription.$subtype %]selected="selected"[% END %]>
+                                    [% SWITCH subtype %]
+                                    [% CASE 'numberlength' %]
+                                        <span>issues</span>
+                                    [% CASE 'weeklength' %]
+                                        <span>weeks</span>
+                                    [% CASE 'monthlength' %]
+                                        <span>months</span>
+                                    [% END %]
+                                </option>
+                            [% END %]
+                        </select>
+                        <input type="text" name="sublength" id="sublength" size="3" value="[% subscription.numberlength || subscription.weeklength || subscription.monthlength | html %]" />(enter amount in numerals)
+                        <input type="hidden" name="issuelengthcount" />
+                    </li>
+
+                    [% IF Koha.Preference('RenewSerialAddsSuggestion') %]
+                        <li>
+                            <label for="branchcode">Library:</label>
+                            <select name="branchcode" id="branchcode" style="width: 20em;">
+                                [% UNLESS ( Independentbranches ) %]
+                                    <option value="">None</option>
+                                [% END %]
+                                [% IF CAN_user_serials_superserials %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all(selected => subscription.branchcode) %]
+                                [% END %]
+                            </select>
+                            (select a library)
+                        </li>
+
+                        <li>
+                            <label for="note">Note for the librarian that will manage your renewal request: </label>
+                            <textarea name="note" id="note" rows="5" cols="50"></textarea>
+                        </li>
+                    [% END %]
+                </ol>
+            </fieldset>
+            <nav class="navbar navbar-default fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                        <button type="button" class="btn btn-default close_window">Close window</button>
+                    </fieldset>
+                </div>
+            </nav>
+        </form>
     [% END %]
 
-    <nav class="navbar navbar-default fixed-bottom">
-        <div class="container-fluid">
-            <fieldset class="action">
-                <button type="button" class="btn btn-default close_window">Close window</button>
-            </fieldset>
-        </div>
-    </nav>
-[% ELSIF op == 'multi_renew' %]
-
-    <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-multi_renew" />
-        Subscription renewal for:
-        <ul>
-        [% FOR subscription IN subscriptions %]
-            <li>
-                <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
-                [% subscription.bibliotitle | html %]
-            </li>
-        [% END %]
-        </ul>
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
-    </form>
-
-[% ELSIF op == 'renew' %]
-
-<form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-		<input type="hidden" name="op" value="cud-renew" />
-		<input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
-		<fieldset class="rows"><legend>Subscription renewal for [% subscription.bibliotitle | html %]</legend>
-        <ol>
-            <li>
-                <label for="startdate">Start date: </label>
-                <input type="text" size="10" id="startdate" name="startdate" value="[% startdate | html %]" class="flatpickr"/>
-                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-            </li>
-    <li>
-    <label>Subscription length:</label>
-    <select name="subtype" id="subtype">
-        [% FOREACH st IN [['numberlength', 'issues'], ['weeklength', 'weeks'], ['monthlength', 'months']] %]
-            [% SET subtype = st.0 %]
-            [% SET value = st.1 %]
-            <option value="[% value | html %]" [% IF subscription.$subtype %]selected="selected"[% END %]>
-            [% SWITCH subtype %]
-                [% CASE 'numberlength' %]<span>issues</span>
-                [% CASE 'weeklength'   %]<span>weeks</span>
-                [% CASE 'monthlength'  %]<span>months</span>
-            [% END %]
-            </option>
-        [% END %]
-    </select>
-    <input type="text" name="sublength" id="sublength" size="3" value="[% subscription.numberlength || subscription.weeklength || subscription.monthlength | html %]" />(enter amount in numerals)
-    <input type="hidden" name="issuelengthcount">
-    </li>
-
-    [% IF Koha.Preference('RenewSerialAddsSuggestion') %]
-        <li>
-            <label for="branchcode">Library:</label>
-            <select name="branchcode" id="branchcode" style="width: 20em;">
-                [% UNLESS ( Independentbranches ) %]
-                    <option value="">None</option>
-                [% END %]
-                [% IF CAN_user_serials_superserials %]
-                    [% PROCESS options_for_libraries libraries => Branches.all(selected => subscription.branchcode) %]
-                [% END %]
-            </select> (select a library)
-        </li>
-
-        <li>
-            <label for="note">Note for the librarian that will manage your renewal request: </label>
-            <textarea name="note" id="note" rows="5" cols="50"></textarea>
-        </li>
-    [% END %]
-</ol>
-</fieldset>
-    <nav class="navbar navbar-default fixed-bottom">
-        <div class="container-fluid">
-            <fieldset class="action">
-                <input type="submit" class="btn btn-primary" value="Submit" />
-                <button type="button" class="btn btn-default close_window">Close window</button>
-            </fieldset>
-        </div>
-    </nav>
-</form>
-[% END %]
-
-[% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'calendar.inc' %]
-    <script>
-        $(document).ready(function(){
-            $(".close").on("click", function(e){
-                e.preventDefault();
-                window.opener.location.reload(false);
-                self.close();
+    [% MACRO jsinclude BLOCK %]
+        [% INCLUDE 'calendar.inc' %]
+        <script>
+            $(document).ready(function () {
+                $(".close").on("click", function (e) {
+                    e.preventDefault();
+                    window.opener.location.reload(false);
+                    self.close();
+                });
             });
-        });
-    </script>
-[% END %]
+        </script>
+    [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
+    [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
+</div>

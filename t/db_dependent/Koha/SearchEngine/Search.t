@@ -17,30 +17,30 @@ use t::lib::Mocks;
 use Koha::Database;
 use Koha::SearchEngine::Search;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 subtest 'Test extract_biblionumber' => sub {
     plan tests => 2;
 
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Zebra' );
-    my $biblio_mod = Test::MockModule->new( 'C4::Biblio' );
-    my $search_mod = Test::MockModule->new( 'C4::Search' );
+    my $biblio_mod  = Test::MockModule->new('C4::Biblio');
+    my $search_mod  = Test::MockModule->new('C4::Search');
     my $koha_fields = [ '001', '' ];
-    $biblio_mod->mock( 'GetMarcFromKohaField', sub { return @$koha_fields; });
+    $biblio_mod->mock( 'GetMarcFromKohaField',  sub { return @$koha_fields; } );
     $search_mod->mock( 'new_record_from_zebra', \&test_record );
 
     # Extract using 001
     my $searcher = Koha::SearchEngine::Search->new;
-    my $bibno = $searcher->extract_biblionumber( 'fake_result' );
+    my $bibno    = $searcher->extract_biblionumber('fake_result');
     is( $bibno, 3456, 'Extracted biblio number for Zebra' );
 
     # Now use 999c with Elasticsearch
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
-    $search_mod->unmock( 'new_record_from_zebra' );
+    $search_mod->unmock('new_record_from_zebra');
     $koha_fields = [ '999', 'c' ];
-    $searcher = Koha::SearchEngine::Search->new({ index => 'biblios' });
-    $bibno = $searcher->extract_biblionumber( test_record() );
+    $searcher    = Koha::SearchEngine::Search->new( { index => 'biblios' } );
+    $bibno       = $searcher->extract_biblionumber( test_record() );
     is( $bibno, 4567, 'Extracted biblio number for Zebra' );
 };
 

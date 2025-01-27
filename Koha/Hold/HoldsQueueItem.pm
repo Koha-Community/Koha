@@ -40,10 +40,10 @@ Koha::Hold::HoldsQueueItem - Koha holds queue items object class
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->borrowernumber;
     return unless $rs;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 biblio
@@ -51,10 +51,10 @@ sub patron {
 =cut
 
 sub biblio {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->biblionumber;
     return unless $rs;
-    return Koha::Biblio->_new_from_dbic( $rs );
+    return Koha::Biblio->_new_from_dbic($rs);
 }
 
 =head3 item
@@ -62,10 +62,10 @@ sub biblio {
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->itemnumber;
     return unless $rs;
-    return Koha::Item->_new_from_dbic( $rs );
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head2 Internal methods

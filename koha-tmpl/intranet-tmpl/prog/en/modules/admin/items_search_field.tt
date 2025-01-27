@@ -5,72 +5,70 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-    [% IF (field) %]
-        [% tx("Modify search field '{field}'", { field = field.name }) | html %]
-    [% ELSE %]
-        [% t("New search field") | html %]
-    [% END %] &rsaquo;
-    [% t("Item search fields") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% IF (field) %]
+            [% tx("Modify search field '{field}'", { field = field.name }) | html %]
+        [% ELSE %]
+            [% t("New search field") | html %]
+        [% END %]
+        &rsaquo; [% t("Item search fields") | html %] &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="admin_itemssearchfields" class="admin">
-    [% WRAPPER 'header.inc' %]
-        [% INCLUDE 'prefs-admin-search.inc' %]
-    [% END %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+[% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-            [% END %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        [% END %]
 
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a>
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a>
+        [% END %]
+        [% IF (field) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% tx("Modify search field  '{field}'", { field = field.name }) | html %]
             [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>New search field</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <h1>
+        [% IF (field) %]
+            [% tx("Modify search field  '{field}'", { field = field.name }) | html %]
+        [% ELSE %]
+            [% t("New search field") | html %]
+        [% END %]
+    </h1>
+
+    <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" id="search_fields">
+        [% INCLUDE 'csrf-token.inc' %]
+        <fieldset class="rows">
+            [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
             [% IF (field) %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    [% tx("Modify search field  '{field}'", { field = field.name }) | html %]
-                [% END %]
-
+                <input type="hidden" name="op" value="cud-mod" />
             [% ELSE %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>New search field</span>
-                [% END %]
+                <input type="hidden" name="op" value="cud-add" />
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
-
-    [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-                    <h1>
-                        [% IF (field) %]
-                            [% tx("Modify search field  '{field}'", { field = field.name }) | html %]
-                        [% ELSE %]
-                            [% t("New search field") | html %]
-                        [% END %]
-                    </h1>
-
-                    <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" id="search_fields">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <fieldset class="rows">
-                            [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
-                            [% IF (field) %]
-                                <input type="hidden" name="op" value="cud-mod" />
-                            [% ELSE %]
-                                <input type="hidden" name="op" value="cud-add" />
-                            [% END %]
-                        </fieldset>
-                        <fieldset class="action">
-                            <input type="submit" class="btn btn-primary" value="Submit" />
-                            <a class="cancel" href="/cgi-bin/koha/admin/items_search_fields.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-
-    [% END %]
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/admin/items_search_fields.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]

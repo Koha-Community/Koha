@@ -2,19 +2,20 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("008 builder") | html %] &rsaquo;
-    [% t("Authorities") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("008 builder") | html %]
+        &rsaquo; [% t("Authorities") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_marc21_field_008_authorities" class="cat value_builder">
 
-    <h1> 008 Fixed-length data elements</h1>
+<h1> 008 Fixed-length data elements</h1>
 
-    <form method="get" name="f_pop" onsubmit="report()" action="">
+<form method="get" name="f_pop" onsubmit="report()" action="">
     <input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl" />
     <input name="f1" value="[% f1 | html %]" type="hidden" />
 
@@ -693,31 +694,31 @@
                 <td><label for="f39">39- Cataloging source</label></td>
                 <td>
                     <select name="f39" id="f39">
-                    [% IF ( f39 ) %]
-                        <option value=" " selected="selected">#- National bibliographic agency</option>
-                    [% ELSE %]
-                        <option value=" ">#- National bibliographic agency</option>
-                    [% END %]
-                    [% IF ( f39c ) %]
-                        <option value="c" selected="selected">c- Cooperative cataloging program</option>
-                    [% ELSE %]
-                        <option value="c">c- Cooperative cataloging program</option>
-                    [% END %]
-                    [% IF ( f39d ) %]
-                        <option value="d" selected="selected">d- Other</option>
-                    [% ELSE %]
-                        <option value="d">d- Other</option>
-                    [% END %]
-                    [% IF ( f39u ) %]
-                        <option value="u" selected="selected">u- Unknown</option>
-                    [% ELSE %]
-                        <option value="u">u- Unknown</option>
-                    [% END %]
-                    [% IF ( f39pipe ) %]
-                        <option value="|" selected="selected">|- No attempt to code</option>
-                    [% ELSE %]
-                        <option value="|">|- No attempt to code</option>
-                    [% END %]
+                        [% IF ( f39 ) %]
+                            <option value=" " selected="selected">#- National bibliographic agency</option>
+                        [% ELSE %]
+                            <option value=" ">#- National bibliographic agency</option>
+                        [% END %]
+                        [% IF ( f39c ) %]
+                            <option value="c" selected="selected">c- Cooperative cataloging program</option>
+                        [% ELSE %]
+                            <option value="c">c- Cooperative cataloging program</option>
+                        [% END %]
+                        [% IF ( f39d ) %]
+                            <option value="d" selected="selected">d- Other</option>
+                        [% ELSE %]
+                            <option value="d">d- Other</option>
+                        [% END %]
+                        [% IF ( f39u ) %]
+                            <option value="u" selected="selected">u- Unknown</option>
+                        [% ELSE %]
+                            <option value="u">u- Unknown</option>
+                        [% END %]
+                        [% IF ( f39pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
                     </select>
                 </td>
             </tr>
@@ -730,7 +731,8 @@
                 </fieldset>
             </div>
         </nav>
-    </div> <!-- /.page-section -->
+    </div>
+    <!-- /.page-section -->
 </form>
 
 [% MACRO jsinclude BLOCK %]

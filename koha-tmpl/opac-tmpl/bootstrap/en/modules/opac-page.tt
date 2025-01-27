@@ -7,7 +7,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF page %][% page.title | html %][% ELSE %]Page error[% END %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-page-' _ page.additional_content_id %]
 [% INCLUDE 'masthead.inc' %]
@@ -29,33 +30,33 @@
             [% IF ( OpacNav ||  OpacNavBottom ) %]
                 [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                 <div class="col-lg-2">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' %]
-                    </div>
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
                 </div>
             [% END %]
 
             <div class="[% column_class | html %]">
+                [% IF page %]
+                    <div id="page_[% page.additional_content_id | html %]" class="maincontent">
+                        <h1>[% page.title | html %]</h1>
 
-            [% IF page %]
-                <div id="page_[% page.additional_content_id | html %]" class="maincontent">
-                    <h1>[% page.title | html %]</h1>
-
-                    <div class="page_content">
-                        [% page.content | $raw %]
+                        <div class="page_content"> [% page.content | $raw %] </div>
                     </div>
-                </div> <!-- /.maincontent -->
-            [% ELSE %]
-                <div class="maincontent">
-                    <div class="alert alert-error">
-                        This page does not exist.
+                    <!-- /.maincontent -->
+                [% ELSE %]
+                    <div class="maincontent">
+                        <div class="alert alert-error"> This page does not exist. </div>
                     </div>
-                </div> <!-- /.maincontent -->
-            [% END %]
-            </div> <!-- / .col -->
-        </div> <!-- /.row -->
-    </div> <!-- /.container-fluid -->
-</div> <!-- /.main -->
+                    <!-- /.maincontent -->
+                [% END %]
+            </div>
+            <!-- / .col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

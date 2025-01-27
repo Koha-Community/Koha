@@ -4,12 +4,15 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Record blocked") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Record blocked") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-blocked' %]
 [% INCLUDE 'masthead.inc' %]
@@ -27,14 +30,14 @@
                     <h1>Record blocked</h1>
                     <p>You are not authorized to view this record.</p>
                     [% IF ( OpacSuppressionMessage ) %]
-                        <div id="opacsuppressionmessage">
-                            [% PROCESS koha_news_block news => OpacSuppressionMessage %]
-                        </div>
+                        <div id="opacsuppressionmessage"> [% PROCESS koha_news_block news => OpacSuppressionMessage %] </div>
                     [% END %]
                 </div>
             </div>
         </div>
     </div>
 
-[% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+    [% INCLUDE 'opac-bottom.inc' %]
+    [% BLOCK jsinclude %]
+    [% END %]
+</div>

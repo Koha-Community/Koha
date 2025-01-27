@@ -66,20 +66,18 @@ sub claim_returned {
             }
         );
 
-        $c->res->headers->location($c->req->url->to_string . '/' . $claim->id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $claim->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($claim),
         );
-    }
-    catch {
+    } catch {
         if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
                 openapi => { error => "$_" }
             );
-        }
-        elsif ( $_->isa('Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy') ) {
+        } elsif ( $_->isa('Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy') ) {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Mandatory attribute created_by missing" }
@@ -102,7 +100,7 @@ sub update_notes {
     my $claim_id = $c->param('claim_id');
     my $body     = $c->req->json;
 
-    my $claim = Koha::Checkouts::ReturnClaims->find( $claim_id );
+    my $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
 
     return $c->render_resource_not_found("Claim")
         unless $claim;
@@ -126,8 +124,7 @@ sub update_notes {
             status  => 200,
             openapi => $c->objects->to_api($claim),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -170,8 +167,7 @@ sub resolve_claim {
             status  => 200,
             openapi => $c->objects->to_api($claim),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

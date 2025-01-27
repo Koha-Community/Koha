@@ -7,7 +7,6 @@ use base qw(C4::Creators::Batch);
 
 use autouse 'Data::Dumper' => qw(Dumper);
 
-
 __PACKAGE__ =~ m/^C4::(.+)::.+$/;
 my $me = $1;
 
@@ -30,14 +29,13 @@ sub retrieve {
 }
 
 sub delete {
-    if (ref($_[0])) {
-        my $self = shift;  # check to see if this is a method call
+    if ( ref( $_[0] ) ) {
+        my $self = shift;    # check to see if this is a method call
         push @_, "creator", $me;
         return $self->SUPER::delete(@_);
-    }
-    else {
+    } else {
         push @_, "creator", $me;
-        return __PACKAGE__->SUPER::delete(@_); # XXX: is this too hackish?
+        return __PACKAGE__->SUPER::delete(@_);    # XXX: is this too hackish?
     }
 }
 

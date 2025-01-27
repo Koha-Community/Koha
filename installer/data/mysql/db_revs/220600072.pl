@@ -3,9 +3,9 @@ use Modern::Perl;
 return {
     bug_number  => "24381",
     description => "Update accounts notices",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         # ACCOUNT_CREDIT
         my $account_credit = q{
@@ -122,21 +122,35 @@ return {
 </table>
         };
 
-        my $account_credit_old = q{<table>[%IF(LibraryName)%]<tr><thcolspan="4"class="centerednames"><h3>[%LibraryName|html%]</h3></th></tr>[%END%]<tr><thcolspan="4"class="centerednames"><h2><u>Feereceipt</u></h2></th></tr><tr><thcolspan="4"class="centerednames"><h2>[%Branches.GetName(patron.branchcode)|html%]</h2></th></tr><tr><thcolspan="4">Receivedwiththanksfrom[%patron.firstname|html%][%patron.surname|html%]<br/>Cardnumber:[%patron.cardnumber|html%]<br/></th></tr><tr><th>Date</th><th>Descriptionofcharges</th><th>Note</th><th>Amount</th></tr>[%FOREACHaccountINaccounts%]<trclass="highlight"><td>[%account.date|$KohaDates%]</td><td>[%PROCESSaccount_type_descriptionaccount=account%][%-IFaccount.description%],[%account.description|html%][%END%]</td><td>[%account.note|html%]</td>[%IF(account.amountcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%account.amount|$Price%]</td></tr>[%END%]<tfoot><tr><tdcolspan="3">Totaloutstandingduesasondate:</td>[%IF(totalcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%total|$Price%]</td></tr></tfoot></table>};
+        my $account_credit_old =
+            q{<table>[%IF(LibraryName)%]<tr><thcolspan="4"class="centerednames"><h3>[%LibraryName|html%]</h3></th></tr>[%END%]<tr><thcolspan="4"class="centerednames"><h2><u>Feereceipt</u></h2></th></tr><tr><thcolspan="4"class="centerednames"><h2>[%Branches.GetName(patron.branchcode)|html%]</h2></th></tr><tr><thcolspan="4">Receivedwiththanksfrom[%patron.firstname|html%][%patron.surname|html%]<br/>Cardnumber:[%patron.cardnumber|html%]<br/></th></tr><tr><th>Date</th><th>Descriptionofcharges</th><th>Note</th><th>Amount</th></tr>[%FOREACHaccountINaccounts%]<trclass="highlight"><td>[%account.date|$KohaDates%]</td><td>[%PROCESSaccount_type_descriptionaccount=account%][%-IFaccount.description%],[%account.description|html%][%END%]</td><td>[%account.note|html%]</td>[%IF(account.amountcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%account.amount|$Price%]</td></tr>[%END%]<tfoot><tr><tdcolspan="3">Totaloutstandingduesasondate:</td>[%IF(totalcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%total|$Price%]</td></tr></tfoot></table>};
 
-        my $sth = $dbh->prepare(q{
+        my $sth = $dbh->prepare(
+            q{
             UPDATE letter SET content = ? WHERE code = 'ACCOUNT_CREDIT' AND REPLACE(REPLACE(content, ' ', ''), '\n','') = ?
-        });
+        }
+        );
         $sth->execute( $account_credit, $account_credit_old );
 
         # replace patron variable with credit.patron
-        $dbh->do("UPDATE letter SET content = REPLACE(content, '[% patron', '[% credit.patron') WHERE code = 'ACCOUNT_CREDIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, '[% patron', '[% credit.patron') WHERE code = 'ACCOUNT_CREDIT' "
+        );
+
         # replace library variable with credit.library.branchname
-        $dbh->do("UPDATE letter SET content = REPLACE(content, '[% library', '[% credit.library.branchname') WHERE code = 'ACCOUNT_CREDIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, '[% library', '[% credit.library.branchname') WHERE code = 'ACCOUNT_CREDIT' "
+        );
+
         # replace offsets variable with credit.offsets
-        $dbh->do("UPDATE letter SET content = REPLACE(content, ' offsets %]', ' credit.offsets %]') WHERE code = 'ACCOUNT_CREDIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, ' offsets %]', ' credit.offsets %]') WHERE code = 'ACCOUNT_CREDIT' "
+        );
+
         # replace change_given variable with change
-        $dbh->do("UPDATE letter SET content = REPLACE(content, '[% change_given', '[% change') WHERE code = 'ACCOUNT_CREDIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, '[% change_given', '[% change') WHERE code = 'ACCOUNT_CREDIT' "
+        );
 
         # ACCOUNT_DEBIT
         my $account_debit = q{
@@ -225,23 +239,40 @@ return {
 </table>
         };
 
-        my $account_debit_old = q{<table>[%IF(LibraryName)%]<tr><thcolspan="5"class="centerednames"><h3>[%LibraryName|html%]</h3></th></tr>[%END%]<tr><thcolspan="5"class="centerednames"><h2><u>INVOICE</u></h2></th></tr><tr><thcolspan="5"class="centerednames"><h2>[%Branches.GetName(patron.branchcode)|html%]</h2></th></tr><tr><thcolspan="5">Billto:[%patron.firstname|html%][%patron.surname|html%]<br/>Cardnumber:[%patron.cardnumber|html%]<br/></th></tr><tr><th>Date</th><th>Descriptionofcharges</th><th>Note</th><thstyle="text-align:right;">Amount</th><thstyle="text-align:right;">Amountoutstanding</th></tr>[%FOREACHaccountINaccounts%]<trclass="highlight"><td>[%account.date|$KohaDates%]</td><td>[%PROCESSaccount_type_descriptionaccount=account%][%-IFaccount.description%],[%account.description|html%][%END%]</td><td>[%account.note|html%]</td>[%IF(account.amountcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%account.amount|$Price%]</td>[%IF(account.amountoutstandingcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%account.amountoutstanding|$Price%]</td></tr>[%END%]<tfoot><tr><tdcolspan="4">Totaloutstandingduesasondate:</td>[%IF(totalcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%total|$Price%]</td></tr></tfoot></table>};
+        my $account_debit_old =
+            q{<table>[%IF(LibraryName)%]<tr><thcolspan="5"class="centerednames"><h3>[%LibraryName|html%]</h3></th></tr>[%END%]<tr><thcolspan="5"class="centerednames"><h2><u>INVOICE</u></h2></th></tr><tr><thcolspan="5"class="centerednames"><h2>[%Branches.GetName(patron.branchcode)|html%]</h2></th></tr><tr><thcolspan="5">Billto:[%patron.firstname|html%][%patron.surname|html%]<br/>Cardnumber:[%patron.cardnumber|html%]<br/></th></tr><tr><th>Date</th><th>Descriptionofcharges</th><th>Note</th><thstyle="text-align:right;">Amount</th><thstyle="text-align:right;">Amountoutstanding</th></tr>[%FOREACHaccountINaccounts%]<trclass="highlight"><td>[%account.date|$KohaDates%]</td><td>[%PROCESSaccount_type_descriptionaccount=account%][%-IFaccount.description%],[%account.description|html%][%END%]</td><td>[%account.note|html%]</td>[%IF(account.amountcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%account.amount|$Price%]</td>[%IF(account.amountoutstandingcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%account.amountoutstanding|$Price%]</td></tr>[%END%]<tfoot><tr><tdcolspan="4">Totaloutstandingduesasondate:</td>[%IF(totalcredit)%]<tdclass="credit">[%ELSE%]<tdclass="debit">[%END%][%total|$Price%]</td></tr></tfoot></table>};
 
-        $sth = $dbh->prepare(q{
+        $sth = $dbh->prepare(
+            q{
             UPDATE letter SET content = ? WHERE code = 'ACCOUNT_DEBIT' AND REPLACE(REPLACE(content, ' ', ''), '\n','') = ?
-        });
-        $sth->execute($account_debit, $account_debit_old);
+        }
+        );
+        $sth->execute( $account_debit, $account_debit_old );
 
         # replace patron variable with debit.patron
-        $dbh->do("UPDATE letter SET content = REPLACE(content, '[% patron', '[% debit.patron') WHERE code = 'ACCOUNT_DEBIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, '[% patron', '[% debit.patron') WHERE code = 'ACCOUNT_DEBIT' "
+        );
+
         # replace library variable with debit.library.branchname
-        $dbh->do("UPDATE letter SET content = REPLACE(content, '[% library', '[% debit.library.branchname') WHERE code = 'ACCOUNT_DEBIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, '[% library', '[% debit.library.branchname') WHERE code = 'ACCOUNT_DEBIT' "
+        );
+
         # replace offsets variable with debit.offsets
-        $dbh->do("UPDATE letter SET content = REPLACE(content, ' offsets %]', ' debit.offsets %]') WHERE code = 'ACCOUNT_DEBIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, ' offsets %]', ' debit.offsets %]') WHERE code = 'ACCOUNT_DEBIT' "
+        );
+
         # replace total variable with debit.patron.account.balance
-        $dbh->do("UPDATE letter SET content = REPLACE(content, '[% total ', '[% debit.patron.account.balance ') WHERE code = 'ACCOUNT_DEBIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, '[% total ', '[% debit.patron.account.balance ') WHERE code = 'ACCOUNT_DEBIT' "
+        );
+
         # replace totalcredit variable with debit.patron.account.balance <= 0
-        $dbh->do("UPDATE letter SET content = REPLACE(content, 'totalcredit', 'debit.patron.account.balance <= 0') WHERE code = 'ACCOUNT_DEBIT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, 'totalcredit', 'debit.patron.account.balance <= 0') WHERE code = 'ACCOUNT_DEBIT' "
+        );
 
         # RECEIPT
         my $receipt = q{
@@ -312,15 +343,21 @@ return {
 </table>
         };
 
-        my $receipt_old = q{[%PROCESS"accounts.inc"%]<table>[%IF(LibraryName)%]<tr><thcolspan="2"class="centerednames"><h3>[%LibraryName|html%]</h3></th></tr>[%END%]<tr><thcolspan="2"class="centerednames"><h2>[%Branches.GetName(payment.branchcode)|html%]</h2></th></tr><tr><thcolspan="2"class="centerednames"><h3>[%payment.date|$KohaDates%]</h3></tr><tr><td>TransactionID:</td><td>[%payment.accountlines_id%]</td></tr><tr><td>OperatorID:</td><td>[%payment.manager_id%]</td></tr><tr><td>Paymenttype:</td><td>[%payment.payment_type%]</td></tr><tr></tr><tr><thcolspan="2"class="centerednames"><h2><u>Feereceipt</u></h2></th></tr><tr></tr><tr><th>Descriptionofcharges</th><th>Amount</th></tr>[%FOREACHoffsetINoffsets%]<tr><td>[%PROCESSaccount_type_descriptionaccount=offset.debit%]</td><td>[%offset.amount*-1|$Price%]</td></tr>[%END%]<tfoot><trclass="highlight"><td>Total:</td><td>[%payment.amount*-1|$Price%]</td></tr><tr><td>Tendered:</td><td>[%collected|$Price%]</td></tr><tr><td>Change:</td><td>[%change|$Price%]</td></tr></tfoot></table>};
+        my $receipt_old =
+            q{[%PROCESS"accounts.inc"%]<table>[%IF(LibraryName)%]<tr><thcolspan="2"class="centerednames"><h3>[%LibraryName|html%]</h3></th></tr>[%END%]<tr><thcolspan="2"class="centerednames"><h2>[%Branches.GetName(payment.branchcode)|html%]</h2></th></tr><tr><thcolspan="2"class="centerednames"><h3>[%payment.date|$KohaDates%]</h3></tr><tr><td>TransactionID:</td><td>[%payment.accountlines_id%]</td></tr><tr><td>OperatorID:</td><td>[%payment.manager_id%]</td></tr><tr><td>Paymenttype:</td><td>[%payment.payment_type%]</td></tr><tr></tr><tr><thcolspan="2"class="centerednames"><h2><u>Feereceipt</u></h2></th></tr><tr></tr><tr><th>Descriptionofcharges</th><th>Amount</th></tr>[%FOREACHoffsetINoffsets%]<tr><td>[%PROCESSaccount_type_descriptionaccount=offset.debit%]</td><td>[%offset.amount*-1|$Price%]</td></tr>[%END%]<tfoot><trclass="highlight"><td>Total:</td><td>[%payment.amount*-1|$Price%]</td></tr><tr><td>Tendered:</td><td>[%collected|$Price%]</td></tr><tr><td>Change:</td><td>[%change|$Price%]</td></tr></tfoot></table>};
 
-        $sth = $dbh->prepare(q{
+        $sth = $dbh->prepare(
+            q{
             UPDATE letter SET content = ? WHERE code = 'RECEIPT' AND REPLACE(REPLACE(content, ' ', ''), '\n','') = ?
-        });
-        $sth->execute($receipt,$receipt_old);
+        }
+        );
+        $sth->execute( $receipt, $receipt_old );
 
         # replace offsets variable with debit.offsets
-        $dbh->do("UPDATE letter SET content = REPLACE(content, ' offsets %]', ' payment.offsets %]') WHERE code = 'RECEIPT' ");
+        $dbh->do(
+            "UPDATE letter SET content = REPLACE(content, ' offsets %]', ' payment.offsets %]') WHERE code = 'RECEIPT' "
+        );
+
         # replace collected variable with tendered
         $dbh->do("UPDATE letter SET content = REPLACE(content, '[% collected', '[% tendered') WHERE code = 'RECEIPT' ");
     },

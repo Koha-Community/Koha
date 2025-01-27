@@ -31,10 +31,10 @@ use Date::Calc qw( Date_to_Days );
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Overdues qw( CalcFine checkoverdues GetFine Getoverdues );
-use C4::Calendar qw();    # don't need any exports from Calendar
-use C4::Log qw( cronlogaction );
-use Getopt::Long qw( GetOptions );
+use C4::Overdues    qw( CalcFine checkoverdues GetFine Getoverdues );
+use C4::Calendar    qw();                                               # don't need any exports from Calendar
+use C4::Log         qw( cronlogaction );
+use Getopt::Long    qw( GetOptions );
 use List::MoreUtils qw( none );
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
@@ -48,21 +48,21 @@ my @libraries;
 my $delay;
 my $useborrowerlibrary;
 my $borrowernumberlimit;
-my $borrowersalreadyapplied; # hashref of borrowers for whom we already applied the fine, so it's only applied once
-my $debug = 0;
+my $borrowersalreadyapplied;    # hashref of borrowers for whom we already applied the fine, so it's only applied once
+my $debug    = 0;
 my $bigdebug = 0;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'h|help'      => \$help,
-    'v|verbose'   => \$verbose,
-    'c|category:s'=> \@pcategories,
-    'l|library:s' => \@libraries,
-    'd|delay:i'   => \$delay,
+    'h|help'                 => \$help,
+    'v|verbose'              => \$verbose,
+    'c|category:s'           => \@pcategories,
+    'l|library:s'            => \@libraries,
+    'd|delay:i'              => \$delay,
     'u|use-borrower-library' => \$useborrowerlibrary,
-    'b|borrower:i' => \$borrowernumberlimit
+    'b|borrower:i'           => \$borrowernumberlimit
 );
 my $usage = << 'ENDUSAGE';
 
@@ -88,7 +88,7 @@ my $dbh = C4::Context->dbh;
 
 # Processing categories
 foreach (@pcategories) {
-    my ($category, $amount) = split(',', $_);
+    my ( $category, $amount ) = split( ',', $_ );
     push @categories, $category;
     $catamounts{$category} = $amount;
 }
@@ -106,30 +106,30 @@ CHECK {
     $branch_type     = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
     $mode            = C4::Context->preference('finesMode');
     $dbname          = C4::Context->config('database');
-    $delim           = "\t";                                                                          # ?  C4::Context->preference('delimiter') || "\t";
+    $delim           = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
 
 }
 
 INIT {
     $debug and print "Each line will contain the following fields:\n",
-      "From borrowers : ", join( ', ', @borrower_fields ), "\n",
-      "From items : ",     join( ', ', @item_fields ),     "\n",
-      "Per overdue: ",     join( ', ', @other_fields ),    "\n",
-      "Delimiter: '$delim'\n";
+        "From borrowers : ", join( ', ', @borrower_fields ), "\n",
+        "From items : ",     join( ', ', @item_fields ),     "\n",
+        "Per overdue: ",     join( ', ', @other_fields ),    "\n",
+        "Delimiter: '$delim'\n";
 }
-$debug and (defined $borrowernumberlimit) and print "--borrower limitation: borrower $borrowernumberlimit\n";
-my ($numOverdueItems, $data);
-if (defined $borrowernumberlimit) {
-    ($numOverdueItems, $data) = checkoverdues($borrowernumberlimit);
+$debug and ( defined $borrowernumberlimit ) and print "--borrower limitation: borrower $borrowernumberlimit\n";
+my ( $numOverdueItems, $data );
+if ( defined $borrowernumberlimit ) {
+    ( $numOverdueItems, $data ) = checkoverdues($borrowernumberlimit);
 } else {
-    $data = Getoverdues();
+    $data            = Getoverdues();
     $numOverdueItems = scalar @$data;
 }
 my $overdueItemsCounted = 0;
 my %calendars           = ();
-$today      = dt_from_string;
-$today_iso  = $today->ymd;
-my ($tyear, $tmonth, $tday) = split( /-/, $today_iso );
+$today     = dt_from_string;
+$today_iso = $today->ymd;
+my ( $tyear, $tmonth, $tday ) = split( /-/, $today_iso );
 $today_days = Date_to_Days( $tyear, $tmonth, $tday );
 
 for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
@@ -141,30 +141,40 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         $datedue_days = Date_to_Days( split( /-/, $datedue_iso ) );
     };
     if ($@) {
-    warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
-    next;
+        warn "Error on date for borrower "
+            . $data->[$i]->{'borrowernumber'}
+            . ": $@date_due: "
+            . $data->[$i]->{'date_due'}
+            . "\ndatedue_days: "
+            . $datedue_days
+            . "\nSkipping";
+        next;
     }
     my $due_str = output_pref( { dt => $datedue, dateonly => 1 } );
     unless ( defined $data->[$i]->{'borrowernumber'} ) {
-        print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
-        next;    # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
+        print STDERR
+            "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
+        next
+            ; # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
     }
     my $patron = Koha::Patrons->find( $data->[$i]->{'borrowernumber'} );
 
     # Skipping borrowers that are not in @categories
-    $bigdebug and warn "Skipping borrower from category " . $patron->categorycode if none { $patron->categorycode eq $_ } @categories;
+    $bigdebug and warn "Skipping borrower from category " . $patron->categorycode
+        if none { $patron->categorycode eq $_ } @categories;
     next if none { $patron->categorycode eq $_ } @categories;
 
     my $branchcode =
-        ( $useborrowerlibrary )           ? $patron->branchcode
-      : ( $control eq 'ItemHomeLibrary' ) ? $data->[$i]->{$branch_type}
-      : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
-      :                                     $data->[$i]->{branchcode};
+          ($useborrowerlibrary)             ? $patron->branchcode
+        : ( $control eq 'ItemHomeLibrary' ) ? $data->[$i]->{$branch_type}
+        : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
+        :                                     $data->[$i]->{branchcode};
+
     # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
 
     # Skipping branchcodes that are not in @libraries
     $bigdebug and warn "Skipping library $branchcode" if none { $branchcode eq $_ } @libraries;
-    next if none { $branchcode eq $_ } @libraries;
+    next                                              if none { $branchcode eq $_ } @libraries;
 
     my $calendar;
     unless ( defined( $calendars{$branchcode} ) ) {
@@ -175,7 +185,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
 
     # Reassing datedue_days if -delay specified in commandline
     $bigdebug and warn "Using commandline supplied delay : $delay" if ($delay);
-    $datedue_days += $delay if ($delay);
+    $datedue_days += $delay                                        if ($delay);
 
     ( $datedue_days <= $today_days ) or next;    # or it's not overdue, right?
 
@@ -189,37 +199,46 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     );
 
     # Reassign fine's amount if specified in command-line
-    $amount = $catamounts{$patron->categorycode} if (defined $catamounts{$patron->categorycode});
+    $amount = $catamounts{ $patron->categorycode } if ( defined $catamounts{ $patron->categorycode } );
 
     # We check if there is already a fine for the given borrower
-    my $fine = GetFine(undef, $data->[$i]->{'borrowernumber'});
-    if ($fine > 0) {
-        $debug and warn "There is already a fine for borrower " . $data->[$i]->{'borrowernumber'} . ". Nothing to do here. Skipping this borrower";
+    my $fine = GetFine( undef, $data->[$i]->{'borrowernumber'} );
+    if ( $fine > 0 ) {
+        $debug
+            and warn "There is already a fine for borrower "
+            . $data->[$i]->{'borrowernumber'}
+            . ". Nothing to do here. Skipping this borrower";
         next;
     }
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.
-    if ( $mode eq 'production' and !$borrowersalreadyapplied->{$data->[$i]->{'borrowernumber'}}) {
+    if ( $mode eq 'production' and !$borrowersalreadyapplied->{ $data->[$i]->{'borrowernumber'} } ) {
+
         # If we're on a holiday, warn the user (if debug) that no fine will be applied
-        if($isHoliday) {
-            $debug and warn "Today is a holiday. The fine for borrower " . $data->[$i]->{'borrowernumber'} . " will not be applied";
+        if ($isHoliday) {
+            $debug
+                and warn "Today is a holiday. The fine for borrower "
+                . $data->[$i]->{'borrowernumber'}
+                . " will not be applied";
         } else {
             $debug and warn "Creating fine for borrower " . $data->[$i]->{'borrowernumber'} . " with amount : $amount";
 
             # We mark this borrower as already processed
-            $borrowersalreadyapplied->{$data->[$i]->{'borrowernumber'}} = 1;
+            $borrowersalreadyapplied->{ $data->[$i]->{'borrowernumber'} } = 1;
 
             my $borrowernumber = $data->[$i]->{'borrowernumber'};
             my $itemnumber     = $data->[$i]->{'itemnumber'};
 
             # And we create the fine
-            my $sth4 = $dbh->prepare( "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?" );
+            my $sth4 = $dbh->prepare(
+                "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?"
+            );
             $sth4->execute($itemnumber);
             my $title = $sth4->fetchrow;
 
-            my $desc        = "staticfine";
-            my $query       = "INSERT INTO accountlines
+            my $desc  = "staticfine";
+            my $query = "INSERT INTO accountlines
                         (borrowernumber,itemnumber,date,amount,description,debit_type_code,status,amountoutstanding)
                                 VALUES (?,?,now(),?,?,'OVERDUE','RETURNED',?)";
             my $sth2 = $dbh->prepare($query);
@@ -240,4 +259,4 @@ Number of Overdue Items:
 EOM
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

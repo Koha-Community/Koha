@@ -9,8 +9,8 @@
             </div>
             <div class="modal-body">
                 [% FOREACH system IN cites.keys.sort %]
-                <h3>[% system | html %]</h3>
-                <p>[% cites.$system | html %]</p>
+                    <h3>[% system | html %]</h3>
+                    <p>[% cites.$system | html %]</p>
                 [% END %]
             </div>
             <div class="modal-footer">

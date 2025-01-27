@@ -2,8 +2,8 @@ use Modern::Perl;
 use Test::More tests => 3;
 
 use C4::Acquisition qw( NewBasket AddInvoice ModOrder ModOrderUsers GetOrder GetOrderUsers ModReceiveOrder );
-use C4::Biblio qw( AddBiblio );
-use C4::Letters qw( GetQueuedMessages );
+use C4::Biblio      qw( AddBiblio );
+use C4::Letters     qw( GetQueuedMessages );
 use Koha::Database;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
@@ -15,19 +15,21 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
-my $library = $builder->build({
-    source => "Branch",
-});
-my $patron_category = $builder->build({ source => 'Category' });
-my $currency = $builder->build({ source => 'Currency' });
+my $library = $builder->build(
+    {
+        source => "Branch",
+    }
+);
+my $patron_category = $builder->build( { source => 'Category' } );
+my $currency        = $builder->build( { source => 'Currency' } );
 
 # Creating some orders
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
-        name         => "my vendor",
-        address1     => "bookseller's address",
-        phone        => "0123456",
-        active       => 1,
+        name     => "my vendor",
+        address1 => "bookseller's address",
+        phone    => "0123456",
+        active   => 1,
     }
 )->store;
 
@@ -75,52 +77,57 @@ my $invoiceid = AddInvoice(
     unknown       => "unknown"
 );
 
-my $borrowernumber = Koha::Patron->new({
-    cardnumber => 'TESTCARD',
-    firstname =>  'TESTFN',
-    surname => 'TESTSN',
-    categorycode => $patron_category->{categorycode},
-    branchcode => $library->{branchcode},
-    dateofbirth => '',
-    dateexpiry => '9999-12-31',
-    userid => 'TESTUSERID'
-})->store->borrowernumber;
+my $borrowernumber = Koha::Patron->new(
+    {
+        cardnumber   => 'TESTCARD',
+        firstname    => 'TESTFN',
+        surname      => 'TESTSN',
+        categorycode => $patron_category->{categorycode},
+        branchcode   => $library->{branchcode},
+        dateofbirth  => '',
+        dateexpiry   => '9999-12-31',
+        userid       => 'TESTUSERID'
+    }
+)->store->borrowernumber;
 
 C4::Acquisition::ModOrderUsers( $ordernumber, $borrowernumber );
 
-my $is_added = grep { /^$borrowernumber$/ } C4::Acquisition::GetOrderUsers( $ordernumber );
+my $is_added = grep { /^$borrowernumber$/ } C4::Acquisition::GetOrderUsers($ordernumber);
 is( $is_added, 1, 'ModOrderUsers should link patrons to an order' );
 
-$order = Koha::Acquisition::Orders->find( $ordernumber );
+$order = Koha::Acquisition::Orders->find($ordernumber);
 ModReceiveOrder(
     {
-        biblionumber      => $biblionumber,
-        order             => $order->unblessed,
-        quantityreceived  => 1,
-        cost              => 10,
-        ecost             => 10,
-        invoiceid         => $invoiceid,
-        rrp               => 10,
-        budget_id         => $budgetid,
+        biblionumber     => $biblionumber,
+        order            => $order->unblessed,
+        quantityreceived => 1,
+        cost             => 10,
+        ecost            => 10,
+        invoiceid        => $invoiceid,
+        rrp              => 10,
+        budget_id        => $budgetid,
     }
 );
 
-my $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
-is( scalar( @$messages ), 0, 'The letter has not been sent to message queue on receiving the order, the order is not entire received');
+my $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+is(
+    scalar(@$messages), 0,
+    'The letter has not been sent to message queue on receiving the order, the order is not entire received'
+);
 
-$order = Koha::Acquisition::Orders->find( $ordernumber );
+$order = Koha::Acquisition::Orders->find($ordernumber);
 ModReceiveOrder(
     {
-        biblionumber      => $biblionumber,
-        order             => $order->unblessed,
-        quantityreceived  => 1,
-        cost              => 10,
-        ecost             => 10,
-        invoiceid         => $invoiceid,
-        rrp               => 10,
-        budget_id         => $budgetid,
+        biblionumber     => $biblionumber,
+        order            => $order->unblessed,
+        quantityreceived => 1,
+        cost             => 10,
+        ecost            => 10,
+        invoiceid        => $invoiceid,
+        rrp              => 10,
+        budget_id        => $budgetid,
     }
 );
 
-$messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
-is( scalar( @$messages ), 1, 'The letter has been sent to message queue on receiving the order');
+$messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+is( scalar(@$messages), 1, 'The letter has been sent to message queue on receiving the order' );

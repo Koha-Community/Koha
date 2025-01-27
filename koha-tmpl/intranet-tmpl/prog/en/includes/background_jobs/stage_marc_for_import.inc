@@ -15,12 +15,11 @@
             <h3>Processing authority records</h3>
         [% END %]
         <ul>
-            <li>[% report.total | html %]  records in file</li>
+            <li>[% report.total | html %] records in file</li>
             <li>[% report.import_errors | html %] records not staged because of MARC error</li>
             <li>[% report.staged | html %] records staged</li>
             [% IF ( report.checked_matches ) %]
-            <li>[% report.matched | html %] records with at least one match in catalog per matching rule
-                &quot;[% report.matcher_code | html %]&quot;</li>
+                <li>[% report.matched | html %] records with at least one match in catalog per matching rule &quot;[% report.matcher_code | html %]&quot;</li>
             [% ELSE %]
                 [% IF ( report.matcher_failed ) %]
                     <li>Record matching failed -- unable to retrieve selected matching rule.</li>
@@ -39,9 +38,11 @@
             <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% report.import_batch_id | uri %]">View batch</a>
         </p>
         [% IF report.basket_id && report.vendor_id %]
-        <p>
-            <a id="addtobasket" class="btn btn-default" href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% report.import_batch_id | html %]&basketno=[% report.basket_id | html %]&booksellerid=[% report.vendor_id | html %]">Add staged files to basket</a>
-        </p>
+            <p>
+                <a id="addtobasket" class="btn btn-default" href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% report.import_batch_id | html %]&basketno=[% report.basket_id | html %]&booksellerid=[% report.vendor_id | html %]"
+                    >Add staged files to basket</a
+                >
+            </p>
         [% END %]
     [% END %]
 [% END %]

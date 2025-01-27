@@ -10,7 +10,7 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::Number::Price;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
@@ -22,7 +22,7 @@ subtest 'Tests from t' => sub {
 
     my ( @booksellers, @baskets, @biblios );
     my @names = ( '0 0', '0 1', '1 0', '1 1' );
-    foreach my $i ( 1..4 ) {
+    foreach my $i ( 1 .. 4 ) {
         push @booksellers, $builder->build_object(
             {
                 class => 'Koha::Acquisition::Booksellers',
@@ -33,39 +33,41 @@ subtest 'Tests from t' => sub {
         push @baskets, $builder->build_object(
             {
                 class => 'Koha::Acquisition::Baskets',
-                value =>
-                    { basketname => $names[ $i - 1 ], booksellerid => $booksellers[$i-1]->id }
+                value => { basketname => $names[ $i - 1 ], booksellerid => $booksellers[ $i - 1 ]->id }
             }
         );
-        push @biblios,  $builder->build_sample_biblio;
+        push @biblios, $builder->build_sample_biblio;
     }
 
     my ( $basketno_0_0, $basketno_0_1, $basketno_1_0, $basketno_1_1 ) = map { $_->id } @baskets;
     my ( $invoiceid_0_0, $invoiceid_1_1 );
     my $today;
 
-    for my $currency_format ( qw( US FR ) ) {
+    for my $currency_format (qw( US FR )) {
         t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
-        subtest 'Configuration 1: 0 0 (Vendor List prices do not include tax / Invoice prices do not include tax)' => sub {
+        subtest 'Configuration 1: 0 0 (Vendor List prices do not include tax / Invoice prices do not include tax)' =>
+            sub {
             plan tests => 8;
 
             my $biblionumber_0_0 = $biblios[0]->id;
 
-            my $order_0_0 = Koha::Acquisition::Order->new({
-                biblionumber     => $biblionumber_0_0,
-                quantity         => 2,
-                listprice        => 82,
-                unitprice        => 73.80,
-                quantityreceived => 2,
-                basketno         => $basketno_0_0,
-                invoiceid        => $invoiceid_0_0,
-                rrp              => 82.00,
-                ecost            => 73.80,
-                tax_rate_on_ordering  => 0.0500,
-                tax_rate_on_receiving => 0.0500,
-                discount         => 10,
-                datereceived     => $today
-            });
+            my $order_0_0 = Koha::Acquisition::Order->new(
+                {
+                    biblionumber          => $biblionumber_0_0,
+                    quantity              => 2,
+                    listprice             => 82,
+                    unitprice             => 73.80,
+                    quantityreceived      => 2,
+                    basketno              => $basketno_0_0,
+                    invoiceid             => $invoiceid_0_0,
+                    rrp                   => 82.00,
+                    ecost                 => 73.80,
+                    tax_rate_on_ordering  => 0.0500,
+                    tax_rate_on_receiving => 0.0500,
+                    discount              => 10,
+                    datereceived          => $today
+                }
+            );
             $order_0_0->populate_with_prices_for_ordering();
 
             compare(
@@ -135,27 +137,29 @@ subtest 'Tests from t' => sub {
                     field    => 'tax_value'
                 }
             );
-        };
+            };
 
         subtest 'Configuration 1: 1 1 (Vendor List prices do include tax / Invoice prices include tax)' => sub {
             plan tests => 11;
 
             my $biblionumber_1_1 = $biblios[3]->id;
-            my $order_1_1        = Koha::Acquisition::Order->new({
-                biblionumber     => $biblionumber_1_1,
-                quantity         => 2,
-                listprice        => 82,
-                unitprice        => 73.80,
-                quantityreceived => 2,
-                basketno         => $basketno_1_1,
-                invoiceid        => $invoiceid_1_1,
-                rrp              => 82.00,
-                ecost            => 73.80,
-                tax_rate_on_ordering  => 0.0500,
-                tax_rate_on_receiving => 0.0500,
-                discount         => 10,
-                datereceived     => $today
-            });
+            my $order_1_1        = Koha::Acquisition::Order->new(
+                {
+                    biblionumber          => $biblionumber_1_1,
+                    quantity              => 2,
+                    listprice             => 82,
+                    unitprice             => 73.80,
+                    quantityreceived      => 2,
+                    basketno              => $basketno_1_1,
+                    invoiceid             => $invoiceid_1_1,
+                    rrp                   => 82.00,
+                    ecost                 => 73.80,
+                    tax_rate_on_ordering  => 0.0500,
+                    tax_rate_on_receiving => 0.0500,
+                    discount              => 10,
+                    datereceived          => $today
+                }
+            );
 
             $order_1_1->populate_with_prices_for_ordering();
 
@@ -230,21 +234,23 @@ subtest 'Tests from t' => sub {
             # When unitprice is 0.00
             # Koha::Acquisition::Order::populate_with_prices_for_ordering() falls
             # back to using ecost_tax_included and ecost_tax_excluded
-            $order_1_1        = Koha::Acquisition::Order->new({
-                biblionumber     => $biblionumber_1_1,
-                quantity         => 1,
-                listprice        => 10,
-                unitprice        => '0.00',
-                quantityreceived => 1,
-                basketno         => $basketno_1_1,
-                invoiceid        => $invoiceid_1_1,
-                rrp              => 10.00,
-                ecost            => 10.00,
-                tax_rate_on_ordering  => 0.1500,
-                tax_rate_on_receiving => 0.1500,
-                discount         => 0,
-                datereceived     => $today
-            });
+            $order_1_1 = Koha::Acquisition::Order->new(
+                {
+                    biblionumber          => $biblionumber_1_1,
+                    quantity              => 1,
+                    listprice             => 10,
+                    unitprice             => '0.00',
+                    quantityreceived      => 1,
+                    basketno              => $basketno_1_1,
+                    invoiceid             => $invoiceid_1_1,
+                    rrp                   => 10.00,
+                    ecost                 => 10.00,
+                    tax_rate_on_ordering  => 0.1500,
+                    tax_rate_on_receiving => 0.1500,
+                    discount              => 0,
+                    datereceived          => $today
+                }
+            );
 
             $order_1_1->populate_with_prices_for_ordering();
 
@@ -278,21 +284,23 @@ subtest 'Tests from t' => sub {
             plan tests => 9;
 
             my $biblionumber_1_0 = $biblios[2]->id;
-            my $order_1_0 = Koha::Acquisition::Order->new({
-                biblionumber     => $biblionumber_1_0,
-                quantity         => 2,
-                listprice        => 82,
-                unitprice        => 0,
-                quantityreceived => 2,
-                basketno         => $basketno_1_0,
-                invoiceid        => $invoiceid_1_1,
-                rrp              => 82.00,
-                ecost            => 73.80,
-                tax_rate_on_ordering  => 0.0500,
-                tax_rate_on_receiving => 0.0500,
-                discount         => 10,
-                datereceived     => $today
-            });
+            my $order_1_0        = Koha::Acquisition::Order->new(
+                {
+                    biblionumber          => $biblionumber_1_0,
+                    quantity              => 2,
+                    listprice             => 82,
+                    unitprice             => 0,
+                    quantityreceived      => 2,
+                    basketno              => $basketno_1_0,
+                    invoiceid             => $invoiceid_1_1,
+                    rrp                   => 82.00,
+                    ecost                 => 73.80,
+                    tax_rate_on_ordering  => 0.0500,
+                    tax_rate_on_receiving => 0.0500,
+                    discount              => 10,
+                    datereceived          => $today
+                }
+            );
 
             $order_1_0->populate_with_prices_for_ordering();
 
@@ -328,6 +336,7 @@ subtest 'Tests from t' => sub {
                     field    => 'ecost_tax_excluded'
                 }
             );
+
             # If we order with unitprice = 0, tax is calculated from the ecost
             # (note that in addorder.pl and addorderiso2709 the unitprice may/will be set to the ecost
             compare(
@@ -383,21 +392,23 @@ subtest 'Tests from t' => sub {
             plan tests => 9;
 
             my $biblionumber_0_1 = $biblios[1]->id;
-            my $order_0_1 = Koha::Acquisition::Order->new({
-                biblionumber     => $biblionumber_0_1,
-                quantity         => 2,
-                listprice        => 82,
-                unitprice        => 0,
-                quantityreceived => 2,
-                basketno         => $basketno_0_1,
-                invoiceid        => $invoiceid_1_1,
-                rrp              => 82.00,
-                ecost            => 73.80,
-                tax_rate_on_ordering  => 0.0500,
-                tax_rate_on_receiving => 0.0500,
-                discount         => 10,
-                datereceived     => $today
-            });
+            my $order_0_1        = Koha::Acquisition::Order->new(
+                {
+                    biblionumber          => $biblionumber_0_1,
+                    quantity              => 2,
+                    listprice             => 82,
+                    unitprice             => 0,
+                    quantityreceived      => 2,
+                    basketno              => $basketno_0_1,
+                    invoiceid             => $invoiceid_1_1,
+                    rrp                   => 82.00,
+                    ecost                 => 73.80,
+                    tax_rate_on_ordering  => 0.0500,
+                    tax_rate_on_receiving => 0.0500,
+                    discount              => 10,
+                    datereceived          => $today
+                }
+            );
 
             $order_0_1->populate_with_prices_for_ordering();
 
@@ -433,6 +444,7 @@ subtest 'Tests from t' => sub {
                     field    => 'ecost_tax_excluded'
                 }
             );
+
             # If we order with unitprice = 0, tax is calculated from the ecost
             # (note that in addorder.pl and addorderiso2709 the unitprice may/will be set to the ecost
             compare(

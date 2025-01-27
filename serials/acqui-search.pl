@@ -17,20 +17,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "serials/acqui-search.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { serials => '*' },
+        template_name => "serials/acqui-search.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { serials => '*' },
     }
 );
 

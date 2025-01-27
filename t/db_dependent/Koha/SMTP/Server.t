@@ -45,16 +45,16 @@ subtest 'transport() tests' => sub {
     my $transport = $server->transport;
 
     is( ref($transport), 'Email::Sender::Transport::SMTP::Persistent', 'Type is correct' );
-    is( $transport->ssl, 0, 'SSL is not set' );
+    is( $transport->ssl, 0,                                            'SSL is not set' );
 
-    $server->set({ ssl_mode => '1' })->store;
+    $server->set( { ssl_mode => '1' } )->store;
     $transport = $server->transport;
 
-    is( ref($transport), 'Email::Sender::Transport::SMTP::Persistent', 'Type is correct' );
-    is( $transport->ssl, '1', 'SSL is set' );
-    is( $transport->debug, '0', 'Debug setting honoured (disabled)' );
+    is( ref($transport),   'Email::Sender::Transport::SMTP::Persistent', 'Type is correct' );
+    is( $transport->ssl,   '1',                                          'SSL is set' );
+    is( $transport->debug, '0',                                          'Debug setting honoured (disabled)' );
 
-    $server->set({ debug => 1 })->store;
+    $server->set( { debug => 1 } )->store;
     $transport = $server->transport;
 
     is( $transport->debug, '1', 'Debug setting honoured (enabled)' );
@@ -99,7 +99,7 @@ subtest 'to_api() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $smtp_server = $builder->build_object({ class => 'Koha::SMTP::Servers' });
+    my $smtp_server = $builder->build_object( { class => 'Koha::SMTP::Servers' } );
     ok( !exists $smtp_server->to_api->{password}, 'Password is not part of the API representation' );
 
     $schema->storage->txn_rollback;
@@ -113,12 +113,9 @@ subtest 'store() tests' => sub {
 
     Koha::SMTP::Servers->search->delete;
 
-    my $server_1 = $builder->build_object(
-        { class => 'Koha::SMTP::Servers', value => { is_default => 0 } } );
-    my $server_2 = $builder->build_object(
-        { class => 'Koha::SMTP::Servers', value => { is_default => 0 } } );
-    my $server_3 = $builder->build_object(
-        { class => 'Koha::SMTP::Servers', value => { is_default => 1 } } );
+    my $server_1 = $builder->build_object( { class => 'Koha::SMTP::Servers', value => { is_default => 0 } } );
+    my $server_2 = $builder->build_object( { class => 'Koha::SMTP::Servers', value => { is_default => 0 } } );
+    my $server_3 = $builder->build_object( { class => 'Koha::SMTP::Servers', value => { is_default => 1 } } );
 
     my $default_servers = Koha::SMTP::Servers->search( { is_default => 1 } );
 

@@ -43,7 +43,7 @@ sub new_from_statistic {
     my ( $class, $statistic ) = @_;
 
     my $values = {
-        hashed_borrowernumber => $class->get_hash($statistic->borrowernumber),
+        hashed_borrowernumber => $class->get_hash( $statistic->borrowernumber ),
     };
 
     my @t_fields_to_copy = split ',', C4::Context->preference('PseudonymizationTransactionFields') || '';
@@ -73,11 +73,11 @@ sub new_from_statistic {
 
     # Remove fields we have already handled from the list
     @t_fields_to_copy = grep {
-             $_ ne 'transaction_branchcode'
-          && $_ ne 'holdingbranch'
-          && $_ ne 'homebranch'
-          && $_ ne 'transaction_type'
-          && $_ ne 'itemcallnumber'
+               $_ ne 'transaction_branchcode'
+            && $_ ne 'holdingbranch'
+            && $_ ne 'homebranch'
+            && $_ ne 'transaction_type'
+            && $_ ne 'itemcallnumber'
     } @t_fields_to_copy;
 
     # Populate the remaining columns
@@ -122,10 +122,10 @@ sub get_hash {
     my ( $class, $s ) = @_;
     my $bcrypt_settings = C4::Context->config('bcrypt_settings');
 
-    Koha::Exceptions::Config::MissingEntry->throw(
-        "Missing 'bcrypt_settings' entry in config file") unless $bcrypt_settings;
+    Koha::Exceptions::Config::MissingEntry->throw("Missing 'bcrypt_settings' entry in config file")
+        unless $bcrypt_settings;
 
-    return bcrypt($s, $bcrypt_settings);
+    return bcrypt( $s, $bcrypt_settings );
 }
 
 =head2 Internal methods

@@ -107,6 +107,7 @@ Gets the best suited valid domain configuration for the given provider.
 =cut
 
 sub get_valid_domain_config {
+
     # FIXME: Should be a hashref param
     my ( $self, $params ) = @_;
     my $provider   = $params->{provider};
@@ -121,9 +122,9 @@ sub get_valid_domain_config {
 
     while ( my $domain = $domains->next ) {
 
-        my $pattern = '@';
+        my $pattern     = '@';
         my $domain_text = $domain->domain;
-        unless ( defined $domain_text && $domain_text ne '') {
+        unless ( defined $domain_text && $domain_text ne '' ) {
             $response = $domain;
             next;
         }
@@ -144,7 +145,7 @@ sub get_valid_domain_config {
 
     if ( !$perfect_match && @subdomain_matches ) {
         @subdomain_matches = sort { $b->{match_length} <=> $a->{match_length} } @subdomain_matches
-          unless scalar @subdomain_matches == 1;
+            unless scalar @subdomain_matches == 1;
         $response = $subdomain_matches[0]->{domain};
     } elsif ($perfect_match) {
         $response = $perfect_match;
@@ -169,12 +170,13 @@ Checks if provider has a valid domain for user email. If has, returns that domai
 =cut
 
 sub has_valid_domain_config {
+
     # FIXME: Should be a hashref param
     my ( $self, $params ) = @_;
-    my $domain = $self->get_valid_domain_config( $params );
+    my $domain = $self->get_valid_domain_config($params);
 
     Koha::Exceptions::Auth::NoValidDomain->throw( code => 401 )
-      unless $domain;
+        unless $domain;
 
     return $domain;
 }
@@ -208,14 +210,14 @@ Get deep nested value in a hash.
 =cut
 
 sub _traverse_hash {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
     my $base = $params->{base};
     my $keys = $params->{keys};
-    my ($key, $rest) = ($keys =~ /^([^.]+)(?:\.(.*))?/);
+    my ( $key, $rest ) = ( $keys =~ /^([^.]+)(?:\.(.*))?/ );
     return unless defined $key;
     my $value = ref $base eq 'HASH' ? $base->{$key} : $base->[$key];
     return $value unless $rest;
-    return $self->_traverse_hash({ base => $value, keys => $rest });
+    return $self->_traverse_hash( { base => $value, keys => $rest } );
 }
 
 1;

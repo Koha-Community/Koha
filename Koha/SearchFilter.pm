@@ -41,29 +41,30 @@ Koha::SearchFilter - Koha Search filter object class
 sub expand_filter {
     my $self = shift;
 
-    my $query_part = $self->query;
+    my $query_part  = $self->query;
     my $limits_part = $self->limits;
 
     my $limits = decode_json($limits_part)->{limits};
 
-    my $query = decode_json($query_part);
+    my $query     = decode_json($query_part);
     my $operators = $query->{operators};
-    my $operands = $query->{operands};
-    my $indexes = $query->{indexes};
+    my $operands  = $query->{operands};
+    my $indexes   = $query->{indexes};
 
     my $query_limit = "(";
-    for( my $i = 0; $i < scalar @$operands; $i++ ){
+    for ( my $i = 0 ; $i < scalar @$operands ; $i++ ) {
         next unless @$operands[$i];
-        my $index = @$indexes[$i] ? @$indexes[$i] . "=" : "";
-        my $query = "(" . @$operands[$i] . ")";
+        my $index    = @$indexes[$i] ? @$indexes[$i] . "=" : "";
+        my $query    = "(" . @$operands[$i] . ")";
         my $operator = "";
-        $operator = @$operators[$i-1] ? " " . @$operators[$i-1] . " " : scalar @$operands > $i ? " AND " : "" if $i > 0;
+        $operator = @$operators[ $i - 1 ] ? " " . @$operators[ $i - 1 ] . " " : scalar @$operands > $i ? " AND " : ""
+            if $i > 0;
         my $limit = $operator . $index . $query;
         $query_limit .= $limit;
     }
     $query_limit .= ")";
 
-    return ($limits, $query_limit);
+    return ( $limits, $query_limit );
 }
 
 =head2 Internal methods

@@ -25,9 +25,9 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Metadata::Invalid' => {
-        isa => 'Koha::Exceptions::Metadata',
+        isa         => 'Koha::Exceptions::Metadata',
         description => 'Invalid data',
-        fields => ['id', 'biblionumber', 'format', 'schema', 'decoding_error']
+        fields      => [ 'id', 'biblionumber', 'format', 'schema', 'decoding_error' ]
     }
 );
 
@@ -38,8 +38,10 @@ sub full_message {
 
     unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Metadata::Invalid') ) {
-            $msg = sprintf( "Invalid data, cannot decode metadata object (biblio_metadata.id=%s, biblionumber=%s, format=%s, schema=%s, decoding_error='%s')",
-                $self->id, $self->biblionumber, $self->format, $self->schema, $self->decoding_error );
+            $msg = sprintf(
+                "Invalid data, cannot decode metadata object (biblio_metadata.id=%s, biblionumber=%s, format=%s, schema=%s, decoding_error='%s')",
+                $self->id, $self->biblionumber, $self->format, $self->schema, $self->decoding_error
+            );
         }
     }
 

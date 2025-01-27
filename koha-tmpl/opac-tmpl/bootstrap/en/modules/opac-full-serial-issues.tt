@@ -11,71 +11,73 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     [% FILTER collapse %]
-    <style>
-        div.tabsub {
-            clear: both;
-        }
-        #filterform label {
-            font-weight: bold;
-        }
-        #filterform select {
-            width: 100%;
-        }
-        #subtabs a {
-            display: block;
-            float: left;
-            border: 1px solid #CCC;
-            padding: .2em .4em;
-            margin: .3em;
-            text-decoration: none;
-            font-size: 115%;
-        }
+        <style>
+            div.tabsub {
+                clear: both;
+            }
+            #filterform label {
+                font-weight: bold;
+            }
+            #filterform select {
+                width: 100%;
+            }
+            #subtabs a {
+                display: block;
+                float: left;
+                border: 1px solid #ccc;
+                padding: 0.2em 0.4em;
+                margin: 0.3em;
+                text-decoration: none;
+                font-size: 115%;
+            }
 
-        #subtabs strong {
-            display: block;
-            float: left;
-            font-size: 115%;
-            padding: .2em .4em;
-            margin: 0.3em 0;
-        }
+            #subtabs strong {
+                display: block;
+                float: left;
+                font-size: 115%;
+                padding: 0.2em 0.4em;
+                margin: 0.3em 0;
+            }
 
-        #subtabs {
-            margin-top: 1em;
-        }
-        .action .btn {
-            font-size: 90%;
-            width: 100%;
-        }
-        .menu-collapse {
-            padding: .5em;
-        }
-        a.currentsubtab {
-            background-color: #FFC;
-        }
-    </style>
+            #subtabs {
+                margin-top: 1em;
+            }
+            .action .btn {
+                font-size: 90%;
+                width: 100%;
+            }
+            .menu-collapse {
+                padding: 0.5em;
+            }
+            a.currentsubtab {
+                background-color: #ffc;
+            }
+        </style>
     [% END %]
 [% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-full-serial-issues' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Full subscription history</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Full subscription history</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2">
-                    <div id="searchfacetscontainer">
-                        <div id="search-facets">
-                            <form method="get" action="/cgi-bin/koha/opac-serial-issues.pl" id="filterform">
-                                <legend><h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2></legend>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                <div id="searchfacetscontainer">
+                    <div id="search-facets">
+                        <form method="get" action="/cgi-bin/koha/opac-serial-issues.pl" id="filterform">
+                            <legend
+                                ><h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2></legend
+                            >
                             <ul class="menu-collapse">
                                 <li>
                                     <label for="libraryfilter">Library: </label>
@@ -87,95 +89,96 @@
                                     <input type="reset" id="reset" class="btn btn-primary" value="Clear" />
                                 </li>
                             </ul>
-                            </form>
-                        </div> <!-- / #search-facets -->
-                    </div> <!-- / #searchfacetscontainer -->
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' %]
+                        </form>
                     </div>
-                </div> <!-- / .col-lg-2 -->
-                <div class="col-10 order-first order-md-first order-lg-2">
-                    <div id="fullserialissues" class="maincontent">
-                        [% UNLESS ( popup ) %]
-                            <h1>Full subscription history for [% bibliotitle | html %]</h1>
-                            <div id="views">
-                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Normal view</a></span>
-                                <span class="view"><a id="Briefhistory" href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=[% biblionumber | html %]&amp;selectview=small">Brief history</a></span>
-                                <span class="view"><span id="Fullhistory">Full history</span></span>
-                            </div>
-                        [% END %]
-
-                        <div id="subtabs">
-                            <strong>Show year: </strong>
-                            [% FOREACH year IN years %]
-                                [% IF ( year.year ) %]
-                                    <a class="tabsubs" href="#" data-year="[% year.year | html %]">[% year.year | html %]</a>
-                                [% END %]
-                            [% END %]
+                    <!-- / #search-facets -->
+                </div>
+                <!-- / #searchfacetscontainer -->
+                <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+            </div>
+            <!-- / .col-lg-2 -->
+            <div class="col-10 order-first order-md-first order-lg-2">
+                <div id="fullserialissues" class="maincontent">
+                    [% UNLESS ( popup ) %]
+                        <h1>Full subscription history for [% bibliotitle | html %]</h1>
+                        <div id="views">
+                            <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Normal view</a></span>
+                            <span class="view"><a id="Briefhistory" href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=[% biblionumber | html %]&amp;selectview=small">Brief history</a></span>
+                            <span class="view"><span id="Fullhistory">Full history</span></span>
                         </div>
+                    [% END %]
 
+                    <div id="subtabs">
+                        <strong>Show year: </strong>
                         [% FOREACH year IN years %]
-                            [% SET div_style = "display:none" %]
-                            [% IF loop.first %]
-                                [% div_style = "display:block" %]
+                            [% IF ( year.year ) %]
+                                <a class="tabsubs" href="#" data-year="[% year.year | html %]">[% year.year | html %]</a>
                             [% END %]
-                            <div class="yeardata tabsub" id="show[% year.year | html %]" style="[% div_style | html %]">
-                                <table class="subscriptionstclass table table-bordered table-striped">
-                                    <caption class="sr-only">Subscriptions</caption>
-                                    <thead>
+                        [% END %]
+                    </div>
+
+                    [% FOREACH year IN years %]
+                        [% SET div_style = "display:none" %]
+                        [% IF loop.first %]
+                            [% div_style = "display:block" %]
+                        [% END %]
+                        <div class="yeardata tabsub" id="show[% year.year | html %]" style="[% div_style | html %]">
+                            <table class="subscriptionstclass table table-bordered table-striped">
+                                <caption class="sr-only">Subscriptions</caption>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Library</th>
+                                        <th>Location</th>
+                                        <th>Notes</th>
+                                        <th>Date received</th>
+                                        <th>Number</th>
+                                        <th>Status</th>
+                                        <th>Subscription</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH serial IN year.serials %]
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Library</th>
-                                            <th>Location</th>
-                                            <th>Notes</th>
-                                            <th>Date received</th>
-                                            <th>Number</th>
-                                            <th>Status</th>
-                                            <th>Subscription</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH serial IN year.serials %]
-                                            <tr>
-                                                <td data-order="[% serial.publisheddate | html %]">
-                                                    [% IF ( serial.publisheddate ) %]
-                                                        [% IF serial.publisheddatetext %]
-                                                            [% serial.publisheddatetext | html %]
-                                                        [% ELSE %]
-                                                            [% serial.publisheddate | $KohaDates %]
-                                                        [% END %]
+                                            <td data-order="[% serial.publisheddate | html %]">
+                                                [% IF ( serial.publisheddate ) %]
+                                                    [% IF serial.publisheddatetext %]
+                                                        [% serial.publisheddatetext | html %]
                                                     [% ELSE %]
-                                                        &nbsp;
+                                                        [% serial.publisheddate | $KohaDates %]
                                                     [% END %]
-                                                </td>
-                                                <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) | html %]</td>
-                                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => serial.location, opac => 1 ) | html %]</td>
-                                                <td>[% serial.notes | html %]</td>
-                                                [% IF ( serial.status2 && serial.planneddate ) %]
-                                                    <td data-order="[% serial.planneddate | html %]">
-                                                        [% serial.planneddate | $KohaDates %]
-                                                    </td>
                                                 [% ELSE %]
-                                                    <td data-order="9999-12-31">
-                                                        &nbsp;
-                                                    </td>
+                                                    &nbsp;
                                                 [% END %]
-                                                <td>[% serial.serialseq | html %]</td>
-                                                <td>
-                                                    [% INCLUDE 'serial-status.inc' serial = serial %]
-                                                </td>
-                                                <td class="subscriptionidfilterclass">[% serial.subscriptionid | html %]</td>
-                                            </tr>
-                                        [% END %]
-                                    </tbody>
-                                </table>
-                            </div> <!-- / .yeardata tabsub -->
-                        [% END # / FOREACH year %]
-                    </div> <!-- / #fullserialissues -->
-                </div> <!-- / .col-10 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                                            </td>
+                                            <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) | html %]</td>
+                                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => serial.location, opac => 1 ) | html %]</td>
+                                            <td>[% serial.notes | html %]</td>
+                                            [% IF ( serial.status2 && serial.planneddate ) %]
+                                                <td data-order="[% serial.planneddate | html %]"> [% serial.planneddate | $KohaDates %] </td>
+                                            [% ELSE %]
+                                                <td data-order="9999-12-31"> &nbsp; </td>
+                                            [% END %]
+                                            <td>[% serial.serialseq | html %]</td>
+                                            <td> [% INCLUDE 'serial-status.inc' serial = serial %] </td>
+                                            <td class="subscriptionidfilterclass">[% serial.subscriptionid | html %]</td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- / .yeardata tabsub -->
+                    [% END # / FOREACH year %]
+                </div>
+                <!-- / #fullserialissues -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

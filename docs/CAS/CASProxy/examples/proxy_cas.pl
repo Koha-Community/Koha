@@ -34,50 +34,47 @@ use Authen::CAS::Client;
 
 # URL Of the CAS Server
 my $casServerUrl = 'https://localhost:8443/cas/';
-my $cas = Authen::CAS::Client->new($casServerUrl);
-my $cgi = CGI->new;
+my $cas          = Authen::CAS::Client->new($casServerUrl);
+my $cgi          = CGI->new;
 
 # URL of the service we're requesting a Service Ticket for (typically this very same page)
 my $proxy_service = $cgi->url;
 
-
-# Callback URL (this is an URL the CAS Server will query, providing the Proxy Ticket we'll need 
-# to query the koha webservice). It can be this page or another. In this example, another page will be 
+# Callback URL (this is an URL the CAS Server will query, providing the Proxy Ticket we'll need
+# to query the koha webservice). It can be this page or another. In this example, another page will be
 # called back
 my $pgtUrl = "https://.../proxy_cas_callback.pl";
 
-print $cgi->header({-type  =>  'text/html'});
+print $cgi->header( { -type => 'text/html' } );
 print $cgi->start_html("proxy cas");
 
 # If we already have a service ticket
-if ($cgi->param('ticket')) {
+if ( $cgi->param('ticket') ) {
 
     print "Got a ticket :" . $cgi->param('ticket') . "<br>\n";
-  
+
     # We validate it against the CAS Server, providing the callback URL
-    my $r = $cas->service_validate( $proxy_service, $cgi->param('ticket'), pgtUrl => $pgtUrl);
+    my $r = $cas->service_validate( $proxy_service, $cgi->param('ticket'), pgtUrl => $pgtUrl );
 
     # If it is successful, we are authenticated
-    if( $r->is_success() ) {
-	print "User authenticated as: ", $r->user(), "<br>\n";
+    if ( $r->is_success() ) {
+        print "User authenticated as: ", $r->user(), "<br>\n";
     } else {
-	print "User authentication failed<br />\n";
+        print "User authentication failed<br />\n";
     }
 
     # If we have a PGTIou ticket, the proxy validation was successful
-    if (defined $r->iou) {
-      print "Proxy granting ticket IOU: ", $r->iou, "<br />\n";
-      my $pgtIou = $r->iou;
+    if ( defined $r->iou ) {
+        print "Proxy granting ticket IOU: ", $r->iou, "<br />\n";
+        my $pgtIou = $r->iou;
 
-      print '<a href="proxy_cas_data.pl?PGTIOU=', $r->iou, '">Next</a>';
+        print '<a href="proxy_cas_data.pl?PGTIOU=', $r->iou, '">Next</a>';
 
-      
-     	    
     } else {
-      print "Service validation for proxying failed\n";
-   }
+        print "Service validation for proxying failed\n";
+    }
 
-# If we don't have a Service Ticket, we ask for one (ie : the user will be redirected to the CAS Server for authentication)
+    # If we don't have a Service Ticket, we ask for one (ie : the user will be redirected to the CAS Server for authentication)
 } else {
 
     my $url = $cas->login_url($proxy_service);
@@ -85,6 +82,4 @@ if ($cgi->param('ticket')) {
 }
 
 print $cgi->end_html;
-
-
 

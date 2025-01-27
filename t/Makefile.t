@@ -41,11 +41,11 @@ my @ignored = qw(
 );
 
 my @not_mapped;
-for my $file (@files ) {
+for my $file (@files) {
     chomp $file;
-    unless ( grep {/$file/} @MakeFile or grep {/$file/} @ignored ) {
+    unless ( grep { /$file/ } @MakeFile or grep { /$file/ } @ignored ) {
         push @not_mapped, $file;
     }
 }
 
-is( @not_mapped, 0, 'All directories should be mapped' . (@not_mapped ? ': ' . join ',', @not_mapped : '' ) );
+is( @not_mapped, 0, 'All directories should be mapped' . ( @not_mapped ? ': ' . join ',', @not_mapped : '' ) );

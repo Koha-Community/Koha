@@ -9,29 +9,29 @@
 [% BLOCK cssinclude %]
     <style>
         #largeCoverImg {
-            border : 1px solid #CCCCCC;
-            display : block;
-            margin : auto;
-            padding : 1em;
+            border: 1px solid #cccccc;
+            display: block;
+            margin: auto;
+            padding: 1em;
         }
         #thumbnails {
-            text-align : center;
+            text-align: center;
         }
         #thumbnails a img {
-            border : 2px solid #8EB3E7;
+            border: 2px solid #8eb3e7;
         }
         img.thumbnail {
-            display : block;
-            float : none;
-            margin : .3em 0;
-            padding : .5em;
+            display: block;
+            float: none;
+            margin: 0.3em 0;
+            padding: 0.5em;
         }
 
         #thumbnails a img.selected {
             border-color: black;
-            cursor : default;
-            opacity:0.4;
-            filter:alpha(opacity=40); /* For IE8 and earlier */
+            cursor: default;
+            opacity: 0.4;
+            filter: alpha(opacity=40); /* For IE8 and earlier */
         }
     </style>
 [% END %]
@@ -39,69 +39,77 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-imageviewer' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                [% INCLUDE 'biblio-title.inc' link = 1 %]
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Images</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            [% INCLUDE 'biblio-title.inc' link = 1 %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Images</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
+            [% END %]
+
+            <div class="[% column_class | html %]">
+                <div class="row">
+                    <div class="col-lg-9 maincontent">
+                        <h1 class="title">Images for [% INCLUDE 'biblio-title.inc' link=> 1 %] [% biblio.author | html %] </h1>
                     </div>
-                [% END %]
+                    <!-- / col-lg-9 -->
+                </div>
+                <!-- / .row -->
 
-                <div class="[% column_class | html %]">
-                    <div class="row">
-                        <div class="col-lg-9 maincontent">
-                            <h1 class="title">Images for  [% INCLUDE 'biblio-title.inc' link=> 1 %] [% biblio.author | html %]
-                            </h1>
-                        </div> <!-- / col-lg-9 -->
-                    </div> <!-- / .row -->
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div id="imageviewer">
+                            <div id="largeCover">
+                                <img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber | url %]" />
+                            </div>
+                        </div>
+                        <!-- / #imageviewer -->
+                    </div>
+                    <!-- / .span12 -->
 
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <div id="imageviewer">
-                                <div id="largeCover">
-                                    <img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber | url %]" />
-                                </div>
-                            </div> <!-- / #imageviewer -->
-                        </div> <!-- / .span12 -->
-
-                        [% IF OPACLocalCoverImages == 1 %]
-                            [% IF images.size %]
-                                <div class="col-lg-3">
-                                    <div id="thumbnails">
-                                        [% FOREACH image IN images %]
-                                            <a class="cover_thumbnail" data-imagenumber="[% image.imagenumber| html %]" href="#">
+                    [% IF OPACLocalCoverImages == 1 %]
+                        [% IF images.size %]
+                            <div class="col-lg-3">
+                                <div id="thumbnails">
+                                    [% FOREACH image IN images %]
+                                        <a class="cover_thumbnail" data-imagenumber="[% image.imagenumber| html %]" href="#">
                                             [% IF loop.first %]
-                                                <img class="thumbnail selected" id="[% image.imagenumber| html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                                <img class="thumbnail selected" id="[% image.imagenumber| html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
                                             [% ELSE %]
-                                                <img class="thumbnail" id="[% image.imagenumber | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                                <img class="thumbnail" id="[% image.imagenumber | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
                                             [% END %]
-                                            </a>
-                                        [% END %]
-                                    </div> <!-- /#thumbnails -->
-                                </div> <!-- /.col-lg-3 -->
-                            [% END %]
-                        [% ELSE %]
-                            Unfortunately, images are not enabled for this catalog at this time.
+                                        </a>
+                                    [% END %]
+                                </div>
+                                <!-- /#thumbnails -->
+                            </div>
+                            <!-- /.col-lg-3 -->
                         [% END %]
-                    </div> <!-- / .row -->
-                </div> <!-- / .col-lg-10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                    [% ELSE %]
+                        Unfortunately, images are not enabled for this catalog at this time.
+                    [% END %]
+                </div>
+                <!-- / .row -->
+            </div>
+            <!-- / .col-lg-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

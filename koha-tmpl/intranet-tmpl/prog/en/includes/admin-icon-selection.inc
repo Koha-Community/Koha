@@ -18,23 +18,25 @@
             [% ELSE %]
                 [% SET bt_active = 0 %]
             [% END %]
-            [% WRAPPER tab_item tabname= imageset.imagesetname bt_active= bt_active %] [% imageset.imagesetname | html %] [% END %]
+            [% WRAPPER tab_item tabname= imageset.imagesetname bt_active= bt_active %][% imageset.imagesetname | html %][% END %]
         [% END %]
         [% IF image_location.match('^http') %]
             [% SET bt_active = 1 %]
         [% ELSE %]
             [% SET bt_active = 0 %]
         [% END %]
-        [% WRAPPER tab_item tabname= "remote" bt_active= bt_active %] <span>Remote image</span> [% END %]
+        [% WRAPPER tab_item tabname= "remote" bt_active= bt_active %]<span>Remote image</span>[% END %]
     [% END %]
 
     [% WRAPPER tab_panels %]
         [% WRAPPER tab_panel tabname="none" bt_active= 0 %]
             <div class="[% context | html %]-icons">
-                <label for="noimage">No image:
+                <label for="noimage"
+                    >No image:
                     <input type="radio" name="image" id="noimage" value="removeImage" />
                 </label>
-            </div> <!-- /.[% context | html %]-icons -->
+            </div>
+            <!-- /.[% context | html %]-icons -->
         [% END %]
 
         [% FOREACH imageset IN imagesets %]
@@ -52,12 +54,14 @@
                             [% END %]
                             [% IF image.checked %]
                                 <input type="radio" name="image" value="[% image.KohaImage | html %]" checked="checked" />
-                            [% ELSIF image.KohaImage %] <!-- to delete the radio button if there is no image after -->
+                            [% ELSIF image.KohaImage %]
+                                <!-- to delete the radio button if there is no image after -->
                                 <input type="radio" name="image" value="[% image.KohaImage | html %]" />
                             [% END %]
                         </label>
                     [% END #/ FOREACH image %]
-                </div> <!-- /.[% context | html %]-icons -->
+                </div>
+                <!-- /.[% context | html %]-icons -->
             [% END # /tab_panel %]
         [% END # /FOREACH imageset %]
 

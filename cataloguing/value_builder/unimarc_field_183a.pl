@@ -22,14 +22,14 @@ use Modern::Perl;
 use Date::Calc;
 
 use Koha::Util::FrameworkPlugin qw(wrapper);
-use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use C4::Auth                    qw( get_template_and_user );
+use CGI                         qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 
-my $builder= sub {
+my $builder = sub {
     my $params = shift;
-    my $id = $params->{id};
+    my $id     = $params->{id};
 
     return qq|
 <script>
@@ -42,19 +42,21 @@ function Click$id(event) {
 </script>|;
 };
 
-my $launcher= sub {
+my $launcher = sub {
     my $params = shift;
-    my $cgi = $params->{cgi};
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name => "cataloguing/value_builder/unimarc_field_183a.tt",
-        query => $cgi,
-        type => "intranet",
-        flagsrequired => {editcatalogue => '*'},
-    });
+    my $cgi    = $params->{cgi};
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_183a.tt",
+            query         => $cgi,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
     my $results = scalar $cgi->param('result');
 
     $template->param(
-        index => scalar $cgi->param('index'),
+        index  => scalar $cgi->param('index'),
         result => $results,
     );
 

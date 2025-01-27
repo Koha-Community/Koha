@@ -20,7 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -36,10 +36,11 @@ my $op            = $input->param('op') || 'list';
 my @messages;
 
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => 'admin/currency.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => 'currencies_manage' },
+    {
+        template_name => 'admin/currency.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { acquisition => 'currencies_manage' },
     }
 );
 
@@ -51,14 +52,14 @@ if ( $op eq 'add_form' ) {
 
     $template->param( currency => $currency, );
 } elsif ( $op eq 'cud-add_validate' ) {
-    my $currency_code = $input->param('currency_code');
-    my $symbol        = $input->param('symbol');
-    my $isocode       = $input->param('isocode');
-    my $rate          = $input->param('rate');
-    my $active        = $input->param('active');
+    my $currency_code  = $input->param('currency_code');
+    my $symbol         = $input->param('symbol');
+    my $isocode        = $input->param('isocode');
+    my $rate           = $input->param('rate');
+    my $active         = $input->param('active');
     my $p_sep_by_space = $input->param('p_sep_by_space');
-    my $p_cs_precedes = $input->param('p_cs_precedes') // 0;
-    my $is_a_modif    = $input->param('is_a_modif');
+    my $p_cs_precedes  = $input->param('p_cs_precedes') // 0;
+    my $is_a_modif     = $input->param('is_a_modif');
 
     if ($is_a_modif) {
         my $currency = Koha::Acquisition::Currencies->find($currency_code);
@@ -69,6 +70,7 @@ if ( $op eq 'add_form' ) {
         $currency->p_sep_by_space($p_sep_by_space);
         $currency->p_cs_precedes($p_cs_precedes);
         eval { $currency->store; };
+
         if ($@) {
             push @messages, { type => 'error', code => 'error_on_update' };
         } else {
@@ -98,16 +100,17 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'delete_confirm' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
 
-    my $nb_of_orders = Koha::Acquisition::Orders->search( { currency => $currency->currency } )->count;
-    my $nb_of_vendors = Koha::Acquisition::Booksellers->search( { -or => { listprice => $currency->currency, invoiceprice => $currency->currency } })->count;
+    my $nb_of_orders  = Koha::Acquisition::Orders->search( { currency => $currency->currency } )->count;
+    my $nb_of_vendors = Koha::Acquisition::Booksellers->search(
+        { -or => { listprice => $currency->currency, invoiceprice => $currency->currency } } )->count;
     $template->param(
-        currency     => $currency,
-        nb_of_orders => $nb_of_orders,
+        currency      => $currency,
+        nb_of_orders  => $nb_of_orders,
         nb_of_vendors => $nb_of_vendors,
     );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
-    my $deleted = eval { $currency->delete; };
+    my $deleted  = eval { $currency->delete; };
 
     if ( $@ or not $deleted ) {
         push @messages, { type => 'error', code => 'error_on_delete' };

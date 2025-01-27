@@ -22,22 +22,22 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 
-my $input = CGI->new;
-my $op = $input->param('op') // q|form|;
+my $input           = CGI->new;
+my $op              = $input->param('op') // q|form|;
 my $preview_results = $input->param('preview_results');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'tools/batch_extend_due_dates.tt',
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { tools => 'batch_extend_due_dates' },
+        template_name => 'tools/batch_extend_due_dates.tt',
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'batch_extend_due_dates' },
     }
 );
 
@@ -45,8 +45,7 @@ my @issue_ids;
 
 if ( $op eq 'form' ) {
     $template->param( view => 'form', );
-}
-elsif ( $op eq 'cud-list' ) {
+} elsif ( $op eq 'cud-list' ) {
 
     my @categorycodes     = $input->multi_param('categorycodes');
     my @itemtypecodes     = $input->multi_param('itemtypecodes');
@@ -75,40 +74,34 @@ elsif ( $op eq 'cud-list' ) {
 
     if ( $from_due_date and $to_due_date ) {
         my $to_due_date_endday = dt_from_string($to_due_date);
-        $to_due_date_endday
-          ->set(  # We set last second of day to see all checkouts from that day
+        $to_due_date_endday->set(    # We set last second of day to see all checkouts from that day
             hour   => 23,
             minute => 59,
             second => 59
-          );
+        );
         $search_params->{'me.date_due'} = {
             -between => [
                 $dtf->format_datetime( dt_from_string($from_due_date) ),
                 $dtf->format_datetime($to_due_date_endday),
             ]
         };
-    }
-    elsif ($from_due_date) {
+    } elsif ($from_due_date) {
         $search_params->{'me.date_due'} =
-          { '>=' => $dtf->format_datetime( dt_from_string($from_due_date) ) };
-    }
-    elsif ($to_due_date) {
+            { '>=' => $dtf->format_datetime( dt_from_string($from_due_date) ) };
+    } elsif ($to_due_date) {
         my $to_due_date_endday = dt_from_string($to_due_date);
-        $to_due_date_endday
-          ->set(  # We set last second of day to see all checkouts from that day
+        $to_due_date_endday->set(    # We set last second of day to see all checkouts from that day
             hour   => 23,
             minute => 59,
             second => 59
-          );
+        );
         $search_params->{'me.date_due'} =
-          { '<=' => $dtf->format_datetime($to_due_date_endday) };
+            { '<=' => $dtf->format_datetime($to_due_date_endday) };
     }
 
     my $checkouts = Koha::Checkouts->search(
         $search_params,
-        {
-            join => [ 'item', 'patron' ]
-        }
+        { join => [ 'item', 'patron' ] }
     );
 
     my @new_due_dates;
@@ -118,7 +111,7 @@ elsif ( $op eq 'cud-list' ) {
                 @new_due_dates,
                 calc_new_due_date(
                     {
-                        due_date => dt_from_string( $checkout->date_due ),
+                        due_date          => dt_from_string( $checkout->date_due ),
                         new_hard_due_date => $new_hard_due_date,
                         add_days          => $due_date_days
                     }
@@ -129,13 +122,13 @@ elsif ( $op eq 'cud-list' ) {
         }
     }
 
-    if ( $preview_results ) {
+    if ($preview_results) {
         $template->param(
             checkouts         => $checkouts,
             new_hard_due_date => $new_hard_due_date,
-            due_date_days => $due_date_days,
-            new_due_dates => \@new_due_dates,
-            view          => 'list',
+            due_date_days     => $due_date_days,
+            new_due_dates     => \@new_due_dates,
+            view              => 'list',
         );
     } else {
         $op = 'cud-modify';
@@ -153,11 +146,11 @@ if ( $op eq 'cud-modify' ) {
 
     $new_hard_due_date &&= dt_from_string($new_hard_due_date);
     my $checkouts =
-      Koha::Checkouts->search( { issue_id => { -in => \@issue_ids } } );
+        Koha::Checkouts->search( { issue_id => { -in => \@issue_ids } } );
     while ( my $checkout = $checkouts->next ) {
         my $new_due_date = calc_new_due_date(
             {
-                due_date          => dt_from_string($checkout->date_due),
+                due_date          => dt_from_string( $checkout->date_due ),
                 new_hard_due_date => $new_hard_due_date,
                 add_days          => $due_date_days
             }
@@ -183,16 +176,16 @@ sub calc_new_due_date {
     my $add_days          = $params->{add_days};
 
     my $new;
-    if ( $new_hard_due_date ) {
-      $new = $new_hard_due_date->clone->set(
-        hour   => $due_date->hour,
-        minute => $due_date->minute,
-        second => $due_date->second,
-      )
-  } else {
-      $new = $due_date->clone->add( days => $add_days );
-  }
-  return $new;
+    if ($new_hard_due_date) {
+        $new = $new_hard_due_date->clone->set(
+            hour   => $due_date->hour,
+            minute => $due_date->minute,
+            second => $due_date->second,
+        );
+    } else {
+        $new = $due_date->clone->add( days => $add_days );
+    }
+    return $new;
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

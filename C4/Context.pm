@@ -20,8 +20,9 @@ package C4::Context;
 use Modern::Perl;
 
 use vars qw($AUTOLOAD $context);
+
 BEGIN {
-    if ( $ENV{'HTTP_USER_AGENT'} ) { # Only hit when plack is not enabled
+    if ( $ENV{'HTTP_USER_AGENT'} ) {    # Only hit when plack is not enabled
 
         # Redefine multi_param if cgi version is < 4.08
         # Remove the "CGI::param called in list context" warning in this case
@@ -33,7 +34,7 @@ BEGIN {
             $CGI::LIST_CONTEXT_WARN = 0;
         }
     }
-};
+}
 
 use Carp qw( carp );
 use DateTime::TimeZone;
@@ -100,9 +101,10 @@ environment variable to the pathname of a configuration file to use.
 # Zconn
 #     A connection object for the Zebra server
 
-$context = undef;        # Initially, no context is set
+$context = undef;    # Initially, no context is set
 
 sub import {
+
     # Create the default context ($C4::Context::Context)
     # the first time the module is called
     # (a config file can be optionaly passed)
@@ -111,7 +113,7 @@ sub import {
     return if $context;
 
     # no ? so load it!
-    my ($pkg,$config_file) = @_ ;
+    my ( $pkg, $config_file ) = @_;
     my $new_ctx = __PACKAGE__->new($config_file);
     return unless $new_ctx;
 
@@ -142,16 +144,17 @@ that, use C<&set_context>.
 # Revision History:
 # 2004-08-10 A. Tarallo: Added check if the conf file is not empty
 sub new {
-    my $class = shift;
-    my $conf_fname = shift;        # Config file to load
+    my $class      = shift;
+    my $conf_fname = shift;    # Config file to load
 
     # check that the specified config file exists and is not empty
-    undef $conf_fname unless 
-        (defined $conf_fname && -s $conf_fname);
+    undef $conf_fname
+        unless ( defined $conf_fname && -s $conf_fname );
+
     # Figure out a good config file to load if none was specified.
     unless ( defined $conf_fname ) {
         $conf_fname = Koha::Config->guess_koha_conf;
-        unless ( $conf_fname ) {
+        unless ($conf_fname) {
             warn "unable to locate Koha configuration file koha-conf.xml";
             return;
         }
@@ -164,10 +167,10 @@ sub new {
         return;
     }
 
-    $self->{"Zconn"} = undef;    # Zebra Connections
-    $self->{"userenv"} = undef;        # User env
+    $self->{"Zconn"}   = undef;    # Zebra Connections
+    $self->{"userenv"} = undef;    # User env
     $self->{"shelves"} = undef;
-    $self->{tz} = undef; # local timezone object
+    $self->{tz}        = undef;    # local timezone object
 
     bless $self, $class;
     return $self;
@@ -183,8 +186,7 @@ or
 =cut
 
 #'
-sub set_context
-{
+sub set_context {
     my $self = shift;
     my $new_context;    # The context to set
 
@@ -197,11 +199,12 @@ sub set_context
     # break this assumption by playing silly buggers, but that's
     # harder to do than doing it properly, and harder to check
     # for.
-    if (ref($self) eq "")
-    {
+    if ( ref($self) eq "" ) {
+
         # Class method. The new context is the next argument.
         $new_context = shift;
     } else {
+
         # Instance method. The new context is $self.
         $new_context = $self;
     }
@@ -220,18 +223,19 @@ from which the current context was created.
 =cut
 
 sub _common_config {
-    my ($var, $term) = @_;
+    my ( $var, $term ) = @_;
 
     return unless defined $context and defined $context->{config};
 
-    return $context->{config}->get($var, $term);
+    return $context->{config}->get( $var, $term );
 }
 
 sub config {
-	return _common_config($_[1],'config');
+    return _common_config( $_[1], 'config' );
 }
+
 sub zebraconfig {
-	return _common_config($_[1],'server');
+    return _common_config( $_[1], 'server' );
 }
 
 =head2 preference
@@ -251,18 +255,19 @@ with this method.
 =cut
 
 my $use_syspref_cache = 1;
+
 sub preference {
     my $self = shift;
     my $var  = shift;    # The system preference to return
 
-    return Encode::decode_utf8($ENV{"OVERRIDE_SYSPREF_$var"})
+    return Encode::decode_utf8( $ENV{"OVERRIDE_SYSPREF_$var"} )
         if defined $ENV{"OVERRIDE_SYSPREF_$var"};
 
     $var = lc $var;
 
     if ($use_syspref_cache) {
         my $syspref_cache = Koha::Caches->get_instance('syspref');
-        my $cached_var = $syspref_cache->get_from_cache("syspref_$var");
+        my $cached_var    = $syspref_cache->get_from_cache("syspref_$var");
         return $cached_var if defined $cached_var;
     }
 
@@ -270,9 +275,9 @@ sub preference {
     eval { $syspref = Koha::Config::SysPrefs->find( lc $var ) };
     my $value = $syspref ? $syspref->value() : undef;
 
-    if ( $use_syspref_cache ) {
+    if ($use_syspref_cache) {
         my $syspref_cache = Koha::Caches->get_instance('syspref');
-        $syspref_cache->set_in_cache("syspref_$var", $value);
+        $syspref_cache->set_in_cache( "syspref_$var", $value );
     }
     return $value;
 }
@@ -288,14 +293,17 @@ the value cannot be properly decoded as YAML.
 sub yaml_preference {
     my ( $self, $preference ) = @_;
 
-    my $yaml = eval { YAML::XS::Load( Encode::encode_utf8( $self->preference( $preference ) // '' ) ); };
+    my $yaml = eval { YAML::XS::Load( Encode::encode_utf8( $self->preference($preference) // '' ) ); };
     if ($@) {
         warn "Unable to parse $preference syspref : $@";
         return;
     }
 
     # TODO Remove next line when enforced elsewhere
-    if( $yaml && lc($preference) eq 'itemsdeniedrenewal' and ref($yaml) ne 'HASH' ) { warn "Hashref expected for $preference"; return; }
+    if ( $yaml && lc($preference) eq 'itemsdeniedrenewal' and ref($yaml) ne 'HASH' ) {
+        warn "Hashref expected for $preference";
+        return;
+    }
     return $yaml;
 }
 
@@ -327,6 +335,7 @@ default behavior.
 sub enable_syspref_cache {
     my ($self) = @_;
     $use_syspref_cache = 1;
+
     # We need to clear the cache to have it up-to-date
     $self->clear_syspref_cache();
 }
@@ -381,9 +390,9 @@ sub set_preference {
 
     my $syspref = Koha::Config::SysPrefs->find($variable);
     $type =
-        $type    ? $type
-      : $syspref ? $syspref->type
-      :            undef;
+          $type    ? $type
+        : $syspref ? $syspref->type
+        :            undef;
 
     $value = 0 if ( $type && $type eq 'YesNo' && $value eq '' );
 
@@ -394,7 +403,8 @@ sub set_preference {
 
     if ($syspref) {
         $syspref->set(
-            {   ( defined $value ? ( value       => $value )       : () ),
+            {
+                ( defined $value ? ( value       => $value )       : () ),
                 ( $explanation   ? ( explanation => $explanation ) : () ),
                 ( $type          ? ( type        => $type )        : () ),
                 ( $options       ? ( options     => $options )     : () ),
@@ -402,7 +412,8 @@ sub set_preference {
         )->store;
     } else {
         $syspref = Koha::Config::SysPref->new(
-            {   variable    => $variable_case,
+            {
+                variable    => $variable_case,
                 value       => $value,
                 explanation => $explanation || undef,
                 type        => $type,
@@ -411,7 +422,7 @@ sub set_preference {
         )->store();
     }
 
-    if ( $use_syspref_cache ) {
+    if ($use_syspref_cache) {
         my $syspref_cache = Koha::Caches->get_instance('syspref');
         $syspref_cache->set_in_cache( "syspref_$variable", $value );
     }
@@ -433,8 +444,8 @@ sub delete_preference {
     my ( $self, $var ) = @_;
 
     $var = lc $var;
-    if ( Koha::Config::SysPrefs->find( $var )->delete ) {
-        if ( $use_syspref_cache ) {
+    if ( Koha::Config::SysPrefs->find($var)->delete ) {
+        if ($use_syspref_cache) {
             my $syspref_cache = Koha::Caches->get_instance('syspref');
             $syspref_cache->clear_from_cache("syspref_$var");
         }
@@ -511,13 +522,17 @@ C<$async> whether this is a asynchronous connection
 =cut
 
 sub Zconn {
-    my ($self, $server, $async ) = @_;
-    my $cache_key = join ('::', (map { $_ // '' } ($server, $async )));
-    if ( (!defined($ENV{GATEWAY_INTERFACE})) && defined($context->{"Zconn"}->{$cache_key}) && (0 == $context->{"Zconn"}->{$cache_key}->errcode()) ) {
+    my ( $self, $server, $async ) = @_;
+    my $cache_key = join( '::', ( map { $_ // '' } ( $server, $async ) ) );
+    if (   ( !defined( $ENV{GATEWAY_INTERFACE} ) )
+        && defined( $context->{"Zconn"}->{$cache_key} )
+        && ( 0 == $context->{"Zconn"}->{$cache_key}->errcode() ) )
+    {
         # if we are running the script from the commandline, lets try to use the caching
         return $context->{"Zconn"}->{$cache_key};
     }
-    $context->{"Zconn"}->{$cache_key}->destroy() if defined($context->{"Zconn"}->{$cache_key}); #destroy old connection before making a new one
+    $context->{"Zconn"}->{$cache_key}->destroy()
+        if defined( $context->{"Zconn"}->{$cache_key} );    #destroy old connection before making a new one
     $context->{"Zconn"}->{$cache_key} = &_new_Zconn( $server, $async );
     return $context->{"Zconn"}->{$cache_key};
 }
@@ -539,43 +554,43 @@ C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
 sub _new_Zconn {
     my ( $server, $async ) = @_;
 
-    my $tried=0; # first attempt
-    my $Zconn; # connection object
+    my $tried = 0;    # first attempt
+    my $Zconn;        # connection object
     my $elementSetName;
     my $syntax;
 
     $server //= "biblioserver";
 
-    $syntax = 'xml';
+    $syntax         = 'xml';
     $elementSetName = 'marcxml';
 
-    my $host = _common_config($server, 'listen')->{content};
-    my $serverinfo = _common_config($server, 'serverinfo');
-    my $user = $serverinfo->{user};
-    my $password = $serverinfo->{password};
+    my $host       = _common_config( $server, 'listen' )->{content};
+    my $serverinfo = _common_config( $server, 'serverinfo' );
+    my $user       = $serverinfo->{user};
+    my $password   = $serverinfo->{password};
     eval {
         # set options
         my $o = ZOOM::Options->new();
-        $o->option(user => $user) if $user && $password;
-        $o->option(password => $password) if $user && $password;
-        $o->option(async => 1) if $async;
-        $o->option(cqlfile=> _common_config($server, 'server')->{cql2rpn});
-        $o->option(cclfile=> $serverinfo->{ccl2rpn});
-        $o->option(preferredRecordSyntax => $syntax);
-        $o->option(elementSetName => $elementSetName) if $elementSetName;
-        $o->option(databaseName => _common_config($server, 'config') || 'biblios');
+        $o->option( user                  => $user )     if $user && $password;
+        $o->option( password              => $password ) if $user && $password;
+        $o->option( async                 => 1 )         if $async;
+        $o->option( cqlfile               => _common_config( $server, 'server' )->{cql2rpn} );
+        $o->option( cclfile               => $serverinfo->{ccl2rpn} );
+        $o->option( preferredRecordSyntax => $syntax );
+        $o->option( elementSetName        => $elementSetName ) if $elementSetName;
+        $o->option( databaseName          => _common_config( $server, 'config' ) || 'biblios' );
         my $timeout = C4::Context->config('zebra_connection_timeout') || 30;
-        $o->option(timeout => $timeout);
+        $o->option( timeout => $timeout );
 
         # create a new connection object
-        $Zconn= create ZOOM::Connection($o);
+        $Zconn = create ZOOM::Connection($o);
 
         # forge to server
-        $Zconn->connect($host, 0);
+        $Zconn->connect( $host, 0 );
 
         # check for errors and warn
-        if ($Zconn->errcode() !=0) {
-            warn "something wrong with the connection: ". $Zconn->errmsg();
+        if ( $Zconn->errcode() != 0 ) {
+            warn "something wrong with the connection: " . $Zconn->errmsg();
         }
     };
     return $Zconn;
@@ -585,10 +600,9 @@ sub _new_Zconn {
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
 # returns it.
-sub _new_dbh
-{
+sub _new_dbh {
 
-    Koha::Database->schema({ new => 1 })->storage->dbh;
+    Koha::Database->schema( { new => 1 } )->storage->dbh;
 }
 
 =head2 dbh
@@ -601,16 +615,15 @@ creates one, and connects to the database.
 
 =cut
 
-sub dbh
-{
-    my $self = shift;
+sub dbh {
+    my $self   = shift;
     my $params = shift;
 
     unless ( $params->{new} ) {
         return Koha::Database->schema->storage->dbh;
     }
 
-    return Koha::Database->schema({ new => 1 })->storage->dbh;
+    return Koha::Database->schema( { new => 1 } )->storage->dbh;
 }
 
 =head2 new_dbh
@@ -627,11 +640,10 @@ connect to so that the caller doesn't have to know.
 =cut
 
 #'
-sub new_dbh
-{
+sub new_dbh {
     my $self = shift;
 
-    return &dbh({ new => 1 });
+    return &dbh( { new => 1 } );
 }
 
 =head2 userenv
@@ -701,11 +713,9 @@ Destroys user environment variables.
 
 =cut
 
-sub unset_userenv
-{
+sub unset_userenv {
     $context->{userenv} = undef;
 }
-
 
 =head2 get_versions
 
@@ -720,22 +730,22 @@ Gets various version info, for core Koha packages, Currently called from carp ha
 # A little example sub to show more debugging info for CGI::Carp
 sub get_versions {
     my ( %versions, $mysqlVersion );
-    $versions{kohaVersion}  = Koha::version();
+    $versions{kohaVersion}   = Koha::version();
     $versions{kohaDbVersion} = C4::Context->preference('version');
-    $versions{osVersion} = join(" ", POSIX::uname());
-    $versions{perlVersion} = $];
+    $versions{osVersion}     = join( " ", POSIX::uname() );
+    $versions{perlVersion}   = $];
 
     my $dbh = C4::Context->dbh;
-    $mysqlVersion = $dbh->get_info(18) if $dbh; # SQL_DBMS_VER
+    $mysqlVersion = $dbh->get_info(18) if $dbh;    # SQL_DBMS_VER
 
     {
-        no warnings qw(exec); # suppress warnings if unable to find a program in $PATH
-        $mysqlVersion          ||= `mysql -V`; # fallback to sql client version?
+        no warnings qw(exec);                      # suppress warnings if unable to find a program in $PATH
+        $mysqlVersion ||= `mysql -V`;              # fallback to sql client version?
         $versions{apacheVersion} = (`apache2ctl -v`)[0];
-        $versions{apacheVersion} = `httpd -v`             unless  $versions{apacheVersion} ;
-        $versions{apacheVersion} = `httpd2 -v`            unless  $versions{apacheVersion} ;
-        $versions{apacheVersion} = `apache2 -v`           unless  $versions{apacheVersion} ;
-        $versions{apacheVersion} = `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
+        $versions{apacheVersion} = `httpd -v`             unless $versions{apacheVersion};
+        $versions{apacheVersion} = `httpd2 -v`            unless $versions{apacheVersion};
+        $versions{apacheVersion} = `apache2 -v`           unless $versions{apacheVersion};
+        $versions{apacheVersion} = `/usr/sbin/apache2 -v` unless $versions{apacheVersion};
     }
     $versions{mysqlVersion} = $mysqlVersion;
     return %versions;
@@ -751,13 +761,12 @@ sub get_versions {
 
 sub tz {
     my $self = shift;
-    if (!defined $context->{tz}) {
+    if ( !defined $context->{tz} ) {
         my $timezone = $context->{config}->timezone;
-        $context->{tz} = DateTime::TimeZone->new(name => $timezone);
+        $context->{tz} = DateTime::TimeZone->new( name => $timezone );
     }
     return $context->{tz};
 }
-
 
 =head2 IsSuperLibrarian
 
@@ -769,6 +778,7 @@ sub IsSuperLibrarian {
     my $userenv = C4::Context->userenv;
 
     unless ( $userenv and exists $userenv->{flags} ) {
+
         # If we reach this without a user environment,
         # assume that we're running from a command-line script,
         # and act as a superlibrarian.
@@ -776,7 +786,7 @@ sub IsSuperLibrarian {
         return 1;
     }
 
-    return ($userenv->{flags}//0) % 2;
+    return ( $userenv->{flags} // 0 ) % 2;
 }
 
 =head2 interface
@@ -790,9 +800,9 @@ Sets the current interface for later retrieval in any Perl module
 =cut
 
 sub interface {
-    my ($class, $interface) = @_;
+    my ( $class, $interface ) = @_;
 
-    if (defined $interface) {
+    if ( defined $interface ) {
         $interface = lc $interface;
         if (   $interface eq 'api'
             || $interface eq 'opac'
@@ -812,7 +822,7 @@ sub interface {
 
 # always returns a string for OK comparison via "eq" or "ne"
 sub mybranch {
-    C4::Context->userenv           or return '';
+    C4::Context->userenv or return '';
     return C4::Context->userenv->{branch} || '';
 }
 
@@ -827,10 +837,10 @@ sub mybranch {
 
 sub only_my_library {
     return
-         C4::Context->preference('IndependentBranches')
-      && C4::Context->userenv
-      && !C4::Context->IsSuperLibrarian()
-      && C4::Context->userenv->{branch};
+           C4::Context->preference('IndependentBranches')
+        && C4::Context->userenv
+        && !C4::Context->IsSuperLibrarian()
+        && C4::Context->userenv->{branch};
 }
 
 =head3 temporary_directory
@@ -840,7 +850,7 @@ Returns root directory for temporary storage
 =cut
 
 sub temporary_directory {
-    my ( $class ) = @_;
+    my ($class) = @_;
     return C4::Context->config('tmp_path') || File::Spec->tmpdir;
 }
 
@@ -881,9 +891,9 @@ We are relying on the convention of the value being "on" or "ON" here.
 
 sub https_enabled {
     my $https_enabled = 0;
-    my $env_https = $ENV{HTTPS};
-    if ($env_https){
-        if ($env_https =~ /^ON$/i){
+    my $env_https     = $ENV{HTTPS};
+    if ($env_https) {
+        if ( $env_https =~ /^ON$/i ) {
             $https_enabled = 1;
         }
     }
@@ -902,7 +912,7 @@ This method returns a boolean representing the install status of the Koha instan
 
 sub needs_install {
     my ($self) = @_;
-    return ($self->preference('Version')) ? 0 : 1;
+    return ( $self->preference('Version') ) ? 0 : 1;
 }
 
 =head3 psgi_env
@@ -914,7 +924,7 @@ this is a PSGI app or a CGI app, and implementing code as appropriate.
 =cut
 
 sub psgi_env {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return any { /^(psgi\.|plack\.|PLACK_ENV$)/i } keys %ENV;
 }
 
@@ -928,9 +938,9 @@ app
 
 #NOTE: This is not a very robust method but it's the best we have so far
 sub is_internal_PSGI_request {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $is_internal = 0;
-    if( $self->psgi_env && ( $ENV{REQUEST_URI} !~ /^(\/intranet|\/opac)/ ) ) {
+    if ( $self->psgi_env && ( $ENV{REQUEST_URI} !~ /^(\/intranet|\/opac)/ ) ) {
         $is_internal = 1;
     }
     return $is_internal;

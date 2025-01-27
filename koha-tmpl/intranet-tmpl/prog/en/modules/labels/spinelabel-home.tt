@@ -4,12 +4,13 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% t("Quick spine label creator") | html %] &rsaquo;
-        [% t("Cataloging") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Quick spine label creator") | html %]
+        &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="labels_spinelabel-home" class="tools labels">
@@ -29,29 +30,28 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='cat-menu' %]
-
-<h1>Quick spine label creator</h1>
-                <form action="/cgi-bin/koha/labels/spinelabel-print.pl" method="get" id="spinelabelprint">
-				<fieldset class="brief">
-				<ol>
-					<li><label for="barcode">Barcode: </label>
-                        <input type="text" name="barcode" id="barcode" class="focus" required="required" />
-					</li>
-				</ol>
-				</fieldset>
-                    <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="View spine label" />
-                    </fieldset>
-				</form>
-
+    <h1>Quick spine label creator</h1>
+    <form action="/cgi-bin/koha/labels/spinelabel-print.pl" method="get" id="spinelabelprint">
+        <fieldset class="brief">
+            <ol>
+                <li
+                    ><label for="barcode">Barcode: </label>
+                    <input type="text" name="barcode" id="barcode" class="focus" required="required" />
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="View spine label" />
+        </fieldset>
+    </form>
 [% END %]
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
-            $("#spinelabelprint").on("submit", function(e){
+        $(document).ready(function () {
+            $("#spinelabelprint").on("submit", function (e) {
                 e.preventDefault();
                 var params = $(this).serialize();
-                openWindow("/cgi-bin/koha/labels/spinelabel-print.pl?" + params,"Print spine label",400,400);
+                openWindow("/cgi-bin/koha/labels/spinelabel-print.pl?" + params, "Print spine label", 400, 400);
                 $("#barcode").val("").focus();
             });
         });

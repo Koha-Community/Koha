@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 NAME
 
 opac-ISBDdetail.pl - script to show a biblio in ISBD format
@@ -44,17 +43,17 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( parametrized_url output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Biblio qw(
     CountItemsIssued
     GetISBDView
     GetMarcISSN
     TransformMarcToKoha
 );
-use C4::Record qw( marc2cites );;
+use C4::Record   qw( marc2cites );
 use C4::Reserves qw( IsAvailableForItemLevelRequest );
-use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
-use C4::Koha qw(
+use C4::Serials  qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
+use C4::Koha     qw(
     GetNormalizedEAN
     GetNormalizedISBN
     GetNormalizedOCLCNumber
@@ -67,11 +66,11 @@ use Koha::RecordProcessor;
 use Koha::Biblios;
 use Koha::Util::MARC;
 
-my $query = CGI->new();
+my $query        = CGI->new();
 my $biblionumber = $query->param('biblionumber');
 my $biblio;
 $biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata', 'items' ] } ) if $biblionumber;
-if( !$biblio ) {
+if ( !$biblio ) {
     print $query->redirect('/cgi-bin/koha/errors/404.pl');
     exit;
 }
@@ -91,21 +90,23 @@ my $patron = Koha::Patrons->find($loggedinuser);
 my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');
 
 unless ( $patron and $patron->category->override_hidden_items ) {
+
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems
-    if ( $biblio->hidden_in_opac({ rules => $opachiddenitems_rules }) ) {
-        print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
+    if ( $biblio->hidden_in_opac( { rules => $opachiddenitems_rules } ) ) {
+        print $query->redirect('/cgi-bin/koha/errors/404.pl');    # escape early
         exit;
     }
 }
 
 my $record = $biblio->metadata->record;
-my @items  = $biblio->items->filter_by_visible_in_opac({ patron => $patron })->as_list;
+my @items  = $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->as_list;
 
 my $metadata_extractor = $biblio->metadata_extractor;
 
 my $record_processor = Koha::RecordProcessor->new(
-    {   filters => [ 'EmbedItems', 'ViewPolicy' ],
+    {
+        filters => [ 'EmbedItems', 'ViewPolicy' ],
         options => {
             interface     => 'opac',
             frameworkcode => $biblio->frameworkcode,
@@ -116,14 +117,15 @@ my $record_processor = Koha::RecordProcessor->new(
 $record_processor->process($record);
 
 # get biblionumbers stored in the cart
-if(my $cart_list = $query->cookie("bib_list")){
-    my @cart_list = split(/\//, $cart_list);
-    if ( grep {$_ eq $biblionumber} @cart_list) {
+if ( my $cart_list = $query->cookie("bib_list") ) {
+    my @cart_list = split( /\//, $cart_list );
+    if ( grep { $_ eq $biblionumber } @cart_list ) {
         $template->param( incart => 1 );
     }
 }
 
 my $marcflavour = C4::Context->preference("marcflavour");
+
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
@@ -145,23 +147,23 @@ $template->param(
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my $dat                 = TransformMarcToKoha({ record => $record });
+my $dat                 = TransformMarcToKoha( { record => $record } );
 
-my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
+my @subscriptions = SearchSubscriptions( { biblionumber => $biblionumber, orderby => 'title' } );
 my @subs;
 foreach my $subscription (@subscriptions) {
     my %cell;
-	my $serials_to_display;
+    my $serials_to_display;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
     $cell{branchcode}        = $subscription->{branchcode};
 
     #get the three latest serials.
-	$serials_to_display = $subscription->{opacdisplaycount};
-	$serials_to_display = C4::Context->preference('OPACSerialIssueDisplayCount') unless $serials_to_display;
-	$cell{opacdisplaycount} = $serials_to_display;
+    $serials_to_display     = $subscription->{opacdisplaycount};
+    $serials_to_display     = C4::Context->preference('OPACSerialIssueDisplayCount') unless $serials_to_display;
+    $cell{opacdisplaycount} = $serials_to_display;
     $cell{latestserials} =
-      GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
+        GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     push @subs, \%cell;
 }
 
@@ -170,11 +172,13 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
 );
 
-my $res = GetISBDView({
-    'record'    => $record,
-    'template'  => 'opac',
-    'framework' => $biblio->frameworkcode
-});
+my $res = GetISBDView(
+    {
+        'record'    => $record,
+        'template'  => 'opac',
+        'framework' => $biblio->frameworkcode
+    }
+);
 
 # Count the number of items that allow holds at the 'All libraries' rule level
 my $holdable_items = $biblio->items->filter_by_for_hold->count;
@@ -198,13 +202,13 @@ $template->param(
 
 #Search for title in links
 my $control_number = $metadata_extractor->get_control_number();
-my $marcissns = GetMarcISSN ( $record, $marcflavour );
-my $issn = $marcissns->[0] || '';
+my $marcissns      = GetMarcISSN( $record, $marcflavour );
+my $issn           = $marcissns->[0] || '';
 
-if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
-    $dat->{title} =~ s/\/+$//; # remove trailing slash
-    $dat->{title} =~ s/\s+$//; # remove trailing space
-    my $oclc_no =  Koha::Util::MARC::oclc_number( $record );
+if ( my $search_for_title = C4::Context->preference('OPACSearchForTitleIn') ) {
+    $dat->{title} =~ s/\/+$//;    # remove trailing slash
+    $dat->{title} =~ s/\s+$//;    # remove trailing space
+    my $oclc_no = Koha::Util::MARC::oclc_number($record);
     $search_for_title = parametrized_url(
         $search_for_title,
         {
@@ -217,16 +221,15 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
             OCLC_NO       => $oclc_no,
         }
     );
-    $template->param('OPACSearchForTitleIn' => $search_for_title);
+    $template->param( 'OPACSearchForTitleIn' => $search_for_title );
 }
 
-if( C4::Context->preference('ArticleRequests') ) {
-    my $itemtype = Koha::ItemTypes->find($biblio->itemtype);
-    my $artreqpossible = $patron
-        ? $biblio->can_article_request( $patron )
-        : $itemtype
-        ? $itemtype->may_article_request
-        : q{};
+if ( C4::Context->preference('ArticleRequests') ) {
+    my $itemtype = Koha::ItemTypes->find( $biblio->itemtype );
+    my $artreqpossible =
+          $patron   ? $biblio->can_article_request($patron)
+        : $itemtype ? $itemtype->may_article_request
+        :             q{};
     $template->param( artreqpossible => $artreqpossible );
 }
 

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,16 +20,16 @@
 use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
 use C4::Output qw( output_html_with_http_headers );
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number) = @_;
-my $function_name= "106".(int(rand(100000))+1);
-my $res="
+    my ( $dbh, $record, $tagslib, $field_number ) = @_;
+    my $function_name = "106" . ( int( rand(100000) ) + 1 );
+    my $res           = "
 <script>
 function Clic$field_number(ev) {
         ev.preventDefault();
@@ -41,23 +40,27 @@ function Clic$field_number(ev) {
 </script>
 ";
 
-return ($field_number,$res);
+    return ( $field_number, $res );
 }
-sub plugin {
-my ($input) = @_;
-	my $index= $input->param('index');
-	my $result= $input->param('result') || q{};
 
-	my $dbh = C4::Context->dbh;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_106.tt",
-			     query => $input,
-			     type => "intranet",
-			     flagsrequired => {editcatalogue => '*'},
-			     });
- 	my $f1 = substr($result,0,1);
-	$template->param(index => $index,
-							"f1$f1" => $f1
- );
-        output_html_with_http_headers $input, $cookie, $template->output;
+sub plugin {
+    my ($input) = @_;
+    my $index   = $input->param('index');
+    my $result  = $input->param('result') || q{};
+
+    my $dbh = C4::Context->dbh;
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_106.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
+    my $f1 = substr( $result, 0, 1 );
+    $template->param(
+        index   => $index,
+        "f1$f1" => $f1
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }

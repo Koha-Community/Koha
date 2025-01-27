@@ -20,11 +20,11 @@
 #
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use C4::ClassSortRoutine qw( GetSortRoutineNames );
+use C4::Output            qw( output_html_with_http_headers );
+use C4::ClassSortRoutine  qw( GetSortRoutineNames );
 use C4::ClassSplitRoutine qw( GetSplitRoutineNames );
 use Koha::ClassSources;
 use Koha::ClassSortRules;
@@ -43,25 +43,23 @@ my $used             = $input->param('used');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/classsources.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_classifications' },
+        template_name => "admin/classsources.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_classifications' },
     }
 );
 
 my @messages;
 
 if ( $op eq "add_source" ) {
-    my $class_source =
-      $cn_source ? Koha::ClassSources->find($cn_source) : undef;
+    my $class_source = $cn_source ? Koha::ClassSources->find($cn_source) : undef;
     $template->param(
         class_source => $class_source,
         sort_rules   => Koha::ClassSortRules->search,
         split_rules  => Koha::ClassSplitRules->search,
     );
-}
-elsif ( $op eq "cud-add_source_validate" ) {
+} elsif ( $op eq "cud-add_source_validate" ) {
     my $class_source = Koha::ClassSources->find($cn_source);
     if ($class_source) {
         $class_source->set(
@@ -75,15 +73,13 @@ elsif ( $op eq "cud-add_source_validate" ) {
         eval { $class_source->store; };
         if ($@) {
             push @messages,
-              { type => 'error', code => 'error_on_update_source' };
-        }
-        else {
+                { type => 'error', code => 'error_on_update_source' };
+        } else {
             push @messages,
-              { type => 'message', code => 'success_on_update_source' };
+                { type => 'message', code => 'success_on_update_source' };
         }
 
-    }
-    else {
+    } else {
         $class_source = Koha::ClassSource->new(
             {
                 cn_source        => $cn_source,
@@ -96,54 +92,45 @@ elsif ( $op eq "cud-add_source_validate" ) {
         eval { $class_source->store; };
         if ($@) {
             push @messages,
-              { type => 'error', code => 'error_on_insert_source' };
-        }
-        else {
+                { type => 'error', code => 'error_on_insert_source' };
+        } else {
             push @messages,
-              { type => 'message', code => 'success_on_insert_source' };
+                { type => 'message', code => 'success_on_insert_source' };
         }
     }
 
     $op = 'list';
-}
-elsif ( $op eq "cud-delete_source_confirmed" ) {
+} elsif ( $op eq "cud-delete_source_confirmed" ) {
     my $class_source = Koha::ClassSources->find($cn_source);
-    my $deleted = eval { $class_source->delete };
+    my $deleted      = eval { $class_source->delete };
     if ( $@ or not $deleted ) {
         push @messages, { type => 'error', code => 'error_on_delete_source' };
-    }
-    else {
+    } else {
         push @messages,
-          { type => 'message', code => 'success_on_delete_source' };
+            { type => 'message', code => 'success_on_delete_source' };
     }
 
     $op = 'list';
-}
-elsif ( $op eq "add_sort_rule" ) {
-    my $sort_rule =
-      $class_sort_rule ? Koha::ClassSortRules->find($class_sort_rule) : undef;
+} elsif ( $op eq "add_sort_rule" ) {
+    my $sort_rule = $class_sort_rule ? Koha::ClassSortRules->find($class_sort_rule) : undef;
     $template->param(
         sort_rule     => $sort_rule,
         sort_routines => get_class_sort_routines(),
     );
-}
-elsif ( $op eq "cud-add_sort_rule_validate" ) {
+} elsif ( $op eq "cud-add_sort_rule_validate" ) {
     my $sort_rule = Koha::ClassSortRules->find($class_sort_rule);
     if ($sort_rule) {
-        $sort_rule->set(
-            { description => $description, sort_routine => $sort_routine } );
+        $sort_rule->set( { description => $description, sort_routine => $sort_routine } );
         eval { $sort_rule->store; };
         if ($@) {
             push @messages,
-              { type => 'error', code => 'error_on_update_sort_rule' };
-        }
-        else {
+                { type => 'error', code => 'error_on_update_sort_rule' };
+        } else {
             push @messages,
-              { type => 'message', code => 'success_on_update_sort_rule' };
+                { type => 'message', code => 'success_on_update_sort_rule' };
         }
 
-    }
-    else {
+    } else {
         $sort_rule = Koha::ClassSortRule->new(
             {
                 class_sort_rule => $class_sort_rule,
@@ -154,42 +141,37 @@ elsif ( $op eq "cud-add_sort_rule_validate" ) {
         eval { $sort_rule->store; };
         if ($@) {
             push @messages,
-              { type => 'error', code => 'error_on_insert_sort_rule' };
-        }
-        else {
+                { type => 'error', code => 'error_on_insert_sort_rule' };
+        } else {
             push @messages,
-              { type => 'message', code => 'success_on_insert_sort_rule' };
+                { type => 'message', code => 'success_on_insert_sort_rule' };
         }
     }
     $op = 'list';
-}
-elsif ( $op eq "cud-delete_sort_rule" ) {
+} elsif ( $op eq "cud-delete_sort_rule" ) {
     my $sort_rule = Koha::ClassSortRules->find($class_sort_rule);
-    my $deleted = eval { $sort_rule->delete };
+    my $deleted   = eval { $sort_rule->delete };
     if ( $@ or not $deleted ) {
         push @messages,
-          { type => 'error', code => 'error_on_delete_sort_rule' };
-    }
-    else {
+            { type => 'error', code => 'error_on_delete_sort_rule' };
+    } else {
         push @messages,
-          { type => 'message', code => 'success_on_delete_sort_rule' };
+            { type => 'message', code => 'success_on_delete_sort_rule' };
     }
     $op = 'list';
-}
-elsif ( $op eq "add_split_rule" ) {
+} elsif ( $op eq "add_split_rule" ) {
     my $split_rule =
-      $class_split_rule
-      ? Koha::ClassSplitRules->find($class_split_rule)
-      : undef;
+        $class_split_rule
+        ? Koha::ClassSplitRules->find($class_split_rule)
+        : undef;
     $template->param(
         split_rule     => $split_rule,
         split_routines => get_class_split_routines(),
     );
-}
-elsif ( $op eq "cud-add_split_rule_validate" ) {
+} elsif ( $op eq "cud-add_split_rule_validate" ) {
     my $split_rule = Koha::ClassSplitRules->find($class_split_rule);
 
-    @split_regex =  grep {!/^$/} @split_regex; # Remove empty
+    @split_regex = grep { !/^$/ } @split_regex;    # Remove empty
     if ($split_rule) {
         $split_rule->set(
             {
@@ -198,21 +180,19 @@ elsif ( $op eq "cud-add_split_rule_validate" ) {
             }
         );
         eval {
-            $split_rule->regexs(\@split_regex)
+            $split_rule->regexs( \@split_regex )
                 if $split_routine eq 'RegEx';
             $split_rule->store;
         };
         if ($@) {
             push @messages,
-              { type => 'error', code => 'error_on_update_split_rule' };
-        }
-        else {
+                { type => 'error', code => 'error_on_update_split_rule' };
+        } else {
             push @messages,
-              { type => 'message', code => 'success_on_update_split_rule' };
+                { type => 'message', code => 'success_on_update_split_rule' };
         }
 
-    }
-    else {
+    } else {
         $split_rule = Koha::ClassSplitRule->new(
             {
                 class_split_rule => $class_split_rule,
@@ -225,25 +205,22 @@ elsif ( $op eq "cud-add_split_rule_validate" ) {
         if ($@) {
             warn $@;
             push @messages,
-              { type => 'error', code => 'error_on_insert_split_rule' };
-        }
-        else {
+                { type => 'error', code => 'error_on_insert_split_rule' };
+        } else {
             push @messages,
-              { type => 'message', code => 'success_on_insert_split_rule' };
+                { type => 'message', code => 'success_on_insert_split_rule' };
         }
     }
     $op = 'list';
-}
-elsif ( $op eq "cud-delete_split_rule" ) {
+} elsif ( $op eq "cud-delete_split_rule" ) {
     my $split_rule = Koha::ClassSplitRules->find($class_split_rule);
-    my $deleted = eval { $split_rule->delete };
+    my $deleted    = eval { $split_rule->delete };
     if ( $@ or not $deleted ) {
         push @messages,
-          { type => 'error', code => 'error_on_delete_split_rule' };
-    }
-    else {
+            { type => 'error', code => 'error_on_delete_split_rule' };
+    } else {
         push @messages,
-          { type => 'message', code => 'success_on_delete_split_rule' };
+            { type => 'message', code => 'success_on_delete_split_rule' };
     }
     $op = 'list';
 }

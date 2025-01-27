@@ -72,18 +72,17 @@ sub filter {
 
     if ( ref($precord) eq 'ARRAY' ) {
         @records = @{$precord};
-    }
-    else {
+    } else {
         push @records, $precord;
     }
 
-    my $params = $self->params;
-    my $interface     = $params->{options}->{interface} // 'opac';
+    my $params        = $self->params;
+    my $interface     = $params->{options}->{interface}     // 'opac';
     my $frameworkcode = $params->{options}->{frameworkcode} // q{};
 
     foreach my $current_record (@records) {
-        my $result        = $current_record;
-        my $hide          = _should_hide_on_interface();
+        my $result = $current_record;
+        my $hide   = _should_hide_on_interface();
 
         my $marcsubfieldstructure = C4::Biblio::GetMarcStructure( 0, $frameworkcode, { unsafe => 1 } );
 
@@ -124,7 +123,7 @@ sub _filter_field {
             # visibility is a "level" (-9 to +9), default to 0
             # -8 is flagged, and 9/-9 are not implemented.
             my $visibility =
-              $marcsubfieldstructure->{$tag}->{$subtag}->{hidden};
+                $marcsubfieldstructure->{$tag}->{$subtag}->{hidden};
             $visibility //= 0;
             if ( $hide->{$interface}->{$visibility} ) {
 
@@ -132,8 +131,7 @@ sub _filter_field {
                 # this detects that case to delete the field.
                 if ( scalar $field->subfields() <= 1 ) {
                     $result->delete_fields($field);
-                }
-                else {
+                } else {
                     $field->delete_subfield( code => $subtag );
                 }
             }
@@ -253,8 +251,7 @@ sub should_hide_marc {
                     my $shouldhide = $hide->{$interface}->{$hidden};
                     if ($shouldhide) {
                         $shouldhidemarc{$field} = 1;
-                    }
-                    elsif ( !exists $shouldhidemarc{$field} ) {
+                    } elsif ( !exists $shouldhidemarc{$field} ) {
                         $shouldhidemarc{$field} = 0;
                     }
                 }

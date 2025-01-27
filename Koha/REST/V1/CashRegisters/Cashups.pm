@@ -48,8 +48,7 @@ sub list {
     return try {
         my $cashups = $c->objects->search( $register->cashups );
         return $c->render( status => 200, openapi => $cashups );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -73,8 +72,7 @@ sub get {
             status  => 200,
             openapi => $c->objects->to_api($cashup),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     }
 }

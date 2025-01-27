@@ -31,9 +31,10 @@ use Koha::DateUtils qw(output_pref dt_from_string);
 
 my $input = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $input->cookie('CGISESSID'),
-    { circulate => 'circulate_remaining_permissions' } );
+my ($auth_status) = check_cookie_auth(
+    $input->cookie('CGISESSID'),
+    { circulate => 'circulate_remaining_permissions' }
+);
 
 if ( $auth_status ne "ok" ) {
     exit 0;
@@ -46,32 +47,32 @@ my $itemnumber     = $input->param('itemnumber');
 my $borrowernumber = $input->param('borrowernumber');
 my $override_limit = $input->param('override_limit');
 my $branchcode     = $input->param('branchcode')
-  || C4::Context->userenv->{'branch'};
-my $seen           = $input->param('seen');
+    || C4::Context->userenv->{'branch'};
+my $seen = $input->param('seen');
 my $date_due;
 if ( $input->param('date_due') ) {
     $date_due = dt_from_string( scalar $input->param('date_due') );
 }
 
 my $data;
-$data->{itemnumber} = $itemnumber;
+$data->{itemnumber}     = $itemnumber;
 $data->{borrowernumber} = $borrowernumber;
-$data->{branchcode} = $branchcode;
+$data->{branchcode}     = $branchcode;
 
 my $patron = Koha::Patrons->find($borrowernumber);
-my $item = Koha::Items->find($itemnumber);
+my $item   = Koha::Items->find($itemnumber);
 
 ( $data->{renew_okay}, $data->{error} ) =
     CanBookBeRenewed( $patron, $item->checkout, $override_limit );
 
 # If we're allowing reserved items to be renewed...
-if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference('AllowRenewalOnHoldOverride')) {
+if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference('AllowRenewalOnHoldOverride') ) {
     $data->{renew_okay} = 1;
-    $data->{error} = undef;
+    $data->{error}      = undef;
 }
 
-if ( $data->{renew_okay} || ( $seen && $data->{error} eq 'too_unseen') ) {
-    try{
+if ( $data->{renew_okay} || ( $seen && $data->{error} eq 'too_unseen' ) ) {
+    try {
         $date_due = AddRenewal(
             {
                 borrowernumber => $borrowernumber,
@@ -81,9 +82,9 @@ if ( $data->{renew_okay} || ( $seen && $data->{error} eq 'too_unseen') ) {
                 seen           => $seen
             }
         );
-        $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );
+        $data->{date_due}   = output_pref( { dt => $date_due, as_due_date => 1 } );
         $data->{renew_okay} = 1;
-        $data->{error} = undef;
+        $data->{error}      = undef;
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Checkout::FailedRenewal' ) {
             $data->{error} = 'renewal_failed';

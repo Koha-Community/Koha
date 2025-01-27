@@ -50,18 +50,18 @@ OIDs and diagnostic codes used in Z39.50
 
 use constant {
     UNIMARC_OID => '1.2.840.10003.5.1',
-    USMARC_OID => '1.2.840.10003.5.10',
+    USMARC_OID  => '1.2.840.10003.5.10',
     MARCXML_OID => '1.2.840.10003.5.109.10'
 };
 
 use constant {
-    ERR_TEMPORARY_ERROR => 2,
+    ERR_TEMPORARY_ERROR      => 2,
     ERR_PRESENT_OUT_OF_RANGE => 13,
-    ERR_RECORD_TOO_LARGE => 16,
-    ERR_NO_SUCH_RESULTSET => 30,
-    ERR_SEARCH_FAILED => 125,
-    ERR_SYNTAX_UNSUPPORTED => 239,
-    ERR_DB_DOES_NOT_EXIST => 235,
+    ERR_RECORD_TOO_LARGE     => 16,
+    ERR_NO_SUCH_RESULTSET    => 30,
+    ERR_SEARCH_FAILED        => 125,
+    ERR_SYNTAX_UNSUPPORTED   => 239,
+    ERR_DB_DOES_NOT_EXIST    => 235,
 };
 
 =head1 FUNCTIONS
@@ -82,11 +82,14 @@ Instantiate a Session
 sub new {
     my ( $class, $args ) = @_;
 
-    my $self = bless( {
-        %$args,
-        logger => Koha::Logger->get({ interface => 'z3950' }),
-        resultsets => {},
-    }, $class );
+    my $self = bless(
+        {
+            %$args,
+            logger     => Koha::Logger->get( { interface => 'z3950' } ),
+            resultsets => {},
+        },
+        $class
+    );
 
     if ( $self->{server}->{debug} ) {
         $self->{logger}->debug_to_screen();
@@ -118,7 +121,7 @@ sub search_handler {
     my $query = $args->{QUERY};
     $self->log_info("received search for '$query', (RS $args->{SETNAME})");
 
-    my ($resultset, $hits) = $self->start_search( $args, $self->{server}->{num_to_prefetch} );
+    my ( $resultset, $hits ) = $self->start_search( $args, $self->{server}->{num_to_prefetch} );
     return unless $resultset;
 
     $args->{HITS} = $hits;
@@ -140,11 +143,12 @@ sub fetch_handler {
 
     my $server = $self->{server};
 
-    my $form_oid = $args->{REQ_FORM} // '';
-    my $composition = $args->{COMP} // '';
+    my $form_oid    = $args->{REQ_FORM} // '';
+    my $composition = $args->{COMP}     // '';
     $self->log_debug("    form OID '$form_oid', composition '$composition'");
 
     my $resultset = $self->{resultsets}->{ $args->{SETNAME} };
+
     # The offset comes across 1-indexed.
     my $offset = $args->{OFFSET} - 1;
 
@@ -165,16 +169,21 @@ sub fetch_handler {
         my $tag = $server->{item_tag};
 
         foreach my $field ( $record->field($tag) ) {
-            $self->add_item_status( $field );
+            $self->add_item_status($field);
         }
     }
 
     if ( $form_oid eq $self->MARCXML_OID && $composition eq 'marcxml' ) {
         $args->{RECORD} = $record->as_xml_record();
-    } elsif ( ( $form_oid eq $self->USMARC_OID || $form_oid eq $self->UNIMARC_OID ) && ( !$composition || $composition eq 'F' ) ) {
+    } elsif ( ( $form_oid eq $self->USMARC_OID || $form_oid eq $self->UNIMARC_OID )
+        && ( !$composition || $composition eq 'F' ) )
+    {
         $args->{RECORD} = $record->as_usmarc();
     } else {
-        $self->set_error( $args, $self->ERR_SYNTAX_UNSUPPORTED, "Unsupported syntax/composition $form_oid/$composition" );
+        $self->set_error(
+            $args, $self->ERR_SYNTAX_UNSUPPORTED,
+            "Unsupported syntax/composition $form_oid/$composition"
+        );
         return;
     }
 }
@@ -214,12 +223,12 @@ Check that the fetch request parameters are within bounds of the result set.
 sub check_fetch {
     my ( $self, $resultset, $args, $offset, $num_records ) = @_;
 
-    if ( !defined( $resultset ) ) {
+    if ( !defined($resultset) ) {
         $self->set_error( $args, ERR_NO_SUCH_RESULTSET, 'No such resultset' );
         return 0;
     }
 
-    if ( $offset < 0 || $offset + $num_records > $resultset->{hits} )  {
+    if ( $offset < 0 || $offset + $num_records > $resultset->{hits} ) {
         $self->set_error( $args, ERR_PRESENT_OUT_OF_RANGE, 'Present request out of range' );
         return 0;
     }
@@ -253,24 +262,24 @@ sub add_item_status {
     my $server = $self->{server};
 
     my $itemnumber_subfield = $server->{itemnumber_subfield};
-    my $add_subfield = $server->{add_item_status_subfield};
-    my $status_strings = $server->{status_strings};
+    my $add_subfield        = $server->{add_item_status_subfield};
+    my $status_strings      = $server->{status_strings};
 
     my $itemnumber = $field->subfield($itemnumber_subfield);
     next unless $itemnumber;
 
-    my $item = Koha::Items->find( $itemnumber );
+    my $item = Koha::Items->find($itemnumber);
     return unless $item;
 
     my $statuses = $item->z3950_status($status_strings);
 
     if ( $server->{add_status_multi_subfield} ) {
-        $field->add_subfields( map { ( $add_subfield, $_ ) } ( @$statuses ? @$statuses : $status_strings->{AVAILABLE} ) );
+        $field->add_subfields( map { ( $add_subfield, $_ ) }
+                ( @$statuses ? @$statuses : $status_strings->{AVAILABLE} ) );
     } else {
         $field->add_subfields( $add_subfield, @$statuses ? join( ', ', @$statuses ) : $status_strings->{AVAILABLE} );
     }
 }
-
 
 =head3 log_debug
 

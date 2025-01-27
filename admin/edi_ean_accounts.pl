@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
 
@@ -27,10 +27,10 @@ my $input = CGI->new();
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'admin/edi_ean_accounts.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => 'edi_manage' },
+        template_name => 'admin/edi_ean_accounts.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { acquisition => 'edi_manage' },
     }
 );
 
@@ -53,15 +53,13 @@ if ( $op eq 'ean_form' ) {
         branches => \@branches,
         ean      => $e,
     );
-}
-elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $e = $schema->resultset('EdifactEan')->find($id);
     $template->param(
         delete_confirm => 1,
         ean            => $e,
     );
-}
-else {
+} else {
     if ( $op eq 'cud-save' ) {
         my $change = $id;
         if ($change) {
@@ -73,8 +71,7 @@ else {
                     id_code_qualifier => scalar $input->param('id_code_qualifier'),
                 }
             );
-        }
-        else {
+        } else {
             my $new_ean = $schema->resultset('EdifactEan')->new(
                 {
                     branchcode        => scalar $input->param('branchcode') || undef,
@@ -85,8 +82,7 @@ else {
             );
             $new_ean->insert();
         }
-    }
-    elsif ( $op eq 'cud-delete_confirmed' ) {
+    } elsif ( $op eq 'cud-delete_confirmed' ) {
         my $e = $schema->resultset('EdifactEan')->find($id);
         $e->delete if $e;
     }

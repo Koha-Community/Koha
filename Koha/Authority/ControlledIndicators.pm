@@ -55,9 +55,9 @@ sub new {
 
 sub get {
     my ( $self, $params ) = @_;
-    my $flavour = $params->{flavour} // q{};
-    my $tag = $params->{biblio_tag} // q{};
-    my $record = $params->{auth_record};
+    my $flavour    = $params->{flavour}    // q{};
+    my $tag        = $params->{biblio_tag} // q{};
+    my $record     = $params->{auth_record};
     my $report_tag = $params->{report_tag} // q{};
 
     $flavour = uc($flavour);
@@ -66,25 +66,23 @@ sub get {
     $self->{_parsed} //= _load_pref();
     my $result = {};
     return $result if !exists $self->{_parsed}->{$flavour};
-    my $rule = $self->{_parsed}->{$flavour}->{$tag} //
-        $self->{_parsed}->{$flavour}->{'*'} //
-        {};
-    my $report_fld = $record ? $record->field( $report_tag ) : undef;
+    my $rule       = $self->{_parsed}->{$flavour}->{$tag} // $self->{_parsed}->{$flavour}->{'*'} // {};
+    my $report_fld = $record ? $record->field($report_tag) : undef;
 
     foreach my $ind ( 'ind1', 'ind2' ) {
-        if( exists $rule->{$ind} ) {
-            if( !$rule->{$ind} ) {
-                $result->{$ind} = $rule->{$ind}; # undef or empty string
-            } elsif( $rule->{$ind} eq 'auth1' ) {
+        if ( exists $rule->{$ind} ) {
+            if ( !$rule->{$ind} ) {
+                $result->{$ind} = $rule->{$ind};    # undef or empty string
+            } elsif ( $rule->{$ind} eq 'auth1' ) {
                 $result->{$ind} = $report_fld->indicator(1) if $report_fld;
-            } elsif( $rule->{$ind} eq 'auth2' ) {
+            } elsif ( $rule->{$ind} eq 'auth2' ) {
                 $result->{$ind} = $report_fld->indicator(2) if $report_fld;
-            } elsif( $rule->{$ind} eq 'thesaurus' ) {
-                my @info = _thesaurus_info( $record );
+            } elsif ( $rule->{$ind} eq 'thesaurus' ) {
+                my @info = _thesaurus_info($record);
                 $result->{$ind} = $info[0];
                 $result->{sub2} = $info[1];
             } else {
-                $result->{$ind} = substr( $rule->{$ind}, 0, 1);
+                $result->{$ind} = substr( $rule->{$ind}, 0, 1 );
             }
         }
     }
@@ -93,24 +91,25 @@ sub get {
 }
 
 sub _load_pref {
-    my $pref = C4::Context->preference('AuthorityControlledIndicators') // q{};
+    my $pref  = C4::Context->preference('AuthorityControlledIndicators') // q{};
     my @lines = split /\r?\n/, $pref;
 
     my $res = {};
     foreach my $line (@lines) {
         $line =~ s/^\s*|\s*$//g;
         next if $line =~ /^#/;
+
         # line should be of the form: marcflavour,fld,ind1:val,ind2:val
         my @temp = split /\s*,\s*/, $line;
         next if @temp < 3;
-        my $flavour = uc($temp[0]);
+        my $flavour = uc( $temp[0] );
         $flavour = 'UNIMARC' if $flavour eq 'UNIMARCAUTH';
         next if $temp[1] !~ /(\d{3}|\*)/;
         my $tag = $1;
-        if( $temp[2] =~ /ind1\s*:\s*(.*)/ ) {
+        if ( $temp[2] =~ /ind1\s*:\s*(.*)/ ) {
             $res->{$flavour}->{$tag}->{ind1} = $1;
         }
-        if( $temp[3] && $temp[3] =~ /ind2\s*:\s*(.*)/ ) {
+        if ( $temp[3] && $temp[3] =~ /ind2\s*:\s*(.*)/ ) {
             $res->{$flavour}->{$tag}->{ind2} = $1;
         }
     }
@@ -118,25 +117,27 @@ sub _load_pref {
 }
 
 sub _thesaurus_info {
+
     # This sub is triggered by the term 'thesaurus' in the controlling pref.
     # The indicator of some MARC21 fields (like 600 ind2) is controlled by
     # authority field 008/11 and 040$f. Additionally, it may also control $2.
-    my ( $record ) = @_;
-    my $code = $record->field('008')
-        ? substr($record->field('008')->data, 11, 1)
+    my ($record) = @_;
+    my $code =
+        $record->field('008')
+        ? substr( $record->field('008')->data, 11, 1 )
         : q{};
     my %thes_mapping = ( a => 0, b => 1, c => 2, d => 3, k => 5, n => 4, r => 7, s => 7, v => 6, z => 7, '|' => 4 );
-    my $ind = $thes_mapping{ $code } // '4';
+    my $ind          = $thes_mapping{$code} // '4';
 
     # Determine optional subfield $2
     my $sub2;
-    if( $ind eq '7' ) {
+    if ( $ind eq '7' ) {
+
         # Important now to return a defined value
-        $sub2 = $code eq 'r'
-            ? 'aat'
-            : $code eq 's'
-            ? 'sears'
-            : $code eq 'z' # pick from 040$f
+        $sub2 =
+              $code eq 'r' ? 'aat'
+            : $code eq 's' ? 'sears'
+            : $code eq 'z'    # pick from 040$f
             ? $record->subfield( '040', 'f' ) // q{}
             : q{};
     }

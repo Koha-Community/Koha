@@ -52,16 +52,16 @@ sub get_fields {
     my $syspref = C4::Context->preference('StatisticsFields');
     my $ret;
 
-    if ( $syspref ) {
+    if ($syspref) {
         my @ret;
-        my @spfields = split ('\|', $syspref);
-        my $schema       = Koha::Database->new()->schema();
-        my @columns = $schema->source('Item')->columns;
+        my @spfields = split( '\|', $syspref );
+        my $schema   = Koha::Database->new()->schema();
+        my @columns  = $schema->source('Item')->columns;
 
-        foreach my $fn ( @spfields ) {
-            push ( @ret, $fn ) if ( grep { $_ eq $fn } @columns );
+        foreach my $fn (@spfields) {
+            push( @ret, $fn ) if ( grep { $_ eq $fn } @columns );
         }
-        $ret = join( '|', @ret);
+        $ret = join( '|', @ret );
     }
     return $ret || 'location|itype|ccode';
 }
@@ -73,11 +73,11 @@ sub get_fields {
 =cut
 
 sub construct_query {
-    my $count    = shift;
-    my $subquery = shift;
-    my $fields = get_fields();
+    my $count         = shift;
+    my $subquery      = shift;
+    my $fields        = get_fields();
     my @select_fields = split '\|', $fields;
-    my $query = "SELECT COUNT(*) as count_$count,";
+    my $query         = "SELECT COUNT(*) as count_$count,";
     $query .= join ',', @select_fields;
 
     $query .= " " . $subquery;
@@ -96,17 +96,17 @@ sub construct_query {
 
 sub GetTotalIssuesTodayByBorrower {
     my ($borrowernumber) = @_;
-    my $dbh   = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     my $query = construct_query "total_issues_today",
         "FROM (
             SELECT it.* FROM issues i, items it WHERE i.itemnumber = it.itemnumber AND i.borrowernumber = ? AND DATE(i.issuedate) = CAST(now() AS date)
             UNION
             SELECT it.* FROM old_issues oi, items it WHERE oi.itemnumber = it.itemnumber AND oi.borrowernumber = ? AND DATE(oi.issuedate) = CAST(now() AS date)
-        ) tmp";     # alias is required by MySQL
+        ) tmp";    # alias is required by MySQL
 
     my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber, $borrowernumber);
+    $sth->execute( $borrowernumber, $borrowernumber );
     return $sth->fetchall_arrayref( {} );
 }
 
@@ -117,9 +117,10 @@ sub GetTotalIssuesTodayByBorrower {
 
 sub GetTotalIssuesReturnedTodayByBorrower {
     my ($borrowernumber) = @_;
-    my $dbh   = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
-    my $query = construct_query "total_issues_returned_today", "FROM old_issues i, items it WHERE i.itemnumber = it.itemnumber AND i.borrowernumber = ? AND DATE(i.returndate) = CAST(now() AS date) ";
+    my $query = construct_query "total_issues_returned_today",
+        "FROM old_issues i, items it WHERE i.itemnumber = it.itemnumber AND i.borrowernumber = ? AND DATE(i.returndate) = CAST(now() AS date) ";
 
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
@@ -133,18 +134,18 @@ sub GetTotalIssuesReturnedTodayByBorrower {
 
 sub GetPrecedentStateByBorrower {
     my ($borrowernumber) = @_;
-    my $dbh   = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     my $query = construct_query "precedent_state",
         "FROM (
             SELECT it.* FROM issues i, items it WHERE i.borrowernumber = ? AND i.itemnumber = it.itemnumber AND DATE(i.issuedate) < CAST(now() AS date)
             UNION
             SELECT it.* FROM old_issues oi, items it WHERE oi.borrowernumber = ? AND oi.itemnumber = it.itemnumber AND DATE(oi.issuedate) < CAST(now() AS date) AND DATE(oi.returndate) = CAST(now() AS date)
-        ) tmp";     # alias is required by MySQL
+        ) tmp";    # alias is required by MySQL
 
     my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber, $borrowernumber);
-    return $sth->fetchall_arrayref( {});
+    $sth->execute( $borrowernumber, $borrowernumber );
+    return $sth->fetchall_arrayref( {} );
 }
 
 1;

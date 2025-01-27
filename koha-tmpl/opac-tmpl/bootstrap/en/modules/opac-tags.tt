@@ -20,13 +20,31 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
-        fieldset { padding : .3em;margin:.3em 0;}
-        #tagcloud    {background-color: #F5F5F5; text-align: justify;padding:7px;}
-        .tag a       {text-decoration: none;}
-        .tag a:hover {text-decoration: underline;}
-        .tag         {display: block; padding-left: 1em;}
-        .tagcount    {display: none;}
-        .cloudweight {display: none;}
+        fieldset {
+            padding: 0.3em;
+            margin: 0.3em 0;
+        }
+        #tagcloud {
+            background-color: #f5f5f5;
+            text-align: justify;
+            padding: 7px;
+        }
+        .tag a {
+            text-decoration: none;
+        }
+        .tag a:hover {
+            text-decoration: underline;
+        }
+        .tag {
+            display: block;
+            padding-left: 1em;
+        }
+        .tagcount {
+            display: none;
+        }
+        .cloudweight {
+            display: none;
+        }
         .tagweight {
             display: none;
             position: relative;
@@ -58,224 +76,242 @@
             [% IF ( OpacNav||loggedinusername ) %]
                 [% column_class = "col-md-12 col-lg-10 order-1" %]
                 <div class="col col-lg-2 order-2 order-lg-1">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                    </div>
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
                 </div>
             [% END %]
 
             <div class="[% column_class | html %]">
-
-                    <div id="usertags" class="maincontent">
-                        <h1>All tags</h1>
-                        [% IF ( ERRORS ) %]
-                            [% FOREACH ERROR IN ERRORS %]
-                                <div class="alert alert-warning">
-                                    <span>There was a problem with this operation:</span>
-                                    [% IF ( ERROR.badparam ) %]
-                                        <span>ERROR: illegal parameter [% ERROR.badparam | html %]</span>
-                                    [% ELSIF ( ERROR.login ) %]
-                                        <span>ERROR: You must log in to complete that action.</span>
-                                    [% ELSIF ( ERROR.failed_delete ) %]
-                                        <span>ERROR: You cannot delete the tag [% ERROR.failed_delete | html %].</span>
-                                        <br /><span>Note: you can only delete your own tags.</span>
-                                    [% ELSIF ( ERROR.scrubbed ) %]
-                                        <span>Note: your tag contained markup code that was removed.</span>
-                                        <br /><span>The tag was added as &quot;[% ERROR.scrubbed | html %]&quot;.</span>
-                                    [% ELSIF ( ERROR.scrubbed_all_bad ) %]
-                                        <span>Note: your tag was entirely markup code.  It was NOT added.</span>
-                                        <br /><span>Please try again with plain text.</span>
-                                    [% ELSE %]<span>Unrecognized error.</span>
-                                    [% END %]
-                                </div>
-                            [% END %]
-                        [% END # /IF ERRORS %]
-
-                        <form method="get" action="opac-tags.pl" class="row">
-                            <div class="col-auto gx-2 ms-2 my-1">
-                                <label>
-                                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span>Tags to show from other users:</span>
-                                    [% ELSE %]
-                                        <span>Tags to show:</span>
-                                    [% END %]
-                                </label>
-                            </div>
-                            <div class="col-auto gx-2 my-1">
-                                <input type="text" name="limit" class="form-control form-control-sm" maxlength="4" size="4" value="[% limit or '100' | html %]" />
-                            </div>
-                            <div class="col-auto gx-2 my-1">
-                                <input type="submit" value="OK" class="btn btn-sm btn-primary" />
-                            </div>
-                        </form>
-                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                            [% UNLESS ( loggedinusername ) %]
-                                <p>
-                                    [% IF Koha.Preference('casAuthentication') %]
-                                        [%# CAS authentication is too complicated for modal window %]
-                                        <a href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
-                                    [% ELSE %]
-                                        <a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
-                                    [% END %]
-                                </p>
-                            [% END %]
-                        [% END %]
-
-                        [% IF ( TAGLOOP ) %]
-                            <div id="tagcloud">
-                                [% FOREACH TAGLOO IN TAGLOOP %]
-                                    <span class="tag tagweight[% TAGLOO.stratum | html %]" id="tag[% loop.count | html %]" style="display:inline;">
-                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |uri %]&amp;q=[% TAGLOO.term |uri %]">[% TAGLOO.term | html %]</a>
-                                    <span class="tagweight">[% TAGLOO.weight_total | html %]</span>
-                                    </span>
+                <div id="usertags" class="maincontent">
+                    <h1>All tags</h1>
+                    [% IF ( ERRORS ) %]
+                        [% FOREACH ERROR IN ERRORS %]
+                            <div class="alert alert-warning">
+                                <span>There was a problem with this operation:</span>
+                                [% IF ( ERROR.badparam ) %]
+                                    <span>ERROR: illegal parameter [% ERROR.badparam | html %]</span>
+                                [% ELSIF ( ERROR.login ) %]
+                                    <span>ERROR: You must log in to complete that action.</span>
+                                [% ELSIF ( ERROR.failed_delete ) %]
+                                    <span>ERROR: You cannot delete the tag [% ERROR.failed_delete | html %].</span>
+                                    <br /><span>Note: you can only delete your own tags.</span>
+                                [% ELSIF ( ERROR.scrubbed ) %]
+                                    <span>Note: your tag contained markup code that was removed.</span>
+                                    <br /><span>The tag was added as &quot;[% ERROR.scrubbed | html %]&quot;.</span>
+                                [% ELSIF ( ERROR.scrubbed_all_bad ) %]
+                                    <span>Note: your tag was entirely markup code. It was NOT added.</span>
+                                    <br /><span>Please try again with plain text.</span>
+                                [% ELSE %]
+                                    <span>Unrecognized error.</span>
                                 [% END %]
                             </div>
-                        [% END # / TAGLOOP%]
-                        [% IF ( add_op ) %]
-                            [% IF ( added_count ) %]
-                                <div class="alert alert-info">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
-                            [% END %]
-                            [% IF ( deleted_count ) %]
-                                <div class="alert alert-info">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
-                            [% END %]
-                        [% END # /add_op %]
+                        [% END %]
+                    [% END # /IF ERRORS %]
 
-                        [% IF ( MY_TAGS ) %]
-                            <form id="deletetags" name="deletetags" method="post" action="opac-tags.pl">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-del" />
-                                <table id="mytagst" class="table table-bordered table-striped">
-                                    <caption>Your tags</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>&nbsp;</th>
-                                            <th>Term</th>
-                                            <th class="all anti-the">Title</th>
-                                            <th>Date added</th>
-                                            <th class="NoSort"></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH MY_TAG IN MY_TAGS %]
-                                            [% IF MY_TAG.visible %]
-                                                <tr id="row[% MY_TAG.tag_id | html %]">
-                                                    <td class="selectcol">
-                                                        <input type="checkbox" class="cb" name="biblionumber" value="[% MY_TAG.biblionumber | html %]" data-title="[% MY_TAG.title | html %]" data-tagname="[% MY_TAG.term | html %]" data-tagid="[% MY_TAG.tag_id | html %]" aria-label="[% check_title | html %]"/>
-                                                    </td>
-                                                    <td class="tagterm">
-                                                        [% IF MY_TAG.approved == 1 %]
-                                                            <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |uri %]&amp;q=[% MY_TAG.term |uri %]">[% MY_TAG.term | html %]</a>
-                                                        [% ELSE %]
-                                                            [% MY_TAG.term | html %] (not approved)
+                    <form method="get" action="opac-tags.pl" class="row">
+                        <div class="col-auto gx-2 ms-2 my-1">
+                            <label>
+                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                    <span>Tags to show from other users:</span>
+                                [% ELSE %]
+                                    <span>Tags to show:</span>
+                                [% END %]
+                            </label>
+                        </div>
+                        <div class="col-auto gx-2 my-1">
+                            <input type="text" name="limit" class="form-control form-control-sm" maxlength="4" size="4" value="[% limit or '100' | html %]" />
+                        </div>
+                        <div class="col-auto gx-2 my-1">
+                            <input type="submit" value="OK" class="btn btn-sm btn-primary" />
+                        </div>
+                    </form>
+                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                        [% UNLESS ( loggedinusername ) %]
+                            <p>
+                                [% IF Koha.Preference('casAuthentication') %]
+                                    [%# CAS authentication is too complicated for modal window %]
+                                    <a href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
+                                [% ELSE %]
+                                    <a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
+                                [% END %]
+                            </p>
+                        [% END %]
+                    [% END %]
+
+                    [% IF ( TAGLOOP ) %]
+                        <div id="tagcloud">
+                            [% FOREACH TAGLOO IN TAGLOOP %]
+                                <span class="tag tagweight[% TAGLOO.stratum | html %]" id="tag[% loop.count | html %]" style="display:inline;">
+                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |uri %]&amp;q=[% TAGLOO.term |uri %]">[% TAGLOO.term | html %]</a>
+                                    <span class="tagweight">[% TAGLOO.weight_total | html %]</span>
+                                </span>
+                            [% END %]
+                        </div>
+                    [% END # / TAGLOOP %]
+                    [% IF ( add_op ) %]
+                        [% IF ( added_count ) %]
+                            <div class="alert alert-info">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
+                        [% END %]
+                        [% IF ( deleted_count ) %]
+                            <div class="alert alert-info">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
+                        [% END %]
+                    [% END # /add_op %]
+
+                    [% IF ( MY_TAGS ) %]
+                        <form id="deletetags" name="deletetags" method="post" action="opac-tags.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-del" />
+                            <table id="mytagst" class="table table-bordered table-striped">
+                                <caption>Your tags</caption>
+                                <thead>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th>Term</th>
+                                        <th class="all anti-the">Title</th>
+                                        <th>Date added</th>
+                                        <th class="NoSort"></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH MY_TAG IN MY_TAGS %]
+                                        [% IF MY_TAG.visible %]
+                                            <tr id="row[% MY_TAG.tag_id | html %]">
+                                                <td class="selectcol">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="cb"
+                                                        name="biblionumber"
+                                                        value="[% MY_TAG.biblionumber | html %]"
+                                                        data-title="[% MY_TAG.title | html %]"
+                                                        data-tagname="[% MY_TAG.term | html %]"
+                                                        data-tagid="[% MY_TAG.tag_id | html %]"
+                                                        aria-label="[% check_title | html %]"
+                                                    />
+                                                </td>
+                                                <td class="tagterm">
+                                                    [% IF MY_TAG.approved == 1 %]
+                                                        <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |uri %]&amp;q=[% MY_TAG.term |uri %]">[% MY_TAG.term | html %]</a>
+                                                    [% ELSE %]
+                                                        [% MY_TAG.term | html %]
+                                                        (not approved)
+                                                    [% END %]
+                                                </td>
+                                                <td>
+                                                    [% IF ( MY_TAG.XSLTBloc ) %]
+                                                        [% MY_TAG.XSLTBloc | $raw %]
+                                                    [% ELSE %]
+                                                        [% INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 %]
+                                                        [% IF ( MY_TAG.author ) %]
+                                                            by [% MY_TAG.author | html %]
                                                         [% END %]
-                                                    </td>
-                                                    <td>
-                                                        [% IF ( MY_TAG.XSLTBloc ) %]
-                                                            [% MY_TAG.XSLTBloc | $raw %]
-                                                        [% ELSE %]
-                                                            [% INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 %]
-                                                            [% IF ( MY_TAG.author ) %]
-                                                                by [% MY_TAG.author | html %]
-                                                            [% END %]
-                                                        [% END # /IF MY_TAG.XSLTBloc %]
+                                                    [% END # /IF MY_TAG.XSLTBloc %]
 
-                                                        [% INCLUDE 'title-actions-menu.inc' items=MY_TAG %]
-                                                    </td>
-                                                    <td data-order="[% MY_TAG.date_created | html %]">
-                                                        [% MY_TAG.date_created | $KohaDates %]
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-link btn-sm remove" data-tagname="[% MY_TAG.term | html %]" data-tagid="[% MY_TAG.tag_id | html %]" data-biblionumber="[% MY_TAG.biblionumber | html %]" type="button"><i class="fa fa-times" aria-hidden="true"></i> Remove tag</button>
-                                                    </td>
-                                                    <td></td>
-                                                </tr>
-                                            [% END %]
+                                                    [% INCLUDE 'title-actions-menu.inc' items=MY_TAG %]
+                                                </td>
+                                                <td data-order="[% MY_TAG.date_created | html %]"> [% MY_TAG.date_created | $KohaDates %] </td>
+                                                <td>
+                                                    <button
+                                                        class="btn btn-link btn-sm remove"
+                                                        data-tagname="[% MY_TAG.term | html %]"
+                                                        data-tagid="[% MY_TAG.tag_id | html %]"
+                                                        data-biblionumber="[% MY_TAG.biblionumber | html %]"
+                                                        type="button"
+                                                        ><i class="fa fa-times" aria-hidden="true"></i> Remove tag</button
+                                                    >
+                                                </td>
+                                                <td></td>
+                                            </tr>
                                         [% END %]
-                                    </tbody>
-                                </table>
-                                <input type="submit" value="Remove selected tags" class="btn btn-danger remove">
-                            </form>
-                        [% END # /MY_TAGS %]
-                    </div> <!-- / .usertags -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                                    [% END %]
+                                </tbody>
+                            </table>
+                            <input type="submit" value="Remove selected tags" class="btn btn-danger remove" />
+                        </form>
+                    [% END # /MY_TAGS %]
+                </div>
+                <!-- / .usertags -->
+            </div>
+            <!-- / .span10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-<script>
-    const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
-    const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
-    const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
-</script>
-[% Asset.js("js/results-list.js") | $raw %]
-<script>
-
-    $(document).ready(function(){
-        $("body").on("click", ".remove", function(e){
-            e.preventDefault();
-            var href;
-            var title;
-            var yes_label;
-            var no_label;
-            var message = "";
-            var tag_delete_form = $("#deletetags");
-            /* Single "Remove from list" link has a biblionumber data-attribute */
-            if( $(this).data("biblionumber") ){
-                /* Use the checkbox with that value to preview the title in the confirmation */
-                var selected_titles = $("#row" + $(this).data("tagid") + " .cb[value='" + $(this).data("biblionumber") + "'");
-                var href = $(this).attr("href");
-            } else {
-                var selected_titles = $(".cb:checked");
-            }
-            if ( selected_titles.size() < 1 ) {
-                alert( _("No item was selected") );
-            } else {
-                if( selected_titles.size() > 1 ){
-                    message = $("<ul></ul>");
-                    title = _("Are you sure you want to remove the selected tags from these titles?");
-                    yes_label = _("Yes, delete tags");
-                    no_label = _("No, do not delete tags");
-                    selected_titles.each(function(){
-                        message.append( "<li><em>" +  $(this).data("title") + "</em> ... <b>Tag:</b> " + $(this).data("tagname") + "</li>" );
-                        tag_delete_form.append( '<input type="hidden" name="del' + $(this).data("tagid") + '" value="del' + $(this).data("tagid") + '" />' );
-                    });
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
+        const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
+        const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
+    </script>
+    [% Asset.js("js/results-list.js") | $raw %]
+    <script>
+        $(document).ready(function () {
+            $("body").on("click", ".remove", function (e) {
+                e.preventDefault();
+                var href;
+                var title;
+                var yes_label;
+                var no_label;
+                var message = "";
+                var tag_delete_form = $("#deletetags");
+                /* Single "Remove from list" link has a biblionumber data-attribute */
+                if ($(this).data("biblionumber")) {
+                    /* Use the checkbox with that value to preview the title in the confirmation */
+                    var selected_titles = $("#row" + $(this).data("tagid") + " .cb[value='" + $(this).data("biblionumber") + "'");
+                    var href = $(this).attr("href");
                 } else {
-                    title = _("Are you sure you want to remove the selected tag from this title?");
-                    yes_label = _("Yes, delete tag");
-                    no_label = _("No, do not delete tag");
-                    selected_titles.each(function(){
-                        message += "<em>" + $(this).data("title") + "</em> ... <b>Tag:</b> " + $(this).data("tagname");
-                        tag_delete_form.append( '<input type="hidden" name="del' + $(this).data("tagid") + '" value="del' + $(this).data("tagid") + '" />' );
+                    var selected_titles = $(".cb:checked");
+                }
+                if (selected_titles.size() < 1) {
+                    alert(_("No item was selected"));
+                } else {
+                    if (selected_titles.size() > 1) {
+                        message = $("<ul></ul>");
+                        title = _("Are you sure you want to remove the selected tags from these titles?");
+                        yes_label = _("Yes, delete tags");
+                        no_label = _("No, do not delete tags");
+                        selected_titles.each(function () {
+                            message.append("<li><em>" + $(this).data("title") + "</em> ... <b>Tag:</b> " + $(this).data("tagname") + "</li>");
+                            tag_delete_form.append('<input type="hidden" name="del' + $(this).data("tagid") + '" value="del' + $(this).data("tagid") + '" />');
+                        });
+                    } else {
+                        title = _("Are you sure you want to remove the selected tag from this title?");
+                        yes_label = _("Yes, delete tag");
+                        no_label = _("No, do not delete tag");
+                        selected_titles.each(function () {
+                            message += "<em>" + $(this).data("title") + "</em> ... <b>Tag:</b> " + $(this).data("tagname");
+                            tag_delete_form.append('<input type="hidden" name="del' + $(this).data("tagid") + '" value="del' + $(this).data("tagid") + '" />');
+                        });
+                    }
+                    confirmModal(message, title, yes_label, no_label, function (result) {
+                        if (result) {
+                            $("#deletetags").submit();
+                        }
                     });
                 }
-                confirmModal( message, title, yes_label, no_label, function( result ){
-                    if( result ){
-                        $("#deletetags").submit();
-                    }
-                });
-            }
+            });
+
+            $("#mytagst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    sorting: [[2, "asc"]],
+                    columnDefs: [
+                        { targets: [0], sortable: false, searchable: false },
+                        { sType: "anti-the", aTargets: ["anti-the"] },
+                        { className: "dtr-control", orderable: false, targets: -1 },
+                        { responsivePriority: 1, targets: 2 },
+                    ],
+                    responsive: {
+                        details: {
+                            type: "column",
+                            target: -1,
+                        },
+                    },
+                })
+            );
         });
-
-        $("#mytagst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sorting": [[ 2, "asc" ]],
-            "columnDefs": [
-                { "targets": [ 0 ], "sortable": false, "searchable": false },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                { "className": 'dtr-control', "orderable": false, "targets": -1 },
-                { responsivePriority: 1, targets: 2 }
-            ],
-            "responsive": {
-                details: {
-                    type: 'column',
-                    target: -1
-                }
-            },
-        }));
-    });
-
-</script>
+    </script>
 [% END %]

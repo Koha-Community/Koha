@@ -25,18 +25,18 @@ use Koha::Patron::Categories;
 
 sub all {
     my ( $self, $params ) = @_;
-    return Koha::Patron::Categories->search($params, { order_by => [ 'description' ] } );
+    return Koha::Patron::Categories->search( $params, { order_by => ['description'] } );
 }
 
 sub limited {
     my ( $self, $params ) = @_;
-    return Koha::Patron::Categories->search_with_library_limits($params, { order_by => [ 'description' ] } );
+    return Koha::Patron::Categories->search_with_library_limits( $params, { order_by => ['description'] } );
 }
 
 sub GetName {
     my ( $self, $categorycode ) = @_;
 
-    return Koha::Patron::Categories->find( $categorycode )->description;
+    return Koha::Patron::Categories->find($categorycode)->description;
 }
 
 sub can_any_reset_password {

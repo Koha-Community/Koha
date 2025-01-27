@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 use C4::Languages;
 use Koha::SearchEngine::Search;
@@ -32,11 +32,11 @@ use Koha::Authorities;
 use Koha::XSLT::Base;
 
 my $query        = CGI->new;
-my $op           = $query->param('op') || '';
+my $op           = $query->param('op')           || '';
 my $authtypecode = $query->param('authtypecode') || '';
-my $index        = $query->param('index') || '';
-my $tagid        = $query->param('tagid') || '';
-my $source       = $query->param('source') || '';
+my $index        = $query->param('index')        || '';
+my $tagid        = $query->param('tagid')        || '';
+my $source       = $query->param('source')       || '';
 my $relationship = $query->param('relationship') || '';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -44,9 +44,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => ( $op eq 'do_search' )
         ? 'authorities/searchresultlist-auth.tt'
         : 'authorities/auth_finder.tt',
-        query           => $query,
-        type            => 'intranet',
-        flagsrequired   => { catalogue => 1 },
+        query         => $query,
+        type          => 'intranet',
+        flagsrequired => { catalogue => 1 },
     }
 );
 
@@ -68,19 +68,18 @@ if ( $op eq "do_search" ) {
     my $startfrom      = $query->param('startfrom')      || 0;
     my $resultsperpage = $query->param('resultsperpage') || 20;
 
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    my $searcher = Koha::SearchEngine::Search->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $builder      = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $searcher     = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
     my $search_query = $builder->build_authorities_query_compat(
-        \@marclist, \@and_or, \@excluding, \@operator,
-        \@value, $authtypecode, $orderby
+        \@marclist, \@and_or,      \@excluding, \@operator,
+        \@value,    $authtypecode, $orderby
     );
     $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');
     my $offset = $startfrom * $resultsperpage;
-    my ( $results, $total ) =
-        $searcher->search_auth_compat( $search_query, $offset,
-        $resultsperpage );
+    my ( $results, $total ) = $searcher->search_auth_compat(
+        $search_query, $offset,
+        $resultsperpage
+    );
 
     # multi page display gestion
     my $displaynext = 0;
@@ -91,7 +90,7 @@ if ( $op eq "do_search" ) {
 
     my @field_data = ();
 
-# get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name)
+    # get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name)
     my @marclist_ini = $query->multi_param('marclist');
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
         push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
@@ -101,13 +100,13 @@ if ( $op eq "do_search" ) {
     }
 
     push @field_data,
-      { term => "value_mainstr", val => scalar $query->param('value_mainstr') || "" };
+        { term => "value_mainstr", val => scalar $query->param('value_mainstr') || "" };
     push @field_data,
-      { term => "value_main", val => scalar $query->param('value_main') || "" };
+        { term => "value_main", val => scalar $query->param('value_main') || "" };
     push @field_data,
-      { term => "value_match", val => scalar $query->param('value_match') || "" };
+        { term => "value_match", val => scalar $query->param('value_match') || "" };
     push @field_data,
-      { term => "value_any", val => scalar $query->param('value_any') || "" };
+        { term => "value_any", val => scalar $query->param('value_any') || "" };
 
     my @numbers = ();
     if ( $total > $resultsperpage ) {
@@ -116,12 +115,12 @@ if ( $op eq "do_search" ) {
                 my $highlight = 0;
                 ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );
                 push @numbers,
-                  {
+                    {
                     number     => $i,
                     highlight  => $highlight,
                     searchdata => \@field_data,
                     startfrom  => ( $i - 1 )
-                  };
+                    };
             }
         }
     }
@@ -130,8 +129,7 @@ if ( $op eq "do_search" ) {
     my $to;
     if ( $total < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
         $to = $total;
-    }
-    else {
+    } else {
         $to = ( ( $startfrom + 1 ) * $resultsperpage );
     }
 
@@ -177,8 +175,7 @@ if ( $op eq "do_search" ) {
         operator_match   => ( @operator > 2 && $operator[2] ) ? $operator[2] : '',
         operator_any     => ( @operator > 3 && $operator[3] ) ? $operator[3] : '',
     );
-}
-else {
+} else {
 
     # special case for UNIMARC field 210c builder
     my $resultstring = $query->param('result') || '';
@@ -186,17 +183,17 @@ else {
 }
 
 $template->param(
-    op            => $op,
-    value_mainstr => scalar $query->param('value_mainstr') || '',
-    value_main    => scalar $query->param('value_main') || '',
-    value_any     => scalar $query->param('value_any') || '',
-    value_match   => scalar $query->param('value_match') || '',
-    tagid         => $tagid,
-    index         => $index,
-    authority_types  => $authority_types,
-    authtypecode  => $authtypecode,
-    source        => $source,
-    relationship  => $relationship,
+    op              => $op,
+    value_mainstr   => scalar $query->param('value_mainstr') || '',
+    value_main      => scalar $query->param('value_main')    || '',
+    value_any       => scalar $query->param('value_any')     || '',
+    value_match     => scalar $query->param('value_match')   || '',
+    tagid           => $tagid,
+    index           => $index,
+    authority_types => $authority_types,
+    authtypecode    => $authtypecode,
+    source          => $source,
+    relationship    => $relationship,
 );
 
 # Print the page

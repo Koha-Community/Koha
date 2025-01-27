@@ -4,21 +4,24 @@ use C4::Context;
 return {
     bug_number  => "31378",
     description => "Add identity_provider and identity_provider_domains configuration tables",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         # Add new permission
-        $dbh->do(qq{
+        $dbh->do(
+            qq{
             INSERT IGNORE permissions (module_bit, code, description)
             VALUES
             ( 3, 'manage_identity_providers', 'Manage authentication providers')
-        });
+        }
+        );
 
         say $out "Added new permission 'manage_identity_providers'";
 
-        unless (TableExists('identity_providers')) {
-            $dbh->do(q{
+        unless ( TableExists('identity_providers') ) {
+            $dbh->do(
+                q{
                 CREATE TABLE `identity_providers` (
                 `identity_provider_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify the provider',
                 `code` varchar(20) NOT NULL COMMENT 'Provider code',
@@ -32,13 +35,15 @@ return {
                 UNIQUE KEY (`code`),
                 KEY `protocol` (`protocol`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            });
+            }
+            );
 
             say $out "Added new table 'identity_providers'";
         }
 
-        unless (TableExists('identity_provider_domains')) {
-            $dbh->do(q{
+        unless ( TableExists('identity_provider_domains') ) {
+            $dbh->do(
+                q{
                 CREATE TABLE `identity_provider_domains` (
                     `identity_provider_domain_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify providers domain',
                     `identity_provider_id` int(11) NOT NULL COMMENT 'Reference to provider',
@@ -58,7 +63,8 @@ return {
                     CONSTRAINT `identity_provider_domain_ibfk_2` FOREIGN KEY (`default_library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE,
                     CONSTRAINT `identity_provider_domain_ibfk_3` FOREIGN KEY (`default_category_id`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            });
+            }
+            );
 
             say $out "Added new table 'identity_provider_domains'";
         }

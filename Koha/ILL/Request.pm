@@ -133,7 +133,7 @@ Initialises an empty processors arrayref
 =cut
 
 sub init_processors {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->{processors} = [];
 }
@@ -148,7 +148,7 @@ Pushes a passed processor function into our processors arrayref
 
 sub push_processor {
     my ( $self, $processor ) = @_;
-    push @{$self->{processors}}, $processor;
+    push @{ $self->{processors} }, $processor;
 }
 
 =head3 ill_batch
@@ -179,8 +179,9 @@ AuthorisedValue object
 =cut
 
 sub statusalias {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return unless $self->status_alias;
+
     # We can't know which result is the right one if there are multiple
     # ILL_STATUS_ALIAS authorised values with the same authorised_value column value
     # so we just use the first
@@ -200,10 +201,8 @@ sub statusalias {
 
 sub illrequestattributes {
     deprecated 'illrequestattributes is DEPRECATED in favor of extended_attributes';
-    my ( $self ) = @_;
-    return Koha::ILL::Request::Attributes->_new_from_dbic(
-        scalar $self->_result->illrequestattributes
-    );
+    my ($self) = @_;
+    return Koha::ILL::Request::Attributes->_new_from_dbic( scalar $self->_result->illrequestattributes );
 }
 
 =head3 illcomments
@@ -211,10 +210,8 @@ sub illrequestattributes {
 =cut
 
 sub illcomments {
-    my ( $self ) = @_;
-    return Koha::ILL::Comments->_new_from_dbic(
-        scalar $self->_result->illcomments
-    );
+    my ($self) = @_;
+    return Koha::ILL::Comments->_new_from_dbic( scalar $self->_result->illcomments );
 }
 
 =head3 comments
@@ -226,10 +223,8 @@ Returns a I<Koha::ILL::Comments> resultset for the linked comments.
 =cut
 
 sub comments {
-    my ( $self ) = @_;
-    return Koha::ILL::Comments->_new_from_dbic(
-        scalar $self->_result->comments
-    );
+    my ($self) = @_;
+    return Koha::ILL::Comments->_new_from_dbic( scalar $self->_result->comments );
 }
 
 =head3 logs
@@ -237,7 +232,7 @@ sub comments {
 =cut
 
 sub logs {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $logger = Koha::ILL::Request::Logger->new;
     return $logger->get_request_logs($self);
 }
@@ -252,7 +247,7 @@ associated with it, or undef if none exists
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $patron_rs = $self->_result->patron;
     return unless $patron_rs;
@@ -315,6 +310,7 @@ sub extended_attributes {
     }
 
     my $rs = $self->_result->extended_attributes;
+
     # We call search to use the filters in Koha::ILL::Request::Attributes->search
     return Koha::ILL::Request::Attributes->_new_from_dbic($rs)->search;
 }
@@ -330,16 +326,19 @@ correct category and records the fact that the status has changed
 =cut
 
 sub status_alias {
-    my ($self, $new_status_alias) = @_;
+    my ( $self, $new_status_alias ) = @_;
 
     my $current_status_alias = $self->get_column('status_alias');
 
     if ($new_status_alias) {
+
         # Keep a record of the previous status before we change it,
         # we might need it
-        $self->{previous_status} = $current_status_alias ?
-            $current_status_alias :
-            scalar $self->status;
+        $self->{previous_status} =
+              $current_status_alias
+            ? $current_status_alias
+            : scalar $self->status;
+
         # This is hackery to enable us to undefine
         # status_alias, since we need to have an overloaded
         # status_alias method to get us around the problem described
@@ -347,20 +346,23 @@ sub status_alias {
         # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
         # We need a way of accepting implied undef, so we can nullify
         # the status_alias column, when called from $self->status
-        my $val = $new_status_alias eq "-1" ? undef : $new_status_alias;
-        my $ret = $self->set( { status_alias => $val } );
+        my $val        = $new_status_alias eq "-1" ? undef : $new_status_alias;
+        my $ret        = $self->set( { status_alias => $val } );
         my $val_to_log = $val ? $new_status_alias : scalar $self->status;
         if ($ret) {
             my $logger = Koha::ILL::Request::Logger->new;
-            $logger->log_status_change({
-                request => $self,
-                value   => $val_to_log
-            });
+            $logger->log_status_change(
+                {
+                    request => $self,
+                    value   => $val_to_log
+                }
+            );
         } else {
             delete $self->{previous_status};
         }
         return $ret;
     }
+
     # We can't know which result is the right one if there are multiple
     # ILL_STATUS_ALIAS authorised values with the same authorised_value column value
     # so we just use the first
@@ -391,19 +393,22 @@ and sends a notice if appropriate
 =cut
 
 sub status {
-    my ( $self, $new_status) = @_;
+    my ( $self, $new_status ) = @_;
 
-    my $current_status = $self->get_column('status');
+    my $current_status       = $self->get_column('status');
     my $current_status_alias = $self->get_column('status_alias');
 
     if ($new_status) {
+
         # Keep a record of the previous status before we change it,
         # we might need it
-        $self->{previous_status} = $current_status_alias ?
-            $current_status_alias :
-            $current_status;
+        $self->{previous_status} =
+              $current_status_alias
+            ? $current_status_alias
+            : $current_status;
         my $ret = $self->set( { status => $new_status } )->store;
         if ($current_status_alias) {
+
             # This is hackery to enable us to undefine
             # status_alias, since we need to have an overloaded
             # status_alias method to get us around the problem described
@@ -414,14 +419,17 @@ sub status {
             $self->status_alias("-1");
         } else {
             my $logger = Koha::ILL::Request::Logger->new;
-            $logger->log_status_change({
-                request => $self,
-                value   => $new_status
-            });
+            $logger->log_status_change(
+                {
+                    request => $self,
+                    value   => $new_status
+                }
+            );
         }
         delete $self->{previous_status};
+
         # If status has changed to cancellation requested, send a notice
-        if ($new_status eq 'CANCREQ') {
+        if ( $new_status eq 'CANCREQ' ) {
             $self->send_staff_notice('ILL_REQUEST_CANCEL');
         }
         return $ret;
@@ -467,8 +475,7 @@ sub load_backend {
     my $backend_name = $backend_id || $self->backend;
 
     unless ( defined $backend_name && $backend_name ne '' ) {
-        Koha::Exceptions::Ill::InvalidBackendId->throw(
-            "An invalid backend ID was requested ('')");
+        Koha::Exceptions::Ill::InvalidBackendId->throw("An invalid backend ID was requested ('')");
     }
 
     my $backend_params = {
@@ -499,7 +506,6 @@ sub load_backend {
     return $self;
 }
 
-
 =head3 _backend
 
     my $backend = $abstract->_backend($new_backend);
@@ -511,7 +517,8 @@ Getter/Setter for our API object.
 
 sub _backend {
     my ( $self, $backend ) = @_;
-    $self->{_my_backend} = $backend if ( $backend );
+    $self->{_my_backend} = $backend if ($backend);
+
     # Dynamically load our backend object, as late as possible.
     $self->load_backend unless ( $self->{_my_backend} );
     return $self->{_my_backend};
@@ -541,6 +548,7 @@ capabilities & custom_capability and their callers.
 sub _backend_capability {
     my ( $self, $name, $args ) = @_;
     my $capability = 0;
+
     # See if capability is defined in backend
     try {
         $capability = $self->_backend->capabilities($name);
@@ -548,6 +556,7 @@ sub _backend_capability {
         warn $_;
         return 0;
     };
+
     # Try to invoke it
     if ( $capability && ref($capability) eq 'CODE' ) {
         return &{$capability}($args);
@@ -567,7 +576,8 @@ Getter/Setter for our config object.
 
 sub _config {
     my ( $self, $config ) = @_;
-    $self->{_my_config} = $config if ( $config );
+    $self->{_my_config} = $config if ($config);
+
     # Load our config object, as late as possible.
     unless ( $self->{_my_config} ) {
         $self->{_my_config} = Koha::ILL::Request::Config->new;
@@ -580,7 +590,7 @@ sub _config {
 =cut
 
 sub metadata {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     if ( $self->_backend->can('metadata') ) {
 
@@ -605,19 +615,19 @@ the end user at any given point.
 =cut
 
 sub _core_status_graph {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return {
         NEW => {
-            prev_actions => [ ],                           # Actions containing buttons
-                                                           # leading to this status
-            id             => 'NEW',                       # ID of this status
-            name           => __('New request'),           # UI name of this status
-            ui_method_name => __('New request'),           # UI name of method leading
-                                                           # to this status
-            method         => 'create',                    # method to this status
-            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ], # buttons to add to all
-                                                           # requests with this status
-            ui_method_icon => 'fa-plus',                   # UI Style class
+            prev_actions   => [],                             # Actions containing buttons
+                                                              # leading to this status
+            id             => 'NEW',                          # ID of this status
+            name           => __('New request'),              # UI name of this status
+            ui_method_name => __('New request'),              # UI name of method leading
+                                                              # to this status
+            method         => 'create',                       # method to this status
+            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ],    # buttons to add to all
+                                                              # requests with this status
+            ui_method_icon => 'fa-plus',                      # UI Style class
         },
         REQ => {
             prev_actions   => [ 'NEW', 'REQREV', 'QUEUED', 'CANCREQ' ],
@@ -647,7 +657,7 @@ sub _core_status_graph {
             ui_method_icon => 'fa-times',
         },
         QUEUED => {
-            prev_actions   => [ ],
+            prev_actions   => [],
             id             => 'QUEUED',
             name           => __('Queued request'),
             ui_method_name => 0,
@@ -656,7 +666,7 @@ sub _core_status_graph {
             ui_method_icon => 0,
         },
         CANCREQ => {
-            prev_actions   => [ 'NEW' ],
+            prev_actions   => ['NEW'],
             id             => 'CANCREQ',
             name           => __('Cancellation requested'),
             ui_method_name => 0,
@@ -665,12 +675,12 @@ sub _core_status_graph {
             ui_method_icon => 0,
         },
         COMP => {
-            prev_actions   => [ 'REQ' ],
+            prev_actions   => ['REQ'],
             id             => 'COMP',
             name           => __('Completed'),
             ui_method_name => __('Mark completed'),
             method         => 'mark_completed',
-            next_actions   => [ 'CHK' ],
+            next_actions   => ['CHK'],
             ui_method_icon => 'fa-check',
         },
         KILL => {
@@ -679,7 +689,7 @@ sub _core_status_graph {
             name           => 0,
             ui_method_name => __('Delete request'),
             method         => 'delete',
-            next_actions   => [ ],
+            next_actions   => [],
             ui_method_icon => 'fa-trash',
         },
         CHK => {
@@ -687,21 +697,22 @@ sub _core_status_graph {
             id             => 'CHK',
             name           => __('Checked out'),
             ui_method_name => __('Check out'),
-            needs_prefs    => [ 'CirculateILL' ],
-            needs_perms    => [ 'user_circulate_circulate_remaining_permissions' ],
+            needs_prefs    => ['CirculateILL'],
+            needs_perms    => ['user_circulate_circulate_remaining_permissions'],
+
             # An array of functions that all must return true
-            needs_all      => [ sub { my $r = shift;  return $r->biblio; } ],
+            needs_all      => [ sub { my $r = shift; return $r->biblio; } ],
             method         => 'check_out',
-            next_actions   => [ ],
+            next_actions   => [],
             ui_method_icon => 'fa-upload',
         },
         RET => {
-            prev_actions   => [ 'CHK' ],
+            prev_actions   => ['CHK'],
             id             => 'RET',
             name           => __('Returned to library'),
             ui_method_name => __('Check in'),
             method         => 'check_in',
-            next_actions   => [ 'COMP' ],
+            next_actions   => ['COMP'],
             ui_method_icon => 'fa-download',
         }
     };
@@ -730,6 +741,7 @@ i.e. each of the graphs need to be correct at the outset of the operation.
 
 sub _status_graph_union {
     my ( $self, $core_status_graph, $backend_status_graph ) = @_;
+
     # Create new status graph with:
     # - all core_status_graph
     # - for-each each backend_status_graph
@@ -742,32 +754,33 @@ sub _status_graph_union {
     #     * update prev_actions with additional prev action
 
     my @core_status_ids = keys %{$core_status_graph};
-    my $status_graph = clone($core_status_graph);
+    my $status_graph    = clone($core_status_graph);
 
     foreach my $backend_status_key ( keys %{$backend_status_graph} ) {
         my $backend_status = $backend_status_graph->{$backend_status_key};
+
         # Add to new status graph
         $status_graph->{$backend_status_key} = $backend_status;
+
         # Update all core methods' next_actions.
-        foreach my $prev_action ( @{$backend_status->{prev_actions}} ) {
+        foreach my $prev_action ( @{ $backend_status->{prev_actions} } ) {
             if ( grep { $prev_action eq $_ } @core_status_ids ) {
                 my @next_actions =
-                     @{$status_graph->{$prev_action}->{next_actions}};
+                    @{ $status_graph->{$prev_action}->{next_actions} };
                 push @next_actions, $backend_status_key
-                    if (!grep(/^$backend_status_key$/, @next_actions));
-                $status_graph->{$prev_action}->{next_actions}
-                    = \@next_actions;
+                    if ( !grep( /^$backend_status_key$/, @next_actions ) );
+                $status_graph->{$prev_action}->{next_actions} = \@next_actions;
             }
         }
+
         # Update all core methods' prev_actions
-        foreach my $next_action ( @{$backend_status->{next_actions}} ) {
+        foreach my $next_action ( @{ $backend_status->{next_actions} } ) {
             if ( grep { $next_action eq $_ } @core_status_ids ) {
                 my @prev_actions =
-                     @{$status_graph->{$next_action}->{prev_actions}};
+                    @{ $status_graph->{$next_action}->{prev_actions} };
                 push @prev_actions, $backend_status_key
-                    if (!grep(/^$backend_status_key$/, @prev_actions));
-                $status_graph->{$next_action}->{prev_actions}
-                    = \@prev_actions;
+                    if ( !grep( /^$backend_status_key$/, @prev_actions ) );
+                $status_graph->{$next_action}->{prev_actions} = \@prev_actions;
             }
         }
     }
@@ -803,16 +816,21 @@ capabilities & custom_capability and their callers.
 
 sub capabilities {
     my ( $self, $status ) = @_;
+
     # Generate up to date status_graph
     my $status_graph = $self->_status_graph_union(
         $self->_core_status_graph,
-        $self->_backend->status_graph({
-            request => $self,
-            other   => {}
-        })
+        $self->_backend->status_graph(
+            {
+                request => $self,
+                other   => {}
+            }
+        )
     );
+
     # Extract available actions from graph.
     return $status_graph->{$status} if $status;
+
     # Or return entire graph.
     return $status_graph;
 }
@@ -837,13 +855,14 @@ capabilities & custom_capability and their callers.
 
 sub custom_capability {
     my ( $self, $candidate, $params ) = @_;
-    foreach my $capability ( values %{$self->capabilities} ) {
+    foreach my $capability ( values %{ $self->capabilities } ) {
         if ( $candidate eq $capability->{method} ) {
-            my $response =
-                $self->_backend->$candidate({
-                    request    => $self,
-                    other      => $params,
-                });
+            my $response = $self->_backend->$candidate(
+                {
+                    request => $self,
+                    other   => $params,
+                }
+            );
             return $self->expand_template($response);
         }
     }
@@ -869,10 +888,9 @@ Return a list of available actions.
 =cut
 
 sub available_actions {
-    my ( $self ) = @_;
-    my $current_action = $self->capabilities($self->status);
-    my @available_actions = map { $self->capabilities($_) }
-        @{$current_action->{next_actions}};
+    my ($self)            = @_;
+    my $current_action    = $self->capabilities( $self->status );
+    my @available_actions = map { $self->capabilities($_) } @{ $current_action->{next_actions} };
     return \@available_actions;
 }
 
@@ -883,9 +901,9 @@ Mark a request as completed (status = COMP).
 =cut
 
 sub mark_completed {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->status('COMP')->store;
-    $self->completed(dt_from_string())->store;
+    $self->completed( dt_from_string() )->store;
     return {
         error   => 0,
         status  => '',
@@ -905,10 +923,13 @@ View and manage an ILL request
 sub backend_illview {
     my ( $self, $params ) = @_;
 
-    my $response = $self->_backend_capability('illview',{
-        request    => $self,
-        other      => $params,
-    });
+    my $response = $self->_backend_capability(
+        'illview',
+        {
+            request => $self,
+            other   => $params,
+        }
+    );
     return $self->expand_template($response) if $response;
     return $response;
 }
@@ -921,12 +942,16 @@ Migrate a request from one backend to another.
 
 sub backend_migrate {
     my ( $self, $params ) = @_;
+
     # Set the request's backend to be the destination backend
-    $self->load_backend($params->{backend});
-    my $response = $self->_backend_capability('migrate',{
-            request    => $self,
-            other      => $params,
-        });
+    $self->load_backend( $params->{backend} );
+    my $response = $self->_backend_capability(
+        'migrate',
+        {
+            request => $self,
+            other   => $params,
+        }
+    );
     return $self->expand_template($response) if $response;
     return $response;
 }
@@ -948,10 +973,12 @@ Confirm a request. The backend handles setting of mandatory fields in the commit
 sub backend_confirm {
     my ( $self, $params ) = @_;
 
-    my $response = $self->_backend->confirm({
-            request    => $self,
-            other      => $params,
-        });
+    my $response = $self->_backend->confirm(
+        {
+            request => $self,
+            other   => $params,
+        }
+    );
     return $self->expand_template($response);
 }
 
@@ -961,7 +988,7 @@ sub backend_confirm {
 
 sub backend_update_status {
     my ( $self, $params ) = @_;
-    return $self->expand_template($self->_backend->update_status($params));
+    return $self->expand_template( $self->_backend->update_status($params) );
 }
 
 =head3 backend_cancel
@@ -975,10 +1002,12 @@ The standard interface method allowing for request cancellation.
 sub backend_cancel {
     my ( $self, $params ) = @_;
 
-    my $result = $self->_backend->cancel({
-        request => $self,
-        other => $params
-    });
+    my $result = $self->_backend->cancel(
+        {
+            request => $self,
+            other   => $params
+        }
+    );
 
     return $self->expand_template($result);
 }
@@ -992,11 +1021,13 @@ The standard interface method allowing for request renewal queries.
 =cut
 
 sub backend_renew {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->expand_template(
-        $self->_backend->renew({
-            request    => $self,
-        })
+        $self->_backend->renew(
+            {
+                request => $self,
+            }
+        )
     );
 }
 
@@ -1041,11 +1072,13 @@ sub backend_create {
                     backend => $self->_backend->name
                 }
             };
-        } elsif (     defined $params->{stage}
-                && $params->{stage} eq 'copyrightclearance' ) {
+        } elsif ( defined $params->{stage}
+            && $params->{stage} eq 'copyrightclearance' )
+        {
             $params->{stage} = 'init';
         }
     }
+
     # First perform API action, then...
     my $args = {
         request => $self,
@@ -1061,18 +1094,16 @@ sub backend_create {
     # ... complex case: commit!
 
     # Do we still have space for an ILL or should we queue?
-    my $permitted = $self->check_limits(
-        { patron => $self->patron }, { librarycode => $self->branchcode }
-    );
+    my $permitted = $self->check_limits( { patron => $self->patron }, { librarycode => $self->branchcode } );
 
     # Now augment our committed request.
 
-    $result->{permitted} = $permitted;             # Queue request?
+    $result->{permitted} = $permitted;    # Queue request?
 
     # This involves...
 
     # ...Updating status!
-    $self->status('QUEUED')->store unless ( $permitted );
+    $self->status('QUEUED')->store unless ($permitted);
 
     ## Handle Unmediated ILLs
 
@@ -1124,6 +1155,7 @@ Return a version of $PARAMS augmented with our required template path.
 sub expand_template {
     my ( $self, $params ) = @_;
     my $backend = $self->_backend->name;
+
     # Generate path to file to load
     my $backend_dir;
     my $backend_tmpl;
@@ -1146,12 +1178,13 @@ sub expand_template {
         $backend_tmpl = join "/", $backend_dir, $backend;
     }
 
-    my $intra_tmpl =  join "/", $backend_tmpl, "intra-includes",
-        ( $params->{method}//q{} ) . ".inc";
-    my $opac_tmpl =  join "/", $backend_tmpl, "opac-includes",
-        ( $params->{method}//q{} ) . ".inc";
+    my $intra_tmpl = join "/", $backend_tmpl, "intra-includes",
+        ( $params->{method} // q{} ) . ".inc";
+    my $opac_tmpl = join "/", $backend_tmpl, "opac-includes",
+        ( $params->{method} // q{} ) . ".inc";
+
     # Set files to load
-    $params->{template} = $intra_tmpl;
+    $params->{template}      = $intra_tmpl;
     $params->{opac_template} = $opac_tmpl;
     return $params;
 }
@@ -1174,13 +1207,13 @@ or for the default, we must define fall-back values here.
 
 sub getLimits {
     my ( $self, $params ) = @_;
-    my $limits = $self->_config->getLimitRules($params->{type});
+    my $limits = $self->_config->getLimitRules( $params->{type} );
 
-    if (     defined $params->{value}
-          && defined $limits->{$params->{value}} ) {
-            return $limits->{$params->{value}};
-    }
-    else {
+    if (   defined $params->{value}
+        && defined $limits->{ $params->{value} } )
+    {
+        return $limits->{ $params->{value} };
+    } else {
         return $limits->{default} || { count => -1, method => 'active' };
     }
 }
@@ -1199,7 +1232,7 @@ per branch or the default.
 sub getPrefix {
     my ( $self, $params ) = @_;
     my $brn_prefixes = $self->_config->getPrefixes();
-    return $brn_prefixes->{$params->{branch}} || ""; # "the empty prefix"
+    return $brn_prefixes->{ $params->{branch} } || "";    # "the empty prefix"
 }
 
 =head3 get_type
@@ -1212,7 +1245,7 @@ Return a string representing the material type of this request or undef
 
 sub get_type {
     my ($self) = @_;
-    my $attr = $self->extended_attributes->find({ type => 'type'});
+    my $attr = $self->extended_attributes->find( { type => 'type' } );
     return if !$attr;
     return $attr->value;
 }
@@ -1273,32 +1306,34 @@ sub check_limits {
 
     # Establish maximum number of allowed requests
     my ( $branch_rules, $brw_rules ) = (
-        $self->getLimits( {
-            type => 'branch',
-            value => $branchcode
-        } ),
-        $self->getLimits( {
-            type => 'brw_cat',
-            value => $patron->categorycode,
-        } ),
+        $self->getLimits(
+            {
+                type  => 'branch',
+                value => $branchcode
+            }
+        ),
+        $self->getLimits(
+            {
+                type  => 'brw_cat',
+                value => $patron->categorycode,
+            }
+        ),
     );
-    my ( $branch_limit, $brw_limit )
-        = ( $branch_rules->{count}, $brw_rules->{count} );
+    my ( $branch_limit, $brw_limit ) =
+        ( $branch_rules->{count}, $brw_rules->{count} );
+
     # Establish currently existing requests
     my ( $branch_count, $brw_count ) = (
-        $self->_limit_counter(
-            $branch_rules->{method}, { branchcode => $branchcode }
-        ),
-        $self->_limit_counter(
-            $brw_rules->{method}, { borrowernumber => $patron->borrowernumber }
-        ),
+        $self->_limit_counter( $branch_rules->{method}, { branchcode     => $branchcode } ),
+        $self->_limit_counter( $brw_rules->{method},    { borrowernumber => $patron->borrowernumber } ),
     );
 
     # Compare and return
     # A limit of -1 means no limit exists.
     # We return blocked if either branch limit or brw limit is reached.
-    if ( ( $branch_limit != -1 && $branch_limit <= $branch_count )
-             || ( $brw_limit != -1 && $brw_limit <= $brw_count ) ) {
+    if (   ( $branch_limit != -1 && $branch_limit <= $branch_count )
+        || ( $brw_limit != -1 && $brw_limit <= $brw_count ) )
+    {
         return 0;
     } else {
         return 1;
@@ -1310,16 +1345,18 @@ sub _limit_counter {
 
     # Establish parameters of counts
     my $resultset;
-    if ($method && $method eq 'annual') {
-        $resultset = Koha::ILL::Requests->search({
-            -and => [
-                %{$target},
-                \"YEAR(placed) = YEAR(NOW())"
-            ]
-        });
-    } else {                    # assume 'active'
-        # XXX: This status list is ugly. There should be a method in config
-        # to return these.
+    if ( $method && $method eq 'annual' ) {
+        $resultset = Koha::ILL::Requests->search(
+            {
+                -and => [
+                    %{$target},
+                    \"YEAR(placed) = YEAR(NOW())"
+                ]
+            }
+        );
+    } else {    # assume 'active'
+                # XXX: This status list is ugly. There should be a method in config
+                # to return these.
         my $where = { status => { -not_in => [ 'QUEUED', 'COMP' ] } };
         $resultset = Koha::ILL::Requests->search( { %{$target}, %{$where} } );
     }
@@ -1338,11 +1375,11 @@ otherwise.
 =cut
 
 sub requires_moderation {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $require_moderation = {
         'CANCREQ' => 'CANCREQ',
     };
-    return $require_moderation->{$self->status};
+    return $require_moderation->{ $self->status };
 }
 
 =head3 biblio
@@ -1355,7 +1392,7 @@ or undef if none exists
 =cut
 
 sub biblio {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $biblio_rs = $self->_result->biblio;
     return unless $biblio_rs;
     return Koha::Biblio->_new_from_dbic($biblio_rs);
@@ -1389,36 +1426,36 @@ sub check_out {
     # Find all statistical patrons
     my $statistical_patrons = Koha::Patrons->search(
         { 'category_type' => 'x' },
-        { join => { 'categorycode' => 'borrowers' } }
+        { join            => { 'categorycode' => 'borrowers' } }
     );
 
-    if (!$params->{stage} || $params->{stage} eq 'init') {
+    if ( !$params->{stage} || $params->{stage} eq 'init' ) {
+
         # Present a form to gather the required data
         #
         # We may be viewing this page having previously tried to issue
         # the item (in which case, we may already have created an item)
         # so we pass the biblio for this request
         return {
-            method  => 'check_out',
-            stage   => 'form',
-            value   => {
+            method => 'check_out',
+            stage  => 'form',
+            value  => {
                 itemtypes   => $itemtypes,
                 libraries   => $libraries,
                 statistical => $statistical_patrons,
                 biblio      => $biblio
             }
         };
-    } elsif ($params->{stage} eq 'form') {
+    } elsif ( $params->{stage} eq 'form' ) {
+
         # Validate what we've got and return with an error if we fail
         my $errors = {};
-        if (!$params->{item_type} || length $params->{item_type} == 0) {
+        if ( !$params->{item_type} || length $params->{item_type} == 0 ) {
             $errors->{item_type} = 1;
         }
-        if ($params->{inhouse} && length $params->{inhouse} > 0) {
-            my $patron_count = Koha::Patrons->search({
-                cardnumber => $params->{inhouse}
-            })->count();
-            if ($patron_count != 1) {
+        if ( $params->{inhouse} && length $params->{inhouse} > 0 ) {
+            my $patron_count = Koha::Patrons->search( { cardnumber => $params->{inhouse} } )->count();
+            if ( $patron_count != 1 ) {
                 $errors->{inhouse} = 1;
             }
         }
@@ -1428,18 +1465,18 @@ sub check_out {
         # Having 1 is OK, it means we're likely trying to issue
         # following a previously failed attempt, the item exists
         # so we'll use it
-        my @items = $biblio->items->as_list;
+        my @items      = $biblio->items->as_list;
         my $item_count = scalar @items;
-        if ($item_count > 1) {
+        if ( $item_count > 1 ) {
             $errors->{itemcount} = 1;
         }
 
         # Failed validation, go back to the form
-        if (%{$errors}) {
+        if ( %{$errors} ) {
             return {
-                method  => 'check_out',
-                stage   => 'form',
-                value   => {
+                method => 'check_out',
+                stage  => 'form',
+                value  => {
                     params      => $params,
                     statistical => $statistical_patrons,
                     itemtypes   => $itemtypes,
@@ -1455,7 +1492,7 @@ sub check_out {
         # Create an item if one doesn't already exist,
         # if one does, use that
         my $itemnumber;
-        if ($item_count == 0) {
+        if ( $item_count == 0 ) {
             my $item_hash = {
                 biblionumber  => $self->biblio_id,
                 homebranch    => $params->{branchcode},
@@ -1471,12 +1508,13 @@ sub check_out {
         } else {
             $itemnumber = $items[0]->itemnumber;
         }
+
         # Check we have an item before going forward
-        if (!$itemnumber) {
+        if ( !$itemnumber ) {
             return {
-                method  => 'check_out',
-                stage   => 'form',
-                value   => {
+                method => 'check_out',
+                stage  => 'form',
+                value  => {
                     params      => $params,
                     itemtypes   => $itemtypes,
                     libraries   => $libraries,
@@ -1489,36 +1527,38 @@ sub check_out {
         # Do the check out
         #
         # Gather what we need
-        my $target_item = Koha::Items->find( $itemnumber );
+        my $target_item = Koha::Items->find($itemnumber);
+
         # Determine who we're issuing to
-        my $patron = $params->{inhouse} && length $params->{inhouse} > 0 ?
-            Koha::Patrons->find({ cardnumber => $params->{inhouse} }) :
-            $self->patron;
+        my $patron =
+            $params->{inhouse} && length $params->{inhouse} > 0
+            ? Koha::Patrons->find( { cardnumber => $params->{inhouse} } )
+            : $self->patron;
 
         my @issue_args = (
             $patron,
             scalar $target_item->barcode
         );
-        if ($params->{duedate} && length $params->{duedate} > 0) {
-            push @issue_args, dt_from_string($params->{duedate});
+        if ( $params->{duedate} && length $params->{duedate} > 0 ) {
+            push @issue_args, dt_from_string( $params->{duedate} );
         }
+
         # Check if we can check out
-        my ( $error, $confirm, $alerts, $messages ) =
-            C4::Circulation::CanBookBeIssued(@issue_args);
+        my ( $error, $confirm, $alerts, $messages ) = C4::Circulation::CanBookBeIssued(@issue_args);
 
         # If we got anything back saying we can't check out,
         # return it to the template
         my $problems = {};
-        if ( $error && %{$error} ) { $problems->{error} = $error };
-        if ( $confirm && %{$confirm} ) { $problems->{confirm} = $confirm };
-        if ( $alerts && %{$alerts} ) { $problems->{alerts} = $alerts };
-        if ( $messages && %{$messages} ) { $problems->{messages} = $messages };
+        if ( $error    && %{$error} )    { $problems->{error}    = $error }
+        if ( $confirm  && %{$confirm} )  { $problems->{confirm}  = $confirm }
+        if ( $alerts   && %{$alerts} )   { $problems->{alerts}   = $alerts }
+        if ( $messages && %{$messages} ) { $problems->{messages} = $messages }
 
-        if (%{$problems}) {
+        if ( %{$problems} ) {
             return {
-                method  => 'check_out',
-                stage   => 'form',
-                value   => {
+                method => 'check_out',
+                stage  => 'form',
+                value  => {
                     params           => $params,
                     itemtypes        => $itemtypes,
                     libraries        => $libraries,
@@ -1534,12 +1574,13 @@ sub check_out {
         my $issue = C4::Circulation::AddIssue(@issue_args);
 
         if ($issue) {
+
             # Update the request status
             $self->status('CHK')->store;
             return {
-                method  => 'check_out',
-                stage   => 'done_check_out',
-                value   => {
+                method => 'check_out',
+                stage  => 'done_check_out',
+                value  => {
                     params    => $params,
                     patron    => $patron,
                     check_out => $issue
@@ -1547,9 +1588,9 @@ sub check_out {
             };
         } else {
             return {
-                method  => 'check_out',
-                stage   => 'form',
-                value   => {
+                method => 'check_out',
+                stage  => 'form',
+                value  => {
                     params    => $params,
                     itemtypes => $itemtypes,
                     libraries => $libraries,
@@ -1573,18 +1614,19 @@ attempts to submit the email.
 
 sub generic_confirm {
     my ( $self, $params ) = @_;
-    my $branch = Koha::Libraries->find($params->{current_branchcode})
+    my $branch = Koha::Libraries->find( $params->{current_branchcode} )
         || die "Invalid current branchcode. Are you logged in as the database user?";
-    if ( !$params->{stage}|| $params->{stage} eq 'init' ) {
-        # Get the message body from the notice definition
-        my $letter = $self->get_notice({
-            notice_code => 'ILL_PARTNER_REQ',
-            transport   => 'email'
-        });
+    if ( !$params->{stage} || $params->{stage} eq 'init' ) {
 
-        my $partners = Koha::Patrons->search({
-            categorycode => $self->_config->partner_code
-        });
+        # Get the message body from the notice definition
+        my $letter = $self->get_notice(
+            {
+                notice_code => 'ILL_PARTNER_REQ',
+                transport   => 'email'
+            }
+        );
+
+        my $partners = Koha::Patrons->search( { categorycode => $self->_config->partner_code } );
         return {
             error   => 0,
             status  => '',
@@ -1601,43 +1643,45 @@ sub generic_confirm {
         };
 
     } elsif ( 'draft' eq $params->{stage} ) {
+
         # Create the to header
         my $to = $params->{partners};
         if ( defined $to ) {
-            $to =~ s/^\x00//;       # Strip leading NULLs
+            $to =~ s/^\x00//;    # Strip leading NULLs
         }
         Koha::Exceptions::Ill::NoTargetEmail->throw(
-            "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
-          if ( !$to );
+            "No target email addresses found. Either select at least one partner or check your ILL partner library records."
+        ) if ( !$to );
 
         # Take the null delimited string that we receive and create
         # an array of associated patron objects
-        my @to_patrons = map {
-            Koha::Patrons->find({ borrowernumber => $_ })
-        } split(/\x00/, $to);
+        my @to_patrons = map { Koha::Patrons->find( { borrowernumber => $_ } ) } split( /\x00/, $to );
 
         # Create the from, replyto and sender headers
-        my $from = $branch->from_email_address;
+        my $from    = $branch->from_email_address;
         my $replyto = $branch->inbound_ill_address;
-        Koha::Exceptions::Ill::NoLibraryEmail->throw(
-            "Your library has no usable email address. Please set it.")
-          if ( !$from );
+        Koha::Exceptions::Ill::NoLibraryEmail->throw("Your library has no usable email address. Please set it.")
+            if ( !$from );
 
         # So we get a notice hashref, then substitute the possibly
         # modified title and body from the draft stage
-        my $letter = $self->get_notice({
-            notice_code => 'ILL_PARTNER_REQ',
-            transport   => 'email'
-        });
-        $letter->{title} = $params->{subject};
+        my $letter = $self->get_notice(
+            {
+                notice_code => 'ILL_PARTNER_REQ',
+                transport   => 'email'
+            }
+        );
+        $letter->{title}   = $params->{subject};
         $letter->{content} = $params->{body};
 
         if ($letter) {
 
             # Keep track of who received this notice
             my @queued = ();
+
             # Iterate our array of recipient patron objects
-            foreach my $patron(@to_patrons) {
+            foreach my $patron (@to_patrons) {
+
                 # Create the params we pass to the notice
                 my $params = {
                     letter                 => $letter,
@@ -1648,20 +1692,20 @@ sub generic_confirm {
                     reply_address          => $replyto
                 };
                 my $result = C4::Letters::EnqueueLetter($params);
-                if ( $result ) {
+                if ($result) {
                     push @queued, $patron->email;
                 }
             }
 
             # If all notices were queued successfully,
             # store that
-            if (scalar @queued == scalar @to_patrons) {
+            if ( scalar @queued == scalar @to_patrons ) {
                 $self->status("GENREQ")->store;
                 $self->_backend_capability(
                     'set_requested_partners',
                     {
                         request => $self,
-                        to => join("; ", @queued)
+                        to      => join( "; ", @queued )
                     }
                 );
                 return {
@@ -1683,7 +1727,7 @@ sub generic_confirm {
             stage   => 'draft',
         };
     } else {
-        die "Unknown stage, should not have happened."
+        die "Unknown stage, should not have happened.";
     }
 }
 
@@ -1699,10 +1743,8 @@ sub send_patron_notice {
     my ( $self, $notice_code, $additional_text ) = @_;
 
     # We need a notice code
-    if (!$notice_code) {
-        return {
-            error => 'notice_no_type'
-        };
+    if ( !$notice_code ) {
+        return { error => 'notice_no_type' };
     }
 
     # Map from the notice code to the messaging preference
@@ -1713,36 +1755,42 @@ sub send_patron_notice {
     );
 
     # Get the patron's messaging preferences
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
-        borrowernumber => $self->borrowernumber,
-        message_name   => $message_name{$notice_code}
-    });
+    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences(
+        {
+            borrowernumber => $self->borrowernumber,
+            message_name   => $message_name{$notice_code}
+        }
+    );
     my @transports = keys %{ $borrower_preferences->{transports} };
 
     # Notice should come from the library where the request was placed,
     # not the patrons home library
-    my $branch = Koha::Libraries->find($self->branchcode);
-    my $from_address = $branch->from_email_address;
+    my $branch        = Koha::Libraries->find( $self->branchcode );
+    my $from_address  = $branch->from_email_address;
     my $reply_address = $branch->inbound_ill_address;
 
     # Send the notice to the patron via the chosen transport methods
     # and record the results
     my @success = ();
-    my @fail = ();
+    my @fail    = ();
     for my $transport (@transports) {
-        my $letter = $self->get_notice({
-            notice_code     => $notice_code,
-            transport       => $transport,
-            additional_text => $additional_text
-        });
+        my $letter = $self->get_notice(
+            {
+                notice_code     => $notice_code,
+                transport       => $transport,
+                additional_text => $additional_text
+            }
+        );
         if ($letter) {
-            my $result = C4::Letters::EnqueueLetter({
-                letter                 => $letter,
-                borrowernumber         => $self->borrowernumber,
-                message_transport_type => $transport,
-                from_address           => $from_address,
-                reply_address          => $reply_address
-            });
+            my $result = C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $self->borrowernumber,
+                    message_transport_type => $transport,
+                    from_address           => $from_address,
+                    reply_address          => $reply_address
+                }
+            );
             if ($result) {
                 push @success, $transport;
             } else {
@@ -1752,12 +1800,14 @@ sub send_patron_notice {
             push @fail, $transport;
         }
     }
-    if (scalar @success > 0) {
+    if ( scalar @success > 0 ) {
         my $logger = Koha::ILL::Request::Logger->new;
-        $logger->log_patron_notice({
-            request => $self,
-            notice_code => $notice_code
-        });
+        $logger->log_patron_notice(
+            {
+                request     => $self,
+                notice_code => $notice_code
+            }
+        );
     }
     return {
         result => {
@@ -1779,10 +1829,8 @@ sub send_staff_notice {
     my ( $self, $notice_code ) = @_;
 
     # We need a notice code
-    if (!$notice_code) {
-        return {
-            error => 'notice_no_type'
-        };
+    if ( !$notice_code ) {
+        return { error => 'notice_no_type' };
     }
 
     # Get the staff notices that have been assigned for sending in
@@ -1790,20 +1838,20 @@ sub send_staff_notice {
     my $staff_to_send = C4::Context->preference('ILLSendStaffNotices') // q{};
 
     # If it hasn't been enabled in the syspref, we don't want to send it
-    if ($staff_to_send !~ /\b$notice_code\b/) {
-        return {
-            error => 'notice_not_enabled'
-        };
+    if ( $staff_to_send !~ /\b$notice_code\b/ ) {
+        return { error => 'notice_not_enabled' };
     }
 
-    my $letter = $self->get_notice({
-        notice_code => $notice_code,
-        transport   => 'email'
-    });
+    my $letter = $self->get_notice(
+        {
+            notice_code => $notice_code,
+            transport   => 'email'
+        }
+    );
 
     # Try and get an address to which to send staff notices
-    my $branch = Koha::Libraries->find($self->branchcode);
-    my $to_address = $branch->inbound_ill_address;
+    my $branch       = Koha::Libraries->find( $self->branchcode );
+    my $to_address   = $branch->inbound_ill_address;
     my $from_address = $branch->inbound_ill_address;
 
     my $params = {
@@ -1816,21 +1864,15 @@ sub send_staff_notice {
     if ($to_address) {
         $params->{to_address} = $to_address;
     } else {
-        return {
-            error => 'notice_no_create'
-        };
+        return { error => 'notice_no_create' };
     }
 
     if ($letter) {
         C4::Letters::EnqueueLetter($params)
             or warn "can't enqueue letter $letter";
-        return {
-            success => 'notice_queued'
-        };
+        return { success => 'notice_queued' };
     } else {
-        return {
-            error => 'notice_no_create'
-        };
+        return { error => 'notice_no_create' };
     }
 }
 
@@ -1846,23 +1888,17 @@ and transport type
 sub get_notice {
     my ( $self, $params ) = @_;
 
-    my $title = $self->extended_attributes->find(
-        { type => 'title' }
-    );
-    my $author = $self->extended_attributes->find(
-        { type => 'author' }
-    );
-    my $metahash = $self->metadata;
+    my $title     = $self->extended_attributes->find( { type => 'title' } );
+    my $author    = $self->extended_attributes->find( { type => 'author' } );
+    my $metahash  = $self->metadata;
     my @metaarray = ();
-    foreach my $key (sort { lc $a cmp lc $b } keys %{$metahash}) {
+    foreach my $key ( sort { lc $a cmp lc $b } keys %{$metahash} ) {
         my $value = $metahash->{$key};
         push @metaarray, "- $key: $value" if $value;
     }
-    my $metastring = join("\n", @metaarray);
+    my $metastring = join( "\n", @metaarray );
 
-    my $illrequestattributes = {
-        map { $_->type => $_->value } $self->extended_attributes->as_list
-    };
+    my $illrequestattributes = { map { $_->type => $_->value } $self->extended_attributes->as_list };
 
     my $letter = C4::Letters::GetPreparedLetter(
         module                 => 'ill',
@@ -1876,18 +1912,17 @@ sub get_notice {
             biblio      => $self->biblio_id,
             branches    => $self->branchcode,
         },
-        substitute  => {
-            ill_bib_title      => $title ? $title->value : '',
-            ill_bib_author     => $author ? $author->value : '',
-            ill_full_metadata  => $metastring,
-            additional_text    => $params->{additional_text},
+        substitute => {
+            ill_bib_title        => $title  ? $title->value  : '',
+            ill_bib_author       => $author ? $author->value : '',
+            ill_full_metadata    => $metastring,
+            additional_text      => $params->{additional_text},
             illrequestattributes => $illrequestattributes,
         }
     );
 
     return $letter;
 }
-
 
 =head3 attach_processors
 
@@ -1899,11 +1934,10 @@ any processors we have for it
 sub attach_processors {
     my ( $self, $update ) = @_;
 
-    foreach my $processor(@{$self->{processors}}) {
-        if (
-            $processor->{target_source_type} eq $update->{source_type} &&
-            $processor->{target_source_name} eq $update->{source_name}
-        ) {
+    foreach my $processor ( @{ $self->{processors} } ) {
+        if (   $processor->{target_source_type} eq $update->{source_type}
+            && $processor->{target_source_name} eq $update->{source_name} )
+        {
             $update->attach_processor($processor);
         }
     }
@@ -1918,9 +1952,9 @@ Append some text to the staff note
 =cut
 
 sub append_to_note {
-    my ($self, $text) = @_;
+    my ( $self, $text ) = @_;
     my $current = $self->notesstaff;
-    $text = ($current && length $current > 0) ? "$current\n\n$text" : $text;
+    $text = ( $current && length $current > 0 ) ? "$current\n\n$text" : $text;
     $self->notesstaff($text)->store;
 }
 
@@ -1935,11 +1969,13 @@ file.
 =cut
 
 sub id_prefix {
-    my ( $self ) = @_;
-    my $prefix = $self->getPrefix( {
-        branch  => $self->branchcode,
-    } );
-    $prefix .= "-" if ( $prefix );
+    my ($self) = @_;
+    my $prefix = $self->getPrefix(
+        {
+            branch => $self->branchcode,
+        }
+    );
+    $prefix .= "-" if ($prefix);
     return $prefix;
 }
 
@@ -1976,34 +2012,41 @@ sub store {
     my %updated_columns = $self->_result->get_dirty_columns;
 
     my @holds;
-    if( $self->in_storage and defined $updated_columns{'borrowernumber'} and
-        Koha::Patrons->find( $updated_columns{'borrowernumber'} ) )
+    if (    $self->in_storage
+        and defined $updated_columns{'borrowernumber'}
+        and Koha::Patrons->find( $updated_columns{'borrowernumber'} ) )
     {
         # borrowernumber has changed
         my $old_illreq = $self->get_from_storage;
-        @holds = Koha::Holds->search( {
-            borrowernumber => $old_illreq->borrowernumber,
-            biblionumber   => $self->biblio_id,
-        } )->as_list if $old_illreq;
+        @holds = Koha::Holds->search(
+            {
+                borrowernumber => $old_illreq->borrowernumber,
+                biblionumber   => $self->biblio_id,
+            }
+            )->as_list
+            if $old_illreq;
     }
 
     my $ret = $self->SUPER::store;
 
     if ( scalar @holds ) {
+
         # move holds to the changed borrowernumber
-        foreach my $hold ( @holds ) {
+        foreach my $hold (@holds) {
             $hold->borrowernumber( $updated_columns{'borrowernumber'} )->store;
         }
     }
 
     $attrs->{log_origin} = 'core';
 
-    if ($ret && defined $attrs) {
+    if ( $ret && defined $attrs ) {
         my $logger = Koha::ILL::Request::Logger->new;
-        $logger->log_maybe({
-            request => $self,
-            attrs   => $attrs
-        });
+        $logger->log_maybe(
+            {
+                request => $self,
+                attrs   => $attrs
+            }
+        );
     }
 
     return $ret;
@@ -2019,7 +2062,7 @@ whom a request has been sent
 =cut
 
 sub requested_partners {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->_backend_capability(
         'get_requested_partners',
         { request => $self }
@@ -2224,12 +2267,12 @@ sub get_op_param_deprecation {
         $op = 'cud-create' if $op eq 'create' || $op eq 'add_form';
     } elsif ( $interface eq 'intranet' ) {
         $op = $params->{op} // $params->{method} // 'illlist';
-        $op = 'cud-create' if $op eq 'create';
-        $op = 'cud-edit_action' if $op eq 'edit_action';
+        $op = 'cud-create'          if $op eq 'create';
+        $op = 'cud-edit_action'     if $op eq 'edit_action';
         $op = 'cud-generic_confirm' if $op eq 'generic_confirm';
-        $op = 'cud-cancel' if $op eq 'cancel';
-        $op = 'cud-delete' if $op eq 'delete';
-        $op = 'cud-check_out' if $op eq 'check_out';
+        $op = 'cud-cancel'          if $op eq 'cancel';
+        $op = 'cud-delete'          if $op eq 'delete';
+        $op = 'cud-check_out'       if $op eq 'check_out';
     }
     return $op;
 }

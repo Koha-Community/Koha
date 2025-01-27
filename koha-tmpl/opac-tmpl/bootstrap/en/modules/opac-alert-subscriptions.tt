@@ -7,7 +7,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your alert subscriptions &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-alert-subscriptions' %]
 [% INCLUDE 'masthead.inc' %]
@@ -25,17 +26,15 @@
                 <a href="#" aria-current="page">Your alert subscriptions</a>
             </li>
         </ol>
-    </nav> <!-- /#breadcrumbs -->
+    </nav>
+    <!-- /#breadcrumbs -->
 
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-md-12 col-lg-10 order-1">
-
                 <div id="alert-subscriptions" class="maincontent">
                     <h1>Alert subscriptions</h1>
 
@@ -43,39 +42,37 @@
                         <table id="subscriptions" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                <th>ISSN</th>
-                                <th>Title</th>
-                                <th>Library</th>
-                                <th>Location</th>
-                                <th>Call number</th>
-                                <th>Actions</th>
+                                    <th>ISSN</th>
+                                    <th>Title</th>
+                                    <th>Library</th>
+                                    <th>Location</th>
+                                    <th>Call number</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 [% FOREACH sub IN patron.alert_subscriptions %]
                                     <tr>
-                                        <td>
-                                            [% IF sub.biblio.biblioitem.issn %][% sub.biblio.biblioitem.issn | html %][% END %]
-                                        </td>
+                                        <td> [% IF sub.biblio.biblioitem.issn %][% sub.biblio.biblioitem.issn | html %][% END %] </td>
                                         <td>
                                             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% sub.biblionumber | uri %]">[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]</a>
                                         </td>
-                                        <td>
-                                            [% IF ( sub.branchcode ) %][% Branches.GetName( sub.branchcode ) | html %][% END %]
-                                        </td>
-                                        <td>
-                                            [% IF ( sub.location ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => sub.location ) | html %][% END %]
-                                        </td>
-                                        <td>
-                                            [% IF ( sub.callnumber ) %][% sub.callnumber | html %][% END %]
-                                        </td>
+                                        <td> [% IF ( sub.branchcode ) %][% Branches.GetName( sub.branchcode ) | html %][% END %] </td>
+                                        <td> [% IF ( sub.location ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => sub.location ) | html %][% END %] </td>
+                                        <td> [% IF ( sub.callnumber ) %][% sub.callnumber | html %][% END %] </td>
                                         <td class="actions">
-                                            <form action="/cgi-bin/koha/opac-alert-subscribe.pl" method="post" class="unsubscribe" data-title="[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]" data-patron="[% INCLUDE 'patron-title.inc' no_html=1 patron=logged_in_user%]">
+                                            <form
+                                                action="/cgi-bin/koha/opac-alert-subscribe.pl"
+                                                method="post"
+                                                class="unsubscribe"
+                                                data-title="[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]"
+                                                data-patron="[% INCLUDE 'patron-title.inc' no_html=1 patron=logged_in_user %]"
+                                            >
                                                 [% INCLUDE 'csrf-token.inc' %]
-                                                <input type="hidden" name="subscriptionid" value="[% sub.subscriptionid | html %]">
-                                                <input type="hidden" name="referer" value="[% referer | html %]">
-                                                <input type="hidden" name="biblionumber" value="[% sub.biblionumber | html %]">
-                                                <input type="hidden" name="op" value="cud-cancel_confirmed">
+                                                <input type="hidden" name="subscriptionid" value="[% sub.subscriptionid | html %]" />
+                                                <input type="hidden" name="referer" value="[% referer | html %]" />
+                                                <input type="hidden" name="biblionumber" value="[% sub.biblionumber | html %]" />
+                                                <input type="hidden" name="op" value="cud-cancel_confirmed" />
                                                 <button type="submit" class="btn btn-link btn-sm" name="submit"><i class="fa fa-times" aria-hidden="true"></i> Unsubscribe from email alerts</button>
                                             </form>
                                         </td>
@@ -88,25 +85,28 @@
                             <p>You have not subscribed to email alerts for any subscriptions.</p>
                         </div>
                     [% END %]
-                </div> <!-- /#alert-subscriptions -->
-
-           </div> <!-- / .col-lg-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- /#alert-subscriptions -->
+            </div>
+            <!-- / .col-lg-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-<script>
-    $(document).ready(function(){
-        $("#subscriptions").dataTable($.extend(true, {}, dataTablesDefaults, {
-        }));
-        $(".unsubscribe").submit(function(){
-            var patron = $(this).data('patron');
-            var title = $(this).data('title');
-            return confirmDelete(_("Are you sure you want to unsubscribe %s from email alerts for %s?").format(patron, title));
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function () {
+            $("#subscriptions").dataTable($.extend(true, {}, dataTablesDefaults, {}));
+            $(".unsubscribe").submit(function () {
+                var patron = $(this).data("patron");
+                var title = $(this).data("title");
+                return confirmDelete(_("Are you sure you want to unsubscribe %s from email alerts for %s?").format(patron, title));
+            });
         });
-    });
-</script>
+    </script>
 [% END %]

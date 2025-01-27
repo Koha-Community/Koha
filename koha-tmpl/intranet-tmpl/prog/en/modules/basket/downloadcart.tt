@@ -1,39 +1,41 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Download cart") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Download cart") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body style="padding:1em;" id="cart_downloadcart" class="cart">
 [% IF ( format ) %]
     <p>Your download should begin automatically.</p>
 [% ELSE %]
-<form action="/cgi-bin/koha/basket/downloadcart.pl" method="get" >
-<fieldset class="rows">
-	<legend>Download cart</legend>
-	<ol><li>
-	<label for="format">Format:</label>
-        <select name="format" id="format">
-        <option value="">-- Choose format --</option>
-        <option value="iso2709">MARC</option>
-	    <option value="ris">RIS</option>
-	    <option value="bibtex">BibTex</option>
-	    [% FOREACH csv_profile IN csv_profiles %]
-	    <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
-	    [% END %]
-
-	</select></li>
-	</ol>
-	</fieldset>
-	<fieldset class="action">
-	<input type="hidden" name="bib_list" value="[% bib_list | html %]" />
-    <input type="submit" name="save" class="btn btn-primary" value="Save" /> <a class="cancel close" href="#">Cancel</a>
-    </fieldset>
+    <form action="/cgi-bin/koha/basket/downloadcart.pl" method="get">
+        <fieldset class="rows">
+            <legend>Download cart</legend>
+            <ol
+                ><li>
+                    <label for="format">Format:</label>
+                    <select name="format" id="format">
+                        <option value="">-- Choose format --</option>
+                        <option value="iso2709">MARC</option>
+                        <option value="ris">RIS</option>
+                        <option value="bibtex">BibTex</option>
+                        [% FOREACH csv_profile IN csv_profiles %]
+                            <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
+                        [% END %]
+                    </select></li
+                >
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
+            <input type="submit" name="save" class="btn btn-primary" value="Save" /> <a class="cancel close" href="#">Cancel</a>
+        </fieldset>
     </form>
-
 [% END %]
 </body>
 <!-- prettier-ignore-start -->

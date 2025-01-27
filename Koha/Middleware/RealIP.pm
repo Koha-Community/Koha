@@ -82,10 +82,10 @@ sub get_real_ip {
     my $trusted_proxies = get_trusted_proxies();
 
     #X-Forwarded-For: <client>, <proxy1>, <proxy2>
-    my $real_ip = shift @forwarded_for;
+    my $real_ip     = shift @forwarded_for;
     my @unconfirmed = ( @forwarded_for, $remote_addr );
 
-    while (my $addr = pop @unconfirmed) {
+    while ( my $addr = pop @unconfirmed ) {
         my $has_matched = 0;
         foreach my $netmask (@$trusted_proxies) {
             $has_matched++, last if $netmask->match($addr);
@@ -107,19 +107,17 @@ sub get_trusted_proxies {
     my $proxies_conf = C4::Context->config('koha_trusted_proxies');
     return unless $proxies_conf;
     my @trusted_proxies_ip = split( / /, $proxies_conf );
-    my @trusted_proxies = ();
-    foreach my $ip (@trusted_proxies_ip){
+    my @trusted_proxies    = ();
+    foreach my $ip (@trusted_proxies_ip) {
         my $mask = Net::Netmask->new2($ip);
-        if ($mask){
-            push(@trusted_proxies,$mask);
-        }
-        else {
+        if ($mask) {
+            push( @trusted_proxies, $mask );
+        } else {
             warn "$Net::Netmask::error";
         }
     }
     return \@trusted_proxies;
 }
-
 
 =head1 AUTHORS
 

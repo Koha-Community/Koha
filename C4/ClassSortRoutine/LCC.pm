@@ -2,7 +2,7 @@ package C4::ClassSortRoutine::LCC;
 
 # Copyright (C) 2007 LibLime
 # Copyright (C) 2012 Equinox Software, Inc.
-# 
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -21,8 +21,6 @@ package C4::ClassSortRoutine::LCC;
 use strict;
 use warnings;
 use Library::CallNumber::LC;
-
-
 
 =head1 NAME 
 
@@ -45,11 +43,11 @@ Generates sorting key for LC call numbers.
 =cut
 
 sub get_class_sort_key {
-    my ($cn_class, $cn_item) = @_;
+    my ( $cn_class, $cn_item ) = @_;
 
     $cn_class = '' unless defined $cn_class;
     $cn_item  = '' unless defined $cn_item;
-    my $call_number = Library::CallNumber::LC->new(uc "$cn_class $cn_item");
+    my $call_number = Library::CallNumber::LC->new( uc "$cn_class $cn_item" );
     return '' unless defined $call_number;
     my $key = $call_number->normalize();
     $key = '' unless defined $key;

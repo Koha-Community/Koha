@@ -68,14 +68,14 @@ as the number of files.
 
 sub delete {
     my ( $self, $params ) = @_;
-    $self = Koha::UploadedFiles->new if !ref($self); # handle class call
-    # We use the individual delete on each resultset record
+    $self = Koha::UploadedFiles->new if !ref($self);    # handle class call
+                                                        # We use the individual delete on each resultset record
     my $rv = 0;
-    while( my $row = $self->next ) {
-        my $deleted = eval { $row->delete( $params ) };
+    while ( my $row = $self->next ) {
+        my $deleted = eval { $row->delete($params) };
         $rv++ if $deleted && !$@;
     }
-    return $rv==0 ? "0E0" : $rv;
+    return $rv == 0 ? "0E0" : $rv;
 }
 
 =head3 delete_temporary
@@ -91,18 +91,20 @@ Return value: see delete.
 sub delete_temporary {
     my ( $self, $params ) = @_;
     my $days = C4::Context->preference('UploadPurgeTemporaryFilesDays');
-    if( exists $params->{override_pref} ) {
+    if ( exists $params->{override_pref} ) {
         $days = $params->{override_pref};
-    } elsif( !defined($days) || $days eq '' ) { # allow 0, not NULL or ""
+    } elsif ( !defined($days) || $days eq '' ) {    # allow 0, not NULL or ""
         return "0E0";
     }
     my $dt = dt_from_string();
     $dt->subtract( days => $days );
     my $parser = Koha::Database->new->schema->storage->datetime_parser;
-    return $self->search({
-        permanent => [ undef, 0 ],
-        dtcreated => { '<' => $parser->format_datetime($dt) },
-    })->delete;
+    return $self->search(
+        {
+            permanent => [ undef, 0 ],
+            dtcreated => { '<' => $parser->format_datetime($dt) },
+        }
+    )->delete;
 }
 
 =head3 delete_missing
@@ -123,22 +125,23 @@ as delete does.
 
 sub delete_missing {
     my ( $self, $params ) = @_;
-    $self = Koha::UploadedFiles->new if !ref($self); # handle class call
+    $self = Koha::UploadedFiles->new if !ref($self);    # handle class call
     my $rv = 0;
-    while( my $row = $self->next ) {
+    while ( my $row = $self->next ) {
         my $file = $row->full_path;
         next if -e $file;
-        if( $params->{keep_record} ) {
+        if ( $params->{keep_record} ) {
             $rv++;
             next;
         }
+
         # We are passing keep_file since we already know that the file
         # is missing and we do not want to see the warning
         # Apply the same logic as in delete for the return value
-        my $deleted = eval { $row->delete({ keep_file => 1 }) };
+        my $deleted = eval { $row->delete( { keep_file => 1 } ) };
         $rv++ if $deleted && !$@;
     }
-    return $rv==0 ? "0E0" : $rv;
+    return $rv == 0 ? "0E0" : $rv;
 }
 
 =head3 search_term
@@ -152,15 +155,17 @@ Is only a wrapper around Koha::Objects search. Has similar return value.
 
 sub search_term {
     my ( $self, $params ) = @_;
-    my $term = $params->{term} // '';
+    my $term   = $params->{term} // '';
     my %public = ();
-    if( !$params->{include_private} ) {
+    if ( !$params->{include_private} ) {
         %public = ( public => 1 );
     }
     return $self->search(
-        [ { filename => { like => '%'.$term.'%' }, %public },
-          { hashvalue => { like => '%'.$params->{term}.'%' }, %public } ],
-        { order_by => { -asc => 'id' }},
+        [
+            { filename  => { like => '%' . $term . '%' },           %public },
+            { hashvalue => { like => '%' . $params->{term} . '%' }, %public }
+        ],
+        { order_by => { -asc => 'id' } },
     );
 }
 
@@ -173,9 +178,9 @@ getCategories returns a list of upload category codes and names
 =cut
 
 sub getCategories {
-    my ( $class ) = @_;
+    my ($class) = @_;
     my $cats = C4::Koha::GetAuthorisedValues('UPLOAD');
-    [ map {{ code => $_->{authorised_value}, name => $_->{lib} }} @$cats ];
+    [ map { { code => $_->{authorised_value}, name => $_->{lib} } } @$cats ];
 }
 
 =head3 _type

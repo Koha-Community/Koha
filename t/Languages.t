@@ -25,48 +25,48 @@ use Koha::Cache::Memory::Lite;
 use Koha::Language;
 
 BEGIN {
-    use_ok('C4::Languages', qw( getlanguage ));
+    use_ok( 'C4::Languages', qw( getlanguage ) );
 }
 
-my @languages = (); # stores the list of active languages
-                    # for the syspref mock
+my @languages    = ();    # stores the list of active languages
+                          # for the syspref mock
 my $return_undef = 0;
 
-my $module_context = Test::MockModule->new('C4::Context');
+my $module_context   = Test::MockModule->new('C4::Context');
 my $module_languages = Test::MockModule->new('C4::Languages');
 
 $module_context->mock(
     preference => sub {
-        my ($self, $pref) = @_;
+        my ( $self, $pref ) = @_;
         if ($return_undef) {
             return;
-        } elsif ($pref eq 'language' || $pref eq 'OPACLanguages') {
+        } elsif ( $pref eq 'language' || $pref eq 'OPACLanguages' ) {
             return join ',', @languages;
         } else {
             return 'XXX';
         }
-  },
+    },
 );
 
 $module_languages->mock(
     _get_language_dirs => sub {
-        return @languages
+        return @languages;
     }
 );
 
 delete $ENV{HTTP_ACCEPT_LANGUAGE};
 
 my $query = CGI->new();
-@languages = ('de-DE', 'fr-FR');
-is(C4::Languages::getlanguage($query), 'de-DE', 'default to first language specified in syspref (bug 10560)');
+@languages = ( 'de-DE', 'fr-FR' );
+is( C4::Languages::getlanguage($query), 'de-DE', 'default to first language specified in syspref (bug 10560)' );
 
 Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
 @languages = ();
-is(C4::Languages::getlanguage($query), 'en', 'default to English if no language specified in syspref (bug 10560)');
+is( C4::Languages::getlanguage($query), 'en', 'default to English if no language specified in syspref (bug 10560)' );
 
 Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
 $return_undef = 1;
-is(C4::Languages::getlanguage($query), 'en', 'default to English if no database');
+is( C4::Languages::getlanguage($query), 'en', 'default to English if no database' );
 
 subtest 'when interface is not intranet or opac' => sub {
     plan tests => 3;
@@ -74,17 +74,17 @@ subtest 'when interface is not intranet or opac' => sub {
     my $cache = Koha::Cache::Memory::Lite->get_instance;
     C4::Context->interface('api');
 
-    @languages = ('fr-FR', 'de-DE', 'en');
+    @languages = ( 'fr-FR', 'de-DE', 'en' );
 
     $ENV{HTTP_ACCEPT_LANGUAGE} = 'de-DE';
     $cache->clear_from_cache('getlanguage');
-    is(C4::Languages::getlanguage(), 'de-DE', 'Accept-Language HTTP header is respected');
+    is( C4::Languages::getlanguage(), 'de-DE', 'Accept-Language HTTP header is respected' );
 
     Koha::Language->set_requested_language('fr-FR');
     $cache->clear_from_cache('getlanguage');
-    is(C4::Languages::getlanguage(), 'fr-FR', 'but language requested through Koha::Language is preferred');
+    is( C4::Languages::getlanguage(), 'fr-FR', 'but language requested through Koha::Language is preferred' );
 
     @languages = ();
     $cache->clear_from_cache('getlanguage');
-    is(C4::Languages::getlanguage(), 'en', 'fallback to english when no language is available');
+    is( C4::Languages::getlanguage(), 'en', 'fallback to english when no language is available' );
 };

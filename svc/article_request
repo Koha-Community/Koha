@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI  qw ( -utf8 );
 use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth);
@@ -28,8 +28,8 @@ use Koha::ArticleRequests;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $cgi->cookie('CGISESSID'), { circulate => 'circulate_remaining_permissions' } );
+my ($auth_status) =
+    check_cookie_auth( $cgi->cookie('CGISESSID'), { circulate => 'circulate_remaining_permissions' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -37,36 +37,32 @@ if ( $auth_status ne "ok" ) {
 binmode STDOUT, ':encoding(UTF-8)';
 print $cgi->header( -type => 'application/json', -charset => 'UTF-8' );
 
-my $id = $cgi->param('id');
-my $op = $cgi->param('op') || q{};
+my $id    = $cgi->param('id');
+my $op    = $cgi->param('op') || q{};
 my $notes = $cgi->param('notes');
 
 my $ar = Koha::ArticleRequests->find($id);
 
 if ($ar) {
     if ( $op eq 'cud-cancel' ) {
-        $ar = $ar->cancel({ notes => $notes });
-    }
-    elsif ( $op eq 'cud-process' ) {
+        $ar = $ar->cancel( { notes => $notes } );
+    } elsif ( $op eq 'cud-process' ) {
         $ar = $ar->process();
-    }
-    elsif ( $op eq 'cud-pending' ) {
+    } elsif ( $op eq 'cud-pending' ) {
         $ar = $ar->set_pending();
-    }
-    elsif ( $op eq 'cud-complete' ) {
+    } elsif ( $op eq 'cud-complete' ) {
         $ar = $ar->complete();
-    }
-    elsif ( $op eq 'cud-update_library_id' ) {
+    } elsif ( $op eq 'cud-update_library_id' ) {
         my $branchcode = $cgi->param('library_id');
-        $ar->branchcode( $branchcode ) if $branchcode;
+        $ar->branchcode($branchcode) if $branchcode;
         $ar = $ar->store();
-    }
-    elsif( $op eq 'cud-update_urls' ) {
+    } elsif ( $op eq 'cud-update_urls' ) {
         my $urls = $cgi->param('urls') // q{};
-        $ar->urls( $urls );
+        $ar->urls($urls);
         $ar = $ar->store();
+    } else {
+        undef $ar;
     }
-    else { undef $ar; }
 }
 
 # FIXME do not return 200 if not success

@@ -20,7 +20,7 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::SearchFilters;
@@ -29,21 +29,23 @@ use Try::Tiny qw( catch try);
 
 my $cgi = CGI->new;
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => 'admin/search_filters.tt',
-    query => $cgi,
-    type => 'intranet',
-    flagsrequired   => { parameters => 'manage_search_filters' },
-});
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => 'admin/search_filters.tt',
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { parameters => 'manage_search_filters' },
+    }
+);
 
 my $op = $cgi->param('op') || '';
 
-if ($op eq 'cud-del') {
+if ( $op eq 'cud-del' ) {
     my $id = $cgi->param('id');
     my $sf = Koha::SearchFilters->find($id);
-    $template->param(filter_not_found => 1) unless $sf;
+    $template->param( filter_not_found => 1 ) unless $sf;
     if ($sf) {
-        try{
+        try {
             $sf->delete();
             $template->param( filter_deleted => $sf->name );
         } catch {

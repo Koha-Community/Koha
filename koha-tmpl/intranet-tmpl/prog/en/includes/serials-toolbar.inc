@@ -1,11 +1,16 @@
 [% IF subscriptionid and ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_receive_serials ) %]
-
     <div id="toolbar" class="btn-toolbar">
         [% IF CAN_user_serials_create_subscription %]
             [% IF biblionumber_for_new_subscription %]
-                <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"><i class="fa fa-plus"></i> New subscription for this serial</a></div>
+                <div class="btn-group"
+                    ><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"
+                        ><i class="fa fa-plus"></i> New subscription for this serial</a
+                    ></div
+                >
             [% ELSE %]
-                <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div>
+                <div class="btn-group"
+                    ><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div
+                >
             [% END %]
         [% END %]
 
@@ -13,52 +18,56 @@
             [% UNLESS ( cannotedit ) %]
                 <div class="btn-group">
                     <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</button>
-                        <ul class="dropdown-menu">
-                            [% IF ( CAN_user_serials_edit_subscription ) %]
-                                <li>
-                                    <a class="dropdown-item" href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid | uri %]">Edit subscription</a>
-                                </li>
-                            [% END %]
+                    <ul class="dropdown-menu">
+                        [% IF ( CAN_user_serials_edit_subscription ) %]
+                            <li>
+                                <a class="dropdown-item" href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid | uri %]">Edit subscription</a>
+                            </li>
+                        [% END %]
 
-                            [% IF ( CAN_user_serials_create_subscription ) %]
-                                <li>
-                                    <a class="dropdown-item" href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid | uri %]">Edit as new (duplicate)</a>
-                                </li>
-                            [% END %]
+                        [% IF ( CAN_user_serials_create_subscription ) %]
+                            <li>
+                                <a class="dropdown-item" href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid | uri %]">Edit as new (duplicate)</a>
+                            </li>
+                        [% END %]
 
-                            [% IF CAN_user_editcatalogue_edit_catalogue %]
-                                <li>
-                                    <a class="dropdown-item" id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]">Edit record</a>
-                                </li>
-                            [% END %]
+                        [% IF CAN_user_editcatalogue_edit_catalogue %]
+                            <li>
+                                <a class="dropdown-item" id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]">Edit record</a>
+                            </li>
+                        [% END %]
 
-                            [% IF serialsadditems && CAN_user_editcatalogue_edit_items %]
-                                <li>
-                                    <a class="dropdown-item" id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | uri %]">Edit items</a>
-                                </li>
-                            [% END %]
+                        [% IF serialsadditems && CAN_user_editcatalogue_edit_items %]
+                            <li>
+                                <a class="dropdown-item" id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | uri %]">Edit items</a>
+                            </li>
+                        [% END %]
 
-                            [% IF ( CAN_user_serials_delete_subscription ) %]
-                                <li>
-                                    <form action="subscription-detail.pl" method="post">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="op" value="cud-del" />
-                                        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-                                        <button type="submit" class="dropdown-item" id="deletesub">Delete subscription</button>
-                                    </form>
-                                </li>
-                            [% END %]
-                        </ul>
+                        [% IF ( CAN_user_serials_delete_subscription ) %]
+                            <li>
+                                <form action="subscription-detail.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-del" />
+                                    <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                                    <button type="submit" class="dropdown-item" id="deletesub">Delete subscription</button>
+                                </form>
+                            </li>
+                        [% END %]
+                    </ul>
                 </div>
             [% END %]
         [% END %]
 
         [% IF not cannotedit or CAN_user_serials_receive_serials %]
             [% IF CAN_user_serials_renew_subscription and not subscription.closed %]
-                <div class="btn-group"><a id="renew" class="btn btn-default" href="#"><i class="fa-solid fa-rotate"></i> Renew</a></div>
+                <div class="btn-group"
+                    ><a id="renew" class="btn btn-default" href="#"><i class="fa-solid fa-rotate"></i> Renew</a></div
+                >
             [% END %]
             [% IF CAN_user_serials_receive_serials and not subscription.closed %]
-                <div class="btn-group"><a id="receive" class="btn btn-default" href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscriptionid | html %]&amp;serstatus=1,3"><i class="fa fa-inbox"></i> Receive</a></div>
+                <div class="btn-group"
+                    ><a id="receive" class="btn btn-default" href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscriptionid | html %]&amp;serstatus=1,3"><i class="fa fa-inbox"></i> Receive</a></div
+                >
             [% END %]
             [% UNLESS cannotedit %]
                 [% IF subscription.closed %]
@@ -105,7 +114,7 @@
                                 <a class="dropdown-item" data-commentid="[% c.id | html %]" data-resourceid="[% mana_id | html %]" href="#">[% c.message | html %] ([% c.nb | html %])</a>
                             </li>
                         [% END %]
-                        <li><hr class="dropdown-divider"></li>
+                        <li><hr class="dropdown-divider" /></li>
                     [% END %]
                     <li><a class="dropdown-item" data-commentid="other" data-resourceid="[% mana_id | html %]" href="#">New comment</a></li>
                 </ul>
@@ -115,9 +124,15 @@
 [% ELSIF CAN_user_serials_create_subscription %]
     <div id="toolbar" class="btn-toolbar">
         [% IF ( biblionumber_for_new_subscription ) %]
-            <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"><i class="fa fa-plus"></i> New subscription for this serial</a></div>
+            <div class="btn-group"
+                ><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"
+                    ><i class="fa fa-plus"></i> New subscription for this serial</a
+                ></div
+            >
         [% ELSE %]
-            <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div>
+            <div class="btn-group"
+                ><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div
+            >
         [% END %]
     </div>
 [% END %]
@@ -141,9 +156,12 @@
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
-        </div> <!-- /.modal-content -->
-    </div> <!-- /.modal-dialog -->
-</div> <!-- /#mana-comment-box -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#mana-comment-box -->
 
 <div id="mana_share_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_share_modal_label">
     <div class="modal-dialog modal-lg">
@@ -162,16 +180,18 @@
                     [% UNLESS ( one_language_enabled ) %]
                         <div class="rows">
                             <ol>
-                                <li><span class="label">Frequency: </span>
-                                        [% frequency.description | html %]
+                                <li
+                                    ><span class="label">Frequency: </span>
+                                    [% frequency.description | html %]
                                 </li>
-                                <li><span class="label">Number pattern: </span>
+                                <li
+                                    ><span class="label">Number pattern: </span>
                                     [% numberpattern.label | html %]
                                 </li>
                             </ol>
                         </div>
                         <div class="rows">
-                            <form method="get" id="mana_share_form" action="/cgi-bin/koha/serials/subscription-detail.pl" class="validated" >
+                            <form method="get" id="mana_share_form" action="/cgi-bin/koha/serials/subscription-detail.pl" class="validated">
                                 <fieldset>
                                     <label for="mana_language">Language:</label>
                                     <select id="mana_language" name="mana_language">
@@ -223,18 +243,23 @@
                                             [% END %]
                                         [% END %]
                                     </select>
-                                    <input type="hidden" id="op" name="op" value="share"/>
-                                    <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]"/>
+                                    <input type="hidden" id="op" name="op" value="share" />
+                                    <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
                                 </fieldset>
                             </form>
-                        </div> <!-- /.rows -->
+                        </div>
+                        <!-- /.rows -->
                     [% END %]
                 [% END %]
-            </div> <!-- /.modal-body -->
+            </div>
+            <!-- /.modal-body -->
             <div class="modal-footer">
                 <button type="submit" form="mana_share_form" class="btn btn-primary">Share</button>
                 <button class="btn btn-default" type="button" data-bs-dismiss="modal">Cancel</button>
             </div>
-        </div> <!-- /.modal-content -->
-    </div> <!-- /.modal-dialog -->
-</div> <!-- /#mana-share-modal -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#mana-share-modal -->

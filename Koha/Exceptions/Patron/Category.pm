@@ -18,11 +18,9 @@ package Koha::Exceptions::Patron::Category;
 use Modern::Perl;
 
 use Exception::Class (
-    'Koha::Exceptions::Patron::Category' => {
-        description => "Something went wrong!"
-    },
+    'Koha::Exceptions::Patron::Category'           => { description => "Something went wrong!" },
     'Koha::Exceptions::Patron::Category::NotFound' => {
-        isa => 'Koha::Exceptions::Patron::Category',
+        isa         => 'Koha::Exceptions::Patron::Category',
         description => "Patron category not found"
     },
 );

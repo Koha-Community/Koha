@@ -49,7 +49,10 @@ SKIP: {
     eval { require Selenium::Remote::Driver; };
     skip "Selenium::Remote::Driver is needed for selenium tests.", 2 if $@;
 
-    skip "This test must be run with an empty DB. We are using KOHA_TESTING that is set by our CI\nIf you really want to run it, set this env var.", 2 unless $ENV{KOHA_TESTING};
+    skip
+        "This test must be run with an empty DB. We are using KOHA_TESTING that is set by our CI\nIf you really want to run it, set this env var.",
+        2
+        unless $ENV{KOHA_TESTING};
 
     my $dbh = eval { C4::Context->dbh; };
     skip "Tests won't run if the database does not exist", 2 if $@;
@@ -58,33 +61,35 @@ SKIP: {
         my $dup_err;
         local *STDERR;
         open STDERR, ">>", \$dup_err;
-        $dbh->do(q|
+        $dbh->do(
+            q|
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
         close STDERR;
-        if ( $dup_err ) {
+        if ($dup_err) {
             skip "Tests won't run if the database is not empty", 2 if $@;
         }
     }
 
     my $s = t::lib::Selenium->new;
 
-    my $driver = $s->driver;
+    my $driver   = $s->driver;
     my $base_url = $s->base_url;
-    my $db_user = C4::Context->config('user');
-    my $db_pass = C4::Context->config('pass');
+    my $db_user  = C4::Context->config('user');
+    my $db_pass  = C4::Context->config('pass');
 
-    $driver->get($base_url."mainpage.pl");
+    $driver->get( $base_url . "mainpage.pl" );
 
-    my $lang = "en"; # The idea here is to loop on all languages
+    my $lang = "en";    # The idea here is to loop on all languages
 
-    $driver->set_window_size(3840,1080);
+    $driver->set_window_size( 3840, 1080 );
+
     # Welcome to the Koha web installer
-    $s->fill_form({userid => $db_user, password => $db_pass });
+    $s->fill_form( { userid => $db_user, password => $db_pass } );
     $s->submit_form;
 
     # Choose your language
-    $s->fill_form({ language => $languages->{$lang} });
+    $s->fill_form( { language => $languages->{$lang} } );
     $s->submit_form;
 
     # Check Perl dependencies
@@ -110,7 +115,7 @@ SKIP: {
     $s->submit_form;
 
     # Select your MARC flavor
-    $s->fill_form({ marcflavour => 'MARC21' });
+    $s->fill_form( { marcflavour => 'MARC21' } );
     $s->submit_form;
 
     # Selecting default settings
@@ -121,7 +126,8 @@ SKIP: {
     #}
     $s->submit_form;
 
-    for (1..20){ # FIXME This is really ugly, but for an unknown reason the next submit_form is resubmitting the same form. So waiting for the next page to be effectively loaded
+    for ( 1 .. 20 )
+    { # FIXME This is really ugly, but for an unknown reason the next submit_form is resubmitting the same form. So waiting for the next page to be effectively loaded
         my $title = $s->driver->get_title;
         last if $title =~ m|Default data loaded|;
         sleep 1;
@@ -134,45 +140,52 @@ SKIP: {
     $s->click( { href => '/installer/onboarding.pl', main => 'installer-step3' } );
 
     # Create a library
-    $s->fill_form({ branchcode => 'CPL', branchname => 'Centerville' });
+    $s->fill_form( { branchcode => 'CPL', branchname => 'Centerville' } );
     $s->submit_form;
 
     # Library created!
     $s->driver->find_element('//div[@class="alert alert-success"]');
+
     # Create a patron category
-    $s->fill_form({ categorycode => 'S', description => 'Staff', enrolmentperiod => 12 });
+    $s->fill_form( { categorycode => 'S', description => 'Staff', enrolmentperiod => 12 } );
     $s->submit_form;
 
     # Patron category created!
     $s->driver->find_element('//div[@class="alert alert-success"]');
+
     # Create Koha administrator patron
-    $s->fill_form({ %$superlibrarian, password2 => $superlibrarian->{password} });
+    $s->fill_form( { %$superlibrarian, password2 => $superlibrarian->{password} } );
     $s->submit_form;
 
     #Administrator account created!
     $s->driver->find_element('//div[@class="alert alert-success"]');
+
     # Create a new item type
-    $s->fill_form({ itemtype => 'BK', description => 'Book' });
+    $s->fill_form( { itemtype => 'BK', description => 'Book' } );
     $s->submit_form;
 
     # New item type created!
     $s->driver->find_element('//div[@class="alert alert-success"]');
+
     # Create a new circulation rule
     # Keep default values
     $s->submit_form;
 
     # Get the interface in the correct language
-    C4::Context->set_preference('language', $languages->{$lang} );
-    C4::Context->set_preference('opaclanguages', $languages->{$lang} );
+    C4::Context->set_preference( 'language',      $languages->{$lang} );
+    C4::Context->set_preference( 'opaclanguages', $languages->{$lang} );
 
     $s->click( { href => '/mainpage.pl', main => 'onboarding-step5' } );
 
-    $s->fill_form({ userid => $superlibrarian->{userid}, password => $superlibrarian->{password} });
+    $s->fill_form( { userid => $superlibrarian->{userid}, password => $superlibrarian->{password} } );
 
-    like( $s->driver->get_title, qr(Log in to Koha), 'After the onboarding process the user should have landed in the login form page');
+    like(
+        $s->driver->get_title, qr(Log in to Koha),
+        'After the onboarding process the user should have landed in the login form page'
+    );
     $s->submit_form;
 
-    is( $s->driver->get_title, 'Koha staff interface', 'The credentials we created should work');
+    is( $s->driver->get_title, 'Koha staff interface', 'The credentials we created should work' );
 
     $driver->quit();
-};
+}

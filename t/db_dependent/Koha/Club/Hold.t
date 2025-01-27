@@ -28,12 +28,12 @@ use Koha::Club::Hold::PatronHolds;
 use Koha::Holds;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
-use Scalar::Util qw(blessed);
+use Scalar::Util    qw(blessed);
 
 use t::lib::TestBuilder;
 
 my $builder = t::lib::TestBuilder->new;
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 
 subtest 'add' => sub {
 
@@ -41,32 +41,24 @@ subtest 'add' => sub {
 
     $schema->storage->txn_begin;
 
-    my $club = $builder->build_object({ class => 'Koha::Clubs' });
-    my $library = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
-    my $item1 = $builder->build_sample_item({ library => $library->branchcode });
-    my $item2 = $builder->build_sample_item({ library => $library->branchcode });
+    my $club    = $builder->build_object( { class => 'Koha::Clubs' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $item1   = $builder->build_sample_item( { library => $library->branchcode } );
+    my $item2   = $builder->build_sample_item( { library => $library->branchcode } );
 
     throws_ok {
-        Koha::Club::Hold::add(
-            {
-                club_id => $club->id
-            }
-        );
+        Koha::Club::Hold::add( { club_id => $club->id } );
     }
     'Koha::Exceptions::MissingParameter',
-      'Exception thrown when biblio_id is passed';
+        'Exception thrown when biblio_id is passed';
 
     like( "$@", qr/The biblio_id parameter is mandatory/ );
 
     throws_ok {
-        Koha::Club::Hold::add(
-            {
-                biblio_id => $item1->biblionumber
-            }
-        );
+        Koha::Club::Hold::add( { biblio_id => $item1->biblionumber } );
     }
     'Koha::Exceptions::MissingParameter',
-      'Exception thrown when club_id is passed';
+        'Exception thrown when club_id is passed';
 
     like( "$@", qr/The club_id parameter is mandatory/ );
 
@@ -80,7 +72,7 @@ subtest 'add' => sub {
         );
     }
     'Koha::Exceptions::ClubHold::NoPatrons',
-      'Exception thrown when no patron is enrolled in club';
+        'Exception thrown when no patron is enrolled in club';
 
     my $patron = $builder->build_object(
         {
@@ -107,7 +99,7 @@ subtest 'add' => sub {
         }
     );
 
-    is(blessed($club_hold), 'Koha::Club::Hold', 'add returns a Koha::Club::Hold');
+    is( blessed($club_hold), 'Koha::Club::Hold', 'add returns a Koha::Club::Hold' );
 
     $e->date_canceled(dt_from_string)->store;
 
@@ -121,17 +113,17 @@ subtest 'add' => sub {
         );
     }
     'Koha::Exceptions::ClubHold::NoPatrons',
-      'Exception thrown when no patron is enrolled in club';
+        'Exception thrown when no patron is enrolled in club';
 
-    my $patron_holds = Koha::Club::Hold::PatronHolds->search({ club_hold_id => $club_hold->id });
+    my $patron_holds = Koha::Club::Hold::PatronHolds->search( { club_hold_id => $club_hold->id } );
 
-    ok($patron_holds->count, "There must be at least one patron_hold");
+    ok( $patron_holds->count, "There must be at least one patron_hold" );
 
     my $patron_hold = $patron_holds->next;
 
-    my $hold = Koha::Holds->find($patron_hold->hold_id);
+    my $hold = Koha::Holds->find( $patron_hold->hold_id );
 
-    is($patron_hold->patron_id, $hold->borrowernumber, 'Patron must be the same');
+    is( $patron_hold->patron_id, $hold->borrowernumber, 'Patron must be the same' );
 
     $schema->storage->txn_rollback;
-}
+    }

@@ -47,14 +47,13 @@ foreach my $key ( keys %{$metadata} ) {
     $sorted->{$key} = $metadata->{$key};
 }
 
-my $availability =
-  Koha::ILL::Request::Workflow::Availability->new( $sorted, 'staff' );
+my $availability = Koha::ILL::Request::Workflow::Availability->new( $sorted, 'staff' );
 
 isa_ok( $availability, 'Koha::ILL::Request::Workflow::Availability' );
 
 is(
     $availability->prep_metadata($sorted),
-'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIn0%3D%0A',
+    'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIn0%3D%0A',
     'prep_metadata works'
 );
 
@@ -77,15 +76,16 @@ $backend->mock( 'status_graph', sub { }, );
 
 # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
 my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
-$illreqmodule->mock( 'load_backend',
-    sub { my $self = shift; $self->{_my_backend} = $backend; return $self } );
+$illreqmodule->mock(
+    'load_backend',
+    sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+);
 
 # Mock ILLModuleDisclaimerByType with valid YAML
 t::lib::Mocks::mock_preference( 'ILLCheckAvailability', 1 );
 
 # Mock not empty availability services
-my $availability_module =
-  Test::MockModule->new('Koha::ILL::Request::Workflow::Availability');
+my $availability_module = Test::MockModule->new('Koha::ILL::Request::Workflow::Availability');
 $availability_module->mock( 'get_services', [ { name => 'service' } ] );
 
 my $req_1 = $builder->build_object(
@@ -97,13 +97,17 @@ my $req_1 = $builder->build_object(
 
 my $request = $req_1->load_backend('Mock');
 
-is( $availability->show_availability($request),
-    1, 'able to show availability search' );
+is(
+    $availability->show_availability($request),
+    1, 'able to show availability search'
+);
 
 # Mock empty availability services
 $availability_module->mock( 'get_services', [] );
 
-is( $availability->show_availability($request),
-    0, 'unable to show type disclaimer form' );
+is(
+    $availability->show_availability($request),
+    0, 'unable to show type disclaimer form'
+);
 
 $schema->storage->txn_rollback;

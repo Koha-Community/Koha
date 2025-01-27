@@ -19,7 +19,7 @@ package Koha::Plugins::Base;
 
 use Modern::Perl;
 
-use Cwd qw( abs_path );
+use Cwd        qw( abs_path );
 use List::Util qw( max );
 use Try::Tiny;
 
@@ -42,12 +42,12 @@ sub new {
 
     return unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
 
-    $args->{'class'} = $class;
+    $args->{'class'}    = $class;
     $args->{'template'} = Template->new( { ABSOLUTE => 1, ENCODING => 'UTF-8' } );
 
     my $self = bless( $args, $class );
 
-    my $plugin_version = $self->get_metadata->{version};
+    my $plugin_version   = $self->get_metadata->{version};
     my $database_version = $self->retrieve_data('__INSTALLED_VERSION__') || 0;
 
     ## Run the installation method if it exists and hasn't been run before
@@ -56,33 +56,31 @@ sub new {
             if ( $self->install() ) {
                 $self->store_data( { '__INSTALLED__' => 1, '__ENABLED__' => 1 } );
                 if ( my $version = $plugin_version ) {
-                    $self->store_data({ '__INSTALLED_VERSION__' => $version });
+                    $self->store_data( { '__INSTALLED_VERSION__' => $version } );
                 }
             } else {
                 warn "Plugin $class failed during installation!";
             }
-        }
-        catch {
+        } catch {
             Koha::Exceptions::Plugin::InstallDied->throw( plugin_class => $class );
         };
     } elsif ( $self->can('upgrade') ) {
         if ( _version_compare( $plugin_version, $database_version ) == 1 ) {
             try {
                 if ( $self->upgrade() ) {
-                    $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
+                    $self->store_data( { '__INSTALLED_VERSION__' => $plugin_version } );
                 } else {
                     warn "Plugin $class failed during upgrade!";
                 }
-            }
-            catch {
+            } catch {
                 Koha::Exceptions::Plugin::UpgradeDied->throw( plugin_class => $class );
             };
         }
     } elsif ( $plugin_version ne $database_version ) {
-        $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
+        $self->store_data( { '__INSTALLED_VERSION__' => $plugin_version } );
     }
 
-    $self->{_bundle_path} = abs_path($self->mbf_dir);
+    $self->{_bundle_path} = abs_path( $self->mbf_dir );
 
     return $self;
 }
@@ -106,8 +104,8 @@ sub store_data {
         $sth->execute( $self->{'class'}, $key, $data->{$key} );
     }
 
-    if (exists $data->{__ENABLED__}) {
-        Koha::Cache::Memory::Lite->clear_from_cache(Koha::Plugins->ENABLED_PLUGINS_CACHE_KEY);
+    if ( exists $data->{__ENABLED__} ) {
+        Koha::Cache::Memory::Lite->clear_from_cache( Koha::Plugins->ENABLED_PLUGINS_CACHE_KEY );
     }
 }
 
@@ -170,11 +168,13 @@ sub get_template {
     require C4::Auth;
 
     my $template_name = $args->{'file'} // '';
+
     # if not absolute, call mbf_path, which dies if file does not exist
-    $template_name = $self->mbf_path( $template_name )
+    $template_name = $self->mbf_path($template_name)
         if $template_name !~ m/^\//;
     my ( $template, $loggedinuser, $cookie ) = C4::Auth::get_template_and_user(
-        {   template_name   => $template_name,
+        {
+            template_name   => $template_name,
             query           => $self->{'cgi'},
             type            => "intranet",
             authnotrequired => 1,
@@ -185,7 +185,7 @@ sub get_template {
         METHOD      => scalar $self->{'cgi'}->param('method'),
         PLUGIN_PATH => $self->get_plugin_http_path(),
         PLUGIN_DIR  => $self->bundle_path(),
-        LANG        => C4::Languages::getlanguage($self->{'cgi'}),
+        LANG        => C4::Languages::getlanguage( $self->{'cgi'} ),
     );
 
     return $template;
@@ -196,7 +196,7 @@ sub get_metadata {
 
     #FIXME: Why another encoding issue? For metadata containing non latin characters.
     my $metadata = $self->{metadata};
-    defined($metadata->{$_}) && utf8::decode($metadata->{$_}) for keys %$metadata;
+    defined( $metadata->{$_} ) && utf8::decode( $metadata->{$_} ) for keys %$metadata;
     return $metadata;
 }
 
@@ -338,8 +338,7 @@ sub _version_compare {
 
         if ( int( $v1[$i] ) > int( $v2[$i] ) ) {
             return 1;
-        }
-        elsif ( int( $v1[$i] ) < int( $v2[$i] ) ) {
+        } elsif ( int( $v1[$i] ) < int( $v2[$i] ) ) {
             return -1;
         }
     }
@@ -357,7 +356,7 @@ $plugin->enable
 sub is_enabled {
     my ($self) = @_;
 
-    return $self->retrieve_data( '__ENABLED__' );
+    return $self->retrieve_data('__ENABLED__');
 }
 
 =head2 enable
@@ -371,7 +370,7 @@ $plugin->enable
 sub enable {
     my ($self) = @_;
 
-    $self->store_data( {'__ENABLED__' => 1}  );
+    $self->store_data( { '__ENABLED__' => 1 } );
 
     return $self;
 }
@@ -387,7 +386,7 @@ $plugin->disable
 sub disable {
     my ($self) = @_;
 
-    $self->store_data( {'__ENABLED__' => 0}  );
+    $self->store_data( { '__ENABLED__' => 0 } );
 
     return $self;
 }

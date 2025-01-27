@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
@@ -26,7 +26,7 @@ use C4::Context;
 use Koha::Biblios;
 use AnyEvent;
 use AnyEvent::HTTP qw( http_request );
-use Encode qw( encode_utf8 );
+use Encode         qw( encode_utf8 );
 
 my ( $verbose, $help, $html ) = ( 0, 0, 0 );
 my ( $host,    $host_intranet ) = ( '', '' );
@@ -68,21 +68,20 @@ sub usage {
 sub report {
     my ( $hdr, $biblionumber, $url ) = @_;
     print $html
-      ? "<tr>\n <td><a href=\""
-      . $host_intranet
-      . $uriedit
-      . $biblionumber
-      . "\">$biblionumber</a>"
-      . "</td>\n <td>$url</td>\n <td>"
-      . "$hdr->{Status} $hdr->{Reason}</td>\n</tr>\n"
-      : "$biblionumber\t$url\t" . "$hdr->{Status} $hdr->{Reason}\n";
+        ? "<tr>\n <td><a href=\""
+        . $host_intranet
+        . $uriedit
+        . $biblionumber
+        . "\">$biblionumber</a>"
+        . "</td>\n <td>$url</td>\n <td>"
+        . "$hdr->{Status} $hdr->{Reason}</td>\n</tr>\n"
+        : "$biblionumber\t$url\t" . "$hdr->{Status} $hdr->{Reason}\n";
 }
 
 # Check all URLs from all current Koha biblio records
 
 sub check_all_url {
-    my $sth = C4::Context->dbh->prepare(
-        "SELECT biblionumber FROM biblioitems ORDER BY biblionumber");
+    my $sth = C4::Context->dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber");
     $sth->execute;
 
     my $count = 0;                   # Number of requested URL
@@ -110,7 +109,7 @@ sub check_all_url {
                                 my ( undef, $hdr ) = @_;
                                 $count--;
                                 report( $hdr, $biblionumber, $url )
-                                  if $hdr->{Status} !~ /^2/ || $verbose;
+                                    if $hdr->{Status} !~ /^2/ || $verbose;
                             },
                         );
                     }
@@ -139,10 +138,8 @@ usage() if $help;
 if ( $html && !$host_intranet ) {
     if ($host) {
         $host_intranet = $host;
-    }
-    else {
-        say
-"Error: host-intranet parameter or host must be provided in html mode";
+    } else {
+        say "Error: host-intranet parameter or host must be provided in html mode";
         exit;
     }
 }

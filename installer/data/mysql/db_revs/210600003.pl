@@ -1,9 +1,9 @@
 use Modern::Perl;
 
 return {
-    bug_number => "24434",
+    bug_number  => "24434",
     description => "Add 'WrongTransfer' to branchtransfers.cancellation_reason enum",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
         my $dbh = $args->{dbh};
 
@@ -30,4 +30,4 @@ return {
               }
         );
     },
-}
+    }

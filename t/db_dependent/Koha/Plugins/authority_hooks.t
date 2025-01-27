@@ -57,17 +57,17 @@ subtest 'after_authority_action hook' => sub {
     $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
     my $type = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
 
-    warnings_exist { ( $id ) = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} ); }
-            qr/after_authority_action called with action: create, id: \d+/,
-            'AddAuthority calls the hook with action=create, id passed';
+    warnings_exist { ($id) = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} ); }
+    qr/after_authority_action called with action: create, id: \d+/,
+        'AddAuthority calls the hook with action=create, id passed';
 
     warnings_exist { C4::AuthoritiesMarc::ModAuthority( $id, $record, $type->{authtypecode}, { skip_merge => 1 } ); }
-            qr/after_authority_action called with action: modify, id: $id/,
-            'ModAuthority calls the hook with action=modify, id passed';
+    qr/after_authority_action called with action: modify, id: $id/,
+        'ModAuthority calls the hook with action=modify, id passed';
 
-    warnings_exist { C4::AuthoritiesMarc::DelAuthority({ authid => $id, skip_merge => 1 }); }
-            qr/after_authority_action called with action: delete, id: $id/,
-            'DelAuthority calls the hook with action=delete, id passed';
+    warnings_exist { C4::AuthoritiesMarc::DelAuthority( { authid => $id, skip_merge => 1 } ); }
+    qr/after_authority_action called with action: delete, id: $id/,
+        'DelAuthority calls the hook with action=delete, id passed';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;

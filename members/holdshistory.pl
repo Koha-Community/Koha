@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Patrons;
@@ -30,24 +30,27 @@ my $borrowernumber;
 my $cardnumber;
 my @all_holds;
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/holdshistory.tt",
-                query => $input,
-                type => "intranet",
-                flagsrequired => {borrowers => 'edit_borrowers'},
-                });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "members/holdshistory.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
+    }
+);
 
 my $patron;
 
-if ($input->param('cardnumber')) {
+if ( $input->param('cardnumber') ) {
     $cardnumber = $input->param('cardnumber');
-    $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
+    $patron     = Koha::Patrons->find( { cardnumber => $cardnumber } );
 }
-if ($input->param('borrowernumber')) {
+if ( $input->param('borrowernumber') ) {
     $borrowernumber = $input->param('borrowernumber');
-    $patron = Koha::Patrons->find( $borrowernumber );
+    $patron         = Koha::Patrons->find($borrowernumber);
 }
 
-unless ( $patron ) {
+unless ($patron) {
     print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
 }
@@ -55,19 +58,20 @@ unless ( $patron ) {
 my $holds;
 my $old_holds;
 
-if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ){
+if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ) {
+
     # use of 'eq' in the above comparison is intentional -- the
     # system preference value could be blank
     $template->param( is_anonymous => 1 );
 } else {
-    $holds = $patron->holds;
+    $holds     = $patron->holds;
     $old_holds = $patron->old_holds;
 
-    while (my $hold = $holds->next) {
+    while ( my $hold = $holds->next ) {
         push @all_holds, $hold;
     }
 
-    while (my $hold = $old_holds->next) {
+    while ( my $hold = $old_holds->next ) {
         push @all_holds, $hold;
     }
 }

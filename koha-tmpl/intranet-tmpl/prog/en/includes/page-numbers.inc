@@ -7,11 +7,19 @@
             [% END %]
             [% IF ( previous_page_offset.defined ) %]
                 <li class="page-item">
-                    <a class="page-link" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"><i class="fa fa-fw fa-angle-double-left"></i> First</a>
+                    <a
+                        class="page-link"
+                        href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"
+                        ><i class="fa fa-fw fa-angle-double-left"></i> First</a
+                    >
                 </li>
                 <!-- Row of numbers corresponding to search result pages -->
                 <li class="page-item">
-                    <a class="page-link" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% previous_page_offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"><i class="fa fa-fw fa-angle-left"></i> Previous</a>
+                    <a
+                        class="page-link"
+                        href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% previous_page_offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"
+                        ><i class="fa fa-fw fa-angle-left"></i> Previous</a
+                    >
                 </li>
             [% END %]
             [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
@@ -21,18 +29,31 @@
                     </li>
                 [% ELSE %]
                     <li class="page-item">
-                        <a class="page-link" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% PAGE_NUMBER.offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]">[% PAGE_NUMBER.pg | html %]</a>
+                        <a
+                            class="page-link"
+                            href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% PAGE_NUMBER.offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"
+                            >[% PAGE_NUMBER.pg | html %]</a
+                        >
                     </li>
                 [% END %]
             [% END %]
             [% IF ( next_page_offset ) %]
                 <li class="page-item">
-                    <a class="page-link" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% next_page_offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]">Next <i class="fa fa-fw fa-angle-right"></i></a>
+                    <a
+                        class="page-link"
+                        href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% next_page_offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"
+                        >Next <i class="fa fa-fw fa-angle-right"></i
+                    ></a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% last_page_offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
+                    <a
+                        class="page-link"
+                        href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% last_page_offset | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | html %][% END %]"
+                        >Last <i class="fa fa-fw fa-angle-double-right"></i
+                    ></a>
                 </li>
             [% END %]
-        </ul> <!-- /.pagination -->
+        </ul>
+        <!-- /.pagination -->
     </nav>
 [% END %][% END %]

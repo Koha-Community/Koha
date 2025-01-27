@@ -49,9 +49,9 @@ Returns the prefetched chooser for this visit.
 =cut
 
 sub chooser {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->chooser_brwnumber;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 deliverer
@@ -63,9 +63,9 @@ Returns the prefetched deliverer for this visit.
 =cut
 
 sub deliverer {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->deliverer_brwnumber;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 
 }
 

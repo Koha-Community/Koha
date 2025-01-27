@@ -1,8 +1,6 @@
 #!/usr/bin/perl
 
-
 #script to show display basket of orders
-
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2008-2009 BibLibre SARL
@@ -67,12 +65,12 @@ To know how many results have to be display / page.
 =cut
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::Acquisition qw( GetInvoices GetInvoice AddInvoice );
-use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
+use C4::Budgets     qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Invoices;
@@ -80,7 +78,7 @@ use Koha::AdditionalFields;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input          = CGI->new;
-my $booksellerid     = $input->param('booksellerid');
+my $booksellerid   = $input->param('booksellerid');
 my $order          = $input->param('orderby') || 'shipmentdate desc';
 my $startfrom      = $input->param('startfrom');
 my $code           = $input->param('filter');
@@ -92,17 +90,18 @@ my $op             = $input->param('op');
 $resultsperpage ||= 20;
 
 our ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
-    {   template_name   => 'acqui/parcels.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => 'order_receive' },
+    {
+        template_name => 'acqui/parcels.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { acquisition => 'order_receive' },
     }
 );
 
-my $invoicenumber = $input->param('invoice');
-my $shipmentcost = $input->param('shipmentcost');
+my $invoicenumber         = $input->param('invoice');
+my $shipmentcost          = $input->param('shipmentcost');
 my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
-my $shipmentdate = $input->param('shipmentdate');
+my $shipmentdate          = $input->param('shipmentdate');
 
 if ( $op and $op eq 'cud-new' ) {
     if ( C4::Context->preference('AcqWarnOnDuplicateInvoice') ) {
@@ -111,51 +110,50 @@ if ( $op and $op eq 'cud-new' ) {
             invoicenumber => $invoicenumber,
         );
         if ( scalar @invoices > 0 ) {
-            $template->{'VARS'}->{'duplicate_invoices'} = \@invoices;
-            $template->{'VARS'}->{'invoicenumber'}      = $invoicenumber;
-            $template->{'VARS'}->{'shipmentdate'}       = $shipmentdate;
-            $template->{'VARS'}->{'shipmentcost'}       = $shipmentcost;
-            $template->{'VARS'}->{'shipmentcost_budgetid'} =
-              $shipmentcost_budgetid;
+            $template->{'VARS'}->{'duplicate_invoices'}    = \@invoices;
+            $template->{'VARS'}->{'invoicenumber'}         = $invoicenumber;
+            $template->{'VARS'}->{'shipmentdate'}          = $shipmentdate;
+            $template->{'VARS'}->{'shipmentcost'}          = $shipmentcost;
+            $template->{'VARS'}->{'shipmentcost_budgetid'} = $shipmentcost_budgetid;
         }
     }
     $op = 'cud-confirm' unless $template->{'VARS'}->{'duplicate_invoices'};
 }
 
-if ($op and $op eq 'cud-confirm') {
+if ( $op and $op eq 'cud-confirm' ) {
     my $invoiceid = AddInvoice(
-        invoicenumber => $invoicenumber,
-        booksellerid => $booksellerid,
-        shipmentdate => $shipmentdate,
-        shipmentcost => $shipmentcost,
+        invoicenumber         => $invoicenumber,
+        booksellerid          => $booksellerid,
+        shipmentdate          => $shipmentdate,
+        shipmentcost          => $shipmentcost,
         shipmentcost_budgetid => $shipmentcost_budgetid,
     );
-    if (defined $invoiceid) {
+    if ( defined $invoiceid ) {
 
         my @additional_fields =
             Koha::Acquisition::Invoices->find($invoiceid)->prepare_cgi_additional_field_values( $input, 'aqinvoices' );
         if (@additional_fields) {
-            my $invoice = Koha::Acquisition::Invoices->find( $invoiceid );
-            $invoice->set_additional_fields(\@additional_fields);
+            my $invoice = Koha::Acquisition::Invoices->find($invoiceid);
+            $invoice->set_additional_fields( \@additional_fields );
         }
+
         # Successful 'Add'
         print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
         exit 0;
     } else {
-        $template->param(error_failed_to_create_invoice => 1);
+        $template->param( error_failed_to_create_invoice => 1 );
     }
 }
 
 $template->param(
-    available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'aqinvoices' })->as_list ]
-);
+    available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqinvoices' } )->as_list ] );
 
-my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
 my @parcels    = GetInvoices(
     supplierid    => $booksellerid,
     invoicenumber => $code,
     ( $datefrom ? ( shipmentdatefrom => $datefrom ) : () ),
-    ( $dateto   ? ( shipmentdateto   => $dateto   ) : () ),
+    ( $dateto   ? ( shipmentdateto   => $dateto )   : () ),
     order_by => $order,
     ( $include_closed ? () : ( closedate => undef ) ),
 );
@@ -183,12 +181,13 @@ if ( $count_parcels > $resultsperpage ) {
 my $loopres = [];
 
 my $next_page_start = $startfrom + $resultsperpage;
-my $last_row = ( $next_page_start < $count_parcels  ) ? $next_page_start - 1 : $count_parcels - 1;
-for my $i ( $startfrom .. $last_row) {
+my $last_row        = ( $next_page_start < $count_parcels ) ? $next_page_start - 1 : $count_parcels - 1;
+for my $i ( $startfrom .. $last_row ) {
     my $p = $parcels[$i];
 
     push @{$loopres},
-      { number           => $i + 1,
+        {
+        number           => $i + 1,
         invoiceid        => $p->{invoiceid},
         code             => $p->{invoicenumber},
         nullcode         => $p->{invoicenumber} eq 'NULL',
@@ -196,9 +195,9 @@ for my $i ( $startfrom .. $last_row) {
         raw_datereceived => $p->{shipmentdate},
         datereceived     => $p->{shipmentdate},
         bibcount         => $p->{receivedbiblios} || 0,
-        reccount         => $p->{receiveditems} || 0,
-        itemcount        => $p->{itemsexpected} || 0,
-      };
+        reccount         => $p->{receiveditems}   || 0,
+        itemcount        => $p->{itemsexpected}   || 0,
+        };
 }
 if ($count_parcels) {
     $template->param( searchresults => $loopres, count => $count_parcels );
@@ -206,32 +205,31 @@ if ($count_parcels) {
 
 # build budget list
 my $budget_loop = [];
-my $budgets = GetBudgetHierarchy;
-foreach my $r (@{$budgets}) {
-    next unless (CanUserUseBudget($loggedinuser, $r, $flags));
+my $budgets     = GetBudgetHierarchy;
+foreach my $r ( @{$budgets} ) {
+    next unless ( CanUserUseBudget( $loggedinuser, $r, $flags ) );
     push @{$budget_loop}, {
-        b_id  => $r->{budget_id},
-        b_txt => $r->{budget_name},
+        b_id     => $r->{budget_id},
+        b_txt    => $r->{budget_name},
         b_active => $r->{budget_period_active},
     };
 }
 
 @{$budget_loop} =
-  sort { uc( $a->{b_txt}) cmp uc( $b->{b_txt}) } @{$budget_loop};
-
+    sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @{$budget_loop};
 
 $template->param(
-    orderby                  => $order,
-    filter                   => $code,
-    datefrom                 => $datefrom,
-    dateto                   => $dateto,
-    resultsperpage           => $resultsperpage,
-    filter_include_closed    => $include_closed,
-    name                     => $bookseller->name,
-    shipmentdate_today       => dt_from_string,
-    booksellerid             => $booksellerid,
-    GST                      => C4::Context->preference('TaxRates'),
-    budgets                  => $budget_loop,
+    orderby               => $order,
+    filter                => $code,
+    datefrom              => $datefrom,
+    dateto                => $dateto,
+    resultsperpage        => $resultsperpage,
+    filter_include_closed => $include_closed,
+    name                  => $bookseller->name,
+    shipmentdate_today    => dt_from_string,
+    booksellerid          => $booksellerid,
+    GST                   => C4::Context->preference('TaxRates'),
+    budgets               => $budget_loop,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -256,23 +254,24 @@ sub set_page_navigation {
         }
 
         # set up page indexes for at max 15 pages
-        my $max_idx = ( $pages < 15 ) ? $pages : 15;
+        my $max_idx      = ( $pages < 15 ) ? $pages : 15;
         my $current_page = ( $startfrom / $resultsperpage ) - 1;
         for my $idx ( 1 .. $max_idx ) {
             push @{$numbers},
-              { number    => $idx,
+                {
+                number    => $idx,
                 startfrom => ( $idx - 1 ) * $resultsperpage,
                 highlight => ( $idx == $current_page ),
-              };
+                };
         }
     }
 
     $template->param(
-        numbers     => $numbers,
-        displaynext => $displaynext,
-        displayprev => $displayprev,
+        numbers       => $numbers,
+        displaynext   => $displaynext,
+        displayprev   => $displayprev,
         nextstartfrom => ( ( $next_row < $total_rows ) ? $next_row : $total_rows ),
-        prevstartfrom => ( ( $prev_row > 0 ) ? $prev_row : 0 )
+        prevstartfrom => ( ( $prev_row > 0 )           ? $prev_row : 0 )
     );
     return;
 }

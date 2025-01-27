@@ -40,15 +40,16 @@ Return the configuration options needed for the ERM Vue app
 sub config {
     my $c = shift->openapi->valid_input or return;
     return $c->render(
-        status => 200,
+        status  => 200,
         openapi => {
             settings => {
-                ERMModule => C4::Context->preference('ERMModule'),
-                ERMProviders => [split ',', C4::Context->preference('ERMProviders')]
+                ERMModule    => C4::Context->preference('ERMModule'),
+                ERMProviders => [ split ',', C4::Context->preference('ERMProviders') ]
             },
+
             # TODO Add permissions
         },
-    )
+    );
 }
 
 =head3 list_users
@@ -63,14 +64,13 @@ sub list_users {
     return try {
 
         my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('erm');
-        my $patrons    = $c->objects->search( $patrons_rs );
+        my $patrons    = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

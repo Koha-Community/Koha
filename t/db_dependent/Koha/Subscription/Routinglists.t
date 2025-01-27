@@ -35,32 +35,38 @@ subtest 'new() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $biblio = Koha::Biblio->new()->store();
-    my $subscription = Koha::Subscription->new({
-        biblionumber => $biblio->biblionumber,
+    my $biblio       = Koha::Biblio->new()->store();
+    my $subscription = Koha::Subscription->new(
+        {
+            biblionumber => $biblio->biblionumber,
         }
     )->store;
 
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library->id } });
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
 
     my $routinglist_count = Koha::Subscription::Routinglists->count;
-    my $routinglist = Koha::Subscription::Routinglist->new({
-        borrowernumber   => $patron->borrowernumber,
-        ranking          => 1,
-        subscriptionid   => $subscription->subscriptionid
-    })->store;
+    my $routinglist       = Koha::Subscription::Routinglist->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            ranking        => 1,
+            subscriptionid => $subscription->subscriptionid
+        }
+    )->store;
 
-    is( Koha::Subscription::Routinglists->search->count, $routinglist_count +1, 'One routing list added' );
+    is( Koha::Subscription::Routinglists->search->count, $routinglist_count + 1, 'One routing list added' );
 
     my $retrieved_routinglist = Koha::Subscription::Routinglists->find( $routinglist->routingid );
-    is ( $retrieved_routinglist->routingid, $routinglist->routingid, "Find a routing list by id returns the correct routing list");
+    is(
+        $retrieved_routinglist->routingid, $routinglist->routingid,
+        "Find a routing list by id returns the correct routing list"
+    );
 
     $routinglist->ranking(4)->update;
-    is ( $routinglist->ranking, 4, "Routing list ranking has been updated");
+    is( $routinglist->ranking, 4, "Routing list ranking has been updated" );
 
     $routinglist->delete;
-    is ( Koha::Subscription::Routinglists->search->count, $routinglist_count, 'One subscription list deleted' );
+    is( Koha::Subscription::Routinglists->search->count, $routinglist_count, 'One subscription list deleted' );
 
 };
 

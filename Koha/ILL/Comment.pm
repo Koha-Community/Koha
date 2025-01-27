@@ -36,10 +36,8 @@ Return the patron object associated with this comment
 =cut
 
 sub patron {
-    my ( $self ) = @_;
-    return Koha::Patron->_new_from_dbic(
-        scalar $self->_result->borrowernumber
-    );
+    my ($self) = @_;
+    return Koha::Patron->_new_from_dbic( scalar $self->_result->borrowernumber );
 }
 
 =head2 Internal methods

@@ -26,26 +26,26 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Try::Tiny;
 use Array::Utils qw( array_minus );
-use C4::Auth qw(get_template_and_user);
+use C4::Auth     qw(get_template_and_user);
 use C4::Koha;
 use C4::Context;
-use C4::Log qw( logaction );
-use C4::Output qw(output_html_with_http_headers output_and_exit_if_error);
-use C4::Languages qw(getTranslatedLanguages);
+use C4::Log         qw( logaction );
+use C4::Output      qw(output_html_with_http_headers output_and_exit_if_error);
+use C4::Languages   qw(getTranslatedLanguages);
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 use Koha::AdditionalContents;
 
 my $cgi = CGI->new;
 
-my $op             = $cgi->param('op') || 'list';
-my $id             = $cgi->param('id');
-my $category       = $cgi->param('category') || 'news';
+my $op       = $cgi->param('op') || 'list';
+my $id       = $cgi->param('id');
+my $category = $cgi->param('category') || 'news';
 my $wysiwyg;
-my $redirect       = $cgi->param('redirect');
+my $redirect = $cgi->param('redirect');
 my $editmode;
 
-if( $cgi->param('editmode') ){
+if ( $cgi->param('editmode') ) {
     $wysiwyg = $cgi->param('editmode') eq "wysiwyg" ? 1 : 0;
 } else {
     $wysiwyg = C4::Context->preference("AdditionalContentsEditor") eq "tinymce" ? 1 : 0;
@@ -55,10 +55,10 @@ $editmode = $wysiwyg eq 1 ? "wysiwyg" : "text";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/additional-contents.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { tools => 'edit_additional_contents' },
+        template_name => "tools/additional-contents.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { tools => 'edit_additional_contents' },
     }
 );
 
@@ -72,21 +72,20 @@ if ( $op eq 'add_form' ) {
         $category            = $additional_content->category;
     }
     $template->param(
-        additional_content => $additional_content,
+        additional_content  => $additional_content,
         translated_contents => $translated_contents,
     );
-}
-elsif ( $op eq 'cud-add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     output_and_exit_if_error( $cgi, $cookie, $template, { check => 'csrf_token' } );
     my $location   = $cgi->param('location');
     my $code       = $cgi->param('code');
     my $branchcode = $cgi->param('branchcode') || undef;
 
-    my @lang       = $cgi->multi_param('lang');
+    my @lang = $cgi->multi_param('lang');
 
     my $expirationdate = $cgi->param('expirationdate');
-    my $published_on = $cgi->param('published_on');
-    my $number = $cgi->param('number');
+    my $published_on   = $cgi->param('published_on');
+    my $number         = $cgi->param('number');
 
     try {
         Koha::Database->new->schema->txn_do(
@@ -181,28 +180,33 @@ elsif ( $op eq 'cud-add_validate' ) {
         }
     };
 
-    if( $redirect eq "just_save" ){
-        print $cgi->redirect("/cgi-bin/koha/tools/additional-contents.pl?op=add_form&id=$id&category=$category&editmode=$editmode&redirect=done");
+    if ( $redirect eq "just_save" ) {
+        print $cgi->redirect(
+            "/cgi-bin/koha/tools/additional-contents.pl?op=add_form&id=$id&category=$category&editmode=$editmode&redirect=done"
+        );
         exit;
     } else {
         $op = 'list';
     }
-}
-elsif ( $op eq 'cud-delete_confirmed' ) {
-    output_and_exit_if_error($cgi, $cookie, $template, { check => 'csrf_token' });
+} elsif ( $op eq 'cud-delete_confirmed' ) {
+    output_and_exit_if_error( $cgi, $cookie, $template, { check => 'csrf_token' } );
     my @ids = $cgi->multi_param('ids');
 
     try {
         Koha::Database->new->schema->txn_do(
             sub {
-                my $contents =
-                  Koha::AdditionalContents->search( { id => \@ids } );
+                my $contents = Koha::AdditionalContents->search( { id => \@ids } );
 
                 if ( C4::Context->preference("NewsLog") ) {
                     while ( my $c = $contents->next ) {
                         my $translated_contents = $c->translated_contents;
                         while ( my $translated_content = $translated_contents->next ) {
-                            logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $c->code, $translated_content->lang, $translated_content->content));
+                            logaction(
+                                'NEWS', 'DELETE', undef,
+                                sprintf(
+                                    "%s|%s|%s|%s", $c->code, $translated_content->lang, $translated_content->content
+                                )
+                            );
                         }
                     }
                 }
@@ -220,7 +224,7 @@ elsif ( $op eq 'cud-delete_confirmed' ) {
 
 if ( $op eq 'list' ) {
     my $additional_contents = Koha::AdditionalContents->search(
-        { category => $category, 'additional_contents_localizations.lang' => 'default' },
+        { category => $category,                   'additional_contents_localizations.lang' => 'default' },
         { order_by => { -desc => 'published_on' }, join => 'additional_contents_localizations' }
     );
     $template->param( additional_contents => $additional_contents );
@@ -232,24 +236,22 @@ for my $language (@$translated_languages) {
     for my $sublanguage ( @{ $language->{sublanguages_loop} } ) {
         if ( $language->{plural} ) {
             push @languages,
-              {
+                {
                 lang        => $sublanguage->{rfc4646_subtag},
                 description => $sublanguage->{native_description} . ' '
-                  . $sublanguage->{region_description} . ' ('
-                  . $sublanguage->{rfc4646_subtag} . ')',
-              };
-        }
-        else {
+                    . $sublanguage->{region_description} . ' ('
+                    . $sublanguage->{rfc4646_subtag} . ')',
+                };
+        } else {
             push @languages,
-              {
+                {
                 lang        => $sublanguage->{rfc4646_subtag},
-                description => $sublanguage->{native_description} . ' ('
-                  . $sublanguage->{rfc4646_subtag} . ')',
-              };
+                description => $sublanguage->{native_description} . ' (' . $sublanguage->{rfc4646_subtag} . ')',
+                };
         }
     }
 }
-unshift @languages, {lang => 'default'} if @languages;
+unshift @languages, { lang => 'default' } if @languages;
 
 $template->param(
     op        => $op,

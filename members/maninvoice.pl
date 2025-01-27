@@ -23,12 +23,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Try::Tiny qw( catch try );
+use Try::Tiny   qw( catch try );
 use URI::Escape qw( uri_escape_utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
 
@@ -45,10 +45,10 @@ use Koha::AdditionalFields;
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/maninvoice.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {
+        template_name => "members/maninvoice.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => {
             borrowers     => 'edit_borrowers',
             updatecharges => 'manual_invoice'
         }
@@ -58,8 +58,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 my $patron         = Koha::Patrons->find($borrowernumber);
 unless ($patron) {
-    print $input->redirect(
-        "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
 }
 
@@ -94,6 +93,7 @@ $template->param(
 );
 
 if ( $op eq 'cud-add' ) {
+
     # Note: If the logged in user is not allowed to see this patron an invoice can be forced
     # Here we are trusting librarians not to hack the system
     my $desc       = $input->param('desc');
@@ -104,21 +104,21 @@ if ( $op eq 'cud-add' ) {
     # If barcode is passed, attempt to find the associated item
     my $failed;
     my $item_id;
-    my $olditem; # FIXME: When items and deleted_items are merged, we can remove this
+    my $olditem;    # FIXME: When items and deleted_items are merged, we can remove this
     my $issue_id;
     if ($barcode) {
         my $item = Koha::Items->find( { barcode => $barcode } );
         if ($item) {
             $item_id = $item->itemnumber;
-        }
-        else {
-            $item = Koha::Old::Items->search( { barcode => $barcode },
-                { order_by => { -desc => 'timestamp' }, rows => 1 } );
-            if ($item->count) {
+        } else {
+            $item = Koha::Old::Items->search(
+                { barcode  => $barcode },
+                { order_by => { -desc => 'timestamp' }, rows => 1 }
+            );
+            if ( $item->count ) {
                 $item_id = $item->next->itemnumber;
                 $olditem = 1;
-            }
-            else {
+            } else {
                 $template->param( error => 'itemnumber' );
                 $failed = 1;
             }
@@ -132,9 +132,9 @@ if ( $op eq 'cud-add' ) {
                 }
             );
             my $checkout =
-                $checkouts->count
-              ? $checkouts->next
-              : Koha::Old::Checkouts->search(
+                  $checkouts->count
+                ? $checkouts->next
+                : Koha::Old::Checkouts->search(
                 {
                     itemnumber     => $item_id,
                     borrowernumber => $borrowernumber
@@ -157,13 +157,13 @@ if ( $op eq 'cud-add' ) {
                     library_id  => $library_id,
                     type        => $debit_type,
                     ( $olditem ? () : ( item_id => $item_id ) ),
-                    issue_id    => $issue_id
+                    issue_id => $issue_id
                 }
             );
 
             my @additional_fields = $line->prepare_cgi_additional_field_values( $input, 'accountlines:debit' );
             if (@additional_fields) {
-                $line->set_additional_fields(\@additional_fields);
+                $line->set_additional_fields( \@additional_fields );
             }
 
             if ( C4::Context->preference('AccountAutoReconcile') ) {
@@ -185,21 +185,16 @@ if ( $op eq 'cud-add' ) {
                 );
 
                 print $input->redirect($url);
-            }
-            else {
-                print $input->redirect(
-                    "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
-                );
+            } else {
+                print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
             }
 
             exit;
-        }
-        catch {
+        } catch {
             my $error = $_;
             if ( ref($error) eq 'Koha::Exceptions::Object::FKConstraint' ) {
                 $template->param( error => $error->broken_fk );
-            }
-            else {
+            } else {
                 $template->param( error => $error );
             }
         }
@@ -207,13 +202,14 @@ if ( $op eq 'cud-add' ) {
 }
 
 my $debit_types = Koha::Account::DebitTypes->search_with_library_limits(
-  { can_be_invoiced => 1, archived => 0 },
-  {}, $library_id );
+    { can_be_invoiced => 1, archived => 0 },
+    {}, $library_id
+);
 
 $template->param(
-  debit_types => $debit_types,
-  patron    => $patron,
-  finesview => 1,
-  available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:debit' })->as_list ],
-  );
+    debit_types                 => $debit_types,
+    patron                      => $patron,
+    finesview                   => 1,
+    available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'accountlines:debit' } )->as_list ],
+);
 output_html_with_http_headers $input, $cookie, $template->output;

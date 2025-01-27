@@ -67,7 +67,7 @@ subtest 'StageMARCForImport' => sub {
         }
     );
 
-    my $report = decode_json($job->get_from_storage->data)->{report};
+    my $report = decode_json( $job->get_from_storage->data )->{report};
     is( $report->{num_items},     138 );
     is( $report->{staged},        178 );
     is( $report->{total},         179 );

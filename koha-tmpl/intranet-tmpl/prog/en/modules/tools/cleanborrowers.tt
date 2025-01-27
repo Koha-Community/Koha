@@ -6,17 +6,20 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF step == 2 %]
-        [% t("Confirm") | html %] &rsaquo;
-    [% END %]
-    [% IF step == 3 %]
-        [% t("Finished") | html %] &rsaquo;
-    [% END %]
-    [% t("Batch patron deletion and anonymization") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF step == 2 %]
+            [% t("Confirm") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF step == 3 %]
+            [% t("Finished") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Batch patron deletion and anonymization") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -57,210 +60,204 @@
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
 
-[% IF !OnlyMine %]
-  [% IF current_branch == '*' %]
-    <h1>Batch patron deletion and anonymization</h1>
-  [% ELSE %]
-    <h1>Batch patron deletion and anonymization for [% Branches.GetName( current_branch ) | html %]</h1>
-  [% END %]
-    [% IF step == 1 %]
-    <form method="get" action="/cgi-bin/koha/tools/cleanborrowers.pl" id="selectlibrary">
-    Select a library :
-        <select name="branch" id="branch" style="width:20em;">
-            <option value="*">All libraries</option>
-        [% FOREACH branch IN Branches.all( selected => current_branch ) %]
-          [% IF branch.selected %]
-            <option value="[% branch.branchcode | html %]" selected="selected">[% branch.branchname | html %]</option>
-          [% ELSE %]
-            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-          [% END %]
+    [% IF !OnlyMine %]
+        [% IF current_branch == '*' %]
+            <h1>Batch patron deletion and anonymization</h1>
+        [% ELSE %]
+            <h1>Batch patron deletion and anonymization for [% Branches.GetName( current_branch ) | html %]</h1>
         [% END %]
-        </select>
-    </form>
+        [% IF step == 1 %]
+            <form method="get" action="/cgi-bin/koha/tools/cleanborrowers.pl" id="selectlibrary">
+                Select a library :
+                <select name="branch" id="branch" style="width:20em;">
+                    <option value="*">All libraries</option>
+                    [% FOREACH branch IN Branches.all( selected => current_branch ) %]
+                        [% IF branch.selected %]
+                            <option value="[% branch.branchcode | html %]" selected="selected">[% branch.branchname | html %]</option>
+                        [% ELSE %]
+                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+            </form>
+        [% END %]
+    [% ELSE %]
+        <h1>Batch patron deletion and anonymization for [% Branches.GetLoggedInBranchname | html %]</h1>
     [% END %]
-[% ELSE %]
-    <h1>Batch patron deletion and anonymization for [% Branches.GetLoggedInBranchname | html %]</h1>
-[% END %]
 
-[% IF step == 1 %]
-<!-- step 1 START -->
+    [% IF step == 1 %]
+        <!-- step 1 START -->
 
-<div class="help">
-    <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used. Patrons will not be deleted if they meet one or more of the following conditions:</p>
-<ul>
-<li>They have items currently checked out.</li>
-<li>They have a non-zero account balance.</li>
-<li>They are the guarantor to another patron.</li>
-<li>They are in a patron category of type staff.</li>
-<li>They have permissions assigned to them.</li>
-</ul>
-</div>
-<div id="step1">
-    <form name="f1" id="delete_patrons_form" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="get">
-    <fieldset>
-    <legend>Delete patrons</legend>
-        <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Verify you want to delete patrons</label></h3>
-        <br />
-        <h5>Delete patrons who meet the following criteria:</h5>
-        <ul>
-                <li>
-                    <label for="date1">who have not borrowed since:</label>
-                    <input size="10" id="date1" name="not_borrowed_since" type="text" class="flatpickr" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                </li>
-                <li>
-                    <label for="borrower_dateexpiry">whose expiration date is before:</label>
-                    <input size="10" id="borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="flatpickr" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                </li>
-                [% IF Koha.Preference('TrackLastPatronActivityTriggers') %]
-                    <li>
-                        <label for="borrower_lastseen">who have not been active since:</label>
-                        <input size="10" id="borrower_lastseen" name="borrower_lastseen" type="text" class="flatpickr" />
-                        <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                    </li>
-                [% END %]
-                <li>
-                    <label for="borrower_categorycode">whose patron category is:</label>
-                    <select id="borrower_categorycode" name="borrower_categorycode">
-                        <option value="" selected="selected">Any</option>
-                        [% FOREACH bc IN borrower_categorycodes %]
-                            [% UNLESS bc.category_type == 'S' %]
-                                <option value="[% bc.categorycode | html %]">[% bc.description | html %]</option>
-                            [% END %]
-                        [% END %]
-                    </select>
-                </li>
-                [% IF patron_lists %]
-                <li>
-                    <label for="patron_list_id">who are in patron list: </label>
-                    <select id="patron_list_id" name="patron_list_id">
-                        <option value=""></option>
-                        [% FOREACH pl IN patron_lists %]
-                            <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
-                        [% END %]
-                    </select>
-                </li>
-                [% END %]
-            </ul>
-        </fieldset>
-
-        <fieldset>
-        <legend>Anonymize checkout history</legend>
-        [% UNLESS Koha.Preference('AnonymousPatron') %]
-            <div class="alert alert-info">The AnonymousPatron system preference is not defined. You can use this feature anyway but NULL will be used to update the checkout history.</div>
-        [% END %]
-        <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Verify you want to anonymize patron checkout history</label></h3>
-        <br />
-        <ul>
-            <li>
-                <label for="date2">Permanently delete checkout history older than</label>
-                <input size="10" id="date2" name="last_issue_date" type="text" class="flatpickr" />
-                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-            </li>
-        </ul>
-
-            <!-- hidden here -->
-            <input type="hidden" name="step" value="2" />
-            <input type="hidden" name="branch" value="[% current_branch | html %]" />
-            </fieldset>
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Next &gt;&gt;" /></fieldset>
-    </form>
-</div>
-<!-- step 1 END -->
-[% END %]
-
-[% IF step == 2 %]
-<!-- STEP 2 START -->
-<div id="step2">
-        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete" />
-
-        <div class="alert alert-warning">
-            <h3>Warning</h3>
+        <div class="help">
+            <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used. Patrons will not be deleted if they meet one or more of the following conditions:</p>
             <ul>
-                <li>[% patrons_to_delete.size || 0 | html %] patrons will be deleted</li>
-                <li>[% patrons_to_anonymize.count || 0 | html %] patrons' checkout histories will be anonymized</li>
+                <li>They have items currently checked out.</li>
+                <li>They have a non-zero account balance.</li>
+                <li>They are the guarantor to another patron.</li>
+                <li>They are in a patron category of type staff.</li>
+                <li>They have permissions assigned to them.</li>
             </ul>
         </div>
-
-            [% IF patrons_to_delete.size %]
+        <div id="step1">
+            <form name="f1" id="delete_patrons_form" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="get">
                 <fieldset>
-                    <legend>How should patrons be deleted?</legend>
-                    <p>
-                        <input id="delete" type="radio" name="radio" value="delete" />
-                        <label for="delete">Permanently delete these patrons</label>
-                        <span class="hint">
-                            Delete patrons directly from the database. Patron data will not be recoverable.
-                        </span>
-                    </p>
-                    <p>
-                        <input id="trash" type="radio" name="radio" value="trash" />
-                        <label for="trash">Move these patrons to the trash</label>
-                        <span class="hint">
-                            Move patrons to the deleted patrons table. They can be deleted permanently by the <code>cleanup_database</code> script.
-                        </span>
-                    </p>
-                    <p>
-                        <input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
-                        <label for="testrun">Test run: Do not remove any patrons.</label>
-                        <input type="hidden" name="do_delete" value="[% patrons_to_delete.size | html %]" />
-                    </p>
+                    <legend>Delete patrons</legend>
+                    <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Verify you want to delete patrons</label></h3>
+                    <br />
+                    <h5>Delete patrons who meet the following criteria:</h5>
+                    <ul>
+                        <li>
+                            <label for="date1">who have not borrowed since:</label>
+                            <input size="10" id="date1" name="not_borrowed_since" type="text" class="flatpickr" />
+                            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                        </li>
+                        <li>
+                            <label for="borrower_dateexpiry">whose expiration date is before:</label>
+                            <input size="10" id="borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="flatpickr" />
+                            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                        </li>
+                        [% IF Koha.Preference('TrackLastPatronActivityTriggers') %]
+                            <li>
+                                <label for="borrower_lastseen">who have not been active since:</label>
+                                <input size="10" id="borrower_lastseen" name="borrower_lastseen" type="text" class="flatpickr" />
+                                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                            </li>
+                        [% END %]
+                        <li>
+                            <label for="borrower_categorycode">whose patron category is:</label>
+                            <select id="borrower_categorycode" name="borrower_categorycode">
+                                <option value="" selected="selected">Any</option>
+                                [% FOREACH bc IN borrower_categorycodes %]
+                                    [% UNLESS bc.category_type == 'S' %]
+                                        <option value="[% bc.categorycode | html %]">[% bc.description | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                        [% IF patron_lists %]
+                            <li>
+                                <label for="patron_list_id">who are in patron list: </label>
+                                <select id="patron_list_id" name="patron_list_id">
+                                    <option value=""></option>
+                                    [% FOREACH pl IN patron_lists %]
+                                        <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                        [% END %]
+                    </ul>
                 </fieldset>
-            [% END %]
 
-            [% IF patrons_to_anonymize.count %]
                 <fieldset>
-                Checkout history for [% patrons_to_anonymize.count | html %] patrons will be anonymized
-                <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.count | html %]" />
+                    <legend>Anonymize checkout history</legend>
+                    [% UNLESS Koha.Preference('AnonymousPatron') %]
+                        <div class="alert alert-info">The AnonymousPatron system preference is not defined. You can use this feature anyway but NULL will be used to update the checkout history.</div>
+                    [% END %]
+                    <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Verify you want to anonymize patron checkout history</label></h3>
+                    <br />
+                    <ul>
+                        <li>
+                            <label for="date2">Permanently delete checkout history older than</label>
+                            <input size="10" id="date2" name="last_issue_date" type="text" class="flatpickr" />
+                            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                        </li>
+                    </ul>
+
+                    <!-- hidden here -->
+                    <input type="hidden" name="step" value="2" />
+                    <input type="hidden" name="branch" value="[% current_branch | html %]" />
                 </fieldset>
-            [% END %]
+                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Next &gt;&gt;" /></fieldset>
+            </form>
+        </div>
+        <!-- step 1 END -->
+    [% END %]
 
-            <input type="hidden" name="step" value="3" />
-            <input type="hidden" name="not_borrowed_since" value="[% not_borrowed_since | $KohaDates dateformat => 'iso' %]" />
-            <input type="hidden" name="last_issue_date" value="[% last_issue_date | $KohaDates dateformat => 'iso' %]" />
-            <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry | $KohaDates dateformat => 'iso' %]" />
-            [% IF Koha.Preference('TrackLastPatronActivityTriggers') %]
-                <input type="hidden" name="borrower_lastseen" value="[% borrower_lastseen | $KohaDates dateformat => 'iso' %]" />
-            [% END %]
-            <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode | html %]" />
-            <input type="hidden" name="patron_list_id" value="[% patron_list_id | html %]" />
-            <input type="hidden" name="branch" value="[% current_branch | html %]" />
-    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
-        </form>
-</div>
-<!-- STEP 2 END -->
-[% END %]
+    [% IF step == 2 %]
+        <!-- STEP 2 START -->
+        <div id="step2">
+            <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete" />
 
-[% IF step == 3 %]
-<!-- Step 3 START -->
+                <div class="alert alert-warning">
+                    <h3>Warning</h3>
+                    <ul>
+                        <li>[% patrons_to_delete.size || 0 | html %] patrons will be deleted</li>
+                        <li>[% patrons_to_anonymize.count || 0 | html %] patrons' checkout histories will be anonymized</li>
+                    </ul>
+                </div>
 
-    <div id="step3">
-        [% IF ( testrun ) %]
-            <h4>[% TotalDel | html %] patrons would have been removed (if it wasn't a test run)</h4>
-            <h4>No patron records have been actually removed</h4>
-        [% ELSE %]
-            [% IF ( do_delete ) %]
-                [% IF ( trash ) %]
-                    <h4>[% TotalDel | html %] patrons have been successfully moved to trash</h4>
-                [% ELSE %]
-                    <h4>[% TotalDel | html %] patrons have been successfully deleted</h4>
+                [% IF patrons_to_delete.size %]
+                    <fieldset>
+                        <legend>How should patrons be deleted?</legend>
+                        <p>
+                            <input id="delete" type="radio" name="radio" value="delete" />
+                            <label for="delete">Permanently delete these patrons</label>
+                            <span class="hint"> Delete patrons directly from the database. Patron data will not be recoverable. </span>
+                        </p>
+                        <p>
+                            <input id="trash" type="radio" name="radio" value="trash" />
+                            <label for="trash">Move these patrons to the trash</label>
+                            <span class="hint"> Move patrons to the deleted patrons table. They can be deleted permanently by the <code>cleanup_database</code> script. </span>
+                        </p>
+                        <p>
+                            <input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
+                            <label for="testrun">Test run: Do not remove any patrons.</label>
+                            <input type="hidden" name="do_delete" value="[% patrons_to_delete.size | html %]" />
+                        </p>
+                    </fieldset>
                 [% END %]
+
+                [% IF patrons_to_anonymize.count %]
+                    <fieldset>
+                        Checkout history for [% patrons_to_anonymize.count | html %] patrons will be anonymized
+                        <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.count | html %]" />
+                    </fieldset>
+                [% END %]
+
+                <input type="hidden" name="step" value="3" />
+                <input type="hidden" name="not_borrowed_since" value="[% not_borrowed_since | $KohaDates dateformat => 'iso' %]" />
+                <input type="hidden" name="last_issue_date" value="[% last_issue_date | $KohaDates dateformat => 'iso' %]" />
+                <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry | $KohaDates dateformat => 'iso' %]" />
+                [% IF Koha.Preference('TrackLastPatronActivityTriggers') %]
+                    <input type="hidden" name="borrower_lastseen" value="[% borrower_lastseen | $KohaDates dateformat => 'iso' %]" />
+                [% END %]
+                <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode | html %]" />
+                <input type="hidden" name="patron_list_id" value="[% patron_list_id | html %]" />
+                <input type="hidden" name="branch" value="[% current_branch | html %]" />
+                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
+            </form>
+        </div>
+        <!-- STEP 2 END -->
+    [% END %]
+
+    [% IF step == 3 %]
+        <!-- Step 3 START -->
+
+        <div id="step3">
+            [% IF ( testrun ) %]
+                <h4>[% TotalDel | html %] patrons would have been removed (if it wasn't a test run)</h4>
+                <h4>No patron records have been actually removed</h4>
             [% ELSE %]
-                <h4>No patron records have been removed</h4>
+                [% IF ( do_delete ) %]
+                    [% IF ( trash ) %]
+                        <h4>[% TotalDel | html %] patrons have been successfully moved to trash</h4>
+                    [% ELSE %]
+                        <h4>[% TotalDel | html %] patrons have been successfully deleted</h4>
+                    [% END %]
+                [% ELSE %]
+                    <h4>No patron records have been removed</h4>
+                [% END %]
             [% END %]
-        [% END %]
-        [% IF do_anonym %]
-            <h4>All checkouts ([% do_anonym | html %]) older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
-        [% ELSE %]
-            <h4>No patron records have been anonymized</h4>
-        [% END %]
-
-    </div>
-<!-- Step 3 END -->
-[% END %]
-
+            [% IF do_anonym %]
+                <h4>All checkouts ([% do_anonym | html %]) older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
+            [% ELSE %]
+                <h4>No patron records have been anonymized</h4>
+            [% END %]
+        </div>
+        <!-- Step 3 END -->
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

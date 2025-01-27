@@ -46,8 +46,7 @@ subtest 'set() (authorized user tests)' => sub {
         }
     );
     my $password = 'thePassword123';
-    $privileged_patron->set_password(
-        { password => $password, skip_validation => 1 } );
+    $privileged_patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $privileged_patron->userid;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -58,59 +57,45 @@ subtest 'set() (authorized user tests)' => sub {
     my $new_password = 'abc';
 
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => $new_password } )
-      ->status_is(200)->json_is('');
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password } )->status_is(200)
+        ->json_is('');
 
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => 'cde' } )->status_is(400)
-      ->json_is( { error => 'Passwords don\'t match' } );
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => 'cde' } )->status_is(400)
+        ->json_is( { error => 'Passwords don\'t match' } );
 
     t::lib::Mocks::mock_preference( 'minPasswordLength', 5 );
 
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => $new_password } )
-      ->status_is(400)
-      ->json_is(
-        { error => 'Password length (3) is shorter than required (5)' } );
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password } )->status_is(400)
+        ->json_is( { error => 'Password length (3) is shorter than required (5)' } );
 
     $new_password = 'abc   ';
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => $new_password } )
-      ->status_is(400)->json_is(
-        {
-            error =>
-              '[Password contains leading/trailing whitespace character(s)]'
-        }
-      );
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password } )->status_is(400)
+        ->json_is( { error => '[Password contains leading/trailing whitespace character(s)]' } );
 
     $new_password = 'abcdefg';
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => $new_password } )
-      ->status_is(200)->json_is('');
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password } )->status_is(200)
+        ->json_is('');
 
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 1 );
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => $new_password } )
-      ->status_is(400)->json_is( { error => '[Password is too weak]' } );
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password } )->status_is(400)
+        ->json_is( { error => '[Password is too weak]' } );
 
     $new_password = 'ABcde123%&';
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password" => json =>
-          { password => $new_password, password_2 => $new_password } )
-      ->status_is(200)->json_is('');
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password } )->status_is(200)
+        ->json_is('');
 
     $schema->storage->txn_rollback;
 };
@@ -124,7 +109,7 @@ subtest 'set_public() (unprivileged user tests)' => sub {
     my $category = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
-            value => { change_password => 0 } # disallow changing password for the patron category
+            value => { change_password => 0 }      # disallow changing password for the patron category
         }
     );
     my $patron = $builder->build_object(
@@ -149,82 +134,59 @@ subtest 'set_public() (unprivileged user tests)' => sub {
     my $new_password = 'abc';
 
     $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/"
-          . $patron->id
-          . "/password" => json => {
+        "//$userid:$password@/api/v1/public/patrons/" . $patron->id . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
             old_password      => 'blah'
-          }
-    )->status_is(403)->json_is(
-        {
-            error => 'Changing password is forbidden'
         }
-    );
+    )->status_is(403)->json_is( { error => 'Changing password is forbidden' } );
 
     t::lib::Mocks::mock_preference( 'OpacPasswordChange', 1 );
 
     $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/"
-          . $other_patron->id
-          . "/password" => json => {
+        "//$userid:$password@/api/v1/public/patrons/" . $other_patron->id . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
             old_password      => $password
-          }
-    )->status_is(403)
-      ->json_is( '/error',
-        "Authorization failure. Missing required permission(s)." );
+        }
+    )->status_is(403)->json_is(
+        '/error',
+        "Authorization failure. Missing required permission(s)."
+    );
 
     $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/"
-          . $patron->id
-          . "/password" => json => {
+        "//$userid:$password@/api/v1/public/patrons/" . $patron->id . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
             old_password      => $password
-          }
-    )->status_is(403)->json_is({ error => 'Changing password is forbidden' });
+        }
+    )->status_is(403)->json_is( { error => 'Changing password is forbidden' } );
 
     # Allow password changing to the patron category
     $category->change_password(1)->store;
 
     $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/"
-          . $patron->id
-          . "/password" => json => {
+        "//$userid:$password@/api/v1/public/patrons/" . $patron->id . "/password" => json => {
             password          => $new_password,
             password_repeated => 'wrong_password',
             old_password      => $password
-          }
-    )->status_is(400)->json_is(
-        {
-            error => "Passwords don't match"
         }
-    );
+    )->status_is(400)->json_is( { error => "Passwords don't match" } );
 
     $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/"
-          . $patron->id
-          . "/password" => json => {
+        "//$userid:$password@/api/v1/public/patrons/" . $patron->id . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
             old_password      => 'badpassword'
-          }
-    )->status_is(400)->json_is(
-        {
-            error => "Invalid password"
         }
-    );
+    )->status_is(400)->json_is( { error => "Invalid password" } );
 
     $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/"
-          . $patron->id
-          . "/password" => json => {
+        "//$userid:$password@/api/v1/public/patrons/" . $patron->id . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
             old_password      => $password
-          }
+        }
     )->status_is(200)->json_is('');
 
     $schema->storage->txn_rollback;

@@ -2,23 +2,23 @@
 
 use Modern::Perl;
 
-use File::Copy qw( copy );
-use File::Path qw( make_path );
-use File::Find qw( find );
+use File::Copy     qw( copy );
+use File::Path     qw( make_path );
+use File::Find     qw( find );
 use File::Basename qw( dirname );
 use File::Spec;
 
 use C4::Context;
 
-my $source = File::Spec->rel2abs('.');
-my $destination = $ARGV[0];
-my $marc_type = $ARGV[1] || 'marc21';
+my $source        = File::Spec->rel2abs('.');
+my $destination   = $ARGV[0];
+my $marc_type     = $ARGV[1] || 'marc21';
 my $indexing_mode = $ARGV[2] || 'dom';
 
-$ENV{__ZEBRA_MARC_FORMAT__} = $marc_type;
-$ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios-dom.cfg';
-$ENV{__BIB_RETRIEVAL_CFG__} = 'retrieval-info-bib-dom.xml';
-$ENV{__ZEBRA_AUTH_CFG__} = 'zebra-authorities-dom.cfg';
+$ENV{__ZEBRA_MARC_FORMAT__}  = $marc_type;
+$ENV{__ZEBRA_BIB_CFG__}      = 'zebra-biblios-dom.cfg';
+$ENV{__BIB_RETRIEVAL_CFG__}  = 'retrieval-info-bib-dom.xml';
+$ENV{__ZEBRA_AUTH_CFG__}     = 'zebra-authorities-dom.cfg';
 $ENV{__AUTH_RETRIEVAL_CFG__} = 'retrieval-info-auth-dom.xml';
 
 make_path("$destination/var/lock/zebradb");
@@ -39,7 +39,7 @@ make_path("$destination/var/lib/zebradb/authorities/tmp");
 make_path("$destination/var/log/koha");
 make_path("$destination/var/run/zebradb");
 
-$ENV{'INSTALL_BASE'} = $destination;
+$ENV{'INSTALL_BASE'}     = $destination;
 $ENV{'__INSTALL_BASE__'} = $destination;
 
 $ENV{'__DB_TYPE__'} = C4::Context->config('db_scheme') // 'mysql';
@@ -56,7 +56,7 @@ my @files = (
     "$source/etc/log4perl.conf",
 );
 
-find(sub { push @files, $File::Find::name if ( -f $File::Find::name ); }, "$source/etc/zebradb");
+find( sub { push @files, $File::Find::name if ( -f $File::Find::name ); }, "$source/etc/zebradb" );
 
 foreach my $file (@files) {
     my $target = "$file";
@@ -64,16 +64,16 @@ foreach my $file (@files) {
     $target =~ s#etc/zebradb#etc/koha/zebradb#;
     $target =~ s#etc/log4perl\.conf#etc/koha/log4perl.conf#;
     unlink($target);
-    make_path(dirname($target));
-    copy("$file", "$target");
+    make_path( dirname($target) );
+    copy( "$file", "$target" );
     system("perl $source/rewrite-config.PL $target");
-    if ($file =~ m/xml/) {
-        replace("$target", "$destination/intranet/templates", "$source/koha-tmpl/intranet-tmpl");
+
+    if ( $file =~ m/xml/ ) {
+        replace( "$target", "$destination/intranet/templates", "$source/koha-tmpl/intranet-tmpl" );
     }
 }
 
-
 sub replace {
-    my ($file, $pattern, $replacement) = @_;
+    my ( $file, $pattern, $replacement ) = @_;
     system("sed -i -e 's#$pattern#$replacement#' $file");
 }

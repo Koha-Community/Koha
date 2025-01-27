@@ -36,6 +36,7 @@ provides something that can be given to Zebra to get answers.
 =head1 METHODS
 
 =cut
+
 use Modern::Perl;
 
 use base qw(Class::Accessor);
@@ -63,10 +64,10 @@ sub build_query {
 
 sub build_query_compat {
     my $self = shift;
-    my ($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang, $params) = @_;
+    my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang, $params ) = @_;
 
-    my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type)
-      = $self->build_query(@_);
+    my ( $error, $query, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, $query_type ) =
+        $self->build_query(@_);
 
     # add OPAC 'hidelostitems'
     #if (C4::Context->preference('hidelostitems') == 1) {
@@ -75,16 +76,17 @@ sub build_query_compat {
     #}
     #
     # add OPAC suppression - requires at least one item indexed with Suppress
-    if ($params->{suppress}) {
+    if ( $params->{suppress} ) {
         if ( defined $query_type and $query_type eq 'pqf' ) {
+
             #$query = "($query) && -(suppress:1)"; #QP syntax
-            $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1'; #PQF syntax
+            $query = '@not ' . $query . ' @attr 14=1 @attr 1=9011 1';    #PQF syntax
         } else {
             $query = "($query) not Suppress=1";
         }
     }
 
-    return ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
+    return ( $error, $query, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, $query_type );
 }
 
 =head2 build_authorities_query
@@ -113,10 +115,10 @@ sub build_authorities_query {
 =cut
 
 sub build_authorities_query_compat {
+
     # Pass straight through as well
     build_authorities_query(@_);
 }
-
 
 =head2 clean_search_term
 

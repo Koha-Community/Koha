@@ -20,7 +20,7 @@ package Koha::Plugins::Handler;
 use Modern::Perl;
 
 use Array::Utils qw( array_minus );
-use File::Path qw( remove_tree );
+use File::Path   qw( remove_tree );
 
 use Module::Load qw( load );
 
@@ -31,8 +31,8 @@ use Koha::Plugins::Methods;
 BEGIN {
     my $pluginsdir = C4::Context->config("pluginsdir");
     my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
-    push @INC, array_minus(@pluginsdir, @INC) ;
-    pop @INC if $INC[-1] eq '.' ;
+    push @INC, array_minus( @pluginsdir, @INC );
+    pop @INC if $INC[-1] eq '.';
 }
 
 =head1 NAME
@@ -64,11 +64,12 @@ sub run {
     my $cgi           = $args->{'cgi'};
     my $params        = $args->{'params'};
 
-    my $has_method = Koha::Plugins::Methods->search({ plugin_class => $plugin_class, plugin_method => $plugin_method })->count();
-    if ( $has_method ) {
+    my $has_method =
+        Koha::Plugins::Methods->search( { plugin_class => $plugin_class, plugin_method => $plugin_method } )->count();
+    if ($has_method) {
         load $plugin_class;
         my $plugin = $plugin_class->new( { cgi => $cgi, enable_plugins => $args->{'enable_plugins'} } );
-        return $plugin->$plugin_method( $params );
+        return $plugin->$plugin_method($params);
     } else {
         warn "Plugin does not have method $plugin_method";
         return;
@@ -91,18 +92,19 @@ sub delete {
     my $plugin_class = $args->{'class'};
 
     my $plugin_path = $plugin_class;
-    $plugin_path =~ s/::/\//g;  # Take class name, transform :: to / to get path
-    $plugin_path =~ s/$/.pm/;   # Add .pm to the end
-    require $plugin_path;   # Require the plugin to have it's path listed in INC
-    $plugin_path =
-      $INC{$plugin_path};   # Get the full true path to the plugin from INC
-    $plugin_path =~ s/.pm//;    # Remove the .pm from the end
+    $plugin_path =~ s/::/\//g;            # Take class name, transform :: to / to get path
+    $plugin_path =~ s/$/.pm/;             # Add .pm to the end
+    require $plugin_path;                 # Require the plugin to have it's path listed in INC
+    $plugin_path = $INC{$plugin_path};    # Get the full true path to the plugin from INC
+    $plugin_path =~ s/.pm//;              # Remove the .pm from the end
 
-    Koha::Plugins::Handler->run({
-        class          => $plugin_class,
-        method         => 'uninstall',
-        enable_plugins => $args->{enable_plugins},
-    });
+    Koha::Plugins::Handler->run(
+        {
+            class          => $plugin_class,
+            method         => 'uninstall',
+            enable_plugins => $args->{enable_plugins},
+        }
+    );
 
     # TODO Would next call be a candidate for replacing destructive by disable ?
     Koha::Plugins->RemovePlugins( { plugin_class => $plugin_class, destructive => 1 } );

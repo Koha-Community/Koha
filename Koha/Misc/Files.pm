@@ -64,7 +64,7 @@ sub new {
     my $recid = $args{'recordid'};
     my $tag   = $args{'tabletag'};
     ( defined($tag) && $tag ne '' && defined($recid) && $recid =~ /^\d+$/ )
-      || return ();
+        || return ();
 
     my $self = bless( {}, $class );
 
@@ -137,8 +137,10 @@ sub AddFile {
         VALUES ( ?,?,?,?,?,? )
     ';
     my $sth = $dbh->prepare($query);
-    $sth->execute( $self->{'table_tag'}, $self->{'record_id'}, $name, $type,
-        $description, $content );
+    $sth->execute(
+        $self->{'table_tag'}, $self->{'record_id'}, $name, $type,
+        $description,         $content
+    );
 }
 
 =item GetFile()

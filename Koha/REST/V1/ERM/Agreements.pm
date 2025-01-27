@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ERM::Agreements;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -40,13 +40,12 @@ sub list {
 
     return try {
         my $agreements_set = Koha::ERM::Agreements->new;
-        if ( $max_expiration_date ) {
-            $agreements_set = $agreements_set->filter_by_expired( $max_expiration_date );
+        if ($max_expiration_date) {
+            $agreements_set = $agreements_set->filter_by_expired($max_expiration_date);
         }
-        my $agreements = $c->objects->search( $agreements_set );
+        my $agreements = $c->objects->search($agreements_set);
         return $c->render( status => 200, openapi => $agreements );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -71,8 +70,7 @@ sub get {
             status  => 200,
             openapi => $agreement
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -110,15 +108,14 @@ sub add {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $agreement->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $agreement->agreement_id );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($agreement),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::ERM::Agreement->new->to_api_mapping;
 
@@ -128,28 +125,17 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -199,39 +185,28 @@ sub update {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $agreement->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $agreement->agreement_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($agreement),
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::ERM::Agreement->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -241,7 +216,7 @@ sub update {
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 

@@ -7,8 +7,10 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(q{
+        $dbh->do(
+            q{
             ALTER TABLE tmp_holdsqueue CHANGE COLUMN itemnumber `itemnumber` int(11) NOT NULL
-        });
+        }
+        );
     },
 };

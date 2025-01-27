@@ -29,11 +29,14 @@ use utf8;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Installer', qw( column_exists index_exists unique_key_exists foreign_key_exists primary_key_exists marc_framework_sql_list ));
+    use_ok(
+        'C4::Installer',
+        qw( column_exists index_exists unique_key_exists foreign_key_exists primary_key_exists marc_framework_sql_list )
+    );
 }
 
 ok( my $installer = C4::Installer->new(), 'Testing NewInstaller' );
-is( ref $installer, 'C4::Installer', 'Testing class of object' );
+is( ref $installer,         'C4::Installer',                 'Testing class of object' );
 is( $installer->{'dbname'}, C4::Context->config('database'), 'Testing DbName' );
 is(
     $installer->{'dbms'},
@@ -57,38 +60,41 @@ my $source = $schema->source('Borrower');
 
 my @column_names = $source->columns();
 my $column_name  = $column_names[0];
-ok( column_exists( 'borrowers', $column_name ), 'Known column does exist' );
-ok( ! column_exists( 'borrowers', 'xxx'), 'Column xxx does not exist' );
+ok( column_exists( 'borrowers',  $column_name ), 'Known column does exist' );
+ok( !column_exists( 'borrowers', 'xxx' ),        'Column xxx does not exist' );
 {
-    ok( ! column_exists( 'this_table_will_never_exist', 'xxx'), 'Column xxx does not exist, the table does not exist' );
+    ok( !column_exists( 'this_table_will_never_exist', 'xxx' ), 'Column xxx does not exist, the table does not exist' );
 }
 my @constraint_names = $source->unique_constraint_names();
 my $constraint_name  = $constraint_names[0];
-ok( index_exists( 'borrowers', $constraint_name), 'Known contraint does exist' );
-ok( ! index_exists( 'borrowers', 'xxx'), 'Constraint xxx does not exist' );
+ok( index_exists( 'borrowers',  $constraint_name ), 'Known contraint does exist' );
+ok( !index_exists( 'borrowers', 'xxx' ),            'Constraint xxx does not exist' );
 
-ok( foreign_key_exists( 'borrowers', 'borrowers_ibfk_1' ), 'FK borrowers_ibfk_1 exists' );
-ok( ! foreign_key_exists( 'borrowers', 'xxx' ), 'FK xxxx does not exist' );
+ok( foreign_key_exists( 'borrowers',  'borrowers_ibfk_1' ), 'FK borrowers_ibfk_1 exists' );
+ok( !foreign_key_exists( 'borrowers', 'xxx' ),              'FK xxxx does not exist' );
 
-ok( unique_key_exists( 'items', 'itembarcodeidx' ), 'UNIQUE KEY itembarcodeidx exists' );
-ok( ! unique_key_exists( 'borrowers', 'xxx' ), 'UNIQUE KEY xxxx does not exist' );
+ok( unique_key_exists( 'items',      'itembarcodeidx' ), 'UNIQUE KEY itembarcodeidx exists' );
+ok( !unique_key_exists( 'borrowers', 'xxx' ),            'UNIQUE KEY xxxx does not exist' );
 
-ok( primary_key_exists( 'borrowers' ), 'Borrowers does have a primary key on some column');
-ok( primary_key_exists( 'borrowers', 'borrowernumber'), 'Borrowers has primary key on borrowernumber');
-ok( ! primary_key_exists( 'borrowers', 'email'), 'Borrowers does not have a primary key on email');
+ok( primary_key_exists('borrowers'), 'Borrowers does have a primary key on some column' );
+ok( primary_key_exists( 'borrowers',  'borrowernumber' ), 'Borrowers has primary key on borrowernumber' );
+ok( !primary_key_exists( 'borrowers', 'email' ),          'Borrowers does not have a primary key on email' );
 
 subtest 'marc_framework_sql_list' => sub {
     plan tests => 1;
 
-    my ($fh, $filepath) = tempfile( DIR =>  C4::Context->config("intranetdir") . "/installer/data/mysql/en/marcflavour/marc21/mandatory", SUFFIX => '.yml', UNLINK => 1 );
+    my ( $fh, $filepath ) = tempfile(
+        DIR    => C4::Context->config("intranetdir") . "/installer/data/mysql/en/marcflavour/marc21/mandatory",
+        SUFFIX => '.yml', UNLINK => 1
+    );
     print $fh Encode::encode_utf8("---\ndescription:\n    - \"Standardowe typy haseł przedmiotowych MARC21\"\n");
     close $fh;
 
-    my $yaml_files = $installer->marc_framework_sql_list('en', 'MARC21');
+    my $yaml_files = $installer->marc_framework_sql_list( 'en', 'MARC21' );
 
     my $description;
-    FILE: for my $file ( @$yaml_files ) {
-        for my $framework ( @{ $file->{frameworks}} ) {
+FILE: for my $file (@$yaml_files) {
+        for my $framework ( @{ $file->{frameworks} } ) {
             if ( $framework->{fwkfile} eq $filepath ) {
                 $description = $framework->{fwkdescription}->[0];
                 last FILE;

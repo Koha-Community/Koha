@@ -92,22 +92,21 @@ sub process {
 
     $self->start;
 
-    my @record_ids = @{ $args->{record_ids} };
-    my $regex_mod  = $args->{regex_mod};
-    my $new_values = $args->{new_values};
-    my $exclude_from_local_holds_priority =
-      $args->{exclude_from_local_holds_priority};
-    my $mark_items_returned =
-      $args->{mark_items_returned};
+    my @record_ids                        = @{ $args->{record_ids} };
+    my $regex_mod                         = $args->{regex_mod};
+    my $new_values                        = $args->{new_values};
+    my $exclude_from_local_holds_priority = $args->{exclude_from_local_holds_priority};
+    my $mark_items_returned               = $args->{mark_items_returned};
 
     my $report = {
-        total_records            => scalar @record_ids,
-        modified_fields          => 0,
+        total_records   => scalar @record_ids,
+        modified_fields => 0,
     };
 
     try {
         my ($results) = Koha::Items->search( { itemnumber => \@record_ids } )->batch_update(
-            {   regex_mod                         => $regex_mod,
+            {
+                regex_mod                         => $regex_mod,
                 new_values                        => $new_values,
                 exclude_from_local_holds_priority => $exclude_from_local_holds_priority,
                 mark_items_returned               => $mark_items_returned,
@@ -116,17 +115,16 @@ sub process {
         );
         $report->{modified_itemnumbers} = $results->{modified_itemnumbers};
         $report->{modified_fields}      = $results->{modified_fields};
-    }
-    catch {
+    } catch {
         warn $_;
         die "Something terrible has happened!"
-          if ( $_ =~ /Rollback failed/ );    # Rollback failed
+            if ( $_ =~ /Rollback failed/ );    # Rollback failed
     };
 
     my $data = $self->decoded_data;
     $data->{report} = $report;
 
-    $self->finish( $data );
+    $self->finish($data);
 }
 
 =head3 enqueue
@@ -167,9 +165,7 @@ sub additional_report {
     if ( scalar(@$itemnumbers) > C4::Context->preference('MaxItemsToDisplayForBatchMod') ) {
         return { too_many_items_display => 1 };
     } else {
-        my $items_table =
-          Koha::UI::Table::Builder::Items->new( { itemnumbers => $itemnumbers } )
-          ->build_table;
+        my $items_table = Koha::UI::Table::Builder::Items->new( { itemnumbers => $itemnumbers } )->build_table;
 
         return {
             items            => $items_table->{items},

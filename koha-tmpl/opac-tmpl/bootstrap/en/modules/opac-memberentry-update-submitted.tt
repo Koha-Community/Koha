@@ -6,47 +6,50 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Updates submitted &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-patron-update-submitted' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-memberentry.pl">Your personal details</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Updates submitted</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-memberentry.pl">Your personal details</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Updates submitted</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
-
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
+            </div>
+            <div class="col-10 order-first order-lg-2">
+                <div id="update-submitted" class="maincontent">
+                    <div class="alert alert-success">
+                        <p><strong>Thank you</strong></p>
+                        [% IF ( Koha.Preference('AutoApprovePatronProfileSettings') ) %]
+                            <p>Your updates have been submitted and your patron account has been modified.</p>
+                        [% ELSE %]
+                            <p>Your updates have been submitted. A librarian will review your updates before applying them.</p>
+                        [% END %]
                     </div>
                 </div>
-                <div class="col-10 order-first order-lg-2">
-                    <div id="update-submitted" class="maincontent">
-                        <div class="alert alert-success">
-                            <p><strong>Thank you</strong></p>
-                          [% IF ( Koha.Preference('AutoApprovePatronProfileSettings') ) %]
-                            <p>Your updates have been submitted and your patron account has been modified.</p>
-                          [% ELSE %]
-                            <p>Your updates have been submitted. A librarian will review your updates before applying them.</p>
-                          [% END %]
-                        </div>
-                    </div>
-                </div> <!-- /.col-10 -->
-            </div> <!-- /.row -->
-        </div> <!-- /.container-fluid -->
-    </div> <!-- /.main -->
+            </div>
+            <!-- /.col-10 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

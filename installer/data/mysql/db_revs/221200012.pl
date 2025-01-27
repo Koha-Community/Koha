@@ -1,21 +1,25 @@
 use Modern::Perl;
 
 return {
-    bug_number => "30624",
+    bug_number  => "30624",
     description => "Add loggedinlibrary permission",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
-        $dbh->do(q{
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
+        $dbh->do(
+            q{
             INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (29, 'loggedinlibrary', 'Allow staff to change logged in library', 0)
-        });
+        }
+        );
         say $out "Added new permission 'loggedinlibrary'";
 
         my $IndependentBranches = C4::Context->preference('IndependentBranches');
-        unless ( $IndependentBranches ) {
-            $dbh->do(q{
+        unless ($IndependentBranches) {
+            $dbh->do(
+                q{
                 UPDATE borrowers SET flags = flags + (1<<29) WHERE ( flags & 4 AND !(flags & 1<<29) ) ;
-           });
+           }
+            );
         }
     },
 };

@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 use C4::RotatingCollections;
 
@@ -28,23 +28,24 @@ use Koha::Items;
 use CGI qw ( -utf8 );
 
 my $query = CGI->new;
-my $op = $query->param('op') || q{};
+my $op    = $query->param('op') || q{};
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "rotating_collections/addItems.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { tools => 'rotating_collections' },
+        template_name => "rotating_collections/addItems.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { tools => 'rotating_collections' },
     }
 );
 
-if ( defined $op and
-    $op eq 'cud-add' ) {
+if ( defined $op
+    and $op eq 'cud-add' )
+{
     ## Add the given item to the collection
     my $colId      = $query->param('colId');
     my $barcode    = $query->param('barcode');
     my $removeItem = $query->param('removeItem');
-    my $item       = Koha::Items->find({barcode => $barcode});
+    my $item       = Koha::Items->find( { barcode => $barcode } );
     my $itemnumber = $item ? $item->itemnumber : undef;
 
     my ( $success, $errorCode, $errorMessage );
@@ -52,8 +53,7 @@ if ( defined $op and
     $template->param( barcode => $barcode );
 
     if ( !$removeItem ) {
-        ( $success, $errorCode, $errorMessage ) =
-          AddItemToCollection( $colId, $itemnumber );
+        ( $success, $errorCode, $errorMessage ) = AddItemToCollection( $colId, $itemnumber );
 
         $template->param(
             previousActionAdd => 1,
@@ -61,16 +61,13 @@ if ( defined $op and
 
         if ($success) {
             $template->param( addSuccess => 1 );
-        }
-        else {
+        } else {
             $template->param( addFailure     => 1 );
             $template->param( failureMessage => $errorMessage );
         }
-    }
-    else {
+    } else {
         ## Remove the given item from the collection
-        ( $success, $errorCode, $errorMessage ) =
-          RemoveItemFromCollection( $colId, $itemnumber );
+        ( $success, $errorCode, $errorMessage ) = RemoveItemFromCollection( $colId, $itemnumber );
 
         $template->param(
             previousActionRemove => 1,
@@ -79,8 +76,7 @@ if ( defined $op and
 
         if ($success) {
             $template->param( removeSuccess => 1 );
-        }
-        else {
+        } else {
             $template->param( removeFailure  => 1 );
             $template->param( failureMessage => $errorMessage );
         }
@@ -89,7 +85,7 @@ if ( defined $op and
 }
 
 my ( $colId, $colTitle, $colDescription, $colBranchcode ) =
-  GetCollection( scalar $query->param('colId') );
+    GetCollection( scalar $query->param('colId') );
 my $collectionItems = GetItemsInCollection($colId);
 if ($collectionItems) {
     $template->param( collectionItemsLoop => $collectionItems );

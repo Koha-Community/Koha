@@ -87,12 +87,12 @@ sub new {
     my $options = $param->{options} || '';
     my @plugins = ();
 
-    foreach my $plugin ( @{$param->{plugins}} ) {
+    foreach my $plugin ( @{ $param->{plugins} } ) {
         next unless $plugin;
         my $plugin_module =
-            $plugin =~ m/:/
-          ? $plugin
-          : "Koha::SuggestionEngine::Plugin::${plugin}";
+              $plugin =~ m/:/
+            ? $plugin
+            : "Koha::SuggestionEngine::Plugin::${plugin}";
         if ( can_load( modules => { $plugin_module => undef } ) ) {
             my $object = $plugin_module->new();
             $plugin_module->initialize($param);
@@ -148,27 +148,22 @@ sub get_suggestions {
         my $pluginres = $pluginobj->get_suggestions($param);
         foreach my $suggestion (@$pluginres) {
             $suggestions{ $suggestion->{'search'} }->{'relevance'} +=
-              $suggestion->{'relevance'} * $index;
+                $suggestion->{'relevance'} * $index;
             $suggestions{ $suggestion->{'search'} }->{'label'} |=
-              $suggestion->{'label'};
+                $suggestion->{'label'};
         }
         $index--;
     }
 
     my @results = ();
-    for (
-        sort {
-            $suggestions{$b}->{'relevance'} <=> $suggestions{$a}->{'relevance'}
-        } keys %suggestions
-      )
-    {
+    for ( sort { $suggestions{$b}->{'relevance'} <=> $suggestions{$a}->{'relevance'} } keys %suggestions ) {
         last if ( $#results == $number - 1 );
         push @results,
-          {
+            {
             'search'  => $_,
             relevance => $suggestions{$_}->{'relevance'},
             label     => $suggestions{$_}->{'label'}
-          };
+            };
     }
 
     return \@results;
@@ -191,7 +186,7 @@ Get a list of available plugins.
 =cut
 
 sub AvailablePlugins {
-    my $path = 'Koha::SuggestionEngine::Plugin';
+    my $path   = 'Koha::SuggestionEngine::Plugin';
     my $finder = Module::Pluggable::Object->new( search_path => $path );
     return $finder->plugins;
 }

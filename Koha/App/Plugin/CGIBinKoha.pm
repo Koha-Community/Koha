@@ -26,7 +26,7 @@ use CGI::Compile;
 use CGI::Emulate::PSGI;
 
 sub register {
-    my ($self, $app, $conf) = @_;
+    my ( $self, $app, $conf ) = @_;
 
     # CGI::Compile calls CGI::initialize_globals before each request, which resets PARAM_UTF8 to 0
     # We need to set it back to the correct value
@@ -43,38 +43,40 @@ sub register {
 
     my $r = $app->routes;
 
-    $r->any('/cgi-bin/koha/*script' => sub {
-        my ($c) = @_;
+    $r->any(
+        '/cgi-bin/koha/*script' => sub {
+            my ($c) = @_;
 
-        my $script = $c->stash('script');
+            my $script = $c->stash('script');
 
-        # Special case for installer which can takes a long time
-        $c->inactivity_timeout(300) if $script eq 'installer/install.pl';
+            # Special case for installer which can takes a long time
+            $c->inactivity_timeout(300) if $script eq 'installer/install.pl';
 
-        # Remove trailing slash, if any (e.g. .../svc/config/systempreferences/)
-        $script =~ s|/$||;
+            # Remove trailing slash, if any (e.g. .../svc/config/systempreferences/)
+            $script =~ s|/$||;
 
-        if ($opac) {
-            $script = "opac/$script";
+            if ($opac) {
+                $script = "opac/$script";
+            }
+
+            unless ( -e $c->app->home->rel_file($script) ) {
+                return $c->reply->not_found;
+            }
+
+            my $sub      = CGI::Compile->compile($script);
+            my $app      = CGI::Emulate::PSGI->handler($sub);
+            my $response = $app->( $self->_psgi_env($c) );
+
+            $c->res->code( $response->[0] );
+            $c->res->headers->from_hash( { @{ $response->[1] } } );
+            $c->res->body( join( '', @{ $response->[2] } ) );
+            $c->rendered;
         }
-
-        unless (-e $c->app->home->rel_file($script)) {
-            return $c->reply->not_found;
-        }
-
-        my $sub = CGI::Compile->compile($script);
-        my $app = CGI::Emulate::PSGI->handler($sub);
-        my $response = $app->($self->_psgi_env($c));
-
-        $c->res->code($response->[0]);
-        $c->res->headers->from_hash({ @{ $response->[1] } });
-        $c->res->body(join('', @{$response->[2]}));
-        $c->rendered;
-    })->name('cgi');
+    )->name('cgi');
 }
 
 sub _psgi_env {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $env = $c->req->env;
 
@@ -82,24 +84,24 @@ sub _psgi_env {
     open my $input, '<', \$body or die "Can't open in-memory scalar: $!";
     $env = {
         %$env,
-        'psgi.input' => $input,
-        'psgi.errors' => *STDERR,
-        REQUEST_METHOD => $c->req->method,
-        QUERY_STRING => $c->req->url->query->to_string,
-        SERVER_NAME => $c->req->url->to_abs->host,
-        SERVER_PORT => $c->req->url->to_abs->port,
+        'psgi.input'    => $input,
+        'psgi.errors'   => *STDERR,
+        REQUEST_METHOD  => $c->req->method,
+        QUERY_STRING    => $c->req->url->query->to_string,
+        SERVER_NAME     => $c->req->url->to_abs->host,
+        SERVER_PORT     => $c->req->url->to_abs->port,
         SERVER_PROTOCOL => 'HTTP/1.1',
-        CONTENT_LENGTH => $c->req->headers->content_length,
-        CONTENT_TYPE => $c->req->headers->content_type,
-        REMOTE_ADDR => $c->tx->remote_address,
-        SCRIPT_NAME => $c->req->url->path->to_string,
+        CONTENT_LENGTH  => $c->req->headers->content_length,
+        CONTENT_TYPE    => $c->req->headers->content_type,
+        REMOTE_ADDR     => $c->tx->remote_address,
+        SCRIPT_NAME     => $c->req->url->path->to_string,
     };
 
     # Starman sets PATH_INFO to the same value of SCRIPT_NAME, which confuses
     # CGI and causes the redirect after OPAC login to fail
-    delete $env->{PATH_INFO} if ($env->{PATH_INFO} && $env->{PATH_INFO} eq $env->{SCRIPT_NAME});
+    delete $env->{PATH_INFO} if ( $env->{PATH_INFO} && $env->{PATH_INFO} eq $env->{SCRIPT_NAME} );
 
-    for my $name (@{ $c->req->headers->names }) {
+    for my $name ( @{ $c->req->headers->names } ) {
         my $value = $c->req->headers->header($name);
         $name =~ s/-/_/g;
         $name = 'HTTP_' . uc($name);

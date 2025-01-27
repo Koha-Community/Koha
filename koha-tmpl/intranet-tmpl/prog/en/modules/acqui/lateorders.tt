@@ -8,11 +8,12 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Late orders") | html %] &rsaquo;
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Late orders") | html %]
+        &rsaquo; [% t("Acquisitions") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -38,246 +39,286 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-<h1>[% IF bookseller_filter %][% bookseller_filter.name | html %] : [% END %]Late orders</h1>
-<div id="acqui_lateorders" class="page-section">
-
-[% IF error_claim %]
-    [% IF ( error_claim == "no_email" ) %]
-        <div class="alert alert-warning">This vendor has no email</div>
-    [% ELSIF ( error_claim == "no_order_selected" ) %]
-        <div class="alert alert-warning">No order selected</div>
-    [% ELSE %]
-        <div class="alert alert-warning">[% error_claim | html %]</div>
-    [% END %]
-[% END %]
-[% IF info_claim %]
-    <div class="alert alert-info">Email has been sent.</div>
-[% END %]
-[% IF lateorders.size %]
-<form action="lateorders.pl" name="claim" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="cud-send_alert" />
-  <input type="hidden" name="delay" value="[% delay | html %]" />
-  <input type="hidden" name="booksellerid" value="[% bookseller_filter.id | html %]" />
-	[% IF ( letters ) %]
-	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
-	  [% FOREACH letter IN letters %]
-		<option value="[% letter.code | html %]">[% letter.name | html %]</option>
-	  [% END %]
-	  </select>
-	</p>
-	[% END %]
-    [% SET total = 0 %]
-    [% SET total_quantity = 0 %]
-    [% IF bookseller_filter %]
-        <p><a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a> <a id="CheckNone" href="#"><i class="fa fa-times"></i> Uncheck all</a></p>
-    [% END %]
-    <table id="late_orders">
-      <thead>
-        <tr>
-            <th class="NoSort"></th>
-            <th>Order line</th>
-            <th>Order date</th>
-            <th>Estimated delivery date</th>
-            <th>Vendor</th>
-            <th class="anti-the">Information</th>
-            <th>Quantity</th>
-            <th>Total cost</th>
-            <th>Basket</th>
-            <th>Basket date</th>
-            <th>Basket group</th>
-            <th>Library</th>
-            <th>Budget</th>
-            <th>Fund</th>
-            <th>Claims count</th>
-            <th>Claimed date</th>
-            <th>Internal note</th>
-            <th>Vendor note</th>
-            <th>ISBN</th>
-        </tr>
-      </thead>
-      <tbody>
-      [% FOREACH lateorder IN lateorders %]
-        <tr>
-            <td>
-                <input type="checkbox" value="[% lateorder.ordernumber | html %]" data-booksellerid="[% lateorder.basket.booksellerid | html %]" name="ordernumber">
-            </td>
-            <td>
-                [% lateorder.ordernumber | $raw %]
-            </td>
-            <td data-order="[% lateorder.basket.closedate | html %]">
-                [% lateorder.basket.closedate | $KohaDates %] ([% lateorder.basket.late_since_days | html %] days)
-            </td>
-            [% IF lateorder.get_column('estimated_delivery_date') %]
-                [% SET estimated_delivery_date = lateorder.get_column('estimated_delivery_date') %]
-            [% ELSIF lateorder.get_column('calculated_estimated_delivery_date') %]
-                [% SET estimated_delivery_date = lateorder.get_column('calculated_estimated_delivery_date') %]
-            [% END %]
-            <td data-order="[% estimated_delivery_date | html %]">
-                <p class="delivery_date">
-                    <span>[% estimated_delivery_date | $KohaDates %]</span>
-                    [% IF CAN_user_acquisition_order_manage %]
-                        <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-delivery_date="[% estimated_delivery_date | html %]" id="delivery_date_[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
-                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
-                        </a>
-                    [% END %]
-                </p>
-            </td>
-            <td>
-                [% lateorder.basket.bookseller.name | html %]
-                ([% lateorder.basket.bookseller.id | html %])
-            </td>
-            <td>
-                <span class="title">[% INCLUDE 'biblio-title.inc' biblio=lateorder.biblio link=1 %]</span>
-                   [% IF ( lateorder.biblio.author ) %]<br/><em>Author:</em> [% lateorder.biblio.author | html %][% END %]
-                   [% IF ( lateorder.biblio.biblioitem.publishercode ) %]
-                        <br/><em>Published by:</em> [% lateorder.biblio.biblioitem.publishercode | html %]
-                        [% IF ( lateorder.biblio.biblioitem.publicationyear ) %]
-                            <em> in </em>[% lateorder.biblio.biblioitem.publicationyear | html %]
+                <h1>[% IF bookseller_filter %][% bookseller_filter.name | html %] :[% END %]Late orders</h1>
+                <div id="acqui_lateorders" class="page-section">
+                    [% IF error_claim %]
+                        [% IF ( error_claim == "no_email" ) %]
+                            <div class="alert alert-warning">This vendor has no email</div>
+                        [% ELSIF ( error_claim == "no_order_selected" ) %]
+                            <div class="alert alert-warning">No order selected</div>
+                        [% ELSE %]
+                            <div class="alert alert-warning">[% error_claim | html %]</div>
                         [% END %]
-                   [% END %]
-            </td>
-            <td>
-                [% lateorder.quantity | html %]
-                [% SET total_quantity = total_quantity + lateorder.quantity %]
-            </td>
-            <td>
-                [% SET subtotal = (lateorder.quantity - lateorder.quantityreceived) * lateorder.rrp %]
-                [% SET total = total + subtotal %]
-                [% lateorder.rrp | html %]x[% lateorder.quantity - lateorder.quantityreceived | html %] = [% subtotal | $Price %]
-            </td>
-            <td>
-                [% IF ( CAN_user_acquisition_order_manage ) %]
-                    <a href="basket.pl?basketno=[% lateorder.basketno | uri %]" title="basket">[% lateorder.basket.basketname | html %] ([% lateorder.basketno | html %])</a>
-                [% ELSE %]
-                    [% lateorder.basket.basketname | html %] ([% lateorder.basketno | html %])
-                [% END %]
-            </td>
-            <td data-order="[% lateorder.basket.creationdate | html %]">[% lateorder.basket.creationdate | $KohaDates %]</td>
-            <td>
-                [% IF ( lateorder.basket.basketgroupid ) %]
-                    [% IF ( CAN_user_acquisition_group_manage ) %]
-                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.basket.booksellerid | uri %]&basketgroupid=[% lateorder.basket.basketgroupid | uri %]" title="basketgroup">[% lateorder.basket.basket_group.name | html %] ([% lateorder.basket.basketgroupid | html %])</a>
-                    [% ELSE %]
-                        [% lateorder.basket.basket_group.name | html %] ([% lateorder.basket.basketgroupid | html %])
                     [% END %]
-                [% END %]
-            </td>
-            <td>[% Branches.GetName( lateorder.basket.authorizer.branchcode ) | html %]
-            </td>
-            <td>[% lateorder.fund.budget.budget_period_description | html %]</td>
-            <td>[% lateorder.fund.budget_name | html %]</td>
-            <td>[% lateorder.claims.count | html %]</td>
-            <td data-order="[% lateorder.claims.last.claimed_on | html %]">
-                [% FOR claim IN lateorder.claims %]
-                    [% claim.claimed_on | $KohaDates %]
-                    [% UNLESS loop.last %]<br/>[% END %]
-                [% END %]
-            </td>
-            <td>
-                [% IF lateorder.order_internalnote %]
-                    <p class="ordernote">
-                        <span id="internal-note-[% lateorder.ordernumber | html %]">[% lateorder.order_internalnote | html %]</span>
-                        <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Edit internal note">
-                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit internal note
-                        </a>
-                    </p>
-                [% ELSE %]
-                    <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Add internal note">
-                        <i class="fa fa-plus"></i> Add internal note
-                    </a>
-                [% END %]
-            </td>
-            <td>
-                [% IF lateorder.order_vendornote %]
-                    <p class="ordernote">
-                        <span id="vendor-note-[% lateorder.ordernumber | html %]">[% lateorder.order_vendornote | html %]</span>
-                        <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Edit vendor note">
-                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor note
-                        </a>
-                    </p>
-                [% ELSE %]
-                    <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Add vendor note">
-                        <i class="fa fa-plus"></i> Add vendor note
-                    </a>
-                [% END %]
-            </td>
-            <td>[% lateorder.biblio.biblioitem.isbn | $raw %]</td>
-        </tr>
-      [% END %]
-      </tbody>
-      <tfoot>
-        <tr>
-            <th colspan="6">Total</th>
-            <th>[% total_quantity | html %]</th>
-            <th>[% total | $Price %]</th>
-            <th colspan="10">&nbsp;</th>
-        </tr>
-      </tfoot>
-    </table>
+                    [% IF info_claim %]
+                        <div class="alert alert-info">Email has been sent.</div>
+                    [% END %]
+                    [% IF lateorders.size %]
+                        <form action="lateorders.pl" name="claim" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-send_alert" />
+                            <input type="hidden" name="delay" value="[% delay | html %]" />
+                            <input type="hidden" name="booksellerid" value="[% bookseller_filter.id | html %]" />
+                            [% IF ( letters ) %]
+                                <p
+                                    ><label for="letter_code">Claim using notice: </label
+                                    ><select name="letter_code" id="letter_code">
+                                        [% FOREACH letter IN letters %]
+                                            <option value="[% letter.code | html %]">[% letter.name | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </p>
+                            [% END %]
+                            [% SET total = 0 %]
+                            [% SET total_quantity = 0 %]
+                            [% IF bookseller_filter %]
+                                <p
+                                    ><a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a> <a id="CheckNone" href="#"><i class="fa fa-times"></i> Uncheck all</a></p
+                                >
+                            [% END %]
+                            <table id="late_orders">
+                                <thead>
+                                    <tr>
+                                        <th class="NoSort"></th>
+                                        <th>Order line</th>
+                                        <th>Order date</th>
+                                        <th>Estimated delivery date</th>
+                                        <th>Vendor</th>
+                                        <th class="anti-the">Information</th>
+                                        <th>Quantity</th>
+                                        <th>Total cost</th>
+                                        <th>Basket</th>
+                                        <th>Basket date</th>
+                                        <th>Basket group</th>
+                                        <th>Library</th>
+                                        <th>Budget</th>
+                                        <th>Fund</th>
+                                        <th>Claims count</th>
+                                        <th>Claimed date</th>
+                                        <th>Internal note</th>
+                                        <th>Vendor note</th>
+                                        <th>ISBN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH lateorder IN lateorders %]
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" value="[% lateorder.ordernumber | html %]" data-booksellerid="[% lateorder.basket.booksellerid | html %]" name="ordernumber" />
+                                            </td>
+                                            <td> [% lateorder.ordernumber | $raw %] </td>
+                                            <td data-order="[% lateorder.basket.closedate | html %]"> [% lateorder.basket.closedate | $KohaDates %] ([% lateorder.basket.late_since_days | html %] days) </td>
+                                            [% IF lateorder.get_column('estimated_delivery_date') %]
+                                                [% SET estimated_delivery_date = lateorder.get_column('estimated_delivery_date') %]
+                                            [% ELSIF lateorder.get_column('calculated_estimated_delivery_date') %]
+                                                [% SET estimated_delivery_date = lateorder.get_column('calculated_estimated_delivery_date') %]
+                                            [% END %]
+                                            <td data-order="[% estimated_delivery_date | html %]">
+                                                <p class="delivery_date">
+                                                    <span>[% estimated_delivery_date | $KohaDates %]</span>
+                                                    [% IF CAN_user_acquisition_order_manage %]
+                                                        <a
+                                                            class="edit_delivery_date noExport"
+                                                            data-ordernumber="[% lateorder.ordernumber | html %]"
+                                                            data-delivery_date="[% estimated_delivery_date | html %]"
+                                                            id="delivery_date_[% lateorder.ordernumber | html %]"
+                                                            href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]"
+                                                            title="Edit delivery date"
+                                                        >
+                                                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
+                                                        </a>
+                                                    [% END %]
+                                                </p>
+                                            </td>
+                                            <td> [% lateorder.basket.bookseller.name | html %] ([% lateorder.basket.bookseller.id | html %]) </td>
+                                            <td>
+                                                <span class="title">[% INCLUDE 'biblio-title.inc' biblio=lateorder.biblio link=1 %]</span>
+                                                [% IF ( lateorder.biblio.author ) %]<br /><em>Author:</em> [% lateorder.biblio.author | html %][% END %]
+                                                [% IF ( lateorder.biblio.biblioitem.publishercode ) %]
+                                                    <br /><em>Published by:</em> [% lateorder.biblio.biblioitem.publishercode | html %]
+                                                    [% IF ( lateorder.biblio.biblioitem.publicationyear ) %]
+                                                        <em> in </em>[% lateorder.biblio.biblioitem.publicationyear | html %]
+                                                    [% END %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% lateorder.quantity | html %]
+                                                [% SET total_quantity = total_quantity + lateorder.quantity %]
+                                            </td>
+                                            <td>
+                                                [% SET subtotal = (lateorder.quantity - lateorder.quantityreceived) * lateorder.rrp %]
+                                                [% SET total = total + subtotal %]
+                                                [% lateorder.rrp | html %]x[% lateorder.quantity - lateorder.quantityreceived | html %]
+                                                = [% subtotal | $Price %]
+                                            </td>
+                                            <td>
+                                                [% IF ( CAN_user_acquisition_order_manage ) %]
+                                                    <a href="basket.pl?basketno=[% lateorder.basketno | uri %]" title="basket">[% lateorder.basket.basketname | html %] ([% lateorder.basketno | html %])</a>
+                                                [% ELSE %]
+                                                    [% lateorder.basket.basketname | html %]
+                                                    ([% lateorder.basketno | html %])
+                                                [% END %]
+                                            </td>
+                                            <td data-order="[% lateorder.basket.creationdate | html %]">[% lateorder.basket.creationdate | $KohaDates %]</td>
+                                            <td>
+                                                [% IF ( lateorder.basket.basketgroupid ) %]
+                                                    [% IF ( CAN_user_acquisition_group_manage ) %]
+                                                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.basket.booksellerid | uri %]&basketgroupid=[% lateorder.basket.basketgroupid | uri %]" title="basketgroup"
+                                                            >[% lateorder.basket.basket_group.name | html %] ([% lateorder.basket.basketgroupid | html %])</a
+                                                        >
+                                                    [% ELSE %]
+                                                        [% lateorder.basket.basket_group.name | html %]
+                                                        ([% lateorder.basket.basketgroupid | html %])
+                                                    [% END %]
+                                                [% END %]
+                                            </td>
+                                            <td>[% Branches.GetName( lateorder.basket.authorizer.branchcode ) | html %] </td>
+                                            <td>[% lateorder.fund.budget.budget_period_description | html %]</td>
+                                            <td>[% lateorder.fund.budget_name | html %]</td>
+                                            <td>[% lateorder.claims.count | html %]</td>
+                                            <td data-order="[% lateorder.claims.last.claimed_on | html %]">
+                                                [% FOR claim IN lateorder.claims %]
+                                                    [% claim.claimed_on | $KohaDates %]
+                                                    [% UNLESS loop.last %]<br />[% END %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF lateorder.order_internalnote %]
+                                                    <p class="ordernote">
+                                                        <span id="internal-note-[% lateorder.ordernumber | html %]">[% lateorder.order_internalnote | html %]</span>
+                                                        <a
+                                                            class="edit_note noExport"
+                                                            data-ordernumber="[% lateorder.ordernumber | html %]"
+                                                            data-note_type="internal"
+                                                            href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal"
+                                                            title="Edit internal note"
+                                                        >
+                                                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit internal note
+                                                        </a>
+                                                    </p>
+                                                [% ELSE %]
+                                                    <a
+                                                        class="edit_note noExport"
+                                                        data-ordernumber="[% lateorder.ordernumber | html %]"
+                                                        data-note_type="internal"
+                                                        href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal"
+                                                        title="Add internal note"
+                                                    >
+                                                        <i class="fa fa-plus"></i> Add internal note
+                                                    </a>
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF lateorder.order_vendornote %]
+                                                    <p class="ordernote">
+                                                        <span id="vendor-note-[% lateorder.ordernumber | html %]">[% lateorder.order_vendornote | html %]</span>
+                                                        <a
+                                                            class="edit_note noExport"
+                                                            data-ordernumber="[% lateorder.ordernumber | html %]"
+                                                            data-note_type="vendor"
+                                                            href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor"
+                                                            title="Edit vendor note"
+                                                        >
+                                                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor note
+                                                        </a>
+                                                    </p>
+                                                [% ELSE %]
+                                                    <a
+                                                        class="edit_note noExport"
+                                                        data-ordernumber="[% lateorder.ordernumber | html %]"
+                                                        data-note_type="vendor"
+                                                        href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor"
+                                                        title="Add vendor note"
+                                                    >
+                                                        <i class="fa fa-plus"></i> Add vendor note
+                                                    </a>
+                                                [% END %]
+                                            </td>
+                                            <td>[% lateorder.biblio.biblioitem.isbn | $raw %]</td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="6">Total</th>
+                                        <th>[% total_quantity | html %]</th>
+                                        <th>[% total | $Price %]</th>
+                                        <th colspan="10">&nbsp;</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
 
-    <fieldset class="action">
-        <div class="btn-group">
-          <a id="exportbutton" class="btn btn-default" href="/cgi-bin/koha/acqui/lateorders-export.pl"><i class="fa fa-download"></i> Export as CSV</a>
-          <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></a>
-          <ul class="dropdown-menu" id="export-csv-menu">
-              <li><a class="dropdown-item dropdown-menu-end" href="#">Default</a></li>
-              [% IF csv_profiles.count %]
-                  [% FOR csv IN csv_profiles %]
-                    <li><a class="dropdown-item" href="#" data-value="[% csv.export_format_id | html %]">[% csv.profile | html %]</a></li>
-                  [% END %]
-              [% END %]
-           </ul>
+                            <fieldset class="action">
+                                <div class="btn-group">
+                                    <a id="exportbutton" class="btn btn-default" href="/cgi-bin/koha/acqui/lateorders-export.pl"><i class="fa fa-download"></i> Export as CSV</a>
+                                    <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu" id="export-csv-menu">
+                                        <li><a class="dropdown-item dropdown-menu-end" href="#">Default</a></li>
+                                        [% IF csv_profiles.count %]
+                                            [% FOR csv IN csv_profiles %]
+                                                <li><a class="dropdown-item" href="#" data-value="[% csv.export_format_id | html %]">[% csv.profile | html %]</a></li>
+                                            [% END %]
+                                        [% END %]
+                                    </ul>
+                                </div>
+
+                                <input type="submit" class="btn btn-default" value="Claim order" />
+                            </fieldset>
+                        </form>
+                    [% ELSE %]
+                        <p>There are no late orders.</p>
+                    [% END %]
+                </div>
+                <!-- /#acqui_lateorders -->
+            </main>
         </div>
+        <!-- /.col-md-10.order-md-2 -->
 
-        <input type="submit"  class="btn btn-default" value="Claim order" />
-    </fieldset>
-</form>
-[% ELSE %]<p>There are no late orders.</p>
-[% END %]
-</div> <!-- /#acqui_lateorders -->
-</main>
-</div> <!-- /.col-md-10.order-md-2 -->
+        <div class="col-md-2 order-sm-2 order-md-1">
+            <aside>
+                <form action="lateorders.pl" method="get">
+                    <fieldset class="brief">
+                        <h4>Filter results:</h4>
+                        [% FOREACH ERROR_LOO IN ERROR_LOOP %]
+                            [% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay | html %]) must be a number between 0 and 999.</p>[% END %]
+                        [% END %]
+                        <ol>
+                            <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html %]" /> days ago</li>
+                            <li
+                                ><label for="from">Estimated delivery date from: </label>
+                                <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="flatpickr" data-date_to="to" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                            <li
+                                ><label for="to">To: </label>
+                                <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
 
-<div class="col-md-2 order-sm-2 order-md-1">
-    <aside>
-<form action="lateorders.pl" method="get">
-<fieldset class="brief">
-<h4>Filter results:</h4>
-[% FOREACH ERROR_LOO IN ERROR_LOOP %]
-[% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay | html %]) must be a number between 0 and 999.</p>[% END %]
-[% END %]
-<ol>
-    <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html %]" /> days ago</li>
-    <li><label for="from">Estimated delivery date from: </label>
-        <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="flatpickr" data-date_to="to"/>
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-    <li><label for="to">To: </label>
-        <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="flatpickr" />
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-
-    <li><label for="booksellerid">Vendor:</label>
-        <select id="booksellerid" tabindex="" name="booksellerid">
-            <option value=""></option>
-            [% FOREACH bookseller IN booksellers %]
-                [% IF bookseller.id == bookseller_filter.id %]
-                    <option value="[% bookseller.id | html %]" selected="selected">[% bookseller.name | html %]</option>
-                [% ELSE %]
-                    <option value="[% bookseller.id | html %]">[% bookseller.name | html %]</option>
-                [% END %]
-            [% END %]
-        </select>
-</ol>
-</fieldset>
-    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Filter" /></fieldset>
-    </form>
-[% INCLUDE 'acquisitions-menu.inc' %]
-</aside>
-</div> <!-- /.col-md-2.order-md-1 -->
+                            <li
+                                ><label for="booksellerid">Vendor:</label>
+                                <select id="booksellerid" tabindex="" name="booksellerid">
+                                    <option value=""></option>
+                                    [% FOREACH bookseller IN booksellers %]
+                                        [% IF bookseller.id == bookseller_filter.id %]
+                                            <option value="[% bookseller.id | html %]" selected="selected">[% bookseller.name | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% bookseller.id | html %]">[% bookseller.name | html %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                            </li></ol
+                        >
+                    </fieldset>
+                    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Filter" /></fieldset>
+                </form>
+                [% INCLUDE 'acquisitions-menu.inc' %]
+            </aside>
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
+    </div>
 </div>
-</div> <!-- /.main.container-fluid -->
+<!-- /.main.container-fluid -->
 
 <!-- Modal for editing vendor and internal notes -->
 <div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">
@@ -290,15 +331,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>
-                <input type="hidden" id="notes_ordernumber" name="ordernumber" value="" />
-                <input type="hidden" name="op" value="cud-save" />
-                <input type="hidden" id="type" name="type" value="" />
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-            </div>
+                    <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>
+                    <input type="hidden" id="notes_ordernumber" name="ordernumber" value="" />
+                    <input type="hidden" name="op" value="cud-save" />
+                    <input type="hidden" id="type" name="type" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </form>
     </div>
@@ -315,15 +356,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]"/>
-                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
-                <input type="hidden" name="op" value="cud-save" />
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-            </div>
+                    <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]" />
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
+                    <input type="hidden" name="op" value="cud-save" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
             </div>
         </form>
     </div>

@@ -24,11 +24,11 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Token::BadPattern' => {
-        isa => 'Koha::Exceptions::Token',
+        isa         => 'Koha::Exceptions::Token',
         description => 'Bad pattern for random token generation'
     },
     'Koha::Exceptions::Token::WrongCSRFToken' => {
-        isa => 'Koha::Exceptions::Token',
+        isa         => 'Koha::Exceptions::Token',
         description => 'Invalid CSRF Token'
     },
 

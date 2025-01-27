@@ -99,7 +99,7 @@ sub type_disclaimer_template_params {
     );
 
     $params->{method} = 'typedisclaimer' if $self->{ui_context} eq 'staff';
-    delete $params->{stage} if $self->{ui_context} eq 'staff';
+    delete $params->{stage}              if $self->{ui_context} eq 'staff';
 
     return (
         whole      => $params,
@@ -110,7 +110,7 @@ sub type_disclaimer_template_params {
             illrequestsview => 1,
             message         => $params->{message},
             op              => 'typedisclaimer',
-          )
+            )
         : ()
     );
 }

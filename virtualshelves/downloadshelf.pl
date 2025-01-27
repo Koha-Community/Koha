@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Record;
 use C4::Ris qw( marc2ris );
@@ -33,12 +33,12 @@ use Koha::Virtualshelves;
 use utf8;
 my $query = CGI->new;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "virtualshelves/downloadshelf.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "virtualshelves/downloadshelf.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
@@ -47,48 +47,47 @@ my $format  = $query->param('format');
 my $dbh     = C4::Context->dbh;
 my @messages;
 
-if ($shelfid && $format) {
+if ( $shelfid && $format ) {
 
-    my $marcflavour         = C4::Context->preference('marcflavour');
-    my $output='';
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $output      = '';
 
     my $shelf = Koha::Virtualshelves->find($shelfid);
-    if ( $shelf ) {
-        if ( $shelf->can_be_viewed( $loggedinuser ) ) {
+    if ($shelf) {
+        if ( $shelf->can_be_viewed($loggedinuser) ) {
 
             my $contents = $shelf->get_contents;
+
             # CSV
-            if ($format =~ /^\d+$/) {
+            if ( $format =~ /^\d+$/ ) {
                 my @biblios;
                 while ( my $content = $contents->next ) {
                     push @biblios, $content->biblionumber;
                 }
-                $output = marc2csv(\@biblios, $format);
-            }
-            else { #Other formats
+                $output = marc2csv( \@biblios, $format );
+            } else {    #Other formats
                 while ( my $content = $contents->next ) {
                     my $biblionumber = $content->biblionumber;
-                    my $biblio = Koha::Biblios->find($biblionumber);
-                    my $record = $biblio->metadata_record( { embed_items => 1 } );
-                    if ($format eq 'iso2709') {
+                    my $biblio       = Koha::Biblios->find($biblionumber);
+                    my $record       = $biblio->metadata_record( { embed_items => 1 } );
+                    if ( $format eq 'iso2709' ) {
                         $output .= $record->as_usmarc();
-                    }
-                    elsif ($format eq 'ris') {
+                    } elsif ( $format eq 'ris' ) {
                         $output .= marc2ris($record);
-                    }
-                    elsif ($format eq 'bibtex') {
-                        $output .= marc2bibtex($record, $biblionumber);
+                    } elsif ( $format eq 'bibtex' ) {
+                        $output .= marc2bibtex( $record, $biblionumber );
                     }
                 }
             }
 
             # If it was a CSV export we change the format after the export so the file extension is fine
-            $format = "csv" if ($format =~ m/^\d+$/);
+            $format = "csv" if ( $format =~ m/^\d+$/ );
 
             print $query->header(
-            -type => 'application/octet-stream',
-            -'Content-Transfer-Encoding' => 'binary',
-            -attachment=>"shelf.$format");
+                -type                        => 'application/octet-stream',
+                -'Content-Transfer-Encoding' => 'binary',
+                -attachment                  => "shelf.$format"
+            );
             print $output;
             exit;
         } else {
@@ -97,10 +96,10 @@ if ($shelfid && $format) {
     } else {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
-}
-else {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' })->as_list ]);
-    $template->param(shelfid => $shelfid); 
+} else {
+    $template->param(
+        csv_profiles => [ Koha::CsvProfiles->search( { type => 'marc', used_for => 'export_records' } )->as_list ] );
+    $template->param( shelfid => $shelfid );
 }
 $template->param( messages => \@messages );
 output_html_with_http_headers $query, $cookie, $template->output;

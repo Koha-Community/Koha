@@ -5,18 +5,24 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% UNLESS blocking_error %]
-        [% tx("Basket {basketnumber}", { basketnumber = basket.basketno }) | html %] &rsaquo;
-        [% t("Duplicate existing orders") | html %] &rsaquo;
-    [% END %]
-    [% t("Acquisitions") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% UNLESS blocking_error %]
+            [% tx("Basket {basketnumber}", { basketnumber = basket.basketno }) | html %]
+            &rsaquo; [% t("Duplicate existing orders") | html %] &rsaquo;
+        [% END %]
+        [% t("Acquisitions") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-    .picked_to_duplicate > td { background-color: #bcdb89 !important; }
-    span.hint { margin-left: 1em; }
+    .picked_to_duplicate > td {
+        background-color: #bcdb89 !important;
+    }
+    span.hint {
+        margin-left: 1em;
+    }
 </style>
 </head>
 
@@ -46,254 +52,260 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
+    <h1>Duplicate existing orders</h1>
 
-<h1>Duplicate existing orders</h1>
+    [% IF op == 'search' || op == 'select' %]
+        <form action="/cgi-bin/koha/acqui/duplicate_orders.pl" method="get">
+            <fieldset class="rows">
+                <legend>
+                    [% IF op == 'search' %]
+                        <span>Search orders</span>
+                    [% ELSE %]
+                        <span>Refine search</span>
+                    [% END %]
+                    <span class="toggle_orders_filters" id="show_orders_filters"><a href="#">[+]</a></span>
+                    <span class="toggle_orders_filters" id="hide_orders_filters"><a href="#">[-]</a></span>
+                </legend>
+                <div id="orders_filters">
+                    [% INCLUDE 'filter-orders.inc' %]
+                    <input type="hidden" name="op" value="select" />
+                    <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
 
-[% IF op == 'search' || op == 'select' %]
-<form action="/cgi-bin/koha/acqui/duplicate_orders.pl" method="get">
-    <fieldset class="rows">
-        <legend>
-            [% IF op == 'search' %]
-                <span>Search orders</span>
-            [% ELSE %]
-                <span>Refine search</span>
-            [% END %]
-            <span class="toggle_orders_filters" id="show_orders_filters"><a href="#">[+]</a></span>
-            <span class="toggle_orders_filters" id="hide_orders_filters"><a href="#">[-]</a></span>
-        </legend>
-        <div id="orders_filters">
-            [% INCLUDE 'filter-orders.inc' %]
-            <input type="hidden" name="op" value="select" />
-            <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
-
-            <input type="hidden" name="ordernumbers" value="[% ordernumbers.join(',') | html %]" />
-        </div>
-    </fieldset>
-    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /></fieldset>
-</form>
-[% END %]
-
-[% BLOCK display_order_line %]
-    [% IF selected %]
-        [% SET tr_class="picked_to_duplicate" %]
+                    <input type="hidden" name="ordernumbers" value="[% ordernumbers.join(',') | html %]" />
+                </div>
+            </fieldset>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /></fieldset>
+        </form>
     [% END %]
-    <tr class="[% tr_class | html %]" data-ordernumber="[% order.ordernumber | html %]">
-        <td>
-            [% IF can_check %]
-                [% IF selected %]
-                    <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" checked="checked" />
-                [% ELSE %]
-                    <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" />
-                [% END %]
-            [% END %]
-            [% order.ordernumber | html %]
-            [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
-        </td>
-        <td>
-            [% SWITCH order.orderstatus %]
-                [% CASE 'new' %]<span>New</span>
-                [% CASE 'ordered' %]<span>Ordered</span>
-                [% CASE 'partial' %]<span>Partially received</span>
-                [% CASE 'complete' %]<span>Received</span>
-                [% CASE 'cancelled' %]<span>Cancelled</span>
-            [% END %]
-        </td>
-        <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
-        <td>[% order.authorisedbyname | html %]</td>
-        <td>
-            [% IF ( order.basketgroupid ) %]
-                [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
-            [% ELSE %]
-                &nbsp;
-            [% END %]
-        </td>
-        <td>[% IF ( order.invoicenumber ) %]
-                <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
-            [% ELSE %]
-                &nbsp;
-            [% END %]
-        </td>
-        <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title |html %]</a>
-            <br />[% order.author | html %] <br /> [% order.isbn | html %]
-        </td>
-        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
-        <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
-        <td data-order="[% order.datereceived | html %]">
-            [% order.datereceived | $KohaDates %]
-        </td>
-        <td>[% order.quantityreceived | html %]</td>
-        <td>[% order.quantity | html %]</td>
-        <td>[% order.ecost | html %]</td>
-        <td>[% order.budget_name | html %]</td>
-    </tr>
-[% END %]
 
-
-[% IF op == 'select' && ( result_order_loop || selected_order_loop ) %]
-<form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl">
-    [% INCLUDE 'csrf-token.inc' %]
-    <div id="orders_to_copy" class="page-section">
-        <table id="table_orders">
-            <caption>
-                <span class="actions"><a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
-                | <a href="#" id="clear_all"><i class="fa fa-times"></i> Clear all</a></span>
-            </caption>
-
-            <thead>
-                    <tr>
-                    <th>Order line (parent)</th>
-                    <th>Status</th>
-                    <th>Basket</th>
-                    <th>Basket creator</th>
-                    <th>Basket group</th>
-                    <th>Invoice number</th>
-                    <th class="anti-the">Summary</th>
-                    <th>Vendor</th>
-                    <th>Placed on</th>
-                    <th>Received on</th>
-                    <th>Quantity received</th>
-                    <th>Quantity ordered</th>
-                    <th>Unit cost</th>
-                    <th>Fund</th>
-                </tr>
-            </thead>
-            <tfoot>
-            [% FOREACH order IN selected_order_loop %]
-                [% INCLUDE display_order_line selected => 1 can_check => 1%]
-            [% END %]
-            </tfoot>
-            <tbody>
-            [% FOREACH order IN result_order_loop %]
-                [% INCLUDE display_order_line can_check => 1 %]
-            [% END %]
-            </tbody>
-        </table>
-    </div>
-    <fieldset class="action">
-        <input type="hidden" name="op" value="cud-batch_edit" />
-        <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
-        <button type="submit" class="btn btn-primary go_to_batch_edit">Next <i class="fa fa-fw fa-arrow-right"></i></button>
-    </fieldset>
-</form>
-
-[% ELSIF op == "cud-batch_edit" %]
-
-<form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl" id="batch_edit_form">
-    [% INCLUDE 'csrf-token.inc' %]
-    <div id="accounting_details">
-      <p>Duplicate all the orders with the following accounting details:</p>
-      <fieldset class="rows" style="float:none;">
-          <legend>Accounting details</legend>
-          <div class="hint" style="margin: 1em 1em 0">Check boxes to duplicate the original values</div>
-          <ol>
-              <li>
-                  <label for="all_currency">Currency:</label>
-                  <input type="checkbox" name="copy_existing_value" value="currency" title="Copy existing value" />
-                  <select name="all_currency" id="all_currency">
-                  [% FOREACH currency IN currencies %]
-                      [% IF currency.currency == vendor.listprice %]
-                          <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
-                      [% ELSIF not currency.archived %]
-                          <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
-                      [% END %]
-                  [% END %]
-                  </select>
-                  <span class="hint" id="hint_currency">The original currency value will be copied</span>
-              </li>
-              <li>
-                  <label for="all_budget_id">Fund: </label>
-                  <input type="checkbox" name="copy_existing_value" value="budget_id" title="Copy existing value" />
-                  <select id="all_budget_id" name="all_budget_id">
-                    <option value="">Select a fund</option>
-                  [% FOREACH budget_loo IN budget_loop %]
-                      [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
-                      [% ELSE %]<option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
-                      [% END %]
-                  [% END %]
-                  </select>
-                  <label for="all_showallbudgets" style="float:none;width:auto;margin-right:0;">&nbsp;Show inactive:</label>
-                  <input type="checkbox" id="all_showallbudgets" />
-                  <span class="hint" id="hint_budget_id">The original fund will be used</span>
-              </li>
-              <li>
-                  <label for="all_order_internalnote">Internal note: </label>
-                  <input type="checkbox" name="copy_existing_value" value="order_internalnote" title="Copy existing value" />
-                  <textarea id="all_order_internalnote" cols="30" rows="3" name="all_order_internalnote"></textarea>
-                  <span class="hint" id="hint_order_internalnote">The original internal note will be used</span>
-              </li>
-              <li>
-                  <label for="all_order_vendornote">Vendor note: </label>
-                  <input type="checkbox" name="copy_existing_value" value="order_vendornote" title="Copy existing value" />
-                  <textarea id="all_order_vendornote" cols="30" rows="3" name="all_order_vendornote"></textarea>
-                  <span class="hint" id="hint_order_vendornote">The original vendor note will be used</span>
-              </li>
-              <li>
-                  <div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
-                  <label for="all_sort1">Statistic 1: </label>
-                  <input type="checkbox" name="copy_existing_value" value="sort1" title="Copy existing value" />
-                  <input type="text" id="all_sort1" size="20" name="all_sort1" value="" />
-                  <span class="hint" id="hint_sort1">The original statistic 1 will be used</span>
-
-              </li>
-              <li>
-                  <label for="all_sort2">Statistic 2: </label>
-                  <input type="checkbox" name="copy_existing_value" value="sort2" title="Copy existing value" />
-                  <input type="text" id="all_sort2" size="20" name="all_sort2" value="" />
-                  <span class="hint" id="hint_sort2">The original statistic 2 will be used</span>
-              </li>
-          </ol>
-      </fieldset>
-    </div>
-
-    <fieldset class="action">
-        [% FOREACH ordernumber IN ordernumbers %]
-            <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
+    [% BLOCK display_order_line %]
+        [% IF selected %]
+            [% SET tr_class="picked_to_duplicate" %]
         [% END %]
-        <input type="hidden" name="op" value="cud-do_duplicate" />
-        <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
-        <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
-        <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
-        <button type="submit" class="btn btn-primary">Duplicate orders</button>
-        <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno | html %]">Cancel</a>
-    </fieldset>
-</form>
-
-[% ELSIF op == 'duplication_done' %]
-    [% IF new_orders %]
-        <div class="page-section">
-            <table id="table_neworders">
-                <thead>
-                    <tr>
-                        <th>Order line</th>
-                        <th>Status</th>
-                        <th>Basket</th>
-                        <th>Basket creator</th>
-                        <th>Basket group</th>
-                        <th>Invoice number</th>
-                        <th class="anti-the">Summary</th>
-                        <th>Vendor</th>
-                        <th>Placed on</th>
-                        <th>Received on</th>
-                        <th>Quantity received</th>
-                        <th>Quantity ordered</th>
-                        <th>Unit cost</th>
-                        <th>Fund</th>
-                    </tr>
-                </thead>
-                <tbody>
-                [% FOREACH order IN new_orders %]
-                    [% INCLUDE display_order_line %]
+        <tr class="[% tr_class | html %]" data-ordernumber="[% order.ordernumber | html %]">
+            <td>
+                [% IF can_check %]
+                    [% IF selected %]
+                        <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" />
+                    [% END %]
                 [% END %]
-                </tbody>
-            </table>
-        </div>
-        <a class="btn btn-default" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"><i class="fa fa-fw fa-arrow-left"></i> Return to the basket</a>
-    [% ELSE %]
-        <span>No order has been duplicated. Maybe something wrong happened?</span>
+                [% order.ordernumber | html %]
+                [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
+            </td>
+            <td>
+                [% SWITCH order.orderstatus %]
+                [% CASE 'new' %]
+                    <span>New</span>
+                [% CASE 'ordered' %]
+                    <span>Ordered</span>
+                [% CASE 'partial' %]
+                    <span>Partially received</span>
+                [% CASE 'complete' %]
+                    <span>Received</span>
+                [% CASE 'cancelled' %]
+                    <span>Cancelled</span>
+                [% END %]
+            </td>
+            <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
+            <td>[% order.authorisedbyname | html %]</td>
+            <td>
+                [% IF ( order.basketgroupid ) %]
+                    [% order.groupname | html %]
+                    (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
+            <td
+                >[% IF ( order.invoicenumber ) %]
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
+            <td>
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title |html %]</a>
+                <br />[% order.author | html %] <br />
+                [% order.isbn | html %]
+            </td>
+            <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
+            <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
+            <td data-order="[% order.datereceived | html %]"> [% order.datereceived | $KohaDates %] </td>
+            <td>[% order.quantityreceived | html %]</td>
+            <td>[% order.quantity | html %]</td>
+            <td>[% order.ecost | html %]</td>
+            <td>[% order.budget_name | html %]</td>
+        </tr>
     [% END %]
-[% END %]
 
+    [% IF op == 'select' && ( result_order_loop || selected_order_loop ) %]
+        <form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <div id="orders_to_copy" class="page-section">
+                <table id="table_orders">
+                    <caption>
+                        <span class="actions"
+                            ><a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" id="clear_all"><i class="fa fa-times"></i> Clear all</a></span
+                        >
+                    </caption>
+
+                    <thead>
+                        <tr>
+                            <th>Order line (parent)</th>
+                            <th>Status</th>
+                            <th>Basket</th>
+                            <th>Basket creator</th>
+                            <th>Basket group</th>
+                            <th>Invoice number</th>
+                            <th class="anti-the">Summary</th>
+                            <th>Vendor</th>
+                            <th>Placed on</th>
+                            <th>Received on</th>
+                            <th>Quantity received</th>
+                            <th>Quantity ordered</th>
+                            <th>Unit cost</th>
+                            <th>Fund</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        [% FOREACH order IN selected_order_loop %]
+                            [% INCLUDE display_order_line selected => 1 can_check => 1 %]
+                        [% END %]
+                    </tfoot>
+                    <tbody>
+                        [% FOREACH order IN result_order_loop %]
+                            [% INCLUDE display_order_line can_check => 1 %]
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <fieldset class="action">
+                <input type="hidden" name="op" value="cud-batch_edit" />
+                <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
+                <button type="submit" class="btn btn-primary go_to_batch_edit">Next <i class="fa fa-fw fa-arrow-right"></i></button>
+            </fieldset>
+        </form>
+    [% ELSIF op == "cud-batch_edit" %]
+        <form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl" id="batch_edit_form">
+            [% INCLUDE 'csrf-token.inc' %]
+            <div id="accounting_details">
+                <p>Duplicate all the orders with the following accounting details:</p>
+                <fieldset class="rows" style="float:none;">
+                    <legend>Accounting details</legend>
+                    <div class="hint" style="margin: 1em 1em 0">Check boxes to duplicate the original values</div>
+                    <ol>
+                        <li>
+                            <label for="all_currency">Currency:</label>
+                            <input type="checkbox" name="copy_existing_value" value="currency" title="Copy existing value" />
+                            <select name="all_currency" id="all_currency">
+                                [% FOREACH currency IN currencies %]
+                                    [% IF currency.currency == vendor.listprice %]
+                                        <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
+                                    [% ELSIF not currency.archived %]
+                                        <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                            <span class="hint" id="hint_currency">The original currency value will be copied</span>
+                        </li>
+                        <li>
+                            <label for="all_budget_id">Fund: </label>
+                            <input type="checkbox" name="copy_existing_value" value="budget_id" title="Copy existing value" />
+                            <select id="all_budget_id" name="all_budget_id">
+                                <option value="">Select a fund</option>
+                                [% FOREACH budget_loo IN budget_loop %]
+                                    [% IF ( budget_loo.b_active ) %]
+                                        <option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                            >[% budget_loo.b_txt | html %]</option
+                                        >
+                                    [% ELSE %]
+                                        <option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                            >[% budget_loo.b_txt | html %] (inactive)</option
+                                        >
+                                    [% END %]
+                                [% END %]
+                            </select>
+                            <label for="all_showallbudgets" style="float:none;width:auto;margin-right:0;">&nbsp;Show inactive:</label>
+                            <input type="checkbox" id="all_showallbudgets" />
+                            <span class="hint" id="hint_budget_id">The original fund will be used</span>
+                        </li>
+                        <li>
+                            <label for="all_order_internalnote">Internal note: </label>
+                            <input type="checkbox" name="copy_existing_value" value="order_internalnote" title="Copy existing value" />
+                            <textarea id="all_order_internalnote" cols="30" rows="3" name="all_order_internalnote"></textarea>
+                            <span class="hint" id="hint_order_internalnote">The original internal note will be used</span>
+                        </li>
+                        <li>
+                            <label for="all_order_vendornote">Vendor note: </label>
+                            <input type="checkbox" name="copy_existing_value" value="order_vendornote" title="Copy existing value" />
+                            <textarea id="all_order_vendornote" cols="30" rows="3" name="all_order_vendornote"></textarea>
+                            <span class="hint" id="hint_order_vendornote">The original vendor note will be used</span>
+                        </li>
+                        <li>
+                            <div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
+                            <label for="all_sort1">Statistic 1: </label>
+                            <input type="checkbox" name="copy_existing_value" value="sort1" title="Copy existing value" />
+                            <input type="text" id="all_sort1" size="20" name="all_sort1" value="" />
+                            <span class="hint" id="hint_sort1">The original statistic 1 will be used</span>
+                        </li>
+                        <li>
+                            <label for="all_sort2">Statistic 2: </label>
+                            <input type="checkbox" name="copy_existing_value" value="sort2" title="Copy existing value" />
+                            <input type="text" id="all_sort2" size="20" name="all_sort2" value="" />
+                            <span class="hint" id="hint_sort2">The original statistic 2 will be used</span>
+                        </li>
+                    </ol>
+                </fieldset>
+            </div>
+
+            <fieldset class="action">
+                [% FOREACH ordernumber IN ordernumbers %]
+                    <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
+                [% END %]
+                <input type="hidden" name="op" value="cud-do_duplicate" />
+                <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
+                <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
+                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
+                <button type="submit" class="btn btn-primary">Duplicate orders</button>
+                <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno | html %]">Cancel</a>
+            </fieldset>
+        </form>
+    [% ELSIF op == 'duplication_done' %]
+        [% IF new_orders %]
+            <div class="page-section">
+                <table id="table_neworders">
+                    <thead>
+                        <tr>
+                            <th>Order line</th>
+                            <th>Status</th>
+                            <th>Basket</th>
+                            <th>Basket creator</th>
+                            <th>Basket group</th>
+                            <th>Invoice number</th>
+                            <th class="anti-the">Summary</th>
+                            <th>Vendor</th>
+                            <th>Placed on</th>
+                            <th>Received on</th>
+                            <th>Quantity received</th>
+                            <th>Quantity ordered</th>
+                            <th>Unit cost</th>
+                            <th>Fund</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH order IN new_orders %]
+                            [% INCLUDE display_order_line %]
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <a class="btn btn-default" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"><i class="fa fa-fw fa-arrow-left"></i> Return to the basket</a>
+        [% ELSE %]
+            <span>No order has been duplicated. Maybe something wrong happened?</span>
+        [% END %]
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

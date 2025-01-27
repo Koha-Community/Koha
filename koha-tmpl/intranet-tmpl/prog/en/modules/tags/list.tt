@@ -6,15 +6,21 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Results for tag '{tag}'", { tag = tag }) | html %] &rsaquo;
-    [% t("Tags") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Results for tag '{tag}'", { tag = tag }) | html %]
+        &rsaquo; [% t("Tags") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }</style>
+    tr.selected {
+        background-color: #ffffcc;
+    }
+    tr.selected td {
+        background-color: transparent;
+    }
+</style>
 </head>
 
 <body id="tags_list" class="tools">
@@ -44,62 +50,83 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
                 <h1>[% tx("Results for tag '{tag}'", { tag = tag }) | html %]</h1>
 
-[% IF ( titles ) %]
-    <div class="page-section">
-        <table id="itemst">
-            <thead><tr>
-                <th>Title</th>
-                <th>Location</th>
-                <th>&nbsp;</th>
-                </tr></thead>
+                [% IF ( titles ) %]
+                    <div class="page-section">
+                        <table id="itemst">
+                            <thead
+                                ><tr>
+                                    <th>Title</th>
+                                    <th>Location</th>
+                                    <th>&nbsp;</th>
+                                </tr></thead
+                            >
 
-                [% FOREACH title IN titles %]
-                    <tr>
-                    <td>[% INCLUDE 'biblio-title.inc' biblio=title link = 1 %]
-                    [% title.author | html %]
-                    <p>[% IF ( title.publishercode ) %]- [% title.publishercode | html %]
-                    [% IF ( title.place ) %] [% title.place | html %][% END %][% END %]
-                    [% IF ( title.pages ) %] - [% title.pages | html %][% IF ( title.size ) %] [% title.size | html %]
-                    [% END %]
-                    [% END %]</p>
-                    [% IF ( title.notes ) %]
-                    <p>[% title.notes | html %]</p>[% END %]
-                    [% IF ( title.TagLoop ) %]<p style="font-size:90%"><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
-                    <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
-                    [% END %]</p>
-                    [% END %]
-                    </td>
-                    <td>[% IF ( title.items.count ) %]<ul style="font-size:80%">[% FOREACH item IN title.items %]
-                        <li>
-                            [% Branches.GetName(item.holdingbranch) | html %]
-                            <span class="shelvingloc">
-                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
-                            </span>
-                            [% IF ( item.itemcallnumber ) %]
-                                ([% item.itemcallnumber | html %])
+                            [% FOREACH title IN titles %]
+                                <tr>
+                                    <td
+                                        >[% INCLUDE 'biblio-title.inc' biblio=title link = 1 %]
+                                        [% title.author | html %]
+                                        <p
+                                            >[% IF ( title.publishercode ) %]
+                                                - [% title.publishercode | html %]
+                                                [% IF ( title.place ) %][% title.place | html %][% END %]
+                                            [% END %]
+                                            [% IF ( title.pages ) %]
+                                                -
+                                                [% title.pages | html %][% IF ( title.size ) %]
+                                                    [% title.size | html %]
+                                                [% END %]
+                                            [% END %]</p
+                                        >
+                                        [% IF ( title.notes ) %]
+                                            <p>[% title.notes | html %]</p>
+                                        [% END %]
+                                        [% IF ( title.TagLoop ) %]
+                                            <p style="font-size:90%"
+                                                ><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
+                                                    <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a>
+                                                    <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %],[% END %]
+                                                [% END %]</p
+                                            >
+                                        [% END %]
+                                    </td>
+                                    <td
+                                        >[% IF ( title.items.count ) %]
+                                            <ul style="font-size:80%"
+                                                >[% FOREACH item IN title.items %]
+                                                    <li>
+                                                        [% Branches.GetName(item.holdingbranch) | html %]
+                                                        <span class="shelvingloc"> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %] </span>
+                                                        [% IF ( item.itemcallnumber ) %]
+                                                            ([% item.itemcallnumber | html %])
+                                                        [% END %]
+                                                    </li>
+                                                [% END %]</ul
+                                            >
+                                        [% ELSE %]
+                                            This record has no items.
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        <form method="post" action="/cgi-bin/koha/tags/list.pl">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-del" />
+                                            <input type="hidden" name="tag" value="[% tag | html %]" />
+                                            <input type="hidden" name="tag_id" value="[% title.tag_id | html %]" />
+                                            <button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Remove tag</button>
+                                        </form>
+                                    </td>
+                                </tr>
                             [% END %]
-                        </li>
-                        [% END %]</ul>[% ELSE %]This record has no items.[% END %]
-                    </td>
-                    <td>
-                        <form method="post" action="/cgi-bin/koha/tags/list.pl">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-del" />
-                            <input type="hidden" name="tag" value="[% tag | html %]" />
-                            <input type="hidden" name="tag_id" value="[% title.tag_id | html %]" />
-                            <button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Remove tag</button>
-                        </form>
-                    </td>
-                    </tr>
+                        </table>
+                    </div>
+                    <!-- /.page-section -->
+                [% ELSE %]
+                    <div class="alert alert-info">There are no titles tagged with the term <em>[% tag | html %]</em></div>
                 [% END %]
-            </table>
-    </div> <!-- /.page-section -->
-[% ELSE %]
-    <div class="alert alert-info">There are no titles tagged with the term <em>[% tag | html %]</em></div>
-[% END %]
-
             </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
+        </div>
+        <!-- /.col-md-10.order-md-2 -->
 
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
@@ -113,29 +140,32 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                 </div>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+        </div>
+        <!-- /.col-md-2.order-md-1 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".delete").click(function (event) {
                 $(this).parent().parent().parent().addClass("selected");
                 var answer = confirm(_("Are you sure you want to remove the tag from this title?"));
-                    if (!answer){
-                        $("tr").removeClass("selected");
-                        event.preventDefault();
-                    }
+                if (!answer) {
+                    $("tr").removeClass("selected");
+                    event.preventDefault();
+                }
             });
-            $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1, -2 ], "orderable": false, "searchable":  false },
-                ],
-                "order": [[ 0, "asc" ]],
-                "pagingType": "full"
-            }));
+            $("#itemst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
+                    order: [[0, "asc"]],
+                    pagingType: "full",
+                })
+            );
         });
     </script>
 [% END %]

@@ -50,9 +50,8 @@ associated this houseboundProfile.
 =cut
 
 sub housebound_visits {
-    my ( $self ) = @_;
-    return Koha::Patron::HouseboundVisits
-        ->special_search({ borrowernumber => $self->borrowernumber });
+    my ($self) = @_;
+    return Koha::Patron::HouseboundVisits->special_search( { borrowernumber => $self->borrowernumber } );
 }
 
 =head3 _type

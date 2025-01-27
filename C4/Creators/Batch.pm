@@ -8,8 +8,8 @@ use autouse 'Data::Dumper' => qw(Dumper);
 use C4::Context;
 
 sub _check_params {
-    my $given_params = {};
-    my $exit_code = 0;
+    my $given_params          = {};
+    my $exit_code             = 0;
     my @valid_template_params = (
         'label_id',
         'batch_id',
@@ -19,18 +19,17 @@ sub _check_params {
         'branch_code',
         'creator',
     );
-    if (scalar(@_) >1) {
+    if ( scalar(@_) > 1 ) {
         $given_params = {@_};
-        foreach my $key (keys %{$given_params}) {
-            if (!(grep m/$key/, @valid_template_params)) {
-                warn sprintf('Unrecognized parameter type of "%s".', $key);
+        foreach my $key ( keys %{$given_params} ) {
+            if ( !( grep m/$key/, @valid_template_params ) ) {
+                warn sprintf( 'Unrecognized parameter type of "%s".', $key );
                 $exit_code = 1;
             }
         }
-    }
-    else {
-        if (!(grep m/$_/, @valid_template_params)) {
-            warn sprintf('Unrecognized parameter type of %s', $_);
+    } else {
+        if ( !( grep m/$_/, @valid_template_params ) ) {
+            warn sprintf( 'Unrecognized parameter type of %s', $_ );
             $exit_code = 1;
         }
     }
@@ -39,64 +38,67 @@ sub _check_params {
 
 sub new {
     my ($invocant) = shift;
-    my $type = ref($invocant) || $invocant;
-    my $self = {
-        batch_id        => 0,
-        description     => '',
-        items           => [],
-        branch_code     => 'NB',
-        batch_stat      => 0,   # False if any data has changed and the db has not been updated
+    my $type       = ref($invocant) || $invocant;
+    my $self       = {
+        batch_id    => 0,
+        description => '',
+        items       => [],
+        branch_code => 'NB',
+        batch_stat  => 0,      # False if any data has changed and the db has not been updated
         @_,
     };
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
 sub add_item {
-    my $self = shift;
+    my $self   = shift;
     my $number = shift;
     ref($self) =~ m/C4::(.+)::.+$/;
-    my $number_type = ($1 eq 'Patroncards' ? 'borrower_number' : 'item_number');
-    if ($self->{'batch_id'} == 0){ #if this is a new batch batch_id must be created
+    my $number_type = ( $1 eq 'Patroncards' ? 'borrower_number' : 'item_number' );
+    if ( $self->{'batch_id'} == 0 ) {    #if this is a new batch batch_id must be created
         my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM creator_batches;");
         $sth->execute();
         my $batch_id = $sth->fetchrow_array;
-        $self->{'batch_id'}= ++$batch_id;
+        $self->{'batch_id'} = ++$batch_id;
     }
-    my $query = "INSERT INTO creator_batches (batch_id, description, $number_type, branch_code, creator) VALUES (?,?,?,?,?);";
+    my $query =
+        "INSERT INTO creator_batches (batch_id, description, $number_type, branch_code, creator) VALUES (?,?,?,?,?);";
     my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
-    $sth->execute($self->{'batch_id'}, $self->{'description'}, $number, $self->{'branch_code'}, $1);
-    if ($sth->err) {
-       warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
+
+    #    $sth->{'TraceLevel'} = 3;
+    $sth->execute( $self->{'batch_id'}, $self->{'description'}, $number, $self->{'branch_code'}, $1 );
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error on attempted INSERT: %s', $sth->errstr );
         return -1;
     }
     $query = "SELECT max(label_id) FROM creator_batches WHERE batch_id=? AND $number_type=? AND branch_code=?;";
     my $sth1 = C4::Context->dbh->prepare($query);
-    $sth1->execute($self->{'batch_id'}, $number, $self->{'branch_code'});
+    $sth1->execute( $self->{'batch_id'}, $number, $self->{'branch_code'} );
     my $label_id = $sth1->fetchrow_array;
-    push (@{$self->{'items'}}, {$number_type => $number, label_id => $label_id});
+    push( @{ $self->{'items'} }, { $number_type => $number, label_id => $label_id } );
     $self->{'batch_stat'} = 1;
     return 0;
 }
 
 sub get_attr {
     my $self = shift;
-    return $self->{$_[0]};
+    return $self->{ $_[0] };
 }
 
 sub remove_item {
-    my $self = shift;
+    my $self     = shift;
     my $label_id = shift;
-    my $query = "DELETE FROM creator_batches WHERE label_id=? AND batch_id=?;";
-    my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
-    $sth->execute($label_id, $self->{'batch_id'});
-    if ($sth->err) {
-        warn sprintf('Database returned the following error on attempted DELETE: %s', $sth->errstr);
+    my $query    = "DELETE FROM creator_batches WHERE label_id=? AND batch_id=?;";
+    my $sth      = C4::Context->dbh->prepare($query);
+
+    #    $sth->{'TraceLevel'} = 3;
+    $sth->execute( $label_id, $self->{'batch_id'} );
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error on attempted DELETE: %s', $sth->errstr );
         return -1;
     }
-    @{$self->{'items'}} = grep{$_->{'label_id'} != $label_id} @{$self->{'items'}};
+    @{ $self->{'items'} } = grep { $_->{'label_id'} != $label_id } @{ $self->{'items'} };
     $self->{'batch_stat'} = 1;
     return 0;
 }
@@ -133,85 +135,91 @@ sub remove_item {
 
 sub retrieve {
     my $invocant = shift;
-    my %opts = @_;
-    my $type = ref($invocant) || $invocant;
+    my %opts     = @_;
+    my $type     = ref($invocant) || $invocant;
     $type =~ m/C4::(.+)::.+$/;
-    my $number_type = ($1 eq 'Patroncards' ? 'borrower_number' : 'item_number');
+    my $number_type = ( $1 eq 'Patroncards' ? 'borrower_number' : 'item_number' );
     my $record_flag = 0;
-    my $query = "SELECT * FROM creator_batches WHERE batch_id = ? ORDER BY label_id";
-    my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
-    $sth->execute($opts{'batch_id'});
+    my $query       = "SELECT * FROM creator_batches WHERE batch_id = ? ORDER BY label_id";
+    my $sth         = C4::Context->dbh->prepare($query);
+
+    #    $sth->{'TraceLevel'} = 3;
+    $sth->execute( $opts{'batch_id'} );
     my $self = {
-        batch_id        => $opts{'batch_id'},
-        items           => [],
+        batch_id => $opts{'batch_id'},
+        items    => [],
     };
-    while (my $record = $sth->fetchrow_hashref) {
+    while ( my $record = $sth->fetchrow_hashref ) {
         $self->{'branch_code'} = $record->{'branch_code'};
-        $self->{'creator'} = $record->{'creator'};
+        $self->{'creator'}     = $record->{'creator'};
         $self->{'description'} = $record->{'description'};
-        push (@{$self->{'items'}}, {$number_type => $record->{$number_type}, label_id => $record->{'label_id'}});
-        $record_flag = 1;       # true if one or more rows were retrieved
+        push( @{ $self->{'items'} }, { $number_type => $record->{$number_type}, label_id => $record->{'label_id'} } );
+        $record_flag = 1;    # true if one or more rows were retrieved
     }
-    return -2 if $record_flag == 0;     # a hackish sort of way of indicating no such record exists
-    if ($sth->err) {
-        warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
+    return -2 if $record_flag == 0;    # a hackish sort of way of indicating no such record exists
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error on attempted SELECT: %s', $sth->errstr );
         return -1;
     }
     $self->{'batch_stat'} = 1;
-    bless ($self, $type);
+    bless( $self, $type );
     return $self;
 }
 
 sub delete {
-    my $self = {};
-    my %opts = ();
-    my $call_type = '';
+    my $self         = {};
+    my %opts         = ();
+    my $call_type    = '';
     my @query_params = ();
-    if (ref($_[0])) {
-        $self = shift;  # check to see if this is a method call
-        $call_type = 'C4::Labels::Batch->delete'; # seems hackish
-        @query_params = ($self->{'batch_id'}, $self->{'branch_code'});
-    }
-    else {
+    if ( ref( $_[0] ) ) {
+        $self         = shift;                                             # check to see if this is a method call
+        $call_type    = 'C4::Labels::Batch->delete';                       # seems hackish
+        @query_params = ( $self->{'batch_id'}, $self->{'branch_code'} );
+    } else {
         shift @_;
-        %opts = @_;
-        $call_type = 'C4::Labels::Batch::delete';
-        @query_params = ($opts{'batch_id'}, $opts{'branch_code'});
+        %opts         = @_;
+        $call_type    = 'C4::Labels::Batch::delete';
+        @query_params = ( $opts{'batch_id'}, $opts{'branch_code'} );
     }
-    if ($query_params[0] eq '') {   # If there is no template id then we cannot delete it
-        warn sprintf('%s : Cannot delete batch as the batch ID is invalid or non-existent.', $call_type);
+    if ( $query_params[0] eq '' ) {    # If there is no template id then we cannot delete it
+        warn sprintf( '%s : Cannot delete batch as the batch ID is invalid or non-existent.', $call_type );
         return -1;
     }
     my $query = "DELETE FROM creator_batches WHERE batch_id = ? AND branch_code =?";
-    my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
+    my $sth   = C4::Context->dbh->prepare($query);
+
+    #    $sth->{'TraceLevel'} = 3;
     $sth->execute(@query_params);
-    if ($sth->err) {
-        warn sprintf('%s : Database returned the following error on attempted INSERT: %s', $call_type, $sth->errstr);
+    if ( $sth->err ) {
+        warn sprintf( '%s : Database returned the following error on attempted INSERT: %s', $call_type, $sth->errstr );
         return -1;
     }
     return 0;
 }
 
 sub remove_duplicates {
-    my $self = shift;
-    my %seen=();
-    my $query = "DELETE FROM creator_batches WHERE label_id = ?;"; # ORDER BY timestamp ASC LIMIT ?;";
-    my $sth = C4::Context->dbh->prepare($query);
-    my @duplicate_items = grep{
-        $_->{'item_number'}
-            ? $seen{$_->{'item_number'}}++
-            : $seen{$_->{'borrower_number'}}++
-    } @{$self->{'items'}};
+    my $self  = shift;
+    my %seen  = ();
+    my $query = "DELETE FROM creator_batches WHERE label_id = ?;";    # ORDER BY timestamp ASC LIMIT ?;";
+    my $sth   = C4::Context->dbh->prepare($query);
+    my @duplicate_items =
+        grep { $_->{'item_number'} ? $seen{ $_->{'item_number'} }++ : $seen{ $_->{'borrower_number'} }++ }
+        @{ $self->{'items'} };
     foreach my $item (@duplicate_items) {
-        $sth->execute($item->{'label_id'});
-        if ($sth->err) {
-            warn sprintf('Database returned the following error on attempted DELETE for label_id %s: %s', $item->{'label_id'}, $sth->errstr);
+        $sth->execute( $item->{'label_id'} );
+        if ( $sth->err ) {
+            warn sprintf(
+                'Database returned the following error on attempted DELETE for label_id %s: %s',
+                $item->{'label_id'}, $sth->errstr
+            );
             return -1;
         }
-        $sth->finish(); # Per DBI.pm docs: "If execute() is called on a statement handle that's still active ($sth->{Active} is true) then it should effectively call finish() to tidy up the previous execution results before starting this new execution."
-        @{$self->{'items'}} = grep{$_->{'label_id'} != $item->{'label_id'}} @{$self->{'items'}};  # the correct label/item must be removed from the current batch object as well; this should be done *after* each sql DELETE in case the DELETE fails
+        $sth->finish()
+            ; # Per DBI.pm docs: "If execute() is called on a statement handle that's still active ($sth->{Active} is true) then it should effectively call finish() to tidy up the previous execution results before starting this new execution."
+        @{ $self->{'items'} } =
+            grep { $_->{'label_id'} != $item->{'label_id'} }
+            @{ $self->{'items'} }
+            ; # the correct label/item must be removed from the current batch object as well; this should be done *after* each sql DELETE in case the DELETE fails
     }
     return scalar(@duplicate_items);
 }

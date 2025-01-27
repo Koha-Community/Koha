@@ -19,10 +19,10 @@
 #
 
 use Modern::Perl;
-use XML::Simple qw( XMLin );
-use Pod::Usage qw( pod2usage );
+use XML::Simple  qw( XMLin );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
-use Carp qw( croak );
+use Carp         qw( croak );
 
 use open ':std', ':encoding(UTF-8)';
 
@@ -39,13 +39,13 @@ my $tempfile = '/tmp/languages.xml';
 
 GetOptions(
     'o|output:s' => \$outfile,
-    'url:s' => \$sourceurl,
-    'help|h'   => \$help,
+    'url:s'      => \$sourceurl,
+    'help|h'     => \$help,
 );
 
 usage() if $help;
 
-system( qq{/usr/bin/wget $sourceurl -O $tempfile } ) == 0
+system(qq{/usr/bin/wget $sourceurl -O $tempfile }) == 0
     or croak "Can't wget $sourceurl ($?)";
 
 my $ref       = XMLin($tempfile);
@@ -53,16 +53,15 @@ my $languages = $ref->{'languages'}->{'language'};
 
 # output log or STDOUT
 my $out_handle;
-if (defined $outfile) {
+if ( defined $outfile ) {
     open( $out_handle, ">", $outfile ) || croak("Cannot open output file");
 } else {
     open( $out_handle, q{>}, "&STDOUT" ) || croak("Couldn't duplicate STDOUT: $!");
 }
 generate_header($out_handle);
-generate_body($out_handle, $languages);
+generate_body( $out_handle, $languages );
 generate_footer($out_handle);
 close $out_handle;
-
 
 sub generate_body {
     my ( $file_handle, $language_list ) = @_;

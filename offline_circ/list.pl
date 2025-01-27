@@ -20,9 +20,9 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Context;
 use C4::Circulation qw( GetOfflineOperations GetOfflineOperation );
 use C4::Members;
@@ -32,21 +32,23 @@ use Koha::Items;
 
 my $query = CGI->new;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "offline_circ/list.tt",
-    query => $query,
-    type => "intranet",
-    flagsrequired   => { circulate => "circulate_remaining_permissions" },
-});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "offline_circ/list.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
+    }
+);
 
 my $operations = GetOfflineOperations;
 
 for (@$operations) {
-    my $item = $_->{barcode} ? Koha::Items->find({ barcode => $_->{barcode} }) : undef;
+    my $item = $_->{barcode} ? Koha::Items->find( { barcode => $_->{barcode} } ) : undef;
     if ($item) {
         my $biblio = $item->biblio;
-        $_->{'bibliotitle'}    = $biblio->title;
-        $_->{'biblionumber'}   = $biblio->biblionumber;
+        $_->{'bibliotitle'}  = $biblio->title;
+        $_->{'biblionumber'} = $biblio->biblionumber;
     }
 
     my $patron =
@@ -57,12 +59,12 @@ for (@$operations) {
 
     if ($patron) {
         $_->{'borrowernumber'} = $patron->borrowernumber;
-        $_->{'borrower'}       = ($patron->firstname ? $patron->firstname:'').' '.$patron->surname;
+        $_->{'borrower'}       = ( $patron->firstname ? $patron->firstname : '' ) . ' ' . $patron->surname;
     }
-    $_->{'actionissue'}    = $_->{'action'} eq 'issue';
-    $_->{'actionreturn'}   = $_->{'action'} eq 'return';
-    $_->{'actionpayment'}  = $_->{'action'} eq 'payment';
+    $_->{'actionissue'}   = $_->{'action'} eq 'issue';
+    $_->{'actionreturn'}  = $_->{'action'} eq 'return';
+    $_->{'actionpayment'} = $_->{'action'} eq 'payment';
 }
-$template->param(pending_operations => $operations);
+$template->param( pending_operations => $operations );
 
 output_html_with_http_headers $query, $cookie, $template->output;

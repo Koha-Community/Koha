@@ -128,20 +128,22 @@ my $ok = GetOptions(
         my ( $opt_name, $opt_value ) = @_;
         if ( $opt_value eq 'all' ) {
             $branch = 0;
-        }
-        else {
-            my $branches = Koha::Libraries->search( {},
-                { order_by => { -asc => 'branchname' } } );
+        } else {
+            my $branches = Koha::Libraries->search(
+                {},
+                { order_by => { -asc => 'branchname' } }
+            );
             my $brnch = $branches->find($opt_value);
             if ($brnch) {
                 $branch = $brnch;
                 return $brnch;
-            }
-            else {
+            } else {
                 printf("Option $opt_name should be one of (name -> code):\n");
                 while ( my $candidate = $branches->next ) {
-                    printf( "  %-40s  ->  %s\n",
-                        $candidate->branchname, $candidate->branchcode );
+                    printf(
+                        "  %-40s  ->  %s\n",
+                        $candidate->branchname, $candidate->branchcode
+                    );
                 }
                 exit 1;
             }
@@ -152,8 +154,7 @@ my $ok = GetOptions(
         my ( $opt_name, $opt_value ) = @_;
         if ( $opt_value eq 'full' || $opt_value eq 'email' ) {
             $report = $opt_value;
-        }
-        else {
+        } else {
             printf("Option $opt_name should be either 'email' or 'full'.\n");
             exit 1;
         }
@@ -166,7 +167,7 @@ exit 1 unless ($ok);
 
 $send_email++ if ($send_all);    # if we send all, then we must want emails.
 
-if ( $send_email && !$admin_email && ($report eq 'full')) {
+if ( $send_email && !$admin_email && ( $report eq 'full' ) ) {
     printf("Sending the full report by email requires --admin-email.\n");
     exit 1;
 }
@@ -198,8 +199,7 @@ sub execute {
         my $reason = $item->{reason};
         if ( $reason eq 'repatriation' ) {
             $item->{object}->repatriate;
-        }
-        elsif ( grep { $reason eq $_ } qw/in-demand advancement initiation/ ) {
+        } elsif ( grep { $reason eq $_ } qw/in-demand advancement initiation/ ) {
             $item->{object}->advance;
         }
     }
@@ -242,30 +242,28 @@ sub report_full {
   Total items to be repatriated: %5u
   Total items to be advanced:    %5u
   Total items in demand:         %5u\n\n",
-      $data->{sum_rotas},  $data->{rotas_inactive}, $data->{rotas_active},
-      $data->{sum_items},  $data->{items_inactive}, $data->{stationary},
-      $data->{actionable}, $data->{initiable},      $data->{repatriable},
-      $data->{advanceable}, $data->{indemand};
+        $data->{sum_rotas},   $data->{rotas_inactive}, $data->{rotas_active},
+        $data->{sum_items},   $data->{items_inactive}, $data->{stationary},
+        $data->{actionable},  $data->{initiable},      $data->{repatriable},
+        $data->{advanceable}, $data->{indemand};
 
     if ( @{ $data->{rotas} } ) {    # Per Rota details
         $body .= "ROTAS DETAIL\n";
         $body .= "------------\n\n";
         foreach my $rota ( @{ $data->{rotas} } ) {
             $body .= sprintf "Details for %s [%s]:\n",
-              $rota->{name}, $rota->{id};
+                $rota->{name}, $rota->{id};
             $body .= "\n  Items:";    # Rota item details
             if ( @{ $rota->{items} } ) {
                 $body .=
-                  join( "", map { _print_item($_) } @{ $rota->{items} } );
-            }
-            else {
+                    join( "", map { _print_item($_) } @{ $rota->{items} } );
+            } else {
                 $body .= "\n    No items to be processed for this rota.\n";
             }
             $body .= "\n  Log:";      # Rota log details
             if ( @{ $rota->{log} } ) {
                 $body .= join( "", map { _print_item($_) } @{ $rota->{log} } );
-            }
-            else {
+            } else {
                 $body .= "\n    No items in log for this rota.\n\n";
             }
         }
@@ -277,8 +275,8 @@ sub report_full {
                 title   => 'Stockrotation Report',
                 content => $body                     # The body of the report
             },
-            status          => 1,    # We have a meaningful report
-            no_branch_email => 1,    # We don't expect branch email in report
+            status          => 1,                    # We have a meaningful report
+            no_branch_email => 1,                    # We don't expect branch email in report
         }
     ];
 }
@@ -320,17 +318,15 @@ sub report_by_branch {
 
     if ($branch) {    # Branch limited report
         push @{$out}, _report_per_branch( $branched->{ $branch->branchcode } );
-    }
-    elsif ( $data->{actionable} ) {    # Full email report
+    } elsif ( $data->{actionable} ) {    # Full email report
         while ( my ( $branchcode_id, $details ) = each %{$branched} ) {
             push @{$out}, _report_per_branch($details)
-              if ( @{ $details->{items} } );
+                if ( @{ $details->{items} } );
         }
-    }
-    else {
+    } else {
         push @{$out}, {
-            body => "No actionable items at any libraries.\n\n",    # The body of the report
-            no_branch_email => 1,    # We don't expect branch email in report
+            body            => "No actionable items at any libraries.\n\n",    # The body of the report
+            no_branch_email => 1,                                              # We don't expect branch email in report
         };
     }
     return $out;
@@ -365,7 +361,7 @@ sub _report_per_branch {
             message_transport_type => 'email',
             substitute             => { branch => $branch }
         )
-      )
+        )
     {
         return {
             letter        => $letter,
@@ -399,11 +395,11 @@ sub _print_item {
     On loan?:        %s
     Status:          %s
     Current Library: %s [%s]\n\n",
-      $item->{title}      || "N/A", $item->{author}   || "N/A",
-      $item->{callnumber} || "N/A", $item->{location} || "N/A",
-      $item->{barcode} || "N/A", $item->{onloan} ? 'Yes' : 'No',
-      $item->{reason} || "N/A", $item->{branch}->branchname,
-      $item->{branch}->branchcode;
+        $item->{title}      || "N/A", $item->{author}   || "N/A",
+        $item->{callnumber} || "N/A", $item->{location} || "N/A",
+        $item->{barcode}    || "N/A", $item->{onloan} ? 'Yes' : 'No',
+        $item->{reason}     || "N/A", $item->{branch}->branchname,
+        $item->{branch}->branchcode;
 }
 
 =head3 emit
@@ -427,14 +423,14 @@ die.
 sub emit {
     my ($params) = @_;
 
-# REPORT is an arrayref of at least 2 elements:
-#   - The header for the report, which will be repeated for each part
-#   - a "part" for each report we want to emit
-# PARTS are hashrefs:
-#   - part->{status}: a boolean indicating whether the reported part is empty or not
-#   - part->{email_address}: the email address to send the report to
-#   - part->{no_branch_email}: a boolean indicating that we are missing a branch email
-#   - part->{letter}: a GetPreparedLetter hash as returned by the C4::Letters module
+    # REPORT is an arrayref of at least 2 elements:
+    #   - The header for the report, which will be repeated for each part
+    #   - a "part" for each report we want to emit
+    # PARTS are hashrefs:
+    #   - part->{status}: a boolean indicating whether the reported part is empty or not
+    #   - part->{email_address}: the email address to send the report to
+    #   - part->{no_branch_email}: a boolean indicating that we are missing a branch email
+    #   - part->{letter}: a GetPreparedLetter hash as returned by the C4::Letters module
     my $report = $params->{report};
     my $header = shift @{$report};
     my $parts  = $report;
@@ -451,10 +447,9 @@ sub emit {
             my $addressee;
             if ( $part->{email_address} ) {
                 $addressee = $part->{email_address};
-            }
-            elsif ( !$part->{no_branch_email} ) {
+            } elsif ( !$part->{no_branch_email} ) {
                 $addressee = C4::Context->preference('KohaAdminEmailAddress')
-                  if ( C4::Context->preference('KohaAdminEmailAddress') );
+                    if ( C4::Context->preference('KohaAdminEmailAddress') );
             }
 
             if ( $params->{send_email} ) {    # Only email if emails requested
@@ -465,9 +460,7 @@ sub emit {
                             to_address             => $addressee,
                             message_transport_type => 'email',
                         }
-                      )
-                      or warn
-                      "can't enqueue letter $part->{letter} for $addressee";
+                    ) or warn "can't enqueue letter $part->{letter} for $addressee";
                 }
 
                 # Copy to admin?
@@ -478,20 +471,14 @@ sub emit {
                             to_address             => $params->{admin_email},
                             message_transport_type => 'email',
                         }
-                      )
-                      or warn
-                      "can't enqueue letter $part->{letter} for $params->{admin_email}";
+                    ) or warn "can't enqueue letter $part->{letter} for $params->{admin_email}";
                 }
-            }
-            else {
-                my $email =
-                  "-------- Email message --------" . "\n\n";
+            } else {
+                my $email = "-------- Email message --------" . "\n\n";
                 $email .= "To: $addressee\n";
                 $email .= "Cc: " . $params->{admin_email} . "\n"
-                  if ( $params->{admin_email} );
-                $email .= "Subject: "
-                  . $part->{letter}->{title} . "\n\n"
-                  . $part->{letter}->{content};
+                    if ( $params->{admin_email} );
+                $email .= "Subject: " . $part->{letter}->{title} . "\n\n" . $part->{letter}->{content};
                 push @emails, $email;
             }
         }
@@ -503,7 +490,7 @@ sub emit {
         # The final message is the header + body of this part.
         my $msg = $header;
         $msg .= "No database updates have been performed.\n\n"
-          unless ( $params->{execute} );
+            unless ( $params->{execute} );
 
         # Append email reports to message
         $msg .= join( "\n\n", @emails );
@@ -514,7 +501,7 @@ sub emit {
 #### Main Code
 
 # Compile Stockrotation Report data
-my $rotas = Koha::StockRotationRotas->search(undef,{ order_by => { '-asc' => 'title' }});
+my $rotas = Koha::StockRotationRotas->search( undef, { order_by => { '-asc' => 'title' } } );
 my $data  = $rotas->investigate;
 
 # Perform db updates if requested
@@ -523,7 +510,7 @@ execute($data) if ($execute);
 # Emit Reports
 my $out_report = {};
 $out_report = report_by_branch( $data, $branch ) if $report eq 'email';
-$out_report = report_full( $data, $branch ) if $report eq 'full';
+$out_report = report_full( $data, $branch )      if $report eq 'full';
 emit(
     {
         admin_email => $admin_email,

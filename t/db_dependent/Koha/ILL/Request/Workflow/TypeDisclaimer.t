@@ -48,14 +48,13 @@ foreach my $key ( keys %{$metadata} ) {
     $sorted->{$key} = $metadata->{$key};
 }
 
-my $type_disclaimer =
-  Koha::ILL::Request::Workflow::TypeDisclaimer->new( $sorted, 'staff' );
+my $type_disclaimer = Koha::ILL::Request::Workflow::TypeDisclaimer->new( $sorted, 'staff' );
 
 isa_ok( $type_disclaimer, 'Koha::ILL::Request::Workflow::TypeDisclaimer' );
 
 is(
     $type_disclaimer->prep_metadata($sorted),
-'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIiwi%0AdHlwZSI6ImpvdXJuYWwifQ%3D%3D%0A',
+    'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIiwi%0AdHlwZSI6ImpvdXJuYWwifQ%3D%3D%0A',
     'prep_metadata works'
 );
 
@@ -78,8 +77,10 @@ $backend->mock( 'status_graph', sub { }, );
 
 # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
 my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
-$illreqmodule->mock( 'load_backend',
-    sub { my $self = shift; $self->{_my_backend} = $backend; return $self } );
+$illreqmodule->mock(
+    'load_backend',
+    sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+);
 
 # Mock ILLModuleDisclaimerByType with valid YAML
 t::lib::Mocks::mock_preference(
@@ -104,15 +105,18 @@ my $req_1 = $builder->build_object(
 
 my $request = $req_1->load_backend('Mock');
 
-is( $type_disclaimer->show_type_disclaimer($request),
-    1, 'able to show type disclaimer form' );
+is(
+    $type_disclaimer->show_type_disclaimer($request),
+    1, 'able to show type disclaimer form'
+);
 
 # Mock ILLModuleDisclaimerByType with invalid YAML
-my $type_disclaimer_module =
-  Test::MockModule->new('Koha::ILL::Request::Workflow::TypeDisclaimer');
+my $type_disclaimer_module = Test::MockModule->new('Koha::ILL::Request::Workflow::TypeDisclaimer');
 $type_disclaimer_module->mock( '_get_type_disclaimer_sys_pref', {} );
 
-is( $type_disclaimer->show_type_disclaimer($request),
-    0, 'not able to show type disclaimer form' );
+is(
+    $type_disclaimer->show_type_disclaimer($request),
+    0, 'not able to show type disclaimer form'
+);
 
 $schema->storage->txn_rollback;

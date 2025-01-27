@@ -3,14 +3,19 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Dictionary") | html %] &rsaquo;
-    [% t("Guided reports wizard") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Dictionary") | html %]
+        &rsaquo; [% t("Guided reports wizard") | html %] &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>fieldset.rows table { clear: none; margin: 0;}</style>
+<style>
+    fieldset.rows table {
+        clear: none;
+        margin: 0;
+    }
+</style>
 </head>
 
 <body id="rep_dictionary" class="rep">
@@ -20,12 +25,19 @@
 
 [%- BLOCK area_name -%]
     [%- SWITCH area -%]
-        [%- CASE 'CIRC' -%]<span>Circulation</span>
-        [%- CASE 'CAT'  -%]<span>Catalog</span>
-        [%- CASE 'PAT'  -%]<span>Patrons</span>
-        [%- CASE 'ACQ'  -%]<span>Acquisitions</span>
-        [%- CASE 'ACC'  -%]<span>Accounts</span>
-        [%- CASE 'SER'  -%]<span>Serials</span>
+
+    [%- CASE 'CIRC' -%]
+        <span>Circulation</span>
+    [%- CASE 'CAT' -%]
+        <span>Catalog</span>
+    [%- CASE 'PAT' -%]
+        <span>Patrons</span>
+    [%- CASE 'ACQ' -%]
+        <span>Acquisitions</span>
+    [%- CASE 'ACC' -%]
+        <span>Accounts</span>
+    [%- CASE 'SER' -%]
+        <span>Serials</span>
     [%- END -%]
 [%- END -%]
 
@@ -72,16 +84,16 @@
 
 [% WRAPPER 'main-container.inc' aside='guided-reports-view' %]
 
-[% IF ( start_dictionary ) %]
-    <div id="toolbar">
-        <a id="newdictionary" class="btn btn-default" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form"><i class="fa fa-plus"></i> New definition</a>
-    </div>
-[% END %]
-<h1>Dictionary</h1>
-[% IF ( start_dictionary ) %]
-	<p>Use the dictionary to define custom criteria for reporting.</p>
+    [% IF ( start_dictionary ) %]
+        <div id="toolbar">
+            <a id="newdictionary" class="btn btn-default" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form"><i class="fa fa-plus"></i> New definition</a>
+        </div>
+    [% END %]
+    <h1>Dictionary</h1>
+    [% IF ( start_dictionary ) %]
+        <p>Use the dictionary to define custom criteria for reporting.</p>
 
-		[% IF ( definitions ) %]
+        [% IF ( definitions ) %]
             <div class="page-section">
                 <h2>Current terms</h2>
                 <form action="/cgi-bin/koha/reports/dictionary.pl" method="get">
@@ -111,202 +123,205 @@
                         <th>Action</th>
                     </tr>
                     [% FOREACH definition IN definitions %]
-                    <tr>
-                        <td>[% definition.name | html %]</td>
-                        <td>[% definition.description | html %]</td>
-                        <td>[% definition.areaname | html %]</td>
-                        <td>[% definition.saved_sql | html %]</td>
-                        <td class="actions">
-                            <form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-delete" />
-                                <input type="hidden" name="id" value="[% definition.id | html %]" />
-                                <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash-can"></i> Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>[% definition.name | html %]</td>
+                            <td>[% definition.description | html %]</td>
+                            <td>[% definition.areaname | html %]</td>
+                            <td>[% definition.saved_sql | html %]</td>
+                            <td class="actions">
+                                <form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-delete" />
+                                    <input type="hidden" name="id" value="[% definition.id | html %]" />
+                                    <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash-can"></i> Delete</button>
+                                </form>
+                            </td>
+                        </tr>
                     [% END %]
                 </table>
-            </div> <!-- /.page-section -->
+            </div>
+            <!-- /.page-section -->
         [% ELSE %]
             <div class="alert alert-info">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form">Add a definition to the dictionary.</a></div>
-		[% END %]
-[% END %]
-
-[% IF ( new_dictionary ) %]
-<h3>Add new definition</h3>
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-<fieldset class="rows"><legend>Step 1 of 5: Name the new definition</legend><ol>
-<li>
-<label for="definition_name">Definition name:</label>
-<input type="text" id="definition_name" name="definition_name" />
-</li>
-<li>
-<label for="definition_description">Definition description:</label>
-<textarea name="definition_description" id="definition_description" rows="3" cols="20"></textarea>
-</li>
-</ol></fieldset>
-
-<fieldset class="action">
-<input type="hidden" name="op" value="cud-add_form_2" />
-<input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
-</form>
-[% END %]
-
-[%- IF ( step_2 ) -%]
-<h3>Add new definition</h3>
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-  <fieldset class="rows">
-    <legend>Step 2 of 5: Choose the area</legend>
-    <ol>
-      <li>
-        <input type="hidden" name="op" value="cud-add_form_3" />
-        <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
-        <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
-        <label for="area">Select table:</label><select name="area" id="area">
-      [%- FOREACH area IN areas -%]
-        <option value="[%- area.id | html -%]">[%- PROCESS area_name area=area.id -%]</option>
-      [%- END -%]
-        </select>
-      </li>
-    </ol>
-  </fieldset>
-  <fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
-</form>
-[%- END -%]
-
-[% IF ( step_3 ) %]
-<h3>Add new definition</h3>
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
-    [% INCLUDE 'csrf-token.inc' %]
-<fieldset class="rows">
-<legend>Step 3 of 5: Choose a column</legend>
-<input type="hidden" name="area" value="[% area | html %]" />
-<input type="hidden" name="definition_name" value="[% definition_name | html %]" />
-<input type="hidden" name="definition_description" value="[% definition_description | html %]" />
-
-<select id="availableColumns" name="columns" size="25" style="min-width:200px; height:300px; margin:1em;">
-    [% FOREACH table IN columns.keys.sort %]
-        <optgroup label="[% table | html %]">
-            [% FOREACH column IN columns.item(table) %]
-                <option value="[% column.name | html %]">
-                    [% IF ( column.description ) %]
-                        [% column.description | html %] &nbsp; / &nbsp; [% column.name | html %]
-                    [% ELSE %]
-                        [% column.name | html %]
-                    [% END %]
-                </option>
-            [% END %]
-        </optgroup>
-    [% END %]
-</select>
-
-<input type="hidden" name="op" value="cud-add_form_4" />
-</fieldset>
-<fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
-</form>
-[% END %]
-
-[% IF ( step_4 ) %]
-<h3>Add new definition</h3>
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-<fieldset class="rows">
-<legend>Step 4 of 5: Specify a value</legend>
-<input type="hidden" name="area" value="[% area | html %]" />
-<input type="hidden" name="definition_name" value="[% definition_name | html %]" />
-<input type="hidden" name="definition_description" value="[% definition_description | html %]" />
-<input type="hidden" name="columnstring" value="[% columnstring | html %]" />
-
-[% FOREACH column IN columns %]
-<input type="hidden" name="criteria_column" value="[% column.name | html %]" />
-<ol><li><span class="label">Column: </span> [% column.name | html %]</li>
-[% IF ( column.distinct ) %]
-    <li><label for="[% column.name | html %]_value">Choose: </label> <select id="[% column.name | html %]_value" name="[% column.name | html %]_value">
-        [% FOREACH value IN column.values %]
-            <option value="[% value.availablevalues | html %]">[% value.availablevalues | html %]</option>
         [% END %]
-    </select></li>
-[% END %]
-[% IF ( column.date ) %]
-    <li class="radio">
-        <label for="all_dates">All dates</label>
-        <input type="radio" id="all_dates" name="[% column.name | html %]_date_type_value" value="all" checked="checked" />
-        <label for="date_range">Date range</label>
-        <input type="radio" id="date_range" name="[% column.name | html %]_date_type_value" value="range" />
-    </li>
-    <li class="radio">
-        Start of date range
-        <input type="text" size="10" id="from" name="[% column.name | html %]_start_value" value="" class="flatpickr" data-date_to="to" />
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-        End of date range
-        <input type="text" size="10" id="to" name="[% column.name | html %]_end_value" value="" class="flatpickr" />
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-[% END %]
-[% IF ( column.text ) %]
-	<li><label for="[% column.name | html %]_value">Search string matches: </label> <input type="text" size="13" name="[% column.name | html %]_value" /></li>
-[% END %]
+    [% END %]
 
-</ol>
-[% END %]
-<input type="hidden" name="op" value="cud-add_form_5" />
-</fieldset>
-<fieldset class="action">
-<input type="submit" name="submit" class="btn btn-primary" value="Next" />
-</fieldset>
-</form>
-[% END %]
+    [% IF ( new_dictionary ) %]
+        <h3>Add new definition</h3>
+        <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows"
+                ><legend>Step 1 of 5: Name the new definition</legend
+                ><ol>
+                    <li>
+                        <label for="definition_name">Definition name:</label>
+                        <input type="text" id="definition_name" name="definition_name" />
+                    </li>
+                    <li>
+                        <label for="definition_description">Definition description:</label>
+                        <textarea name="definition_description" id="definition_description" rows="3" cols="20"></textarea>
+                    </li> </ol
+            ></fieldset>
 
-[% IF ( step_5 ) %]
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
-<input type="hidden" name="area" value="[% area | html %]" />
-<input type="hidden" name="definition_name" value="[% definition_name | html %]" />
-<input type="hidden" name="definition_description" value="[% definition_description | html %]" />
-<input type="hidden" name="columnstring" value="[% columnstring | html %]" />
+            <fieldset class="action">
+                <input type="hidden" name="op" value="cud-add_form_2" />
+                <input type="submit" name="submit" class="btn btn-primary" value="Next"
+            /></fieldset>
+        </form>
+    [% END %]
 
-<h3>Add new definition</h3>
+    [%- IF ( step_2 ) -%]
+        <h3>Add new definition</h3>
+        <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows">
+                <legend>Step 2 of 5: Choose the area</legend>
+                <ol>
+                    <li>
+                        <input type="hidden" name="op" value="cud-add_form_3" />
+                        <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+                        <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
+                        <label for="area">Select table:</label
+                        ><select name="area" id="area">
+                            [%- FOREACH area IN areas -%]
+                                <option value="[%- area.id | html -%]">[%- PROCESS area_name area=area.id -%]</option>
+                            [%- END -%]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
+        </form>
+    [%- END -%]
 
-<fieldset class="rows">
-  <legend>Step 5 of 5: Confirm details</legend>
-  <ol>
-    <li>
-      <span class="label">Name:</span>[%- definition_name | html -%]
-    </li>
-    <li>
-      <span class="label">Description:</span>[%- definition_description | html -%]
-    </li>
-    <li>
-      <span class="label">Area:</span>[%- PROCESS area_name area=area -%]
-    </li>
-    <li>
-      <span class="label">Data:</span>
-      <table>
-        <tr>
-          <th>Columns</th>
-          <th>Values</th>
-        </tr>
-      [%- FOREACH criteria_loo IN criteria_loop -%]
-        <tr>
-          <td>[%- criteria_loo.name | html -%]</td>
-          <td>[%- criteria_loo.value | html -%]</td>
-        </tr>
-      [%- END -%]
-      </table>
-    </li>
-  </ol>
-</fieldset>
+    [% IF ( step_3 ) %]
+        <h3>Add new definition</h3>
+        <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows">
+                <legend>Step 3 of 5: Choose a column</legend>
+                <input type="hidden" name="area" value="[% area | html %]" />
+                <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+                <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
 
-<fieldset class="action"><input type="hidden" name="sql" value="[% query | html %]" />
-<input type="hidden" name="op" value="cud-add_form_6" />
-<input type="submit" name="submit" class="btn btn-primary" value="Save" />         </fieldset>
+                <select id="availableColumns" name="columns" size="25" style="min-width:200px; height:300px; margin:1em;">
+                    [% FOREACH table IN columns.keys.sort %]
+                        <optgroup label="[% table | html %]">
+                            [% FOREACH column IN columns.item(table) %]
+                                <option value="[% column.name | html %]">
+                                    [% IF ( column.description ) %]
+                                        [% column.description | html %]
+                                        &nbsp; / &nbsp; [% column.name | html %]
+                                    [% ELSE %]
+                                        [% column.name | html %]
+                                    [% END %]
+                                </option>
+                            [% END %]
+                        </optgroup>
+                    [% END %]
+                </select>
 
-</form>
-[% END %]
+                <input type="hidden" name="op" value="cud-add_form_4" />
+            </fieldset>
+            <fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
+        </form>
+    [% END %]
 
+    [% IF ( step_4 ) %]
+        <h3>Add new definition</h3>
+        <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <fieldset class="rows">
+                <legend>Step 4 of 5: Specify a value</legend>
+                <input type="hidden" name="area" value="[% area | html %]" />
+                <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+                <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
+                <input type="hidden" name="columnstring" value="[% columnstring | html %]" />
+
+                [% FOREACH column IN columns %]
+                    <input type="hidden" name="criteria_column" value="[% column.name | html %]" />
+                    <ol
+                        ><li><span class="label">Column: </span> [% column.name | html %]</li>
+                        [% IF ( column.distinct ) %]
+                            <li
+                                ><label for="[% column.name | html %]_value">Choose: </label>
+                                <select id="[% column.name | html %]_value" name="[% column.name | html %]_value">
+                                    [% FOREACH value IN column.values %]
+                                        <option value="[% value.availablevalues | html %]">[% value.availablevalues | html %]</option>
+                                    [% END %]
+                                </select></li
+                            >
+                        [% END %]
+                        [% IF ( column.date ) %]
+                            <li class="radio">
+                                <label for="all_dates">All dates</label>
+                                <input type="radio" id="all_dates" name="[% column.name | html %]_date_type_value" value="all" checked="checked" />
+                                <label for="date_range">Date range</label>
+                                <input type="radio" id="date_range" name="[% column.name | html %]_date_type_value" value="range" />
+                            </li>
+                            <li class="radio">
+                                Start of date range
+                                <input type="text" size="10" id="from" name="[% column.name | html %]_start_value" value="" class="flatpickr" data-date_to="to" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                End of date range
+                                <input type="text" size="10" id="to" name="[% column.name | html %]_end_value" value="" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                        [% END %]
+                        [% IF ( column.text ) %]
+                            <li><label for="[% column.name | html %]_value">Search string matches: </label> <input type="text" size="13" name="[% column.name | html %]_value" /></li>
+                        [% END %]
+                    </ol>
+                [% END %]
+                <input type="hidden" name="op" value="cud-add_form_5" />
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" name="submit" class="btn btn-primary" value="Next" />
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF ( step_5 ) %]
+        <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="area" value="[% area | html %]" />
+            <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+            <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
+            <input type="hidden" name="columnstring" value="[% columnstring | html %]" />
+
+            <h3>Add new definition</h3>
+
+            <fieldset class="rows">
+                <legend>Step 5 of 5: Confirm details</legend>
+                <ol>
+                    <li> <span class="label">Name:</span>[%- definition_name | html -%] </li>
+                    <li> <span class="label">Description:</span>[%- definition_description | html -%] </li>
+                    <li> <span class="label">Area:</span>[%- PROCESS area_name area=area -%] </li>
+                    <li>
+                        <span class="label">Data:</span>
+                        <table>
+                            <tr>
+                                <th>Columns</th>
+                                <th>Values</th>
+                            </tr>
+                            [%- FOREACH criteria_loo IN criteria_loop -%]
+                                <tr>
+                                    <td>[%- criteria_loo.name | html -%]</td>
+                                    <td>[%- criteria_loo.value | html -%]</td>
+                                </tr>
+                            [%- END -%]
+                        </table>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action"
+                ><input type="hidden" name="sql" value="[% query | html %]" />
+                <input type="hidden" name="op" value="cud-add_form_6" />
+                <input type="submit" name="submit" class="btn btn-primary" value="Save" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -314,16 +329,16 @@
     <script>
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary definition? This cannot be undone.");
 
-        $(document).ready(function() {
-            $("#delete").on("click",function(){
+        $(document).ready(function () {
+            $("#delete").on("click", function () {
                 return confirmDelete(MSG_CONFIRM_DELETE);
             });
 
-            $("#date_range").change(function(){
-                $("input#from").parents('li').show();
+            $("#date_range").change(function () {
+                $("input#from").parents("li").show();
             });
-            $("#all_dates").change(function(){
-                $("input#from").parents('li').hide();
+            $("#all_dates").change(function () {
+                $("input#from").parents("li").hide();
             });
             $("#all_dates").click().change();
         });

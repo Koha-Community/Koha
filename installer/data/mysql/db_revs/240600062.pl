@@ -33,9 +33,9 @@ return {
             }
             );
 
-            say_success( $out, "Added new table 'marc_order_accounts'");
+            say_success( $out, "Added new table 'marc_order_accounts'" );
         } else {
-            say_info( $out, "Table 'marc_order_accounts' already exists");
+            say_info( $out, "Table 'marc_order_accounts' already exists" );
         }
 
         $dbh->do(
@@ -44,16 +44,14 @@ return {
             }
 
         );
-                    say_success( $out, "Added new system preference 'MarcOrderingAutomation'");
+        say_success( $out, "Added new system preference 'MarcOrderingAutomation'" );
 
         $dbh->do(
             q{
                 INSERT IGNORE INTO permissions (module_bit, code, description) values (11, 'marc_order_manage', 'Manage MARC ordering');
                 }
         );
-        say_success( $out, "Added new permission 'marc_order_manage'");
-
-
+        say_success( $out, "Added new permission 'marc_order_manage'" );
 
     },
 };

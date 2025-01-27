@@ -29,53 +29,60 @@ use Koha::Patrons;
 use C4::Biblio qw( GetMarcFromKohaField );
 
 {
-    my $items = Koha::Items->search({ -or => { homebranch => undef, holdingbranch => undef }});
-    if ( $items->count ) { new_section("Not defined items.homebranch and/or items.holdingbranch")}
+    my $items = Koha::Items->search( { -or => { homebranch => undef, holdingbranch => undef } } );
+    if ( $items->count ) { new_section("Not defined items.homebranch and/or items.holdingbranch") }
     while ( my $item = $items->next ) {
         if ( not $item->homebranch and not $item->holdingbranch ) {
-            new_item(sprintf "Item with itemnumber=%s does not have homebranch and holdingbranch defined", $item->itemnumber);
+            new_item(
+                sprintf "Item with itemnumber=%s does not have homebranch and holdingbranch defined",
+                $item->itemnumber
+            );
         } elsif ( not $item->homebranch ) {
-            new_item(sprintf "Item with itemnumber=%s does not have homebranch defined", $item->itemnumber);
+            new_item( sprintf "Item with itemnumber=%s does not have homebranch defined", $item->itemnumber );
         } else {
-            new_item(sprintf "Item with itemnumber=%s does not have holdingbranch defined", $item->itemnumber);
+            new_item( sprintf "Item with itemnumber=%s does not have holdingbranch defined", $item->itemnumber );
         }
     }
-    if ( $items->count ) { new_hint("Edit these items and set valid homebranch and/or holdingbranch")}
+    if ( $items->count ) { new_hint("Edit these items and set valid homebranch and/or holdingbranch") }
 }
 
 {
     # No join possible, FK is missing at DB level
-    my @auth_types = Koha::Authority::Types->search->get_column('authtypecode');
-    my $authorities = Koha::Authorities->search({authtypecode => { 'not in' => \@auth_types } });
-    if ( $authorities->count ) {new_section("Invalid auth_header.authtypecode")}
+    my @auth_types  = Koha::Authority::Types->search->get_column('authtypecode');
+    my $authorities = Koha::Authorities->search( { authtypecode => { 'not in' => \@auth_types } } );
+    if ( $authorities->count ) { new_section("Invalid auth_header.authtypecode") }
     while ( my $authority = $authorities->next ) {
-        new_item(sprintf "Authority with authid=%s does not have a code defined (%s)", $authority->authid, $authority->authtypecode);
+        new_item(
+            sprintf "Authority with authid=%s does not have a code defined (%s)", $authority->authid,
+            $authority->authtypecode
+        );
     }
-    if ( $authorities->count ) {new_hint("Go to 'Home › Administration › Authority types' to define them")}
+    if ( $authorities->count ) { new_hint("Go to 'Home › Administration › Authority types' to define them") }
 }
 
 {
     if ( C4::Context->preference('item-level_itypes') ) {
-        my $items_without_itype = Koha::Items->search( { -or => [itype => undef,itype => ''] } );
+        my $items_without_itype = Koha::Items->search( { -or => [ itype => undef, itype => '' ] } );
         if ( $items_without_itype->count ) {
             new_section("Items do not have itype defined");
             while ( my $item = $items_without_itype->next ) {
-                if (defined $item->biblioitem->itemtype && $item->biblioitem->itemtype ne '' ) {
+                if ( defined $item->biblioitem->itemtype && $item->biblioitem->itemtype ne '' ) {
                     new_item(
-                        sprintf "Item with itemnumber=%s does not have a itype value, biblio's item type will be used (%s)",
+                        sprintf
+                            "Item with itemnumber=%s does not have a itype value, biblio's item type will be used (%s)",
                         $item->itemnumber, $item->biblioitem->itemtype
                     );
                 } else {
                     new_item(
-                        sprintf "Item with itemnumber=%s does not have a itype value, additionally no item type defined for biblionumber=%s",
+                        sprintf
+                            "Item with itemnumber=%s does not have a itype value, additionally no item type defined for biblionumber=%s",
                         $item->itemnumber, $item->biblioitem->biblionumber
                     );
-               }
+                }
             }
             new_hint("The system preference item-level_itypes expects item types to be defined at item level");
         }
-    }
-    else {
+    } else {
         my $biblioitems_without_itemtype = Koha::Biblioitems->search( { itemtype => undef } );
         if ( $biblioitems_without_itemtype->count ) {
             new_section("Biblioitems do not have itemtype defined");
@@ -91,7 +98,8 @@ use C4::Biblio qw( GetMarcFromKohaField );
 
     my @itemtypes = Koha::ItemTypes->search->get_column('itemtype');
     if ( C4::Context->preference('item-level_itypes') ) {
-        my $items_with_invalid_itype = Koha::Items->search( { -and => [itype => { not_in => \@itemtypes }, itype => { '!=' => '' }] } );
+        my $items_with_invalid_itype =
+            Koha::Items->search( { -and => [ itype => { not_in => \@itemtypes }, itype => { '!=' => '' } ] } );
         if ( $items_with_invalid_itype->count ) {
             new_section("Items have invalid itype defined");
             while ( my $item = $items_with_invalid_itype->next ) {
@@ -100,13 +108,12 @@ use C4::Biblio qw( GetMarcFromKohaField );
                     $item->itemnumber, $item->biblionumber, $item->itype
                 );
             }
-            new_hint("The items must have a itype value that is defined in the item types of Koha (Home › Administration › Item types administration)");
+            new_hint(
+                "The items must have a itype value that is defined in the item types of Koha (Home › Administration › Item types administration)"
+            );
         }
-    }
-    else {
-        my $biblioitems_with_invalid_itemtype = Koha::Biblioitems->search(
-            { itemtype => { not_in => \@itemtypes } }
-        );
+    } else {
+        my $biblioitems_with_invalid_itemtype = Koha::Biblioitems->search( { itemtype => { not_in => \@itemtypes } } );
         if ( $biblioitems_with_invalid_itemtype->count ) {
             new_section("Biblioitems do not have itemtype defined");
             while ( my $biblioitem = $biblioitems_with_invalid_itemtype->next ) {
@@ -115,16 +122,18 @@ use C4::Biblio qw( GetMarcFromKohaField );
                     $biblioitem->biblioitemnumber
                 );
             }
-            new_hint("The biblioitems must have a itemtype value that is defined in the item types of Koha (Home › Administration › Item types administration)");
+            new_hint(
+                "The biblioitems must have a itemtype value that is defined in the item types of Koha (Home › Administration › Item types administration)"
+            );
         }
     }
 
     my ( @decoding_errors, @ids_not_in_marc );
     my $biblios = Koha::Biblios->search;
-    my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
-    my ( $biblioitem_tag, $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
+    my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
+    my ( $biblioitem_tag, $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber");
     while ( my $biblio = $biblios->next ) {
-        my $record = eval{$biblio->metadata->record;};
+        my $record = eval { $biblio->metadata->record; };
         if ($@) {
             push @decoding_errors, $@;
             next;
@@ -144,31 +153,33 @@ use C4::Biblio qw( GetMarcFromKohaField );
         }
         if ( $biblionumber != $biblio->biblionumber ) {
             push @ids_not_in_marc,
-              {
+                {
                 biblionumber         => $biblio->biblionumber,
                 biblionumber_in_marc => $biblionumber,
-              };
+                };
         }
         if ( $biblioitemnumber != $biblio->biblioitem->biblioitemnumber ) {
             push @ids_not_in_marc,
-            {
-                biblionumber     => $biblio->biblionumber,
-                biblioitemnumber => $biblio->biblioitem->biblioitemnumber,
+                {
+                biblionumber             => $biblio->biblionumber,
+                biblioitemnumber         => $biblio->biblioitem->biblioitemnumber,
                 biblioitemnumber_in_marc => $biblionumber,
-            };
+                };
         }
     }
-    if ( @decoding_errors ) {
+    if (@decoding_errors) {
         new_section("Bibliographic records have invalid MARCXML");
         new_item($_) for @decoding_errors;
-        new_hint("The bibliographic records must have a valid MARCXML or you will face encoding issues or wrong displays");
+        new_hint(
+            "The bibliographic records must have a valid MARCXML or you will face encoding issues or wrong displays");
     }
     if (@ids_not_in_marc) {
         new_section("Bibliographic records have MARCXML without biblionumber or biblioitemnumber");
         for my $id (@ids_not_in_marc) {
             if ( exists $id->{biblioitemnumber} ) {
                 new_item(
-                    sprintf(q{Biblionumber %s has biblioitemnumber '%s' but should be '%s' in %s$%s},
+                    sprintf(
+                        q{Biblionumber %s has biblioitemnumber '%s' but should be '%s' in %s$%s},
                         $id->{biblionumber},
                         $id->{biblioitemnumber},
                         $id->{biblioitemnumber_in_marc},
@@ -176,10 +187,10 @@ use C4::Biblio qw( GetMarcFromKohaField );
                         $biblioitem_subfield,
                     )
                 );
-            }
-            else {
+            } else {
                 new_item(
-                    sprintf(q{Biblionumber %s has '%s' in %s$%s},
+                    sprintf(
+                        q{Biblionumber %s has '%s' in %s$%s},
                         $id->{biblionumber},
                         $id->{biblionumber_in_marc},
                         $biblio_tag,
@@ -194,24 +205,23 @@ use C4::Biblio qw( GetMarcFromKohaField );
 
 {
     my @framework_codes = Koha::BiblioFrameworks->search()->get_column('frameworkcode');
-    push @framework_codes,""; # The default is not stored in frameworks, we need to force it
+    push @framework_codes, "";    # The default is not stored in frameworks, we need to force it
 
     my $invalid_av_per_framework = {};
-    foreach my $frameworkcode ( @framework_codes ) {
+    foreach my $frameworkcode (@framework_codes) {
+
         # We are only checking fields that are mapped to DB fields
-        my $msss = Koha::MarcSubfieldStructures->search({
-            frameworkcode => $frameworkcode,
-            authorised_value => {
-                '!=' => [ -and => ( undef, '' ) ]
-            },
-            kohafield => {
-                '!=' => [ -and => ( undef, '' ) ]
+        my $msss = Koha::MarcSubfieldStructures->search(
+            {
+                frameworkcode    => $frameworkcode,
+                authorised_value => { '!=' => [ -and => ( undef, '' ) ] },
+                kohafield        => { '!=' => [ -and => ( undef, '' ) ] }
             }
-        });
+        );
         while ( my $mss = $msss->next ) {
             my $kohafield = $mss->kohafield;
-            my $av = $mss->authorised_value;
-            next if grep {$_ eq $av} qw( branches itemtypes cn_source ); # internal categories
+            my $av        = $mss->authorised_value;
+            next if grep { $_ eq $av } qw( branches itemtypes cn_source );    # internal categories
 
             my $avs = Koha::AuthorisedValues->search_by_koha_field(
                 {
@@ -225,46 +235,45 @@ use C4::Biblio qw( GetMarcFromKohaField );
             } else {
                 $tmp_kohafield =~ s|items|me|;
             }
+
             # replace items.attr with me.attr
 
             # We are only checking biblios with items
             my $items = Koha::Items->search(
                 {
-                    $tmp_kohafield =>
-                      {
-                          -not_in => [ $avs->get_column('authorised_value'), '' ],
-                          '!='    => undef,
-                      },
+                    $tmp_kohafield => {
+                        -not_in => [ $avs->get_column('authorised_value'), '' ],
+                        '!='    => undef,
+                    },
                     'biblio.frameworkcode' => $frameworkcode
                 },
                 { join => [ 'biblioitem', 'biblio' ] }
             );
             if ( $items->count ) {
-                $invalid_av_per_framework->{ $frameworkcode }->{$av} =
-                  { items => $items, kohafield => $kohafield };
+                $invalid_av_per_framework->{$frameworkcode}->{$av} =
+                    { items => $items, kohafield => $kohafield };
             }
         }
     }
     if (%$invalid_av_per_framework) {
         new_section('Wrong values linked to authorised values');
         for my $frameworkcode ( keys %$invalid_av_per_framework ) {
-            while ( my ( $av_category, $v ) = each %{$invalid_av_per_framework->{$frameworkcode}} ) {
+            while ( my ( $av_category, $v ) = each %{ $invalid_av_per_framework->{$frameworkcode} } ) {
                 my $items     = $v->{items};
                 my $kohafield = $v->{kohafield};
                 my ( $table, $column ) = split '\.', $kohafield;
                 my $output;
                 while ( my $i = $items->next ) {
-                    my $value = $table eq 'items'
-                        ? $i->$column
-                        : $table eq 'biblio'
-                        ? $i->biblio->$column
-                        : $i->biblioitem->$column;
+                    my $value =
+                          $table eq 'items'  ? $i->$column
+                        : $table eq 'biblio' ? $i->biblio->$column
+                        :                      $i->biblioitem->$column;
                     $output .= " {" . $i->itemnumber . " => " . $value . "}\n";
                 }
                 new_item(
                     sprintf(
-                        "The Framework *%s* is using the authorised value's category *%s*, "
-                        . "but the following %s do not have a value defined ({itemnumber => value }):\n%s",
+                              "The Framework *%s* is using the authorised value's category *%s*, "
+                            . "but the following %s do not have a value defined ({itemnumber => value }):\n%s",
                         $frameworkcode, $av_category, $kohafield, $output
                     )
                 );
@@ -274,19 +283,21 @@ use C4::Biblio qw( GetMarcFromKohaField );
 }
 
 {
-    my $biblios = Koha::Biblios->search({
-        -or => [
-            title => '',
-            title => undef,
-        ]
-    });
+    my $biblios = Koha::Biblios->search(
+        {
+            -or => [
+                title => '',
+                title => undef,
+            ]
+        }
+    );
     if ( $biblios->count ) {
-        my ( $title_tag, $title_subtag ) = C4::Biblio::GetMarcFromKohaField( 'biblio.title' );
+        my ( $title_tag, $title_subtag ) = C4::Biblio::GetMarcFromKohaField('biblio.title');
         my $title_field = $title_tag // '';
-        $title_field .= '$'.$title_subtag if $title_subtag;
+        $title_field .= '$' . $title_subtag if $title_subtag;
         new_section("Biblio without title $title_field");
         while ( my $biblio = $biblios->next ) {
-            new_item(sprintf "Biblio with biblionumber=%s does not have title defined", $biblio->biblionumber);
+            new_item( sprintf "Biblio with biblionumber=%s does not have title defined", $biblio->biblionumber );
         }
         new_hint("Edit these bibliographic records to define a title");
     }
@@ -298,7 +309,7 @@ use C4::Biblio qw( GetMarcFromKohaField );
             -not => {
                 -or => {
                     'me.dateofbirth' => undef,
-                    -and => {
+                    -and             => {
                         'categorycode.dateofbirthrequired' => undef,
                         'categorycode.upperagelimit'       => undef,
                     }
@@ -318,8 +329,8 @@ use C4::Biblio qw( GetMarcFromKohaField );
             my $category = $invalid_patron->category;
             new_item(
                 sprintf "Patron borrowernumber=%s has an invalid age of %s for their category '%s' (%s to %s)",
-                $invalid_patron->borrowernumber, $invalid_patron->get_age, $category->categorycode,
-                $category->dateofbirthrequired // '0',  $category->upperagelimit // 'unlimited'
+                $invalid_patron->borrowernumber,       $invalid_patron->get_age, $category->categorycode,
+                $category->dateofbirthrequired // '0', $category->upperagelimit // 'unlimited'
             );
         }
         new_hint("You may change the patron's category automatically with misc/cronjobs/update_patrons_category.pl");
@@ -451,16 +462,17 @@ use C4::Biblio qw( GetMarcFromKohaField );
 }
 
 sub new_section {
-    my ( $name ) = @_;
+    my ($name) = @_;
     say "\n== $name ==";
 }
 
 sub new_item {
-    my ( $name ) = @_;
+    my ($name) = @_;
     say "\t* $name";
 }
+
 sub new_hint {
-    my ( $name ) = @_;
+    my ($name) = @_;
     say "=> $name";
 }
 

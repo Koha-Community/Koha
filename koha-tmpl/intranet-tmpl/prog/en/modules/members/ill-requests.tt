@@ -9,16 +9,18 @@
 [% USE TablesSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("ILL requests history for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("ILL requests history for") | html %]
+        [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_illrequestshistory" class="pat">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'patron-search-header.inc' %]
 [% END %]
 
@@ -37,31 +39,29 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
-                [% INCLUDE 'messages.inc' %]
-                [% INCLUDE 'members-toolbar.inc' %]
-                <h1>ILL requests history</h1>
-                <div class="page-section">
-                    [% INCLUDE 'ill-list-table.inc' %]
-                </div>
+    [% INCLUDE 'messages.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
+    <h1>ILL requests history</h1>
+    <div class="page-section"> [% INCLUDE 'ill-list-table.inc' %] </div>
 [% END %]
 
-    [% MACRO jsinclude BLOCK %]
-        [% INCLUDE 'str/members-menu.inc' %]
-        [% Asset.js("js/members-menu.js") | $raw %]
-        [% INCLUDE 'datatables.inc' %]
-        [% INCLUDE 'columns_settings.inc' %]
-        [% INCLUDE 'js-biblio-format.inc' %]
-        [% INCLUDE 'js-patron-format.inc' %]
-        [% INCLUDE 'calendar.inc' %]
-        <script>
-            var prefilters = '[% prefilters | html %]';
-            // Set column settings
-            var table_settings = [% TablesSettings.GetTableSettings( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) | $raw %];
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'str/members-menu.inc' %]
+    [% Asset.js("js/members-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'js-biblio-format.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    <script>
+        var prefilters = '[% prefilters | html %]';
+        // Set column settings
+        var table_settings = [% TablesSettings.GetTableSettings( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) | $raw %];
 
-            var ill_table_actions = [% table_actions | $raw %];
-        </script>
-        [% INCLUDE 'ill-list-table-strings.inc' %]
-        [% Asset.js("js/ill-list-table.js") | $raw %]
-    [% END %]
+        var ill_table_actions = [% table_actions | $raw %];
+    </script>
+    [% INCLUDE 'ill-list-table-strings.inc' %]
+    [% Asset.js("js/ill-list-table.js") | $raw %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

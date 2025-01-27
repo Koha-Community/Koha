@@ -25,17 +25,17 @@ use Koha::Database;
 use Koha::Patrons;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Members::Messaging;
-use Carp qw( carp );
+use Carp            qw( carp );
 use List::MoreUtils qw( any );
 
 use Koha::Logger;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA     = qw(Exporter);
-    @EXPORT_OK =
-      qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
 }
 
 # Check that shib config is not malformed
@@ -52,8 +52,8 @@ sub shib_ok {
 # Logout from Shibboleth
 sub logout_shib {
     my ($query) = @_;
-    my $uri = _get_uri();
-    my $return = _get_return($query);
+    my $uri     = _get_uri();
+    my $return  = _get_return($query);
     print $query->redirect( $uri . "/Shibboleth.sso/Logout?return=$return" );
 }
 
@@ -62,7 +62,7 @@ sub login_shib_url {
     my ($query) = @_;
 
     my $target = _get_return($query);
-    my $uri = _get_uri() . "/Shibboleth.sso/Login?target=" . $target;
+    my $uri    = _get_uri() . "/Shibboleth.sso/Login?target=" . $target;
 
     return $uri;
 }
@@ -70,12 +70,12 @@ sub login_shib_url {
 # Returns shibboleth user login
 sub get_login_shib {
 
-# In case of a Shibboleth authentication, we expect a shibboleth user attribute
-# to contain the login match point of the shibboleth-authenticated user. This match
-# point is configured in koha-conf.xml
+    # In case of a Shibboleth authentication, we expect a shibboleth user attribute
+    # to contain the login match point of the shibboleth-authenticated user. This match
+    # point is configured in koha-conf.xml
 
-# Shibboleth attributes are mapped into http environmement variables, so we're getting
-# the match point of the user this way
+    # Shibboleth attributes are mapped into http environmement variables, so we're getting
+    # the match point of the user this way
 
     # Get shibboleth config
     my $config = _get_shib_config();
@@ -83,9 +83,9 @@ sub get_login_shib {
     my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
 
     if ( C4::Context->psgi_env ) {
-      return $ENV{"HTTP_".uc($matchAttribute)} || '';
+        return $ENV{ "HTTP_" . uc($matchAttribute) } || '';
     } else {
-      return $ENV{$matchAttribute} || '';
+        return $ENV{$matchAttribute} || '';
     }
 }
 
@@ -93,21 +93,23 @@ sub get_login_shib {
 # In our case : does the given attribute match one of our users ?
 sub checkpw_shib {
 
-    my ( $match ) = @_;
+    my ($match) = @_;
     my $config = _get_shib_config();
 
     # Does the given shibboleth attribute value ($match) match a valid koha user ?
     my $borrowers = Koha::Patrons->search( { $config->{matchpoint} => $match } );
-    if ( $borrowers->count > 1 ){
+    if ( $borrowers->count > 1 ) {
+
         # If we have more than 1 borrower the matchpoint is not unique
         # we cannot know which patron is the correct one, so we should fail
-        Koha::Logger->get->warn("There are several users with $config->{matchpoint} of $match, matchpoints must be unique");
+        Koha::Logger->get->warn(
+            "There are several users with $config->{matchpoint} of $match, matchpoints must be unique");
         return 0;
     }
     my $borrower = $borrowers->next;
     if ( defined($borrower) ) {
-        if ($config->{'sync'}) {
-            _sync($borrower->borrowernumber, $config, $match);
+        if ( $config->{'sync'} ) {
+            _sync( $borrower->borrowernumber, $config, $match );
         }
         return ( 1, $borrower->get_column('cardnumber'), $borrower->get_column('userid'), $borrower );
     }
@@ -115,6 +117,7 @@ sub checkpw_shib {
     if ( $config->{'autocreate'} ) {
         return _autocreate( $config, $match );
     } else {
+
         # If we reach this point, the user is not a valid koha user
         Koha::Logger->get->info("No users with $config->{matchpoint} of $match found and autocreate is disabled");
         return 0;
@@ -126,9 +129,9 @@ sub _autocreate {
 
     my %borrower = ( $config->{matchpoint} => $match );
 
-    while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
+    while ( my ( $key, $entry ) = each %{ $config->{'mapping'} } ) {
         if ( C4::Context->psgi_env ) {
-            $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
+            $borrower{$key} = ( $entry->{'is'} && $ENV{ "HTTP_" . uc( $entry->{'is'} ) } ) || $entry->{'content'} || '';
         } else {
             $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
         }
@@ -178,37 +181,37 @@ sub _autocreate {
 }
 
 sub _sync {
-    my ($borrowernumber, $config, $match ) = @_;
+    my ( $borrowernumber, $config, $match ) = @_;
     my %borrower;
     $borrower{'borrowernumber'} = $borrowernumber;
-    while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
+    while ( my ( $key, $entry ) = each %{ $config->{'mapping'} } ) {
         if ( C4::Context->psgi_env ) {
-            $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
+            $borrower{$key} = ( $entry->{'is'} && $ENV{ "HTTP_" . uc( $entry->{'is'} ) } ) || $entry->{'content'} || '';
         } else {
             $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
         }
     }
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    $patron->set(\%borrower)->store;
+    my $patron = Koha::Patrons->find($borrowernumber);
+    $patron->set( \%borrower )->store;
 }
 
 sub _get_uri {
 
-    my $protocol = "https://";
+    my $protocol  = "https://";
     my $interface = C4::Context->interface;
 
     my $uri =
-      $interface eq 'intranet'
-      ? C4::Context->preference('staffClientBaseURL')
-      : C4::Context->preference('OPACBaseURL');
+        $interface eq 'intranet'
+        ? C4::Context->preference('staffClientBaseURL')
+        : C4::Context->preference('OPACBaseURL');
 
-    $uri or Koha::Logger->get->warn("Syspref staffClientBaseURL or OPACBaseURL not set!"); # FIXME We should die here
+    $uri or Koha::Logger->get->warn("Syspref staffClientBaseURL or OPACBaseURL not set!");    # FIXME We should die here
 
     $uri ||= "";
 
-    if ($uri =~ /(.*):\/\/(.*)/) {
+    if ( $uri =~ /(.*):\/\/(.*)/ ) {
         my $oldprotocol = $1;
-        if ($oldprotocol ne 'https') {
+        if ( $oldprotocol ne 'https' ) {
             Koha::Logger->get->warn('Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!');
         }
         $uri = $2;
@@ -224,6 +227,7 @@ sub _get_return {
 
     my $uri_params_part = '';
     foreach my $param ( sort $query->url_param() ) {
+
         # url_param() always returns parameters that were deleted by delete()
         # This additional check ensure that parameter was not deleted.
         my $uriPiece = $query->param($param);
@@ -250,15 +254,13 @@ sub _get_shib_config {
         && defined( $config->{mapping}->{ $config->{matchpoint} }->{is} ) )
     {
         my $logger = Koha::Logger->get;
-        $logger->debug("koha borrower field to match: " . $config->{matchpoint});
-        $logger->debug("shibboleth attribute to match: " . $config->{mapping}->{ $config->{matchpoint} }->{is});
+        $logger->debug( "koha borrower field to match: " . $config->{matchpoint} );
+        $logger->debug( "shibboleth attribute to match: " . $config->{mapping}->{ $config->{matchpoint} }->{is} );
         return $config;
-    }
-    else {
+    } else {
         if ( !$config->{matchpoint} ) {
             carp 'shibboleth matchpoint not defined';
-        }
-        else {
+        } else {
             carp 'shibboleth matchpoint not mapped';
         }
         return 0;

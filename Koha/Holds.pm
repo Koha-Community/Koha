@@ -19,7 +19,6 @@ package Koha::Holds;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Hold;
@@ -56,7 +55,7 @@ returns a set of holds that are waiting from an existing set
 =cut
 
 sub waiting {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search( { found => 'W' } );
 }
@@ -68,7 +67,7 @@ returns a set of holds that are processing from an existing set
 =cut
 
 sub processing {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search( { found => 'P' } );
 }
@@ -80,7 +79,7 @@ returns a set of holds that are unfilled from an existing set
 =cut
 
 sub unfilled {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search( { found => undef } );
 }
@@ -137,18 +136,20 @@ Items that are not:
 =cut
 
 sub get_items_that_can_fill {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::Items->new->empty()
-      unless $self->count() > 0;
+        unless $self->count() > 0;
 
-    my @itemnumbers = $self->search({ 'me.itemnumber' => { '!=' => undef } })->get_column('itemnumber');
-    my @biblionumbers = $self->search({ 'me.itemnumber' => undef })->get_column('biblionumber');
+    my @itemnumbers   = $self->search( { 'me.itemnumber' => { '!=' => undef } } )->get_column('itemnumber');
+    my @biblionumbers = $self->search( { 'me.itemnumber' => undef } )->get_column('biblionumber');
     my @bibs_or_items;
-    push @bibs_or_items, 'me.itemnumber' => { in => \@itemnumbers } if @itemnumbers;
+    push @bibs_or_items, 'me.itemnumber'   => { in => \@itemnumbers }   if @itemnumbers;
     push @bibs_or_items, 'me.biblionumber' => { in => \@biblionumbers } if @biblionumbers;
 
-    my @branchtransfers = Koha::Item::Transfers->filter_by_current->search({}, {
+    my @branchtransfers = Koha::Item::Transfers->filter_by_current->search(
+        {},
+        {
             columns  => ['itemnumber'],
             collapse => 1,
         }
@@ -163,10 +164,10 @@ sub get_items_that_can_fill {
 
     return Koha::Items->search(
         {
-            -or => \@bibs_or_items,
-            itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
-            onloan       => undef,
-            notforloan   => 0,
+            -or        => \@bibs_or_items,
+            itemnumber => { -not_in => [ @branchtransfers, @waiting_holds ] },
+            onloan     => undef,
+            notforloan => 0,
         }
     )->filter_by_for_hold();
 }
@@ -182,8 +183,10 @@ Returns a filtered resultset only containing holds that have cancellation reques
 sub filter_by_has_cancellation_requests {
     my ($self) = @_;
 
-    return $self->search( { 'hold_cancellation_request_id' => { '!=' => undef } },
-        { join => 'cancellation_requests' } );
+    return $self->search(
+        { 'hold_cancellation_request_id' => { '!=' => undef } },
+        { join                           => 'cancellation_requests' }
+    );
 }
 
 =head3 filter_out_has_cancellation_requests
@@ -197,8 +200,10 @@ Returns a filtered resultset without holds with cancellation requests.
 sub filter_out_has_cancellation_requests {
     my ($self) = @_;
 
-    return $self->search( { 'hold_cancellation_request_id' => { '=' => undef } },
-        { join => 'cancellation_requests' } );
+    return $self->search(
+        { 'hold_cancellation_request_id' => { '=' => undef } },
+        { join                           => 'cancellation_requests' }
+    );
 }
 
 =head2 Internal methods

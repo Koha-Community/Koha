@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use base qw(Koha::Plugins::Base);
 
-our $VERSION = 1.01;
+our $VERSION  = 1.01;
 our $metadata = {
     name            => 'Broken install plugin',
     author          => 'Kyle M Hall',

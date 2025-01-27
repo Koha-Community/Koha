@@ -1,7 +1,7 @@
 [%- INCLUDE csv_headers/reports/orders_by_budget.tt -%]
 [%- INCLUDE empty_line.inc -%]
 [%- FOREACH row IN rows -%]
-    [%- FOREACH field IN row; field; sep IF !loop.last; END -%]
+[%- FOREACH field IN row; field; sep IF !loop.last; END -%]
     [%- INCLUDE empty_line.inc -%]
 [%- END -%]
 TOTAL[%- INCLUDE empty_line.inc -%]

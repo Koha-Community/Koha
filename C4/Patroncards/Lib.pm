@@ -25,57 +25,55 @@ use C4::Context;
 BEGIN {
     use base qw(Exporter);
     our @EXPORT = qw(unpack_UTF8
-                     text_alignment
-                     leading
-                     box
-                     get_borrower_attributes
-                     put_image
-                     get_image
-                     rm_image
+        text_alignment
+        leading
+        box
+        get_borrower_attributes
+        put_image
+        get_image
+        rm_image
     );
 }
 
 sub unpack_UTF8 {
     my ($str) = @_;
-    my @UTF8 =  (unpack("U0U*", $str));
-    my @HEX = map { sprintf '%2.2x', $_ } @UTF8;
+    my @UTF8  = ( unpack( "U0U*", $str ) );
+    my @HEX   = map { sprintf '%2.2x', $_ } @UTF8;
     return \@HEX;
 }
 
 sub text_alignment {
-    my ($origin_llx, $text_box_width, $text_llx, $string_width, $line, $alignment) = @_;
+    my ( $origin_llx, $text_box_width, $text_llx, $string_width, $line, $alignment ) = @_;
     my $Tw = 0;
     my $Tx = 0;
-    if ($alignment eq 'J') {
-        my $UTF82HEX = unpack_UTF8($line);
+    if ( $alignment eq 'J' ) {
+        my $UTF82HEX    = unpack_UTF8($line);
         my $space_count = 0;
-        grep {$space_count++ if $_ eq '20'} @$UTF82HEX;
-        $Tw = (($text_box_width - $text_llx) - $string_width) / $space_count;
+        grep { $space_count++ if $_ eq '20' } @$UTF82HEX;
+        $Tw = ( ( $text_box_width - $text_llx ) - $string_width ) / $space_count;
         return $origin_llx, $Tw;
-    }
-    elsif ($alignment eq 'C') {
-        my $center_margin = ($text_box_width / 2) + ($origin_llx - $text_llx);
-        $Tx = $center_margin - ($string_width / 2);
+    } elsif ( $alignment eq 'C' ) {
+        my $center_margin = ( $text_box_width / 2 ) + ( $origin_llx - $text_llx );
+        $Tx = $center_margin - ( $string_width / 2 );
         return $Tx, $Tw;
-    }
-    elsif ($alignment eq 'R') {
-        $Tx = ($text_box_width - $string_width) + (($origin_llx - $text_llx) / 2);
+    } elsif ( $alignment eq 'R' ) {
+        $Tx = ( $text_box_width - $string_width ) + ( ( $origin_llx - $text_llx ) / 2 );
         return $Tx, $Tw;
-    }
-    elsif ($alignment eq 'L') {
+    } elsif ( $alignment eq 'L' ) {
         return $origin_llx, $Tw;
-    }
-    else {      # if we are not handed an alignment default to left align text...
+    } else {    # if we are not handed an alignment default to left align text...
         return $origin_llx, $Tw;
     }
 }
 
 sub leading {
-    return $_[0] + ($_[0] * 0.20);      # recommended starting point for leading is 20% of the font point size  (See http://www.bastoky.com/KeyRelations.htm)
+    return $_[0] +
+        ( $_[0] * 0.20 )
+        ; # recommended starting point for leading is 20% of the font point size  (See http://www.bastoky.com/KeyRelations.htm)
 }
 
 sub box {
-    my ($llx, $lly, $width, $height, $pdf) = @_;
+    my ( $llx, $lly, $width, $height, $pdf ) = @_;
     my $obj_stream = "q\n";                            # save the graphic state
     $obj_stream .= "0.5 w\n";                          # border line width
     $obj_stream .= "1.0 0.0 0.0  RG\n";                # border color red
@@ -87,30 +85,31 @@ sub box {
 }
 
 sub get_borrower_attributes {
-    my ($borrower_number, @fields) = @_;
+    my ( $borrower_number, @fields ) = @_;
     my $get_branch = 0;
-    $get_branch = 1 if grep{$_ eq 'branchcode'} @fields;
+    $get_branch = 1 if grep { $_ eq 'branchcode' } @fields;
     my $attrib_count = scalar(@fields);
-    my $query = "SELECT ";
-    while (scalar(@fields)) {
+    my $query        = "SELECT ";
+    while ( scalar(@fields) ) {
         $query .= shift(@fields);
         $query .= ', ' if scalar(@fields);
     }
     $query .= " FROM borrowers WHERE borrowernumber = ?";
     my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
+
+    #    $sth->{'TraceLevel'} = 3;
     $sth->execute($borrower_number);
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth->errstr );
         return 1;
     }
     my $borrower_attributes = $sth->fetchrow_hashref();
     if ($get_branch) {
         $query = "SELECT branchname FROM branches WHERE branchcode = ?";
-        $sth = C4::Context->dbh->prepare($query);
-        $sth->execute($borrower_attributes->{'branchcode'});
-        if ($sth->err) {
-            warn sprintf('Database returned the following error: %s', $sth->errstr);
+        $sth   = C4::Context->dbh->prepare($query);
+        $sth->execute( $borrower_attributes->{'branchcode'} );
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error: %s', $sth->errstr );
             return 1;
         }
         $borrower_attributes->{'branchcode'} = $sth->fetchrow_hashref()->{'branchname'};
@@ -119,62 +118,61 @@ sub get_borrower_attributes {
 }
 
 sub put_image {
-    my ($image_name, $image_file) = @_;
-    if (my $image_limit = C4::Context->preference('ImageLimit')) { # enforce quota if set
+    my ( $image_name, $image_file ) = @_;
+    if ( my $image_limit = C4::Context->preference('ImageLimit') ) {    # enforce quota if set
         my $query = "SELECT count(*) FROM creator_images;";
-        my $sth = C4::Context->dbh->prepare($query);
+        my $sth   = C4::Context->dbh->prepare($query);
         $sth->execute();
-        if ($sth->err) {
-            warn sprintf('Database returned the following error: %s', $sth->errstr);
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error: %s', $sth->errstr );
             return 1;
         }
         return 202 if $sth->fetchrow_array >= $image_limit;
     }
-    my$query = "INSERT INTO creator_images (imagefile, image_name) VALUES (?,?) ON DUPLICATE KEY UPDATE imagefile = ?;";
+    my $query =
+        "INSERT INTO creator_images (imagefile, image_name) VALUES (?,?) ON DUPLICATE KEY UPDATE imagefile = ?;";
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($image_file, $image_name, $image_file);
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
+    $sth->execute( $image_file, $image_name, $image_file );
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth->errstr );
         return 1;
     }
     return;
 }
 
 sub get_image {
-    my ($image_name, $fields) = @_;
+    my ( $image_name, $fields ) = @_;
     $fields = '*' unless $fields;
     my $query = "SELECT $fields FROM creator_images";
     $query .= " WHERE image_name = ?" if $image_name;
     my $sth = C4::Context->dbh->prepare($query);
     if ($image_name) {
         $sth->execute($image_name);
-    }
-    else {
+    } else {
         $sth->execute();
     }
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
+    if ( $sth->err ) {
+        warn sprintf( 'Database returned the following error: %s', $sth->errstr );
         return 1;
     }
-    return $sth->fetchall_arrayref({});
+    return $sth->fetchall_arrayref( {} );
 }
 
 sub rm_image {
     my $image_ids = shift;
-    my $errstr = ();
+    my $errstr    = ();
     foreach my $image_id (@$image_ids) {
         my $query = "DELETE FROM creator_images WHERE image_id = ?";
-        my $sth = C4::Context->dbh->prepare($query);
+        my $sth   = C4::Context->dbh->prepare($query);
         $sth->execute($image_id);
-        if ($sth->err) {
-            warn sprintf('Database returned the following error: %s', $sth->errstr);
-            push (@$errstr, $image_id);
+        if ( $sth->err ) {
+            warn sprintf( 'Database returned the following error: %s', $sth->errstr );
+            push( @$errstr, $image_id );
         }
     }
     if ($errstr) {
         return $errstr;
-    }
-    else {
+    } else {
         return;
     }
 }

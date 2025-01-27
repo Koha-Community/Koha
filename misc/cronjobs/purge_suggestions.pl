@@ -28,8 +28,8 @@ use C4::Context;
 
 my ( $help, $days, $confirm, $verbose );
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help|?'    => \$help,
@@ -58,14 +58,14 @@ $usage .= $0 . " -confirm -days 30\n";
 $days = C4::Context->preference('PurgeSuggestionsOlderThan') if !defined($days);
 
 # If this script is called with the 'help' parameter, we show up the help message and we leave the script without doing anything.
-if( !$confirm || $help || !defined($days) ) {
+if ( !$confirm || $help || !defined($days) ) {
     print "No confirm parameter passed!\n\n" if !$confirm && !$help;
     print $usage;
-} elsif( $days and $days > 0 ) {
+} elsif ( $days and $days > 0 ) {
     print "Purging suggestions older than $days days\n" if $verbose;
     DelSuggestionsOlderThan($days);
 } else {
     warn "This script requires a positive number of days. Aborted.\n";
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

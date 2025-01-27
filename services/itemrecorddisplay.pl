@@ -29,26 +29,28 @@ It uses PrepareItemrecordDisplay
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Items qw( PrepareItemrecordDisplay );
+use C4::Items  qw( PrepareItemrecordDisplay );
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'services/itemrecorddisplay.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => {acquisition => '*'},
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'services/itemrecorddisplay.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { acquisition => '*' },
+    }
+);
 
-my $biblionumber = $input->param('biblionumber') || '';
-my $itemnumber = $input->param('itemnumber') || '';
+my $biblionumber  = $input->param('biblionumber')  || '';
+my $itemnumber    = $input->param('itemnumber')    || '';
 my $frameworkcode = $input->param('frameworkcode') || '';
 
-my $result = PrepareItemrecordDisplay($biblionumber, $itemnumber, undef, $frameworkcode);
-unless($result) {
-    $result = PrepareItemrecordDisplay($biblionumber, $itemnumber, undef, '');
+my $result = PrepareItemrecordDisplay( $biblionumber, $itemnumber, undef, $frameworkcode );
+unless ($result) {
+    $result = PrepareItemrecordDisplay( $biblionumber, $itemnumber, undef, '' );
 }
 
 $template->param(%$result);

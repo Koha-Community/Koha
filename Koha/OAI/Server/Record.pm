@@ -25,17 +25,18 @@ use XML::LibXML;
 
 use base ("HTTP::OAI::Record");
 
-
 sub new {
-    my ($class, $repository, $marcxml, $timestamp, $setSpecs, %args) = @_;
+    my ( $class, $repository, $marcxml, $timestamp, $setSpecs, %args ) = @_;
 
     my $self = $class->SUPER::new(%args);
 
     $timestamp =~ s/ /T/, $timestamp .= 'Z';
-    $self->header( HTTP::OAI::Header->new(
-        identifier  => $args{identifier},
-        datestamp   => $timestamp,
-    ) );
+    $self->header(
+        HTTP::OAI::Header->new(
+            identifier => $args{identifier},
+            datestamp  => $timestamp,
+        )
+    );
 
     foreach my $setSpec (@$setSpecs) {
         $self->header->setSpec($setSpec);
@@ -43,24 +44,26 @@ sub new {
 
     my $format = $args{metadataPrefix};
     my $record_dom;
-    my $xsl_file = $repository->{conf} ?
-        defined $repository->{conf}->{format}->{$format}->{xsl_file}
+    my $xsl_file =
+        $repository->{conf}
+        ? defined $repository->{conf}->{format}->{$format}->{xsl_file}
         : undef;
-    if (($format ne 'marc21' && $format ne 'marcxml')
-        || $xsl_file
-    ) {
-        my $args = {
-            OPACBaseURL => "'" . C4::Context->preference('OPACBaseURL') . "'"
-        };
+    if ( ( $format ne 'marc21' && $format ne 'marcxml' )
+        || $xsl_file )
+    {
+        my $args = { OPACBaseURL => "'" . C4::Context->preference('OPACBaseURL') . "'" };
+
         # call Koha::XSLT::Base now
-        $record_dom = $repository->{xslt_engine}->transform({
-            xml        => $marcxml,
-            file       => $repository->stylesheet($format),
-            parameters => $args,
-            format     => 'xmldoc',
-        });
+        $record_dom = $repository->{xslt_engine}->transform(
+            {
+                xml        => $marcxml,
+                file       => $repository->stylesheet($format),
+                parameters => $args,
+                format     => 'xmldoc',
+            }
+        );
     } else {
-        $record_dom = XML::LibXML->new->parse_string( $marcxml );
+        $record_dom = XML::LibXML->new->parse_string($marcxml);
     }
     $self->metadata( HTTP::OAI::Metadata->new( dom => $record_dom ) );
 

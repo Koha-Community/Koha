@@ -1,25 +1,26 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 182a builder") | html %] &rsaquo;
-    [% t("Cataloguing") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 182a builder") | html %]
+        &rsaquo; [% t("Cataloguing") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_182a" class="cat value_builder">
 
-    <h3>UNIMARC field 182a builder</h3>
+<h3>UNIMARC field 182a builder</h3>
 
-    <form method="get" name="f_pop" action="">
-        <div class="page-section">
-            <table>
-                <tr>
-                    <td><label for="f1">Media Type Code </label></td>
-                    <td>
-                        <select name="f1" id="f1">
+<form method="get" name="f_pop" action="">
+    <div class="page-section">
+        <table>
+            <tr>
+                <td><label for="f1">Media Type Code </label></td>
+                <td>
+                    <select name="f1" id="f1">
                         [% IF ( f1 == "a" ) %]
                             <option value="a" selected="selected">a - audio</option>
                         [% ELSE %]
@@ -79,25 +80,23 @@
                         [% ELSE %]
                             <option value="z">z - other media</option>
                         [% END %]
-                        </select>
-                    </td>
-                </tr>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.page-section -->
 
-            </table>
-        </div> <!-- /.page-section -->
-
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <input type="button" class="btn btn-primary" onclick="submitMyForm();" value="Save" />
-                    <button class="btn btn-default close_window">Cancel</button>
-                </fieldset>
-            </div>
-        </nav>
-
-    </form>
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="button" class="btn btn-primary" onclick="submitMyForm();" value="Save" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
+</form>
 <script>
-
     function submitMyForm() {
         var doc   = opener.document;
         var field = doc.getElementById("[% index | html %]");
@@ -107,5 +106,4 @@
         return false;
     }
 </script>
-
 [% INCLUDE 'popup-bottom.inc' %]

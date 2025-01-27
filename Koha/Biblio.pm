@@ -80,9 +80,9 @@ Overloaded I<store> method to set default values
 =cut
 
 sub store {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    $self->datecreated( dt_from_string ) unless $self->datecreated;
+    $self->datecreated(dt_from_string) unless $self->datecreated;
 
     return $self->SUPER::store;
 }
@@ -96,7 +96,7 @@ Returns a Koha::Biblio::Metadata object
 =cut
 
 sub metadata {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $metadata = $self->_result->metadata;
     return Koha::Biblio::Metadata->_new_from_dbic($metadata);
@@ -111,7 +111,7 @@ Returns a Marc::Record object
 =cut
 
 sub record {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->metadata->record;
 }
@@ -125,7 +125,7 @@ Returns the record schema (MARC21, USMARC or UNIMARC).
 =cut
 
 sub record_schema {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->metadata->schema // C4::Context->preference("marcflavour");
 }
@@ -204,7 +204,7 @@ Returns a Koha::Acquisition::Orders object
 =cut
 
 sub orders {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $orders = $self->_result->orders;
     return Koha::Acquisition::Orders->_new_from_dbic($orders);
@@ -219,7 +219,7 @@ Returns acquisition orders related to this biblio that are not cancelled.
 =cut
 
 sub uncancelled_orders {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->orders->filter_out_cancelled;
 }
@@ -259,9 +259,9 @@ Returns all tickets linked to the biblio
 =cut
 
 sub tickets {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->tickets;
-    return Koha::Tickets->_new_from_dbic( $rs );
+    return Koha::Tickets->_new_from_dbic($rs);
 }
 
 =head3 ill_requests
@@ -273,7 +273,7 @@ Returns a Koha::ILL::Requests object
 =cut
 
 sub ill_requests {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $ill_requests = $self->_result->ill_requests;
     return Koha::ILL::Requests->_new_from_dbic($ill_requests);
@@ -288,7 +288,7 @@ Returns a Koha::Biblio::ItemGroups object
 =cut
 
 sub item_groups {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $item_groups = $self->_result->item_groups;
     return Koha::Biblio::ItemGroups->_new_from_dbic($item_groups);
@@ -309,7 +309,7 @@ sub can_article_request {
 
     my $rule = $self->article_request_type($borrower);
     return q{} if $rule eq 'item_only' && !$self->items()->count();
-    return 1 if $rule && $rule ne 'no';
+    return 1   if $rule                && $rule ne 'no';
 
     return q{};
 }
@@ -427,7 +427,7 @@ to $to_library, otherwise 0.
 =cut
 
 sub can_be_transferred {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $to   = $params->{to};
     my $from = $params->{from};
@@ -436,15 +436,16 @@ sub can_be_transferred {
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
 
     my $items;
-    foreach my $item_of_bib ($self->items->as_list) {
+    foreach my $item_of_bib ( $self->items->as_list ) {
         next unless $item_of_bib->holdingbranch;
-        next if $from && $from->branchcode ne $item_of_bib->holdingbranch;
+        next     if $from && $from->branchcode ne $item_of_bib->holdingbranch;
         return 1 if $item_of_bib->holdingbranch eq $to->branchcode;
-        my $code = $limittype eq 'itemtype'
+        my $code =
+              $limittype eq 'itemtype'
             ? $item_of_bib->effective_itemtype
             : $item_of_bib->ccode;
         return 1 unless $code;
-        $items->{$code}->{$item_of_bib->holdingbranch} = 1;
+        $items->{$code}->{ $item_of_bib->holdingbranch } = 1;
     }
 
     # At this point we will have a HASHref containing each itemtype/ccode that
@@ -454,20 +455,20 @@ sub can_be_transferred {
     # listed holdingbranches to the given $to library exist. If at least one
     # holdingbranch for that $limittype does not have a transfer limit to given
     # $to library, then we know that the transfer is possible.
-    foreach my $code (keys %{$items}) {
-        my @holdingbranches = keys %{$items->{$code}};
-        return 1 if Koha::Item::Transfer::Limits->search({
-            toBranch => $to->branchcode,
-            fromBranch => { 'in' => \@holdingbranches },
-            $limittype => $code
-        }, {
-            group_by => [qw/fromBranch/]
-        })->count == scalar(@holdingbranches) ? 0 : 1;
+    foreach my $code ( keys %{$items} ) {
+        my @holdingbranches = keys %{ $items->{$code} };
+        return 1 if Koha::Item::Transfer::Limits->search(
+            {
+                toBranch   => $to->branchcode,
+                fromBranch => { 'in' => \@holdingbranches },
+                $limittype => $code
+            },
+            { group_by => [qw/fromBranch/] }
+        )->count == scalar(@holdingbranches) ? 0 : 1;
     }
 
     return 0;
 }
-
 
 =head3 pickup_locations
 
@@ -502,7 +503,7 @@ sub pickup_locations {
             $memory_cache->set_in_cache( $cache_key, $item_pickup_locations );
         }
         push @pickup_locations, @{$item_pickup_locations};
-        for my $location (@{$item_pickup_locations}) {
+        for my $location ( @{$item_pickup_locations} ) {
             push @{ $location_items->{$location} }, $item->itemnumber;
         }
     }
@@ -541,9 +542,9 @@ sub hidden_in_opac {
 
     my @items = $self->items->as_list;
 
-    return 0 unless @items; # Do not hide if there is no item
+    return 0 unless @items;    # Do not hide if there is no item
 
-    return !(any { !$_->hidden_in_opac({ rules => $rules }) } @items);
+    return !( any { !$_->hidden_in_opac( { rules => $rules } ) } @items );
 }
 
 =head3 article_request_type
@@ -562,7 +563,7 @@ sub article_request_type {
 
     return q{} unless $borrower;
 
-    my $rule = $self->article_request_type_for_items( $borrower );
+    my $rule = $self->article_request_type_for_items($borrower);
     return $rule if $rule;
 
     # If the record has no items that are requestable, go by the record itemtype
@@ -597,7 +598,7 @@ sub article_request_type_for_bib {
     );
 
     return q{} unless $rule;
-    return $rule->rule_value || q{}
+    return $rule->rule_value || q{};
 }
 
 =head3 article_request_type_for_items
@@ -635,7 +636,7 @@ Returns the article requests associated with this biblio
 =cut
 
 sub article_requests {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::ArticleRequests->_new_from_dbic( scalar $self->_result->article_requests );
 }
@@ -651,8 +652,10 @@ Returns the current checkouts associated with this biblio
 sub current_checkouts {
     my ($self) = @_;
 
-    return Koha::Checkouts->search( { "item.biblionumber" => $self->id },
-        { join => 'item' } );
+    return Koha::Checkouts->search(
+        { "item.biblionumber" => $self->id },
+        { join                => 'item' }
+    );
 }
 
 =head3 old_checkouts
@@ -664,10 +667,12 @@ Returns the past checkouts associated with this biblio
 =cut
 
 sub old_checkouts {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    return Koha::Old::Checkouts->search( { "item.biblionumber" => $self->id },
-        { join => 'item' } );
+    return Koha::Old::Checkouts->search(
+        { "item.biblionumber" => $self->id },
+        { join                => 'item' }
+    );
 }
 
 =head3 items
@@ -681,17 +686,17 @@ Returns the related Koha::Items object for this biblio
 =cut
 
 sub items {
-    my ($self,$params) = @_;
+    my ( $self, $params ) = @_;
 
     my $items_rs = $self->_result->items;
 
     return Koha::Items->_new_from_dbic($items_rs)
         unless $params->{host_items} && C4::Context->preference('EasyAnalyticalRecords');
 
-    my @itemnumbers = $items_rs->get_column('itemnumber')->all;
+    my @itemnumbers      = $items_rs->get_column('itemnumber')->all;
     my $host_itemnumbers = $self->_host_itemnumbers();
-    push @itemnumbers, @{ $host_itemnumbers };
-    return Koha::Items->search({ "me.itemnumber" => { -in => \@itemnumbers } });
+    push @itemnumbers, @{$host_itemnumbers};
+    return Koha::Items->search( { "me.itemnumber" => { -in => \@itemnumbers } } );
 }
 
 =head3 bookable_items
@@ -719,7 +724,7 @@ sub host_items {
     my ($self) = @_;
 
     return Koha::Items->new->empty
-      unless C4::Context->preference('EasyAnalyticalRecords');
+        unless C4::Context->preference('EasyAnalyticalRecords');
 
     my $host_itemnumbers = $self->_host_itemnumbers;
 
@@ -737,7 +742,7 @@ Return the itemnumbers for analytical items on this record
 sub _host_itemnumbers {
     my ($self) = @_;
 
-    my $marcflavour = C4::Context->preference("marcflavour");
+    my $marcflavour   = C4::Context->preference("marcflavour");
     my $analyticfield = '773';
     if ( $marcflavour eq 'UNIMARC' ) {
         $analyticfield = '461';
@@ -750,7 +755,6 @@ sub _host_itemnumbers {
     return \@itemnumbers;
 }
 
-
 =head3 itemtype
 
 my $itemtype = $biblio->itemtype();
@@ -760,7 +764,7 @@ Returns the itemtype for this record.
 =cut
 
 sub itemtype {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->biblioitem()->itemtype();
 }
@@ -807,8 +811,7 @@ It does not include future holds.
 sub current_holds {
     my ($self) = @_;
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    return $self->holds(
-        { reservedate => { '<=' => $dtf->format_date(dt_from_string) } } );
+    return $self->holds( { reservedate => { '<=' => $dtf->format_date(dt_from_string) } } );
 }
 
 =head3 biblioitem
@@ -850,7 +853,7 @@ sub suggestions {
     my ($self) = @_;
 
     my $suggestions_rs = $self->_result->suggestions;
-    return Koha::Suggestions->_new_from_dbic( $suggestions_rs );
+    return Koha::Suggestions->_new_from_dbic($suggestions_rs);
 }
 
 =head3 get_marc_components
@@ -863,20 +866,23 @@ this object (MARC21 773 points to this)
 =cut
 
 sub get_marc_components {
-    my ($self, $max_results) = @_;
+    my ( $self, $max_results ) = @_;
 
-    return [] if (C4::Context->preference('marcflavour') ne 'MARC21');
+    return [] if ( C4::Context->preference('marcflavour') ne 'MARC21' );
 
     my ( $searchstr, $sort ) = $self->get_components_query;
 
     my $components;
-    if (defined($searchstr)) {
-        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    if ( defined($searchstr) ) {
+        my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
         my ( $error, $results, $facets );
         eval {
-            ( $error, $results, $facets ) = $searcher->search_compat( $searchstr, undef, [$sort], ['biblioserver'], $max_results, 0, undef, undef, 'ccl', 0 );
+            ( $error, $results, $facets ) = $searcher->search_compat(
+                $searchstr, undef, [$sort], ['biblioserver'], $max_results, 0, undef, undef,
+                'ccl',      0
+            );
         };
-        if( $error || $@ ) {
+        if ( $error || $@ ) {
             $error //= q{};
             $error .= $@ if $@;
             warn "Warning from search_compat: '$error'";
@@ -903,12 +909,11 @@ Returns a query which can be used to search for all component parts of MARC21 bi
 sub get_components_query {
     my ($self) = @_;
 
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-    my $marc = $self->metadata->record;
+    my $builder              = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+    my $marc                 = $self->metadata->record;
     my $component_sort_field = C4::Context->preference('ComponentSortField') // "title";
     my $component_sort_order = C4::Context->preference('ComponentSortOrder') // "asc";
-    my $sort = $component_sort_field . "_" . $component_sort_order;
+    my $sort                 = $component_sort_field . "_" . $component_sort_order;
 
     my $searchstr;
     if ( C4::Context->preference('UseControlNumber') ) {
@@ -919,11 +924,12 @@ sub get_components_query {
             my $pf003 = $marc->field('003') || undef;
 
             if ( !defined($pf003) ) {
+
                 # search for 773$w='Host001'
-                $searchstr .= "rcn:\"" . $pf001->data()."\"";
-            }
-            else {
+                $searchstr .= "rcn:\"" . $pf001->data() . "\"";
+            } else {
                 $searchstr .= "(";
+
                 # search for (773$w='Host001' and 003='Host003') or 773$w='(Host003)Host001'
                 $searchstr .= "(rcn:\"" . $pf001->data() . "\" AND cni:\"" . $pf003->data() . "\")";
                 $searchstr .= " OR rcn:\"" . $pf003->data() . " " . $pf001->data() . "\"";
@@ -934,20 +940,19 @@ sub get_components_query {
             $searchstr .= " AND (bib-level:a OR bib-level:b)";
             $searchstr .= ")";
         }
-    }
-    else {
-        my $cleaned_title = $marc->subfield('245', "a");
+    } else {
+        my $cleaned_title = $marc->subfield( '245', "a" );
         $cleaned_title =~ tr|/||;
         $cleaned_title = $builder->clean_search_term($cleaned_title);
-        $searchstr = qq#Host-item:("$cleaned_title")#;
+        $searchstr     = qq#Host-item:("$cleaned_title")#;
     }
-    my ($error, $query ,$query_str) = $builder->build_query_compat( undef, [$searchstr], undef, undef, [$sort], 0 );
-    if( $error ){
+    my ( $error, $query, $query_str ) = $builder->build_query_compat( undef, [$searchstr], undef, undef, [$sort], 0 );
+    if ($error) {
         warn $error;
         return;
     }
 
-    return ($query, $query_str, $sort);
+    return ( $query, $query_str, $sort );
 }
 
 =head3 get_marc_volumes
@@ -1089,10 +1094,17 @@ Tells if this bibliographic record has items waiting or in transit.
 =cut
 
 sub has_items_waiting_or_intransit {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    if ( Koha::Holds->search({ biblionumber => $self->id,
-                               found => ['W', 'T'] })->count ) {
+    if (
+        Koha::Holds->search(
+            {
+                biblionumber => $self->id,
+                found        => [ 'W', 'T' ]
+            }
+        )->count
+        )
+    {
         return 1;
     }
 
@@ -1112,7 +1124,7 @@ Returns the COinS (a span) which can be included in a biblio record
 =cut
 
 sub get_coins {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $record = $self->metadata->record;
 
@@ -1157,22 +1169,22 @@ sub get_coins {
     $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
 
     if ( $genre eq 'book' ) {
-            $genre = $fmts7->{$pos7} if $fmts7->{$pos7};
+        $genre = $fmts7->{$pos7} if $fmts7->{$pos7};
     }
 
     ##### We must transform mtx to a valable mtx and document type ####
     if ( $genre eq 'book' ) {
-            $mtx = 'book';
-            $titletype = 'b';
+        $mtx       = 'book';
+        $titletype = 'b';
     } elsif ( $genre eq 'journal' ) {
-            $mtx = 'journal';
-            $titletype = 'j';
+        $mtx       = 'journal';
+        $titletype = 'j';
     } elsif ( $genre eq 'journalArticle' ) {
-            $mtx   = 'journal';
-            $genre = 'article';
-            $titletype = 'a';
+        $mtx       = 'journal';
+        $genre     = 'article';
+        $titletype = 'a';
     } else {
-            $mtx = 'dc';
+        $mtx = 'dc';
     }
 
     if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
@@ -1180,7 +1192,7 @@ sub get_coins {
         # Setting datas
         $aulast  = $record->subfield( '700', 'a' ) || '';
         $aufirst = $record->subfield( '700', 'b' ) || '';
-        push @authors, "$aufirst $aulast" if ($aufirst or $aulast);
+        push @authors, "$aufirst $aulast" if ( $aufirst or $aulast );
 
         # others authors
         if ( $record->field('200') ) {
@@ -1189,9 +1201,9 @@ sub get_coins {
             }
         }
 
-        $title     = $record->subfield( '200', 'a' );
-        my $subfield_210d = $record->subfield('210', 'd');
-        if ($subfield_210d and $subfield_210d =~ /(\d{4})/) {
+        $title = $record->subfield( '200', 'a' );
+        my $subfield_210d = $record->subfield( '210', 'd' );
+        if ( $subfield_210d and $subfield_210d =~ /(\d{4})/ ) {
             $pubyear = $1;
         }
         $publisher = $record->subfield( '210', 'c' ) || '';
@@ -1214,14 +1226,14 @@ sub get_coins {
         }
         $title = $record->field('245');
         $title &&= $title->as_string('ab');
-        if ($titletype eq 'a') {
+        if ( $titletype eq 'a' ) {
             $pubyear   = $record->field('008') || '';
-            $pubyear   = substr($pubyear->data(), 7, 4) if $pubyear;
+            $pubyear   = substr( $pubyear->data(), 7, 4 ) if $pubyear;
             $isbn      = $record->subfield( '773', 'z' ) || '';
             $issn      = $record->subfield( '773', 'x' ) || '';
-            $hosttitle = $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{};
+            $hosttitle = $record->subfield( '773', 't' ) || $record->subfield( '773', 'a' ) || q{};
             my @rels = $record->subfield( '773', 'g' );
-            $pages = join(', ', @rels);
+            $pages = join( ', ', @rels );
         } else {
             $pubyear   = $record->subfield( '260', 'c' ) || '';
             $publisher = $record->subfield( '260', 'b' ) || '';
@@ -1232,15 +1244,15 @@ sub get_coins {
     }
 
     my @params = (
-        [ 'ctx_ver', 'Z39.88-2004' ],
-        [ 'rft_val_fmt', "info:ofi/fmt:kev:mtx:$mtx" ],
-        [ ($mtx eq 'dc' ? 'rft.type' : 'rft.genre'), $genre ],
-        [ "rft.${titletype}title", $title ],
+        [ 'ctx_ver',                                   'Z39.88-2004' ],
+        [ 'rft_val_fmt',                               "info:ofi/fmt:kev:mtx:$mtx" ],
+        [ ( $mtx eq 'dc' ? 'rft.type' : 'rft.genre' ), $genre ],
+        [ "rft.${titletype}title",                     $title ],
     );
 
     # rft.title is authorized only once, so by checking $titletype
     # we ensure that rft.title is not already in the list.
-    if ($hosttitle and $titletype) {
+    if ( $hosttitle and $titletype ) {
         push @params, [ 'rft.title', $hosttitle ];
     }
 
@@ -1250,19 +1262,21 @@ sub get_coins {
     );
 
     # If it's a subscription, these informations have no meaning.
-    if ($genre ne 'journal') {
+    if ( $genre ne 'journal' ) {
         push @params, (
-            [ 'rft.aulast', $aulast ],
+            [ 'rft.aulast',  $aulast ],
             [ 'rft.aufirst', $aufirst ],
-            (map { [ 'rft.au', $_ ] } @authors),
-            [ 'rft.pub', $publisher ],
-            [ 'rft.date', $pubyear ],
+            ( map { [ 'rft.au', $_ ] } @authors ),
+            [ 'rft.pub',   $publisher ],
+            [ 'rft.date',  $pubyear ],
             [ 'rft.pages', $pages ],
         );
     }
 
-    my $coins_value = join( '&amp;',
-        map { $$_[1] ? $$_[0] . '=' . uri_escape_utf8( $$_[1] ) : () } @params );
+    my $coins_value = join(
+        '&amp;',
+        map { $$_[1] ? $$_[0] . '=' . uri_escape_utf8( $$_[1] ) : () } @params
+    );
 
     return $coins_value;
 }
@@ -1276,14 +1290,14 @@ Returns url for OpenURL resolver set in OpenURLResolverURL system preference
 =cut
 
 sub get_openurl {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $OpenURLResolverURL = C4::Context->preference('OpenURLResolverURL');
 
     if ($OpenURLResolverURL) {
         my $uri = URI->new($OpenURLResolverURL);
 
-        if (not defined $uri->query) {
+        if ( not defined $uri->query ) {
             $OpenURLResolverURL .= '?';
         } else {
             $OpenURLResolverURL .= '&amp;';
@@ -1303,12 +1317,12 @@ Return boolean true if this bibbliographic record is continuing resource
 =cut
 
 sub is_serial {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return 1 if $self->serial;
 
     my $record = $self->metadata->record;
-    return 1 if substr($record->leader, 7, 1) eq 's';
+    return 1 if substr( $record->leader, 7, 1 ) eq 's';
 
     return 0;
 }
@@ -1323,7 +1337,7 @@ It is built regaring the value of the system preference CustomCoverImagesURL
 =cut
 
 sub custom_cover_image_url {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $url = C4::Context->preference('CustomCoverImagesURL');
     if ( $url =~ m|{isbn}| ) {
         my $isbn = $self->biblioitem->isbn;
@@ -1343,11 +1357,11 @@ sub custom_cover_image_url {
 
     my $re = qr|{(?<field>\d{3})(\$(?<subfield>.))?}|;
     if ( $url =~ $re ) {
-        my $field = $+{field};
-        my $subfield = $+{subfield};
+        my $field       = $+{field};
+        my $subfield    = $+{subfield};
         my $marc_record = $self->metadata->record;
         my $value;
-        if ( $subfield ) {
+        if ($subfield) {
             $value = $marc_record->subfield( $field, $subfield );
         } else {
             my $controlfield = $marc_record->field($field);
@@ -1367,7 +1381,7 @@ Return the cover images associated with this biblio.
 =cut
 
 sub cover_images {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $cover_images_rs = $self->_result->cover_images;
     return unless $cover_images_rs;
@@ -1388,10 +1402,10 @@ sub get_marc_notes {
     my ( $self, $params ) = @_;
 
     my $marcflavour = C4::Context->preference('marcflavour');
-    my $opac = $params->{opac} // '0';
-    my $interface = $params->{opac} ? 'opac' : 'intranet';
+    my $opac        = $params->{opac} // '0';
+    my $interface   = $params->{opac} ? 'opac' : 'intranet';
 
-    my $record = $params->{record} // $self->metadata->record;
+    my $record           = $params->{record} // $self->metadata->record;
     my $record_processor = Koha::RecordProcessor->new(
         {
             filters => [ 'ViewPolicy', 'ExpandCodedFields' ],
@@ -1403,7 +1417,8 @@ sub get_marc_notes {
     );
     $record_processor->process($record);
 
-    my $scope = $marcflavour eq "UNIMARC"? '3..': '5..';
+    my $scope = $marcflavour eq "UNIMARC" ? '3..' : '5..';
+
     #MARC21 specs indicate some notes should be private if first indicator 0
     my %maybe_private = (
         541 => 1,
@@ -1414,23 +1429,23 @@ sub get_marc_notes {
     );
 
     my %hiddenlist = map { $_ => 1 }
-        split( /,/, C4::Context->preference('NotesToHide'));
+        split( /,/, C4::Context->preference('NotesToHide') );
 
     my @marcnotes;
     foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
-        next if $hiddenlist{ $tag };
+        next if $hiddenlist{$tag};
         next if $opac && $maybe_private{$tag} && !$field->indicator(1);
-        if( $marcflavour ne 'UNIMARC' && $field->subfield('u') ) {
+        if ( $marcflavour ne 'UNIMARC' && $field->subfield('u') ) {
+
             # Field 5XX$u always contains URI
             # Examples: 505u, 506u, 510u, 514u, 520u, 530u, 538u, 540u, 542u, 552u, 555u, 561u, 563u, 583u
             # We first push the other subfields, then all $u's separately
             # Leave further actions to the template (see e.g. opac-detail)
-            my $othersub =
-                join '', ( 'a' .. 't', 'v' .. 'z', '0' .. '9' ); # excl 'u'
+            my $othersub = join '', ( 'a' .. 't', 'v' .. 'z', '0' .. '9' );    # excl 'u'
             push @marcnotes, { marcnote => $field->as_string($othersub) };
             foreach my $sub ( $field->subfield('u') ) {
-                $sub =~ s/^\s+|\s+$//g; # trim
+                $sub =~ s/^\s+|\s+$//g;                                        # trim
                 push @marcnotes, { marcnote => $sub, tag => $tag };
             }
         } else {
@@ -1458,16 +1473,17 @@ sub _get_marc_authors {
     my $marcflavour        = C4::Context->preference('marcflavour');
 
     # tagslib useful only for UNIMARC author responsibilities
-    my $tagslib = $marcflavour eq "UNIMARC"
-      ? C4::Biblio::GetMarcStructure( 1, $self->frameworkcode, { unsafe => 1 } )
-      : undef;
+    my $tagslib =
+        $marcflavour eq "UNIMARC"
+        ? C4::Biblio::GetMarcStructure( 1, $self->frameworkcode, { unsafe => 1 } )
+        : undef;
 
     my @marcauthors;
     foreach my $field ( $self->metadata->record->field($fields_filter) ) {
 
         next
-          if $mintag && $field->tag() < $mintag
-          || $maxtag && $field->tag() > $maxtag;
+            if $mintag && $field->tag() < $mintag
+            || $maxtag && $field->tag() > $maxtag;
 
         my @subfields_loop;
         my @link_loop;
@@ -1494,39 +1510,42 @@ sub _get_marc_authors {
             # don't load unimarc subfields 3, 5
             next if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /3|5/ ) );
 
-            my $code = $authors_subfield->[0];
-            my $value        = $authors_subfield->[1];
-            my $linkvalue    = $value;
+            my $code      = $authors_subfield->[0];
+            my $value     = $authors_subfield->[1];
+            my $linkvalue = $value;
             $linkvalue =~ s/(\(|\))//g;
+
             # UNIMARC author responsibility
             if ( $marcflavour eq 'UNIMARC' and $code eq '4' ) {
-                $value = C4::Biblio::GetAuthorisedValueDesc( $field->tag(), $code, $value, '', $tagslib );
+                $value     = C4::Biblio::GetAuthorisedValueDesc( $field->tag(), $code, $value, '', $tagslib );
                 $linkvalue = "($value)";
             }
+
             # if no authority link, build a search query
             unless ($subfield9) {
                 push @link_loop, {
                     limit    => 'au',
                     'link'   => $linkvalue,
-                    operator => (scalar @link_loop) ? ' AND ' : undef
+                    operator => ( scalar @link_loop ) ? ' AND ' : undef
                 };
             }
             my @this_link_loop = @link_loop;
+
             # do not display $0
-            unless ( $code eq '0') {
+            unless ( $code eq '0' ) {
                 push @subfields_loop, {
                     tag       => $field->tag(),
                     code      => $code,
                     value     => $value,
                     link_loop => \@this_link_loop,
-                    separator => (scalar @subfields_loop) ? $AuthoritySeparator : ''
+                    separator => ( scalar @subfields_loop ) ? $AuthoritySeparator : ''
                 };
             }
         }
         push @marcauthors, {
             MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop,
-            authoritylink => $subfield9,
-            unimarc3 => $unimarc3
+            authoritylink             => $subfield9,
+            unimarc3                  => $unimarc3
         };
     }
     return \@marcauthors;
@@ -1548,20 +1567,20 @@ sub get_marc_contributors {
     my $marcflavour = C4::Context->preference('marcflavour');
 
     if ( $marcflavour eq "UNIMARC" ) {
-        $mintag = "700";
-        $maxtag = "712";
+        $mintag        = "700";
+        $maxtag        = "712";
         $fields_filter = '7..';
-    } else { # marc21/normarc
-        $mintag = "700";
-        $maxtag = "720";
+    } else {    # marc21/normarc
+        $mintag        = "700";
+        $maxtag        = "720";
         $fields_filter = '7..';
     }
 
     return $self->_get_marc_authors(
         {
             fields_filter => $fields_filter,
-            mintag       => $mintag,
-            maxtag       => $maxtag
+            mintag        => $mintag,
+            maxtag        => $maxtag
         }
     );
 }
@@ -1584,21 +1603,23 @@ sub get_marc_authors {
 
     if ( $marcflavour eq "UNIMARC" ) {
         $fields_filter = '200';
-    } else { # marc21/normarc
+    } else {    # marc21/normarc
         $fields_filter = '100';
     }
 
-    my @first_authors = @{$self->_get_marc_authors(
-        {
-            fields_filter => $fields_filter,
-            mintag       => $mintag,
-            maxtag       => $maxtag
-        }
-    )};
+    my @first_authors = @{
+        $self->_get_marc_authors(
+            {
+                fields_filter => $fields_filter,
+                mintag        => $mintag,
+                maxtag        => $maxtag
+            }
+        )
+    };
 
-    my @other_authors = @{$self->get_marc_contributors};
+    my @other_authors = @{ $self->get_marc_contributors };
 
-    return [@first_authors, @other_authors];
+    return [ @first_authors, @other_authors ];
 }
 
 =head3 normalized_isbn
@@ -1611,8 +1632,8 @@ ISBN13 are converted into ISBN10. This is required to get some book cover images
 =cut
 
 sub normalized_isbn {
-    my ( $self) = @_;
-    return C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
+    my ($self) = @_;
+    return C4::Koha::GetNormalizedISBN( $self->biblioitem->isbn );
 }
 
 =head3 public_read_list
@@ -1623,11 +1644,11 @@ This method returns the list of publicly readable database fields for both API a
 
 sub public_read_list {
     return [
-        'biblionumber',   'frameworkcode',   'author',
-        'title',          'medium',          'subtitle',
-        'part_number',    'part_name',       'unititle',
-        'notes',          'serial',          'seriestitle',
-        'copyrightdate',  'abstract'
+        'biblionumber',  'frameworkcode', 'author',
+        'title',         'medium',        'subtitle',
+        'part_number',   'part_name',     'unititle',
+        'notes',         'serial',        'seriestitle',
+        'copyrightdate', 'abstract'
     ];
 }
 
@@ -1684,15 +1705,15 @@ on the API.
 =cut
 
 sub to_api {
-    my ($self, $args) = @_;
+    my ( $self, $args ) = @_;
 
-    my $json_biblio = $self->SUPER::to_api( $args );
+    my $json_biblio = $self->SUPER::to_api($args);
     return unless $json_biblio;
 
     $args = defined $args ? {%$args} : {};
     delete $args->{embed};
 
-    my $json_biblioitem = $self->biblioitem->to_api( $args );
+    my $json_biblioitem = $self->biblioitem->to_api($args);
     return unless $json_biblioitem;
 
     return { %$json_biblio, %$json_biblioitem };
@@ -1707,13 +1728,13 @@ on the API.
 
 sub to_api_mapping {
     return {
-        biblionumber     => 'biblio_id',
-        frameworkcode    => 'framework_id',
-        unititle         => 'uniform_title',
-        seriestitle      => 'series_title',
-        copyrightdate    => 'copyright_date',
-        datecreated      => 'creation_date',
-        deleted_on       => undef,
+        biblionumber  => 'biblio_id',
+        frameworkcode => 'framework_id',
+        unititle      => 'uniform_title',
+        seriestitle   => 'series_title',
+        copyrightdate => 'copyright_date',
+        datecreated   => 'creation_date',
+        deleted_on    => undef,
     };
 }
 
@@ -1739,9 +1760,9 @@ sub to_api_mapping {
 =cut
 
 sub get_marc_host {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
     my $no_items = $params->{no_items};
-    return if C4::Context->preference('marcflavour') eq 'UNIMARC'; # TODO
+    return if C4::Context->preference('marcflavour') eq 'UNIMARC';    # TODO
     return if $params->{no_items} && $self->items->count > 0;
 
     my $record;
@@ -1754,32 +1775,36 @@ sub get_marc_host {
     my $hostfld;
     foreach my $f ( $record->field('773') ) {
         my $w = $f->subfield('w') or next;
-        if( $w =~ /^\($orgcode\)\s*(\d+)/i or $w =~ /^\d+/ ) {
+        if ( $w =~ /^\($orgcode\)\s*(\d+)/i or $w =~ /^\d+/ ) {
             $hostfld = $f;
             last;
         }
     }
 
-    my $engine = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $engine = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $bibno;
-    if ( !$hostfld and $record->subfield('773','t') ) {
+    if ( !$hostfld and $record->subfield( '773', 't' ) ) {
+
         # not linked using $w
         my $unlinkedf = $record->field('773');
         my $host;
         if ( C4::Context->preference("EasyAnalyticalRecords") ) {
             if ( $unlinkedf->subfield('0') ) {
+
                 # use 773$0 host biblionumber
                 $bibno = $unlinkedf->subfield('0');
             } elsif ( $unlinkedf->subfield('9') ) {
+
                 # use 773$9 host itemnumber
                 my $linkeditemnumber = $unlinkedf->subfield('9');
-                $bibno = Koha::Items->find( $linkeditemnumber )->biblionumber;
+                $bibno = Koha::Items->find($linkeditemnumber)->biblionumber;
             }
         }
-        if ( $bibno ) {
+        if ($bibno) {
             my $host = Koha::Biblios->find($bibno) or return;
             return wantarray ? ( $host, $unlinkedf->subfield('g') ) : $host;
         }
+
         # just return plaintext and no host record
         my $hostinfo = join( ", ", $unlinkedf->subfield('a'), $unlinkedf->subfield('t'), $unlinkedf->subfield('g') );
         return wantarray ? ( undef, $unlinkedf->subfield('g'), $hostinfo ) : undef;
@@ -1788,22 +1813,23 @@ sub get_marc_host {
     my $rcn = $hostfld->subfield('w');
 
     # Look for control number with/without orgcode
-    for my $try (1..2) {
-        my ( $error, $results, $total_hits ) = $engine->simple_search_compat( 'Control-number='.$rcn, 0,1 );
-        if( !$error and $total_hits == 1 ) {
+    for my $try ( 1 .. 2 ) {
+        my ( $error, $results, $total_hits ) = $engine->simple_search_compat( 'Control-number=' . $rcn, 0, 1 );
+        if ( !$error and $total_hits == 1 ) {
             $bibno = $engine->extract_biblionumber( $results->[0] );
             last;
         }
+
         # Add or remove orgcode for second try
-        if( $try == 1 && $rcn =~ /\)\s*(\d+)/ ) {
-            $rcn = $1; # number only
-        } elsif( $try == 1 && $rcn =~ /^\d+/ ) {
+        if ( $try == 1 && $rcn =~ /\)\s*(\d+)/ ) {
+            $rcn = $1;    # number only
+        } elsif ( $try == 1 && $rcn =~ /^\d+/ ) {
             $rcn = "($orgcode)$rcn";
         } else {
             last;
         }
     }
-    if( $bibno ) {
+    if ($bibno) {
         my $host = Koha::Biblios->find($bibno) or return;
         return wantarray ? ( $host, $hostfld->subfield('g') ) : $host;
     }
@@ -1820,7 +1846,7 @@ Return host only
 sub get_marc_host_only {
     my ($self) = @_;
 
-    my ( $host ) = $self->get_marc_host;
+    my ($host) = $self->get_marc_host;
 
     return $host;
 }
@@ -2064,7 +2090,7 @@ Return recalls linked to this biblio
 =cut
 
 sub recalls {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return Koha::Recalls->_new_from_dbic( scalar $self->_result->recalls );
 }
 
@@ -2088,7 +2114,7 @@ sub can_be_recalled {
         $branchcode = $patron->branchcode;
     }
 
-    my @all_items = Koha::Items->search({ biblionumber => $self->biblionumber })->as_list;
+    my @all_items = Koha::Items->search( { biblionumber => $self->biblionumber } )->as_list;
 
     # if there are no available items at all, no recall can be placed
     return 0 if ( scalar @all_items == 0 );
@@ -2097,12 +2123,12 @@ sub can_be_recalled {
     my @itemnumbers;
     my @items;
     my @all_itemnumbers;
-    foreach my $item ( @all_items ) {
+    foreach my $item (@all_items) {
         push( @all_itemnumbers, $item->itemnumber );
-        if ( $item->can_be_recalled({ patron => $patron }) ) {
-            push( @itemtypes, $item->effective_itemtype );
+        if ( $item->can_be_recalled( { patron => $patron } ) ) {
+            push( @itemtypes,   $item->effective_itemtype );
             push( @itemnumbers, $item->itemnumber );
-            push( @items, $item );
+            push( @items,       $item );
         }
     }
 
@@ -2111,47 +2137,56 @@ sub can_be_recalled {
 
     # Check the circulation rule for each relevant itemtype for this biblio
     my ( @recalls_allowed, @recalls_per_record, @on_shelf_recalls );
-    foreach my $itemtype ( @itemtypes ) {
-        my $rule = Koha::CirculationRules->get_effective_rules({
-            branchcode => $branchcode,
-            categorycode => $patron ? $patron->categorycode : undef,
-            itemtype => $itemtype,
-            rules => [
-                'recalls_allowed',
-                'recalls_per_record',
-                'on_shelf_recalls',
-            ],
-        });
-        push( @recalls_allowed, $rule->{recalls_allowed} ) if $rule;
+    foreach my $itemtype (@itemtypes) {
+        my $rule = Koha::CirculationRules->get_effective_rules(
+            {
+                branchcode   => $branchcode,
+                categorycode => $patron ? $patron->categorycode : undef,
+                itemtype     => $itemtype,
+                rules        => [
+                    'recalls_allowed',
+                    'recalls_per_record',
+                    'on_shelf_recalls',
+                ],
+            }
+        );
+        push( @recalls_allowed,    $rule->{recalls_allowed} )    if $rule;
         push( @recalls_per_record, $rule->{recalls_per_record} ) if $rule;
-        push( @on_shelf_recalls, $rule->{on_shelf_recalls} ) if $rule;
+        push( @on_shelf_recalls,   $rule->{on_shelf_recalls} )   if $rule;
     }
-    my $recalls_allowed = (sort {$b <=> $a} @recalls_allowed)[0]; # take highest
-    my $recalls_per_record = (sort {$b <=> $a} @recalls_per_record)[0]; # take highest
+    my $recalls_allowed        = ( sort { $b <=> $a } @recalls_allowed )[0];       # take highest
+    my $recalls_per_record     = ( sort { $b <=> $a } @recalls_per_record )[0];    # take highest
     my %on_shelf_recalls_count = ();
-    foreach my $count ( @on_shelf_recalls ) {
+    foreach my $count (@on_shelf_recalls) {
         $on_shelf_recalls_count{$count}++;
     }
-    my $on_shelf_recalls = (sort {$on_shelf_recalls_count{$b} <=> $on_shelf_recalls_count{$a}} @on_shelf_recalls)[0]; # take most common
+    my $on_shelf_recalls = ( sort { $on_shelf_recalls_count{$b} <=> $on_shelf_recalls_count{$a} } @on_shelf_recalls )[0]
+        ;                                                                          # take most common
 
     # check recalls allowed has been set and is not zero
     return 0 if ( !defined($recalls_allowed) || $recalls_allowed == 0 );
 
-    if ( $patron ) {
+    if ($patron) {
+
         # check borrower has not reached open recalls allowed limit
         return 0 if ( $patron->recalls->filter_by_current->count >= $recalls_allowed );
 
         # check borrower has not reached open recalls allowed per record limit
-        return 0 if ( $patron->recalls->filter_by_current->search({ biblio_id => $self->biblionumber })->count >= $recalls_per_record );
+        return 0
+            if ( $patron->recalls->filter_by_current->search( { biblio_id => $self->biblionumber } )->count >=
+            $recalls_per_record );
 
         # check if any of the items under this biblio are already checked out by this borrower
-        return 0 if ( Koha::Checkouts->search({ itemnumber => [ @all_itemnumbers ], borrowernumber => $patron->borrowernumber })->count > 0 );
+        return 0
+            if (
+            Koha::Checkouts->search( { itemnumber => [@all_itemnumbers], borrowernumber => $patron->borrowernumber } )
+            ->count > 0 );
     }
 
     # check item availability
     my $checked_out_count = 0;
     foreach (@items) {
-        if ( Koha::Checkouts->search({ itemnumber => $_->itemnumber })->count > 0 ){ $checked_out_count++; }
+        if ( Koha::Checkouts->search( { itemnumber => $_->itemnumber } )->count > 0 ) { $checked_out_count++; }
     }
 
     # can't recall if on shelf recalls only allowed when all unavailable, but items are still available for checkout
@@ -2173,7 +2208,7 @@ Return a Koha::Ratings object representing the ratings of this bibliographic rec
 =cut
 
 sub ratings {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->ratings;
     return Koha::Ratings->_new_from_dbic($rs);
 }

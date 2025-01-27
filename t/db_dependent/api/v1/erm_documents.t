@@ -72,9 +72,8 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This document exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/documents/"
-          . $document->document_id
-          . "/file/content" )->status_is(200)->json_is('123');
+    $t->get_ok( "//$userid:$password@/api/v1/erm/documents/" . $document->document_id . "/file/content" )
+        ->status_is(200)->json_is('123');
 
     # Create a document through a license, gets returned
     my $license = $builder->build_object( { class => 'Koha::ERM::Licenses' } );
@@ -94,10 +93,8 @@ subtest 'get() tests' => sub {
     my @documents           = $license->documents->as_list;
     my $license_document_id = $documents[0]->document_id;
 
-    $t->get_ok( "//$userid:$password@/api/v1/erm/documents/"
-          . $license_document_id
-          . "/file/content" )->status_is(200)
-      ->content_is( decode_base64('321') );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/documents/" . $license_document_id . "/file/content" )->status_is(200)
+        ->content_is( decode_base64('321') );
 
     # Delete a document through a license, no longer exists
     my $deleted_document_id   = $license_document_id;
@@ -113,24 +110,19 @@ subtest 'get() tests' => sub {
         ]
     );
 
-    $t->get_ok( "//$userid:$password@/api/v1/erm/documents/"
-          . $deleted_document_id
-          . "/file/content" )->status_is(404);
+    $t->get_ok( "//$userid:$password@/api/v1/erm/documents/" . $deleted_document_id . "/file/content" )->status_is(404);
 
     # Unauthorized access
-    $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/documents/"
-          . $document->document_id
-          . "/file/content" )->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/documents/" . $document->document_id . "/file/content" )
+        ->status_is(403);
 
     # Attempt to get non-existent document
-    my $document_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::Documents' } );
-    my $non_existent_id = $document_to_delete->id;
+    my $document_to_delete = $builder->build_object( { class => 'Koha::ERM::Documents' } );
+    my $non_existent_id    = $document_to_delete->id;
     $document_to_delete->delete;
 
-    $t->get_ok(
-"//$userid:$password@/api/v1/erm/documents/$non_existent_id/file/content"
-    )->status_is(404)->json_is( '/error' => 'Document not found' );
+    $t->get_ok("//$userid:$password@/api/v1/erm/documents/$non_existent_id/file/content")->status_is(404)
+        ->json_is( '/error' => 'Document not found' );
 
     $schema->storage->txn_rollback;
 };

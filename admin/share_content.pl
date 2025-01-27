@@ -17,11 +17,11 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI  qw ( -utf8 );
 use JSON qw( to_json );
 use HTTP::Request;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::SharedContent;
@@ -29,48 +29,53 @@ use Koha::SharedContent;
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/share_content.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_mana' },
+        template_name => "admin/share_content.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_mana' },
     }
 );
 
-my $op = $query->param('op') || q{};
+my $op        = $query->param('op')                || q{};
 my $mana_base = C4::Context->config('mana_config') || '';
+
 # Check the mana server actually exists at the other end
 my $bad_url;
 if ($mana_base) {
     my $request = HTTP::Request->new( GET => $mana_base );
-    my $result = Koha::SharedContent::process_request($request);
-    $bad_url = 1 unless (exists($result->{version}));
+    my $result  = Koha::SharedContent::process_request($request);
+    $bad_url = 1 unless ( exists( $result->{version} ) );
 }
 
 if ( $op eq 'cud-save' ) {
     my $auto_share = $query->param('autosharewithmana') || q{};
-    my $mana = $query->param('mana');
+    my $mana       = $query->param('mana');
 
-    C4::Context->set_preference('Mana', $mana);
+    C4::Context->set_preference( 'Mana', $mana );
 
     if ( $auto_share ne '' ) {
-        C4::Context->set_preference('AutoShareWithMana', 'subscription');
+        C4::Context->set_preference( 'AutoShareWithMana', 'subscription' );
     } else {
-        C4::Context->set_preference('AutoShareWithMana', '');
+        C4::Context->set_preference( 'AutoShareWithMana', '' );
     }
 }
 
 if ( $op eq 'cud-reset' ) {
-    C4::Context->set_preference('ManaToken', '');
+    C4::Context->set_preference( 'ManaToken', '' );
 }
 
 if ( $op eq 'cud-send' && not $bad_url ) {
-    my $name = $query->param('name');
+    my $name  = $query->param('name');
     my $email = $query->param('email');
 
-    my $content = to_json({name => $name,
-                           email => $email});
+    my $content = to_json(
+        {
+            name  => $name,
+            email => $email
+        }
+    );
 
-    my $url = "$mana_base/getsecuritytoken";
+    my $url     = "$mana_base/getsecuritytoken";
     my $request = HTTP::Request->new( POST => $url );
     $request->content($content);
     my $result = Koha::SharedContent::process_request($request);
@@ -78,14 +83,13 @@ if ( $op eq 'cud-send' && not $bad_url ) {
     $template->param( result => $result );
 
     if ( $result->{code} eq '201' && $result->{token} ) {
-        C4::Context->set_preference('ManaToken', $result->{token});
+        C4::Context->set_preference( 'ManaToken', $result->{token} );
     }
 }
 
-
 $template->param(
-    mana_url    => $mana_base,
-    bad_url     => $bad_url,
+    mana_url => $mana_base,
+    bad_url  => $bad_url,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -17,25 +17,25 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use Encode qw( encode );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use Encode     qw( encode );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Recalls;
 
 my $input = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-   {
-      template_name   => "opac-recalls.tt",
-      query           => $input,
-      type            => "opac",
-   }
+    {
+        template_name => "opac-recalls.tt",
+        query         => $input,
+        type          => "opac",
+    }
 );
 
-my $recalls = Koha::Recalls->search({ patron_id => $borrowernumber }, { order_by => { -desc => 'created_date' } });
+my $recalls = Koha::Recalls->search( { patron_id => $borrowernumber }, { order_by => { -desc => 'created_date' } } );
 $template->param(
-     RECALLS => $recalls,
-     recallsview => 1
+    RECALLS     => $recalls,
+    recallsview => 1
 );
 
 output_html_with_http_headers $input, $cookie, $template->output, undef, { force_no_caching => 1 };

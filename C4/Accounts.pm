@@ -17,7 +17,6 @@ package C4::Accounts;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use C4::Context;
 use C4::Stats;
@@ -27,15 +26,14 @@ use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Items;
 
-
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      chargelostitem
-      purge_zero_balance_fees
+        chargelostitem
+        purge_zero_balance_fees
     );
 }
 
@@ -69,25 +67,27 @@ FIXME : if no replacement price, borrower just doesn't get charged?
 
 sub chargelostitem {
     my $dbh = C4::Context->dbh();
-    my ($borrowernumber, $itemnumber, $replacementprice, $description) = @_;
+    my ( $borrowernumber, $itemnumber, $replacementprice, $description ) = @_;
     my $item  = Koha::Items->find($itemnumber);
     my $itype = $item->itemtype;
     $replacementprice //= 0;
-    my $defaultreplacecost = $itype->defaultreplacecost;
-    my $processfee = $itype->processfee;
+    my $defaultreplacecost        = $itype->defaultreplacecost;
+    my $processfee                = $itype->processfee;
     my $usedefaultreplacementcost = C4::Context->preference("useDefaultReplacementCost");
-    my $processingfeenote = C4::Context->preference("ProcessingFeeNote");
-    if ($usedefaultreplacementcost && $replacementprice == 0 && $defaultreplacecost){
+    my $processingfeenote         = C4::Context->preference("ProcessingFeeNote");
+
+    if ( $usedefaultreplacementcost && $replacementprice == 0 && $defaultreplacecost ) {
         $replacementprice = $defaultreplacecost;
     }
-    my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
+    my $checkout = Koha::Checkouts->find( { itemnumber => $itemnumber } );
     if ( !$checkout && $item->in_bundle ) {
         my $host = $item->bundle_host;
         $checkout = $host->checkout;
     }
     my $issue_id = $checkout ? $checkout->issue_id : undef;
 
-    my $account = Koha::Account->new({ patron_id => $borrowernumber });
+    my $account = Koha::Account->new( { patron_id => $borrowernumber } );
+
     # first make sure the borrower hasn't already been charged for this item (for this issuance)
     my $existing_charges = $account->lines->search(
         {
@@ -99,8 +99,9 @@ sub chargelostitem {
 
     # OK, they haven't
     unless ($existing_charges) {
+
         #add processing fee
-        if ($processfee && $processfee > 0){
+        if ( $processfee && $processfee > 0 ) {
             my $accountline = $account->add_debit(
                 {
                     amount      => $processfee,
@@ -115,8 +116,9 @@ sub chargelostitem {
                 }
             );
         }
+
         #add replace cost
-        if ($replacementprice > 0){
+        if ( $replacementprice > 0 ) {
             my $accountline = $account->add_debit(
                 {
                     amount      => $replacementprice,

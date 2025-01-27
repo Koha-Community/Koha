@@ -22,8 +22,8 @@ use Modern::Perl;
 
 use Carp qw( croak );
 use Mojo::JSON;
-use Scalar::Util qw( blessed looks_like_number );
-use Try::Tiny qw( catch try );
+use Scalar::Util    qw( blessed looks_like_number );
+use Try::Tiny       qw( catch try );
 use List::MoreUtils qw( any );
 use DateTime::Format::MySQL;
 
@@ -78,13 +78,13 @@ sub new {
         }
 
         $self->{_result} =
-          $schema->resultset( $class->_type() )->new($attributes);
+            $schema->resultset( $class->_type() )->new($attributes);
     }
 
     $self->{_messages} = [];
 
     croak("No _type found! Koha::Object must be subclassed!")
-      unless $class->_type();
+        unless $class->_type();
 
     bless( $self, $class );
 
@@ -104,10 +104,10 @@ sub _new_from_dbic {
     $self->{_result} = $dbic_row;
 
     croak("No _type found! Koha::Object must be subclassed!")
-      unless $class->_type();
+        unless $class->_type();
 
     croak( "DBIC result _type " . ref( $self->{_result} ) . " isn't of the _type " . $class->_type() )
-      unless ref( $self->{_result} ) eq "Koha::Schema::Result::" . $class->_type();
+        unless ref( $self->{_result} ) eq "Koha::Schema::Result::" . $class->_type();
 
     bless( $self, $class );
 
@@ -132,50 +132,53 @@ sub store {
 
     # Handle not null and default values for integers and dates
     foreach my $col ( keys %{$columns_info} ) {
+
         # Integers
         if (   _numeric_column_type( $columns_info->{$col}->{data_type} )
-            or _decimal_column_type( $columns_info->{$col}->{data_type} )
-        ) {
+            or _decimal_column_type( $columns_info->{$col}->{data_type} ) )
+        {
             # Has been passed but not a number, usually an empty string
             my $value = $self->_result()->get_column($col);
-            if ( defined $value and not looks_like_number( $value ) ) {
+            if ( defined $value and not looks_like_number($value) ) {
                 if ( $columns_info->{$col}->{is_nullable} ) {
+
                     # If nullable, default to null
-                    $self->_result()->set_column($col => undef);
+                    $self->_result()->set_column( $col => undef );
                 } else {
+
                     # If cannot be null, get the default value
                     # What if cannot be null and does not have a default value? Possible?
-                    $self->_result()->set_column($col => $columns_info->{$col}->{default_value});
+                    $self->_result()->set_column( $col => $columns_info->{$col}->{default_value} );
                 }
             }
-        }
-        elsif ( _date_or_datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
+        } elsif ( _date_or_datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
+
             # Set to null if an empty string (or == 0 but should not happen)
             my $value = $self->_result()->get_column($col);
             if ( defined $value and not $value ) {
                 if ( $columns_info->{$col}->{is_nullable} ) {
-                    $self->_result()->set_column($col => undef);
+                    $self->_result()->set_column( $col => undef );
                 } else {
-                    $self->_result()->set_column($col => $columns_info->{$col}->{default_value});
+                    $self->_result()->set_column( $col => $columns_info->{$col}->{default_value} );
                 }
+            } elsif ( not defined $self->$col
+                && $columns_info->{$col}->{datetime_undef_if_invalid} )
+            {
+                # timestamp
+                $self->_result()->set_column( $col => $columns_info->{$col}->{default_value} );
             }
-            elsif ( not defined $self->$col
-                  && $columns_info->{$col}->{datetime_undef_if_invalid} )
-              {
-                  # timestamp
-                  $self->_result()->set_column($col => $columns_info->{$col}->{default_value});
-              }
         }
     }
 
     try {
         return $self->_result()->update_or_insert() ? $self : undef;
-    }
-    catch {
+    } catch {
+
         # Catch problems and raise relevant exceptions
-        if (ref($_) eq 'DBIx::Class::Exception') {
+        if ( ref($_) eq 'DBIx::Class::Exception' ) {
             warn $_->{msg};
             if ( $_->{msg} =~ /Cannot add or update a child row: a foreign key constraint fails/ ) {
+
                 # FK constraints
                 # FIXME: MySQL error, if we support more DB engines we should implement this for each
                 if ( $_->{msg} =~ /FOREIGN KEY \(`(?<column>.*?)`\)/ ) {
@@ -184,25 +187,26 @@ sub store {
                         broken_fk => $+{column}
                     );
                 }
-            }
-            elsif( $_->{msg} =~ /Duplicate entry '(.*?)' for key '(?<key>.*?)'/ ) {
+            } elsif ( $_->{msg} =~ /Duplicate entry '(.*?)' for key '(?<key>.*?)'/ ) {
                 Koha::Exceptions::Object::DuplicateID->throw(
-                    error => 'Duplicate ID',
+                    error        => 'Duplicate ID',
                     duplicate_id => $+{key}
                 );
-            }
-            elsif( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/ ) { # The optional \W in the regex might be a quote or backtick
-                my $type = $+{type};
-                my $value = $+{value};
+            } elsif ( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/ )
+            {    # The optional \W in the regex might be a quote or backtick
+                my $type     = $+{type};
+                my $value    = $+{value};
                 my $property = $+{property};
                 $property =~ s/['`]//g;
                 Koha::Exceptions::Object::BadValue->throw(
                     type     => $type,
                     value    => $value,
-                    property => $property =~ /(\w+\.\w+)$/ ? $1 : $property, # results in table.column without quotes or backtics
+                    property => $property =~ /(\w+\.\w+)$/
+                    ? $1
+                    : $property,    # results in table.column without quotes or backtics
                 );
-            }
-            elsif ( $_->{msg} =~ /Data truncated for column \W?(?<property>\w+)/ ) {    # The optional \W in the regex might be a quote or backtick
+            } elsif ( $_->{msg} =~ /Data truncated for column \W?(?<property>\w+)/ )
+            {                       # The optional \W in the regex might be a quote or backtick
                 my $property = $+{property};
                 my $type     = $columns_info->{$property}->{data_type};
                 Koha::Exceptions::Object::BadValue->throw(
@@ -214,6 +218,7 @@ sub store {
                 ) if $type eq 'enum';
             }
         }
+
         # Catch-all for foreign key breakages. It will help find other use cases
         $_->rethrow();
     }
@@ -238,7 +243,7 @@ A shortcut for set + store in one call.
 =cut
 
 sub update {
-    my ($self, $values) = @_;
+    my ( $self, $values ) = @_;
     Koha::Exceptions::Object::NotInStorage->throw unless $self->in_storage;
     $self->set($values)->store();
 }
@@ -311,7 +316,7 @@ no properties will be set.
 sub set {
     my ( $self, $properties ) = @_;
 
-    my @columns = @{$self->_columns()};
+    my @columns = @{ $self->_columns() };
 
     foreach my $p ( keys %$properties ) {
         unless ( grep { $_ eq $p } @columns ) {
@@ -336,7 +341,6 @@ If not listed in $properties_hashref, the property will be set to the default
 value defined at DB level, or nulled.
 
 =cut
-
 
 sub set_or_blank {
     my ( $self, $properties ) = @_;
@@ -377,7 +381,7 @@ sub get_from_storage {
     my ( $self, $attrs ) = @_;
     my $stored_object = $self->_result->get_from_storage($attrs);
     return unless $stored_object;
-    my $object_class  = Koha::Object::_get_object_class( $self->_result->result_class );
+    my $object_class = Koha::Object::_get_object_class( $self->_result->result_class );
     return $object_class->_new_from_dbic($stored_object);
 }
 
@@ -390,7 +394,7 @@ Returns the (probably non-fatal) messages that were recorded on the object.
 =cut
 
 sub object_messages {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->{_messages} = []
         unless defined $self->{_messages};
@@ -436,37 +440,32 @@ sub TO_JSON {
     my ($self) = @_;
 
     my $unblessed    = $self->unblessed;
-    my $columns_info = Koha::Database->new->schema->resultset( $self->_type )
-        ->result_source->{_columns};
+    my $columns_info = Koha::Database->new->schema->resultset( $self->_type )->result_source->{_columns};
 
     foreach my $col ( keys %{$columns_info} ) {
 
-        if ( $columns_info->{$col}->{is_boolean} )
-        {    # Handle booleans gracefully
-            $unblessed->{$col}
-                = ( $unblessed->{$col} )
+        if ( $columns_info->{$col}->{is_boolean} ) {    # Handle booleans gracefully
+            $unblessed->{$col} =
+                ( $unblessed->{$col} )
                 ? Mojo::JSON->true
                 : Mojo::JSON->false;
-        }
-        elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} )
-            and looks_like_number( $unblessed->{$col} )
-        ) {
+        } elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} )
+            and looks_like_number( $unblessed->{$col} ) )
+        {
             # TODO: Remove once the solution for
             # https://github.com/perl5-dbi/DBD-mysql/issues/212
             # is ported to whatever distro we support by that time
             # or we move to DBD::MariaDB
             $unblessed->{$col} += 0;
-        }
-        elsif ( _decimal_column_type( $columns_info->{$col}->{data_type} )
-            and looks_like_number( $unblessed->{$col} )
-        ) {
+        } elsif ( _decimal_column_type( $columns_info->{$col}->{data_type} )
+            and looks_like_number( $unblessed->{$col} ) )
+        {
             # TODO: Remove once the solution for
             # https://github.com/perl5-dbi/DBD-mysql/issues/212
             # is ported to whatever distro we support by that time
             # or we move to DBD::MariaDB
             $unblessed->{$col} += 0.00;
-        }
-        elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
+        } elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
             eval {
                 return unless $unblessed->{$col};
                 my $dt = Koha::DateTime::Format::SQL->parse_datetime( $unblessed->{$col} );
@@ -486,8 +485,9 @@ sub _date_or_datetime_column_type {
         'datetime'
     );
 
-    return ( grep { $column_type eq $_ } @dt_types) ? 1 : 0;
+    return ( grep { $column_type eq $_ } @dt_types ) ? 1 : 0;
 }
+
 sub _datetime_column_type {
     my ($column_type) = @_;
 
@@ -496,10 +496,11 @@ sub _datetime_column_type {
         'datetime'
     );
 
-    return ( grep { $column_type eq $_ } @dt_types) ? 1 : 0;
+    return ( grep { $column_type eq $_ } @dt_types ) ? 1 : 0;
 }
 
 sub _numeric_column_type {
+
     # TODO: Remove once the solution for
     # https://github.com/perl5-dbi/DBD-mysql/issues/212
     # is ported to whatever distro we support by that time
@@ -515,10 +516,11 @@ sub _numeric_column_type {
         'tinyint',
     );
 
-    return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
+    return ( grep { $column_type eq $_ } @numeric_types ) ? 1 : 0;
 }
 
 sub _decimal_column_type {
+
     # TODO: Remove once the solution for
     # https://github.com/perl5-dbi/DBD-mysql/issues/212
     # is ported to whatever distro we support by that time
@@ -531,7 +533,7 @@ sub _decimal_column_type {
         'float'
     );
 
-    return ( grep { $column_type eq $_ } @decimal_types) ? 1 : 0;
+    return ( grep { $column_type eq $_ } @decimal_types ) ? 1 : 0;
 }
 
 =head3 prefetch_whitelist
@@ -543,15 +545,15 @@ Returns a hash of prefetchable subs and the type they return.
 =cut
 
 sub prefetch_whitelist {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $whitelist = {};
     my $relations = $self->_result->result_source->_relationships;
 
-    foreach my $key (keys %{$relations}) {
-        if($self->can($key)) {
+    foreach my $key ( keys %{$relations} ) {
+        if ( $self->can($key) ) {
             my $result_class = $relations->{$key}->{class};
-            my $obj = $result_class->new;
+            my $obj          = $result_class->new;
             try {
                 $whitelist->{$key} = Koha::Object::_get_object_class( $obj->result_class );
             } catch {
@@ -614,13 +616,13 @@ sub to_api {
     if ( $params->{public} ) {
         for my $field ( keys %{$json_object} ) {
             delete $json_object->{$field}
-              unless any { $_ eq $field } @{ $self->public_read_list };
+                unless any { $_ eq $field } @{ $self->public_read_list };
         }
 
         if ($strings) {
             foreach my $field ( keys %{$string_map} ) {
                 delete $string_map->{$field}
-                  unless any { $_ eq $field } @{ $self->public_read_list };
+                    unless any { $_ eq $field } @{ $self->public_read_list };
             }
         }
     }
@@ -655,10 +657,9 @@ sub to_api {
                 # key != undef
                 $json_object->{$mapped_column} = delete $json_object->{$column};
                 $string_map->{$mapped_column}  = delete $string_map->{$column}
-                  if exists $string_map->{$column};
+                    if exists $string_map->{$column};
 
-            }
-            elsif ( exists $json_object->{$column}
+            } elsif ( exists $json_object->{$column}
                 && !defined $mapped_column )
             {
 
@@ -670,7 +671,7 @@ sub to_api {
     }
 
     $json_object->{_strings} = $string_map
-      if $strings;
+        if $strings;
 
     if ($embeds) {
         foreach my $embed ( keys %{$embeds} ) {
@@ -680,13 +681,12 @@ sub to_api {
 
                 my $relation = $+{relation};
                 $json_object->{$embed} = $self->$relation->count;
-            }
-            else {
+            } else {
                 my $curr = $embed;
                 my $next = $embeds->{$curr}->{children};
 
                 $params->{strings} = 1
-                  if $embeds->{$embed}->{strings};
+                    if $embeds->{$embed}->{strings};
 
                 my $children = $self->$curr;
 
@@ -702,8 +702,7 @@ sub to_api {
                         )
                     } @{$children};
                     $json_object->{$curr} = \@list;
-                }
-                else {
+                } else {
                     $json_object->{$curr} = $self->_handle_to_api_child(
                         {
                             child  => $children,
@@ -769,8 +768,7 @@ own implementation.
 
 =cut
 
-sub public_read_list
- {
+sub public_read_list {
     return [];
 }
 
@@ -801,13 +799,13 @@ comes from the API is correctly renamed to match what is required for the DB.
 =cut
 
 sub from_api_mapping {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $to_api_mapping = $self->to_api_mapping;
 
     unless ( defined $self->{_from_api_mapping} ) {
         $self->{_from_api_mapping} = {};
-        while (my ($key, $value) = each %{ $to_api_mapping } ) {
+        while ( my ( $key, $value ) = each %{$to_api_mapping} ) {
             $self->{_from_api_mapping}->{$value} = $key
                 if defined $value;
         }
@@ -829,7 +827,7 @@ sub new_from_api {
     my ( $class, $params ) = @_;
 
     my $self = $class->new;
-    return $self->set_from_api( $params );
+    return $self->set_from_api($params);
 }
 
 =head3 set_from_api
@@ -844,7 +842,7 @@ Sets the object's attributes mapping API attribute names to the ones on the DB s
 sub set_from_api {
     my ( $self, $from_api_params ) = @_;
 
-    return $self->set( $self->attributes_from_api( $from_api_params ) );
+    return $self->set( $self->attributes_from_api($from_api_params) );
 }
 
 =head3 attributes_from_api
@@ -882,7 +880,7 @@ sub _recursive_fixup {
                         $value = $dtf->format_date($dt);
                     } else {
                         my $dt = Koha::DateTime::Format::RFC3339->parse_datetime($value);
-                        $dt->set_time_zone(C4::Context->tz);
+                        $dt->set_time_zone( C4::Context->tz );
                         $value = $dtf->format_datetime($dt);
                     }
                 } catch {
@@ -903,6 +901,7 @@ sub attributes_from_api {
     my $columns_info = $self->_result->result_source->columns_info;
 
     if ( ref($from_api_params) && ref($from_api_params) eq 'ARRAY' ) {
+
         # TODO No fixup if an ARRAY is passed
         return $from_api_params;
     }
@@ -913,7 +912,8 @@ sub attributes_from_api {
             ? $from_api_mapping->{$key}
             : $key;
 
-        if ( exists $columns_info->{$koha_field_name}  ) {
+        if ( exists $columns_info->{$koha_field_name} ) {
+
             # TODO No fixup if the name is from an embed (eg. suggester.borrowernumber)
             # See warnings produced by t/db_dependent/Koha/REST/Plugin/Objects.t if this test is removed
             $params->{$koha_field_name} = $self->_recursive_fixup( $key, $value, $columns_info->{$koha_field_name} );
@@ -939,17 +939,17 @@ sub unblessed_all_relateds {
 
     my %data;
     my $related_resultsets = $self->_result->{related_resultsets} || {};
-    my $rs = $self->_result;
+    my $rs                 = $self->_result;
     while ( $related_resultsets and %$related_resultsets ) {
-        my @relations = keys %{ $related_resultsets };
-        if ( @relations ) {
+        my @relations = keys %{$related_resultsets};
+        if (@relations) {
             my $relation = $relations[0];
             $rs = $rs->related_resultset($relation)->get_cache;
-            $rs = $rs->[0]; # Does it makes sense to have several values here?
+            $rs = $rs->[0];                                       # Does it makes sense to have several values here?
             my $object_class = Koha::Object::_get_object_class( $rs->result_class );
-            my $koha_object = $object_class->_new_from_dbic( $rs );
+            my $koha_object  = $object_class->_new_from_dbic($rs);
             $related_resultsets = $rs->{related_resultsets};
-            %data = ( %data, %{ $koha_object->unblessed } );
+            %data               = ( %data, %{ $koha_object->unblessed } );
         }
     }
     %data = ( %data, %{ $self->unblessed } );
@@ -967,7 +967,7 @@ sub _result {
 
     # If we don't have a dbic row at this point, we need to create an empty one
     $self->{_result} ||=
-      Koha::Database->new()->schema()->resultset( $self->_type() )->new({});
+        Koha::Database->new()->schema()->resultset( $self->_type() )->new( {} );
 
     return $self->{_result};
 }
@@ -988,10 +988,10 @@ sub _columns {
 }
 
 sub _get_object_class {
-    my ( $type ) = @_;
+    my ($type) = @_;
     return unless $type;
 
-    if( $type->can('koha_object_class') ) {
+    if ( $type->can('koha_object_class') ) {
         return $type->koha_object_class;
     }
     $type =~ s|Schema::Result::||;
@@ -1010,7 +1010,7 @@ sub AUTOLOAD {
     my $method = our $AUTOLOAD;
     $method =~ s/.*://;
 
-    my @columns = @{$self->_columns()};
+    my @columns = @{ $self->_columns() };
     if ( grep { $_ eq $method } @columns ) {
 
         # Lazy definition of get/set accessors like $item->barcode; note that it contains $method
@@ -1023,11 +1023,12 @@ sub AUTOLOAD {
                 return $self->_result()->get_column($method);
             }
         };
+
         # If called from child class as $self->SUPER-><accessor_name>
         # $AUTOLOAD will contain ::SUPER which breaks method lookup
         # therefore we cannot write those entries into the symbol table
         unless ( $AUTOLOAD =~ /::SUPER::/ ) {
-            no strict 'refs'; ## no critic (strict)
+            no strict 'refs';    ## no critic (strict)
             *{$AUTOLOAD} = $accessor;
         }
         return $accessor->( $self, @_ );
@@ -1036,12 +1037,12 @@ sub AUTOLOAD {
     my @known_methods = qw( is_changed id in_storage get_column make_column_dirty );
 
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
-        error      => sprintf("The method %s->%s is not covered by tests!", ref($self), $method),
+        error      => sprintf( "The method %s->%s is not covered by tests!", ref($self), $method ),
         show_trace => 1
     ) unless grep { $_ eq $method } @known_methods;
 
     my $r = eval { $self->_result->$method(@_) };
-    if ( $@ ) {
+    if ($@) {
         Koha::Exceptions::Object->throw( ref($self) . "::$method generated this error: " . $@ );
     }
     return $r;
@@ -1061,7 +1062,7 @@ sub _type { }
 =cut
 
 sub _handle_to_api_child {
-    my ($self, $args ) = @_;
+    my ( $self, $args ) = @_;
 
     my $child  = $args->{child};
     my $next   = $args->{next};
@@ -1072,14 +1073,15 @@ sub _handle_to_api_child {
 
     if ( defined $child ) {
 
-        Koha::Exception->throw( "Asked to embed $curr but its return value doesn't implement to_api" )
-            if defined $next and blessed $child and !$child->can('to_api');
+        Koha::Exception->throw("Asked to embed $curr but its return value doesn't implement to_api")
+            if defined $next
+            and blessed $child
+            and !$child->can('to_api');
 
         if ( blessed $child ) {
             $params->{embed} = $next;
             $res = $child->to_api($params);
-        }
-        else {
+        } else {
             $res = $child;
         }
     }

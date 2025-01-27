@@ -45,7 +45,8 @@ subtest 'enqueue() tests' => sub {
 
     my $record_ids = [ 1, 2 ];
 
-    $job_id = Koha::BackgroundJob::BatchUpdateAuthority->new->enqueue( { record_ids => $record_ids, mmtid => 'thing' } );
+    $job_id =
+        Koha::BackgroundJob::BatchUpdateAuthority->new->enqueue( { record_ids => $record_ids, mmtid => 'thing' } );
     my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
 
     is( $job->size,   scalar @{$record_ids}, 'Size is correct' );

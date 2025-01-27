@@ -36,13 +36,11 @@ subtest 'enqueue' => sub {
     $schema->storage->txn_begin;
 
     # FIXME: Should be an exception
-    my $job_id =
-      Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue();
+    my $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue();
     is( $job_id, undef, 'Nothing enqueued if missing params' );
 
     # FIXME: Should be an exception
-    $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue(
-        { record_ids => undef } );
+    $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue( { record_ids => undef } );
     is( $job_id, undef, "Nothing enqueued if missing 'package_id' param" );
 
     $schema->storage->txn_rollback;
@@ -56,9 +54,8 @@ subtest 'process' => sub {
 
         $schema->storage->txn_begin;
 
-        my $biblio = $builder->build_sample_biblio;
-        my $package =
-          Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
+        my $biblio  = $builder->build_sample_biblio;
+        my $package = Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
 
         my $job = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new(
             {
@@ -74,7 +71,7 @@ subtest 'process' => sub {
         };
         my $json = $job->json->encode($data);
         $job->data($json)->store;
-        $package->delete; # Delete the package
+        $package->delete;    # Delete the package
         $job->process($data);
         is( $job->report->{total_success}, 0 );
         is_deeply(
@@ -94,9 +91,8 @@ subtest 'process' => sub {
 
         $schema->storage->txn_begin;
 
-        my $biblio = $builder->build_sample_biblio;
-        my $package =
-          Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
+        my $biblio  = $builder->build_sample_biblio;
+        my $package = Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
 
         my $job = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new(
             {

@@ -18,10 +18,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Encode qw( encode_utf8 );
+use Encode     qw( encode_utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
+use CGI        qw ( -utf8 );
 use C4::Context;
 
 use Koha::Authority::Types;
@@ -41,18 +41,18 @@ $offset = 0 if not defined $offset or $offset < 0;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/marc_subfields_structure.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_marc_frameworks' },
+        template_name => "admin/marc_subfields_structure.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_marc_frameworks' },
     }
 );
 my $cache = Koha::Caches->get_instance();
 
-my $op       = $input->param('op') || "";
+my $op = $input->param('op') || "";
 $tagfield =~ s/\,//g;
 
-my $framework = Koha::BiblioFrameworks->search({ frameworkcode => $frameworkcode })->next;
+my $framework = Koha::BiblioFrameworks->search( { frameworkcode => $frameworkcode } )->next;
 
 if ($op) {
     $template->param(
@@ -61,8 +61,7 @@ if ($op) {
         framework     => $framework,
         $op           => 1
     );    # we show only the TMPL_VAR names $op
-}
-else {
+} else {
     $template->param(
         tagfield      => $tagfield,
         frameworkcode => $frameworkcode,
@@ -74,7 +73,7 @@ else {
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
-    my $dbh            = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     # builds kohafield tables
     my @kohafields;
@@ -98,7 +97,7 @@ if ( $op eq 'add_form' ) {
 
     # build authorised value list
     $sth2->finish;
-    my @authorised_values= Koha::AuthorisedValueCategories->search->get_column('category_name');
+    my @authorised_values = Koha::AuthorisedValueCategories->search->get_column('category_name');
 
     # build thesaurus categories list
     my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search->as_list );
@@ -115,15 +114,16 @@ if ( $op eq 'add_form' ) {
     unless ( opendir( $dir_h, "$cgidir/cataloguing/value_builder" ) ) {
         $cgidir = C4::Context->config('intranetdir');
         opendir( $dir_h, "$cgidir/cataloguing/value_builder" )
-          || die "can't opendir $cgidir/value_builder: $!";
+            || die "can't opendir $cgidir/value_builder: $!";
     }
     while ( my $line = readdir($dir_h) ) {
-        if ( $line =~ /\.pl$/ &&
-             $line !~ /EXAMPLE\.pl$/ ) { # documentation purposes
+        if (   $line =~ /\.pl$/
+            && $line !~ /EXAMPLE\.pl$/ )
+        {    # documentation purposes
             push( @value_builder, $line );
         }
     }
-    @value_builder= sort {$a cmp $b} @value_builder;
+    @value_builder = sort { $a cmp $b } @value_builder;
     closedir $dir_h;
 
     # build values list
@@ -133,7 +133,7 @@ if ( $op eq 'add_form' ) {
     )->unblessed;
     my @loop_data = ();
     my $i         = 0;
-    for my $m ( @$mss ) {
+    for my $m (@$mss) {
         my %row_data = %$m;    # get a fresh hash for the row data
         $row_data{subfieldcode}      = $m->{tagsubfield};
         $row_data{urisubfieldcode}   = $row_data{subfieldcode} eq '%' ? 'pct' : $row_data{subfieldcode};
@@ -147,24 +147,24 @@ if ( $op eq 'add_form' ) {
             and $m->{kohafield} eq 'biblio.biblionumber' )
         {
             my $hidden_opac = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
-                    {
-                        frameworkcode => $frameworkcode,
-                        interface     => "opac",
-                    }
-                )->{biblionumber};
+                {
+                    frameworkcode => $frameworkcode,
+                    interface     => "opac",
+                }
+            )->{biblionumber};
 
             my $hidden_intranet = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
-                    {
-                        frameworkcode => $frameworkcode,
-                        interface     => "intranet",
-                    }
-                )->{biblionumber};
+                {
+                    frameworkcode => $frameworkcode,
+                    interface     => "intranet",
+                }
+            )->{biblionumber};
 
             if ( $hidden_opac or $hidden_intranet ) {
+
                 # We should allow editing for fixing it
                 $row_data{hidden_protected} = 0;
-            }
-            else {
+            } else {
                 $row_data{hidden_protected} = 1;
             }
         }
@@ -174,7 +174,7 @@ if ( $op eq 'add_form' ) {
     }
 
     # Add a new row for the "New" tab
-    my %row_data;    # get a fresh hash for the row data
+    my %row_data;                                         # get a fresh hash for the row data
     $row_data{'new_subfield'}    = 1;
     $row_data{'subfieldcode'}    = '';
     $row_data{'maxlength'}       = 9999;
@@ -199,17 +199,16 @@ if ( $op eq 'add_form' ) {
     $template->param( 'use_heading_flags_p'      => 1 );
     $template->param( 'heading_edit_subfields_p' => 1 );
     $template->param(
-        tagfield => $tagfield,
+        tagfield    => $tagfield,
         tagsubfield => $tagsubfield,
-        loop           => \@loop_data,
-        more_tag       => $tagfield
+        loop        => \@loop_data,
+        more_tag    => $tagfield
     );
 
     # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
-}
-elsif ( $op eq 'cud-add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
     my $tagfield    = $input->param('tagfield');
@@ -217,28 +216,29 @@ elsif ( $op eq 'cud-add_validate' ) {
     my @tab_ids     = $input->multi_param('tab_id');
 
     my $display_order;
-    for my $tagsubfield ( @tagsubfield ) {
+    for my $tagsubfield (@tagsubfield) {
         $tagsubfield = "@" unless $tagsubfield ne '';
-        my $id = shift @tab_ids;
+        my $id               = shift @tab_ids;
         my $liblibrarian     = $input->param("liblibrarian_$id");
         my $libopac          = $input->param("libopac_$id");
         my $repeatable       = $input->param("repeatable_$id") ? 1 : 0;
-        my $mandatory        = $input->param("mandatory_$id") ? 1 : 0;
-        my $important        = $input->param("important_$id") ? 1 : 0;
+        my $mandatory        = $input->param("mandatory_$id")  ? 1 : 0;
+        my $important        = $input->param("important_$id")  ? 1 : 0;
         my $kohafield        = $input->param("kohafield_$id");
         my $tab              = $input->param("tab_$id");
         my $seealso          = $input->param("seealso_$id");
         my $authorised_value = $input->param("authorised_value_$id");
         my $authtypecode     = $input->param("authtypecode_$id");
         my $value_builder    = $input->param("value_builder_$id");
-        my $hidden = $input->param("hidden_$id");
-        my $isurl  = $input->param("isurl_$id") ? 1 : 0;
-        my $link   = $input->param("link_$id");
-        my $defaultvalue = $input->param("defaultvalue_$id");
-        my $maxlength = $input->param("maxlength_$id") || 9999;
+        my $hidden           = $input->param("hidden_$id");
+        my $isurl            = $input->param("isurl_$id") ? 1 : 0;
+        my $link             = $input->param("link_$id");
+        my $defaultvalue     = $input->param("defaultvalue_$id");
+        my $maxlength        = $input->param("maxlength_$id") || 9999;
 
-        if (defined($liblibrarian) && $liblibrarian ne "") {
-            my $mss = Koha::MarcSubfieldStructures->find({tagfield => $tagfield, tagsubfield => $tagsubfield, frameworkcode => $frameworkcode });
+        if ( defined($liblibrarian) && $liblibrarian ne "" ) {
+            my $mss = Koha::MarcSubfieldStructures->find(
+                { tagfield => $tagfield, tagsubfield => $tagsubfield, frameworkcode => $frameworkcode } );
             if ($mss) {
                 $mss->update(
                     {
@@ -262,9 +262,10 @@ elsif ( $op eq 'cud-add_validate' ) {
                     }
                 );
             } else {
-                if( $frameworkcode ne q{} ) {
+                if ( $frameworkcode ne q{} ) {
+
                     # BZ 19096: Overwrite kohafield from Default when adding a new record
-                     my $rec = Koha::MarcSubfieldStructures->find( q{}, $tagfield, $tagsubfield );
+                    my $rec = Koha::MarcSubfieldStructures->find( q{}, $tagfield, $tagsubfield );
                     $kohafield = $rec->kohafield if $rec;
                 }
                 Koha::MarcSubfieldStructure->new(
@@ -300,14 +301,14 @@ elsif ( $op eq 'cud-add_validate' ) {
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
     $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
 
-    print $input->redirect("/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
+    print $input->redirect(
+        "/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
     exit;
 
     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
-}
-elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $mss = Koha::MarcSubfieldStructures->find(
         {
             tagfield      => $tagfield,
@@ -321,9 +322,8 @@ elsif ( $op eq 'delete_confirm' ) {
 
     # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
-  # called by delete_confirm, used to effectively confirm deletion of data in DB
-}
-elsif ( $op eq 'cud-delete_confirmed' ) {
+    # called by delete_confirm, used to effectively confirm deletion of data in DB
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     Koha::MarcSubfieldStructures->find(
         {
             tagfield      => $tagfield,
@@ -336,13 +336,13 @@ elsif ( $op eq 'cud-delete_confirmed' ) {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
     $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
-    print $input->redirect("/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
+    print $input->redirect(
+        "/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
     exit;
 
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
-}
-else {    # DEFAULT
+} else {    # DEFAULT
     my $mss = Koha::MarcSubfieldStructures->search(
         {
             tagfield      => { -like => "$tagfield%" },

@@ -17,7 +17,6 @@ package Koha::Rating;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -40,8 +39,7 @@ sub store {
     my ($self) = @_;
     if ( $self->rating_value > 5 ) {
         $self->rating_value(5);
-    }
-    elsif ( $self->rating_value < 0 ) {
+    } elsif ( $self->rating_value < 0 ) {
         $self->rating_value(0);
     }
     return $self->SUPER::store;

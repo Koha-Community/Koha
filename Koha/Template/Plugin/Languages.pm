@@ -26,9 +26,9 @@ use C4::Languages;
 
 sub GetByISOCode {
     my ( $self, $lang, $code ) = @_;
-    $lang =  substr($lang,0,2); #Get db code from Koha lang value
-    my $rfc = C4::Languages::get_rfc4646_from_iso639( $code );
-    my $description = C4::Languages::language_get_description($rfc,$lang,'language');
+    $lang = substr( $lang, 0, 2 );    #Get db code from Koha lang value
+    my $rfc         = C4::Languages::get_rfc4646_from_iso639($code);
+    my $description = C4::Languages::language_get_description( $rfc, $lang, 'language' );
     return $description;
 }
 

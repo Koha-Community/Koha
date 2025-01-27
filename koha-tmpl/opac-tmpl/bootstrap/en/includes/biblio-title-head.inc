@@ -4,7 +4,8 @@
     No title
 [% END %]
 [%~ SET subtitles = biblio.subtitle.split(' \| ') ~%]
-[%~ FOREACH subtitle IN subtitles ~%][%~ IF Koha.Preference('marcflavour')=='UNIMARC' ~%],[%~ END ~%]
+[%~ FOREACH subtitle IN subtitles ~%]
+    [%~ IF Koha.Preference('marcflavour')=='UNIMARC' ~%],[%~ END ~%]
     [% subtitle | html %]
 [% END %]
 [% part_numbers = biblio.part_number.split(' \\| ') %]

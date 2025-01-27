@@ -2,11 +2,11 @@
     var table;
     var batchesProxy;
 
-    window.addEventListener('load', onload);
+    window.addEventListener("load", onload);
 
     function onload() {
         // Only proceed if appropriate
-        if (!document.getElementById('ill-batch-requests')) return;
+        if (!document.getElementById("ill-batch-requests")) return;
 
         // A proxy that will give us some element of reactivity to
         // changes in our list of batches
@@ -19,7 +19,7 @@
                 set: function (obj, prop, value) {
                     obj[prop] = value;
                     updateTable();
-                }
+                },
             }
         );
 
@@ -27,21 +27,22 @@
         table = initTable();
 
         // Do the initial data population
-        window.doBatchApiRequest( '?_per_page=-1', {
+        window
+            .doBatchApiRequest("?_per_page=-1", {
                 headers: {
-                    'x-koha-embed': '+strings,requests+count,patron'
-                }
+                    "x-koha-embed": "+strings,requests+count,patron",
+                },
             })
-            .then(function(response) {
+            .then(function (response) {
                 return response.json();
             })
-            .then(function(data) {
+            .then(function (data) {
                 batchesProxy.data = data;
             });
 
         // Clean up any event listeners we added
-        window.addEventListener('beforeunload', removeEventListeners);
-    };
+        window.addEventListener("beforeunload", removeEventListeners);
+    }
 
     // Initialise the Datatable
     // FIXME: This should be a kohaTable not KohaTable
@@ -50,44 +51,44 @@
             data: batchesProxy.data,
             columns: [
                 {
-                    data: 'ill_batch_id',
-                    width: '10%'
+                    data: "ill_batch_id",
+                    width: "10%",
                 },
                 {
-                    data: 'name',
+                    data: "name",
                     render: createName,
-                    width: '30%'
+                    width: "30%",
                 },
                 {
-                    data: 'requests_count',
-                    width: '10%'
+                    data: "requests_count",
+                    width: "10%",
                 },
                 {
-                    data: 'status',
+                    data: "status",
                     render: createStatus,
-                    width: '10%'
+                    width: "10%",
                 },
                 {
-                    data: 'patron',
+                    data: "patron",
                     render: createPatronLink,
-                    width: '10%'
+                    width: "10%",
                 },
                 {
-                    data: 'branch',
+                    data: "branch",
                     render: createBranch,
-                    width: '20%'
+                    width: "20%",
                 },
                 {
                     render: createActions,
-                    width: '10%',
+                    width: "10%",
                     orderable: false,
-                    className: 'noExport'
-                }
+                    className: "noExport",
+                },
             ],
             processing: true,
-            drawCallback: addEventListeners
+            drawCallback: addEventListeners,
         });
-    }
+    };
 
     // A render function for branch name
     var createBranch = function (x, y, data) {
@@ -96,9 +97,12 @@
 
     // A render function for batch name
     var createName = function (x, y, data) {
-        var a = document.createElement('a');
-        a.setAttribute('href', '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + data.ill_batch_id);
-        a.setAttribute('title', data.name);
+        var a = document.createElement("a");
+        a.setAttribute(
+            "href",
+            "/cgi-bin/koha/ill/ill-requests.pl?batch_id=" + data.ill_batch_id
+        );
+        a.setAttribute("title", data.name);
         a.textContent = data.name;
         return a.outerHTML;
     };
@@ -110,24 +114,29 @@
 
     // A render function for our patron link
     var createPatronLink = function (data) {
-        return data ? $patron_to_html(data, { display_cardnumber: true, url: true }) : '';
+        return data
+            ? $patron_to_html(data, { display_cardnumber: true, url: true })
+            : "";
     };
 
     // A render function for our row action buttons
     var createActions = function (data, type, row) {
-        var div = document.createElement('div');
-        div.setAttribute('class', 'action-buttons');
+        var div = document.createElement("div");
+        div.setAttribute("class", "action-buttons");
 
-        var editButton = document.createElement('button');
-        editButton.setAttribute('type', 'button');
-        editButton.setAttribute('class', 'editButton btn btn-xs btn-default');
-        editButton.setAttribute('data-batch-id', row.ill_batch_id);
+        var editButton = document.createElement("button");
+        editButton.setAttribute("type", "button");
+        editButton.setAttribute("class", "editButton btn btn-xs btn-default");
+        editButton.setAttribute("data-batch-id", row.ill_batch_id);
         editButton.appendChild(document.createTextNode(ill_batch_edit));
 
-        var deleteButton = document.createElement('button');
-        deleteButton.setAttribute('type', 'button');
-        deleteButton.setAttribute('class', 'deleteButton btn btn-xs btn-danger');
-        deleteButton.setAttribute('data-batch-id', row.ill_batch_id);
+        var deleteButton = document.createElement("button");
+        deleteButton.setAttribute("type", "button");
+        deleteButton.setAttribute(
+            "class",
+            "deleteButton btn btn-xs btn-danger"
+        );
+        deleteButton.setAttribute("data-batch-id", row.ill_batch_id);
         deleteButton.appendChild(document.createTextNode(ill_batch_delete));
 
         div.appendChild(editButton);
@@ -138,29 +147,29 @@
 
     // Add event listeners to our row action buttons
     var addEventListeners = function () {
-        var del = document.querySelectorAll('.deleteButton');
+        var del = document.querySelectorAll(".deleteButton");
         del.forEach(function (el) {
-            el.addEventListener('click', handleDeleteClick);
+            el.addEventListener("click", handleDeleteClick);
         });
 
-        var edit = document.querySelectorAll('.editButton');
+        var edit = document.querySelectorAll(".editButton");
         edit.forEach(function (elEdit) {
-            elEdit.addEventListener('click', handleEditClick);
+            elEdit.addEventListener("click", handleEditClick);
         });
     };
 
     // Remove all added event listeners
     var removeEventListeners = function () {
-        var del = document.querySelectorAll('.deleteButton');
+        var del = document.querySelectorAll(".deleteButton");
         del.forEach(function (el) {
-            el.removeEventListener('click', handleDeleteClick);
+            el.removeEventListener("click", handleDeleteClick);
         });
-        window.removeEventListener('load', onload);
-        window.removeEventListener('beforeunload', removeEventListeners);
+        window.removeEventListener("load", onload);
+        window.removeEventListener("beforeunload", removeEventListeners);
     };
 
     // Handle "Delete" clicks
-    var handleDeleteClick = function(e) {
+    var handleDeleteClick = function (e) {
         var el = e.srcElement;
         if (confirm(ill_batch_confirm_delete)) {
             deleteBatch(el);
@@ -168,7 +177,7 @@
     };
 
     // Handle "Edit" clicks
-    var handleEditClick = function(e) {
+    var handleEditClick = function (e) {
         var el = e.srcElement;
         var id = el.dataset.batchId;
         window.openBatchModal(id);
@@ -180,24 +189,21 @@
     // - Update our proxy data
     var deleteBatch = function (el) {
         var id = el.dataset.batchId;
-        doBatchApiRequest(
-            '/' + id,
-            { method: 'DELETE' }
-        )
-        .then(function (response) {
-            if (!response.ok) {
+        doBatchApiRequest("/" + id, { method: "DELETE" })
+            .then(function (response) {
+                if (!response.ok) {
+                    window.handleApiError(ill_batch_delete_fail);
+                } else {
+                    removeBatch(el.dataset.batchId);
+                }
+            })
+            .catch(function (response) {
                 window.handleApiError(ill_batch_delete_fail);
-            } else {
-                removeBatch(el.dataset.batchId);
-            }
-        })
-        .catch(function (response) {
-            window.handleApiError(ill_batch_delete_fail);
-        })
+            });
     };
 
     // Remove a batch from our proxy data
-    var removeBatch = function(id) {
+    var removeBatch = function (id) {
         batchesProxy.data = batchesProxy.data.filter(function (batch) {
             return batch.ill_batch_id != id;
         });
@@ -205,10 +211,6 @@
 
     // Redraw the table
     var updateTable = function () {
-        table.api()
-            .clear()
-            .rows.add(batchesProxy.data)
-            .draw();
+        table.api().clear().rows.add(batchesProxy.data).draw();
     };
-
 })();

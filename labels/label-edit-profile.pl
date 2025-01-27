@@ -22,83 +22,81 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth     qw( get_template_and_user );
+use C4::Output   qw( output_html_with_http_headers );
 use C4::Creators qw( get_all_templates get_unit_values );
 use C4::Labels;
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "labels/label-edit-profile.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "labels/label-edit-profile.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
-my $op = $cgi->param('op');
-my $profile_id = $cgi->param('profile_id') || $cgi->param('element_id');
-my $profile = undef;
-my $template_list = undef;
+my $op             = $cgi->param('op');
+my $profile_id     = $cgi->param('profile_id') || $cgi->param('element_id');
+my $profile        = undef;
+my $template_list  = undef;
 my @label_template = ();
 
 my $units = get_unit_values();
 
-if ($op eq 'edit_form') {
-    $profile = C4::Labels::Profile->retrieve(profile_id => $profile_id);
-    $template_list = get_all_templates( { fields => [ qw( template_id template_code profile_id) ] } );
-}
-elsif ($op eq 'cud-save') {
+if ( $op eq 'edit_form' ) {
+    $profile       = C4::Labels::Profile->retrieve( profile_id => $profile_id );
+    $template_list = get_all_templates( { fields => [qw( template_id template_code profile_id)] } );
+} elsif ( $op eq 'cud-save' ) {
     my @params = (
-        printer_name        => scalar $cgi->param('printer_name') || 'DEFAULT PRINTER',
-        paper_bin           => scalar $cgi->param('paper_bin') || 'Tray 1',
-        offset_horz         => scalar $cgi->param('offset_horz') || 0,
-        offset_vert         => scalar $cgi->param('offset_vert') || 0,
-        creep_horz          => scalar $cgi->param('creep_horz') || 0,
-        creep_vert          => scalar $cgi->param('creep_vert') || 0,
-        units               => scalar $cgi->param('units') || 'POINT',
+        printer_name => scalar $cgi->param('printer_name') || 'DEFAULT PRINTER',
+        paper_bin    => scalar $cgi->param('paper_bin')    || 'Tray 1',
+        offset_horz  => scalar $cgi->param('offset_horz')  || 0,
+        offset_vert  => scalar $cgi->param('offset_vert')  || 0,
+        creep_horz   => scalar $cgi->param('creep_horz')   || 0,
+        creep_vert   => scalar $cgi->param('creep_vert')   || 0,
+        units        => scalar $cgi->param('units')        || 'POINT',
     );
-    if ($profile_id) {   # if a label_id was passed in, this is an update to an existing layout
-        $profile = C4::Labels::Profile->retrieve(profile_id => $profile_id);
+    if ($profile_id) {    # if a label_id was passed in, this is an update to an existing layout
+        $profile = C4::Labels::Profile->retrieve( profile_id => $profile_id );
         $profile->set_attr(@params);
         $profile->save();
-    }
-    else {      # if no label_id, this is a new layout so insert it
+    } else {              # if no label_id, this is a new layout so insert it
         $profile = C4::Labels::Profile->new(@params);
         $profile->save();
     }
     print $cgi->redirect("label-manage.pl?label_element=profile");
     exit;
-}
-else {  # if we get here, this is a new layout
+} else {    # if we get here, this is a new layout
     $profile = C4::Labels::Profile->new();
 }
 
 if ($profile_id) {
     @label_template = grep {
-        ($_->{'profile_id'} == $profile->get_attr('profile_id')) && ($_->{'template_id'} == $profile->get_attr('template_id'));
-        } @$template_list;
+               ( $_->{'profile_id'} == $profile->get_attr('profile_id') )
+            && ( $_->{'template_id'} == $profile->get_attr('template_id') );
+    } @$template_list;
 }
 
 foreach my $unit (@$units) {
-    if ($unit->{'type'} eq $profile->get_attr('units')) {
+    if ( $unit->{'type'} eq $profile->get_attr('units') ) {
         $unit->{'selected'} = 1;
     }
 }
 
-$template->param(profile_id => $profile->get_attr('profile_id')) if $profile->get_attr('profile_id') > 0;
+$template->param( profile_id => $profile->get_attr('profile_id') ) if $profile->get_attr('profile_id') > 0;
 
 $template->param(
-    label_template      => $label_template[0]->{'template_code'} || '',
-    printer_name        => $profile->get_attr('printer_name'),
-    paper_bin           => $profile->get_attr('paper_bin'),
-    offset_horz         => $profile->get_attr('offset_horz'),
-    offset_vert         => $profile->get_attr('offset_vert'),
-    creep_horz          => $profile->get_attr('creep_horz'),
-    creep_vert          => $profile->get_attr('creep_vert'),
-    units               => $units,
-    op                  => $op,
+    label_template => $label_template[0]->{'template_code'} || '',
+    printer_name   => $profile->get_attr('printer_name'),
+    paper_bin      => $profile->get_attr('paper_bin'),
+    offset_horz    => $profile->get_attr('offset_horz'),
+    offset_vert    => $profile->get_attr('offset_vert'),
+    creep_horz     => $profile->get_attr('creep_horz'),
+    creep_vert     => $profile->get_attr('creep_vert'),
+    units          => $units,
+    op             => $op,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

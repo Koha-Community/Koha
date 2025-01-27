@@ -17,13 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 # This script walks through your authority marc records and tells you
 # which hidden fields in the framework still contain data.
 
 use Modern::Perl;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script;
 use Koha::Authorities;
@@ -38,39 +37,41 @@ if ( !$confirm || $help ) {
 }
 
 our $hidden_fields = Koha::Authority::Subfields->search(
-    { hidden => { '!=' => 0 }},
+    { hidden => { '!=' => 0 } },
 );
 our $results = {};
 
 my $auths = Koha::Authorities->search( {}, { order_by => 'authid' } );
 my $count = 0;
-while( my $record = $auths->next ) {
+while ( my $record = $auths->next ) {
     last if $max && $count >= $max;
-    scan_record( $record );
+    scan_record($record);
     $count++;
 }
 report_results();
 
 sub scan_record {
-    my ( $record ) = @_;
-    my $id = $record->authid;
-    my $type = $record->authtypecode;
-    my $marc = Koha::MetadataRecord::Authority->get_from_authid($id)->record;
-    foreach my $fld ( $marc->fields ) { # does not include leader
-        my @subfields = $fld->is_control_field
+    my ($record) = @_;
+    my $id       = $record->authid;
+    my $type     = $record->authtypecode;
+    my $marc     = Koha::MetadataRecord::Authority->get_from_authid($id)->record;
+    foreach my $fld ( $marc->fields ) {    # does not include leader
+        my @subfields =
+            $fld->is_control_field
             ? '@'
             : map { $_->[0] } $fld->subfields;
-        foreach my $sub ( @subfields ) {
-            next if $results->{ $type } && $results->{ $type }->{ $fld->tag } && $results->{ $type }->{ $fld->tag }->{ $sub };
-            if( $hidden_fields->find($type, $fld->tag, $sub) ) {
-                $results->{ $type }->{ $fld->tag }->{ $sub } = 1;
+        foreach my $sub (@subfields) {
+            next if $results->{$type} && $results->{$type}->{ $fld->tag } && $results->{$type}->{ $fld->tag }->{$sub};
+            if ( $hidden_fields->find( $type, $fld->tag, $sub ) ) {
+                $results->{$type}->{ $fld->tag }->{$sub} = 1;
             }
         }
     }
+
     # To be overcomplete, check the leader too :)
-    if( $marc->leader ) {
-        if( $hidden_fields->find($type, '000', '@') ) {
-            $results->{ $type }->{ '000' }->{ '@' } = 1;
+    if ( $marc->leader ) {
+        if ( $hidden_fields->find( $type, '000', '@' ) ) {
+            $results->{$type}->{'000'}->{'@'} = 1;
         }
     }
 }
@@ -78,15 +79,16 @@ sub scan_record {
 sub report_results {
     my $cnt = 0;
     foreach my $fw ( sort keys %$results ) {
-        foreach my $tag ( sort keys %{$results->{$fw}} ) {
-            foreach my $sub ( sort keys %{$results->{$fw}->{$tag}} ) {
-                print "\nFramework ".($fw||'Default').", $tag, $sub contains data but is hidden";
+        foreach my $tag ( sort keys %{ $results->{$fw} } ) {
+            foreach my $sub ( sort keys %{ $results->{$fw}->{$tag} } ) {
+                print "\nFramework " . ( $fw || 'Default' ) . ", $tag, $sub contains data but is hidden";
                 $cnt++;
             }
         }
     }
-    if( $cnt ) {
-        print "\n\nNOTE: You should consider removing the hidden attribute of these framework fields in order to not lose data in those fields when editing authority records.\n";
+    if ($cnt) {
+        print
+            "\n\nNOTE: You should consider removing the hidden attribute of these framework fields in order to not lose data in those fields when editing authority records.\n";
     } else {
         print "\nNo hidden (sub)fields containing data were found!\n";
     }

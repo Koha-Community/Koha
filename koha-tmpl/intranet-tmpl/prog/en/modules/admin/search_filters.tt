@@ -5,17 +5,18 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-  <title>[% FILTER collapse %]
-    [% t("Search filters") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
-  [% INCLUDE 'doc-head-close.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Search filters") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="admin_searchfilters" class="admin">
-  [% INCLUDE 'header.inc' %]
-  [% INCLUDE 'prefs-admin-search.inc' %]
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
@@ -30,187 +31,181 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-        [% IF filters_count %]
-            <div id="search_filters_list">
-                <h2>Search filters</h2>
+    [% IF filters_count %]
+        <div id="search_filters_list">
+            <h2>Search filters</h2>
 
-                <table id="search_filters_table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>Query</th>
-                            <th>Limits</th>
-                            <th>OPAC</th>
-                            <th>Staff interface</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        [% ELSE %]
-            <div class="alert alert-info">
-                There are no search filters defined.
-            </div>
-        [% END %]
-
+            <table id="search_filters_table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Query</th>
+                        <th>Limits</th>
+                        <th>OPAC</th>
+                        <th>Staff interface</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    [% ELSE %]
+        <div class="alert alert-info"> There are no search filters defined. </div>
+    [% END %]
 [% END %]
 
-    <div id="edit_search_filter_modal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="edit_search_filter_modal_label">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="edit_search_filter_modal_label">Edit filter</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div id="edit_search_filter_modal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="edit_search_filter_modal_label">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="edit_search_filter_modal_label">Edit filter</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" id="filter_edit_id" name="filter_edit_id" />
+                    <label for="filter_edit_name">Name:</label>
+                    <input id="filter_edit_name" name="filter_edit_name" type="text" />
+                    <label for="filter_edit_opac">Show in OPAC?</label>
+                    <input type="checkbox" id="filter_edit_opac" name="filter_edit_opac" />
+                    <label for="filter_edit_staff_client">Show in staff interface?</label>
+                    <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client" />
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input type="hidden" id="filter_edit_id" name="filter_edit_id">
-                        <label for="filter_edit_name">Name:</label>
-                        <input id="filter_edit_name" name="filter_edit_name" type="text">
-                        <label for="filter_edit_opac">Show in OPAC?</label>
-                        <input type="checkbox" id="filter_edit_opac" name="filter_edit_opac">
-                        <label for="filter_edit_staff_client">Show in staff interface?</label>
-                        <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="replace_existing_filter" type="button" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="replace_existing_filter" type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.css("css/humanmsg.css") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-
     <script>
         let filters_table;
-        $(document).ready(function(){
+        $(document).ready(function () {
             filters_table = $("#search_filters_table").kohaTable({
-                "ajax": {
-                    "url": "/api/v1/search_filters"
+                ajax: {
+                    url: "/api/v1/search_filters",
                 },
-                "columns": [
+                columns: [
                     {
-                        "data": "search_filter_id",
-                        "searchable": true,
-                        "orderable": true
+                        data: "search_filter_id",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": "name",
-                        "searchable": true,
-                        "orderable": true
+                        data: "name",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": "query",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": jQuery.fn.DataTable.render.text()
+                        data: "query",
+                        searchable: true,
+                        orderable: true,
+                        render: jQuery.fn.DataTable.render.text(),
                     },
                     {
-                        "data": "limits",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": jQuery.fn.DataTable.render.text()
+                        data: "limits",
+                        searchable: true,
+                        orderable: true,
+                        render: jQuery.fn.DataTable.render.text(),
                     },
                     {
-                        "data": "opac",
-                        "searchable": true,
-                        "orderable": true
+                        data: "opac",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": "staff_client",
-                        "searchable": true,
-                        "orderable": true
+                        data: "staff_client",
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": function( row, meta, val, type ) {
+                        data: function (row, meta, val, type) {
                             let filter = row;
                             let filter_buttons = '<a class="btn btn-default btn-xs edit_filter" onclick="edit_filter(this)"';
-                            filter_buttons += ' data-filter_id="'+ escape_str(filter.search_filter_id);
-                            filter_buttons += '" data-filter_name="'+ escape_str(filter.name);
-                            filter_buttons += '" data-filter_opac="'+ filter.opac;
-                            filter_buttons += '" data-filter_staff_client="'+ filter.staff_client;
-                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit filter")+'</a>';
-                            filter_buttons += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter='+encodeURIComponent(filter.search_filter_id)+'"><i class="fa fa-search"></i> '+ _("Edit search") + '</a>';
+                            filter_buttons += ' data-filter_id="' + escape_str(filter.search_filter_id);
+                            filter_buttons += '" data-filter_name="' + escape_str(filter.name);
+                            filter_buttons += '" data-filter_opac="' + filter.opac;
+                            filter_buttons += '" data-filter_staff_client="' + filter.staff_client;
+                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit filter") + "</a>";
+                            filter_buttons +=
+                                '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter=' + encodeURIComponent(filter.search_filter_id) + '"><i class="fa fa-search"></i> ' + _("Edit search") + "</a>";
                             filter_buttons += '<a class="btn btn-default btn-xs delete_filter" onclick="delete_filter(this)"';
-                            filter_buttons += ' data-filter_id="'+ escape_str(filter.search_filter_id);
-                            filter_buttons += '"><i class="fa fa-trash-can"></i> '+_("Delete")+'</a>';
+                            filter_buttons += ' data-filter_id="' + escape_str(filter.search_filter_id);
+                            filter_buttons += '"><i class="fa fa-trash-can"></i> ' + _("Delete") + "</a>";
                             return filter_buttons;
                         },
-                        "searchable": false,
-                        "orderable": false
-                    }
-                ]
+                        searchable: false,
+                        orderable: false,
+                    },
+                ],
             });
         });
 
-        $("#replace_existing_filter").click(function(){
+        $("#replace_existing_filter").click(function () {
             let name = $("#filter_edit_name").val();
             let id = $("#filter_edit_id").val();
-            let opac = $("#filter_edit_opac").prop('checked');
-            let staff_client = $("#filter_edit_staff_client").prop('checked');
-            save_search_filter(name,id,opac,staff_client);
+            let opac = $("#filter_edit_opac").prop("checked");
+            let staff_client = $("#filter_edit_staff_client").prop("checked");
+            save_search_filter(name, id, opac, staff_client);
         });
 
-        function edit_filter(element){
-            let filter_id = $(element).data('filter_id');
-            let filter_name = $(element).data('filter_name');
-            let filter_opac = $(element).data('filter_opac');
-            let filter_staff_client = $(element).data('filter_staff_client');
+        function edit_filter(element) {
+            let filter_id = $(element).data("filter_id");
+            let filter_name = $(element).data("filter_name");
+            let filter_opac = $(element).data("filter_opac");
+            let filter_staff_client = $(element).data("filter_staff_client");
             $("#filter_edit_name").val(filter_name);
             $("#filter_edit_id").val(filter_id);
-            $("#filter_edit_opac").prop('checked',filter_opac);
-            $("#filter_edit_staff_client").prop('checked',filter_staff_client);
-            $("#edit_search_filter_modal").modal('show');
-        };
+            $("#filter_edit_opac").prop("checked", filter_opac);
+            $("#filter_edit_staff_client").prop("checked", filter_staff_client);
+            $("#edit_search_filter_modal").modal("show");
+        }
 
-        function delete_filter(element){
-            let filter_id = $(element).data('filter_id');
+        function delete_filter(element) {
+            let filter_id = $(element).data("filter_id");
             let options = {
-                url: '/api/v1/search_filters/' + filter_id,
+                url: "/api/v1/search_filters/" + filter_id,
                 method: "DELETE",
                 contentType: "application/json",
             };
             $.ajax(options)
-                .then(function(result) {
-                    humanMsg.displayAlert( _("Filter successfully deleted."), { className: 'human Success' } );
+                .then(function (result) {
+                    humanMsg.displayAlert(_("Filter successfully deleted."), { className: "human Success" });
                     filters_table.DataTable().ajax.reload();
                 })
-                .fail(function(err) {
-                    humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                .fail(function (err) {
+                    humanMsg.displayAlert(_("There was an error during saving:") + err.responseText, { className: "humanError" });
                 });
         }
 
-
-        function save_search_filter(name,id,opac,staff){
+        function save_search_filter(name, id, opac, staff) {
             let options = {
-                url: '/api/v1/search_filters/' + id,
+                url: "/api/v1/search_filters/" + id,
                 method: "PUT",
                 contentType: "application/json",
                 data: JSON.stringify({
                     name: name,
                     opac: opac,
                     staff_client: staff,
-                })
+                }),
             };
             $.ajax(options)
-                .then(function(result) {
-                    $("#edit_search_filter_modal").modal('hide');
-                    humanMsg.displayAlert( _("Saved filter: ") + name  , { className: 'human Success' } );
+                .then(function (result) {
+                    $("#edit_search_filter_modal").modal("hide");
+                    humanMsg.displayAlert(_("Saved filter: ") + name, { className: "human Success" });
                     filters_table.DataTable().ajax.reload();
                 })
-                .fail(function(err) {
-                    humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                .fail(function (err) {
+                    humanMsg.displayAlert(_("There was an error during saving:") + err.responseText, { className: "humanError" });
                 });
         }
-
-
     </script>
 [% END %]
 

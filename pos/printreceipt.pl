@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use Koha::Account::Lines;
 use Koha::Notice::Templates;
 
@@ -50,7 +50,7 @@ output_and_exit_if_error(
     }
 ) if $patron;    # Payment could have been anonymous
 
-my $lang = $patron ? $patron->lang : $template->lang;
+my $lang   = $patron ? $patron->lang : $template->lang;
 my $letter = C4::Letters::GetPreparedLetter(
     module                 => 'pos',
     letter_code            => 'RECEIPT',

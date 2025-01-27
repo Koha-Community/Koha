@@ -6,11 +6,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Pending discharge requests") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Pending discharge requests") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_discharges" class="pat">
@@ -32,33 +33,35 @@
 [% WRAPPER 'main-container.inc' %]
 
     [% IF pending_discharges %]
-      <h1>Pending discharge requests</h1>
-      <div id="pending_updates" class="page-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Patron</th>
-              <th>Library</th>
-              <th>Date requested</th>
-              <th>Allow</th>
-            </tr>
-          </thead>
-          <tbody>
-            [% FOREACH d IN pending_discharges %]
-              <tr>
-                <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber | uri %]">[% d.borrower.surname | html %], [% d.borrower.firstname | html %]</a></td>
-                <td>[% d.borrower.branchcode.branchname | html %]</td>
-                <td data-order="[% d.needed | html %]">[% d.needed | $KohaDates %]</td>
-                <td><a class="btn btn-xs btn-default" href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber | html %]"><i class="fa fa-check"></i> Allow</a></td>
-              </tr>
-            [% END %]
-          </tbody>
-        </table>
-      </div>
+        <h1>Pending discharge requests</h1>
+        <div id="pending_updates" class="page-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patron</th>
+                        <th>Library</th>
+                        <th>Date requested</th>
+                        <th>Allow</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH d IN pending_discharges %]
+                        <tr>
+                            <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber | uri %]">[% d.borrower.surname | html %], [% d.borrower.firstname | html %]</a></td>
+                            <td>[% d.borrower.branchcode.branchname | html %]</td>
+                            <td data-order="[% d.needed | html %]">[% d.needed | $KohaDates %]</td>
+                            <td
+                                ><a class="btn btn-xs btn-default" href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber | html %]"><i class="fa fa-check"></i> Allow</a></td
+                            >
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
     [% ELSE %]
-      <div class="alert alert-info">
-        <h1>There are no pending discharge requests.</h1>
-      </div>
+        <div class="alert alert-info">
+            <h1>There are no pending discharge requests.</h1>
+        </div>
     [% END %]
 [% END %]
 
@@ -68,16 +71,16 @@
 
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-            $('#pending_updates table').DataTable($.extend(true, {}, dataTablesDefaults, {
-                paging: false,
-                info: true,
-                searching: true,
-                order: [[2, "asc"]],
-                columnDefs: [
-                    { targets: -1, orderable: false }
-                ],
-            }));
+        $(document).ready(function () {
+            $("#pending_updates table").DataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    paging: false,
+                    info: true,
+                    searching: true,
+                    order: [[2, "asc"]],
+                    columnDefs: [{ targets: -1, orderable: false }],
+                })
+            );
         });
     </script>
 [% END %]

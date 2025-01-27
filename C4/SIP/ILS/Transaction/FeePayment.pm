@@ -37,7 +37,7 @@ sub new {
         $self->{_permitted}->{$_} = $fields{$_};    # overlaying _permitted
     }
 
-    @{$self}{ keys %fields } = values %fields;    # copying defaults into object
+    @{$self}{ keys %fields } = values %fields;      # copying defaults into object
     return bless $self, $class;
 }
 
@@ -70,13 +70,10 @@ sub pay {
 
     if ($fee_id) {
         my $fee = Koha::Account::Lines->find($fee_id);
-        if ( $fee ) {
+        if ($fee) {
             $pay_options->{lines} = [$fee];
-        }
-        else {
-            return {
-                ok => 0
-            };
+        } else {
+            return { ok => 0 };
         }
     }
 
@@ -85,14 +82,12 @@ sub pay {
     my $error;
     try {
         $pay_response = $account->pay($pay_options);
-    }
-    catch {
+    } catch {
         $ok = 0;
 
         if ( ref($_) =~ /^Koha::Exceptions/ ) {
             $error = $_->description;
-        }
-        else {
+        } else {
             $_->rethrow;
         }
     };

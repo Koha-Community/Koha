@@ -37,8 +37,7 @@ sub list {
     return try {
         my $quotes = $c->objects->search( Koha::Quotes->new );
         return $c->render( status => 200, openapi => $quotes );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -58,8 +57,7 @@ sub get {
             unless $quote;
 
         return $c->render( status => 200, openapi => $c->objects->to_api($quote), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     }
 }
@@ -79,8 +77,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($quote),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -101,8 +98,7 @@ sub update {
         $quote->set_from_api( $c->req->json );
         $quote->store();
         return $c->render( status => 200, openapi => $c->objects->to_api($quote), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -122,8 +118,7 @@ sub delete {
     return try {
         $quote->delete;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

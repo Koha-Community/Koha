@@ -29,20 +29,21 @@ use Koha::DateUtils qw(dt_from_string);
 use t::lib::TestBuilder;
 
 my $builder = t::lib::TestBuilder->new;
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 
 subtest 'is_canceled' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    my $enrollment = $builder->build_object({ class => 'Koha::Club::Enrollments', value => { date_canceled => undef } });
+    my $enrollment =
+        $builder->build_object( { class => 'Koha::Club::Enrollments', value => { date_canceled => undef } } );
 
-    ok(!$enrollment->is_canceled, 'Enrollment should not be canceled');
+    ok( !$enrollment->is_canceled, 'Enrollment should not be canceled' );
 
-    $enrollment->date_canceled(dt_from_string+"")->store;
+    $enrollment->date_canceled( dt_from_string + "" )->store;
 
-    ok($enrollment->is_canceled, 'Enrollment should be canceled');
+    ok( $enrollment->is_canceled, 'Enrollment should be canceled' );
 
     $schema->storage->txn_rollback;
-}
+    }

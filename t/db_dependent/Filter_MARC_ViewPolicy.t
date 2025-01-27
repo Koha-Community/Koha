@@ -49,16 +49,14 @@ sub run_hiding_tests {
     # TODO: -8 is Flagged, which doesn't seem used.
     # -9 and +9 are supposedly valid future values
     # according to older documentation in 3.10.x
-    my @valid_hidden_values =
-      ( -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+    my @valid_hidden_values = ( -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 
     my $hidden = {
         'opac'     => [ -8, 1,  2,  3,  4,  5, 6, 7, 8 ],
         'intranet' => [ -8, -7, -4, -3, -2, 2, 3, 5, 8 ]
     };
 
-    my ( $isbn_field, $isbn_subfield ) =
-      GetMarcFromKohaField( 'biblioitems.isbn' );
+    my ( $isbn_field, $isbn_subfield ) = GetMarcFromKohaField('biblioitems.isbn');
     my $update_sql = q{UPDATE marc_subfield_structure SET hidden=? };
     my $sth        = $dbh->prepare($update_sql);
     foreach my $hidden_value (@valid_hidden_values) {
@@ -93,49 +91,59 @@ sub run_hiding_tests {
         if ( any { $_ == $hidden_value } @{ $hidden->{$interface} } ) {
 
             # Subfield and controlfield are set to be hidden
-            is( $filtered_record->field($isbn_field),
+            is(
+                $filtered_record->field($isbn_field),
                 undef,
-                "Data field has been deleted because of hidden=$hidden_value" );
-            isnt( $unfiltered_record->field($isbn_field), undef,
-"Data field has been deleted in the original record because of hidden=$hidden_value"
+                "Data field has been deleted because of hidden=$hidden_value"
+            );
+            isnt(
+                $unfiltered_record->field($isbn_field), undef,
+                "Data field has been deleted in the original record because of hidden=$hidden_value"
             );
 
             # Control fields have a different behaviour in code
-            is( $filtered_record->field('008'), undef,
+            is(
+                $filtered_record->field('008'), undef,
                 "Control field has been deleted because of hidden=$hidden_value"
             );
-            isnt( $unfiltered_record->field('008'), undef,
-"Control field has been deleted in the original record because of hidden=$hidden_value"
+            isnt(
+                $unfiltered_record->field('008'), undef,
+                "Control field has been deleted in the original record because of hidden=$hidden_value"
             );
 
             ok( $filtered_record && $unfiltered_record, 'Records exist' );
 
-        }
-        else {
-            isnt( $filtered_record->field($isbn_field), undef,
+        } else {
+            isnt(
+                $filtered_record->field($isbn_field), undef,
                 "Data field hasn't been deleted because of hidden=$hidden_value"
             );
-            isnt( $unfiltered_record->field($isbn_field), undef,
-"Data field hasn't been deleted in the original record because of hidden=$hidden_value"
+            isnt(
+                $unfiltered_record->field($isbn_field), undef,
+                "Data field hasn't been deleted in the original record because of hidden=$hidden_value"
             );
 
             # Control fields have a different behaviour in code
-            isnt( $filtered_record->field('008'), undef,
-"Control field hasn't been deleted because of hidden=$hidden_value"
+            isnt(
+                $filtered_record->field('008'), undef,
+                "Control field hasn't been deleted because of hidden=$hidden_value"
             );
-            isnt( $unfiltered_record->field('008'), undef,
-"Control field hasn't been deleted in the original record because of hidden=$hidden_value"
+            isnt(
+                $unfiltered_record->field('008'), undef,
+                "Control field hasn't been deleted in the original record because of hidden=$hidden_value"
             );
 
             # force all the hidden values the same, so filtered and unfiltered
             # records should be identical.
-            is_deeply( $filtered_record, $unfiltered_record,
-                'Records are the same' );
+            is_deeply(
+                $filtered_record, $unfiltered_record,
+                'Records are the same'
+            );
         }
 
     }
 
-    $sth->execute(-1); # -1 is visible in opac and intranet.
+    $sth->execute(-1);    # -1 is visible in opac and intranet.
 
     my $cache = Koha::Caches->get_instance();
     $cache->flush_all();    # easy way to ensure DB is queried again.
@@ -146,9 +154,9 @@ sub run_hiding_tests {
             interface     => $interface
         }
     );
-    my @hiddenfields = grep { $shouldhidemarc->{$_}==1 } keys %{$shouldhidemarc};
+    my @hiddenfields = grep { $shouldhidemarc->{$_} == 1 } keys %{$shouldhidemarc};
 
-    $sth->execute(8); # 8 is invisible in opac and intranet.
+    $sth->execute(8);       # 8 is invisible in opac and intranet.
 
     $cache->flush_all();    # easy way to ensure DB is queried again.
 
@@ -158,26 +166,24 @@ sub run_hiding_tests {
             interface     => $interface
         }
     );
-    my @keyvalues = keys %{$shouldhidemarc};
-    my @visiblefields = grep { $shouldhidemarc->{$_}==1 } @keyvalues;
+    my @keyvalues     = keys %{$shouldhidemarc};
+    my @visiblefields = grep { $shouldhidemarc->{$_} == 1 } @keyvalues;
 
-    is(scalar @hiddenfields,0,'Should Hide MARC - Full Visibility');
-    is_deeply(\@visiblefields,\@keyvalues,'Should Hide MARC - No Visibility');
+    is( scalar @hiddenfields, 0, 'Should Hide MARC - Full Visibility' );
+    is_deeply( \@visiblefields, \@keyvalues, 'Should Hide MARC - No Visibility' );
     return;
 }
 
 sub create_marc_record {
 
-    my ( $title_field, $title_subfield ) =
-      GetMarcFromKohaField( 'biblio.title' );
-    my ( $isbn_field, $isbn_subfield ) =
-      GetMarcFromKohaField( 'biblioitems.isbn' );
+    my ( $title_field, $title_subfield ) = GetMarcFromKohaField('biblio.title');
+    my ( $isbn_field, $isbn_subfield )   = GetMarcFromKohaField('biblioitems.isbn');
     my $isbn        = '0590353403';
     my $title       = 'Foundation';
     my $marc_record = MARC::Record->new;
     my @fields      = (
-        MARC::Field->new( '003', 'AR-CdUBM' ),
-        MARC::Field->new( '008', '######suuuu####ag_||||__||||_0||_|_uuu|d' ),
+        MARC::Field->new( '003',        'AR-CdUBM' ),
+        MARC::Field->new( '008',        '######suuuu####ag_||||__||||_0||_|_uuu|d' ),
         MARC::Field->new( $isbn_field,  q{}, q{}, $isbn_subfield  => $isbn ),
         MARC::Field->new( $title_field, q{}, q{}, $title_subfield => $title ),
     );
@@ -206,4 +212,4 @@ subtest 'Koha::Filter::MARC::ViewPolicy intranet tests' => sub {
 };
 
 my $cache = Koha::Caches->get_instance();
-$cache->flush_all(); # Clear cache for the other tests
+$cache->flush_all();    # Clear cache for the other tests

@@ -6,52 +6,57 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-confirmation-pending' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-memberentry.pl">Register a new account</a>
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-memberentry.pl">Register a new account</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Registration invalid</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Registration invalid</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav ||  OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                [% END %]
+            <div class="[% column_class | html %]">
+                <div id="registration-confirmation-error" class="maincontent">
+                    <div class="alert alert-warning">
+                        <h1>Registration invalid!</h1>
 
-                <div class="[% column_class | html %]">
-                    <div id="registration-confirmation-error" class="maincontent">
-                        <div class="alert alert-warning">
-                            <h1>Registration invalid!</h1>
-
-                            <p>There were problems processing your registration. Please contact your library for help.</p>
-                            [% IF error_type OR error_info %]
-                                [% IF error_type == 'Koha::Exceptions::Patron::InvalidUserid' %]
-                                    <p>Error: Userid is not valid</p>
-                                [% ELSE %]
-                                    <p>Error [% error_type | html %]: [% error_info | html %]</p>
-                                [% END %]
+                        <p>There were problems processing your registration. Please contact your library for help.</p>
+                        [% IF error_type OR error_info %]
+                            [% IF error_type == 'Koha::Exceptions::Patron::InvalidUserid' %]
+                                <p>Error: Userid is not valid</p>
+                            [% ELSE %]
+                                <p>Error [% error_type | html %]: [% error_info | html %]</p>
                             [% END %]
-                        </div>
-                    </div> <!-- /#registration-confirmation-error -->
-                </div> <!-- /.col-lg-10/12 -->
-            </div> <!-- /.row -->
-        </div> <!-- /.container-fluid -->
-    </div> <!-- /.main -->
+                        [% END %]
+                    </div>
+                </div>
+                <!-- /#registration-confirmation-error -->
+            </div>
+            <!-- /.col-lg-10/12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

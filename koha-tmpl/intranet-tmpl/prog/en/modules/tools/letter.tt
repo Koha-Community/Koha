@@ -7,39 +7,46 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF ( add_form or copy_form ) %]
-        [% IF ( modify ) %]
-            [% t("Modify notice") | html %] &rsaquo;
-        [% ELSE %]
-            [% t("New notice") | html %] &rsaquo;
+<title
+    >[% FILTER collapse %]
+        [% IF ( add_form or copy_form ) %]
+            [% IF ( modify ) %]
+                [% t("Modify notice") | html %]
+                &rsaquo;
+            [% ELSE %]
+                [% t("New notice") | html %]
+                &rsaquo;
+            [% END %]
         [% END %]
-    [% END %]
-    [% IF ( add_validate or copy_validate) %]
-        [% t("Notice added") | html %] &rsaquo;
-    [% END %]
-    [% IF ( delete_confirm ) %]
-        [% t("Confirm deletion") | html %] &rsaquo;
-    [% END %]
-    [% IF ( branchcode ) %]
-        [% Branches.GetName( branchcode ) | html %] &rsaquo;
-    [% END %]
-    [% t("Notices and slips") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+        [% IF ( add_validate or copy_validate) %]
+            [% t("Notice added") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( delete_confirm ) %]
+            [% t("Confirm deletion") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( branchcode ) %]
+            [% Branches.GetName( branchcode ) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Notices and slips") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
         #preview_template .modal-dialog {
-            width : 80%;
+            width: 80%;
         }
         .spinner {
             display: none;
         }
         @media (max-width: 767px) {
             #preview_template {
-                margin: 0; width : auto;
+                margin: 0;
+                width: auto;
             }
         }
         .panel-body fieldset.rows {
@@ -47,7 +54,7 @@
             background: transparent none;
             clear: none;
             float: none;
-            margin: 0 0 .5em 0;
+            margin: 0 0 0.5em 0;
         }
         #tabs,
         .panel-group {
@@ -64,519 +71,553 @@
 </head>
 
 <body id="tools_letter" class="tools">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'letters-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-        [% WRAPPER breadcrumbs %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        [% END %]
+
+        [% IF ( add_form OR copy_form OR add_validate OR copy_validate OR delete_confirm OR branchcode ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+                <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
             [% END %]
+        [% END %]
 
-            [% IF ( add_form OR copy_form OR add_validate OR copy_validate OR delete_confirm OR branchcode ) %]
-                [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
-                [% END %]
-            [% END %]
-
-            [% IF ( add_form or copy_form) %]
-                [% IF ( modify ) %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Modify notice</span>
-                    [% END %]
-                [% ELSE %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>New notice</span>
-                    [% END %]
-                [% END # /IF modify %]
-            [% ELSIF ( branchcode ) %]
+        [% IF ( add_form or copy_form) %]
+            [% IF ( modify ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    [% Branches.GetName( branchcode ) | html %]
+                    <span>Modify notice</span>
                 [% END %]
             [% ELSE %]
-                [% IF ( add_validate or copy_validate) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>New notice</span>
+                [% END %]
+            [% END # /IF modify %]
+        [% ELSIF ( branchcode ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% Branches.GetName( branchcode ) | html %]
+            [% END %]
+        [% ELSE %]
+            [% IF ( add_validate or copy_validate) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Notice added</span>
+                [% END %]
+            [% ELSE %]
+                [% IF ( delete_confirm ) %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Notice added</span>
+                        <span>Confirm deletion</span>
                     [% END %]
                 [% ELSE %]
-                    [% IF ( delete_confirm ) %]
-                        [% WRAPPER breadcrumb_item bc_active= 1 %]
-                            <span>Confirm deletion</span>
-                        [% END %]
-                    [% ELSE %]
-                        [% WRAPPER breadcrumb_item bc_active= 1 %]
-                            <span>Notices and slips</span>
-                        [% END %]
-                    [% END # /IF ( delete_confirm ) %]
-                [% END # /IF ( add_validate or copy_validate) %]
-            [% END # /IF ( add_form or copy_form) %]
-        [% END #/ WRAPPER breadcrumbs %]
-    [% END #/ WRAPPER sub-header.inc %]
-
-    <div id="preview_template" class="modal in" tabindex="-1" role="dialog" aria-labelledby="preview_template_label" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="preview_template_label">Preview notice template</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="loading">
-                        <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- TODO <a href="#" class="btn btn-default" id="preview_template_button" role="button" data-bs-toggle="modal">Convert using the Template Toolkit syntax</a>-->
-                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#preview_template -->
-
-    <!-- Sample display modal -->
-    <div class="modal" id="noticeSampleModal" tabindex="-1" aria-labelledby="noticeSampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="noticeSampleModalLabel">Default template</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <pre class="template-body"></pre>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary copy">Copy to template</button>
-                    <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                </div>
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /.modal -->
-
-    [% SET aside = ( add_form || copy_form ) ? '' : 'tools-menu' %]
-    [% WRAPPER 'main-container.inc' aside=aside %]
-
-                [% IF ( no_op_set ) %]
-                    <h1>Notices and slips</h1>
-                    [% IF ( branchcode ) %]
-                        <h2>[% Branches.GetName( branchcode ) | html %]</h2>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Notices and slips</span>
                     [% END %]
-                    <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
-                        <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-                        [% UNLESS independant_branch %]
-                            <p>
-                                Select a library:
+                [% END # /IF ( delete_confirm ) %]
+            [% END # /IF ( add_validate or copy_validate) %]
+        [% END # /IF ( add_form or copy_form) %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+<div id="preview_template" class="modal in" tabindex="-1" role="dialog" aria-labelledby="preview_template_label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="preview_template_label">Preview notice template</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+            </div>
+            <div class="modal-footer">
+                <!-- TODO <a href="#" class="btn btn-default" id="preview_template_button" role="button" data-bs-toggle="modal">Convert using the Template Toolkit syntax</a>-->
+                <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#preview_template -->
+
+<!-- Sample display modal -->
+<div class="modal" id="noticeSampleModal" tabindex="-1" aria-labelledby="noticeSampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="noticeSampleModalLabel">Default template</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <pre class="template-body"></pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary copy">Copy to template</button>
+                <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+[% SET aside = ( add_form || copy_form ) ? '' : 'tools-menu' %]
+[% WRAPPER 'main-container.inc' aside=aside %]
+
+    [% IF ( no_op_set ) %]
+        <h1>Notices and slips</h1>
+        [% IF ( branchcode ) %]
+            <h2>[% Branches.GetName( branchcode ) | html %]</h2>
+        [% END %]
+        <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
+            <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+            [% UNLESS independant_branch %]
+                <p>
+                    Select a library:
+                    <select name="branchcode" id="branch" style="width:20em;">
+                        <option value="*">All libraries</option>
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                    </select>
+                </p>
+            [% END %]
+        </form>
+        <!-- /#selectlibrary -->
+
+        <div id="toolbar" class="btn-toolbar">
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New notice</button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=acquisition">Acquisition</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=catalogue">Catalog</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=circulation">Circulation</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimacquisition">Claim acquisition</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimissues">Claim serial issue</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=reserves">Holds</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=ill">Interlibrary loans</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=lists">Lists</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=orderacquisition">Order acquisition</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=members">Patrons</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=patron_slip">Patrons (custom slip)</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=add_message">Patrons (custom message)</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=preservation">Preservation</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=bookings">Bookings</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /#toolbar -->
+
+        [% IF ( search ) %]
+            <p>You searched for <strong>[% searchfield | html %]</strong></p>
+        [% END %]
+
+        [% IF ( letter && !independant_branch) %]
+            [% select_for_copy = BLOCK %]
+                <select name="branchcode">
+                    [% FOREACH l IN Branches.all() %]
+                        <option value="[% l.branchcode | html %]">Copy to [% l.branchname | html %]</option>
+                    [% END %]
+                </select>
+            [% END %]
+        [% END %]
+
+        [% IF letter %]
+            <div class="page-section">
+                <table id="lettert">
+                    <thead>
+                        <tr>
+                            <th>Library</th>
+                            <th>Module</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Last updated</th>
+                            <th class="NoSort noExport">Copy notice</th>
+                            <th class="NoSort noExport">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH lette IN letter %]
+                            [% can_edit = lette.branchcode || !independant_branch %]
+                            <tr>
+                                <td>
+                                    [% IF lette.branchname %]
+                                        [% lette.branchname | html %]
+                                    [% ELSE %]
+                                        <span>(All libraries)</span>
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% SWITCH lette.module %]
+                                    [% CASE 'acquisition' %]
+                                        <span>Acquisition</span>
+                                    [% CASE 'catalogue' %]
+                                        <span>Catalog</span>
+                                    [% CASE 'circulation' %]
+                                        <span>Circulation</span>
+                                    [% CASE 'orderacquisition' %]
+                                        <span>Order acquisition</span>
+                                    [% CASE 'claimacquisition' %]
+                                        <span>Claim acquisition</span>
+                                    [% CASE 'claimissues' %]
+                                        <span>Claim serial issue</span>
+                                    [% CASE 'reserves' %]
+                                        <span>Holds</span>
+                                    [% CASE 'ill' %]
+                                        <span>Interlibrary loans</span>
+                                    [% CASE 'lists' %]
+                                        <span>Lists</span>
+                                    [% CASE 'members' %]
+                                        <span>Patrons</span>
+                                    [% CASE 'patron_slip' %]
+                                        <span>Patrons (custom slip)</span>
+                                    [% CASE 'add_message' %]
+                                        <span>Patrons (custom message)</span>
+                                    [% CASE 'preservation' %]
+                                        <span>Preservation</span>
+                                    [% CASE 'serial' %]
+                                        <span>Serials (new issue)</span>
+                                    [% CASE 'suggestions' %]
+                                        <span>Suggestions</span>
+                                    [% CASE 'pos' %]
+                                        <span>Point of sale</span>
+                                    [% CASE 'report' %]
+                                        <span>Reports</span>
+                                    [% CASE 'bookings' %]
+                                        <span>Bookings</span>
+                                    [% CASE %]
+                                        <span>[% lette.module | html %]</span>
+                                    [% END %]
+                                </td>
+                                <td>[% lette.code | html %]</td>
+                                <td>[% lette.name | html %]</td>
+                                <td data-order="[% lette.updated_on | html %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
+                                <td class="actions">
+                                    [% IF !independant_branch || !lette.branchcode %]
+                                        <form method="post" action="/cgi-bin/koha/tools/letter.pl">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-copy_form" />
+                                            <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
+                                            <input type="hidden" name="module" value="[% lette.module | html %]" />
+                                            <input type="hidden" name="code" value="[% lette.code | html %]" />
+                                            [% IF independant_branch %]
+                                                <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
+                                            [% ELSE %]
+                                                [% select_for_copy | $raw %]
+                                            [% END %]
+                                            <button class="btn btn-default btn-xs"><i class="fa-solid fa-copy"></i> Copy</button>
+                                        </form>
+                                    [% END # /IF !independent_branch %]
+                                </td>
+                                <td class="actions">
+                                    [% IF can_edit %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"
+                                            ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                                        >
+                                    [% END %]
+                                    [% IF !lette.protected && can_edit %]
+                                        <a
+                                            class="btn btn-default btn-xs"
+                                            href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"
+                                            ><i class="fa fa-trash-can"></i> Delete</a
+                                        >
+                                    [% END %]
+                                </td>
+                            </tr>
+                        [% END # /FOREACH lette %]
+                    </tbody>
+                </table>
+                <!-- /#lettert --> </div
+            ><!-- /.page-section -->
+        [% ELSE # IF lette %]
+            <div class="alert alert-info">
+                [% IF ( branchcode ) %]
+                    <p>There are no notices for this library.</p>
+                [% ELSE %]
+                    <p>There are no notices.</p>
+                [% END %]
+            </div>
+        [% END # /IF lette %]
+    [% END # /IF no_op_set %]
+
+    [% IF add_form or copy_form %]
+        <h1>
+            [% IF ( modify ) %]
+                <span>Modify notice</span>
+            [% ELSE %]
+                <span>New notice</span>
+            [% END %]
+        </h1>
+
+        <div id="toolbar" class="btn-toolbar sticky">
+            <div class="btn-group">
+                <button class="btn btn-primary" id="submit_form"><i class="fa fa-save"></i> Save</button>
+                <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" id="saveandcontinue" href="#">Save and continue editing</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/letter.pl"><i class="fa fa-times"></i> Cancel</a>
+        </div>
+        <!-- /#toolbar -->
+
+        <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
+            [% INCLUDE 'csrf-token.inc' %]
+            [% IF add_form %]
+                <input type="hidden" name="op" id="op" value="cud-add_validate" />
+            [% ELSE %]
+                <input type="hidden" name="op" id="op" value="cud-copy_validate" />
+            [% END %]
+
+            <input type="hidden" name="checked" value="0" />
+
+            [% IF ( modify ) %]
+                <input type="hidden" name="add" value="0" />
+            [% ELSE %]
+                <input type="hidden" name="add" value="1" />
+            [% END %]
+
+            <fieldset class="rows page-section">
+                <input type="hidden" name="oldbranchcode" value="[% oldbranchcode | html %]" />
+                [% IF independant_branch %]
+                    <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
+                [% END %]
+                <ol>
+                    [% UNLESS independant_branch %]
+                        <li>
+                            [% IF adding %]
+                                <label for="branch">Library:</label>
                                 <select name="branchcode" id="branch" style="width:20em;">
-                                    <option value="*">All libraries</option>
+                                    <option value="">All libraries</option>
                                     [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
                                 </select>
-                            </p>
-                        [% END %]
-                    </form> <!-- /#selectlibrary -->
-
-                    <div id="toolbar" class="btn-toolbar">
-                        <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New notice</button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=acquisition">Acquisition</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=catalogue">Catalog</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=circulation">Circulation</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimacquisition">Claim acquisition</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimissues">Claim serial issue</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=reserves">Holds</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=ill">Interlibrary loans</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=lists">Lists</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=orderacquisition">Order acquisition</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=members">Patrons</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=patron_slip">Patrons (custom slip)</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=add_message">Patrons (custom message)</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=preservation">Preservation</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports</a></li>
-                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=bookings">Bookings</a></li>
-                            </ul>
-                        </div>
-                    </div> <!-- /#toolbar -->
-
-                    [% IF ( search ) %]
-                        <p>You searched for <strong>[% searchfield | html %]</strong></p>
-                    [% END %]
-
-                    [% IF ( letter && !independant_branch) %]
-                        [% select_for_copy = BLOCK %]
-                            <select name="branchcode">
-                                [% FOREACH l IN Branches.all() %]
-                                    <option value="[% l.branchcode | html %]">Copy to [% l.branchname | html %]</option>
-                                [% END %]
-                            </select>
-                        [% END %]
-                    [% END %]
-
-                    [% IF letter %]
-                        <div class="page-section">
-                            <table id="lettert">
-                                <thead>
-                                    <tr>
-                                        <th>Library</th>
-                                        <th>Module</th>
-                                        <th>Code</th>
-                                        <th>Name</th>
-                                        <th>Last updated</th>
-                                        <th class="NoSort noExport">Copy notice</th>
-                                        <th class="NoSort noExport">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH lette IN letter %]
-                                        [% can_edit = lette.branchcode || !independant_branch %]
-                                        <tr>
-                                            <td>
-                                                [% IF lette.branchname %]
-                                                    [% lette.branchname | html %]
-                                                [% ELSE %]
-                                                    <span>(All libraries)</span>
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% SWITCH lette.module %]
-                                                    [% CASE 'acquisition' %]<span>Acquisition</span>
-                                                    [% CASE 'catalogue' %]<span>Catalog</span>
-                                                    [% CASE 'circulation' %]<span>Circulation</span>
-                                                    [% CASE 'orderacquisition' %]<span>Order acquisition</span>
-                                                    [% CASE 'claimacquisition' %]<span>Claim acquisition</span>
-                                                    [% CASE 'claimissues' %]<span>Claim serial issue</span>
-                                                    [% CASE 'reserves' %]<span>Holds</span>
-                                                    [% CASE 'ill' %]<span>Interlibrary loans</span>
-                                                    [% CASE 'lists' %]<span>Lists</span>
-                                                    [% CASE 'members' %]<span>Patrons</span>
-                                                    [% CASE 'patron_slip' %]<span>Patrons (custom slip)</span>
-                                                    [% CASE 'add_message' %]<span>Patrons (custom message)</span>
-                                                    [% CASE 'preservation' %]<span>Preservation</span>
-                                                    [% CASE 'serial' %]<span>Serials (new issue)</span>
-                                                    [% CASE 'suggestions' %]<span>Suggestions</span>
-                                                    [% CASE 'pos' %]<span>Point of sale</span>
-                                                    [% CASE 'report' %]<span>Reports</span>
-                                                    [% CASE 'bookings' %]<span>Bookings</span>
-                                                    [% CASE %]<span>[% lette.module | html %]</span>
-                                                [% END %]
-                                            </td>
-                                            <td>[% lette.code | html %]</td>
-                                            <td>[% lette.name | html %]</td>
-                                            <td data-order="[% lette.updated_on | html %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
-                                            <td class="actions">
-                                                [% IF !independant_branch || !lette.branchcode %]
-                                                    <form method="post" action="/cgi-bin/koha/tools/letter.pl">
-                                                        [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="cud-copy_form" />
-                                                        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
-                                                        <input type="hidden" name="module" value="[% lette.module | html %]" />
-                                                        <input type="hidden" name="code" value="[% lette.code | html %]" />
-                                                        [% IF independant_branch %]
-                                                            <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
-                                                        [% ELSE %]
-                                                            [% select_for_copy | $raw %]
-                                                        [% END %]
-                                                        <button class="btn btn-default btn-xs"><i class="fa-solid fa-copy"></i> Copy</button>
-                                                    </form>
-                                                [% END # /IF !independent_branch %]
-                                            </td>
-                                            <td class="actions">
-                                                [% IF can_edit %]
-                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                [% END %]
-                                                [% IF !lette.protected && can_edit %]
-                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                    [% END # /FOREACH lette %]
-                                </tbody>
-                            </table> <!-- /#lettert -->
-                        </div><!-- /.page-section -->
-                    [% ELSE # IF lette %]
-                        <div class="alert alert-info">
-                            [% IF ( branchcode ) %]
-                                <p>There are no notices for this library.</p>
                             [% ELSE %]
-                                <p>There are no notices.</p>
+                                <span class="label">Library:</span>
+                                <input type="hidden" id="branch" name="branchcode" value="[% branchcode | html %]" />
+                                [% IF ( branchcode ) %]
+                                    [% Branches.GetName( branchcode ) | html %]
+                                [% ELSE %]
+                                    <span>All libraries</span>
+                                [% END %]
                             [% END %]
-                        </div>
-                    [% END # /IF lette %]
-                [% END # /IF no_op_set %]
-
-                [% IF add_form or copy_form %]
-                    <h1>
-                        [% IF ( modify ) %]
-                            <span>Modify notice</span>
-                        [% ELSE %]
-                            <span>New notice</span>
-                        [% END %]
-                    </h1>
-
-                    <div id="toolbar" class="btn-toolbar sticky">
-                        <div class="btn-group">
-                            <button class="btn btn-primary" id="submit_form"><i class="fa fa-save"></i> Save</button>
-                            <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" id="saveandcontinue" href="#">Save and continue editing</a></li>
-                            </ul>
-                        </div>
-                        <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/letter.pl"><i class="fa fa-times"></i> Cancel</a>
-                    </div> <!-- /#toolbar -->
-
-                    <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        [% IF add_form %]
-                            <input type="hidden" name="op" id="op" value="cud-add_validate" />
-                        [% ELSE %]
-                            <input type="hidden" name="op" id="op" value="cud-copy_validate" />
-                        [% END %]
-
-                        <input type="hidden" name="checked" value="0" />
-
-                        [% IF ( modify ) %]
-                            <input type="hidden" name="add" value="0" />
-                        [% ELSE %]
-                            <input type="hidden" name="add" value="1" />
-                        [% END %]
-
-                        <fieldset class="rows page-section">
-                            <input type="hidden" name="oldbranchcode" value="[% oldbranchcode | html %]" />
-                            [% IF independant_branch %]
-                                <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
+                        </li>
+                    [% END # /UNLESS independant_branch %]
+                    <li>
+                        <label for="newmodule">Koha module:</label>
+                        <input type="hidden" name="oldmodule" value="[% module | html %]" />
+                        <select name="module" id="[% adding ? 'newmodule' : 'module' | html %]">
+                            [% IF ( module == "acquisition" ) %]
+                                <option value="acquisition" selected="selected">Acquisition</option>
+                            [% ELSE %]
+                                <option value="acquisition">Acquisition</option>
                             [% END %]
-                            <ol>
-                            [% UNLESS independant_branch %]
-                                    <li>
-                                        [% IF adding %]
-                                            <label for="branch">Library:</label>
-                                            <select name="branchcode" id="branch" style="width:20em;">
-                                                <option value="">All libraries</option>
-                                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
-                                            </select>
-                                        [% ELSE %]
-                                            <span class="label">Library:</span>
-                                            <input type="hidden" id="branch" name="branchcode" value="[% branchcode | html %]" />
-                                            [% IF ( branchcode ) %]
-                                               [% Branches.GetName( branchcode ) | html %]
-                                            [% ELSE %]
-                                                <span>All libraries</span>
-                                            [% END %]
-                                        [% END %]
-                                    </li>
-                            [% END # /UNLESS independant_branch %]
-                                <li>
-                                    <label for="newmodule">Koha module:</label>
-                                    <input type="hidden" name="oldmodule" value="[% module | html %]" />
-                                    <select name="module" id="[% adding ? 'newmodule' : 'module' | html %]">
-                                        [% IF ( module == "acquisition" ) %]
-                                            <option value="acquisition" selected="selected">Acquisition</option>
-                                        [% ELSE %]
-                                            <option value="acquisition" >Acquisition</option>
-                                        [% END %]
-                                        [% IF ( module == "catalogue" ) %]
-                                            <option value="catalogue" selected="selected">Catalog</option>
-                                        [% ELSE %]
-                                            <option value="catalogue" >Catalog</option>
-                                        [% END %]
-                                        [% IF ( module == "circulation" ) %]
-                                            <option value="circulation" selected="selected">Circulation</option>
-                                        [% ELSE %]
-                                            <option value="circulation">Circulation</option>
-                                        [% END %]
-                                        [% IF ( module == "orderacquisition" ) %]
-                                            <option value="orderacquisition" selected="selected">Order acquisition</option>
-                                        [% ELSE %]
-                                            <option value="orderacquisition">Order acquisition</option>
-                                        [% END %]
-                                        [% IF ( module == "claimacquisition" ) %]
-                                            <option value="claimacquisition" selected="selected">Claim acquisition</option>
-                                        [% ELSE %]
-                                            <option value="claimacquisition">Claim acquisition</option>
-                                        [% END %]
-                                        [% IF ( module == "claimissues" ) %]
-                                            <option value="claimissues" selected="selected">Claim serial issue</option>
-                                        [% ELSE %]
-                                            <option value="claimissues">Claim serial issue</option>
-                                        [% END %]
-                                        [% IF ( module == "reserves" ) %]
-                                            <option value="reserves" selected="selected">Holds</option>
-                                        [% ELSE %]
-                                            <option value="reserves">Holds</option>
-                                        [% END %]
-                                        [% IF ( module == "ill" ) %]
-                                        <option value="ill" selected="selected">Interlibrary loans</option>
-                                        [% ELSE %]
-                                        [% IF ( module == "lists" ) %]
-                                        <option value="lists" selected="selected">Lists</option>
-                                        [% ELSE %]
-                                        <option value="lists">Lists</option>
-                                        [% END %]
-                                        <option value="ill">Interlibrary loans</option>
-                                        [% END %]
-                                        [% IF ( module == "members" ) %]
-                                            <option value="members" selected="selected">Patrons</option>
-                                        [% ELSE %]
-                                            <option value="members">Patrons</option>
-                                        [% END %]
-                                        [% IF ( module == "patron_slip" ) %]
-                                            <option value="patron_slip" selected="selected">Patron (custom slip)</option>
-                                        [% ELSE %]
-                                            <option value="patron_slip">Patron (custom slip)</option>
-                                        [% END %]
-                                        [% IF ( module == "add_message" ) %]
-                                            <option value="add_message" selected="selected">Patrons (custom message)</option>
-                                        [% ELSE %]
-                                            <option value="add_message">Patrons (custom message)</option>
-                                        [% END %]
-                                        [% IF ( module == "preservation" ) %]
-                                            <option value="preservation" selected="selected">Preservation</option>
-                                        [% ELSE %]
-                                            <option value="preservation">Preservation</option>
-                                        [% END %]
-                                        [% IF ( module == "serial" ) %]
-                                            <option value="serial" selected="selected">Serials (new issue)</option>
-                                        [% ELSE %]
-                                            <option value="serial">Serials (new issue)</option>
-                                        [% END %]
-                                        [% IF ( module == "suggestions" ) %]
-                                            <option value="suggestions" selected="selected">Suggestions</option>
-                                        [% ELSE %]
-                                            <option value="suggestions">Suggestions</option>
-                                        [% END %]
-                                        [% IF ( module == "pos" ) %]
-                                            <option value="pos" selected="selected">Point of sale</option>
-                                        [% ELSE %]
-                                            <option value="pos">Point of sale</option>
-                                        [% END %]
-                                        [% IF ( module == "report" ) %]
-                                            <option value="report" selected="selected">Reports</option>
-                                        [% ELSE %]
-                                            <option value="report">Reports</option>
-                                        [% END %]
-                                        [% IF ( module == "bookings" ) %]
-                                            <option value="bookings" selected="selected">Bookings</option>
-                                        [% ELSE %]
-                                            <option value="bookings" >Bookings</option>
-                                        [% END %]
-                                    </select>
-                                </li>
-                                <li>
-                                    [% IF adding %]
-                                        <label for="code" class="required">Code:</label>
-                                        <input type="text" id="code" name="code" size="20" maxlength="20" value="" required="required"/>
-                                        <span class="required">Required</span>
-                                    [% ELSE %]
-                                        <span class="label">Code:</span>
-                                        <input type="hidden" id="code" name="code" value="[% code | html %]" />
-                                        [% code | html %]
-                                    [% END %]
-                                </li>
-                                <li>
-                                    <label for="name" class="required">Name:</label>
-                                    <input type="text" id="name" name="name" size="60" value="[% letter_name | html %]" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                [% IF code and preview_is_available%]
-                                    <li>
-                                        <label for="name">Data for preview:</label>
-                                        [% SWITCH code %]
-                                            [% CASE 'CHECKIN' %]
-                                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode" />
-                                            [% CASE 'CHECKOUT' %]
-                                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode|borrowernumber" />
-                                            [% CASE 'HOLD_SLIP' %]
-                                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="biblionumber|borrowernumber" />
-                                            [% CASE %]
-                                                <span>Not supported yet.</span>
-                                        [% END %]
-                                    </li>
-                                [% END # /IF code %]
-                            </ol>
-                        </fieldset> <!-- /#add_notice -->
-
-                        [% IF Koha.Preference('TranslateNotices') %]
-                            <div style="clear:both"></div>
-                            [% WRAPPER tabs id= "tabs" %]
-                                [% WRAPPER tabs_nav %]
-                                    [% WRAPPER tab_item tabname= "lang_default" %] <span>Default</span> [% END %]
-                                    [% FOR language IN languages %]
-                                        [% FOR sublanguage IN language.sublanguages_loop %]
-                                            [% IF language.plural %]
-                                                [% WRAPPER tab_item tabname= "lang_${sublanguage.rfc4646_subtag}" %] [% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %]) [% END %]
-                                            [% ELSE %]
-                                                [% WRAPPER tab_item tabname= "lang_${sublanguage.rfc4646_subtag}" %] [% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %]) [% END %]
-                                            [% END %]
-                                        [% END %]
-                                    [% END %]
-                                [% END # /.tabs_nav %]
-
-                                [% WRAPPER tab_panels %]
-                                    [% FOREACH lang IN letters.keys %]
-                                        [% WRAPPER tab_panel tabname="lang_${lang}" %]
-                                            [% IF lang == 'default' %]
-                                            <p><span class="label">Default language:</span> [% default_language | html %]</p>
-                                            [% END %]
-                                            [% PROCESS message_templates %]
-                                        [% END # /WRAPPER tab_panel %]
-                                    [% END # /FOREACH lang %]
-                                [% END # /WRAPPER tab_panels %]
-                            [% END # /WRAPPER tabs#tabs %]
+                            [% IF ( module == "catalogue" ) %]
+                                <option value="catalogue" selected="selected">Catalog</option>
+                            [% ELSE %]
+                                <option value="catalogue">Catalog</option>
+                            [% END %]
+                            [% IF ( module == "circulation" ) %]
+                                <option value="circulation" selected="selected">Circulation</option>
+                            [% ELSE %]
+                                <option value="circulation">Circulation</option>
+                            [% END %]
+                            [% IF ( module == "orderacquisition" ) %]
+                                <option value="orderacquisition" selected="selected">Order acquisition</option>
+                            [% ELSE %]
+                                <option value="orderacquisition">Order acquisition</option>
+                            [% END %]
+                            [% IF ( module == "claimacquisition" ) %]
+                                <option value="claimacquisition" selected="selected">Claim acquisition</option>
+                            [% ELSE %]
+                                <option value="claimacquisition">Claim acquisition</option>
+                            [% END %]
+                            [% IF ( module == "claimissues" ) %]
+                                <option value="claimissues" selected="selected">Claim serial issue</option>
+                            [% ELSE %]
+                                <option value="claimissues">Claim serial issue</option>
+                            [% END %]
+                            [% IF ( module == "reserves" ) %]
+                                <option value="reserves" selected="selected">Holds</option>
+                            [% ELSE %]
+                                <option value="reserves">Holds</option>
+                            [% END %]
+                            [% IF ( module == "ill" ) %]
+                                <option value="ill" selected="selected">Interlibrary loans</option>
+                            [% ELSE %]
+                                [% IF ( module == "lists" ) %]
+                                    <option value="lists" selected="selected">Lists</option>
+                                [% ELSE %]
+                                    <option value="lists">Lists</option>
+                                [% END %]
+                                <option value="ill">Interlibrary loans</option>
+                            [% END %]
+                            [% IF ( module == "members" ) %]
+                                <option value="members" selected="selected">Patrons</option>
+                            [% ELSE %]
+                                <option value="members">Patrons</option>
+                            [% END %]
+                            [% IF ( module == "patron_slip" ) %]
+                                <option value="patron_slip" selected="selected">Patron (custom slip)</option>
+                            [% ELSE %]
+                                <option value="patron_slip">Patron (custom slip)</option>
+                            [% END %]
+                            [% IF ( module == "add_message" ) %]
+                                <option value="add_message" selected="selected">Patrons (custom message)</option>
+                            [% ELSE %]
+                                <option value="add_message">Patrons (custom message)</option>
+                            [% END %]
+                            [% IF ( module == "preservation" ) %]
+                                <option value="preservation" selected="selected">Preservation</option>
+                            [% ELSE %]
+                                <option value="preservation">Preservation</option>
+                            [% END %]
+                            [% IF ( module == "serial" ) %]
+                                <option value="serial" selected="selected">Serials (new issue)</option>
+                            [% ELSE %]
+                                <option value="serial">Serials (new issue)</option>
+                            [% END %]
+                            [% IF ( module == "suggestions" ) %]
+                                <option value="suggestions" selected="selected">Suggestions</option>
+                            [% ELSE %]
+                                <option value="suggestions">Suggestions</option>
+                            [% END %]
+                            [% IF ( module == "pos" ) %]
+                                <option value="pos" selected="selected">Point of sale</option>
+                            [% ELSE %]
+                                <option value="pos">Point of sale</option>
+                            [% END %]
+                            [% IF ( module == "report" ) %]
+                                <option value="report" selected="selected">Reports</option>
+                            [% ELSE %]
+                                <option value="report">Reports</option>
+                            [% END %]
+                            [% IF ( module == "bookings" ) %]
+                                <option value="bookings" selected="selected">Bookings</option>
+                            [% ELSE %]
+                                <option value="bookings">Bookings</option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        [% IF adding %]
+                            <label for="code" class="required">Code:</label>
+                            <input type="text" id="code" name="code" size="20" maxlength="20" value="" required="required" />
+                            <span class="required">Required</span>
                         [% ELSE %]
-                            <div style="clear:both"></div>
-                            <div class="page-section">
-                            [% FOREACH lang IN letters.keys %]
+                            <span class="label">Code:</span>
+                            <input type="hidden" id="code" name="code" value="[% code | html %]" />
+                            [% code | html %]
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="name" class="required">Name:</label>
+                        <input type="text" id="name" name="name" size="60" value="[% letter_name | html %]" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    [% IF code and preview_is_available %]
+                        <li>
+                            <label for="name">Data for preview:</label>
+                            [% SWITCH code %]
+                            [% CASE 'CHECKIN' %]
+                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode" />
+                            [% CASE 'CHECKOUT' %]
+                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode|borrowernumber" />
+                            [% CASE 'HOLD_SLIP' %]
+                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="biblionumber|borrowernumber" />
+                            [% CASE %]
+                                <span>Not supported yet.</span>
+                            [% END %]
+                        </li>
+                    [% END # /IF code %]
+                </ol>
+            </fieldset>
+            <!-- /#add_notice -->
+
+            [% IF Koha.Preference('TranslateNotices') %]
+                <div style="clear:both"></div>
+                [% WRAPPER tabs id= "tabs" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "lang_default" %]<span>Default</span>[% END %]
+                        [% FOR language IN languages %]
+                            [% FOR sublanguage IN language.sublanguages_loop %]
+                                [% IF language.plural %]
+                                    [% WRAPPER tab_item tabname= "lang_${sublanguage.rfc4646_subtag}" %][% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])[% END %]
+                                [% ELSE %]
+                                    [% WRAPPER tab_item tabname= "lang_${sublanguage.rfc4646_subtag}" %][% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])[% END %]
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                    [% END # /.tabs_nav %]
+
+                    [% WRAPPER tab_panels %]
+                        [% FOREACH lang IN letters.keys %]
+                            [% WRAPPER tab_panel tabname="lang_${lang}" %]
                                 [% IF lang == 'default' %]
-                                <p><span class="label">Default language:</span> [% default_language | html %]</p>
+                                    <p><span class="label">Default language:</span> [% default_language | html %]</p>
                                 [% END %]
                                 [% PROCESS message_templates %]
-                            [% END # /FOREACH lang %]
-                            </div>
-                        [% END # /IF TranslateNotices %]
+                            [% END # /WRAPPER tab_panel %]
+                        [% END # /FOREACH lang %]
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs#tabs %]
+            [% ELSE %]
+                <div style="clear:both"></div>
+                <div class="page-section">
+                    [% FOREACH lang IN letters.keys %]
+                        [% IF lang == 'default' %]
+                            <p><span class="label">Default language:</span> [% default_language | html %]</p>
+                        [% END %]
+                        [% PROCESS message_templates %]
+                    [% END # /FOREACH lang %]
+                </div>
+            [% END # /IF TranslateNotices %]
 
-                        <input type="hidden" id="redirect" name="redirect" value="" />
-                        <input type="hidden" id="section" name="section" value="[% section | html %]" />
-                        <input type="hidden" id="langtab" name="langtab" value="[% langtab | html %]" />
-                        <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-                    </form> <!-- /#add_notice -->
-                [% END # /IF add_form %]
+            <input type="hidden" id="redirect" name="redirect" value="" />
+            <input type="hidden" id="section" name="section" value="[% section | html %]" />
+            <input type="hidden" id="langtab" name="langtab" value="[% langtab | html %]" />
+            <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+        </form>
+        <!-- /#add_notice -->
+    [% END # /IF add_form %]
 
-                [% IF ( delete_confirm ) %]
-                    <div class="alert alert-warning">
-                        <h1>Delete notice?</h1>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Library</th>
-                                <th>Module</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                            </tr>
-                            </thead>
-                            <tr>
-                                <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) | html %][% ELSE %]<span>(All libraries)</span>[% END %]</td>
-                                <td>[% letter.module | html %]</td>
-                                <td>[% letter.code | html %]</td>
-                                <td>[% letter.name | html %]</td>
-                            </tr>
-                        </table>
-                        <form action="/cgi-bin/koha/tools/letter.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-delete_confirmed">
-                            <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
-                            <input type="hidden" name="code" value="[% letter.code | html %]" />
-                            <input type="hidden" name="module" value="[% letter.module | html %]" />
-                            <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Yes, delete</button>
-                        </form>
+    [% IF ( delete_confirm ) %]
+        <div class="alert alert-warning">
+            <h1>Delete notice?</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Library</th>
+                        <th>Module</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) | html %][% ELSE %]<span>(All libraries)</span>[% END %]</td>
+                    <td>[% letter.module | html %]</td>
+                    <td>[% letter.code | html %]</td>
+                    <td>[% letter.name | html %]</td>
+                </tr>
+            </table>
+            <form action="/cgi-bin/koha/tools/letter.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
+                <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
+                <input type="hidden" name="code" value="[% letter.code | html %]" />
+                <input type="hidden" name="module" value="[% letter.module | html %]" />
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Yes, delete</button>
+            </form>
 
-                        <form action="/cgi-bin/koha/tools/letter.pl" method="get">
-                            <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> No, do not delete</button>
-                        </form>
-                    </div>
-                [% END # /IF delete_confirm %]
-
+            <form action="/cgi-bin/koha/tools/letter.pl" method="get">
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> No, do not delete</button>
+            </form>
+        </div>
+    [% END # /IF delete_confirm %]
 [% END %]
 
 [% BLOCK message_templates %]
@@ -588,13 +629,20 @@
             [% WRAPPER accordion_item %]
                 [% WRAPPER accordion_heading panel_id="${letter.message_transport_type}_${lang}" %]
                     [% SWITCH letter.message_transport_type %]
-                        [% CASE 'email' %]<span>Email</span>
-                        [% CASE 'print' %]<span>[% tp('Message transport type', 'Print') | html %]</span>
-                        [% CASE 'sms' %]<span>SMS</span>
-                        [% CASE 'feed' %]<span>Feed</span>
-                        [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
-                        [% CASE 'phone' %]<span>Phone</span>
-                        [% CASE %]<span>[% letter.message_transport_type | html %]</span>
+                    [% CASE 'email' %]
+                        <span>Email</span>
+                    [% CASE 'print' %]
+                        <span>[% tp('Message transport type', 'Print') | html %]</span>
+                    [% CASE 'sms' %]
+                        <span>SMS</span>
+                    [% CASE 'feed' %]
+                        <span>Feed</span>
+                    [% CASE 'itiva' %]
+                        <span>Phone (i-tiva)</span>
+                    [% CASE 'phone' %]
+                        <span>Phone</span>
+                    [% CASE %]
+                        <span>[% letter.message_transport_type | html %]</span>
                     [% END %]
                 [% END %]
                 [% WRAPPER accordion_panel panel_id="${letter.message_transport_type}_${lang}" %]
@@ -622,13 +670,32 @@
                                 <label for="is_html_[% letter.message_transport_type | html %]_[% lang | html %]">HTML message:</label>
                                 [% IF letter.is_html %]
                                     [% IF sms_readonly %]
-                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" disabled="disabled" />
+                                        <input
+                                            type="checkbox"
+                                            name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                            id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                            value="1"
+                                            checked="checked"
+                                            disabled="disabled"
+                                        />
                                     [% ELSE %]
-                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
+                                        <input
+                                            type="checkbox"
+                                            name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                            id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                            value="1"
+                                            checked="checked"
+                                        />
                                     [% END %]
                                 [% ELSE %]
                                     [% IF sms_readonly %]
-                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" disabled="disabled" />
+                                        <input
+                                            type="checkbox"
+                                            name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                            id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                            value="1"
+                                            disabled="disabled"
+                                        />
                                     [% ELSE %]
                                         <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" />
                                     [% END %]
@@ -666,34 +733,67 @@
                                         </td>
                                         <td class="actions">
                                             [% IF sms_readonly %]
-                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa-solid fa-right-long" disabled="disabled"></i></button>
+                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert"
+                                                    >Insert <i class="fa-solid fa-right-long" disabled="disabled"></i
+                                                ></button>
                                             [% ELSE %]
-                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa-solid fa-right-long"></i></button>
+                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert"
+                                                    >Insert <i class="fa-solid fa-right-long"></i
+                                                ></button>
                                             [% END %]
                                         </td>
                                         <td>
-                                        [% IF sms_readonly %]
-                                            <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15" readonly>[% letter.content | html %]</textarea>
-                                        [% ELSE %]
-                                            <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15">[% letter.content | html %]</textarea>
-                                        [% END %]
+                                            [% IF sms_readonly %]
+                                                <textarea
+                                                    name="content"
+                                                    data-lang="[% lang | html %]"
+                                                    class="content_[% letter.message_transport_type | html %]"
+                                                    id="content_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                                    cols="80"
+                                                    rows="15"
+                                                    readonly
+                                                >
+[% letter.content | html %]</textarea
+                                                >
+                                            [% ELSE %]
+                                                <textarea
+                                                    name="content"
+                                                    data-lang="[% lang | html %]"
+                                                    class="content_[% letter.message_transport_type | html %]"
+                                                    id="content_[% letter.message_transport_type | html %]_[% lang | html %]"
+                                                    cols="80"
+                                                    rows="15"
+                                                >
+[% letter.content | html %]</textarea
+                                                >
+                                            [% END %]
                                         </td>
                                     </tr>
                                 </table>
                             </li>
                             [% IF preview_is_available %]
                                 <li>
-                                    <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa-solid fa-eye"></i> Preview</a>
+                                    <a
+                                        href="/cgi-bin/koha/svc/letters/preview"
+                                        class="preview_template btn btn-default btn-xs"
+                                        title="Preview this notice template"
+                                        data-mtt="[% letter.message_transport_type | html %]"
+                                        data-lang="[% lang | html %]"
+                                        ><i class="fa-solid fa-eye"></i> Preview</a
+                                    >
                                 </li>
                             [% END %]
                             [% IF letter.sample %]
-                            <li>
-                                <button data-noticeid="[% letter.id | html %]" data-replace="content_[% letter.message_transport_type | html %]_[% lang | html %]" class="notice-sample btn btn-default btn-sm"><i class="fa-solid fa-eye"></i> View default</button>
-                                <textarea style="display:none" id="notice[% letter.id | html %]">[% letter.sample | html %]</textarea>
-                            </li>
+                                <li>
+                                    <button data-noticeid="[% letter.id | html %]" data-replace="content_[% letter.message_transport_type | html %]_[% lang | html %]" class="notice-sample btn btn-default btn-sm"
+                                        ><i class="fa-solid fa-eye"></i> View default</button
+                                    >
+                                    <textarea style="display:none" id="notice[% letter.id | html %]">[% letter.sample | html %]</textarea>
+                                </li>
                             [% END %]
                         </ol>
-                    </fieldset> <!-- /.rows.mtt -->
+                    </fieldset>
+                    <!-- /.rows.mtt -->
                 [% END %]
             [% END # /collapse_item %]
         [% END # /FOR mtt %]
@@ -705,34 +805,39 @@
                         <span>Format</span>
                     </a>
                 </h3>
-            </div> <!-- /.panel-heading -->
+            </div>
+            <!-- /.panel-heading -->
             <div id="format_[% lang | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="format_[% lang | html %]Heading">
                 <div class="panel-body">
                     <fieldset class="rows">
-                    <div class="alert alert-info">These format settings apply when a notice is printed.</div>
-                    <div class="col-md-12">
-                        <ol>
-                            <li id="css-helpers">
-                                <label>Insert selectors to apply styles to: </label>
-                                <a class="css-helper headings" data-lang="[% lang | html %]">Headings</a>
-                                <a class="css-helper tables" data-lang="[% lang | html %]">Tables</a>
-                                <a class="css-helper text" data-lang="[% lang | html %]">All text</a>
-                            </li>
-                            <li class="style_notices_option">
-                                <label for="style_[% lang | html %]">Style (CSS): </label>
-                                <textarea id="style_[% lang | html %]" name="style_[% lang | html %]" rows="15" cols="80">[% letters.$lang.params.style | $raw %]</textarea>
-                            </li>
-                            <li class="format_all_notices_option">
-                                <label for="format_all_[% lang | html %]">Apply format settings to all notices[% IF Koha.Preference('TranslateNotices') %] for this language[% END %]:</label>
-                                <input type="checkbox" name="format_all_[% lang | html %]" id="format_all_[% lang | html %]" class="format_all" value="1" />
-                                <span class="hint">Existing format settings will be overwritten.</span>
-                            </li>
-                        </ol>
-                    </div>
-                    </fieldset> <!-- /.rows.mtt -->
-                </div> <!-- /.panel-body -->
-            </div> <!-- /.panel-collapse -->
-        </div> <!-- /.panel.panel-default -->
+                        <div class="alert alert-info">These format settings apply when a notice is printed.</div>
+                        <div class="col-md-12">
+                            <ol>
+                                <li id="css-helpers">
+                                    <label>Insert selectors to apply styles to: </label>
+                                    <a class="css-helper headings" data-lang="[% lang | html %]">Headings</a>
+                                    <a class="css-helper tables" data-lang="[% lang | html %]">Tables</a>
+                                    <a class="css-helper text" data-lang="[% lang | html %]">All text</a>
+                                </li>
+                                <li class="style_notices_option">
+                                    <label for="style_[% lang | html %]">Style (CSS): </label>
+                                    <textarea id="style_[% lang | html %]" name="style_[% lang | html %]" rows="15" cols="80">[% letters.$lang.params.style | $raw %]</textarea>
+                                </li>
+                                <li class="format_all_notices_option">
+                                    <label for="format_all_[% lang | html %]">Apply format settings to all notices[% IF Koha.Preference('TranslateNotices') %]for this language[% END %]:</label>
+                                    <input type="checkbox" name="format_all_[% lang | html %]" id="format_all_[% lang | html %]" class="format_all" value="1" />
+                                    <span class="hint">Existing format settings will be overwritten.</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </fieldset>
+                    <!-- /.rows.mtt -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel-collapse -->
+        </div>
+        <!-- /.panel.panel-default -->
     [% END # /WRAPPER accordion %]
 [% END %]
 
@@ -803,7 +908,7 @@
                 $('#noticeSampleModal').modal('hide');
             });
         });
-     </script>
+    </script>
     [% Asset.js("js/letter.js") | $raw %]
 [% END %]
 

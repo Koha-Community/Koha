@@ -11,7 +11,7 @@
             <select name="[% type | html %]_type" id="[% type | html %]_type" class="required" required="required">
                 <option value="">None selected</option>
                 [% IF type == 'refund' %]
-                <option value="AC">Account credit</option>
+                    <option value="AC">Account credit</option>
                 [% END %]
                 [% FOREACH pt IN payment_types %]
                     <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
@@ -23,7 +23,7 @@
             <select name="[% type | html %]_type" id="[% type | html %]_type">
                 <option value="">None selected</option>
                 [% IF type == 'refund' %]
-                <option value="AC">Account credit</option>
+                    <option value="AC">Account credit</option>
                 [% END %]
                 [% FOREACH pt IN payment_types %]
                     <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>

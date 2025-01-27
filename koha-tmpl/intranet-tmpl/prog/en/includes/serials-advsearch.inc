@@ -63,9 +63,11 @@
             [% IF ( mana ) %]
                 <input type="hidden" name="mana" value="1" />
             [% END %]
-        </fieldset> <!-- /.rows -->
+        </fieldset>
+        <!-- /.rows -->
         <fieldset class="action">
             <input type="submit" class="btn btn-primary" value="Search" />
         </fieldset>
     </form>
-</div> <!-- /#advsearch -->
+</div>
+<!-- /#advsearch -->

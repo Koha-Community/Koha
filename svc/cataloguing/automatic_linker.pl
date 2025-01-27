@@ -19,8 +19,8 @@
 
 use Modern::Perl;
 use CGI;
-use JSON qw( to_json );
-use C4::Auth qw( check_cookie_auth );
+use JSON       qw( to_json );
+use C4::Auth   qw( check_cookie_auth );
 use C4::Biblio qw( BiblioAutoLink TransformHtmlToMarc );
 use C4::Context;
 
@@ -28,11 +28,13 @@ my $input = CGI->new;
 print $input->header('application/json');
 
 # Check the user's permissions
-my ( $auth_status ) =
-  C4::Auth::check_cookie_auth( $input->cookie('CGISESSID'), {
-    editauthorities => 1,
-    editcatalogue => 'edit_catalogue'
-  });
+my ($auth_status) = C4::Auth::check_cookie_auth(
+    $input->cookie('CGISESSID'),
+    {
+        editauthorities => 1,
+        editcatalogue   => 'edit_catalogue'
+    }
+);
 if ( $auth_status ne "ok" ) {
     print to_json( { status => 'UNAUTHORIZED' } );
     exit 0;
@@ -47,15 +49,15 @@ if ( $auth_status ne "ok" ) {
 
 my $json;
 
-my $record = TransformHtmlToMarc($input,1);
+my $record = TransformHtmlToMarc( $input, 1 );
 
-my ( $headings_changed, $results ) = BiblioAutoLink (
+my ( $headings_changed, $results ) = BiblioAutoLink(
     $record,
     scalar $input->param('frameworkcode'),
     1
 );
 
 $json->{status} = 'OK';
-$json->{links} = $results->{details} || '';
+$json->{links}  = $results->{details} || '';
 
 print to_json($json);

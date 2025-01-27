@@ -74,13 +74,13 @@ my $r = $builder->build_object(
 );
 
 t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees', '5.00' );
-t::lib::Mocks::mock_preference( 'AllowFineOverride', '' );
+t::lib::Mocks::mock_preference( 'AllowFineOverride',        '' );
 
 my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
 is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
 
 my $account = Koha::Account->new( { patron_id => $guarantee->id } );
-$account->add_debit({ amount => 10.00, type => 'LOST', interface => 'test' });
+$account->add_debit( { amount => 10.00, type => 'LOST', interface => 'test' } );
 ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
 
@@ -91,13 +91,13 @@ is(
     "Patron can check out item as the patron category limit is now higher than 10"
 );
 
-my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->id })->next();
-is( $accountline->amountoutstanding+0, 10, "Found 10.00 amount outstanding" );
-is( $accountline->debit_type_code, "LOST", "Debit type is LOST" );
+my $accountline = Koha::Account::Lines->search( { borrowernumber => $guarantee->id } )->next();
+is( $accountline->amountoutstanding + 0, 10,     "Found 10.00 amount outstanding" );
+is( $accountline->debit_type_code,       "LOST", "Debit type is LOST" );
 
-my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id })->next();
-is( $offset->type, 'CREATE', 'Got CREATE offset type' );
-is( $offset->amount+0, 10, 'Got amount of $10.00' );
+my $offset = Koha::Account::Offsets->search( { debit_id => $accountline->id } )->next();
+is( $offset->type,       'CREATE', 'Got CREATE offset type' );
+is( $offset->amount + 0, 10,       'Got amount of $10.00' );
 
 $schema->storage->txn_rollback;
 

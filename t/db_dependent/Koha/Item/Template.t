@@ -41,11 +41,12 @@ subtest 'Serializing and deserializing contents' => sub {
 
     my $data = {
         location => 'test',
-        cost    => "2\x{20ac}",
+        cost     => "2\x{20ac}",
     };
 
     my $template = Koha::Item::Template->new(
-        {   name     => 'My template',
+        {
+            name     => 'My template',
             contents => $data,
         }
     )->store();

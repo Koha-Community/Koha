@@ -20,9 +20,9 @@ use Modern::Perl;
 use MARC::File::XML;
 use Scalar::Util qw( blessed );
 
-use C4::Biblio qw( GetMarcFromKohaField );
+use C4::Biblio  qw( GetMarcFromKohaField );
 use C4::Charset qw( StripNonXmlChars );
-use C4::Items qw( GetMarcItem );
+use C4::Items   qw( GetMarcItem );
 
 use Koha::Database;
 use Koha::Exceptions::Metadata;
@@ -96,11 +96,11 @@ override if necessary.
 
 sub record {
 
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
-    my $record = $params->{record};
+    my $record      = $params->{record};
     my $embed_items = $params->{embed_items};
-    my $format = blessed($self) ? $self->format : $params->{format};
+    my $format      = blessed($self) ? $self->format : $params->{format};
     $format ||= 'marcxml';
 
     if ( !$record && !blessed($self) ) {
@@ -123,10 +123,8 @@ sub record {
                 decoding_error => $marcxml_error,
             );
         }
-    }
-    else {
-        Koha::Exceptions::Metadata->throw(
-            'Koha::Biblio::Metadata->record called on unhandled format: ' . $format );
+    } else {
+        Koha::Exceptions::Metadata->throw( 'Koha::Biblio::Metadata->record called on unhandled format: ' . $format );
     }
 
     # FIXME: Remove existing items from the MARC record. This should be handled
@@ -135,8 +133,8 @@ sub record {
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
     $record->delete_field( ( $record->field($itemtag) ) );
 
-    if ( $embed_items ) {
-        $self->_embed_items({ %$params, format => $format, record => $record });
+    if ($embed_items) {
+        $self->_embed_items( { %$params, format => $format, record => $record } );
     }
 
     return $record;
@@ -223,40 +221,39 @@ sub _embed_items {
     my $record       = $params->{record};
     my $format       = $params->{format};
     my $biblionumber = $params->{biblionumber} || $self->biblionumber;
-    my $itemnumbers = $params->{itemnumbers} // [];
-    my $patron      = $params->{patron};
-    my $opac        = $params->{opac};
+    my $itemnumbers  = $params->{itemnumbers} // [];
+    my $patron       = $params->{patron};
+    my $opac         = $params->{opac};
 
     if ( $format eq 'marcxml' ) {
 
-        my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+        my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
         my $biblio = Koha::Biblios->find($biblionumber);
 
         my $items = $biblio->items;
-        if ( @$itemnumbers ) {
-            $items = $items->search({ itemnumber => { -in => $itemnumbers } });
+        if (@$itemnumbers) {
+            $items = $items->search( { itemnumber => { -in => $itemnumbers } } );
         }
-        if ( $opac ) {
-            $items = $items->filter_by_visible_in_opac({ patron => $patron });
+        if ($opac) {
+            $items = $items->filter_by_visible_in_opac( { patron => $patron } );
         }
         my @itemnumbers = $items->get_column('itemnumber');
         my @item_fields;
-        for my $itemnumber ( @itemnumbers ) {
+        for my $itemnumber (@itemnumbers) {
             my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
             push @item_fields, $item_marc->field($itemtag);
         }
         $record->insert_fields_ordered( reverse @item_fields );
-            # insert_fields_ordered with the reverse keeps 952s in right order
 
-    }
-    else {
+        # insert_fields_ordered with the reverse keeps 952s in right order
+
+    } else {
         Koha::Exceptions::Metadata->throw(
             'Koha::Biblio::Metadata->embed_item called on unhandled format: ' . $format );
     }
 
     return $record;
 }
-
 
 =head3 _type
 

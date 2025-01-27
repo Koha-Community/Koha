@@ -19,12 +19,11 @@
             </li>
             <li>
                 <label for="illfilter_status">Status:</label>
-                <select name="illfilter_status" id="illfilter_status">
-                </select>
+                <select name="illfilter_status" id="illfilter_status"> </select>
             </li>
             <li>
                 <label for="illfilter_dateplaced_start">Date placed between:</label>
-                <input type="text" name="illfilter_dateplaced_start" id="illfilter_dateplaced_start" class="flatpickr" data-date_to="illfilter_dateplaced_end"/>
+                <input type="text" name="illfilter_dateplaced_start" id="illfilter_dateplaced_start" class="flatpickr" data-date_to="illfilter_dateplaced_end" />
             </li>
             <li>
                 <label for="illfilter_dateplaced_end">and:</label>
@@ -55,4 +54,5 @@
         <input type="submit" class="btn btn-primary" value="Search" />
         <input type="button" value="Clear" class="clear_search" />
     </fieldset>
-</form> <!-- /#illfilter_form -->
+</form>
+<!-- /#illfilter_form -->

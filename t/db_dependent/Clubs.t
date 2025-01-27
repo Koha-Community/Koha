@@ -78,8 +78,10 @@ my $club_template_field_1 = Koha::Club::Template::Field->new(
         name             => 'Test Club Template Field 1',
     }
 )->store();
-is( ref($club_template_field_1),
-    'Koha::Club::Template::Field', 'Club template field 1 created' );
+is(
+    ref($club_template_field_1),
+    'Koha::Club::Template::Field', 'Club template field 1 created'
+);
 
 my $club_template_field_2 = Koha::Club::Template::Field->new(
     {
@@ -87,41 +89,45 @@ my $club_template_field_2 = Koha::Club::Template::Field->new(
         name             => 'Test Club Template Field 2',
     }
 )->store();
-is( ref($club_template_field_2),
-    'Koha::Club::Template::Field', 'Club template field 2 created' );
+is(
+    ref($club_template_field_2),
+    'Koha::Club::Template::Field', 'Club template field 2 created'
+);
 
-is( $club_template->club_template_fields->count,
-    2, 'Club template has two fields' );
+is(
+    $club_template->club_template_fields->count,
+    2, 'Club template has two fields'
+);
 
 ## Add some template enrollment fields
-my $club_template_enrollment_field_1 =
-  Koha::Club::Template::EnrollmentField->new(
+my $club_template_enrollment_field_1 = Koha::Club::Template::EnrollmentField->new(
     {
         club_template_id => $club_template->id,
         name             => 'Test Club Template EnrollmentField 1',
     }
-  )->store();
+)->store();
 is(
     ref($club_template_enrollment_field_1),
     'Koha::Club::Template::EnrollmentField',
     'Club template field 1 created'
 );
 
-my $club_template_enrollment_field_2 =
-  Koha::Club::Template::EnrollmentField->new(
+my $club_template_enrollment_field_2 = Koha::Club::Template::EnrollmentField->new(
     {
         club_template_id => $club_template->id,
         name             => 'Test Club Template EnrollmentField 2',
     }
-  )->store();
+)->store();
 is(
     ref($club_template_enrollment_field_2),
     'Koha::Club::Template::EnrollmentField',
     'Club template field 2 created'
 );
 
-is( $club_template->club_template_enrollment_fields->count,
-    2, 'Club template has two enrollment fields' );
+is(
+    $club_template->club_template_enrollment_fields->count,
+    2, 'Club template has two enrollment fields'
+);
 
 ## Create a club based on this template
 Koha::Club->new(
@@ -173,14 +179,20 @@ is(
 );
 
 is( ref($club), 'Koha::Club', 'Club created' );
-is( $club->club_template->id,
-    $club_template->id, 'Club is using correct template' );
-is( $club->branch->id, $branchcode, 'Club is using correct branch' );
-is( $club->club_fields->count, 2, 'Club has correct number of fields' );
-is( Koha::Clubs->get_enrollable( { borrower => $patron } )->count,
-    1, 'Koha::Clubs->get_enrollable returns 1 enrollable club for patron' );
-is( $patron->get_enrollable_clubs->count,
-    1, 'There is 1 enrollable club for patron' );
+is(
+    $club->club_template->id,
+    $club_template->id, 'Club is using correct template'
+);
+is( $club->branch->id,         $branchcode, 'Club is using correct branch' );
+is( $club->club_fields->count, 2,           'Club has correct number of fields' );
+is(
+    Koha::Clubs->get_enrollable( { borrower => $patron } )->count,
+    1, 'Koha::Clubs->get_enrollable returns 1 enrollable club for patron'
+);
+is(
+    $patron->get_enrollable_clubs->count,
+    1, 'There is 1 enrollable club for patron'
+);
 
 ## Create an enrollment for this club
 my $club_enrollment = Koha::Club::Enrollment->new(
@@ -190,15 +202,16 @@ my $club_enrollment = Koha::Club::Enrollment->new(
         branchcode     => $branchcode,
     }
 )->store();
-is( ref($club_enrollment), 'Koha::Club::Enrollment',
-    'Club enrollment created' );
+is(
+    ref($club_enrollment), 'Koha::Club::Enrollment',
+    'Club enrollment created'
+);
 
 my $club_enrollment_field_1 = Koha::Club::Enrollment::Field->new(
     {
-        club_enrollment_id => $club_enrollment->id,
-        club_template_enrollment_field_id =>
-          $club_template_enrollment_field_1->id,
-        value => 'TEST',
+        club_enrollment_id                => $club_enrollment->id,
+        club_template_enrollment_field_id => $club_template_enrollment_field_1->id,
+        value                             => 'TEST',
     }
 )->store();
 is(
@@ -209,10 +222,9 @@ is(
 
 my $club_enrollment_field_2 = Koha::Club::Enrollment::Field->new(
     {
-        club_enrollment_id => $club_enrollment->id,
-        club_template_enrollment_field_id =>
-          $club_template_enrollment_field_2->id,
-        value => 'TEST',
+        club_enrollment_id                => $club_enrollment->id,
+        club_template_enrollment_field_id => $club_template_enrollment_field_2->id,
+        value                             => 'TEST',
     }
 )->store();
 is(
@@ -222,12 +234,18 @@ is(
 );
 
 is( $club_enrollment->club->id, $club->id, 'Got correct club for enrollment' );
-is( Koha::Clubs->get_enrollable( { borrower => $patron } )->count,
-    0, 'Koha::Clubs->get_enrollable returns 0 enrollable clubs for patron' );
-is( $patron->get_club_enrollments->count,
-    1, 'Got 1 club enrollment for patron' );
-is( $patron->get_enrollable_clubs->count,
-    0, 'No more enrollable clubs for patron' );
+is(
+    Koha::Clubs->get_enrollable( { borrower => $patron } )->count,
+    0, 'Koha::Clubs->get_enrollable returns 0 enrollable clubs for patron'
+);
+is(
+    $patron->get_club_enrollments->count,
+    1, 'Got 1 club enrollment for patron'
+);
+is(
+    $patron->get_enrollable_clubs->count,
+    0, 'No more enrollable clubs for patron'
+);
 is( $club->club_enrollments->count, 1, 'There is 1 enrollment for club' );
 
 $schema->storage->txn_rollback();
@@ -238,7 +256,7 @@ subtest 'filter_out_empty' => sub {
 
     $schema->storage->txn_begin();
 
-    my $club_template = $builder->build_object({ class => 'Koha::Club::Templates' });
+    my $club_template = $builder->build_object( { class => 'Koha::Club::Templates' } );
 
     # club_1 has 2 patrons
     my $club_1 = $builder->build_object(
@@ -264,8 +282,8 @@ subtest 'filter_out_empty' => sub {
         }
     );
 
-    my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $enrollment_1_1 = Koha::Club::Enrollment->new(
         {
@@ -289,17 +307,16 @@ subtest 'filter_out_empty' => sub {
         }
     )->store();
 
-
     $enrollment_2_1->cancel;
 
-    my $clubs = Koha::Clubs->search({ club_template_id => $club_template->id });
+    my $clubs = Koha::Clubs->search( { club_template_id => $club_template->id } );
 
     is( $clubs->count, 3, 'Base resultset has all the clubs' );
 
     my $filtered_out_rs = $clubs->filter_out_empty;
 
-    is( $filtered_out_rs->count, 1, 'Only one club has patron enrolled' );
-    is( $filtered_out_rs->next->id, $club_1->id, 'Correct club is considered non-empty');
+    is( $filtered_out_rs->count,    1,           'Only one club has patron enrolled' );
+    is( $filtered_out_rs->next->id, $club_1->id, 'Correct club is considered non-empty' );
 
     $schema->storage->txn_rollback();
-}
+    }

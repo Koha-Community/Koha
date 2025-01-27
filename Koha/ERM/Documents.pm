@@ -49,6 +49,7 @@ sub replace_with {
         sub {
             my $existing_documents = $obj->documents;
             my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
+
             # FIXME Here we are not deleting all the documents before recreating them, like we do for other related resources.
             # As we do not want the content of the documents to transit over the network we need to use the document_id (and allow it in the API spec)
             # to distinguish from each other
@@ -57,34 +58,33 @@ sub replace_with {
             $obj->documents->search(
                 {
                     @$document_ids_after_update
-                    ? (
-                        document_id => {
-                            '-not_in' => $document_ids_after_update
-                        }
-                        )
+                    ? ( document_id => { '-not_in' => $document_ids_after_update } )
                     : ()
                 }
             )->delete;
 
             for my $document (@$documents) {
-                my $file_content = defined($document->{file_content}) ? decode_base64( $document->{file_content} ) : "";
+                my $file_content =
+                    defined( $document->{file_content} ) ? decode_base64( $document->{file_content} ) : "";
                 my $mt = MIME::Types->new();
+
                 # Throw exception if uploaded file exceeds server limit
-                Koha::Exceptions::PayloadTooLarge->throw("File size exceeds limit defined by server") if length($file_content) > $max_allowed_packet;
+                Koha::Exceptions::PayloadTooLarge->throw("File size exceeds limit defined by server")
+                    if length($file_content) > $max_allowed_packet;
 
                 if ( $document->{document_id} ) {
+
                     # The document already exists in DB
-                    $existing_documents->find( $document->{document_id} )
-                        ->set(
+                    $existing_documents->find( $document->{document_id} )->set(
                         {
                             #Check if existing document had its file changed
                             length $file_content
                             ? (
-                                file_content      => $file_content,
-                                file_type         => $mt->mimeTypeOf( $document->{file_name} ),
-                                file_name         => $document->{file_name},
-                                uploaded_on       => dt_from_string,
-                            )
+                                file_content => $file_content,
+                                file_type    => $mt->mimeTypeOf( $document->{file_name} ),
+                                file_name    => $document->{file_name},
+                                uploaded_on  => dt_from_string,
+                                )
                             : (),
                             file_description  => $document->{file_description},
                             physical_location => $document->{physical_location},
@@ -92,13 +92,13 @@ sub replace_with {
                             notes             => $document->{notes},
                         }
                     )->store;
-                }
-                else {
+                } else {
+
                     # Creating a whole new document
                     $document->{file_type} = $mt->mimeTypeOf( $document->{file_name} );
                     $document->{uploaded_on} //= dt_from_string;
                     $document->{file_content} = $file_content;
-                    $obj->_result->add_to_erm_documents( $document);
+                    $obj->_result->add_to_erm_documents($document);
                 }
             }
         }

@@ -8,8 +8,6 @@ if (typeof KOHA == "undefined" || !KOHA) {
  * A namespace for local cover related functions.
  */
 KOHA.LocalCover = {
-
-
     /**
      * Search all:
      *    <div title="biblionumber" id="isbn" class="openlibrary-thumbnail"></div>
@@ -19,19 +17,25 @@ KOHA.LocalCover = {
      * The result is asynchronously returned by OpenLibrary and catched by
      * olCallBack().
      */
-    GetCoverFromBibnumber: function(uselink) {
+    GetCoverFromBibnumber: function (uselink) {
         var mydiv = $("#local-thumbnail-preview");
         var biblionumber = mydiv.data("biblionumber");
         var img = document.createElement("img");
-        img.src = "/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=" + biblionumber;
-        img.onload = function() {
+        img.src =
+            "/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=" +
+            biblionumber;
+        img.onload = function () {
             // image dimensions can't be known until image has loaded
-            if ( (img.complete != null) && (!img.complete) ) {
+            if (img.complete != null && !img.complete) {
                 mydiv.remove();
             }
         };
         if (uselink) {
-            var a = $("<a />").attr('href', '/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
+            var a = $("<a />").attr(
+                "href",
+                "/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=" +
+                    $(mydiv).attr("class")
+            );
             $(a).append(img);
             mydiv.append(a);
         } else {

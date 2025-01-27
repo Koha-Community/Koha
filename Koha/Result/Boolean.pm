@@ -21,8 +21,8 @@ package Koha::Result::Boolean;
 use Modern::Perl;
 
 use overload
-   bool => \&as_bool,
-   '==' => \&equals;
+    bool => \&as_bool,
+    '==' => \&equals;
 
 use Koha::Object::Message;
 
@@ -46,7 +46,7 @@ a boolean expression.
 sub new {
     my ( $class, $value ) = @_;
 
-    $value //= 1; # default to true
+    $value //= 1;    # default to true
     $value = ($value) ? 1 : 0;
 
     my $self = {
@@ -54,7 +54,7 @@ sub new {
         _messages => [],
     };
 
-    return bless ( $self, $class );
+    return bless( $self, $class );
 }
 
 =head3 set_value
@@ -83,7 +83,7 @@ Returns the I<Koha::Object::Message> objects that were recorded.
 =cut
 
 sub messages {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->{_messages} = []
         unless defined $self->{_messages};
@@ -137,8 +137,8 @@ sub equals {
     my ( $first, $second, $flipped ) = @_;
 
     return ($flipped)
-      ? $first == $second->as_bool
-      : $first->as_bool == $second;
+        ? $first == $second->as_bool
+        : $first->as_bool == $second;
 }
 
 =head1 AUTHORS

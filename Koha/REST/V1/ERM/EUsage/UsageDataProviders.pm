@@ -49,11 +49,11 @@ sub list {
                 $provider->{erm_usage_data_provider_id}
             );
             $provider->{earliest_title} =
-                    $title_dates->{earliest_date}
+                  $title_dates->{earliest_date}
                 ? $title_dates->{earliest_date}
                 : '';
             $provider->{latest_title} =
-                    $title_dates->{latest_date}
+                  $title_dates->{latest_date}
                 ? $title_dates->{latest_date}
                 : '';
 
@@ -62,11 +62,11 @@ sub list {
                 $provider->{erm_usage_data_provider_id}
             );
             $provider->{earliest_platform} =
-                    $platform_dates->{earliest_date}
+                  $platform_dates->{earliest_date}
                 ? $platform_dates->{earliest_date}
                 : '';
             $provider->{latest_platform} =
-                    $platform_dates->{latest_date}
+                  $platform_dates->{latest_date}
                 ? $platform_dates->{latest_date}
                 : '';
 
@@ -75,7 +75,7 @@ sub list {
                 $provider->{erm_usage_data_provider_id}
             );
             $provider->{earliest_item} =
-                    $item_dates->{earliest_date}
+                  $item_dates->{earliest_date}
                 ? $item_dates->{earliest_date}
                 : '';
             $provider->{latest_item} =
@@ -86,11 +86,11 @@ sub list {
                 $provider->{erm_usage_data_provider_id}
             );
             $provider->{earliest_database} =
-                    $database_dates->{earliest_date}
+                  $database_dates->{earliest_date}
                 ? $database_dates->{earliest_date}
                 : '';
             $provider->{latest_database} =
-                    $database_dates->{latest_date}
+                  $database_dates->{latest_date}
                 ? $database_dates->{latest_date}
                 : '';
 
@@ -299,8 +299,7 @@ sub process_COUNTER_file {
                 $counter_file_validation->validate;
 
                 # Validation was successful, enqueue the job
-                my $udprovider =
-                    Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
+                my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
                 my $jobs = $udprovider->enqueue_counter_file_processing_job(
                     {

@@ -26,7 +26,7 @@
             [% END %]
             <th>Status</th>
             [% IF SuspendHoldsOpac and ! onlyinfo %]
-                    <th class="nosort" >Suspend</th>
+                <th class="nosort">Suspend</th>
             [% END %]
             [% IF ! onlyinfo %]
                 <th class="nosort">Modify</th>
@@ -65,9 +65,7 @@
                         <p class="hint">Item on hold: [% HOLD.item.barcode | html %]</p>
                     [% END %]
                 </td>
-                <td class="reservedate" data-order="[% HOLD.reservedate | html %]">
-                    [% HOLD.reservedate | $KohaDates %]
-                </td>
+                <td class="reservedate" data-order="[% HOLD.reservedate | html %]"> [% HOLD.reservedate | $KohaDates %] </td>
                 <td class="expirationdate" data-order="[% !HOLD.found ? HOLD.expirationdate : '0000-00-00' | html %]">
                     [% IF ! HOLD.found %]
                         [% IF ( HOLD.expirationdate ) %]
@@ -83,15 +81,13 @@
                     <td class="branch">
                         [% HOLD.branch.branchname | html %]
                         [% IF ( HOLD.can_update_pickup_location_opac ) %]
-                            <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#changePickup[% HOLD.reserve_id | html %]">
-                                <i class="fa fa-pencil-alt" aria-hidden="true"></i> Change
-                            </button>
+                            <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#changePickup[% HOLD.reserve_id | html %]"> <i class="fa fa-pencil-alt" aria-hidden="true"></i> Change </button>
                             <!-- Change pickup location modal -->
                             <div class="modal" id="changePickup[% HOLD.reserve_id | html %]" tabindex="-1" aria-labelledby="changePickup[% HOLD.reserve_id | html %]Label" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <form id="change_branch_form[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="op" value="cud-change_branch">
+                                        <input type="hidden" name="op" value="cud-change_branch" />
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h1>
@@ -99,10 +95,10 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-group">
-                                                <label for="new_branch[% HOLD.reserve_id | html %]">New pickup location:</label>
-                                                <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-select">
-                                                    [% PROCESS options_for_libraries libraries = Branches.pickup_locations({ search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
-                                                </select>
+                                                    <label for="new_branch[% HOLD.reserve_id | html %]">New pickup location:</label>
+                                                    <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-select">
+                                                        [% PROCESS options_for_libraries libraries = Branches.pickup_locations({ search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
+                                                    </select>
                                                 </div>
                                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                             </div>
@@ -110,17 +106,18 @@
                                                 <button type="submit" name="change_branch" value="1" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
                                             </div>
-                                        </div> <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-content -->
                                     </form>
-                                </div> <!-- /.modal-dialog -->
-                            </div> <!-- /.modal -->
-                        [% END  %]
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!-- /.modal -->
+                        [% END %]
                     </td>
                 [% END %]
                 [% IF ( showpriority ) %]
-                        <td data-order="[% HOLD.priority | html %]" class="priority">
-                        [% HOLD.priority | html %]
-                    </td>
+                    <td data-order="[% HOLD.priority | html %]" class="priority"> [% HOLD.priority | html %] </td>
                 [% END %]
                 [% IF Koha.Preference('OpacHoldNotes') %]
                     <td>[% HOLD.reservenotes | html | html_line_break %]</td>
@@ -150,7 +147,7 @@
                         [% ELSIF ( HOLD.is_in_processing ) %]
                             <span>Item in processing</span>
                         [% ELSIF ( HOLD.suspend ) %]
-                            <span>Suspended</span>[% IF ( HOLD.suspend_until ) %] <span>until</span> [% HOLD.suspend_until | $KohaDates %][% END %]
+                            <span>Suspended</span>[% IF ( HOLD.suspend_until ) %]<span>until</span> [% HOLD.suspend_until | $KohaDates %][% END %]
                         [% ELSE %]
                             [% IF HOLD.itemtype %]
                                 <span>Pending for next available item of item type '[% ItemTypes.GetDescription( HOLD.itemtype ) | html %]'</span>
@@ -173,7 +170,14 @@
                             [% ELSE %]
                                 [% IF AutoResumeSuspendedHolds %]
                                     [%- SET subtitles = HOLD.biblio.subtitle.split(' \| ') -%]
-                                    <a class="btn btn-link suspend_hold js-show" href="#" role="button" data-title="[% HOLD.biblio.title | html %] [% FOREACH subtitle IN subtitles %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-reserve_id="[% HOLD.reserve_id | html %]"><i class="fa fa-pause" aria-hidden="true"></i> Suspend</a>
+                                    <a
+                                        class="btn btn-link suspend_hold js-show"
+                                        href="#"
+                                        role="button"
+                                        data-title="[% HOLD.biblio.title | html %] [% FOREACH subtitle IN subtitles %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]"
+                                        data-reserve_id="[% HOLD.reserve_id | html %]"
+                                        ><i class="fa fa-pause" aria-hidden="true"></i> Suspend</a
+                                    >
                                 [% ELSE %]
                                     <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
@@ -183,7 +187,7 @@
                                     </form>
                                 [% END # / IF AutoResumeSuspendedHolds %]
                             [% END # / IF HOLD.suspend %]
-                        [% END # / IF ( HOLD.is_cancelable_from_opac )%]
+                        [% END # / IF ( HOLD.is_cancelable_from_opac ) %]
                     </td>
                 [% END # / IF SuspendHoldsOpac %]
                 [% IF ! onlyinfo %]
@@ -194,7 +198,9 @@
                                 <input type="hidden" name="op" value="cud-cancel" />
                                 <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
+                                <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"
+                                    ><i class="fa fa-times" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button
+                                >
                             </form>
                         [% ELSIF HOLD.is_waiting && HOLD.cancellation_requestable_from_opac %]
                             <form id="req_cancel_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
@@ -202,7 +208,9 @@
                                 <input type="hidden" name="op" value="cud-request_cancellation" />
                                 <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Request to cancel hold button', 'Request to cancel') | html %]</button>
+                                <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"
+                                    ><i class="fa fa-times" aria-hidden="true"></i> [% tp('Request to cancel hold button', 'Request to cancel') | html %]</button
+                                >
                             </form>
                         [% END %]
                     </td>
@@ -229,7 +237,7 @@
                 [% END %]
             </form>
         </div>
-        <br/>
+        <br />
         <div>
             <form id="resume_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]

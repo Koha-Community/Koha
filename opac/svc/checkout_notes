@@ -41,9 +41,9 @@ svc/checkout_notes - Web service for setting patron notes on items
 =cut
 
 # AJAX requests
-my $is_ajax = is_ajax();
-my $query = CGI->new;
-my ( $auth_status ) = check_cookie_auth( $query->cookie('CGISESSID'), {} );
+my $is_ajax       = is_ajax();
+my $query         = CGI->new;
+my ($auth_status) = check_cookie_auth( $query->cookie('CGISESSID'), {} );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -52,64 +52,68 @@ if ($is_ajax) {
 
     # Issue Note
     if ( $op eq 'cud-add_note' && C4::Context->preference('AllowCheckoutNotes') ) {
-        my $scrubber = C4::Scrubber->new();
-        my $note = $query->param('note');
-        my $issue_id = $query->param('issue_id');
+        my $scrubber   = C4::Scrubber->new();
+        my $note       = $query->param('note');
+        my $issue_id   = $query->param('issue_id');
         my $clean_note = $scrubber->scrub($note);
-        my $status = "saved";
-        my ($patron, $issue);
+        my $status     = "saved";
+        my ( $patron, $issue );
 
-        my ( $template, $borrowernumber, $cookie ) = C4::Auth::get_template_and_user({
-            template_name   => "opac-user.tt",
-            query           => $query,
-            type            => "opac",
-            authnotrequired => 1,
-        });
+        my ( $template, $borrowernumber, $cookie ) = C4::Auth::get_template_and_user(
+            {
+                template_name   => "opac-user.tt",
+                query           => $query,
+                type            => "opac",
+                authnotrequired => 1,
+            }
+        );
 
         # verify issue_id
         if ( $issue_id =~ /\d+/ ) {
-            $patron = Koha::Patrons->find( $borrowernumber );
-            $issue = Koha::Checkouts->find($issue_id);
+            $patron = Koha::Patrons->find($borrowernumber);
+            $issue  = Koha::Checkouts->find($issue_id);
             if ( $issue->borrowernumber != $borrowernumber ) {
                 $status = "fail";
             }
         }
 
         if ( $issue && $status eq "saved" ) {
-            $issue->set({ notedate => dt_from_string(), note => $clean_note, noteseen => 0 })->store;
-            if($clean_note) { # only send email if note not empty
-                my $branch = Koha::Libraries->find( $issue->branchcode );
+            $issue->set( { notedate => dt_from_string(), note => $clean_note, noteseen => 0 } )->store;
+            if ($clean_note) {    # only send email if note not empty
+                my $branch       = Koha::Libraries->find( $issue->branchcode );
                 my $biblionumber = $issue->item->biblionumber;
-                my $letter = C4::Letters::GetPreparedLetter (
-                    module => 'circulation',
+                my $letter       = C4::Letters::GetPreparedLetter(
+                    module      => 'circulation',
                     letter_code => 'CHECKOUT_NOTE',
-                    branchcode => $branch,
-                    tables => {
-                        'biblio' => $biblionumber,
+                    branchcode  => $branch,
+                    tables      => {
+                        'biblio'    => $biblionumber,
                         'borrowers' => $borrowernumber,
-                        'issues' => $issue->itemnumber,
+                        'issues'    => $issue->itemnumber,
                     },
                 );
 
-                my $to_address = $branch->inbound_email_address;
+                my $to_address    = $branch->inbound_email_address;
                 my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
-                C4::Letters::EnqueueLetter({
-                    letter => $letter,
-                    message_transport_type => 'email',
-                    borrowernumber => $patron->borrowernumber,
-                    to_address => $to_address,
-                    reply_address => $reply_address,
-                });
-            } else { # note empty, i.e removed
+                C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $letter,
+                        message_transport_type => 'email',
+                        borrowernumber         => $patron->borrowernumber,
+                        to_address             => $to_address,
+                        reply_address          => $reply_address,
+                    }
+                );
+            } else {    # note empty, i.e removed
                 $status = "removed";
             }
         } else {
             $status = "fail";
         }
 
-        my $json = encode_json ( { status => $status, note => $clean_note, issue_id => $issue_id } );
-        output_with_http_headers($query, undef, $json, 'json');
+        my $json = encode_json( { status => $status, note => $clean_note, issue_id => $issue_id } );
+        output_with_http_headers( $query, undef, $json, 'json' );
         exit;
-    } # END Issue Note
+    }    # END Issue Note
 }

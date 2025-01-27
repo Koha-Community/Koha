@@ -82,9 +82,10 @@ sub call {
 
     # Then, these need to be mapped to key-value pairs, and commas removed.
     my %setenvs = map {
+
         # The syntax of this is a bit awkward because you can't use return inside a map (it
         # returns from the enclosing function).
-        if (!/$allowed_setenvs/) {
+        if ( !/$allowed_setenvs/ ) {
             warn "Forbidden/incorrect X-Koha-SetEnv: $_";
 
             ();

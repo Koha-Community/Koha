@@ -75,8 +75,8 @@ it may contain confidential information and should be fully hidden rather than j
 sub is_hidden {
     my ( $self, $module, $page, $table, $column_name ) = @_;
     my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
-    foreach my $keys(@$columns){
-        if($keys->{'columnname'} eq $column_name){
+    foreach my $keys (@$columns) {
+        if ( $keys->{'columnname'} eq $column_name ) {
             return $keys->{'is_hidden'};
         }
     }
@@ -98,7 +98,7 @@ sub GetTableSettings {
     $format //= q{};
 
     my $settings = C4::Utils::DataTables::TablesSettings::get_table_settings( $module, $page, $table );
-    my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
+    my $columns  = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
 
     $settings = {
         %$settings,
@@ -110,7 +110,7 @@ sub GetTableSettings {
 
     return $format eq 'json'
         ? to_json( $settings || {} )
-        : $settings
+        : $settings;
 }
 
 1;

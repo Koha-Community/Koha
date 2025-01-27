@@ -7,7 +7,7 @@ use CGI;
 use Test::More tests => 2;
 
 use C4::Acquisition qw( NewBasket NewBasketgroup GetBasketGroupAsCSV );
-use C4::Biblio qw( AddBiblio );
+use C4::Biblio      qw( AddBiblio );
 use Koha::Database;
 use Koha::CsvProfiles;
 use Koha::Acquisition::Orders;
@@ -21,12 +21,14 @@ $schema->storage->txn_begin();
 
 my $query = CGI->new();
 
-my $vendor = Koha::Acquisition::Bookseller->new({
-    name => 'my vendor',
-    address1 => 'vendor address',
-    active => 1,
-    deliverytime => 5,
-})->store;
+my $vendor = Koha::Acquisition::Bookseller->new(
+    {
+        name         => 'my vendor',
+        address1     => 'vendor address',
+        active       => 1,
+        deliverytime => 5,
+    }
+)->store;
 
 my $budget_period_id = C4::Budgets::AddBudgetPeriod(
     {
@@ -44,14 +46,14 @@ my $budget_id = C4::Budgets::AddBudget(
         budget_period_id => $budget_period_id,
     }
 );
-my $budget = C4::Budgets::GetBudget( $budget_id );
+my $budget = C4::Budgets::GetBudget($budget_id);
 
-my $basketno = C4::Acquisition::NewBasket($vendor->id, 1);
+my $basketno = C4::Acquisition::NewBasket( $vendor->id, 1 );
 
 my $basketgroupid = C4::Acquisition::NewBasketgroup(
     {
-        booksellerid  => $vendor->id,
-        basketlist    => [ $basketno ],
+        booksellerid => $vendor->id,
+        basketlist   => [$basketno],
     }
 );
 
@@ -60,17 +62,19 @@ $biblio->append_fields(
     MARC::Field->new( '100', ' ', ' ', a => 'King, Stephen' ),
     MARC::Field->new( '245', ' ', ' ', a => 'Test Record' ),
 );
-my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
 
-my $order = Koha::Acquisition::Order->new({
-    basketno => $basketno,
-    quantity => 3,
-    biblionumber => $biblionumber,
-    budget_id => $budget_id,
-    entrydate => '2016-01-02',
-})->store;
+my $order = Koha::Acquisition::Order->new(
+    {
+        basketno     => $basketno,
+        quantity     => 3,
+        biblionumber => $biblionumber,
+        budget_id    => $budget_id,
+        entrydate    => '2016-01-02',
+    }
+)->store;
 
-t::lib::Mocks::mock_preference('CSVDelimiter', ',');
+t::lib::Mocks::mock_preference( 'CSVDelimiter', ',' );
 
 my $basketgroup_csv1 = C4::Acquisition::GetBasketGroupAsCSV( $basketgroupid, $query );
 is(

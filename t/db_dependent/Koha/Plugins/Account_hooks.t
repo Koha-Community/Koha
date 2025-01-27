@@ -57,17 +57,16 @@ subtest 'Koha::Account tests' => sub {
 
     my $account = $patron->account;
     warning_like {
-        $account->add_credit({ amount => 20, interface => 'commandline', type => 'WRITEOFF'});
+        $account->add_credit( { amount => 20, interface => 'commandline', type => 'WRITEOFF' } );
     }
     qr/after_account_action called with action: add_credit, type: writeoff, ref: Koha::Account::Line/,
-      '->add_credit calls the after_account_action hook with type writeoff';
-
+        '->add_credit calls the after_account_action hook with type writeoff';
 
     warning_like {
-        $account->add_credit({ amount => 10, interface => 'commandline', type => 'PAYMENT'});
+        $account->add_credit( { amount => 10, interface => 'commandline', type => 'PAYMENT' } );
     }
     qr/after_account_action called with action: add_credit, type: payment, ref: Koha::Account::Line/,
-      '->add_credit calls the after_account_action hook with type payment';
+        '->add_credit calls the after_account_action hook with type payment';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;

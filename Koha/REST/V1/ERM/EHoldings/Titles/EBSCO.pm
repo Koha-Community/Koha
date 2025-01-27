@@ -23,7 +23,7 @@ use JSON qw( decode_json );
 use Koha::ERM::Providers::EBSCO;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -50,23 +50,15 @@ sub list {
             # TODO We can add  search on publisher, isxn, [subject or zdbid]
             return $c->render(
                 status  => 400,
-                openapi => {
-                    errors => [
-                        {
-                            message =>
-"A search keyword on publication_title is required"
-                        }
-                    ]
-                }
+                openapi => { errors => [ { message => "A search keyword on publication_title is required" } ] }
             );
         }
 
         my $searchfield = 'titlename';
         my $params =
-          sprintf '?orderby=relevance&offset=%s&count=%s&searchfield=%s',
-          $page, $per_page, $searchfield;
-        my $result =
-          $ebsco->request( GET => '/titles' . $params, $additional_params );
+            sprintf '?orderby=relevance&offset=%s&count=%s&searchfield=%s',
+            $page, $per_page, $searchfield;
+        my $result = $ebsco->request( GET => '/titles' . $params, $additional_params );
 
         my $embed_header = $c->req->headers->header('x-koha-embed');
         my @titles;
@@ -80,15 +72,14 @@ sub list {
 
         $c->add_pagination_headers(
             {
-               #base_total   => $base_total,
-                page         => $page,
-                per_page     => $per_page,
-                total        => $total,
+                #base_total   => $base_total,
+                page     => $page,
+                per_page => $per_page,
+                total    => $total,
             }
         );
         return $c->render( status => 200, openapi => \@titles );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Authorization::Unauthorized') ) {
                 return $c->render(
@@ -96,7 +87,8 @@ sub list {
                     openapi => {
                         errors => [
                             {
-                                message => "Check your ERMProviderEbscoApiKey/ERMProviderEbscoCustomerID system preferences."
+                                message =>
+                                    "Check your ERMProviderEbscoApiKey/ERMProviderEbscoCustomerID system preferences."
                             }
                         ]
                     }
@@ -125,15 +117,13 @@ sub get {
         }
 
         my $title = $ebsco->build_title($t);
-        $title =
-          $ebsco->embed( $title, $t, $c->req->headers->header('x-koha-embed') );
+        $title = $ebsco->embed( $title, $t, $c->req->headers->header('x-koha-embed') );
 
         return $c->render(
             status  => 200,
             openapi => $title,
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

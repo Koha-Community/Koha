@@ -64,7 +64,7 @@ sub process {
         total_success => 0,
     };
     my @messages;
-      HOLD_IDS: for my $hold_id ( sort { $a <=> $b } @hold_ids ) {
+HOLD_IDS: for my $hold_id ( sort { $a <=> $b } @hold_ids ) {
         next unless $hold_id;
 
         # Authorities
@@ -79,26 +79,25 @@ sub process {
 
         if ( $error and $error != $hold or $@ ) {
             push @messages,
-              {
-                type        => 'error',
-                code        => 'hold_not_cancelled',
-                patron_id   => defined $patron ? $patron->borrowernumber : '',
-                biblio_id    => defined $biblio ? $biblio->biblionumber : '',
-                hold_id      => $hold_id,
-                error        => defined $hold
+                {
+                type      => 'error',
+                code      => 'hold_not_cancelled',
+                patron_id => defined $patron ? $patron->borrowernumber : '',
+                biblio_id => defined $biblio ? $biblio->biblionumber   : '',
+                hold_id   => $hold_id,
+                error     => defined $hold
                 ? ( $@ ? "$@" : 0 )
                 : 'hold_not_found',
-              };
-        }
-        else {
+                };
+        } else {
             push @messages,
-              {
+                {
                 type      => 'success',
                 code      => 'hold_cancelled',
                 patron_id => $patron->borrowernumber,
-                biblio_id    => $biblio->biblionumber,
-                hold_id      => $hold_id,
-              };
+                biblio_id => $biblio->biblionumber,
+                hold_id   => $hold_id,
+                };
             $report->{total_success}++;
         }
         $self->step;
@@ -106,9 +105,9 @@ sub process {
 
     my $data = $self->decoded_data;
     $data->{messages} = \@messages;
-    $data->{report} = $report;
+    $data->{report}   = $report;
 
-    $self->finish( $data );
+    $self->finish($data);
 }
 
 =head3 enqueue
@@ -144,9 +143,9 @@ sub additional_report {
     my ( $self, $args ) = @_;
 
     my $messages = $self->messages;
-    for my $m ( @$messages ) {
-        $m->{patron} = Koha::Patrons->find($m->{patron_id});
-        $m->{biblio} = Koha::Biblios->find($m->{biblio_id});
+    for my $m (@$messages) {
+        $m->{patron} = Koha::Patrons->find( $m->{patron_id} );
+        $m->{biblio} = Koha::Biblios->find( $m->{biblio_id} );
     }
     return { report_messages => $messages };
 }

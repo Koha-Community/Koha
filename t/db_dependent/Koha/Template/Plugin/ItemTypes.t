@@ -38,10 +38,10 @@ my $plugin = Koha::Template::Plugin::ItemTypes->new();
 ok( $plugin, "initialized ItemTypes plugin" );
 
 my $GetDescriptionUndef = $plugin->GetDescription(undef);
-is($GetDescriptionUndef, q{}, "GetDescription call with undef");
+is( $GetDescriptionUndef, q{}, "GetDescription call with undef" );
 
 my $GetDescriptionUnknown = $plugin->GetDescription("deliriumtremenssyndrome");
-is($GetDescriptionUnknown, q{}, "GetDescription call with unknown type");
+is( $GetDescriptionUnknown, q{}, "GetDescription call with unknown type" );
 
 my $itemtypeA = $builder->build_object(
     {
@@ -62,7 +62,7 @@ Koha::Localization->new(
 )->store;
 my $itemtypeB = $builder->build_object(
     {
-        class  => 'Koha::ItemTypes',
+        class => 'Koha::ItemTypes',
         value => {
             parent_type => $itemtypeA->itemtype,
             description => "Desc itemtype B",
@@ -87,18 +87,24 @@ my $itemtypeC = $builder->build_object(
     }
 );
 
-my $GetDescriptionA1 = $plugin->GetDescription($itemtypeA->itemtype);
-is($GetDescriptionA1, "Translated itemtype A", "ItemType without parent - GetDescription without want parent");
-my $GetDescriptionA2 = $plugin->GetDescription($itemtypeA->itemtype, 1);
-is($GetDescriptionA2, "Translated itemtype A", "ItemType without parent - GetDescription with want parent");
+my $GetDescriptionA1 = $plugin->GetDescription( $itemtypeA->itemtype );
+is( $GetDescriptionA1, "Translated itemtype A", "ItemType without parent - GetDescription without want parent" );
+my $GetDescriptionA2 = $plugin->GetDescription( $itemtypeA->itemtype, 1 );
+is( $GetDescriptionA2, "Translated itemtype A", "ItemType without parent - GetDescription with want parent" );
 
-my $GetDescriptionB1 = $plugin->GetDescription($itemtypeB->itemtype);
-is($GetDescriptionB1, "Translated itemtype B", "ItemType with parent - GetDescription without want parent");
-my $GetDescriptionB2 = $plugin->GetDescription($itemtypeB->itemtype, 1);
-is($GetDescriptionB2, "Translated itemtype A->Translated itemtype B", "ItemType with parent - GetDescription with want parent");
+my $GetDescriptionB1 = $plugin->GetDescription( $itemtypeB->itemtype );
+is( $GetDescriptionB1, "Translated itemtype B", "ItemType with parent - GetDescription without want parent" );
+my $GetDescriptionB2 = $plugin->GetDescription( $itemtypeB->itemtype, 1 );
+is(
+    $GetDescriptionB2, "Translated itemtype A->Translated itemtype B",
+    "ItemType with parent - GetDescription with want parent"
+);
 
-my $GetDescriptionC1 = $plugin->GetDescription($itemtypeC->itemtype);
-is($GetDescriptionC1, "Desc itemtype C", "ItemType without parent - GetDescription without want parent - No translation");
+my $GetDescriptionC1 = $plugin->GetDescription( $itemtypeC->itemtype );
+is(
+    $GetDescriptionC1, "Desc itemtype C",
+    "ItemType without parent - GetDescription without want parent - No translation"
+);
 
 $itemtypeC->description("New desc itemtype C")->store();
 
@@ -106,8 +112,11 @@ $itemtypeC->description("New desc itemtype C")->store();
 my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
 $memory_cache->flush;
 
-$GetDescriptionC1 = $plugin->GetDescription($itemtypeC->itemtype);
-is($GetDescriptionC1, "New desc itemtype C", "ItemType without parent - GetDescription without want parent - No translation - updated value returned");
+$GetDescriptionC1 = $plugin->GetDescription( $itemtypeC->itemtype );
+is(
+    $GetDescriptionC1, "New desc itemtype C",
+    "ItemType without parent - GetDescription without want parent - No translation - updated value returned"
+);
 
 $schema->storage->txn_rollback;
 

@@ -8,16 +8,17 @@
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-   [% IF ( library ) %]
-        [% library.branchname | html %] &rsaquo;
+    [% IF ( library ) %]
+        [% library.branchname | html %]
+        &rsaquo;
     [% END %]
-    Libraries
-    &rsaquo;
-[% IF ( LibraryNameTitle ) %]
+    Libraries &rsaquo;
+    [% IF ( LibraryNameTitle ) %]
         [% LibraryNameTitle | html %]
     [% ELSE %]
         Koha online
-    [% END %] catalog
+    [% END %]
+    catalog
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
@@ -26,7 +27,7 @@
             margin-top: 1rem;
             margin-bottom: 1rem;
             border: 0;
-            border-bottom: 1px solid rgba(0,0,0,.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
     </style>
 [% END %]
@@ -36,15 +37,12 @@
 [% INCLUDE 'masthead.inc' %]
 
 [% BLOCK library_description %]
-    <div property="description">
-        [% IF OpacLibraryInfo %][% OpacLibraryInfo.content | $raw %][% END %]
-    </div>
+    <div property="description"> [% IF OpacLibraryInfo %][% OpacLibraryInfo.content | $raw %][% END %] </div>
 [% END %]
 
 [% BLOCK library_info %]
-    <div class="branchaddress" property="address" typeof="PostalAddress">
-        [% PROCESS 'display-library-address' %]
-    </div> <!-- /div property=address -->
+    <div class="branchaddress" property="address" typeof="PostalAddress"> [% PROCESS 'display-library-address' %] </div>
+    <!-- /div property=address -->
     [% IF ( library.branchphone ) %]
         <p class="branchphone">Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
     [% END %]
@@ -82,53 +80,54 @@
             [% IF ( OpacNav ||  OpacNavBottom ) %]
                 [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                 <div class="col-lg-2">
-                    <div id="navigation">
-                        [% INCLUDE 'navigation.inc' %]
-                    </div>
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
                 </div>
             [% END %]
 
             <div class="[% column_class | html %]">
-            [% IF ( library ) %]
-                <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
-                    <h1 property="name">[% library.branchname | html %]</h1>
-                    <div class="row">
-                        <div class="col-lg-8">
-                            [% PROCESS library_info %]
-                            [% IF ( OpacLibraryInfo ) %]
-                                <div class="library_description">
-                                    <hr />
-                                    [% PROCESS library_description %]
-                                </div>
-                            [% END %]
+                [% IF ( library ) %]
+                    <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
+                        <h1 property="name">[% library.branchname | html %]</h1>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                [% PROCESS library_info %]
+                                [% IF ( OpacLibraryInfo ) %]
+                                    <div class="library_description">
+                                        <hr />
+                                        [% PROCESS library_description %]
+                                    </div>
+                                [% END %]
+                            </div>
                         </div>
                     </div>
-                </div> <!-- /#library_info -->
-
-            [% ELSE %]
-                <div id="library_info" class="maincontent">
-                    <h1>Libraries</h1>
-                    [% SET div_class = "section_library" %]
-                    [% FOREACH library IN libraries %]
-                        [% IF ( branchcode == library.branchcode ) %]
-                            [% div_class = "section_library current" %]
+                    <!-- /#library_info -->
+                [% ELSE %]
+                    <div id="library_info" class="maincontent">
+                        <h1>Libraries</h1>
+                        [% SET div_class = "section_library" %]
+                        [% FOREACH library IN libraries %]
+                            [% IF ( branchcode == library.branchcode ) %]
+                                [% div_class = "section_library current" %]
+                            [% END %]
+                            <div class="[% div_class | html %]" id="section_[% library.branchcode | html %]">
+                                <h2 property="name">
+                                    <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]"> [% library.branchname | html %] </a>
+                                </h2>
+                                [% PROCESS library_info %]
+                            </div>
                         [% END %]
-                        <div class="[% div_class | html %]" id="section_[% library.branchcode | html %]">
-                        <h2 property="name">
-                            <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
-                                [% library.branchname | html %]
-                            </a>
-                        </h2>
-                        [% PROCESS library_info %]
-                        </div>
-                    [% END %]
-                </div> <!-- /#library_info -->
-            [% END # /IF library %]
-
-            </div> <!-- /.col -->
-        </div> <!-- /.row -->
-    </div> <!-- /.container-fluid -->
-</div> <!-- / .main -->
+                    </div>
+                    <!-- /#library_info -->
+                [% END # /IF library %]
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

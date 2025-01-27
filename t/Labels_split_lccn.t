@@ -25,11 +25,10 @@ use Test::More;
 
 BEGIN {
     our $lccns = {};
-    if ($ARGV[0]) {
+    if ( $ARGV[0] ) {
         BAIL_OUT("USAGE: perl Labels_split_lccn.t 'HE 8700.7 .P6 T44 1983' 'HE,8700.7,.P6,T44,1983'") unless $ARGV[1];
-        $lccns = {$ARGV[0] => [split (/,/,$ARGV[1])],};
-    }
-    else {
+        $lccns = { $ARGV[0] => [ split( /,/, $ARGV[1] ) ], };
+    } else {
         $lccns = {
             'HE8700.7 .P6T44 1983' => [qw(HE 8700.7 .P6 T44 1983)],
             'BS2545.E8 H39 1996'   => [qw(BS 2545 .E8 H39 1996)],
@@ -39,8 +38,8 @@ BEGIN {
         };
     }
     my $test_num = 1;
-    foreach (keys(%$lccns)) {
-        my $split_num = scalar(@{$lccns->{$_}});
+    foreach ( keys(%$lccns) ) {
+        my $split_num = scalar( @{ $lccns->{$_} } );
         $test_num += 2 * $split_num;
         $test_num += 4;
     }
@@ -49,17 +48,17 @@ BEGIN {
     use vars qw($lccns);
 }
 
-foreach my $lccn (sort keys %$lccns) {
-    my (@parts, @expected);
-    ok($lccn, "lccn: $lccn");
-    ok(@expected = @{$lccns->{$lccn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::ClassSplitRoutine::LCC::split_callnumber($lccn), "split LCC ($lccn)");
-    ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
+foreach my $lccn ( sort keys %$lccns ) {
+    my ( @parts, @expected );
+    ok( $lccn, "lccn: $lccn" );
+    ok( @expected = @{ $lccns->{$lccn} }, "split expected to produce " . scalar(@expected) . " pieces" );
+    ok( @parts    = C4::ClassSplitRoutine::LCC::split_callnumber($lccn), "split LCC ($lccn)" );
+    ok( scalar(@expected) == scalar(@parts), sprintf( "%d of %d pieces produced", scalar(@parts), scalar(@expected) ) );
     my $i = 0;
     foreach my $unit (@expected) {
         my $part;
-        ok($part = $parts[$i], "($lccn)[$i] populated: " . (defined($part) ? $part : 'UNDEF'));
-        ok((defined($part) and $part eq $unit),     "($lccn)[$i]   matches: $unit");
+        ok( $part = $parts[$i],                    "($lccn)[$i] populated: " . ( defined($part) ? $part : 'UNDEF' ) );
+        ok( ( defined($part) and $part eq $unit ), "($lccn)[$i]   matches: $unit" );
         $i++;
     }
 }

@@ -19,7 +19,6 @@ package Koha::Authorities;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Authority;
@@ -50,9 +49,9 @@ sub get_usage_count {
     my ( $class, $params ) = @_;
     my $authid = $params->{authid} || return;
 
-    my $searcher = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my ( $err, $result, $count ) = $searcher->simple_search_compat( 'an:' . $authid, 0, 0 );
-    if( $err ) {
+    if ($err) {
         warn "Error: $err from search for " . $authid;
         return;
     }
@@ -76,18 +75,20 @@ sub linked_biblionumbers {
     my ( $self, $params ) = @_;
     my $authid = $params->{authid} || return;
 
-    my $searcher = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-    # if max_results is undefined, we will get all results
-    my ( $err, $result, $count ) = $searcher->simple_search_compat( 'an:' . $authid, $params->{offset} // 0, $params->{max_results} );
+    my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-    if( $err ) {
+    # if max_results is undefined, we will get all results
+    my ( $err, $result, $count ) =
+        $searcher->simple_search_compat( 'an:' . $authid, $params->{offset} // 0, $params->{max_results} );
+
+    if ($err) {
         warn "Error: $err from search for " . $authid;
         return;
     }
 
     my @biblionumbers;
-    foreach my $res ( @$result ) {
-        my $bibno = $searcher->extract_biblionumber( $res );
+    foreach my $res (@$result) {
+        my $bibno = $searcher->extract_biblionumber($res);
         push @biblionumbers, $bibno if $bibno;
     }
     return @biblionumbers;

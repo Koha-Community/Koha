@@ -23,10 +23,10 @@ use t::lib::TestBuilder;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Barcodes::ValueBuilder', qw( get_barcode ));
-};
+    use_ok( 'C4::Barcodes::ValueBuilder', qw( get_barcode ) );
+}
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
@@ -34,55 +34,35 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
-my $item_1 = $builder->build_sample_item(
-    {
-        barcode => '33333074344563'
-    }
-);
-my $item_2 = $builder->build_sample_item(
-    {
-        barcode => 'hb12070890'
-    }
-);
-my $item_3 = $builder->build_sample_item(
-    {
-        barcode => '201200345'
-    }
-);
-my $item_4 = $builder->build_sample_item(
-    {
-        barcode => '2012-0034'
-    }
-);
+my $item_1 = $builder->build_sample_item( { barcode => '33333074344563' } );
+my $item_2 = $builder->build_sample_item( { barcode => 'hb12070890' } );
+my $item_3 = $builder->build_sample_item( { barcode => '201200345' } );
+my $item_4 = $builder->build_sample_item( { barcode => '2012-0034' } );
 
 my %args = (
-    year        => '2012',
-    mon         => '07',
-    day         => '30',
-    tag         => '952',
-    subfield    => 'p',
+    year     => '2012',
+    mon      => '07',
+    day      => '30',
+    tag      => '952',
+    subfield => 'p',
 );
 
-my ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
-is($nextnum, 33333074344564, 'incremental barcode');
-is($scr, undef, 'incremental javascript');
+my ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::incremental::get_barcode( \%args );
+is( $nextnum, 33333074344564, 'incremental barcode' );
+is( $scr,     undef,          'incremental javascript' );
 
-($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
-is($nextnum, '12070891', 'hbyymmincr barcode');
-ok(length($scr) > 0, 'hbyymmincr javascript');
+( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode( \%args );
+is( $nextnum, '12070891', 'hbyymmincr barcode' );
+ok( length($scr) > 0, 'hbyymmincr javascript' );
 
-($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
-is($nextnum, '2012-0035', 'annual barcode');
-is($scr, undef, 'annual javascript');
+( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::annual::get_barcode( \%args );
+is( $nextnum, '2012-0035', 'annual barcode' );
+is( $scr,     undef,       'annual javascript' );
 
 $dbh->do(q|DELETE FROM items|);
-my $item_5 = $builder->build_sample_item(
-    {
-        barcode => '978e0143019375'
-    }
-);
-($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
-is($nextnum, '979', 'incremental barcode');
-is($scr, undef, 'incremental javascript');
+my $item_5 = $builder->build_sample_item( { barcode => '978e0143019375' } );
+( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::incremental::get_barcode( \%args );
+is( $nextnum, '979', 'incremental barcode' );
+is( $scr,     undef, 'incremental javascript' );
 
 $schema->storage->txn_rollback;

@@ -17,7 +17,6 @@ package Koha::Patron::Messages;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Patron::Message;
@@ -41,7 +40,7 @@ Koha::Patron::Messages - Koha Message Object set class
 =cut
 
 sub filter_by_unread {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search(
         {

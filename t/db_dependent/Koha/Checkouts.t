@@ -24,7 +24,7 @@ use Test::MockModule;
 use Test::Warn;
 
 use C4::Circulation qw( MarkIssueReturned AddReturn );
-use C4::Reserves qw( AddReserve );
+use C4::Reserves    qw( AddReserve );
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -36,11 +36,9 @@ use t::lib::Mocks;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
-my $library = $builder->build( { source => 'Branch' } );
-my $patron  = $builder->build(
-    { source => 'Borrower', value => { branchcode => $library->{branchcode} } }
-);
+my $builder         = t::lib::TestBuilder->new;
+my $library         = $builder->build( { source => 'Branch' } );
+my $patron          = $builder->build( { source => 'Borrower', value => { branchcode => $library->{branchcode} } } );
 my $item_1          = $builder->build_sample_item;
 my $item_2          = $builder->build_sample_item;
 my $nb_of_checkouts = Koha::Checkouts->search->count;
@@ -59,8 +57,10 @@ my $new_checkout_2 = Koha::Checkout->new(
     }
 )->store;
 
-like( $new_checkout_1->issue_id, qr|^\d+$|,
-    'Adding a new checkout should have set the issue_id' );
+like(
+    $new_checkout_1->issue_id, qr|^\d+$|,
+    'Adding a new checkout should have set the issue_id'
+);
 is(
     Koha::Checkouts->search->count,
     $nb_of_checkouts + 2,
@@ -82,36 +82,50 @@ subtest 'is_overdue' => sub {
     my $tomorrow       = dt_from_string->add( days => 1 );
 
     $retrieved_checkout_1->date_due($ten_days_ago)->store;
-    is( $retrieved_checkout_1->is_overdue,
-        1, 'The item should have been returned 10 days ago' );
+    is(
+        $retrieved_checkout_1->is_overdue,
+        1, 'The item should have been returned 10 days ago'
+    );
 
     $retrieved_checkout_1->date_due($ten_days_later)->store;
     is( $retrieved_checkout_1->is_overdue, 0, 'The item is due in 10 days' );
 
     $retrieved_checkout_1->date_due($tomorrow)->store;
-    is( $retrieved_checkout_1->is_overdue($ten_days_later),
-        1, 'The item should have been returned yesterday' );
+    is(
+        $retrieved_checkout_1->is_overdue($ten_days_later),
+        1, 'The item should have been returned yesterday'
+    );
 
     $retrieved_checkout_1->date_due($yesterday)->store;
-    is( $retrieved_checkout_1->is_overdue($ten_days_ago),
-        0, 'Ten days ago the item due yesterday was not late' );
+    is(
+        $retrieved_checkout_1->is_overdue($ten_days_ago),
+        0, 'Ten days ago the item due yesterday was not late'
+    );
 
     $retrieved_checkout_1->date_due($tomorrow)->store;
-    is( $retrieved_checkout_1->is_overdue($ten_days_later),
-        1, 'In Ten days, the item due tomorrow will be late' );
+    is(
+        $retrieved_checkout_1->is_overdue($ten_days_later),
+        1, 'In Ten days, the item due tomorrow will be late'
+    );
 
     $retrieved_checkout_1->date_due($yesterday)->store;
-    is( $retrieved_checkout_1->is_overdue($ten_days_ago),
-        0, 'In Ten days, the item due yesterday will still be late' );
+    is(
+        $retrieved_checkout_1->is_overdue($ten_days_ago),
+        0, 'In Ten days, the item due yesterday will still be late'
+    );
 };
 
 subtest 'item' => sub {
     plan tests => 2;
     my $item = $retrieved_checkout_1->item;
-    is( ref($item), 'Koha::Item',
-        'Koha::Checkout->item should return a Koha::Item' );
-    is( $item->itemnumber, $item_1->itemnumber,
-        'Koha::Checkout->item should return the correct item' );
+    is(
+        ref($item), 'Koha::Item',
+        'Koha::Checkout->item should return a Koha::Item'
+    );
+    is(
+        $item->itemnumber, $item_1->itemnumber,
+        'Koha::Checkout->item should return the correct item'
+    );
 };
 
 subtest 'account_lines' => sub {
@@ -133,12 +147,16 @@ subtest 'account_lines' => sub {
     )->store();
 
     my $account_lines = $retrieved_checkout_1->account_lines;
-    is( ref($account_lines), 'Koha::Account::Lines',
-        'Koha::Checkout->account_lines should return a Koha::Account::Lines' );
+    is(
+        ref($account_lines), 'Koha::Account::Lines',
+        'Koha::Checkout->account_lines should return a Koha::Account::Lines'
+    );
 
     my $line = $account_lines->next;
-    is( ref($line), 'Koha::Account::Line',
-        'next returns a Koha::Account::Line' );
+    is(
+        ref($line), 'Koha::Account::Line',
+        'next returns a Koha::Account::Line'
+    );
 
     is(
         $accountline->id,
@@ -168,19 +186,26 @@ subtest 'patron' => sub {
     t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 
     my $p = $checkout->patron;
-    is( ref($p), 'Koha::Patron',
-        'Koha::Checkout->patron should return a Koha::Patron' );
-    is( $p->borrowernumber, $patron->borrowernumber,
-        'Koha::Checkout->patron should return the correct patron' );
+    is(
+        ref($p), 'Koha::Patron',
+        'Koha::Checkout->patron should return a Koha::Patron'
+    );
+    is(
+        $p->borrowernumber, $patron->borrowernumber,
+        'Koha::Checkout->patron should return the correct patron'
+    );
 
     # Testing Koha::Old::Checkout->patron now
     my $issue_id = $checkout->issue_id;
-    C4::Circulation::MarkIssueReturned( $p->borrowernumber,
-        $checkout->itemnumber );
+    C4::Circulation::MarkIssueReturned(
+        $p->borrowernumber,
+        $checkout->itemnumber
+    );
     $p->delete;
     my $old_issue = Koha::Old::Checkouts->find($issue_id);
-    is( $old_issue->patron, undef,
-'Koha::Checkout->patron should return undef if the patron record has been deleted'
+    is(
+        $old_issue->patron, undef,
+        'Koha::Checkout->patron should return undef if the patron record has been deleted'
     );
 };
 
@@ -217,19 +242,26 @@ subtest 'issuer' => sub {
     )->store;
 
     my $i = $checkout->issuer;
-    is( ref($i), 'Koha::Patron',
-        'Koha::Checkout->issuer should return a Koha::Patron' );
-    is( $i->borrowernumber, $issuer->borrowernumber,
-        'Koha::Checkout->issuer should return the correct patron' );
+    is(
+        ref($i), 'Koha::Patron',
+        'Koha::Checkout->issuer should return a Koha::Patron'
+    );
+    is(
+        $i->borrowernumber, $issuer->borrowernumber,
+        'Koha::Checkout->issuer should return the correct patron'
+    );
 
     # Testing Koha::Old::Checkout->patron now
     my $issue_id = $checkout->issue_id;
-    C4::Circulation::MarkIssueReturned( $patron->borrowernumber,
-        $checkout->itemnumber );
+    C4::Circulation::MarkIssueReturned(
+        $patron->borrowernumber,
+        $checkout->itemnumber
+    );
     $i->delete;
     my $old_issue = Koha::Old::Checkouts->find($issue_id);
-    is( $old_issue->issuer_id, undef,
-'Koha::Checkout->issuer_id should return undef if the patron record has been deleted'
+    is(
+        $old_issue->issuer_id, undef,
+        'Koha::Checkout->issuer_id should return undef if the patron record has been deleted'
     );
 
 };
@@ -255,11 +287,12 @@ subtest 'Koha::Old::Checkouts->filter_by_todays_checkins' => sub {
     );
 
     my @checkouts;
+
     # Create 7 checkouts
     for ( 0 .. 6 ) {
         my $item = $builder->build_sample_item;
         push @checkouts,
-          Koha::Checkout->new(
+            Koha::Checkout->new(
             {
                 borrowernumber => $patron->borrowernumber,
                 itemnumber     => $item->itemnumber,
@@ -274,16 +307,17 @@ subtest 'Koha::Old::Checkouts->filter_by_todays_checkins' => sub {
         my $checkout = $checkouts[$i];
         C4::Circulation::AddReturn(
             $checkout->item->barcode, $library->{branchcode},
-            undef, $not_today->set_hour( int( rand(24) ) )
+            undef,                    $not_today->set_hour( int( rand(24) ) )
         );
     }
+
     # Checkin 4 today
     my $today = dt_from_string;
     for my $i ( 3 .. 6 ) {
         my $checkout = $checkouts[$i];
         C4::Circulation::AddReturn(
             $checkout->item->barcode, $library->{branchcode},
-            undef, $today->set_hour( int( rand(24) ) )
+            undef,                    $today->set_hour( int( rand(24) ) )
         );
     }
 
@@ -308,18 +342,10 @@ subtest 'automatic_checkin' => sub {
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $due_ac_item =
-      $builder->build_sample_item(
-        { homebranch => $patron->branchcode, itemlost => 0 } );
-    my $ac_item =
-      $builder->build_sample_item(
-        { homebranch => $patron->branchcode, itemlost => 0 } );
-    my $odue_ac_item =
-      $builder->build_sample_item(
-        { homebranch => $patron->branchcode, itemlost => 0 } );
-    my $normal_item =
-      $builder->build_sample_item(
-        { homebranch => $patron->branchcode, itemlost => 0 } );
+    my $due_ac_item  = $builder->build_sample_item( { homebranch => $patron->branchcode, itemlost => 0 } );
+    my $ac_item      = $builder->build_sample_item( { homebranch => $patron->branchcode, itemlost => 0 } );
+    my $odue_ac_item = $builder->build_sample_item( { homebranch => $patron->branchcode, itemlost => 0 } );
+    my $normal_item  = $builder->build_sample_item( { homebranch => $patron->branchcode, itemlost => 0 } );
 
     $due_ac_item->itemtype->automatic_checkin(1)->store;
     $odue_ac_item->itemtype->automatic_checkin(1)->store;
@@ -371,12 +397,16 @@ subtest 'automatic_checkin' => sub {
     )->store;
 
     my $searched = Koha::Checkouts->find( $checkout_ni->issue_id );
-    is( $searched->issue_id, $checkout_ni->issue_id,
-        'checkout for normal_item exists' );
+    is(
+        $searched->issue_id, $checkout_ni->issue_id,
+        'checkout for normal_item exists'
+    );
 
     $searched = Koha::Checkouts->find( $checkout_aci->issue_id );
-    is( $searched->issue_id, $checkout_aci->issue_id,
-        'checkout for ac_item exists' );
+    is(
+        $searched->issue_id, $checkout_aci->issue_id,
+        'checkout for ac_item exists'
+    );
 
     $searched = Koha::Checkouts->find( $checkout_due_aci->issue_id );
     is(
@@ -395,12 +425,16 @@ subtest 'automatic_checkin' => sub {
     Koha::Checkouts->automatic_checkin;
 
     $searched = Koha::Checkouts->find( $checkout_ni->issue_id );
-    is( $searched->issue_id, $checkout_ni->issue_id,
-        'checkout for normal_item still exists' );
+    is(
+        $searched->issue_id, $checkout_ni->issue_id,
+        'checkout for normal_item still exists'
+    );
 
     $searched = Koha::Checkouts->find( $checkout_aci->issue_id );
-    is( $searched->issue_id, $checkout_aci->issue_id,
-        'checkout for ac_item still exists' );
+    is(
+        $searched->issue_id, $checkout_aci->issue_id,
+        'checkout for ac_item still exists'
+    );
 
     $searched = Koha::Checkouts->find( $checkout_due_aci->issue_id );
     is( $searched, undef, 'checkout for due_ac_item doesn\'t exist anymore' );
@@ -409,8 +443,10 @@ subtest 'automatic_checkin' => sub {
     is( $searched, undef, 'checkout for odue_ac_item doesn\'t exist anymore' );
 
     $searched = Koha::Old::Checkouts->find( $checkout_odue_aci->issue_id );
-    is( dt_from_string($searched->returndate), $yesterday, 'old checkout for odue_ac_item has the right return date' );
-
+    is(
+        dt_from_string( $searched->returndate ), $yesterday,
+        'old checkout for odue_ac_item has the right return date'
+    );
 
     subtest 'automatic_checkin AutomaticCheckinAutoFill tests' => sub {
 

@@ -34,7 +34,7 @@ C4::Context->set_preference( 'URLLINKTEXT', $newURLLinkText );
 is( C4::Context->preference('URLLinkText'), $newURLLinkText, 'The pref should have been set correctly' );
 
 C4::Context->set_preference( 'URLLinkText', $URLLinkText );
-is( C4::Context->preference('URLLINKTEXT'), $URLLinkText, 'A pref name should be case insensitive');
+is( C4::Context->preference('URLLINKTEXT'), $URLLinkText, 'A pref name should be case insensitive' );
 
 $ENV{OVERRIDE_SYSPREF_URLLinkText} = 'this is an override';
 C4::Context->clear_syspref_cache();
@@ -44,14 +44,14 @@ is(
     'system preference value overridden from environment'
 );
 
-is( C4::Context->preference('IDoNotExist'), undef, 'Get a non-existent system preference should return undef');
+is( C4::Context->preference('IDoNotExist'), undef, 'Get a non-existent system preference should return undef' );
 
 C4::Context->set_preference( 'IDoNotExist', 'NonExistent' );
 is( C4::Context->preference('IDoNotExist'), 'NonExistent', 'Test creation of non-existent system preference' );
 
-C4::Context->set_preference('testpreference', 'abc');
+C4::Context->set_preference( 'testpreference', 'abc' );
 C4::Context->delete_preference('testpreference');
-is(C4::Context->preference('testpreference'), undef, 'deleting preferences');
+is( C4::Context->preference('testpreference'), undef, 'deleting preferences' );
 
 # Test delete_preference, check cache; we need an example here with MIXED case !
 C4::Context->enable_syspref_cache;

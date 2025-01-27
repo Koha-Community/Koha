@@ -40,7 +40,7 @@ Return the patron linked to this user role
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $patron_rs = $self->_result->user;
     return Koha::Patron->_new_from_dbic($patron_rs);
 }

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -20,12 +19,12 @@
 
 use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use C4::Koha qw( GetAuthorisedValues );
+use C4::Output  qw( output_html_with_http_headers );
+use C4::Koha    qw( GetAuthorisedValues );
 use C4::Reports qw( GetDelimiterChoices );
-use C4::Biblio qw( GetMarcSubfieldStructureFromKohaField );
+use C4::Biblio  qw( GetMarcSubfieldStructureFromKohaField );
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string );
@@ -40,37 +39,40 @@ plugin that shows a stats on borrowers
 =cut
 
 our $debug = 0;
-my $input = CGI->new;
+my $input          = CGI->new;
 my $fullreportname = "reports/catalogue_stats.tt";
-my $do_it       = $input->param('do_it');
-my $line        = $input->param("Line");
-my $column      = $input->param("Column");
-my $cellvalue      = $input->param("Cellvalue"); # one of 'items', 'biblios', 'deleteditems'
-my @filters     = $input->multi_param("Filter");
-my $cotedigits  = $input->param("cotedigits");
-my $output      = $input->param("output");
-my $basename    = $input->param("basename");
-our $sep        = C4::Context->csv_delimiter(scalar $input->param("sep"));
+my $do_it          = $input->param('do_it');
+my $line           = $input->param("Line");
+my $column         = $input->param("Column");
+my $cellvalue      = $input->param("Cellvalue");      # one of 'items', 'biblios', 'deleteditems'
+my @filters        = $input->multi_param("Filter");
+my $cotedigits     = $input->param("cotedigits");
+my $output         = $input->param("output");
+my $basename       = $input->param("basename");
+our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 my $item_itype;
-if(C4::Context->preference('item-level_itypes')) {
-	$item_itype = "items\.itype"
+
+if ( C4::Context->preference('item-level_itypes') ) {
+    $item_itype = "items\.itype";
 } else {
-	$item_itype = "itemtype";
+    $item_itype = "itemtype";
 }
-if(C4::Context->preference('marcflavour') ne "UNIMARC" && ($line=~ /publicationyear/ )) {
+if ( C4::Context->preference('marcflavour') ne "UNIMARC" && ( $line =~ /publicationyear/ ) ) {
     $line = "copyrightdate";
 }
-if(C4::Context->preference('marcflavour') ne "UNIMARC" && ($column =~ /publicationyear/ )) {
+if ( C4::Context->preference('marcflavour') ne "UNIMARC" && ( $column =~ /publicationyear/ ) ) {
     $column = "copyrightdate";
 }
 
-my ($template, $borrowernumber, $cookie)
-	= get_template_and_user({template_name => $fullreportname,
-				query => $input,
-				type => "intranet",
-				flagsrequired => {reports => '*'},
-				});
-$template->param(do_it => $do_it);
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
+$template->param( do_it => $do_it );
 if ($do_it) {
     my $results = calculate( $line, $column, $cellvalue, $cotedigits, \@filters );
     if ( $output eq "screen" ) {
@@ -109,33 +111,43 @@ if ($do_it) {
         exit;
     }
 } else {
-	my $dbh = C4::Context->dbh;
-	my $count=0;
+    my $dbh   = C4::Context->dbh;
+    my $count = 0;
 
     my $itemtypes = Koha::ItemTypes->search_with_localization;
 
-    my @authvals = map { { code => $_->{authorised_value}, description => $_->{lib} } } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } );
-    my @locations = map { { code => $_->{authorised_value}, description => $_->{lib} } } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } );
+    my @authvals =
+        map { { code => $_->{authorised_value}, description => $_->{lib} } }
+        Koha::AuthorisedValues->get_descriptions_by_koha_field(
+        { frameworkcode => '', kohafield => 'items.ccode' },
+        { order_by      => ['description'] }
+        );
+    my @locations =
+        map { { code => $_->{authorised_value}, description => $_->{lib} } }
+        Koha::AuthorisedValues->get_descriptions_by_koha_field(
+        { frameworkcode => '', kohafield => 'items.location' },
+        { order_by      => ['description'] }
+        );
 
     foreach my $kohafield (qw(items.notforloan items.materials)) {
         my $subfield_structure = GetMarcSubfieldStructureFromKohaField($kohafield)->[0];    # assuming one result..
-        if($subfield_structure) {
+        if ($subfield_structure) {
             my $avlist;
             my $avcategory = $subfield_structure->{authorised_value};
-            if($avcategory) {
+            if ($avcategory) {
                 $avlist = GetAuthorisedValues($avcategory);
             }
             my $kf = $kohafield;
             $kf =~ s/^items\.//;
             $template->param(
-                $kf => 1,
-                $kf."_label" => $subfield_structure->{liblibrarian},
-                $kf."_avlist" => $avlist
+                $kf             => 1,
+                $kf . "_label"  => $subfield_structure->{liblibrarian},
+                $kf . "_avlist" => $avlist
             );
         }
     }
 
-    my @mime  = ( map { +{type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
+    my @mime = ( map { +{ type => $_ } } ( split /[;:]/, 'CSV' ) );    # FIXME translation
 
     $template->param(
         itemtypes    => $itemtypes,
@@ -151,7 +163,6 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 ## End of Main Body
 
-
 sub calculate {
     my ( $line, $column, $cellvalue, $cotedigits, $filters ) = @_;
     my @mainloop;
@@ -164,7 +175,7 @@ sub calculate {
     my $barcodelike   = @$filters[16];
     my $barcodefilter = @$filters[17];
     my $not;
-    my $itemstable = ($cellvalue eq 'deleteditems') ? 'deleteditems' : 'items';
+    my $itemstable = ( $cellvalue eq 'deleteditems' ) ? 'deleteditems' : 'items';
 
     my $dbh = C4::Context->dbh;
 
@@ -192,33 +203,33 @@ sub calculate {
             }
             $cell{filter} .= @$filters[$i];
             $cell{crit} .=
-                ( $i == 0 )  ? "Item CallNumber From"
-              : ( $i == 1 )  ? "Item CallNumber To"
-              : ( $i == 2 )  ? "Item type"
-              : ( $i == 3 )  ? "Publisher"
-              : ( $i == 4 )  ? "Publication year From"
-              : ( $i == 5 )  ? "Publication year To"
-              : ( $i == 6 ) ? "Library"
-              : ( $i == 7 ) ? "Shelving Location"
-              : ( $i == 8 ) ? "Collection Code"
-              : ( $i == 9 ) ? "Status"
-              : ( $i == 10 ) ? "Materials"
-              : ( $i == 12 and $filters->[11] == 0 ) ? "Barcode (not like)"
-              : ( $i == 12 and $filters->[11] == 1 ) ? "Barcode (like)"
-              : ( $i == 13 ) ? "Date acquired (item) from"
-              : ( $i == 14 ) ? "Date acquired (item) to"
-              : ( $i == 15 ) ? "Date deleted (item) from"
-              : ( $i == 16 ) ? "Date deleted (item) to"
-              :                '';
+                  ( $i == 0 )                          ? "Item CallNumber From"
+                : ( $i == 1 )                          ? "Item CallNumber To"
+                : ( $i == 2 )                          ? "Item type"
+                : ( $i == 3 )                          ? "Publisher"
+                : ( $i == 4 )                          ? "Publication year From"
+                : ( $i == 5 )                          ? "Publication year To"
+                : ( $i == 6 )                          ? "Library"
+                : ( $i == 7 )                          ? "Shelving Location"
+                : ( $i == 8 )                          ? "Collection Code"
+                : ( $i == 9 )                          ? "Status"
+                : ( $i == 10 )                         ? "Materials"
+                : ( $i == 12 and $filters->[11] == 0 ) ? "Barcode (not like)"
+                : ( $i == 12 and $filters->[11] == 1 ) ? "Barcode (like)"
+                : ( $i == 13 )                         ? "Date acquired (item) from"
+                : ( $i == 14 )                         ? "Date acquired (item) to"
+                : ( $i == 15 )                         ? "Date deleted (item) from"
+                : ( $i == 16 )                         ? "Date deleted (item) to"
+                :                                        '';
 
             push @loopfilter, \%cell;
         }
     }
 
-    @$filters[13] = dt_from_string(@$filters[13])->date() if @$filters[13];
-    @$filters[14] = dt_from_string(@$filters[14])->date() if @$filters[14];
-    @$filters[15] = dt_from_string(@$filters[15])->date() if @$filters[15];
-    @$filters[16] = dt_from_string(@$filters[16])->date() if @$filters[16];
+    @$filters[13] = dt_from_string( @$filters[13] )->date() if @$filters[13];
+    @$filters[14] = dt_from_string( @$filters[14] )->date() if @$filters[14];
+    @$filters[15] = dt_from_string( @$filters[15] )->date() if @$filters[15];
+    @$filters[16] = dt_from_string( @$filters[16] )->date() if @$filters[16];
 
     my @linefilter;
     $linefilter[0] = @$filters[0] if ( $line =~ /items\.itemcallnumber/ );
@@ -232,10 +243,10 @@ sub calculate {
     $linefilter[0] = @$filters[4] if ( $line =~ /publicationyear/ );
     $linefilter[1] = @$filters[5] if ( $line =~ /publicationyear/ );
 
-    $linefilter[0] = @$filters[6] if ( $line =~ /items\.homebranch/ );
-    $linefilter[0] = @$filters[7] if ( $line =~ /items\.location/ );
-    $linefilter[0] = @$filters[8] if ( $line =~ /items\.ccode/ );
-    $linefilter[0] = @$filters[9] if ( $line =~ /items\.notforloan/ );
+    $linefilter[0] = @$filters[6]  if ( $line =~ /items\.homebranch/ );
+    $linefilter[0] = @$filters[7]  if ( $line =~ /items\.location/ );
+    $linefilter[0] = @$filters[8]  if ( $line =~ /items\.ccode/ );
+    $linefilter[0] = @$filters[9]  if ( $line =~ /items\.notforloan/ );
     $linefilter[0] = @$filters[10] if ( $line =~ /items\.materials/ );
     $linefilter[0] = @$filters[13] if ( $line =~ /items\.dateaccessioned/ );
     $linefilter[1] = @$filters[14] if ( $line =~ /items\.dateaccessioned/ );
@@ -253,10 +264,10 @@ sub calculate {
     $colfilter[0] = @$filters[3]  if ( $column =~ /publishercode/ );
     $colfilter[0] = @$filters[4]  if ( $column =~ /publicationyear/ );
     $colfilter[1] = @$filters[5]  if ( $column =~ /publicationyear/ );
-    $colfilter[0] = @$filters[6] if ( $column =~ /items\.homebranch/ );
-    $colfilter[0] = @$filters[7] if ( $column =~ /items\.location/ );
-    $colfilter[0] = @$filters[8] if ( $column =~ /items\.ccode/ );
-    $colfilter[0] = @$filters[9] if ( $column =~ /items\.notforloan/ );
+    $colfilter[0] = @$filters[6]  if ( $column =~ /items\.homebranch/ );
+    $colfilter[0] = @$filters[7]  if ( $column =~ /items\.location/ );
+    $colfilter[0] = @$filters[8]  if ( $column =~ /items\.ccode/ );
+    $colfilter[0] = @$filters[9]  if ( $column =~ /items\.notforloan/ );
     $colfilter[0] = @$filters[10] if ( $column =~ /items\.materials/ );
     $colfilter[0] = @$filters[13] if ( $column =~ /items.dateaccessioned/ );
     $colfilter[1] = @$filters[14] if ( $column =~ /items\.dateaccessioned/ );
@@ -265,7 +276,7 @@ sub calculate {
 
     # 1st, loop rows.
     my $origline = $line;
-    $line =~ s/^items\./deleteditems./ if($cellvalue eq "deleteditems");
+    $line =~ s/^items\./deleteditems./ if ( $cellvalue eq "deleteditems" );
     my $linefield;
     if ( ( $line =~ /itemcallnumber/ ) and ($cotedigits) ) {
         $linefield = "left($line,$cotedigits)";
@@ -300,26 +311,26 @@ sub calculate {
     } elsif ( $barcodefilter and $linefilter[0] ) {
         $sth->execute( $barcodefilter, $linefilter[0] );
     } elsif ( $linefilter[0] ) {
-        $sth->execute($linefilter[0]);
+        $sth->execute( $linefilter[0] );
     } elsif ($barcodefilter) {
         $sth->execute($barcodefilter);
     } else {
         $sth->execute();
     }
-    my $rowauthvals = { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => $origline } ) };
+    my $rowauthvals = { map { $_->{authorised_value} => $_->{lib} }
+            Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => $origline } ) };
     while ( my ($celvalue) = $sth->fetchrow ) {
         my %cell;
-        if (defined $celvalue and $celvalue ne '') {
-            if($rowauthvals and $rowauthvals->{$celvalue}) {
+        if ( defined $celvalue and $celvalue ne '' ) {
+            if ( $rowauthvals and $rowauthvals->{$celvalue} ) {
                 $cell{rowtitle} = $rowauthvals->{$celvalue};
             } else {
                 $cell{rowtitle} = $celvalue;
             }
             $cell{value} = $celvalue;
-        }
-        else {
+        } else {
             $cell{rowtitle} = "NULL";
-            $cell{value} = "zzEMPTY";
+            $cell{value}    = "zzEMPTY";
         }
         $cell{totalrow} = 0;
         push @loopline, \%cell;
@@ -327,7 +338,7 @@ sub calculate {
 
     # 2nd, loop cols.
     my $origcolumn = $column;
-    $column =~ s/^items\./deleteditems./ if($cellvalue eq "deleteditems");
+    $column =~ s/^items\./deleteditems./ if ( $cellvalue eq "deleteditems" );
     my $colfield;
     if ( ( $column =~ /itemcallnumber/ ) and ($cotedigits) ) {
         $colfield = "left($column,$cotedigits)";
@@ -361,34 +372,36 @@ sub calculate {
     } elsif ( (@colfilter) and ( $colfilter[1] ) ) {
         $sth2->execute( $colfilter[0], $colfilter[1] );
     } elsif ( $barcodefilter && $colfilter[0] ) {
-        $sth2->execute( $barcodefilter , $colfilter[0] );
-    } elsif ( $colfilter[0]) {
+        $sth2->execute( $barcodefilter, $colfilter[0] );
+    } elsif ( $colfilter[0] ) {
         $sth2->execute( $colfilter[0] );
     } elsif ($barcodefilter) {
         $sth2->execute($barcodefilter);
     } else {
         $sth2->execute();
     }
-    my $colauthvals = { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => $origcolumn } ) };
+    my $colauthvals =
+        { map { $_->{authorised_value} => $_->{lib} }
+            Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => $origcolumn } )
+        };
     while ( my ($celvalue) = $sth2->fetchrow ) {
         my %cell;
-        if (defined $celvalue and $celvalue ne '') {
-            if($colauthvals and $colauthvals->{$celvalue}) {
+        if ( defined $celvalue and $celvalue ne '' ) {
+            if ( $colauthvals and $colauthvals->{$celvalue} ) {
                 $cell{coltitle} = $colauthvals->{$celvalue};
             } else {
                 $cell{coltitle} = $celvalue;
             }
             $cell{value} = $celvalue;
-        }
-        else {
+        } else {
             $cell{coltitle} = "NULL";
-            $cell{value} = "zzEMPTY";
+            $cell{value}    = "zzEMPTY";
         }
         $cell{totalcol} = 0;
         push @loopcol, \%cell;
     }
 
-    my $i = 0;
+    my $i         = 0;
     my $hilighted = -1;
 
     #Initialization of cell values.....
@@ -403,7 +416,7 @@ sub calculate {
 
     # preparing calculation
     my $select_cellvalue = " COUNT(*) ";
-    $select_cellvalue = " COUNT(DISTINCT biblioitems.biblionumber) " if($cellvalue eq 'biblios');
+    $select_cellvalue = " COUNT(DISTINCT biblioitems.biblionumber) " if ( $cellvalue eq 'biblios' );
     my $strcalc = "
         SELECT $linefield, $colfield, $select_cellvalue
         FROM $itemstable
@@ -431,7 +444,9 @@ sub calculate {
     }
 
     if ( @$filters[2] ) {
-        $strcalc .= " AND " . ( C4::Context->preference('item-level_itypes') ? "$itemstable.itype" : 'biblioitems.itemtype' ) . " LIKE ? ";
+        $strcalc .= " AND "
+            . ( C4::Context->preference('item-level_itypes') ? "$itemstable.itype" : 'biblioitems.itemtype' )
+            . " LIKE ? ";
         @$filters[2] =~ s/\*/%/g;
         push @sqlargs, @$filters[2];
     }
@@ -443,17 +458,15 @@ sub calculate {
         push @sqlargs, @$filters[3];
     }
     if ( @$filters[4] ) {
-        $strcalc .= " AND " .
-        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
-        . "> ? ";
+        $strcalc .= " AND "
+            . ( C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate' ) . "> ? ";
         @$filters[4] =~ s/\*/%/g;
         push @sqlargs, @$filters[4];
     }
     if ( @$filters[5] ) {
         @$filters[5] =~ s/\*/%/g;
-        $strcalc .= " AND " .
-        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
-        . "< ? ";
+        $strcalc .= " AND "
+            . ( C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate' ) . "< ? ";
         push @sqlargs, @$filters[5];
     }
     if ( @$filters[6] ) {
@@ -508,30 +521,31 @@ sub calculate {
 
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
 
-        $col      = "zzEMPTY" if ( !defined($col) );
-        $row      = "zzEMPTY" if ( !defined($row) );
+        $col = "zzEMPTY" if ( !defined($col) );
+        $row = "zzEMPTY" if ( !defined($row) );
 
         $table{$row}->{$col}     += $value;
         $table{$row}->{totalrow} += $value;
         $grantotal               += $value;
     }
 
-    foreach my $row ( @loopline ) {
+    foreach my $row (@loopline) {
         my @loopcell;
 
         #@loopcol ensures the order for columns is common with column titles
         # and the number matches the number of columns
         foreach my $col (@loopcol) {
-            my $value = $table{$row->{value}}->{ $col->{value} };
+            my $value = $table{ $row->{value} }->{ $col->{value} };
             push @loopcell, { value => $value };
         }
         push @looprow,
-          { 'rowtitle' => $row->{rowtitle},
-            'value'    => $row->{value},
-            'loopcell' => \@loopcell,
+            {
+            'rowtitle'  => $row->{rowtitle},
+            'value'     => $row->{value},
+            'loopcell'  => \@loopcell,
             'hilighted' => ( $hilighted *= -1 > 0 ),
-            'totalrow' => $table{$row->{value}}->{totalrow}
-          };
+            'totalrow'  => $table{ $row->{value} }->{totalrow}
+            };
     }
 
     foreach my $col (@loopcol) {

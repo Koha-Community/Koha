@@ -28,7 +28,6 @@ use C4::Context;
 use Koha::Items;
 use Pod::Usage qw( pod2usage );
 
-
 sub usage {
     pod2usage( -verbose => 2 );
     exit;
@@ -38,9 +37,9 @@ sub usage {
 my $dbh = C4::Context->dbh;
 
 # Benchmarking variables
-my $startime = time();
-my $goodcount = 0;
-my $badcount = 0;
+my $startime   = time();
+my $goodcount  = 0;
+my $badcount   = 0;
 my $totalcount = 0;
 
 # Options
@@ -50,24 +49,24 @@ my $help;
 my $outfile;
 
 GetOptions(
-  'o|output:s' => \$outfile,
-  'v' => \$verbose,
-  'where:s' => \$whereclause,
-  'help|h'   => \$help,
+    'o|output:s' => \$outfile,
+    'v'          => \$verbose,
+    'where:s'    => \$whereclause,
+    'help|h'     => \$help,
 );
 
 usage() if $help;
 
 if ($whereclause) {
-   $whereclause = "WHERE $whereclause";
+    $whereclause = "WHERE $whereclause";
 }
 
 # output log or STDOUT
 my $fh;
-if (defined $outfile) {
-   open ($fh, '>', $outfile) || die ("Cannot open output file");
+if ( defined $outfile ) {
+    open( $fh, '>', $outfile ) || die("Cannot open output file");
 } else {
-   open($fh, '>&', \*STDOUT) || die ("Couldn't duplicate STDOUT: $!");
+    open( $fh, '>&', \*STDOUT ) || die("Couldn't duplicate STDOUT: $!");
 }
 
 # FIXME Would be better to call Koha::Items->search here
@@ -75,39 +74,39 @@ my $sth_fetch = $dbh->prepare("SELECT biblionumber, itemnumber, itemcallnumber F
 $sth_fetch->execute();
 
 # fetch info from the search
-while (my ($biblionumber, $itemnumber, $itemcallnumber) = $sth_fetch->fetchrow_array){
+while ( my ( $biblionumber, $itemnumber, $itemcallnumber ) = $sth_fetch->fetchrow_array ) {
 
-  my $item = Koha::Items->find($itemnumber);
-  next unless $item;
+    my $item = Koha::Items->find($itemnumber);
+    next unless $item;
 
-  for my $c (qw( itemcallnumber cn_source ) ){
-      $item->make_column_dirty($c);
-  }
+    for my $c (qw( itemcallnumber cn_source )) {
+        $item->make_column_dirty($c);
+    }
 
-  eval { $item->store };
-  my $modok = $@ ? 0 : 1;
+    eval { $item->store };
+    my $modok = $@ ? 0 : 1;
 
-  if ($modok) {
-     $goodcount++;
-     print $fh "Touched item $itemnumber\n" if (defined $verbose);
-  } else {
-     $badcount++;
-     print $fh "ERROR WITH ITEM $itemnumber !!!!\n";
-  }
+    if ($modok) {
+        $goodcount++;
+        print $fh "Touched item $itemnumber\n" if ( defined $verbose );
+    } else {
+        $badcount++;
+        print $fh "ERROR WITH ITEM $itemnumber !!!!\n";
+    }
 
-  $totalcount++;
+    $totalcount++;
 
 }
 close($fh);
 
 # Benchmarking
-my $endtime = time();
-my $time = $endtime-$startime;
-my $accuracy = $totalcount ? ($goodcount / $totalcount) * 100 : 0; # this is a percentage
+my $endtime     = time();
+my $time        = $endtime - $startime;
+my $accuracy    = $totalcount ? ( $goodcount / $totalcount ) * 100 : 0;    # this is a percentage
 my $averagetime = 0;
 $averagetime = $time / $totalcount if $totalcount;
 print "Good: $goodcount, Bad: $badcount (of $totalcount) in $time seconds\n";
-printf "Accuracy: %.2f%%\nAverage time per record: %.6f seconds\n", $accuracy, $averagetime if (defined $verbose);
+printf "Accuracy: %.2f%%\nAverage time per record: %.6f seconds\n", $accuracy, $averagetime if ( defined $verbose );
 
 =head1 NAME
 

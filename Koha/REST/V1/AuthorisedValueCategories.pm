@@ -40,8 +40,7 @@ sub list {
             Koha::AuthorisedValueCategories->search( {}, { order_by => 'category_name' } );
         my $authorised_value_categories = $c->objects->search($authorised_value_categories_set);
         return $c->render( status => 200, openapi => $authorised_value_categories );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 

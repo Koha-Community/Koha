@@ -17,7 +17,6 @@ package Koha::Review;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -41,7 +40,7 @@ Approve a review
 =cut
 
 sub approve {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->approved(1)->store;
 }
 
@@ -54,7 +53,7 @@ Unapprove a review
 =cut
 
 sub unapprove {
-    my ( $self ) = @_;
+    my ($self) = @_;
     $self->approved(0)->store;
 }
 

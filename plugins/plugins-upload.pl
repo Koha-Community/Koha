@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use Archive::Extract;
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use List::Util qw( any );
 use Mojo::UserAgent;
 use File::Temp;
@@ -35,7 +35,7 @@ my $plugins_enabled    = C4::Context->config("enable_plugins");
 my $plugins_restricted = C4::Context->config("plugins_restricted");
 my $plugins_restart    = C4::Context->config("plugins_restart");
 
-my $input = CGI->new;
+my $input          = CGI->new;
 my $uploadlocation = $input->param('uploadlocation');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -51,7 +51,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param( plugins_restart => $plugins_restart );
 
 # Early exist if uploads are not enabled direct upload attempted when uploads are restricted
-if (!$plugins_enabled) {
+if ( !$plugins_enabled ) {
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 } elsif ( $plugins_restricted && !$uploadlocation ) {

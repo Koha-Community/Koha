@@ -1,79 +1,83 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Comments on [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='comment' bodyclass='popup' %]
-    <div class="main">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col order-first order-md-first order-lg-2">
-                    <div id="userreview" class="maincontent">
-                        <h1>Reviews</h1>
-                        [% IF ( ERRORS ) %]
-                            <div class="alert alert-warning">
-                                [% FOREACH ERROR IN ERRORS %]
-                                    [% IF ( ERROR.nobiblio ) %]
-                                        <p>Error: we cannot find this bibliographic record.</p>
-                                    [% END %]
-                                    [% IF ( ERROR.unauthorized ) %]
-                                        <p>Sorry, only the creator of this comment is allowed to change it.</p>
-                                    [% END %]
-                                    [% IF ( ERROR.scrubbed ) %]
-                                        <p>Note: your comment contained illegal markup code. It has been saved with the markup removed, as below. You can edit the comment further, or cancel to retain the comment as is.</p>
-                                    [% END %]
-
-                                    [% IF ( ERROR.scrubbed_all ) %]
-                                        <p>Error!  Your comment was entirely illegal markup code.  It has NOT been added.</p>
-                                    [% END %]
-
-                                    [% IF ( ERROR.empty ) %]
-                                        <p>Error!  You cannot add an empty comment.  Please add content or cancel.</p>
-                                    [% END %]
-                                [% END # / FOREACH ERROR %]
-                                [% IF ( WINDOW_CLOSE ) %]
-                                    Note: this window will close automatically in 5 seconds.
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col order-first order-md-first order-lg-2">
+                <div id="userreview" class="maincontent">
+                    <h1>Reviews</h1>
+                    [% IF ( ERRORS ) %]
+                        <div class="alert alert-warning">
+                            [% FOREACH ERROR IN ERRORS %]
+                                [% IF ( ERROR.nobiblio ) %]
+                                    <p>Error: we cannot find this bibliographic record.</p>
                                 [% END %]
-                            </div>
-                        [% END # / ERRORs %]
+                                [% IF ( ERROR.unauthorized ) %]
+                                    <p>Sorry, only the creator of this comment is allowed to change it.</p>
+                                [% END %]
+                                [% IF ( ERROR.scrubbed ) %]
+                                    <p>Note: your comment contained illegal markup code. It has been saved with the markup removed, as below. You can edit the comment further, or cancel to retain the comment as is.</p>
+                                [% END %]
 
-                        <h2>Comments on <em>[% INCLUDE 'biblio-title.inc' %]</em></h2>
-                        [% IF ( biblio.author ) %]<h3>[% biblio.author | html %]</h3>[% END %]
-                        <form id="reviewf" action="/cgi-bin/koha/opac-review.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <legend class="sr-only">Comments</legend>
-                            <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
-                            [% IF ( reviewid ) %]
-                                <input type="hidden" name="reviewid" value="[% reviewid | html %]" />
-                                <input type="hidden" name="op" value="cud-edit" />
-                            [% ELSE %]
-                                <input type="hidden" name="op" value="cud-add" />
+                                [% IF ( ERROR.scrubbed_all ) %]
+                                    <p>Error! Your comment was entirely illegal markup code. It has NOT been added.</p>
+                                [% END %]
+
+                                [% IF ( ERROR.empty ) %]
+                                    <p>Error! You cannot add an empty comment. Please add content or cancel.</p>
+                                [% END %]
+                            [% END # / FOREACH ERROR %]
+                            [% IF ( WINDOW_CLOSE ) %]
+                                Note: this window will close automatically in 5 seconds.
                             [% END %]
-                            <fieldset>
-                                <textarea id="review" name="review" cols="60" rows="8">[% review | html %]</textarea>
-                            </fieldset>
-                            <p>Note: Your comment must be approved by a librarian. </p>
-                            <fieldset class="action">
-                                <input type="submit" class="btn btn-primary" value="Submit and close this window" />
-                                <a class="cancel close" href="#">Cancel</a>
-                            </fieldset>
-                        </form>
-                    </div> <!-- / #usersendshelfform -->
-                </div> <!-- / .span12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                        </div>
+                    [% END # / ERRORs %]
+
+                    <h2>Comments on <em>[% INCLUDE 'biblio-title.inc' %]</em></h2>
+                    [% IF ( biblio.author ) %]<h3>[% biblio.author | html %]</h3>[% END %]
+                    <form id="reviewf" action="/cgi-bin/koha/opac-review.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <legend class="sr-only">Comments</legend>
+                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
+                        [% IF ( reviewid ) %]
+                            <input type="hidden" name="reviewid" value="[% reviewid | html %]" />
+                            <input type="hidden" name="op" value="cud-edit" />
+                        [% ELSE %]
+                            <input type="hidden" name="op" value="cud-add" />
+                        [% END %]
+                        <fieldset>
+                            <textarea id="review" name="review" cols="60" rows="8">[% review | html %]</textarea>
+                        </fieldset>
+                        <p>Note: Your comment must be approved by a librarian. </p>
+                        <fieldset class="action">
+                            <input type="submit" class="btn btn-primary" value="Submit and close this window" />
+                            <a class="cancel close" href="#">Cancel</a>
+                        </fieldset>
+                    </form>
+                </div>
+                <!-- / #usersendshelfform -->
+            </div>
+            <!-- / .span12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' is_popup=1 %]
 [% BLOCK jsinclude %]
-<script>
-
-         $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             [% IF WINDOW_CLOSE %]
                 opener.location.reload();
                 window.close();
             [% END %]
         });
-
-</script>
+    </script>
 [% END %]

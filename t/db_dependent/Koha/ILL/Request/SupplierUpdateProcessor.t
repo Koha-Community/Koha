@@ -34,4 +34,5 @@ isa_ok( $processor, 'Koha::ILL::Request::SupplierUpdateProcessor' );
 
 warning_like {
     $processor->run()
-} qr/run should only be invoked by a subclass/, 'Invoking base class "run" warns';
+}
+qr/run should only be invoked by a subclass/, 'Invoking base class "run" warns';

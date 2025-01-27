@@ -32,52 +32,74 @@ BEGIN {
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder    = t::lib::TestBuilder->new;
 my $nb_of_adjs = Koha::Acquisition::Invoice::Adjustments->search->count;
-my $budget_id = $builder->build({source=>'Aqbudget'})->{budget_id};
-my $invoice_id = $builder->build({source=>'Aqinvoice'})->{invoiceid};
+my $budget_id  = $builder->build( { source => 'Aqbudget' } )->{budget_id};
+my $invoice_id = $builder->build( { source => 'Aqinvoice' } )->{invoiceid};
 
-my $new_adj = Koha::Acquisition::Invoice::Adjustment->new({
-    note => 'noted',
-    invoiceid => $invoice_id,
-    adjustment => '3',
-    reason => 'unreasonable',
-    budget_id => $budget_id,
-})->store;
+my $new_adj = Koha::Acquisition::Invoice::Adjustment->new(
+    {
+        note       => 'noted',
+        invoiceid  => $invoice_id,
+        adjustment => '3',
+        reason     => 'unreasonable',
+        budget_id  => $budget_id,
+    }
+)->store;
 
-like( $new_adj->adjustment_id, qr|^\d+$|, 'Adding a new adjustment should have set the adjustment_id');
+like( $new_adj->adjustment_id, qr|^\d+$|, 'Adding a new adjustment should have set the adjustment_id' );
 
-my $new_adj2 = Koha::Acquisition::Invoice::Adjustment->new({
-    note => 'not noted',
-    invoiceid => $invoice_id,
-    adjustment => '-3',
-    reason => 'unreasonable',
-    budget_id => $budget_id,
-})->store;
+my $new_adj2 = Koha::Acquisition::Invoice::Adjustment->new(
+    {
+        note       => 'not noted',
+        invoiceid  => $invoice_id,
+        adjustment => '-3',
+        reason     => 'unreasonable',
+        budget_id  => $budget_id,
+    }
+)->store;
 
-ok( $new_adj->adjustment_id < $new_adj2->adjustment_id, 'Adding a new adjustment should increment');
-is( Koha::Acquisition::Invoice::Adjustments->search->count, $nb_of_adjs + 2, 'The 2 adjustments should have been added' );
+ok( $new_adj->adjustment_id < $new_adj2->adjustment_id, 'Adding a new adjustment should increment' );
+is(
+    Koha::Acquisition::Invoice::Adjustments->search->count, $nb_of_adjs + 2,
+    'The 2 adjustments should have been added'
+);
 
 my $retrieved_adj = Koha::Acquisition::Invoice::Adjustments->find( $new_adj->adjustment_id );
 is( $retrieved_adj->reason, $new_adj->reason, 'Find an adjustment by id should return the correct adjustment' );
 
 $retrieved_adj->delete;
-is( Koha::Acquisition::Invoice::Adjustments->search->count, $nb_of_adjs + 1, 'Delete should have deleted the adjustment' );
+is(
+    Koha::Acquisition::Invoice::Adjustments->search->count, $nb_of_adjs + 1,
+    'Delete should have deleted the adjustment'
+);
 
 subtest 'invoice' => sub {
     plan tests => 2;
 
     my $invoice = $retrieved_adj->invoice;
-    is( ref( $invoice ), 'Koha::Acquisition::Invoice', 'Koha::Acquisition::Invoice::Adjustment->invoice should return a Koha::Acquisition::Invoice' );
-    is( $invoice->invoiceid, $retrieved_adj->invoiceid, 'Koha::Acquisition::Invoice::Adjustment->invoice should return the correct invoice' );
+    is(
+        ref($invoice), 'Koha::Acquisition::Invoice',
+        'Koha::Acquisition::Invoice::Adjustment->invoice should return a Koha::Acquisition::Invoice'
+    );
+    is(
+        $invoice->invoiceid, $retrieved_adj->invoiceid,
+        'Koha::Acquisition::Invoice::Adjustment->invoice should return the correct invoice'
+    );
 };
 
 subtest 'fund' => sub {
     plan tests => 2;
 
     my $fund = $retrieved_adj->fund;
-    is( ref( $fund ), 'Koha::Acquisition::Fund', 'Koha::Acquisition::Invoice::Adjustment->fund should return a Koha::Acquisition::Fund' );
-    is( $fund->budget_id, $retrieved_adj->budget_id, 'Koha::Acquisition::Invoice::Adjustment->fund should return the correct fund ' );
+    is(
+        ref($fund), 'Koha::Acquisition::Fund',
+        'Koha::Acquisition::Invoice::Adjustment->fund should return a Koha::Acquisition::Fund'
+    );
+    is(
+        $fund->budget_id, $retrieved_adj->budget_id,
+        'Koha::Acquisition::Invoice::Adjustment->fund should return the correct fund '
+    );
 };
 
 $schema->storage->txn_rollback;

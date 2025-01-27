@@ -27,7 +27,7 @@
     <span>Item is an onsite checkout</span>
 [% CASE 'has_fine' %]
     <span>Item has an outstanding fine</span>
-[% CASE 'item_issued_to_other_patron'%]
+[% CASE 'item_issued_to_other_patron' %]
     <span>Item already issued to other borrower</span>
 [% CASE %]
     <span>Unknown error</span>

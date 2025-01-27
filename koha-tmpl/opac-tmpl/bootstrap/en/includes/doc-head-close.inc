@@ -4,9 +4,10 @@
 [%- USE KohaPlugins -%]
 [% USE Asset %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Koha" /> <!-- leave this for stats -->
+<meta name="generator" content="Koha" />
+<!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="csrf-token" content="[% Koha.GenerateCSRF | $raw %]">
+<meta name="csrf-token" content="[% Koha.GenerateCSRF | $raw %]" />
 [% IF ( Koha.Preference('OpacMetaDescription') ) %]
     <meta name="description" content="[% Koha.Preference('OpacMetaDescription') | html %]" />
 [% END %]
@@ -66,7 +67,7 @@
     [% END %]
 [% END %]
 [% IF ( Koha.Preference('OPACBaseURL') ) %]
-    <link rel="search" type="application/opensearchdescription+xml" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-search.pl?format=opensearchdescription" title="Search [% LibraryNameTitle | html %]">
+    <link rel="search" type="application/opensearchdescription+xml" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-search.pl?format=opensearchdescription" title="Search [% LibraryNameTitle | html %]" />
     <link rel="unapi-server" type="application/xml" title="unAPI" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/unapi" />
 [% END %]
 [% FILTER collapse %]

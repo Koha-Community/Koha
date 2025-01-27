@@ -22,23 +22,21 @@ use Modern::Perl;
 use HTTP::OAI;
 use HTTP::OAI::SAXHandler qw( g_data_element );
 
-
 sub new {
     my ( $class, %args ) = @_;
 
     my $self = {};
 
-    if(my $setDescription = $args{setDescription}) {
+    if ( my $setDescription = $args{setDescription} ) {
         $self->{setDescription} = $setDescription;
     }
-    if(my $handler = $args{handler}) {
+    if ( my $handler = $args{handler} ) {
         $self->{handler} = $handler;
     }
 
     bless $self, $class;
     return $self;
 }
-
 
 sub set_handler {
     my ( $self, $handler ) = @_;
@@ -48,11 +46,13 @@ sub set_handler {
     return $self;
 }
 
-
 sub generate {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    g_data_element($self->{handler}, 'http://www.openarchives.org/OAI/2.0/', 'setDescription', {}, $self->{setDescription});
+    g_data_element(
+        $self->{handler}, 'http://www.openarchives.org/OAI/2.0/', 'setDescription', {},
+        $self->{setDescription}
+    );
 
     return $self;
 }

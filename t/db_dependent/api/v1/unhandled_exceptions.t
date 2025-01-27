@@ -46,8 +46,7 @@ subtest 'unhandled_exception() tests' => sub {
         }
     );
     my $password = 'thePassword123';
-    $authorized_patron->set_password(
-        { password => $password, skip_validation => 1 } );
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $authorized_patron->userid;
 
     my $message = 'delete died';
@@ -55,12 +54,11 @@ subtest 'unhandled_exception() tests' => sub {
     my $mock_patron = Test::MockModule->new('Koha::Patron');
     $mock_patron->mock( 'delete', sub { Koha::Exception->throw($message); } );
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id )
-      ->status_is('500')
-      ->json_is(
-        {   error      => 'Something went wrong, check Koha logs for details.',
+    $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id )->status_is('500')->json_is(
+        {
+            error      => 'Something went wrong, check Koha logs for details.',
             error_code => 'internal_server_error',
         }
     );

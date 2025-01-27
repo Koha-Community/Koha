@@ -21,11 +21,11 @@ use CGI;
 
 use JSON qw( to_json from_json );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth        qw( get_template_and_user );
 use C4::Circulation qw( barcodedecode );
-use C4::Output qw( output_with_http_headers output_html_with_http_headers );
-use C4::Items qw( SearchItems );
-use C4::Koha qw( GetAuthorisedValues );
+use C4::Output      qw( output_with_http_headers output_html_with_http_headers );
+use C4::Items       qw( SearchItems );
+use C4::Koha        qw( GetAuthorisedValues );
 
 use Koha::AuthorisedValues;
 use Koha::Biblios;
@@ -35,7 +35,7 @@ use Koha::Libraries;
 
 my $cgi = CGI->new;
 
-my $format = $cgi->param('format');
+my $format        = $cgi->param('format');
 my $template_name = 'catalogue/itemsearch.tt';
 
 if ( defined $format and $format eq 'json' ) {
@@ -100,18 +100,30 @@ if ( defined $format and $format eq 'json' ) {
     die "Unsupported format $format";
 }
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => $template_name,
-    query => $cgi,
-    type => 'intranet',
-    flagsrequired   => { catalogue => 1 },
-});
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $template_name,
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { catalogue => 1 },
+    }
+);
 
-my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-my $itemlost_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
+my $mss = Koha::MarcSubfieldStructures->search(
+    {
+        frameworkcode    => '', kohafield => 'items.itemlost',
+        authorised_value => [ -and => { '!=' => undef }, { '!=' => '' } ]
+    }
+);
+my $itemlost_values = $mss->count ? GetAuthorisedValues( $mss->next->authorised_value ) : [];
 
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.withdrawn', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-my $withdrawn_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
+$mss = Koha::MarcSubfieldStructures->search(
+    {
+        frameworkcode    => '', kohafield => 'items.withdrawn',
+        authorised_value => [ -and => { '!=' => undef }, { '!=' => '' } ]
+    }
+);
+my $withdrawn_values = $mss->count ? GetAuthorisedValues( $mss->next->authorised_value ) : [];
 
 $mss = Koha::MarcSubfieldStructures->search(
     {
@@ -125,12 +137,13 @@ if ( Koha::MarcSubfieldStructures->search( { frameworkcode => '', kohafield => '
     $template->param( has_new_status => 1 );
 }
 
-if ( defined $format and $format ne 'shareable') {
+if ( defined $format and $format ne 'shareable' ) {
+
     # Parameters given, it's a search
 
     my $filter = {
         conjunction => 'AND',
-        filters => [],
+        filters     => [],
     };
 
     foreach my $p (
@@ -163,29 +176,30 @@ if ( defined $format and $format ne 'shareable') {
     my @op          = $param_names{'op[]'} ? $cgi->multi_param('op[]') : $cgi->multi_param('op');
 
     my $f;
-    for (my $i = 0; $i < @fields; $i++) {
+    for ( my $i = 0 ; $i < @fields ; $i++ ) {
         my $field = $fields[$i];
-        my $q = shift @q;
-        my $op = shift @op;
-        if (defined $q and $q ne '') {
-            if (C4::Context->preference("marcflavour") ne "UNIMARC" && $field eq 'publicationyear') {
+        my $q     = shift @q;
+        my $op    = shift @op;
+        if ( defined $q and $q ne '' ) {
+            if ( C4::Context->preference("marcflavour") ne "UNIMARC" && $field eq 'publicationyear' ) {
                 $field = 'copyrightdate';
             }
 
-            if ($i == 0) {
+            if ( $i == 0 ) {
                 $f = {
-                    field => $field,
-                    query => $q,
+                    field    => $field,
+                    query    => $q,
                     operator => $op,
                 };
             } else {
                 my $c = shift @c;
                 $f = {
                     conjunction => $c,
-                    filters => [
-                        $f, {
-                            field => $field,
-                            query => $q,
+                    filters     => [
+                        $f,
+                        {
+                            field    => $field,
+                            query    => $q,
                             operator => $op,
                         }
                     ],
@@ -218,7 +232,7 @@ if ( defined $format and $format ne 'shareable') {
     foreach my $p (qw( onloan )) {
         my $v = $cgi->param($p) // '';
         my $f = {
-            field => $p,
+            field    => $p,
             operator => "is",
         };
         if ( $v eq 'IS NOT NULL' ) {
@@ -229,39 +243,41 @@ if ( defined $format and $format ne 'shareable') {
         push @{ $filter->{filters} }, $f unless ( $v eq "" );
     }
 
-    if (my $itemcallnumber_from = scalar $cgi->param('itemcallnumber_from')) {
+    if ( my $itemcallnumber_from = scalar $cgi->param('itemcallnumber_from') ) {
         push @{ $filter->{filters} }, {
-            field => 'itemcallnumber',
-            query => $itemcallnumber_from,
+            field    => 'itemcallnumber',
+            query    => $itemcallnumber_from,
             operator => '>=',
         };
     }
-    if (my $itemcallnumber_to = scalar $cgi->param('itemcallnumber_to')) {
+    if ( my $itemcallnumber_to = scalar $cgi->param('itemcallnumber_to') ) {
         push @{ $filter->{filters} }, {
-            field => 'itemcallnumber',
-            query => $itemcallnumber_to,
+            field    => 'itemcallnumber',
+            query    => $itemcallnumber_to,
             operator => '<=',
         };
     }
 
     my $sortby = $cgi->param('sortby') || 'itemnumber';
-    if (C4::Context->preference("marcflavour") ne "UNIMARC" && $sortby eq 'publicationyear') {
+    if ( C4::Context->preference("marcflavour") ne "UNIMARC" && $sortby eq 'publicationyear' ) {
         $sortby = 'copyrightdate';
     }
     my $search_params = {
-        rows => scalar $cgi->param('rows') // 20,
-        page => scalar $cgi->param('page') || 1,
-        sortby => $sortby,
+        rows      => scalar $cgi->param('rows') // 20,
+        page      => scalar $cgi->param('page') || 1,
+        sortby    => $sortby,
         sortorder => scalar $cgi->param('sortorder') || 'asc',
     };
 
-    my ($results, $total_rows) = SearchItems($filter, $search_params);
+    my ( $results, $total_rows ) = SearchItems( $filter, $search_params );
 
-    if ($format eq 'barcodes') {
-        print $cgi->header({
-            type => 'text/plain',
-            attachment => 'barcodes.txt',
-        });
+    if ( $format eq 'barcodes' ) {
+        print $cgi->header(
+            {
+                type       => 'text/plain',
+                attachment => 'barcodes.txt',
+            }
+        );
 
         foreach my $item (@$results) {
             print $item->{barcode} . "\n";
@@ -272,9 +288,9 @@ if ( defined $format and $format ne 'shareable') {
     if ($results) {
         foreach my $item (@$results) {
             my $biblio = Koha::Biblios->find( $item->{biblionumber} );
-            $item->{biblio} = $biblio;
+            $item->{biblio}     = $biblio;
             $item->{biblioitem} = $biblio->biblioitem->unblessed;
-            my $checkout = Koha::Checkouts->find({ itemnumber => $item->{itemnumber} });
+            my $checkout = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
             $item->{checkout} = $checkout;
         }
     }
@@ -284,20 +300,22 @@ if ( defined $format and $format ne 'shareable') {
         search_params => $search_params,
         results       => $results,
         total_rows    => $total_rows,
-        user          => Koha::Patrons->find( $borrowernumber ),
+        user          => Koha::Patrons->find($borrowernumber),
     );
 
-    if ($format eq 'csv') {
-        print $cgi->header({
-            type => 'text/csv',
-            attachment => 'items.csv',
-        });
+    if ( $format eq 'csv' ) {
+        print $cgi->header(
+            {
+                type       => 'text/csv',
+                attachment => 'items.csv',
+            }
+        );
 
         for my $line ( split '\n', $template->output ) {
             print "$line\n" unless $line =~ m|^\s*$|;
         }
-    } elsif ($format eq 'json') {
-        $template->param(draw => scalar $cgi->param('draw'));
+    } elsif ( $format eq 'json' ) {
+        $template->param( draw => scalar $cgi->param('draw') );
         output_with_http_headers $cgi, $cookie, $template->output, 'json';
     }
 
@@ -306,13 +324,15 @@ if ( defined $format and $format ne 'shareable') {
 
 # Display the search form
 
-my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } )->as_list;
-my @itemtypes = map { value => $_->itemtype, label => $_->translated_description }, Koha::ItemTypes->search_with_localization->as_list;
+my @branches = map { value => $_->branchcode, label => $_->branchname },
+    Koha::Libraries->search( {}, { order_by => 'branchname' } )->as_list;
+my @itemtypes = map { value => $_->itemtype, label => $_->translated_description },
+    Koha::ItemTypes->search_with_localization->as_list;
 
-my @ccodes = Koha::AuthorisedValues->get_descriptions_by_koha_field({ kohafield => 'items.ccode' });
+my @ccodes = Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.ccode' } );
 foreach my $ccode (@ccodes) {
     $ccode->{value} = $ccode->{authorised_value},
-    $ccode->{label} = $ccode->{lib},
+        $ccode->{label} = $ccode->{lib},;
 }
 
 my @itemlosts;
@@ -343,21 +363,21 @@ my @items_search_fields = GetItemSearchFields();
 
 my $authorised_values = {};
 foreach my $field (@items_search_fields) {
-    if (my $category = ($field->{authorised_values_category})) {
+    if ( my $category = ( $field->{authorised_values_category} ) ) {
         $authorised_values->{$category} = GetAuthorisedValues($category);
     }
 }
 
 $template->param(
-    branches => \@branches,
-    itemtypes => \@itemtypes,
-    ccodes => \@ccodes,
-    itemlosts => \@itemlosts,
-    withdrawns => \@withdrawns,
-    damageds => \@damageds,
-    items_search_fields => \@items_search_fields,
+    branches               => \@branches,
+    itemtypes              => \@itemtypes,
+    ccodes                 => \@ccodes,
+    itemlosts              => \@itemlosts,
+    withdrawns             => \@withdrawns,
+    damageds               => \@damageds,
+    items_search_fields    => \@items_search_fields,
     authorised_values_json => to_json($authorised_values),
-    query => $cgi,
+    query                  => $cgi,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

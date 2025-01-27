@@ -6,43 +6,44 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Browse our catalog") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Browse our catalog") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-browser' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Browse our catalog</span>
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Browse our catalog</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+
+    <div class="container-fluid">
+        <div class="row">
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
+                [% SET div_class = 'col-10 order-first order-md-first order-lg-2' %]
+            [% ELSE %]
+                [% SET div_class = 'col order-first order-md-first order-lg-2' %]
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                    [% SET div_class = 'col-10 order-first order-md-first order-lg-2' %]
-                [% ELSE %]
-                    [% SET div_class = 'col order-first order-md-first order-lg-2' %]
-                [% END %]
+            <div class="[% div_class | html %]">
+                <div id="userbrowser" class="maincontent">
+                    <h1>Browse our catalog</h1>
 
-                <div class="[% div_class | html %]">
-                    <div id="userbrowser" class="maincontent">
-                        <h1>Browse our catalog</h1>
-
-                        [% IF ( have_hierarchy ) %]
-                            [%# FIXME We could fix this code and remove the prettier-ignore %]
-                            <!-- prettier-ignore-start -->
+                    [% IF ( have_hierarchy ) %]
+                        [%# FIXME We could fix this code and remove the prettier-ignore %]
+                        <!-- prettier-ignore-start -->
                             <ul>
                                 <li>
                                     [% description | html %] <a href="opac-browser.pl">Top level</a>
@@ -82,16 +83,23 @@
                                 </li>
                             </ul>
                             <!-- prettier-ignore-end -->
-                        [% ELSE %]
-                            <div class="warning">The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha-community.org/wiki/Opac_browse_feature">Koha Wiki</a> for more information on what it does and how to configure it.</div>
-                        [% END # / IF have_hierarchy %]
-
-                    </div> <!-- / .userbrowser -->
-
-                </div> <!-- / .col-10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                    [% ELSE %]
+                        <div class="warning"
+                            >The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha-community.org/wiki/Opac_browse_feature">Koha Wiki</a> for more information on what it does and how to configure
+                            it.</div
+                        >
+                    [% END # / IF have_hierarchy %]
+                </div>
+                <!-- / .userbrowser -->
+            </div>
+            <!-- / .col-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

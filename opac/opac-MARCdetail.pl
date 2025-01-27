@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 NAME
 
 opac-MARCdetail.pl : script to show a biblio in MARC format
@@ -48,7 +47,7 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( parametrized_url output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Biblio qw(
     CountItemsIssued
     GetAuthorisedValueDesc
@@ -57,10 +56,10 @@ use C4::Biblio qw(
     GetMarcStructure
     TransformMarcToKoha
 );
-use C4::Record qw( marc2cites );
+use C4::Record   qw( marc2cites );
 use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Members;
-use C4::Koha qw( GetNormalizedISBN );
+use C4::Koha        qw( GetNormalizedISBN );
 use List::MoreUtils qw( uniq );
 use Koha::Biblios;
 use Koha::CirculationRules;
@@ -74,7 +73,7 @@ use Koha::Util::MARC;
 my $query = CGI->new();
 
 my $biblionumber = $query->param('biblionumber');
-if ( ! $biblionumber ) {
+if ( !$biblionumber ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -98,17 +97,18 @@ if ( !$biblio ) {
 }
 
 unless ( $patron and $patron->category->override_hidden_items ) {
+
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems
-    if ( $biblio->hidden_in_opac({ rules => C4::Context->yaml_preference('OpacHiddenItems') }) ) {
-        print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
+    if ( $biblio->hidden_in_opac( { rules => C4::Context->yaml_preference('OpacHiddenItems') } ) ) {
+        print $query->redirect('/cgi-bin/koha/errors/404.pl');    # escape early
         exit;
     }
 }
 
 my $metadata_extractor = $biblio->metadata_extractor;
 
-my $items = $biblio->items->filter_by_visible_in_opac({ patron => $patron });
+my $items     = $biblio->items->filter_by_visible_in_opac( { patron => $patron } );
 my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $tagslib   = &GetMarcStructure( 0, $framework );
 
@@ -127,18 +127,18 @@ if ( !$record ) {
 }
 
 # get biblionumbers stored in the cart
-if(my $cart_list = $query->cookie("bib_list")){
-    my @cart_list = split(/\//, $cart_list);
-    if ( grep {$_ eq $biblionumber} @cart_list) {
+if ( my $cart_list = $query->cookie("bib_list") ) {
+    my @cart_list = split( /\//, $cart_list );
+    if ( grep { $_ eq $biblionumber } @cart_list ) {
         $template->param( incart => 1 );
     }
 }
 
-my ($bt_tag,$bt_subtag) = GetMarcFromKohaField( 'biblio.title' );
+my ( $bt_tag, $bt_subtag ) = GetMarcFromKohaField('biblio.title');
 $template->param(
     bibliotitle => $biblio->title,
-) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
-     $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
+    ) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 &&    # <=0 OPAC visible.
+    $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;           # except -8;
 
 # Count the number of items that allow holds at the 'All libraries' rule level
 my $holdable_items = $biblio->items->filter_by_for_hold->count;
@@ -189,51 +189,51 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
         # if tag <10, there's no subfield, use the "@" trick
         if ( $fields[$x_i]->tag() < 10 ) {
             next
-              if (
-                $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{tab} ne $tabloop );
+                if ( $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{tab} ne $tabloop );
             next if ( $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{hidden} > 0 );
             my %subfield_data;
             $subfield_data{marc_lib} =
-              $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{lib};
+                $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{lib};
             $subfield_data{marc_value}    = $fields[$x_i]->data();
             $subfield_data{marc_subfield} = '@';
             $subfield_data{marc_tag}      = $fields[$x_i]->tag();
             push( @subfields_data, \%subfield_data );
-        }
-        else {
-            my @subf = $fields[$x_i]->subfields;
+        } else {
+            my @subf     = $fields[$x_i]->subfields;
             my $previous = '';
+
             # loop through each subfield
             for my $i ( 0 .. $#subf ) {
-                $subf[$i][0] = "@" unless defined($subf[$i][0]);
+                $subf[$i][0] = "@" unless defined( $subf[$i][0] );
                 my $sf_def = $tagslib->{ $fields[$x_i]->tag() };
                 $sf_def = $sf_def->{ $subf[$i][0] } if defined($sf_def);
-                my ($tab,$hidden,$lib);
-                $tab = $sf_def->{tab} if defined($sf_def);
-                $tab = $tab // int($fields[$x_i]->tag()/100);
+                my ( $tab, $hidden, $lib );
+                $tab    = $sf_def->{tab} if defined($sf_def);
+                $tab    = $tab // int( $fields[$x_i]->tag() / 100 );
                 $hidden = $sf_def->{hidden} if defined($sf_def);
                 $hidden = $hidden // 0;
                 next if ( $tab != $tabloop );
                 next if ( $hidden > 0 );
                 my %subfield_data;
-                $lib = $sf_def->{lib} if defined($sf_def);
-                $lib = $lib // '--';
-                $subfield_data{marc_lib} = ($lib eq $previous) ?  '--' : $lib;
-                $previous = $lib;
-                $subfield_data{link} = $sf_def->{link};
+                $lib                     = $sf_def->{lib} if defined($sf_def);
+                $lib                     = $lib // '--';
+                $subfield_data{marc_lib} = ( $lib eq $previous ) ? '--' : $lib;
+                $previous                = $lib;
+                $subfield_data{link}     = $sf_def->{link};
                 $subf[$i][1] =~ s/\n/<br\/>/g;
+
                 if ( $sf_def->{isurl} ) {
                     $subfield_data{marc_value} = "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
-                }
-                elsif ( defined($sf_def->{kohafield}) && $sf_def->{kohafield} eq "biblioitems.isbn" ) {
+                } elsif ( defined( $sf_def->{kohafield} ) && $sf_def->{kohafield} eq "biblioitems.isbn" ) {
                     $subfield_data{marc_value} = $subf[$i][1];
-                }
-                else {
+                } else {
                     if ( $sf_def->{authtypecode} ) {
                         $subfield_data{authority} = $fields[$x_i]->subfield(9);
                     }
-                    $subfield_data{marc_value} = GetAuthorisedValueDesc( $fields[$x_i]->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib, '', 'opac' );
+                    $subfield_data{marc_value} = GetAuthorisedValueDesc(
+                        $fields[$x_i]->tag(),
+                        $subf[$i][0], $subf[$i][1], '', $tagslib, '', 'opac'
+                    );
                 }
                 $subfield_data{marc_subfield} = $subf[$i][0];
                 $subfield_data{marc_tag}      = $fields[$x_i]->tag();
@@ -243,23 +243,19 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
         if ( $#subfields_data >= 0 ) {
             my %tag_data;
             if (   ( $fields[$x_i]->tag() eq $fields[ $x_i - 1 ]->tag() )
-                && ( C4::Context->preference('LabelMARCView') eq 'economical' )
-              )
+                && ( C4::Context->preference('LabelMARCView') eq 'economical' ) )
             {
                 $tag_data{tag} = "";
-            }
-            else {
+            } else {
                 if ( C4::Context->preference('hide_marc') ) {
                     $tag_data{tag} = $tagslib->{ $fields[$x_i]->tag() }->{lib};
-                }
-                else {
+                } else {
                     my $sf_def = $tagslib->{ $fields[$x_i]->tag() };
                     my $lib;
                     $lib = $sf_def->{lib} if defined($sf_def);
                     $lib = $lib // '';
-                    $tag_data{tag} = $fields[$x_i]->tag() . ' '
-                      . C4::Koha::display_marc_indicators($fields[$x_i])
-                      . " - $lib";
+                    $tag_data{tag} =
+                        $fields[$x_i]->tag() . ' ' . C4::Koha::display_marc_indicators( $fields[$x_i] ) . " - $lib";
                 }
             }
             my @tmp = @subfields_data;
@@ -271,7 +267,6 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
     $template->param( "tab" . $tabloop . "XX" => \@loop_data );
 }
 
-
 # now, build item tab !
 # the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
 # loop through each tag
@@ -279,8 +274,7 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
 # then construct template.
 # $record has already had all the item fields filtered above.
 my @fields = $record->fields();
-my %witness
-  ; #---- stores the list of subfields used at least once, with the "meaning" of the code
+my %witness;    #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @item_subfield_codes;
 my @item_loop;
 foreach my $field (@fields) {
@@ -291,51 +285,51 @@ foreach my $field (@fields) {
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
         my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
-        next if ( ($sf_def->{tab}||0) != 10 );
-        next if ( ($sf_def->{hidden}||0) > 0 );
+        next if ( ( $sf_def->{tab}    || 0 ) != 10 );
+        next if ( ( $sf_def->{hidden} || 0 ) > 0 );
 
         push @item_subfield_codes, $subf[$i][0];
         $witness{ $subf[$i][0] } = $sf_def->{lib};
 
         # Allow repeatables (BZ 13574)
-        if( $item->{$subf[$i][0]} ) {
-            $item->{$subf[$i][0]} .= ' | ';
+        if ( $item->{ $subf[$i][0] } ) {
+            $item->{ $subf[$i][0] } .= ' | ';
         } else {
-            $item->{$subf[$i][0]} = q{};
+            $item->{ $subf[$i][0] } = q{};
         }
 
         if ( $sf_def->{isurl} ) {
             $item->{ $subf[$i][0] } .= "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
-        }
-        elsif ( $sf_def->{kohafield} eq "biblioitems.isbn" ) {
+        } elsif ( $sf_def->{kohafield} eq "biblioitems.isbn" ) {
             $item->{ $subf[$i][0] } .= $subf[$i][1];
-        }
-        else {
-            $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
-                $subf[$i][1], '', $tagslib, '', 'opac' ) // q{};
+        } else {
+            $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc(
+                $field->tag(), $subf[$i][0],
+                $subf[$i][1],  '', $tagslib, '', 'opac'
+            ) // q{};
         }
 
         my $kohafield = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield};
         $item->{ $subf[$i][0] } = output_pref( { str => $item->{ $subf[$i][0] }, dateonly => 1 } )
-          if grep { $kohafield eq $_ }
-              qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate );
+            if grep { $kohafield eq $_ }
+            qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate );
 
     }
     push @item_loop, $item if $item;
 }
-my ( $holdingbrtagf, $holdingbrtagsubf ) =
-  &GetMarcFromKohaField( "items.holdingbranch" );
+my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField("items.holdingbranch");
 @item_loop =
-  sort { ($a->{$holdingbrtagsubf}||'') cmp ($b->{$holdingbrtagsubf}||'') } @item_loop;
+    sort { ( $a->{$holdingbrtagsubf} || '' ) cmp( $b->{$holdingbrtagsubf} || '' ) } @item_loop;
 
 @item_subfield_codes = uniq @item_subfield_codes;
+
 # fill item info
 my @item_header_loop;
-for my $subfield_code ( @item_subfield_codes ) {
+for my $subfield_code (@item_subfield_codes) {
     push @item_header_loop, $witness{$subfield_code};
-    for my $item_data ( @item_loop ) {
-        $item_data->{$subfield_code} ||= "&nbsp;"
-     }
+    for my $item_data (@item_loop) {
+        $item_data->{$subfield_code} ||= "&nbsp;";
+    }
 }
 
 if ( C4::Context->preference("OPACISBD") ) {
@@ -350,10 +344,10 @@ my $control_number = $metadata_extractor->get_control_number();
 my $marcissns      = GetMarcISSN( $record, $marcflavour );
 my $issn           = $marcissns->[0] || '';
 
-if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
-    $dat->{title} =~ s/\/+$//; # remove trailing slash
-    $dat->{title} =~ s/\s+$//; # remove trailing space
-    my $oclc_no = Koha::Util::MARC::oclc_number( $record );
+if ( my $search_for_title = C4::Context->preference('OPACSearchForTitleIn') ) {
+    $dat->{title} =~ s/\/+$//;    # remove trailing slash
+    $dat->{title} =~ s/\s+$//;    # remove trailing space
+    my $oclc_no = Koha::Util::MARC::oclc_number($record);
     $search_for_title = parametrized_url(
         $search_for_title,
         {
@@ -366,20 +360,19 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
             OCLC_NO       => $oclc_no,
         }
     );
-    $template->param('OPACSearchForTitleIn' => $search_for_title);
+    $template->param( 'OPACSearchForTitleIn' => $search_for_title );
 }
 
-if( C4::Context->preference('ArticleRequests') ) {
-    my $itemtype = Koha::ItemTypes->find($biblio->itemtype);
-    my $artreqpossible = $patron
-        ? $biblio->can_article_request( $patron )
-        : $itemtype
-        ? $itemtype->may_article_request
-        : q{};
+if ( C4::Context->preference('ArticleRequests') ) {
+    my $itemtype = Koha::ItemTypes->find( $biblio->itemtype );
+    my $artreqpossible =
+          $patron   ? $biblio->can_article_request($patron)
+        : $itemtype ? $itemtype->may_article_request
+        :             q{};
     $template->param( artreqpossible => $artreqpossible );
 }
 
-my $norequests = ! $biblio->items->filter_by_for_hold->count;
+my $norequests = !$biblio->items->filter_by_for_hold->count;
 $template->param(
     item_loop           => \@item_loop,
     item_header_loop    => \@item_header_loop,

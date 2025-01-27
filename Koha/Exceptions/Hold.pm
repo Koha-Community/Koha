@@ -30,7 +30,7 @@ use Exception::Class (
     'Koha::Exceptions::Hold::CannotSuspendFound' => {
         isa         => 'Koha::Exceptions::Hold',
         description => "Found holds cannot be suspended",
-        fields      =>  ['status']
+        fields      => ['status']
     },
     'Koha::Exceptions::Hold::InvalidPickupLocation' => {
         isa         => 'Koha::Exceptions::Hold',
@@ -47,9 +47,9 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Hold::CannotSuspendFound') ) {
-            $msg = sprintf("Found hold cannot be suspended. Status=%s", $self->status );
+            $msg = sprintf( "Found hold cannot be suspended. Status=%s", $self->status );
         }
     }
 

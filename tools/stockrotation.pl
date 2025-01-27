@@ -36,11 +36,13 @@ use Koha::StockRotationRotas;
 use Koha::StockRotationItems;
 use Koha::StockRotationStages;
 use Koha::Item;
-use Koha::Util::StockRotation qw( get_branches get_stages move_to_next_stage toggle_indemand remove_from_stage add_items_to_rota get_barcodes_status );
+use Koha::Util::StockRotation
+    qw( get_branches get_stages move_to_next_stage toggle_indemand remove_from_stage add_items_to_rota get_barcodes_status );
 
 my $input = CGI->new;
 
-unless (C4::Context->preference('StockRotation')) {
+unless ( C4::Context->preference('StockRotation') ) {
+
     # redirect to Intranet home if self-check is not enabled
     print $input->redirect("/cgi-bin/koha/mainpage.pl");
     exit;
@@ -48,11 +50,11 @@ unless (C4::Context->preference('StockRotation')) {
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'tools/stockrotation.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => {
-            tools => '*',
+        template_name => 'tools/stockrotation.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => {
+            tools         => '*',
             stockrotation => '*',
         },
     }
@@ -65,14 +67,12 @@ our %params = $input->Vars();
 
 my $op = $params{op};
 
-if (!defined $op) {
+if ( !defined $op ) {
 
     # No operation is supplied, we're just displaying the list of rotas
     my $rotas = Koha::StockRotationRotas->search(
         undef,
-        {
-            order_by => { -asc => 'title' }
-        }
+        { order_by => { -asc => 'title' } }
     )->as_list;
 
     $template->param(
@@ -80,20 +80,18 @@ if (!defined $op) {
         no_op_set      => 1
     );
 
-} elsif ($op eq 'create_edit_rota') {
+} elsif ( $op eq 'create_edit_rota' ) {
 
     # Edit an existing rota or define a new one
     my $rota_id = $params{rota_id};
 
     my $rota = {};
 
-    if (!defined $rota_id) {
+    if ( !defined $rota_id ) {
 
         # No ID supplied, we're creating a new rota
         # Create a shell rota hashref
-        $rota = {
-            cyclical => 1
-        };
+        $rota = { cyclical => 1 };
 
     } else {
 
@@ -107,30 +105,30 @@ if (!defined $op) {
         op   => $op
     );
 
-} elsif ($op eq 'cud-toggle_rota') {
+} elsif ( $op eq 'cud-toggle_rota' ) {
 
     # Find and update the active status of the rota
-    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+    my $rota = Koha::StockRotationRotas->find( $params{rota_id} );
 
-    my $new_active = ($rota->active == 1) ? 0 : 1;
+    my $new_active = ( $rota->active == 1 ) ? 0 : 1;
 
     $rota->active($new_active)->store;
 
     # Return to rotas page
     print $input->redirect('stockrotation.pl');
 
-} elsif ($op eq 'cud-process_rota') {
+} elsif ( $op eq 'cud-process_rota' ) {
 
     # Get a hashref of the submitted rota data
     my $rota = get_rota_from_form();
 
-    if (!process_rota($rota)) {
+    if ( !process_rota($rota) ) {
 
         # The submitted rota was invalid
         $template->param(
             error => 'invalid_form',
-            rota => $rota,
-            op   => 'create_edit_rota'
+            rota  => $rota,
+            op    => 'create_edit_rota'
         );
 
     } else {
@@ -140,9 +138,9 @@ if (!defined $op) {
 
     }
 
-} elsif ($op eq 'manage_stages') {
+} elsif ( $op eq 'manage_stages' ) {
 
-    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+    my $rota = Koha::StockRotationRotas->find( $params{rota_id} );
 
     $template->param(
         rota            => $rota,
@@ -152,16 +150,17 @@ if (!defined $op) {
         op              => $op
     );
 
-} elsif ($op eq 'create_edit_stage') {
+} elsif ( $op eq 'create_edit_stage' ) {
 
     # Edit an existing stage or define a new one
     my $stage_id = $params{stage_id};
 
     my $rota_id = $params{rota_id};
 
-    if (!defined $stage_id) {
+    if ( !defined $stage_id ) {
 
         my $rota = Koha::StockRotationRotas->find($rota_id);
+
         # No ID supplied, we're creating a new stage
         $template->param(
             branches => get_branches(),
@@ -187,7 +186,7 @@ if (!defined $op) {
 
     }
 
-} elsif ($op eq 'confirm_remove_from_rota') {
+} elsif ( $op eq 'confirm_remove_from_rota' ) {
 
     # Get the stage we're deleting
     $template->param(
@@ -197,56 +196,48 @@ if (!defined $op) {
         item_id  => $params{item_id}
     );
 
-} elsif ($op eq 'confirm_delete_rota') {
+} elsif ( $op eq 'confirm_delete_rota' ) {
 
     # Get the rota we're deleting
-    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+    my $rota = Koha::StockRotationRotas->find( $params{rota_id} );
 
     # Get all items on this rota, for each prefetch their
     # stage and biblio objects
     my $sritems = Koha::StockRotationItems->search(
         { 'stage.rota_id' => $params{rota_id} },
-        {
-            prefetch => {
-                stage => {
-                    'stockrotationitems' => {
-                        'itemnumber' => 'biblionumber'
-                    }
-                }
-            }
-        }
+        { prefetch        => { stage => { 'stockrotationitems' => { 'itemnumber' => 'biblionumber' } } } }
     );
 
     $template->param(
-        rota_id  => $params{rota_id},
-        sritemstotal  => $sritems->count,
-        op       => $op
+        rota_id      => $params{rota_id},
+        sritemstotal => $sritems->count,
+        op           => $op
     );
 
-} elsif ($op eq 'cud-delete_rota') {
+} elsif ( $op eq 'cud-delete_rota' ) {
 
     # Get the rota we're deleting
-    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+    my $rota = Koha::StockRotationRotas->find( $params{rota_id} );
 
     $rota->delete;
 
     # Return to the rotas list
     print $input->redirect("/cgi-bin/koha/tools/stockrotation.pl");
 
-} elsif ($op eq 'confirm_delete_stage') {
+} elsif ( $op eq 'confirm_delete_stage' ) {
 
     # Get the stage we're deleting
-    my $stage = Koha::StockRotationStages->find($params{stage_id});
+    my $stage = Koha::StockRotationStages->find( $params{stage_id} );
 
     $template->param(
         op    => $op,
         stage => $stage
     );
 
-} elsif ($op eq 'cud-delete_stage') {
+} elsif ( $op eq 'cud-delete_stage' ) {
 
     # Get the stage we're deleting
-    my $stage = Koha::StockRotationStages->find($params{stage_id});
+    my $stage = Koha::StockRotationStages->find( $params{stage_id} );
 
     # Get the ID of the rota with which this stage is associated
     # (so we can return to the "Manage stages" page after deletion)
@@ -257,7 +248,7 @@ if (!defined $op) {
     # Return to the stages list
     print $input->redirect("?op=manage_stages&rota_id=$rota_id");
 
-} elsif ($op eq 'cud-process_stage') {
+} elsif ( $op eq 'cud-process_stage' ) {
 
     # Get a hashref of the submitted stage data
     my $stage = get_stage_from_form();
@@ -265,7 +256,7 @@ if (!defined $op) {
     # The rota we're managing
     my $rota_id = $params{rota_id};
 
-    if (!process_stage($stage, $rota_id)) {
+    if ( !process_stage( $stage, $rota_id ) ) {
 
         # The submitted stage was invalid
         # Get all branches
@@ -286,23 +277,15 @@ if (!defined $op) {
 
     }
 
-} elsif ($op eq 'manage_items') {
+} elsif ( $op eq 'manage_items' ) {
 
-    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+    my $rota = Koha::StockRotationRotas->find( $params{rota_id} );
 
     # Get all items on this rota, for each prefetch their
     # stage and biblio objects
     my $sritems = Koha::StockRotationItems->search(
         { 'stage.rota_id' => $params{rota_id} },
-        {
-            prefetch => {
-                stage => {
-                    'stockrotationitems' => {
-                        'itemnumber' => 'biblionumber'
-                    }
-                }
-            }
-        }
+        { prefetch        => { stage => { 'stockrotationitems' => { 'itemnumber' => 'biblionumber' } } } }
     );
 
     $template->param(
@@ -315,30 +298,30 @@ if (!defined $op) {
         op       => $op
     );
 
-} elsif ($op eq 'cud-move_to_next_stage') {
+} elsif ( $op eq 'cud-move_to_next_stage' ) {
 
-    move_to_next_stage($params{item_id}, $params{stage_id});
+    move_to_next_stage( $params{item_id}, $params{stage_id} );
 
     # Return to the items list
-    print $input->redirect("?op=manage_items&rota_id=" . $params{rota_id});
+    print $input->redirect( "?op=manage_items&rota_id=" . $params{rota_id} );
 
-} elsif ($op eq 'cud-toggle_in_demand') {
+} elsif ( $op eq 'cud-toggle_in_demand' ) {
 
     # Toggle the item's in_demand
-    toggle_indemand($params{item_id}, $params{stage_id});
+    toggle_indemand( $params{item_id}, $params{stage_id} );
 
     # Return to the items list
-    print $input->redirect("?op=manage_items&rota_id=".$params{rota_id});
+    print $input->redirect( "?op=manage_items&rota_id=" . $params{rota_id} );
 
-} elsif ($op eq 'cud-remove_item_from_stage') {
+} elsif ( $op eq 'cud-remove_item_from_stage' ) {
 
     # Remove the item from the stage
-    remove_from_stage($params{item_id}, $params{stage_id});
+    remove_from_stage( $params{item_id}, $params{stage_id} );
 
     # Return to the items list
-    print $input->redirect("?op=manage_items&rota_id=".$params{rota_id});
+    print $input->redirect( "?op=manage_items&rota_id=" . $params{rota_id} );
 
-} elsif ($op eq 'cud-add_items_to_rota') {
+} elsif ( $op eq 'cud-add_items_to_rota' ) {
 
     # The item's barcode,
     # which we may or may not have been passed
@@ -364,12 +347,13 @@ if (!defined $op) {
 
         # Call binmode on the filehandle as we want to set a
         # UTF-8 layer on it
-        binmode($barcode_file, ":encoding(UTF-8)");
+        binmode( $barcode_file, ":encoding(UTF-8)" );
+
         # Parse the file into an array of barcodes
-        while (my $barcode = <$barcode_file>) {
+        while ( my $barcode = <$barcode_file> ) {
             $barcode =~ s/\r/\n/g;
             $barcode =~ s/\n+/\n/g;
-            my @data = split(/\n/, $barcode);
+            my @data = split( /\n/, $barcode );
             push @barcodes, @data;
         }
 
@@ -384,22 +368,22 @@ if (!defined $op) {
     };
 
     # If we have something to work with, do it
-    get_barcodes_status($rota_id, \@barcodes, $barcode_status) if (@barcodes);
+    get_barcodes_status( $rota_id, \@barcodes, $barcode_status ) if (@barcodes);
 
     # Now we know the status of each barcode, add those that
     # need it
-    if (scalar @{$barcode_status->{ok}} > 0) {
+    if ( scalar @{ $barcode_status->{ok} } > 0 ) {
 
-        add_items_to_rota($rota_id, $barcode_status->{ok});
+        add_items_to_rota( $rota_id, $barcode_status->{ok} );
 
     }
+
     # If we were only passed one barcode and it was successfully
     # added, redirect back to ourselves, we don't want to display
     # a report, redirect also if we were passed no barcodes
-    if (
-        scalar @barcodes == 0 ||
-        (scalar @barcodes == 1 && scalar @{$barcode_status->{ok}} == 1)
-    ) {
+    if ( scalar @barcodes == 0
+        || ( scalar @barcodes == 1 && scalar @{ $barcode_status->{ok} } == 1 ) )
+    {
 
         print $input->redirect("?op=manage_items&rota_id=$rota_id");
 
@@ -415,23 +399,23 @@ if (!defined $op) {
 
     }
 
-} elsif ($op eq 'cud-move_items_to_rota') {
+} elsif ( $op eq 'cud-move_items_to_rota' ) {
 
     # The barcodes of the items we're moving
     my @move = $input->multi_param('move_item');
 
-    foreach my $item(@move) {
+    foreach my $item (@move) {
 
         # The item we're moving
         my $item = Koha::Items->find($item);
 
         # Move it to the new rota
-        $item->add_to_rota($params{rota_id});
+        $item->add_to_rota( $params{rota_id} );
 
     }
 
     # Return to the items list
-    print $input->redirect("?op=manage_items&rota_id=".$params{rota_id});
+    print $input->redirect( "?op=manage_items&rota_id=" . $params{rota_id} );
 
 }
 
@@ -450,9 +434,9 @@ sub get_rota_from_form {
 sub get_stage_from_form {
 
     return {
-        stage_id    => $params{stage_id},
-        branchcode  => $params{branchcode},
-        duration    => $params{duration}
+        stage_id   => $params{stage_id},
+        branchcode => $params{branchcode},
+        duration   => $params{duration}
     };
 }
 
@@ -461,18 +445,18 @@ sub process_rota {
     my $sub_rota = shift;
 
     # Fields we require
-    my @required = ('title','cyclical');
+    my @required = ( 'title', 'cyclical' );
 
     # Count of the number of required fields we have
     my $valid = 0;
 
     # Ensure we have everything we require
-    foreach my $req(@required) {
+    foreach my $req (@required) {
 
-        if (exists $sub_rota->{$req}) {
+        if ( exists $sub_rota->{$req} ) {
 
-            chomp(my $value = $sub_rota->{$req});
-            if (length $value > 0) {
+            chomp( my $value = $sub_rota->{$req} );
+            if ( length $value > 0 ) {
                 $valid++;
             }
 
@@ -485,26 +469,23 @@ sub process_rota {
 
     # Passed validation
     # Find the rota we're updating
-    my $rota = Koha::StockRotationRotas->find($sub_rota->{id});
+    my $rota = Koha::StockRotationRotas->find( $sub_rota->{id} );
 
     if ($rota) {
 
-        $rota->title(
-            $sub_rota->{title}
-        )->cyclical(
-            $sub_rota->{cyclical}
-        )->description(
-            $sub_rota->{description}
-        )->store;
+        $rota->title( $sub_rota->{title} )->cyclical( $sub_rota->{cyclical} )->description( $sub_rota->{description} )
+            ->store;
 
     } else {
 
-        $rota = Koha::StockRotationRota->new({
-            title       => $sub_rota->{title},
-            cyclical    => $sub_rota->{cyclical},
-            active      => 0,
-            description => $sub_rota->{description}
-        })->store;
+        $rota = Koha::StockRotationRota->new(
+            {
+                title       => $sub_rota->{title},
+                cyclical    => $sub_rota->{cyclical},
+                active      => 0,
+                description => $sub_rota->{description}
+            }
+        )->store;
 
     }
 
@@ -513,21 +494,21 @@ sub process_rota {
 
 sub process_stage {
 
-    my ($sub_stage, $rota_id) = @_;
+    my ( $sub_stage, $rota_id ) = @_;
 
     # Fields we require
-    my @required = ('branchcode','duration');
+    my @required = ( 'branchcode', 'duration' );
 
     # Count of the number of required fields we have
     my $valid = 0;
 
     # Ensure we have everything we require
-    foreach my $req(@required) {
+    foreach my $req (@required) {
 
-        if (exists $sub_stage->{$req}) {
+        if ( exists $sub_stage->{$req} ) {
 
-            chomp(my $value = $sub_stage->{$req});
-            if (length $value > 0) {
+            chomp( my $value = $sub_stage->{$req} );
+            if ( length $value > 0 ) {
                 $valid++;
             }
 
@@ -540,25 +521,23 @@ sub process_stage {
 
     # Passed validation
     # Find the stage we're updating
-    my $stage = Koha::StockRotationStages->find($sub_stage->{stage_id});
+    my $stage = Koha::StockRotationStages->find( $sub_stage->{stage_id} );
 
     if ($stage) {
 
         # Updating an existing stage
-        $stage->branchcode_id(
-            $sub_stage->{branchcode}
-        )->duration(
-            $sub_stage->{duration}
-        )->store;
+        $stage->branchcode_id( $sub_stage->{branchcode} )->duration( $sub_stage->{duration} )->store;
 
     } else {
 
         # Creating a new stage
-        $stage = Koha::StockRotationStage->new({
-            branchcode_id  => $sub_stage->{branchcode},
-            rota_id        => $rota_id,
-            duration       => $sub_stage->{duration}
-        })->store;
+        $stage = Koha::StockRotationStage->new(
+            {
+                branchcode_id => $sub_stage->{branchcode},
+                rota_id       => $rota_id,
+                duration      => $sub_stage->{duration}
+            }
+        )->store;
 
     }
 

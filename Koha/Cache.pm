@@ -40,7 +40,7 @@ The first, traditional OO interface provides the following functions:
 
 use strict;
 use warnings;
-use Carp qw( croak );
+use Carp                      qw( croak );
 use Module::Load::Conditional qw( can_load );
 use Sereal::Encoder;
 use Sereal::Decoder;
@@ -51,8 +51,7 @@ use Koha::Config;
 
 use base qw(Class::Accessor);
 
-__PACKAGE__->mk_ro_accessors(
-    qw( cache memcached_cache ));
+__PACKAGE__->mk_ro_accessors(qw( cache memcached_cache ));
 
 our %L1_cache;
 our $L1_encoder = Sereal::Encoder->new;
@@ -66,14 +65,14 @@ Create a new Koha::Cache object. This is required for all cache-related function
 
 sub new {
     my ( $class, $self, $params ) = @_;
-    $self->{'default_type'} =
-         $self->{cache_type}
-      || $ENV{CACHING_SYSTEM} # DELME What about this?
-      || 'memcached';
+    $self->{'default_type'} = $self->{cache_type}
+        || $ENV{CACHING_SYSTEM}    # DELME What about this?
+        || 'memcached';
 
     my $subnamespace = $params->{subnamespace} // '';
 
-    $self->{'timeout'}   ||= 0;
+    $self->{'timeout'} ||= 0;
+
     # Should we continue to support MEMCACHED ENV vars?
     $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE};
     my @servers = split /,/, $ENV{MEMCACHED_SERVERS} || '';
@@ -82,21 +81,21 @@ sub new {
         unless @servers;
     $self->{namespace} .= ":$subnamespace:";
 
-    if ( $self->{'default_type'} eq 'memcached'
+    if (   $self->{'default_type'} eq 'memcached'
         && can_load( modules => { 'Cache::Memcached::Fast::Safe' => undef } )
-        && _initialize_memcached($self, @servers)
+        && _initialize_memcached( $self, @servers )
         && defined( $self->{'memcached_cache'} ) )
     {
         $self->{'cache'} = $self->{'memcached_cache'};
     }
 
     return
-      bless $self,
-      $class;
+        bless $self,
+        $class;
 }
 
 sub _initialize_memcached {
-    my ($self, @servers) = @_;
+    my ( $self, @servers ) = @_;
 
     return unless @servers;
 
@@ -112,9 +111,10 @@ sub _initialize_memcached {
     );
 
     # Ensure we can actually talk to the memcached server
-    my $ismemcached = $memcached->set('ismemcached','1');
+    my $ismemcached = $memcached->set( 'ismemcached', '1' );
     unless ($ismemcached) {
-        warn "\nConnection to the memcached servers '@servers' failed. Are the unix socket permissions set properly? Is the host reachable?\nIf you ignore this warning, you will face performance issues\n";
+        warn
+            "\nConnection to the memcached servers '@servers' failed. Are the unix socket permissions set properly? Is the host reachable?\nIf you ignore this warning, you will face performance issues\n";
         return $self;
     }
     $self->{'memcached_cache'} = $memcached;
@@ -172,34 +172,36 @@ sub set_in_cache {
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
     my $expiry = $options->{expiry};
     $expiry //= $self->{timeout};
-    my $set_sub = $self->{ref($self->{$cache}) . "_set"};
+    my $set_sub = $self->{ ref( $self->{$cache} ) . "_set" };
 
-    my $flag = '-CF0'; # 0: scalar, 1: frozen data structure
-    if (ref($value)) {
+    my $flag = '-CF0';    # 0: scalar, 1: frozen data structure
+    if ( ref($value) ) {
+
         # Set in L1 cache as a data structure
         # We only save the frozen form: we do want to save $value in L1
         # directly in order to protect it. And thawing now may not be
         # needed, so improves performance.
-        $value = $L1_encoder->encode($value);
-        $L1_cache{$self->{namespace}}{$key}->{frozen} = $value;
-        $flag = '-CF1';
+        $value                                          = $L1_encoder->encode($value);
+        $L1_cache{ $self->{namespace} }{$key}->{frozen} = $value;
+        $flag                                           = '-CF1';
     } else {
+
         # Set in L1 cache as a scalar; exit if we are caching an undef
-        $L1_cache{$self->{namespace}}{$key} = $value;
+        $L1_cache{ $self->{namespace} }{$key} = $value;
         return if !defined $value;
     }
 
     $value .= $flag;
+
     # We consider an expiry of 0 to be infinite
-    if ( $expiry ) {
+    if ($expiry) {
         return $set_sub
-          ? $set_sub->( $key, $value, $expiry )
-          : $self->{$cache}->set( $key, $value, $expiry );
-    }
-    else {
+            ? $set_sub->( $key, $value, $expiry )
+            : $self->{$cache}->set( $key, $value, $expiry );
+    } else {
         return $set_sub
-          ? $set_sub->( $key, $value )
-          : $self->{$cache}->set( $key, $value );
+            ? $set_sub->( $key, $value )
+            : $self->{$cache}->set( $key, $value );
     }
 }
 
@@ -235,43 +237,49 @@ sub get_from_cache {
     my $unsafe = $options->{unsafe} || 0;
     $key =~ s/[\x00-\x20]/_/g;
     croak "No key" unless $key;
-    return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
+    return         unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
 
     # Return L1 cache value if exists
-    if ( exists $L1_cache{$self->{namespace}}{$key} ) {
-        if (ref($L1_cache{$self->{namespace}}{$key})) {
+    if ( exists $L1_cache{ $self->{namespace} }{$key} ) {
+        if ( ref( $L1_cache{ $self->{namespace} }{$key} ) ) {
             if ($unsafe) {
+
                 # ONLY use thawed for unsafe calls !!!
-                $L1_cache{$self->{namespace}}{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$self->{namespace}}{$key}->{frozen});
-                return $L1_cache{$self->{namespace}}{$key}->{thawed};
+                $L1_cache{ $self->{namespace} }{$key}->{thawed} ||=
+                    $L1_decoder->decode( $L1_cache{ $self->{namespace} }{$key}->{frozen} );
+                return $L1_cache{ $self->{namespace} }{$key}->{thawed};
             } else {
-                return $L1_decoder->decode($L1_cache{$self->{namespace}}{$key}->{frozen});
+                return $L1_decoder->decode( $L1_cache{ $self->{namespace} }{$key}->{frozen} );
             }
         } else {
+
             # No need to thaw if it's a scalar
-            return $L1_cache{$self->{namespace}}{$key};
+            return $L1_cache{ $self->{namespace} }{$key};
         }
     }
 
-    my $get_sub = $self->{ref($self->{$cache}) . "_get"};
+    my $get_sub  = $self->{ ref( $self->{$cache} ) . "_get" };
     my $L2_value = $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
 
     return if ref($L2_value);
-    return unless (defined($L2_value) && length($L2_value) >= 4);
+    return unless ( defined($L2_value) && length($L2_value) >= 4 );
 
-    my $flag = substr($L2_value, -4, 4, '');
-    if ($flag eq '-CF0') {
+    my $flag = substr( $L2_value, -4, 4, '' );
+    if ( $flag eq '-CF0' ) {
+
         # it's a scalar
-        $L1_cache{$self->{namespace}}{$key} = $L2_value;
+        $L1_cache{ $self->{namespace} }{$key} = $L2_value;
         return $L2_value;
-    } elsif ($flag eq '-CF1') {
+    } elsif ( $flag eq '-CF1' ) {
+
         # it's a frozen data structure
         my $thawed;
         eval { $thawed = $L1_decoder->decode($L2_value); };
         return if $@;
-        $L1_cache{$self->{namespace}}{$key}->{frozen} = $L2_value;
+        $L1_cache{ $self->{namespace} }{$key}->{frozen} = $L2_value;
+
         # ONLY save thawed for unsafe calls !!!
-        $L1_cache{$self->{namespace}}{$key}->{thawed} = $thawed if $unsafe;
+        $L1_cache{ $self->{namespace} }{$key}->{thawed} = $thawed if $unsafe;
         return $thawed;
     }
 
@@ -292,13 +300,13 @@ sub clear_from_cache {
     $key =~ s/[\x00-\x20]/_/g;
     $cache ||= 'cache';
     croak "No key" unless $key;
-    return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
+    return         unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
 
     # Clear from L1 cache
-    delete $L1_cache{$self->{namespace}}{$key};
+    delete $L1_cache{ $self->{namespace} }{$key};
 
     return $self->{$cache}->delete($key)
-      if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
+        if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
     return $self->{$cache}->remove($key);
 }
 
@@ -318,13 +326,13 @@ sub flush_all {
     $self->flush_L1_cache();
 
     return $self->{$cache}->flush_all()
-      if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
+        if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
     return $self->{$cache}->clear();
 }
 
 sub flush_L1_cache {
-    my( $self ) = @_;
-    delete $L1_cache{$self->{namespace}};
+    my ($self) = @_;
+    delete $L1_cache{ $self->{namespace} };
 }
 
 =head1 TIED INTERFACE

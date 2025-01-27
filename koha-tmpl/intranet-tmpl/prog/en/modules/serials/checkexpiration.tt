@@ -5,11 +5,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Check expiration") | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Check expiration") | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -30,139 +31,134 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='serials-menu' %]
-
-<h1>Check expiration</h1>
+    <h1>Check expiration</h1>
 
     <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="get" class="validated">
-<fieldset class="rows">
-    <legend>Filter results:</legend>
-    
-         <ol>
-        <ol>
-        <li><label for="title">Title:</label>
-        <input id="title" type="text" name="title" size="15" value="[% title | html %]" /></li>
+        <fieldset class="rows">
+            <legend>Filter results:</legend>
 
-        <li><label for="issn">ISSN:</label>
-        <input id="issn" type="text" name="issn" size="15" value="[% issn | html %]" /></li>
-        [% IF can_change_library %]
-        <li><label for="branch">Library:</label>
-        <select id="branch" name="branch">
-            <option value="">All</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
-        </select>
-        </li>
-        [% END %]
+            <ol>
+                <ol>
+                    <li><label for="title">Title:</label> <input id="title" type="text" name="title" size="15" value="[% title | html %]" /></li>
 
-        <li><label for="date" class="required">Expiring before:</label>
-            <input id="date" type="text" name="date" size="10" value="[% date | html %]" class="required focus flatpickr" required="required" />
-        <span class="required">Required</span>
-			<div class="hint">[% INCLUDE 'date-format.inc' %]</div></li>
-			</ol>
+                    <li><label for="issn">ISSN:</label> <input id="issn" type="text" name="issn" size="15" value="[% issn | html %]" /></li>
+                    [% IF can_change_library %]
+                        <li
+                            ><label for="branch">Library:</label>
+                            <select id="branch" name="branch">
+                                <option value="">All</option>
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
+                            </select>
+                        </li>
+                    [% END %]
 
-        <li>
-            <label for="showhistoricexpired">Include expirations before today:</label>
-            [% IF showhistoricexpired %]
-                <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired" checked="checked" />
-            [% ELSE %]
-                <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired" />
-            [% END %]
-        </li>
-        </ol>
-</fieldset>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /></fieldset>
-</form>
+                    <li
+                        ><label for="date" class="required">Expiring before:</label>
+                        <input id="date" type="text" name="date" size="10" value="[% date | html %]" class="required focus flatpickr" required="required" />
+                        <span class="required">Required</span>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div></li
+                    >
+                </ol>
 
-[% IF ( subscriptions_loop ) %]
-<h2>
-    [% expirydate = date | $KohaDates %]
-    [% tnx("Your search returned 1 subscription expiring before {date}", "Your search returned {count} subscriptions expiring before {date}", numsubscription, { date = expirydate, count = numsubscription }) %]
-</h2>
+                <li>
+                    <label for="showhistoricexpired">Include expirations before today:</label>
+                    [% IF showhistoricexpired %]
+                        <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired" checked="checked" />
+                    [% ELSE %]
+                        <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired" />
+                    [% END %]
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /></fieldset>
+    </form>
 
-<div class="page-section">
-<div class="checkexpiration-table_table_controls">
-    <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
-    <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
-    <span class="itemselection_actions">
-      | Actions:
-          <a class="itemselection_action_renew" title="Renew selected subscriptions"><i class="fa-solid fa-rotate"></i> Renew selected subscriptions</a>
-    </span>
-</div>
+    [% IF ( subscriptions_loop ) %]
+        <h2>
+            [% expirydate = date | $KohaDates %]
+            [% tnx("Your search returned 1 subscription expiring before {date}", "Your search returned {count} subscriptions expiring before {date}", numsubscription, { date = expirydate, count = numsubscription }) %]
+        </h2>
 
+        <div class="page-section">
+            <div class="checkexpiration-table_table_controls">
+                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
+                <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
+                <span class="itemselection_actions">
+                    | Actions:
+                    <a class="itemselection_action_renew" title="Renew selected subscriptions"><i class="fa-solid fa-rotate"></i> Renew selected subscriptions</a>
+                </span>
+            </div>
 
-<table>
-        <tr>
-            <th></th>
-            <th>ISSN</th>
-            <th>Title</th>
-            [% IF can_change_library %]<th>Library</th>[% END %]
-            <th>OPAC note</th>
-            <th>Nonpublic note</th>
-            <th>Expiration date</th>
-            <th class="noExport">Actions</th>
-        </tr>
-    [% FOREACH subscriptions_loo IN subscriptions_loop %]
-        <tr>
-            <td style="text-align:center;vertical-align:middle">
-                <input type="checkbox" value="[% subscriptions_loo.subscriptionid | html %]" name="subscriptionid" />
-            </td>
-            <td>
-                [% subscriptions_loo.issn | html %]
-            </td>
-            <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptions_loo.subscriptionid |url %]">[% IF ( subscriptions_loo.title ) %]
-                    [% subscriptions_loo.title | html %]
-                [% ELSE %]
-                    |
+            <table>
+                <tr>
+                    <th></th>
+                    <th>ISSN</th>
+                    <th>Title</th>
+                    [% IF can_change_library %]<th>Library</th>[% END %]
+                    <th>OPAC note</th>
+                    <th>Nonpublic note</th>
+                    <th>Expiration date</th>
+                    <th class="noExport">Actions</th>
+                </tr>
+                [% FOREACH subscriptions_loo IN subscriptions_loop %]
+                    <tr>
+                        <td style="text-align:center;vertical-align:middle">
+                            <input type="checkbox" value="[% subscriptions_loo.subscriptionid | html %]" name="subscriptionid" />
+                        </td>
+                        <td> [% subscriptions_loo.issn | html %] </td>
+                        <td
+                            ><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptions_loo.subscriptionid |url %]"
+                                >[% IF ( subscriptions_loo.title ) %]
+                                    [% subscriptions_loo.title | html %]
+                                [% ELSE %]
+                                    |
+                                [% END %]
+                            </a>
+                        </td>
+                        [% IF can_change_library %]
+                            <td> [% Branches.GetName( subscriptions_loo.branchcode ) | html %] </td>
+                        [% END %]
+                        <td> [% subscriptions_loo.notes | html %] </td>
+                        <td> [% subscriptions_loo.internalnotes | html %] </td>
+                        <td> [% subscriptions_loo.expirationdate | $KohaDates %] </td>
+                        <td class="actions">
+                            <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" class="btn btn-default btn-xs"
+                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                            >
+                            <a href="#" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa-solid fa-rotate"></i> Renew</a>
+                        </td>
+                    </tr>
                 [% END %]
-                </a>
-            </td>
-            [% IF can_change_library %]<td>
-                [% Branches.GetName( subscriptions_loo.branchcode ) | html %]
-            </td>[% END %]
-            <td>
-                [% subscriptions_loo.notes | html %]
-            </td>
-            <td>
-                [% subscriptions_loo.internalnotes | html %]
-            </td>
-            <td>
-                [% subscriptions_loo.expirationdate | $KohaDates %]
-            </td>
-            <td class="actions">
-                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                <a href="#" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa-solid fa-rotate"></i> Renew</a>
-            </td>
-        </tr>
+            </table>
+        </div>
+        <!-- .page-section -->
+    [% ELSIF searched %]
+        <p>No results for your query</p>
     [% END %]
-    </table>
-    </div> <!-- .page-section -->
-[% ELSIF searched %]
-    <p>No results for your query</p>
-[% END %]
-
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     <script>
-        $(document).ready(function(){
-            $(".renew_subscription").on("click",function(e){
+        $(document).ready(function () {
+            $(".renew_subscription").on("click", function (e) {
                 e.preventDefault();
                 var subscriptionid = $(this).data("subscriptionid");
-                newin=window.open("/cgi-bin/koha/serials/subscription-renew.pl?op=renew&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
+                newin = window.open("/cgi-bin/koha/serials/subscription-renew.pl?op=renew&subscriptionid=" + subscriptionid, "popup", "width=590,height=440,toolbar=false,scrollbars=yes,resize=yes");
             });
-            $('a.itemselection_action_renew').on("click", function(e){
+            $("a.itemselection_action_renew").on("click", function (e) {
                 e.preventDefault();
-                newin=window.open($(this).attr('href'),'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
+                newin = window.open($(this).attr("href"), "popup", "width=590,height=440,toolbar=false,scrollbars=yes,resize=yes");
             });
             function itemSelectionBuildRenewLink() {
-                var subscription_ids= new Array();
-                $("input[name='subscriptionid'][type='checkbox']:checked").each(function() {
+                var subscription_ids = new Array();
+                $("input[name='subscriptionid'][type='checkbox']:checked").each(function () {
                     subscription_ids.push($(this).val());
                 });
                 if (subscription_ids.length > 0) {
-                    var url = '/cgi-bin/koha/serials/subscription-renew.pl?op=multi_renew';
-                    url += '&subscriptionid=' + subscription_ids.join('&subscriptionid=');
-                    $('a.itemselection_action_renew').attr('href', url);
+                    var url = "/cgi-bin/koha/serials/subscription-renew.pl?op=multi_renew";
+                    url += "&subscriptionid=" + subscription_ids.join("&subscriptionid=");
+                    $("a.itemselection_action_renew").attr("href", url);
                 } else {
                     return false;
                 }
@@ -172,25 +168,24 @@
             function itemSelectionBuildActionLinks() {
                 var export_link_ok = itemSelectionBuildRenewLink();
                 if (export_link_ok) {
-                    $('.itemselection_actions').show();
+                    $(".itemselection_actions").show();
                 } else {
-                    $('.itemselection_actions').hide();
+                    $(".itemselection_actions").hide();
                 }
             }
 
             itemSelectionBuildActionLinks();
 
-            $("input[name='subscriptionid'][type='checkbox']").change(function() {
+            $("input[name='subscriptionid'][type='checkbox']").change(function () {
                 itemSelectionBuildActionLinks();
             });
 
-            $(".SelectAll, .ClearAll").on("click",function(e){
+            $(".SelectAll, .ClearAll").on("click", function (e) {
                 e.preventDefault();
-                var checkboxes = $(this).parent().siblings('table').first().find('input[type="checkbox"]');
-                checkboxes.prop('checked', $(this).hasClass('SelectAll'));
+                var checkboxes = $(this).parent().siblings("table").first().find('input[type="checkbox"]');
+                checkboxes.prop("checked", $(this).hasClass("SelectAll"));
                 itemSelectionBuildActionLinks();
             });
-
         });
     </script>
 [% END %]

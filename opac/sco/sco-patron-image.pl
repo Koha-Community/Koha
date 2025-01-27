@@ -26,17 +26,17 @@ use Koha::Patrons;
 
 my ( $query, $response ) = C4::Service->init( self_check => 'self_checkout_module' );
 
-unless (C4::Context->preference('WebBasedSelfCheck')) {
-    print $query->header(status => '403 Forbidden - web-based self-check not enabled');
+unless ( C4::Context->preference('WebBasedSelfCheck') ) {
+    print $query->header( status => '403 Forbidden - web-based self-check not enabled' );
     exit;
 }
-unless (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
-    print $query->header(status => '403 Forbidden - displaying patron images in self-check not enabled');
+unless ( C4::Context->preference('ShowPatronImageInWebBasedSelfCheck') ) {
+    print $query->header( status => '403 Forbidden - displaying patron images in self-check not enabled' );
     exit;
 }
 
-unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
-    print $query->header(status => '403 Forbidden - functionality not available from your location');
+unless ( in_iprange( C4::Context->preference('SelfCheckAllowByIPRanges') ) ) {
+    print $query->header( status => '403 Forbidden - functionality not available from your location' );
     exit;
 }
 
@@ -56,8 +56,8 @@ if ($patron_image) {
     print $query->header(
         -type           => $patron_image->mimetype,
         -Content_Length => length( $patron_image->imagefile )
-      ),
-      $patron_image->imagefile;
+        ),
+        $patron_image->imagefile;
 } else {
-    print $query->header(status => '404 patron image not found');
+    print $query->header( status => '404 patron image not found' );
 }

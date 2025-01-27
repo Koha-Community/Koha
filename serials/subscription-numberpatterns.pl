@@ -30,8 +30,8 @@ Manage numbering patterns
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth                   qw( get_template_and_user );
+use C4::Output                 qw( output_html_with_http_headers );
 use C4::Serials::Numberpattern qw(
     AddSubscriptionNumberpattern
     DelSubscriptionNumberpattern
@@ -44,68 +44,70 @@ use C4::Serials::Numberpattern qw(
 use C4::Serials::Frequency qw( GetSubscriptionFrequencies );
 
 my @NUMBERPATTERN_FIELDS = qw/
-      label description numberingmethod displayorder
-      label1 label2 label3 add1 add2 add3 every1 every2 every3
-      setto1 setto2 setto3 whenmorethan1 whenmorethan2 whenmorethan3
-      numbering1 numbering2 numbering3 /;
+    label description numberingmethod displayorder
+    label1 label2 label3 add1 add2 add3 every1 every2 every3
+    setto1 setto2 setto3 whenmorethan1 whenmorethan2 whenmorethan3
+    numbering1 numbering2 numbering3 /;
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'serials/subscription-numberpatterns.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'serials' => "*" }
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'serials/subscription-numberpatterns.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'serials' => "*" }
+    }
+);
 
 my $op = $input->param('op');
 
-if($op && $op eq 'cud-savenew') {
+if ( $op && $op eq 'cud-savenew' ) {
     my $label = $input->param('label');
     my $numberpattern;
-    foreach(@NUMBERPATTERN_FIELDS) {
+    foreach (@NUMBERPATTERN_FIELDS) {
         $numberpattern->{$_} = $input->param($_);
-        if(defined $numberpattern->{$_} and $numberpattern->{$_} eq '') {
+        if ( defined $numberpattern->{$_} and $numberpattern->{$_} eq '' ) {
             $numberpattern->{$_} = undef;
         }
     }
     my $numberpattern2 = GetSubscriptionNumberpatternByName($label);
 
-    if(!defined $numberpattern2) {
+    if ( !defined $numberpattern2 ) {
         AddSubscriptionNumberpattern($numberpattern);
     } else {
         $op = 'new';
-        $template->param(error_existing_numberpattern => 1);
+        $template->param( error_existing_numberpattern => 1 );
         $template->param(%$numberpattern);
     }
-} elsif ($op && $op eq 'cud-savemod') {
-    my $id = $input->param('id');
-    my $label = $input->param('label');
+} elsif ( $op && $op eq 'cud-savemod' ) {
+    my $id            = $input->param('id');
+    my $label         = $input->param('label');
     my $numberpattern = GetSubscriptionNumberpattern($id);
-    my $mod_ok = 1;
-    if($numberpattern->{'label'} ne $label) {
+    my $mod_ok        = 1;
+    if ( $numberpattern->{'label'} ne $label ) {
         my $numberpattern2 = GetSubscriptionNumberpatternByName($label);
-        if(defined $numberpattern2 && $id != $numberpattern2->{'id'}) {
+        if ( defined $numberpattern2 && $id != $numberpattern2->{'id'} ) {
             $mod_ok = 0;
         }
     }
-    if($mod_ok) {
-        foreach(@NUMBERPATTERN_FIELDS) {
+    if ($mod_ok) {
+        foreach (@NUMBERPATTERN_FIELDS) {
             $numberpattern->{$_} = $input->param($_) || undef;
-            if(defined $numberpattern->{$_} and $numberpattern->{$_} eq '') {
+            if ( defined $numberpattern->{$_} and $numberpattern->{$_} eq '' ) {
                 $numberpattern->{$_} = undef;
             }
         }
         ModSubscriptionNumberpattern($numberpattern);
     } else {
         $op = 'cud-modify';
-        $template->param(error_existing_numberpattern => 1);
+        $template->param( error_existing_numberpattern => 1 );
     }
 }
 
-if($op && ($op eq 'new' || $op eq 'modify')) {
-    if($op eq 'modify') {
+if ( $op && ( $op eq 'new' || $op eq 'modify' ) ) {
+    if ( $op eq 'modify' ) {
         my $id = $input->param('id');
-        if(defined $id) {
+        if ( defined $id ) {
             my $numberpattern = GetSubscriptionNumberpattern($id);
             $template->param(%$numberpattern);
         } else {
@@ -113,23 +115,25 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
         }
     }
     my @frequencies = GetSubscriptionFrequencies();
-    my $languages = [ map {
-        {
-            language => $_->{iso639_2_code},
-            description => $_->{language_description} || $_->{language}
-        }
-    } @{ C4::Languages::getAllLanguages() } ];
+    my $languages   = [
+        map {
+            {
+                language    => $_->{iso639_2_code},
+                description => $_->{language_description} || $_->{language}
+            }
+        } @{ C4::Languages::getAllLanguages() }
+    ];
 
     $template->param(
-        $op => 1,
+        $op              => 1,
         frequencies_loop => \@frequencies,
-        locales => $languages,
+        locales          => $languages,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
-if($op && $op eq 'cud-del') {
+if ( $op && $op eq 'cud-del' ) {
     my $id = $input->param('id');
     if ($id) {
         my $confirm = $input->param('confirm');
@@ -139,8 +143,8 @@ if($op && $op eq 'cud-del') {
             my @subs = GetSubscriptionsWithNumberpattern($id);
             if (@subs) {
                 $template->param(
-                    id => $id,
-                    still_used => 1,
+                    id            => $id,
+                    still_used    => 1,
                     subscriptions => \@subs
                 );
             } else {

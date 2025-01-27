@@ -29,8 +29,8 @@ Modify subscription history
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::Serials qw( ModSubscriptionHistory ModSubscription GetSubscriptionHistoryFromSubscriptionId GetSubscription );
@@ -38,33 +38,38 @@ use Koha::Biblios;
 use Koha::DateUtils qw( output_pref );
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'serials/subscription-history.tt',
-    query           => $input,
-    type            => 'intranet',
-    flagsrequired   => { 'serials' => 'edit_subscription' },
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => 'serials/subscription-history.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { 'serials' => 'edit_subscription' },
+    }
+);
 
-my $subscriptionid  = $input->param('subscriptionid');
-my $op              = $input->param('op');
+my $subscriptionid = $input->param('subscriptionid');
+my $op             = $input->param('op');
 
-if(!defined $subscriptionid || $subscriptionid eq '') {
+if ( !defined $subscriptionid || $subscriptionid eq '' ) {
     print $input->redirect('/cgi-bin/koha/serials/serials-home.pl');
     exit;
 }
 
-if($op && $op eq 'cud-mod') {
-    my $histstartdate   = $input->param('histstartdate');
-    my $histenddate     = $input->param('histenddate');
-    my $receivedlist    = $input->param('receivedlist');
-    my $missinglist     = $input->param('missinglist');
-    my $opacnote        = $input->param('opacnote');
-    my $librariannote   = $input->param('librariannote');
+if ( $op && $op eq 'cud-mod' ) {
+    my $histstartdate = $input->param('histstartdate');
+    my $histenddate   = $input->param('histenddate');
+    my $receivedlist  = $input->param('receivedlist');
+    my $missinglist   = $input->param('missinglist');
+    my $opacnote      = $input->param('opacnote');
+    my $librariannote = $input->param('librariannote');
 
     $histstartdate = output_pref( { str => $histstartdate, dateonly => 1, dateformat => 'iso' } );
     $histenddate   = output_pref( { str => $histenddate,   dateonly => 1, dateformat => 'iso' } );
 
-    ModSubscriptionHistory( $subscriptionid, $histstartdate, $histenddate, $receivedlist, $missinglist, $opacnote, $librariannote );
+    ModSubscriptionHistory(
+        $subscriptionid, $histstartdate, $histenddate, $receivedlist, $missinglist, $opacnote,
+        $librariannote
+    );
 
     print $input->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     exit;
@@ -73,14 +78,14 @@ if($op && $op eq 'cud-mod') {
     my $biblio  = Koha::Biblios->find( $history->{biblionumber} );
 
     $template->param(
-        subscriptionid  => $subscriptionid,
-        title           => $biblio->title,
-        histstartdate   => $history->{'histstartdate'},
-        histenddate     => $history->{'histenddate'},
-        receivedlist    => $history->{'recievedlist'},
-        missinglist     => $history->{'missinglist'},
-        opacnote        => $history->{'opacnote'},
-        librariannote   => $history->{'librariannote'},
+        subscriptionid => $subscriptionid,
+        title          => $biblio->title,
+        histstartdate  => $history->{'histstartdate'},
+        histenddate    => $history->{'histenddate'},
+        receivedlist   => $history->{'recievedlist'},
+        missinglist    => $history->{'missinglist'},
+        opacnote       => $history->{'opacnote'},
+        librariannote  => $history->{'librariannote'},
     );
 
     output_html_with_http_headers $input, $cookie, $template->output;

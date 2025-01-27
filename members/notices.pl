@@ -20,42 +20,48 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Members;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patron::Password::Recovery qw( SendPasswordRecoveryEmail ValidateBorrowernumber );
 
-my $input=CGI->new;
-
+my $input = CGI->new;
 
 my $borrowernumber = $input->param('borrowernumber');
-my $patron = Koha::Patrons->find( $borrowernumber );
-unless ( $patron ) {
+my $patron         = Koha::Patrons->find($borrowernumber);
+unless ($patron) {
     print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
 }
 my $borrower = $patron->unblessed;
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/notices.tt",
-				query => $input,
-				type => "intranet",
-                flagsrequired => {borrowers => 'edit_borrowers'},
-				});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "members/notices.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
+    }
+);
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 # Allow resending of messages in Notices tab
 my $op = $input->param('op') || q{};
 if ( $op eq 'cud-resend_notice' ) {
     my $message_id = $input->param('message_id');
-    my $message = C4::Letters::GetMessage( $message_id );
+    my $message    = C4::Letters::GetMessage($message_id);
     if ( $message->{borrowernumber} = $borrowernumber ) {
-        C4::Letters::ResendMessage( $message_id );
+        C4::Letters::ResendMessage($message_id);
+
         # redirect to self to avoid form submission on refresh
         print $input->redirect("/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
     }
@@ -128,18 +134,17 @@ if ( $op eq 'send_password_reset' ) {
     }
 
     # redirect to self to avoid form submission on refresh
-    print $input->redirect(
-        "/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
+    print $input->redirect("/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
 }
 
 # Getting the messages
-my $queued_messages = Koha::Notice::Messages->search({borrowernumber => $borrowernumber});
+my $queued_messages = Koha::Notice::Messages->search( { borrowernumber => $borrowernumber } );
 
 $template->param(
-    patron             => $patron,
-    QUEUED_MESSAGES    => $queued_messages,
-    borrowernumber     => $borrowernumber,
-    sentnotices        => 1,
+    patron          => $patron,
+    QUEUED_MESSAGES => $queued_messages,
+    borrowernumber  => $borrowernumber,
+    sentnotices     => 1,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

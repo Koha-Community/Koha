@@ -43,9 +43,9 @@ Returns the list of baskets for the vendor
 =cut
 
 sub baskets {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $baskets_rs = $self->_result->aqbaskets;
-    return Koha::Acquisition::Baskets->_new_from_dbic( $baskets_rs );
+    return Koha::Acquisition::Baskets->_new_from_dbic($baskets_rs);
 }
 
 =head3 contacts
@@ -60,7 +60,7 @@ Returns the list of contacts for the vendor
 sub contacts {
     my ($self) = @_;
     my $contacts_rs = $self->_result->aqcontacts;
-    return Koha::Acquisition::Bookseller::Contacts->_new_from_dbic( $contacts_rs );
+    return Koha::Acquisition::Bookseller::Contacts->_new_from_dbic($contacts_rs);
 }
 
 =head3 subscriptions
@@ -87,7 +87,7 @@ sub subscriptions {
 =cut
 
 sub aliases {
-    my ($self, $aliases) = @_;
+    my ( $self, $aliases ) = @_;
 
     if ($aliases) {
         my $schema = $self->_result->result_source->schema;
@@ -102,7 +102,7 @@ sub aliases {
     }
 
     my $rs = $self->_result->aqbookseller_aliases;
-    return Koha::Acquisition::Bookseller::Aliases->_new_from_dbic( $rs );
+    return Koha::Acquisition::Bookseller::Aliases->_new_from_dbic($rs);
 }
 
 =head3 interfaces
@@ -114,7 +114,7 @@ sub aliases {
 =cut
 
 sub interfaces {
-    my ($self, $interfaces) = @_;
+    my ( $self, $interfaces ) = @_;
 
     if ($interfaces) {
         my $schema = $self->_result->result_source->schema;
@@ -134,7 +134,7 @@ sub interfaces {
     }
 
     my $rs = $self->_result->aqbookseller_interfaces;
-    return Koha::Acquisition::Bookseller::Interfaces->_new_from_dbic( $rs );
+    return Koha::Acquisition::Bookseller::Interfaces->_new_from_dbic($rs);
 }
 
 =head3 issues
@@ -158,11 +158,11 @@ on the API.
 
 sub to_api_mapping {
     return {
-        listprice       => 'list_currency',
-        invoiceprice    => 'invoice_currency',
-        gstreg          => 'gst',
-        listincgst      => 'list_includes_gst',
-        invoiceincgst   => 'invoice_includes_gst'
+        listprice     => 'list_currency',
+        invoiceprice  => 'invoice_currency',
+        gstreg        => 'gst',
+        listincgst    => 'list_includes_gst',
+        invoiceincgst => 'invoice_includes_gst'
     };
 }
 

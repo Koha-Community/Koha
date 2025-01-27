@@ -3,12 +3,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Preview routing list") | html %] &rsaquo;
-    [% title | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Preview routing list") | html %]
+        &rsaquo; [% title | html %] &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -32,55 +32,57 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='serials-menu' %]
-<h1>Preview routing list for <em>[% title | html %]</em></h1>
+    <h1>Preview routing list for <em>[% title | html %]</em></h1>
 
-<fieldset class="rows">
-	<ol>
-		<li><span class="label">Issue:</span>[% issue | html %]</li>
-		<li><span class="label">List member:</span><table style="clear:none;margin:0;">
-        <tr><th>Name</th></tr>
-[% FOREACH memberloo IN memberloop %]
-        <tr><td>[% memberloo.surname | html %], [% memberloo.firstname | html %]</td></tr>
-[% END %]
-        </table></li>
-		<li><span class="label">Notes:</span>[% routingnotes | html %]</li>
-	</ol>
-</fieldset>
+    <fieldset class="rows">
+        <ol>
+            <li><span class="label">Issue:</span>[% issue | html %]</li>
+            <li
+                ><span class="label">List member:</span
+                ><table style="clear:none;margin:0;">
+                    <tr><th>Name</th></tr>
+                    [% FOREACH memberloo IN memberloop %]
+                        <tr><td>[% memberloo.surname | html %], [% memberloo.firstname | html %]</td></tr>
+                    [% END %]
+                </table></li
+            >
+            <li><span class="label">Notes:</span>[% routingnotes | html %]</li>
+        </ol>
+    </fieldset>
 
-<fieldset class="action">
-    <form method="post" id="save_and_preview_form" action="routing-preview.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
-        <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
-        <input type="hidden" name="op" value="cud-save_and_preview" />
-        <input id="save_and_preview" type="submit" class="btn btn-primary" value="Save and preview routing slip" />
-    </form>
+    <fieldset class="action">
+        <form method="post" id="save_and_preview_form" action="routing-preview.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
+            <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
+            <input type="hidden" name="op" value="cud-save_and_preview" />
+            <input id="save_and_preview" type="submit" class="btn btn-primary" value="Save and preview routing slip" />
+        </form>
 
-    <form method="post" action="routing-preview.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
-        <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
-        <input type="hidden" name="op" value="cud-edit" />
-        <input type="submit" class="btn btn-primary" value="Edit" />
-    </form>
+        <form method="post" action="routing-preview.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
+            <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
+            <input type="hidden" name="op" value="cud-edit" />
+            <input type="submit" class="btn btn-primary" value="Edit" />
+        </form>
 
-    <form method="post" action="routing-preview.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
-        <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
-        <input type="hidden" name="op" value="cud-delete" />
-        <input type="submit" class="btn btn-primary" value="Delete" />
-    </form>
-</fieldset>
-
+        <form method="post" action="routing-preview.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
+            <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
+            <input type="hidden" name="op" value="cud-delete" />
+            <input type="submit" class="btn btn-primary" value="Delete" />
+        </form>
+    </fieldset>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-     <script>
-        $(document).ready(function(){
-            $("#save_and_preview_form").on("submit",function(e){
-                var myurl = 'routing-preview.pl?op=print&subscriptionid='+$("#subscriptionid").val()+'&issue='+$("#issue_escaped").val();
-                window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+    <script>
+        $(document).ready(function () {
+            $("#save_and_preview_form").on("submit", function (e) {
+                var myurl = "routing-preview.pl?op=print&subscriptionid=" + $("#subscriptionid").val() + "&issue=" + $("#issue_escaped").val();
+                window.open(myurl, "PrintSlip", "width=500,height=500,toolbar=no,scrollbars=yes");
             });
             /*    e.preventDefault();
                 print_slip( $("#subscriptionid").val(), $("#issue_escaped").val() );

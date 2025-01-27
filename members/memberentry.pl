@@ -28,8 +28,8 @@ use CGI qw ( -utf8 );
 # internal modules
 use C4::Auth qw( get_template_and_user haspermission );
 use C4::Context;
-use C4::Output qw( output_and_exit output_and_exit_if_error output_html_with_http_headers );
-use C4::Koha qw( GetAuthorisedValues );
+use C4::Output  qw( output_and_exit output_and_exit_if_error output_html_with_http_headers );
+use C4::Koha    qw( GetAuthorisedValues );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
@@ -54,18 +54,20 @@ my %data;
 
 my $dbh = C4::Context->dbh;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/memberentrygen.tt",
-           query => $input,
-           type => "intranet",
-           flagsrequired => {borrowers => 'edit_borrowers'},
-       });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "members/memberentrygen.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
+    }
+);
 
 my $borrowernumber = $input->param('borrowernumber');
 my $patron         = Koha::Patrons->find($borrowernumber);
 
 if ( $borrowernumber and not $patron ) {
-    output_and_exit( $input, $cookie, $template,  'unknown_patron' );
+    output_and_exit( $input, $cookie, $template, 'unknown_patron' );
 }
 
 if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
@@ -84,12 +86,12 @@ my $duplicate    = $input->param('duplicate');
 my $quickadd     = $input->param('quickadd');
 my $check_patron;
 
-$nodouble = 1 if ($op eq 'edit_form' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
-                                     # modifying an existing patron, it ipso facto
-                                     # isn't a duplicate.  Marking FIXME because this
-                                     # script needs to be refactored.
-my $nok           = $input->param('nok');
-my $step          = $input->param('step') || 0;
+$nodouble = 1 if ( $op eq 'edit_form' or $op eq 'duplicate' );    # FIXME hack to represent fact that if we're
+                                                                  # modifying an existing patron, it ipso facto
+                                                                  # isn't a duplicate.  Marking FIXME because this
+                                                                  # script needs to be refactored.
+my $nok  = $input->param('nok');
+my $step = $input->param('step') || 0;
 my @errors;
 my $borrower_data;
 my $NoUpdateLogin;
@@ -103,8 +105,8 @@ my @messages;
 $template->param( relationships => $patron->guarantor_relationships ) if $patron;
 
 my $guarantor_id = $input->param('guarantor_id');
-my $guarantor = undef;
-$guarantor = Koha::Patrons->find( $guarantor_id ) if $guarantor_id;
+my $guarantor    = undef;
+$guarantor = Koha::Patrons->find($guarantor_id) if $guarantor_id;
 $template->param( guarantor => $guarantor );
 
 #Search existing guarantor id(s) and new ones from params
@@ -120,20 +122,18 @@ my @existing_guarantors = $patron ? $patron->guarantor_relationships()->guaranto
 push @guarantors, @existing_guarantors;
 
 ## Deal with debarments
-$template->param(
-    restriction_types => scalar Koha::Patron::Restriction::Types->search()
-);
+$template->param( restriction_types => scalar Koha::Patron::Restriction::Types->search() );
 my @debarments_to_remove = $input->multi_param('remove_debarment');
-foreach my $d ( @debarments_to_remove ) {
-    DelDebarment( $d );
+foreach my $d (@debarments_to_remove) {
+    DelDebarment($d);
 }
 if ( $input->param('add_debarment') ) {
 
     my $expiration = $input->param('debarred_expiration');
     $expiration =
-      $expiration
-      ? dt_from_string($expiration)->ymd
-      : undef;
+        $expiration
+        ? dt_from_string($expiration)->ymd
+        : undef;
 
     AddDebarment(
         {
@@ -145,33 +145,37 @@ if ( $input->param('add_debarment') ) {
     );
 }
 
-$template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
+$template->param( "uppercasesurnames" => C4::Context->preference('uppercasesurnames') );
 
 # function to designate mandatory fields (visually with css)
-my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
-my @field_check=split(/\|/,$check_BorrowerMandatoryField);
+my $check_BorrowerMandatoryField = C4::Context->preference("BorrowerMandatoryField");
+my @field_check                  = split( /\|/, $check_BorrowerMandatoryField );
 foreach (@field_check) {
     $template->param( "mandatory$_" => 1 );
 }
+
 # function to designate unwanted fields
-my $check_BorrowerUnwantedField=C4::Context->preference("BorrowerUnwantedField");
-@field_check=split(/\|/,$check_BorrowerUnwantedField);
+my $check_BorrowerUnwantedField = C4::Context->preference("BorrowerUnwantedField");
+@field_check = split( /\|/, $check_BorrowerUnwantedField );
 foreach (@field_check) {
     next unless m/\w/o;
     $template->param( "no$_" => 1 );
 }
-$template->param( "quickadd" => 1 ) if ( $quickadd );
+$template->param( "quickadd"  => 1 ) if ($quickadd);
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
-$template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
+$template->param( "checked"   => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
 if ( $op eq 'edit_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
-    my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+    my $logged_in_user = Koha::Patrons->find($loggedinuser);
+    output_and_exit_if_error(
+        $input, $cookie, $template,
+        { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+    );
 
     # check permission to modify email info.
     if ( $patron->is_superlibrarian && !$logged_in_user->is_superlibrarian ) {
         $NoUpdateEmail = 1;
     }
-    if ($logged_in_user->is_superlibrarian) {
+    if ( $logged_in_user->is_superlibrarian ) {
         $CanUpdatePasswordExpiration = 1;
         $CanUpdateProtectPatron      = 1;
     }
@@ -179,25 +183,28 @@ if ( $op eq 'edit_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
     $borrower_data = $patron->unblessed;
 }
 
-my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
-my $category = Koha::Patron::Categories->find($categorycode);
+my $categorycode = $input->param('categorycode') || $borrower_data->{'categorycode'};
+my $category     = Koha::Patron::Categories->find($categorycode);
 $template->param( patron_category => $category );
 
 # if a add or modify is requested => check validity of data.
 %data = %$borrower_data if ($borrower_data);
 
 # initialize %newdata
-my %newdata;                                                                             # comes from $input->param()
+my %newdata;    # comes from $input->param()
 if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'duplicate' ) {
     my @names = ( $borrower_data && $op ne 'cud-save' ) ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
-        if (defined $input->param($key)) {
+        if ( defined $input->param($key) ) {
             $newdata{$key} = $input->param($key);
         }
     }
 
     # check permission to modify login info.
-    if (ref($borrower_data) && ($category->category_type eq 'S') && ! (C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) )  {
+    if (   ref($borrower_data)
+        && ( $category->category_type eq 'S' )
+        && !( C4::Auth::haspermission( $userenv->{'id'}, { 'staffaccess' => 1 } ) ) )
+    {
         $NoUpdateLogin = 1;
     }
 }
@@ -205,7 +212,8 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
 # remove keys from %newdata that is not part of patron's attributes
 {
     my @keys_to_delete = (
-        qr/^(borrowernumber|date_renewed|debarred|debarredcomment|flags|privacy|updated_on|lastseen|login_attempts|overdrive_auth_token|anonymized)$/, # Bug 28935
+        qr/^(borrowernumber|date_renewed|debarred|debarredcomment|flags|privacy|updated_on|lastseen|login_attempts|overdrive_auth_token|anonymized)$/
+        ,    # Bug 28935
         qr/^BorrowerMandatoryField$/,
         qr/^check_member$/,
         qr/^destination$/,
@@ -223,7 +231,8 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
         qr/^\d+-DAYS/,
         qr/^patron_attr_/,
         qr/^csrf_token$/,
-        qr/^add_debarment$/, qr/^debarred_comment$/,qr/^debarred_expiration$/, qr/^debarred_type$/, qr/^remove_debarment$/, # We already dealt with debarments previously
+        qr/^add_debarment$/, qr/^debarred_comment$/, qr/^debarred_expiration$/, qr/^debarred_type$/,
+        qr/^remove_debarment$/,    # We already dealt with debarments previously
         qr/^housebound_chooser$/, qr/^housebound_deliverer$/,
         qr/^select_city$/,
         qr/^new_guarantor_/,
@@ -237,8 +246,8 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
     push @keys_to_delete, qr/^password_expiration_date$/ unless $CanUpdatePasswordExpiration;
     push @keys_to_delete, qr/^protected$/                unless $CanUpdateProtectPatron;
     for my $regexp (@keys_to_delete) {
-        for (keys %newdata) {
-            delete($newdata{$_}) if /$regexp/;
+        for ( keys %newdata ) {
+            delete( $newdata{$_} ) if /$regexp/;
         }
     }
 }
@@ -247,12 +256,12 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
 if ( ( $op eq 'cud-insert' ) and !$nodouble ) {
     my @dup_fields = split '\|', C4::Context->preference('PatronDuplicateMatchingAddFields');
     my $conditions;
-    for my $f ( @dup_fields ) {
+    for my $f (@dup_fields) {
         $conditions->{$f} = $newdata{$f} if $newdata{$f};
     }
     $nodouble = 1;
     my $patrons = Koha::Patrons->search($conditions);
-    if ( $patrons->count > 0) {
+    if ( $patrons->count > 0 ) {
         $nodouble     = 0;
         $check_patron = $patrons->next;
         $check_member = $check_patron->borrowernumber;
@@ -310,16 +319,16 @@ if (@valid_relationships) {
 
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
-$newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
-$newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
-$newdata{'country'} = $input->param('country') if defined($input->param('country'));
+$newdata{'city'}    = $input->param('city')    if defined( $input->param('city') );
+$newdata{'zipcode'} = $input->param('zipcode') if defined( $input->param('zipcode') );
+$newdata{'country'} = $input->param('country') if defined( $input->param('country') );
 
-$newdata{'lang'}    = $input->param('lang')    if defined($input->param('lang'));
+$newdata{'lang'} = $input->param('lang') if defined( $input->param('lang') );
 
 # Bug 32426 removed the fake_patron code here that filled $newdata{userid}. We should leave it now to patron->store.
 
 my $extended_patron_attributes;
-if ($op eq 'cud-save' || $op eq 'cud-insert'){
+if ( $op eq 'cud-save' || $op eq 'cud-insert' ) {
 
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
@@ -329,7 +338,7 @@ if ($op eq 'cud-save' || $op eq 'cud-insert'){
 
     $newdata{'cardnumber'} = $new_barcode;
 
-    my $is_valid = Koha::Policy::Patrons::Cardnumber->is_valid($newdata{cardnumber}, $patron );
+    my $is_valid = Koha::Policy::Patrons::Cardnumber->is_valid( $newdata{cardnumber}, $patron );
     unless ($is_valid) {
         for my $m ( @{ $is_valid->messages } ) {
             my $message = $m->message;
@@ -342,85 +351,85 @@ if ($op eq 'cud-save' || $op eq 'cud-insert'){
     }
 
     my $dateofbirth;
-    if ($op eq 'cud-save' && $step == 3) {
+    if ( $op eq 'cud-save' && $step == 3 ) {
         $dateofbirth = $patron->dateofbirth;
-    }
-    else {
+    } else {
         $dateofbirth = $newdata{dateofbirth};
     }
 
-    if ( $dateofbirth ) {
-        my $patron = Koha::Patron->new({ dateofbirth => $dateofbirth });
-        my $age = $patron->get_age;
-        my ($low,$high) = ($category->dateofbirthrequired, $category->upperagelimit);
-        if (($high && ($age > $high)) or ($age < $low)) {
+    if ($dateofbirth) {
+        my $patron = Koha::Patron->new( { dateofbirth => $dateofbirth } );
+        my $age    = $patron->get_age;
+        my ( $low, $high ) = ( $category->dateofbirthrequired, $category->upperagelimit );
+        if ( ( $high && ( $age > $high ) ) or ( $age < $low ) ) {
             push @errors, 'ERROR_age_limitations';
-            $template->param( age_low => $low);
-            $template->param( age_high => $high);
+            $template->param( age_low  => $low );
+            $template->param( age_high => $high );
         }
     }
-  
-  if (C4::Context->preference("IndependentBranches")) {
-    unless ( C4::Context->IsSuperLibrarian() ){
-      unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
-        push @errors, "ERROR_branch";
-      }
+
+    if ( C4::Context->preference("IndependentBranches") ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
+            unless ( !$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'} ) {
+                push @errors, "ERROR_branch";
+            }
+        }
     }
-  }
 
-  # Bug 32426 removed the userid unique-check here. Postpone it to patron->store.
+    # Bug 32426 removed the userid unique-check here. Postpone it to patron->store.
 
-  my $password = $input->param('password');
-  my $password2 = $input->param('password2');
-  push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
+    my $password  = $input->param('password');
+    my $password2 = $input->param('password2');
+    push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
 
-  if ( $password and $password ne '****' ) {
-      my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, $category );
-      unless ( $is_valid ) {
-          push @errors, 'ERROR_password_too_short' if $error eq 'too_short';
-          push @errors, 'ERROR_password_too_weak' if $error eq 'too_weak';
-          push @errors, 'ERROR_password_has_whitespaces' if $error eq 'has_whitespaces';
-      }
-  }
+    if ( $password and $password ne '****' ) {
+        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, $category );
+        unless ($is_valid) {
+            push @errors, 'ERROR_password_too_short'       if $error eq 'too_short';
+            push @errors, 'ERROR_password_too_weak'        if $error eq 'too_weak';
+            push @errors, 'ERROR_password_has_whitespaces' if $error eq 'has_whitespaces';
+        }
+    }
 
-  # Validate emails
-  my $emailprimary = $input->param('email');
-  my $emailsecondary = $input->param('emailpro');
-  my $emailalt = $input->param('B_email');
+    # Validate emails
+    my $emailprimary   = $input->param('email');
+    my $emailsecondary = $input->param('emailpro');
+    my $emailalt       = $input->param('B_email');
 
-  if ($emailprimary) {
-      push (@errors, "ERROR_bad_email") unless Koha::Email->is_valid($emailprimary);
-  }
-  if ($emailsecondary) {
-      push (@errors, "ERROR_bad_email_secondary") unless Koha::Email->is_valid($emailsecondary);
-  }
-  if ($emailalt) {
-      push (@errors, "ERROR_bad_email_alternative") unless Koha::Email->is_valid($emailalt);
-  }
+    if ($emailprimary) {
+        push( @errors, "ERROR_bad_email" ) unless Koha::Email->is_valid($emailprimary);
+    }
+    if ($emailsecondary) {
+        push( @errors, "ERROR_bad_email_secondary" ) unless Koha::Email->is_valid($emailsecondary);
+    }
+    if ($emailalt) {
+        push( @errors, "ERROR_bad_email_alternative" ) unless Koha::Email->is_valid($emailalt);
+    }
 
-  if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-      $extended_patron_attributes = parse_extended_patron_attributes($input);
-      for my $attr ( @$extended_patron_attributes ) {
-          $attr->{borrowernumber} = $borrowernumber if $borrowernumber;
-          my $attribute = Koha::Patron::Attribute->new($attr);
-          if ( !$attribute->unique_ok ) {
-              push @errors, "ERROR_extended_unique_id_failed";
-              my $attr_type = Koha::Patron::Attribute::Types->find($attr->{code});
-              $template->param(
-                  ERROR_extended_unique_id_failed_code => $attr->{code},
-                  ERROR_extended_unique_id_failed_value => $attr->{attribute},
-                  ERROR_extended_unique_id_failed_description => $attr_type->description()
-              );
-          }
-      }
-  }
-}
-elsif ( $borrowernumber ) {
+    if ( C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes') ) {
+        $extended_patron_attributes = parse_extended_patron_attributes($input);
+        for my $attr (@$extended_patron_attributes) {
+            $attr->{borrowernumber} = $borrowernumber if $borrowernumber;
+            my $attribute = Koha::Patron::Attribute->new($attr);
+            if ( !$attribute->unique_ok ) {
+                push @errors, "ERROR_extended_unique_id_failed";
+                my $attr_type = Koha::Patron::Attribute::Types->find( $attr->{code} );
+                $template->param(
+                    ERROR_extended_unique_id_failed_code        => $attr->{code},
+                    ERROR_extended_unique_id_failed_value       => $attr->{attribute},
+                    ERROR_extended_unique_id_failed_description => $attr_type->description()
+                );
+            }
+        }
+    }
+} elsif ($borrowernumber) {
     $extended_patron_attributes = Koha::Patrons->find($borrowernumber)->extended_attributes->unblessed;
 }
 
-if ( ($op eq 'edit_form' || $op eq 'cud-insert' || $op eq 'cud-save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
-    unless ($newdata{'dateexpiry'}){
+if (    ( $op eq 'edit_form' || $op eq 'cud-insert' || $op eq 'cud-save' || $op eq 'duplicate' )
+    and ( $step == 0 or $step == 3 ) )
+{
+    unless ( $newdata{'dateexpiry'} ) {
         $newdata{'dateexpiry'} = $category->get_expiry_date( $newdata{dateenrolled} ) if $category;
     }
 }
@@ -433,30 +442,32 @@ if ( defined $sms ) {
 
 ###  Error checks should happen before this line.
 $nok = $nok || scalar(@errors);
-if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
+if ( ( !$nok ) and $nodouble and ( $op eq 'cud-insert' or $op eq 'cud-save' ) ) {
     my $success;
-	if ($op eq 'cud-insert'){
-		# we know it's not a duplicate borrowernumber or there would already be an error
+    if ( $op eq 'cud-insert' ) {
+
+        # we know it's not a duplicate borrowernumber or there would already be an error
         delete $newdata{password2};
         $success = 1;
-        $patron = try {
+        $patron  = try {
             Koha::Patron->new( \%newdata )->store( { guarantors => \@guarantors } );
         } catch {
             $success = 0;
-            $nok = 1;
-            if( ref($_) eq 'Koha::Exceptions::Patron::InvalidUserid' ) {
+            $nok     = 1;
+            if ( ref($_) eq 'Koha::Exceptions::Patron::InvalidUserid' ) {
                 push @errors, "ERROR_login_exist";
             } else {
+
                 # FIXME Urgent error handling here, we cannot fail without relevant feedback
                 # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
-                warn "Patron creation failed! - $_"; # Maybe we must die instead of just warn
-                push @messages, {error => 'error_on_insert_patron'};
+                warn "Patron creation failed! - $_";    # Maybe we must die instead of just warn
+                push @messages, { error => 'error_on_insert_patron' };
             }
             $op = "add_form";
             return;
         };
 
-        if ( $success ) {
+        if ($success) {
             add_guarantors( $patron, $input );
             $borrowernumber = $patron->borrowernumber;
             $newdata{'borrowernumber'} = $borrowernumber;
@@ -465,9 +476,11 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
 
         # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( $patron && C4::Context->preference("AutoEmailNewUser") ) {
+
             #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
             my $emailaddr = $patron->notice_email_address;
-            # if we manage to find a valid email address, send notice 
+
+            # if we manage to find a valid email address, send notice
             if ($emailaddr) {
                 eval {
                     my $letter = GetPreparedLetter(
@@ -498,32 +511,41 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
             }
         }
 
-        if ( $patron && (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) ) {
-            C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
+        if ( $patron
+            && ( C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs') )
+            )
+        {
+            C4::Form::MessagingPreferences::handle_form_action(
+                $input, { borrowernumber => $borrowernumber },
+                $template, 1, $newdata{'categorycode'}
+            );
         }
 
         # Create HouseboundRole if necessary.
         # Borrower did not exist, so HouseboundRole *cannot* yet exist.
         my ( $hsbnd_chooser, $hsbnd_deliverer ) = ( 0, 0 );
-        $hsbnd_chooser = 1 if $input->param('housebound_chooser');
+        $hsbnd_chooser   = 1 if $input->param('housebound_chooser');
         $hsbnd_deliverer = 1 if $input->param('housebound_deliverer');
+
         # Only create a HouseboundRole if patron has a role.
         if ( $patron && ( $hsbnd_chooser || $hsbnd_deliverer ) ) {
-            Koha::Patron::HouseboundRole->new({
-                borrowernumber_id    => $borrowernumber,
-                housebound_chooser   => $hsbnd_chooser,
-                housebound_deliverer => $hsbnd_deliverer,
-            })->store;
+            Koha::Patron::HouseboundRole->new(
+                {
+                    borrowernumber_id    => $borrowernumber,
+                    housebound_chooser   => $hsbnd_chooser,
+                    housebound_deliverer => $hsbnd_deliverer,
+                }
+            )->store;
         }
 
-    } elsif ($op eq 'cud-save') {
+    } elsif ( $op eq 'cud-save' ) {
 
         if ($NoUpdateLogin) {
             delete $newdata{'password'};
             delete $newdata{'userid'};
         }
 
-        $patron = Koha::Patrons->find( $borrowernumber );
+        $patron = Koha::Patrons->find($borrowernumber);
 
         # Ensure preferred name is set even if not passed because of BorrowerUnwantedFields
         $newdata{preferred_name} = undef unless defined $newdata{preferred_name};
@@ -538,57 +560,63 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
 
         try {
             $patron->set( \%newdata )->store( { guarantors => \@guarantors } ) if scalar( keys %newdata ) > 1;
-                # bug 4508 - avoid crash if we're not updating any columns in the borrowers table (editing patron attrs or msg prefs)
+
+            # bug 4508 - avoid crash if we're not updating any columns in the borrowers table (editing patron attrs or msg prefs)
             $success = 1;
         } catch {
             $success = 0;
-            $nok = 1;
-            if( ref($_) eq 'Koha::Exceptions::Patron::InvalidUserid' ) {
+            $nok     = 1;
+            if ( ref($_) eq 'Koha::Exceptions::Patron::InvalidUserid' ) {
                 push @errors, "ERROR_login_exist";
             } else {
-                warn "Patron modification failed! - $@"; # Maybe we must die instead of just warn
-                push @messages, {error => 'error_on_update_patron'};
+                warn "Patron modification failed! - $@";    # Maybe we must die instead of just warn
+                push @messages, { error => 'error_on_update_patron' };
             }
             $op = 'edit_form';
         };
 
-        if ( $success ) {
+        if ($success) {
 
             # Update or create our HouseboundRole if necessary.
             my $housebound_role = Koha::Patron::HouseboundRoles->find($borrowernumber);
             my ( $hsbnd_chooser, $hsbnd_deliverer ) = ( 0, 0 );
-            $hsbnd_chooser = 1 if $input->param('housebound_chooser');
+            $hsbnd_chooser   = 1 if $input->param('housebound_chooser');
             $hsbnd_deliverer = 1 if $input->param('housebound_deliverer');
-            if ( $housebound_role ) {
+            if ($housebound_role) {
                 if ( $hsbnd_chooser || $hsbnd_deliverer ) {
+
                     # Update our HouseboundRole.
-                    $housebound_role
-                        ->housebound_chooser($hsbnd_chooser)
-                        ->housebound_deliverer($hsbnd_deliverer)
-                        ->store;
+                    $housebound_role->housebound_chooser($hsbnd_chooser)->housebound_deliverer($hsbnd_deliverer)->store;
                 } else {
-                    $housebound_role->delete; # No longer needed.
+                    $housebound_role->delete;    # No longer needed.
                 }
             } else {
+
                 # Only create a HouseboundRole if patron has a role.
                 if ( $hsbnd_chooser || $hsbnd_deliverer ) {
-                    $housebound_role = Koha::Patron::HouseboundRole->new({
-                        borrowernumber_id    => $borrowernumber,
-                        housebound_chooser   => $hsbnd_chooser,
-                        housebound_deliverer => $hsbnd_deliverer,
-                    })->store;
+                    $housebound_role = Koha::Patron::HouseboundRole->new(
+                        {
+                            borrowernumber_id    => $borrowernumber,
+                            housebound_chooser   => $hsbnd_chooser,
+                            housebound_deliverer => $hsbnd_deliverer,
+                        }
+                    )->store;
                 }
             }
 
             # should never raise an exception as password validity is checked above
             my $password = $newdata{password};
             if ( $password and $password ne '****' ) {
-                $patron->set_password({ password => $password });
+                $patron->set_password( { password => $password } );
             }
 
             add_guarantors( $patron, $input );
-            if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
-                C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
+            if ( C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs') )
+            {
+                C4::Form::MessagingPreferences::handle_form_action(
+                    $input, { borrowernumber => $borrowernumber },
+                    $template
+                );
             }
         }
     }
@@ -657,26 +685,26 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
     }
 }
 
-if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
-	exit;		# same as above
+if ($delete) {
+    print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+    exit;        # same as above
 }
 
-if ($nok or !$nodouble){
-    $op = 'add_form'  if ( $op eq 'cud-insert' );
-    $op = 'edit_form' if ( $op eq 'cud-save' );
-    %data=%newdata; 
-    unless ($step){  
-        $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 );
-    }  
-} 
+if ( $nok or !$nodouble ) {
+    $op   = 'add_form'  if ( $op eq 'cud-insert' );
+    $op   = 'edit_form' if ( $op eq 'cud-save' );
+    %data = %newdata;
+    unless ($step) {
+        $template->param( step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 );
+    }
+}
 
 $template->param( "op" => $op );
 
-if (C4::Context->preference("IndependentBranches")) {
+if ( C4::Context->preference("IndependentBranches") ) {
     my $userenv = C4::Context->userenv;
     if ( !C4::Context->IsSuperLibrarian() && $data{'branchcode'} ) {
-        unless ($userenv->{branch} eq $data{'branchcode'}){
+        unless ( $userenv->{branch} eq $data{'branchcode'} ) {
             print $input->redirect("/cgi-bin/koha/members/members-home.pl");
             exit;
         }
@@ -684,44 +712,49 @@ if (C4::Context->preference("IndependentBranches")) {
 }
 
 # Define the fields to be pre-filled in guarantee records
-my $prefillguarantorfields=C4::Context->preference("PrefillGuaranteeField");
-my @prefill_fields=split(/\,/,$prefillguarantorfields);
+my $prefillguarantorfields = C4::Context->preference("PrefillGuaranteeField");
+my @prefill_fields         = split( /\,/, $prefillguarantorfields );
 $template->param(
     prefill_fields => \@prefill_fields,
     to_api_mapping => Koha::Patron->new->to_api_mapping
 );
 
-if ($op eq 'add_form'){
+if ( $op eq 'add_form' ) {
     if ($guarantor_id) {
         foreach (@prefill_fields) {
             $newdata{$_} = $guarantor->$_;
         }
     }
-    $template->param( updtype => 'I', step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1, step_7 => 1);
+    $template->param(
+        updtype => 'I', step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1,
+        step_7  => 1
+    );
 }
-if ($op eq 'edit_form')  {
-    $template->param( updtype => 'M',modify => 1 );
-    $template->param( step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1, step_7 => 1) unless $step;
+if ( $op eq 'edit_form' ) {
+    $template->param( updtype => 'M', modify => 1 );
+    $template->param( step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 )
+        unless $step;
     if ( $step == 4 ) {
         $template->param( categorycode => $borrower_data->{'categorycode'} );
     }
 }
 if ( $op eq "duplicate" ) {
     $template->param( updtype => 'I' );
-    $template->param( step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 ) unless $step;
+    $template->param( step_1  => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 )
+        unless $step;
     $data{'cardnumber'} = "";
 }
 
-if(!defined($data{'sex'})){
-    $template->param( none => 1);
-} elsif($data{'sex'} eq 'F'){
-    $template->param( female => 1);
-} elsif ($data{'sex'} eq 'M'){
-    $template->param(  male => 1);
-} elsif ($data{'sex'} eq 'O') {
-    $template->param( other => 1);
+if ( !defined( $data{'sex'} ) ) {
+    $template->param( none => 1 );
+} elsif ( $data{'sex'} eq 'F' ) {
+    $template->param( female => 1 );
+} elsif ( $data{'sex'} eq 'M' ) {
+    $template->param( male => 1 );
+} elsif ( $data{'sex'} eq 'O' ) {
+    $template->param( other => 1 );
 } else {
-    $template->param(  none => 1);
+    $template->param( none => 1 );
 }
 
 ##Now all the data to modify a member.
@@ -733,42 +766,43 @@ my $patron_categories = Koha::Patron::Categories->search_with_library_limits(
     },
     { order_by => ['categorycode'] }
 );
-my $no_categories = ! $patron_categories->count;
-my $categories = {};
+my $no_categories     = !$patron_categories->count;
+my $categories        = {};
 my @patron_categories = $patron_categories->as_list;
+
 # When adding a guarantor we don't have a category yet, and only want to choose from the eligible categories
-unless ( !$category || $patron_categories->find( $category->id ) ){
+unless ( !$category || $patron_categories->find( $category->id ) ) {
     $template->param( limited_category => 1 );
     push @patron_categories, $category;
 }
-foreach my $patron_category ( @patron_categories ) {
+foreach my $patron_category (@patron_categories) {
     push @{ $categories->{ $patron_category->category_type } }, $patron_category;
 }
 
 $template->param(
     patron_categories => $categories,
-    no_categories => $no_categories,
+    no_categories     => $no_categories,
 );
 
 my $cities = Koha::Cities->search( {}, { order_by => 'city_name' } );
 $template->param(
-    cities    => $cities,
+    cities => $cities,
 );
 
 my $default_borrowertitle = '';
-unless ( $op eq 'duplicate' ) { $default_borrowertitle=$data{'title'} }
+unless ( $op eq 'duplicate' ) { $default_borrowertitle = $data{'title'} }
 
 my @relationships = split /,|\|/, C4::Context->preference('borrowerRelationship');
 my @relshipdata;
 while (@relationships) {
-  my $relship = shift @relationships || '';
-  my %row = ('relationship' => $relship);
-  if (defined($data{'relationship'}) and $data{'relationship'} eq $relship) {
-    $row{'selected'}=' selected';
-  } else {
-    $row{'selected'}='';
-  }
-  push(@relshipdata, \%row);
+    my $relship = shift @relationships || '';
+    my %row     = ( 'relationship' => $relship );
+    if ( defined( $data{'relationship'} ) and $data{'relationship'} eq $relship ) {
+        $row{'selected'} = ' selected';
+    } else {
+        $row{'selected'} = '';
+    }
+    push( @relshipdata, \%row );
 }
 
 # get Branch Loop
@@ -776,62 +810,63 @@ while (@relationships) {
 # in add    mod: userbranch value comes from branches table (ip correspondence)
 
 my $userbranch = '';
-if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+if ( C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
     $userbranch = C4::Context->userenv->{'branch'};
 }
 
-if (defined ($data{'branchcode'}) and ( $op eq 'edit_form' || $op eq 'duplicate' || $op eq 'add_form' )) {
+if ( defined( $data{'branchcode'} ) and ( $op eq 'edit_form' || $op eq 'duplicate' || $op eq 'add_form' ) ) {
     $userbranch = $data{'branchcode'};
 }
 $template->param( userbranch => $userbranch );
 
 my $no_add;
-if ( Koha::Libraries->search->count < 1 ){
+if ( Koha::Libraries->search->count < 1 ) {
     $no_add = 1;
-    $template->param(no_branches => 1);
+    $template->param( no_branches => 1 );
 }
-if($no_categories){
+if ($no_categories) {
     $no_add = 1;
-    $template->param(no_categories => 1);
+    $template->param( no_categories => 1 );
 }
-$template->param(no_add => $no_add);
+$template->param( no_add => $no_add );
+
 # --------------------------------------------------------------------------------------------------------
 
-$template->param( sort1 => $data{'sort1'});
-$template->param( sort2 => $data{'sort2'});
-$template->param( autorenew => $data{'autorenew'});
+$template->param( sort1     => $data{'sort1'} );
+$template->param( sort2     => $data{'sort2'} );
+$template->param( autorenew => $data{'autorenew'} );
 
 if ($nok) {
     foreach my $error (@errors) {
-        $template->param($error) || $template->param( $error => 1);
+        $template->param($error) || $template->param( $error => 1 );
     }
-    $template->param(nok => 1);
+    $template->param( nok => 1 );
 
     #Prevent losing guarantor data if error occurs
     my @new_guarantors;
     my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
     my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
-    foreach my $gid ( @new_guarantor_id ) {
-        my $patron = Koha::Patrons->find( $gid );
-        my $relationship = shift( @new_guarantor_relationship );
+    foreach my $gid (@new_guarantor_id) {
+        my $patron       = Koha::Patrons->find($gid);
+        my $relationship = shift(@new_guarantor_relationship);
         next unless $patron;
         my $g = { patron => $patron, relationship => $relationship };
         push( @new_guarantors, $g );
     }
     $template->param( new_guarantors => \@new_guarantors );
 }
-  
-  #Formatting data for display    
-  
-if (!defined($data{'dateenrolled'}) or $data{'dateenrolled'} eq ''){
-  $data{'dateenrolled'} = dt_from_string;
+
+#Formatting data for display
+
+if ( !defined( $data{'dateenrolled'} ) or $data{'dateenrolled'} eq '' ) {
+    $data{'dateenrolled'} = dt_from_string;
 }
 if ( $op eq 'duplicate' ) {
     $data{'dateenrolled'} = dt_from_string;
-    $data{dateexpiry} = $category->get_expiry_date( $data{dateenrolled} );
+    $data{dateexpiry}     = $category->get_expiry_date( $data{dateenrolled} );
 }
-if (C4::Context->preference('uppercasesurnames')) {
-    $data{'surname'} &&= uc( $data{'surname'} );
+if ( C4::Context->preference('uppercasesurnames') ) {
+    $data{'surname'}     &&= uc( $data{'surname'} );
     $data{'contactname'} &&= uc( $data{'contactname'} );
 }
 
@@ -839,27 +874,28 @@ if ( C4::Context->preference('ExtendedPatronAttributes') ) {
     patron_attributes_form( $template, $extended_patron_attributes, $op );
 }
 
-if (C4::Context->preference('EnhancedMessagingPreferences')) {
-    if ($op eq 'add_form') {
-        C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode }, $template);
+if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
+    if ( $op eq 'add_form' ) {
+        C4::Form::MessagingPreferences::set_form_values( { categorycode => $categorycode }, $template );
     } else {
-        C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
+        C4::Form::MessagingPreferences::set_form_values( { borrowernumber => $borrowernumber }, $template );
     }
-    $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
-    $template->param(SMSnumber     => $data{'smsalertnumber'} );
-    $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
+    $template->param( SMSSendDriver         => C4::Context->preference("SMSSendDriver") );
+    $template->param( SMSnumber             => $data{'smsalertnumber'} );
+    $template->param( TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification") );
 }
 
-$template->param( borrower_data => \%data );
-$template->param( "show_guarantor" => $category ? $category->can_be_guarantee : 1); # associate with step to know where you are
-$template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
-$template->param(  step  => $step   ) if $step;	# associate with step to know where u are
+$template->param( borrower_data    => \%data );
+$template->param( "show_guarantor" => $category ? $category->can_be_guarantee : 1 )
+    ;    # associate with step to know where you are
+$template->param( "step_$step" => 1 )     if $step;    # associate with step to know where u are
+$template->param( step         => $step ) if $step;    # associate with step to know where u are
 
 $template->param(
-  BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
-  destination   => $destination,#to know where u come from and where u must go in redirect
-  check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
-  check_patron    => $check_patron
+    BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),    #field to test with javascript
+    destination            => $destination,     #to know where u come from and where u must go in redirect
+    check_member           => $check_member,    #to know if the borrower already exist(=>1) or not (=>0)
+    check_patron           => $check_patron
 );
 
 $template->param(
@@ -878,16 +914,15 @@ $template->param(
 
 # HouseboundModule data
 $template->param(
-    housebound_role  => Koha::Patron::HouseboundRoles->find($borrowernumber),
+    housebound_role => Koha::Patron::HouseboundRoles->find($borrowernumber),
 );
 
-if(defined($data{'flags'})){
-  $template->param(flags=>$data{'flags'});
+if ( defined( $data{'flags'} ) ) {
+    $template->param( flags => $data{'flags'} );
 }
-if(defined($data{'contacttitle'})){
-  $template->param("contacttitle_" . $data{'contacttitle'} => "SELECTED");
+if ( defined( $data{'contacttitle'} ) ) {
+    $template->param( "contacttitle_" . $data{'contacttitle'} => "SELECTED" );
 }
-
 
 my ( $min, $max ) = Koha::Policy::Patrons::Cardnumber->get_valid_length();
 if ( defined $min ) {
@@ -914,7 +949,7 @@ sub parse_extended_patron_attributes {
     foreach my $key (@patron_attr) {
         my $value = $input->param($key);
         next unless defined($value) and $value ne '';
-        my $code     = $input->param("${key}_code");
+        my $code = $input->param("${key}_code");
         next if exists $dups{$code}->{$value};
         $dups{$code}->{$value} = 1;
         push @attr, { code => $code, attribute => $value };
@@ -923,73 +958,74 @@ sub parse_extended_patron_attributes {
 }
 
 sub patron_attributes_form {
-    my $template = shift;
+    my $template   = shift;
     my $attributes = shift;
-    my $op = shift;
+    my $op         = shift;
 
-    my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
+    my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
     if ( $attribute_types->count == 0 ) {
-        $template->param(no_patron_attribute_types => 1);
+        $template->param( no_patron_attribute_types => 1 );
         return;
     }
 
     # map patron's attributes into a more convenient structure
     my %attr_hash = ();
     foreach my $attr (@$attributes) {
-        push @{ $attr_hash{$attr->{code}} }, $attr;
+        push @{ $attr_hash{ $attr->{code} } }, $attr;
     }
 
     my @attribute_loop = ();
-    my $i = 0;
+    my $i              = 0;
     my %items_by_class;
-    while ( my ( $attr_type ) = $attribute_types->next ) {
+    while ( my ($attr_type) = $attribute_types->next ) {
         my $entry = {
-            class             => $attr_type->class(),
-            code              => $attr_type->code(),
-            description       => $attr_type->description(),
-            repeatable        => $attr_type->repeatable(),
-            category          => $attr_type->authorised_value_category(),
-            category_code     => $attr_type->category_code(),
-            mandatory         => $attr_type->mandatory(),
-            is_date           => $attr_type->is_date(),
+            class         => $attr_type->class(),
+            code          => $attr_type->code(),
+            description   => $attr_type->description(),
+            repeatable    => $attr_type->repeatable(),
+            category      => $attr_type->authorised_value_category(),
+            category_code => $attr_type->category_code(),
+            mandatory     => $attr_type->mandatory(),
+            is_date       => $attr_type->is_date(),
         };
-        if (exists $attr_hash{$attr_type->code()}) {
-            foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {
-                my $newentry = { %$entry };
-                $newentry->{value} = $attr->{attribute};
+        if ( exists $attr_hash{ $attr_type->code() } ) {
+            foreach my $attr ( @{ $attr_hash{ $attr_type->code() } } ) {
+                my $newentry = {%$entry};
+                $newentry->{value}        = $attr->{attribute};
                 $newentry->{use_dropdown} = 0;
-                if ($attr_type->authorised_value_category()) {
+                if ( $attr_type->authorised_value_category() ) {
                     $newentry->{use_dropdown} = 1;
-                    $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category(), $attr->{attribute});
+                    $newentry->{auth_val_loop} =
+                        GetAuthorisedValues( $attr_type->authorised_value_category(), $attr->{attribute} );
                 }
                 $i++;
-                undef $newentry->{value} if ($attr_type->unique_id() && $op eq 'duplicate');
+                undef $newentry->{value} if ( $attr_type->unique_id() && $op eq 'duplicate' );
                 $newentry->{form_id} = "patron_attr_$i";
-                push @{$items_by_class{$attr_type->class()}}, $newentry;
+                push @{ $items_by_class{ $attr_type->class() } }, $newentry;
             }
         } else {
             $i++;
-            my $newentry = { %$entry };
-            if ($attr_type->authorised_value_category()) {
-                $newentry->{use_dropdown} = 1;
-                $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category());
+            my $newentry = {%$entry};
+            if ( $attr_type->authorised_value_category() ) {
+                $newentry->{use_dropdown}  = 1;
+                $newentry->{auth_val_loop} = GetAuthorisedValues( $attr_type->authorised_value_category() );
             }
             $newentry->{form_id} = "patron_attr_$i";
-            push @{$items_by_class{$attr_type->class()}}, $newentry;
+            push @{ $items_by_class{ $attr_type->class() } }, $newentry;
         }
     }
     for my $class ( sort keys %items_by_class ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
+        my $av  = Koha::AuthorisedValues->search( { category => 'PA_CLASS', authorised_value => $class } );
         my $lib = $av->count ? $av->next->lib : $class;
         push @attribute_loop, {
             class => $class,
             items => $items_by_class{$class},
             lib   => $lib,
-        }
+        };
     }
 
-    $template->param(patron_attributes => \@attribute_loop);
+    $template->param( patron_attributes => \@attribute_loop );
 
 }
 

@@ -48,8 +48,8 @@ use C4::Context;
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine") // 'Zebra';
-    my $file = "Koha/SearchEngine/${engine}/Indexer.pm";
-    my $class = "Koha::SearchEngine::${engine}::Indexer";
+    my $file   = "Koha/SearchEngine/${engine}/Indexer.pm";
+    my $class  = "Koha::SearchEngine::${engine}::Indexer";
     require $file;
     shift @_;
     return $class->new(@_);

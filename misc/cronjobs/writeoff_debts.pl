@@ -4,7 +4,7 @@ use Modern::Perl;
 use feature 'say';
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Account::Lines;
 use Koha::DateUtils qw( dt_from_string );
@@ -38,12 +38,12 @@ if ( !$file && !@type && !$before && !$after && !@category_code ) {
 }
 
 my $where = { 'amountoutstanding' => { '>' => 0 } };
-my $attr = {};
+my $attr  = {};
 
 if ($file) {
     my @accounts_from_file;
     open( my $fh, '<:encoding(UTF-8)', $file )
-      or die "Could not open file '$file' $!";
+        or die "Could not open file '$file' $!";
     while ( my $line = <$fh> ) {
         chomp($line);
         push @accounts_from_file, $line;
@@ -57,7 +57,7 @@ if (@type) {
 }
 
 my $dtf;
-if ($before||$after) {
+if ( $before || $after ) {
     $dtf = Koha::Database->new->schema->storage->datetime_parser;
 }
 
@@ -77,19 +77,19 @@ if (@category_code) {
 }
 
 my $lines = Koha::Account::Lines->search( $where, $attr );
-if ( $verbose ) {
+if ($verbose) {
     print "Attempting to write off " . $lines->count . " debts";
-    print " of type " . join(',',@type) if @type;
-    print " added before " . $before if $before;
-    print " from the passed list" if $file;
+    print " of type " . join( ',', @type ) if @type;
+    print " added before " . $before       if $before;
+    print " from the passed list"          if $file;
     print "\n";
 }
 
 while ( my $line = $lines->next ) {
     say "Skipping " . $line->accountlines_id . "; Not a debt" and next
-      if $line->is_credit && $verbose > 1;
+        if $line->is_credit && $verbose > 1;
     say "Skipping " . $line->accountlines_id . "; Is a PAYOUT" and next
-      if $line->debit_type_code eq 'PAYOUT' && $verbose > 1;
+        if $line->debit_type_code eq 'PAYOUT' && $verbose > 1;
 
     if ($confirm) {
         $line->_result->result_source->schema->txn_do(
@@ -119,11 +119,7 @@ while ( my $line = $lines->next ) {
                 )->store();
 
                 # Link writeoff to charge
-                $writeoff->apply(
-                    {
-                        debits => [$line]
-                    }
-                );
+                $writeoff->apply( { debits => [$line] } );
                 $writeoff->status('APPLIED')->store();
 
                 # Update status of original debit
@@ -135,8 +131,7 @@ while ( my $line = $lines->next ) {
     if ($verbose) {
         if ($confirm) {
             say "Accountline " . $line->accountlines_id . " written off";
-        }
-        else {
+        } else {
             say "Accountline " . $line->accountlines_id . " will be written off";
         }
     }

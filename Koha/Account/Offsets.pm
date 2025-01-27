@@ -17,7 +17,6 @@ package Koha::Account::Offsets;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Account::Offset;
@@ -56,8 +55,8 @@ sub total {
     );
 
     return $offsets->count
-      ? $offsets->next->get_column('total_amount') + 0
-      : 0;
+        ? $offsets->next->get_column('total_amount') + 0
+        : 0;
 }
 
 =head3 filter_by_non_reversible
@@ -74,8 +73,8 @@ sub filter_by_non_reversible {
     my $me = $self->_resultset()->current_source_alias;
 
     my $where = {
-        debit_id                  => { '!='      => undef },
-        credit_id                 => { '!='      => undef },
+        debit_id                  => { '!=' => undef },
+        credit_id                 => { '!=' => undef },
         type                      => 'APPLY',
         'credit.credit_type_code' => [ 'WRITEOFF', 'DISCOUNT', 'CANCELLATION' ],
         'credit.status'           => [ { '!=' => 'VOID' }, undef ],
@@ -100,8 +99,8 @@ sub filter_by_reversible {
     my $me = $self->_resultset()->current_source_alias;
 
     my $where = {
-        debit_id                  => { '!='      => undef },
-        credit_id                 => { '!='      => undef },
+        debit_id                  => { '!=' => undef },
+        credit_id                 => { '!=' => undef },
         type                      => 'APPLY',
         'credit.credit_type_code' => { -not_in => [ 'WRITEOFF', 'DISCOUNT', 'CANCELLATION' ] },
         'credit.status'           => [ { '!=' => 'VOID' }, undef ],

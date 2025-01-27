@@ -27,7 +27,7 @@ biblioitems.publishercode
 use Modern::Perl;
 use C4::Context;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -38,10 +38,10 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $function_name = $params->{id};
 
-    my $res  = "
+    my $res = "
 <script>
     function Focus$function_name(event) {
         var tagfield = jQuery( this );

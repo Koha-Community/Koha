@@ -2,15 +2,15 @@
 
 use Modern::Perl;
 
-use CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
+use CGI;    # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use Koha::Script -cron;
 use C4::Context;
 use C4::Letters qw( GetPrintMessages );
 use C4::Templates;
 use File::Spec;
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
-use C4::Log qw( cronlogaction );
+use C4::Log      qw( cronlogaction );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Email;
@@ -29,16 +29,16 @@ my (
     @emails,
 );
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 $send = 1;
 GetOptions(
-    'h|help'  => \$help,
-    's|split' => \$split,
-    'html'    => \$html,
-    'csv'     => \$csv,
-    'ods'     => \$ods,
+    'h|help'        => \$help,
+    's|split'       => \$split,
+    'html'          => \$html,
+    'csv'           => \$csv,
+    'ods'           => \$ods,
     'd|delimiter:s' => \$delimiter,
     'letter_code:s' => \@letter_codes,
     'send!'         => \$send,
@@ -50,32 +50,38 @@ pod2usage(0) if $help;
 my $output_directory = $ARGV[0];
 
 if ( !$output_directory || !-d $output_directory || !-w $output_directory ) {
-    pod2usage({
-        -exitval => 1,
-        -msg => qq{\nError: You must specify a valid and writeable directory to dump the print notices in.\n},
-    });
+    pod2usage(
+        {
+            -exitval => 1,
+            -msg     => qq{\nError: You must specify a valid and writeable directory to dump the print notices in.\n},
+        }
+    );
 }
 
 # Default value is html
 $html = 1 if not $html and not $csv and not $ods;
 
 if ( $csv and @letter_codes != 1 ) {
-    pod2usage({
-        -exitval => 1,
-        -msg => qq{\nIt is not consistent to use --csv without one (and only one) letter_code\n},
-    });
+    pod2usage(
+        {
+            -exitval => 1,
+            -msg     => qq{\nIt is not consistent to use --csv without one (and only one) letter_code\n},
+        }
+    );
 }
 
 if ( $ods and @letter_codes != 1 ) {
-    pod2usage({
-        -exitval => 1,
-        -msg => qq{\nIt is not consistent to use --ods without one (and only one) letter_code\n},
-    });
+    pod2usage(
+        {
+            -exitval => 1,
+            -msg     => qq{\nIt is not consistent to use --ods without one (and only one) letter_code\n},
+        }
+    );
 }
 
 $delimiter ||= q|,|;
 
-my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) ;
+my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
 my $today_syspref = output_pref( { dt => dt_from_string, dateonly => 1 } );
 
 my @all_messages = @{ GetPrintMessages() };
@@ -83,37 +89,41 @@ my @all_messages = @{ GetPrintMessages() };
 # Filter by letter_code
 @all_messages = map {
     my $letter_code = $_->{letter_code};
-    (
-        grep { $_ eq $letter_code } @letter_codes
-    ) ? $_ : ()
+    ( grep { $_ eq $letter_code } @letter_codes ) ? $_ : ()
 } @all_messages if @letter_codes;
 exit unless @all_messages;
 
 my ( $html_filenames, $csv_filenames, $ods_filenames );
-$csv_filenames = print_notices({
-    messages => \@all_messages,
-    split => $split,
-    output_directory => $output_directory,
-    format => 'csv',
-}) if $csv;
-
-$ods_filenames = print_notices({
-    messages => \@all_messages,
-    split => $split,
-    output_directory => $output_directory,
-    format => 'ods',
-}) if $ods;
-
-if ( $html ) {
-    $html_filenames = print_notices({
-        messages => \@all_messages,
-        split => $split,
+$csv_filenames = print_notices(
+    {
+        messages         => \@all_messages,
+        split            => $split,
         output_directory => $output_directory,
-        format => 'html',
-    });
+        format           => 'csv',
+    }
+) if $csv;
+
+$ods_filenames = print_notices(
+    {
+        messages         => \@all_messages,
+        split            => $split,
+        output_directory => $output_directory,
+        format           => 'ods',
+    }
+) if $ods;
+
+if ($html) {
+    $html_filenames = print_notices(
+        {
+            messages         => \@all_messages,
+            split            => $split,
+            output_directory => $output_directory,
+            format           => 'html',
+        }
+    );
 }
 
-if ( @emails ) {
+if (@emails) {
     my $files = {
         html => $html_filenames,
         csv  => $csv_filenames,
@@ -122,7 +132,7 @@ if ( @emails ) {
 
     my $transport = Koha::SMTP::Servers->get_default->transport;
 
-    for my $email ( @emails ) {
+    for my $email (@emails) {
         send_files(
             {
                 directory => $output_directory,
@@ -135,22 +145,22 @@ if ( @emails ) {
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub print_notices {
-    my ( $params ) = @_;
+    my ($params) = @_;
 
-    my $messages = $params->{messages};
-    my $split = $params->{split};
+    my $messages         = $params->{messages};
+    my $split            = $params->{split};
     my $output_directory = $params->{output_directory};
-    my $format = $params->{format} // 'html';
+    my $format           = $params->{format} // 'html';
 
     die "Format $format is not known"
         unless $format =~ m[^html$|^csv$|^ods$];
 
     my ( @filenames, $messages_by_branch );
 
-    if ( $split ) {
+    if ($split) {
         foreach my $message (@$messages) {
             push( @{ $messages_by_branch->{ $message->{'branchcode'} } }, $message );
         }
@@ -160,33 +170,40 @@ sub print_notices {
 
     while ( my ( $branchcode, $branch_messages ) = each %$messages_by_branch ) {
         my $letter_codes = @letter_codes == 0 ? 'all' : join '_', @letter_codes;
-        my $filename = $split
+        my $filename =
+            $split
             ? "notices_$letter_codes-" . $today_iso . "-$branchcode.$format"
             : "notices_$letter_codes-" . $today_iso . ".$format";
         my $filepath = File::Spec->catdir( $output_directory, $filename );
         if ( $format eq 'html' ) {
-            generate_html({
-                messages => $branch_messages,
-                filepath => $filepath,
-            });
+            generate_html(
+                {
+                    messages => $branch_messages,
+                    filepath => $filepath,
+                }
+            );
         } elsif ( $format eq 'csv' ) {
-            generate_csv ({
-                messages => $branch_messages,
-                filepath => $filepath,
-            });
+            generate_csv(
+                {
+                    messages => $branch_messages,
+                    filepath => $filepath,
+                }
+            );
         } elsif ( $format eq 'ods' ) {
-            _generate_ods ({
-                messages => $branch_messages,
-                filepath => $filepath,
-            });
+            _generate_ods(
+                {
+                    messages => $branch_messages,
+                    filepath => $filepath,
+                }
+            );
         }
 
-        if ( $send ) {
-            foreach my $message ( @$branch_messages ) {
+        if ($send) {
+            foreach my $message (@$branch_messages) {
                 C4::Letters::_set_message_status(
                     {
                         message_id => $message->{'message_id'},
-                        status => 'sent'
+                        status     => 'sent'
                     }
                 );
             }
@@ -197,13 +214,14 @@ sub print_notices {
 }
 
 sub generate_html {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $messages = $params->{messages};
     my $filepath = $params->{filepath};
 
-    my $template =
-      C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
-        CGI->new );
+    my $template = C4::Templates::gettemplate(
+        'batch/print-notices.tt', 'intranet',
+        CGI->new
+    );
 
     foreach my $message (@$messages) {
         $message->{is_html} = $message->{content_type} && $message->{content_type} =~ /html/i;
@@ -222,25 +240,25 @@ sub generate_html {
 }
 
 sub generate_csv {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $messages = $params->{messages};
     my $filepath = $params->{filepath};
 
     open my $OUTPUT, '>encoding(utf-8)', $filepath
         or die "Could not open $filepath: $!";
     my $headers;
-    foreach my $message ( @$messages ) {
+    foreach my $message (@$messages) {
         my @lines = split /\n/, $message->{content};
         chomp for @lines;
 
         # We don't have headers, get them
-        unless ( $headers ) {
+        unless ($headers) {
             $headers = $lines[0];
             say $OUTPUT $headers;
         }
 
         shift @lines;
-        for my $line ( @lines ) {
+        for my $line (@lines) {
             next if $line =~ /^\s$/;
             say $OUTPUT $line;
         }
@@ -248,26 +266,27 @@ sub generate_csv {
 }
 
 sub _generate_ods {
-    my ( $params ) = @_;
-    my $messages = $params->{messages};
+    my ($params)     = @_;
+    my $messages     = $params->{messages};
     my $ods_filepath = $params->{filepath};
 
     # Prepare sheet
     my $ods_content;
     my $has_headers;
-    foreach my $message ( @$messages ) {
+    foreach my $message (@$messages) {
         my @message_lines = split /\n/, $message->{content};
         chomp for @message_lines;
+
         # Get headers from first message
         if ($has_headers) {
             shift @message_lines;
         } else {
             $has_headers = 1;
         }
-        foreach my $message_line ( @message_lines ) {
+        foreach my $message_line (@message_lines) {
             my @content_row;
             my @message_cells = split $delimiter, $message_line;
-            foreach ( @message_cells ) {
+            foreach (@message_cells) {
                 push @content_row, Encode::encode( 'UTF8', $_ );
             }
             push @$ods_content, \@content_row;
@@ -275,11 +294,11 @@ sub _generate_ods {
     }
 
     # Process
-    generate_ods($ods_filepath, $ods_content);
+    generate_ods( $ods_filepath, $ods_content );
 }
 
 sub send_files {
-    my ( $params ) = @_;
+    my ($params)  = @_;
     my $directory = $params->{directory};
     my $files     = $params->{files};
     my $to        = $params->{to};
@@ -298,14 +317,12 @@ sub send_files {
     );
 
     while ( my ( $type, $filenames ) = each %$files ) {
-        for my $filename ( @$filenames ) {
-            my $mimetype = $type eq 'html'
-                ? 'text/html'
-                : $type eq 'csv'
-                    ? 'text/csv'
-                    : $type eq 'ods'
-                        ? 'application/vnd.oasis.opendocument.spreadsheet'
-                        : undef;
+        for my $filename (@$filenames) {
+            my $mimetype =
+                  $type eq 'html' ? 'text/html'
+                : $type eq 'csv'  ? 'text/csv'
+                : $type eq 'ods'  ? 'application/vnd.oasis.opendocument.spreadsheet'
+                :                   undef;
 
             next unless $mimetype;
 

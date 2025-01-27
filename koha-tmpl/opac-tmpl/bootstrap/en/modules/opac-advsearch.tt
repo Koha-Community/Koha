@@ -5,24 +5,26 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Advanced search") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Advanced search") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     [% FILTER collapse %]
         <style>
             .adv-search-grid {
                 display: grid;
-                gap: .5rem;
-                grid-template-columns: repeat( auto-fit, minmax( 15rem, 1fr ) );
+                gap: 0.5rem;
+                grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
             }
 
             .adv-search-item {
-                display:flex;
+                display: flex;
                 flex-direction: row;
-                gap: .5rem;
+                gap: 0.5rem;
             }
         </style>
     [% END %]
@@ -33,7 +35,7 @@
 [% SET AllPublicBranches = Branches.all(  search_params => { public => 1 } ) %]
 
 <form id="advsearch_form" action="/cgi-bin/koha/opac-search.pl" method="get">
-    <input type="hidden" name="advsearch" value="1"/>
+    <input type="hidden" name="advsearch" value="1" />
     <div class="main">
         [% WRAPPER breadcrumbs %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -55,11 +57,11 @@
                                     <div class="search-term-row">
                                         <div class="search-term-input">
                                             [% IF ( expanded_options ) %]
-                                                    <select name="op" class="form-select">
-                                                        <option value="AND" selected="selected">and</option>
-                                                        <option value="OR">or</option>
-                                                        <option value="NOT">not</option>
-                                                    </select>
+                                                <select name="op" class="form-select">
+                                                    <option value="AND" selected="selected">and</option>
+                                                    <option value="OR">or</option>
+                                                    <option value="NOT">not</option>
+                                                </select>
                                             [% ELSE %]
                                                 <label for="search-field_[% loop.index | html %]">
                                                     [% IF loop.index == 0 %]
@@ -69,7 +71,8 @@
                                                     [% END %]
                                                 </label>
                                             [% END # /IF ( expanded_options ) %]
-                                        </div> <!-- .search-term-input -->
+                                        </div>
+                                        <!-- .search-term-input -->
 
                                         <div class="search-term-input">
                                             <select class="form-select" name="idx" aria-label="Choose search type for field [% loop.index + 1 | html %]" id="search-field_[% loop.index | html %]">
@@ -93,7 +96,6 @@
                                                     [% ELSE %]
                                                         <option value="callnum">Call number</option>
                                                     [% END %]
-
                                                 [% END %]
                                                 <option value="au,wrdl">Author</option>
                                                 [% IF ( expanded_options ) %]
@@ -124,28 +126,33 @@
                                                     <option value="nb">ISBN</option>
                                                 [% END %]
                                                 <option value="bc">Barcode</option>
-                                            </select> <!-- /#search-field_[% loop.index | html %] -->
-                                        </div> <!-- .search-term-input -->
+                                            </select>
+                                            <!-- /#search-field_[% loop.index | html %] -->
+                                        </div>
+                                        <!-- .search-term-input -->
                                         <div class="search-term-input">
                                             <input class="form-control" type="text" name="q" aria-label="Enter field [% loop.index + 1 | html %] search terms" value="" />
-                                        </div> <!-- .search-term-input -->
+                                        </div>
+                                        <!-- .search-term-input -->
                                         [% IF ( expanded_options ) %]
                                             <div class="search-term-input">
-                                                    <a class="ButtonPlus" title="Add another field" href="#">
-                                                        <i class="fa fa-plus-square" aria-hidden="true"></i>
-                                                    </a>
-                                                    <a class="ButtonLess" title="Remove field" href="#">
-                                                        <i class="fa fa-minus-square" aria-hidden="true"></i>
-                                                    </a>
-                                            </div> <!-- .search-term-input -->
+                                                <a class="ButtonPlus" title="Add another field" href="#">
+                                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                                </a>
+                                                <a class="ButtonLess" title="Remove field" href="#">
+                                                    <i class="fa fa-minus-square" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                            <!-- .search-term-input -->
                                         [% END %]
-                                    </div> <!-- /.search-term-row -->
+                                    </div>
+                                    <!-- /.search-term-row -->
                                 [% END # FOREACH search_box %]
                                 [% IF ( expanded_options ) %]
                                     [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
                                         <div id="weight_search">
                                             <label>
-                                                <input type="checkbox" name="weight_search" checked="checked">
+                                                <input type="checkbox" name="weight_search" checked="checked" />
                                                 Apply field weights to search
                                             </label>
                                         </div>
@@ -159,17 +166,19 @@
                                         See from (non-preferred form) headings are included
                                     </div>
                                 [% END %]
-                            </div> <!-- /.advanced-search-terms -->
+                            </div>
+                            <!-- /.advanced-search-terms -->
                         </fieldset>
-                    </div> <!-- /#booleansearch -->
-                </div> <!-- / .col -->
-            </div> <!-- / .row -->
+                    </div>
+                    <!-- /#booleansearch -->
+                </div>
+                <!-- / .col -->
+            </div>
+            <!-- / .row -->
 
             <div class="text-center">
                 <!-- SEARCH BUTTONS -->
-                <fieldset class="action">
-                    [% PROCESS searchbuttons %]
-                </fieldset>
+                <fieldset class="action"> [% PROCESS searchbuttons %] </fieldset>
                 <!-- /SEARCH BUTTONS -->
             </div>
 
@@ -181,10 +190,14 @@
                             [% WRAPPER tabs_nav %]
                                 [% FOREACH advsearchloo IN advancedsearchesloop %]
                                     [% WRAPPER tab_item tabname= "advsearch-tab-${advsearchloo.advanced_search_type}" bt_active= "0" %]
-                                        [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
-                                        [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
-                                        [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
-                                        [% ELSE %]<span>Something else</span>
+                                        [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]
+                                            <span>Item type</span>
+                                        [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]
+                                            <span>Collection</span>
+                                        [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]
+                                            <span>Shelving location</span>
+                                        [% ELSE %]
+                                            <span>Something else</span>
                                         [% END %]
                                     [% END %]
                                 [% END %]
@@ -199,7 +212,8 @@
                                                     [% IF (advsearchloo.advanced_search_type != 'itemtypes') OR (((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1)) %]
                                                         <div class="adv-search-item">
                                                             <div>
-                                                                <input type="checkbox"
+                                                                <input
+                                                                    type="checkbox"
                                                                     id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]"
                                                                     name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
                                                                     value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
@@ -229,12 +243,13 @@
                                 [% END # / FOREACH advancedsearchesloop %]
                             [% END # /tab_panels %]
                         [% END # /WRAPPER tabs#advsearches %]
-                    </div> <!-- / .col -->
+                    </div>
+                    <!-- / .col -->
                 [% END # /IF OpacAdvSearchOptions %]
-            </div> <!-- /.row -->
+            </div>
+            <!-- /.row -->
 
             <div id="advsearch_limits" class="row">
-
                 [%# Following on one line for translatability %]
                 [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('location').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('location').size > 0 and expanded_options ) ) %]
                     [% IF ( singleBranchMode ) %]
@@ -247,9 +262,11 @@
                                         <label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label>
                                     </div>
                                 </fieldset>
-                            </div> <!-- / #location -->
+                            </div>
+                            <!-- / #location -->
                             <!-- /AVAILABILITY LIMITS -->
-                        </div> <!-- / .col -->
+                        </div>
+                        <!-- / .col -->
                     [% ELSE %]
                         <div class="col-sm-6 col-lg-3">
                             <!-- AVAILABILITY LIMITS -->
@@ -263,14 +280,14 @@
 
                                     [% IF AllPublicBranches.size > 1 %]
                                         <select class="form-select" name="limit" id="branchloop">
-                                        <option value="">All libraries</option>
-                                        [% FOREACH BranchesLoo IN AllPublicBranches %]
-                                            [% IF BranchesLoo.selected %]
-                                                <option value="branch:[% BranchesLoo.branchcode | html %]" selected="selected">[% BranchesLoo.branchname | html %]</option>
-                                            [% ELSE %]
-                                                <option value="branch:[% BranchesLoo.branchcode | html %]">[% BranchesLoo.branchname | html %]</option>
+                                            <option value="">All libraries</option>
+                                            [% FOREACH BranchesLoo IN AllPublicBranches %]
+                                                [% IF BranchesLoo.selected %]
+                                                    <option value="branch:[% BranchesLoo.branchcode | html %]" selected="selected">[% BranchesLoo.branchname | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="branch:[% BranchesLoo.branchcode | html %]">[% BranchesLoo.branchname | html %]</option>
+                                                [% END %]
                                             [% END %]
-                                        [% END %]
                                         </select>
                                         [% IF search_groups %]
                                             <p>OR</p>
@@ -287,9 +304,11 @@
                                         <label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label>
                                     </div>
                                 </fieldset>
-                            </div> <!-- / #location -->
+                            </div>
+                            <!-- / #location -->
                             <!-- /AVAILABILITY LIMITS -->
-                        </div> <!-- / .col -->
+                        </div>
+                        <!-- / .col -->
                     [% END # / IF singleBranchMode %]
                 [% END %]
 
@@ -306,7 +325,8 @@
                             </fieldset>
                         </div>
                         <!-- RANK LIMITS -->
-                    </div> <!-- / .col -->
+                    </div>
+                    <!-- / .col -->
                 [% END %]
 
                 [%# Following on one line for translatability %]
@@ -317,7 +337,7 @@
                             <fieldset>
                                 <label for="limit-yr">Publication date range</label>
                                 <input type="text" size="30" id="limit-yr" name="limit-yr" title="Enter search terms" value="" />
-                                <div class="hint">For example:  1999-2001.  You could also use "-1987" for everything published in and before 1987 or "2008-" for everything published in 2008 and after.</div>
+                                <div class="hint">For example: 1999-2001. You could also use "-1987" for everything published in and before 1987 or "2008-" for everything published in 2008 and after.</div>
                             </fieldset>
                             <!-- /PUB RANGE OPTION -->
                         </div>
@@ -343,10 +363,13 @@
                                 </select>
                                 <!-- /LANGUAGE LIMIT -->
                             </fieldset>
-                        </div> <!-- / #langfilter -->
-                    </div> <!-- / .col -->
+                        </div>
+                        <!-- / #langfilter -->
+                    </div>
+                    <!-- / .col -->
                 [% END %]
-            </div> <!-- / .row -->
+            </div>
+            <!-- / .row -->
 
             [%# Following on one line for translatability %]
             [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('subtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('subtype').size > 0 and expanded_options ) ) %]
@@ -369,14 +392,16 @@
                                         <option value="aud:j">Juvenile</option>
                                     </select>
                                 </fieldset>
-                            </div> <!-- /.advsearch_limit -->
-                        </div> <!-- / .col-sm-6 col-lg-3 -->
+                            </div>
+                            <!-- /.advsearch_limit -->
+                        </div>
+                        <!-- / .col-sm-6 col-lg-3 -->
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="advsearch_limit">
                                 <fieldset>
                                     <label for="subtype_content">Content</label>
-                                    <select id="subtype_content"  name="limit" class="subtype form-select">
+                                    <select id="subtype_content" name="limit" class="subtype form-select">
                                         <option value="" selected="selected" class="menuheader">Any content</option>
                                         <option value="fic:1">Fiction</option>
                                         <option value="fic:0">Non-fiction</option>
@@ -385,7 +410,8 @@
                                         <option value="mus:i">Non-musical recording</option>
                                     </select>
                                 </fieldset>
-                            </div> <!-- /.advsearch_limit -->
+                            </div>
+                            <!-- /.advsearch_limit -->
                         </div>
 
                         <div class="col-sm-6 col-lg-3">
@@ -406,8 +432,10 @@
                                         <option value="l-format:cr">Website</option>
                                     </select>
                                 </fieldset>
-                            </div> <!-- /.advsearch_limit -->
-                        </div> <!-- / .col-sm-6 col-lg-3 -->
+                            </div>
+                            <!-- /.advsearch_limit -->
+                        </div>
+                        <!-- / .col-sm-6 col-lg-3 -->
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="advsearch_limit">
@@ -439,9 +467,12 @@
                                         <option value="ctype:z">Treaties </option>
                                     </select>
                                 </fieldset>
-                            </div> <!-- /.advsearch_limit -->
-                        </div> <!-- / .col-sm-6 col-lg-3 -->
-                    </div> <!-- / #subtypes.row -->
+                            </div>
+                            <!-- /.advsearch_limit -->
+                        </div>
+                        <!-- / .col-sm-6 col-lg-3 -->
+                    </div>
+                    <!-- / #subtypes.row -->
                     <!-- SUBTYPE LIMITS -->
                 [% END # / IF usmarc %]
 
@@ -462,8 +493,10 @@
                     </fieldset>
                 </div>
             [% END %]
-        </div> <!-- / .container-fluid -->
-   </div> <!-- / .main -->
+        </div>
+        <!-- / .container-fluid -->
+    </div>
+    <!-- / .main -->
 </form>
 
 [% INCLUDE 'opac-bottom.inc' %]
@@ -484,110 +517,110 @@
 [% END %]
 
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
-<script>
-window.addEventListener('pageshow', function( e ){
-    $('.form-control:visible').prop('disabled' , false );
-});
-$(document).ready(function() {
-    [% IF search_groups %]
-        function branch_limit() {
-            if( $("#branchloop").val() != "" ){
-                $("#categoryloop").val("").prop('disabled',true);
-            } else {
-                $("#categoryloop").prop('disabled',false);
-            }
-            if ( $("#categoryloop").val() != "" ){
-                $("#branchloop").val("").prop('disabled',true);
-            } else {
-                $("#branchloop").prop('disabled',false);
-            }
-        }
-        branch_limit();
-        $("#branchloop,#categoryloop").on("change",function(){
-            branch_limit();
+    [% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
+    <script>
+        window.addEventListener('pageshow', function( e ){
+            $('.form-control:visible').prop('disabled' , false );
         });
-    [% END %]
+        $(document).ready(function() {
+            [% IF search_groups %]
+                function branch_limit() {
+                    if( $("#branchloop").val() != "" ){
+                        $("#categoryloop").val("").prop('disabled',true);
+                    } else {
+                        $("#categoryloop").prop('disabled',false);
+                    }
+                    if ( $("#categoryloop").val() != "" ){
+                        $("#branchloop").val("").prop('disabled',true);
+                    } else {
+                        $("#branchloop").prop('disabled',false);
+                    }
+                }
+                branch_limit();
+                $("#branchloop,#categoryloop").on("change",function(){
+                    branch_limit();
+                });
+            [% END %]
 
-    if( $("#advsearches .tab-pane.active").length < 1 ){
-        $("#advsearches li:first a").tab("show");
-    }
-
-    $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
-
-    [% IF ( ReturnToSearch ) %]
-        if (form_serialized = JSON.parse( Cookies.get("form_serialized") ) ) {
-            // Add missing term inputs if there were more than 3
-            var count = (form_serialized.match(/&q=/g) || []).length;
-            for(var i = 3 ; i < count ; i++) {
-                $("a.ButtonPlus:last").click();
+            if( $("#advsearches .tab-pane.active").length < 1 ){
+                $("#advsearches li:first a").tab("show");
             }
-            $('#advsearch form').deserialize(form_serialized);
-        }
-        if (form_serialized_limits = JSON.parse( Cookies.get("form_serialized_limits") ) ) {
-            $('#language-limit')     .val(form_serialized_limits[0]);
-            $('#branchloop')         .val(form_serialized_limits[1]);
-            $('#subtype_audience')   .val(form_serialized_limits[2]);
-            $('#subtype_content')    .val(form_serialized_limits[3]);
-            $('#subtype_format')     .val(form_serialized_limits[4]);
-            $('#subtype_additional') .val(form_serialized_limits[5]);
-            $('#locloop')            .val(form_serialized_limits[6]);
-        }
-    [% ELSE %]
-        //Clear all form cookies
-        Cookies.remove("form_serialized", { path: '/'});
-        Cookies.remove("form_serialized_limits", { path: '/'});
-        Cookies.remove("search_path_code", { path: '/'});
-    [% END %]
-    $('#advsearch_form').submit(function() {
-        $('[name^="limit"]').each(function(){
-            if( $(this).val() == '' ){
-                $(this).prop("disabled","disabled");
-            }
+
+            $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
+
+            [% IF ( ReturnToSearch ) %]
+                if (form_serialized = JSON.parse( Cookies.get("form_serialized") ) ) {
+                    // Add missing term inputs if there were more than 3
+                    var count = (form_serialized.match(/&q=/g) || []).length;
+                    for(var i = 3 ; i < count ; i++) {
+                        $("a.ButtonPlus:last").click();
+                    }
+                    $('#advsearch form').deserialize(form_serialized);
+                }
+                if (form_serialized_limits = JSON.parse( Cookies.get("form_serialized_limits") ) ) {
+                    $('#language-limit')     .val(form_serialized_limits[0]);
+                    $('#branchloop')         .val(form_serialized_limits[1]);
+                    $('#subtype_audience')   .val(form_serialized_limits[2]);
+                    $('#subtype_content')    .val(form_serialized_limits[3]);
+                    $('#subtype_format')     .val(form_serialized_limits[4]);
+                    $('#subtype_additional') .val(form_serialized_limits[5]);
+                    $('#locloop')            .val(form_serialized_limits[6]);
+                }
+            [% ELSE %]
+                //Clear all form cookies
+                Cookies.remove("form_serialized", { path: '/'});
+                Cookies.remove("form_serialized_limits", { path: '/'});
+                Cookies.remove("search_path_code", { path: '/'});
+            [% END %]
+            $('#advsearch_form').submit(function() {
+                $('[name^="limit"]').each(function(){
+                    if( $(this).val() == '' ){
+                        $(this).prop("disabled","disabled");
+                    }
+                });
+                $(".search-term-row").each(function(){
+                    if( $(this).find('input[name="q"]').val() == "" ){
+                        $(this).find('input[name="q"]').prop("disabled","disabled");
+                        $(this).find('select[name="op"]').prop("disabled","disabled");
+                        $(this).find('select[name="idx"]').prop("disabled","disabled");
+                    }
+                });
+                form_serialized = $(this).serialize();
+                Cookies.set("form_serialized", JSON.stringify( form_serialized ), { path: '/', sameSite: 'Lax' });
+                form_serialized_limits = [
+                    $('#language-limit').val(),   $('#branchloop').val(),
+                    $('#subtype_audience').val(), $('#subtype_content').val(),
+                    $('#subtype_format').val(),   $('#subtype_additional').val(),
+                    $('#locloop').val()
+                ];
+                Cookies.set("form_serialized_limits", JSON.stringify( form_serialized_limits ),{ path: '/', sameSite: 'Lax' });
+                [% IF ( expanded_options ) %]
+                    Cookies.set("search_path_code", 'exs', { path: '/', sameSite: 'Lax' });
+                [% ELSE %]
+                    Cookies.set("search_path_code", 'ads', { path: '/', sameSite: 'Lax' });
+                [% END %]
+            });
+
         });
-        $(".search-term-row").each(function(){
-            if( $(this).find('input[name="q"]').val() == "" ){
-                $(this).find('input[name="q"]').prop("disabled","disabled");
-                $(this).find('select[name="op"]').prop("disabled","disabled");
-                $(this).find('select[name="idx"]').prop("disabled","disabled");
-            }
-        });
-        form_serialized = $(this).serialize();
-        Cookies.set("form_serialized", JSON.stringify( form_serialized ), { path: '/', sameSite: 'Lax' });
-        form_serialized_limits = [
-            $('#language-limit').val(),   $('#branchloop').val(),
-            $('#subtype_audience').val(), $('#subtype_content').val(),
-            $('#subtype_format').val(),   $('#subtype_additional').val(),
-            $('#locloop').val()
-        ];
-        Cookies.set("form_serialized_limits", JSON.stringify( form_serialized_limits ),{ path: '/', sameSite: 'Lax' });
-        [% IF ( expanded_options ) %]
-            Cookies.set("search_path_code", 'exs', { path: '/', sameSite: 'Lax' });
-        [% ELSE %]
-            Cookies.set("search_path_code", 'ads', { path: '/', sameSite: 'Lax' });
-        [% END %]
-    });
+            /* This function allows to display a new field to search.
+            */
+            $(document).on("click", '.ButtonPlus', function(e) {
+                e.preventDefault();
+                $('.ButtonLess').show();
+                var thisLine = $(this).parent().parent();
+                var newLine = thisLine.clone();
+                $(newLine).find('.search-term-input select[name="op"]').first().prop("disabled",false).show();
+                newLine.find('input').val('');
+                thisLine.after(newLine);
+            });
 
-});
-    /* This function allows to display a new field to search.
-    */
-    $(document).on("click", '.ButtonPlus', function(e) {
-        e.preventDefault();
-        $('.ButtonLess').show();
-        var thisLine = $(this).parent().parent();
-        var newLine = thisLine.clone();
-        $(newLine).find('.search-term-input select[name="op"]').first().prop("disabled",false).show();
-        newLine.find('input').val('');
-        thisLine.after(newLine);
-    });
-
-    $(document).on("click", '.ButtonLess', function(e) {
-        e.preventDefault();
-        if( $("a.ButtonLess").length <= 2 ) {
-           $('.ButtonLess').hide();
-        }
-        $(this).parent().parent().remove();
-        $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
-    });
-</script>
+            $(document).on("click", '.ButtonLess', function(e) {
+                e.preventDefault();
+                if( $("a.ButtonLess").length <= 2 ) {
+                   $('.ButtonLess').hide();
+                }
+                $(this).parent().parent().remove();
+                $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
+            });
+    </script>
 [% END %]

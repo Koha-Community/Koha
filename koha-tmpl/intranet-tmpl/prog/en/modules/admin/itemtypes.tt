@@ -8,34 +8,38 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF op == 'add_form' %]
-        [% IF ( itemtype ) %]
-            [% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
-        [% ELSE %]
-            [% t("New item type") | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% IF op == 'delete_confirm' %]
-        [% IF ( total ) %]
-            [% tx("Cannot delete item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
-        [% ELSE %]
-            [% tx("Confirm deletion of item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
-        [% END %] &rsaquo;
-    [% END %]
-    [% IF op == 'cud-delete_confirmed' %]
-        [% t("Data deleted") | html %] &rsaquo;
-    [% END %]
-    [% t("Item types") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF op == 'add_form' %]
+            [% IF ( itemtype ) %]
+                [% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
+            [% ELSE %]
+                [% t("New item type") | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% IF op == 'delete_confirm' %]
+            [% IF ( total ) %]
+                [% tx("Cannot delete item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
+            [% ELSE %]
+                [% tx("Confirm deletion of item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
+            [% END %]
+            &rsaquo;
+        [% END %]
+        [% IF op == 'cud-delete_confirmed' %]
+            [% t("Data deleted") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Item types") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
         fieldset.rows div.toptabs li {
             clear: none;
-            margin-right:.4em;
+            margin-right: 0.4em;
             padding-bottom: 0;
             width: auto;
         }
@@ -59,23 +63,23 @@
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
-       [% WRAPPER breadcrumb_item %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
 
         [% IF op == 'add_form' || op == 'delete_confirm' || op == 'delete_confirmed' %]
-           [% WRAPPER breadcrumb_item %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a>
             [% END %]
         [% END %]
 
         [% IF op == 'add_form' %]
             [% IF itemtype %]
-               [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
                 [% END %]
             [% ELSE %]
-               [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>New item type</span>
                 [% END %]
             [% END %]
@@ -83,24 +87,24 @@
 
         [% IF op == 'delete_confirm' %]
             [% IF total %]
-               [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% tx("Cannot delete item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
                 [% END %]
             [% ELSE %]
-               [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% tx("Confirm deletion of item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
                 [% END %]
             [% END %]
         [% END %]
 
         [% IF op == 'delete_confirmed' %]
-           [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Data deleted</span>
             [% END %]
         [% END %]
 
         [% IF op == 'list' %]
-           [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Item types</span>
             [% END %]
         [% END %]
@@ -108,421 +112,423 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-[% IF op == 'list' %]<div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default" id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form"><i class="fa fa-plus"></i> New item type</a>
-</div>[% END %]
-
-[% FOREACH m IN messages %]
-    <div class="alert alert-[% m.type | html %]">
-        [% SWITCH m.code %]
-        [% CASE 'error_on_update' %]
-            <span>An error occurred when updating this item type. Perhaps the value already exists.</span>
-        [% CASE 'error_on_insert' %]
-            <span>An error occurred when inserting this item type. Perhaps the value already exists.</span>
-        [% CASE 'error_on_delete' %]
-            <span>An error occurred when deleting this item type. Check the logs for details.</span>
-        [% CASE 'success_on_update' %]
-            <span>Item type updated successfully.</span>
-        [% CASE 'success_on_insert' %]
-            <span>Item type inserted successfully.</span>
-        [% CASE 'success_on_delete' %]
-            <span>Item type deleted successfully.</span>
-        [% CASE 'already_exists' %]
-            <span>This item type already exists.</span>
-        [% CASE 'cannot_be_deleted' %]
-            <span>Cannot delete this item type. <p><strong>This record is in use</strong>. Deletion is not possible.</p></span>
-        [% CASE %]
-            <span>[% m.code | html %]</span>
-        [% END %]
-    </div>
-[% END %]
-
-
-[% IF op == 'add_form' %]
-    [% IF itemtype %]
-        <h1>[% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]</h1>
-    [% ELSE %]
-        <h1>New item type</h1>
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form"><i class="fa fa-plus"></i> New item type</a>
+        </div>
     [% END %]
-    <form action="/cgi-bin/koha/admin/itemtypes.pl" name="Aform" method="post" id="itemtypeentry">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-add_validate" />
-        <fieldset class="rows">
-            <ol>
-                [% IF itemtype %]
-                    <li>
-                        <input type="hidden" name="is_a_modif" value="1" />
-                        <span class="label">Item type: </span> <input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
-                        [% itemtype.itemtype | html %]
-                    </li>
-                [% ELSE %]
-                    <li>
-                        <label for="itemtype" class="required">Item type: </label>
-                        <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" required="required" class="focus" /> <span class="required">Required</span>
-                    </li>
-                [% END %]
-                <li>
-                    <label for="parent_type">Parent item type: </label>
-                    [% IF !is_a_parent && parent_types %]
-                    <select name="parent_type" id="parent_type">
-                        <option value="">None</option>
-                        [% FOREACH pt IN parent_types %]
-                            [% IF parent_type == pt.itemtype %]
-                                <option value="[% pt.itemtype | html %]" selected="selected">[% pt.description | html %]</option>
-                            [% ELSE %]
-                                <option value="[% pt.itemtype | html %]">[% pt.description | html %]</option>
-                            [% END %]
-                        [% END %]
-                    </select>
-                    [% ELSIF is_a_parent %]
-                    <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled/>
-                    <p>Is a parent to another type, cannot have a parent</p>
-                    [% ELSE %]
-                    <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled/>
-                    <p>No available parent types</p>
-                    [% END %]
-                    <div class="hint">Defining a parent type will apply checkout limits for all children as described on the circulation rules page.</div>
-                </li>
-                <li>
-                    <label for="description" class="required">Description: </label>
-                    <input type="text" id="description" name="description" size="48" value="[% itemtype.description | html %]" required="required" /> <span class="required">Required</span>
-                    [% IF can_be_translated %]
-                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | uri %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Translate into other languages</a>
-                    [% END %]
-                </li>
-                <li>
-                    <label for="searchcategory">Search category: </label>
-                    <select id="searchcategory" name="searchcategory">
-                    <option value="">None</option>
-                        [% FOREACH cat IN searchcategory %]
-                            [% IF cat.authorised_value == itemtype.searchcategory %]
-                                <option value="[% cat.authorised_value | html %]" selected="selected">
-                                    [% cat.lib | html %]
-                                </option>
-                            [% ELSE %]
-                                <option value="[% cat.authorised_value | html %]" >
-                                    [% cat.lib | html %]
-                                </option>
-                            [% END %]
-                        [% END %]
-                    </select>
-                    <div class="hint">
-                        [% IF ( CAN_user_parameters_manage_auth_values ) %]
-                            <span>Options are defined by the authorized value <a target="_blank" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ITEMTYPECAT">ITEMTYPECAT</a>.</span>
-                        [% ELSE %]
-                            <span>Options are defined by the authorized value ITEMTYPECAT.</span>
-                        [% END %]
-                    </div>
-                </li>
-                [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
-                    <li>
-                        <span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages or OpacNoItemTypeImages system preferences</a>
-                    </li>
-                [% END %]
-            </ol>
 
-            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
-                [% INCLUDE 'admin-icon-selection.inc' context = "itemtype" %]
+    [% FOREACH m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'error_on_update' %]
+                <span>An error occurred when updating this item type. Perhaps the value already exists.</span>
+            [% CASE 'error_on_insert' %]
+                <span>An error occurred when inserting this item type. Perhaps the value already exists.</span>
+            [% CASE 'error_on_delete' %]
+                <span>An error occurred when deleting this item type. Check the logs for details.</span>
+            [% CASE 'success_on_update' %]
+                <span>Item type updated successfully.</span>
+            [% CASE 'success_on_insert' %]
+                <span>Item type inserted successfully.</span>
+            [% CASE 'success_on_delete' %]
+                <span>Item type deleted successfully.</span>
+            [% CASE 'already_exists' %]
+                <span>This item type already exists.</span>
+            [% CASE 'cannot_be_deleted' %]
+                <span
+                    >Cannot delete this item type. <p><strong>This record is in use</strong>. Deletion is not possible.</p></span
+                >
+            [% CASE %]
+                <span>[% m.code | html %]</span>
             [% END %]
+        </div>
+    [% END %]
 
-            <ol class="oladditemtype">
-                <li>
-                    <label for="hideinopac">Hide in OPAC: </label>
-                    [% IF ( itemtype.hideinopac ) %]
-                        <input type="checkbox" id="hideinopac" name="hideinopac" checked="checked" value="1" />
+    [% IF op == 'add_form' %]
+        [% IF itemtype %]
+            <h1>[% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]</h1>
+        [% ELSE %]
+            <h1>New item type</h1>
+        [% END %]
+        <form action="/cgi-bin/koha/admin/itemtypes.pl" name="Aform" method="post" id="itemtypeentry">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-add_validate" />
+            <fieldset class="rows">
+                <ol>
+                    [% IF itemtype %]
+                        <li>
+                            <input type="hidden" name="is_a_modif" value="1" />
+                            <span class="label">Item type: </span> <input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
+                            [% itemtype.itemtype | html %]
+                        </li>
                     [% ELSE %]
-                        <input type="checkbox" id="hideinopac" name="hideinopac" value="1" />
+                        <li>
+                            <label for="itemtype" class="required">Item type: </label>
+                            <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" required="required" class="focus" /> <span class="required">Required</span>
+                        </li>
                     [% END %]
-                    <span class="hint">If checked, items of this type will be hidden as filters in OPAC's advanced search.</span>
-                </li>
-                <li>
-                    <label for="notforloan">Not for loan: </label>
+                    <li>
+                        <label for="parent_type">Parent item type: </label>
+                        [% IF !is_a_parent && parent_types %]
+                            <select name="parent_type" id="parent_type">
+                                <option value="">None</option>
+                                [% FOREACH pt IN parent_types %]
+                                    [% IF parent_type == pt.itemtype %]
+                                        <option value="[% pt.itemtype | html %]" selected="selected">[% pt.description | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% pt.itemtype | html %]">[% pt.description | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        [% ELSIF is_a_parent %]
+                            <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled />
+                            <p>Is a parent to another type, cannot have a parent</p>
+                        [% ELSE %]
+                            <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled />
+                            <p>No available parent types</p>
+                        [% END %]
+                        <div class="hint">Defining a parent type will apply checkout limits for all children as described on the circulation rules page.</div>
+                    </li>
+                    <li>
+                        <label for="description" class="required">Description: </label>
+                        <input type="text" id="description" name="description" size="48" value="[% itemtype.description | html %]" required="required" /> <span class="required">Required</span>
+                        [% IF can_be_translated %]
+                            <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | uri %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"
+                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Translate into other languages</a
+                            >
+                        [% END %]
+                    </li>
+                    <li>
+                        <label for="searchcategory">Search category: </label>
+                        <select id="searchcategory" name="searchcategory">
+                            <option value="">None</option>
+                            [% FOREACH cat IN searchcategory %]
+                                [% IF cat.authorised_value == itemtype.searchcategory %]
+                                    <option value="[% cat.authorised_value | html %]" selected="selected"> [% cat.lib | html %] </option>
+                                [% ELSE %]
+                                    <option value="[% cat.authorised_value | html %]"> [% cat.lib | html %] </option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <div class="hint">
+                            [% IF ( CAN_user_parameters_manage_auth_values ) %]
+                                <span>Options are defined by the authorized value <a target="_blank" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ITEMTYPECAT">ITEMTYPECAT</a>.</span>
+                            [% ELSE %]
+                                <span>Options are defined by the authorized value ITEMTYPECAT.</span>
+                            [% END %]
+                        </div>
+                    </li>
+                    [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
+                        <li>
+                            <span class="label">Image: </span>Item type images are disabled. To enable them, turn off the
+                            <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages or OpacNoItemTypeImages system preferences</a>
+                        </li>
+                    [% END %]
+                </ol>
+
+                [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
+                    [% INCLUDE 'admin-icon-selection.inc' context = "itemtype" %]
+                [% END %]
+
+                <ol class="oladditemtype">
+                    <li>
+                        <label for="hideinopac">Hide in OPAC: </label>
+                        [% IF ( itemtype.hideinopac ) %]
+                            <input type="checkbox" id="hideinopac" name="hideinopac" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" id="hideinopac" name="hideinopac" value="1" />
+                        [% END %]
+                        <span class="hint">If checked, items of this type will be hidden as filters in OPAC's advanced search.</span>
+                    </li>
+                    <li>
+                        <label for="notforloan">Not for loan: </label>
                         [% IF itemtype.notforloan %]
                             <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="notforloan" name="notforloan" value="1" />
                         [% END %]
                         <span class="hint">If checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item.</span>
-                </li>
-                <li>
-                    <label for="automatic_checkin">Automatic check-in: </label>
+                    </li>
+                    <li>
+                        <label for="automatic_checkin">Automatic check-in: </label>
                         [% IF itemtype.automatic_checkin %]
                             <input type="checkbox" id="automatic_checkin" name="automatic_checkin" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="automatic_checkin" name="automatic_checkin" value="1" />
                         [% END %]
-                        <span class="hint">If checked, items will be automatically checked in once they've reached their due date. This feature requires the <code>misc/cronjobs/automatic_checkin.pl</code> cronjob. Ask your system administrator to schedule it.</span>
-                </li>
-                <li>
-                    <label for="bookable">Bookable: </label>
+                        <span class="hint"
+                            >If checked, items will be automatically checked in once they've reached their due date. This feature requires the <code>misc/cronjobs/automatic_checkin.pl</code> cronjob. Ask your system administrator to
+                            schedule it.</span
+                        >
+                    </li>
+                    <li>
+                        <label for="bookable">Bookable: </label>
                         [% IF itemtype.bookable %]
                             <input type="checkbox" id="bookable" name="bookable" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="bookable" name="bookable" value="1" />
                         [% END %]
                         <span class="hint">If checked, all items of this type will be enabled for future bookings unless overridden at the item level.</span>
-                </li>
-                <li>
-                    <label for="rentalcharge">Rental charge: </label>
-                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" min="0" />
-                    <div class="hint">This fee is charged once per checkout/renewal per item</div>
-                </li>
-                <li>
-                    <label for="rentalcharge_daily">Daily rental charge: </label>
-                    <input type="text" id="rentalcharge_daily" name="rentalcharge_daily" size="10" value="[% itemtype.rentalcharge_daily | $Price on_editing => 1 %]" min="0" />
-                    <div class="hint">This fee is charged at checkout/renewal time for each day between the checkout/renewal date and due date for loans specified in days.</div>
-                </li>
-                <li>
-                    <label for="rentalcharge_daily_calendar">Daily rentals use calendar: </label>
+                    </li>
+                    <li>
+                        <label for="rentalcharge">Rental charge: </label>
+                        <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" min="0" />
+                        <div class="hint">This fee is charged once per checkout/renewal per item</div>
+                    </li>
+                    <li>
+                        <label for="rentalcharge_daily">Daily rental charge: </label>
+                        <input type="text" id="rentalcharge_daily" name="rentalcharge_daily" size="10" value="[% itemtype.rentalcharge_daily | $Price on_editing => 1 %]" min="0" />
+                        <div class="hint">This fee is charged at checkout/renewal time for each day between the checkout/renewal date and due date for loans specified in days.</div>
+                    </li>
+                    <li>
+                        <label for="rentalcharge_daily_calendar">Daily rentals use calendar: </label>
                         [% IF itemtype.rentalcharge_daily_calendar %]
                             <input type="checkbox" id="rentalcharge_daily_calendar" name="rentalcharge_daily_calendar" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="rentalcharge_daily_calendar" name="rentalcharge_daily_calendar" value="1" />
                         [% END %]
                         <span class="hint">If checked, daily charge will be calculated using the calendar to exclude holidays. If not checked, the fee will be calculated based on the number of days until due, directly.</span>
-                </li>
-                <li>
-                    <label for="rentalcharge_hourly">Hourly rental charge: </label>
-                    <input type="text" id="rentalcharge_hourly" name="rentalcharge_hourly" size="10" value="[% itemtype.rentalcharge_hourly | $Price on_editing => 1 %]" min="0" />
-                    <div class="hint">This fee is charged at checkout/renewal time for each hour between the checkout/renewal date and due date for loans specified in hours.</div>
-                </li>
-                <li>
-                    <label for="rentalcharge_hourly_calendar">Hourly rentals use calendar: </label>
+                    </li>
+                    <li>
+                        <label for="rentalcharge_hourly">Hourly rental charge: </label>
+                        <input type="text" id="rentalcharge_hourly" name="rentalcharge_hourly" size="10" value="[% itemtype.rentalcharge_hourly | $Price on_editing => 1 %]" min="0" />
+                        <div class="hint">This fee is charged at checkout/renewal time for each hour between the checkout/renewal date and due date for loans specified in hours.</div>
+                    </li>
+                    <li>
+                        <label for="rentalcharge_hourly_calendar">Hourly rentals use calendar: </label>
                         [% IF itemtype.rentalcharge_hourly_calendar %]
                             <input type="checkbox" id="rentalcharge_hourly_calendar" name="rentalcharge_hourly_calendar" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="rentalcharge_hourly_calendar" name="rentalcharge_hourly_calendar" value="1" />
                         [% END %]
                         <span class="hint">If checked, hourly charge will be calculated using the calendar to exclude holidays. If not checked, the fee will be calculated based on the number of hours until due, directly.</span>
-                </li>
-                <li>
-                    <label for="defaultreplacecost">Default replacement cost: </label>
-                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | $Price on_editing => 1 %]" min="0" />
-                </li>
-                <li>
-                    <label for="processfee">Processing fee (when lost): </label>
-                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | $Price on_editing => 1 %]" min="0" />
-                </li>
-                <li>
-                    <label for="checkinmsg">Checkin message: </label>
-                    <textarea id="checkinmsg" name="checkinmsg" cols="55" rows="5">[% itemtype.checkinmsg | html %]</textarea>
-                </li>
-                <li>
-                    <label for="checkinmsgtype">Checkin message type: </label>
-                    <select id="checkinmsgtype" name="checkinmsgtype">
-                        [% IF itemtype.checkinmsgtype == 'message' %]
-                            <option value="message" selected="selected">Message</option>
-                        [% ELSE %]
-                            <option value="message">Message</option>
-                        [% END %]
-                        [% IF itemtype.checkinmsgtype == 'alert' %]
-                            <option value="alert" selected="selected">Alert</option>
-                        [% ELSE %]
-                            <option value="alert">Alert</option>
-                        [% END %]
-                    </select>
-                </li>
-                <li>
-                    <label for="sip_media_type">SIP media type: </label>
-                    <select id="sip_media_type" name="sip_media_type">
-                        <option value=""></option>
-                        [% FOREACH a IN AuthorisedValues.Get('SIP_MEDIA_TYPE') %]
-                            [% IF a.authorised_value == itemtype.sip_media_type %]
-                                <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
+                    </li>
+                    <li>
+                        <label for="defaultreplacecost">Default replacement cost: </label>
+                        <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | $Price on_editing => 1 %]" min="0" />
+                    </li>
+                    <li>
+                        <label for="processfee">Processing fee (when lost): </label>
+                        <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | $Price on_editing => 1 %]" min="0" />
+                    </li>
+                    <li>
+                        <label for="checkinmsg">Checkin message: </label>
+                        <textarea id="checkinmsg" name="checkinmsg" cols="55" rows="5">[% itemtype.checkinmsg | html %]</textarea>
+                    </li>
+                    <li>
+                        <label for="checkinmsgtype">Checkin message type: </label>
+                        <select id="checkinmsgtype" name="checkinmsgtype">
+                            [% IF itemtype.checkinmsgtype == 'message' %]
+                                <option value="message" selected="selected">Message</option>
                             [% ELSE %]
-                                <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
+                                <option value="message">Message</option>
                             [% END %]
-                        [% END %]
-                    </select>
-                </li>
-                <li><label for="branches">Library limitation: </label>
-                    <select id="branches" name="branches" multiple size="10">
-                        <option value="">All libraries</option>
-                        [% PROCESS options_for_libraries libraries => Branches.all( selected => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
-                    </select>
-                    <div class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</div>
-                </li>
-                <li>
-                    <label for="summary">Summary: </label>
-                   <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>
-                    <div class="hint">Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </div>
-                    <div class="hint"><strong>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</strong> will show the link just below the title</div>
-                </li>
-            </ol>
-        </fieldset>
+                            [% IF itemtype.checkinmsgtype == 'alert' %]
+                                <option value="alert" selected="selected">Alert</option>
+                            [% ELSE %]
+                                <option value="alert">Alert</option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="sip_media_type">SIP media type: </label>
+                        <select id="sip_media_type" name="sip_media_type">
+                            <option value=""></option>
+                            [% FOREACH a IN AuthorisedValues.Get('SIP_MEDIA_TYPE') %]
+                                [% IF a.authorised_value == itemtype.sip_media_type %]
+                                    <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                    <li
+                        ><label for="branches">Library limitation: </label>
+                        <select id="branches" name="branches" multiple size="10">
+                            <option value="">All libraries</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all( selected => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
+                        </select>
+                        <div class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</div>
+                    </li>
+                    <li>
+                        <label for="summary">Summary: </label>
+                        <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>
+                        <div class="hint">Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </div>
+                        <div class="hint"><strong>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</strong> will show the link just below the title</div>
+                    </li>
+                </ol>
+            </fieldset>
 
-        <fieldset class="action">
-            <input type="submit" class="btn btn-primary" value="Save changes" />
-            <a href="/cgi-bin/koha/admin/itemtypes.pl" class="cancel">Cancel</a>
-        </fieldset>
-    </form>
-[% END %]
-
-[% IF op == 'delete_confirm' %]
-    <div class="alert alert-warning">
-        <h1>[% tx("Are you sure you want to delete item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]</h1>
-        <table>
-            <tr>
-                <th scope="row">Item type</th>
-                <td>[% itemtype.itemtype | html %]</td>
-            </tr>
-            <tr><th scope="row">Description</th><td>[% itemtype.translated_description | html %]</td></tr>
-            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
-                <tr>
-                    <th scope="row">Image</th>
-                    <td>
-                        [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% END %]
-                    </td>
-                </tr>
-            [% END %]
-            <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price %]</td></tr>
-        </table>
-        <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
-            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save changes" />
+                <a href="/cgi-bin/koha/admin/itemtypes.pl" class="cancel">Cancel</a>
+            </fieldset>
         </form>
-        <form action="/cgi-bin/koha/admin/itemtypes.pl" method="get">
-            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
-        </form>
-    </div>
-[% END %]
-
-[% IF op == 'list' %]
-    <h1>Item types</h1>
-    [% IF itemtypes %]
-    <div class="page-section">
-        <table id="table_item_type">
-          <thead>
-            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="noExport">Image</th>[% END %]
-            <th>Description</th>
-            <th>Code</th>
-            <th>Parent code</th>
-            <th>Search category</th>
-            <th>Not for loan</th>
-            <th>Hide in OPAC</th>
-            <th>Rental charge</th>
-            <th>Daily rental charge</th>
-            <th>Hourly rental charge</th>
-            <th>Default replacement cost</th>
-            <th>Processing fee (when lost)</th>
-            <th>Checkin message</th>
-            <th>Library limitations</th>
-            <th>Automatic check-in</th>
-            <th class="noExport NoSort">Actions</th>
-          </thead>
-          [% FOREACH itemtype IN itemtypes %]
-            <tr>
-                [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
-                    <td>
-                        [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
-                    </td>
-                [% END %]
-            <td>
-                [% IF itemtype.parent_type %]
-                    [% IF itemtype.parent.translated_descriptions.size %]
-                        [% itemtype.parent.description | html %] <span>(default)</span><br/>
-                    [% ELSE %]
-                        [% itemtype.parent.description | html %]
-                    [% END %]
-                    <br/>
-                    [% IF itemtype.translated_descriptions.size %]
-                        [% itemtype.description | html %] <span>(default)</span><br/>
-                        [% FOR description IN itemtype.translated_descriptions %]
-                            [% IF description.translation == itemtype.translated_description %]
-                            --    <strong>[% description.translation | html %]</strong>
-                            [% ELSE %]
-                            --    [% description.translation | html %] ([% description.lang | html %])
-                            [% END %]
-                            <br/>
-                        [% END %]
-                    [% ELSE %]
-                    --    [% itemtype.description | html %]
-                    [% END %]
-                [% ELSE %]
-                    [% IF itemtype.translated_descriptions.size %]
-                        [% itemtype.description | html %] <span>(default)</span><br/>
-                        [% FOR description IN itemtype.translated_descriptions %]
-                            [% IF description.translation == itemtype.translated_description %]
-                                <strong>[% description.translation | html %]</strong>
-                            [% ELSE %]
-                                [% description.translation | html %] ([% description.lang | html %])
-                            [% END %]
-                            <br/>
-                        [% END %]
-                    [% ELSE %]
-                        [% itemtype.description | html %]
-                    [% END %]
-                [% END %]
-            </td>
-            <td>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]">
-                [% itemtype.itemtype | html %]
-              </a>
-            </td>
-            <td>
-                [% itemtype.parent_type | html %]
-            </td>
-            <td>[% AuthorisedValues.GetByCode( 'ITEMTYPECAT', itemtype.searchcategory ) | html %]</td>
-            <td>[% IF ( itemtype.notforloan ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
-            <td>[% IF ( itemtype.hideinopac ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
-            <td>
-            [% UNLESS ( itemtype.notforloan ) %]
-              [% itemtype.rentalcharge | $Price %]
-            [% END %]
-            </td>
-            <td>
-            [% UNLESS ( itemtype.notforloan ) %]
-              [% itemtype.rentalcharge_daily | $Price %]
-            [% END %]
-            </td>
-            <td>
-            [% UNLESS ( itemtype.notforloan ) %]
-              [% itemtype.rentalcharge_hourly | $Price %]
-            [% END %]
-            </td>
-
-            <td>[% itemtype.defaultreplacecost | $Price %]</td>
-            <td>[% itemtype.processfee | $Price %]</td>
-            <td>[% itemtype.checkinmsg | html_line_break | $raw %]</td>
-            <td>
-                [% SET library_limits = itemtype.library_limits %]
-                [% IF library_limits.count > 0 %]
-                    [% library_str = "" %]
-                    [% FOREACH library IN library_limits %]
-                        [%- IF loop.first -%]
-                            [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
-                        [% ELSE %]
-                            [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
-                        [% END %]
-                    [% END %]
-                    <span class="library_limitation" data-bs-toggle="tooltip" title="[% library_str | html %]">
-                        [% IF library_limits.count > 1 %]
-                            <span>[% library_limits.count | html %] library limitations</span>
-                        [% ELSE %]
-                            <span>[% library_limits.count | html %] library limitation</span>
-                        [% END %]
-                    </span>
-                [% ELSE %]
-                    <span>No limitation</span>
-                [% END %]
-            </td>
-            <td>[% IF ( itemtype.automatic_checkin ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
-            <td class="actions">
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
-            </td>
-          </tr>
-          [% END %]
-        </table>
-    </div>
-    [% ELSE %]
-        <div class="alert alert-info">There are no itemtypes defined</div>
     [% END %]
-[% END %]
 
+    [% IF op == 'delete_confirm' %]
+        <div class="alert alert-warning">
+            <h1>[% tx("Are you sure you want to delete item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]</h1>
+            <table>
+                <tr>
+                    <th scope="row">Item type</th>
+                    <td>[% itemtype.itemtype | html %]</td>
+                </tr>
+                <tr><th scope="row">Description</th><td>[% itemtype.translated_description | html %]</td></tr>
+                [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
+                    <tr>
+                        <th scope="row">Image</th>
+                        <td>
+                            [% SET image_location = itemtype.image_location('intranet') %]
+                            [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% END %]
+                        </td>
+                    </tr>
+                [% END %]
+                <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price %]</td></tr>
+            </table>
+            <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
+            </form>
+            <form action="/cgi-bin/koha/admin/itemtypes.pl" method="get">
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            </form>
+        </div>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <h1>Item types</h1>
+        [% IF itemtypes %]
+            <div class="page-section">
+                <table id="table_item_type">
+                    <thead>
+                        [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="noExport">Image</th>[% END %]
+                        <th>Description</th>
+                        <th>Code</th>
+                        <th>Parent code</th>
+                        <th>Search category</th>
+                        <th>Not for loan</th>
+                        <th>Hide in OPAC</th>
+                        <th>Rental charge</th>
+                        <th>Daily rental charge</th>
+                        <th>Hourly rental charge</th>
+                        <th>Default replacement cost</th>
+                        <th>Processing fee (when lost)</th>
+                        <th>Checkin message</th>
+                        <th>Library limitations</th>
+                        <th>Automatic check-in</th>
+                        <th class="noExport NoSort">Actions</th>
+                    </thead>
+                    [% FOREACH itemtype IN itemtypes %]
+                        <tr>
+                            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
+                                <td>
+                                    [% SET image_location = itemtype.image_location('intranet') %]
+                                    [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
+                                </td>
+                            [% END %]
+                            <td>
+                                [% IF itemtype.parent_type %]
+                                    [% IF itemtype.parent.translated_descriptions.size %]
+                                        [% itemtype.parent.description | html %] <span>(default)</span><br />
+                                    [% ELSE %]
+                                        [% itemtype.parent.description | html %]
+                                    [% END %]
+                                    <br />
+                                    [% IF itemtype.translated_descriptions.size %]
+                                        [% itemtype.description | html %] <span>(default)</span><br />
+                                        [% FOR description IN itemtype.translated_descriptions %]
+                                            [% IF description.translation == itemtype.translated_description %]
+                                                -- <strong>[% description.translation | html %]</strong>
+                                            [% ELSE %]
+                                                -- [% description.translation | html %] ([% description.lang | html %])
+                                            [% END %]
+                                            <br />
+                                        [% END %]
+                                    [% ELSE %]
+                                        -- [% itemtype.description | html %]
+                                    [% END %]
+                                [% ELSE %]
+                                    [% IF itemtype.translated_descriptions.size %]
+                                        [% itemtype.description | html %] <span>(default)</span><br />
+                                        [% FOR description IN itemtype.translated_descriptions %]
+                                            [% IF description.translation == itemtype.translated_description %]
+                                                <strong>[% description.translation | html %]</strong>
+                                            [% ELSE %]
+                                                [% description.translation | html %]
+                                                ([% description.lang | html %])
+                                            [% END %]
+                                            <br />
+                                        [% END %]
+                                    [% ELSE %]
+                                        [% itemtype.description | html %]
+                                    [% END %]
+                                [% END %]
+                            </td>
+                            <td>
+                                <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]"> [% itemtype.itemtype | html %] </a>
+                            </td>
+                            <td> [% itemtype.parent_type | html %] </td>
+                            <td>[% AuthorisedValues.GetByCode( 'ITEMTYPECAT', itemtype.searchcategory ) | html %]</td>
+                            <td>[% IF ( itemtype.notforloan ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
+                            <td>[% IF ( itemtype.hideinopac ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
+                            <td>
+                                [% UNLESS ( itemtype.notforloan ) %]
+                                    [% itemtype.rentalcharge | $Price %]
+                                [% END %]
+                            </td>
+                            <td>
+                                [% UNLESS ( itemtype.notforloan ) %]
+                                    [% itemtype.rentalcharge_daily | $Price %]
+                                [% END %]
+                            </td>
+                            <td>
+                                [% UNLESS ( itemtype.notforloan ) %]
+                                    [% itemtype.rentalcharge_hourly | $Price %]
+                                [% END %]
+                            </td>
+
+                            <td>[% itemtype.defaultreplacecost | $Price %]</td>
+                            <td>[% itemtype.processfee | $Price %]</td>
+                            <td>[% itemtype.checkinmsg | html_line_break | $raw %]</td>
+                            <td>
+                                [% SET library_limits = itemtype.library_limits %]
+                                [% IF library_limits.count > 0 %]
+                                    [% library_str = "" %]
+                                    [% FOREACH library IN library_limits %]
+                                        [%- IF loop.first -%]
+                                            [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                                        [% ELSE %]
+                                            [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                        [% END %]
+                                    [% END %]
+                                    <span class="library_limitation" data-bs-toggle="tooltip" title="[% library_str | html %]">
+                                        [% IF library_limits.count > 1 %]
+                                            <span>[% library_limits.count | html %] library limitations</span>
+                                        [% ELSE %]
+                                            <span>[% library_limits.count | html %] library limitation</span>
+                                        [% END %]
+                                    </span>
+                                [% ELSE %]
+                                    <span>No limitation</span>
+                                [% END %]
+                            </td>
+                            <td>[% IF ( itemtype.automatic_checkin ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
+                            <td class="actions">
+                                <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
+                            </td>
+                        </tr>
+                    [% END %]
+                </table>
+            </div>
+        [% ELSE %]
+            <div class="alert alert-info">There are no itemtypes defined</div>
+        [% END %]
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -531,35 +537,35 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-         $(document).ready(function() {
-            var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
-            [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
-                table_settings['columns'].shift(); // Remove item type image column from configuration
-            [% END %]
+        $(document).ready(function() {
+           var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
+           [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
+               table_settings['columns'].shift(); // Remove item type image column from configuration
+           [% END %]
 
-            $(document).ready(function() {
-                KohaTable("table_item_type", {
-                "pagingType": "full"
-                }, table_settings);
-            });
+           $(document).ready(function() {
+               KohaTable("table_item_type", {
+               "pagingType": "full"
+               }, table_settings);
+           });
 
-            $( "#itemtypeentry" ).validate({
-                rules: {
-                    itemtype: { required: true },
-                    description: { required: true },
-                    rentalcharge: { number: true },
-                    rentalcharge_hourly: { number: true },
-                    defaultreplacecost: { number: true },
-                    processfee: { number: true }
-                }
-            });
-            $("#itemtype").on("blur",function(){
-                toUC(this);
-            });
-            if( $("#icons .tab-pane.active").length < 1 ){
-                $("#icons a:first").tab("show");
-            }
-         });
+           $( "#itemtypeentry" ).validate({
+               rules: {
+                   itemtype: { required: true },
+                   description: { required: true },
+                   rentalcharge: { number: true },
+                   rentalcharge_hourly: { number: true },
+                   defaultreplacecost: { number: true },
+                   processfee: { number: true }
+               }
+           });
+           $("#itemtype").on("blur",function(){
+               toUC(this);
+           });
+           if( $("#icons .tab-pane.active").length < 1 ){
+               $("#icons a:first").tab("show");
+           }
+        });
     </script>
 [% END %]
 

@@ -6,96 +6,103 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Authority search") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
-<meta name="robots" content="noindex">
+<title
+    >[% FILTER collapse %]
+        [% t("Authority search") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
+<meta name="robots" content="noindex" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-authorities' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Authority search</span>
-            [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Authority search</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav || OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
-                    </div>
-                [% END %]
-                <div class="[% column_class | html %]">
-                    <div id="userauthhome" class="maincontent">
-                        <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="get">
-                            <input type="hidden" name="op" value="do_search" />
-                            <input type="hidden" name="type" value="opac" />
-                            <fieldset class="rows">
-                                <legend><h1>Authority search</h1></legend>
-                                <ol>
-                                    <li>
-                                        <label for="authtypecode">Authority type: </label>
-                                        <select name="authtypecode" id="authtypecode">
-                                            [% FOREACH authority_type IN authority_types %]
-                                                [% IF authority_type.authtypecode == authtypecode %]
-                                                    <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
-                                                [% END %]
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
+            [% END %]
+            <div class="[% column_class | html %]">
+                <div id="userauthhome" class="maincontent">
+                    <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="get">
+                        <input type="hidden" name="op" value="do_search" />
+                        <input type="hidden" name="type" value="opac" />
+                        <fieldset class="rows">
+                            <legend><h1>Authority search</h1></legend>
+                            <ol>
+                                <li>
+                                    <label for="authtypecode">Authority type: </label>
+                                    <select name="authtypecode" id="authtypecode">
+                                        [% FOREACH authority_type IN authority_types %]
+                                            [% IF authority_type.authtypecode == authtypecode %]
+                                                <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
                                             [% END %]
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="anywhere">Search options:</label>
-                                        <select name="operator" id="anywhere">
-                                            <option value="contains">contains</option>
-                                            <option value="start">starts with</option>
-                                            <option value="exact">is exactly</option>
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="value">Term(s):</label>
-                                        <input type="text" name="value" id="value" value="[% value | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="marclist">Where:</label>
-                                        <select name="marclist" id="marclist">
-                                            <option value="all" selected="selected">in the complete record</option>
-                                            <option value="match">in any heading</option>
-                                            <option value="mainentry">in main entry</option>
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <input type="hidden" name="and_or" value="and" />
-                                        <input type="hidden" name="excluding" value="" />
-                                        <label for="orderby">Order by: </label>
-                                        <select name="orderby" id="orderby">
-                                            <option value="">None</option>
-                                            <option value="HeadingAsc" selected="selected">Heading ascendant</option>
-                                            <option value="HeadingDsc">Heading descendant</option>
-                                        </select>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="submit" value="Submit" class="btn btn-primary" />
-                            </fieldset>
-                        </form>
-                    </div> <!-- / #userauthhome -->
-                </div> <!-- / .col-lg-10/12 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="anywhere">Search options:</label>
+                                    <select name="operator" id="anywhere">
+                                        <option value="contains">contains</option>
+                                        <option value="start">starts with</option>
+                                        <option value="exact">is exactly</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="value">Term(s):</label>
+                                    <input type="text" name="value" id="value" value="[% value | html %]" />
+                                </li>
+                                <li>
+                                    <label for="marclist">Where:</label>
+                                    <select name="marclist" id="marclist">
+                                        <option value="all" selected="selected">in the complete record</option>
+                                        <option value="match">in any heading</option>
+                                        <option value="mainentry">in main entry</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <input type="hidden" name="and_or" value="and" />
+                                    <input type="hidden" name="excluding" value="" />
+                                    <label for="orderby">Order by: </label>
+                                    <select name="orderby" id="orderby">
+                                        <option value="">None</option>
+                                        <option value="HeadingAsc" selected="selected">Heading ascendant</option>
+                                        <option value="HeadingDsc">Heading descendant</option>
+                                    </select>
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </fieldset>
+                    </form>
+                </div>
+                <!-- / #userauthhome -->
+            </div>
+            <!-- / .col-lg-10/12 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

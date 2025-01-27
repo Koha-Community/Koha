@@ -1,19 +1,18 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("SRU search field mapping for authorities") | html %] &rsaquo;
-    [% t("Z39.50/SRU servers") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("SRU search field mapping for authorities") | html %]
+        &rsaquo; [% t("Z39.50/SRU servers") | html %] &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="admin_sru_modmapping" class="admin">
 
 <div class="main container-fluid">
-
     <main>
         [% INCLUDE 'messages.inc' %]
         <h1>SRU search field mapping for authorities</h1>
@@ -83,17 +82,17 @@
                 </div>
             </nav>
         </form>
-
     </main>
-</div> <!-- /.main.container-fluid -->
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function() {
-            $("#form01").submit(function(event) {
-                if(window.opener) {
-                    var newmap=allInputs();
-                    window.opener.$('#show_sru_fields').val(newmap);
+        $(document).ready(function () {
+            $("#form01").submit(function (event) {
+                if (window.opener) {
+                    var newmap = allInputs();
+                    window.opener.$("#show_sru_fields").val(newmap);
                     window.close();
                 } else {
                     // In this case not called as a popup. Just do nothing.
@@ -101,14 +100,14 @@
                 }
             });
         });
-        function allInputs () {
-            var aInput= new Array();
-            $("form :input").each(function() {
-                if( this.id && $(this).val() ) {
-                    aInput.push(this.id+'='+$(this).val());
+        function allInputs() {
+            var aInput = new Array();
+            $("form :input").each(function () {
+                if (this.id && $(this).val()) {
+                    aInput.push(this.id + "=" + $(this).val());
                 }
             });
-            return aInput.join(',');
+            return aInput.join(",");
         }
     </script>
 [% END %]

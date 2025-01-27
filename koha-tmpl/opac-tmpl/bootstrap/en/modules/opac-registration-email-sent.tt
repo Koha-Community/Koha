@@ -6,44 +6,49 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Please confirm your registration &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-confirmation-pending' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm your registration</span>
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Confirm your registration</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+
+    <div class="container-fluid">
+        <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
+                <div class="col-lg-2">
+                    <div id="navigation"> [% INCLUDE 'navigation.inc' %] </div>
+                </div>
             [% END %]
-        [% END #/ WRAPPER breadcrumbs %]
 
-        <div class="container-fluid">
-            <div class="row">
-                [% SET column_class = "col order-first order-md-first order-lg-2" %]
-                [% IF ( OpacNav ||  OpacNavBottom ) %]
-                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
-                    <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
+            <div class="[% column_class | html %]">
+                <div id="registration-confirmation-pending" class="maincontent">
+                    <h1>Please confirm your registration</h1>
+                    <div id="confirmation-pending" class="alert alert-info">
+                        <p>A confirmation email will be sent shortly to the email address <strong>[% email | html %]</strong>.</p>
+
+                        <p>Your account will not be activated until you follow the link provided in the confirmation email.</p>
                     </div>
-                [% END %]
-
-                <div class="[% column_class | html %]">
-                    <div id="registration-confirmation-pending" class="maincontent">
-                        <h1>Please confirm your registration</h1>
-                        <div id="confirmation-pending" class="alert alert-info">
-
-                            <p>A confirmation email will be sent shortly to the email address <strong>[% email | html %]</strong>.</p>
-
-                            <p>Your account will not be activated until you follow the link provided in the confirmation email.</p>
-                        </div> <!-- /#confirmation-pending -->
-                    </div> <!-- /#registration-confirmation-pending -->
-                </div> <!-- /.col/10 -->
-            </div> <!-- /.row -->
-        </div> <!-- /.container-fluid -->
-    </div> <!-- /.main -->
+                    <!-- /#confirmation-pending -->
+                </div>
+                <!-- /#registration-confirmation-pending -->
+            </div>
+            <!-- /.col/10 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+[% END %]

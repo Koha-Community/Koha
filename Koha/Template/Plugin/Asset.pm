@@ -59,7 +59,7 @@ Constructor. Do not use this directly.
 =cut
 
 sub new {
-    my ($class, $context) = @_;
+    my ( $class, $context ) = @_;
 
     my $self = {
         _CONTEXT => $context,
@@ -87,7 +87,7 @@ sub js {
 
     $attributes->{src} = $url;
 
-    return $self->_tag('script', $attributes) . '</script>';
+    return $self->_tag( 'script', $attributes ) . '</script>';
 }
 
 =head2 css
@@ -108,11 +108,11 @@ sub css {
         return;
     }
 
-    $attributes->{rel} = 'stylesheet';
+    $attributes->{rel}  = 'stylesheet';
     $attributes->{type} = 'text/css';
     $attributes->{href} = $url;
 
-    return $self->_tag('link', $attributes);
+    return $self->_tag( 'link', $attributes );
 }
 
 =head2 url
@@ -126,14 +126,14 @@ Returns the URL for the given file
 sub url {
     my ( $self, $filename ) = @_;
 
-    my $stash = $self->{_CONTEXT}->stash();
+    my $stash     = $self->{_CONTEXT}->stash();
     my $interface = $stash->get('interface');
-    my $theme = $stash->get('theme');
+    my $theme     = $stash->get('theme');
 
     my $configkey = $interface =~ /opac/ ? 'opachtdocs' : 'intrahtdocs';
-    my $root = C4::Context->config($configkey);
+    my $root      = C4::Context->config($configkey);
 
-    my ($basename, $dirname, $suffix) = fileparse($filename, qr/\.[^.]*/);
+    my ( $basename, $dirname, $suffix ) = fileparse( $filename, qr/\.[^.]*/ );
 
     my $type = substr $suffix, 1;
     my @dirs = (
@@ -144,9 +144,9 @@ sub url {
     my $version = Koha::version;
     $version =~ s/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/$1.$2$3$4/;
     foreach my $dir (@dirs) {
-        my $abspath = File::Spec->catfile($root, $dir, $filename);
-        if (-e $abspath) {
-            return File::Spec->catfile($interface, $dir, $dirname, "${basename}_${version}${suffix}");
+        my $abspath = File::Spec->catfile( $root, $dir, $filename );
+        if ( -e $abspath ) {
+            return File::Spec->catfile( $interface, $dir, $dirname, "${basename}_${version}${suffix}" );
         }
     }
 }
@@ -159,11 +159,11 @@ This shouldn't be used directly.
 =cut
 
 sub _tag {
-    my ($self, $name, $attributes) = @_;
+    my ( $self, $name, $attributes ) = @_;
 
     my @attributes_strs;
     if ($attributes) {
-        while (my ($key, $value) = each %$attributes) {
+        while ( my ( $key, $value ) = each %$attributes ) {
             push @attributes_strs, qq{$key="$value"};
         }
     }

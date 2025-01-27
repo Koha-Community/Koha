@@ -53,7 +53,7 @@ Returns the periods for this agreement
 sub periods {
     my ( $self, $periods ) = @_;
 
-    if ( $periods ) {
+    if ($periods) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
@@ -79,7 +79,7 @@ Returns the user roles for this agreement
 sub user_roles {
     my ( $self, $user_roles ) = @_;
 
-    if ( $user_roles ) {
+    if ($user_roles) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
@@ -104,11 +104,10 @@ Returns the agreement_licenses for this agreement
 sub agreement_licenses {
     my ( $self, $agreement_licenses ) = @_;
 
-    if ( $agreement_licenses ) {
+    if ($agreement_licenses) {
         my $controlling = grep { $_->{status} eq 'controlling' } @$agreement_licenses;
         if ( $controlling > 1 ) {
-            Koha::Exceptions::DuplicateObject->throw(
-                "Only one controlling license can exist for a given agreement");
+            Koha::Exceptions::DuplicateObject->throw("Only one controlling license can exist for a given agreement");
         }
 
         my $schema = $self->_result->result_source->schema;
@@ -135,19 +134,20 @@ Returns the agreement relationships of this agreement
 sub agreement_relationships {
     my ( $self, $relationships ) = @_;
 
-    if ( $relationships ) {
+    if ($relationships) {
         my $schema = $self->_result->result_source->schema;
+
         # FIXME naming - is "back link" ok?
         my $back_links = {
-            'supersedes'       => 'is-superseded-by',
-            'is-superseded-by' => 'supersedes',
+            'supersedes'                            => 'is-superseded-by',
+            'is-superseded-by'                      => 'supersedes',
             'provides_post-cancellation_access_for' => 'has-post-cancellation-access-in',
             'has-post-cancellation-access-in'       => 'provides_post-cancellation_access_for',
             'tracks_demand-driven_acquisitions_for' => 'has-demand-driven-acquisitions-in',
             'has-demand-driven-acquisitions-in'     => 'tracks_demand-driven_acquisitions_for',
-            'has_backfile_in'  => 'has_frontfile_in',
-            'has_frontfile_in' => 'has_backfile_in',
-            'related_to'       => 'related_to',
+            'has_backfile_in'                       => 'has_frontfile_in',
+            'has_frontfile_in'                      => 'has_backfile_in',
+            'related_to'                            => 'related_to',
         };
         $schema->txn_do(
             sub {
@@ -157,10 +157,10 @@ sub agreement_relationships {
                 for my $relationship (@$relationships) {
                     $self->_result->add_to_erm_agreement_relationships_agreements($relationship);
                     my $back_link = {
-                        agreement_id => $relationship->{related_agreement_id},
+                        agreement_id         => $relationship->{related_agreement_id},
                         related_agreement_id => $self->agreement_id,
-                        relationship => $back_links->{$relationship->{relationship}},
-                        notes        => $relationship->{notes}, # FIXME Is it correct, do we keep the note here?
+                        relationship         => $back_links->{ $relationship->{relationship} },
+                        notes                => $relationship->{notes}, # FIXME Is it correct, do we keep the note here?
                     };
                     $self->_result->add_to_erm_agreement_relationships_related_agreements($back_link);
                 }
@@ -179,7 +179,7 @@ Returns the reverse relationship
 =cut
 
 sub agreement_back_relationships {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->erm_agreement_relationships_related_agreements;
     return Koha::ERM::Agreement::Relationships->_new_from_dbic($rs);
 }
@@ -199,7 +199,7 @@ Returns or updates the documents for this agreement
 sub documents {
     my ( $self, $documents ) = @_;
     if ($documents) {
-        $self->documents->replace_with($documents, $self);
+        $self->documents->replace_with( $documents, $self );
     }
     my $documents_rs = $self->_result->erm_documents;
     return Koha::ERM::Documents->_new_from_dbic($documents_rs);
@@ -212,7 +212,7 @@ Return the local packages for this agreement (and the other ones that have an en
 =cut
 
 sub agreement_packages {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $packages_agreements_rs = $self->_result->erm_eholdings_packages_agreements;
     return Koha::ERM::EHoldings::Package::Agreements->_new_from_dbic($packages_agreements_rs);
 }
@@ -224,7 +224,7 @@ Return the vendor for this agreement
 =cut
 
 sub vendor {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $vendor_rs = $self->_result->vendor;
     return unless $vendor_rs;
     return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);

@@ -22,7 +22,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use C4::Acquisition qw( NewBasket ModReceiveOrder CancelReceipt );
-use C4::Biblio qw( AddBiblio );
+use C4::Biblio      qw( AddBiblio );
 use C4::Items;
 use C4::Budgets qw( AddBudget GetBudget );
 use t::lib::Mocks;
@@ -37,22 +37,20 @@ use MARC::Record;
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $builder = t::lib::TestBuilder->new;
-my $itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };
+my $builder  = t::lib::TestBuilder->new;
+my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
-        name => "my vendor 1",
+        name     => "my vendor 1",
         address1 => "bookseller's address",
-        phone => "0123456",
-        active => 1
+        phone    => "0123456",
+        active   => 1
     }
 )->store;
-t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
+t::lib::Mocks::mock_preference( 'AcqCreateItem', 'receiving' );
 
-my $basketno1 = C4::Acquisition::NewBasket(
-    $bookseller->id
-);
+my $basketno1 = C4::Acquisition::NewBasket( $bookseller->id );
 
 my $budget_period_id = C4::Budgets::AddBudgetPeriod(
     {
@@ -71,17 +69,17 @@ my $budgetid = C4::Budgets::AddBudget(
     }
 );
 
-my $budget = C4::Budgets::GetBudget( $budgetid );
+my $budget = C4::Budgets::GetBudget($budgetid);
 
-my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
-my $itemnumber = Koha::Item->new({ itype => $itemtype, biblionumber => $biblionumber })->store->itemnumber;
+my ( $biblionumber, $biblioitemnumber ) = AddBiblio( MARC::Record->new, '' );
+my $itemnumber = Koha::Item->new( { itype => $itemtype, biblionumber => $biblionumber } )->store->itemnumber;
 
 my $order = Koha::Acquisition::Order->new(
     {
-        basketno => $basketno1,
-        quantity => 2,
+        basketno     => $basketno1,
+        quantity     => 2,
         biblionumber => $biblionumber,
-        budget_id => $budget->{budget_id},
+        budget_id    => $budget->{budget_id},
     }
 )->store;
 my $ordernumber = $order->ordernumber;
@@ -94,33 +92,34 @@ ModReceiveOrder(
     }
 );
 
-$order->add_item( $itemnumber );
+$order->add_item($itemnumber);
 
 CancelReceipt($ordernumber);
 
-is($order->items->count, 0, "Create items on receiving: 0 item exist after cancelling a receipt");
+is( $order->items->count, 0, "Create items on receiving: 0 item exist after cancelling a receipt" );
 
-my $itemnumber1 = Koha::Item->new({ itype => $itemtype, biblionumber => $biblionumber })->store->itemnumber;
-my $itemnumber2 = Koha::Item->new({ itype => $itemtype, biblionumber => $biblionumber })->store->itemnumber;
+my $itemnumber1 = Koha::Item->new( { itype => $itemtype, biblionumber => $biblionumber } )->store->itemnumber;
+my $itemnumber2 = Koha::Item->new( { itype => $itemtype, biblionumber => $biblionumber } )->store->itemnumber;
 
-t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
-t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
+t::lib::Mocks::mock_preference( 'AcqCreateItem',                             'ordering' );
+t::lib::Mocks::mock_preference( 'AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9' );  # notforloan is mapped with 952$7
 $order = Koha::Acquisition::Order->new(
     {
-        basketno => $basketno1,
-        quantity => 2,
+        basketno     => $basketno1,
+        quantity     => 2,
         biblionumber => $biblionumber,
-        budget_id => $budget->{budget_id},
+        budget_id    => $budget->{budget_id},
     }
 )->store;
 $ordernumber = $order->ordernumber;
 
-is( $order->parent_ordernumber, $order->ordernumber,
+is(
+    $order->parent_ordernumber, $order->ordernumber,
     "Insert an order should set parent_order=ordernumber, if no parent_ordernumber given"
 );
 
-$order->add_item( $itemnumber1 );
-$order->add_item( $itemnumber2 );
+$order->add_item($itemnumber1);
+$order->add_item($itemnumber2);
 
 is(
     $order->items->count,
@@ -133,17 +132,22 @@ my ( undef, $new_ordernumber ) = ModReceiveOrder(
         biblionumber     => $biblionumber,
         order            => $order->unblessed,
         quantityreceived => 1,
-        received_items   => [ $itemnumber1 ],
+        received_items   => [$itemnumber1],
     }
 );
 
-my $new_order = Koha::Acquisition::Orders->find( $new_ordernumber );
+my $new_order = Koha::Acquisition::Orders->find($new_ordernumber);
 
-is( $new_order->ordernumber, $new_ordernumber,
-    "ModReceiveOrder should return a correct ordernumber" );
-isnt( $new_ordernumber, $ordernumber,
-    "ModReceiveOrder should return a different ordernumber" );
-is( $new_order->parent_ordernumber, $ordernumber,
+is(
+    $new_order->ordernumber, $new_ordernumber,
+    "ModReceiveOrder should return a correct ordernumber"
+);
+isnt(
+    $new_ordernumber, $ordernumber,
+    "ModReceiveOrder should return a different ordernumber"
+);
+is(
+    $new_order->parent_ordernumber, $ordernumber,
     "The new order created by ModReceiveOrder should be linked to the parent order"
 );
 
@@ -171,10 +175,10 @@ is(
     "Create items on ordering: items are not deleted after cancelling a receipt"
 );
 
-my $item1 = Koha::Items->find( $itemnumber1 );
+my $item1 = Koha::Items->find($itemnumber1);
 is( $item1->notforloan, 9, "The notforloan value has been updated with '9'" );
 
-my $item2 = Koha::Items->find( $itemnumber2 );
+my $item2 = Koha::Items->find($itemnumber2);
 is( $item2->notforloan, 0, "The notforloan value has been updated with '0'" );
 
 $schema->storage->txn_rollback();

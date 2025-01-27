@@ -35,7 +35,7 @@ subtest 'library' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $register = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
@@ -43,13 +43,17 @@ subtest 'library' => sub {
         }
     );
 
-    is( ref( $register->library ),
+    is(
+        ref( $register->library ),
         'Koha::Library',
-        'Koha::Cash::Register->library should return a Koha::Library' );
+        'Koha::Cash::Register->library should return a Koha::Library'
+    );
 
-    is( $register->library->id,
+    is(
+        $register->library->id,
         $library->id,
-        'Koha::Cash::Register->library returns the correct Koha::Library' );
+        'Koha::Cash::Register->library returns the correct Koha::Library'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -59,15 +63,16 @@ subtest 'accountlines' => sub {
 
     $schema->storage->txn_begin;
 
-    my $register =
-      $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
 
     my $accountlines = $register->accountlines;
-    is( ref($accountlines), 'Koha::Account::Lines',
-'Koha::Cash::Register->accountlines should always return a Koha::Account::Lines set'
+    is(
+        ref($accountlines), 'Koha::Account::Lines',
+        'Koha::Cash::Register->accountlines should always return a Koha::Account::Lines set'
     );
-    is( $accountlines->count, 0,
-'Koha::Cash::Register->accountlines should always return the correct number of accountlines'
+    is(
+        $accountlines->count, 0,
+        'Koha::Cash::Register->accountlines should always return the correct number of accountlines'
     );
 
     my $accountline1 = $builder->build_object(
@@ -84,16 +89,19 @@ subtest 'accountlines' => sub {
     );
 
     $accountlines = $register->accountlines;
-    is( ref($accountlines), 'Koha::Account::Lines',
-'Koha::Cash::Register->accountlines should return a set of Koha::Account::Lines'
+    is(
+        ref($accountlines), 'Koha::Account::Lines',
+        'Koha::Cash::Register->accountlines should return a set of Koha::Account::Lines'
     );
-    is( $accountlines->count, 2,
-'Koha::Cash::Register->accountlines should return the correct number of accountlines'
+    is(
+        $accountlines->count, 2,
+        'Koha::Cash::Register->accountlines should return the correct number of accountlines'
     );
 
     $accountline1->delete;
-    is( $register->accountlines->next->id, $accountline2->id,
-'Koha::Cash::Register->accountlines should return the correct acocuntlines'
+    is(
+        $register->accountlines->next->id, $accountline2->id,
+        'Koha::Cash::Register->accountlines should return the correct acocuntlines'
     );
 
     $schema->storage->txn_rollback;
@@ -103,7 +111,7 @@ subtest 'branch_default' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $register1 = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
@@ -121,13 +129,15 @@ subtest 'branch_default' => sub {
         plan tests => 2;
 
         $register1->name('Test till 1');
-        ok( $register1->store(),
-            "Store works as expected when branch_default is not changed" );
+        ok(
+            $register1->store(),
+            "Store works as expected when branch_default is not changed"
+        );
 
         $register1->branch_default(0);
         throws_ok { $register1->store(); }
         'Koha::Exceptions::Object::ReadOnlyProperty',
-          'Exception thrown if direct update to branch_default is attempted';
+            'Exception thrown if direct update to branch_default is attempted';
 
     };
 
@@ -159,18 +169,15 @@ subtest 'cashup' => sub {
 
     $schema->storage->txn_begin;
 
-    my $register =
-      $builder->build_object( { class => 'Koha::Cash::Registers' } );
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $cashup1;
     subtest 'add_cashup' => sub {
         plan tests => 6;
 
         ok(
-            $cashup1 = $register->add_cashup(
-                { manager_id => $patron->id, amount => '12.00' }
-            ),
+            $cashup1 = $register->add_cashup( { manager_id => $patron->id, amount => '12.00' } ),
             'call successfull'
         );
 
@@ -179,21 +186,28 @@ subtest 'cashup' => sub {
             'Koha::Cash::Register::Cashup',
             'return is Koha::Cash::Register::Cashup'
         );
-        is( $cashup1->code, 'CASHUP',
-            'CASHUP code set in Koha::Cash::Register::Cashup' );
-        is( $cashup1->manager_id, $patron->id,
-            'manager_id set correctly in Koha::Cash::Register::Cashup' );
-        is( $cashup1->amount, '12.000000',
-            'amount set correctly in Koha::Cash::Register::Cashup' );
-        isnt( $cashup1->timestamp, undef,
-            'timestamp set in Koha::Cash::Register::Cashup' );
+        is(
+            $cashup1->code, 'CASHUP',
+            'CASHUP code set in Koha::Cash::Register::Cashup'
+        );
+        is(
+            $cashup1->manager_id, $patron->id,
+            'manager_id set correctly in Koha::Cash::Register::Cashup'
+        );
+        is(
+            $cashup1->amount, '12.000000',
+            'amount set correctly in Koha::Cash::Register::Cashup'
+        );
+        isnt(
+            $cashup1->timestamp, undef,
+            'timestamp set in Koha::Cash::Register::Cashup'
+        );
     };
 
     subtest 'last_cashup' => sub {
         plan tests => 3;
 
-        my $cashup2 =
-          $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
+        my $cashup2 = $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
 
         my $last_cashup = $register->last_cashup;
         is(
@@ -201,8 +215,10 @@ subtest 'cashup' => sub {
             'Koha::Cash::Register::Cashup',
             'A cashup was returned when one existed'
         );
-        is( $last_cashup->id, $cashup2->id,
-            'The most recent cashup was returned' );
+        is(
+            $last_cashup->id, $cashup2->id,
+            'The most recent cashup was returned'
+        );
         $cashup1->delete;
         $cashup2->delete;
         $last_cashup = $register->last_cashup;
@@ -213,22 +229,25 @@ subtest 'cashup' => sub {
         plan tests => 4;
 
         my $cashups = $register->cashups;
-        is( ref($cashups), 'Koha::Cash::Register::Cashups',
-'Koha::Cash::Register->cashups should always return a Koha::Cash::Register::Cashups set'
+        is(
+            ref($cashups), 'Koha::Cash::Register::Cashups',
+            'Koha::Cash::Register->cashups should always return a Koha::Cash::Register::Cashups set'
         );
-        is( $cashups->count, 0,
-'Koha::Cash::Register->cashups should always return the correct number of cashups'
+        is(
+            $cashups->count, 0,
+            'Koha::Cash::Register->cashups should always return the correct number of cashups'
         );
 
-        my $cashup3 =
-          $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
+        my $cashup3 = $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
 
         $cashups = $register->cashups;
-        is( ref($cashups), 'Koha::Cash::Register::Cashups',
-'Koha::Cash::Register->cashups should return a Koha::Cash::Register::Cashups set'
+        is(
+            ref($cashups), 'Koha::Cash::Register::Cashups',
+            'Koha::Cash::Register->cashups should return a Koha::Cash::Register::Cashups set'
         );
-        is( $cashups->count, 1,
-'Koha::Cash::Register->cashups should return the correct number of cashups'
+        is(
+            $cashups->count, 1,
+            'Koha::Cash::Register->cashups should return the correct number of cashups'
         );
 
         $cashup3->delete;
@@ -238,11 +257,13 @@ subtest 'cashup' => sub {
         plan tests => 6;
 
         my $accountlines = $register->outstanding_accountlines;
-        is( ref($accountlines), 'Koha::Account::Lines',
-'Koha::Cash::Register->outstanding_accountlines should always return a Koha::Account::Lines set'
+        is(
+            ref($accountlines), 'Koha::Account::Lines',
+            'Koha::Cash::Register->outstanding_accountlines should always return a Koha::Account::Lines set'
         );
-        is( $accountlines->count, 0,
-'Koha::Cash::Register->outstanding_accountlines should always return the correct number of accountlines'
+        is(
+            $accountlines->count, 0,
+            'Koha::Cash::Register->outstanding_accountlines should always return the correct number of accountlines'
         );
 
         my $accountline1 = $builder->build_object(
@@ -254,15 +275,14 @@ subtest 'cashup' => sub {
         my $accountline2 = $builder->build_object(
             {
                 class => 'Koha::Account::Lines',
-                value => { register_id => $register->id, date => \'NOW() - INTERVAL 5 MINUTE'},
+                value => { register_id => $register->id, date => \'NOW() - INTERVAL 5 MINUTE' },
             }
         );
 
         $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 2, 'No cashup, all accountlines returned' );
 
-        my $cashup3 =
-          $register->add_cashup( { manager_id => $patron->id, amount => '2.50' } );
+        my $cashup3 = $register->add_cashup( { manager_id => $patron->id, amount => '2.50' } );
 
         $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 0, 'Cashup added, no accountlines returned' );
@@ -276,13 +296,17 @@ subtest 'cashup' => sub {
 
         # Fake the cashup timestamp to make sure it's before the accountline we just added,
         # we can't trust that these two actions are more than a second apart in a test
-        $cashup3->timestamp(\'NOW() - INTERVAL 2 MINUTE')->store;
+        $cashup3->timestamp( \'NOW() - INTERVAL 2 MINUTE' )->store;
 
         $accountlines = $register->outstanding_accountlines;
-        is( $accountlines->count, 1,
-            'Accountline added, one accountline returned' );
-        is( $accountlines->next->id,
-            $accountline3->id, 'Correct accountline returned' );
+        is(
+            $accountlines->count, 1,
+            'Accountline added, one accountline returned'
+        );
+        is(
+            $accountlines->next->id,
+            $accountline3->id, 'Correct accountline returned'
+        );
     };
 
     $schema->storage->txn_rollback;

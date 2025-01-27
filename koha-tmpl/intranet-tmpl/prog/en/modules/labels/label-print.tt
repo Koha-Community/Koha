@@ -1,123 +1,183 @@
 [% USE raw %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% t("Label printing/exporting") | html %] &rsaquo;
-        [% t("Label creator") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' popup => 1 %]
-    <style>table {border-collapse: separate; border-spacing: 0; border: hidden none;} .header {cursor: auto; background-position: center center; background-repeat: repeat;}</style>
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Label printing/exporting") | html %]
+        &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' popup => 1 %]
+<style>
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        border: hidden none;
+    }
+    .header {
+        cursor: auto;
+        background-position: center center;
+        background-repeat: repeat;
+    }
+</style>
 </head>
 
 <body id="labels_label-print" class="tools labels">
-    <div class="main container-fluid">
-        [% INCLUDE 'messages.inc' %]
-        <h1>Label printing/exporting</h1>
-        [% IF ( batches ) %]
-            <form method="get">
-                <h3>Click on the following links to download the exported batch(es).</h3>
-                [% IF warn_empty_range %]
+<div class="main container-fluid">
+    [% INCLUDE 'messages.inc' %]
+    <h1>Label printing/exporting</h1>
+    [% IF ( batches ) %]
+        <form method="get">
+            <h3>Click on the following links to download the exported batch(es).</h3>
+            [% IF warn_empty_range %]
                 <div class="alert alert-warning">
                     <p>Some or all of the barcodes in the range you have selected have no corresponding items.</p>
                     <p>If you are using a layout without barcodes, this may result in missing entries or a blank page</p>
                 </div>
-                [% END %]
-                        [% FOREACH batche IN batches %]
-                        <fieldset>
-                            [% IF ( batche.label_ids ) %]
-                                <legend>[% IF ( batche.label_count == 1 ) %][% batche.label_count | html %] single label[% ELSE %][% batche.label_count | html %] single labels[% END %]</legend>
-                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %][% batche.label_ids | html %]">Download as PDF</a>
+            [% END %]
+            [% FOREACH batche IN batches %]
+                <fieldset>
+                    [% IF ( batche.label_ids ) %]
+                        <legend>[% IF ( batche.label_count == 1 ) %][% batche.label_count | html %] single label[% ELSE %][% batche.label_count | html %] single labels[% END %]</legend>
+                        <a
+                            class="document pdf"
+                            href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %][% batche.label_ids | html %]"
+                            >Download as PDF</a
+                        >
 
-                                    <p><a class="document csv" href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]">Download as CSV</a></p>
+                        <p
+                            ><a
+                                class="document csv"
+                                href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]"
+                                >Download as CSV</a
+                            ></p
+                        >
 
-                                    <p><a class="document xml" href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]">Download as XML</a></p>
-                            [% ELSIF ( batche.item_numbers ) %]
-                            <legend>[% IF ( batche.label_count == 1 ) %][% batche.label_count | html %] single label[% ELSE %][% batche.label_count | html %] single labels[% END %]</legend>
-                                    <p><a class="document pdf" href="/cgi-bin/koha/labels/[% batche.create_script | html %]?template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %][% batche.item_numbers | html %]">Download as PDF</a></p>
+                        <p
+                            ><a
+                                class="document xml"
+                                href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]"
+                                >Download as XML</a
+                            ></p
+                        >
+                    [% ELSIF ( batche.item_numbers ) %]
+                        <legend>[% IF ( batche.label_count == 1 ) %][% batche.label_count | html %] single label[% ELSE %][% batche.label_count | html %] single labels[% END %]</legend>
+                        <p
+                            ><a
+                                class="document pdf"
+                                href="/cgi-bin/koha/labels/[% batche.create_script | html %]?template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %][% batche.item_numbers | html %]"
+                                >Download as PDF</a
+                            ></p
+                        >
 
-                                    <p><a class="document csv" href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.item_numbers | html %]">Download as CSV</a></p>
+                        <p
+                            ><a
+                                class="document csv"
+                                href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.item_numbers | html %]"
+                                >Download as CSV</a
+                            ></p
+                        >
 
-                                    <p><a class="document xml" href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.item_numbers | html %]">Download as XML</a></p>
-                            [% ELSIF ( batche.batch_id) %]
-                            <legend>Label batch number [% batche.batch_id | html %]</legend>
-                                    <p><a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]">Download as PDF</a>
-                                </p>
-                                <p>
-                                    <a class="document csv" href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]">Download as CSV</a>
-                                </p>
-                                <p>
-                                    <a class="document xml" href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]">Download as XML</a></p>
-                            [% ELSIF (batche.from && batche.to) %]
-                            <legend>Barcodes from [% batche.from | html %] to [% batche.to | html %]</legend>
-                            <p>
-                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=0&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]&amp;from=[% batche.from | html %]&amp;to=[% batche.to | html %]&amp;barcode_length=[% batche.barcode_length | html %]">Download as PDF</a>
-                            </p>
+                        <p
+                            ><a
+                                class="document xml"
+                                href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.item_numbers | html %]"
+                                >Download as XML</a
+                            ></p
+                        >
+                    [% ELSIF ( batche.batch_id) %]
+                        <legend>Label batch number [% batche.batch_id | html %]</legend>
+                        <p
+                            ><a
+                                class="document pdf"
+                                href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]"
+                                >Download as PDF</a
+                            >
+                        </p>
+                        <p>
+                            <a class="document csv" href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]"
+                                >Download as CSV</a
+                            >
+                        </p>
+                        <p>
+                            <a class="document xml" href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]"
+                                >Download as XML</a
+                            ></p
+                        >
+                    [% ELSIF (batche.from && batche.to) %]
+                        <legend>Barcodes from [% batche.from | html %] to [% batche.to | html %]</legend>
+                        <p>
+                            <a
+                                class="document pdf"
+                                href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=0&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]&amp;from=[% batche.from | html %]&amp;to=[% batche.to | html %]&amp;barcode_length=[% batche.barcode_length | html %]"
+                                >Download as PDF</a
+                            >
+                        </p>
+                    [% END %]
+                </fieldset>
+            [% END %]
+            <fieldset class="action">
+                <input type="button" class="gb-close" value="Done" />
+            </fieldset>
+        </form>
+    [% ELSE %]
+        <h3>
+            [% IF ( label_ids ) %]
+                [% IF ( label_count == 1 ) %]<span>Exporting 1 label</span>[% ELSE %]<span>Exporting [% label_count | html %] labels</span>[% END %]
+            [% ELSIF ( item_numbers ) %]
+                [% IF ( item_count == 1 ) %]<span>Exporting 1 label</span>[% ELSE %]<span>Exporting [% item_count | html %] labels</span>[% END %]
+            [% ELSE %]
+                [% IF ( multi_batch_count == 1 ) %]<span>1 batch to export</span>[% ELSE %]<span>[% multi_batch_count | html %] batches to export</span>[% END %]
+            [% END %]
+        </h3>
+        <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-print.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-export" />
+            <input type="hidden" name="referer" value="[% referer | html %]" />
+            [% FOREACH batch_id IN batch_ids %]
+                <input type="hidden" name="batch_id" value="[% batch_id.batch_id | html %]" />
+            [% END %]
+            [% FOREACH label_id IN label_ids %]
+                <input type="hidden" name="label_id" value="[% label_id.label_id | html %]" />
+            [% END %]
+            [% FOREACH item_number IN item_numbers %]
+                <input type="hidden" name="item_number" value="[% item_number.item_number | html %]" />
+            [% END %]
+            <input type="hidden" name="from" value="[% txt_from | html %]" />
+            <input type="hidden" name="to" value="[% txt_to | html %]" />
+            <input type="hidden" name="barcode_length" value="[% barcode_length | html %]" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="template_id" style="width:20em">Select a template to be applied: </label>
+                        <select name="template_id" id="template_id">
+                            [% FOREACH template IN templates %]
+                                <option value="[% template.template_id | html %]">[% template.template_code | html %]</option>
                             [% END %]
-                        </fieldset>
-                        [% END %]
-                <fieldset class="action">
-                    <input type="button" class="gb-close" value="Done" />
-                </fieldset>
-            </form>
-        [% ELSE %]
-            <h3>
-                [% IF ( label_ids ) %]
-                    [% IF ( label_count == 1 ) %]<span>Exporting 1 label</span>[% ELSE %]<span>Exporting [% label_count | html %] labels</span>[% END %]
-                [% ELSIF ( item_numbers ) %]
-                    [% IF ( item_count == 1 ) %]<span>Exporting 1 label</span>[% ELSE %]<span>Exporting [% item_count | html %] labels</span>[% END %]
-                [% ELSE %]
-                    [% IF ( multi_batch_count == 1 ) %]<span>1 batch to export</span>[% ELSE %]<span>[% multi_batch_count | html %] batches to export</span>[% END %]
-                [% END %]
-            </h3>
-            <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-print.pl">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op" value="cud-export" />
-                <input type="hidden" name="referer" value="[% referer | html %]" />
-                [% FOREACH batch_id IN batch_ids %]
-                    <input type="hidden" name="batch_id" value="[% batch_id.batch_id | html %]" />
-                [% END %]
-                [% FOREACH label_id IN label_ids %]
-                    <input type="hidden" name="label_id" value="[% label_id.label_id | html %]" />
-                [% END %]
-                [% FOREACH item_number IN item_numbers %]
-                    <input type="hidden" name="item_number" value="[% item_number.item_number | html %]" />
-                [% END %]
-                <input type="hidden" name="from" value="[% txt_from | html %]" />
-                <input type="hidden" name="to" value="[% txt_to | html %]" />
-                <input type="hidden" name="barcode_length" value="[% barcode_length | html %]" />
-                <fieldset class="rows">
-                    <ol>
-                        <li>
-                            <label for="template_id" style="width:20em">Select a template to be applied: </label>
-                            <select name="template_id" id="template_id">
-                                    [% FOREACH template IN templates %]
-                                    <option value="[% template.template_id | html %]">[% template.template_code | html %]</option>
-                                    [% END %]
-                                </select>
-                        </li>
-                        <li>
-                            <label for="layout_id" style="width:20em">Select a layout to be applied: </label>
-                            <select name="layout_id" id="layout_id">
-                                    [% FOREACH layout IN layouts %]
-                                    <option value="[% layout.layout_id | html %]">[% layout.layout_name | html %]</option>
-                                    [% END %]
-                                </select>
-                        </li>
-                        <li>
-                            <label for="start_label" style="width:20em">Enter starting label position (for PDF): </label>
-                            <input type="text" size="5" id="start_label" name="start_label" class="focus" title="Starting label number" value="1"/>
-                        </li>
-                    </ol>
-                </fieldset>
-                <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Export" />
-                    <a href="#" class="cancel gb-close">Cancel</a>
-                </fieldset>
-            </form>
-        [% END %]
-    </div> <!-- /.main.container-fluid -->
+                        </select>
+                    </li>
+                    <li>
+                        <label for="layout_id" style="width:20em">Select a layout to be applied: </label>
+                        <select name="layout_id" id="layout_id">
+                            [% FOREACH layout IN layouts %]
+                                <option value="[% layout.layout_id | html %]">[% layout.layout_name | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="start_label" style="width:20em">Enter starting label position (for PDF): </label>
+                        <input type="text" size="5" id="start_label" name="start_label" class="focus" title="Starting label number" value="1" />
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Export" />
+                <a href="#" class="cancel gb-close">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]

@@ -82,7 +82,8 @@ subtest 'list() tests' => sub {
 
     # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
     my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
-    $illreqmodule->mock( 'load_backend',
+    $illreqmodule->mock(
+        'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
     );
 
@@ -113,12 +114,7 @@ subtest 'list() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # Make sure the ILL_STATUS_ALIAS authorised value category is defined
-    unless (
-        Koha::AuthorisedValueCategories->search(
-            { category_name => 'ILL_STATUS_ALIAS' }
-        )->count > 0
-      )
-    {
+    unless ( Koha::AuthorisedValueCategories->search( { category_name => 'ILL_STATUS_ALIAS' } )->count > 0 ) {
         $builder->build_object(
             {
                 class => 'Koha::AuthorisedValueCategories',
@@ -141,15 +137,13 @@ subtest 'list() tests' => sub {
     );
 
     # No backends, expect empty
-    $t->get_ok("//$userid:$password@/api/v1/ill/backends")->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/ill/backends")->status_is(200)->json_is( [] );
 
     # Mock one existing backend
     $illconfig_module->mock( 'available_backends', sub { ["Mock"] } );
 
     #One backend exists, expect that
-    $t->get_ok("//$userid:$password@/api/v1/ill/backends")->status_is(200)
-      ->json_has( '/0/ill_backend_id', 'Mock' );
+    $t->get_ok("//$userid:$password@/api/v1/ill/backends")->status_is(200)->json_has( '/0/ill_backend_id', 'Mock' );
 
     # Prepare status
     my $backend_status = {
@@ -170,15 +164,13 @@ subtest 'list() tests' => sub {
     my $backend_status_req = $builder->build_object(
         {
             class => 'Koha::ILL::Requests',
-            value =>
-              { status => $backend_status->{code}, backend => $backend->name }
+            value => { status => $backend_status->{code}, backend => $backend->name }
         }
     );
     my $core_status_req = $builder->build_object(
         {
             class => 'Koha::ILL::Requests',
-            value =>
-              { status => $core_status->{code}, backend => $backend->name }
+            value => { status => $core_status->{code}, backend => $backend->name }
         }
     );
     my $alias_status_req = $builder->build_object(
@@ -193,22 +185,18 @@ subtest 'list() tests' => sub {
     );
 
     #Check for backend existing statuses
-    $t->get_ok("//$userid:$password@/api/v1/ill/backends/Mock" => {'x-koha-embed' => 'statuses+strings'} )
-      ->status_is(200)
-      ->json_has( '/statuses', [ $backend_status, $core_status, $alias_status ] );
+    $t->get_ok( "//$userid:$password@/api/v1/ill/backends/Mock" => { 'x-koha-embed' => 'statuses+strings' } )
+        ->status_is(200)->json_has( '/statuses', [ $backend_status, $core_status, $alias_status ] );
 
     #Check for backend existing statuses of a backend that doesn't exist
-    $t->get_ok("//$userid:$password@/api/v1/ill/backends/GhostBackend"  => {'x-koha-embed' => 'statuses+strings'} )
-      ->status_is(200)
-      ->json_hasnt( 'statuses' );
+    $t->get_ok( "//$userid:$password@/api/v1/ill/backends/GhostBackend" => { 'x-koha-embed' => 'statuses+strings' } )
+        ->status_is(200)->json_hasnt('statuses');
 
     # Unauthorized attempt to list
-    $t->get_ok("//$unauth_userid:$password@/api/v1/ill/backends")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/ill/backends")->status_is(403);
 
     # DELETE method not supported
-    $t->delete_ok("//$unauth_userid:$password@/api/v1/ill/backends")
-      ->status_is(404);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/ill/backends")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

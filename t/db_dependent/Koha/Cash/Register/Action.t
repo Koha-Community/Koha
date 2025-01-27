@@ -33,19 +33,22 @@ subtest 'manager' => sub {
     $schema->storage->txn_begin;
 
     my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $action = $builder->build_object(
+    my $action  = $builder->build_object(
         {
             class => 'Koha::Cash::Register::Actions',
             value => { manager_id => $manager->borrowernumber },
         }
     );
 
-    is( ref( $action->manager ),
+    is(
+        ref( $action->manager ),
         'Koha::Patron',
-        'Koha::Cash::Register::Action->manager should return a Koha::Patron' );
+        'Koha::Cash::Register::Action->manager should return a Koha::Patron'
+    );
 
-    is( $action->manager->id, $manager->id,
-'Koha::Cash::Registeri::Action->manager returns the correct Koha::Patron'
+    is(
+        $action->manager->id, $manager->id,
+        'Koha::Cash::Registeri::Action->manager returns the correct Koha::Patron'
     );
 
     $schema->storage->txn_rollback;
@@ -57,9 +60,8 @@ subtest 'register' => sub {
 
     $schema->storage->txn_begin;
 
-    my $register =
-      $builder->build_object( { class => 'Koha::Cash::Registers' } );
-    my $action = $builder->build_object(
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $action   = $builder->build_object(
         {
             class => 'Koha::Cash::Register::Actions',
             value => { register_id => $register->id },
@@ -69,11 +71,12 @@ subtest 'register' => sub {
     is(
         ref( $action->register ),
         'Koha::Cash::Register',
-'Koha::Cash::Register::Action->register should return a Koha::Cash::Register'
+        'Koha::Cash::Register::Action->register should return a Koha::Cash::Register'
     );
 
-    is( $action->register->id, $register->id,
-'Koha::Cash::Register::Action->register returns the correct Koha::Cash::Register'
+    is(
+        $action->register->id, $register->id,
+        'Koha::Cash::Register::Action->register returns the correct Koha::Cash::Register'
     );
 
     $schema->storage->txn_rollback;

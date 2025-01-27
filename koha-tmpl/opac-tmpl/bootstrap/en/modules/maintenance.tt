@@ -8,10 +8,12 @@
 [% SET OpacMaintenanceNotice = AdditionalContents.get( location => "OpacMaintenanceNotice", lang => lang, library => branchcode || default_branch ) %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 [% SET opaclanguagedisplay = Koha.Preference('opaclanguagedisplay') %]
-<title>[% FILTER collapse %]
-    [% t("System maintenance") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("System maintenance") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
@@ -19,16 +21,16 @@
             justify-content: space-between;
         }
         #opac-maintenance-message {
-            background:none repeat scroll 0 0 #FFFFFF;
-            border:1px solid #A2A2A2;
+            background: none repeat scroll 0 0 #ffffff;
+            border: 1px solid #a2a2a2;
             border-radius: 8px 8px 8px 8px;
             box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
-            margin:4em auto;
-            padding:1.5em;
-            position:relative;
-            right:auto;
-            top:auto;
-            width:50%;
+            margin: 4em auto;
+            padding: 1.5em;
+            position: relative;
+            right: auto;
+            top: auto;
+            width: 50%;
         }
         .langlabel {
             display: inline;
@@ -37,44 +39,42 @@
 [% END %]
 </head>
 <body id="opac_maintenance" class="opac">
-    <div id="wrapper">
-        <div id="header-region" class="noprint">
-            <nav class="navbar navbar-expand">
-                <div id="logo">
-                    <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
-                        [% IF ( LibraryNameTitle ) %]
-                            [% LibraryNameTitle | html %]
-                        [% ELSE %]
-                            Koha online
-                        [% END %]
-                    </a>
-                </div>
+<div id="wrapper">
+    <div id="header-region" class="noprint">
+        <nav class="navbar navbar-expand">
+            <div id="logo">
+                <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
+                    [% IF ( LibraryNameTitle ) %]
+                        [% LibraryNameTitle | html %]
+                    [% ELSE %]
+                        Koha online
+                    [% END %]
+                </a>
+            </div>
 
-                [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
-                    [% INCLUDE 'langmenu.inc' %]
-                [% END %]
-            </nav>
-        </div>
+            [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
+                [% INCLUDE 'langmenu.inc' %]
+            [% END %]
+        </nav>
+    </div>
 
     [% IF ( OpacHeader ) %]
         <div class="container-fluid">
             <div class="row">
-                <div class="col">
-                    [% PROCESS koha_news_block news => OpacHeader %]
-                </div>
+                <div class="col"> [% PROCESS koha_news_block news => OpacHeader %] </div>
             </div>
         </div>
     [% END %]
 
-<div class="main">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <div id="opac-maintenance-message" class="maincontent">
-                    [% IF ( OpacMaintenanceNotice ) %]
-                        [% PROCESS koha_news_block news => OpacMaintenanceNotice %]
-                    [% ELSE %]
-                        <h1>System maintenance</h1>
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div id="opac-maintenance-message" class="maincontent">
+                        [% IF ( OpacMaintenanceNotice ) %]
+                            [% PROCESS koha_news_block news => OpacMaintenanceNotice %]
+                        [% ELSE %]
+                            <h1>System maintenance</h1>
                             <p>
                                 <span>The [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog is offline for system maintenance. We'll be back soon!</span>
                                 [% IF ( Koha.Preference( 'ReplytoDefault' ) ) %]
@@ -83,12 +83,14 @@
                                     If you have any questions, please contact the <a href="mailto:[% Koha.Preference( 'KohaAdminEmailAddress' ) | $raw %]">site administrator</a>
                                 [% END %]
                             </p>
-                    [% END %]
+                        [% END %]
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-[% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+    [% INCLUDE 'opac-bottom.inc' %]
+    [% BLOCK jsinclude %]
+    [% END %]
+</div>

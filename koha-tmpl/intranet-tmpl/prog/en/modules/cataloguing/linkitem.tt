@@ -3,11 +3,12 @@
 [% USE HtmlTags %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Link to host record") | html %] &rsaquo;
-    [% t("Cataloging") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Link to host record") | html %]
+        &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_linkitem" class="catalog">
@@ -27,55 +28,53 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
+    <h1>Link a host record to [% bibliotitle | html %]</h1>
 
-            <h1>Link a host record to [% bibliotitle | html %]</h1>
-
-[% IF ( error ) %]
-    <div class="alert alert-warning">
-	[% IF ( errornomodbiblio ) %]ERROR: Unable to modify the bibliographic record.[% END %]
-	[% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
-    </div>
-    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber | uri %]" class="btn btn-primary">OK</a>
-[% ELSE %]
-    [% IF ( success ) %]
-    <div class="alert alert-info">The item has successfully been linked to <em>[% bibliotitle | html %]</em>.</div>
-    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber | uri %]" class="btn btn-primary">OK</a>
+    [% IF ( error ) %]
+        <div class="alert alert-warning">
+            [% IF ( errornomodbiblio ) %]ERROR: Unable to modify the bibliographic record.[% END %]
+            [% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
+        </div>
+        <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber | uri %]" class="btn btn-primary">OK</a>
     [% ELSE %]
-	[% IF ( missingparameter ) %]
-	<form method="post" action="/cgi-bin/koha/cataloguing/linkitem.pl">
-	    [% INCLUDE 'csrf-token.inc' %]
-	    [% IF ( missingbiblionumber ) %]
-	    <fieldset id="biblionumber_fieldset">
-		<label for="biblionumber_fieldset">Select the biblionumber to link the item to</label>
-		    <div class="hint">Enter biblionumber:</div>
-		    <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" /> 
-	    </fieldset>
-	    [% ELSE %]
-	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
-	    [% END %]
+        [% IF ( success ) %]
+            <div class="alert alert-info">The item has successfully been linked to <em>[% bibliotitle | html %]</em>.</div>
+            <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber | uri %]" class="btn btn-primary">OK</a>
+        [% ELSE %]
+            [% IF ( missingparameter ) %]
+                <form method="post" action="/cgi-bin/koha/cataloguing/linkitem.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    [% IF ( missingbiblionumber ) %]
+                        <fieldset id="biblionumber_fieldset">
+                            <label for="biblionumber_fieldset">Select the biblionumber to link the item to</label>
+                            <div class="hint">Enter biblionumber:</div>
+                            <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" />
+                        </fieldset>
+                    [% ELSE %]
+                        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
+                    [% END %]
 
-    	    [% IF ( missingbarcode ) %]
-	    <fieldset id="barcode_fieldset">
-        <label for="barcode_fieldset">
-            [% IF (bibliotitle ) %]
-                <span>Select the host record to link to '[% bibliotitle | html %]'</span>
-            [% ELSE %]
-                <span>Select the host record to link</span>
+                    [% IF ( missingbarcode ) %]
+                        <fieldset id="barcode_fieldset">
+                            <label for="barcode_fieldset">
+                                [% IF (bibliotitle ) %]
+                                    <span>Select the host record to link to '[% bibliotitle | html %]'</span>
+                                [% ELSE %]
+                                    <span>Select the host record to link</span>
+                                [% END %]
+                            </label>
+                            <div class="hint">Enter item barcode:</div>
+                            <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
+                        </fieldset>
+                    [% ELSE %]
+                        <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
+                    [% END %]
+
+                    <input type="hidden" name="op" value="cud-linkitem" />
+                    <input type="submit" class="btn btn-primary" value="Select" />
+                </form>
             [% END %]
-        </label>
-		    <div class="hint">Enter item barcode:</div>
-		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> 
-	    </fieldset>
-	    [% ELSE %]
-	    <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
-	    [% END %]
-
-        <input type="hidden" name="op" value="cud-linkitem" />
-        <input type="submit" class="btn btn-primary" value="Select" />
-
-	</form>
-	[% END %]
+        [% END %]
     [% END %]
-[% END %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

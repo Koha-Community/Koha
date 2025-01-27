@@ -19,7 +19,6 @@ package Koha::ApiKey;
 
 use Modern::Perl;
 
-
 use Koha::AuthUtils qw(hash_password);
 use Koha::Exceptions::Object;
 
@@ -53,12 +52,13 @@ sub store {
         # only allow 'description' and 'active' to be updated
         for my $property ( keys %dirty_columns ) {
             Koha::Exceptions::Object::ReadOnlyProperty->throw( property => $property )
-              if $property ne 'description' and $property ne 'active';
+                if $property ne 'description' and $property ne 'active';
         }
     } else {
         $self->{_plain_text_secret} = $self->_generate_unused_uuid('secret');
         $self->set(
-            {   secret    => Koha::AuthUtils::hash_password( $self->{_plain_text_secret} ),
+            {
+                secret    => Koha::AuthUtils::hash_password( $self->{_plain_text_secret} ),
                 client_id => $self->_generate_unused_uuid('client_id'),
             }
         );
@@ -124,14 +124,15 @@ $column can be 'client_id' or 'secret'.
 =cut
 
 sub _generate_unused_uuid {
-    my ($self, $column) = @_;
+    my ( $self, $column ) = @_;
 
     my ( $uuid, $uuidstring );
 
     UUID::generate($uuid);
     UUID::unparse( $uuid, $uuidstring );
 
-    while ( Koha::ApiKeys->search({ $column => $uuidstring })->count > 0 ) {
+    while ( Koha::ApiKeys->search( { $column => $uuidstring } )->count > 0 ) {
+
         # Make sure $secret is unique
         UUID::generate($uuid);
         UUID::unparse( $uuid, $uuidstring );

@@ -3,17 +3,19 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("MARC view for: {title}", { title = bibliotitle }) | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("MARC view for: {title}", { title = bibliotitle }) | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-marcdetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>MARC view: [% bibliotitle | html %]</span>
@@ -26,11 +28,18 @@
                 <div id="opac-detail" class="maincontent">
                     <div id="usermarcdetail">
                         <div id="catalogue_detail_biblio">
-
                             <div id="views">
-                                <span class="view"><a id="Normalview" class="btn btn-link" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Normal view</a></span>
-                                <span class="view current-view"><span id="MARCview"><i class="fa-solid fa-rectangle-list" aria-hidden="true"></i> MARC view</span></span>
-                                [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul" aria-hidden="true"></i> ISBD view</a></span>[% END %]
+                                <span class="view"
+                                    ><a id="Normalview" class="btn btn-link" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Normal view</a></span
+                                >
+                                <span class="view current-view"
+                                    ><span id="MARCview"><i class="fa-solid fa-rectangle-list" aria-hidden="true"></i> MARC view</span></span
+                                >
+                                [% IF ( ISBD ) %]
+                                    <span class="view"
+                                        ><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul" aria-hidden="true"></i> ISBD view</a></span
+                                    >
+                                [% END %]
                             </div>
                             <h1 class="title">[% bibliotitle | html %] (Record no. [% biblio.biblionumber | html %])</h1>
 
@@ -41,8 +50,8 @@
                                 <table id="marc" class="table table-bordered table-striped">
                                     <caption class="sr-only">MARC details</caption>
                                     [% FOREACH tab0X IN tab0XX %]
-                                    <tr><th colspan="2">[% tab0X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab0X.subfield %]
+                                        <tr><th colspan="2">[% tab0X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab0X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -50,18 +59,18 @@
                                         [% END %]
                                     [% END %]
                                     [% FOREACH tab1X IN tab1XX %]
-                                    <tr><th colspan="2">[% tab1X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab1X.subfield %]
+                                        <tr><th colspan="2">[% tab1X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab1X.subfield %]
                                             <tr>
-                                                <td  >[% subfiel.marc_lib | $raw %]</td>
-                                                <td  >[% subfiel.marc_value | html %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab2X IN tab2XX %]
-                                    <tr><th colspan="2">[% tab2X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab2X.subfield %]
+                                        <tr><th colspan="2">[% tab2X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab2X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -70,8 +79,8 @@
                                     [% END %]
 
                                     [% FOREACH tab3X IN tab3XX %]
-                                    <tr><th colspan="2">[% tab3X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab3X.subfield %]
+                                        <tr><th colspan="2">[% tab3X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab3X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -80,8 +89,8 @@
                                     [% END %]
 
                                     [% FOREACH tab4X IN tab4XX %]
-                                    <tr><th colspan="2" >[% tab4X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab4X.subfield %]
+                                        <tr><th colspan="2">[% tab4X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab4X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -90,8 +99,8 @@
                                     [% END %]
 
                                     [% FOREACH tab5X IN tab5XX %]
-                                    <tr><th colspan="2">[% tab5X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab5X.subfield %]
+                                        <tr><th colspan="2">[% tab5X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab5X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -100,8 +109,8 @@
                                     [% END %]
 
                                     [% FOREACH tab6X IN tab6XX %]
-                                    <tr><th colspan="2">[% tab6X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab6X.subfield %]
+                                        <tr><th colspan="2">[% tab6X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab6X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -110,8 +119,8 @@
                                     [% END %]
 
                                     [% FOREACH tab7X IN tab7XX %]
-                                    <tr><th colspan="2">[% tab7X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab7X.subfield %]
+                                        <tr><th colspan="2">[% tab7X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab7X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -120,8 +129,8 @@
                                     [% END %]
 
                                     [% FOREACH tab8X IN tab8XX %]
-                                    <tr><th colspan="2">[% tab8X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab8X.subfield %]
+                                        <tr><th colspan="2">[% tab8X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab8X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -130,8 +139,8 @@
                                     [% END %]
 
                                     [% FOREACH tab9X IN tab9XX %]
-                                    <tr><th colspan="2">[% tab9X.tag | html %]</th></tr>
-                                    [% FOREACH subfiel IN tab9X.subfield %]
+                                        <tr><th colspan="2">[% tab9X.tag | html %]</th></tr>
+                                        [% FOREACH subfiel IN tab9X.subfield %]
                                             <tr>
                                                 <td>[% subfiel.marc_lib | $raw %]</td>
                                                 <td>[% subfiel.marc_value | html %]</td>
@@ -163,16 +172,21 @@
                             [% ELSE %]
                                 <p>No items available.</p>
                             [% END %]
-                        </div> <!-- / #catalogue_detail_biblio -->
-                    </div> <!-- / #usermarcdetail -->
-                </div> <!-- / #opac-detail -->
-            </div> <!-- / .col-lg-9 -->
-            <div class="col-lg-3">
-                [% INCLUDE 'opac-detail-sidebar.inc' %]
+                        </div>
+                        <!-- / #catalogue_detail_biblio -->
+                    </div>
+                    <!-- / #usermarcdetail -->
+                </div>
+                <!-- / #opac-detail -->
             </div>
-        </div> <!-- / .row -->
-    </div>  <!-- / .container-fluid -->
-</div> <!-- / .main -->
+            <!-- / .col-lg-9 -->
+            <div class="col-lg-3"> [% INCLUDE 'opac-detail-sidebar.inc' %] </div>
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% IF Koha.Preference('OpacCatalogConcerns') %]
     [% INCLUDE 'modals/catalog_concern.inc' %]
@@ -180,41 +194,41 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% IF Koha.Preference('OpacCatalogConcerns') %]
-    [% Asset.js("js/modals/catalog_concern.js") | $raw %]
-[% END %]
-<script>
-    $(document).ready(function(){
-        var loaded = 0;
-        var toggle = 0;
-        $("#switchview").on("click",function(e){
-            e.preventDefault();
-            if( toggle == 0){
-                $(this).text(_("view labeled"));
-                $("#labeledmarc").hide();
-                if(!loaded){
-                    $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface | html %]/[% theme | html %]/images/loading.gif\" /> "+_("Loading")+"...</div>");
-                    var plain_marc = $.get( "/cgi-bin/koha/opac-showmarc.pl", { id: "[% biblio.biblionumber | html %]", viewas: "html" })
-                    .done(function( data ) {
-                        $("#plainmarc").html( data );
-                        loaded = 1;
-                    })
-                    .fail(function() {
-                        $('#switchview').parent().html("<div class=\"alert alert-warning\">"+_("Sorry, plain view is temporarily unavailable")+".</div>");
-                        $("#plainmarc").hide();
-                        $("#labeledmarc").show();
-                    });
+    [% IF Koha.Preference('OpacCatalogConcerns') %]
+        [% Asset.js("js/modals/catalog_concern.js") | $raw %]
+    [% END %]
+    <script>
+        $(document).ready(function(){
+            var loaded = 0;
+            var toggle = 0;
+            $("#switchview").on("click",function(e){
+                e.preventDefault();
+                if( toggle == 0){
+                    $(this).text(_("view labeled"));
+                    $("#labeledmarc").hide();
+                    if(!loaded){
+                        $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface | html %]/[% theme | html %]/images/loading.gif\" /> "+_("Loading")+"...</div>");
+                        var plain_marc = $.get( "/cgi-bin/koha/opac-showmarc.pl", { id: "[% biblio.biblionumber | html %]", viewas: "html" })
+                        .done(function( data ) {
+                            $("#plainmarc").html( data );
+                            loaded = 1;
+                        })
+                        .fail(function() {
+                            $('#switchview').parent().html("<div class=\"alert alert-warning\">"+_("Sorry, plain view is temporarily unavailable")+".</div>");
+                            $("#plainmarc").hide();
+                            $("#labeledmarc").show();
+                        });
+                    } else {
+                        $("#plainmarc").show();
+                    }
+                    toggle = 1;
                 } else {
-                    $("#plainmarc").show();
+                    $(this).text(_("view plain"));
+                    $("#labeledmarc").show();
+                    $("#plainmarc").hide();
+                    toggle = 0;
                 }
-                toggle = 1;
-            } else {
-                $(this).text(_("view plain"));
-                $("#labeledmarc").show();
-                $("#plainmarc").hide();
-                toggle = 0;
-            }
+            });
         });
-    });
-</script>
+    </script>
 [% END %]

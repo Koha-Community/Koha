@@ -43,7 +43,7 @@ subtest 'list_av_from_category() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2 ** 2 } # catalogue flag = 2
+            value => { flags => 2**2 }    # catalogue flag = 2
         }
     );
     my $password = 'thePassword123';
@@ -62,28 +62,24 @@ subtest 'list_av_from_category() tests' => sub {
 
     ## Authorized user tests
     # No category, 404 expected
-    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/NON_EXISTS/authorised_values")
-      ->status_is(404)
-      ->json_is( '/error' => 'Category not found' );
+    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/NON_EXISTS/authorised_values")->status_is(404)
+        ->json_is( '/error' => 'Category not found' );
 
-    my $av_cat = $builder->build_object({ class => 'Koha::AuthorisedValueCategories' })->category_name;
+    my $av_cat = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } )->category_name;
 
     # No AVs, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")
-      ->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")->status_is(200)
+        ->json_is( [] );
 
-    my $av = $builder->build_object(
-        { class => 'Koha::AuthorisedValues', value => { category => $av_cat } } );
+    my $av = $builder->build_object( { class => 'Koha::AuthorisedValues', value => { category => $av_cat } } );
 
     # One av created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")
-      ->status_is(200)
-      ->json_is( [$av->to_api] );
+    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")->status_is(200)
+        ->json_is( [ $av->to_api ] );
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")
-      ->status_is(403);
+        ->status_is(403);
 
     # Test the query webservice endpoint for multiple av_cats
     my $av_cat_2 =
@@ -120,7 +116,7 @@ subtest 'list_av_from_category() tests' => sub {
                 category         => $av_cat_2->category_name,
                 authorised_value => 'c',
                 lib              => 'description_value'
-              }
+            }
         }
     );
     my $av_4 = $builder->build_object(
@@ -135,17 +131,16 @@ subtest 'list_av_from_category() tests' => sub {
     );
 
     my $embedded_av_query = { "me.category_name" => [ $av_cat_2->category_name ] };
-    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?_order_by=authorised_values.authorised_value&q="
-            . encode_json($embedded_av_query) => { 'x-koha-embed' => 'authorised_values' } )->status_is(200)
-        ->json_is(
-            [
-                {
-                    %{ $av_cat_2->to_api },
-                    authorised_values =>
-                      [ $av_2->to_api, $av_4->to_api, $av_3->to_api ]
-                }
-            ]
-        );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/authorised_value_categories?_order_by=authorised_values.authorised_value&q="
+            . encode_json($embedded_av_query) => { 'x-koha-embed' => 'authorised_values' } )->status_is(200)->json_is(
+        [
+            {
+                %{ $av_cat_2->to_api },
+                authorised_values => [ $av_2->to_api, $av_4->to_api, $av_3->to_api ]
+            }
+        ]
+            );
 
     $schema->storage->txn_rollback;
 };

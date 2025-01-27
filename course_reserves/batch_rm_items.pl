@@ -19,12 +19,12 @@
 
 use Modern::Perl;
 
-use CGI qw( -utf8 );
+use CGI             qw( -utf8 );
 use List::MoreUtils qw( uniq );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Circulation qw( barcodedecode );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth           qw( get_template_and_user );
+use C4::Circulation    qw( barcodedecode );
+use C4::Output         qw( output_html_with_http_headers );
 use C4::CourseReserves qw( GetCourse GetCourseItem GetItemCourseReservesInfo DelCourse DelCourseReserve );
 
 use Koha::Items;
@@ -36,56 +36,53 @@ my $barcodes = $cgi->param('barcodes') || q{};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "course_reserves/batch_rm_items.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { coursereserves => 'delete_reserves' },
+        template_name => "course_reserves/batch_rm_items.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { coursereserves => 'delete_reserves' },
     }
 );
 
 if ( !$op ) {
     $template->param( action => 'display_form' );
-}
 
-elsif ( $op eq 'cud-batch_rm' ) {
-    my @barcodes = uniq( split (/\s\n/, $barcodes ) );
+} elsif ( $op eq 'cud-batch_rm' ) {
+    my @barcodes = uniq( split( /\s\n/, $barcodes ) );
     my @invalid_barcodes;
     my @item_and_count;
 
     foreach my $bar (@barcodes) {
         $bar = barcodedecode($bar) if $bar;
         my $item = Koha::Items->find( { barcode => $bar } );
-        if($item) {
-            my $courseitem = GetCourseItem(itemnumber => $item->id);
-            if($courseitem) {
+        if ($item) {
+            my $courseitem = GetCourseItem( itemnumber => $item->id );
+            if ($courseitem) {
 
-                my $res_info = GetItemCourseReservesInfo(itemnumber => $item->id);
+                my $res_info = GetItemCourseReservesInfo( itemnumber => $item->id );
 
                 my $no_of_res = @$res_info;
 
-                my $delitemcount = {'delitem' => $item, 'delcount' => $no_of_res};
-                push ( @item_and_count, $delitemcount );
+                my $delitemcount = { 'delitem' => $item, 'delcount' => $no_of_res };
+                push( @item_and_count, $delitemcount );
 
                 foreach my $cr (@$res_info) {
-                    if($cr->{cr_id}) {
-                        DelCourseReserve('cr_id' => $cr->{cr_id});
+                    if ( $cr->{cr_id} ) {
+                        DelCourseReserve( 'cr_id' => $cr->{cr_id} );
                     }
                 }
+            } else {
+                push( @invalid_barcodes, $bar );
             }
-            else {
-                push( @invalid_barcodes, $bar);
-            }
-        }
-        else {
+        } else {
             push( @invalid_barcodes, $bar );
         }
 
     }
 
     $template->param(
-        action => 'display_results',
+        action           => 'display_results',
         invalid_barcodes => \@invalid_barcodes,
-        item_and_count => \@item_and_count,
+        item_and_count   => \@item_and_count,
     );
 }
 

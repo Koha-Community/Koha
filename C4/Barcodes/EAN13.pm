@@ -23,7 +23,7 @@ use warnings;
 use C4::Context;
 
 use Algorithm::CheckDigits qw( CheckDigits );
-use Carp qw( carp );
+use Carp                   qw( carp );
 
 use vars qw(@ISA);
 
@@ -32,9 +32,9 @@ BEGIN {
 }
 
 sub parse {
-    my $self = shift;
+    my $self    = shift;
     my $barcode = (@_) ? shift : $self->value;
-    my $ean = CheckDigits('ean');
+    my $ean     = CheckDigits('ean');
     if ( $ean->is_valid($barcode) ) {
         return ( '', $ean->basenumber($barcode), $ean->checkdigit($barcode) );
     } else {
@@ -44,8 +44,8 @@ sub parse {
 }
 
 sub process_tail {
-    my ( $self,$tail,$whole,$specific ) = @_;
-    my $ean = CheckDigits('ean');
+    my ( $self, $tail, $whole, $specific ) = @_;
+    my $ean  = CheckDigits('ean');
     my $full = $ean->complete($whole);
     my $chk  = $ean->checkdigit($full);
     return $chk;

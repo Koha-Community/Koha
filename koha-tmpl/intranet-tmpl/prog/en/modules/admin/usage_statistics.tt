@@ -6,11 +6,12 @@
 [% USE Price %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Koha usage statistics") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Koha usage statistics") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/leaflet/leaflet.css") | $raw %]
 </head>
@@ -33,32 +34,32 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
-[% FOR m IN messages %]
-    <div class="alert alert-[% m.type | html %]">
-        [% SWITCH m.code %]
-        [% CASE 'error_on_update' %]
-            <span>An error occurred when updating this patron category. Perhaps it already exists.</span>
-        [% CASE 'error_on_insert' %]
-            <span>An error occurred when inserting this patron category. The patron category might already exist.</span>
-        [% CASE 'error_on_delete' %]
-            <span>An error occurred when deleting this patron category. Check the logs for details.</span>
-        [% CASE 'success_on_update' %]
-            <span>Patron category updated successfully.</span>
-        [% CASE 'success_on_insert' %]
-            <span>Patron category inserted successfully.</span>
-        [% CASE 'success_on_delete' %]
-            <span>Patron category deleted successfully.</span>
-        [% CASE 'already_exists' %]
-            <span>This patron category already exists.</span>
-        [% CASE %]
-            <span>[% m.code | html %]</span>
-        [% END %]
-    </div>
-[% END %]
+    [% FOR m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'error_on_update' %]
+                <span>An error occurred when updating this patron category. Perhaps it already exists.</span>
+            [% CASE 'error_on_insert' %]
+                <span>An error occurred when inserting this patron category. The patron category might already exist.</span>
+            [% CASE 'error_on_delete' %]
+                <span>An error occurred when deleting this patron category. Check the logs for details.</span>
+            [% CASE 'success_on_update' %]
+                <span>Patron category updated successfully.</span>
+            [% CASE 'success_on_insert' %]
+                <span>Patron category inserted successfully.</span>
+            [% CASE 'success_on_delete' %]
+                <span>Patron category deleted successfully.</span>
+            [% CASE 'already_exists' %]
+                <span>This patron category already exists.</span>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
 
-[% IF NOT Koha.Preference('UsageStats') %]
-    <div class="alert alert-info">You are not sharing any data with the Koha community</div>
-[% END %]
+    [% IF NOT Koha.Preference('UsageStats') %]
+        <div class="alert alert-info">You are not sharing any data with the Koha community</div>
+    [% END %]
 
     <form id="category_form" action="/cgi-bin/koha/admin/usage_statistics.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
@@ -70,19 +71,19 @@
                         <li>
                             <label for="UsageStats">Share my Koha usage statistics: </label>
                             <select name="UsageStats" id="UsageStats">
-                            [% IF Koha.Preference('UsageStats') == 1 %]
-                                <option value="2">Undecided</option>
-                                <option value="1" selected="selected">Yes</option>
-                                <option value="0">No</option>
-                            [% ELSIF Koha.Preference('UsageStats') == 0 %]
-                                <option value="2">Undecided</option>
-                                <option value="1">Yes</option>
-                                <option value="0" selected="selected">No</option>
-                            [% ELSE %]
-                                <option value="2" selected="selected">Undecided</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            [% END %]
+                                [% IF Koha.Preference('UsageStats') == 1 %]
+                                    <option value="2">Undecided</option>
+                                    <option value="1" selected="selected">Yes</option>
+                                    <option value="0">No</option>
+                                [% ELSIF Koha.Preference('UsageStats') == 0 %]
+                                    <option value="2">Undecided</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0" selected="selected">No</option>
+                                [% ELSE %]
+                                    <option value="2" selected="selected">Undecided</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                [% END %]
                             </select>
                         </li>
                         <li>
@@ -105,8 +106,7 @@
                                 [% END %]
                             </select>
                             [% UNLESS IsUsageStatsCountryValid %]
-                                Note: The value of your system preference 'UsageStatsCountry' is not valid ([% UsageStatsCountry | html %]).
-                                Please select a valid one.
+                                Note: The value of your system preference 'UsageStatsCountry' is not valid ([% UsageStatsCountry | html %]). Please select a valid one.
                             [% END %]
                         </li>
                         <li>
@@ -185,8 +185,18 @@
                         </li>
                         <li>
                             <label for="UsageStatsGeolocation">Geolocation: </label>
-                            <input id="UsageStatsGeolocation" name="UsageStatsGeolocation" value="[% Koha.Preference('UsageStatsGeolocation') | html %]" type="text" value="[% Koha.Preference('UsageStatsLibrariesInfo') | html %]" size="35" readonly="readonly" />
-                            <a href="#" class="change_geolocation" data-branchname="" data-id="UsageStatsGeolocation"><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation" style="max-height: 2em;" /></a>
+                            <input
+                                id="UsageStatsGeolocation"
+                                name="UsageStatsGeolocation"
+                                value="[% Koha.Preference('UsageStatsGeolocation') | html %]"
+                                type="text"
+                                value="[% Koha.Preference('UsageStatsLibrariesInfo') | html %]"
+                                size="35"
+                                readonly="readonly"
+                            />
+                            <a href="#" class="change_geolocation" data-branchname="" data-id="UsageStatsGeolocation"
+                                ><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation" style="max-height: 2em;"
+                            /></a>
                         </li>
                         <li>
                             <label for="UsageStatsLibrariesInfo">Libraries informations: </label>
@@ -203,22 +213,24 @@
 
                         <li id="libraries_info">
                             <fieldset class="rows">
-                            <legend>Libraries</legend>
-                            <ol>
-                                [% FOR l IN libraries %]
-                                <li>
-                                    <label for="[% l.branchcode | html %]">[% l.branchname | html %]: </label>
-                                    <div style="float:left;">
-                                        <div>Country: [% l.branchcountry | html %]</div>
-                                        <div>Url: [% l.branchurl | html %]</div>
-                                        <div>
-                                            Geolocation: <input type="text" id="geolocation_[% l.branchcode | html %]" name="geolocation_[% l.branchcode | html %]" value="[% l.geolocation | html %]" size="35" readonly="readonly" />
-                                            <a href="#" class="change_geolocation" data-branchname="[% l.branchname | html %]" data-id="geolocation_[% l.branchcode | html %]"><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation for [% l.branchname | html %]" style="max-height: 2em;" /></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                [% END %]
-                            </ol>
+                                <legend>Libraries</legend>
+                                <ol>
+                                    [% FOR l IN libraries %]
+                                        <li>
+                                            <label for="[% l.branchcode | html %]">[% l.branchname | html %]: </label>
+                                            <div style="float:left;">
+                                                <div>Country: [% l.branchcountry | html %]</div>
+                                                <div>Url: [% l.branchurl | html %]</div>
+                                                <div>
+                                                    Geolocation: <input type="text" id="geolocation_[% l.branchcode | html %]" name="geolocation_[% l.branchcode | html %]" value="[% l.geolocation | html %]" size="35" readonly="readonly" />
+                                                    <a href="#" class="change_geolocation" data-branchname="[% l.branchname | html %]" data-id="geolocation_[% l.branchcode | html %]"
+                                                        ><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation for [% l.branchname | html %]" style="max-height: 2em;"
+                                                    /></a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    [% END %]
+                                </ol>
                             </fieldset>
                         </li>
                         <li>
@@ -230,7 +242,6 @@
                                 You do not have anything public yet.
                             [% END %]
                         </li>
-
                     </ol>
                 </fieldset>
             </div>
@@ -239,7 +250,6 @@
                     <div id="mapid" style="width:100%;height: 400px;"></div>
                 </div>
             </div>
-
         </div>
 
         <fieldset class="action">
@@ -248,7 +258,6 @@
             <a class="cancel" href="/cgi-bin/koha/admin/usage_statistics.pl">Cancel</a>
         </fieldset>
     </form>
-
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -357,7 +366,6 @@
             else $("#libraries_info").hide();
             positionMap();
         });
-
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

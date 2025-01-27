@@ -51,23 +51,23 @@ sub process_request {
     my $result;
     $mana_request->content_type('application/json');
     my $userAgent = LWP::UserAgent->new;
-    if ( $mana_request->method eq "POST" ){
+    if ( $mana_request->method eq "POST" ) {
         my $content;
-        if ($mana_request->content) {$content = from_json( $mana_request->content )};
+        if ( $mana_request->content ) { $content = from_json( $mana_request->content ) }
         $content->{securitytoken} = C4::Context->preference("ManaToken");
         $mana_request->content( to_json($content) );
     }
 
     my $response = $userAgent->simple_request($mana_request);
-    eval { $result = from_json( $response->decoded_content, { utf8 => 1} ); };
+    eval { $result = from_json( $response->decoded_content, { utf8 => 1 } ); };
     $result->{code} = $response->code;
-    if ( $@ ){
+    if ($@) {
         $result->{msg} = $@;
     }
-    if ($response->is_error){
+    if ( $response->is_error ) {
         $result->{msg} = "An error occurred, mana server returned: " . $response->message;
     }
-    return $result ;
+    return $result;
 }
 
 =head2 increment_entity_value
@@ -80,7 +80,7 @@ of Koha instances using a specific entity.
 =cut
 
 sub increment_entity_value {
-    return process_request(build_request('increment', @_));
+    return process_request( build_request( 'increment', @_ ) );
 }
 
 =head2 send_entity
@@ -92,14 +92,14 @@ Share a Koha entity (i.e subscription or report) to Mana KB.
 =cut
 
 sub send_entity {
-    my ($lang, $loggedinuser, $resourceid, $resourcetype) = @_;
+    my ( $lang, $loggedinuser, $resourceid, $resourcetype ) = @_;
 
-    my $content = prepare_entity_data($lang, $loggedinuser, $resourceid, $resourcetype);
+    my $content = prepare_entity_data( $lang, $loggedinuser, $resourceid, $resourcetype );
 
-    my $result = process_request(build_request('post', $resourcetype, $content));
+    my $result = process_request( build_request( 'post', $resourcetype, $content ) );
 
-    if ( $result and ($result->{code} eq "200" or $result->{code} eq "201") ) {
-        my $packages = "Koha::".ucfirst($resourcetype)."s";
+    if ( $result and ( $result->{code} eq "200" or $result->{code} eq "201" ) ) {
+        my $packages = "Koha::" . ucfirst($resourcetype) . "s";
         my $resource = $packages->find($resourceid);
         eval { $resource->set( { mana_id => $result->{id} } )->store };
     }
@@ -115,10 +115,14 @@ Send a comment about a Mana entity.
 =cut
 
 sub comment_entity {
-    my ($resourceid, $resourcetype, $comment) = @_;
+    my ( $resourceid, $resourcetype, $comment ) = @_;
 
-    my $result = process_request(build_request('post', 'resource_comment',
-            { resource_id => $resourceid, resource_type => $resourcetype, message => $comment }));
+    my $result = process_request(
+        build_request(
+            'post', 'resource_comment',
+            { resource_id => $resourceid, resource_type => $resourcetype, message => $comment }
+        )
+    );
 
     return $result;
 }
@@ -132,17 +136,17 @@ Prepare Koha entity data to be sent to Mana KB.
 =cut
 
 sub prepare_entity_data {
-    my ($lang, $loggedinuser, $ressourceid, $ressourcetype) = @_;
+    my ( $lang, $loggedinuser, $ressourceid, $ressourcetype ) = @_;
     $lang ||= C4::Context->preference('StaffInterfaceLanguages');
 
     my $mana_email;
     if ( $loggedinuser ne 0 ) {
         my $borrower = Koha::Patrons->find($loggedinuser);
         $mana_email = $borrower->first_valid_email_address
-            || Koha::Libraries->find( C4::Context->userenv->{'branch'} )->branchemail
+            || Koha::Libraries->find( C4::Context->userenv->{'branch'} )->branchemail;
     }
     $mana_email = C4::Context->preference('KohaAdminEmailAddress')
-      if ( ( not defined($mana_email) ) or ( $mana_email eq '' ) );
+        if ( ( not defined($mana_email) ) or ( $mana_email eq '' ) );
 
     my %versions = C4::Context::get_versions();
 
@@ -153,8 +157,8 @@ sub prepare_entity_data {
     };
 
     my $ressource_mana_info;
-    my $packages = "Koha::".ucfirst($ressourcetype)."s";
-    my $package = "Koha::".ucfirst($ressourcetype);
+    my $packages = "Koha::" . ucfirst($ressourcetype) . "s";
+    my $package  = "Koha::" . ucfirst($ressourcetype);
     $ressource_mana_info = $package->get_sharable_info($ressourceid);
     $ressource_mana_info = { %$ressource_mana_info, %$mana_info };
 
@@ -171,7 +175,7 @@ embed all user reviews.
 =cut
 
 sub get_entity_by_id {
-    return process_request(build_request('getwithid', @_));
+    return process_request( build_request( 'getwithid', @_ ) );
 }
 
 =head2 search_entities
@@ -184,7 +188,7 @@ Search entities on ManaKB.
 =cut
 
 sub search_entities {
-    return process_request(build_request('get', @_));
+    return process_request( build_request( 'get', @_ ) );
 }
 
 =head2 build_request
@@ -196,7 +200,7 @@ Create a HTTP::Request object to be passed to process_request.
 =cut
 
 sub build_request {
-    my $type = shift;
+    my $type     = shift;
     my $resource = shift;
     my $mana_url = get_sharing_url();
 
@@ -210,7 +214,7 @@ sub build_request {
     }
 
     if ( $type eq 'getwithid' ) {
-        my $id = shift;
+        my $id     = shift;
         my $params = shift;
         $params = join '&',
             map { defined $params->{$_} && $params->{$_} ne '' ? $_ . "=" . $params->{$_} : () }
@@ -221,9 +225,9 @@ sub build_request {
     }
 
     if ( $type eq 'post' ) {
-        my $content  = shift;
+        my $content = shift;
 
-        my $url = "$mana_url/$resource.json";
+        my $url     = "$mana_url/$resource.json";
         my $request = HTTP::Request->new( POST => $url );
 
         my $json = to_json( $content, { utf8 => 1 } );
@@ -233,18 +237,18 @@ sub build_request {
     }
 
     if ( $type eq 'increment' ) {
-        my $id       = shift;
-        my $field    = shift;
-        my $step     = shift;
+        my $id    = shift;
+        my $field = shift;
+        my $step  = shift;
         my $param;
 
-        $param->{step} = $step || 1;
-        $param->{id} = $id;
+        $param->{step}     = $step || 1;
+        $param->{id}       = $id;
         $param->{resource} = $resource;
-        $param = join '&',
-           map { defined $param->{$_} ? $_ . "=" . $param->{$_} : () }
-               keys %$param;
-        my $url = "$mana_url/$resource/$id.json/increment/$field?$param";
+        $param             = join '&',
+            map { defined $param->{$_} ? $_ . "=" . $param->{$_} : () }
+            keys %$param;
+        my $url     = "$mana_url/$resource/$id.json/increment/$field?$param";
         my $request = HTTP::Request->new( POST => $url );
 
     }

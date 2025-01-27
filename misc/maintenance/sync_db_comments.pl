@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use C4::Context;
 use Koha::Database::Commenter;
@@ -30,39 +30,42 @@ sub alert_dry_run { print "-- DRY RUN\n" if $_[0]->{dry_run}; }
 
 my $cmd_args = {};
 GetOptions(
-  'clear'      => \$cmd_args->{clear},
-  'commit|c'   => \$cmd_args->{commit},
-  'database:s' => \$cmd_args->{database},
-  'help|h'     => \$cmd_args->{help},
-  'renumber'   => \$cmd_args->{renumber},
-  'reset'      => \$cmd_args->{reset},
-  'schema:s'   => \$cmd_args->{schema_file},
-  'table:s'    => \$cmd_args->{table},
-  'verbose|v'  => \$cmd_args->{verbose},
+    'clear'      => \$cmd_args->{clear},
+    'commit|c'   => \$cmd_args->{commit},
+    'database:s' => \$cmd_args->{database},
+    'help|h'     => \$cmd_args->{help},
+    'renumber'   => \$cmd_args->{renumber},
+    'reset'      => \$cmd_args->{reset},
+    'schema:s'   => \$cmd_args->{schema_file},
+    'table:s'    => \$cmd_args->{table},
+    'verbose|v'  => \$cmd_args->{verbose},
 );
 $cmd_args->{dry_run} = !$cmd_args->{commit};
 
-my $commenter = Koha::Database::Commenter->new({
-    database => delete $cmd_args->{database}, dbh => C4::Context->dbh, schema_file => delete $cmd_args->{schema_file},
-});
+my $commenter = Koha::Database::Commenter->new(
+    {
+        database    => delete $cmd_args->{database}, dbh => C4::Context->dbh,
+        schema_file => delete $cmd_args->{schema_file},
+    }
+);
 my $messages = $cmd_args->{verbose} || $cmd_args->{dry_run} ? [] : undef;
-if( $cmd_args->{help} ) {
+if ( $cmd_args->{help} ) {
     pod2usage( -verbose => 2 );
-} elsif( ($cmd_args->{clear}||0) + ($cmd_args->{renumber}||0) + ($cmd_args->{reset}||0) > 1 ) {
+} elsif ( ( $cmd_args->{clear} || 0 ) + ( $cmd_args->{renumber} || 0 ) + ( $cmd_args->{reset} || 0 ) > 1 ) {
     print "You cannot pass the clear, renumber and reset flags together\n";
-} elsif( delete $cmd_args->{clear} ) {
-    alert_dry_run( $cmd_args );
+} elsif ( delete $cmd_args->{clear} ) {
+    alert_dry_run($cmd_args);
     $commenter->clear( $cmd_args, $messages );
-} elsif( delete $cmd_args->{reset} ) {
-    alert_dry_run( $cmd_args );
+} elsif ( delete $cmd_args->{reset} ) {
+    alert_dry_run($cmd_args);
     $commenter->reset_to_schema( $cmd_args, $messages );
-} elsif( delete $cmd_args->{renumber} ) {
-    alert_dry_run( $cmd_args );
+} elsif ( delete $cmd_args->{renumber} ) {
+    alert_dry_run($cmd_args);
     $commenter->renumber( $cmd_args, $messages );
 } else {
     pod2usage( -verbose => 1 );
 }
-print join("\n", @$messages), "\n" if $messages && @$messages;
+print join( "\n", @$messages ), "\n" if $messages && @$messages;
 
 __END__
 

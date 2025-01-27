@@ -19,7 +19,6 @@ package Koha::AudioAlerts;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::AudioAlert;
@@ -95,19 +94,16 @@ sub move {
             $other->precedence( $alert->precedence() )->store();
             $alert->precedence( $alert->precedence() - 1 )->store();
         }
-    }
-    elsif ( $where eq 'down' ) {
+    } elsif ( $where eq 'down' ) {
         unless ( $alert->precedence() == $self->get_last_precedence() ) {
             my $other = $self->search( { precedence => $alert->precedence() + 1 } )->next;
             $other->precedence( $alert->precedence() )->store();
             $alert->precedence( $alert->precedence() + 1 )->store();
         }
-    }
-    elsif ( $where eq 'top' ) {
+    } elsif ( $where eq 'top' ) {
         $alert->precedence(0)->store();
         $self->fix_precedences();
-    }
-    elsif ( $where eq 'bottom' ) {
+    } elsif ( $where eq 'bottom' ) {
         $alert->precedence( $self->get_next_precedence() )->store();
         $self->fix_precedences();
     }

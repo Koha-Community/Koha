@@ -23,9 +23,9 @@ use utf8;
 
 use Carp qw( carp );
 use DateTime;
-use Encode qw( from_to );
-use English qw{ -no_match_vars };
-use File::Copy qw( copy move );
+use Encode      qw( from_to );
+use English     qw{ -no_match_vars };
+use File::Copy  qw( copy move );
 use File::Slurp qw( read_file );
 use Net::FTP;
 use Net::SFTP::Foreign;
@@ -40,9 +40,9 @@ sub new {
     my $schema   = $database->schema();
     my $acct     = $schema->resultset('VendorEdiAccount')->find($account_id);
     my $self     = {
-        account     => $acct,
-        schema      => $schema,
-        working_dir => C4::Context::temporary_directory,    #temporary work directory
+        account       => $acct,
+        schema        => $schema,
+        working_dir   => C4::Context::temporary_directory,    #temporary work directory
         transfer_date => dt_from_string(),
     };
 
@@ -66,11 +66,9 @@ sub download_messages {
 
     if ( $self->{account}->transport eq 'SFTP' ) {
         @retrieved_files = $self->sftp_download();
-    }
-    elsif ( $self->{account}->transport eq 'FILE' ) {
+    } elsif ( $self->{account}->transport eq 'FILE' ) {
         @retrieved_files = $self->file_download();
-    }
-    else {    # assume FTP
+    } else {    # assume FTP
         @retrieved_files = $self->ftp_download();
     }
     return @retrieved_files;
@@ -81,11 +79,9 @@ sub upload_messages {
     if (@messages) {
         if ( $self->{account}->transport eq 'SFTP' ) {
             $self->sftp_upload(@messages);
-        }
-        elsif ( $self->{account}->transport eq 'FILE' ) {
+        } elsif ( $self->{account}->transport eq 'FILE' ) {
             $self->file_upload(@messages);
-        }
-        else {    # assume FTP
+        } else {    # assume FTP
             $self->ftp_upload(@messages);
         }
     }
@@ -98,8 +94,8 @@ sub file_download {
 
     my $file_ext = _get_file_ext( $self->{message_type} );
 
-    my $dir = $self->{account}->download_directory;   # makes code more readable
-         # C = ready to retrieve E = Edifact
+    my $dir      = $self->{account}->download_directory;    # makes code more readable
+                                                            # C = ready to retrieve E = Edifact
     my $msg_hash = $self->message_hash();
     if ( opendir my $dh, $dir ) {
         my @file_list = readdir $dh;
@@ -108,8 +104,7 @@ sub file_download {
 
             if ( $filename =~ m/[.]$file_ext$/ ) {
                 if ( copy( "$dir/$filename", $self->{working_dir} ) ) {
-                }
-                else {
+                } else {
                     carp "copy of $filename failed";
                     next;
                 }
@@ -120,8 +115,7 @@ sub file_download {
             }
         }
         $self->ingest( $msg_hash, @downloaded_files );
-    }
-    else {
+    } else {
         carp "Cannot open $dir";
         return;
     }
@@ -140,28 +134,36 @@ sub sftp_download {
     my $sftp = Net::SFTP::Foreign->new(
         host     => $self->{account}->host,
         user     => $self->{account}->username,
-        password => Koha::Encryption->new->decrypt_hex($self->{account}->password),
+        password => Koha::Encryption->new->decrypt_hex( $self->{account}->password ),
         port     => $port,
         timeout  => 10,
     );
     if ( $sftp->error ) {
-        return $self->_abort_download( undef,
-            'Unable to connect to remote host: ' . $sftp->error );
+        return $self->_abort_download(
+            undef,
+            'Unable to connect to remote host: ' . $sftp->error
+        );
     }
     $sftp->setcwd( $self->{account}->download_directory )
-      or return $self->_abort_download( $sftp,
-        "Cannot change remote dir: " . $sftp->error );
+        or return $self->_abort_download(
+        $sftp,
+        "Cannot change remote dir: " . $sftp->error
+        );
     my $file_list = $sftp->ls()
-      or return $self->_abort_download( $sftp,
-        "cannot get file list from server: " . $sftp->error );
+        or return $self->_abort_download(
+        $sftp,
+        "cannot get file list from server: " . $sftp->error
+        );
     foreach my $file ( @{$file_list} ) {
         my $filename = $file->{filename};
 
         if ( $filename =~ m/[.]$file_ext$/ ) {
             $sftp->get( $filename, "$self->{working_dir}/$filename" );
             if ( $sftp->error ) {
-                $self->_abort_download( $sftp,
-                    "Error retrieving $filename: " . $sftp->error );
+                $self->_abort_download(
+                    $sftp,
+                    "Error retrieving $filename: " . $sftp->error
+                );
                 last;
             }
             push @downloaded_files, $filename;
@@ -171,8 +173,10 @@ sub sftp_download {
             #$sftp->atomic_rename( $filename, $processed_name );
             my $ret = $sftp->rename( $filename, $processed_name );
             if ( !$ret ) {
-                $self->_abort_download( $sftp,
-                    "Error renaming $filename: " . $sftp->error );
+                $self->_abort_download(
+                    $sftp,
+                    "Error renaming $filename: " . $sftp->error
+                );
                 last;
             }
 
@@ -189,16 +193,14 @@ sub ingest {
     foreach my $f (@downloaded_files) {
 
         # Check file has not been downloaded already
-        my $existing_file = $self->{schema}->resultset('EdifactMessage')
-          ->find( { filename => $f, } );
+        my $existing_file = $self->{schema}->resultset('EdifactMessage')->find( { filename => $f, } );
         if ($existing_file) {
             carp "skipping ingest of $f : filename exists";
             next;
         }
 
         $msg_hash->{filename} = $f;
-        my $file_content =
-          read_file( "$self->{working_dir}/$f", binmode => ':raw' );
+        my $file_content = read_file( "$self->{working_dir}/$f", binmode => ':raw' );
         if ( !defined $file_content ) {
             carp "Unable to read download file $f";
             next;
@@ -230,22 +232,25 @@ sub ftp_download {
         undef,
         "Cannot connect to $self->{account}->host: $EVAL_ERROR"
         );
-    $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
-      or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
+    $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex( $self->{account}->password ) )
+        or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->download_directory )
-      or return $self->_abort_download( $ftp,
-        "Cannot change remote dir : $ftp->message()" );
+        or return $self->_abort_download(
+        $ftp,
+        "Cannot change remote dir : $ftp->message()"
+        );
     my $file_list = $ftp->ls()
-      or
-      return $self->_abort_download( $ftp, 'cannot get file list from server' );
+        or return $self->_abort_download( $ftp, 'cannot get file list from server' );
 
     foreach my $filename ( @{$file_list} ) {
 
         if ( $filename =~ m/[.]$file_ext$/ ) {
 
             if ( !$ftp->get( $filename, "$self->{working_dir}/$filename" ) ) {
-                $self->_abort_download( $ftp,
-                    "Error retrieving $filename: $ftp->message" );
+                $self->_abort_download(
+                    $ftp,
+                    "Error retrieving $filename: $ftp->message"
+                );
                 last;
             }
 
@@ -275,11 +280,13 @@ sub ftp_upload {
         undef,
         "Cannot connect to $self->{account}->host: $EVAL_ERROR"
         );
-    $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
-      or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
+    $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex( $self->{account}->password ) )
+        or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->upload_directory )
-      or return $self->_abort_download( $ftp,
-        "Cannot change remote dir : $ftp->message()" );
+        or return $self->_abort_download(
+        $ftp,
+        "Cannot change remote dir : $ftp->message()"
+        );
     foreach my $m (@messages) {
         my $content = $m->raw_msg;
         if ($content) {
@@ -289,8 +296,8 @@ sub ftp_upload {
                 $m->transfer_date( $self->{transfer_date} );
                 $m->status('sent');
                 $m->update;
-            }
-            else {
+            } else {
+
                 # error in transfer
 
             }
@@ -307,14 +314,16 @@ sub sftp_upload {
     my $sftp = Net::SFTP::Foreign->new(
         host     => $self->{account}->host,
         user     => $self->{account}->username,
-        password => Koha::Encryption->new->decrypt_hex($self->{account}->password),
+        password => Koha::Encryption->new->decrypt_hex( $self->{account}->password ),
         port     => $port,
         timeout  => 10,
     );
     $sftp->die_on_error("Cannot ssh to $self->{account}->host");
     $sftp->setcwd( $self->{account}->upload_directory )
-      or return $self->_abort_download( $sftp,
-        "Cannot change remote dir : " . $sftp->error );
+        or return $self->_abort_download(
+        $sftp,
+        "Cannot change remote dir : " . $sftp->error
+        );
     foreach my $m (@messages) {
         my $content = $m->raw_msg;
         if ($content) {
@@ -324,8 +333,8 @@ sub sftp_upload {
                 $m->transfer_date( $self->{transfer_date} );
                 $m->status('sent');
                 $m->update;
-            }
-            else {
+            } else {
+
                 # error in transfer
 
             }
@@ -351,15 +360,13 @@ sub file_upload {
                     $m->transfer_date( $self->{transfer_date} );
                     $m->status('sent');
                     $m->update;
-                }
-                else {
+                } else {
                     carp "Could not transfer $m->filename : $ERRNO";
                     next;
                 }
             }
         }
-    }
-    else {
+    } else {
         carp "Upload directory $dir does not exist";
     }
     return;

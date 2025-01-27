@@ -58,8 +58,11 @@ subtest 'get() tests' => sub {
     $patron->discard_changes;
     my $userid = $patron->userid;
 
-    my $authority = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
-      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+    my $authority = $builder->build_object(
+        {
+            'class' => 'Koha::Authorities',
+            value   => {
+                marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
     <datafield tag="110" ind1=" " ind2=" ">
@@ -67,48 +70,43 @@ subtest 'get() tests' => sub {
         <subfield code="a">My Corporation</subfield>
     </datafield>
 </record>|
-    } });
+            }
+        }
+    );
 
-    $t->get_ok("//$userid:$password@/api/v1/authorities/" . $authority->id)
-      ->status_is(403);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id )->status_is(403);
 
     $patron->flags(4)->store;
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                => { Accept => 'application/weird+format' } )
-      ->status_is(400);
+    $t->get_ok(
+        "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'application/weird+format' } )
+        ->status_is(400);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                 => { Accept => 'application/json' } )
-      ->status_is(200)
-      ->json_is( '/authority_id', $authority->id )
-      ->json_is( '/framework_id', $authority->authtypecode );
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'application/json' } )
+        ->status_is(200)->json_is( '/authority_id', $authority->id )
+        ->json_is( '/framework_id', $authority->authtypecode );
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                 => { Accept => 'application/marcxml+xml' } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'application/marcxml+xml' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                 => { Accept => 'application/marc-in-json' } )
-      ->status_is(200);
+    $t->get_ok(
+        "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'application/marc-in-json' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                 => { Accept => 'application/marc' } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'application/marc' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                 => { Accept => 'text/plain' } )
-      ->status_is(200)
-      ->content_is(q|LDR 00079     2200049   4500
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'text/plain' } )
+        ->status_is(200)->content_is(
+        q|LDR 00079     2200049   4500
 001     1001
 110    _9102
-       _aMy Corporation|);
+       _aMy Corporation|
+        );
 
     $authority->delete;
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
-                 => { Accept => 'application/marc' } )
-      ->status_is(404)
-      ->json_is( '/error', 'Authority record not found' );
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id => { Accept => 'application/marc' } )
+        ->status_is(404)->json_is( '/error', 'Authority record not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -122,15 +120,18 @@ subtest 'delete() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 0 } # no permissions
+            value => { flags => 0 }     # no permissions
         }
     );
     my $password = 'thePassword123';
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    my $authority = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
-      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+    my $authority = $builder->build_object(
+        {
+            'class' => 'Koha::Authorities',
+            value   => {
+                marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
     <datafield tag="110" ind1=" " ind2=" ">
@@ -138,19 +139,19 @@ subtest 'delete() tests' => sub {
         <subfield code="a">My Corporation</subfield>
     </datafield>
 </record>|
-    } });
+            }
+        }
+    );
 
-    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
-      ->status_is(403, 'Not enough permissions makes it return the right code');
+    $t->delete_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id )
+        ->status_is( 403, 'Not enough permissions makes it return the right code' );
 
-    $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
+    $patron->flags( 2**14 )->store;    # 14 => editauthorities userflag
 
-    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
-      ->status_is(204, 'REST3.2.4')
-      ->content_is('', 'REST3.3.4');
+    $t->delete_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id )->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
-    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
-      ->status_is(404);
+    $t->delete_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id )->status_is(404);
 
     $schema->storage->txn_rollback;
 };
@@ -167,7 +168,7 @@ subtest 'post() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 0 } # no permissions
+            value => { flags => 0 }     # no permissions
         }
     );
     my $password = 'thePassword123';
@@ -183,50 +184,55 @@ subtest 'post() tests' => sub {
     </datafield>
 </record>|;
 
-    my $mij = '{"fields":[{"001":"1001"},{"110":{"subfields":[{"9":"102"},{"a":"My Corporation"}],"ind1":" ","ind2":" "}}],"leader":"                        "}';
+    my $mij =
+        '{"fields":[{"001":"1001"},{"110":{"subfields":[{"9":"102"},{"a":"My Corporation"}],"ind1":" ","ind2":" "}}],"leader":"                        "}';
     my $marc = '00079     2200049   45000010005000001100024000051001  9102aMy Corporation';
     my $json = {
-      authtypecode => "CORPO_NAME",
-      marcxml      => $marcxml
+        authtypecode => "CORPO_NAME",
+        marcxml      => $marcxml
     };
 
     $t->post_ok("//$userid:$password@/api/v1/authorities")
-      ->status_is(403, 'Not enough permissions makes it return the right code');
+        ->status_is( 403, 'Not enough permissions makes it return the right code' );
 
     # Add permissions
-    $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
+    $patron->flags( 2**14 )->store;    # 14 => editauthorities userflag
 
     # x-koha-override passed to make sure it goes through
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'any' } => $marcxml)
-      ->status_is(201)
-      ->json_is(q{})
-      ->header_like(
-          Location => qr|^\/api\/v1\/authorities/\d*|,
-          'REST3.4.1'
-      );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'any'
+        } => $marcxml
+    )->status_is(201)->json_is(q{})->header_like(
+        Location => qr|^\/api\/v1\/authorities/\d*|,
+        'REST3.4.1'
+    );
 
     # x-koha-override not passed to force block because duplicate
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME' } => $mij)
-      ->status_is(409)
-      ->header_exists_not( 'Location', 'Location header is only set when the new resource is created' )
-      ->json_like( '/error' => qr/Duplicate record (\d*)/ )
-      ->json_is( '/error_code' => q{duplicate} );
+    $t->post_ok( "//$userid:$password@/api/v1/authorities" =>
+            { 'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME' } => $mij )
+        ->status_is(409)
+        ->header_exists_not( 'Location', 'Location header is only set when the new resource is created' )
+        ->json_like( '/error' => qr/Duplicate record (\d*)/ )->json_is( '/error_code' => q{duplicate} );
 
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'duplicate' } => $mij)
-      ->status_is(201)
-      ->json_is(q{})
-      ->header_like(
-          Location => qr|^\/api\/v1\/authorities/\d*|,
-          'REST3.4.1'
-      );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'    => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME',
+            'x-koha-override' => 'duplicate'
+        } => $mij
+    )->status_is(201)->json_is(q{})->header_like(
+        Location => qr|^\/api\/v1\/authorities/\d*|,
+        'REST3.4.1'
+    );
 
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'duplicate' } => $marc)
-      ->status_is(201)
-      ->json_is(q{})
-      ->header_like(
-          Location => qr|^\/api\/v1\/authorities/\d*|,
-          'REST3.4.1'
-      );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type' => 'application/marc', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'duplicate'
+        } => $marc
+    )->status_is(201)->json_is(q{})->header_like(
+        Location => qr|^\/api\/v1\/authorities/\d*|,
+        'REST3.4.1'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -245,7 +251,7 @@ subtest 'put() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 0 } # no permissions
+            value => { flags => 0 }     # no permissions
         }
     );
     my $password = 'thePassword123';
@@ -289,49 +295,48 @@ subtest 'put() tests' => sub {
     </datafield>
 </record>|;
 
-    my $mij = '{"fields":[{"001":"1001"},{"110":{"subfields":[{"9":"102"},{"a":"MIJ"}],"ind1":" ","ind2":" "}}],"leader":"                        "}';
+    my $mij =
+        '{"fields":[{"001":"1001"},{"110":{"subfields":[{"9":"102"},{"a":"MIJ"}],"ind1":" ","ind2":" "}}],"leader":"                        "}';
     my $marc = '00079     2200049   45000010005000001100024000051001  9102aUSMARCFormated';
 
     $t->put_ok("//$userid:$password@/api/v1/authorities/$authid")
-      ->status_is(403, 'Not enough permissions makes it return the right code');
+        ->status_is( 403, 'Not enough permissions makes it return the right code' );
 
     # Add permissions
-    $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
+    $patron->flags( 2**14 )->store;    # 14 => editauthorities userflag
 
-    $t->put_ok("//$userid:$password@/api/v1/authorities/$authid" => {'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => $authtypecode} => $marcxml)
-      ->status_is(200)
-      ->json_has('/id');
+    $t->put_ok( "//$userid:$password@/api/v1/authorities/$authid" =>
+            { 'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => $authtypecode } => $marcxml )
+        ->status_is(200)->json_has('/id');
 
-    $authority = Koha::Authorities->find($authid);
-    $record = $authority->record;
-    $subfield_a = $record->subfield('110', 'a');
+    $authority  = Koha::Authorities->find($authid);
+    $record     = $authority->record;
+    $subfield_a = $record->subfield( '110', 'a' );
 
-    is($subfield_a, 'MARCXML');
+    is( $subfield_a, 'MARCXML' );
 
-    $t->put_ok("//$userid:$password@/api/v1/authorities/$authid" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => $authtypecode} => $mij)
-      ->status_is(200)
-      ->json_has('/id');
+    $t->put_ok( "//$userid:$password@/api/v1/authorities/$authid" =>
+            { 'Content-Type' => 'application/marc-in-json', 'x-authority-type' => $authtypecode } => $mij )
+        ->status_is(200)->json_has('/id');
 
-    $authority = Koha::Authorities->find($authid);
-    $record = $authority->record;
-    $subfield_a = $record->subfield('110', 'a');
+    $authority  = Koha::Authorities->find($authid);
+    $record     = $authority->record;
+    $subfield_a = $record->subfield( '110', 'a' );
 
-    is($subfield_a, 'MIJ');
+    is( $subfield_a, 'MIJ' );
 
-    $t->put_ok("//$userid:$password@/api/v1/authorities/$authid" => {'Content-Type' => 'application/marc', 'x-authority-type' => $authtypecode} => $marc)
-      ->status_is(200)
-      ->json_has('/id');
+    $t->put_ok( "//$userid:$password@/api/v1/authorities/$authid" =>
+            { 'Content-Type' => 'application/marc', 'x-authority-type' => $authtypecode } => $marc )->status_is(200)
+        ->json_has('/id');
 
-    $authority = Koha::Authorities->find($authid);
-    $record = $authority->record;
-    $subfield_a = $record->subfield('110', 'a');
+    $authority  = Koha::Authorities->find($authid);
+    $record     = $authority->record;
+    $subfield_a = $record->subfield( '110', 'a' );
 
-    is($subfield_a, 'USMARCFormated');
+    is( $subfield_a, 'USMARCFormated' );
 
     $schema->storage->txn_rollback;
 };
-
-
 
 subtest 'list() tests' => sub {
     plan tests => 14;
@@ -349,8 +354,11 @@ subtest 'list() tests' => sub {
     $patron->discard_changes;
     my $userid = $patron->userid;
 
-    my $auth_id_1 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
-      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+    my $auth_id_1 = $builder->build_object(
+        {
+            'class' => 'Koha::Authorities',
+            value   => {
+                marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
     <datafield tag="110" ind1=" " ind2=" ">
@@ -358,10 +366,15 @@ subtest 'list() tests' => sub {
         <subfield code="a">My Corporation</subfield>
     </datafield>
 </record>|
-    } })->authid;
+            }
+        }
+    )->authid;
 
-    my $auth_id_2 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
-      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+    my $auth_id_2 = $builder->build_object(
+        {
+            'class' => 'Koha::Authorities',
+            value   => {
+                marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
     <datafield tag="110" ind1=" " ind2=" ">
@@ -369,7 +382,9 @@ subtest 'list() tests' => sub {
         <subfield code="a">My Corporation</subfield>
     </datafield>
 </record>|
-    } })->authid;
+            }
+        }
+    )->authid;
 
     my $query = encode_json( [ { authority_id => $auth_id_1 }, { authority_id => $auth_id_2 } ] );
 

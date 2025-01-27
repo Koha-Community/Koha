@@ -11,7 +11,6 @@
                 <th>Date</th>
             </tr>
         </thead>
-        <tbody id="[% service.id | html %]-body">
-        </tbody>
+        <tbody id="[% service.id | html %]-body"> </tbody>
     </table>
 </div>

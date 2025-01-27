@@ -30,22 +30,27 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
-my $nb_of_budgets= Koha::Acquisition::Budgets->search->count;
-my $now = dt_from_string;
-my $new_budget = Koha::Acquisition::Budget->new({
-    budget_period_startdate => $now,
-    budget_period_enddate => $now,
-    budget_period_active => 1,
-    budget_period_description => 'a new budget',
-    budget_period_total => 1000,
-})->store;
+my $builder       = t::lib::TestBuilder->new;
+my $nb_of_budgets = Koha::Acquisition::Budgets->search->count;
+my $now           = dt_from_string;
+my $new_budget    = Koha::Acquisition::Budget->new(
+    {
+        budget_period_startdate   => $now,
+        budget_period_enddate     => $now,
+        budget_period_active      => 1,
+        budget_period_description => 'a new budget',
+        budget_period_total       => 1000,
+    }
+)->store;
 
-like( $new_budget->budget_period_id, qr|^\d+$|, 'Adding a new budget should have set the budget_period_id');
+like( $new_budget->budget_period_id, qr|^\d+$|, 'Adding a new budget should have set the budget_period_id' );
 is( Koha::Acquisition::Budgets->search->count, $nb_of_budgets + 1, 'The budget should have been added' );
 
-my $retrieved_budget = Koha::Acquisition::Budgets->find( $new_budget->budget_period_id);
-is( $retrieved_budget->budget_period_description, $new_budget->budget_period_description, 'Find a budget by budget_period_id should return the correct budget' );
+my $retrieved_budget = Koha::Acquisition::Budgets->find( $new_budget->budget_period_id );
+is(
+    $retrieved_budget->budget_period_description, $new_budget->budget_period_description,
+    'Find a budget by budget_period_id should return the correct budget'
+);
 
 $retrieved_budget->delete;
 is( Koha::Acquisition::Budgets->search->count, $nb_of_budgets, 'Delete should have deleted the budget' );

@@ -43,8 +43,7 @@ sub list {
             status  => 200,
             openapi => $filters
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -57,7 +56,7 @@ Controller function that handles retrieving a single Koha::AdvancedEditorMacro
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c      = shift->openapi->valid_input or return;
     my $filter = Koha::SearchFilters->find( $c->param('search_filter_id') );
 
     return $c->render_resource_not_found("Search filter")
@@ -83,8 +82,7 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($filter),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
@@ -113,8 +111,7 @@ sub update {
         $filter->set_from_api( $c->req->json );
         $filter->store->discard_changes;
         return $c->render( status => 200, openapi => $c->objects->to_api($filter), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

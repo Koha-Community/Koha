@@ -31,62 +31,71 @@ use vars qw(@ISA);
 use vars qw($width);
 
 BEGIN {
-    @ISA = qw(C4::Barcodes);
-	$width = 4;
+    @ISA   = qw(C4::Barcodes);
+    $width = 4;
 }
 
 sub db_max {
-	my $self = shift;
-	my $query = "SELECT substring_index(barcode,'-',-1) AS chunk,barcode FROM items WHERE barcode LIKE ? ORDER BY chunk DESC LIMIT 1";
-		# FIXME: unreasonably expensive query on large datasets (I think removal of group by does this?)
-	my $sth = C4::Context->dbh->prepare($query);
-	my ($iso);
-	if (@_) {
-		my $input = shift;
-        $iso = output_pref({ dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 }); # try to set the date w/ 2nd arg
-		unless ($iso) {
-			warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
-            $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # failover back to today
-		}
-	} else {
-        $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-	}
-	my $year = substr($iso,0,4);	# YYYY
-	$sth->execute("$year-%");
-	my $row = $sth->fetchrow_hashref;
-	return $row->{barcode};
+    my $self = shift;
+    my $query =
+        "SELECT substring_index(barcode,'-',-1) AS chunk,barcode FROM items WHERE barcode LIKE ? ORDER BY chunk DESC LIMIT 1";
+
+    # FIXME: unreasonably expensive query on large datasets (I think removal of group by does this?)
+    my $sth = C4::Context->dbh->prepare($query);
+    my ($iso);
+    if (@_) {
+        my $input = shift;
+        $iso = output_pref( { dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 } )
+            ;    # try to set the date w/ 2nd arg
+        unless ($iso) {
+            warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
+            $iso = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } ); # failover back to today
+        }
+    } else {
+        $iso = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } );
+    }
+    my $year = substr( $iso, 0, 4 );    # YYYY
+    $sth->execute("$year-%");
+    my $row = $sth->fetchrow_hashref;
+    return $row->{barcode};
 }
 
 sub initial () {
-	my $self = shift;
-    return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) .'-'. sprintf('%'."$width.$width".'d', 1);
+    my $self = shift;
+    return
+        substr( output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } ), 0, 4 ) . '-'
+        . sprintf( '%' . "$width.$width" . 'd', 1 );
 }
 
 sub parse {
-	my $self = shift;
+    my $self    = shift;
     my $barcode = (@_) ? shift : $self->value;
-	unless ($barcode =~ /(\d{4}-)(\d+)$/) {    # non-greedy match in first part
-		carp "Barcode '$barcode' has no incrementing part!";
-		return ($barcode,undef,undef);
-	}
-	return ($1,$2,'');  # the third part is in anticipation of barcodes that include checkdigits
+    unless ( $barcode =~ /(\d{4}-)(\d+)$/ ) {    # non-greedy match in first part
+        carp "Barcode '$barcode' has no incrementing part!";
+        return ( $barcode, undef, undef );
+    }
+    return ( $1, $2, '' );    # the third part is in anticipation of barcodes that include checkdigits
 }
+
 sub width {
-	my $self = shift;
-	(@_) and $width = shift;	# hitting the class variable.
-	return $width;
+    my $self = shift;
+    (@_) and $width = shift;    # hitting the class variable.
+    return $width;
 }
+
 sub process_head {
-	my ($self,$head,$whole,$specific) = @_;
-	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
-    return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) . '-'; # else get new YYYY-
+    my ( $self, $head, $whole, $specific ) = @_;
+    $specific and return $head;    # if this is built off an existing barcode, just return the head unchanged.
+    return
+        substr( output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } ), 0, 4 )
+        . '-';                     # else get new YYYY-
 }
 
 sub new_object {
-	my $class = shift;
-	my $type = ref($class) || $class;
-	my $self = $type->default_self('annual');
-	return bless $self, $type;
+    my $class = shift;
+    my $type  = ref($class) || $class;
+    my $self  = $type->default_self('annual');
+    return bless $self, $type;
 }
 
 1;

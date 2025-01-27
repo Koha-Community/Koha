@@ -26,12 +26,15 @@ use Data::Dumper;
 use Test::More tests => 1;
 
 my @files;
+
 sub wanted {
     my $name = $File::Find::name;
+
     # Ignore files in .git, blib and node_modules
     return if $name =~ m[^\./(.git|blib|node_modules)];
+
     # Ignore directories
-    return if -d $name; # Skip dir
+    return if -d $name;    # Skip dir
 
     # Search for missing x in svc, xt and t
     if (   $name =~ m[^\./(svc|xt)] && $name !~ m[\./xt/(perltidyrc|fix-old-fsf-address\.exclude)]
@@ -50,5 +53,5 @@ sub wanted {
         push @files, $name if -x $name;
     }
 }
-find({ wanted => \&wanted, no_chdir => 1}, '.' );
-is(@files, 0) or diag(Dumper @files) ;
+find( { wanted => \&wanted, no_chdir => 1 }, '.' );
+is( @files, 0 ) or diag( Dumper @files );

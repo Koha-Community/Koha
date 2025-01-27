@@ -19,7 +19,6 @@ package Koha::Serial::Items;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Serial::Item;

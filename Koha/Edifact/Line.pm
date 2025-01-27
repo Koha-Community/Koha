@@ -54,34 +54,29 @@ sub _parse_lines {
     foreach my $s ( @{$aref} ) {
         if ( $s->tag eq 'PIA' ) {
             push @{ $d->{additional_product_ids} },
-              {
+                {
                 function_code => $s->elem(0),
                 item_number   => $s->elem( 1, 0 ),
                 number_type   => $s->elem( 1, 1 ),
-              };
-        }
-        elsif ( $s->tag eq 'IMD' ) {
+                };
+        } elsif ( $s->tag eq 'IMD' ) {
             push @item_description, $s;
-        }
-        elsif ( $s->tag eq 'QTY' ) {
+        } elsif ( $s->tag eq 'QTY' ) {
             if ( $s->elem( 0, 0 ) eq '47' ) {
                 $d->{quantity_invoiced} = $s->elem( 0, 1 );
             }
             $d->{quantity} = $s->elem( 0, 1 );
-        }
-        elsif ( $s->tag eq 'DTM' ) {
+        } elsif ( $s->tag eq 'DTM' ) {
             if ( $s->elem( 0, 0 ) eq '44' ) {
                 $d->{availability_date} = $s->elem( 0, 1 );
             }
-        }
-        elsif ( $s->tag eq 'GIR' ) {
+        } elsif ( $s->tag eq 'GIR' ) {
 
             # we may get a Gir for each copy if QTY > 1
             if ( !$d->{GIR} ) {
                 $d->{GIR} = [];
                 push @{ $d->{GIR} }, extract_gir($s);
-            }
-            else {
+            } else {
                 my $gir = extract_gir($s);
                 if ( $gir->{copy} ) {    # may have to merge
                     foreach my $g ( @{ $d->{GIR} } ) {
@@ -100,23 +95,19 @@ sub _parse_lines {
                     }
                 }
             }
-        }
-        elsif ( $s->tag eq 'FTX' ) {
+        } elsif ( $s->tag eq 'FTX' ) {
 
             my $type  = $s->elem(0);
             my $ctype = 'coded_free_text';
             if ( $type eq 'LNO' ) {    # Ingrams Oasis Internal Notes field
                 $type  = 'internal_notes';
                 $ctype = 'coded_internal_note';
-            }
-            elsif ( $type eq 'LIN' ) {
+            } elsif ( $type eq 'LIN' ) {
                 $type  = 'orderline_free_text';
                 $ctype = 'coded_orderline_text';
-            }
-            elsif ( $type eq 'SUB' ) {
+            } elsif ( $type eq 'SUB' ) {
                 $type = 'coded_substitute_text';
-            }
-            else {
+            } else {
                 $type = 'free_text';
             }
 
@@ -127,35 +118,28 @@ sub _parse_lines {
             }
 
             my $ftx = $s->elem(3);
-            if ( ref $ftx eq 'ARRAY' ) {   # it comes in 70 character components
+            if ( ref $ftx eq 'ARRAY' ) {    # it comes in 70 character components
                 $ftx = join q{ }, @{$ftx};
             }
-            if ( exists $d->{$type} ) {    # we can only catenate repeats
+            if ( exists $d->{$type} ) {     # we can only catenate repeats
                 $d->{$type} .= q{ };
                 $d->{$type} .= $ftx;
-            }
-            else {
+            } else {
                 $d->{$type} = $ftx;
             }
-        }
-        elsif ( $s->tag eq 'MOA' ) {
+        } elsif ( $s->tag eq 'MOA' ) {
 
             $d->{monetary_amount} = $s->elem( 0, 1 );
-        }
-        elsif ( $s->tag eq 'PRI' ) {
+        } elsif ( $s->tag eq 'PRI' ) {
 
             $d->{price} = $s->elem( 0, 1 );
-        }
-        elsif ( $s->tag eq 'RFF' ) {
+        } elsif ( $s->tag eq 'RFF' ) {
             my $qualifier = $s->elem( 0, 0 );
-            if ( $qualifier eq 'QLI' ) {  # Suppliers unique quotation reference
+            if ( $qualifier eq 'QLI' ) {    # Suppliers unique quotation reference
                 $d->{reference} = $s->elem( 0, 1 );
-            }
-            elsif ( $qualifier eq 'LI' ) {    # Buyer's unique orderline number
+            } elsif ( $qualifier eq 'LI' ) {    # Buyer's unique orderline number
                 $d->{ordernumber} = $s->elem( 0, 1 );
-            }
-            elsif ( $qualifier eq 'SLI' )
-            {    # Suppliers unique order line reference number
+            } elsif ( $qualifier eq 'SLI' ) {    # Suppliers unique order line reference number
                 $d->{orderline_reference_number} = $s->elem( 0, 1 );
             }
         }
@@ -170,7 +154,7 @@ sub _format_item_description {
     my @imd    = @_;
     my $bibrec = {};
 
- # IMD : +Type code 'L' + characteristic code 3 char + Description in comp 3 & 4
+    # IMD : +Type code 'L' + characteristic code 3 char + Description in comp 3 & 4
     foreach my $imd (@imd) {
         my $type_code = $imd->elem(0);
         my $ccode     = $imd->elem(1);
@@ -179,15 +163,13 @@ sub _format_item_description {
             $desc .= $imd->elem( 2, 4 );
         }
         if ( $type_code ne 'L' ) {
-            carp
-              "Only handles text item descriptions at present: code=$type_code";
+            carp "Only handles text item descriptions at present: code=$type_code";
             next;
         }
         if ( exists $bibrec->{$ccode} ) {
             $bibrec->{$ccode} .= q{ };
             $bibrec->{$ccode} .= $desc;
-        }
-        else {
+        } else {
             $bibrec->{$ccode} = $desc;
         }
     }
@@ -232,7 +214,7 @@ sub marc_record {
         push @fields, $f;
     }
     @spec = qw( 180 a 181 b 182 c 183 e);
-    $f = new_field( $b, [ 300, q{ }, q{ } ], @spec );
+    $f    = new_field( $b, [ 300, q{ }, q{ } ], @spec );
     if ($f) {
         push @fields, $f;
     }
@@ -307,17 +289,14 @@ sub corpcon {
         $tag = ( $level * 100 ) + 11;
         if ( $level == 1 ) {
             @spec = qw( 030 a 031 e 032 n 033 c 034 d);
-        }
-        else {
+        } else {
             @spec = qw( 040 a 041 e 042 n 043 c 044 d);
         }
-    }
-    else {
+    } else {
         $tag = ( $level * 100 ) + 10;
         if ( $level == 1 ) {
             @spec = qw( 030 a 031 b);
-        }
-        else {
+        } else {
             @spec = qw( 040 a 041 b);
         }
     }
@@ -439,8 +418,7 @@ sub coded_orderline_text {
     my $txt;
     if ( $table eq '8B' || $table eq '7B' ) {
         $txt = translate_8B($code);
-    }
-    elsif ( $table eq '12B' ) {
+    } elsif ( $table eq '12B' ) {
         $txt = translate_12B($code);
     }
     if ( !$txt || $txt eq 'no match' ) {
@@ -504,8 +482,7 @@ sub translate_8B {
 
     if ( exists $code_list_8B{$code} ) {
         return $code_list_8B{$code};
-    }
-    else {
+    } else {
         return 'no match';
     }
 }
@@ -516,11 +493,9 @@ sub translate_12B {
     my %code_list_12B = (
         100 => 'Order line accepted',
         101 => 'Price query: orderline will be held awaiting customer response',
-        102 =>
-          'Discount query: order line will be held awaiting customer response',
+        102 => 'Discount query: order line will be held awaiting customer response',
         103 => 'Minimum order value not reached: order line will be held',
-        104 =>
-'Firm order required: order line will be held awaiting customer response',
+        104 => 'Firm order required: order line will be held awaiting customer response',
         110 => 'Order line accepted, substitute product will be supplied',
         200 => 'Order line not accepted',
         201 => 'Price query: order line not accepted',
@@ -528,8 +503,7 @@ sub translate_12B {
         203 => 'Minimum order value not reached: order line not accepted',
         205 => 'Order line not accepted: quoted promotion is invalid',
         206 => 'Order line not accepted: quoted promotion has ended',
-        207 =>
-          'Order line not accepted: customer ineligible for quoted promotion',
+        207 => 'Order line not accepted: customer ineligible for quoted promotion',
         210 => 'Order line not accepted: substitute product is offered',
         220 => 'Oustanding order line cancelled: reason unspecified',
         221 => 'Oustanding order line cancelled: past order expiry date',
@@ -548,8 +522,7 @@ sub translate_12B {
         408 => 'Our supplier sent imperfect item(s), re-ordered',
         409 => 'Our supplier cannot trace order, re-ordered',
         410 => 'Ordered item(s) being processed by bookseller',
-        411 =>
-'Ordered item(s) being processed by bookseller, awaiting customer action',
+        411 => 'Ordered item(s) being processed by bookseller, awaiting customer action',
         412 => 'Order line held awaiting customer instruction',
         500 => 'Order line on hold - contact customer service',
         800 => 'Order line already despatched',
@@ -562,8 +535,7 @@ sub translate_12B {
 
     if ( exists $code_list_12B{$code} ) {
         return $code_list_12B{$code};
-    }
-    else {
+    } else {
         return 'no match';
     }
 }
@@ -649,8 +621,7 @@ sub girfield {
         }
         $occ ||= 0;
         return $self->{GIR}->[$occ]->{$field};
-    }
-    else {
+    } else {
         return;
     }
 }
@@ -662,8 +633,7 @@ sub number_of_girs {
         my $qty = @{ $self->{GIR} };
 
         return $qty;
-    }
-    else {
+    } else {
         return 0;
     }
 }
@@ -697,16 +667,15 @@ sub extract_gir {
         RIC => 'reader_interest_category',
     );
 
-    my $set_qualifier = $s->elem( 0, 0 );    # copy number
-    my $gir_element = { copy => $set_qualifier, };
-    my $element = 1;
+    my $set_qualifier = $s->elem( 0, 0 );              # copy number
+    my $gir_element   = { copy => $set_qualifier, };
+    my $element       = 1;
     while ( my $e = $s->elem($element) ) {
         ++$element;
         if ( exists $qmap{ $e->[1] } ) {
             my $qualifier = $qmap{ $e->[1] };
             $gir_element->{$qualifier} = $e->[0];
-        }
-        else {
+        } else {
 
             carp "Unrecognized GIR code : $e->[1] for $e->[0]";
         }
@@ -724,8 +693,10 @@ sub moa_amt {
     }
     return;
 }
+
 sub moa_multiple_amt {
     my ( $self, $qualifier ) = @_;
+
     # return a repeatable MOA field
     my $amt   = 0;
     my $found = 0;
@@ -768,6 +739,7 @@ sub amt_lineitem {
     my $self = shift;
     return $self->moa_amt('203');
 }
+
 sub amt_taxoncharge {
     my $self = shift;
     return $self->moa_multiple_amt('124');
@@ -775,14 +747,16 @@ sub amt_taxoncharge {
 
 sub pri_price {
     my ( $self, $price_qualifier ) = @_;
-            # In practice qualifier is AAE in the quote and AAA & AAB in invoices
-            # but the following are defined
-            # AAA calculation price net (unit price excl tax but incl any allowances or charges)
-            # AAB calculation price gross (unit price excl all taxes, allowances and charges )
-            # AAE information price (incl tax but excl allowances or charges )
-            # AAF information price (including all taxes, allowances or charges)
+
+    # In practice qualifier is AAE in the quote and AAA & AAB in invoices
+    # but the following are defined
+    # AAA calculation price net (unit price excl tax but incl any allowances or charges)
+    # AAB calculation price gross (unit price excl all taxes, allowances and charges )
+    # AAE information price (incl tax but excl allowances or charges )
+    # AAF information price (including all taxes, allowances or charges)
     foreach my $s ( @{ $self->{segs} } ) {
         if ( $s->tag eq 'PRI' && $s->elem( 0, 0 ) eq $price_qualifier ) {
+
             # in practice not all 3 fields may be present
             # so use a temp variable to avoid runtime warnings
             my $p = {
@@ -846,20 +820,21 @@ sub tax {
 
 sub tax_rate {
     my $self = shift;
-    my $tr = {};
+    my $tr   = {};
     foreach my $s ( @{ $self->{segs} } ) {
         if ( $s->tag eq 'TAX' && $s->elem( 0, 0 ) == 7 ) {
-            $tr->{type} = $s->elem( 1, 0 ); # VAT, GST or IMP
-            $tr->{rate} = $s->elem( 4, 3 ); # percentage
-            # category values may be:
-            # E = exempt from tax
-            # G = export item, tax not charged
-            # H = higher rate
-            # L = lower rate
-            # S = standard rate
-            # Z = zero-rated
+            $tr->{type}     = $s->elem( 1, 0 );    # VAT, GST or IMP
+            $tr->{rate}     = $s->elem( 4, 3 );    # percentage
+                                                   # category values may be:
+                                                   # E = exempt from tax
+                                                   # G = export item, tax not charged
+                                                   # H = higher rate
+                                                   # L = lower rate
+                                                   # S = standard rate
+                                                   # Z = zero-rated
             $tr->{category} = $s->elem( 5, 0 );
-            if (!defined $tr->{rate} && $tr->{category} eq 'Z') {
+
+            if ( !defined $tr->{rate} && $tr->{category} eq 'Z' ) {
                 $tr->{rate} = 0;
             }
             return $tr;

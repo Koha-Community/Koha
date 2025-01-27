@@ -27,12 +27,13 @@ use Test::More;
 my $filebase = "$FindBin::Bin/../koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences";
 
 my @files;
+
 sub wanted {
     my $name = $File::Find::name;
     push @files, $name
         if $name =~ /\.pref/;
 }
-find({ wanted => \&wanted, no_chdir => 1 }, $filebase);
+find( { wanted => \&wanted, no_chdir => 1 }, $filebase );
 
 plan tests => scalar @files;
 
@@ -40,7 +41,6 @@ foreach my $f (@files) {
     chomp $f;
     yaml_file_ok( $f, "$f is YAML" );
 }
-
 
 =head1 NAME
 

@@ -9,14 +9,17 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
-<title>[% FILTER collapse %]
-    [% IF patron %]
-        [% patron_in_title = INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %]
-        [% tx("Batch check out to {patron}", { patron = patron_in_title }) | html %] &rsaquo;
-    [% END %]
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF patron %]
+            [% patron_in_title = INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %]
+            [% tx("Batch check out to {patron}", { patron = patron_in_title }) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Circulation") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -44,302 +47,307 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
-                [% IF patron %]
-                    [% INCLUDE 'members-toolbar.inc' %]
-                [% END %]
+    [% IF patron %]
+        [% INCLUDE 'members-toolbar.inc' %]
+    [% END %]
 
-                <h1>Batch check out</h1>
+    <h1>Batch check out</h1>
 
-[% IF patron and not batch_allowed %]
-  <div class="alert alert-warning">You are not allowed to use batch checkout for this patron</div>
-[% ELSIF patron and noissues and not checkout_infos %]
-  <div class="alert alert-warning">
-      Cannot check out!
-      [% IF ( charges ) %]
-            [% INCLUDE 'blocked-fines.inc' NoIssuesCharge = chargesamount %]
-      [% END %]
-      [% IF ( charges_guarantors_guarantees ) %]
-          <li>
-              <span class="circ-hlt">Charges:</span> Patron's guarantors and their other guarantees collectively owe [% charges_guarantors_guarantees | $Price %].
-              [% IF noissues %]
-                  <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
-              [% END %]
-          </li>
-      [% END %]
-      [% IF ( charges_guarantees ) %]
-          <li>
-              <span class="circ-hlt">Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
-              [% IF noissues %]
-                  <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
-              [% END %]
-          </li>
-      [% END %]
-  </div>
-[% ELSIF patron and not checkout_infos %]
-  <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
-      [% INCLUDE 'csrf-token.inc' %]
-    <div id="circ_circulation_issue">
-        <fieldset>
-            <legend>Checking out to [% INCLUDE 'patron-title.inc' %]</legend>
-            <ol>
+    [% IF patron and not batch_allowed %]
+        <div class="alert alert-warning">You are not allowed to use batch checkout for this patron</div>
+    [% ELSIF patron and noissues and not checkout_infos %]
+        <div class="alert alert-warning">
+            Cannot check out!
+            [% IF ( charges ) %]
+                [% INCLUDE 'blocked-fines.inc' NoIssuesCharge = chargesamount %]
+            [% END %]
+            [% IF ( charges_guarantors_guarantees ) %]
                 <li>
-                    <label for="barcodelist">Enter barcodes (one barcode per line): </label>
-                    <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
+                    <span class="circ-hlt">Charges:</span> Patron's guarantors and their other guarantees collectively owe [% charges_guarantors_guarantees | $Price %].
+                    [% IF noissues %]
+                        <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
+                    [% END %]
                 </li>
+            [% END %]
+            [% IF ( charges_guarantees ) %]
                 <li>
-                    <label for="uploadfile">Or use a file: </label>
-                    <input type="file" id="uploadfile" name="uploadfile" />
+                    <span class="circ-hlt">Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
+                    [% IF noissues %]
+                        <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
+                    [% END %]
                 </li>
-            </ol>
-        </fieldset>
-
-        [% IF Koha.Preference('SpecifyDueDate') || Koha.Preference('OnSiteCheckouts') %]
-            <fieldset>
-                <ol>
-                    [% IF Koha.Preference('SpecifyDueDate') %]
+            [% END %]
+        </div>
+    [% ELSIF patron and not checkout_infos %]
+        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <div id="circ_circulation_issue">
+                <fieldset>
+                    <legend>Checking out to [% INCLUDE 'patron-title.inc' %]</legend>
+                    <ol>
                         <li>
-                            <label for="duedatespec">Specify due date: [% INCLUDE 'date-format.inc' %]</label>
-                            <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true"/>
+                            <label for="barcodelist">Enter barcodes (one barcode per line): </label>
+                            <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
                         </li>
-                    [% END %]
-                    [% IF Koha.Preference('OnSiteCheckouts') %]
-                        <li class="radio">
-                            <div id="onsite_checkout-select">
-                                <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting"/>
-                                <label for="onsite_checkout">On-site checkout</label>
-                            </div>
+                        <li>
+                            <label for="uploadfile">Or use a file: </label>
+                            <input type="file" id="uploadfile" name="uploadfile" />
                         </li>
-                    [% END %]
-                </ol>
+                    </ol>
+                </fieldset>
+
+                [% IF Koha.Preference('SpecifyDueDate') || Koha.Preference('OnSiteCheckouts') %]
+                    <fieldset>
+                        <ol>
+                            [% IF Koha.Preference('SpecifyDueDate') %]
+                                <li>
+                                    <label for="duedatespec">Specify due date: [% INCLUDE 'date-format.inc' %]</label>
+                                    <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true" />
+                                </li>
+                            [% END %]
+                            [% IF Koha.Preference('OnSiteCheckouts') %]
+                                <li class="radio">
+                                    <div id="onsite_checkout-select">
+                                        <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting" />
+                                        <label for="onsite_checkout">On-site checkout</label>
+                                    </div>
+                                </li>
+                            [% END %]
+                        </ol>
+                    </fieldset>
+                [% END %]
+            </div>
+
+            <fieldset class="action">
+                <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                <input type="hidden" name="branch" value="[% branch | html %]" />
+                <input type="hidden" name="batch" value="1" />
+                <input type="hidden" name="op" value="cud-checkout" />
+                <input type="submit" class="btn btn-primary" value="Check out" />
             </fieldset>
-       [% END %]
-    </div>
-
-    <fieldset class="action">
-        <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-        <input type="hidden" name="branch" value="[% branch | html %]" />
-        <input type="hidden" name="batch" value="1" />
-        <input type="hidden" name="op" value="cud-checkout" />
-        <input type="submit" class="btn btn-primary" value="Check out" />
-    </fieldset>
-  </form>
-
-[% ELSIF patron %]
-  [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-    <h3>Batch checkout confirmation</h3>
-    <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
-        [% INCLUDE 'csrf-token.inc' %]
-        [% PROCESS checkouts_table %]
-        <fieldset>
-            <legend>Please confirm checkout</legend>
-      <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-      <input type="hidden" name="issueconfirmed" value="1" />
-      <input type="hidden" name="debt_confirmed" value="1" />
-      <input type="hidden" name="branch" value="[% branch | html %]" />
-      <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
-      <input type="hidden" name="batch" value="1" />
-      <input type="hidden" name="op" value="cud-checkout" />
-      <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
-      <input type="submit" id="checkoutrenew" class="btn btn-primary" value="Checkout or renew" />
-        </fieldset>
-    </form>
-
-  [% ELSE %]
-    <h3>Batch checkout results</h3>
-    [% PROCESS checkouts_table %]
-  [% END %]
-
-[% ELSE %]
-    <div class="alert alert-info">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
-[% END %]
-
+        </form>
+    [% ELSIF patron %]
+        [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
+            <h3>Batch checkout confirmation</h3>
+            <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
+                [% INCLUDE 'csrf-token.inc' %]
+                [% PROCESS checkouts_table %]
+                <fieldset>
+                    <legend>Please confirm checkout</legend>
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    <input type="hidden" name="issueconfirmed" value="1" />
+                    <input type="hidden" name="debt_confirmed" value="1" />
+                    <input type="hidden" name="branch" value="[% branch | html %]" />
+                    <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+                    <input type="hidden" name="batch" value="1" />
+                    <input type="hidden" name="op" value="cud-checkout" />
+                    <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
+                    <input type="submit" id="checkoutrenew" class="btn btn-primary" value="Checkout or renew" />
+                </fieldset>
+            </form>
+        [% ELSE %]
+            <h3>Batch checkout results</h3>
+            [% PROCESS checkouts_table %]
+        [% END %]
+    [% ELSE %]
+        <div class="alert alert-info">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
+    [% END %]
 [% END %]
 
 [% BLOCK checkouts_table %]
-<div class="page-section">
-    <table id="checkout_infos">
-      <thead>
-        <tr>
-          [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-            <th class="NoSort"></th>
-          [% END %]
-          <th>Barcode</th>
-          <th class="anti-the">Title</th>
-          <th>Information</th>
-        </tr>
-      </thead>
-      <tbody>
-        [% FOR checkout_info IN checkout_infos %]
-          <tr>
-            [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-              <td>
-                [% IF checkout_info.NEEDSCONFIRMATION %]
-                  <input type="checkbox" name="barcodes" value="[% checkout_info.barcode | html %]" checked="checked" />
+    <div class="page-section">
+        <table id="checkout_infos">
+            <thead>
+                <tr>
+                    [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
+                        <th class="NoSort"></th>
+                    [% END %]
+                    <th>Barcode</th>
+                    <th class="anti-the">Title</th>
+                    <th>Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOR checkout_info IN checkout_infos %]
+                    <tr>
+                        [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
+                            <td>
+                                [% IF checkout_info.NEEDSCONFIRMATION %]
+                                    <input type="checkbox" name="barcodes" value="[% checkout_info.barcode | html %]" checked="checked" />
+                                [% END %]
+                            </td>
+                        [% END %]
+                        <td>[% checkout_info.barcode | html %]</td>
+                        <td>
+                            [% INCLUDE 'biblio-title.inc' biblio=checkout_info.biblio link = 1 %]
+                            [% IF checkout_info.biblio.author %], by [% checkout_info.biblio.author | html %][% END %][% IF ( checkout_info.item.itemnotes ) %]
+                                - <span class="circ-hlt">[% checkout_info.item.itemnotes | $raw %]</span>
+                            [% END %]
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout_info.biblio.biblionumber | uri %]&amp;itemnumber=[% checkout_info.item.itemnumber | uri %]#item[% checkout_info.item.itemnumber | uri %]"
+                                >[% checkout_info.item.barcode | html %]</a
+                            >
+                        </td>
+                        <td>
+                            [% IF checkout_info.NEEDSCONFIRMATION %]
+                                <ul class="fa-ul warn">
+                                    [% IF checkout_info.AGE_RESTRICTION %]
+                                        <li><i class="fa fa-li fa-warning"></i>Age restriction [% checkout_info.AGE_RESTRICTION | html %].</li>
+                                    [% END %]
+                                    [% IF checkout_info.RENEW_ISSUE %]
+                                        <li><i class="fa fa-li fa-warning"></i>This item is currently checked out to this patron. Renew?</li>
+                                    [% END %]
+                                    [% IF checkout_info.ADDITIONAL_MATERIALS %]
+                                        <li><i class="fa fa-li fa-warning"></i>Please confirm that the accompanying materials are present: [% checkout_info.ADDITIONAL_MATERIALS | html %]</li>
+                                    [% END %]
+                                    [% IF checkout_info.RESERVE_WAITING %]
+                                        <li><i class="fa fa-li fa-warning"></i>This item is waiting for another patron.</li>
+                                    [% END %]
+                                    [% IF checkout_info.TRANSFERRED %]
+                                        <li><i class="fa fa-li fa-warning"></i>This item is on hold and being transferred for another patron.</li>
+                                    [% END %]
+                                    [% IF checkout_info.PROCESSING %]
+                                        <li><i class="fa fa-li fa-warning"></i>This item is on hold and being processed for another patron.</li>
+                                    [% END %]
+                                    [% IF checkout_info.ISSUED_TO_ANOTHER %]
+                                        <li
+                                            ><i class="fa fa-li fa-warning"></i>This item is checked out to another patron.
+                                            [% IF CAN_user_circulate_force_checkout %]
+                                                Check in and check out?
+                                            [% END %]</li
+                                        >
+                                    [% END %]
+                                    [% IF checkout_info.TOO_MANY %]
+                                        <li><i class="fa fa-li fa-warning"></i>Too many checked out.</li>
+                                    [% END %]
+                                    [% IF checkout_info.BORRNOTSAMEBRANCH %]
+                                        <li><i class="fa fa-li fa-warning"></i>This patron is from a different library ([% Branches.GetName( checkout_info.BORRNOTSAMEBRANCH ) | html %]).</li>
+                                    [% END %]
+                                    [% IF checkout_info.PATRON_CANT %]
+                                        <li><i class="fa fa-li fa-warning"></i>This patron can't check out this item per library circulation policy.</li>
+                                    [% END %]
+                                    [% IF checkout_info.NOT_FOR_LOAN_FORCING %]
+                                        [% IF checkout_info.itemtype_notforloan %]
+                                            <li><i class="fa fa-li fa-warning"></i>Item type is normally not for loan.</li>
+                                        [% ELSIF checkout_info.item_notforloan %]
+                                            [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => checkout_info.item_notforloan ) %]
+                                            <li><i class="fa fa-li fa-warning"></i>Item is normally not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF checkout_info.USERBLOCKEDOVERDUE %]
+                                        <li><i class="fa fa-li fa-warning"></i>Patron has [% checkout_info.USERBLOCKEDOVERDUE | html %] overdue item(s).</li>
+                                    [% END %]
+                                    [% IF checkout_info.ITEM_LOST %]
+                                        <li><i class="fa fa-li fa-warning"></i>This item has been lost with a status of "[% checkout_info.ITEM_LOST | html %]."</li>
+                                    [% END %]
+                                    [% IF checkout_info.HIGHHOLDS %]
+                                        <li><i class="fa fa-li fa-warning"></i>High demand item. Loan period shortened to [% checkout_info.HIGHHOLDS.duration | html %] days (due [% checkout_info.HIGHHOLDS.returndate | html %]).</li>
+                                    [% END %]
+                                    [% IF checkout_info.HIGHHOLDS %]
+                                        <!-- FIXME -->
+                                        <script>
+                                            $(document).ready(function() {
+                                                $("input[name=duedatespec]:hidden").val('[% checkout_info.HIGHHOLDS.returndate | html %]');
+                                            });
+                                        </script>
+                                    [% END %]
+
+                                    [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout || checkout_info.HIGHHOLDS ) && ( checkout_info.RESERVED || checkout_info.RESERVE_WAITING || checkout_info.TRANSFERRED || checkout_info.PROCESSING ) %]
+                                        <!-- arbitrary choice, revert the hold is not possible-->
+                                        <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron. The hold will be overridden, but not cancelled.</li>
+                                    [% ELSIF checkout_info.RESERVED %]
+                                        <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron.</li>
+                                    [% END %]
+
+                                    [% IF checkout_info.PREVISSUE %]
+                                        <li>This item has previously been checked out to this patron.</li>
+                                    [% END %]
+                                </ul>
+                            [% END %]
+
+                            [% IF checkout_info.alert.ITEM_LOST || checkout_info.alert.OTHER_CHARGES %]
+                                <ul class="info">
+                                    [% IF checkout_info.alert.ITEM_LOST %]
+                                        <li>This item has been lost with a status of "[% checkout_info.alert.ITEM_LOST | html %]."</li>
+                                    [% END %]
+                                    [% IF checkout_info.alert.OTHER_CHARGES %]
+                                        <li>The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES | $Price %].</li>
+                                    [% END %]
+                                </ul>
+                            [% END %]
+
+                            [% IF checkout_info.alert.RETURNED_FROM_ANOTHER %]
+                                <div class="alert alert-warning">Item was checked out to [% INCLUDE 'patron-title.inc' patron = checkout_info.alert.RETURNED_FROM_ANOTHER.patron %] and was returned automatically.</div>
+                            [% END %]
+
+                            [% IF checkout_info.IMPOSSIBLE %]
+                                <ul class="fa-ul error">
+                                    [% IF checkout_info.STATS %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Local use recorded.</li>
+                                    [% END %]
+
+                                    [% IF checkout_info.NOT_FOR_LOAN %]
+                                        [% IF checkout_info.itemtype_notforloan %]
+                                            <li><i class="fa fa-li fa-exclamation"></i>Item type not for loan.</li>
+                                        [% ELSIF checkout_info.item_notforloan %]
+                                            [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => checkout_info.item_notforloan ) %]
+                                            <li><i class="fa fa-li fa-exclamation"></i>Item not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF checkout_info.WTHDRAWN %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Item has been withdrawn.</li>
+                                    [% END %]
+                                    [% IF checkout_info.RESTRICTED %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Item is restricted.</li>
+                                    [% END %]
+                                    [% IF checkout_info.GNA %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Patron's address is in doubt.</li>
+                                    [% END %]
+                                    [% IF checkout_info.CARD_LOST %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Patron's card is lost.</li>
+                                    [% END %]
+                                    [% IF checkout_info.DEBARRED %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Patron is restricted.</li>
+                                    [% END %]
+                                    [% IF checkout_info.NO_MORE_RENEWALS %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>No more renewals possible.</li>
+                                    [% END %]
+                                    [% IF checkout_info.EXPIRED %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Patron's card is expired.</li>
+                                    [% END %]
+                                    [% IF checkout_info.ITEMNOTSAMEBRANCH %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>This item belongs to [% Branches.GetName( checkout_info.itemhomebranch ) | html %] and cannot be checked out from this location.</li>
+                                    [% END %]
+                                    [% IF checkout_info.USERBLOCKEDREMAINING %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Patron has had overdue items and is blocked for [% checkout_info.USERBLOCKEDREMAINING | html %] day(s).</li>
+                                    [% END %]
+                                    [% IF checkout_info.USERBLOCKEDOVERDUE %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Checkouts are BLOCKED because patron has overdue items.</li>
+                                    [% END %]
+                                    [% IF checkout_info.TOO_MANY %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>Too many checked out.</li>
+                                    [% END %]
+                                    [% IF checkout_info.UNKNOWN_BARCODE %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>The barcode was not found [% checkout_info.barcode | html %].</li>
+                                    [% END %]
+                                    [% IF checkout_info.DEBT %]
+                                        <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT | $Price %].</li>
+                                        <!-- Need debt_confirmed -->
+                                    [% END %]
+                                </ul>
+                            [% END %]
+
+                            [% IF checkout_info.issue.date_due %]
+                                <ul>
+                                    <li>Due on [% checkout_info.issue.date_due | $KohaDates as_due_date => 1 %]</li>
+                                </ul>
+                            [% END %]
+                        </td>
+                    </tr>
                 [% END %]
-              </td>
-            [% END %]
-            <td>[% checkout_info.barcode | html %]</td>
-            <td>
-                [% INCLUDE 'biblio-title.inc' biblio=checkout_info.biblio link = 1 %] [% IF checkout_info.biblio.author %], by [% checkout_info.biblio.author | html %][% END %][% IF ( checkout_info.item.itemnotes ) %]- <span class="circ-hlt">[% checkout_info.item.itemnotes | $raw %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout_info.biblio.biblionumber | uri %]&amp;itemnumber=[% checkout_info.item.itemnumber | uri %]#item[% checkout_info.item.itemnumber | uri %]">[% checkout_info.item.barcode | html %]</a>
-            </td>
-            <td>
-              [% IF checkout_info.NEEDSCONFIRMATION %]
-                <ul class="fa-ul warn">
-                  [% IF checkout_info.AGE_RESTRICTION %]
-                      <li><i class="fa fa-li fa-warning"></i>Age restriction [% checkout_info.AGE_RESTRICTION | html %].</li>
-                  [% END %]
-                  [% IF checkout_info.RENEW_ISSUE %]
-                      <li><i class="fa fa-li fa-warning"></i>This item is currently checked out to this patron. Renew?</li>
-                  [% END %]
-                  [% IF checkout_info.ADDITIONAL_MATERIALS %]
-                      <li><i class="fa fa-li fa-warning"></i>Please confirm that the accompanying materials are present: [%  checkout_info.ADDITIONAL_MATERIALS | html %]</li>
-                  [% END %]
-                  [% IF checkout_info.RESERVE_WAITING %]
-                      <li><i class="fa fa-li fa-warning"></i>This item is waiting for another patron.</li>
-                  [% END %]
-                  [% IF checkout_info.TRANSFERRED %]
-                      <li><i class="fa fa-li fa-warning"></i>This item is on hold and being transferred for another patron.</li>
-                  [% END %]
-                  [% IF checkout_info.PROCESSING %]
-                      <li><i class="fa fa-li fa-warning"></i>This item is on hold and being processed for another patron.</li>
-                  [% END %]
-                  [% IF checkout_info.ISSUED_TO_ANOTHER %]
-                      <li><i class="fa fa-li fa-warning"></i>This item is checked out to another patron.
-                    [% IF CAN_user_circulate_force_checkout %]
-                      Check in and check out?
-                      [% END %]</li>
-                  [% END %]
-                  [% IF checkout_info.TOO_MANY %]
-                      <li><i class="fa fa-li fa-warning"></i>Too many checked out.</li>
-                  [% END %]
-                  [% IF checkout_info.BORRNOTSAMEBRANCH %]
-                      <li><i class="fa fa-li fa-warning"></i>This patron is from a different library ([% Branches.GetName( checkout_info.BORRNOTSAMEBRANCH ) | html %]).</li>
-                  [% END %]
-                  [% IF checkout_info.PATRON_CANT %]
-                      <li><i class="fa fa-li fa-warning"></i>This patron can't check out this item per library circulation policy.</li>
-                  [% END %]
-                  [% IF checkout_info.NOT_FOR_LOAN_FORCING %]
-                    [% IF checkout_info.itemtype_notforloan %]
-                        <li><i class="fa fa-li fa-warning"></i>Item type is normally not for loan.</li>
-                    [% ELSIF checkout_info.item_notforloan %]
-                      [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => checkout_info.item_notforloan ) %]
-                        <li><i class="fa fa-li fa-warning"></i>Item is normally not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
-                    [% END %]
-                  [% END %]
-                  [% IF checkout_info.USERBLOCKEDOVERDUE %]
-                      <li><i class="fa fa-li fa-warning"></i>Patron has [% checkout_info.USERBLOCKEDOVERDUE | html %] overdue item(s).</li>
-                  [% END %]
-                  [% IF checkout_info.ITEM_LOST %]
-                      <li><i class="fa fa-li fa-warning"></i>This item has been lost with a status of "[% checkout_info.ITEM_LOST | html %]."</li>
-                  [% END %]
-                  [% IF checkout_info.HIGHHOLDS %]
-                      <li><i class="fa fa-li fa-warning"></i>High demand item. Loan period shortened to [% checkout_info.HIGHHOLDS.duration | html %] days (due [% checkout_info.HIGHHOLDS.returndate | html %]).</li>
-                  [% END %]
-                  [% IF checkout_info.HIGHHOLDS %] <!-- FIXME -->
-                      <script>
-                          $(document).ready(function() {
-                              $("input[name=duedatespec]:hidden").val('[% checkout_info.HIGHHOLDS.returndate | html %]');
-                          });
-                      </script>
-                  [% END %]
-
-                  [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout || checkout_info.HIGHHOLDS ) && ( checkout_info.RESERVED || checkout_info.RESERVE_WAITING || checkout_info.TRANSFERRED || checkout_info.PROCESSING ) %] <!-- arbitrary choice, revert the hold is not possible-->
-                      <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron. The hold will be overridden, but not cancelled.</li>
-                  [% ELSIF checkout_info.RESERVED %]
-                      <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron.</li>
-                  [% END %]
-
-                  [% IF checkout_info.PREVISSUE %]
-                      <li>This item has previously been checked out to this patron.</li>
-                  [% END %]
-                </ul>
-              [% END %]
-
-
-              [% IF checkout_info.alert.ITEM_LOST || checkout_info.alert.OTHER_CHARGES %]
-                <ul class="info">
-                  [% IF checkout_info.alert.ITEM_LOST %]
-                      <li>This item has been lost with a status of "[% checkout_info.alert.ITEM_LOST | html %]."</li>
-                  [% END %]
-                  [% IF checkout_info.alert.OTHER_CHARGES %]
-                      <li>The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES | $Price %].</li>
-                  [% END %]
-                </ul>
-              [% END %]
-
-              [% IF checkout_info.alert.RETURNED_FROM_ANOTHER %]
-                  <div class="alert alert-warning">Item was checked out to [% INCLUDE 'patron-title.inc' patron = checkout_info.alert.RETURNED_FROM_ANOTHER.patron %] and was returned automatically.</div>
-              [% END %]
-
-              [% IF checkout_info.IMPOSSIBLE %]
-                <ul class="fa-ul error">
-                  [% IF checkout_info.STATS  %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Local use recorded.</li>
-                  [% END %]
-
-                  [% IF checkout_info.NOT_FOR_LOAN %]
-                    [% IF checkout_info.itemtype_notforloan %]
-                       <li><i class="fa fa-li fa-exclamation"></i>Item type not for loan.</li>
-                    [% ELSIF checkout_info.item_notforloan %]
-                      [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => checkout_info.item_notforloan ) %]
-                        <li><i class="fa fa-li fa-exclamation"></i>Item not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
-                    [% END %]
-                  [% END %]
-                  [% IF checkout_info.WTHDRAWN %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Item has been withdrawn.</li>
-                  [% END %]
-                  [% IF checkout_info.RESTRICTED %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Item is restricted.</li>
-                  [% END %]
-                  [% IF checkout_info.GNA %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Patron's address is in doubt.</li>
-                  [% END %]
-                  [% IF checkout_info.CARD_LOST %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Patron's card is lost.</li>
-                  [% END %]
-                  [% IF checkout_info.DEBARRED %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Patron is restricted.</li>
-                  [% END %]
-                  [% IF checkout_info.NO_MORE_RENEWALS %]
-                      <li><i class="fa fa-li fa-exclamation"></i>No more renewals possible.</li>
-                  [% END %]
-                  [% IF checkout_info.EXPIRED %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Patron's card is expired.</li>
-                  [% END %]
-                  [% IF checkout_info.ITEMNOTSAMEBRANCH %]
-                      <li><i class="fa fa-li fa-exclamation"></i>This item belongs to [% Branches.GetName( checkout_info.itemhomebranch ) | html %] and cannot be checked out from this location.</li>
-                  [% END %]
-                  [% IF checkout_info.USERBLOCKEDREMAINING %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Patron has had overdue items and is blocked for [% checkout_info.USERBLOCKEDREMAINING | html %] day(s).</li>
-                  [% END %]
-                  [% IF checkout_info.USERBLOCKEDOVERDUE %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Checkouts are BLOCKED because patron has overdue items.</li>
-                  [% END %]
-                  [% IF checkout_info.TOO_MANY %]
-                      <li><i class="fa fa-li fa-exclamation"></i>Too many checked out.</li>
-                  [% END %]
-                  [% IF checkout_info.UNKNOWN_BARCODE %]
-                      <li><i class="fa fa-li fa-exclamation"></i>The barcode was not found [% checkout_info.barcode | html %].</li>
-                  [% END %]
-                  [% IF checkout_info.DEBT %]
-                      <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT | $Price %].</li> <!-- Need debt_confirmed -->
-                  [% END %]
-                </ul>
-              [% END %]
-
-              [% IF checkout_info.issue.date_due %]
-                    <ul>
-                        <li>Due on [% checkout_info.issue.date_due | $KohaDates as_due_date => 1 %]</li>
-                    </ul>
-              [% END %]
-            </td>
-          </tr>
-        [% END %]
-      </tbody>
-    </table>
+            </tbody>
+        </table>
     </div>
 [% END %]
-
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

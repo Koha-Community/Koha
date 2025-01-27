@@ -66,7 +66,7 @@ subtest "store() tests" => sub {
         Koha::Checkouts::Renewal->new( { interface => 'intranet' } )->store()
     }
     'Koha::Exceptions::Object::FKConstraint',
-      'Exception thrown if no checkout_id is passed on creation';
+        'Exception thrown if no checkout_id is passed on creation';
 
     my $renewal = Koha::Checkouts::Renewal->new(
         {
@@ -78,8 +78,7 @@ subtest "store() tests" => sub {
 
     is( ref($renewal), 'Koha::Checkouts::Renewal', 'Object type is correct' );
     is(
-        Koha::Checkouts::Renewals->search( { checkout_id => $checkout->id } )
-          ->count,
+        Koha::Checkouts::Renewals->search( { checkout_id => $checkout->id } )->count,
         1,
         'Renewal stored on the DB'
     );
@@ -88,9 +87,8 @@ subtest "store() tests" => sub {
         local *STDERR;
         open STDERR, '>', '/dev/null';
 
-        my $another_checkout =
-          $builder->build_object( { class => 'Koha::Checkouts' } );
-        my $checkout_id = $another_checkout->id;
+        my $another_checkout = $builder->build_object( { class => 'Koha::Checkouts' } );
+        my $checkout_id      = $another_checkout->id;
         $another_checkout->delete;
 
         my $THE_renewal;
@@ -104,7 +102,7 @@ subtest "store() tests" => sub {
             )->store;
         }
         'Koha::Exceptions::Object::FKConstraint',
-          'An exception is thrown on invalid checkout_id';
+            'An exception is thrown on invalid checkout_id';
         close STDERR;
 
         is( $@->broken_fk, 'checkout_id', 'Exception field is correct' );
@@ -142,19 +140,23 @@ subtest 'renewer() tests' => sub {
     )->store;
 
     my $renewal_renewer_patron = $renewal->renewer;
-    is( ref($renewal_renewer_patron),
+    is(
+        ref($renewal_renewer_patron),
         'Koha::Patron',
-        'Koha::Checkouts::Renewal->renewer should return a Koha::Patron' );
-    is( $renewal->renewer_id, $renewal_renewer_patron->borrowernumber,
+        'Koha::Checkouts::Renewal->renewer should return a Koha::Patron'
+    );
+    is(
+        $renewal->renewer_id, $renewal_renewer_patron->borrowernumber,
         'Koha::Checkouts::Renewal->renewer should return the correct borrower'
     );
 
     my $checkout_id = $checkout->id;
     $librarian->delete;
-    my $renewals =
-      Koha::Checkouts::Renewals->search( { checkout_id => $checkout_id } );
-    is( $renewals->count, 1,
-        'Koha::Checkouts::Renewal is not deleted on librarian deletion' );
+    my $renewals = Koha::Checkouts::Renewals->search( { checkout_id => $checkout_id } );
+    is(
+        $renewals->count, 1,
+        'Koha::Checkouts::Renewal is not deleted on librarian deletion'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -188,23 +190,28 @@ subtest 'checkout() tests' => sub {
     )->store;
 
     my $renewal_checkout = $renewal->checkout;
-    is( ref($renewal_checkout), 'Koha::Checkout',
-        'Koha::Checkouts::Renewal->checkout should return a Koha::Checkout' );
-    is( $renewal->checkout_id, $renewal_checkout->id,
+    is(
+        ref($renewal_checkout), 'Koha::Checkout',
+        'Koha::Checkouts::Renewal->checkout should return a Koha::Checkout'
+    );
+    is(
+        $renewal->checkout_id, $renewal_checkout->id,
         'Koha::Checkouts::Renewal->checkout should return the correct checkout'
     );
 
     my $issue_id = $checkout->issue_id;
     $checkout->delete;
 
-    my $renewals =
-      Koha::Checkouts::Renewals->search( { checkout_id => $issue_id } );
-    is( $renewals->count, 1,
-        'Koha::Checkouts::Renewal remains on checkout deletion' );
+    my $renewals = Koha::Checkouts::Renewals->search( { checkout_id => $issue_id } );
+    is(
+        $renewals->count, 1,
+        'Koha::Checkouts::Renewal remains on checkout deletion'
+    );
 
     $renewal->discard_changes;
-    is( $renewal->checkout, undef,
-'Koha::Checkouts::Renewal->checkout should return undef if checkout has been deleted'
+    is(
+        $renewal->checkout, undef,
+        'Koha::Checkouts::Renewal->checkout should return undef if checkout has been deleted'
     );
 
     $schema->storage->txn_rollback;
@@ -239,26 +246,30 @@ subtest 'old_checkout() tests' => sub {
     )->store;
 
     my $renewal_old_checkout = $renewal->old_checkout;
-    is( ref($renewal_old_checkout), 'Koha::Old::Checkout',
-'Koha::Checkouts::Renewal->old_checkout should return a Koha::Old::Checkout'
+    is(
+        ref($renewal_old_checkout), 'Koha::Old::Checkout',
+        'Koha::Checkouts::Renewal->old_checkout should return a Koha::Old::Checkout'
     );
-    is( $renewal->checkout_id, $renewal_old_checkout->id,
-'Koha::Checkouts::Renewal->old_checkout should return the correct old checkout'
+    is(
+        $renewal->checkout_id, $renewal_old_checkout->id,
+        'Koha::Checkouts::Renewal->old_checkout should return the correct old checkout'
     );
 
     my $issue_id = $old_checkout->issue_id;
     $old_checkout->delete;
 
-    my $renewals =
-      Koha::Checkouts::Renewals->search( { checkout_id => $issue_id } );
-    is( $renewals->count, 1,
-        'Koha::Checkouts::Renewal remains on old_checkout deletion' );
+    my $renewals = Koha::Checkouts::Renewals->search( { checkout_id => $issue_id } );
+    is(
+        $renewals->count, 1,
+        'Koha::Checkouts::Renewal remains on old_checkout deletion'
+    );
 
     # FIXME: Should we actually set null on OldCheckout deletion?
 
     $renewal->discard_changes;
-    is( $renewal->old_checkout, undef,
-'Koha::Checkouts::Renewal->old_checkout should return undef if old_checkout has been deleted'
+    is(
+        $renewal->old_checkout, undef,
+        'Koha::Checkouts::Renewal->old_checkout should return undef if old_checkout has been deleted'
     );
 
     $schema->storage->txn_rollback;

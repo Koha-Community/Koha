@@ -65,8 +65,8 @@ Representings an index state where index needs to be recreated and is not in a w
 =cut
 
 use constant {
-    INDEX_STATUS_OK => 0,
-    INDEX_STATUS_REINDEX_REQUIRED => 1,
+    INDEX_STATUS_OK                => 0,
+    INDEX_STATUS_REINDEX_REQUIRED  => 1,
     INDEX_STATUS_RECREATE_REQUIRED => 2,
 };
 
@@ -99,7 +99,7 @@ Arrayref of C<MARC::Record>s.
 =cut
 
 sub update_index {
-    my ($self, $record_ids, $records) = @_;
+    my ( $self, $record_ids, $records ) = @_;
 
     my $index_record_ids = [];
     unless ( $records && @$records ) {
@@ -107,9 +107,9 @@ sub update_index {
 
             next unless $record_id;
 
-            my $record = $self->_get_record( $record_id );
-            if( $record ){
-                push @$records, $record;
+            my $record = $self->_get_record($record_id);
+            if ($record) {
+                push @$records,          $record;
                 push @$index_record_ids, $record_id;
             }
         }
@@ -119,30 +119,26 @@ sub update_index {
 
     my $documents = $self->marc_records_to_documents($records);
     my @body;
-    for (my $i = 0; $i < scalar @$index_record_ids; $i++) {
-        my $id = $index_record_ids->[$i];
+    for ( my $i = 0 ; $i < scalar @$index_record_ids ; $i++ ) {
+        my $id       = $index_record_ids->[$i];
         my $document = $documents->[$i];
-        push @body, {
-            index => {
-                _id => "$id"
-            }
-        };
+        push @body, { index => { _id => "$id" } };
         push @body, $document;
     }
     my $response;
     if (@body) {
-        try{
+        try {
             my $elasticsearch = $self->get_elasticsearch();
             $response = $elasticsearch->bulk(
                 index => $self->index_name,
-                body => \@body
+                body  => \@body
             );
-            if ($response->{errors}) {
+            if ( $response->{errors} ) {
                 carp "One or more ElasticSearch errors occurred when indexing documents";
             }
         } catch {
             Koha::Exceptions::Elasticsearch::BadResponse->throw(
-                type => $_->{type},
+                type    => $_->{type},
                 details => $_->{text},
             );
         };
@@ -233,22 +229,23 @@ a valid status. See L</CONSTANTS>.
 =cut
 
 sub index_status {
-    my ($self, $status) = @_;
+    my ( $self, $status ) = @_;
     my $key = 'ElasticsearchIndexStatus_' . $self->index;
 
-    if (defined $status) {
-        unless (any { $status == $_ } (
+    if ( defined $status ) {
+        unless (
+            any { $status == $_ } (
                 INDEX_STATUS_OK,
                 INDEX_STATUS_REINDEX_REQUIRED,
                 INDEX_STATUS_RECREATE_REQUIRED,
             )
-        ) {
+            )
+        {
             Koha::Exception->throw("Invalid index status: $status");
         }
-        C4::Context->set_preference($key, $status);
+        C4::Context->set_preference( $key, $status );
         return $status;
-    }
-    else {
+    } else {
         return C4::Context->preference($key);
     }
 }
@@ -263,21 +260,22 @@ failes.
 =cut
 
 sub update_mappings {
-    my ($self) = @_;
+    my ($self)        = @_;
     my $elasticsearch = $self->get_elasticsearch();
-    my $mappings = $self->get_elasticsearch_mappings();
+    my $mappings      = $self->get_elasticsearch_mappings();
 
     try {
         my $response = $elasticsearch->indices->put_mapping(
             index => $self->index_name,
-            body => $mappings,
+            body  => $mappings,
         );
     } catch {
         $self->set_index_status_recreate_required();
-        my $reason = $_[0]->{vars}->{body}->{error}->{reason};
+        my $reason     = $_[0]->{vars}->{body}->{error}->{reason};
         my $index_name = $self->index_name;
         Koha::Exception->throw(
-            error => "Unable to update mappings for index \"$index_name\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
+            error =>
+                "Unable to update mappings for index \"$index_name\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
         );
     };
     $self->set_index_status_ok();
@@ -296,7 +294,8 @@ it to be updated by a regular index cron job in the future.
 sub update_index_background {
     my ( $self, $record_numbers, $server ) = @_;
 
-    Koha::BackgroundJob::UpdateElasticIndex->new->enqueue({ record_ids => $record_numbers, record_server => $server });
+    Koha::BackgroundJob::UpdateElasticIndex->new->enqueue(
+        { record_ids => $record_numbers, record_server => $server } );
 }
 
 =head2 index_records
@@ -318,7 +317,7 @@ to 5000.
 sub index_records {
     my ( $self, $record_numbers, $op, $server, $records ) = @_;
     $record_numbers = [$record_numbers] if ref $record_numbers ne 'ARRAY' && defined $record_numbers;
-    $records = [$records] if ref $records ne 'ARRAY' && defined $records;
+    $records        = [$records]        if ref $records ne 'ARRAY'        && defined $records;
     if ( $op eq 'specialUpdate' ) {
         my $config    = $self->get_elasticsearch_params;
         my $at_a_time = $config->{chunk_size} // 5000;
@@ -326,7 +325,7 @@ sub index_records {
         $record_chunks    = natatime $at_a_time, @$records        if ($records);
         $record_id_chunks = natatime $at_a_time, @$record_numbers if ($record_numbers);
         if ($records) {
-            while ( (my @records = $record_chunks->()) && (my @record_ids = $record_id_chunks->()) ) {
+            while ( ( my @records = $record_chunks->() ) && ( my @record_ids = $record_id_chunks->() ) ) {
                 $self->update_index( \@record_ids, \@records );
             }
         } else {
@@ -334,10 +333,10 @@ sub index_records {
                 $self->update_index_background( \@record_ids, $server );
             }
         }
+    } elsif ( $op eq 'recordDelete' ) {
+        $self->delete_index_background($record_numbers);
     }
-    elsif ( $op eq 'recordDelete' ) {
-        $self->delete_index_background( $record_numbers );
-    }
+
     #FIXME Current behaviour is to index Zebra when using ES, at some point we should stop
     Koha::SearchEngine::Zebra::Indexer::index_records( $self, $record_numbers, $op, $server, undef );
 }
@@ -350,7 +349,7 @@ sub _get_record {
     if ( $self->index eq $Koha::SearchEngine::BIBLIOS_INDEX ) {
         my $biblio = Koha::Biblios->find($record_id);
         $record = $biblio->metadata_record( { embed_items => 1 } )
-          if $biblio;
+            if $biblio;
     } else {
         $record = C4::AuthoritiesMarc::GetAuthority($record_id);
     }
@@ -365,15 +364,15 @@ C<$biblionums> is an arrayref of biblionumbers to delete from the index.
 =cut
 
 sub delete_index {
-    my ($self, $biblionums) = @_;
+    my ( $self, $biblionums ) = @_;
 
     my $elasticsearch = $self->get_elasticsearch();
-    my @body = map { { delete => { _id => "$_" } } } @{$biblionums};
-    my $result = $elasticsearch->bulk(
+    my @body          = map { { delete => { _id => "$_" } } } @{$biblionums};
+    my $result        = $elasticsearch->bulk(
         index => $self->index_name,
-        body => \@body,
+        body  => \@body,
     );
-    if ($result->{errors}) {
+    if ( $result->{errors} ) {
         croak "An Elasticsearch error occurred during bulk delete";
     }
 }
@@ -398,9 +397,9 @@ Drops the index from the Elasticsearch server.
 
 sub drop_index {
     my ($self) = @_;
-    if ($self->index_exists) {
+    if ( $self->index_exists ) {
         my $elasticsearch = $self->get_elasticsearch();
-        $elasticsearch->indices->delete(index => $self->index_name);
+        $elasticsearch->indices->delete( index => $self->index_name );
         $self->set_index_status_recreate_required();
     }
 }
@@ -412,14 +411,12 @@ Creates the index (including mappings) on the Elasticsearch server.
 =cut
 
 sub create_index {
-    my ($self) = @_;
-    my $settings = $self->get_elasticsearch_settings();
+    my ($self)        = @_;
+    my $settings      = $self->get_elasticsearch_settings();
     my $elasticsearch = $self->get_elasticsearch();
     $elasticsearch->indices->create(
         index => $self->index_name,
-        body => {
-            settings => $settings
-        }
+        body  => { settings => $settings }
     );
     $self->update_mappings();
 }

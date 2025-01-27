@@ -29,7 +29,7 @@ use Koha::Virtualshelves;
 
 use t::lib::Mocks;
 
-use_ok( "C4::Utils::DataTables::VirtualShelves" );
+use_ok("C4::Utils::DataTables::VirtualShelves");
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -41,11 +41,11 @@ $dbh->do(q|DELETE FROM virtualshelves|);
 my @categories   = Koha::Patron::Categories->search_with_library_limits->as_list;
 my $categorycode = $categories[0]->categorycode;
 my $branchcode   = "ABC";
-my $branch_data = {
-    branchcode     => $branchcode,
-    branchname     => 'my branchname',
+my $branch_data  = {
+    branchcode => $branchcode,
+    branchname => 'my branchname',
 };
-Koha::Library->new( $branch_data )->store;
+Koha::Library->new($branch_data)->store;
 
 my %john_doe = (
     cardnumber   => '123456',
@@ -60,7 +60,7 @@ my %john_doe = (
 
 my %jane_doe = (
     cardnumber   => '234567',
-    firstname    =>  'Jane',
+    firstname    => 'Jane',
     surname      => 'Doe',
     categorycode => $categorycode,
     branchcode   => $branchcode,
@@ -70,7 +70,7 @@ my %jane_doe = (
 );
 my %john_smith = (
     cardnumber   => '345678',
-    firstname    =>  'John',
+    firstname    => 'John',
     surname      => 'Smith',
     categorycode => $categorycode,
     branchcode   => $branchcode,
@@ -80,8 +80,8 @@ my %john_smith = (
 );
 
 my $john_doe_patron = Koha::Patron->new( \%john_doe )->store;
-$john_doe{borrowernumber} = $john_doe_patron->borrowernumber;
-$jane_doe{borrowernumber} = Koha::Patron->new( \%jane_doe )->store->borrowernumber;
+$john_doe{borrowernumber}   = $john_doe_patron->borrowernumber;
+$jane_doe{borrowernumber}   = Koha::Patron->new( \%jane_doe )->store->borrowernumber;
 $john_smith{borrowernumber} = Koha::Patron->new( \%john_smith )->store->borrowernumber;
 
 my $shelf1 = Koha::Virtualshelf->new(
@@ -139,7 +139,7 @@ my $biblionumber9  = _add_biblio('title 9');
 my $biblionumber10 = _add_biblio('title 10');
 my $biblionumber11 = _add_biblio('title 11');
 my $biblionumber12 = _add_biblio('title 12');
-$shelf3->add_biblio( $biblionumber9, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber9,  $jane_doe{borrowernumber} );
 $shelf3->add_biblio( $biblionumber10, $jane_doe{borrowernumber} );
 $shelf3->add_biblio( $biblionumber11, $jane_doe{borrowernumber} );
 $shelf3->add_biblio( $biblionumber12, $jane_doe{borrowernumber} );
@@ -177,81 +177,113 @@ for my $i ( 6 .. 15 ) {
 
 # Set common datatables params
 my %dt_params = (
-    length   => 10,
-    start    => 0
+    length => 10,
+    start  => 0
 );
 my $search_results;
 
-t::lib::Mocks::mock_userenv({ patron => $john_doe_patron });
+t::lib::Mocks::mock_userenv( { patron => $john_doe_patron } );
 
 # Search private lists by title
-$search_results = C4::Utils::DataTables::VirtualShelves::search({
-    shelfname => "ist",
-    %dt_params,
-    public    => 0,
-});
+$search_results = C4::Utils::DataTables::VirtualShelves::search(
+    {
+        shelfname => "ist",
+        %dt_params,
+        public => 0,
+    }
+);
 
-is( $search_results->{ recordsTotal }, 2,
-    "There should be 2 private shelves in total" );
+is(
+    $search_results->{recordsTotal}, 2,
+    "There should be 2 private shelves in total"
+);
 
-is( $search_results->{ recordsFiltered }, 2,
-    "There should be 2 private shelves with title like '%ist%" );
+is(
+    $search_results->{recordsFiltered}, 2,
+    "There should be 2 private shelves with title like '%ist%"
+);
 
-is( @{ $search_results->{ shelves } }, 2,
-    "There should be 2 private shelves returned" );
+is(
+    @{ $search_results->{shelves} }, 2,
+    "There should be 2 private shelves returned"
+);
 
 # Search by type only
-$search_results = C4::Utils::DataTables::VirtualShelves::search({
-    %dt_params,
-    public    => 1,
-});
-is( $search_results->{ recordsTotal }, 12,
-    "There should be 12 public shelves in total" );
+$search_results = C4::Utils::DataTables::VirtualShelves::search(
+    {
+        %dt_params,
+        public => 1,
+    }
+);
+is(
+    $search_results->{recordsTotal}, 12,
+    "There should be 12 public shelves in total"
+);
 
-is( $search_results->{ recordsFiltered }, 12,
-    "There should be 12 private shelves" );
+is(
+    $search_results->{recordsFiltered}, 12,
+    "There should be 12 private shelves"
+);
 
-is( @{ $search_results->{ shelves } }, 10,
-    "There should be 10 public shelves returned" );
+is(
+    @{ $search_results->{shelves} }, 10,
+    "There should be 10 public shelves returned"
+);
 
 # Search by owner
-$search_results = C4::Utils::DataTables::VirtualShelves::search({
-    owner => "jane",
-    %dt_params,
-    public    => 1,
-});
-is( $search_results->{ recordsTotal }, 12,
-    "There should be 12 public shelves in total" );
+$search_results = C4::Utils::DataTables::VirtualShelves::search(
+    {
+        owner => "jane",
+        %dt_params,
+        public => 1,
+    }
+);
+is(
+    $search_results->{recordsTotal}, 12,
+    "There should be 12 public shelves in total"
+);
 
-is( $search_results->{ recordsFiltered }, 2,
-    "There should be 1 public shelves for jane" );
+is(
+    $search_results->{recordsFiltered}, 2,
+    "There should be 1 public shelves for jane"
+);
 
-is( @{ $search_results->{ shelves } }, 2,
-    "There should be 1 public shelf returned" );
+is(
+    @{ $search_results->{shelves} }, 2,
+    "There should be 1 public shelf returned"
+);
 
 # Search by owner and shelf name
-$search_results = C4::Utils::DataTables::VirtualShelves::search({
-    owner => "smith",
-    shelfname => "public list 1",
-    %dt_params,
-    public    => 1,
-});
-is( $search_results->{ recordsTotal }, 12,
-    "There should be 12 public shelves in total" );
+$search_results = C4::Utils::DataTables::VirtualShelves::search(
+    {
+        owner     => "smith",
+        shelfname => "public list 1",
+        %dt_params,
+        public => 1,
+    }
+);
+is(
+    $search_results->{recordsTotal}, 12,
+    "There should be 12 public shelves in total"
+);
 
-is( $search_results->{ recordsFiltered }, 6,
-    "There should be 6 public shelves for john with name like %public list 1%" );
+is(
+    $search_results->{recordsFiltered}, 6,
+    "There should be 6 public shelves for john with name like %public list 1%"
+);
 
-is( @{ $search_results->{ shelves } }, 6,
-    "There should be 6 public chalves returned" );
+is(
+    @{ $search_results->{shelves} }, 6,
+    "There should be 6 public chalves returned"
+);
 
 sub _add_biblio {
-    my ( $title ) = @_;
+    my ($title) = @_;
     my $biblio = MARC::Record->new();
     $biblio->append_fields(
-        MARC::Field->new('245', ' ', ' ', a => $title),
+        MARC::Field->new( '245', ' ', ' ', a => $title ),
     );
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
     return $biblionumber;
 }
 

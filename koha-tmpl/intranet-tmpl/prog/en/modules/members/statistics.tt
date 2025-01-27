@@ -6,13 +6,15 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% UNLESS blocking_error %]
-        [% t("Statistics for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %]
-    [% END %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% UNLESS blocking_error %]
+            [% t("Statistics for") | html %]
+            [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        [% END %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -37,14 +39,14 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
-        [% INCLUDE 'members-toolbar.inc' %]
+    [% INCLUDE 'members-toolbar.inc' %]
 
-            <h1>Statistics for [% INCLUDE 'patron-title.inc' %]</h1>
-            [% IF ( datas.size ) %]
-                <div class="page-section">
-                    <table id="statistics">
-                    <thead>
-                        <tr>
+    <h1>Statistics for [% INCLUDE 'patron-title.inc' %]</h1>
+    [% IF ( datas.size ) %]
+        <div class="page-section">
+            <table id="statistics">
+                <thead>
+                    <tr>
                         [% FOREACH cn IN column_names %]
                             <th>
                                 [% SWITCH cn %]
@@ -67,33 +69,33 @@
                         <th>Today's checkouts</th>
                         <th>Today's checkins</th>
                         <th>Total checkouts</th>
-                        </tr>
-                    </thead>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        [% FOREACH r IN datas %]
-                            <tr>
-                                [% FOREACH c IN r %]
-                                    <td>[% c | html %]</td>
-                                [% END %]
-                            </tr>
-                        [% END %]
-                    </tbody>
-                    <tfoot>
+                <tbody>
+                    [% FOREACH r IN datas %]
                         <tr>
-                            <td colspan="[% column_names.size | html %]">TOTAL</td>
-                            <td>[% count_total_precedent_state | html %]</td>
-                            <td>[% count_total_issues | html %]</td>
-                            <td>[% count_total_issues_returned | html %]</td>
-                            <td>[% count_total_actual_state | html %]</td>
+                            [% FOREACH c IN r %]
+                                <td>[% c | html %]</td>
+                            [% END %]
                         </tr>
-                    </tfoot>
-                    </table>
-                </div> <!-- /.page-section -->
-            [% ELSE %]
-                <div class="alert alert-info">There are no statistics for this patron.</div>
-            [% END %]
-
+                    [% END %]
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="[% column_names.size | html %]">TOTAL</td>
+                        <td>[% count_total_precedent_state | html %]</td>
+                        <td>[% count_total_issues | html %]</td>
+                        <td>[% count_total_issues_returned | html %]</td>
+                        <td>[% count_total_actual_state | html %]</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <div class="alert alert-info">There are no statistics for this patron.</div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -101,11 +103,13 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-            $("#statistics").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "paginate": false
-            }));
+        $(document).ready(function () {
+            $("#statistics").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    dom: "t",
+                    paginate: false,
+                })
+            );
         });
     </script>
 [% END %]

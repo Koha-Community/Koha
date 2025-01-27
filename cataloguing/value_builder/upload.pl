@@ -30,7 +30,7 @@ use Modern::Perl;
 # the possibility to delete the uploaded file. If the field is empty, you
 # can upload a new file.
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -41,7 +41,7 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     return <<"SCRIPT";
 <script>
         function Click$params->{id}(event) {

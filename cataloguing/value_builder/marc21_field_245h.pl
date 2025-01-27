@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -31,12 +31,11 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $function_name = $params->{id};
 
-    my $res  = "
+    my $res = "
 <script>
 
 function Blur$function_name(event) {

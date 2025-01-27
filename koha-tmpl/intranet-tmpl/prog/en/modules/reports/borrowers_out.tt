@@ -3,11 +3,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Patrons with no checkouts") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Patrons with no checkouts") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -38,108 +39,112 @@
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
 
-[% IF ( do_it ) %]
-    [% FOREACH mainloo IN mainloop %]
-        <h1>Patrons with no checkouts</h1>
-        [% IF ( mainloo.loopfilter ) %]
-            <p>Filtered on:</p>
-            [% FOREACH loopfilte IN mainloo.loopfilter %]
-                    <p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit | html %] =[% loopfilte.filter | html %][% IF ( loopfilte.err ) %]  [% END %]</p>
-            [% END %]
-        [% END %]
-        
-        <table>
-            <tr>
-                <th>Num/Patrons</th>
-                [% FOREACH loopco IN mainloo.loopcol %]
-                    <th>[% loopco.coltitle | html %]</th>
+    [% IF ( do_it ) %]
+        [% FOREACH mainloo IN mainloop %]
+            <h1>Patrons with no checkouts</h1>
+            [% IF ( mainloo.loopfilter ) %]
+                <p>Filtered on:</p>
+                [% FOREACH loopfilte IN mainloo.loopfilter %]
+                    <p>[% IF ( loopfilte.err ) %][% END %] [% loopfilte.crit | html %] =[% loopfilte.filter | html %][% IF ( loopfilte.err ) %][% END %]</p>
                 [% END %]
-            </tr>
+            [% END %]
+
+            <table>
+                <tr>
+                    <th>Num/Patrons</th>
+                    [% FOREACH loopco IN mainloo.loopcol %]
+                        <th>[% loopco.coltitle | html %]</th>
+                    [% END %]
+                </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
-            <tr>
+                    <tr>
                         <td>[% loopro.rowtitle | html %]</td>
                         [% FOREACH loopcel IN loopro.loopcell %]
-                        <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
-                            </td>
+                            <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %] </td>
                         [% END %]
                     </tr>
                 [% END %]
-        </table>
-    [% END %]
-[% ELSE %]
-    <h1>Patrons with no checkouts</h1>
-    <form method="get" action="/cgi-bin/koha/reports/borrowers_out.pl">
-    <fieldset class="rows">
-		<ol>
-            <li><label for="patroncategory">Patron category: </label> <select name="Filter" id="patroncategory"><option value="" > Any category code</option>
-    [% FOREACH patron_category IN patron_categories %]
-        <option value="[% patron_category.categorycode | html %]" >[% patron_category.description | html %] </option>
-    [% END %]
-    </select>
-</li>
-    <li><label for="to">Not checked out since: </label> <input size="10" id="to" class="flatpickr" data-flatpickr-pastdate="true" name="Filter" value="" type="text" />
-</li>
-		</ol>
-	</fieldset>
-	
-    <fieldset class="rows">
-	<legend>Limits</legend>
-		<ol>
-			<li><label for="numberlimit">Limit to: </label><select name="Limit" id="numberlimit">
-                        <option value ="" selected="selected">None</option>
-                        <option value ="5"> 5</option>
-                        <option value ="10">10</option>
-                        <option value ="15">15</option>
-                        <option value ="20">20</option>
-                        <option value ="25">25</option>
-                        <option value ="40">40</option>
-                        <option value ="50">50</option>
-                        <option value ="100">100</option>
-                    </select></li>
-			<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
-                        <option value ="" selected="selected">None</option>
-                        <option value ="categorycode">Patron category</option>
-                        <option value ="branchcode">Library</option>
-                    </select></li>
-		</ol>
-	</fieldset>
-	
-<fieldset class="rows">
-	<legend>Output</legend>
-    <ol>
-        <li>
-            <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" />
-        </li>
-        <li>
-            <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
-            <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
-            <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME">
-            [% FOREACH value IN CGIextChoice %]
-                <option value="[% value | html %]">[% value | html %]</option>
-            [% END %]
-            </select>
-            <select name="sep" id="sep">
-            [% FOREACH value IN CGIsepChoice.values.sort() %]
-              [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-              [% ELSE %]
-                <option value="[% value | html %]">[% value | html %]</option>
-              [% END %]
-            [% END %]
-            </select>
-        </li>
-    </ol>
-	</fieldset>
+            </table>
+        [% END %]
+    [% ELSE %]
+        <h1>Patrons with no checkouts</h1>
+        <form method="get" action="/cgi-bin/koha/reports/borrowers_out.pl">
+            <fieldset class="rows">
+                <ol>
+                    <li
+                        ><label for="patroncategory">Patron category: </label>
+                        <select name="Filter" id="patroncategory"
+                            ><option value=""> Any category code</option>
+                            [% FOREACH patron_category IN patron_categories %]
+                                <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %] </option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li><label for="to">Not checked out since: </label> <input size="10" id="to" class="flatpickr" data-flatpickr-pastdate="true" name="Filter" value="" type="text" /> </li>
+                </ol>
+            </fieldset>
 
-	<fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name | html %]" />
-	<input type="hidden" name="do_it" value="1" />
-	</fieldset>
-	</form>
-[% END %]
+            <fieldset class="rows">
+                <legend>Limits</legend>
+                <ol>
+                    <li
+                        ><label for="numberlimit">Limit to: </label
+                        ><select name="Limit" id="numberlimit">
+                            <option value="" selected="selected">None</option>
+                            <option value="5"> 5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select></li
+                    >
+                    <li
+                        ><label for="criteria">By: </label
+                        ><select name="Criteria" id="criteria">
+                            <option value="" selected="selected">None</option>
+                            <option value="categorycode">Patron category</option>
+                            <option value="branchcode">Library</option>
+                        </select></li
+                    >
+                </ol>
+            </fieldset>
 
+            <fieldset class="rows">
+                <legend>Output</legend>
+                <ol>
+                    <li> <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+                    <li>
+                        <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label
+                        ><input type="text" name="basename" id="basename" value="Export" />
+                        <label class="inline" for="MIME">Into an application:</label>
+                        <select name="MIME" id="MIME">
+                            [% FOREACH value IN CGIextChoice %]
+                                <option value="[% value | html %]">[% value | html %]</option>
+                            [% END %]
+                        </select>
+                        <select name="sep" id="sep">
+                            [% FOREACH value IN CGIsepChoice.values.sort() %]
+                                [% IF ( value == CGIsepChoice.default ) %]
+                                    <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% value | html %]">[% value | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="report_name" value="[% report_name | html %]" />
+                <input type="hidden" name="do_it" value="1" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

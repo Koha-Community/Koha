@@ -17,7 +17,6 @@ package Koha::Tags::Indexes;
 
 use Modern::Perl;
 
-
 use Koha::Tags::Index;
 
 use base qw(Koha::Objects);

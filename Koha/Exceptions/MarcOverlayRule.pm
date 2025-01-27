@@ -25,11 +25,11 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp' => {
-        isa => 'Koha::Exceptions::MarcOverlayRule',
+        isa         => 'Koha::Exceptions::MarcOverlayRule',
         description => 'Invalid regular expression for tag'
     },
     'Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions' => {
-        isa => 'Koha::Exceptions::MarcOverlayRule',
+        isa         => 'Koha::Exceptions::MarcOverlayRule',
         description => 'Invalid control field actions'
     }
 );

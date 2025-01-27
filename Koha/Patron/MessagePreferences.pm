@@ -48,14 +48,15 @@ Converts C<message_name> into C<message_attribute_id> and continues find.
 =cut
 
 sub find_with_message_name {
-    my ($self, $id) = @_;
+    my ( $self, $id ) = @_;
 
-    if (ref($id) eq "HASH" && $id->{'message_name'}) {
-        my $attr = Koha::Patron::MessagePreference::Attributes->find({
-            message_name => $id->{'message_name'},
-        });
-        $id->{'message_attribute_id'} = ($attr) ?
-                    $attr->message_attribute_id : undef;
+    if ( ref($id) eq "HASH" && $id->{'message_name'} ) {
+        my $attr = Koha::Patron::MessagePreference::Attributes->find(
+            {
+                message_name => $id->{'message_name'},
+            }
+        );
+        $id->{'message_attribute_id'} = ($attr) ? $attr->message_attribute_id : undef;
         delete $id->{'message_name'};
     }
 
@@ -73,22 +74,24 @@ Returns an ARRAYref of HASHrefs on available messaging options.
 sub get_options {
     my ($self) = @_;
 
-    my $transports = Koha::Patron::MessagePreference::Transports->search(undef,
+    my $transports = Koha::Patron::MessagePreference::Transports->search(
+        undef,
         {
-            join => ['message_attribute'],
-            '+select' => ['message_attribute.message_name', 'message_attribute.takes_days'],
-            '+as' => ['message_name', 'takes_days'],
-        });
+            join      => ['message_attribute'],
+            '+select' => [ 'message_attribute.message_name', 'message_attribute.takes_days' ],
+            '+as'     => [ 'message_name',                   'takes_days' ],
+        }
+    );
 
     my $choices;
-    while (my $transport = $transports->next) {
+    while ( my $transport = $transports->next ) {
         my $name = $transport->get_column('message_name');
         $choices->{$name}->{'message_attribute_id'} = $transport->message_attribute_id;
         $choices->{$name}->{'message_name'}         = $name;
         $choices->{$name}->{'takes_days'}           = $transport->get_column('takes_days');
-        $choices->{$name}->{'has_digest'}           ||= 1 if $transport->is_digest;
-        $choices->{$name}->{'has_digest_off'}       ||= 1 if !$transport->is_digest;
-        $choices->{$name}->{'transport_'.$transport->get_column('message_transport_type')} = ' ';
+        $choices->{$name}->{'has_digest'}     ||= 1 if $transport->is_digest;
+        $choices->{$name}->{'has_digest_off'} ||= 1 if !$transport->is_digest;
+        $choices->{$name}->{ 'transport_' . $transport->get_column('message_transport_type') } = ' ';
     }
 
     my @return = values %$choices;
@@ -111,18 +114,19 @@ searches.
 =cut
 
 sub search_with_message_name {
-    my ($self, $params, $attributes) = @_;
+    my ( $self, $params, $attributes ) = @_;
 
-    if (ref($params) eq "HASH" && $params->{'message_name'}) {
-        my $attr = Koha::Patron::MessagePreference::Attributes->find({
-            message_name => $params->{'message_name'},
-        });
-        $params->{'message_attribute_id'} = ($attr) ?
-                    $attr->message_attribute_id : undef;
+    if ( ref($params) eq "HASH" && $params->{'message_name'} ) {
+        my $attr = Koha::Patron::MessagePreference::Attributes->find(
+            {
+                message_name => $params->{'message_name'},
+            }
+        );
+        $params->{'message_attribute_id'} = ($attr) ? $attr->message_attribute_id : undef;
         delete $params->{'message_name'};
     }
 
-    return $self->SUPER::search($params, $attributes);
+    return $self->SUPER::search( $params, $attributes );
 }
 
 =head3 _type

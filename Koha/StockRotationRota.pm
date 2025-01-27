@@ -54,9 +54,9 @@ Returns the stages associated with the current rota.
 =cut
 
 sub stockrotationstages {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->stockrotationstages;
-    return Koha::StockRotationStages->_new_from_dbic( $rs );
+    return Koha::StockRotationStages->_new_from_dbic($rs);
 }
 
 =head3 add_item
@@ -73,15 +73,16 @@ sub add_item {
     my ( $self, $itemnumber ) = @_;
     my $sritem = Koha::StockRotationItems->find($itemnumber);
     if ($sritem) {
-        $sritem->stage_id($self->first_stage->stage_id)
-            ->indemand(0)->fresh(1)->store;
+        $sritem->stage_id( $self->first_stage->stage_id )->indemand(0)->fresh(1)->store;
     } else {
-        $sritem = Koha::StockRotationItem->new({
-            itemnumber_id => $itemnumber,
-            stage_id      => $self->first_stage->stage_id,
-            indemand      => 0,
-            fresh         => 1,
-        })->store;
+        $sritem = Koha::StockRotationItem->new(
+            {
+                itemnumber_id => $itemnumber,
+                stage_id      => $self->first_stage->stage_id,
+                indemand      => 0,
+                fresh         => 1,
+            }
+        )->store;
     }
     return $self;
 }
@@ -96,10 +97,10 @@ Return the first stage attached to this rota (the one that has an undefined
 =cut
 
 sub first_stage {
-    my ( $self ) = @_;
-    my $guess = $self->stockrotationstages->next;
-    my $stage = $guess->first_sibling;
-    return ( $stage ) ? $stage : $guess;
+    my ($self) = @_;
+    my $guess  = $self->stockrotationstages->next;
+    my $stage  = $guess->first_sibling;
+    return ($stage) ? $stage : $guess;
 }
 
 =head3 stockrotationitems
@@ -111,10 +112,8 @@ Return all items associated with this rota via its stages.
 =cut
 
 sub stockrotationitems {
-    my ( $self ) = @_;
-    my $rs = Koha::StockRotationItems->search(
-        { 'stage.rota_id' => $self->rota_id }, { join =>  [ qw/stage/ ] }
-    );
+    my ($self) = @_;
+    my $rs = Koha::StockRotationItems->search( { 'stage.rota_id' => $self->rota_id }, { join => [qw/stage/] } );
     return $rs;
 }
 
@@ -145,19 +144,21 @@ sub investigate {
 
     if ( $self->active ) {
         $report->{rotas_active}++;
+
         # stockrotationstages->investigate augments $report with the stage's
         # content.  This is how 'branched' slowly accumulates all items.
         $report = $self->stockrotationstages->investigate($report);
+
         # Add our rota report to the full report.
-        push @{$report->{rotas}}, {
+        push @{ $report->{rotas} }, {
             name  => $self->title,
             id    => $self->rota_id,
             items => $report->{tmp_items} || [],
-            log   => $report->{tmp_log} || [],
+            log   => $report->{tmp_log}   || [],
         };
         delete $report->{tmp_items};
         delete $report->{tmp_log};
-    } else {                    # Rota is not active.
+    } else {    # Rota is not active.
         $report->{rotas_inactive}++;
         $report->{items_inactive} += $count;
     }

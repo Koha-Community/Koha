@@ -10,315 +10,350 @@
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && TagsEnabled && TagsInputOnList ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Your cart") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Your cart") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]<style>.item-status, .dt-buttons { display: inline; } @media print { body { height: 99%; } }</style>[% END %]
+[% BLOCK cssinclude %]
+    <style>
+        .item-status,
+        .dt-buttons {
+            display: inline;
+        }
+        @media print {
+            body {
+                height: 99%;
+            }
+        }
+    </style>
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='basket' %]
-    <div class="main">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
-                    <div id="userbasket" class="maincontent">
-                        <h1>Your cart</h1>
-                        <div id="floating" class="sticky">
-                            <div id="toolbar" class="toolbar noprint">
-                                [% IF ( verbose ) %]
-                                    <a href="opac-basket.pl" class="btn btn-link btn-sm brief"><i class="fa fa-fw fa-search-minus" aria-hidden="true"></i> Brief display</a>
-                                [% ELSE %]
-                                    <a href="opac-basket.pl" class="btn btn-link btn-sm detail"><i class="fa fa-fw fa-search-plus" aria-hidden="true"></i> More details</a>
-                                [% END %]
-                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    <a class="btn btn-link btn-sm send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send</a>
-                                [% END %]
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div id="userbasket" class="maincontent">
+                    <h1>Your cart</h1>
+                    <div id="floating" class="sticky">
+                        <div id="toolbar" class="toolbar noprint">
+                            [% IF ( verbose ) %]
+                                <a href="opac-basket.pl" class="btn btn-link btn-sm brief"><i class="fa fa-fw fa-search-minus" aria-hidden="true"></i> Brief display</a>
+                            [% ELSE %]
+                                <a href="opac-basket.pl" class="btn btn-link btn-sm detail"><i class="fa fa-fw fa-search-plus" aria-hidden="true"></i> More details</a>
+                            [% END %]
+                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                <a class="btn btn-link btn-sm send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send</a>
+                            [% END %]
 
-                                <div id="download-cart" class="btn-group dropdown">
-                                    <a id="format" class="btn btn-link dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download cart" data-bs-toggle="dropdown" role="button" href="#"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
-                                    <div class="dropdown-menu" role="menu" aria-labelledby="format">
-                                        <a role="menuitem" class="dropdown-item download-cart" data-format="bibtex" href="#">BibTeX</a>
-                                        <a role="menuitem" class="dropdown-item download-cart" data-format="isbd" href="#">ISBD</a>
-                                        <a role="menuitem" class="dropdown-item download-cart" data-format="iso2709" href="#">MARC</a>
-                                        <a role="menuitem" class="dropdown-item download-cart" data-format="ris" href="#">RIS (Zotero, EndNote, others)</a>
-                                        [% FOREACH csv_profile IN csv_profiles %]
-                                            <a role="menuitem" class="dropdown-item download-cart" data-format="[% csv_profile.export_format_id | html %]" href="#">CSV - [% csv_profile.profile | html %]</a>
-                                        [% END %]
-                                    </div>
+                            <div id="download-cart" class="btn-group dropdown">
+                                <a id="format" class="btn btn-link dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download cart" data-bs-toggle="dropdown" role="button" href="#"
+                                    ><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b
+                                ></a>
+                                <div class="dropdown-menu" role="menu" aria-labelledby="format">
+                                    <a role="menuitem" class="dropdown-item download-cart" data-format="bibtex" href="#">BibTeX</a>
+                                    <a role="menuitem" class="dropdown-item download-cart" data-format="isbd" href="#">ISBD</a>
+                                    <a role="menuitem" class="dropdown-item download-cart" data-format="iso2709" href="#">MARC</a>
+                                    <a role="menuitem" class="dropdown-item download-cart" data-format="ris" href="#">RIS (Zotero, EndNote, others)</a>
+                                    [% FOREACH csv_profile IN csv_profiles %]
+                                        <a role="menuitem" class="dropdown-item download-cart" data-format="[% csv_profile.export_format_id | html %]" href="#">CSV - [% csv_profile.profile | html %]</a>
+                                    [% END %]
                                 </div>
-
-                                <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash-can" aria-hidden="true"></i> Empty and close</a>
-                                <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i> Hide window</a>
-                                [% IF ( verbose ) %]
-                                    <a class="btn btn-link btn-sm print-large" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a>
-                                [% END %]
                             </div>
 
-                            <div class="selections-toolbar toolbar noprint">
-                                <div class="check_control">
-                                    <a id="CheckAll" class="btn btn-link btn-sm btn-sm" href="#">Select all</a>
-                                    <a id="CheckNone" class="btn btn-link btn-sm btn-sm" href="#">Clear all</a>
-                                </div>
-                                <span class="links" id="tag_hides">
-                                    <span class="selections">Select titles to: </span>
-                                    <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled" aria-disabled="true"><i class="fa fa-times" aria-hidden="true"></i> Remove</a>
-                                    [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
-                                        [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
-                                            <a href="#" class="btn btn-link btn-sm newshelf disabled" aria-disabled="true"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
-                                        [% END %]
-                                        [% IF ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) %]
-                                            <a href="#" class="btn btn-link btn-sm hold disabled" aria-disabled="true"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
-                                        [% END %]
-                                        [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <a href="#" id="tagsel_tag" class="btn btn-link btn-sm disabled" aria-disabled="true"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
-                                        [% END %]
-                                    [% END # / IF opacuserlogin %]
-                                </span>
-                                [% IF ( TagsInputEnabled && loggedinusername ) %]
+                            <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash-can" aria-hidden="true"></i> Empty and close</a>
+                            <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i> Hide window</a>
+                            [% IF ( verbose ) %]
+                                <a class="btn btn-link btn-sm print-large" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a>
+                            [% END %]
+                        </div>
+
+                        <div class="selections-toolbar toolbar noprint">
+                            <div class="check_control">
+                                <a id="CheckAll" class="btn btn-link btn-sm btn-sm" href="#">Select all</a>
+                                <a id="CheckNone" class="btn btn-link btn-sm btn-sm" href="#">Clear all</a>
+                            </div>
+                            <span class="links" id="tag_hides">
+                                <span class="selections">Select titles to: </span>
+                                <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled" aria-disabled="true"><i class="fa fa-times" aria-hidden="true"></i> Remove</a>
+                                [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+                                    [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
+                                        <a href="#" class="btn btn-link btn-sm newshelf disabled" aria-disabled="true"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
+                                    [% END %]
+                                    [% IF ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) %]
+                                        <a href="#" class="btn btn-link btn-sm hold disabled" aria-disabled="true"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
+                                    [% END %]
+                                    [% IF ( TagsInputEnabled && loggedinusername ) %]
+                                        <a href="#" id="tagsel_tag" class="btn btn-link btn-sm disabled" aria-disabled="true"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
+                                    [% END %]
+                                [% END # / IF opacuserlogin %]
+                            </span>
+                            [% IF ( TagsInputEnabled && loggedinusername ) %]
                                 <span id="tagsel_form" style="display:none">
                                     <label for="tagsel_new">New tag:</label>
                                     <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
-                                    <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="Add" type="submit" value="Add">
+                                    <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="Add" type="submit" value="Add" />
                                     <a href="#" id="tagsel_cancel">Cancel</a>
                                 </span>
+                            [% END %]
+                        </div>
+                    </div>
+                    <!-- /#floating -->
+
+                    [% IF ( verbose ) %]
+                        <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
+                            [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
+                                [% IF BIBLIO_RESULT.title %]
+                                    [% check_title = BIBLIO_RESULT.title %]
+                                [% ELSE %]
+                                    [% check_title = BIBLIO_RESULT.biblionumber %]
                                 [% END %]
-                            </div>
-                        </div> <!-- /#floating -->
+                                <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
+                                <h2>
+                                    <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
+                                    [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]
+                                    [% IF ( BIBLIO_RESULT.author ) %][% BIBLIO_RESULT.author | html %][% END %]
+                                </h2>
+                                <!-- COinS / Openurl -->
+                                <span
+                                    class="Z3988"
+                                    title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="
+                                ></span>
 
-                        [% IF ( verbose ) %]
-                            <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
-                                [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
-                                    [% IF BIBLIO_RESULT.title %]
-                                        [% check_title = BIBLIO_RESULT.title %]
-                                    [% ELSE %]
-                                        [% check_title = BIBLIO_RESULT.biblionumber %]
+                                <table class="table">
+                                    [% IF ( BIBLIO_RESULT.isbn ) %]
+                                        <tr>
+                                            <th scope="row">ISBN</th>
+                                            <td>[% BIBLIO_RESULT.isbn | html %]</td>
+                                        </tr>
                                     [% END %]
-                                    <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
-                                    <h2>
-                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
-                                                [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]
-                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author | html %][% END %]
-                                    </h2>
-                                    <!-- COinS / Openurl -->
-                                    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
 
-                                    <table class="table">
-                                        [% IF ( BIBLIO_RESULT.isbn ) %]
-                                            <tr>
-                                                <th scope="row">ISBN</th>
-                                                <td>[% BIBLIO_RESULT.isbn | html %]</td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
+                                    [% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
                                         <tr>
                                             <th scope="row">Author(s)</th>
                                             <td>
-                                               [% IF ( BIBLIO_RESULT.author ) %]
-                                                   <p>[% BIBLIO_RESULT.author | html %]</p>
-                                               [% END %]
-                                               [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
-                                                   [% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %]
-                                                   <p> [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
-                                                          [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
-                                                              [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]
-                                                       [% END %]
-                                                   </p>
-                                                   [% END %]
-                                               [% END %]
+                                                [% IF ( BIBLIO_RESULT.author ) %]
+                                                    <p>[% BIBLIO_RESULT.author | html %]</p>
+                                                [% END %]
+                                                [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
+                                                    [% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %]
+                                                        <p>
+                                                            [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
+                                                                [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
+                                                                [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]
+                                                            [% END %]
+                                                        </p>
+                                                    [% END %]
+                                                [% END %]
                                             </td>
                                         </tr>
-                                        [% END %]
+                                    [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.publishercode ) %]
-                                            <tr>
-                                                <th scope="row">Publisher</th>
-                                                <td>[% BIBLIO_RESULT.place | html %] [% BIBLIO_RESULT.publishercode | html %] [% BIBLIO_RESULT.publicationyear | html %]
-                                                </td>
-                                            </tr>
-                                        [% END %]
+                                    [% IF ( BIBLIO_RESULT.publishercode ) %]
+                                        <tr>
+                                            <th scope="row">Publisher</th>
+                                            <td>[% BIBLIO_RESULT.place | html %] [% BIBLIO_RESULT.publishercode | html %] [% BIBLIO_RESULT.publicationyear | html %] </td>
+                                        </tr>
+                                    [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.pages ) %]
-                                            <tr>
-                                                <th scope="row">Details</th>
-                                                <td>[% BIBLIO_RESULT.pages | html %] [% BIBLIO_RESULT.illus | html %] [% BIBLIO_RESULT.item('size') | html %]</td>
-                                            </tr>
-                                        [% END %]
+                                    [% IF ( BIBLIO_RESULT.pages ) %]
+                                        <tr>
+                                            <th scope="row">Details</th>
+                                            <td>[% BIBLIO_RESULT.pages | html %] [% BIBLIO_RESULT.illus | html %] [% BIBLIO_RESULT.item('size') | html %]</td>
+                                        </tr>
+                                    [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.seriestitle ) %]
+                                    [% IF ( BIBLIO_RESULT.seriestitle ) %]
                                         <tr>
                                             <th scope="row">Collection</th>
                                             <td> [% BIBLIO_RESULT.seriestitle | html %]</td>
                                         </tr>
-                                        [% END %]
+                                    [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.MARCSUBJCTS ) %]
+                                    [% IF ( BIBLIO_RESULT.MARCSUBJCTS ) %]
                                         <tr>
                                             <th scope="row">Subject(s)</th>
-                                            <td>[% FOREACH MARCSUBJCT IN BIBLIO_RESULT.MARCSUBJCTS %]
-                                                   <p> [% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
-                                                        [% MARCSUBJECT_SUBFIELDS_LOO.separator | html %][% MARCSUBJECT_SUBFIELDS_LOO.value | html %][% END %]
-                                                   </p>
-                                                [% END %]</td>
+                                            <td
+                                                >[% FOREACH MARCSUBJCT IN BIBLIO_RESULT.MARCSUBJCTS %]
+                                                    <p>
+                                                        [% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
+                                                            [% MARCSUBJECT_SUBFIELDS_LOO.separator | html %][% MARCSUBJECT_SUBFIELDS_LOO.value | html %]
+                                                        [% END %]
+                                                    </p>
+                                                [% END %]</td
+                                            >
                                         </tr>
-                                        [% END %]
+                                    [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.copyrightdate ) %]
-                                            <tr><th scope="row">Copyright</th>
-                                                <td> [% BIBLIO_RESULT.copyrightdate | html %]</td>
-                                            </tr>
-                                        [% END %]
+                                    [% IF ( BIBLIO_RESULT.copyrightdate ) %]
+                                        <tr
+                                            ><th scope="row">Copyright</th>
+                                            <td> [% BIBLIO_RESULT.copyrightdate | html %]</td>
+                                        </tr>
+                                    [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.MARCNOTES ) %]
-                                            <tr>
-                                                <th scope="row">Notes</th>
-                                                <td>
+                                    [% IF ( BIBLIO_RESULT.MARCNOTES ) %]
+                                        <tr>
+                                            <th scope="row">Notes</th>
+                                            <td>
                                                 [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
                                                     <p>
-                                                    [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                        - <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
-                                                    [% ELSE %]
-                                                        - [% MARCNOTE.marcnote | html %]
-                                                    [% END %]
-                                                    </p>
-                                                [% END %]
-                                                </td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( BIBLIO_RESULT.unititle ) %]
-                                            <tr>
-                                                <th scope="row">Unified title</th>
-                                                <td> [% BIBLIO_RESULT.unititle | html %]</td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( BIBLIO_RESULT.serial ) %]
-                                            <tr>
-                                                <th scope="row">Serial</th>
-                                                <td>[% BIBLIO_RESULT.serial | html %]</td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( BIBLIO_RESULT.dewey ) %]
-                                            <tr>
-                                                <th scope="row">Dewey</th>
-                                                <td>[% BIBLIO_RESULT.dewey | html %]</td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( BIBLIO_RESULT.classification ) %]
-                                            <tr>
-                                                <th scope="row">Classification</th>
-                                                <td> [% BIBLIO_RESULT.classification | html %]</td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( BIBLIO_RESULT.lccn ) %]
-                                            <tr>
-                                                <th scope="row">LCCN</th>
-                                                <td> [% BIBLIO_RESULT.lccn | html %]</td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF BIBLIO_RESULT.MARCURLS.size %]
-                                            <tr>
-                                                <th scope="row">URL(s)</th>
-                                                <td>
-                                                   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
-                                                        [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
-
-                                                        [% IF OPACURLOpenInNewWindow %]
-                                                            <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">[% MARCurl.linktext | html %]</a>
+                                                        [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                                            - <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
                                                         [% ELSE %]
-                                                            <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
-                                                        [% END %]
-
-                                                        [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note | html %]</p>[% END %][% END %]
-                                                    [% END %]
-                                                </td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
-                                            <tr>
-                                                <th scope="row">In</th>
-                                                <td>
-                                                    <p>
-                                                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a> [% BIBLIO_RESULT.RELATEDPARTS | html %]
-                                                        [% ELSE %]
-                                                            [% BIBLIO_RESULT.HOSTINFO| html %]
+                                                            - [% MARCNOTE.marcnote | html %]
                                                         [% END %]
                                                     </p>
-                                                </td>
-                                            </tr>
-                                        [% END %]
-
-                                        <tr>
-                                            <th scope="row">Location(s) (Status)</th>
-                                            <td>
-                                                [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
-                                                    <ul>
-                                                        [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                                                            <li>
-                                                                <strong>[% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]</strong>
-                                                                <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
-                                                                [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                                    ([% ITEM_RESULT.itemcallnumber | html %])
-                                                                [% END %]
-                                                                ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
-                                                            </li>
-                                                        [% END %]
-                                                    </ul>
-                                                [% ELSE %]
-                                                    This record has no items.
                                                 [% END %]
                                             </td>
                                         </tr>
-                                    </table>
-                                [% END # / FOREACH BIBLIO_RESULT %]
-                            </form>
+                                    [% END %]
 
-                        [% ELSE %]
-
-                            <form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
-                                <table id="itemst" class="table table-bordered table-striped">
-                                    <caption class="sr-only">Items in your cart</caption>
-                                    <thead>
+                                    [% IF ( BIBLIO_RESULT.unititle ) %]
                                         <tr>
-                                            <th class="noprint">&nbsp;</th>
-                                            <th>Title</th>
-                                            <th>Author</th>
-                                            <th>Year</th>
-                                            <th>Location (Status)</th>
+                                            <th scope="row">Unified title</th>
+                                            <td> [% BIBLIO_RESULT.unititle | html %]</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                    [% END %]
+
+                                    [% IF ( BIBLIO_RESULT.serial ) %]
+                                        <tr>
+                                            <th scope="row">Serial</th>
+                                            <td>[% BIBLIO_RESULT.serial | html %]</td>
+                                        </tr>
+                                    [% END %]
+
+                                    [% IF ( BIBLIO_RESULT.dewey ) %]
+                                        <tr>
+                                            <th scope="row">Dewey</th>
+                                            <td>[% BIBLIO_RESULT.dewey | html %]</td>
+                                        </tr>
+                                    [% END %]
+
+                                    [% IF ( BIBLIO_RESULT.classification ) %]
+                                        <tr>
+                                            <th scope="row">Classification</th>
+                                            <td> [% BIBLIO_RESULT.classification | html %]</td>
+                                        </tr>
+                                    [% END %]
+
+                                    [% IF ( BIBLIO_RESULT.lccn ) %]
+                                        <tr>
+                                            <th scope="row">LCCN</th>
+                                            <td> [% BIBLIO_RESULT.lccn | html %]</td>
+                                        </tr>
+                                    [% END %]
+
+                                    [% IF BIBLIO_RESULT.MARCURLS.size %]
+                                        <tr>
+                                            <th scope="row">URL(s)</th>
+                                            <td>
+                                                [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
+                                                    [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
+
+                                                    [% IF OPACURLOpenInNewWindow %]
+                                                        <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">[% MARCurl.linktext | html %]</a>
+                                                    [% ELSE %]
+                                                        <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+                                                    [% END %]
+
+                                                    [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note | html %]</p>[% END %][% END %]
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END %]
+
+                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
+                                        <tr>
+                                            <th scope="row">In</th>
+                                            <td>
+                                                <p>
+                                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]"
+                                                            >[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a
+                                                        >
+                                                        [% BIBLIO_RESULT.RELATEDPARTS | html %]
+                                                    [% ELSE %]
+                                                        [% BIBLIO_RESULT.HOSTINFO| html %]
+                                                    [% END %]
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    [% END %]
+
+                                    <tr>
+                                        <th scope="row">Location(s) (Status)</th>
+                                        <td>
+                                            [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
+                                                <ul>
+                                                    [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+                                                        <li>
+                                                            <strong>[% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]</strong>
+                                                            <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
+                                                            [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                                                                ([% ITEM_RESULT.itemcallnumber | html %])
+                                                            [% END %]
+                                                            ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
+                                                        </li>
+                                                    [% END %]
+                                                </ul>
+                                            [% ELSE %]
+                                                This record has no items.
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                </table>
+                            [% END # / FOREACH BIBLIO_RESULT %]
+                        </form>
+                    [% ELSE %]
+                        <form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
+                            <table id="itemst" class="table table-bordered table-striped">
+                                <caption class="sr-only">Items in your cart</caption>
+                                <thead>
+                                    <tr>
+                                        <th class="noprint">&nbsp;</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Location (Status)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                         <tr>
-                                                <td class="noprint selectcol">
-                                                    [% IF BIBLIO_RESULT.title %]
-                                                        [% check_title = BIBLIO_RESULT.title %]
-                                                    [% ELSE %]
-                                                        [% check_title = BIBLIO_RESULT.biblionumber %]
-                                                    [% END %]
-                                                    <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
-                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
-                                                </td>
+                                            <td class="noprint selectcol">
+                                                [% IF BIBLIO_RESULT.title %]
+                                                    [% check_title = BIBLIO_RESULT.title %]
+                                                [% ELSE %]
+                                                    [% check_title = BIBLIO_RESULT.biblionumber %]
+                                                [% END %]
+                                                <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
+                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
+                                            </td>
                                             <td>
-                                                <a href="#" class="bib_opener" data-link="[% PROCESS biblio_a_href biblionumber => BIBLIO_RESULT.biblionumber %]" data-biblionumber="[% BIBLIO_RESULT.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]</a>
+                                                <a href="#" class="bib_opener" data-link="[% PROCESS biblio_a_href biblionumber => BIBLIO_RESULT.biblionumber %]" data-biblionumber="[% BIBLIO_RESULT.biblionumber | html %]"
+                                                    >[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]</a
+                                                >
                                                 <!-- COinS / Openurl -->
-                                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
+                                                <span
+                                                    class="Z3988"
+                                                    title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="
+                                                ></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                                <span id="newtag[% BIBLIO_RESULT.biblionumber | html %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</span>
+                                                    <span id="newtag[% BIBLIO_RESULT.biblionumber | html %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</span>
                                                 [% END %]
 
                                                 [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
-                                                    <p>In:
+                                                    <p
+                                                        >In:
                                                         [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a> [% BIBLIO_RESULT.RELATEDPARTS | html %]
+                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]"
+                                                                >[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a
+                                                            >
+                                                            [% BIBLIO_RESULT.RELATEDPARTS | html %]
                                                         [% ELSE %]
                                                             [% BIBLIO_RESULT.HOSTINFO | html %]
                                                         [% END %]
@@ -333,211 +368,222 @@
                                                     [% BIBLIO_RESULT.copyrightdate | html %]
                                                 [% END %]
                                             </td>
-                                            <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                                                <li>
-                                                    [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
-                                                    <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
-                                                    <span class="ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ITEM_RESULT.ccode, opac => 1 ) | html %]</span>
-                                                    [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                        ([% ITEM_RESULT.itemcallnumber | html %])
-                                                    [% END %]
-                                                    ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
-                                                </li>
-                                                [% END %]</ul>[% ELSE %]This record has no items.[% END %]
+                                            <td
+                                                >[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
+                                                    <ul
+                                                        >[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+                                                            <li>
+                                                                [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
+                                                                <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
+                                                                <span class="ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ITEM_RESULT.ccode, opac => 1 ) | html %]</span>
+                                                                [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                                                                    ([% ITEM_RESULT.itemcallnumber | html %])
+                                                                [% END %]
+                                                                ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
+                                                            </li>
+                                                        [% END %]</ul
+                                                    >
+                                                [% ELSE %]
+                                                    This record has no items.
+                                                [% END %]
                                             </td>
                                         </tr>
                                     [% END # / FOREACH BIBLIO_RESULT %]
-                                    </tbody>
-                                </table>
-                            </form>
-                        [% END # / verbose %]
+                                </tbody>
+                            </table>
+                        </form>
+                    [% END # / verbose %]
 
-                            <form name="myform" action="opac-basket.pl" method="get">
-                                <input type="hidden" name="records" id="records" />
-                            </form>
-                            <form method="get" id="download_cart" action="/cgi-bin/koha/opac-downloadcart.pl">
-                                <input type="hidden" name="format" id="download_format" value="" />
-                                <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
-                            </form>
-
-                </div> <!-- / #userbasket -->
-            </div> <!-- / .col -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                    <form name="myform" action="opac-basket.pl" method="get">
+                        <input type="hidden" name="records" id="records" />
+                    </form>
+                    <form method="get" id="download_cart" action="/cgi-bin/koha/opac-downloadcart.pl">
+                        <input type="hidden" name="format" id="download_format" value="" />
+                        <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
+                    </form>
+                </div>
+                <!-- / #userbasket -->
+            </div>
+            <!-- / .col -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 
 [% BLOCK jsinclude %]
-        [% INCLUDE 'datatables.inc' %]
-        <script>
-            [% IF ( TagsInputEnabled && loggedinusername ) %]
-                function tagSelected() {
-                    var bibs = document.getElementById('records').value;
-                    if (bibs) {
-                        $("#tagsel_tag").hide();
-                        $("#tag_hides").hide();
-                        $("#tagsel_form").show();
-                    } else {
-                        alert( _("No item was selected") );
-                    }
-                }
-
-                function tagCanceled() {
-                    $("#tagsel_form").hide();
-                    $("#tagsel_tag").show();
-                    $("#tag_hides").show();
-                    $("#tagsel_new").val("");
-                    $(".tagstatus").empty().hide();
-                }
-
-                function tagAdded() {
-                    var checkedBoxes = $("input:checkbox:checked");
-                    if (!$(checkedBoxes).size()) {
-                        alert( _("No item was selected") );
-                        return false;
-                    }
-
-                    var tag = $("#tagsel_new").val();
-                    if (!tag || (tag == "")) {
-                        alert( _("No tag was specified.") );
-                        return false;
-                    }
-
-                    var bibs = [];
-                    for (var i = 0; i < $(checkedBoxes).size(); i++) {
-                        var box = $(checkedBoxes).get(i);
-                        bibs[i] = $(box).val();
-                    }
-
-                    KOHA.Tags.add_multitags_button(bibs, tag);
-                    return false;
-                }
-            [% END # / TagsInputEnabled && loggedinusername %]
-
-            $(document).ready(function(){
-                $("a.bib_opener").on('click',function(){
-                    let link = this.dataset.link;
-                    let biblionumber = this.dataset.biblionumber;
-                    openBiblio(link,biblionumber)
-                });
-
-                $(".brief").click(function(e){
-                    e.preventDefault();
-                    showLess();
-                });
-
-                $(".detail").click(function(e){
-                    e.preventDefault();
-                    showMore();
-                });
-
-                $(".send").click(function(e){
-                    e.preventDefault();
-                    sendBasket();
-                });
-
-                $(".download-cart").on("click", function(e){
-                    e.preventDefault();
-                    var format = $(this).data("format");
-                    $("#download_format").val( format );
-                    $("#download_cart").submit();
-                });
-
-                $(".empty").click(function(e){
-                    e.preventDefault();
-                    delBasket();
-                });
-
-                $(".deleteshelf").click(function(e){
-                    e.preventDefault();
-                    delSelRecords();
-                });
-
-                $(".newshelf").click(function(e){
-                    e.preventDefault();
-                    addSelToShelf();
-                });
-
-                $(".hold").click(function(e){
-                    e.preventDefault();
-                    holdSel();
-                });
-
-                $("#tagsel_tag").click(function(e){
-                    e.preventDefault();
-                    tagSelected();
-                });
-
-                $("#tagsel_button").click(function(e){
-                    e.preventDefault();
-                    tagAdded();
-                });
-
-                $("#tagsel_cancel").click(function(e){
-                    e.preventDefault();
-                    tagCanceled();
-                });
-
-                $("#CheckAll").click(function(e){
-                    e.preventDefault();
-                    $(".cb").each(function(){
-                        $(this).prop("checked", true);
-                        selRecord(this.value, true);
-                    });
-                    enableCheckboxActions();
-                });
-
-                $("#CheckNone").click(function(e){
-                    e.preventDefault();
-                    $(".cb").each(function(){
-                        $(this).prop("checked", false);
-                        selRecord(this.value, false);
-                    });
-                    enableCheckboxActions();
-                });
-
-                if( $("#itemst").length > 0 ){
-                    var itemst = $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                        "order": [[ 1, "asc" ]],
-                        "columnDefs": [
-                          { "targets": [ 0,-1 ], "sortable": false, "searchable": false }
-                        ],
-                        "columns": [
-                            null,
-                            { "type": "anti-the" },
-                            null,
-                            null,
-                            null
-                        ],
-                    }));
-
-                    var buttons = new $.fn.dataTable.Buttons(itemst, {
-                         buttons: [
-                            'print'
-                        ]
-                    }).container().appendTo($('#toolbar'));
-                }
-
-                $(".cb").change(function(){
-                    selRecord( $(this).val(), $(this).prop("checked") );
-                    enableCheckboxActions();
-                    return false;
-                });
-                enableCheckboxActions();
-
-            });
-
-            function enableCheckboxActions(){
-                // Enable/disable controls if checkboxes are checked
-                var checkedBoxes = $(".cb:checked");
-                if ( checkedBoxes.length ) {
-                  $(".selections").html(_("With selected titles: "));
-                  $(".selections-toolbar .links a").removeClass("disabled").attr("aria-disabled", "false");
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        [% IF ( TagsInputEnabled && loggedinusername ) %]
+            function tagSelected() {
+                var bibs = document.getElementById('records').value;
+                if (bibs) {
+                    $("#tagsel_tag").hide();
+                    $("#tag_hides").hide();
+                    $("#tagsel_form").show();
                 } else {
-                  $(".selections").html(_("Select titles to: "));
-                  $(".selections-toolbar .links a").addClass("disabled").attr("aria-disabled", "true");
+                    alert( _("No item was selected") );
                 }
             }
-        </script>
+
+            function tagCanceled() {
+                $("#tagsel_form").hide();
+                $("#tagsel_tag").show();
+                $("#tag_hides").show();
+                $("#tagsel_new").val("");
+                $(".tagstatus").empty().hide();
+            }
+
+            function tagAdded() {
+                var checkedBoxes = $("input:checkbox:checked");
+                if (!$(checkedBoxes).size()) {
+                    alert( _("No item was selected") );
+                    return false;
+                }
+
+                var tag = $("#tagsel_new").val();
+                if (!tag || (tag == "")) {
+                    alert( _("No tag was specified.") );
+                    return false;
+                }
+
+                var bibs = [];
+                for (var i = 0; i < $(checkedBoxes).size(); i++) {
+                    var box = $(checkedBoxes).get(i);
+                    bibs[i] = $(box).val();
+                }
+
+                KOHA.Tags.add_multitags_button(bibs, tag);
+                return false;
+            }
+        [% END # / TagsInputEnabled && loggedinusername %]
+
+        $(document).ready(function(){
+            $("a.bib_opener").on('click',function(){
+                let link = this.dataset.link;
+                let biblionumber = this.dataset.biblionumber;
+                openBiblio(link,biblionumber)
+            });
+
+            $(".brief").click(function(e){
+                e.preventDefault();
+                showLess();
+            });
+
+            $(".detail").click(function(e){
+                e.preventDefault();
+                showMore();
+            });
+
+            $(".send").click(function(e){
+                e.preventDefault();
+                sendBasket();
+            });
+
+            $(".download-cart").on("click", function(e){
+                e.preventDefault();
+                var format = $(this).data("format");
+                $("#download_format").val( format );
+                $("#download_cart").submit();
+            });
+
+            $(".empty").click(function(e){
+                e.preventDefault();
+                delBasket();
+            });
+
+            $(".deleteshelf").click(function(e){
+                e.preventDefault();
+                delSelRecords();
+            });
+
+            $(".newshelf").click(function(e){
+                e.preventDefault();
+                addSelToShelf();
+            });
+
+            $(".hold").click(function(e){
+                e.preventDefault();
+                holdSel();
+            });
+
+            $("#tagsel_tag").click(function(e){
+                e.preventDefault();
+                tagSelected();
+            });
+
+            $("#tagsel_button").click(function(e){
+                e.preventDefault();
+                tagAdded();
+            });
+
+            $("#tagsel_cancel").click(function(e){
+                e.preventDefault();
+                tagCanceled();
+            });
+
+            $("#CheckAll").click(function(e){
+                e.preventDefault();
+                $(".cb").each(function(){
+                    $(this).prop("checked", true);
+                    selRecord(this.value, true);
+                });
+                enableCheckboxActions();
+            });
+
+            $("#CheckNone").click(function(e){
+                e.preventDefault();
+                $(".cb").each(function(){
+                    $(this).prop("checked", false);
+                    selRecord(this.value, false);
+                });
+                enableCheckboxActions();
+            });
+
+            if( $("#itemst").length > 0 ){
+                var itemst = $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "order": [[ 1, "asc" ]],
+                    "columnDefs": [
+                      { "targets": [ 0,-1 ], "sortable": false, "searchable": false }
+                    ],
+                    "columns": [
+                        null,
+                        { "type": "anti-the" },
+                        null,
+                        null,
+                        null
+                    ],
+                }));
+
+                var buttons = new $.fn.dataTable.Buttons(itemst, {
+                     buttons: [
+                        'print'
+                    ]
+                }).container().appendTo($('#toolbar'));
+            }
+
+            $(".cb").change(function(){
+                selRecord( $(this).val(), $(this).prop("checked") );
+                enableCheckboxActions();
+                return false;
+            });
+            enableCheckboxActions();
+
+        });
+
+        function enableCheckboxActions(){
+            // Enable/disable controls if checkboxes are checked
+            var checkedBoxes = $(".cb:checked");
+            if ( checkedBoxes.length ) {
+              $(".selections").html(_("With selected titles: "));
+              $(".selections-toolbar .links a").removeClass("disabled").attr("aria-disabled", "false");
+            } else {
+              $(".selections").html(_("Select titles to: "));
+              $(".selections-toolbar .links a").addClass("disabled").attr("aria-disabled", "true");
+            }
+        }
+    </script>
 [% END # / BLOCK jsinclude %]

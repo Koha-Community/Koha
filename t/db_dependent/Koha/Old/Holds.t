@@ -36,16 +36,15 @@ subtest 'anonymize() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron           = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $anonymous_patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     is( $patron->old_holds->count, 0, 'Patron has no old holds' );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
-    throws_ok
-        { $patron->old_holds->anonymize; }
-        'Koha::Exceptions::SysPref::NotSet',
+    throws_ok { $patron->old_holds->anonymize; }
+    'Koha::Exceptions::SysPref::NotSet',
         'Exception thrown because AnonymousPatron not set';
 
     is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
@@ -57,8 +56,7 @@ subtest 'anonymize() tests' => sub {
     my $hold_1 = $builder->build_object(
         {
             class => 'Koha::Old::Holds',
-            value =>
-              { borrowernumber => $patron->id, timestamp => dt_from_string() }
+            value => { borrowernumber => $patron->id, timestamp => dt_from_string() }
         }
     );
     my $hold_2 = $builder->build_object(
@@ -90,18 +88,19 @@ subtest 'anonymize() tests' => sub {
     );
 
     is( $patron->old_holds->count, 4, 'Patron has 4 completed holds' );
+
     # filter them so only the older two are part of the resultset
-    my $holds = $patron->old_holds->search({ timestamp => { '<=' => dt_from_string()->subtract( days => 2 ) } });
+    my $holds = $patron->old_holds->search( { timestamp => { '<=' => dt_from_string()->subtract( days => 2 ) } } );
+
     # Anonymize them
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
-    throws_ok
-        { $holds->anonymize; }
-        'Koha::Exceptions::SysPref::NotSet',
+    throws_ok { $holds->anonymize; }
+    'Koha::Exceptions::SysPref::NotSet',
         'Exception thrown because AnonymousPatron not set';
 
-    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
-    is( $patron->old_holds->count, 4, 'Patron has 4 completed holds' );
+    is( $@->syspref,               'AnonymousPatron', 'syspref parameter is correctly passed' );
+    is( $patron->old_holds->count, 4,                 'Patron has 4 completed holds' );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
@@ -120,12 +119,10 @@ subtest 'filter_by_anonymizable() tests' => sub {
     $schema->storage->txn_begin;
 
     # patron_1 => keep records forever
-    my $patron_1 = $builder->build_object(
-        { class => 'Koha::Patrons', value => { privacy => 0 } } );
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons', value => { privacy => 0 } } );
 
     # patron_2 => never keep records
-    my $patron_2 = $builder->build_object(
-        { class => 'Koha::Patrons', value => { privacy => 1 } } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { privacy => 1 } } );
 
     is( $patron_1->old_holds->count, 0, 'patron_1 has no old holds' );
     is( $patron_2->old_holds->count, 0, 'patron_2 has no old holds' );
@@ -163,28 +160,24 @@ subtest 'filter_by_anonymizable() tests' => sub {
         }
     )->_move_to_old;
 
-    $hold_1 = Koha::Old::Holds->find( $hold_1->id )
-      ->set( { timestamp => dt_from_string() } )->store;
-    $hold_2 = Koha::Old::Holds->find( $hold_2->id )
-      ->set( { timestamp => dt_from_string()->subtract( days => 1 ) } )->store;
-    $hold_3 = Koha::Old::Holds->find( $hold_3->id )
-      ->set( { timestamp => dt_from_string()->subtract( days => 2 ) } )->store;
-    $hold_4 = Koha::Old::Holds->find( $hold_4->id )
-      ->set( { timestamp => dt_from_string()->subtract( days => 3 ) } )->store;
+    $hold_1 = Koha::Old::Holds->find( $hold_1->id )->set( { timestamp => dt_from_string() } )->store;
+    $hold_2 =
+        Koha::Old::Holds->find( $hold_2->id )->set( { timestamp => dt_from_string()->subtract( days => 1 ) } )->store;
+    $hold_3 =
+        Koha::Old::Holds->find( $hold_3->id )->set( { timestamp => dt_from_string()->subtract( days => 2 ) } )->store;
+    $hold_4 =
+        Koha::Old::Holds->find( $hold_4->id )->set( { timestamp => dt_from_string()->subtract( days => 3 ) } )->store;
 
     is( $patron_1->old_holds->count, 2, 'patron_1 has 2 completed holds' );
     is( $patron_2->old_holds->count, 2, 'patron_2 has 2 completed holds' );
 
     # filter them so only the older two are part of the resultset
-    my $holds = Koha::Old::Holds->search(
-        { 'me.borrowernumber' => [ $patron_1->id, $patron_2->id ] } );
+    my $holds = Koha::Old::Holds->search( { 'me.borrowernumber' => [ $patron_1->id, $patron_2->id ] } );
     is( $holds->count, 4, 'Total of 4 holds returned correctly' );
     my $rs = $holds->filter_by_anonymizable;
     is( $rs->count, 2, 'Only 2 can be anonymized' );
 
-    $rs = $holds
-            ->filter_by_anonymizable
-            ->filter_by_last_update( { days => 1 } );
+    $rs = $holds->filter_by_anonymizable->filter_by_last_update( { days => 1 } );
 
     is( $rs->count, 1, 'Only 1 can be anonymized with date filter applied' );
 

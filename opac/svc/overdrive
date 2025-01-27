@@ -19,16 +19,16 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use JSON qw(encode_json);
-use C4::Auth qw( checkauth );
+use CGI        qw ( -utf8 );
+use JSON       qw(encode_json);
+use C4::Auth   qw( checkauth );
 use C4::Output qw( output_with_http_headers );
 use Koha::Logger;
 use Koha::Patrons;
 use Koha::Library::OverDriveInfos;
 use Koha::ExternalContent::OverDrive;
 
-my $logger = Koha::Logger->get({ interface => 'opac' });
+my $logger = Koha::Logger->get( { interface => 'opac' } );
 our $cgi = CGI->new;
 my $page_url = $cgi->referer();
 
@@ -37,108 +37,108 @@ $user && $sessionID or response_bad_request("User not logged in");
 
 my $action = $cgi->param('action') or response_bad_request("No 'action' specified");
 
-my $od = Koha::ExternalContent::OverDrive->new({ koha_session_id => $sessionID });
+my $od   = Koha::ExternalContent::OverDrive->new( { koha_session_id => $sessionID } );
 my %data = (
-   is_logged_in => JSON::false,
+    is_logged_in => JSON::false,
 );
 local $@;
 eval {
-        {
-            $action eq 'cud-login' && do {
-                my $password = $cgi->param("password") // q{} ;
-                my $patron = Koha::Patrons->find({ userid => $user });
-                my $branch_info = $patron ? Koha::Library::OverDriveInfos->find( $patron->branchcode ) : undef;
-                my $od_username;
-                if ( C4::Context->preference('OverDriveUsername') eq 'cardnumber' ){
-                    $od_username = $patron ? $patron->cardnumber : undef;
-                } else {
-                    $od_username = $user;
-                }
-                my $branch_authname = $branch_info ? $branch_info->authname : undef;
-                my $authname = $branch_authname || C4::Context->preference('OverDriveAuthname');
-                $od->auth_by_userid($od_username, $password,C4::Context->preference('OverDriveWebsiteID'),$authname);
-                $data{login_success} = 1;
+    {
+        $action eq 'cud-login' && do {
+            my $password    = $cgi->param("password") // q{};
+            my $patron      = Koha::Patrons->find( { userid => $user } );
+            my $branch_info = $patron ? Koha::Library::OverDriveInfos->find( $patron->branchcode ) : undef;
+            my $od_username;
+            if ( C4::Context->preference('OverDriveUsername') eq 'cardnumber' ) {
+                $od_username = $patron ? $patron->cardnumber : undef;
+            } else {
+                $od_username = $user;
+            }
+            my $branch_authname = $branch_info ? $branch_info->authname : undef;
+            my $authname        = $branch_authname || C4::Context->preference('OverDriveAuthname');
+            $od->auth_by_userid( $od_username, $password, C4::Context->preference('OverDriveWebsiteID'), $authname );
+            $data{login_success} = 1;
+            last;
+        };
+
+        if ( $od->is_logged_in ) {
+            $data{is_logged_in} = JSON::true;
+
+            $action eq 'cud-logout' && do {
+                $od->forget();
+                $data{login_url}    = $od->auth_url($page_url);
+                $data{is_logged_in} = JSON::false;
                 last;
             };
 
-            if ($od->is_logged_in) {
-                $data{is_logged_in} = JSON::true;
+            $action eq 'account' && do {
+                $data{account}   = $od->patron;
+                $data{checkouts} = $od->checkouts;
+                $data{holds}     = $od->holds;
+                last;
+            };
 
-                $action eq 'cud-logout' && do {
-                    $od->forget();
-                    $data{login_url} = $od->auth_url($page_url);
-                    $data{is_logged_in} = JSON::false;
-                    last;
-                };
+            $action eq 'cud-checkout' && do {
+                my $id = $cgi->param('id')
+                    or response_bad_request("No 'id' specified");
+                my $format = $cgi->param('format');
+                $data{action}    = $od->checkout( $id, $format );
+                $data{checkouts} = $od->checkouts;
+                $data{holds}     = $od->holds;
+                last;
+            };
 
-                $action eq 'account' && do {
-                    $data{account} = $od->patron;
-                    $data{checkouts} = $od->checkouts;
-                    $data{holds} = $od->holds;
-                    last;
-                };
+            $action eq 'cud-checkout-format' && do {
+                my $id = $cgi->param('id')
+                    or response_bad_request("No 'id' specified");
+                my $format = $cgi->param('format')
+                    or response_bad_request("No 'format' specified");
+                $data{action}    = $od->lock_format( $id, $format );
+                $data{checkouts} = $od->checkouts;
+                last;
+            };
 
-                $action eq 'cud-checkout' && do {
-                    my $id = $cgi->param('id')
-                      or response_bad_request("No 'id' specified");
-                    my $format = $cgi->param('format');
-                    $data{action} = $od->checkout($id, $format);
-                    $data{checkouts} = $od->checkouts;
-                    $data{holds} = $od->holds;
-                    last;
-                };
+            $action eq 'download-url' && do {
+                my $id = $cgi->param('id')
+                    or response_bad_request("No 'id' specified");
+                $data{action} = $od->checkout_download_url($id);
+                last;
+            };
 
-                $action eq 'cud-checkout-format' && do {
-                    my $id = $cgi->param('id')
-                      or response_bad_request("No 'id' specified");
-                    my $format = $cgi->param('format')
-                      or response_bad_request("No 'format' specified");
-                    $data{action} = $od->lock_format($id, $format);
-                    $data{checkouts} = $od->checkouts;
-                    last;
-                };
+            $action eq 'cud-return' && do {
+                my $id = $cgi->param('id')
+                    or response_bad_request("No 'id' specified");
+                local $@;
+                $data{action}    = eval { $od->return($id) };
+                $data{action}    = $@ if $@;
+                $data{checkouts} = $od->checkouts;
+                last;
+            };
 
-                $action eq 'download-url' && do {
-                    my $id = $cgi->param('id')
-                      or response_bad_request("No 'id' specified");
-                    $data{action} = $od->checkout_download_url($id);
-                    last;
-                };
+            $action eq 'cud-place-hold' && do {
+                my $id = $cgi->param('id')
+                    or response_bad_request("No 'id' specified");
+                $data{action} = $od->place_hold($id);
+                $data{holds}  = $od->holds;
+                last;
+            };
 
-                $action eq 'cud-return' && do {
-                    my $id = $cgi->param('id')
-                      or response_bad_request("No 'id' specified");
-                    local $@;
-                    $data{action} = eval { $od->return($id) };
-                    $data{action} = $@ if $@;
-                    $data{checkouts} = $od->checkouts;
-                    last;
-                };
+            $action eq 'cud-remove-hold' && do {
+                my $id = $cgi->param('id')
+                    or response_bad_request("No 'id' specified");
+                local $@;
+                $data{action} = eval { $od->remove_hold($id) };
+                $data{action} = $@ if $@;
+                $data{holds}  = $od->holds;
+                last;
+            };
 
-                $action eq 'cud-place-hold' && do {
-                    my $id = $cgi->param('id')
-                      or response_bad_request("No 'id' specified");
-                    $data{action} = $od->place_hold($id);
-                    $data{holds} = $od->holds;
-                    last;
-                };
-
-                $action eq 'cud-remove-hold' && do {
-                    my $id = $cgi->param('id')
-                      or response_bad_request("No 'id' specified");
-                    local $@;
-                    $data{action} = eval { $od->remove_hold($id) };
-                    $data{action} = $@ if $@;
-                    $data{holds} = $od->holds;
-                    last;
-                };
-
-                response_bad_request("Invalid 'action': $action");
-            }
+            response_bad_request("Invalid 'action': $action");
         }
+    }
 };
 if ($@) {
-    if ($od->is_not_authenticated_error("$@")) {
+    if ( $od->is_not_authenticated_error("$@") ) {
         $logger->debug("OverDrive session timeout");
         $data{is_logged_in} = JSON::false;
     } else {
@@ -147,15 +147,15 @@ if ($@) {
     }
 }
 
-response(\%data);
-
+response( \%data );
 
 sub response_bad_request {
     my ($error) = @_;
-    response({error => $error}, "400 $error");
+    response( { error => $error }, "400 $error" );
 }
+
 sub response {
-    my ($data, $status_line) = @_;
+    my ( $data, $status_line ) = @_;
     $status_line ||= "200 OK";
     output_with_http_headers $cgi, undef, encode_json($data), 'json', $status_line;
     exit;

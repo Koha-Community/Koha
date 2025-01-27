@@ -1,8 +1,6 @@
 [% USE AuthorisedValues %]
 
-<h2>
-    Enroll in <em>[% club.name | html %]</em>
-</h2>
+<h2> Enroll in <em>[% club.name | html %]</em> </h2>
 
 <div class="container">
     <form method="get" id="patron-enrollment-form">
@@ -34,46 +32,45 @@
         </fieldset>
     </form>
 </div>
-
 <script>
-function addEnrollment() {
-    $("body").css("cursor", "progress");
-    let data = $( "#patron-enrollment-form" ).serialize();
-    data += '&csrf_token='+$('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        type: "POST",
-        url: '/cgi-bin/koha/svc/club/enroll',
-        data,
-        success: function( data ) {
-            if ( data.success ) {
-                $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
-                    $("body").css("cursor", "default");
-                });
-            } else {
-                alert(_("Unable to create enrollment!"));
-            }
-        },
-        dataType: 'json'
-    });
-    return false;
-}
-
-function showClubs() {
-    $("body").css("cursor", "progress");
-    $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
-        $("body").css("cursor", "default");
-    });
-}
-
-    $(document).ready(function(){
-        $(".add_enrollment").on("click", function(e){
-            e.preventDefault();
-            addEnrollment();
+    function addEnrollment() {
+        $("body").css("cursor", "progress");
+        let data = $( "#patron-enrollment-form" ).serialize();
+        data += '&csrf_token='+$('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            type: "POST",
+            url: '/cgi-bin/koha/svc/club/enroll',
+            data,
+            success: function( data ) {
+                if ( data.success ) {
+                    $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+                        $("body").css("cursor", "default");
+                    });
+                } else {
+                    alert(_("Unable to create enrollment!"));
+                }
+            },
+            dataType: 'json'
         });
+        return false;
+    }
 
-        $(".show_clubs").on("click", function(e){
-            e.preventDefault();
-            showClubs();
+    function showClubs() {
+        $("body").css("cursor", "progress");
+        $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+            $("body").css("cursor", "default");
         });
-    });
+    }
+
+        $(document).ready(function(){
+            $(".add_enrollment").on("click", function(e){
+                e.preventDefault();
+                addEnrollment();
+            });
+
+            $(".show_clubs").on("click", function(e){
+                e.preventDefault();
+                showClubs();
+            });
+        });
 </script>

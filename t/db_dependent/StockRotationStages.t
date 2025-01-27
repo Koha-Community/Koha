@@ -36,17 +36,19 @@ subtest 'Basic object tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build({ source => 'Branch' });
-    my $rota = $builder->build({ source => 'Stockrotationrota' });
-    my $stage = $builder->build({
-        source => 'Stockrotationstage',
-        value  => {
-            branchcode_id => $library->{branchcode},
-            rota_id       => $rota->{rota_id},
-        },
-    });
+    my $library = $builder->build( { source => 'Branch' } );
+    my $rota    = $builder->build( { source => 'Stockrotationrota' } );
+    my $stage   = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => {
+                branchcode_id => $library->{branchcode},
+                rota_id       => $rota->{rota_id},
+            },
+        }
+    );
 
-    my $srstage = Koha::StockRotationStages->find($stage->{stage_id});
+    my $srstage = Koha::StockRotationStages->find( $stage->{stage_id} );
     isa_ok(
         $srstage,
         'Koha::StockRotationStage',
@@ -69,34 +71,44 @@ subtest 'DBIx::Class::Ordered tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build({ source => 'Branch' });
-    my $rota = $builder->build({ source => 'Stockrotationrota' });
-    my $stagefirst = $builder->build({
-        source   => 'Stockrotationstage',
-        value    => { rota_id  => $rota->{rota_id}, position => 1 }
-    });
-    my $stageprevious = $builder->build({
-        source   => 'Stockrotationstage',
-        value    => { rota_id  => $rota->{rota_id}, position => 2 }
-    });
-    my $stage = $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->{rota_id}, position => 3 },
-    });
-    my $stagenext = $builder->build({
-        source   => 'Stockrotationstage',
-        value    => { rota_id  => $rota->{rota_id}, position => 4 }
-    });
-    my $stagelast = $builder->build({
-        source   => 'Stockrotationstage',
-        value    => { rota_id  => $rota->{rota_id}, position => 5 }
-    });
+    my $library    = $builder->build( { source => 'Branch' } );
+    my $rota       = $builder->build( { source => 'Stockrotationrota' } );
+    my $stagefirst = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id}, position => 1 }
+        }
+    );
+    my $stageprevious = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id}, position => 2 }
+        }
+    );
+    my $stage = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id}, position => 3 },
+        }
+    );
+    my $stagenext = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id}, position => 4 }
+        }
+    );
+    my $stagelast = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->{rota_id}, position => 5 }
+        }
+    );
 
-    my $srstage = Koha::StockRotationStages->find($stage->{stage_id});
+    my $srstage = Koha::StockRotationStages->find( $stage->{stage_id} );
 
-    is($srstage->siblings->count, 4, "Siblings works.");
-    is($srstage->previous_siblings->count, 2, "Previous Siblings works.");
-    is($srstage->next_siblings->count, 2, "Next Siblings works.");
+    is( $srstage->siblings->count,          4, "Siblings works." );
+    is( $srstage->previous_siblings->count, 2, "Previous Siblings works." );
+    is( $srstage->next_siblings->count,     2, "Next Siblings works." );
 
     my $map = {
         first_sibling    => $stagefirst,
@@ -104,52 +116,53 @@ subtest 'DBIx::Class::Ordered tests' => sub {
         next_sibling     => $stagenext,
         last_sibling     => $stagelast,
     };
+
     # Test plain relations:
     while ( my ( $srxsr, $check ) = each %{$map} ) {
         my $sr = $srstage->$srxsr;
-        isa_ok($sr, 'Koha::StockRotationStage', "Fetched using '$srxsr'.");
-        is($sr->stage_id, $check->{stage_id}, "'$srxsr' data is correct.");
-    };
+        isa_ok( $sr, 'Koha::StockRotationStage', "Fetched using '$srxsr'." );
+        is( $sr->stage_id, $check->{stage_id}, "'$srxsr' data is correct." );
+    }
 
     # Test mutators
     ## Move Previous
-    ok($srstage->move_previous, "Previous.");
-    is($srstage->previous_sibling->stage_id, $stagefirst->{stage_id}, "Previous, correct previous.");
-    is($srstage->next_sibling->stage_id, $stageprevious->{stage_id}, "Previous, correct next.");
+    ok( $srstage->move_previous, "Previous." );
+    is( $srstage->previous_sibling->stage_id, $stagefirst->{stage_id},    "Previous, correct previous." );
+    is( $srstage->next_sibling->stage_id,     $stageprevious->{stage_id}, "Previous, correct next." );
     ## Move Next
-    ok($srstage->move_next, "Back to middle.");
-    is($srstage->previous_sibling->stage_id, $stageprevious->{stage_id}, "Middle, correct previous.");
-    is($srstage->next_sibling->stage_id, $stagenext->{stage_id}, "Middle, correct next.");
+    ok( $srstage->move_next, "Back to middle." );
+    is( $srstage->previous_sibling->stage_id, $stageprevious->{stage_id}, "Middle, correct previous." );
+    is( $srstage->next_sibling->stage_id,     $stagenext->{stage_id},     "Middle, correct next." );
     ## Move First
-    ok($srstage->move_first, "First.");
-    is($srstage->previous_sibling, 0, "First, correct previous.");
-    is($srstage->next_sibling->stage_id, $stagefirst->{stage_id}, "First, correct next.");
+    ok( $srstage->move_first, "First." );
+    is( $srstage->previous_sibling,       0,                       "First, correct previous." );
+    is( $srstage->next_sibling->stage_id, $stagefirst->{stage_id}, "First, correct next." );
     ## Move Last
-    ok($srstage->move_last, "Last.");
-    is($srstage->previous_sibling->stage_id, $stagelast->{stage_id}, "Last, correct previous.");
-    is($srstage->next_sibling, 0, "Last, correct next.");
+    ok( $srstage->move_last, "Last." );
+    is( $srstage->previous_sibling->stage_id, $stagelast->{stage_id}, "Last, correct previous." );
+    is( $srstage->next_sibling,               0,                      "Last, correct next." );
     ## Move To
 
     ### Out of range moves.
     is(
-        $srstage->move_to($srstage->siblings->count + 2),
+        $srstage->move_to( $srstage->siblings->count + 2 ),
         0, "Move above count of stages."
     );
-    is($srstage->move_to(0), 0, "Move to 0th position.");
-    is($srstage->move_to(-1), 0, "Move to negative position.");
+    is( $srstage->move_to(0),  0, "Move to 0th position." );
+    is( $srstage->move_to(-1), 0, "Move to negative position." );
 
     ### Move To
-    ok($srstage->move_to(3), "Move.");
-    is($srstage->previous_sibling->stage_id, $stageprevious->{stage_id}, "Move, correct previous.");
-    is($srstage->next_sibling->stage_id, $stagenext->{stage_id}, "Move, correct next.");
+    ok( $srstage->move_to(3), "Move." );
+    is( $srstage->previous_sibling->stage_id, $stageprevious->{stage_id}, "Move, correct previous." );
+    is( $srstage->next_sibling->stage_id,     $stagenext->{stage_id},     "Move, correct next." );
 
     # Group manipulation
-    my $newrota = $builder->build({ source => 'Stockrotationrota' });
-    ok($srstage->move_to_group($newrota->{rota_id}), "Move to Group.");
-    is(Koha::StockRotationStages->find($srstage->stage_id)->rota_id, $newrota->{rota_id}, "Moved correctly.");
+    my $newrota = $builder->build( { source => 'Stockrotationrota' } );
+    ok( $srstage->move_to_group( $newrota->{rota_id} ), "Move to Group." );
+    is( Koha::StockRotationStages->find( $srstage->stage_id )->rota_id, $newrota->{rota_id}, "Moved correctly." );
 
     # Delete in ordered context
-    ok($srstage->delete, "Deleted OK.");
+    ok( $srstage->delete, "Deleted OK." );
     is(
         Koha::StockRotationStages->find($stageprevious)->next_sibling->stage_id,
         $stagenext->{stage_id},
@@ -163,7 +176,7 @@ subtest 'Relationship to stockrotationitems' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-    my $stage = $builder->build({ source => 'Stockrotationstage' });
+    my $stage = $builder->build( { source => 'Stockrotationstage' } );
 
     $builder->build(
         {
@@ -193,7 +206,7 @@ subtest 'Relationship to stockrotationitems' => sub {
         }
     );
 
-    my $srstage = Koha::StockRotationStages->find($stage->{stage_id});
+    my $srstage = Koha::StockRotationStages->find( $stage->{stage_id} );
     my $sritems = $srstage->stockrotationitems;
     is(
         $sritems->count, 3,
@@ -207,7 +220,6 @@ subtest 'Relationship to stockrotationitems' => sub {
 
     $schema->storage->txn_rollback;
 };
-
 
 subtest 'Tests for investigate (singular)' => sub {
 
@@ -229,67 +241,79 @@ subtest 'Tests for investigate (singular)' => sub {
     $schema->storage->txn_begin;
 
     # Libraries
-    my $library1 = $builder->build({ source => 'Branch' });
-    my $library2 = $builder->build({ source => 'Branch' });
-    my $library3 = $builder->build({ source => 'Branch' });
+    my $library1 = $builder->build( { source => 'Branch' } );
+    my $library2 = $builder->build( { source => 'Branch' } );
+    my $library3 = $builder->build( { source => 'Branch' } );
 
-    my $stage1lib = $builder->build({ source => 'Branch' });
-    my $stage2lib = $builder->build({ source => 'Branch' });
-    my $stage3lib = $builder->build({ source => 'Branch' });
-    my $stage4lib = $builder->build({ source => 'Branch' });
+    my $stage1lib = $builder->build( { source => 'Branch' } );
+    my $stage2lib = $builder->build( { source => 'Branch' } );
+    my $stage3lib = $builder->build( { source => 'Branch' } );
+    my $stage4lib = $builder->build( { source => 'Branch' } );
 
-    my $libraries = [ $library1, $library2, $library3, $stage1lib, $stage2lib,
-                      $stage3lib, $stage4lib ];
+    my $libraries = [
+        $library1,  $library2, $library3, $stage1lib, $stage2lib,
+        $stage3lib, $stage4lib
+    ];
 
     # Rota
-    my $rota = $builder->build({
-        source => 'Stockrotationrota',
-        value  => { cyclical => 0 },
-    });
+    my $rota = $builder->build(
+        {
+            source => 'Stockrotationrota',
+            value  => { cyclical => 0 },
+        }
+    );
 
     # Stages
-    my $stage1 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => {
-            rota_id => $rota->{rota_id},
-            branchcode_id => $stage1lib->{branchcode},
-            duration => 10,
-            position => 1,
-        },
-    });
-    my $stage2 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => {
-            rota_id => $rota->{rota_id},
-            branchcode_id => $stage2lib->{branchcode},
-            duration => 20,
-            position => 2,
-        },
-    });
-    my $stage3 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => {
-            rota_id => $rota->{rota_id},
-            branchcode_id => $stage3lib->{branchcode},
-            duration => 10,
-            position => 3,
-        },
-    });
-    my $stage4 = $builder->build({
-        source => 'Stockrotationstage',
-        value  => {
-            rota_id => $rota->{rota_id},
-            branchcode_id => $stage4lib->{branchcode},
-            duration => 20,
-            position => 4,
-        },
-    });
+    my $stage1 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => {
+                rota_id       => $rota->{rota_id},
+                branchcode_id => $stage1lib->{branchcode},
+                duration      => 10,
+                position      => 1,
+            },
+        }
+    );
+    my $stage2 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => {
+                rota_id       => $rota->{rota_id},
+                branchcode_id => $stage2lib->{branchcode},
+                duration      => 20,
+                position      => 2,
+            },
+        }
+    );
+    my $stage3 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => {
+                rota_id       => $rota->{rota_id},
+                branchcode_id => $stage3lib->{branchcode},
+                duration      => 10,
+                position      => 3,
+            },
+        }
+    );
+    my $stage4 = $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => {
+                rota_id       => $rota->{rota_id},
+                branchcode_id => $stage4lib->{branchcode},
+                duration      => 20,
+                position      => 4,
+            },
+        }
+    );
 
     # Test on an empty report.
-    my $spec =  {
-        $library1->{branchcode} => 1,
-        $library2->{branchcode} => 1,
-        $library3->{branchcode} => 1,
+    my $spec = {
+        $library1->{branchcode}  => 1,
+        $library2->{branchcode}  => 1,
+        $library3->{branchcode}  => 1,
         $stage1lib->{branchcode} => 2,
         $stage2lib->{branchcode} => 1,
         $stage3lib->{branchcode} => 3,
@@ -310,28 +334,26 @@ subtest 'Tests for investigate (singular)' => sub {
                 }
             );
             my $dbitem = Koha::StockRotationItems->find($item);
-            $dbitem->item->homebranch($code)
-                ->holdingbranch($code)->store;
+            $dbitem->item->homebranch($code)->holdingbranch($code)->store;
             $cnt++;
         }
     }
-    my $report = Koha::StockRotationStages
-        ->find($stage1->{stage_id})->investigate;
+    my $report  = Koha::StockRotationStages->find( $stage1->{stage_id} )->investigate;
     my $results = [];
     foreach my $lib ( @{$libraries} ) {
-        my $items = $report->{branched}->{$lib->{branchcode}}->{items} || [];
+        my $items = $report->{branched}->{ $lib->{branchcode} }->{items} || [];
         push @{$results},
             scalar @{$items};
     }
 
     # Items assigned to stag1lib -> log, hence $results[4] = 0;
-    is_deeply( $results, [ 1, 1, 1, 2, 1, 3, 4 ], "Empty report test 1.");
+    is_deeply( $results, [ 1, 1, 1, 2, 1, 3, 4 ], "Empty report test 1." );
 
     # Now we test by adding the next stage's items to the same report.
-    $spec =  {
-        $library1->{branchcode} => 3,
-        $library2->{branchcode} => 2,
-        $library3->{branchcode} => 1,
+    $spec = {
+        $library1->{branchcode}  => 3,
+        $library2->{branchcode}  => 2,
+        $library3->{branchcode}  => 1,
         $stage1lib->{branchcode} => 4,
         $stage2lib->{branchcode} => 2,
         $stage3lib->{branchcode} => 0,
@@ -352,45 +374,42 @@ subtest 'Tests for investigate (singular)' => sub {
                 }
             );
             my $dbitem = Koha::StockRotationItems->find($item);
-            $dbitem->item->homebranch($code)
-                ->holdingbranch($code)->store;
+            $dbitem->item->homebranch($code)->holdingbranch($code)->store;
             $cnt++;
         }
     }
 
-    $report = Koha::StockRotationStages
-        ->find($stage2->{stage_id})->investigate($report);
+    $report  = Koha::StockRotationStages->find( $stage2->{stage_id} )->investigate($report);
     $results = [];
     foreach my $lib ( @{$libraries} ) {
-        my $items = $report->{branched}->{$lib->{branchcode}}->{items} || [];
+        my $items = $report->{branched}->{ $lib->{branchcode} }->{items} || [];
         push @{$results},
             scalar @{$items};
     }
-    is_deeply( $results, [ 4, 3, 2, 6, 3, 3, 7 ], "full report test.");
+    is_deeply( $results, [ 4, 3, 2, 6, 3, 3, 7 ], "full report test." );
 
     # Carry out db updates
-    foreach my $item (@{$report->{items}}) {
+    foreach my $item ( @{ $report->{items} } ) {
         my $reason = $item->{reason};
         if ( $reason eq 'repatriation' ) {
             $item->{object}->repatriate;
-        } elsif ( grep { $reason eq $_ }
-                      qw/in-demand advancement initiation/ ) {
+        } elsif ( grep { $reason eq $_ } qw/in-demand advancement initiation/ ) {
             $item->{object}->advance;
         }
     }
 
-    $report = Koha::StockRotationStages
-        ->find($stage1->{stage_id})->investigate;
+    $report  = Koha::StockRotationStages->find( $stage1->{stage_id} )->investigate;
     $results = [];
     foreach my $lib ( @{$libraries} ) {
-        my $items = $report->{branched}->{$lib->{branchcode}}->{items} || [];
+        my $items = $report->{branched}->{ $lib->{branchcode} }->{items} || [];
         push @{$results},
             scalar @{$items};
     }
+
     # All items have been 'initiated', which means they are either happily in
     # transit or happily at the library they are supposed to be.  Either way
     # they will register as 'not-ready' in the stock rotation report.
-    is_deeply( $results, [ 0, 0, 0, 0, 0, 0, 0 ], "All items now in logs.");
+    is_deeply( $results, [ 0, 0, 0, 0, 0, 0, 0 ], "All items now in logs." );
 
     $schema->storage->txn_rollback;
 };

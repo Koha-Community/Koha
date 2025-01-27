@@ -7,7 +7,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Change your password &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-passwd' %]
 [% INCLUDE 'masthead.inc' %]
@@ -34,9 +35,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-10 order-first order-lg-2">
                 <div id="userpasswd" class="maincontent">
@@ -47,7 +46,7 @@
                             <h2>There was a problem with your submission</h2>
                             <p>
                                 [% IF ( passwords_mismatch ) %]
-                                   <span>Passwords do not match.  Please re-type your new password.</span>
+                                    <span>Passwords do not match. Please re-type your new password.</span>
                                 [% END %]
                                 [% IF password_too_short %]
                                     <span>Password must be at least [% minPasswordLength | html %] characters long.</span>
@@ -60,7 +59,7 @@
                                 [% END %]
 
                                 [% IF ( WrongPass ) %]
-                                   <span>Your current password was entered incorrectly. If this problem persists, please ask a librarian to reset your password for you.</span>
+                                    <span>Your current password was entered incorrectly. If this problem persists, please ask a librarian to reset your password for you.</span>
                                 [% END %]
                             </p>
                         </div>
@@ -79,15 +78,15 @@
                                     [% END %]
                                     <div class="form-group">
                                         <label for="Oldkey">Current password:</label>
-                                        <input class="form-control focus" type="password" id="Oldkey" size="25"  name="Oldkey" autocomplete="current-password" />
+                                        <input class="form-control focus" type="password" id="Oldkey" size="25" name="Oldkey" autocomplete="current-password" />
                                     </div>
                                     <div class="form-group">
                                         <label for="Newkey">New password:</label>
-                                        <input class="form-control" type="password" id="Newkey"  size="25"  name="Newkey" autocomplete="new-password" />
+                                        <input class="form-control" type="password" id="Newkey" size="25" name="Newkey" autocomplete="new-password" />
                                     </div>
                                     <div class="form-group">
                                         <label for="Confirm">Re-type new password:</label>
-                                        <input class="form-control" type="password"  id="Confirm" size="25" name="Confirm" autocomplete="new-password" />
+                                        <input class="form-control" type="password" id="Confirm" size="25" name="Confirm" autocomplete="new-password" />
                                     </div>
                                 </fieldset>
                                 <fieldset class="action">
@@ -109,32 +108,35 @@
                         </div>
                         <a class="btn btn-primary" href="/cgi-bin/koha/opac-user.pl">Return to my account</a>
                     [% END # /IF password_updated %]
-                </div> <!-- / #userpasswd -->
-            </div> <!-- / .col-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
-
-
+                </div>
+                <!-- / #userpasswd -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
     [% PROCESS 'password_check.inc' new_password => 'Newkey', minPasswordLength => logged_in_user.category.effective_min_password_length, RequireStrongPassword => logged_in_user.category.effective_require_strong_password %]
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("#mainform").validate({
                 rules: {
                     Newkey: {
                         required: true,
                         password_strong: true,
-                        password_no_spaces: true
+                        password_no_spaces: true,
                     },
                     Confirm: {
                         required: true,
-                        password_match: true
-                    }
-                }
+                        password_match: true,
+                    },
+                },
             });
         });
     </script>

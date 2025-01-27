@@ -26,13 +26,19 @@ is( ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine' );
 
 my $result = $suggestor->get_suggestions( { search => 'Cookery' } );
 
-ok( ( grep { $_->{'search'} eq 'su-na:Cookery' } @$result ) && ( grep { $_->{'search'} eq 'su-br:Cookery' } @$result ) && ( grep { $_->{'search'} eq 'su-rl:Cookery' } @$result ),
+ok(
+           ( grep { $_->{'search'} eq 'su-na:Cookery' } @$result )
+        && ( grep { $_->{'search'} eq 'su-br:Cookery' } @$result )
+        && ( grep { $_->{'search'} eq 'su-rl:Cookery' } @$result ),
     "Suggested correct alternatives for keyword search 'Cookery'"
 );
 
 $result = $suggestor->get_suggestions( { search => 'su:Cookery' } );
 
-ok( ( grep { $_->{'search'} eq 'su-na:Cookery' } @$result ) && ( grep { $_->{'search'} eq 'su-br:Cookery' } @$result ) && ( grep { $_->{'search'} eq 'su-rl:Cookery' } @$result ),
+ok(
+           ( grep { $_->{'search'} eq 'su-na:Cookery' } @$result )
+        && ( grep { $_->{'search'} eq 'su-br:Cookery' } @$result )
+        && ( grep { $_->{'search'} eq 'su-rl:Cookery' } @$result ),
     "Suggested correct alternatives for subject search 'Cookery'"
 );
 

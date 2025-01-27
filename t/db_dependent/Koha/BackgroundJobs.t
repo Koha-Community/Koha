@@ -62,10 +62,14 @@ my $job_id   = t::lib::Koha::BackgroundJob::BatchTest->new->enqueue(
 # Enqueuing a new job
 my $new_job = Koha::BackgroundJobs->find($job_id);
 ok( $new_job, 'New job correctly enqueued' );
-is_deeply( $new_job->json->decode( $new_job->data ),
-    $data, 'data retrieved and json encoded correctly' );
-is( t::lib::Dates::compare( $new_job->enqueued_on, dt_from_string ),
-    0, 'enqueued_on correctly filled with now()' );
+is_deeply(
+    $new_job->json->decode( $new_job->data ),
+    $data, 'data retrieved and json encoded correctly'
+);
+is(
+    t::lib::Dates::compare( $new_job->enqueued_on, dt_from_string ),
+    0, 'enqueued_on correctly filled with now()'
+);
 is( $new_job->size,   $job_size,    'job size retrieved correctly' );
 is( $new_job->status, "new",        'job has not started yet, status is new' );
 is( $new_job->type,   "batch_test", 'job type retrieved from ->job_type' );
@@ -83,8 +87,8 @@ is( $new_job->status, "cancelled", "A cancelled job has not been processed" );
 # Test new job to process
 $new_job->status('new')->store;
 $new_job = $new_job->process;
-is( $new_job->status,             "finished", 'job is new finished!' );
-is( scalar( @{ $new_job->messages } ), 10,    '10 messages generated' );
+is( $new_job->status,                  "finished", 'job is new finished!' );
+is( scalar( @{ $new_job->messages } ), 10,         '10 messages generated' );
 is_deeply(
     $new_job->report,
     { total_records => 10, total_success => 10 },
@@ -101,24 +105,22 @@ subtest 'filter_by_current() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $job_new       = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'new' } } );
-    my $job_cancelled = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'cancelled' } } );
-    my $job_failed    = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'failed' } } );
-    my $job_finished  = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'finished' } } );
+    my $job_new = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'new' } } );
+    my $job_cancelled =
+        $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'cancelled' } } );
+    my $job_failed   = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'failed' } } );
+    my $job_finished = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'finished' } } );
 
     my $rs = Koha::BackgroundJobs->search(
-        {
-            id => [ $job_new->id, $job_cancelled->id, $job_failed->id, $job_finished->id ]
-        }
-    );
+        { id => [ $job_new->id, $job_cancelled->id, $job_failed->id, $job_finished->id ] } );
 
     is( $rs->count, 4, '4 jobs in resultset' );
-    ok( any {$_->status eq 'new'} @{$rs->as_list}, "There is a 'new' job"  );
+    ok( any { $_->status eq 'new' } @{ $rs->as_list }, "There is a 'new' job" );
 
     $rs = $rs->filter_by_current;
 
-    is( $rs->count, 1, 'Only 1 job in filtered resultset' );
-    is( $rs->next->status, 'new', "The only job in resultset is 'new'"  );
+    is( $rs->count,        1,     'Only 1 job in filtered resultset' );
+    is( $rs->next->status, 'new', "The only job in resultset is 'new'" );
 
     $schema->storage->txn_rollback;
 };
@@ -129,9 +131,11 @@ subtest 'search_limited' => sub {
     $schema->storage->txn_begin;
     my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
     my $patron2 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
-    my $job1 = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { borrowernumber => $patron1->id } } );
+    my $job1 =
+        $builder->build_object( { class => 'Koha::BackgroundJobs', value => { borrowernumber => $patron1->id } } );
 
-    my $cnt = Koha::BackgroundJobs->search({ borrowernumber => undef })->count; # expected to be zero, but theoretically possible
+    my $cnt = Koha::BackgroundJobs->search( { borrowernumber => undef } )
+        ->count;    # expected to be zero, but theoretically possible
 
     C4::Context->set_userenv( undef, q{} );
     is( Koha::BackgroundJobs->search_limited->count, $cnt, 'No jobs found without userenv' );

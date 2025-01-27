@@ -24,38 +24,40 @@ use XML::Simple;
 
 use C4::Biblio qw( TransformHtmlToXml );
 
-
 sub run_tests {
 
     my ($marc_flavour) = @_;
 
-    t::lib::Mocks::mock_preference('marcflavour', $marc_flavour);
+    t::lib::Mocks::mock_preference( 'marcflavour', $marc_flavour );
 
     my ( $tags, $subfields );
     if ( $marc_flavour eq 'UNIMARC' ) {
-        $tags= [ '001', '600',  '200', '200', '400' ];
-        $subfields = [ '', 'a', 'a', 'c', 'a' ];
+        $tags      = [ '001', '600', '200', '200', '400' ];
+        $subfields = [ '',    'a',   'a',   'c',   'a' ];
     } else {
-        $tags= [ '001', '100',  '245', '245', '400' ];
-        $subfields = [ '', 'a', 'a', 'c', 'a' ];
+        $tags      = [ '001', '100', '245', '245', '400' ];
+        $subfields = [ '',    'a',   'a',   'c',   'a' ];
     }
     my $values = [ '12345', 'author', 'title', 'resp', '' ];
-    my $ind = [ '  ', '00', ' 9', '  ', ' ' ];
+    my $ind    = [ '  ',    '00',     ' 9',    '  ',   ' ' ];
 
-    my $xml = TransformHtmlToXml( $tags, $subfields, $values, $ind, undef, $marc_flavour );
-    my $xmlh = XML::Simple->new->XMLin( $xml );
+    my $xml  = TransformHtmlToXml( $tags, $subfields, $values, $ind, undef, $marc_flavour );
+    my $xmlh = XML::Simple->new->XMLin($xml);
 
     # check number of controlfields
     is( ref $xmlh->{record}->{controlfield}, 'HASH', 'One controlfield' );
+
     # check datafields
-    my $cnt = @{$xmlh->{record}->{datafield}};
+    my $cnt = @{ $xmlh->{record}->{datafield} };
     if ( $marc_flavour eq 'UNIMARC' ) {
-        is( $cnt, 3, 'Three datafields' ); # 100$a is automatically created
+        is( $cnt, 3, 'Three datafields' );    # 100$a is automatically created
     } else {
         is( $cnt, 2, 'Two datafields' );
     }
+
     # check value of 245c
     is( $xmlh->{record}->{datafield}->[1]->{subfield}->[1]->{content}, 'resp', 'Check value' );
+
     # check second indicator of 245
     is( $xmlh->{record}->{datafield}->[1]->{ind2}, '9', 'Check indicator' );
 }

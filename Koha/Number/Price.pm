@@ -40,20 +40,21 @@ sub format {
     my ( $self, $params ) = @_;
     return unless defined $self->value;
 
-    my $format_params = $self->_format_params( $params );
+    my $format_params = $self->_format_params($params);
+
     # To avoid the system to crash, we will not format big number
     # We divide per 100 because we want to keep the default DECIMAL_DIGITS (2)
     # error - round() overflow. Try smaller precision or use Math::BigFloat
-    return $self->value if abs($self->value) > Number::Format::MAX_INT/100;
+    return $self->value if abs( $self->value ) > Number::Format::MAX_INT / 100;
 
-    return Number::Format->new(%$format_params)->format_price($self->value);
+    return Number::Format->new(%$format_params)->format_price( $self->value );
 }
 
 sub format_for_editing {
     my ( $self, $params ) = @_;
     return unless defined $self->value;
 
-    my $format_params = $self->_format_params( $params );
+    my $format_params = $self->_format_params($params);
     $format_params = {
         %$format_params,
         int_curr_symbol   => '',
@@ -64,22 +65,22 @@ sub format_for_editing {
     # To avoid the system to crash, we will not format big number
     # We divide per 100 because we want to keep the default DECIMAL_DIGITS (2)
     # error - round() overflow. Try smaller precision or use Math::BigFloat
-    return $self->value if $self->value > Number::Format::MAX_INT/100;
+    return $self->value if $self->value > Number::Format::MAX_INT / 100;
 
-    return Number::Format->new(%$format_params)->format_price($self->value);
+    return Number::Format->new(%$format_params)->format_price( $self->value );
 }
 
 sub unformat {
     my ( $self, $params ) = @_;
     return unless defined $self->value;
 
-    my $format_params = $self->_format_params( $params );
+    my $format_params = $self->_format_params($params);
 
-    return Number::Format->new(%$format_params)->unformat_number($self->value);
+    return Number::Format->new(%$format_params)->unformat_number( $self->value );
 }
 
 sub round {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return unless defined $self->value;
 
     my $format_params = $self->_format_params;
@@ -89,13 +90,13 @@ sub round {
 
 sub _format_params {
     my ( $self, $params ) = @_;
-    my $with_symbol = $params->{with_symbol} || 0;
-    my $p_cs_precedes = $params->{p_cs_precedes};
+    my $with_symbol     = $params->{with_symbol} || 0;
+    my $p_cs_precedes   = $params->{p_cs_precedes};
     my $currency        = Koha::Acquisition::Currencies->get_active;
     my $currency_format = C4::Context->preference("CurrencyFormat");
 
     my $int_curr_symbol = ( $with_symbol and $currency ) ? $currency->symbol : q||;
-    my %format_params = (
+    my %format_params   = (
         decimal_fill      => '2',
         decimal_point     => '.',
         int_curr_symbol   => $int_curr_symbol,
@@ -125,7 +126,6 @@ sub _format_params {
             mon_decimal_point => '.'
         );
     }
-
 
     $format_params{p_cs_precedes} =
         defined $p_cs_precedes ? $p_cs_precedes : ( $currency and $currency->p_cs_precedes ) ? 1 : 0;

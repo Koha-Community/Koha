@@ -35,10 +35,10 @@ subtest 'to_api() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $fund = $builder->build_object({ class => 'Koha::Acquisition::Funds' });
+    my $fund     = $builder->build_object( { class => 'Koha::Acquisition::Funds' } );
     my $fund_api = $fund->to_api();
 
-    is( $fund->budget_id, $fund_api->{fund_id}, 'Mapping is correct for budget_id' );
+    is( $fund->budget_id,        $fund_api->{fund_id},   'Mapping is correct for budget_id' );
     is( $fund->budget_period_id, $fund_api->{budget_id}, 'Mapping is correct for budget_period_id' );
 
     $schema->storage->txn_rollback;
@@ -49,10 +49,11 @@ subtest 'budget ()' => sub {
 
     $schema->storage->txn_begin;
 
-    my $budget = $builder->build_object({ class => 'Koha::Acquisition::Budgets' });
-    my $fund = $builder->build_object({ class => 'Koha::Acquisition::Funds', value => { budget_period_id => $budget->budget_period_id } });
+    my $budget = $builder->build_object( { class => 'Koha::Acquisition::Budgets' } );
+    my $fund   = $builder->build_object(
+        { class => 'Koha::Acquisition::Funds', value => { budget_period_id => $budget->budget_period_id } } );
 
-    is($budget->budget_period_id, $fund->budget->budget_period_id, 'Fund\'s budget retrieved correctly');
+    is( $budget->budget_period_id, $fund->budget->budget_period_id, 'Fund\'s budget retrieved correctly' );
 
     $schema->storage->txn_rollback;
 };
@@ -68,16 +69,18 @@ subtest 'budget' => sub {
     );
 
     my $fund = Koha::Acquisition::Funds->find( $f->budget_id );
-    is( ref( $fund->budget ),
+    is(
+        ref( $fund->budget ),
         'Koha::Acquisition::Budget',
-        '->fund should return a Koha::Acquisition::Budget object' );
+        '->fund should return a Koha::Acquisition::Budget object'
+    );
 
     # Cannot set aqbudgets.budget_period_id as NULL
     warning_like {
         eval { $fund->budget_period_id(undef)->store }
     }
     qr{.*DBD::mysql::st execute failed: Column 'budget_period_id' cannot be null.*},
-      'DBD should have raised an error about budget_period_id that cannot be null';
+        'DBD should have raised an error about budget_period_id that cannot be null';
 
     $schema->storage->txn_rollback;
 };

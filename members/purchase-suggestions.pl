@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
@@ -29,28 +29,34 @@ use Koha::Suggestions;
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/purchase-suggestions.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { suggestions => '*' },
+    {
+        template_name => "members/purchase-suggestions.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { suggestions => '*' },
     }
 );
 
 my $borrowernumber = $input->param('borrowernumber');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 my $category = $patron->category;
 $template->param(
-    patron => $patron,
-    suggestionsview  => 1,
+    patron          => $patron,
+    suggestionsview => 1,
 );
 
 my $suggestions = [
-    Koha::Suggestions->search_limited( { suggestedby => $borrowernumber, archived => 0 },
-        { prefetch => 'managedby' } )->as_list
+    Koha::Suggestions->search_limited(
+        { suggestedby => $borrowernumber, archived => 0 },
+        { prefetch    => 'managedby' }
+    )->as_list
 ];
 
 $template->param( suggestions => $suggestions );

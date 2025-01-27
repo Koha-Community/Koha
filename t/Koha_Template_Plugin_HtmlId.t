@@ -19,7 +19,10 @@ use Modern::Perl;
 
 use Test::More tests => 2;
 
-use_ok( 'Koha::Template::Plugin::HtmlId' );
+use_ok('Koha::Template::Plugin::HtmlId');
 
 my $filter = Koha::Template::Plugin::HtmlId->new();
-is('Some_not-allowed_characters', $filter->filter('Some/;:not-allowed*$^characters'), 'Forbidden characters are replaced by _');
+is(
+    'Some_not-allowed_characters', $filter->filter('Some/;:not-allowed*$^characters'),
+    'Forbidden characters are replaced by _'
+);

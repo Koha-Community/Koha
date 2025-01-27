@@ -4,7 +4,7 @@
 [% USE Branches %]
 <!-- catalogue-search-box.inc -->
 [% WRAPPER tab_panel tabname="catalog_search" bt_active= bs_tab_active %]
-    <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
+    <form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="cat-search-block">
         <div class="form-title">
             <label class="control-label" for="search-form"><span class="control-text">Search catalog</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
         </div>
@@ -43,4 +43,3 @@
     </form>
 [% END # /tab_panel %]
 <!-- /catalogue-search-box.inc -->
-

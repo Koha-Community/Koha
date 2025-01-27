@@ -13,8 +13,8 @@
         <div class="btn-group">
             <form method="post" action="/cgi-bin/koha/rotating_collections/editCollections.pl">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op" value="cud-delete">
-                <input type="hidden" name="colId" value="[% colId | html %]">
+                <input type="hidden" name="op" value="cud-delete" />
+                <input type="hidden" name="colId" value="[% colId | html %]" />
                 <button type="submit" class="btn btn-default confirmdelete"><i class="fa fa-trash-can"></i> Delete</button>
             </form>
         </div>

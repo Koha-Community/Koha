@@ -20,29 +20,25 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
-my $patron1 = $builder->build({ source => 'Borrower' });
-my $card = $patron1->{cardnumber};
+my $patron1 = $builder->build( { source => 'Borrower' } );
+my $card    = $patron1->{cardnumber};
 
 # Check existing card number
-my $sip_patron = C4::SIP::ILS::Patron->new( $card );
+my $sip_patron = C4::SIP::ILS::Patron->new($card);
 is( defined $sip_patron, 1, "Patron is valid" );
 
 # Check invalid cardnumber by deleting patron
-$schema->resultset('Borrower')->search({ cardnumber => $card })->delete;
-my $sip_patron2 = C4::SIP::ILS::Patron->new( $card );
+$schema->resultset('Borrower')->search( { cardnumber => $card } )->delete;
+my $sip_patron2 = C4::SIP::ILS::Patron->new($card);
 is( $sip_patron2, undef, "Patron is not valid (anymore)" );
 
 subtest "new tests" => sub {
 
     plan tests => 5;
 
-    my $patron = $builder->build(
-        {
-            source => 'Borrower'
-        }
-    );
+    my $patron = $builder->build( { source => 'Borrower' } );
 
-    my $cardnumber      = $patron->{cardnumber};
+    my $cardnumber     = $patron->{cardnumber};
     my $userid         = $patron->{userid};
     my $borrowernumber = $patron->{borrowernumber};
 
@@ -66,7 +62,7 @@ subtest "OverduesBlockCirc tests" => sub {
         {
             source => 'Borrower',
             value  => {
-                dateexpiry    => "3000-01-01",
+                dateexpiry => "3000-01-01",
             }
         }
     );
@@ -74,32 +70,36 @@ subtest "OverduesBlockCirc tests" => sub {
         {
             source => 'Borrower',
             value  => {
-                dateexpiry    => "3000-01-01",
+                dateexpiry => "3000-01-01",
             }
         }
     );
-    my $odue = $builder->build({ source => 'Issue', value => {
-            borrowernumber => $odue_patron->{borrowernumber},
-            date_due => '2017-01-01',
+    my $odue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $odue_patron->{borrowernumber},
+                date_due       => '2017-01-01',
             }
-    });
+        }
+    );
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'noblock' );
     my $odue_sip_patron = C4::SIP::ILS::Patron->new( $odue_patron->{cardnumber} );
-    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked with overdues when set to 'Don't block'");
+    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked with overdues when set to 'Don't block'" );
     $odue_sip_patron = C4::SIP::ILS::Patron->new( $good_patron->{cardnumber} );
-    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'Don't block'");
+    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'Don't block'" );
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'confirmation' );
     $odue_sip_patron = C4::SIP::ILS::Patron->new( $odue_patron->{cardnumber} );
-    is( $odue_sip_patron->{charge_ok}, '', "Blocked with overdues when set to 'Ask for confirmation'");
+    is( $odue_sip_patron->{charge_ok}, '', "Blocked with overdues when set to 'Ask for confirmation'" );
     $odue_sip_patron = C4::SIP::ILS::Patron->new( $good_patron->{cardnumber} );
-    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'confirmation'");
+    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'confirmation'" );
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'block' );
     $odue_sip_patron = C4::SIP::ILS::Patron->new( $odue_patron->{cardnumber} );
-    is( $odue_sip_patron->{charge_ok}, '', "Blocked with overdues when set to 'Block'");
+    is( $odue_sip_patron->{charge_ok}, '', "Blocked with overdues when set to 'Block'" );
     $odue_sip_patron = C4::SIP::ILS::Patron->new( $good_patron->{cardnumber} );
-    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'Block'");
+    is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'Block'" );
 
 };
 
@@ -110,7 +110,7 @@ subtest "Test build_patron_attribute_string" => sub {
     my $patron = $builder->build( { source => 'Borrower' } );
 
     my $attribute_type = $builder->build( { source => 'BorrowerAttributeType' } );
-    my $attribute = Koha::Patron::Attribute->new(
+    my $attribute      = Koha::Patron::Attribute->new(
         {
             borrowernumber => $patron->{borrowernumber},
             code           => $attribute_type->{code},
@@ -119,7 +119,7 @@ subtest "Test build_patron_attribute_string" => sub {
     )->store();
 
     my $attribute_type2 = $builder->build( { source => 'BorrowerAttributeType' } );
-    my $attribute2 = Koha::Patron::Attribute->new(
+    my $attribute2      = Koha::Patron::Attribute->new(
         {
             borrowernumber => $patron->{borrowernumber},
             code           => $attribute_type2->{code},
@@ -130,61 +130,73 @@ subtest "Test build_patron_attribute_string" => sub {
     my $ils_patron = C4::SIP::ILS::Patron->new( $patron->{cardnumber} );
 
     my $server = {};
-    $server->{account}->{patron_attribute}->{code} = $attribute->code;
+    $server->{account}->{patron_attribute}->{code}  = $attribute->code;
     $server->{account}->{patron_attribute}->{field} = 'XY';
-    my $attribute_string = $ils_patron->build_patron_attributes_string( $server );
+    my $attribute_string = $ils_patron->build_patron_attributes_string($server);
     is( $attribute_string, "XYTest Attribute|", 'Attribute field generated correctly with single param' );
 
-    $server = {};
-    $server->{account}->{patron_attribute}->[0]->{code} = $attribute->code;
+    $server                                              = {};
+    $server->{account}->{patron_attribute}->[0]->{code}  = $attribute->code;
     $server->{account}->{patron_attribute}->[0]->{field} = 'XY';
-    $server->{account}->{patron_attribute}->[1]->{code} = $attribute2->code;
+    $server->{account}->{patron_attribute}->[1]->{code}  = $attribute2->code;
     $server->{account}->{patron_attribute}->[1]->{field} = 'YZ';
-    $attribute_string = $ils_patron->build_patron_attributes_string( $server );
-    is( $attribute_string, "XYTest Attribute|YZAnother Test Attribute|", 'Attribute field generated correctly with multiple params' );
+    $attribute_string                                    = $ils_patron->build_patron_attributes_string($server);
+    is(
+        $attribute_string, "XYTest Attribute|YZAnother Test Attribute|",
+        'Attribute field generated correctly with multiple params'
+    );
 };
 
 subtest "Test build_custom_field_string" => sub {
 
     plan tests => 5;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons',value=>{surname => "Duck", firstname => "Darkwing"} } );
-
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { surname => "Duck", firstname => "Darkwing" } } );
 
     my $ils_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
     my $server = {};
     $server->{account}->{custom_patron_field}->{field} = "DW";
-    my $attribute_string = $ils_patron->build_custom_field_string( $server );
+    my $attribute_string = $ils_patron->build_custom_field_string($server);
     is( $attribute_string, "", 'Custom field not generated if no value passed' );
 
-    $server = {};
+    $server                                               = {};
     $server->{account}->{custom_patron_field}->{template} = "[% patron.surname %]";
-    $attribute_string = $ils_patron->build_custom_field_string( $server );
+    $attribute_string                                     = $ils_patron->build_custom_field_string($server);
     is( $attribute_string, "", 'Custom field not generated if no field passed' );
-
 
     $server = {};
     $server->{account}->{custom_patron_field}->{field} = "DW";
-    $server->{account}->{custom_patron_field}->{template} = "[% patron.firstname %] [% patron.surname %], let's get dangerous!";
-    $attribute_string = $ils_patron->build_custom_field_string( $server );
+    $server->{account}->{custom_patron_field}->{template} =
+        "[% patron.firstname %] [% patron.surname %], let's get dangerous!";
+    $attribute_string = $ils_patron->build_custom_field_string($server);
     is( $attribute_string, "DWDarkwing Duck, let's get dangerous!|", 'Custom field processed correctly' );
 
     $server = {};
     $server->{account}->{custom_patron_field}->[0]->{field} = "DW";
-    $server->{account}->{custom_patron_field}->[0]->{template} = "[% patron.firstname %] [% patron.surname %], let's get dangerous!";
-    $server->{account}->{custom_patron_field}->[1]->{field} = "LM";
+    $server->{account}->{custom_patron_field}->[0]->{template} =
+        "[% patron.firstname %] [% patron.surname %], let's get dangerous!";
+    $server->{account}->{custom_patron_field}->[1]->{field}    = "LM";
     $server->{account}->{custom_patron_field}->[1]->{template} = "Launchpad McQuack crashed on [% patron.dateexpiry %]";
-    $attribute_string = $ils_patron->build_custom_field_string( $server );
-    is( $attribute_string, "DWDarkwing Duck, let's get dangerous!|LMLaunchpad McQuack crashed on ".$patron->dateexpiry."|", 'Custom fields processed correctly when multiple exist' );
+    $attribute_string                                          = $ils_patron->build_custom_field_string($server);
+    is(
+        $attribute_string,
+        "DWDarkwing Duck, let's get dangerous!|LMLaunchpad McQuack crashed on " . $patron->dateexpiry . "|",
+        'Custom fields processed correctly when multiple exist'
+    );
 
     $server = {};
     $server->{account}->{custom_patron_field}->[0]->{field} = "DW";
-    $server->{account}->{custom_patron_field}->[0]->{template} = "[% IF (patron.firstname) %] patron.surname, let's get dangerous!";
-    $server->{account}->{custom_patron_field}->[1]->{field} = "LM";
+    $server->{account}->{custom_patron_field}->[0]->{template} =
+        "[% IF (patron.firstname) %] patron.surname, let's get dangerous!";
+    $server->{account}->{custom_patron_field}->[1]->{field}    = "LM";
     $server->{account}->{custom_patron_field}->[1]->{template} = "Launchpad McQuack crashed on [% patron.dateexpiry %]";
-    $attribute_string = $ils_patron->build_custom_field_string( $server );
-    is( $attribute_string, "LMLaunchpad McQuack crashed on ".$patron->dateexpiry."|", 'Custom fields processed correctly, bad template generate no text' );
+    $attribute_string                                          = $ils_patron->build_custom_field_string($server);
+    is(
+        $attribute_string, "LMLaunchpad McQuack crashed on " . $patron->dateexpiry . "|",
+        'Custom fields processed correctly, bad template generate no text'
+    );
 
 };
 
@@ -202,7 +214,7 @@ subtest "fine_items tests" => sub {
         {
             source => 'Accountline',
             value  => {
-                borrowernumber => $patron->{borrowernumber},
+                borrowernumber    => $patron->{borrowernumber},
                 amountoutstanding => 1,
             }
         }
@@ -212,7 +224,7 @@ subtest "fine_items tests" => sub {
         {
             source => 'Accountline',
             value  => {
-                borrowernumber => $patron->{borrowernumber},
+                borrowernumber    => $patron->{borrowernumber},
                 amountoutstanding => 1,
             }
         }
@@ -224,29 +236,29 @@ subtest "fine_items tests" => sub {
     is( @$all_fine_items, 2, "Got all fine items" );
 
     # Should return only the first fine item
-    my $fine_items = $sip_patron->fine_items(1,1);
-    is( @$fine_items, 1, "Got one fine item" );
-    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct fine item");
+    my $fine_items = $sip_patron->fine_items( 1, 1 );
+    is( @$fine_items,                1,                               "Got one fine item" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct fine item" );
 
     # Should return only the second fine item
-    $fine_items = $sip_patron->fine_items(2,2);
-    is( @$fine_items, 1, "Got one fine item" );
-    is( $fine_items->[0]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct fine item");
+    $fine_items = $sip_patron->fine_items( 2, 2 );
+    is( @$fine_items,                1,                               "Got one fine item" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct fine item" );
 
     # Should return all fine items
-    $fine_items = $sip_patron->fine_items(1,2);
-    is( @$fine_items, 2, "Got two fine items" );
-    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct first fine item");
-    is( $fine_items->[1]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct second fine item");
+    $fine_items = $sip_patron->fine_items( 1, 2 );
+    is( @$fine_items,                2,                               "Got two fine items" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct first fine item" );
+    is( $fine_items->[1]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct second fine item" );
 
     # Check an invalid end boundary
-    $fine_items = $sip_patron->fine_items(1,99);
-    is( @$fine_items, 2, "Got two fine items" );
-    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct first fine item");
-    is( $fine_items->[1]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct second fine item");
+    $fine_items = $sip_patron->fine_items( 1, 99 );
+    is( @$fine_items,                2,                               "Got two fine items" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct first fine item" );
+    is( $fine_items->[1]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct second fine item" );
 
     # Check an invalid start boundary
-    $fine_items = $sip_patron->fine_items(98,99);
+    $fine_items = $sip_patron->fine_items( 98, 99 );
     is( @$fine_items, 0, "Got zero fine items" );
 };
 
@@ -334,20 +346,20 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
             }
         }
     );
-    my $child  = $builder->build_object({ class => 'Koha::Patrons' });
-    my $sibling  = $builder->build_object({ class => 'Koha::Patrons' });
-    $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
-    $sibling->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
+    my $child   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $sibling = $builder->build_object( { class => 'Koha::Patrons' } );
+    $child->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
+    $sibling->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
 
-    t::lib::Mocks::mock_preference('noissuescharge', 50);
-    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantees', 11.01);
-    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', undef);
+    t::lib::Mocks::mock_preference( 'noissuescharge',                         50 );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees',               11.01 );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', undef );
 
     my $fee1 = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
-            value  => {
-                borrowernumber => $patron->borrowernumber,
+            value => {
+                borrowernumber    => $patron->borrowernumber,
                 amountoutstanding => 11,
                 debit_type_code   => 'OVERDUE',
             }
@@ -357,8 +369,8 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
     my $fee2 = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
-            value  => {
-                borrowernumber => $child->borrowernumber,
+            value => {
+                borrowernumber    => $child->borrowernumber,
                 amountoutstanding => 0.11,
                 debit_type_code   => 'OVERDUE',
             }
@@ -368,8 +380,8 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
     my $fee3 = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
-            value  => {
-                borrowernumber => $sibling->borrowernumber,
+            value => {
+                borrowernumber    => $sibling->borrowernumber,
                 amountoutstanding => 11.11,
                 debit_type_code   => 'OVERDUE',
             }
@@ -378,15 +390,21 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
 
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
-    is( $sip_patron->fines_amount, 11, "Only patron's fines are reported in total");
-    ok( !$sip_patron->charge_ok, "Guarantor blocked");
-    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(22\.22\) on guaranteed accounts/,"Screen message includes related fines total");
+    is( $sip_patron->fines_amount, 11, "Only patron's fines are reported in total" );
+    ok( !$sip_patron->charge_ok, "Guarantor blocked" );
+    like(
+        $sip_patron->screen_msg, qr/Patron blocked by fines \(22\.22\) on guaranteed accounts/,
+        "Screen message includes related fines total"
+    );
 
     $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
 
-    is( $sip_patron->fines_amount, 0.11,"Guarantee only fines correctly counted");
-    ok( $sip_patron->charge_ok, "Guarantee not blocked by guarantor fines");
-    unlike( $sip_patron->screen_msg, qr/Patron blocked by fines .* on guaranteed accounts/,"Screen message does not include blocked message");
+    is( $sip_patron->fines_amount, 0.11, "Guarantee only fines correctly counted" );
+    ok( $sip_patron->charge_ok, "Guarantee not blocked by guarantor fines" );
+    unlike(
+        $sip_patron->screen_msg, qr/Patron blocked by fines .* on guaranteed accounts/,
+        "Screen message does not include blocked message"
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -425,16 +443,16 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
             }
         }
     );
-    $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
+    $child->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
 
-    t::lib::Mocks::mock_preference('noissuescharge', 50);
-    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', 11.01);
+    t::lib::Mocks::mock_preference( 'noissuescharge',                         50 );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 11.01 );
 
     my $fee1 = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
-            value  => {
-                borrowernumber => $patron->borrowernumber,
+            value => {
+                borrowernumber    => $patron->borrowernumber,
                 amountoutstanding => 11,
                 debit_type_code   => 'OVERDUE',
             }
@@ -444,8 +462,8 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
     my $fee2 = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
-            value  => {
-                borrowernumber => $child->borrowernumber,
+            value => {
+                borrowernumber    => $child->borrowernumber,
                 amountoutstanding => 0.11,
                 debit_type_code   => 'OVERDUE',
             }
@@ -454,29 +472,41 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
-    is( $sip_patron->fines_amount, 11, "Personal fines correctly reported");
-    ok( !$sip_patron->charge_ok, "Guarantor blocked");
-    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on related accounts/,"Screen message includes related fines total");
+    is( $sip_patron->fines_amount, 11, "Personal fines correctly reported" );
+    ok( !$sip_patron->charge_ok, "Guarantor blocked" );
+    like(
+        $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on related accounts/,
+        "Screen message includes related fines total"
+    );
 
     $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
 
-    is( $sip_patron->fines_amount, 0.11, "Personal fines correctly reported");
-    ok( !$sip_patron->charge_ok, "Guarantee blocked");
-    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on related accounts/,"Screen message includes related fines total");
+    is( $sip_patron->fines_amount, 0.11, "Personal fines correctly reported" );
+    ok( !$sip_patron->charge_ok, "Guarantee blocked" );
+    like(
+        $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on related accounts/,
+        "Screen message includes related fines total"
+    );
 
-    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', 12.01);
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 12.01 );
 
     $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
 
-    is( $sip_patron->fines_amount, 0.11, "Personal fines correctly reported");
-    ok( $sip_patron->charge_ok, "Guarantee not blocked");
-    unlike( $sip_patron->screen_msg, qr/Patron blocked by fines .* on related accounts/,"Screen message does not indicate block");
+    is( $sip_patron->fines_amount, 0.11, "Personal fines correctly reported" );
+    ok( $sip_patron->charge_ok, "Guarantee not blocked" );
+    unlike(
+        $sip_patron->screen_msg, qr/Patron blocked by fines .* on related accounts/,
+        "Screen message does not indicate block"
+    );
 
     $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
-    is( $sip_patron->fines_amount, 11, "Personal fines correctly reported");
-    ok( $sip_patron->charge_ok, "Patron not blocked");
-    unlike( $sip_patron->screen_msg, qr/Patron blocked by fines .* on related accounts/,"Screen message does not indicate block");
+    is( $sip_patron->fines_amount, 11, "Personal fines correctly reported" );
+    ok( $sip_patron->charge_ok, "Patron not blocked" );
+    unlike(
+        $sip_patron->screen_msg, qr/Patron blocked by fines .* on related accounts/,
+        "Screen message does not indicate block"
+    );
 
     $schema->storage->txn_rollback;
 };

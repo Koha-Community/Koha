@@ -17,7 +17,6 @@ package Koha::SearchMarcMap;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -33,7 +32,7 @@ Koha::SearchMarcMap - Koha SearchMarcMap Object class
 =cut
 
 sub add_to_search_fields {
-    my(  $self, $params) = @_;
+    my ( $self, $params ) = @_;
     $self->_result->add_to_search_fields($params);
 
 }

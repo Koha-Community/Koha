@@ -49,12 +49,12 @@ common methods for getting Koha patron.
 =cut
 
 sub agent_string {
-    return 'Koha/'.Koha::version();
+    return 'Koha/' . Koha::version();
 }
 
 sub new {
-    my $class     = shift;
-    my $params    = shift || {};
+    my $class  = shift;
+    my $params = shift || {};
 
     $params->{logger} = Koha::Logger->get();
 
@@ -62,37 +62,37 @@ sub new {
 }
 
 sub _koha_session {
-    my $self = shift;
+    my $self       = shift;
     my $session_id = $self->koha_session_id or return;
     return C4::Auth::get_session($session_id);
 }
 
 sub get_from_koha_session {
-    my $self = shift;
-    my $key = shift or croak "No key";
+    my $self    = shift;
+    my $key     = shift                or croak "No key";
     my $session = $self->_koha_session or return;
     return $session->param($key);
 }
 
 sub set_in_koha_session {
-    my $self = shift;
-    my $key = shift or croak "No key";
-    my $value = shift;
+    my $self    = shift;
+    my $key     = shift or croak "No key";
+    my $value   = shift;
     my $session = $self->_koha_session or croak "No Koha session";
-    return $session->param($key, $value);
+    return $session->param( $key, $value );
 }
 
 sub koha_patron {
     my $self = shift;
 
-    if (my $patron = $self->_koha_patron_accessor) {
+    if ( my $patron = $self->_koha_patron_accessor ) {
         return $patron;
     }
 
     my $id = $self->get_from_koha_session('number')
-      or return;
+        or return;
     my $patron = Koha::Patrons->find($id)
-      or die "Invalid patron number in session";
+        or die "Invalid patron number in session";
     return $self->_koha_patron_accessor($patron);
 }
 

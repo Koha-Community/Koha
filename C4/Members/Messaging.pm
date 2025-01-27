@@ -21,8 +21,6 @@ use strict;
 use warnings;
 use C4::Context;
 
-
-
 =head1 NAME
 
 C4::Members::Messaging - manage patron messaging preferences
@@ -57,7 +55,7 @@ sub GetMessagingPreferences {
     my $params = shift;
 
     return unless exists $params->{message_name};
-    return unless exists $params->{borrowernumber} xor exists $params->{categorycode}; # yes, xor
+    return unless exists $params->{borrowernumber} xor exists $params->{categorycode};    # yes, xor
     my $sql = <<'END_SQL';
 SELECT borrower_message_preferences.*,
        borrower_message_transport_preferences.message_transport_type,
@@ -90,7 +88,7 @@ END_SQL
     my $sth = C4::Context->dbh->prepare($sql);
     $sth->execute(@bind_params);
     my $return;
-    ROW: while ( my $row = $sth->fetchrow_hashref() ) {
+ROW: while ( my $row = $sth->fetchrow_hashref() ) {
         next ROW unless $row->{'message_attribute_id'};
         $return->{'days_in_advance'} = $row->{'days_in_advance'} if defined $row->{'days_in_advance'};
         $return->{'wants_digest'}    = $row->{'wants_digest'}    if defined $row->{'wants_digest'};
@@ -121,21 +119,21 @@ returns nothing useful.
 sub SetMessagingPreference {
     my $params = shift;
 
-    unless (exists $params->{borrowernumber} xor exists $params->{categorycode}) { # yes, xor
+    unless ( exists $params->{borrowernumber} xor exists $params->{categorycode} ) {    # yes, xor
         warn "SetMessagingPreference called without exactly one of borrowernumber or categorycode";
         return;
     }
-    foreach my $required ( qw( message_attribute_id message_transport_types ) ) {
-        if ( ! exists $params->{ $required } ) {
+    foreach my $required (qw( message_attribute_id message_transport_types )) {
+        if ( !exists $params->{$required} ) {
             warn "SetMessagingPreference called without required parameter: $required";
             return;
         }
     }
-    $params->{'days_in_advance'} = undef unless exists ( $params->{'days_in_advance'} );
-    $params->{'wants_digest'}    = 0     unless exists ( $params->{'wants_digest'} );
+    $params->{'days_in_advance'} = undef unless exists( $params->{'days_in_advance'} );
+    $params->{'wants_digest'}    = 0     unless exists( $params->{'wants_digest'} );
 
     my $dbh = C4::Context->dbh();
-    
+
     my $delete_sql = <<'END_SQL';
 DELETE FROM borrower_message_preferences
   WHERE message_attribute_id = ?
@@ -148,8 +146,8 @@ END_SQL
         $delete_sql .= " AND categorycode = ? ";
         push @bind_params, $params->{categorycode};
     }
-    my $sth = $dbh->prepare( $delete_sql );
-    my $deleted = $sth->execute( @bind_params );
+    my $sth     = $dbh->prepare($delete_sql);
+    my $deleted = $sth->execute(@bind_params);
 
     if ( $params->{'message_transport_types'} ) {
         my $insert_bmp = <<'END_SQL';
@@ -158,19 +156,23 @@ INSERT INTO borrower_message_preferences
 VALUES
 (NULL, ?, ?, ?, ?, ?)
 END_SQL
-        
+
         $sth = C4::Context->dbh()->prepare($insert_bmp);
+
         # set up so that we can easily construct the insert SQL
-        $params->{'borrowernumber'}  = undef unless exists ( $params->{'borrowernumber'} );
-        $params->{'categorycode'}    = undef unless exists ( $params->{'categorycode'} );
-        my $success = $sth->execute( $params->{'borrowernumber'},
-                                     $params->{'categorycode'},
-                                     $params->{'message_attribute_id'},
-                                     $params->{'days_in_advance'},
-                                     $params->{'wants_digest'} );
+        $params->{'borrowernumber'} = undef unless exists( $params->{'borrowernumber'} );
+        $params->{'categorycode'}   = undef unless exists( $params->{'categorycode'} );
+        my $success = $sth->execute(
+            $params->{'borrowernumber'},
+            $params->{'categorycode'},
+            $params->{'message_attribute_id'},
+            $params->{'days_in_advance'},
+            $params->{'wants_digest'}
+        );
+
         # my $borrower_message_preference_id = $dbh->last_insert_id();
         my $borrower_message_preference_id = $dbh->{'mysql_insertid'};
-        
+
         my $insert_bmtp = <<'END_SQL';
 INSERT INTO borrower_message_transport_preferences
 (borrower_message_preference_id, message_transport_type)
@@ -178,11 +180,11 @@ VALUES
 (?, ?)
 END_SQL
         $sth = C4::Context->dbh()->prepare($insert_bmtp);
-        foreach my $transport ( @{$params->{'message_transport_types'}}) {
+        foreach my $transport ( @{ $params->{'message_transport_types'} } ) {
             my $success = $sth->execute( $borrower_message_preference_id, $transport );
         }
     }
-    return;    
+    return;
 }
 
 =head2 GetMessagingOptions
@@ -210,7 +212,7 @@ END_SQL
         $choices->{ $row->{'message_name'} }->{'message_name'}         = $row->{'message_name'};
         $choices->{ $row->{'message_name'} }->{'takes_days'}           = $row->{'takes_days'};
         $choices->{ $row->{'message_name'} }->{'has_digest'}           = 1 if $row->{'is_digest'};
-        $choices->{ $row->{'message_name'} }->{'transport_' . $row->{'message_transport_type'}} = ' ';
+        $choices->{ $row->{'message_name'} }->{ 'transport_' . $row->{'message_transport_type'} } = ' ';
     }
 
     my @return = values %$choices;
@@ -253,19 +255,24 @@ whatever defaults are defined for the patron category.
 sub SetMessagingPreferencesFromDefaults {
     my $params = shift;
 
-    foreach my $required ( qw( borrowernumber categorycode ) ) {
-        unless ( exists $params->{ $required } ) {
+    foreach my $required (qw( borrowernumber categorycode )) {
+        unless ( exists $params->{$required} ) {
             die "SetMessagingPreferencesFromDefaults called without required parameter: $required";
         }
     }
 
     my $messaging_options = GetMessagingOptions();
-    OPTION: foreach my $option ( @$messaging_options ) {
+OPTION: foreach my $option (@$messaging_options) {
         if ( defined $params->{message_name} && $option->{'message_name'} ne $params->{message_name} ) {
             next OPTION;
         }
-        my $default_pref = GetMessagingPreferences( { categorycode => $params->{categorycode},
-                                                      message_name => $option->{'message_name'} } );
+        my $default_pref = GetMessagingPreferences(
+            {
+                categorycode => $params->{categorycode},
+                message_name => $option->{'message_name'}
+            }
+        );
+
         # FIXME - except for setting the borrowernumber, it really ought to be possible
         # to have the output of GetMessagingPreferences be able to be the input
         # to SetMessagingPreference
@@ -273,7 +280,7 @@ sub SetMessagingPreferencesFromDefaults {
         $default_pref->{message_attribute_id}    = $option->{'message_attribute_id'};
         $default_pref->{message_transport_types} = \@message_transport_types;
         $default_pref->{borrowernumber}          = $params->{borrowernumber};
-        SetMessagingPreference( $default_pref );
+        SetMessagingPreference($default_pref);
     }
 }
 

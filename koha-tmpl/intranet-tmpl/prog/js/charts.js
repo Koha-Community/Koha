@@ -1,21 +1,27 @@
-function create_chart(headers, results, x_element, y_elements, y_groups, options) {
-
+function create_chart(
+    headers,
+    results,
+    x_element,
+    y_elements,
+    y_groups,
+    options
+) {
     var type = options.type;
     var horizontal = options.horizontal;
     var lines = options.lines;
     var data;
     var axis;
 
-    if (type != 'pie') {
+    if (type != "pie") {
         var columns = build_columns(headers, results, x_element, y_elements);
         var groups = build_group(y_elements, y_groups);
         var x_values = build_xvalues(headers, results, x_element);
 
         axis = {
             x: {
-                type: 'category',
-                categories: x_values
-            }
+                type: "category",
+                categories: x_values,
+            },
         };
 
         data = {
@@ -23,21 +29,18 @@ function create_chart(headers, results, x_element, y_elements, y_groups, options
             groups: groups,
             type: type,
         };
-
-    }
-    else {
+    } else {
         var columns = build_pie_columns(headers, results, x_element);
         data = {
             columns: columns,
             type: type,
         };
-
     }
 
-    if (type == 'bar') {
+    if (type == "bar") {
         var types = {};
-        $.each(lines, function(index, value) {
-            types[value] = 'line';
+        $.each(lines, function (index, value) {
+            types[value] = "line";
         });
         data.types = types;
 
@@ -47,7 +50,7 @@ function create_chart(headers, results, x_element, y_elements, y_groups, options
     }
 
     var chart = c3.generate({
-        bindto: '#chart',
+        bindto: "#chart",
         data: data,
         axis: axis,
     });
@@ -60,20 +63,20 @@ function build_pie_columns(headers, results, x_element) {
     var x_index;
 
     //Get x_element index.
-    $.each(headers, function(index, value) {
+    $.each(headers, function (index, value) {
         if (value.cell == x_element) {
             x_index = index;
         }
     });
 
-    $.each(results, function(index, value) {
+    $.each(results, function (index, value) {
         var cells = value.cells;
-        $.each( cells, function(i, value) {
+        $.each(cells, function (i, value) {
             if (i == x_index) {
                 columns[index] = [value.cell];
             }
         });
-        $.each( cells, function(i, value) {
+        $.each(cells, function (i, value) {
             if (i != x_index) {
                 columns[index].push(value.cell);
             }
@@ -88,15 +91,15 @@ function build_xvalues(headers, results, x_element) {
     x_values = [];
 
     //Get x_element index.
-    $.each(headers, function(index, value) {
+    $.each(headers, function (index, value) {
         if (value.cell == x_element) {
             h_index = index;
         }
     });
 
-    $.each( results, function (i, value) {
+    $.each(results, function (i, value) {
         var cells = value.cells;
-        $.each( cells, function(index, value) {
+        $.each(cells, function (index, value) {
             if (index == h_index) {
                 x_values.push(value.cell);
             }
@@ -104,14 +107,13 @@ function build_xvalues(headers, results, x_element) {
     });
 
     return x_values;
-
 }
 
 function build_group(y_elements, y_groups) {
     var groups_hash = {};
     var groups = [];
 
-    $.each(y_groups, function(index, value) {
+    $.each(y_groups, function (index, value) {
         var related_y = y_elements.shift();
         if (!$.isArray(groups_hash[value])) {
             groups_hash[value] = [];
@@ -119,7 +121,7 @@ function build_group(y_elements, y_groups) {
         groups_hash[value].push(related_y);
     });
 
-    $.each(groups_hash, function(key, value) {
+    $.each(groups_hash, function (key, value) {
         if (value.length !== 0) {
             groups.push(value);
         }
@@ -134,20 +136,20 @@ function build_columns(headers, results, x_element, y_elements) {
     var y_values = {};
 
     // Keep order of headers using array index.
-    $.each( headers, function(index, value) {
+    $.each(headers, function (index, value) {
         if (value.cell == x_element) {
             x_index = index;
         }
-        header_index.push(value.cell)
+        header_index.push(value.cell);
     });
 
-    $.each( y_elements, function(index, element) {
+    $.each(y_elements, function (index, element) {
         y_values[element] = [element];
     });
 
-    $.each( results, function (i, value) {
+    $.each(results, function (i, value) {
         var cells = value.cells;
-        $.each( cells, function(index, value) {
+        $.each(cells, function (index, value) {
             if (index != x_index) {
                 y_values[header_index[index]].push(value.cell);
             }
@@ -155,7 +157,7 @@ function build_columns(headers, results, x_element, y_elements) {
     });
 
     var columns = [];
-    $.each( y_values, function(key, value) {
+    $.each(y_values, function (key, value) {
         columns.push(value);
     });
 

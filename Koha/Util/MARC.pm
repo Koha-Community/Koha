@@ -19,7 +19,7 @@ package Koha::Util::MARC;
 
 use Modern::Perl;
 
-use constant OCLC_REGEX => qr/OCoLC/i; # made it case insensitive, includes the various oclc suffixes too
+use constant OCLC_REGEX => qr/OCoLC/i;    # made it case insensitive, includes the various oclc suffixes too
 
 =head1 NAME
 
@@ -48,7 +48,7 @@ sub createMergeHash {
                 !defined($tagslib)
                 || ( defined( $tagslib->{$fieldtag} )
                     && $tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0 )
-              )
+                )
             {
                 push @array, {
                     tag   => $fieldtag,
@@ -56,8 +56,7 @@ sub createMergeHash {
                     value => $field->data(),
                 };
             }
-        }
-        else {
+        } else {
             my @subfields = $field->subfields();
             my @subfield_array;
             foreach my $subfield (@subfields) {
@@ -67,7 +66,7 @@ sub createMergeHash {
                         && defined $tagslib->{$fieldtag}->{ @$subfield[0] }
                         && defined $tagslib->{$fieldtag}->{ @$subfield[0] }->{'tab'}
                         && $tagslib->{$fieldtag}->{ @$subfield[0] }->{'tab'} >= 0 )
-                  )
+                    )
                 {
                     push @subfield_array, {
                         subtag => @$subfield[0],
@@ -85,15 +84,15 @@ sub createMergeHash {
                         && ( $tagslib->{$fieldtag}->{'tab'} ? $tagslib->{$fieldtag}->{'tab'} : 0 ) >= 0 )
                 )
                 && @subfield_array
-              )
+                )
             {
                 push @array, {
-                      tag        => $fieldtag,
-                      key        => _createKey(),
-                      indicator1 => $field->indicator(1),
-                      indicator2 => $field->indicator(2),
-                      subfield   => [@subfield_array],
-                  };
+                    tag        => $fieldtag,
+                    key        => _createKey(),
+                    indicator1 => $field->indicator(1),
+                    indicator2 => $field->indicator(2),
+                    subfield   => [@subfield_array],
+                };
             }
 
         }
@@ -108,7 +107,7 @@ Create a random value to set it into the input name
 =cut
 
 sub _createKey {
-    return int(rand(1000000));
+    return int( rand(1000000) );
 }
 
 =head2 getAuthorityAuthorizedHeading
@@ -127,8 +126,7 @@ sub getAuthorityAuthorizedHeading {
         foreach my $field ( $record->field('2..') ) {
             return $field->as_string('abcdefghijlmnopqrstuvwxyz');
         }
-    }
-    else {
+    } else {
         foreach my $field ( $record->field('1..') ) {
             my $tag = $field->tag();
             next if "152" eq $tag;
@@ -138,41 +136,29 @@ sub getAuthorityAuthorizedHeading {
             # 9XX
             if ( $tag eq '100' ) {
                 return $field->as_string('abcdefghjklmnopqrstvxyz68');
-            }
-            elsif ( $tag eq '110' ) {
+            } elsif ( $tag eq '110' ) {
                 return $field->as_string('abcdefghklmnoprstvxyz68');
-            }
-            elsif ( $tag eq '111' ) {
+            } elsif ( $tag eq '111' ) {
                 return $field->as_string('acdefghklnpqstvxyz68');
-            }
-            elsif ( $tag eq '130' ) {
+            } elsif ( $tag eq '130' ) {
                 return $field->as_string('adfghklmnoprstvxyz68');
-            }
-            elsif ( $tag eq '148' ) {
+            } elsif ( $tag eq '148' ) {
                 return $field->as_string('abvxyz68');
-            }
-            elsif ( $tag eq '150' ) {
+            } elsif ( $tag eq '150' ) {
                 return $field->as_string('abvxyz68');
-            }
-            elsif ( $tag eq '151' ) {
+            } elsif ( $tag eq '151' ) {
                 return $field->as_string('avxyz68');
-            }
-            elsif ( $tag eq '155' ) {
+            } elsif ( $tag eq '155' ) {
                 return $field->as_string('abvxyz68');
-            }
-            elsif ( $tag eq '180' ) {
+            } elsif ( $tag eq '180' ) {
                 return $field->as_string('vxyz68');
-            }
-            elsif ( $tag eq '181' ) {
+            } elsif ( $tag eq '181' ) {
                 return $field->as_string('vxyz68');
-            }
-            elsif ( $tag eq '182' ) {
+            } elsif ( $tag eq '182' ) {
                 return $field->as_string('vxyz68');
-            }
-            elsif ( $tag eq '185' ) {
+            } elsif ( $tag eq '185' ) {
                 return $field->as_string('vxyz68');
-            }
-            else {
+            } else {
                 return $field->as_string();
             }
         }
@@ -208,20 +194,22 @@ the value
 =cut
 
 sub set_marc_field {
-    my ($record, $marcField, $value) = @_;
+    my ( $record, $marcField, $value ) = @_;
 
     if ($marcField) {
-        my ($fieldTag, $subfieldCode) = split /\$/, $marcField;
-        if( !$subfieldCode ) {
+        my ( $fieldTag, $subfieldCode ) = split /\$/, $marcField;
+        if ( !$subfieldCode ) {
             warn "set_marc_field: Invalid marcField format: $marcField\n";
             return;
         }
         my $field = $record->field($fieldTag);
         if ($field) {
-            $field->update($subfieldCode => $value);
+            $field->update( $subfieldCode => $value );
         } else {
-            $field = MARC::Field->new($fieldTag, ' ', ' ',
-                $subfieldCode => $value);
+            $field = MARC::Field->new(
+                $fieldTag, ' ', ' ',
+                $subfieldCode => $value
+            );
             $record->append_fields($field);
         }
     }
@@ -239,15 +227,15 @@ sub set_marc_field {
 =cut
 
 sub find_marc_info {
-    my ( $params ) = @_;
-    my $record = $params->{record} or return;
-    my $field = $params->{field} or return;
+    my ($params) = @_;
+    my $record   = $params->{record} or return;
+    my $field    = $params->{field}  or return;
     my $subfield = $params->{subfield};
-    my $match = $params->{match};
+    my $match    = $params->{match};
 
     my @rv;
     foreach my $f ( $record->field($field) ) {
-        if( $f->is_control_field ) {
+        if ( $f->is_control_field ) {
             push @rv, $f->data if !$match || $f->data =~ /$match/;
             last if @rv && !wantarray;
         } else {
@@ -257,7 +245,7 @@ sub find_marc_info {
             }
         }
     }
-    return @rv if wantarray;
+    return @rv    if wantarray;
     return $rv[0] if @rv;
 }
 
@@ -286,10 +274,14 @@ sub strip_orgcode {
 
 sub oclc_number {
     my $record = shift;
-    return strip_orgcode( scalar find_marc_info({
-        # Note: Field 035 same for MARC21 and UNIMARC
-        record => $record, field => '035', subfield => 'a', match => OCLC_REGEX,
-    }));
+    return strip_orgcode(
+        scalar find_marc_info(
+            {
+                # Note: Field 035 same for MARC21 and UNIMARC
+                record => $record, field => '035', subfield => 'a', match => OCLC_REGEX,
+            }
+        )
+    );
 }
 
 1;

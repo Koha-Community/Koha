@@ -71,20 +71,23 @@ adds a settings_updated template variable.
 =cut
 
 sub handle_form_action {
-    my ($query, $target_params, $template, $insert, $categorycode) = @_;
+    my ( $query, $target_params, $template, $insert, $categorycode ) = @_;
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
+
     # TODO: If a "NONE" box and another are checked somehow (javascript failed), we should pay attention to the "NONE" box
     my $prefs_set = 0;
-    OPTION: foreach my $option ( @$messaging_options ) {
-        my $updater = { %{ $target_params }, 
-                        message_attribute_id    => $option->{'message_attribute_id'} };
-        
+OPTION: foreach my $option (@$messaging_options) {
+        my $updater = {
+            %{$target_params},
+            message_attribute_id => $option->{'message_attribute_id'}
+        };
+
         # find the desired transports
-        @{$updater->{'message_transport_types'}} = $query->multi_param( $option->{'message_attribute_id'} );
+        @{ $updater->{'message_transport_types'} } = $query->multi_param( $option->{'message_attribute_id'} );
         next OPTION unless $updater->{'message_transport_types'};
 
         if ( $option->{'has_digest'} ) {
-            if ( List::Util::first { $_ == $option->{'message_attribute_id'} } $query->multi_param( 'digest' ) ) {
+            if ( List::Util::first { $_ == $option->{'message_attribute_id'} } $query->multi_param('digest') ) {
                 $updater->{'wants_digest'} = 1;
             }
         }
@@ -95,8 +98,9 @@ sub handle_form_action {
             }
         }
 
-        C4::Members::Messaging::SetMessagingPreference( $updater );
+        C4::Members::Messaging::SetMessagingPreference($updater);
     }
+
     # show the success message
     $template->param( settings_updated => 1 );
 }
@@ -116,27 +120,32 @@ C<$template> is the Template::Toolkit object for the response.
 =cut
 
 sub set_form_values {
-    my ($target_params, $template) = @_;
+    my ( $target_params, $template ) = @_;
+
     # walk through the options and update them with these borrower_preferences
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
-    PREF: foreach my $option ( @$messaging_options ) {
-        my $pref = C4::Members::Messaging::GetMessagingPreferences( { %{ $target_params }, message_name => $option->{'message_name'} } );
+PREF: foreach my $option (@$messaging_options) {
+        my $pref = C4::Members::Messaging::GetMessagingPreferences(
+            { %{$target_params}, message_name => $option->{'message_name'} } );
         $option->{ $option->{'message_name'} } = 1;
+
         # make a hashref of the days, selecting one.
         if ( $option->{'takes_days'} ) {
             my $days_in_advance = $pref->{'days_in_advance'} ? $pref->{'days_in_advance'} : 0;
             $option->{days_in_advance} = $days_in_advance;
-            @{$option->{'select_days'}} = map { {
-                day        => $_,
-                selected   => $_ == $days_in_advance  }
-            } ( 0..MAX_DAYS_IN_ADVANCE );
+            @{ $option->{'select_days'} } = map {
+                {
+                    day      => $_,
+                    selected => $_ == $days_in_advance
+                }
+            } ( 0 .. MAX_DAYS_IN_ADVANCE );
         }
-        foreach my $transport ( keys %{$pref->{'transports'}} ) {
-            $option->{'transports_'.$transport} = 1;
+        foreach my $transport ( keys %{ $pref->{'transports'} } ) {
+            $option->{ 'transports_' . $transport } = 1;
         }
         $option->{'digest'} = 1 if $pref->{'wants_digest'};
     }
-    $template->param(messaging_preferences => $messaging_options);
+    $template->param( messaging_preferences => $messaging_options );
 }
 
 =head1 TODO

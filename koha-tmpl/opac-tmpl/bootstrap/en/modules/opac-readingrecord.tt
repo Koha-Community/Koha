@@ -10,7 +10,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your checkout history &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-readingrecord' %]
 [% INCLUDE 'masthead.inc' %]
@@ -34,12 +35,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-md-12 col-lg-10 order-1">
-
                 <div id="userreadingrecord" class="maincontent">
                     <h1>Checkout history</h1>
                     [% UNLESS checkouts %][% checkouts = [] %][% END %]
@@ -49,11 +47,8 @@
                         You have never borrowed anything from this library.
                     [% ELSE %]
                         <div id="opac-user-readingrec">
-
                             [% IF savings %]
-                                <div class="alert alert-info" id="savings">
-                                    Congratulations, you have saved a total of [% savings | $Price with_symbol => 1 %] by using the library.
-                                </div>
+                                <div class="alert alert-info" id="savings"> Congratulations, you have saved a total of [% savings | $Price with_symbol => 1 %] by using the library. </div>
                             [% END %]
 
                             <div class="resultscontrol resort js-hide">
@@ -69,13 +64,9 @@
                             </div>
 
                             [% IF limit %]
-                                <p>
-                                    Showing last 50 items. <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a>
-                                </p>
+                                <p> Showing last 50 items. <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a> </p>
                             [% ELSE %]
-                                <p>
-                                    Showing all items. <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items</a>
-                                </p>
+                                <p> Showing all items. <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items</a> </p>
                             [% END %]
 
                             [% IF Koha.Preference( 'OnSiteCheckouts' ) == 1 %]
@@ -100,14 +91,19 @@
                             [% ELSE %]
                                 [% PROCESS checkout_history_table checkouts=all_checkouts %]
                             [% END %]
-
-                        </div> <!-- / .opac-user-readingrec -->
+                        </div>
+                        <!-- / .opac-user-readingrec -->
                     [% END # / IF checkouts.size == 0 %]
-                </div> <!-- / .userreadingrecord -->
-            </div> <!-- / .col-lg-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / .userreadingrecord -->
+            </div>
+            <!-- / .col-lg-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% BLOCK checkout_history_table %]
     <table id="readingrec" class="table table-bordered table-striped">
@@ -134,8 +130,10 @@
                 [% SET biblio = item.biblio %]
                 <tr>
                     <td style="display:none;">
-                        [% IF checkout.onsite_checkout %][% issuetype = 'onsite_checkout' %]
-                        [% ELSE %][% issuetype = 'standard_checkout' %]
+                        [% IF checkout.onsite_checkout %]
+                            [% issuetype = 'onsite_checkout' %]
+                        [% ELSE %]
+                            [% issuetype = 'standard_checkout' %]
                         [% END %]
                         [% issuetype | html %]
                     </td>
@@ -143,7 +141,9 @@
                         [% SET normalized_isbn = biblio.normalized_isbn %]
                         [% IF OPACAmazonCoverImages %]
                             [% IF normalized_isbn %]
-                                <a href="http://www.amazon.com/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
+                                <a href="http://www.amazon.com/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"
+                                    ><img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail"
+                                /></a>
                             [% ELSE %]
                                 <span class="no-image">No cover image available</span>
                             [% END %]
@@ -153,24 +153,28 @@
                             [% IF normalized_isbn %]
                                 <div title="[% biblio.biblionumber |url %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
                             [% ELSE %]
-                               <span class="no-image">No cover image available</span>
+                                <span class="no-image">No cover image available</span>
                             [% END %]
                         [% END %]
 
-                         [% IF BakerTaylorEnabled || SyndeticsEnabled && SyndeticsCoverImages %]
-                             [% SET normalized_upc = biblio.normalized_upc %]
-                         [% END %]
-                         [% IF BakerTaylorEnabled %]
-                             [% bt_id = ( normalized_upc || normalized_isbn ) %]
-                             [% IF ( bt_id ) %]
+                        [% IF BakerTaylorEnabled || SyndeticsEnabled && SyndeticsCoverImages %]
+                            [% SET normalized_upc = biblio.normalized_upc %]
+                        [% END %]
+                        [% IF BakerTaylorEnabled %]
+                            [% bt_id = ( normalized_upc || normalized_isbn ) %]
+                            [% IF ( bt_id ) %]
                                 <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
-                             [% ELSE %]
+                            [% ELSE %]
                                 <span class="no-image">No cover image available</span>
-                             [% END %]
+                            [% END %]
                         [% END %]
 
                         [% IF SyndeticsEnabled && SyndeticsCoverImages %]
-                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% biblio.normalized_oclc | html %]" alt="" class="item-thumbnail" />
+                            <img
+                                src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% biblio.normalized_oclc | html %]"
+                                alt=""
+                                class="item-thumbnail"
+                            />
                         [% END %]
                     </td>
                     <td>
@@ -189,22 +193,16 @@
                                 <img src="[% image_location | html %]" alt="" />
                             [% END %]
                         [% END %]
-                        <span class="itypetext">
-                            [% item_type.translated_description | html %]
-                        </span>
+                        <span class="itypetext"> [% item_type.translated_description | html %] </span>
                     </td>
-                    <td>
-                        [% item.itemcallnumber | html %]
-                    </td>
+                    <td> [% item.itemcallnumber | html %] </td>
                     <td>
                         [% IF item.enumchron %]
                             [% item.enumchron | html %]
                         [% END %]
                     </td>
                     [% IF checkout.returndate %]
-                        <td data-order="[% checkout.returndate | html %]">
-                            [% checkout.returndate | $KohaDates %]
-                        </td>
+                        <td data-order="[% checkout.returndate | html %]"> [% checkout.returndate | $KohaDates %] </td>
                     [% ELSE %]
                         <td data-order="Checked out">
                             <em>(Checked out)</em>
@@ -222,44 +220,44 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script>
-    $(document).ready(function(){
-        [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-        $('#order').change(function() {
-            $('#sortform').submit();
-        });
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
+        $(document).ready(function(){
+            [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
+            $('#order').change(function() {
+                $('#sortform').submit();
+            });
 
-        var table = KohaTable("#readingrec", {
-            "dom": '<"top"<"table_entries"i><"table_controls"fB>>t',
-            "language": {
-                "search": "_INPUT_",
-                "searchPlaceholder": _("Search")
-            },
-            "responsive": {
-                "details": {"type": 'column',"target": -1}
-            },
-            "columnDefs": [
-                { "className": "dtr-control","orderable": false,"targets": [-1] },
-                { "visible": false, "targets": [0]},
-                { "orderable": false, "targets": [1]}
-            ],
-        });
-        let table_dt = table.DataTable();
+            var table = KohaTable("#readingrec", {
+                "dom": '<"top"<"table_entries"i><"table_controls"fB>>t',
+                "language": {
+                    "search": "_INPUT_",
+                    "searchPlaceholder": _("Search")
+                },
+                "responsive": {
+                    "details": {"type": 'column',"target": -1}
+                },
+                "columnDefs": [
+                    { "className": "dtr-control","orderable": false,"targets": [-1] },
+                    { "visible": false, "targets": [0]},
+                    { "orderable": false, "targets": [1]}
+                ],
+            });
+            let table_dt = table.DataTable();
 
-        $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-            var id = e.target.id;
-            let pattern = "";
-            if ( id == "checkout-tab" ) {
-                pattern = "standard_checkout";
-            } else if ( id == "onsite_checkout-tab" ) {
-                pattern = "onsite_checkout";
-            }
-            table_dt.columns(0).search(pattern).draw();
+            $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
+                var id = e.target.id;
+                let pattern = "";
+                if ( id == "checkout-tab" ) {
+                    pattern = "standard_checkout";
+                } else if ( id == "onsite_checkout-tab" ) {
+                    pattern = "onsite_checkout";
+                }
+                table_dt.columns(0).search(pattern).draw();
+            });
         });
-    });
-</script>
+    </script>
     [% IF ( Koha.Preference('OpacStarRatings') == 'all' ) %]
         [% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %]
         [% Asset.js("js/ratings.js") | $raw %]

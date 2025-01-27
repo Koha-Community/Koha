@@ -80,7 +80,7 @@ subtest 'store() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+        my $patron           = $builder->build( { source => 'Borrower' } )->{borrowernumber};
         my $attribute_type_1 = $builder->build(
             {
                 source => 'BorrowerAttributeType',
@@ -88,23 +88,25 @@ subtest 'store() tests' => sub {
             }
         );
         Koha::Patron::Attribute->new(
-            {   borrowernumber => $patron,
+            {
+                borrowernumber => $patron,
                 code           => $attribute_type_1->{code},
                 attribute      => 'Foo'
             }
         )->store;
         Koha::Patron::Attribute->new(
-            {   borrowernumber => $patron,
+            {
+                borrowernumber => $patron,
                 code           => $attribute_type_1->{code},
                 attribute      => 'Bar'
             }
         )->store;
-        my $attr_count
-            = Koha::Patron::Attributes->search(
-            { borrowernumber => $patron, code => $attribute_type_1->{code} } )
-            ->count;
-        is( $attr_count, 2,
-            '2 repeatable attributes stored and retrieved correcctly' );
+        my $attr_count =
+            Koha::Patron::Attributes->search( { borrowernumber => $patron, code => $attribute_type_1->{code} } )->count;
+        is(
+            $attr_count, 2,
+            '2 repeatable attributes stored and retrieved correcctly'
+        );
 
         my $attribute_type_2 = $builder->build(
             {
@@ -114,14 +116,16 @@ subtest 'store() tests' => sub {
         );
 
         Koha::Patron::Attribute->new(
-            {   borrowernumber => $patron,
+            {
+                borrowernumber => $patron,
                 code           => $attribute_type_2->{code},
                 attribute      => 'Foo'
             }
         )->store;
         throws_ok {
             Koha::Patron::Attribute->new(
-                {   borrowernumber => $patron,
+                {
+                    borrowernumber => $patron,
                     code           => $attribute_type_2->{code},
                     attribute      => 'Bar'
                 }
@@ -132,17 +136,17 @@ subtest 'store() tests' => sub {
 
         is(
             "$@",
-            "Tried to add more than one non-repeatable attributes. type="
-            . $attribute_type_2->{code}
-            . " value=Bar",
+            "Tried to add more than one non-repeatable attributes. type=" . $attribute_type_2->{code} . " value=Bar",
             'Exception stringified correctly, attribute passed correctly'
         );
 
-        my $attributes = Koha::Patron::Attributes->search(
-            { borrowernumber => $patron, code => $attribute_type_2->{code} } );
+        my $attributes =
+            Koha::Patron::Attributes->search( { borrowernumber => $patron, code => $attribute_type_2->{code} } );
         is( $attributes->count, 1, '1 non-repeatable attribute stored' );
-        is( $attributes->next->attribute,
-            'Foo', 'Non-repeatable attribute remains unchanged' );
+        is(
+            $attributes->next->attribute,
+            'Foo', 'Non-repeatable attribute remains unchanged'
+        );
 
         $schema->storage->txn_rollback;
     };
@@ -212,23 +216,24 @@ subtest 'store() tests' => sub {
             }
         );
         Koha::Patron::Attribute->new(
-            {   borrowernumber => $patron_1,
+            {
+                borrowernumber => $patron_1,
                 code           => $attribute_type_1->{code},
                 attribute      => 'Foo'
             }
         )->store;
         Koha::Patron::Attribute->new(
-            {   borrowernumber => $patron_2,
+            {
+                borrowernumber => $patron_2,
                 code           => $attribute_type_1->{code},
                 attribute      => 'Bar'
             }
         )->store;
-        my $attr_count
-            = Koha::Patron::Attributes->search(
-            { code => $attribute_type_1->{code} } )
-            ->count;
-        is( $attr_count, 2,
-            '2 non-unique attributes stored and retrieved correcctly' );
+        my $attr_count = Koha::Patron::Attributes->search( { code => $attribute_type_1->{code} } )->count;
+        is(
+            $attr_count, 2,
+            '2 non-unique attributes stored and retrieved correcctly'
+        );
 
         my $attribute_type_2 = $builder->build(
             {
@@ -238,14 +243,16 @@ subtest 'store() tests' => sub {
         );
 
         Koha::Patron::Attribute->new(
-            {   borrowernumber => $patron_1,
+            {
+                borrowernumber => $patron_1,
                 code           => $attribute_type_2->{code},
                 attribute      => 'Foo'
             }
         )->store;
         throws_ok {
             Koha::Patron::Attribute->new(
-                {   borrowernumber => $patron_2,
+                {
+                    borrowernumber => $patron_2,
                     code           => $attribute_type_2->{code},
                     attribute      => 'Foo'
                 }
@@ -256,17 +263,17 @@ subtest 'store() tests' => sub {
 
         is(
             "$@",
-            "Your action breaks a unique constraint on the attribute. type="
-            . $attribute_type_2->{code}
-            . " value=Foo",
+            "Your action breaks a unique constraint on the attribute. type=" . $attribute_type_2->{code} . " value=Foo",
             'Exception stringified correctly, attribute passed correctly'
         );
 
-        my $attributes = Koha::Patron::Attributes->search(
-            { borrowernumber => $patron_1, code => $attribute_type_2->{code} } );
+        my $attributes =
+            Koha::Patron::Attributes->search( { borrowernumber => $patron_1, code => $attribute_type_2->{code} } );
         is( $attributes->count, 1, '1 unique attribute stored' );
-        is( $attributes->next->attribute,
-            'Foo', 'unique attribute remains unchanged' );
+        is(
+            $attributes->next->attribute,
+            'Foo', 'unique attribute remains unchanged'
+        );
 
         $schema->storage->txn_rollback;
     };
@@ -277,7 +284,7 @@ subtest 'store() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
         my $attribute_type = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
@@ -292,19 +299,20 @@ subtest 'store() tests' => sub {
         my $code = $attribute_type->code;
         $attribute_type->delete;
 
-        throws_ok
-            { Koha::Patron::Attribute->new(
+        throws_ok {
+            Koha::Patron::Attribute->new(
                 {
                     borrowernumber => $patron->borrowernumber,
                     code           => $code,
                     attribute      => 'Who knows'
 
-                })->store;
-            }
-            'Koha::Exceptions::Patron::Attribute::InvalidType',
+                }
+            )->store;
+        }
+        'Koha::Exceptions::Patron::Attribute::InvalidType',
             'Exception thrown on invalid attribute code';
 
-        is( $@->type, $code, 'type exception parameter passed'  );
+        is( $@->type, $code, 'type exception parameter passed' );
 
         $schema->storage->txn_rollback;
     };
@@ -315,7 +323,7 @@ subtest 'store() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $patron              = $builder->build_object( { class => 'Koha::Patrons' } );
         my $non_repeatable_type = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
@@ -337,9 +345,7 @@ subtest 'store() tests' => sub {
             }
         );
 
-        $non_repeatable_attr->set({ attribute => 'HEY' })
-                        ->store
-                        ->discard_changes;
+        $non_repeatable_attr->set( { attribute => 'HEY' } )->store->discard_changes;
 
         is( $non_repeatable_attr->attribute, 'HEY', 'Value stored correctly' );
 
@@ -353,11 +359,11 @@ subtest 'type() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron
-        = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+    my $patron    = $builder->build( { source => 'Borrower' } )->{borrowernumber};
     my $attr_type = $builder->build( { source => 'BorrowerAttributeType' } );
     my $attribute = Koha::Patron::Attribute->new(
-        {   borrowernumber => $patron,
+        {
+            borrowernumber => $patron,
             code           => $attr_type->{code},
             attribute      => $patron
         }
@@ -365,21 +371,26 @@ subtest 'type() tests' => sub {
 
     my $attribute_type = $attribute->type;
 
-    is( ref($attribute_type),
+    is(
+        ref($attribute_type),
         'Koha::Patron::Attribute::Type',
         '->type returns a Koha::Patron::Attribute::Type object'
     );
 
-    is( $attribute_type->code,
+    is(
+        $attribute_type->code,
         $attr_type->{code},
-        '->type returns the right Koha::Patron::Attribute::Type object' );
+        '->type returns the right Koha::Patron::Attribute::Type object'
+    );
 
-    is( $attribute_type->opac_editable,
+    is(
+        $attribute_type->opac_editable,
         $attr_type->{opac_editable},
         '->type returns the right Koha::Patron::Attribute::Type object'
     );
 
-    is( $attribute_type->opac_display,
+    is(
+        $attribute_type->opac_display,
         $attr_type->{opac_display},
         '->type returns the right Koha::Patron::Attribute::Type object'
     );
@@ -393,7 +404,7 @@ subtest 'merge_and_replace_with' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({class=> 'Koha::Patrons'});
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $unique_attribute_type = $builder->build_object(
         {
@@ -436,15 +447,15 @@ subtest 'merge_and_replace_with' => sub {
     my $attributes = [
         {
             attribute => 'my unique attribute 1',
-            code => $unique_attribute_type->code(),
+            code      => $unique_attribute_type->code(),
         },
         {
             attribute => 'my repeatable attribute 1',
-            code => $repeatable_attribute_type->code(),
+            code      => $repeatable_attribute_type->code(),
         },
         {
             attribute => 'my normal attribute 1',
-            code => $normal_attribute_type->code(),
+            code      => $normal_attribute_type->code(),
         }
     ];
     $patron->extended_attributes($attributes);
@@ -452,19 +463,19 @@ subtest 'merge_and_replace_with' => sub {
     my $new_attributes = [
         {
             attribute => 'my repeatable attribute 2',
-            code => $repeatable_attribute_type->code(),
+            code      => $repeatable_attribute_type->code(),
         },
         {
             attribute => 'my repeatable attribute 3',
-            code => $repeatable_attribute_type->code(),
+            code      => $repeatable_attribute_type->code(),
         },
         {
             attribute => 'my normal attribute 2',
-            code => $normal_attribute_type->code(),
+            code      => $normal_attribute_type->code(),
         },
         {
             attribute => 'my unique attribute 2',
-            code => $unique_attribute_type->code(),
+            code      => $unique_attribute_type->code(),
         }
     ];
 
@@ -472,39 +483,37 @@ subtest 'merge_and_replace_with' => sub {
 
     my $expected = [
         {
-            attribute => 'my normal attribute 2', # Attribute 1 has been replaced by attribute 2
-            code => $normal_attribute_type->code(),
+            attribute => 'my normal attribute 2',          # Attribute 1 has been replaced by attribute 2
+            code      => $normal_attribute_type->code(),
         },
         {
-            attribute => 'my unique attribute 2', # Attribute 1 has been replaced by attribute 2
-            code => $unique_attribute_type->code(),
+            attribute => 'my unique attribute 2',          # Attribute 1 has been replaced by attribute 2
+            code      => $unique_attribute_type->code(),
         },
         {
             attribute => 'my repeatable attribute 1',
-            code => $repeatable_attribute_type->code(),
+            code      => $repeatable_attribute_type->code(),
         },
         {
             attribute => 'my repeatable attribute 2',
-            code => $repeatable_attribute_type->code(),
+            code      => $repeatable_attribute_type->code(),
         },
         {
             attribute => 'my repeatable attribute 3',
-            code => $repeatable_attribute_type->code(),
+            code      => $repeatable_attribute_type->code(),
         },
     ];
     $expected = [ sort { $a->{code} cmp $b->{code} || $a->{attribute} cmp $b->{attribute} } @$expected ];
-    is_deeply($new_extended_attributes, $expected);
+    is_deeply( $new_extended_attributes, $expected );
 
-
-    throws_ok
-        {
-            $patron->extended_attributes->merge_and_replace_with(
-                [
-                    { code => $non_existent_attribute_type_code, attribute => 'foobar' },
-                ]
-            );
-        }
-        'Koha::Exceptions::Patron::Attribute::InvalidType',
+    throws_ok {
+        $patron->extended_attributes->merge_and_replace_with(
+            [
+                { code => $non_existent_attribute_type_code, attribute => 'foobar' },
+            ]
+        );
+    }
+    'Koha::Exceptions::Patron::Attribute::InvalidType',
         'Exception thrown on invalid attribute type';
 
     $schema->storage->txn_rollback;

@@ -34,19 +34,17 @@ subtest 'reporter() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $ticket = $builder->build_object(
         {
             class => 'Koha::Tickets',
-            value => {
-                reporter_id => $patron->id
-            }
+            value => { reporter_id => $patron->id }
         }
     );
 
     my $reporter = $ticket->reporter;
     is( ref($reporter), 'Koha::Patron', 'Koha::Ticket->reporter returns a Koha::Patron object' );
-    is( $reporter->id, $patron->id, 'Koha::Ticket->reporter returns the right Koha::Patron' );
+    is( $reporter->id,  $patron->id,    'Koha::Ticket->reporter returns the right Koha::Patron' );
 
     $schema->storage->txn_rollback;
 };
@@ -78,19 +76,17 @@ subtest 'resolver() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $ticket = $builder->build_object(
         {
             class => 'Koha::Tickets',
-            value => {
-                resolver_id => $patron->id
-            }
+            value => { resolver_id => $patron->id }
         }
     );
 
     my $resolver = $ticket->resolver;
     is( ref($resolver), 'Koha::Patron', 'Koha::Ticket->resolver returns a Koha::Patron object' );
-    is( $resolver->id, $patron->id, 'Koha::Ticket->resolver returns the right Koha::Patron' );
+    is( $resolver->id,  $patron->id,    'Koha::Ticket->resolver returns the right Koha::Patron' );
 
     $schema->storage->txn_rollback;
 };
@@ -101,19 +97,17 @@ subtest 'biblio() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $biblio  = $builder->build_object({ class => 'Koha::Biblios' });
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
     my $ticket = $builder->build_object(
         {
             class => 'Koha::Tickets',
-            value => {
-                biblio_id => $biblio->id
-            }
+            value => { biblio_id => $biblio->id }
         }
     );
 
     my $related_biblio = $ticket->biblio;
     is( ref($related_biblio), 'Koha::Biblio', 'Koha::Ticket->biblio returns a Koha::Biblio object' );
-    is( $related_biblio->id, $biblio->id, 'Koha::Ticket->biblio returns the right Koha::Biblio' );
+    is( $related_biblio->id,  $biblio->id,    'Koha::Ticket->biblio returns the right Koha::Biblio' );
 
     $schema->storage->txn_rollback;
 };
@@ -124,13 +118,13 @@ subtest 'updates() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $ticket = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $ticket  = $builder->build_object( { class => 'Koha::Tickets' } );
     my $updates = $ticket->updates;
     is( ref($updates), 'Koha::Ticket::Updates', 'Koha::Ticket->updates should return a Koha::Ticket::Updates object' );
     is( $updates->count, 0, 'Koha::Ticket->updates should return a count of 0 when there are no related updates' );
 
     # Add two updates
-    foreach (1..2) {
+    foreach ( 1 .. 2 ) {
         $builder->build_object(
             {
                 class => 'Koha::Ticket::Updates',
@@ -141,7 +135,7 @@ subtest 'updates() tests' => sub {
 
     $updates = $ticket->updates;
     is( ref($updates), 'Koha::Ticket::Updates', 'Koha::Ticket->updates should return a Koha::Ticket::Updates object' );
-    is( $updates->count, 2, 'Koha::Ticket->updates should return the correct number of updates' );
+    is( $updates->count, 2,                     'Koha::Ticket->updates should return the correct number of updates' );
 
     $schema->storage->txn_rollback;
 };
@@ -154,14 +148,15 @@ subtest 'add_update() tests' => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $ticket = $builder->build_object( { class => 'Koha::Tickets' } );
-    my $update = $ticket->add_update(
-        { user_id => $patron->id, public => 1, message => "Some message" } );
-    is( ref($update), 'Koha::Ticket::Update',
+    my $update = $ticket->add_update( { user_id => $patron->id, public => 1, message => "Some message" } );
+    is(
+        ref($update), 'Koha::Ticket::Update',
         'Koha::Ticket->add_update should return a Koha::Ticket::Update object'
     );
 
     my $updates = $ticket->updates;
-    is( $updates->count, 1,
+    is(
+        $updates->count, 1,
         'Koha::Ticket->add_update should have added 1 update linked to this ticket'
     );
 
@@ -188,20 +183,25 @@ subtest 'store() tests' => sub {
             }
         )->store();
 
-        is( ref($new_ticket), 'Koha::Ticket',
-            'Koha::Ticket->store() returned the Koha::Ticket object' );
-        my $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
-        is( $notices->count, 1,
-            'One acknowledgement notice queued for the ticket reporter' );
+        is(
+            ref($new_ticket), 'Koha::Ticket',
+            'Koha::Ticket->store() returned the Koha::Ticket object'
+        );
+        my $notices = Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+        is(
+            $notices->count, 1,
+            'One acknowledgement notice queued for the ticket reporter'
+        );
         my $THE_notice = $notices->next;
-        isnt( $THE_notice->status, 'pending',
-            'Acknowledgement notice is sent immediately' );
+        isnt(
+            $THE_notice->status, 'pending',
+            'Acknowledgement notice is sent immediately'
+        );
 
         $new_ticket->set( { title => "Changed title" } )->store();
-        $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
-        is( $notices->count, 1,
+        $notices = Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+        is(
+            $notices->count, 1,
             'Further acknowledgement notices are not queud on subsequent stores'
         );
 
@@ -228,20 +228,25 @@ subtest 'store() tests' => sub {
             }
         )->store();
 
-        is( ref($new_ticket), 'Koha::Ticket',
-            'Koha::Ticket->store() returned the Koha::Ticket object' );
-        my $notices =
-          Koha::Notice::Messages->search( { to_address => $catemail } );
-        is( $notices->count, 1,
-            'One notification notice queued for the catalogers when ticket reported' );
+        is(
+            ref($new_ticket), 'Koha::Ticket',
+            'Koha::Ticket->store() returned the Koha::Ticket object'
+        );
+        my $notices = Koha::Notice::Messages->search( { to_address => $catemail } );
+        is(
+            $notices->count, 1,
+            'One notification notice queued for the catalogers when ticket reported'
+        );
         my $THE_notice = $notices->next;
-        isnt( $THE_notice->status, 'pending',
-            'Notification notice is sent immediately' );
+        isnt(
+            $THE_notice->status, 'pending',
+            'Notification notice is sent immediately'
+        );
 
         $new_ticket->set( { title => "Changed title" } )->store();
-        $notices =
-          Koha::Notice::Messages->search( { to_address => $catemail } );
-        is( $notices->count, 1,
+        $notices = Koha::Notice::Messages->search( { to_address => $catemail } );
+        is(
+            $notices->count, 1,
             'Further notification notices are not queud on subsequent stores'
         );
 

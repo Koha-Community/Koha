@@ -4,7 +4,6 @@
 #written 2/1/00 by chris@katipo.oc.nz
 #last update 27/1/2000 by chris@katipo.co.nz
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -32,16 +31,16 @@ use Koha::Holds;
 my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   
-        template_name   => "opac-account.tt",
-        query           => $query,
-        type            => "opac",
+    {
+        template_name => "opac-account.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
-my $op = $query->param('op');
-my $reserve_id = $query->param('reserve_id');
-my $new_pickup_location  = $query->param('new_pickup_location');
+my $op                  = $query->param('op');
+my $reserve_id          = $query->param('reserve_id');
+my $new_pickup_location = $query->param('new_pickup_location');
 
 if ( $reserve_id && $borrowernumber ) {
 
@@ -56,20 +55,18 @@ if ( $reserve_id && $borrowernumber ) {
 
     if ( $op eq 'cud-request_cancellation' ) {
         $hold->add_cancellation_request
-          if $hold->cancellation_requestable_from_opac;
-    }
-    elsif ( $op eq 'cud-change_branch' && $new_pickup_location ) {
+            if $hold->cancellation_requestable_from_opac;
+    } elsif ( $op eq 'cud-change_branch' && $new_pickup_location ) {
 
-        if ($hold->can_update_pickup_location_opac) {
-            $hold->set_pickup_location({ library_id => $new_pickup_location });
-        }
-        else {
+        if ( $hold->can_update_pickup_location_opac ) {
+            $hold->set_pickup_location( { library_id => $new_pickup_location } );
+        } else {
+
             # whatcha tryin to do?
             print $query->redirect('/cgi-bin/koha/errors/403.pl');
             exit;
         }
-    }
-    elsif ( $op eq 'cud-cancel' && $hold->is_cancelable_from_opac ) {
+    } elsif ( $op eq 'cud-cancel' && $hold->is_cancelable_from_opac ) {
         $hold->cancel;
     }
 }

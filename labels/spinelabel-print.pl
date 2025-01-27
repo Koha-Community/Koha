@@ -16,17 +16,18 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 my $scheme = C4::Context->preference('SpineLabelFormat');
 my $query  = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "labels/spinelabel-print.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+    {
+        template_name => "labels/spinelabel-print.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
@@ -57,10 +58,10 @@ while ( my ( $key, $value ) = each(%$item) ) {
     $data->{$key} .= "<span class='field' id='$key'>";
 
     $value = '' unless defined $value;
-    my @characters = split( //, $value );
-    my $charnum    = 1;
-    my $wordernumber    = 1;
-    my $i          = 1;
+    my @characters   = split( //, $value );
+    my $charnum      = 1;
+    my $wordernumber = 1;
+    my $i            = 1;
     foreach my $char (@characters) {
         if ( $char ne ' ' ) {
             $data->{$key} .= "<span class='character word$wordernumber character$charnum' id='$key$i'>$char</span>";

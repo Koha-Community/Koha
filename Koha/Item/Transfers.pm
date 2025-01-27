@@ -17,7 +17,6 @@ package Koha::Item::Transfers;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Item::Transfer;
@@ -41,7 +40,7 @@ Filters out completed transfers from the resultset.
 =cut
 
 sub filter_by_current {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search(
         {

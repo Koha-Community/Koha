@@ -4,71 +4,77 @@
 [% USE AdditionalContents %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Routing slip for {title}", { title = title }) | html %] &rsaquo;
-    [% t("Serials") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Routing slip for {title}", { title = title }) | html %]
+        &rsaquo; [% t("Serials") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style media="print">
-     #ser_routing-preview-slip { min-width:0; width:auto; }
+    #ser_routing-preview-slip {
+        min-width: 0;
+        width: auto;
+    }
 </style>
 </head>
 
 <body id="ser_routing-preview-slip" class="ser">
-    <div class="container-fluid">
-        <h1>[% tx("Routing slip for {title}", { title = title }) | html %]</h1>
-        <div class="page-section">
-<table>
-    <tr>
-        <td colspan="2"><h3>[% libraryname | html %]</h3></td>
-    </tr>
-    <tr>
-        <td colspan="2"><strong>Title:</strong> [% title | html %]<br />[% issue | html %]</td>
-    </tr>
-    <tr>
-        <td><strong>Name</strong></td>
-        <td><strong>Date due</strong></td>
-    </tr>
-    [% FOREACH memberloo IN memberloop %]
-    <tr>
-        <td>[% memberloo.name | html %]</td>
-        <td>&nbsp;</td>
-    </tr>
-    [% END %]
-</table>
-        </div> <!-- /.page-section -->
-
-<div id="routingnotes">
-    [%- SET RoutingListNote = AdditionalContents.get( location => "RoutingListNote", lang => lang, library => logged_in_user.branchcode ) -%]
-
-    [% IF ( RoutingListNote.content && RoutingListNote.content.count > 0 ) %]
-        <div id="[% RoutingListNote.location | html %]">
-            [% FOREACH n IN RoutingListNote.content %]
-                <div class="[% n.lang | html %]_item">
-                    <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
-                </div>
+<div class="container-fluid">
+    <h1>[% tx("Routing slip for {title}", { title = title }) | html %]</h1>
+    <div class="page-section">
+        <table>
+            <tr>
+                <td colspan="2"><h3>[% libraryname | html %]</h3></td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Title:</strong> [% title | html %]<br />[% issue | html %]</td>
+            </tr>
+            <tr>
+                <td><strong>Name</strong></td>
+                <td><strong>Date due</strong></td>
+            </tr>
+            [% FOREACH memberloo IN memberloop %]
+                <tr>
+                    <td>[% memberloo.name | html %]</td>
+                    <td>&nbsp;</td>
+                </tr>
             [% END %]
-        </div>
-    [% END %]
-
-    <p id="routingnote">[% routingnotes | html %]</p>
-</div>
-
-<nav class="navbar navbar-default fixed-bottom">
-    <div class="container-fluid">
-        <fieldset class="action">
-            <a class="btn btn-default btn-primary" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a>
-            <button type="button" class="btn btn-default close_window">Close window</button>
-        </fieldset>
+        </table>
     </div>
-</nav>
-</div> <!-- /.container-fluid -->
+    <!-- /.page-section -->
+
+    <div id="routingnotes">
+        [%- SET RoutingListNote = AdditionalContents.get( location => "RoutingListNote", lang => lang, library => logged_in_user.branchcode ) -%]
+
+        [% IF ( RoutingListNote.content && RoutingListNote.content.count > 0 ) %]
+            <div id="[% RoutingListNote.location | html %]">
+                [% FOREACH n IN RoutingListNote.content %]
+                    <div class="[% n.lang | html %]_item">
+                        <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
+                    </div>
+                [% END %]
+            </div>
+        [% END %]
+
+        <p id="routingnote">[% routingnotes | html %]</p>
+    </div>
+
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <a class="btn btn-default btn-primary" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a>
+                <button type="button" class="btn btn-default close_window">Close window</button>
+            </fieldset>
+        </div>
+    </nav>
+</div>
+<!-- /.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
-            $("#print_slip").on("click",function(e){
+        $(document).ready(function () {
+            $("#print_slip").on("click", function (e) {
                 e.preventDefault();
                 window.print();
                 self.close();

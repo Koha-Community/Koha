@@ -20,8 +20,8 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
@@ -30,9 +30,9 @@ my $op    = $query->param('op') // q{};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-user.tt",
-        query           => $query,
-        type            => "opac",
+        template_name => "opac-user.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
@@ -46,12 +46,13 @@ unless ($message) {
 }
 
 unless ( $op =~ /^cud-/ && $message ) {
+
     # exit early
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
     exit;
 }
 
-$message->update({ patron_read_date => dt_from_string });
+$message->update( { patron_read_date => dt_from_string } );
 
 print $query->redirect("/cgi-bin/koha/opac-user.pl");
 

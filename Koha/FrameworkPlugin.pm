@@ -117,9 +117,11 @@ use base qw(Class::Accessor);
 
 use C4::Context;
 
-__PACKAGE__->mk_ro_accessors( qw|
-    name path errstr javascript noclick
-|);
+__PACKAGE__->mk_ro_accessors(
+    qw|
+        name path errstr javascript noclick
+        |
+);
 
 =head2 new
 
@@ -135,19 +137,18 @@ __PACKAGE__->mk_ro_accessors( qw|
 sub new {
     my ( $class, $params ) = @_;
     my $self = $class->SUPER::new();
-    if( ref($params) eq 'HASH' ) {
-        foreach( 'name', 'path', 'item_style' ) {
+    if ( ref($params) eq 'HASH' ) {
+        foreach ( 'name', 'path', 'item_style' ) {
             $self->{$_} = $params->{$_};
         }
-    }
-    elsif( !ref($params) && $params ) { # use it as plugin name
+    } elsif ( !ref($params) && $params ) {    # use it as plugin name
         $self->{name} = $params;
-        if( $params =~ /^(.*)\/([^\/]+)$/ ) {
+        if ( $params =~ /^(.*)\/([^\/]+)$/ ) {
             $self->{name} = $2;
             $self->{path} = $1;
         }
     }
-    $self->_error( 'Plugin needs a name' ) if !$self->{name};
+    $self->_error('Plugin needs a name') if !$self->{name};
     return $self;
 }
 
@@ -169,12 +170,12 @@ sub new {
 
 sub build {
     my ( $self, $params ) = @_;
-    return if $self->{errstr};
-    return 1 if exists $self->{html}; # no rebuild
+    return   if $self->{errstr};
+    return 1 if exists $self->{html};    # no rebuild
 
     $self->_load if !$self->{_loaded};
-    return if $self->{errstr}; # load had error
-    return $self->_generate_js( $params );
+    return       if $self->{errstr};     # load had error
+    return $self->_generate_js($params);
 }
 
 =head2 launch
@@ -191,81 +192,85 @@ sub launch {
     return if $self->{errstr};
 
     $self->_load if !$self->{_loaded};
-    return if $self->{errstr}; # load had error
-    return 1 if !exists $self->{launcher}; #just ignore this request
-    if( defined( &{$self->{launcher}} ) ) {
-        my $arg= $self->{oldschool}? $params->{cgi}: $params;
-        return &{$self->{launcher}}( $arg );
+    return       if $self->{errstr};              # load had error
+    return 1     if !exists $self->{launcher};    #just ignore this request
+    if ( defined( &{ $self->{launcher} } ) ) {
+        my $arg = $self->{oldschool} ? $params->{cgi} : $params;
+        return &{ $self->{launcher} }($arg);
     }
-    return $self->_error( 'No launcher sub defined' );
+    return $self->_error('No launcher sub defined');
 }
 
 # **************  INTERNAL ROUTINES ********************************************
 
 sub _error {
     my ( $self, $info ) = @_;
-    $self->{errstr} = 'ERROR: Plugin '. ( $self->{name}//'' ). ': '. $info;
-    return; #always return false
+    $self->{errstr} = 'ERROR: Plugin ' . ( $self->{name} // '' ) . ': ' . $info;
+    return;    #always return false
 }
 
 sub _load {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my ( $rv, $file );
-    return $self->_error( 'Plugin needs a name' ) if !$self->{name}; #2chk
+    return $self->_error('Plugin needs a name') if !$self->{name};    #2chk
     $self->{path} //= _valuebuilderpath();
+
     #NOTE: Resolve symlinks and relative path components if present,
     #so the base will compare correctly lower down
     my $abs_base_path = Cwd::abs_path( $self->{path} );
-    $file= $self->{path}. '/'. $self->{name};
+    $file = $self->{path} . '/' . $self->{name};
+
     #NOTE: Resolve relative path components to prevent loading files outside the base path
     my $abs_file_path = Cwd::abs_path($file);
     if ( $abs_file_path !~ /^\Q$abs_base_path\E/ ) {
         warn "Attempt to load $file ($abs_file_path) in framework plugin!";
         return $self->_error('File not found');
     }
-    return $self->_error( 'File not found' ) if !-e $file;
+    return $self->_error('File not found') if !-e $file;
 
     # undefine oldschool subroutines before defining them again
     undef &plugin_parameters;
     undef &plugin_javascript;
     undef &plugin;
 
-    $rv = do( $file );
-    return $self->_error( $@ ) if $@;
+    $rv = do($file);
+    return $self->_error($@) if $@;
 
-    my $type = ref( $rv );
-    if( $type eq 'HASH' ) { # new style
+    my $type = ref($rv);
+    if ( $type eq 'HASH' ) {    # new style
         $self->{oldschool} = 0;
-        if( exists $rv->{builder} && ref($rv->{builder}) eq 'CODE' ) {
+        if ( exists $rv->{builder} && ref( $rv->{builder} ) eq 'CODE' ) {
             $self->{builder} = $rv->{builder};
-        } elsif( exists $rv->{builder} ) {
-            return $self->_error( 'Builder sub is no coderef' );
+        } elsif ( exists $rv->{builder} ) {
+            return $self->_error('Builder sub is no coderef');
         }
-        if( exists $rv->{launcher} && ref($rv->{launcher}) eq 'CODE' ) {
+        if ( exists $rv->{launcher} && ref( $rv->{launcher} ) eq 'CODE' ) {
             $self->{launcher} = $rv->{launcher};
-        } elsif( exists $rv->{launcher} ) {
-            return $self->_error( 'Launcher sub is no coderef' );
+        } elsif ( exists $rv->{launcher} ) {
+            return $self->_error('Launcher sub is no coderef');
         }
-    } else { # old school
+    } else {                    # old school
         $self->{oldschool} = 1;
-        if( defined(&plugin_javascript) ) {
+        if ( defined(&plugin_javascript) ) {
             $self->{builder} = \&plugin_javascript;
         }
-        if( defined(&plugin) ) {
+        if ( defined(&plugin) ) {
             $self->{launcher} = \&plugin;
         }
     }
-    if( !$self->{builder} && !$self->{launcher} ) {
-        return $self->_error( 'Plugin does not contain builder nor launcher' );
+    if ( !$self->{builder} && !$self->{launcher} ) {
+        return $self->_error('Plugin does not contain builder nor launcher');
     }
-    $self->{_loaded} = $self->{oldschool}? 0: 1;
-        # old style needs reload due to possible sub redefinition
+    $self->{_loaded} = $self->{oldschool} ? 0 : 1;
+
+    # old style needs reload due to possible sub redefinition
     return 1;
 }
 
 sub _valuebuilderpath {
     return C4::Context->config('intranetdir') . "/cataloguing/value_builder";
+
     #Formerly, intranetdir/cgi-bin was tested first.
     #But the intranetdir from koha-conf already includes cgi-bin for
     #package installs, single and standard installs.
@@ -276,28 +281,32 @@ sub _generate_js {
 
     my $sub = $self->{builder};
     return 1 if !$sub;
-        #it is safe to assume here that we do have a launcher
-        #we assume that it is launched in an unorthodox fashion
-        #just useless to build, but no problem
 
-    if( !defined(&$sub) ) { # 2chk: if there is something, it should be code
-        return $self->_error( 'Builder sub not defined' );
+    #it is safe to assume here that we do have a launcher
+    #we assume that it is launched in an unorthodox fashion
+    #just useless to build, but no problem
+
+    if ( !defined(&$sub) ) {    # 2chk: if there is something, it should be code
+        return $self->_error('Builder sub not defined');
     }
 
-    my @params = $self->{oldschool}//0 ?
-        ( $params->{dbh}, $params->{record}, $params->{tagslib},
-            $params->{id} ):
-        ( $params );
-    my @rv = &$sub( @params );
+    my @params = $self->{oldschool} // 0
+        ? (
+        $params->{dbh}, $params->{record}, $params->{tagslib},
+        $params->{id}
+        )
+        : ($params);
+    my @rv = &$sub(@params);
     return $self->_error( 'Builder sub failed: ' . $@ ) if $@;
 
-    my $arg= $self->{oldschool}? pop @rv: shift @rv;
-        #oldschool returns functionname and script; we only use the latter
-    if( $arg && $arg=~/^\s*\<script/ ) {
+    my $arg = $self->{oldschool} ? pop @rv : shift @rv;
+
+    #oldschool returns functionname and script; we only use the latter
+    if ( $arg && $arg =~ /^\s*\<script/ ) {
         $self->_process_javascript( $params, $arg );
-        return 1; #so far, so good
+        return 1;    #so far, so good
     }
-    return $self->_error( 'Builder sub returned bad value(s)' );
+    return $self->_error('Builder sub returned bad value(s)');
 }
 
 sub _process_javascript {
@@ -307,44 +316,46 @@ sub _process_javascript {
     $script =~ s/\<script[^>]*\>\s*(\/\/\<!\[CDATA\[)?\s*//s;
     $script =~ s/(\/\/\]\]\>\s*)?\<\/script\>//s;
 
-    my $id = $params->{id}//'';
-    my $bind = '';
+    my $id         = $params->{id} // '';
+    my $bind       = '';
     my $clickfound = 0;
-    my @events = qw|click focus blur change mouseover mouseout mousedown
+    my @events     = qw|click focus blur change mouseover mouseout mousedown
         mouseup mousemove keydown keypress keyup|;
-    foreach my $ev ( @events ) {
-        my $scan = $ev eq 'click' && $self->{oldschool}? 'clic': $ev;
-        if( $script =~ /function\s+($scan\w+)\s*\(([^\)]*)\)/is ) {
+    foreach my $ev (@events) {
+        my $scan = $ev eq 'click' && $self->{oldschool} ? 'clic' : $ev;
+        if ( $script =~ /function\s+($scan\w+)\s*\(([^\)]*)\)/is ) {
             my ( $bl, $sl ) = $self->_add_binding( $1, $2, $ev, $id );
             $script .= $sl;
-            $bind .= $bl;
+            $bind   .= $bl;
             $clickfound = 1 if $ev eq 'click';
         }
     }
-    if( !$clickfound ) { # make buttonDot do nothing
-        my ( $bl ) = $self->_add_binding( 'noclick', '', 'click', $id );
+    if ( !$clickfound ) {    # make buttonDot do nothing
+        my ($bl) = $self->_add_binding( 'noclick', '', 'click', $id );
         $bind .= $bl;
     }
-    $self->{noclick} = !$clickfound;
-    $self->{javascript}= _merge_script( $id, $script, $bind );
+    $self->{noclick}    = !$clickfound;
+    $self->{javascript} = _merge_script( $id, $script, $bind );
 }
 
 sub _add_binding {
-# adds some jQuery code for event binding:
-# $bind contains lines for the actual event binding: .click, .focus, etc.
-# $script contains function definitions (if needed)
+
+    # adds some jQuery code for event binding:
+    # $bind contains lines for the actual event binding: .click, .focus, etc.
+    # $script contains function definitions (if needed)
     my ( $self, $fname, $pars, $ev, $id ) = @_;
     my ( $bind, $script );
-    my $ctl= $ev eq 'click'? 'buttonDot_'.$id: $id;
-        #click event applies to buttonDot
+    my $ctl = $ev eq 'click' ? 'buttonDot_' . $id : $id;
 
-    if( $pars =~ /^(e|ev|event)$/i ) { # new style event handler assumed
+    #click event applies to buttonDot
+
+    if ( $pars =~ /^(e|ev|event)$/i ) {    # new style event handler assumed
         $bind   = qq|    \$("#$ctl").off('$ev').on('$ev', \{id: '$id'\}, $fname);\n|;    # remove old handler if any
         $script = q{};
-    } elsif( $fname eq 'noclick' ) { # no click: return false, no scroll
+    } elsif ( $fname eq 'noclick' ) {    # no click: return false, no scroll
         $bind   = qq|    \$("#$ctl").$ev(function () { return false; });\n|;
         $script = q{};
-    } else { # add real event handler calling the function found
+    } else {                             # add real event handler calling the function found
         $bind   = qq|    \$("#$ctl").off('$ev').on('$ev', \{id: '$id'\}, ${fname}_handler);\n|;
         $script = $self->_add_handler( $ev, $fname );
     }
@@ -352,13 +363,14 @@ sub _add_binding {
 }
 
 sub _add_handler {
-# adds a handler with event parameter
-# event.data.id is passed to the plugin function in parameters
-# for the click event we always return false to prevent scrolling
+
+    # adds a handler with event parameter
+    # event.data.id is passed to the plugin function in parameters
+    # for the click event we always return false to prevent scrolling
     my ( $self, $ev, $fname ) = @_;
-    my $first= $self->_first_item_par( $ev );
-    my $prefix= $ev eq 'click'? '': 'return ';
-    my $suffix= $ev eq 'click'? "\n    return false;": '';
+    my $first  = $self->_first_item_par($ev);
+    my $prefix = $ev eq 'click' ? ''                    : 'return ';
+    my $suffix = $ev eq 'click' ? "\n    return false;" : '';
     return <<HERE;
 function ${fname}_handler(event) {
     $prefix$fname(${first}event.data.id);$suffix
@@ -368,22 +380,26 @@ HERE
 
 sub _first_item_par {
     my ( $self, $event ) = @_;
+
     # needed for backward compatibility
     # js event functions in old style item plugins have an extra parameter
     # BUT.. not for all events (exceptions provide employment :)
-    if( $self->{item_style} && $self->{oldschool} &&
-            $event=~/focus|blur|change/ ) {
+    if (   $self->{item_style}
+        && $self->{oldschool}
+        && $event =~ /focus|blur|change/ )
+    {
         return qq/'0',/;
     }
     return '';
 }
 
 sub _merge_script {
-# Combine script and event bindings, enclosed in script tags.
-# The BindEvents function is added to easily repeat event binding;
-# this is used in additem.js for dynamically created item blocks.
+
+    # Combine script and event bindings, enclosed in script tags.
+    # The BindEvents function is added to easily repeat event binding;
+    # this is used in additem.js for dynamically created item blocks.
     my ( $id, $script, $bind ) = @_;
-    chomp ($script, $bind);
+    chomp( $script, $bind );
     return <<HERE;
 <script>
 $script

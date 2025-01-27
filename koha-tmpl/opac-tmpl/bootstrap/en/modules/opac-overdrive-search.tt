@@ -14,55 +14,57 @@
 [% INCLUDE 'bodytag.inc' bodyid='overdrive-results-page' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-    <div class="main">
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a class="previous-page" href="">Catalog search for '[% q | html %]'</a>
-                </li>
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">OverDrive search for '[% q | html %]'</a>
-                </li>
-            </ol>
-        </nav> <!-- /#breadcrumbs -->
+<div class="main">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="previous-page" href="">Catalog search for '[% q | html %]'</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#" aria-current="page">OverDrive search for '[% q | html %]'</a>
+            </li>
+        </ol>
+    </nav>
+    <!-- /#breadcrumbs -->
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2">
-                    [% IF ( OpacNav || OpacNavBottom ) %]
-                        [% INCLUDE 'navigation.inc' %]
-                    [% END %]
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    [% INCLUDE 'navigation.inc' %]
+                [% END %]
+            </div>
+            <div class="col-lg-10 order-first order-md-first order-lg-2">
+                <div id="overdrive-results-content" class="maincontent searchresults">
+                    <h1>OverDrive search for '[% q | html %]'</h1>
+                    <div id="breadcrumbs">
+                        <p></p>
+                    </div>
+
+                    <div id="top-pages">
+                        <nav class="pagination pagination-sm noprint" aria-label="Search results pagination"> </nav>
+                    </div>
+
+                    <table id="overdrive-results-list" class="table table-striped">
+                        <tbody> </tbody>
+                    </table>
+
+                    <div id="bottom-pages">
+                        <nav class="pagination pagination-sm noprint" aria-label="Search results pagination"> </nav>
+                    </div>
                 </div>
-                <div class="col-lg-10 order-first order-md-first order-lg-2">
-                    <div id="overdrive-results-content" class="maincontent searchresults">
-                        <h1>OverDrive search for '[% q | html %]'</h1>
-                            <div id="breadcrumbs">
-                                <p></p>
-                            </div>
-
-                            <div id="top-pages">
-                                <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
-                                </nav>
-                            </div>
-
-                            <table id="overdrive-results-list" class="table table-striped">
-                                <tbody>
-                                </tbody>
-                            </table>
-
-                            <div id="bottom-pages">
-                                <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
-                                </nav>
-                            </div>
-
-                    </div> <!-- / #overdrive-results-content -->
-                </div> <!-- / .span10 -->
-            </div> <!-- / .row -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
+                <!-- / #overdrive-results-content -->
+            </div>
+            <!-- / .span10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% IF ( Koha.Preference('OverDriveCirculation') ) %]
     [% INCLUDE 'overdrive-checkout.inc' %]

@@ -29,7 +29,7 @@ subtest 'search_auth_compat' => sub {
     plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'dont_escape' );
-    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
+    t::lib::Mocks::mock_preference( 'SearchEngine',            'Elasticsearch' );
 
     my $search;
     ok(
@@ -47,8 +47,8 @@ subtest 'search_auth_compat' => sub {
     );
 
     my $search_query = $builder->build_authorities_query_compat(
-        ['mainmainentry'], ['and'], [''], ['contains'],
-        ['Donald - ^ \ ~ + Duck'], '', 'HeadingAsc'
+        ['mainmainentry'],         ['and'], [''], ['contains'],
+        ['Donald - ^ \ ~ + Duck'], '',      'HeadingAsc'
     );
 
     is(

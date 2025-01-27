@@ -20,50 +20,52 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Output     qw( output_html_with_http_headers );
+use C4::Auth       qw( get_template_and_user );
 use C4::HoldsQueue qw( TransportCostMatrix UpdateTransportCostMatrix );
 
 use Koha::Libraries;
 
-
 my $input = CGI->new;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/transport-cost-matrix.tt",
-                            query => $input,
-                            type => "intranet",
-                            flagsrequired => { parameters => 'manage_transfers' },
-                            });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "admin/transport-cost-matrix.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_transfers' },
+    }
+);
 my $use_transport_cost_matrix = C4::Context->preference("UseTransportCostMatrix");
 
 my $update = ( $input->param('op') // '' ) eq 'cud-set-cost-matrix';
 
-my ($cost_matrix, $have_matrix);
+my ( $cost_matrix, $have_matrix );
 unless ($update) {
     $cost_matrix = TransportCostMatrix();
     $have_matrix = keys %$cost_matrix if $cost_matrix;
 }
 
-my @branchloop = map { code => $_->branchcode, name => $_->branchname }, Koha::Libraries->search({}, { order_by => 'branchname' })->as_list;
-my (@branchfromloop, @errors);
-foreach my $branchfrom ( @branchloop ) {
+my @branchloop = map { code => $_->branchcode, name => $_->branchname },
+    Koha::Libraries->search( {}, { order_by => 'branchname' } )->as_list;
+my ( @branchfromloop, @errors );
+foreach my $branchfrom (@branchloop) {
     my $fromcode = $branchfrom->{code};
 
     my %from_row = ( code => $fromcode, name => $branchfrom->{name} );
-    foreach my $branchto ( @branchloop ) {
+    foreach my $branchto (@branchloop) {
         my $tocode = $branchto->{code};
 
         my %from_to_input_def = ( code => $tocode, name => $branchto->{name} );
         push @{ $from_row{branchtoloop} }, \%from_to_input_def;
 
-        if ($fromcode eq $tocode) {
+        if ( $fromcode eq $tocode ) {
             $from_to_input_def{skip} = 1;
             next;
         }
 
-        (my $from_to = "${fromcode}_${tocode}") =~ s/\W//go;
-         $from_to_input_def{id} = $from_to;
+        ( my $from_to = "${fromcode}_${tocode}" ) =~ s/\W//go;
+        $from_to_input_def{id} = $from_to;
         my $input_name   = "cost_$from_to";
         my $disable_name = "disable_$from_to";
 
@@ -71,48 +73,50 @@ foreach my $branchfrom ( @branchloop ) {
             my $value = $from_to_input_def{value} = $input->param($input_name);
             if ( $input->param($disable_name) ) {
                 $from_to_input_def{disabled} = 1;
-            }
-            else {
+            } else {
                 push @errors, "$from_row{name} -> $from_to_input_def{name}"
-                  unless $value =~ /\d/o && $value >= 0.0;
+                    unless $value =~ /\d/o && $value >= 0.0;
             }
-        }
-        else {
+        } else {
             if ($have_matrix) {
                 if ( my $cell = $cost_matrix->{$tocode}{$fromcode} ) {
-                    $from_to_input_def{value} = $cell->{cost};
+                    $from_to_input_def{value}    = $cell->{cost};
                     $from_to_input_def{disabled} = 1 if $cell->{disable_transfer};
                 } else {
+
                     # matrix has been previously initialized, but a branch referenced here was created afterward.
                     $from_to_input_def{disabled} = 1;
                 }
             } else {
+
                 # First time initializing the matrix
                 $from_to_input_def{disabled} = 1;
             }
         }
     }
 
-#              die Dumper(\%from_row);
+    #              die Dumper(\%from_row);
     push @branchfromloop, \%from_row;
 }
 
-if ($update && !@errors) {
+if ( $update && !@errors ) {
     my @update_recs = map {
         my $from = $_->{code};
-        map { frombranch => $from, tobranch => $_->{code}, cost => $_->{value}, disable_transfer => $_->{disabled} || 0 },
-            grep { $_->{code} ne $from }
-            @{ $_->{branchtoloop} };
+        map {
+            frombranch => $from, tobranch => $_->{code}, cost => $_->{value}, disable_transfer => $_->{disabled}
+                || 0
+            },
+            grep { $_->{code} ne $from } @{ $_->{branchtoloop} };
     } @branchfromloop;
 
-    UpdateTransportCostMatrix(\@update_recs);
+    UpdateTransportCostMatrix( \@update_recs );
 }
 
 $template->param(
-    branchloop => \@branchloop,
-    branchfromloop => \@branchfromloop,
+    branchloop                        => \@branchloop,
+    branchfromloop                    => \@branchfromloop,
     WARNING_transport_cost_matrix_off => !$use_transport_cost_matrix,
-    errors => \@errors,
+    errors                            => \@errors,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 
-use C4::Output qw( output_and_exit output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
-use C4::Search qw( enabled_staff_search_views );
+use C4::Output  qw( output_and_exit output_html_with_http_headers );
+use C4::Auth    qw( get_template_and_user );
+use C4::Search  qw( enabled_staff_search_views );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use Koha::Biblios;
 use Koha::Logger;
@@ -35,10 +35,10 @@ my $cgi = CGI->new;
 
 my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "circ/request-article.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { circulate => 'circulate_remaining_permissions' },
+        template_name => "circ/request-article.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { circulate => 'circulate_remaining_permissions' },
     }
 );
 
@@ -48,13 +48,13 @@ my $patron_cardnumber = $cgi->param('patron_cardnumber');
 my $patron_id         = $cgi->param('borrowernumber');
 
 my $biblio = Koha::Biblios->find($biblionumber);
-output_and_exit( $cgi, $cookie, $template, 'unknown_biblio')
+output_and_exit( $cgi, $cookie, $template, 'unknown_biblio' )
     unless $biblio;
 
 my $patron =
-    $patron_id         ? Koha::Patrons->find($patron_id)
-  : $patron_cardnumber ? Koha::Patrons->find( { cardnumber => $patron_cardnumber } )
-  : undef;
+      $patron_id         ? Koha::Patrons->find($patron_id)
+    : $patron_cardnumber ? Koha::Patrons->find( { cardnumber => $patron_cardnumber } )
+    :                      undef;
 
 if ( $op eq 'cud-create' ) {
     my $borrowernumber = $cgi->param('borrowernumber');
@@ -93,15 +93,10 @@ if ( $op eq 'cud-create' ) {
         )->request;
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::ArticleRequest::LimitReached') ) {
-            $template->param(
-                error_message => 'article_request_limit_reached'
-            );
-        }
-        else {
+            $template->param( error_message => 'article_request_limit_reached' );
+        } else {
             Koha::Logger->get->debug("Unhandled exception when placing an article request ($_)");
-            $template->param(
-                error_message => 'article_request_unhandled_exception'
-            );
+            $template->param( error_message => 'article_request_unhandled_exception' );
         }
     };
     undef $patron;
@@ -112,18 +107,15 @@ if ( $patron && !$patron->can_request_article ) {
     $template->param( error_message => 'article_request_limit_reached' );
 }
 
-if ( $patron ) {
-    $template->param(
-        article_request_fee => $patron->article_request_fee
-    );
+if ($patron) {
+    $template->param( article_request_fee => $patron->article_request_fee );
 }
 
 $template->param(
-    biblio => $biblio,
-    patron => $patron,
+    biblio              => $biblio,
+    patron              => $patron,
     subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
     C4::Search::enabled_staff_search_views,
 );
-
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

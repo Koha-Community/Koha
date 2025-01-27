@@ -17,8 +17,9 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI  qw ( -utf8 );
 use JSON qw( encode_json );
+
 #use Data::Dump 'pp';
 
 use C4::Auth qw( get_template_and_user );
@@ -36,19 +37,19 @@ our $preferences = 'C4::ItemCirculationAlertPreference';
 sub show {
     my ($input) = @_;
     my $dbh = C4::Context->dbh;
-    my ($template, $user, $cookie) = get_template_and_user(
+    my ( $template, $user, $cookie ) = get_template_and_user(
         {
-            template_name   => "admin/item_circulation_alerts.tt",
-            query           => $input,
-            type            => "intranet",
-            flagsrequired   => { parameters => 'manage_item_circ_alerts' },
-            debug           => defined($input->param('debug')),
+            template_name => "admin/item_circulation_alerts.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { parameters => 'manage_item_circ_alerts' },
+            debug         => defined( $input->param('debug') ),
         }
     );
 
-    my $branch   = $input->param('branch') || '*';
-    my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
-    my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });
+    my $branch        = $input->param('branch') || '*';
+    my $grid_checkout = $preferences->grid( { branchcode => $branch, notification => 'CHECKOUT' } );
+    my $grid_checkin  = $preferences->grid( { branchcode => $branch, notification => 'CHECKIN' } );
 
     $template->param(
         branch        => $branch,
@@ -63,9 +64,9 @@ sub show {
 # toggle a preference via ajax
 sub toggle {
     my ($input) = @_;
-    my $id = $input->param('id');
-    my $branch = $input->param('branch');
-    my ($category, $item_type, $notification) = split('-', $id);
+    my $id      = $input->param('id');
+    my $branch  = $input->param('branch');
+    my ( $category, $item_type, $notification ) = split( '-', $id );
     $category  =~ s/_/*/;
     $item_type =~ s/_/*/;
 
@@ -76,19 +77,21 @@ sub toggle {
         notification => $notification,
     };
 
-    my $restrictions = $preferences;  # all the same thing...
-    my $notifications = $preferences; #
-    if ($notifications->is_enabled_for($settings)) {
+    my $restrictions  = $preferences;    # all the same thing...
+    my $notifications = $preferences;    #
+    if ( $notifications->is_enabled_for($settings) ) {
+
         # toggle by adding a restriction
         $restrictions->create($settings);
     } else {
+
         # toggle by removing the restriction
         $restrictions->delete($settings);
     }
 
     my $response = { success => 1 };
     my @reasons  = $notifications->is_disabled_for($settings);
-    if (@reasons == 0) {
+    if ( @reasons == 0 ) {
         $response->{classes} = '';
     } else {
         my $default_exists   = grep { $_->{branchcode} eq '*' } @reasons;
@@ -96,7 +99,7 @@ sub toggle {
         my @classes;
         push @classes, 'default'  if $default_exists;
         push @classes, 'disabled' if $non_default_also;
-        $response->{classes} = join(' ', @classes);
+        $response->{classes} = join( ' ', @classes );
     }
     print $input->header;
     print encode_json($response);
@@ -108,14 +111,15 @@ sub dispatch {
         show         => \&show,
         'cud-toggle' => \&toggle,
     );
-    my $input  = CGI->new;
-    my $op = $input->param('op') || 'show';
+    my $input = CGI->new;
+    my $op    = $input->param('op') || 'show';
 
-    if (not exists $handler{$op}) {
+    if ( not exists $handler{$op} ) {
         my $status = 400;
-        print $input->header(-status => $status);
+        print $input->header( -status => $status );
         print $input->div(
             $input->h1($status),
+
             # FIXME This is not translatable
             $input->p("op parameter is not supported (must be 'show' or 'toggle').")
         );
@@ -127,7 +131,6 @@ sub dispatch {
 # main
 dispatch if $ENV{REQUEST_URI};
 1;
-
 
 =head1 NAME
 

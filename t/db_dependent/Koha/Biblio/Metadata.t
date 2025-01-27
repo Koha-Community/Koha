@@ -74,19 +74,23 @@ subtest 'record() tests' => sub {
     is( scalar @fields_952, 0, 'Item fields stripped out then calling $metadata->record' );
 
     is( ref $record2, 'MARC::Record', 'Method record() returned a MARC::Record object' );
-    is( $record2->field('245')->subfield("a"),
-        $title, 'Title in 245$a matches title from original record object' );
+    is(
+        $record2->field('245')->subfield("a"),
+        $title, 'Title in 245$a matches title from original record object'
+    );
 
     my $bad_data = $builder->build_object(
-        {   class => 'Koha::Biblio::Metadatas',
+        {
+            class => 'Koha::Biblio::Metadatas',
             value => { format => 'marcxml', schema => 'MARC21', metadata => 'this_is_not_marcxml' }
         }
     );
 
-    warning_like
-       { throws_ok { $bad_data->record; }
-        'Koha::Exceptions::Metadata::Invalid', 'Exception thrown on bad record'; }
-        qr/parser error : Start tag expected, '<' not found/,
+    warning_like {
+        throws_ok { $bad_data->record; }
+        'Koha::Exceptions::Metadata::Invalid', 'Exception thrown on bad record';
+    }
+    qr/parser error : Start tag expected, '<' not found/,
         'Warning thrown excplicitly';
 
     my $exception = $@;
@@ -95,7 +99,8 @@ subtest 'record() tests' => sub {
     is( $exception->schema, 'MARC21',      'schema passed correctly to exception' );
 
     my $bad_format = $builder->build_object(
-        {   class => 'Koha::Biblio::Metadatas',
+        {
+            class => 'Koha::Biblio::Metadatas',
             value => { format => 'mij', schema => 'MARC21', metadata => 'something' }
         }
     );
@@ -103,7 +108,8 @@ subtest 'record() tests' => sub {
     throws_ok { $bad_format->record; }
     'Koha::Exceptions::Metadata', 'Exception thrown on unhandled format';
 
-    is( "$@",
+    is(
+        "$@",
         'Koha::Biblio::Metadata->record called on unhandled format: mij',
         'Exception message built correctly'
     );
@@ -171,18 +177,24 @@ subtest '_embed_items' => sub {
 
     $schema->storage->txn_begin();
 
-    my $builder = t::lib::TestBuilder->new;
-    my $library1 = $builder->build({
-        source => 'Branch',
-    });
-    my $library2 = $builder->build({
-        source => 'Branch',
-    });
-    my $itemtype = $builder->build({
-        source => 'Itemtype',
-    });
+    my $builder  = t::lib::TestBuilder->new;
+    my $library1 = $builder->build(
+        {
+            source => 'Branch',
+        }
+    );
+    my $library2 = $builder->build(
+        {
+            source => 'Branch',
+        }
+    );
+    my $itemtype = $builder->build(
+        {
+            source => 'Itemtype',
+        }
+    );
 
-    my $biblio = $builder->build_sample_biblio();
+    my $biblio     = $builder->build_sample_biblio();
     my $item_infos = [
         { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
         { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
@@ -195,7 +207,7 @@ subtest '_embed_items' => sub {
     ];
     my $number_of_items = scalar @$item_infos;
     my $number_of_items_with_homebranch_is_CPL =
-      grep { $_->{homebranch} eq $library1->{branchcode} } @$item_infos;
+        grep { $_->{homebranch} eq $library1->{branchcode} } @$item_infos;
 
     my @itemnumbers;
     for my $item_info (@$item_infos) {
@@ -216,10 +228,9 @@ subtest '_embed_items' => sub {
 
     throws_ok { Koha::Biblio::Metadata->record() }
     'Koha::Exceptions::Metadata',
-'Koha::Biblio::Metadata->record must be called on an instantiated object or like a class method with a record passed in parameter';
+        'Koha::Biblio::Metadata->record must be called on an instantiated object or like a class method with a record passed in parameter';
 
-    my ($itemfield) =
-      C4::Biblio::GetMarcFromKohaField( 'items.itemnumber' );
+    my ($itemfield) = C4::Biblio::GetMarcFromKohaField('items.itemnumber');
     my $record = $biblio->metadata->record;
     Koha::Biblio::Metadata->record(
         {
@@ -231,44 +242,46 @@ subtest '_embed_items' => sub {
     my @items = $record->field($itemfield);
     is( scalar @items, $number_of_items, 'Should return all items' );
 
-    my $marc_with_items = $biblio->metadata->record({ embed_items => 1 });
-    is_deeply( $record, $marc_with_items, 'A direct call to GetMarcBiblio with items matches');
+    my $marc_with_items = $biblio->metadata->record( { embed_items => 1 } );
+    is_deeply( $record, $marc_with_items, 'A direct call to GetMarcBiblio with items matches' );
 
-    $record = $biblio->metadata->record({ embed_items => 1, itemnumbers => [ $itemnumbers[1], $itemnumbers[3] ] });
-    @items = $record->field($itemfield);
+    $record = $biblio->metadata->record( { embed_items => 1, itemnumbers => [ $itemnumbers[1], $itemnumbers[3] ] } );
+    @items  = $record->field($itemfield);
     is( scalar @items, 2, 'Should return all items present in the list' );
 
-    $record = $biblio->metadata->record({ embed_items => 1, opac => 1 });
-    @items = $record->field($itemfield);
+    $record = $biblio->metadata->record( { embed_items => 1, opac => 1 } );
+    @items  = $record->field($itemfield);
     is( scalar @items, $number_of_items, 'Should return all items for opac' );
 
     my $opachiddenitems = "
         homebranch: ['$library1->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
 
-    $record = $biblio->metadata->record({ embed_items => 1 });
-    @items = $record->field($itemfield);
-    is( scalar @items,
+    $record = $biblio->metadata->record( { embed_items => 1 } );
+    @items  = $record->field($itemfield);
+    is(
+        scalar @items,
         $number_of_items,
-        'Even with OpacHiddenItems set, all items should have been embedded' );
+        'Even with OpacHiddenItems set, all items should have been embedded'
+    );
 
-    $record = $biblio->metadata->record({ embed_items => 1, opac => 1 });
-    @items = $record->field($itemfield);
+    $record = $biblio->metadata->record( { embed_items => 1, opac => 1 } );
+    @items  = $record->field($itemfield);
     is(
         scalar @items,
         $number_of_items - $number_of_items_with_homebranch_is_CPL,
-'For OPAC, the pref OpacHiddenItems should have been take into account. Only items with homebranch ne CPL should have been embedded'
+        'For OPAC, the pref OpacHiddenItems should have been take into account. Only items with homebranch ne CPL should have been embedded'
     );
 
     $opachiddenitems = "
         homebranch: ['$library1->{branchcode}', '$library2->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    $record = $biblio->metadata->record({ embed_items => 1, opac => 1 });
-    @items = $record->field($itemfield);
+    $record = $biblio->metadata->record( { embed_items => 1, opac => 1 } );
+    @items  = $record->field($itemfield);
     is(
         scalar @items,
         0,
-'For OPAC, If all items are hidden, no item should have been embedded'
+        'For OPAC, If all items are hidden, no item should have been embedded'
     );
 
     # Check position of 952 in response of embed_items marc
@@ -282,7 +295,7 @@ subtest '_embed_items' => sub {
     my $field_list = join ',', map { $_->tag } $record->fields;
     ok( $field_list =~ /951,953/, "951 and 953 in $field_list" );
     $biblio->discard_changes;
-    $record = $biblio->metadata->record({ embed_items => 1 });
+    $record     = $biblio->metadata->record( { embed_items => 1 } );
     $field_list = join ',', map { $_->tag } $record->fields;
     ok( $field_list =~ /951,(952,)+953/, "951-952s-953 in $field_list" );
 

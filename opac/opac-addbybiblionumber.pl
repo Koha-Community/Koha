@@ -20,9 +20,9 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 
 use Koha::Biblios;
 use Koha::Virtualshelves;
@@ -49,20 +49,26 @@ if ( scalar(@biblionumbers) == 1 ) {
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "opac-addbybiblionumber.tt",
-        query           => $query,
-        type            => "opac",
+    {
+        template_name => "opac-addbybiblionumber.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
-if( $op && $op !~ /^cud-/ ) {
+if ( $op && $op !~ /^cud-/ ) {
     $authorized = 0;
 } elsif ($newvirtualshelf) {
-    if ($loggedinuser > 0
-        and (  !$public
+    if (
+        $loggedinuser > 0
+        and ( !$public
             or $public and $loggedinuser > 0 && C4::Context->preference('OpacAllowPublicListCreation') )
-      ) {
-        my $shelf = eval { Koha::Virtualshelf->new( { shelfname => $newvirtualshelf, public => $public, owner => $loggedinuser, } )->store; };
+        )
+    {
+        my $shelf = eval {
+            Koha::Virtualshelf->new( { shelfname => $newvirtualshelf, public => $public, owner => $loggedinuser, } )
+                ->store;
+        };
         if ( $@ or not $shelf ) {
             $errcode    = 1;
             $authorized = 0;
@@ -84,7 +90,7 @@ if( $op && $op !~ /^cud-/ ) {
             $shelf->add_biblio( $biblionumber, $loggedinuser );
         }
         $template->param(
-            WINDOW_CLOSE         => 1,
+            WINDOW_CLOSE => 1,
         );
     } else {
         $authorized = 0;
@@ -104,28 +110,31 @@ if( $op && $op !~ /^cud-/ ) {
 } else {
     if ( $loggedinuser > 0 ) {
         my $private_shelves = Koha::Virtualshelves->search(
-            {   public   => 0,
-                owner    => $loggedinuser,
+            {
+                public                  => 0,
+                owner                   => $loggedinuser,
                 allow_change_from_owner => 1,
             },
             { order_by => 'shelfname' }
         );
         my $shelves_shared_with_me = Koha::Virtualshelves->search(
-            {   public                              => 0,
+            {
+                public                              => 0,
                 'virtualshelfshares.borrowernumber' => $loggedinuser,
                 allow_change_from_others            => 1,
             },
             { join => 'virtualshelfshares', }
         );
         my $public_shelves;
-        if ( $loggedinuser ) {
-            if ( Koha::Patrons->find( $loggedinuser )->can_patron_change_permitted_staff_lists ) {
+        if ($loggedinuser) {
+            if ( Koha::Patrons->find($loggedinuser)->can_patron_change_permitted_staff_lists ) {
                 $public_shelves = Koha::Virtualshelves->search(
-                    {   public   => 1,
-                        -or      => [
+                    {
+                        public => 1,
+                        -or    => [
                             -and => {
                                 allow_change_from_owner => 1,
-                                owner     => $loggedinuser,
+                                owner                   => $loggedinuser,
                             },
                             allow_change_from_others          => 1,
                             allow_change_from_staff           => 1,
@@ -134,46 +143,49 @@ if( $op && $op !~ /^cud-/ ) {
                     },
                     { order_by => 'shelfname' }
                 );
-            } elsif ( Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists ) {
+            } elsif ( Koha::Patrons->find($loggedinuser)->can_patron_change_staff_only_lists ) {
                 $public_shelves = Koha::Virtualshelves->search(
-                    {   public   => 1,
-                        -or      => [
+                    {
+                        public => 1,
+                        -or    => [
                             -and => {
                                 allow_change_from_owner => 1,
-                                owner     => $loggedinuser,
+                                owner                   => $loggedinuser,
                             },
-                            allow_change_from_others          => 1,
-                            allow_change_from_staff           => 1
+                            allow_change_from_others => 1,
+                            allow_change_from_staff  => 1
                         ],
                     },
                     { order_by => 'shelfname' }
                 );
             } else {
                 $public_shelves = Koha::Virtualshelves->search(
-                    {   public   => 1,
-                        -or      => [
+                    {
+                        public => 1,
+                        -or    => [
                             -and => {
                                 allow_change_from_owner => 1,
-                                owner => $loggedinuser,
+                                owner                   => $loggedinuser,
                             },
                             allow_change_from_others => 1,
                         ],
                     },
-                    {order_by => 'shelfname' }
+                    { order_by => 'shelfname' }
                 );
             }
         } else {
             $public_shelves = Koha::Virtualshelves->search(
-                {   public   => 1,
-                    -or      => [
+                {
+                    public => 1,
+                    -or    => [
                         -and => {
                             allow_change_from_owner => 1,
-                            owner => $loggedinuser,
+                            owner                   => $loggedinuser,
                         },
                         allow_change_from_others => 1,
                     ],
                 },
-                {order_by => 'shelfname' }
+                { order_by => 'shelfname' }
             );
         }
 
@@ -189,10 +201,11 @@ if( $op && $op !~ /^cud-/ ) {
 
 if ($authorized) {
     for my $biblionumber (@biblionumbers) {
-        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblio = Koha::Biblios->find($biblionumber);
         push(
             @biblios,
-            {   biblionumber => $biblionumber,
+            {
+                biblionumber => $biblionumber,
                 title        => $biblio->title,
                 subtitle     => $biblio->subtitle,
                 medium       => $biblio->medium,
@@ -209,7 +222,7 @@ if ($authorized) {
     );
 
     $template->param(
-        newshelf => $newshelf || 0,
+        newshelf                    => $newshelf || 0,
         OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
     );
 }

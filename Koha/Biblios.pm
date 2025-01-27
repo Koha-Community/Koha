@@ -19,7 +19,6 @@ package Koha::Biblios;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Biblio;
@@ -51,22 +50,19 @@ sub pickup_locations {
     my ( $self, $params ) = @_;
 
     Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
-      unless exists $params->{patron};
+        unless exists $params->{patron};
 
     my $patron = $params->{patron};
 
     my @pickup_locations;
     foreach my $biblio ( $self->as_list ) {
         push @pickup_locations,
-          $biblio->pickup_locations( { patron => $patron } )
-          ->_resultset->get_column('branchcode')->all;
+            $biblio->pickup_locations( { patron => $patron } )->_resultset->get_column('branchcode')->all;
     }
 
     return Koha::Libraries->search(
-        {
-            branchcode => \@pickup_locations
-        },
-        { order_by => ['branchname'] }
+        { branchcode => \@pickup_locations },
+        { order_by   => ['branchname'] }
     );
 }
 
@@ -93,7 +89,7 @@ sub api_query_fixer {
     } else {
         $query =~
             s/${quotes}(age_restriction|cn_class|cn_item|cn_sort|cn_source|cn_suffix|collection_issn|collection_title|collection_volume|ean|edition_statement|illustrations|isbn|issn|item_type|lc_control_number|notes|number|pages|publication_place|publication_year|publisher|material_size|serial_total_issues|url|volume|volume_date|volume_description)${quotes}/${quotes}biblioitem\.$1${quotes}/g;
-        $query =~ # handle ambiguous 'biblionumber'
+        $query =~    # handle ambiguous 'biblionumber'
             s/${quotes}(biblio_id)${quotes}/${quotes}me\.$1${quotes}/g;
     }
 

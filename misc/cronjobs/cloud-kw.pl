@@ -23,58 +23,55 @@ use warnings;
 use diagnostics;
 use Carp qw( carp croak );
 use YAML::XS;
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context qw($context);
-use C4::Log qw( cronlogaction );
+use C4::Log     qw( cronlogaction );
 
-my $verbose     = 0;
-my $help        = 0;
-my $conf        = '';
+my $verbose = 0;
+my $help    = 0;
+my $conf    = '';
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
-GetOptions( 
-    'verbose'   => \$verbose,
-    'help'      => \$help,
-    'conf=s'    => \$conf,
+GetOptions(
+    'verbose' => \$verbose,
+    'help'    => \$help,
+    'conf=s'  => \$conf,
 );
 
 sub usage {
     pod2usage( -verbose => 2 );
     exit;
-} 
+}
 
 usage() if $help || !$conf;
 
 my @clouds;
 print "Reading configuration file: $conf\n" if $verbose;
-eval {
-    @clouds = YAML::XS::LoadFile( $conf );
-};
+eval { @clouds = YAML::XS::LoadFile($conf); };
 croak "Unable to read configuration file: $conf\n" if $@;
 
 my $original_context = $C4::Context::context;
-for my $cloud ( @clouds ) {
+for my $cloud (@clouds) {
     print "Create a cloud\n",
-          "  Koha conf file:  ", $cloud->{KohaConf} ? $cloud->{KohaConf} : "default", "\n",
-          "  Zebra Index:     ", $cloud->{ZebraIndex}, "\n",
-          "  Koha Keyword:    ", $cloud->{KohaIndex}, "\n",
-          "  Count:           ", $cloud->{Count}, "\n",
-          "  Withcss:         ", $cloud->{Withcss}, "\n",
-          "  Output:          ", $cloud->{Output}, "\n",
-      if $verbose;  
+        "  Koha conf file:  ", $cloud->{KohaConf} ? $cloud->{KohaConf} : "default", "\n",
+        "  Zebra Index:     ", $cloud->{ZebraIndex}, "\n",
+        "  Koha Keyword:    ", $cloud->{KohaIndex},  "\n",
+        "  Count:           ", $cloud->{Count},      "\n",
+        "  Withcss:         ", $cloud->{Withcss},    "\n",
+        "  Output:          ", $cloud->{Output},     "\n",
+        if $verbose;
 
     # Set Koha context if KohaConf is present
     if ( $cloud->{KohaConf} ) {
         if ( -e $cloud->{KohaConf} ) {
             my $context = C4::Context->new( $cloud->{KohaConf} );
             $context->set_context();
-        }
-        else {
+        } else {
             carp "Koha conf file doesn't exist: ", $cloud->{KohaConf}, " ; use KOHA_CONF\n";
         }
     }
@@ -91,8 +88,7 @@ for my $cloud ( @clouds ) {
 }
 $original_context->set_context;
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
-
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 package ZebraIndex;
 
@@ -102,25 +98,20 @@ use diagnostics;
 use Carp qw( carp croak );
 
 sub new {
-    my $self = {};
+    my $self  = {};
     my $class = shift;
-    $self->{ zebra_index  } = shift;
-    $self->{ top_terms    } = undef;
-    $self->{ levels_cloud } = 24;
+    $self->{zebra_index}  = shift;
+    $self->{top_terms}    = undef;
+    $self->{levels_cloud} = 24;
     bless $self, $class;
 
     # Test Zebra index
-    my $zbiblio = C4::Context->Zconn( "biblioserver" );
-    eval {
-        my $ss = $zbiblio->scan_pqf(
-            '@attr 1=' . $self->{ zebra_index } . ' @attr 4=1 @attr 6=3 "a"'
-        );
-    };
-    croak "Invalid Zebra index: ", $self->{ zebra_index } if $@;
+    my $zbiblio = C4::Context->Zconn("biblioserver");
+    eval { my $ss = $zbiblio->scan_pqf( '@attr 1=' . $self->{zebra_index} . ' @attr 4=1 @attr 6=3 "a"' ); };
+    croak "Invalid Zebra index: ", $self->{zebra_index} if $@;
 
     return $self;
 }
-
 
 #
 # scan
@@ -135,21 +126,21 @@ sub new {
 #   [1] term number of occurrences
 #   [2] term proportional relative weight in terms set E[0-1]
 #   [3] term logarithmic relative weight E [0-levels_cloud]
-#   
+#
 #   This array is sorted alphabetically by terms ([0])
 #   It can be easily sorted by occurrences:
 #     @t = sort { $a[1] <=> $a[1] } @{$self->{top_terms}};
 #
 sub scan {
     my $self       = shift;
-    my $index_name = $self->{ zebra_index };
+    my $index_name = $self->{zebra_index};
     my $max_terms  = shift;
-    
+
     my $MAX_OCCURENCE = 1000000000;
-    
-    my $zbiblio = C4::Context->Zconn( "biblioserver" );
-    my $number_of_terms = 0; 
-    my @terms;      # 2 dimensions array
+
+    my $zbiblio         = C4::Context->Zconn("biblioserver");
+    my $number_of_terms = 0;
+    my @terms;    # 2 dimensions array
     my $min_occurence_index = -1;
     my $min_occurence;
     my $from = '0';
@@ -159,9 +150,8 @@ sub scan {
         eval {
             print "$from\n" if $verbose;
             $from =~ s/\"/\\\"/g;
-            my $query = '@attr 1=' . $index_name . ' @attr 4=1 @attr 6=3 "'
-                        . $from . 'a"';
-            $ss = $zbiblio->scan_pqf( $query );
+            my $query = '@attr 1=' . $index_name . ' @attr 4=1 @attr 6=3 "' . $from . 'a"';
+            $ss = $zbiblio->scan_pqf($query);
         };
         if ($@) {
             chop $from;
@@ -170,16 +160,17 @@ sub scan {
         $ss->option( rpnCharset => 'UTF-8' );
         last if $ss->size() == 0;
         my $term = '';
-        my $occ = 0;
-        for my $index ( 0..$ss->size()-1 ) {
-            ($term, $occ) = $ss->display_term($index);
+        my $occ  = 0;
+        for my $index ( 0 .. $ss->size() - 1 ) {
+            ( $term, $occ ) = $ss->display_term($index);
+
             #print "$term:$occ\n";
             if ( $number_of_terms < $max_terms ) {
-                push( @terms, [ $term, $occ ] ); 
+                push( @terms, [ $term, $occ ] );
                 ++$number_of_terms;
                 if ( $number_of_terms == $max_terms ) {
                     $min_occurence = $MAX_OCCURENCE;
-                    for (0..$number_of_terms-1) {
+                    for ( 0 .. $number_of_terms - 1 ) {
                         my @term = @{ $terms[$_] };
                         if ( $term[1] <= $min_occurence ) {
                             $min_occurence       = $term[1];
@@ -187,13 +178,12 @@ sub scan {
                         }
                     }
                 }
-            }
-            else {
-                if ( $occ > $min_occurence) {
+            } else {
+                if ( $occ > $min_occurence ) {
                     @{ $terms[$min_occurence_index] }[0] = $term;
                     @{ $terms[$min_occurence_index] }[1] = $occ;
                     $min_occurence = $MAX_OCCURENCE;
-                    for (0..$max_terms-1) {
+                    for ( 0 .. $max_terms - 1 ) {
                         my @term = @{ $terms[$_] };
                         if ( $term[1] <= $min_occurence ) {
                             $min_occurence       = $term[1];
@@ -211,45 +201,44 @@ sub scan {
 
     # A relatif weight to other set terms is added to each term
     my $min     = $terms[0][1];
-    my $log_min = log( $min );
+    my $log_min = log($min);
     my $max     = $terms[$#terms][1];
-    my $log_max = log( $max );
+    my $log_max = log($max);
     my $delta   = $max - $min;
-    $delta = 1 if $delta == 0; # Very unlikely
+    $delta = 1 if $delta == 0;    # Very unlikely
     my $factor;
-    if ($log_max - $log_min == 0) {
+
+    if ( $log_max - $log_min == 0 ) {
         $log_min = $log_min - $self->{levels_cloud};
-        $factor = 1;
-    } 
-    else {
-        $factor = $self->{levels_cloud} / ($log_max - $log_min);
+        $factor  = 1;
+    } else {
+        $factor = $self->{levels_cloud} / ( $log_max - $log_min );
     }
 
-    foreach (0..$#terms) {
-        my $count = @{ $terms[$_] }[1];
-        my $weight = ( $count - $min ) / $delta;
-        my $log_weight = int( (log($count) - $log_min) * $factor);
+    foreach ( 0 .. $#terms ) {
+        my $count      = @{ $terms[$_] }[1];
+        my $weight     = ( $count - $min ) / $delta;
+        my $log_weight = int( ( log($count) - $log_min ) * $factor );
         push( @{ $terms[$_] }, $weight );
         push( @{ $terms[$_] }, $log_weight );
     }
-    $self->{ top_terms } = \@terms;
+    $self->{top_terms} = \@terms;
 
     # Sort array of array by terms alphabetical order
     @terms = sort { @{$a}[0] cmp @{$b}[0] } @terms;
 }
-
 
 #
 # Returns a HTML version of index top terms formatted
 # as a 'tag cloud'.
 #
 sub html_cloud {
-    my $self = shift;
+    my $self       = shift;
     my $koha_index = shift;
-    my $withcss = shift;
-    my @terms = @{ $self->{top_terms} };
-    my $html = '';
-    if ( $withcss ) {
+    my $withcss    = shift;
+    my @terms      = @{ $self->{top_terms} };
+    my $html       = '';
+    if ($withcss) {
         $html = <<EOS;
 <style>
 .subjectcloud {
@@ -292,27 +281,25 @@ span.tagcloud24 { font-size: 36px;}
 <div class="subjectcloud">
 EOS
     }
-    for (0..$#terms) {
+    for ( 0 .. $#terms ) {
         my @term = @{ $terms[$_] };
-        my $uri = $term[0];
+        my $uri  = $term[0];
         $uri =~ s/\(//g;
+
         #print "  0=", $term[0]," - 1=", $term[1], " - 2=", $term[2], " - 3=", $term[3],"\n";
-        $html = $html
+        $html =
+              $html
             . '<span class="tagcloud'
-            . $term[3]
-            . '">'
+            . $term[3] . '">'
             . '<a href="/cgi-bin/koha/opac-search.pl?q='
-            . $koha_index
-            . '%3A'
-            . $uri
-            . '">'
+            . $koha_index . '%3A'
+            . $uri . '">'
             . $term[0]
             . "</a></span>\n";
     }
     $html .= "</div>\n";
     return $html;
 }
-
 
 =head1 NAME
 
@@ -407,5 +394,4 @@ by their weight.
 =back
 
 =cut
-
 

@@ -59,7 +59,7 @@ subtest 'claim_returned() tests' => sub {
         }
     );
 
-    t::lib::Mocks::mock_userenv({ branchcode => $librarian->branchcode });
+    t::lib::Mocks::mock_userenv( { branchcode => $librarian->branchcode } );
 
     my $item  = $builder->build_sample_item;
     my $issue = AddIssue( $patron, $item->barcode, dt_from_string->add( weeks => 2 ) );
@@ -107,8 +107,7 @@ subtest 'claim_returned() tests' => sub {
             created_by      => $librarian->id,
             notes           => "This is a test note."
         }
-    )->status_is(404)
-     ->json_is( '/error' => 'Checkout not found' );
+    )->status_is(404)->json_is( '/error' => 'Checkout not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -131,11 +130,12 @@ subtest 'update_notes() tests' => sub {
 
     my $item = $builder->build_sample_item;
 
-    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } )
-      ;    # needed by AddIssue
+    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } );    # needed by AddIssue
 
-    my $issue = AddIssue( $librarian, $item->barcode,
-        dt_from_string->add( weeks => 2 ) );
+    my $issue = AddIssue(
+        $librarian, $item->barcode,
+        dt_from_string->add( weeks => 2 )
+    );
 
     my $claim = $issue->claim_returned(
         {
@@ -170,8 +170,7 @@ subtest 'update_notes() tests' => sub {
             notes      => "This is a different test note.",
             updated_by => $librarian->id,
         }
-    )->status_is(404)
-     ->json_is( '/error' => 'Claim not found' );
+    )->status_is(404)->json_is( '/error' => 'Claim not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -194,11 +193,11 @@ subtest 'resolve_claim() tests' => sub {
 
     my $item = $builder->build_sample_item;
 
-    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } ); # needed by AddIssue
+    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } );    # needed by AddIssue
 
     # Picking 1 that should exist
     my $ClaimReturnedLostValue = 1;
-    t::lib::Mocks::mock_preference('ClaimReturnedLostValue', $ClaimReturnedLostValue);
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', $ClaimReturnedLostValue );
 
     my $issue = AddIssue( $librarian, $item->barcode, dt_from_string->add( weeks => 2 ) );
 
@@ -216,7 +215,7 @@ subtest 'resolve_claim() tests' => sub {
             created_by => undef,
             updated_by => undef,
         }
-    )->store; # resolve the claim must work even if the created_by patron has been removed
+    )->store;    # resolve the claim must work even if the created_by patron has been removed
 
     # Resolve a claim
     $t->put_ok(
@@ -227,36 +226,33 @@ subtest 'resolve_claim() tests' => sub {
     )->status_is(200);
 
     $claim->discard_changes;
-    is( $claim->resolution, "FOUNDINLIB" );
+    is( $claim->resolution,  "FOUNDINLIB" );
     is( $claim->resolved_by, $librarian->id );
-    is( $claim->updated_by, $librarian->id );
+    is( $claim->updated_by,  $librarian->id );
     ok( $claim->resolved_on );
 
     is( $claim->checkout->item->itemlost, $ClaimReturnedLostValue );
 
-    $claim->update({resolution => undef, resolved_by => undef, resolved_on => undef });
+    $claim->update( { resolution => undef, resolved_by => undef, resolved_on => undef } );
     $t->put_ok(
         "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json => {
-            resolved_by => $librarian->id,
-            resolution  => "FOUNDINLIB",
+            resolved_by     => $librarian->id,
+            resolution      => "FOUNDINLIB",
             new_lost_status => 0,
         }
     )->status_is(200);
     is( $claim->get_from_storage->checkout->item->itemlost, 0 );
-
 
     # Make sure the claim doesn't exist on the DB anymore
     $claim->delete;
 
     ## Invalid claim id
     $t->put_ok(
-        "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json =>
-        {
+        "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json => {
             resolved_by => $librarian->id,
             resolution  => "FOUNDINLIB",
         }
-    )->status_is(404)
-     ->json_is( '/error' => 'Claim not found' );
+    )->status_is(404)->json_is( '/error' => 'Claim not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -279,10 +275,12 @@ subtest 'delete() tests' => sub {
 
     my $item = $builder->build_sample_item;
 
-    t::lib::Mocks::mock_userenv({ branchcode => $item->homebranch });
+    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } );
 
-    my $issue = C4::Circulation::AddIssue( $librarian,
-        $item->barcode, dt_from_string->add( weeks => 2 ) );
+    my $issue = C4::Circulation::AddIssue(
+        $librarian,
+        $item->barcode, dt_from_string->add( weeks => 2 )
+    );
 
     my $claim = $issue->claim_returned(
         {
@@ -292,16 +290,14 @@ subtest 'delete() tests' => sub {
     );
 
     # Test deleting a return claim
-    $t->delete_ok("//$userid:$password@/api/v1/return_claims/" . $claim->id)
-      ->status_is( 204, 'REST3.2.4' )
-      ->content_is( '', 'REST3.3.4' );
+    $t->delete_ok( "//$userid:$password@/api/v1/return_claims/" . $claim->id )->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
-    my $THE_claim = Koha::Checkouts::ReturnClaims->find($claim->id);
+    my $THE_claim = Koha::Checkouts::ReturnClaims->find( $claim->id );
     isnt( $THE_claim, "Return claim was deleted" );
 
-    $t->delete_ok("//$userid:$password@/api/v1/return_claims/" . $claim->id)
-      ->status_is(404)
-      ->json_is( '/error' => 'Claim not found' );
+    $t->delete_ok( "//$userid:$password@/api/v1/return_claims/" . $claim->id )->status_is(404)
+        ->json_is( '/error' => 'Claim not found' );
 
     $schema->storage->txn_rollback;
 };

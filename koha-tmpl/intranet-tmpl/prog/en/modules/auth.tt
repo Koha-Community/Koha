@@ -10,35 +10,46 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF TwoFA_prompt %]
-        [% t("Two-factor authentication") | html %] &rsaquo;
-    [% END %]
-    [% IF TwoFA_setup %]
-        [% t("Two-factor authentication setup") | html %] &rsaquo;
-    [% END %]
-    [% IF too_many_login_attempts %]
-        [% t("This account has been locked.") | html %] &rsaquo;
-    [% ELSIF invalid_username_or_password %]
-        [% t("Invalid username or password") | html %] &rsaquo;
-    [% END %]
-    [% IF ( different_ip ) %]
-        [% t("IP address change") | html %] &rsaquo;
-    [% END %]
-    [% IF ( timed_out ) %]
-        [% t("Session timed out") | html %] &rsaquo;
-    [% END %]
-    [% IF ( nopermission ) %]
-        [% t("Access denied") | html %] &rsaquo;
-    [% END %]
-    [% IF ( auth_error ) %]
-        [% t("Error authenticating with external provider") | html %] &rsaquo;
-    [% END %]
-    [% IF ( loginprompt ) %]
-        [% t("Log in to Koha") | html %] &rsaquo;
-    [% END %]
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF TwoFA_prompt %]
+            [% t("Two-factor authentication") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF TwoFA_setup %]
+            [% t("Two-factor authentication setup") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF too_many_login_attempts %]
+            [% t("This account has been locked.") | html %]
+            &rsaquo;
+        [% ELSIF invalid_username_or_password %]
+            [% t("Invalid username or password") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( different_ip ) %]
+            [% t("IP address change") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( timed_out ) %]
+            [% t("Session timed out") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( nopermission ) %]
+            [% t("Access denied") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( auth_error ) %]
+            [% t("Error authenticating with external provider") | html %]
+            &rsaquo;
+        [% END %]
+        [% IF ( loginprompt ) %]
+            [% t("Log in to Koha") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% PROCESS 'auth-two-factor.inc' %]
 </head>
@@ -47,233 +58,237 @@
 <div class="main container-fluid">
     [% INCLUDE 'messages.inc' %]
 
-<div id="login">
-<h1><a href="http://koha-community.org">Koha</a></h1>
+    <div id="login">
+        <h1><a href="http://koha-community.org">Koha</a></h1>
 
-[% SET StaffLoginInstructions = AdditionalContents.get( location => "StaffLoginInstructions", lang => lang ) %]
+        [% SET StaffLoginInstructions = AdditionalContents.get( location => "StaffLoginInstructions", lang => lang ) %]
 
-[% IF ( StaffLoginInstructions.content && StaffLoginInstructions.content.count > 0 ) %]
-    <div id="[% StaffLoginInstructions.location | html %]" class="page-section">
-        [% FOREACH n IN StaffLoginInstructions.content %]
-            <div class="[% n.lang | html %]_item">
-                <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
+        [% IF ( StaffLoginInstructions.content && StaffLoginInstructions.content.count > 0 ) %]
+            <div id="[% StaffLoginInstructions.location | html %]" class="page-section">
+                [% FOREACH n IN StaffLoginInstructions.content %]
+                    <div class="[% n.lang | html %]_item">
+                        <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
+                    </div>
+                [% END %]
+            </div>
+            <!-- /#StaffLoginInstructions -->
+        [% END # /IF StaffLoginInstructions %]
+
+        [% IF ( nopermission ) %]
+            <div id="login_error">
+                <strong>Error:</strong>
+                You do not have permission to access this page.
+            </div>
+            <p><strong>Log in as a different user</strong></p>
+        [% END %]
+
+        [% IF ( timed_out ) %]
+            <div id="login_error"
+                ><strong>Error: </strong>Session timed out.<br />
+                Please log in again</div
+            >
+        [% END %]
+
+        [% IF ( different_ip ) %]
+            <div id="login_error"><strong>Error: </strong>IP address has changed. Please log in again </div>
+        [% END %]
+
+        [% IF ( wrongip ) %]
+            <div id="login_error"><strong>Error: </strong>StaffLoginRestrictLibraryByIP is switched on and you are logging in with an IP address that doesn't match your library. </div>
+        [% END %]
+
+        [% IF too_many_login_attempts %]
+            <div id="login_error">
+                <strong>Error: </strong>
+                This account has been locked!
+                [% IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
+                    <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">Reset your password</a>.
+                [% END %]
+            </div>
+        [% ELSIF password_has_expired %]
+            <div id="login_error">
+                <strong>Error: </strong>
+                Your password has expired!
+                [% IF Koha.Preference('EnableExpiredPasswordReset') && Koha.Preference('OpacBaseURL') %]
+                    <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-reset-password.pl">Reset your password</a>.
+                [% ELSIF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
+                    <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">Reset your password</a>.
+                [% ELSE %]
+                    <p>You must contact the library to reset your password</p>
+                [% END %]
+            </div>
+        [% ELSIF invalid_username_or_password %]
+            <div id="login_error"><strong>Error: </strong>Invalid username or password</div>
+        [% ELSIF is_anonymous_patron %]
+            <div id="login_error"><strong>Error: </strong>You can't log in as the anonymous patron!</div>
+        [% END %]
+
+        [% IF auth_error %]
+            <div id="login_error" class="alert alert-danger">
+                <p>There was an error authenticating to external identity provider</p>
+                <p>[% auth_error | html %]</p>
             </div>
         [% END %]
-    </div> <!-- /#StaffLoginInstructions -->
-[% END # /IF StaffLoginInstructions %]
 
-[% IF ( nopermission ) %]
-<div id="login_error">
-    <strong>Error:</strong>
-    You do not have permission to access this page.
+        [% IF (shibbolethAuthentication) %]
+            <!-- This is what is displayed if shib login has failed -->
+            [% IF (invalidShibLogin ) %]
+                <div id="login_error"><strong>Error: </strong>Shibboleth login failed</div>
+            [% END %]
+            <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
+        [% END %]
+
+        [% IF !TwoFA_prompt && !TwoFA_setup && !Koha.Preference('staffShibOnly') %]
+            <!-- login prompt time-->
+            [% SET identity_providers = AuthClient.get_providers('staff') %]
+            [% IF ( ! identity_providers.empty ) %]
+                [% FOREACH provider IN identity_providers %]
+                    <p class="clearfix">
+                        <a href="[% provider.url | url %]" class="btn btn-light col" id="provider_[% provider.code | html %]">
+                            [% IF provider.icon_url %]
+                                <img src="[% provider.icon_url | url %]" style="max-height: 20px; max-width: 20px;" />
+                            [% ELSE %]
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            [% END %]
+                            Log in with [% provider.description | html %]
+                        </a>
+                    </p>
+                [% END %]
+                <hr />
+                <p>If you do not have an external account, but do have a local account, you can still log in: </p>
+            [% END # /IF  identity_providers.size %]
+
+            <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-login" />
+                <input type="hidden" name="koha_login_context" value="intranet" />
+                [% FOREACH INPUT IN INPUTS %]
+                    [% NEXT IF INPUT.name == "op" %]
+                    [% NEXT IF INPUT.name == "csrf_token" %]
+                    [% NEXT IF INPUT.name == "koha_login_context" %]
+                    [% NEXT IF INPUT.name == "branch" %]
+                    <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
+                [% END %]
+                <p
+                    ><label for="userid">Username:</label>
+                    <input type="text" name="login_userid" id="userid" class="input focus" value="[% userid | html %]" size="20" tabindex="1" autocomplete="off" />
+                </p>
+                <p
+                    ><label for="password">Password:</label>
+                    <input type="password" name="login_password" id="password" class="input" value="" size="20" tabindex="2" autocomplete="off" />
+                </p>
+
+                [% UNLESS IndependentBranches %]
+                    <p>
+                        [% IF Koha.Preference('ForceLibrarySelection') %]
+                            <label for="set-library-branch" class="required">Library:</label>
+                            <select name="branch" id="set-library-branch" class="input" tabindex="3" required="required">
+                                <option value=""></option>
+                                [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
+                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                [% END %]
+                                <span class="required">Required</span>
+                            </select>
+                        [% ELSE %]
+                            <label for="set-library-branch">Library:</label>
+                            <select name="branch" id="set-library-branch" class="input" tabindex="3">
+                                <option value="">My library</option>
+                                [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
+                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                [% END %]
+                            </select>
+                        [% END %]
+
+                        [% IF Koha.Preference('StaffLoginLibraryBasedOnIP') %]
+                            <span class="warning">Note: Your selection may be overridden if your current IP matches a specified IP for a branch in Koha</span>
+                        [% END %]
+                    </p>
+
+                    [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
+                        <p>
+                            <label for="set-library-desk_id">Desk:</label>
+                            <select name="desk_id" id="set-library-desk_id" class="input" tabindex="3">
+                                <option id="nodesk" value="">---</option>
+                                [% FOREACH d IN Desks.all %]
+                                    <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled>[% d.desk_name | html %]</option>
+                                [% END %]
+                            </select>
+                        </p>
+                    [% END %]
+
+                    [% IF Koha.Preference('UseCashRegisters') && Registers.all().size %]
+                        <p>
+                            <label for="set-library-register_id">Cash register:</label>
+                            <select name="register_id" id="set-library-register_id" class="input" tabindex="4">
+                                <option id="noregister" value="" selected="selected">Library default</option>
+                                [% PROCESS options_for_registers registers => Registers.all() %]
+                            </select>
+                        </p>
+                    [% END %]
+                [% END %]
+
+                <p class="submit"><input id="submit-button" type="submit" class="btn btn-primary" value="Log in" tabindex="4" /></p>
+            </form>
+
+            [% IF ( casAuthentication ) %]
+                <h4>CAS login</h4>
+
+                [% IF ( invalidCasLogin ) %]
+                    <!-- This is what is displayed if cas login has failed -->
+                    <p>Sorry, the CAS login failed.</p>
+                [% END %]
+
+                [% IF ( casServerUrl ) %]
+                    <p><a href="[% casServerUrl | $raw %]">If you have a CAS account, please click here to login</a>.</p>
+                [% END %]
+
+                [% IF ( casServersLoop ) %]
+                    <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
+                    <ul>
+                        [% FOREACH casServer IN casServersLoop %]
+                            <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
+                        [% END %]
+                    </ul>
+                [% END %]
+            [% END %]
+        [% ELSIF TwoFA_prompt %]
+            <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" autocomplete="off">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-login" />
+                <input type="hidden" name="koha_login_context" value="intranet" />
+                [% FOREACH INPUT IN INPUTS %]
+                    [% NEXT IF INPUT.name == "op" %]
+                    [% NEXT IF INPUT.name == "csrf_token" %]
+                    [% NEXT IF INPUT.name == "koha_login_context" %]
+                    [% NEXT IF INPUT.name == "branch" %]
+                    <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
+                [% END %]
+                [% IF invalid_otp_token %]
+                    <div id="login_error">Invalid two-factor code</div>
+                [% END %]
+
+                <div id="email_error" class="alert alert-warning" style="display: none;"></div>
+                <div id="email_success" class="alert alert-info" style="display: none;"></div>
+                <p>
+                    <label for="otp_token">Two-factor authentication code:</label>
+                    <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
+                </p>
+                <p>
+                    <input type="submit" id="submit-button" class="btn btn-primary" value="Verify code" />
+                    <a class="send_otp" id="send_otp" href="#">Send the code by email</a>
+                    <a class="cancel" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Cancel</a>
+                </p>
+            </form>
+        [% ELSIF TwoFA_setup %]
+            [% PROCESS registration_form %]
+        [% END %]
+
+        [% IF ( nopermission ) %]
+            <p><a id="previous_page" href="javascript:window.history.back()">[Previous page]</a> <a id="mainpage" href="/">[Main page]</a></p>
+        [% END %]
+    </div>
 </div>
-<p><strong>Log in as a different user</strong></p>
-[% END %]
-
-[% IF ( timed_out ) %]
-<div id="login_error"><strong>Error: </strong>Session timed out.<br /> Please log in again</div>
-[% END %]
-
-[% IF ( different_ip ) %]
-<div id="login_error"><strong>Error: </strong>IP address has changed. Please log in again </div>
-[% END %]
-
-[% IF ( wrongip ) %]
-<div id="login_error"><strong>Error: </strong>StaffLoginRestrictLibraryByIP is switched on and you are logging in with an IP address that doesn't match your library. </div>
-[% END %]
-
-[% IF too_many_login_attempts %]
-    <div id="login_error">
-        <strong>Error: </strong>
-        This account has been locked!
-        [% IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
-            <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">Reset your password</a>.
-        [% END %]
-    </div>
-[% ELSIF password_has_expired %]
-    <div id="login_error">
-        <strong>Error: </strong>
-        Your password has expired!
-        [% IF Koha.Preference('EnableExpiredPasswordReset') && Koha.Preference('OpacBaseURL') %]
-            <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-reset-password.pl">Reset your password</a>.
-        [% ELSIF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
-            <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">Reset your password</a>.
-        [% ELSE %]
-            <p>You must contact the library to reset your password</p>
-        [% END %]
-    </div>
-[% ELSIF invalid_username_or_password %]
-<div id="login_error"><strong>Error: </strong>Invalid username or password</div>
-[% ELSIF is_anonymous_patron %]
-    <div id="login_error"><strong>Error: </strong>You can't log in as the anonymous patron!</div>
-[% END %]
-
-[% IF auth_error %]
-    <div id="login_error" class="alert alert-danger">
-        <p>There was an error authenticating to external identity provider</p>
-        <p>[% auth_error | html %]</p>
-    </div>
-[% END %]
-
-[% IF (shibbolethAuthentication) %]
-<!-- This is what is displayed if shib login has failed -->
-[% IF (invalidShibLogin ) %]
-<div id="login_error"><Strong>Error: </strong>Shibboleth login failed</div>
-[% END %]
-<p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
-[% END %]
-
-[% IF !TwoFA_prompt && !TwoFA_setup && !Koha.Preference('staffShibOnly') %]
-    <!-- login prompt time-->
-    [% SET identity_providers = AuthClient.get_providers('staff') %]
-    [% IF ( ! identity_providers.empty ) %]
-        [% FOREACH provider IN identity_providers %]
-            <p class="clearfix">
-                <a href="[% provider.url | url %]" class="btn btn-light col" id="provider_[% provider.code | html %]">
-                    [% IF provider.icon_url %]
-                    <img src="[% provider.icon_url | url %]"  style="max-height: 20px; max-width: 20px;"/>
-                    [% ELSE %]
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    [% END %]
-                    Log in with [% provider.description | html %]
-                </a>
-            </p>
-        [% END %]
-        <hr/>
-        <p>If you do not have an external account, but do have a local account, you can still log in: </p>
-    [% END # /IF  identity_providers.size %]
-
-    <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" class="validated">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-login" />
-        <input type="hidden" name="koha_login_context" value="intranet" />
-    [% FOREACH INPUT IN INPUTS %]
-        [% NEXT IF INPUT.name == "op" %]
-        [% NEXT IF INPUT.name == "csrf_token" %]
-        [% NEXT IF INPUT.name == "koha_login_context" %]
-        [% NEXT IF INPUT.name == "branch" %]
-        <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
-    [% END %]
-    <p><label for="userid">Username:</label>
-    <input type="text" name="login_userid" id="userid" class="input focus" value="[% userid | html %]" size="20" tabindex="1" autocomplete="off" />
-    </p>
-    <p><label for="password">Password:</label>
-    <input type="password" name="login_password" id="password" class="input" value="" size="20" tabindex="2" autocomplete="off" />
-    </p>
-
-    [% UNLESS IndependentBranches %]
-        <p>
-            [% IF Koha.Preference('ForceLibrarySelection') %]
-                <label for="set-library-branch" class="required">Library:</label>
-                <select name="branch" id="set-library-branch" class="input" tabindex="3" required="required">
-                    <option value=""></option>
-                    [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
-                        <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                    [% END %]
-                    <span class="required">Required</span>
-                </select>
-            [% ELSE %]
-                <label for="set-library-branch">Library:</label>
-                <select name="branch" id="set-library-branch" class="input" tabindex="3">
-                <option value="">My library</option>
-                [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
-                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                 [% END %]
-                </select>
-            [% END %]
-
-            [% IF Koha.Preference('StaffLoginLibraryBasedOnIP')%]
-                <span class="warning">Note: Your selection may be overridden if your current IP matches a specified IP for a branch in Koha</span>
-            [% END %]
-        </p>
-
-        [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
-        <p>
-            <label for="set-library-desk_id">Desk:</label>
-            <select name="desk_id" id="set-library-desk_id" class="input" tabindex="3">
-                <option id="nodesk" value="">---</option>
-                    [% FOREACH d IN Desks.all %]
-                    <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled >[% d.desk_name | html %]</option>
-                    [% END %]
-            </select>
-        </p>
-        [% END %]
-
-        [% IF Koha.Preference('UseCashRegisters') && Registers.all().size %]
-        <p>
-            <label for="set-library-register_id">Cash register:</label>
-            <select name="register_id" id="set-library-register_id" class="input" tabindex="4">
-                <option id="noregister" value="" selected="selected">Library default</option>
-                [% PROCESS options_for_registers registers => Registers.all() %]
-            </select>
-        </p>
-        [% END %]
-
-    [% END %]
-
-    <p class="submit"><input id="submit-button" type="submit" class="btn btn-primary" value="Log in" tabindex="4" /></p>
-    </form>
-
-    [% IF ( casAuthentication ) %]
-        <h4>CAS login</h4>
-
-        [% IF ( invalidCasLogin ) %]
-        <!-- This is what is displayed if cas login has failed -->
-        <p>Sorry, the CAS login failed.</p>
-        [% END %]
-
-        [% IF ( casServerUrl ) %]
-            <p><a href="[% casServerUrl | $raw %]">If you have a CAS account, please click here to login</a>.</p>
-        [% END %]
-
-        [% IF ( casServersLoop ) %]
-            <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
-        <ul>
-            [% FOREACH casServer IN casServersLoop %]
-                <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
-            [% END %]
-        [% END %]
-    [% END %]
-[% ELSIF TwoFA_prompt %]
-    <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" autocomplete="off">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-login" />
-        <input type="hidden" name="koha_login_context" value="intranet" />
-        [% FOREACH INPUT IN INPUTS %]
-            [% NEXT IF INPUT.name == "op" %]
-            [% NEXT IF INPUT.name == "csrf_token" %]
-            [% NEXT IF INPUT.name == "koha_login_context" %]
-            [% NEXT IF INPUT.name == "branch" %]
-            <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
-        [% END %]
-        [% IF invalid_otp_token %]
-            <div id="login_error">Invalid two-factor code</div>
-        [% END %]
-
-        <div id="email_error" class="alert alert-warning" style="display: none;"></div>
-        <div id="email_success" class="alert alert-info" style="display: none;"></div>
-        <p>
-            <label for="otp_token">Two-factor authentication code:</label>
-            <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
-        </p>
-        <p>
-            <input type="submit" id="submit-button" class="btn btn-primary" value="Verify code" />
-            <a class="send_otp" id="send_otp" href="#">Send the code by email</a>
-            <a class="cancel" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Cancel</a>
-        </p>
-
-    </form>
-[% ELSIF TwoFA_setup %]
-    [% PROCESS registration_form %]
-[% END %]
-
-[% IF ( nopermission ) %]
-    <p><a id="previous_page" href="javascript:window.history.back()">[Previous page]</a>
-    <a id="mainpage" href="/">[Main page]</a></p>
-[% END %]
-
-</div>
-</div> <!-- /.main.container-fluid -->
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

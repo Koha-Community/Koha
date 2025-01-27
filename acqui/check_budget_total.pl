@@ -20,8 +20,8 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Output  qw( output_html_with_http_headers );
+use C4::Auth    qw( get_template_and_user );
 use C4::Budgets qw( GetBudget );
 
 =head1 DESCRIPTION
@@ -30,19 +30,21 @@ fetches the budget amount fron the DB
 
 =cut
 
-my $input = CGI->new;
+my $input     = CGI->new;
 my $budget_id = $input->param('budget_id');
-my $total   = $input->param('total');
+my $total     = $input->param('total');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "acqui/ajax.tt",
-        query           => $input,
-        type            => "intranet",
-} );
+    {
+        template_name => "acqui/ajax.tt",
+        query         => $input,
+        type          => "intranet",
+    }
+);
 
 my $budget = GetBudget($budget_id);
 
-$template->param( return => $budget->{'budget_amount'}  );
+$template->param( return => $budget->{'budget_amount'} );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 1;

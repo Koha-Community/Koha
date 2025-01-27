@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -26,40 +26,43 @@ use C4::Output qw( output_html_with_http_headers );
 use Koha::Libraries;
 use Koha::Library::OverDriveInfos;
 
-my $input         = CGI->new;
-my @branchcodes   = $input->multi_param('branchcode');
-my @authnames     = $input->multi_param('authname');
-my $op            = $input->param('op');
+my $input       = CGI->new;
+my @branchcodes = $input->multi_param('branchcode');
+my @authnames   = $input->multi_param('authname');
+my $op          = $input->param('op');
 
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => 'admin/overdrive.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { parameters => 'parameters_remaining_permissions' },
+    {
+        template_name => 'admin/overdrive.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { parameters => 'parameters_remaining_permissions' },
     }
 );
 
 if ( $op && $op eq 'cud-update' ) {
     my %od_info;
-    @od_info{ @branchcodes } = @authnames;
-    while( my($branchcode,$authname) = each %od_info){
+    @od_info{@branchcodes} = @authnames;
+    while ( my ( $branchcode, $authname ) = each %od_info ) {
         my $cur_info = Koha::Library::OverDriveInfos->find($branchcode);
-        if( $cur_info ) {
+        if ($cur_info) {
             $cur_info->authname($authname)->store;
         } else {
-            Koha::Library::OverDriveInfo->new({
-                branchcode => $branchcode,
-                authname   => $authname,
-            })->store;
+            Koha::Library::OverDriveInfo->new(
+                {
+                    branchcode => $branchcode,
+                    authname   => $authname,
+                }
+            )->store;
         }
     }
 }
 
 my @branches = Koha::Libraries->search->as_list;
 my @branch_od_info;
-foreach my $branch ( @branches ){
-    my $od_info =  Koha::Library::OverDriveInfos->find($branch->branchcode);
-    if( $od_info ){
+foreach my $branch (@branches) {
+    my $od_info = Koha::Library::OverDriveInfos->find( $branch->branchcode );
+    if ($od_info) {
         push @branch_od_info, { branchcode => $od_info->branchcode, authname => $od_info->authname };
     } else {
         push @branch_od_info, { branchcode => $branch->branchcode, authname => "" };

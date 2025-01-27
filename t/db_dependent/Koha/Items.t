@@ -42,25 +42,28 @@ use t::lib::Dates;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $dbh     = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 
 my $builder     = t::lib::TestBuilder->new;
 my $library     = $builder->build( { source => 'Branch' } );
 my $nb_of_items = Koha::Items->search->count;
 my $biblio      = $builder->build_sample_biblio();
-my $new_item_1   = $builder->build_sample_item({
-    biblionumber => $biblio->biblionumber,
-    homebranch       => $library->{branchcode},
-    holdingbranch    => $library->{branchcode},
-});
-my $new_item_2   = $builder->build_sample_item({
-    biblionumber => $biblio->biblionumber,
-    homebranch       => $library->{branchcode},
-    holdingbranch    => $library->{branchcode},
-});
+my $new_item_1  = $builder->build_sample_item(
+    {
+        biblionumber  => $biblio->biblionumber,
+        homebranch    => $library->{branchcode},
+        holdingbranch => $library->{branchcode},
+    }
+);
+my $new_item_2 = $builder->build_sample_item(
+    {
+        biblionumber  => $biblio->biblionumber,
+        homebranch    => $library->{branchcode},
+        holdingbranch => $library->{branchcode},
+    }
+);
 
-
-t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 
 like( $new_item_1->itemnumber, qr|^\d+$|, 'Adding a new item should have set the itemnumber' );
 is( Koha::Items->search->count, $nb_of_items + 2, 'The 2 items should have been added' );
@@ -82,10 +85,14 @@ subtest 'store' => sub {
         }
     )->store->get_from_storage;
 
-    is( t::lib::Dates::compare( $item->replacementpricedate, $today ),
-        0, 'replacementpricedate must have been set to today if not given' );
-    is( t::lib::Dates::compare( dt_from_string($item->datelastseen)->ymd, $today ),
-        0, 'datelastseen must have been set to today if not given' );
+    is(
+        t::lib::Dates::compare( $item->replacementpricedate, $today ),
+        0, 'replacementpricedate must have been set to today if not given'
+    );
+    is(
+        t::lib::Dates::compare( dt_from_string( $item->datelastseen )->ymd, $today ),
+        0, 'datelastseen must have been set to today if not given'
+    );
     is(
         $item->itype,
         $biblio->biblioitem->itemtype,
@@ -99,7 +106,7 @@ subtest 'store' => sub {
         subtest 'location passed to ->store' => sub {
             plan tests => 7;
 
-            my $location = 'my_loc';
+            my $location   = 'my_loc';
             my $attributes = {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
@@ -113,18 +120,22 @@ subtest 'store' => sub {
 
                 # Not passing permanent_location on creating the item
                 my $item = Koha::Item->new($attributes)->store->get_from_storage;
-                is( $item->location, $location,
-                    'location must have been set to location if given' );
-                is( $item->permanent_location, $item->location,
-                    'permanent_location must have been set to location if not given' );
+                is(
+                    $item->location, $location,
+                    'location must have been set to location if given'
+                );
+                is(
+                    $item->permanent_location, $item->location,
+                    'permanent_location must have been set to location if not given'
+                );
                 $item->delete;
 
                 # Passing permanent_location on creating the item
-                $item = Koha::Item->new(
-                    { %$attributes, permanent_location => 'perm_loc' } )
-                  ->store->get_from_storage;
-                is( $item->permanent_location, 'perm_loc',
-                    'permanent_location must have been kept if given' );
+                $item = Koha::Item->new( { %$attributes, permanent_location => 'perm_loc' } )->store->get_from_storage;
+                is(
+                    $item->permanent_location, 'perm_loc',
+                    'permanent_location must have been kept if given'
+                );
                 $item->delete;
             }
 
@@ -135,20 +146,26 @@ subtest 'store' => sub {
 
                 # Not passing permanent_location on creating the item
                 my $item = Koha::Item->new($attributes)->store->get_from_storage;
-                is( $item->location, $location,
-                    'location must have been kept if given' );
-                is( $item->permanent_location, $location,
-                    'permanent_location must have been set to the location given' );
+                is(
+                    $item->location, $location,
+                    'location must have been kept if given'
+                );
+                is(
+                    $item->permanent_location, $location,
+                    'permanent_location must have been set to the location given'
+                );
                 $item->delete;
 
                 # Passing permanent_location on creating the item
-                $item = Koha::Item->new(
-                    { %$attributes, permanent_location => 'perm_loc' } )
-                  ->store->get_from_storage;
-                is( $item->location, $location,
-                    'location must have been kept if given' );
-                is( $item->permanent_location, 'perm_loc',
-                    'permanent_location must have been kept if given' );
+                $item = Koha::Item->new( { %$attributes, permanent_location => 'perm_loc' } )->store->get_from_storage;
+                is(
+                    $item->location, $location,
+                    'location must have been kept if given'
+                );
+                is(
+                    $item->permanent_location, 'perm_loc',
+                    'permanent_location must have been kept if given'
+                );
                 $item->delete;
             }
         };
@@ -168,18 +185,22 @@ subtest 'store' => sub {
 
                 # Not passing permanent_location on creating the item
                 my $item = Koha::Item->new($attributes)->store->get_from_storage;
-                is( $item->location, undef,
-                    'location not passed and no default, it is undef' );
-                is( $item->permanent_location, $item->location,
-                    'permanent_location must have been set to location if not given' );
+                is(
+                    $item->location, undef,
+                    'location not passed and no default, it is undef'
+                );
+                is(
+                    $item->permanent_location, $item->location,
+                    'permanent_location must have been set to location if not given'
+                );
                 $item->delete;
 
                 # Passing permanent_location on creating the item
-                $item = Koha::Item->new(
-                    { %$attributes, permanent_location => 'perm_loc' } )
-                  ->store->get_from_storage;
-                is( $item->permanent_location, 'perm_loc',
-                    'permanent_location must have been kept if given' );
+                $item = Koha::Item->new( { %$attributes, permanent_location => 'perm_loc' } )->store->get_from_storage;
+                is(
+                    $item->permanent_location, 'perm_loc',
+                    'permanent_location must have been kept if given'
+                );
                 $item->delete;
             }
 
@@ -190,20 +211,26 @@ subtest 'store' => sub {
 
                 # Not passing permanent_location on creating the item
                 my $item = Koha::Item->new($attributes)->store->get_from_storage;
-                is( $item->location, $default_location,
-                    'location must have been set to default location if not given' );
-                is( $item->permanent_location, $default_location,
-                    'permanent_location must have been set to the default location as well' );
+                is(
+                    $item->location, $default_location,
+                    'location must have been set to default location if not given'
+                );
+                is(
+                    $item->permanent_location, $default_location,
+                    'permanent_location must have been set to the default location as well'
+                );
                 $item->delete;
 
                 # Passing permanent_location on creating the item
-                $item = Koha::Item->new(
-                    { %$attributes, permanent_location => 'perm_loc' } )
-                  ->store->get_from_storage;
-                is( $item->location, $default_location,
-                    'location must have been set to default location if not given' );
-                is( $item->permanent_location, 'perm_loc',
-                    'permanent_location must have been kept if given' );
+                $item = Koha::Item->new( { %$attributes, permanent_location => 'perm_loc' } )->store->get_from_storage;
+                is(
+                    $item->location, $default_location,
+                    'location must have been set to default location if not given'
+                );
+                is(
+                    $item->permanent_location, 'perm_loc',
+                    'permanent_location must have been kept if given'
+                );
                 $item->delete;
             }
         };
@@ -216,11 +243,11 @@ subtest 'store' => sub {
         # Once the '_on' value is set (triggered by the related field turning from false to true)
         # it should not be re-set for any changes outside of the related field being 'unset'.
 
-        my @fields = qw( itemlost withdrawn damaged );
-        my $today = dt_from_string();
+        my @fields    = qw( itemlost withdrawn damaged );
+        my $today     = dt_from_string();
         my $yesterday = $today->clone()->subtract( days => 1 );
 
-        for my $field ( @fields ) {
+        for my $field (@fields) {
             my $item = $builder->build_sample_item(
                 {
                     itemlost     => 0,
@@ -237,20 +264,24 @@ subtest 'store' => sub {
             Time::Fake->offset( $yesterday->epoch );
             $item->$field(1)->store;
             $item->get_from_storage;
-            is( t::lib::Dates::compare( $item->$field_on, $yesterday ),
-                0, $field_on . " was set upon first truthy setting" );
+            is(
+                t::lib::Dates::compare( $item->$field_on, $yesterday ),
+                0, $field_on . " was set upon first truthy setting"
+            );
 
             # Update the field to a new 'true' value
             Time::Fake->offset( $today->epoch );
             $item->$field(2)->store;
             $item->get_from_storage;
-            is( t::lib::Dates::compare( $item->$field_on, $yesterday ),
-                0, $field_on . " was not updated upon second truthy setting" );
+            is(
+                t::lib::Dates::compare( $item->$field_on, $yesterday ),
+                0, $field_on . " was not updated upon second truthy setting"
+            );
 
             # Update the field to a new 'false' value
             $item->$field(0)->store;
             $item->get_from_storage;
-            is($item->$field_on, undef, $field_on . " was unset upon untruthy setting");
+            is( $item->$field_on, undef, $field_on . " was unset upon untruthy setting" );
 
             Time::Fake->reset;
         }
@@ -284,11 +315,9 @@ subtest 'store' => sub {
 
             plan tests => 12;
 
-            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-            my $manager =
-              $builder->build_object( { class => "Koha::Patrons" } );
-            t::lib::Mocks::mock_userenv(
-                { patron => $manager, branchcode => $manager->branchcode } );
+            my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+            my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
 
             my $item = $builder->build_sample_item(
                 {
@@ -312,15 +341,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -331,11 +366,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountoutstanding is generated' );
+                'The right LOST amountoutstanding is generated'
+            );
             is( $lost_fee_line->status, undef, 'The LOST status was not set' );
 
             my $account = $patron->account;
@@ -353,18 +392,29 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 0, 'No LOST_FOUND account line added' );
+            is(
+                scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 0,
+                'No LOST_FOUND account line added'
+            );
 
             $lost_fee_line->discard_changes;    # reload from DB
-            is( $lost_fee_line->amountoutstanding + 0,
-                0, 'Lost fee has no outstanding amount' );
-            is( $lost_fee_line->debit_type_code,
-                'LOST', 'Lost fee now still has account type of LOST' );
-            is( $lost_fee_line->status, 'FOUND',
-                "Lost fee now has account status of FOUND - No Refund" );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
+                0, 'Lost fee has no outstanding amount'
+            );
+            is(
+                $lost_fee_line->debit_type_code,
+                'LOST', 'Lost fee now still has account type of LOST'
+            );
+            is(
+                $lost_fee_line->status, 'FOUND',
+                "Lost fee now has account status of FOUND - No Refund"
+            );
 
-            is( $patron->account->balance,
-                -0, 'The patron balance is 0, everything was written off' );
+            is(
+                $patron->account->balance,
+                -0, 'The patron balance is 0, everything was written off'
+            );
         };
 
         subtest 'Full payment tests' => sub {
@@ -382,8 +432,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -396,15 +445,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -415,11 +470,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             my $account = $patron->account;
             my $debts   = $account->outstanding_debits;
@@ -436,7 +495,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -447,13 +506,15 @@ subtest 'store' => sub {
             )->single;
 
             ok( $credit_return, 'An account line of type LOST_FOUND is added' );
-            is( $credit_return->amount + 0,
+            is(
+                $credit_return->amount + 0,
                 -99.00,
-                'The account line of type LOST_FOUND has an amount of -99' );
+                'The account line of type LOST_FOUND has an amount of -99'
+            );
             is(
                 $credit_return->amountoutstanding + 0,
                 -99.00,
-'The account line of type LOST_FOUND has an amountoutstanding of -99'
+                'The account line of type LOST_FOUND has an amountoutstanding of -99'
             );
 
             my $processing_return = Koha::Account::Lines->search(
@@ -464,20 +525,29 @@ subtest 'store' => sub {
                 { rows => 1 }
             )->single;
             ok( $processing_return, 'An account line of type PROCESSING_FOUND is added' );
-            is( $processing_return->amount + 0,
+            is(
+                $processing_return->amount + 0,
                 -20.00,
-                'The account line of type PROCESSING_FOUND has an amount of -20' );
+                'The account line of type PROCESSING_FOUND has an amount of -20'
+            );
 
             $lost_fee_line->discard_changes;
-            is( $lost_fee_line->amountoutstanding + 0,
-                0, 'Lost fee has no outstanding amount' );
-            is( $lost_fee_line->debit_type_code,
-                'LOST', 'Lost fee now still has account type of LOST' );
-            is( $lost_fee_line->status, 'FOUND',
-                "Lost fee now has account status of FOUND" );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
+                0, 'Lost fee has no outstanding amount'
+            );
+            is(
+                $lost_fee_line->debit_type_code,
+                'LOST', 'Lost fee now still has account type of LOST'
+            );
+            is(
+                $lost_fee_line->status, 'FOUND',
+                "Lost fee now has account status of FOUND"
+            );
 
-            is( $patron->account->balance, -119,
-'The patron balance is -119, a credit that equals the lost fee payment and the processing fee'
+            is(
+                $patron->account->balance, -119,
+                'The patron balance is -119, a credit that equals the lost fee payment and the processing fee'
             );
         };
 
@@ -497,8 +567,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(3)->store;
@@ -511,15 +580,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -530,11 +605,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             # Set processingreturn_policy to '0' so processing fee is retained
             # these tests are just for lostreturn
@@ -553,7 +632,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -564,37 +643,45 @@ subtest 'store' => sub {
             )->single;
 
             ok( $credit_return, 'An account line of type LOST_FOUND is added' );
-            is( $credit_return->amount + 0,
+            is(
+                $credit_return->amount + 0,
                 -99.00,
-                'The account line of type LOST_FOUND has an amount of -99' );
+                'The account line of type LOST_FOUND has an amount of -99'
+            );
             is(
                 $credit_return->amountoutstanding + 0,
                 0,
-'The account line of type LOST_FOUND has an amountoutstanding of 0'
+                'The account line of type LOST_FOUND has an amountoutstanding of 0'
             );
 
             $lost_fee_line->discard_changes;
-            is( $lost_fee_line->amountoutstanding + 0,
-                0, 'Lost fee has no outstanding amount' );
-            is( $lost_fee_line->debit_type_code,
-                'LOST', 'Lost fee now still has account type of LOST' );
-            is( $lost_fee_line->status, 'FOUND',
-                "Lost fee now has account status of FOUND" );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
+                0, 'Lost fee has no outstanding amount'
+            );
+            is(
+                $lost_fee_line->debit_type_code,
+                'LOST', 'Lost fee now still has account type of LOST'
+            );
+            is(
+                $lost_fee_line->status, 'FOUND',
+                "Lost fee now has account status of FOUND"
+            );
 
-            is( $patron->account->balance,
-                20, 'The patron balance is 20, still owes the processing fee' );
+            is(
+                $patron->account->balance,
+                20, 'The patron balance is 20, still owes the processing fee'
+            );
         };
 
-        subtest
-          'Test with partial payment and write off, and remaining debt' =>
-          sub {
+        subtest 'Test with partial payment and write off, and remaining debt' => sub {
 
             plan tests => 19;
 
             t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 0 );
 
             my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-            my $item = $builder->build_sample_item(
+            my $item   = $builder->build_sample_item(
                 {
                     biblionumber     => $biblio->biblionumber,
                     library          => $library->branchcode,
@@ -603,8 +690,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -617,15 +703,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -636,11 +728,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             my $account = $patron->account;
             is(
@@ -672,7 +768,6 @@ subtest 'store' => sub {
             );
             $write_off->apply( { debits => [$lost_fee_line] } );
 
-
             my $payment_amount_2 = 3;
             my $payment_2        = $account->add_credit(
                 {
@@ -682,8 +777,7 @@ subtest 'store' => sub {
                 }
             );
 
-            $payment_2->apply(
-                { debits => [$lost_fee_line] } );
+            $payment_2->apply( { debits => [$lost_fee_line] } );
 
             # Partially write off fee (52 - 5 = 47)
             my $write_off_amount_2 = 5;
@@ -695,30 +789,22 @@ subtest 'store' => sub {
                 }
             );
 
-            $write_off_2->apply(
-                { debits => [$lost_fee_line] } );
+            $write_off_2->apply( { debits => [$lost_fee_line] } );
 
             is(
                 $account->balance,
-                $processfee_amount +
-                  $replacement_amount -
-                  $payment_amount -
-                  $write_off_amount -
-                  $payment_amount_2 -
-                  $write_off_amount_2,
+                $processfee_amount + $replacement_amount - $payment_amount - $write_off_amount - $payment_amount_2 -
+                    $write_off_amount_2,
                 'Balance is PROCESSING + LOST - PAYMENT 1 - WRITEOFF - PAYMENT 2 - WRITEOFF 2'
             );
 
             # VOID payment_2 and writeoff_2
-            $payment_2->void({ interface => 'test' });
-            $write_off_2->void({ interface => 'test' });
+            $payment_2->void( { interface => 'test' } );
+            $write_off_2->void( { interface => 'test' } );
 
             is(
                 $account->balance,
-                $processfee_amount +
-                  $replacement_amount -
-                  $payment_amount -
-                  $write_off_amount,
+                $processfee_amount + $replacement_amount - $payment_amount - $write_off_amount,
                 'Balance is PROCESSING + LOST - PAYMENT 1 - WRITEOFF (PAYMENT 2 and WRITEOFF 2 VOIDED)'
             );
 
@@ -733,7 +819,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -752,37 +838,42 @@ subtest 'store' => sub {
             );
 
             $lost_fee_line->discard_changes;
-            is( $lost_fee_line->amountoutstanding + 0,
-                0, 'Lost fee has no outstanding amount' );
-            is( $lost_fee_line->debit_type_code,
-                'LOST', 'Lost fee now still has account type of LOST' );
-            is( $lost_fee_line->status, 'FOUND',
-                "Lost fee now has account status of FOUND" );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
+                0, 'Lost fee has no outstanding amount'
+            );
+            is(
+                $lost_fee_line->debit_type_code,
+                'LOST', 'Lost fee now still has account type of LOST'
+            );
+            is(
+                $lost_fee_line->status, 'FOUND',
+                "Lost fee now has account status of FOUND"
+            );
 
             is(
                 $credit_return->amount + 0,
                 ( $payment_amount + $outstanding ) * -1,
-'The account line of type LOST_FOUND has an amount equal to the payment 1 + outstanding'
+                'The account line of type LOST_FOUND has an amount equal to the payment 1 + outstanding'
             );
             is(
                 $credit_return->amountoutstanding + 0,
                 $payment_amount * -1,
-'The account line of type LOST_FOUND has an amountoutstanding equal to the payment'
+                'The account line of type LOST_FOUND has an amountoutstanding equal to the payment'
             );
 
             is(
                 $account->balance,
                 $processfee_amount - $payment_amount,
-'The patron balance is the difference between the PROCESSING and the credit'
+                'The patron balance is the difference between the PROCESSING and the credit'
             );
-          };
+        };
 
-        subtest 'Partial payment, existing debits and AccountAutoReconcile' =>
-          sub {
+        subtest 'Partial payment, existing debits and AccountAutoReconcile' => sub {
 
             plan tests => 10;
 
-            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+            my $patron             = $builder->build_object( { class => 'Koha::Patrons' } );
             my $barcode            = 'KD123456793';
             my $replacement_amount = 100;
             my $processfee_amount  = 20;
@@ -810,8 +901,7 @@ subtest 'store' => sub {
                 },
             )->store;
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -826,11 +916,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             my $account = $patron->account;
             is( $account->balance, $replacement_amount, 'Balance is L' );
@@ -871,7 +965,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -901,12 +995,12 @@ subtest 'store' => sub {
                 $manual_debit_amount - $payment_amount,
                 'reconcile_balance was called'
             );
-          };
+        };
 
         subtest 'Patron deleted' => sub {
             plan tests => 1;
 
-            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+            my $patron             = $builder->build_object( { class => 'Koha::Patrons' } );
             my $barcode            = 'KD123456794';
             my $replacement_amount = 100;
             my $processfee_amount  = 20;
@@ -934,8 +1028,7 @@ subtest 'store' => sub {
                 },
             )->store;
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -946,7 +1039,10 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 0, 'No refund triggered' );
+            is(
+                scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 0,
+                'No refund triggered'
+            );
 
         };
 
@@ -954,10 +1050,8 @@ subtest 'store' => sub {
 
             plan tests => 8;
 
-            my $manager =
-              $builder->build_object( { class => "Koha::Patrons" } );
-            t::lib::Mocks::mock_userenv(
-                { patron => $manager, branchcode => $manager->branchcode } );
+            my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
 
             # Set lostreturn_policy to 'restore' for tests
             my $specific_rule_restore = $builder->build(
@@ -984,8 +1078,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -998,15 +1091,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -1017,11 +1116,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             my $account = $patron->account;
             my $debts   = $account->outstanding_debits;
@@ -1038,8 +1141,11 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
-            is( scalar ( grep { $_->message eq 'lost_restored' } @{$item->object_messages} ), 0, 'Restore not triggered when there is no overdue fine found' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
+            is(
+                scalar( grep { $_->message eq 'lost_restored' } @{ $item->object_messages } ), 0,
+                'Restore not triggered when there is no overdue fine found'
+            );
         };
 
         subtest 'restore fine | unforgiven overdue' => sub {
@@ -1047,10 +1153,8 @@ subtest 'store' => sub {
             plan tests => 10;
 
             # Set lostreturn_policy to 'restore' for tests
-            my $manager =
-              $builder->build_object( { class => "Koha::Patrons" } );
-            t::lib::Mocks::mock_userenv(
-                { patron => $manager, branchcode => $manager->branchcode } );
+            my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
             my $specific_rule_restore = $builder->build(
                 {
                     source => 'CirculationRule',
@@ -1075,8 +1179,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1089,15 +1192,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -1108,11 +1217,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             my $account = $patron->account;
             my $debts   = $account->outstanding_debits;
@@ -1140,16 +1253,23 @@ subtest 'store' => sub {
             )->store();
             $overdue->status('LOST')->store();
             $overdue->discard_changes;
-            is( $overdue->status, 'LOST',
-                'Overdue status set to LOST' );
+            is(
+                $overdue->status, 'LOST',
+                'Overdue status set to LOST'
+            );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
-            is( scalar ( grep { $_->message eq 'lost_restored' } @{$item->object_messages} ), 0, 'Restore not triggered when overdue was not forgiven' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
+            is(
+                scalar( grep { $_->message eq 'lost_restored' } @{ $item->object_messages } ), 0,
+                'Restore not triggered when overdue was not forgiven'
+            );
             $overdue->discard_changes;
-            is( $overdue->status, 'FOUND',
-                'Overdue status updated to FOUND' );
+            is(
+                $overdue->status, 'FOUND',
+                'Overdue status updated to FOUND'
+            );
         };
 
         subtest 'restore fine | forgiven overdue' => sub {
@@ -1157,10 +1277,8 @@ subtest 'store' => sub {
             plan tests => 12;
 
             # Set lostreturn_policy to 'restore' for tests
-            my $manager =
-              $builder->build_object( { class => "Koha::Patrons" } );
-            t::lib::Mocks::mock_userenv(
-                { patron => $manager, branchcode => $manager->branchcode } );
+            my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
             my $specific_rule_restore = $builder->build(
                 {
                     source => 'CirculationRule',
@@ -1185,8 +1303,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $item->barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1199,15 +1316,21 @@ subtest 'store' => sub {
                     debit_type_code => 'PROCESSING'
                 }
             );
-            is( $processing_fee_lines->count,
-                1, 'Only one processing fee produced' );
+            is(
+                $processing_fee_lines->count,
+                1, 'Only one processing fee produced'
+            );
             my $processing_fee_line = $processing_fee_lines->next;
-            is( $processing_fee_line->amount + 0,
+            is(
+                $processing_fee_line->amount + 0,
                 $processfee_amount,
-                'The right PROCESSING amount is generated' );
-            is( $processing_fee_line->amountoutstanding + 0,
+                'The right PROCESSING amount is generated'
+            );
+            is(
+                $processing_fee_line->amountoutstanding + 0,
                 $processfee_amount,
-                'The right PROCESSING amountoutstanding is generated' );
+                'The right PROCESSING amountoutstanding is generated'
+            );
 
             my $lost_fee_lines = Koha::Account::Lines->search(
                 {
@@ -1218,11 +1341,15 @@ subtest 'store' => sub {
             );
             is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
             my $lost_fee_line = $lost_fee_lines->next;
-            is( $lost_fee_line->amount + 0,
-                $replacement_amount, 'The right LOST amount is generated' );
-            is( $lost_fee_line->amountoutstanding + 0,
+            is(
+                $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated'
+            );
+            is(
+                $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
-                'The right LOST amountountstanding is generated' );
+                'The right LOST amountountstanding is generated'
+            );
 
             my $account = $patron->account;
             my $debts   = $account->outstanding_debits;
@@ -1249,8 +1376,10 @@ subtest 'store' => sub {
                 }
             )->store();
             $overdue->status('LOST')->store();
-            is( $overdue->status, 'LOST',
-                'Overdue status set to LOST' );
+            is(
+                $overdue->status, 'LOST',
+                'Overdue status set to LOST'
+            );
 
             t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 0 );
 
@@ -1269,19 +1398,22 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
-            is( scalar ( grep { $_->message eq 'lost_restored' } @{$item->object_messages} ), 1, 'Restore triggered when overdue was forgiven' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
+            is(
+                scalar( grep { $_->message eq 'lost_restored' } @{ $item->object_messages } ), 1,
+                'Restore triggered when overdue was forgiven'
+            );
             $overdue->discard_changes;
-            is( $overdue->status, 'FOUND', 'Overdue status updated to FOUND' );
+            is( $overdue->status,            'FOUND',          'Overdue status updated to FOUND' );
             is( $overdue->amountoutstanding, $overdue->amount, 'Overdue outstanding has been restored' );
             $credit->discard_changes;
-            is( $credit->status, 'VOID', 'Overdue Forgival has been marked as VOID');
+            is( $credit->status, 'VOID', 'Overdue Forgival has been marked as VOID' );
         };
 
         subtest 'Continue when userenv is not set' => sub {
             plan tests => 1;
 
-            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+            my $patron             = $builder->build_object( { class => 'Koha::Patrons' } );
             my $barcode            = 'KD123456795';
             my $replacement_amount = 100;
             my $processfee_amount  = 20;
@@ -1309,8 +1441,7 @@ subtest 'store' => sub {
                 }
             );
 
-            my $issue =
-              C4::Circulation::AddIssue( $patron, $barcode );
+            my $issue = C4::Circulation::AddIssue( $patron, $barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1321,7 +1452,7 @@ subtest 'store' => sub {
 
             # Simluate item marked as found
             $item->itemlost(0)->store;
-            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar( grep { $_->message eq 'lost_refunded' } @{ $item->object_messages } ), 1, 'Refund triggered' );
 
         };
     };
@@ -1465,8 +1596,11 @@ subtest 'get_transfer|transfer' => sub {
     );
 
     $transfer = $new_item_1->get_transfer();
-    is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfer object' );
-    is( ref($new_item_1->transfer), 'Koha::Item::Transfer' );
+    is(
+        ref($transfer), 'Koha::Item::Transfer',
+        'Koha::Item->get_transfer should return a Koha::Item::Transfer object'
+    );
+    is( ref( $new_item_1->transfer ), 'Koha::Item::Transfer' );
 
     my $transfer_2 = $builder->build_object(
         {
@@ -1485,11 +1619,17 @@ subtest 'get_transfer|transfer' => sub {
     );
 
     $transfer = $new_item_1->get_transfer();
-    is( $transfer->branchtransfer_id, $transfer_1->branchtransfer_id, 'Koha::Item->get_transfer returns the oldest transfer request');
+    is(
+        $transfer->branchtransfer_id, $transfer_1->branchtransfer_id,
+        'Koha::Item->get_transfer returns the oldest transfer request'
+    );
 
-    $transfer_2->datesent(\'NOW()')->store;
+    $transfer_2->datesent( \'NOW()' )->store;
     $transfer = $new_item_1->get_transfer();
-    is( $transfer->branchtransfer_id, $transfer_2->branchtransfer_id, 'Koha::Item->get_transfer returns the in_transit transfer');
+    is(
+        $transfer->branchtransfer_id, $transfer_2->branchtransfer_id,
+        'Koha::Item->get_transfer returns the in_transit transfer'
+    );
 
     my $transfer_3 = $builder->build_object(
         {
@@ -1507,14 +1647,20 @@ subtest 'get_transfer|transfer' => sub {
         }
     );
 
-    $transfer_2->datearrived(\'NOW()')->store;
+    $transfer_2->datearrived( \'NOW()' )->store;
     $transfer = $new_item_1->get_transfer();
-    is( $transfer->branchtransfer_id, $transfer_1->branchtransfer_id, 'Koha::Item->get_transfer returns the next queued transfer');
+    is(
+        $transfer->branchtransfer_id, $transfer_1->branchtransfer_id,
+        'Koha::Item->get_transfer returns the next queued transfer'
+    );
     is( $transfer->itemnumber, $new_item_1->itemnumber, 'Koha::Item->get_transfer returns the right items transfer' );
 
-    $transfer_1->datecancelled(\'NOW()')->store;
+    $transfer_1->datecancelled( \'NOW()' )->store;
     $transfer = $new_item_1->get_transfer();
-    is( $transfer->branchtransfer_id, $transfer_3->branchtransfer_id, 'Koha::Item->get_transfer ignores cancelled transfers');
+    is(
+        $transfer->branchtransfer_id, $transfer_3->branchtransfer_id,
+        'Koha::Item->get_transfer ignores cancelled transfers'
+    );
 };
 
 subtest 'holds' => sub {
@@ -1565,7 +1711,7 @@ subtest 'biblio' => sub {
     plan tests => 2;
 
     my $biblio = $retrieved_item_1->biblio;
-    is( ref( $biblio ), 'Koha::Biblio', 'Koha::Item->biblio should return a Koha::Biblio' );
+    is( ref($biblio),          'Koha::Biblio',                  'Koha::Item->biblio should return a Koha::Biblio' );
     is( $biblio->biblionumber, $retrieved_item_1->biblionumber, 'Koha::Item->biblio should return the correct biblio' );
 };
 
@@ -1573,25 +1719,29 @@ subtest 'biblioitem' => sub {
     plan tests => 2;
 
     my $biblioitem = $retrieved_item_1->biblioitem;
-    is( ref( $biblioitem ), 'Koha::Biblioitem', 'Koha::Item->biblioitem should return a Koha::Biblioitem' );
-    is( $biblioitem->biblionumber, $retrieved_item_1->biblionumber, 'Koha::Item->biblioitem should return the correct biblioitem' );
+    is( ref($biblioitem), 'Koha::Biblioitem', 'Koha::Item->biblioitem should return a Koha::Biblioitem' );
+    is(
+        $biblioitem->biblionumber, $retrieved_item_1->biblionumber,
+        'Koha::Item->biblioitem should return the correct biblioitem'
+    );
 };
 
 # Restore userenv
-t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 subtest 'checkout' => sub {
     plan tests => 5;
     my $item = Koha::Items->find( $new_item_1->itemnumber );
+
     # No checkout yet
     my $checkout = $item->checkout;
     is( $checkout, undef, 'Koha::Item->checkout should return undef if there is no current checkout on this item' );
 
     # Add a checkout
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     C4::Circulation::AddIssue( $patron, $item->barcode );
     $checkout = $retrieved_item_1->checkout;
-    is( ref( $checkout ), 'Koha::Checkout', 'Koha::Item->checkout should return a Koha::Checkout' );
-    is( $checkout->itemnumber, $item->itemnumber, 'Koha::Item->checkout should return the correct checkout' );
+    is( ref($checkout),            'Koha::Checkout',        'Koha::Item->checkout should return a Koha::Checkout' );
+    is( $checkout->itemnumber,     $item->itemnumber,       'Koha::Item->checkout should return the correct checkout' );
     is( $checkout->borrowernumber, $patron->borrowernumber, 'Koha::Item->checkout should return the correct checkout' );
 
     # Do the return
@@ -1605,38 +1755,60 @@ subtest 'checkout' => sub {
 subtest 'can_be_transferred' => sub {
     plan tests => 5;
 
-    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
-    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  1 );
+    t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 
     my $biblio   = $builder->build_sample_biblio();
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $item  = $builder->build_sample_item({
-        biblionumber     => $biblio->biblionumber,
-        homebranch       => $library1->branchcode,
-        holdingbranch    => $library1->branchcode,
-    });
+    my $item     = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            homebranch    => $library1->branchcode,
+            holdingbranch => $library1->branchcode,
+        }
+    );
 
-    is(Koha::Item::Transfer::Limits->search({
-        fromBranch => $library1->branchcode,
-        toBranch => $library2->branchcode,
-    })->count, 0, 'There are no transfer limits between libraries.');
-    ok($item->can_be_transferred({ to => $library2 }),
-       'Item can be transferred between libraries.');
+    is(
+        Koha::Item::Transfer::Limits->search(
+            {
+                fromBranch => $library1->branchcode,
+                toBranch   => $library2->branchcode,
+            }
+        )->count,
+        0,
+        'There are no transfer limits between libraries.'
+    );
+    ok(
+        $item->can_be_transferred( { to => $library2 } ),
+        'Item can be transferred between libraries.'
+    );
 
-    my $limit = Koha::Item::Transfer::Limit->new({
-        fromBranch => $library1->branchcode,
-        toBranch => $library2->branchcode,
-        itemtype => $item->effective_itemtype,
-    })->store;
-    is(Koha::Item::Transfer::Limits->search({
-        fromBranch => $library1->branchcode,
-        toBranch => $library2->branchcode,
-    })->count, 1, 'Given we have added a transfer limit,');
-    is($item->can_be_transferred({ to => $library2 }), 0,
-       'Item can no longer be transferred between libraries.');
-    is($item->can_be_transferred({ to => $library2, from => $library1 }), 0,
-       'We get the same result also if we pass the from-library parameter.');
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $library1->branchcode,
+            toBranch   => $library2->branchcode,
+            itemtype   => $item->effective_itemtype,
+        }
+    )->store;
+    is(
+        Koha::Item::Transfer::Limits->search(
+            {
+                fromBranch => $library1->branchcode,
+                toBranch   => $library2->branchcode,
+            }
+        )->count,
+        1,
+        'Given we have added a transfer limit,'
+    );
+    is(
+        $item->can_be_transferred( { to => $library2 } ), 0,
+        'Item can no longer be transferred between libraries.'
+    );
+    is(
+        $item->can_be_transferred( { to => $library2, from => $library1 } ), 0,
+        'We get the same result also if we pass the from-library parameter.'
+    );
 };
 
 # Reset nb_of_items prior to testing delete
@@ -1654,18 +1826,23 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron          = $builder->build_object( { class => 'Koha::Patrons' } );
     my $mocked_category = Test::MockModule->new('Koha::Patron::Category');
-    my $exception = 1;
-    $mocked_category->mock( 'override_hidden_items', sub {
-        return $exception;
-    });
+    my $exception       = 1;
+    $mocked_category->mock(
+        'override_hidden_items',
+        sub {
+            return $exception;
+        }
+    );
 
     # have a fresh biblio
     my $biblio = $builder->build_sample_biblio;
+
     # have two itemtypes
-    my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' });
-    my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itype_1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $itype_2 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
     # have 5 items on that biblio
     my $item_1 = $builder->build_sample_item(
         {
@@ -1725,18 +1902,25 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     my $rules = undef;
 
     my $mocked_context = Test::MockModule->new('C4::Context');
-    $mocked_context->mock( 'yaml_preference', sub {
-        return $rules;
-    });
+    $mocked_context->mock(
+        'yaml_preference',
+        sub {
+            return $rules;
+        }
+    );
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
-    is( $biblio->items->filter_by_visible_in_opac->count,
-        6, 'No rules passed, hidelostitems unset' );
+    is(
+        $biblio->items->filter_by_visible_in_opac->count,
+        6, 'No rules passed, hidelostitems unset'
+    );
 
-    is( $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
-        6, 'No rules passed, hidelostitems unset, patron exception changes nothing' );
+    is(
+        $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->count,
+        6, 'No rules passed, hidelostitems unset, patron exception changes nothing'
+    );
 
-    $rules = { copynumber => [ 2 ] };
+    $rules = { copynumber => [2] };
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
     is(
@@ -1746,7 +1930,7 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     );
 
     is(
-        $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
+        $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->count,
         3,
         'No rules passed, hidelostitems set, patron exception changes nothing'
     );
@@ -1760,10 +1944,11 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
 
     my $biblio2 = $builder->build_sample_biblio;
     $rules = { biblionumber => [ $biblio2->biblionumber ] };
-    my $prefetched = $biblio->items->search({},{ prefetch => ['branchtransfers','reserves'] })->filter_by_visible_in_opac;
-    ok( $prefetched->next, "Can retrieve object when prefetching and hiding on a duplicated column");
+    my $prefetched =
+        $biblio->items->search( {}, { prefetch => [ 'branchtransfers', 'reserves' ] } )->filter_by_visible_in_opac;
+    ok( $prefetched->next, "Can retrieve object when prefetching and hiding on a duplicated column" );
 
-    $rules = { withdrawn => [ 1, 2 ], copynumber => [ 2 ] };
+    $rules = { withdrawn => [ 1, 2 ], copynumber => [2] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         2,
@@ -1771,49 +1956,47 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     );
 
     is(
-        $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
+        $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->count,
         3,
         'hidelostitems set, rules on withdrawn but patron override passed'
     );
 
-    $rules = { itype => [ $itype_1->itemtype ], copynumber => [ 2 ] };
+    $rules = { itype => [ $itype_1->itemtype ], copynumber => [2] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         2,
         'Rules on itype, hidelostitems set'
     );
 
-    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ], copynumber => [ 2 ] };
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ], copynumber => [2] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         1,
         'Rules on itype and withdrawn, hidelostitems set'
     );
     is(
-        $biblio->items->filter_by_visible_in_opac
-          ->next->itemnumber,
+        $biblio->items->filter_by_visible_in_opac->next->itemnumber,
         $item_4->itemnumber,
         'The right item is returned'
     );
 
-    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ], copynumber => [ 2 ] };
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ], copynumber => [2] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         1,
         'Rules on itype and withdrawn, hidelostitems set'
     );
     is(
-        $biblio->items->filter_by_visible_in_opac
-          ->next->itemnumber,
+        $biblio->items->filter_by_visible_in_opac->next->itemnumber,
         $item_5->itemnumber,
         'The right item is returned'
     );
 
     # Make sure the warning on the about page will work
     $rules = { itemlost => ['AB'] };
-    my $c = Koha::Items->filter_by_visible_in_opac->count;
+    my $c        = Koha::Items->filter_by_visible_in_opac->count;
     my @warnings = C4::Context->dbh->selectrow_array('SHOW WARNINGS');
-    like( $warnings[2], qr/Truncated incorrect (DOUBLE|DECIMAL) value: 'AB'/);
+    like( $warnings[2], qr/Truncated incorrect (DOUBLE|DECIMAL) value: 'AB'/ );
 
     $schema->storage->txn_rollback;
 };
@@ -1826,6 +2009,7 @@ subtest 'filter_out_lost() tests' => sub {
 
     # have a fresh biblio
     my $biblio = $builder->build_sample_biblio;
+
     # have 3 items on that biblio
     my $item_1 = $builder->build_sample_item(
         {
@@ -1847,7 +2031,7 @@ subtest 'filter_out_lost() tests' => sub {
     );
 
     is( $biblio->items->filter_out_lost->next->itemnumber, $item_2->itemnumber, 'Right item returned' );
-    is( $biblio->items->filter_out_lost->count, 1, 'Only one item is not lost' );
+    is( $biblio->items->filter_out_lost->count,            1,                   'Only one item is not lost' );
 
     $schema->storage->txn_rollback;
 };
@@ -1860,16 +2044,16 @@ subtest 'move_to_biblio() tests' => sub {
 
     my $biblio1 = $builder->build_sample_biblio;
     my $biblio2 = $builder->build_sample_biblio;
-    my $item1 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
-    my $item2 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+    my $item1   = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
+    my $item2   = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
 
     $biblio1->items->move_to_biblio($biblio2);
 
     $item1->discard_changes;
     $item2->discard_changes;
 
-    is($item1->biblionumber, $biblio2->biblionumber, "Item 1 moved");
-    is($item2->biblionumber, $biblio2->biblionumber, "Item 2 moved");
+    is( $item1->biblionumber, $biblio2->biblionumber, "Item 1 moved" );
+    is( $item2->biblionumber, $biblio2->biblionumber, "Item 2 moved" );
 
     $schema->storage->txn_rollback;
 
@@ -1881,56 +2065,59 @@ subtest 'search_ordered' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library_a = $builder->build_object(
-        { class => 'Koha::Libraries', value => { branchname => 'TEST_A' } } );
-    my $library_z = $builder->build_object(
-        { class => 'Koha::Libraries', value => { branchname => 'TEST_Z' } } );
-    my $biblio = $builder->build_sample_biblio( { serial => 0 } );
-    my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
-    my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
-    my $item3 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => 'TEST_A' } } );
+    my $library_z = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => 'TEST_Z' } } );
+    my $biblio    = $builder->build_sample_biblio( { serial => 0 } );
+    my $item1     = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item2     = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item3     = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    { # Is not a serial
+    {    # Is not a serial
 
         # order_by homebranch.branchname
         $item1->discard_changes->update( { homebranch => $library_z->branchcode } );
         $item2->discard_changes->update( { homebranch => $library_a->branchcode } );
         $item3->discard_changes->update( { homebranch => $library_z->branchcode } );
-        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+        is_deeply(
+            [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
             [ $item2->itemnumber, $item1->itemnumber, $item3->itemnumber ],
-            "not a serial - order by homebranch" );
+            "not a serial - order by homebranch"
+        );
 
         # order_by me.enumchron
         $biblio->items->update( { homebranch => $library_a->branchcode } );
         $item1->discard_changes->update( { enumchron => 'cc' } );
         $item2->discard_changes->update( { enumchron => 'bb' } );
         $item3->discard_changes->update( { enumchron => 'aa' } );
-        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+        is_deeply(
+            [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
             [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ],
-            "not a serial - order by enumchron" );
+            "not a serial - order by enumchron"
+        );
 
         # order_by -desc => 'me.dateaccessioned'
         $biblio->items->update( { enumchron => undef } );
         $item1->discard_changes->update( { dateaccessioned => '2022-08-19' } );
         $item2->discard_changes->update( { dateaccessioned => '2022-07-19' } );
         $item3->discard_changes->update( { dateaccessioned => '2022-09-19' } );
-        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+        is_deeply(
+            [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
             [ $item3->itemnumber, $item1->itemnumber, $item2->itemnumber ],
-            "not a serial - order by date accessioned desc" );
+            "not a serial - order by date accessioned desc"
+        );
     }
 
     {    # Is a serial
 
-        my $sub_freq = $builder->build( { source => 'SubscriptionFrequency' } );
-        my $sub_np =
-          $builder->build( { source => 'SubscriptionNumberpattern' } );
+        my $sub_freq     = $builder->build( { source => 'SubscriptionFrequency' } );
+        my $sub_np       = $builder->build( { source => 'SubscriptionNumberpattern' } );
         my $subscription = $builder->build_object(
             {
                 class => 'Koha::Subscriptions',
                 value => {
-                    biblionumber  => $biblio->biblionumber,
-                    periodicity   => $sub_freq->{id},
-                    numberpattern => $sub_np->{id},
+                    biblionumber          => $biblio->biblionumber,
+                    periodicity           => $sub_freq->{id},
+                    numberpattern         => $sub_np->{id},
                     published_on_template => "[% publisheddatetext %] [% biblionumber %]",
                 }
             }
@@ -1946,20 +2133,23 @@ subtest 'search_ordered' => sub {
         );
 
         $biblio->update( { serial => 1 } );
-        my $serialid1 =
-          C4::Serials::NewIssue( "serialseq", $subscription->subscriptionid,
+        my $serialid1 = C4::Serials::NewIssue(
+            "serialseq",           $subscription->subscriptionid,
             $biblio->biblionumber, 1, undef, undef, "publisheddatetext",
-            "notes", "routingnotes" );
+            "notes",               "routingnotes"
+        );
         C4::Serials::AddItem2Serial( $serialid1, $item1->itemnumber );
-        my $serialid2 =
-          C4::Serials::NewIssue( "serialseq", $subscription->subscriptionid,
+        my $serialid2 = C4::Serials::NewIssue(
+            "serialseq",           $subscription->subscriptionid,
             $biblio->biblionumber, 1, undef, undef, "publisheddatetext",
-            "notes", "routingnotes" );
+            "notes",               "routingnotes"
+        );
         C4::Serials::AddItem2Serial( $serialid2, $item2->itemnumber );
-        my $serialid3 =
-          C4::Serials::NewIssue( "serialseq", $subscription->subscriptionid,
+        my $serialid3 = C4::Serials::NewIssue(
+            "serialseq",           $subscription->subscriptionid,
             $biblio->biblionumber, 1, undef, undef, "publisheddatetext",
-            "notes", "routingnotes" );
+            "notes",               "routingnotes"
+        );
         C4::Serials::AddItem2Serial( $serialid3, $item3->itemnumber );
         my $serial1 = Koha::Serials->find($serialid1);
         my $serial2 = Koha::Serials->find($serialid2);
@@ -1976,19 +2166,30 @@ subtest 'search_ordered' => sub {
         );
 
         # order_by me.enumchron
-        $serial1->discard_changes->update({ publisheddate => '2022-08-19' });
-        $serial2->discard_changes->update({ publisheddate => '2022-08-19' });
-        $serial3->discard_changes->update({ publisheddate => '2022-08-19' });
+        $serial1->discard_changes->update( { publisheddate => '2022-08-19' } );
+        $serial2->discard_changes->update( { publisheddate => '2022-08-19' } );
+        $serial3->discard_changes->update( { publisheddate => '2022-08-19' } );
         $item1->discard_changes->update( { enumchron => 'cc' } );
         $item2->discard_changes->update( { enumchron => 'bb' } );
         $item3->discard_changes->update( { enumchron => 'aa' } );
-        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+        is_deeply(
+            [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
             [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ],
-            "serial - order by enumchron" );
+            "serial - order by enumchron"
+        );
 
-        is( $serial1->publisheddatetext, "publisheddatetext " . $biblio->biblionumber, "Column publisheddatetext rendered correctly from template for serial1" );
-        is( $serial2->publisheddatetext, "publisheddatetext " . $biblio->biblionumber, "Column publisheddatetext rendered correctly from template for serial2" );
-        is( $serial3->publisheddatetext, "publisheddatetext " . $biblio->biblionumber, "Column publisheddatetext rendered correctly from template for serial3" );
+        is(
+            $serial1->publisheddatetext, "publisheddatetext " . $biblio->biblionumber,
+            "Column publisheddatetext rendered correctly from template for serial1"
+        );
+        is(
+            $serial2->publisheddatetext, "publisheddatetext " . $biblio->biblionumber,
+            "Column publisheddatetext rendered correctly from template for serial2"
+        );
+        is(
+            $serial3->publisheddatetext, "publisheddatetext " . $biblio->biblionumber,
+            "Column publisheddatetext rendered correctly from template for serial3"
+        );
 
     }
 
@@ -2025,8 +2226,8 @@ subtest 'filter_by_for_hold' => sub {
     );
 
     my $biblio  = $builder->build_sample_biblio;
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    t::lib::Mocks::mock_preference('IndependentBranches', 0); # more robust tests
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );    # more robust tests
     is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
     $builder->build_sample_item(
         { biblionumber => $biblio->biblionumber, notforloan => 0, itype => $not_holdable_itemtype } );
@@ -2138,10 +2339,10 @@ subtest 'filter_by_for_hold' => sub {
     );
     Koha::CirculationRules->set_rule(
         {
-            branchcode   => undef,
-            itemtype     => $not_holdable_itemtype,
-            rule_name    => 'holdallowed',
-            rule_value   => 'not_allowed',
+            branchcode => undef,
+            itemtype   => $not_holdable_itemtype,
+            rule_name  => 'holdallowed',
+            rule_value => 'not_allowed',
         }
     );
     is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - holdallowed=not_allowed' );
@@ -2149,10 +2350,10 @@ subtest 'filter_by_for_hold' => sub {
     # Remove rule, test notforloan on itemtype
     Koha::CirculationRules->set_rule(
         {
-            branchcode   => undef,
-            itemtype     => $not_holdable_itemtype,
-            rule_name    => 'holdallowed',
-            rule_value   => undef,
+            branchcode => undef,
+            itemtype   => $not_holdable_itemtype,
+            rule_name  => 'holdallowed',
+            rule_value => undef,
         }
     );
     is( $biblio->items->filter_by_for_hold->count, 7, '7 items for hold - rule deleted' );
@@ -2166,11 +2367,11 @@ subtest 'filter_by_for_hold' => sub {
         is( $biblio->items->filter_by_for_hold->count, 2, '2 items for hold, filtered by IndependentBranches' );
     }
 
-    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
     $biblio->biblioitem->itemtype($not_holdable_itemtype)->store;
     is( $biblio->items->filter_by_for_hold->count, 0, '0 item-level_itypes=0' );
 
-    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 
     $schema->storage->txn_rollback;
 };

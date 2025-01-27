@@ -19,7 +19,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Try::Tiny;
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::DateUtils qw( dt_from_string );
@@ -28,9 +28,9 @@ use Koha::CurbsidePickupPolicies;
 use Koha::Libraries;
 use Koha::Patrons;
 
-my $input       = CGI->new;
-my $op          = $input->param('op') || 'list';
-my $tab         = $input->param('tab');
+my $input         = CGI->new;
+my $op            = $input->param('op') || 'list';
+my $tab           = $input->param('tab');
 my $auto_refresh  = $input->param('auto_refresh');
 my $refresh_delay = $input->param('refresh_delay');
 my @messages;
@@ -45,7 +45,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $branchcode = C4::Context->userenv()->{'branch'};
-my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
+my $libraries  = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
 if ( $op eq 'find-patron' ) {
     my $borrowernumber = $input->param('borrowernumber');
 
@@ -53,19 +53,18 @@ if ( $op eq 'find-patron' ) {
 
     my $existing_curbside_pickups = Koha::CurbsidePickups->search(
         {
-            branchcode                => $branchcode,
-            borrowernumber            => $patron->id,
-            delivered_datetime        => undef,
+            branchcode         => $branchcode,
+            borrowernumber     => $patron->id,
+            delivered_datetime => undef,
         }
     )->filter_by_scheduled_today;
 
     $tab = 'schedule-pickup_panel';
     $template->param(
-        patron      => $patron,
+        patron                    => $patron,
         existing_curbside_pickups => $existing_curbside_pickups,
     );
-}
-elsif ( $op eq 'cud-create-pickup' ) {
+} elsif ( $op eq 'cud-create-pickup' ) {
     my $borrowernumber            = $input->param('borrowernumber');
     my $scheduled_pickup_datetime = $input->param('pickup_time');
     my $notes                     = $input->param('notes');
@@ -83,8 +82,8 @@ elsif ( $op eq 'cud-create-pickup' ) {
     } catch {
         if ( $_->isa('Koha::Exceptions::CurbsidePickup::NotEnabled') ) {
             push @messages, {
-                type   => 'error',
-                code   => 'not_enabled',
+                type => 'error',
+                code => 'not_enabled',
             };
         } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::LibraryIsClosed') ) {
             push @messages, {
@@ -94,8 +93,8 @@ elsif ( $op eq 'cud-create-pickup' ) {
             };
         } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::NoWaitingHolds') ) {
             push @messages, {
-                type   => 'error',
-                code   => 'no_waiting_holds',
+                type => 'error',
+                code => 'no_waiting_holds',
             };
         } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::TooManyPickups') ) {
             push @messages, {
@@ -105,64 +104,59 @@ elsif ( $op eq 'cud-create-pickup' ) {
             };
         } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::NoMatchingSlots') ) {
             push @messages, {
-                type   => 'error',
-                code   => 'no_matching_slots',
+                type => 'error',
+                code => 'no_matching_slots',
             };
         } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::NoMorePickupsAvailable') ) {
             push @messages, {
-                type   => 'error',
-                code   => 'no_more_pickups_available',
+                type => 'error',
+                code => 'no_more_pickups_available',
             };
         } else {
             warn $_;
             push @messages, {
-                type   => 'error',
-                code   => 'something_wrong_happened',
+                type => 'error',
+                code => 'something_wrong_happened',
             };
         }
     }
-}
-elsif ( $op eq 'cud-cancel' ) {
+} elsif ( $op eq 'cud-cancel' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->delete() if $curbside_pickup;
-}
-elsif ( $op eq 'cud-mark-as-staged' ) {
+} elsif ( $op eq 'cud-mark-as-staged' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->mark_as_staged if $curbside_pickup;
-}
-elsif ( $op eq 'cud-mark-as-unstaged' ) {
+} elsif ( $op eq 'cud-mark-as-unstaged' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->mark_as_unstaged if $curbside_pickup;
-}
-elsif ( $op eq 'cud-mark-patron-has-arrived' ) {
+} elsif ( $op eq 'cud-mark-patron-has-arrived' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->mark_patron_has_arrived if $curbside_pickup;
-}
-elsif ( $op eq 'cud-mark-as-delivered' ) {
-    my $id = $input->param('id');
+} elsif ( $op eq 'cud-mark-as-delivered' ) {
+    my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
+
     # FIXME Add a try-catch here
     $curbside_pickup->mark_as_delivered if $curbside_pickup;
 }
 
 $template->param(
-    messages => \@messages,
-    op       => $op,
-    tab      => $tab,
-    auto_refresh  => $auto_refresh,
-    refresh_delay => $refresh_delay,
-    policy => Koha::CurbsidePickupPolicies->find({ branchcode => $branchcode }),
+    messages         => \@messages,
+    op               => $op,
+    tab              => $tab,
+    auto_refresh     => $auto_refresh,
+    refresh_delay    => $refresh_delay,
+    policy           => Koha::CurbsidePickupPolicies->find( { branchcode => $branchcode } ),
     curbside_pickups => Koha::CurbsidePickups->search(
         {
             branchcode => $branchcode,
         },
         { order_by => [ { -desc => 'delivered_datetime' }, 'scheduled_pickup_datetime' ], }
-      )->filter_by_scheduled_today,
+    )->filter_by_scheduled_today,
 );
-
 
 output_html_with_http_headers $input, $cookie, $template->output;

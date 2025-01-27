@@ -24,10 +24,10 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Barcodes::ValueBuilder;
-use C4::Biblio qw( GetMarcFromKohaField );
+use C4::Biblio      qw( GetMarcFromKohaField );
 use Koha::DateUtils qw( dt_from_string );
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
 my $input = CGI->new;
 my ($auth_status) =
@@ -38,42 +38,42 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params) = @_;
     my $function_name = $params->{id};
     my %args;
 
     my $dbh = $params->{dbh};
     $args{dbh} = $dbh;
 
-# find today's date
-    ($args{year}, $args{mon}, $args{day}) = split('-', dt_from_string()->ymd());
-    ($args{tag},$args{subfield})       =  GetMarcFromKohaField( "items.barcode" );
+    # find today's date
+    ( $args{year}, $args{mon}, $args{day} ) = split( '-', dt_from_string()->ymd() );
+    ( $args{tag}, $args{subfield} ) = GetMarcFromKohaField("items.barcode");
 
     my $nextnum;
     my $scr;
     my $autoBarcodeType = C4::Context->preference("autoBarcode");
-    if ((not $autoBarcodeType) or $autoBarcodeType eq 'OFF') {
-# don't return a value unless we have the appropriate syspref set
+    if ( ( not $autoBarcodeType ) or $autoBarcodeType eq 'OFF' ) {
+
+        # don't return a value unless we have the appropriate syspref set
         return q|<script></script>|;
     }
-    if ($autoBarcodeType eq 'annual') {
-        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
-    }
-    elsif ($autoBarcodeType eq 'incremental') {
-        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
-    }
-    elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
-        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
+    if ( $autoBarcodeType eq 'annual' ) {
+        ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::annual::get_barcode( \%args );
+    } elsif ( $autoBarcodeType eq 'incremental' ) {
+        ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::incremental::get_barcode( \%args );
+    } elsif ( $autoBarcodeType eq 'hbyymmincr' )
+    { # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
+        ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode( \%args );
     }
 
-# default js body (if not filled by hbyymmincr)
+    # default js body (if not filled by hbyymmincr)
     $scr or $scr = <<END_OF_JS;
     if (\$('#' + id).val() == '') {
         \$('#' + id).val('$nextnum');
     }
 END_OF_JS
 
-    my $js  = <<END_OF_JS;
+    my $js = <<END_OF_JS;
     <script>
 
     function Click$function_name(event) {

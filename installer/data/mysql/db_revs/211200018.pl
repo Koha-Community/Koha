@@ -1,16 +1,17 @@
 use Modern::Perl;
 
 return {
-    bug_number => "19532",
+    bug_number  => "19532",
     description => "Add Recalls",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        unless( TableExists('recalls') ) {
+        unless ( TableExists('recalls') ) {
 
             # Add recalls table
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 CREATE TABLE recalls (
                     recall_id int(11) NOT NULL auto_increment,
                     borrowernumber int(11) NOT NULL DEFAULT 0,
@@ -37,18 +38,22 @@ return {
                     CONSTRAINT recalls_ibfk_3 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT recalls_ibfk_4 FOREIGN KEY (branchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            });
+            }
+            );
 
             # Add RecallsLog, RecallsMaxPickUpDelay and UseRecalls system preferences
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
                 ('RecallsLog','1',NULL,'If ON, log create/cancel/expire/fulfill actions on recalls','YesNo'),
                 ('RecallsMaxPickUpDelay','7',NULL,'Define the maximum time a recall can be awaiting pickup','Integer'),
                 ('UseRecalls','0',NULL,'Enable or disable recalls','YesNo')
-            });
+            }
+            );
 
             # Add recalls notices: RETURN_RECALLED_ITEM, PICKUP_RECALLED_ITEM, RECALL_REQUESTER_DET
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
                 ('circulation','RETURN_RECALLED_ITEM','','Notification to return a recalled item','0','Notification to return a recalled item','Date: <<today>>
 
@@ -78,27 +83,36 @@ Barcode: <<items.barcode>>
 Callnumber: <<items.itemcallnumber>>
 Waiting since: <<recalls.waitingdate>>
 Notes: <<recalls.recallnotes>>', 'print')
-            });
+            }
+            );
 
             # Add recalls user flag and manage_recalls user permission
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (27, 'recalls', 'Recalls', 0)
-            });
-            $dbh->do(q{
+            }
+            );
+            $dbh->do(
+                q{
                 INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (27, 'manage_recalls', 'Manage recalls for patrons')
-            });
+            }
+            );
 
             # Add Recall ENUM option to branchtransfers.reason
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 ALTER TABLE branchtransfers MODIFY COLUMN reason
                 ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve', 'TransferCancellation', 'Recall')
-            });
+            }
+            );
 
             # Add CancelRecall ENUM option to branchtransfers.cancellation_reason
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 ALTER TABLE branchtransfers MODIFY COLUMN cancellation_reason
                 ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve', 'ItemLost', 'WrongTransfer', 'CancelRecall')
-            });
+            }
+            );
 
         }
     },

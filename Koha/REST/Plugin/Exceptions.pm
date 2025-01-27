@@ -57,7 +57,7 @@ sub register {
             my $req    = $c->req;
             my $method = $req->method;
             my $path   = $req->url->to_abs->path;
-            my $type = "";
+            my $type   = "";
 
             if ( blessed $exception && ref($exception) eq 'Koha::Exceptions::REST::Query::InvalidOperator' ) {
                 return $c->render(
@@ -78,7 +78,7 @@ sub register {
 
             my $message = "$method $path: unhandled exception $type\<\<$exception_string\>\>";
 
-            $c->app->log->error( "$message" );
+            $c->app->log->error("$message");
 
             $c->render(
                 status => 500,

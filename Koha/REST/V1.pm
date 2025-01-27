@@ -27,7 +27,7 @@ use Mojolicious::Plugin::OAuth2;
 use JSON::Validator::Schema::OpenAPIv2;
 
 use Try::Tiny qw( catch try );
-use JSON qw( decode_json );
+use JSON      qw( decode_json );
 
 =head1 NAME
 
@@ -46,7 +46,7 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
-    my $logger = Koha::Logger->get({ interface => 'api' });
+    my $logger = Koha::Logger->get( { interface => 'api' } );
     $self->log($logger);
 
     $self->hook(
@@ -57,14 +57,15 @@ sub startup {
             $c->req->url->base->path('/');
 
             # Handle CORS
-            $c->res->headers->header( 'Access-Control-Allow-Origin' =>
-                  C4::Context->preference('AccessControlAllowOrigin') )
-              if C4::Context->preference('AccessControlAllowOrigin');
+            $c->res->headers->header(
+                'Access-Control-Allow-Origin' => C4::Context->preference('AccessControlAllowOrigin') )
+                if C4::Context->preference('AccessControlAllowOrigin');
         }
     );
 
     # Force charset=utf8 in Content-Type header for JSON responses
-    $self->types->type( json    => 'application/json; charset=utf8' );
+    $self->types->type( json => 'application/json; charset=utf8' );
+
     # MARC-related types
     $self->types->type( marcxml => 'application/marcxml+xml' );
     $self->types->type( mij     => 'application/marc-in-json' );
@@ -72,22 +73,22 @@ sub startup {
 
     my $secret_passphrase = C4::Context->config('api_secret_passphrase');
     if ($secret_passphrase) {
-        $self->secrets([$secret_passphrase]);
+        $self->secrets( [$secret_passphrase] );
     }
 
     my $spec_file = $self->home->rel_file("api/v1/swagger/swagger_bundle.json");
-    if (!-f $spec_file) {
+    if ( !-f $spec_file ) {
         $spec_file = $self->home->rel_file("api/v1/swagger/swagger.yaml");
     }
 
-    push @{$self->routes->namespaces}, 'Koha::Plugin';
+    push @{ $self->routes->namespaces }, 'Koha::Plugin';
 
     # Try to load and merge all schemas first and validate the result just once.
     try {
 
         my $schema = JSON::Validator::Schema::OpenAPIv2->new;
 
-        $schema->resolve( $spec_file );
+        $schema->resolve($spec_file);
 
         my $spec = $schema->bundle->data;
 
@@ -96,7 +97,7 @@ sub startup {
                 spec     => $spec,
                 validate => 0,
             }
-        ) unless C4::Context->needs_install; # load only if Koha is installed
+        ) unless C4::Context->needs_install;    # load only if Koha is installed
 
         $self->plugin(
             OpenAPI => {
@@ -106,18 +107,18 @@ sub startup {
         );
 
         $self->plugin('RenderFile');
-    }
-    catch {
+    } catch {
+
         # Validation of the complete spec failed. Resort to validation one-by-one
         # to catch bad ones.
 
         # JSON::Validator uses confess, so trim call stack from the message.
-        $self->app->log->error("Warning: Could not load REST API spec bundle: " . $_);
+        $self->app->log->error( "Warning: Could not load REST API spec bundle: " . $_ );
 
         try {
 
             my $schema = JSON::Validator::Schema::OpenAPIv2->new;
-            $schema->resolve( $spec_file );
+            $schema->resolve($spec_file);
 
             my $spec = $schema->bundle->data;
 
@@ -126,7 +127,7 @@ sub startup {
                     spec     => $spec,
                     validate => 1
                 }
-            )  unless C4::Context->needs_install; # load only if Koha is installed
+            ) unless C4::Context->needs_install;    # load only if Koha is installed
 
             $self->plugin(
                 OpenAPI => {
@@ -134,10 +135,10 @@ sub startup {
                     route => $self->routes->under('/api/v1')->to('Auth#under'),
                 }
             );
-        }
-        catch {
+        } catch {
+
             # JSON::Validator uses confess, so trim call stack from the message.
-            $self->app->log->error("Warning: Could not load REST API spec bundle: " . $_);
+            $self->app->log->error( "Warning: Could not load REST API spec bundle: " . $_ );
         };
     };
 

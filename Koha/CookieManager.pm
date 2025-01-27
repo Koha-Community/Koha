@@ -19,6 +19,7 @@ package Koha::CookieManager;
 
 use Modern::Perl;
 use CGI::Cookie;
+
 # use Data::Dumper qw( Dumper );
 # use List::MoreUtils qw( uniq );
 
@@ -63,11 +64,11 @@ etc. And could serve to register all our cookies in a central location.
 
 sub new {
     my ( $class, $params ) = @_;
-    my $self = bless $params//{}, $class;
-    my $denied = C4::Context->config(DENY_LIST_VAR) || []; # expecting scalar or arrayref
-    $denied = [ $denied ] if ref($denied) eq q{};
+    my $self   = bless $params // {}, $class;
+    my $denied = C4::Context->config(DENY_LIST_VAR) || [];    # expecting scalar or arrayref
+    $denied                 = [$denied] if ref($denied) eq q{};
     $self->{_remove_unless} = { map { $_ => 1 } @$denied };
-    $self->{_secure} = C4::Context->https_enabled;
+    $self->{_secure}        = C4::Context->https_enabled;
     return $self;
 }
 
@@ -89,43 +90,45 @@ sub clear_unless {
     my ( $self, @cookies ) = @_;
     my @rv;
     my $seen = {};
-    foreach my $c ( @cookies ) {
+    foreach my $c (@cookies) {
         my $name;
         my $type = ref($c);
-        if( $type eq 'CGI::Cookie' ) {
+        if ( $type eq 'CGI::Cookie' ) {
             $name = $c->name;
-        } elsif( $type ) { # not expected: ignore
+        } elsif ($type) {    # not expected: ignore
             next;
         } else {
             $name = $c;
         }
         next if !$name;
 
-        if( $self->_should_be_cleared($name) ) {
+        if ( $self->_should_be_cleared($name) ) {
             next if $seen->{$name};
             push @rv, CGI::Cookie->new(
+
                 # -expires explicitly omitted to create shortlived 'session' cookie
                 # -HttpOnly explicitly set to 0: not really needed here for the
                 # cleared httponly cookies, while the js cookies should be 0
                 -name => $name, -value => q{}, -HttpOnly => 0,
                 $self->{_secure} ? ( -secure => 1 ) : (),
             );
-            $seen->{$name} = 1; # prevent duplicates
-        } elsif( $type eq 'CGI::Cookie' ) { # keep the last occurrence
+            $seen->{$name} = 1;    # prevent duplicates
+        } elsif ( $type eq 'CGI::Cookie' ) {    # keep the last occurrence
             @rv = @{ $self->replace_in_list( \@rv, $c ) };
         }
     }
     return \@rv;
 }
 
-sub _should_be_cleared { # when it is not on the deny list in koha-conf
+sub _should_be_cleared {    # when it is not on the deny list in koha-conf
     my ( $self, $name ) = @_;
 
-    return if $self->{_remove_unless}->{$name}; # exact match
+    return if $self->{_remove_unless}->{$name};    # exact match
 
     # Now try the entries as regex
-    foreach my $k ( keys %{$self->{_remove_unless}} ) {
+    foreach my $k ( keys %{ $self->{_remove_unless} } ) {
         my $reg = $self->{_remove_unless}->{$k};
+
         # The entry in koha-conf should match the complete string
         # So adding a ^ and $
         return if $name =~ qr/^${k}$/;
@@ -151,7 +154,7 @@ sub replace_in_list {
     my $name = ref($cookie) eq 'CGI::Cookie' ? $cookie->name : q{};
 
     my @result;
-    foreach my $c ( @$list ) {
+    foreach my $c (@$list) {
         next if ref($c) ne 'CGI::Cookie';
         push @result, $c if !$name or $c->name ne $name;
     }

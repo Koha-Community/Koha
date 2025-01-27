@@ -62,14 +62,14 @@ use Koha::SearchEngine::Elasticsearch;
 
 use YAML::XS;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 my $type = '';
 my $man;
 
 GetOptions(
-    't|type=s'  => \$type,
-    'man'       => \$man,
+    't|type=s' => \$type,
+    'man'      => \$man,
 );
 
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
@@ -79,7 +79,7 @@ if ( $type && $type !~ /^(marc21|unimarc)$/ ) {
     pod2usage(1);
 }
 
-my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings( $type );
+my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings($type);
 
 binmode STDOUT, ":encoding(UTF-8)";
 print Encode::decode_utf8( YAML::XS::Dump($mappings) );

@@ -36,22 +36,17 @@ Controller function that handles listing Koha::AdvancedEditorMacro objects
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c      = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
     return try {
-        my $macros_set = Koha::AdvancedEditorMacros->search(
-            {
-                -or =>
-                  { shared => 1, borrowernumber => $patron->borrowernumber }
-            }
-        );
-        my $macros = $c->objects->search( $macros_set );
+        my $macros_set =
+            Koha::AdvancedEditorMacros->search( { -or => { shared => 1, borrowernumber => $patron->borrowernumber } } );
+        my $macros = $c->objects->search($macros_set);
         return $c->render(
             status  => 200,
             openapi => $macros
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -64,22 +59,21 @@ Controller function that handles retrieving a single Koha::AdvancedEditorMacro
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c      = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
     my $macro  = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
 
     return $c->render_resource_not_found("Macro")
         unless $macro;
 
-    if( $macro->shared ){
-        return $c->render( status => 403, openapi => {
-            error => "This macro is shared, you must access it via advanced_editor/macros/shared"
-        });
+    if ( $macro->shared ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "This macro is shared, you must access it via advanced_editor/macros/shared" }
+        );
     }
-    if( $macro->borrowernumber != $patron->borrowernumber ){
-        return $c->render( status => 403, openapi => {
-            error => "You do not have permission to access this macro"
-        });
+    if ( $macro->borrowernumber != $patron->borrowernumber ) {
+        return $c->render( status => 403, openapi => { error => "You do not have permission to access this macro" } );
     }
 
     return $c->render( status => 200, openapi => $c->objects->to_api($macro) );
@@ -92,19 +86,22 @@ Controller function that handles retrieving a single Koha::AdvancedEditorMacro
 =cut
 
 sub get_shared {
-    my $c = shift->openapi->valid_input or return;
+    my $c      = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
-    my $macro = Koha::AdvancedEditorMacros->find({
-        id => $c->param('advancededitormacro_id'),
-    });
+    my $macro  = Koha::AdvancedEditorMacros->find(
+        {
+            id => $c->param('advancededitormacro_id'),
+        }
+    );
 
     return $c->render_resource_not_found("Macro")
         unless $macro;
 
-    unless( $macro->shared ){
-        return $c->render( status => 403, openapi => {
-            error => "This macro is not shared, you must access it via advanced_editor/macros"
-        });
+    unless ( $macro->shared ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "This macro is not shared, you must access it via advanced_editor/macros" }
+        );
     }
     return $c->render( status => 200, openapi => $c->objects->to_api($macro) );
 }
@@ -120,21 +117,22 @@ sub add {
 
     my $body = $c->req->json;
 
-    if( defined $body->{shared} && $body->{shared} == 1 ){
-        return $c->render( status  => 403,
-                           openapi => { error => "To create shared macros you must use advancededitor/shared" } );
+    if ( defined $body->{shared} && $body->{shared} == 1 ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "To create shared macros you must use advancededitor/shared" }
+        );
     }
 
     return try {
-        my $macro = Koha::AdvancedEditorMacro->new_from_api( $body );
+        my $macro = Koha::AdvancedEditorMacro->new_from_api($body);
         $macro->store->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($macro),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -150,20 +148,21 @@ sub add_shared {
 
     my $body = $c->req->json;
 
-    unless( defined $body->{shared} && $body->{shared} == 1 ){
-        return $c->render( status  => 403,
-                           openapi => { error => "To create private macros you must use advancededitor" } );
+    unless ( defined $body->{shared} && $body->{shared} == 1 ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "To create private macros you must use advancededitor" }
+        );
     }
     return try {
-        my $macro = Koha::AdvancedEditorMacro->new_from_api( $body );
+        my $macro = Koha::AdvancedEditorMacro->new_from_api($body);
         $macro->store->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($macro),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -186,22 +185,26 @@ sub update {
 
     my $body = $c->req->json;
 
-    if( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ){
-        return $c->render( status  => 403,
-                           openapi => { error => "To update a macro as shared you must use the advanced_editor/macros/shared endpoint" } );
+    if ( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ) {
+        return $c->render(
+            status  => 403,
+            openapi =>
+                { error => "To update a macro as shared you must use the advanced_editor/macros/shared endpoint" }
+        );
     } else {
-        unless ( $macro->borrowernumber == $patron->borrowernumber ){
-            return $c->render( status  => 403,
-                               openapi => { error => "You can only edit macros you own" } );
+        unless ( $macro->borrowernumber == $patron->borrowernumber ) {
+            return $c->render(
+                status  => 403,
+                openapi => { error => "You can only edit macros you own" }
+            );
         }
     }
 
     return try {
-        $macro->set_from_api( $body );
+        $macro->set_from_api($body);
         $macro->store->discard_changes;
         return $c->render( status => 200, openapi => $c->objects->to_api($macro), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -222,17 +225,18 @@ sub update_shared {
     return $c->render_resource_not_found("Macro")
         unless $macro;
 
-    unless( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ){
-        return $c->render( status  => 403,
-                           openapi => { error => "You can only update shared macros using this endpoint" } );
+    unless ( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "You can only update shared macros using this endpoint" }
+        );
     }
 
     return try {
-        $macro->set_from_api( $body );
+        $macro->set_from_api($body);
         $macro->store->discard_changes;
         return $c->render( status => 200, openapi => $c->objects->to_api($macro), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -252,13 +256,17 @@ sub delete {
         unless $macro;
 
     my $patron = $c->stash('koha.user');
-    if( $macro->shared == 1 ){
-        return $c->render( status  => 403,
-                           openapi => { error => "You cannot delete shared macros using this endpoint" } );
+    if ( $macro->shared == 1 ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "You cannot delete shared macros using this endpoint" }
+        );
     } else {
-        unless ( $macro->borrowernumber == $patron->borrowernumber ){
-            return $c->render( status  => 403,
-                               openapi => { error => "You can only delete macros you own" } );
+        unless ( $macro->borrowernumber == $patron->borrowernumber ) {
+            return $c->render(
+                status  => 403,
+                openapi => { error => "You can only delete macros you own" }
+            );
         }
     }
 
@@ -284,9 +292,11 @@ sub delete_shared {
     return $c->render_resource_not_found("Macro")
         unless $macro;
 
-    unless( $macro->shared == 1 ){
-        return $c->render( status  => 403,
-                           openapi => { error => "You can only delete shared macros using this endpoint" } );
+    unless ( $macro->shared == 1 ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "You can only delete shared macros using this endpoint" }
+        );
     }
 
     return try {

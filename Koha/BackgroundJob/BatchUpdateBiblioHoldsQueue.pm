@@ -22,8 +22,7 @@ use Try::Tiny;
 use Koha::Biblios;
 use Koha::Exceptions;
 
-use C4::HoldsQueue
-  qw(load_branches_to_pull_from TransportCostMatrix update_queue_for_biblio);
+use C4::HoldsQueue qw(load_branches_to_pull_from TransportCostMatrix update_queue_for_biblio);
 
 use base 'Koha::BackgroundJob';
 
@@ -69,8 +68,8 @@ sub process {
     };
 
     my $use_transport_cost_matrix = C4::Context->preference("UseTransportCostMatrix");
-    my $transport_cost_matrix = $use_transport_cost_matrix ? TransportCostMatrix() : undef;
-    my $branches_to_use = load_branches_to_pull_from($use_transport_cost_matrix);
+    my $transport_cost_matrix     = $use_transport_cost_matrix ? TransportCostMatrix() : undef;
+    my $branches_to_use           = load_branches_to_pull_from($use_transport_cost_matrix);
 
     my @messages;
 
@@ -88,24 +87,23 @@ sub process {
                 }
             );
             push @messages,
-              {
-                type           => 'success',
-                code           => 'holds_queue_updated',
-                biblio_id      => $biblio_id,
-              };
+                {
+                type      => 'success',
+                code      => 'holds_queue_updated',
+                biblio_id => $biblio_id,
+                };
             $report->{total_success}++;
 
             $schema->storage->txn_commit;
-        }
-        catch {
+        } catch {
 
             push @messages,
-              {
+                {
                 type      => 'error',
                 code      => 'holds_queue_update_error',
                 biblio_id => $biblio_id,
                 error     => "$_",
-              };
+                };
 
             $schema->storage->txn_rollback;
         };
@@ -115,9 +113,9 @@ sub process {
 
     my $data = $self->decoded_data;
     $data->{messages} = \@messages;
-    $data->{report} = $report;
+    $data->{report}   = $report;
 
-    $self->finish( $data );
+    $self->finish($data);
 }
 
 =head3 enqueue
@@ -131,9 +129,8 @@ sub enqueue {
 
     return if !C4::Context->preference('RealTimeHoldsQueue');    #TODO Remove check from callers
 
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing biblio_ids parameter is mandatory")
-      unless exists $args->{biblio_ids};
+    Koha::Exceptions::MissingParameter->throw("Missing biblio_ids parameter is mandatory")
+        unless exists $args->{biblio_ids};
 
     my @biblio_ids = @{ $args->{biblio_ids} };
 

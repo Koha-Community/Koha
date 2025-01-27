@@ -22,7 +22,7 @@ use CGI qw ( -utf8 );
 
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user get_session haspermission );
+use C4::Auth   qw( get_template_and_user get_session haspermission );
 use Koha::BiblioFrameworks;
 use Koha::Cash::Registers;
 use Koha::Libraries;
@@ -30,26 +30,29 @@ use Koha::Desks;
 
 my $query = CGI->new();
 
-my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
-    template_name   => "circ/set-library.tt",
-    query           => $query,
-    type            => "intranet",
-    flagsrequired   => { catalogue => 1, },
-});
+my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name => "circ/set-library.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1, },
+    }
+);
 
 my $sessionID = $query->cookie("CGISESSID");
-my $session = get_session($sessionID);
+my $session   = get_session($sessionID);
 
 my $op                  = $query->param('op') || q{};
 my $branch              = $query->param('branch');
 my $desk_id             = $query->param('desk_id');
 my $register_id         = $query->param('register_id');
-my $userenv_branch      = C4::Context->userenv->{'branch'} || '';
-my $userenv_desk        = C4::Context->userenv->{'desk_id'} || '';
+my $userenv_branch      = C4::Context->userenv->{'branch'}      || '';
+my $userenv_desk        = C4::Context->userenv->{'desk_id'}     || '';
 my $userenv_register_id = C4::Context->userenv->{'register_id'} || '';
 my $updated;
 
 my $library = Koha::Libraries->find($branch);
+
 # $session lines here are doing the updating
 if (
        $op eq 'cud-set-library'
@@ -65,7 +68,7 @@ if (
         $updated = 1;
     }
 } else {
-    $branch = $userenv_branch;    # fallback value
+    $branch = $userenv_branch;                           # fallback value
 }
 
 if ( $desk_id && ( !$userenv_desk or $userenv_desk ne $desk_id ) ) {
@@ -95,19 +98,18 @@ if ( defined($register_id)
 
 $session->flush();
 
-
-my $referer =  $query->param('oldreferer') || $ENV{HTTP_REFERER} || '';
-if ( $updated ) {
-    print $query->redirect($referer || '/cgi-bin/koha/mainpage.pl');
+my $referer = $query->param('oldreferer') || $ENV{HTTP_REFERER} || '';
+if ($updated) {
+    print $query->redirect( $referer || '/cgi-bin/koha/mainpage.pl' );
 }
 
 $template->param(
-    referer     => $referer,
-    branch      => $branch,
-    desk_id     => $desk_id,
+    referer => $referer,
+    branch  => $branch,
+    desk_id => $desk_id,
 );
 
 # Checking if there is a Fast Cataloging Framework
-$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
 output_html_with_http_headers $query, $cookie, $template->output;

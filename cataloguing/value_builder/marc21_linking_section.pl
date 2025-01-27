@@ -21,11 +21,11 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Search qw( new_record_from_zebra );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use C4::Biblio qw( TransformMarcToKoha );
@@ -37,7 +37,7 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
 my $builder = sub {
-    my ( $params ) = @_;
+    my ($params)      = @_;
     my $function_name = $params->{id};
     my $res           = "
   <script>
@@ -53,10 +53,11 @@ my $builder = sub {
 };
 
 my $launcher = sub {
-    my ( $params ) = @_;
-    my $query = $params->{cgi};
-    my $dbh       = C4::Context->dbh;
-    my $op        = $query->param('op');
+    my ($params) = @_;
+    my $query    = $params->{cgi};
+    my $dbh      = C4::Context->dbh;
+    my $op       = $query->param('op');
+
     # -- op could be equal to
     # * fillinput
     # * do_search
@@ -74,10 +75,11 @@ my $launcher = sub {
 
         # open template
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-            {   template_name   => "cataloguing/value_builder/marc21_linking_section.tt",
-                query           => $query,
-                type            => "intranet",
-                flagsrequired   => { editcatalogue => '*' },
+            {
+                template_name => "cataloguing/value_builder/marc21_linking_section.tt",
+                query         => $query,
+                type          => "intranet",
+                flagsrequired => { editcatalogue => '*' },
             }
         );
 
@@ -121,9 +123,9 @@ my $launcher = sub {
         my $subfield_value_z;
 
         $subfield_value_x = $marcrecord->field('022')->subfield("a")
-          if ( $marcrecord->field('022') );
+            if ( $marcrecord->field('022') );
         $subfield_value_z = $marcrecord->field('020')->subfield("a")
-          if ( $marcrecord->field('020') );
+            if ( $marcrecord->field('020') );
 
         # escape the 's
         $subfield_value_9 =~ s/'/\\'/g;
@@ -172,13 +174,13 @@ my $launcher = sub {
         my $orderby;
         my $op = 'AND';
 
-        my $searcher = Koha::SearchEngine::Search->new(
-            { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+        my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
         $search = 'kw:' . $search . " $op mc-itemtype:" . $itype if $itype;
-        my ( $errors, $results, $total_hits ) =
-          $searcher->simple_search_compat( $search,
+        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat(
+            $search,
             $startfrom * $resultsperpage,
-            $resultsperpage );
+            $resultsperpage
+        );
         if ( defined $errors ) {
             $results = [];
         }
@@ -187,9 +189,10 @@ my $launcher = sub {
         #        warn " biblio count : ".$total;
 
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-            {   template_name   => "cataloguing/value_builder/marc21_linking_section.tt",
-                query           => $query,
-                type            => 'intranet',
+            {
+                template_name => "cataloguing/value_builder/marc21_linking_section.tt",
+                query         => $query,
+                type          => 'intranet',
             }
         );
 
@@ -203,8 +206,8 @@ my $launcher = sub {
         my @arrayresults;
         my @field_data = ($search);
         for ( my $i = 0 ; $i < $total && $i < $resultsperpage ; $i++ ) {
-            my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
-            my $rechash = TransformMarcToKoha({ record => $record });
+            my $record  = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
+            my $rechash = TransformMarcToKoha( { record => $record } );
             my $pos;
             my $countitems = $rechash->{itembumber} ? 1 : 0;
             while ( index( $rechash->{itemnumber}, '|', $pos ) > 0 ) {
@@ -240,11 +243,12 @@ my $launcher = sub {
                     my $highlight = 0;
                     ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );
                     push @numbers,
-                      { number     => $i,
+                        {
+                        number     => $i,
                         highlight  => $highlight,
                         searchdata => \@field_data,
                         startfrom  => ( $i - 1 )
-                      };
+                        };
                 }
             }
         }
@@ -291,9 +295,10 @@ my $launcher = sub {
 
     } else {
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-            {   template_name   => "cataloguing/value_builder/marc21_linking_section.tt",
-                query           => $query,
-                type            => "intranet",
+            {
+                template_name => "cataloguing/value_builder/marc21_linking_section.tt",
+                query         => $query,
+                type          => "intranet",
             }
         );
 

@@ -41,7 +41,7 @@ subtest 'store() tests' => sub {
 
     Koha::ApiKeys->search->delete;
 
-    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_1    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $description = 'Coral API key';
 
     my $api_key = Koha::ApiKey->new(
@@ -56,15 +56,18 @@ subtest 'store() tests' => sub {
 
     is( ref($api_key), 'Koha::ApiKey' );
     is( $api_key->patron_id, $patron_1->id, 'FK is matched' );
-    ok( defined $api_key->client_id
+    ok(
+               defined $api_key->client_id
             && $api_key->client_id ne ''
             && length( $api_key->client_id ) > 1,
         'API client_id is generated'
     );
-    ok( defined $api_key->secret
+    ok(
+               defined $api_key->secret
             && $api_key->secret ne ''
             && length( $api_key->secret ) > 1,
-        'API secret is generated' );
+        'API secret is generated'
+    );
     is( $api_key->description, $description, 'Description is correctly stored' );
     is( $api_key->active,      1,            'Key is active by default' );
 
@@ -74,11 +77,11 @@ subtest 'store() tests' => sub {
     $api_key->discard_changes;
 
     is( $api_key->client_id, $original_api_key->{client_id}, '->store() preserves the client_id' );
-    is( $api_key->secret, $original_api_key->{secret}, '->store() preserves the secret' );
+    is( $api_key->secret,    $original_api_key->{secret},    '->store() preserves the secret' );
     is( $api_key->patron_id, $original_api_key->{patron_id}, '->store() preserves the patron_id' );
-    is( $api_key->active, 0, '->store() preserves the active value' );
+    is( $api_key->active,    0,                              '->store() preserves the active value' );
 
-    $api_key->set({ client_id => 'NewID!' });
+    $api_key->set( { client_id => 'NewID!' } );
 
     throws_ok {
         $api_key->store
@@ -89,24 +92,23 @@ subtest 'store() tests' => sub {
     is( $@->property, 'client_id', 'Correct attribute reported back' );
 
     $api_key->discard_changes;
+
     # set a writeable attribute
-    $api_key->set({ description => 'Hey' });
+    $api_key->set( { description => 'Hey' } );
     lives_ok { $api_key->store } 'Updating a writeable attribute works';
 
     my $patron_to_delete = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $deleted_id = $patron_to_delete->id;
+    my $deleted_id       = $patron_to_delete->id;
     $patron_to_delete->delete;
 
     {    # hide useless warnings
         local *STDERR;
         open STDERR, '>', '/dev/null';
         throws_ok {
-            Koha::ApiKey->new(
-                { patron_id => $deleted_id, description => 'a description' } )
-              ->store
+            Koha::ApiKey->new( { patron_id => $deleted_id, description => 'a description' } )->store
         }
         'Koha::Exceptions::Object::FKConstraint',
-          'Invalid patron ID raises exception';
+            'Invalid patron ID raises exception';
         close STDERR;
     }
     is( $@->message,   'Broken FK constraint', 'Exception message is correct' );
@@ -123,15 +125,16 @@ subtest 'validate_secret() tests' => sub {
 
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $api_key = Koha::ApiKey->new(
-        {   patron_id   => $patron->id,
+        {
+            patron_id   => $patron->id,
             description => 'The description'
         }
     )->store;
 
     my $secret = $api_key->plain_text_secret;
 
-    is( $api_key->validate_secret( $secret ), 1, 'Valid secret returns true' );
-    is( $api_key->validate_secret( 'Wrong secret' ), 0, 'Invalid secret returns false' );
+    is( $api_key->validate_secret($secret),        1, 'Valid secret returns true' );
+    is( $api_key->validate_secret('Wrong secret'), 0, 'Invalid secret returns false' );
 
     $schema->storage->txn_rollback;
 };
@@ -142,13 +145,14 @@ subtest 'plain_text_secret() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
     # generate a fresh API key
-    my $api_key = Koha::ApiKey->new({ description => 'blah', patron_id => $patron->id })->store;
+    my $api_key           = Koha::ApiKey->new( { description => 'blah', patron_id => $patron->id } )->store;
     my $plain_text_secret = $api_key->plain_text_secret;
 
     ok( defined $plain_text_secret, 'A fresh API key carries its plain text secret' );
-    ok( $plain_text_secret ne q{}, 'Plain text secret is not an empty string' );
+    ok( $plain_text_secret ne q{},  'Plain text secret is not an empty string' );
 
     $schema->storage->txn_rollback;
 };

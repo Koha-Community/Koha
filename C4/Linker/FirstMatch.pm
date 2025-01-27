@@ -41,9 +41,9 @@ sub get_link {
 }
 
 sub update_cache {
-    my $self        = shift;
-    my $heading     = shift;
-    my $authid      = shift;
+    my $self    = shift;
+    my $heading = shift;
+    my $authid  = shift;
     $self->{'default_linker'}->update_cache( $heading, $authid );
 }
 

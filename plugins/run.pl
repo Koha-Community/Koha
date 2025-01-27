@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use Koha::Plugins::Handler;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 
@@ -34,14 +34,15 @@ my $class  = $cgi->param('class');
 my $method = $cgi->param('method');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "plugins/plugins-disabled.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { plugins => $method },
+    {
+        template_name => "plugins/plugins-disabled.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { plugins => $method },
     }
 );
 
-if ( $plugins_enabled ) {
+if ($plugins_enabled) {
     my $plugin = Koha::Plugins::Handler->run( { class => $class, method => $method, cgi => $cgi } );
 } else {
     output_html_with_http_headers( $cgi, $cookie, $template->output );

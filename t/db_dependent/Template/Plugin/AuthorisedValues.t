@@ -27,7 +27,7 @@ use Koha::Template::Plugin::AuthorisedValues;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-my $schema = Koha::Database->schema;
+my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'GetByCode' => sub {
@@ -35,8 +35,7 @@ subtest 'GetByCode' => sub {
 
     $schema->storage->txn_begin;
 
-    my $avc =
-      $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } );
+    my $avc  = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } );
     my $av_1 = $builder->build_object(
         {
             class => 'Koha::AuthorisedValues',
@@ -49,23 +48,27 @@ subtest 'GetByCode' => sub {
             value => { category => $avc->category_name }
         }
     );
-    my $description =
-      Koha::Template::Plugin::AuthorisedValues->GetByCode( $avc->category_name,
-        $av_1->authorised_value );
+    my $description = Koha::Template::Plugin::AuthorisedValues->GetByCode(
+        $avc->category_name,
+        $av_1->authorised_value
+    );
     is( $description, $av_1->lib, 'GetByCode should return the correct dsecription' );
-    my $opac_description =
-      Koha::Template::Plugin::AuthorisedValues->GetByCode( $avc->category_name,
-        $av_1->authorised_value, 'opac' );
+    my $opac_description = Koha::Template::Plugin::AuthorisedValues->GetByCode(
+        $avc->category_name,
+        $av_1->authorised_value, 'opac'
+    );
     is( $opac_description, $av_1->opac_description, 'GetByCode should return the correct opac_description' );
     $av_1->lib_opac(undef)->store;
-    $opac_description =
-      Koha::Template::Plugin::AuthorisedValues->GetByCode( $avc->category_name,
-        $av_1->authorised_value, 'opac' );
+    $opac_description = Koha::Template::Plugin::AuthorisedValues->GetByCode(
+        $avc->category_name,
+        $av_1->authorised_value, 'opac'
+    );
     is( $opac_description, $av_1->lib, 'GetByCode should return the staff description if the lib_opac is not filled' );
 
-    $description =
-      Koha::Template::Plugin::AuthorisedValues->GetByCode( $avc->category_name,
-        'does_not_exist' );
+    $description = Koha::Template::Plugin::AuthorisedValues->GetByCode(
+        $avc->category_name,
+        'does_not_exist'
+    );
     is( $description, 'does_not_exist', 'GetByCode should return the code passed if the AV does not exist' );
 
     $schema->storage->txn_rollback;
@@ -99,17 +102,20 @@ subtest 'GetDescriptionByKohaField' => sub {
     # Make sure we are not catch by cache
     Koha::Caches->get_instance->flush_all;
     my $av_1 = $builder->build_object(
-        {   class => 'Koha::AuthorisedValues',
+        {
+            class => 'Koha::AuthorisedValues',
             value => { category => $avc->category_name, lib_opac => 'lib_opac', lib => 'lib' }
         }
     )->store;
     my $av_2 = $builder->build_object(
-        {   class => 'Koha::AuthorisedValues',
+        {
+            class => 'Koha::AuthorisedValues',
             value => { category => $avc->category_name, lib_opac => undef, lib => 'lib' }
         }
     )->store;
     my $av_3 = $builder->build_object(
-        {   class => 'Koha::AuthorisedValues',
+        {
+            class => 'Koha::AuthorisedValues',
             value => { category => $avc->category_name, lib_opac => undef, lib => undef }
         }
     )->store;
@@ -130,10 +136,16 @@ subtest 'GetDescriptionByKohaField' => sub {
     is( $av, 'lib', 'For OPAC: The staff description should be displayed if none exists for OPAC' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_3->authorised_value } );
-    is( $av, $av_3->authorised_value, 'For OPAC: If both OPAC and staff descriptions are missing, the code should be displayed');
+    is(
+        $av, $av_3->authorised_value,
+        'For OPAC: If both OPAC and staff descriptions are missing, the code should be displayed'
+    );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $non_existent_av } );
-    is( $av, $non_existent_av, 'For OPAC: If both OPAC and staff descriptions are missing, the parameter should be displayed');
+    is(
+        $av, $non_existent_av,
+        'For OPAC: If both OPAC and staff descriptions are missing, the parameter should be displayed'
+    );
 
     # Staff display
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
@@ -141,13 +153,16 @@ subtest 'GetDescriptionByKohaField' => sub {
     is( $av, 'lib', 'The staff description should be displayed' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => $av_3->authorised_value } );
-    is( $av, $av_3->authorised_value, 'If both OPAC and staff descriptions are missing, the code should be displayed');
+    is( $av, $av_3->authorised_value, 'If both OPAC and staff descriptions are missing, the code should be displayed' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => $non_existent_av } );
-    is( $av, $non_existent_av, 'If both OPAC and staff descriptions are missing, the parameter should be displayed');
+    is( $av, $non_existent_av, 'If both OPAC and staff descriptions are missing, the parameter should be displayed' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => undef } );
-    is( $av, '', 'If both OPAC and staff descriptions are missing, and the parameter is undef, an empty string should be displayed');
+    is(
+        $av, '',
+        'If both OPAC and staff descriptions are missing, and the parameter is undef, an empty string should be displayed'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -38,10 +38,10 @@ my $cn_sort = C4::ClassSplitRoutine::RegEx::split_callnumber($cn_item, $regexs);
 =cut
 
 sub split_callnumber {
-    my ($cn_item, $regexs) = @_;
+    my ( $cn_item, $regexs ) = @_;
 
-    for my $regex ( @$regexs ) {
-        eval "\$cn_item =~ $regex"; ## no critic (StringyEval)
+    for my $regex (@$regexs) {
+        eval "\$cn_item =~ $regex";    ## no critic (StringyEval)
     }
     my @lines = split "\n", $cn_item;
 

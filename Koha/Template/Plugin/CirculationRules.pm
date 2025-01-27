@@ -44,7 +44,7 @@ sub Get {
 
     $branchcode   = undef if $branchcode eq q{}   or $branchcode eq q{*};
     $categorycode = undef if $categorycode eq q{} or $categorycode eq q{*};
-    $itemtype     = undef if $itemtype eq q{}     or $itemtype  eq q{*};
+    $itemtype     = undef if $itemtype eq q{}     or $itemtype eq q{*};
 
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
@@ -71,7 +71,7 @@ the rule object.
 =cut
 
 sub Search {
-    my ( $self, $branchcode, $categorycode, $itemtype, $rule_name, $params) = @_;
+    my ( $self, $branchcode, $categorycode, $itemtype, $rule_name, $params ) = @_;
 
     $branchcode   = undef if $branchcode eq q{}   or $branchcode eq q{*};
     $categorycode = undef if $categorycode eq q{} or $categorycode eq q{*};
@@ -86,7 +86,7 @@ sub Search {
         }
     )->next;
 
-    return $rule if $params->{want_rule};
+    return $rule             if $params->{want_rule};
     return $rule->rule_value if $rule;
 }
 
@@ -110,7 +110,8 @@ unseen_remaining - The total number of unseen renewals that can still be made
 sub Renewals {
     my ( $self, $borrowernumber, $itemnumber ) = @_;
 
-    my ( $count, $allowed, $remaining, $unseen_count, $unseen_allowed, $unseen_remaining ) = GetRenewCount( $borrowernumber, $itemnumber );
+    my ( $count, $allowed, $remaining, $unseen_count, $unseen_allowed, $unseen_remaining ) =
+        GetRenewCount( $borrowernumber, $itemnumber );
 
     return {
         count            => $count,

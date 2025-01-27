@@ -17,7 +17,6 @@ package Koha::MarcSubfieldStructure;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);

@@ -2,94 +2,95 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("UNIMARC field 124b builder") | html %] &rsaquo;
-    [% t("Cataloguing") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("UNIMARC field 124b builder") | html %]
+        &rsaquo; [% t("Cataloguing") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="cat_unimarc_field_124b" class="cat value_builder">
-    <h1>UNIMARC field 124b builder</h1>
-    <form method="get" name="f_pop" action="">
-        <div class="page-section">
-            <table>
-                <tr>
-                    <td><label for="f1">Form of cartographic item:</label></td>
-                    <td>
-                        <select name="f1" id="f1">
+<h1>UNIMARC field 124b builder</h1>
+<form method="get" name="f_pop" action="">
+    <div class="page-section">
+        <table>
+            <tr>
+                <td><label for="f1">Form of cartographic item:</label></td>
+                <td>
+                    <select name="f1" id="f1">
+                        [% IF ( f1a ) %]
+                            <option value="a" selected="selected">atlas</option>
+                        [% ELSE %]
+                            <option value="a">atlas</option>
+                        [% END %]
+                        [% IF ( f1b ) %]
+                            <option value="b" selected="selected">diagram</option>
+                        [% ELSE %]
+                            <option value="b">diagram</option>
+                        [% END %]
+                        [% IF ( f1c ) %]
+                            <option value="c" selected="selected">globe</option>
+                        [% ELSE %]
+                            <option value="c">globe</option>
+                        [% END %]
+                        [% IF ( f1d ) %]
+                            <option value="d" selected="selected">map</option>
+                        [% ELSE %]
+                            <option value="d">map</option>
+                        [% END %]
+                        [% IF ( f1e ) %]
+                            <option value="e" selected="selected">model</option>
+                        [% ELSE %]
+                            <option value="e">model</option>
+                        [% END %]
+                        [% IF ( f1f ) %]
+                            <option value="f" selected="selected">profile</option>
+                        [% ELSE %]
+                            <option value="f">profile</option>
+                        [% END %]
+                        [% IF ( f1g ) %]
+                            <option value="g" selected="selected">remote sensing image</option>
+                        [% ELSE %]
+                            <option value="g">remote sensing image</option>
+                        [% END %]
+                        [% IF ( f1h ) %]
+                            <option value="h" selected="selected">section</option>
+                        [% ELSE %]
+                            <option value="h">section</option>
+                        [% END %]
+                        [% IF ( f1i ) %]
+                            <option value="i" selected="selected">view</option>
+                        [% ELSE %]
+                            <option value="i">view</option>
+                        [% END %]
+                        [% IF ( f1j ) %]
+                            <option value="j" selected="selected">plan</option>
+                        [% ELSE %]
+                            <option value="j">plan</option>
+                        [% END %]
+                        [% IF ( f1z ) %]
+                            <option value="z" selected="selected">other</option>
+                        [% ELSE %]
+                            <option value="z">other</option>
+                        [% END %]
+                    </select>
+                </td></tr
+            >
+        </table>
+    </div>
+    <!-- /.page-section -->
 
-                            [% IF ( f1a ) %]
-                                <option value="a" selected="selected">atlas</option>
-                            [% ELSE %]
-                                <option value="a">atlas</option>
-                            [% END %]
-                            [% IF ( f1b ) %]
-                                <option value="b" selected="selected">diagram</option>
-                            [% ELSE %]
-                                <option value="b">diagram</option>
-                            [% END %]
-                            [% IF ( f1c ) %]
-                                <option value="c" selected="selected">globe</option>
-                            [% ELSE %]
-                                <option value="c">globe</option>
-                            [% END %]
-                            [% IF ( f1d ) %]
-                                <option value="d" selected="selected">map</option>
-                            [% ELSE %]
-                                <option value="d">map</option>
-                            [% END %]
-                            [% IF ( f1e ) %]
-                                <option value="e" selected="selected">model</option>
-                            [% ELSE %]
-                                <option value="e">model</option>
-                            [% END %]
-                            [% IF ( f1f ) %]
-                                <option value="f" selected="selected">profile</option>
-                            [% ELSE %]
-                                <option value="f">profile</option>
-                            [% END %]
-                            [% IF ( f1g ) %]
-                                <option value="g" selected="selected">remote sensing image</option>
-                            [% ELSE %]
-                                <option value="g">remote sensing image</option>
-                            [% END %]
-                            [% IF ( f1h ) %]
-                                <option value="h" selected="selected">section</option>
-                            [% ELSE %]
-                                <option value="h">section</option>
-                            [% END %]
-                            [% IF ( f1i ) %]
-                                <option value="i" selected="selected">view</option>
-                            [% ELSE %]
-                                <option value="i">view</option>
-                            [% END %]
-                            [% IF ( f1j ) %]
-                                <option value="j" selected="selected">plan</option>
-                            [% ELSE %]
-                                <option value="j">plan</option>
-                            [% END %]
-                            [% IF ( f1z ) %]
-                                <option value="z" selected="selected">other</option>
-                            [% ELSE %]
-                                <option value="z">other</option>
-                            [% END %]
-                        </select>
-                    </td></tr>
-            </table>
-        </div> <!-- /.page-section -->
-
-        <nav class="navbar navbar-default fixed-bottom">
-            <div class="container-fluid">
-                <fieldset class="action">
-                    <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
-                    <button class="btn btn-default close_window">Cancel</button>
-                </fieldset>
-            </div>
-        </nav>
-
-    </form>
+    <nav class="navbar navbar-default fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
+</form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

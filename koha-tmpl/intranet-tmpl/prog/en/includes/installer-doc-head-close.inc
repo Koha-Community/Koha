@@ -7,11 +7,15 @@
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
 [% Asset.css("css/installer.css")  | $raw %]
 <script>
-var Koha = {};
+    var Koha = {};
 </script>
 [% IF lang && lang != 'en' %]
     [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
 [% END %]
 [% Asset.js('js/Gettext.js') | $raw %]
 [% Asset.js('js/i18n.js') | $raw %]
-<style id="antiClickjack">body{display:none !important;}</style>
+<style id="antiClickjack">
+    body {
+        display: none !important;
+    }
+</style>

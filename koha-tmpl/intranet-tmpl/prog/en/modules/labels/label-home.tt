@@ -3,16 +3,17 @@
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% t("Label creator") | html %] &rsaquo;
-        [% t("Cataloging") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Label creator") | html %]
+        &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="labels_label-home" class="tools labels">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -28,7 +29,7 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='cat-menu' %]
-                [% INCLUDE 'labels-toolbar.inc' %]
-                <h1>Label creator</h1>
+    [% INCLUDE 'labels-toolbar.inc' %]
+    <h1>Label creator</h1>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

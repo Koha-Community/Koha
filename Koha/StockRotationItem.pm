@@ -66,9 +66,9 @@ Returns the item associated with the current stock rotation item.
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->itemnumber;
-    return Koha::Item->_new_from_dbic( $rs );
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head3 stage
@@ -80,9 +80,9 @@ Returns the stage associated with the current stock rotation item.
 =cut
 
 sub stage {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->stage;
-    return Koha::StockRotationStage->_new_from_dbic( $rs );
+    return Koha::StockRotationStage->_new_from_dbic($rs);
 }
 
 =head3 needs_repatriating
@@ -95,15 +95,16 @@ according to our stockrotation plan.
 =cut
 
 sub needs_repatriating {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my ( $item, $stage ) = ( $self->item, $self->stage );
     if ( $self->item->get_transfer ) {
-        return 0;               # We're in transit.
+        return 0;    # We're in transit.
     } elsif ( $item->holdingbranch ne $stage->branchcode_id
-                  || $item->homebranch ne $stage->branchcode_id ) {
-        return 1;               # We're not where we should be.
+        || $item->homebranch ne $stage->branchcode_id )
+    {
+        return 1;    # We're not where we should be.
     } else {
-        return 0;               # We're at home.
+        return 0;    # We're at home.
     }
 }
 
@@ -130,15 +131,13 @@ sub needs_advancing {
         my $duration = $arrival->delta_days( dt_from_string() );
         if ( $duration->in_units('days') >= $self->stage->duration ) {
             return 1;
-        }
-        else {
+        } else {
             return 0;
         }
-    }
-    else {
+    } else {
         warn "We have no historical branch transfer for item "
-          . $self->item->itemnumber
-          . "; This should not have happened!";
+            . $self->item->itemnumber
+            . "; This should not have happened!";
     }
 }
 
@@ -204,48 +203,46 @@ sub advance {
     my $stage = $self->stage;
     my $new_stage;
     if ( $self->indemand && !$self->fresh ) {
-        $self->indemand(0);                                  # De-activate indemand
+        $self->indemand(0);    # De-activate indemand
         $new_stage = $stage;
-    }
-    else {
+    } else {
+
         # New to rota?
         if ( $self->fresh ) {
             $new_stage = $self->stage->first_sibling || $self->stage;
-            $self->fresh(0);                                 # Reset fresh
+            $self->fresh(0);    # Reset fresh
         }
+
         # Last stage?
         elsif ( !$stage->last_sibling ) {
+
             # Cyclical rota?
             if ( $stage->rota->cyclical ) {
-                $new_stage =
-                  $stage->first_sibling || $stage;           # Revert to first stage.
-            }
-            else {
-                $self->delete;                               # StockRotationItem is done.
+                $new_stage = $stage->first_sibling || $stage;    # Revert to first stage.
+            } else {
+                $self->delete;                                   # StockRotationItem is done.
                 return 1;
             }
-        }
-        else {
-            $new_stage = $self->stage->next_sibling;         # Just advance
+        } else {
+            $new_stage = $self->stage->next_sibling;             # Just advance
         }
     }
 
     # Update stage and record transfer
-    $self->stage_id( $new_stage->stage_id );                 # Set new stage
+    $self->stage_id( $new_stage->stage_id );                  # Set new stage
     $self->store();
-    $item->homebranch( $new_stage->branchcode_id )->store;   # Update homebranch
+    $item->homebranch( $new_stage->branchcode_id )->store;    # Update homebranch
     $transfer = try {
         $item->request_transfer(
             {
                 to            => $new_stage->branchcode,
                 reason        => "StockrotationAdvance",
-                ignore_limits => 1                      # Ignore transfer limits
+                ignore_limits => 1                         # Ignore transfer limits
             }
-        );                                              # Add transfer
-    }
-    catch {
+        );                                                 # Add transfer
+    } catch {
         if ( $_->isa('Koha::Exceptions::Item::Transfer::InQueue') ) {
-            my $exception = $_;
+            my $exception      = $_;
             my $found_transfer = $_->transfer;
             if (   $found_transfer->in_transit
                 || $found_transfer->reason eq 'Reserve'
@@ -258,7 +255,7 @@ sub advance {
                         ignore_limits => 1,
                         enqueue       => 1
                     }
-                );                                      # Queue transfer
+                );    # Queue transfer
             } else {
                 return $item->request_transfer(
                     {
@@ -267,16 +264,17 @@ sub advance {
                         ignore_limits => 1,
                         replace       => "StockrotationAdvance"
                     }
-                );                                      # Replace transfer
+                );    # Replace transfer
             }
         } else {
             $_->rethrow();
         }
     };
     $transfer->receive
-      if $item->holdingbranch eq $new_stage->branchcode_id && !$item->checkout;
-      # If item is already at branch, and not checked out
-      # If item is checked out, the return will either receive or initiate the transfer
+        if $item->holdingbranch eq $new_stage->branchcode_id && !$item->checkout;
+
+    # If item is already at branch, and not checked out
+    # If item is checked out, the return will either receive or initiate the transfer
 
     return $transfer;
 }
@@ -295,28 +293,28 @@ in progress transfer.
 =cut
 
 sub toggle_indemand {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # Toggle the item's indemand flag
-    my $new_indemand = ($self->indemand == 1) ? 0 : 1;
+    my $new_indemand = ( $self->indemand == 1 ) ? 0 : 1;
 
     # Cancel 'StockrotationAdvance' transfer if one is in progress
     if ($new_indemand) {
-        my $item = $self->item;
+        my $item     = $self->item;
         my $transfer = $item->get_transfer;
-        if ($transfer && $transfer->reason eq 'StockrotationAdvance') {
+        if ( $transfer && $transfer->reason eq 'StockrotationAdvance' ) {
             my $stage = $self->stage;
             my $new_stage;
-            if ( $stage->rota->cyclical && !$stage->first_sibling ) { # First stage
+            if ( $stage->rota->cyclical && !$stage->first_sibling ) {    # First stage
                 $new_stage = $stage->last_sibling;
             } else {
                 $new_stage = $stage->previous_sibling;
             }
-            $self->stage_id($new_stage->stage_id)->store;        # Revert stage change
-            $item->homebranch($new_stage->branchcode_id)->store; # Revert update homebranch
-            $new_indemand = 0;                                   # Reset indemand
-            $transfer->tobranch($new_stage->branchcode_id);      # Reset StockrotationAdvance
-            $transfer->datearrived(dt_from_string);              # Reset StockrotationAdvance
+            $self->stage_id( $new_stage->stage_id )->store;              # Revert stage change
+            $item->homebranch( $new_stage->branchcode_id )->store;       # Revert update homebranch
+            $new_indemand = 0;                                           # Reset indemand
+            $transfer->tobranch( $new_stage->branchcode_id );            # Reset StockrotationAdvance
+            $transfer->datearrived(dt_from_string);                      # Reset StockrotationAdvance
             $transfer->store;
         }
     }
@@ -334,19 +332,17 @@ generating stockrotation reports about this stockrotationitem.
 =cut
 
 sub investigate {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $item_report = {
-        title      => $self->item->_result->biblioitem
-            ->biblionumber->title,
-        author     => $self->item->_result->biblioitem
-            ->biblionumber->author,
+        title      => $self->item->_result->biblioitem->biblionumber->title,
+        author     => $self->item->_result->biblioitem->biblionumber->author,
         callnumber => $self->item->itemcallnumber,
         location   => $self->item->location,
         onloan     => $self->item->onloan,
         barcode    => $self->item->barcode,
         itemnumber => $self->itemnumber_id,
-        branch => $self->item->_result->holdingbranch,
-        object => $self,
+        branch     => $self->item->_result->holdingbranch,
+        object     => $self,
     };
     my $reason;
     if ( $self->fresh ) {

@@ -18,29 +18,24 @@ package Koha::Sitemapper::Writer;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Moo;
 use Modern::Perl;
 use XML::Writer;
 use IO::File;
 use Koha::DateUtils qw( dt_from_string );
 
-
 our $MAX = 50000;
 
-
-has sitemapper => (is => 'rw', );
+has sitemapper => ( is => 'rw', );
 
 has current => ( is => 'rw', default => sub { $MAX } );
 
 has count => ( is => 'rw', default => sub { 0 } );
 
-has writer => ( is => 'rw',  );
-
-
+has writer => ( is => 'rw', );
 
 sub _writer_create {
-    my ($self, $name) = @_;
+    my ( $self, $name ) = @_;
     $name = $self->sitemapper->dir . "/$name";
     my $fh = IO::File->new(">$name");
     unless ($fh) {
@@ -48,14 +43,13 @@ sub _writer_create {
         exit;
     }
     my $writer = XML::Writer->new(
-        OUTPUT => $fh,
-        DATA_MODE => 1,
+        OUTPUT      => $fh,
+        DATA_MODE   => 1,
         DATA_INDENT => 2,
     );
     $writer->xmlDecl("UTF-8");
     return $writer;
 }
-
 
 sub _writer_end {
     my $self = shift;
@@ -65,39 +59,40 @@ sub _writer_end {
     $self->writer->getOutput()->close();
 }
 
-
 sub write {
-    my ($self, $biblionumber, $timestamp) = @_;
+    my ( $self, $biblionumber, $timestamp ) = @_;
 
     if ( $self->current == $MAX ) {
         $self->_writer_end();
         $self->count( $self->count + 1 );
-        my $w = $self->_writer_create( sprintf("sitemap_%04d.xml", $self->count) );
+        my $w = $self->_writer_create( sprintf( "sitemap_%04d.xml", $self->count ) );
         $w->startTag(
             'urlset',
-            'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
-            'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-            'xsi:schemaLocation' => 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd');
+            'xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
+            'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+            'xsi:schemaLocation' =>
+                'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd'
+        );
         $self->writer($w);
         $self->current(0);
     }
 
     $self->current( $self->current + 1 );
     my $writer = $self->writer;
-    my $url = $self->sitemapper->url .
-              ($self->sitemapper->short ? '/bib/' : '/cgi-bin/koha/opac-detail.pl?biblionumber=') .
-              $biblionumber;
+    my $url =
+          $self->sitemapper->url
+        . ( $self->sitemapper->short ? '/bib/' : '/cgi-bin/koha/opac-detail.pl?biblionumber=' )
+        . $biblionumber;
     $writer->startTag('url');
-        $writer->startTag('loc');
-            $writer->characters($url);
-        $writer->endTag();
-        $writer->startTag('lastmod');
-            $timestamp = substr($timestamp, 0, 10);
-            $writer->characters($timestamp);
-        $writer->endTag();
+    $writer->startTag('loc');
+    $writer->characters($url);
+    $writer->endTag();
+    $writer->startTag('lastmod');
+    $timestamp = substr( $timestamp, 0, 10 );
+    $writer->characters($timestamp);
+    $writer->endTag();
     $writer->endTag();
 }
-
 
 sub end {
     my $self = shift;
@@ -105,21 +100,20 @@ sub end {
     $self->_writer_end();
 
     my $w = $self->_writer_create("sitemapindex.xml");
-    $w->startTag('sitemapindex', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    $w->startTag( 'sitemapindex', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9' );
     my $now = dt_from_string()->ymd;
-    for my $i ( 1..$self->count ) {
+    for my $i ( 1 .. $self->count ) {
         $w->startTag('sitemap');
-            $w->startTag('loc');
-                my $name = sprintf("sitemap_%04d.xml", $i);
-                $w->characters($self->sitemapper->url . "/$name");
-            $w->endTag();
-            $w->startTag('lastmod');
-                $w->characters($now);
-            $w->endTag();
+        $w->startTag('loc');
+        my $name = sprintf( "sitemap_%04d.xml", $i );
+        $w->characters( $self->sitemapper->url . "/$name" );
+        $w->endTag();
+        $w->startTag('lastmod');
+        $w->characters($now);
+        $w->endTag();
         $w->endTag();
     }
     $w->endTag();
 }
-
 
 1;

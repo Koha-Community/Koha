@@ -20,14 +20,13 @@ use Modern::Perl;
 use Test::More tests => 10;
 
 use C4::Circulation qw( CheckValidBarcode );
-use C4::Biblio qw( AddBiblio );
+use C4::Biblio      qw( AddBiblio );
 use C4::Items;
 use Koha::Database;
 use Koha::Library;
 
-
 BEGIN {
-    use_ok('C4::Circulation', qw( CheckValidBarcode ));
+    use_ok( 'C4::Circulation', qw( CheckValidBarcode ) );
 }
 
 my $schema = Koha::Database->new->schema;
@@ -41,15 +40,14 @@ $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM biblio|);
 $dbh->do(q|DELETE FROM categories|);
 
-
 my $branchcode = 'B';
-Koha::Library->new({ branchcode => $branchcode, branchname => 'Branch' })->store;
+Koha::Library->new( { branchcode => $branchcode, branchname => 'Branch' } )->store;
 
 my $categorycode = 'C';
-$dbh->do("INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode);
+$dbh->do( "INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode );
 
 my %item_branch_infos = (
-    homebranch => $branchcode,
+    homebranch    => $branchcode,
     holdingbranch => $branchcode,
 );
 
@@ -66,11 +64,11 @@ is( $check_valid_barcode, 0, 'CheckValidBarcode with an invalid barcode returns 
 $check_valid_barcode = C4::Circulation::CheckValidBarcode($barcode3);
 is( $check_valid_barcode, 0, 'CheckValidBarcode with an invalid barcode returns true' );
 
-my ($biblionumber1) = AddBiblio(MARC::Record->new, '');
-Koha::Item->new({ barcode => $barcode1, %item_branch_infos, biblionumber => $biblionumber1})->store;
-Koha::Item->new({ barcode => $barcode2, %item_branch_infos, biblionumber => $biblionumber1})->store;
-my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
-Koha::Item->new({ barcode => $barcode3, %item_branch_infos, biblionumber =>$biblionumber2})->store;
+my ($biblionumber1) = AddBiblio( MARC::Record->new, '' );
+Koha::Item->new( { barcode => $barcode1, %item_branch_infos, biblionumber => $biblionumber1 } )->store;
+Koha::Item->new( { barcode => $barcode2, %item_branch_infos, biblionumber => $biblionumber1 } )->store;
+my ($biblionumber2) = AddBiblio( MARC::Record->new, '' );
+Koha::Item->new( { barcode => $barcode3, %item_branch_infos, biblionumber => $biblionumber2 } )->store;
 
 $check_valid_barcode = C4::Circulation::CheckValidBarcode();
 is( $check_valid_barcode, 0, 'CheckValidBarcode without barcode returns false' );

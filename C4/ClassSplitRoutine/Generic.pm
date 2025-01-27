@@ -46,11 +46,10 @@ sub split_callnumber {
     my @lines;
 
     # Split call numbers based on spaces
-    push @lines, split /\s+/, $cn_item
-      ;    # split the call number into an arbitrary number of pieces at spaces
+    push @lines, split /\s+/, $cn_item;    # split the call number into an arbitrary number of pieces at spaces
     if ( $lines[-1] !~ /^.*\d-\d.*$/ && $lines[-1] =~ /^(.*\d+)(\D.*)$/ ) {
-        pop @lines;    # pull off the matching last element
-        push @lines, $1, $2;    # replace it with the two pieces
+        pop @lines;                        # pull off the matching last element
+        push @lines, $1, $2;               # replace it with the two pieces
     }
     unless ( scalar @lines ) {
         warn sprintf( 'regexp failed to match string: %s', $cn_item );

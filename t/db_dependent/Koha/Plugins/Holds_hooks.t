@@ -64,22 +64,29 @@ subtest 'after_hold_create() hook tests' => sub {
 
     # Avoid testing useless warnings
     my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
-    $test_plugin->mock( 'after_item_action',   undef );
-    $test_plugin->mock( 'after_biblio_action', undef );
+    $test_plugin->mock( 'after_item_action',      undef );
+    $test_plugin->mock( 'after_biblio_action',    undef );
     $test_plugin->mock( 'item_barcode_transform', undef );
-    $test_plugin->mock( 'after_hold_action', undef );
-    $test_plugin->mock( 'before_send_messages', undef );
+    $test_plugin->mock( 'after_hold_action',      undef );
+    $test_plugin->mock( 'before_send_messages',   undef );
 
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    warnings_like { AddReserve({
-                        branchcode     => $patron->branchcode,
-                        borrowernumber => $patron->borrowernumber,
-                        biblionumber   => $item_1->biblionumber }); }
-        [ qr/after_hold_create is deprecated and will be removed soon/,
-          qr/after_hold_create called with parameter Koha::Hold/ ],
-          'AddReserve calls the after_hold_create hook, deprecation warning found';
+    warnings_like {
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item_1->biblionumber
+            }
+        );
+    }
+    [
+        qr/after_hold_create is deprecated and will be removed soon/,
+        qr/after_hold_create called with parameter Koha::Hold/
+    ],
+        'AddReserve calls the after_hold_create hook, deprecation warning found';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;
@@ -107,23 +114,28 @@ subtest 'after_hold_action (placed) hook tests' => sub {
 
     # Avoid testing useless warnings
     my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
-    $test_plugin->mock( 'after_item_action',   undef );
-    $test_plugin->mock( 'after_biblio_action', undef );
+    $test_plugin->mock( 'after_item_action',      undef );
+    $test_plugin->mock( 'after_biblio_action',    undef );
     $test_plugin->mock( 'item_barcode_transform', undef );
-    $test_plugin->mock( 'after_hold_create', undef );
+    $test_plugin->mock( 'after_hold_create',      undef );
 
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
     warnings_like {
         AddReserve(
-            {   branchcode     => $patron->branchcode,
+            {
+                branchcode     => $patron->branchcode,
                 borrowernumber => $patron->borrowernumber,
                 biblionumber   => $item_1->biblionumber
             }
         );
     }
-    [ qr/after_hold_create is deprecated and will be removed soon/, qr/after_hold_action called with action: place, ref: Koha::Hold/,  ], 'AddReserve calls the after_hold_action hook';
+    [
+        qr/after_hold_create is deprecated and will be removed soon/,
+        qr/after_hold_action called with action: place, ref: Koha::Hold/,
+    ],
+        'AddReserve calls the after_hold_action hook';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;
@@ -159,7 +171,7 @@ subtest 'Koha::Hold tests' => sub {
         $hold->fill;
     }
     qr/after_hold_action called with action: fill, ref: Koha::Old::Hold/,
-      '->fill calls the after_hold_action hook';
+        '->fill calls the after_hold_action hook';
 
     $hold = $builder->build_object(
         {
@@ -174,37 +186,37 @@ subtest 'Koha::Hold tests' => sub {
         $hold->suspend_hold;
     }
     qr/after_hold_action called with action: suspend, ref: Koha::Hold/,
-      '->suspend_hold calls the after_hold_action hook';
+        '->suspend_hold calls the after_hold_action hook';
 
     warning_like {
         $hold->resume;
     }
     qr/after_hold_action called with action: resume, ref: Koha::Hold/,
-      '->resume calls the after_hold_action hook';
+        '->resume calls the after_hold_action hook';
 
     warning_like {
         $hold->set_transfer;
     }
     qr/after_hold_action called with action: transfer, ref: Koha::Hold/,
-      '->set_transfer calls the after_hold_action hook';
+        '->set_transfer calls the after_hold_action hook';
 
     warning_like {
         $hold->set_processing;
     }
     qr/after_hold_action called with action: processing, ref: Koha::Hold/,
-      '->set_processing calls the after_hold_action hook';
+        '->set_processing calls the after_hold_action hook';
 
     warning_like {
         $hold->set_waiting;
     }
     qr/after_hold_action called with action: waiting, ref: Koha::Hold/,
-      '->set_waiting calls the after_hold_action hook';
+        '->set_waiting calls the after_hold_action hook';
 
     warning_like {
         $hold->cancel;
     }
     qr/after_hold_action called with action: cancel, ref: Koha::Old::Hold/,
-      '->cancel calls the after_hold_action hook';
+        '->cancel calls the after_hold_action hook';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;

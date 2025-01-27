@@ -24,9 +24,11 @@
                 <span class="circ-hlt">Expiration:</span>
                 <span>Patron's card expires on [% patron.dateexpiry | $KohaDates %].</span>
                 [% IF ( moremember ) %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or
+                    <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% ELSE %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or
+                    <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% END %]
             </li>
         [% END %]
@@ -45,70 +47,74 @@
                     <span>Patron's card expired on [% expiry | $KohaDates %]</span>
                 [% END %]
                 [% IF ( moremember ) %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or
+                    <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% ELSE %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or
+                    <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% END %]
             </li>
         [% END %]
 
         [% IF ( patron.gonenoaddress ) %]
             <li class="gonenoaddress blocker">
-                <span title="gonenoaddress flag is set in patron record"><span class="circ-hlt">Address:</span> Patron's address flagged as in doubt</span> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3#memberentry_account_flags"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                <span title="gonenoaddress flag is set in patron record"><span class="circ-hlt">Address:</span> Patron's address flagged as in doubt</span>
+                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3#memberentry_account_flags"
+                    ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                >
             </li>
         [% END %]
 
         [% IF ( patron.lost ) %]
             <li class="lost blocker">
-                <span title="lost flag is set in patron record"><span class="circ-hlt">Lost: </span> Patron's card is flagged as lost</span> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3#memberentry_account_flags"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                <span title="lost flag is set in patron record"><span class="circ-hlt">Lost: </span> Patron's card is flagged as lost</span>
+                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3#memberentry_account_flags"
+                    ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                >
             </li>
         [% END %]
 
         [% IF ( userdebarred ) %]
             <li class="userdebarred blocker">
                 <span class="circ-hlt"> Restricted since [% debarredsince | $KohaDates %]:</span> Patron's account is restricted
-
                 [% IF ( userdebarreddate ) %]
                     until [% userdebarreddate | $KohaDates %]
                 [% END %]
 
                 [% IF ( debarredcomment ) %]
-                    with the explanation: <br/>
+                    with the explanation: <br />
                     <em>
                         [% IF debarredcomment.search('OVERDUES_PROCESS') %]
                             Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
                         [% ELSE %]
                             [% FOREACH restriction IN patron.restrictions %]
                                 <div class="[% restriction.type.code | lower | html %]_restriction">
-                                <span class="restriction_expiration">
-                                [% IF restriction.expiration %]
-                                    [% restriction.expiration | $KohaDates %]
-                                [% ELSE %]
-                                    <strong>Indefinite</strong>
-                                [% END %]
-                                </span>
-                                <span class="restriction_detail">
-                                [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: [%- restriction.comment | html_line_break -%][%- END -%]
-                                </span>
+                                    <span class="restriction_expiration">
+                                        [% IF restriction.expiration %]
+                                            [% restriction.expiration | $KohaDates %]
+                                        [% ELSE %]
+                                            <strong>Indefinite</strong>
+                                        [% END %]
+                                    </span>
+                                    <span class="restriction_detail"> [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: [%- restriction.comment | html_line_break -%][%- END -%] </span>
                                 </div>
                             [% END %]
-                        [% END %]
-                    </em><br/>
+                        [% END %] </em
+                    ><br />
                 [% END %]
                 <a class="btn btn-xs btn-default" href="#reldebarments-tab" onclick="$('#reldebarments-tab').click()"><i class="fa fa-ban"></i> View restrictions</a>
-            </li> <!-- /.blocker -->
+            </li>
+            <!-- /.blocker -->
         [% END # /IF userdebarred %]
 
         [% IF ( odues ) %]
             <li class="odues blocker">
-                <span class="circ-hlt">Overdues:</span>  Patron has ITEMS OVERDUE <a href="#checkouts_panel" onclick="$('#issues-table-load-immediately').click(); $('#issues-table-load-immediately').click();">See highlighted items below </a>
+                <span class="circ-hlt">Overdues:</span> Patron has ITEMS OVERDUE <a href="#checkouts_panel" onclick="$('#issues-table-load-immediately').click(); $('#issues-table-load-immediately').click();">See highlighted items below </a>
             </li>
         [% END %]
 
         [% IF return_claims.count > ClaimReturnedWarningThreshold %]
-            <li class="return_claims blocker">
-                <span class="circ-hlt return-claims">Return claims:</span> Patron has [% return_claims.count | html %] RETURN CLAIMS
-            </li>
+            <li class="return_claims blocker"> <span class="circ-hlt return-claims">Return claims:</span> Patron has [% return_claims.count | html %] RETURN CLAIMS </li>
         [% END %]
 
         [% IF age_limitations %]
@@ -142,16 +148,14 @@
         [% IF ( charges_guarantees ) %]
             <li class="charges_guarantees">
                 <span class="circ-hlt">Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
-                    [% IF noissues %]
-                        <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
-                    [% END %]
+                [% IF noissues %]
+                    <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
+                [% END %]
             </li>
         [% END %]
 
         [% IF ( credits ) %]
-            <li class="credits">
-                <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %] of <span class="credit"><strong>[% creditsamount | $Price %]</strong></span>[% END %]
-            </li>
+            <li class="credits"> <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %]of <span class="credit"><strong>[% creditsamount | $Price %]</strong></span>[% END %] </li>
         [% END %]
         [% IF (noissues && CAN_user_circulate_force_checkout && !moremember) %]
             <li>
@@ -161,7 +165,6 @@
             </li>
         [% END %]
     </ul>
-
 [% END # /F ( has_modifications || warndeparture... %]
 
 [% IF waiting_recalls.count %]
@@ -183,15 +186,11 @@
                     [% IF ( w.pickup_library_id == logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% w.biblio_id | uri %]">[% w.biblio.title | html %]</a>
-                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
-                            [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
-                            [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
+                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]), [% IF ( w.biblio.author ) %]by [% w.biblio.author | html %][% END %]
+                            [% IF ( w.item.itemcallnumber ) %][[% w.item.itemcallnumber | html %]][% END %]
                             <span>Recall placed on [% w.created_date | $KohaDates %].</span>
                             <br />
-                            <strong class="waitinghere">
-                                [% SET expires_on = w.expiration_date %]
-                                Waiting here [% IF expires_on %] until [% expires_on | $KohaDates %] [% END %]
-                            </strong>
+                            <strong class="waitinghere"> [% SET expires_on = w.expiration_date %] Waiting here [% IF expires_on %]until [% expires_on | $KohaDates %][% END %] </strong>
                         </li>
                     [% END %]
                 [% END %]
@@ -205,15 +204,11 @@
                     [% IF ( w.pickup_library_id != logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% w.biblio_id | uri %]">[% w.biblio.title | html %]</a>
-                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
-                            [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
-                            [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
+                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]), [% IF ( w.biblio.author ) %]by [% w.biblio.author | html %][% END %]
+                            [% IF ( w.item.itemcallnumber ) %][[% w.item.itemcallnumber | html %]][% END %]
                             <span>Recall placed on [% w.created_date | $KohaDates %].</span>
                             <br />
-                            <strong>
-                                [% SET expires_on = w.expiration_date %]
-                                Waiting at [% Branches.GetName( w.pickup_library_id ) | html %] [% IF expires_on %] until [% expires_on | $KohaDates %] [% END %]
-                            </strong>
+                            <strong> [% SET expires_on = w.expiration_date %] Waiting at [% Branches.GetName( w.pickup_library_id ) | html %] [% IF expires_on %]until [% expires_on | $KohaDates %][% END %] </strong>
                         </li>
                     [% END %]
                 [% END %]
@@ -241,18 +236,12 @@
                     [% IF ( w.branch.branchcode == logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
-                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
-                            [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
-                            [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
+                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]), [% IF ( w.biblio.author ) %]by [% w.biblio.author | html %][% END %]
+                            [% IF ( w.item.itemcallnumber ) %][[% w.item.itemcallnumber | html %]][% END %]
                             <span class="holddate">Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
-                            <strong class="waitinghere">
-                                [% SET expires_on = w.expirationdate %]
-                                Waiting here [% IF expires_on %] until [% expires_on | $KohaDates %][% END %].
-                            </strong>
-                            <strong class="waitingsince">
-                                Waiting here since [% w.waitingdate | $KohaDates %].
-                            </strong>
+                            <strong class="waitinghere"> [% SET expires_on = w.expirationdate %] Waiting here [% IF expires_on %]until [% expires_on | $KohaDates %][% END %]. </strong>
+                            <strong class="waitingsince"> Waiting here since [% w.waitingdate | $KohaDates %]. </strong>
                         </li>
                     [% END %]
                 [% END %]
@@ -266,15 +255,11 @@
                     [% IF ( w.branch.branchcode != logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
-                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
-                            [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
-                            [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
+                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]), [% IF ( w.biblio.author ) %]by [% w.biblio.author | html %][% END %]
+                            [% IF ( w.item.itemcallnumber ) %][[% w.item.itemcallnumber | html %]][% END %]
                             <span>Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
-                            <strong>
-                                [% SET expires_on = w.expirationdate %]
-                                Waiting at [% w.branch.branchname | html %] [% IF expires_on %] until [% expires_on | $KohaDates %] [% END %]
-                            </strong>
+                            <strong> [% SET expires_on = w.expirationdate %] Waiting at [% w.branch.branchname | html %] [% IF expires_on %]until [% expires_on | $KohaDates %][% END %] </strong>
                         </li>
                     [% END %]
                 [% END %]
@@ -289,25 +274,23 @@
         <div id="curbside_pickups" class="circmessage">
             <h4>Curbside pickups scheduled here</h4>
             <ul>
-            [% FOR cp IN curbside_pickups %]
-                <li>On [% cp.scheduled_pickup_datetime | $KohaDates %]:
-                    [% SWITCH cp.status %]
-                    [% CASE 'to-be-staged' %]
-                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=to-be-staged">
-                        To be staged</a>
-                    [% CASE 'staged-and-ready' %]
-                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=staged-and-ready">
-                        Staged and ready</a>
-                    [% CASE 'patron-is-outside' %]
-                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=patron-is-outside">
-                        Patron is outside!</a>
-                    [% CASE 'delivered' %]
-                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=delivered-today">
-                        Delivered</a>
-                    [% CASE %]<span>Unknown status "[% cp.status | html %]"</span>
-                    [% END %]
-                </li>
-            [% END %]
+                [% FOR cp IN curbside_pickups %]
+                    <li
+                        >On [% cp.scheduled_pickup_datetime | $KohaDates %]:
+                        [% SWITCH cp.status %]
+                        [% CASE 'to-be-staged' %]
+                            <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=to-be-staged"> To be staged</a>
+                        [% CASE 'staged-and-ready' %]
+                            <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=staged-and-ready"> Staged and ready</a>
+                        [% CASE 'patron-is-outside' %]
+                            <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=patron-is-outside"> Patron is outside!</a>
+                        [% CASE 'delivered' %]
+                            <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=delivered-today"> Delivered</a>
+                        [% CASE %]
+                            <span>Unknown status "[% cp.status | html %]"</span>
+                        [% END %]
+                    </li>
+                [% END %]
             </ul>
         </div>
     [% END %]
@@ -318,12 +301,11 @@
         <h4>Notes</h4>
         <ul>
             <li>
-                <span class="circ-hlt">
-                    [% patron.borrowernotes | $raw | html_line_break %]
-                </span>
+                <span class="circ-hlt"> [% patron.borrowernotes | $raw | html_line_break %] </span>
             </li>
         </ul>
-    </div> <!-- /#circnotes -->
+    </div>
+    <!-- /#circnotes -->
 [% END # /IF patron.borrowernotes %]
 
 [% IF ( patron_messages ) %]
@@ -340,7 +322,11 @@
                         [% patron_message.message_date | $KohaDates %]
                         [% Branches.GetName( patron_message.branchcode ) | html %]
                         [% IF patron_message.manager_id %]
-                            ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id | uri %]">[% patron_message.get_column('manager_firstname') | html %] [% patron_message.get_column('manager_surname') | html %]</a> )
+                            (
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id | uri %]"
+                                >[% patron_message.get_column('manager_firstname') | html %] [% patron_message.get_column('manager_surname') | html %]</a
+                            >
+                            )
                         [% END %]
                         <em>"[% patron_message.message | html | html_line_break %]"</em>
                         [% IF patron_message.patron_read_date %]
@@ -349,22 +335,36 @@
                     </span>
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
                         [% IF moremember %]
-                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-bs-target="#edit_message_form_[% patron_message.message_id | html %]" data-bs-toggle="modal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <a
+                                id="#edit_message_form_[% patron_message.message_id | html %]"
+                                class="btn btn-link edit_message"
+                                href="#edit_message_form_[% patron_message.message_id | uri %]"
+                                data-bs-target="#edit_message_form_[% patron_message.message_id | html %]"
+                                data-bs-toggle="modal"
+                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                            >
                             <form action="/cgi-bin/koha/circ/del_message.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-delete">
-                                <input type="hidden" name="message_id" value="[% patron_message.message_id | html %]">
-                                <input type="hidden" name="borrowernumber" value="[% patron_message.borrowernumber | html %]">
-                                <input type="hidden" name="from" value="moremember">
+                                <input type="hidden" name="op" value="cud-delete" />
+                                <input type="hidden" name="message_id" value="[% patron_message.message_id | html %]" />
+                                <input type="hidden" name="borrowernumber" value="[% patron_message.borrowernumber | html %]" />
+                                <input type="hidden" name="from" value="moremember" />
                                 <button type="submit" class="btn btn-link delete_message"><i class="fa fa-trash-can"></i> Delete</button>
                             </form>
                         [% ELSE %]
-                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-bs-target="#edit_message_form_[% patron_message.message_id | html %]" data-bs-toggle="modal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <a
+                                id="#edit_message_form_[% patron_message.message_id | html %]"
+                                class="btn btn-link edit_message"
+                                href="#edit_message_form_[% patron_message.message_id | uri %]"
+                                data-bs-target="#edit_message_form_[% patron_message.message_id | html %]"
+                                data-bs-toggle="modal"
+                                ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
+                            >
                             <form action="/cgi-bin/koha/circ/del_message.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-delete">
-                                <input type="hidden" name="message_id" value="[% patron_message.message_id | html %]">
-                                <input type="hidden" name="borrowernumber" value="[% patron_message.borrowernumber | html %]">
+                                <input type="hidden" name="op" value="cud-delete" />
+                                <input type="hidden" name="message_id" value="[% patron_message.message_id | html %]" />
+                                <input type="hidden" name="borrowernumber" value="[% patron_message.borrowernumber | html %]" />
                                 <button type="submit" class="btn btn-link delete_message"><i class="fa fa-trash-can"></i> Delete</button>
                             </form>
                         [% END %]
@@ -373,7 +373,8 @@
             [% END %]
         </ul>
         <a id="addnewmessageLabel" data-bs-target="#add_message_form" class="btn btn-link" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
-    </div> <!-- /#messages -->
+    </div>
+    <!-- /#messages -->
 
     [% FOREACH pm IN patron_messages %]
         <div id="edit_message_form_[% pm.message_id | html %]" class="modal" tabindex="-1" aria-labelledby="#edit_message_form_[% patron_message.message_id | html %]" aria-hidden="true">
@@ -381,8 +382,8 @@
                 <div class="modal-content">
                     <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="edit_message_form" name="message_f">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-edit_message">
-                        <input type="hidden" name="message_id" value="[% pm.message_id | html %]"/>
+                        <input type="hidden" name="op" value="cud-edit_message" />
+                        <input type="hidden" name="message_id" value="[% pm.message_id | html %]" />
                         <div class="modal-header">
                             <h1 class="modal-title">Edit message</h1>
                         </div>
@@ -406,7 +407,7 @@
                                 </label>
                             </div>
                             <div class="form-group">
-                                <textarea rows="3" class="modal-textarea" name="borrower_message" id="edit_borrower_message" >[% pm.message | html %]</textarea>
+                                <textarea rows="3" class="modal-textarea" name="borrower_message" id="edit_borrower_message">[% pm.message | html %]</textarea>
                             </div>
                         </div>
                         <div class="modal-footer">

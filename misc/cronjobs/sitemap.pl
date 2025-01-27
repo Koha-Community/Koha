@@ -21,22 +21,21 @@ package Main;
 
 use Modern::Perl;
 use utf8;
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use Koha::Sitemapper;
 
-
-my ($verbose, $help, $url, $dir, $short) = (0, 0, '', '.', 1);
+my ( $verbose, $help, $url, $dir, $short ) = ( 0, 0, '', '.', 1 );
 my $where;
 GetOptions(
-    'verbose'   => \$verbose,
-    'help'      => \$help,
-    'url=s'     => \$url,
-    'dir=s'     => \$dir,
-    'short!'    => \$short,
-    'where=s'   => \$where,
+    'verbose' => \$verbose,
+    'help'    => \$help,
+    'url=s'   => \$url,
+    'dir=s'   => \$dir,
+    'short!'  => \$short,
+    'where=s' => \$where,
 );
 
 sub usage {
@@ -62,7 +61,6 @@ my $sitemapper = Koha::Sitemapper->new(
     short   => $short,
 );
 $sitemapper->run($where);
-
 
 =head1 USAGE
 

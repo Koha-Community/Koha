@@ -49,9 +49,8 @@ my $patron = $builder->build(
     }
 );
 
-
 my $biblio = $builder->build_sample_biblio;
-my $item1 = $builder->build_sample_item(
+my $item1  = $builder->build_sample_item(
     {
         biblionumber => $biblio->biblionumber,
         library      => $library->{branchcode},
@@ -88,28 +87,42 @@ my $letter = $builder->build(
     {
         source => 'Letter',
         value  => {
-            module => 'circulation',
-            code   => 'HOLD_SLIP',
-            lang   => 'default',
+            module     => 'circulation',
+            code       => 'HOLD_SLIP',
+            lang       => 'default',
             branchcode => $library->{branchcode},
-            content => 'Hold found for <<borrowers.firstname>>: Please pick up <<biblio.title>> with barcode <<items.barcode>> at <<branches.branchcode>>.',
+            content    =>
+                'Hold found for <<borrowers.firstname>>: Please pick up <<biblio.title>> with barcode <<items.barcode>> at <<branches.branchcode>>.',
             message_transport_type => 'email',
         },
     }
 );
 
-is ( ReserveSlip(), undef, "No hold slip returned if invalid or undef borrowernumber and/or biblionumber" );
-is ( ReserveSlip({
-        branchcode     => $library->{branchcode},
-        reserve_id     => $hold1->reserve_id,
-    })->{code},
-    'HOLD_SLIP', "Get a hold slip from library, patron and biblio" );
+is( ReserveSlip(), undef, "No hold slip returned if invalid or undef borrowernumber and/or biblionumber" );
+is(
+    ReserveSlip(
+        {
+            branchcode => $library->{branchcode},
+            reserve_id => $hold1->reserve_id,
+        }
+    )->{code},
+    'HOLD_SLIP',
+    "Get a hold slip from library, patron and biblio"
+);
 
-is (ReserveSlip({
-        branchcode     => $library->{branchcode},
-        reserve_id     => $hold1->reserve_id,
-    })->{content},
-    sprintf( "Hold found for %s: Please pick up %s with barcode %s at %s.", $patron->{firstname}, $biblio->title, $item1->barcode, $library->{branchcode}),"Hold slip contains correctly parsed content");
+is(
+    ReserveSlip(
+        {
+            branchcode => $library->{branchcode},
+            reserve_id => $hold1->reserve_id,
+        }
+    )->{content},
+    sprintf(
+        "Hold found for %s: Please pick up %s with barcode %s at %s.", $patron->{firstname}, $biblio->title,
+        $item1->barcode, $library->{branchcode}
+    ),
+    "Hold slip contains correctly parsed content"
+);
 
 subtest 'title level hold' => sub {
     plan tests => 2;
@@ -145,7 +158,7 @@ subtest 'title level hold' => sub {
         $slip->{content},
         sprintf(
             "Hold found for %s: Please pick up %s with barcode %s at %s.", $patron->{firstname}, $biblio->title,
-            $item->barcode,                                                $library->{branchcode}
+            $item->barcode, $library->{branchcode}
         ),
         "Hold slip contents correctly use the passed item"
     );

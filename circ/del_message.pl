@@ -28,10 +28,11 @@ use Koha::Patron::Messages;
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "circ/circulation.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
+    {
+        template_name => "circ/circulation.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
     }
 );
 
@@ -40,7 +41,7 @@ my $borrowernumber = $input->param('borrowernumber');
 my $message_id     = $input->param('message_id');
 
 my $message = Koha::Patron::Messages->find($message_id);
-if ( $message
+if (   $message
     && !C4::Context->preference('AllowAllMessageDeletion')
     && C4::Context->userenv->{'branch'} ne $message->branchcode )
 {
@@ -50,10 +51,8 @@ if ( $message
 
 $message->delete if $message && $op eq 'cud-delete';
 
-if ( $input->param('from') eq  "moremember" ) {
-    print $input->redirect(
-        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+if ( $input->param('from') eq "moremember" ) {
+    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 } else {
-    print $input->redirect(
-        "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
 }

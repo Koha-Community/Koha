@@ -19,7 +19,6 @@ package Koha::SMS::Provider;
 
 use Modern::Perl;
 
-
 use Koha::Patrons;
 
 use base qw(Koha::Object);
@@ -44,7 +43,7 @@ Gives the number of patrons using this provider
 =cut
 
 sub patrons_using {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::Patrons->search( { sms_provider_id => $self->id } )->count();
 }

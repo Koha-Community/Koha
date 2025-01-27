@@ -29,10 +29,10 @@ sub effective_authorised_value_category {
 
     my $category = $self->authorised_value_category;
     unless ($category) {
-        if ($self->marcfield) {
-            my ($tag, $subfield) = split /\$/, $self->marcfield;
+        if ( $self->marcfield ) {
+            my ( $tag, $subfield ) = split /\$/, $self->marcfield;
 
-            my $mss = Koha::MarcSubfieldStructures->find('', $tag, $subfield);
+            my $mss = Koha::MarcSubfieldStructures->find( '', $tag, $subfield );
             if ($mss) {
                 $category = $mss->authorised_value;
             }

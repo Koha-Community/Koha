@@ -12,7 +12,6 @@
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
         [% END %]
-
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]

@@ -36,12 +36,12 @@ subtest 'suggester() tests' => sub {
     $schema->storage->txn_begin;
 
     my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $suggestion = $builder->build_object(
-        { class => 'Koha::Suggestions', value => { suggestedby => undef } } );
+    my $suggestion = $builder->build_object( { class => 'Koha::Suggestions', value => { suggestedby => undef } } );
 
     is( $suggestion->suggester, undef, 'Returns undef if no suggester' );
+
     # Set a borrowernumber
-    $suggestion->suggestedby($patron->borrowernumber)->store->discard_changes;
+    $suggestion->suggestedby( $patron->borrowernumber )->store->discard_changes;
     my $suggester = $suggestion->suggester;
     is( ref($suggester), 'Koha::Patron', 'Type is correct for suggester' );
     is_deeply( $patron->unblessed, $suggester->unblessed, 'It returns the right patron' );

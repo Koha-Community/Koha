@@ -35,14 +35,14 @@ t::lib::Mocks::mock_userenv();
 
 # Create 10 sample borrowers
 my @borrowers = ();
-foreach (1..10) {
-    push @borrowers, $builder->build({ source => 'Borrower' });
+foreach ( 1 .. 10 ) {
+    push @borrowers, $builder->build( { source => 'Borrower' } );
 }
 
 my $owner  = $borrowers[0]->{borrowernumber};
 my $owner2 = $borrowers[1]->{borrowernumber};
 
-my @lists = GetPatronLists( { owner => $owner } );
+my @lists               = GetPatronLists( { owner => $owner } );
 my $list_count_original = @lists;
 
 my $list1 = AddPatronList( { name => 'Test List 1', owner => $owner } );
@@ -60,12 +60,10 @@ ModPatronList(
 $list2->discard_changes();
 is( $list2->name(), 'Test List 3', 'ModPatronList works' );
 
-AddPatronsToList(
-    { list => $list1, cardnumbers => [ map { $_->{cardnumber} } @borrowers ] }
-);
+AddPatronsToList( { list => $list1, cardnumbers => [ map { $_->{cardnumber} } @borrowers ] } );
 is(
     scalar @borrowers,
-      $list1->patron_list_patrons()->search_related('borrowernumber')->all(),
+    $list1->patron_list_patrons()->search_related('borrowernumber')->all(),
     'AddPatronsToList works for cardnumbers'
 );
 
@@ -77,19 +75,19 @@ AddPatronsToList(
 );
 is(
     scalar @borrowers,
-      $list2->patron_list_patrons()->search_related('borrowernumber')->all(),
+    $list2->patron_list_patrons()->search_related('borrowernumber')->all(),
     'AddPatronsToList works for borrowernumbers'
 );
 
-my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
+my $deleted_patron = $builder->build_object( { class => 'Koha::Patrons' } );
 $deleted_patron->delete;
-my @result = AddPatronsToList({list => $list2,borrowernumbers => [ $deleted_patron->borrowernumber ]});
-is( scalar @result, 0,'Invalid borrowernumber not added');
-@result = AddPatronsToList({list => $list2,cardnumbers => [ $deleted_patron->cardnumber ]});
-is( scalar @result, 0,'Invalid cardnumber not added');
+my @result = AddPatronsToList( { list => $list2, borrowernumbers => [ $deleted_patron->borrowernumber ] } );
+is( scalar @result, 0, 'Invalid borrowernumber not added' );
+@result = AddPatronsToList( { list => $list2, cardnumbers => [ $deleted_patron->cardnumber ] } );
+is( scalar @result, 0, 'Invalid cardnumber not added' );
 
 my @ids =
-  $list1->patron_list_patrons()->get_column('patron_list_patron_id')->all();
+    $list1->patron_list_patrons()->get_column('patron_list_patron_id')->all();
 DelPatronsFromList(
     {
         list                => $list1,
@@ -99,8 +97,8 @@ DelPatronsFromList(
 $list1->discard_changes();
 is( $list1->patron_list_patrons()->count(), 0, 'DelPatronsFromList works.' );
 
-my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-AddPatronsToList({list => $list2,borrowernumbers => [ $patron->borrowernumber ]});
+my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+AddPatronsToList( { list => $list2, borrowernumbers => [ $patron->borrowernumber ] } );
 @lists = $patron->get_lists_with_patron;
 is( scalar @lists, 1, 'get_lists_with_patron works' );
 
@@ -119,7 +117,7 @@ DelPatronList( { patron_list_id => $list1->patron_list_id(), owner => $owner } )
 DelPatronList( { patron_list_id => $list2->patron_list_id(), owner => $owner } );
 
 @lists =
-  GetPatronLists( { patron_list_id => $list1->patron_list_id(), owner => $owner } );
+    GetPatronLists( { patron_list_id => $list1->patron_list_id(), owner => $owner } );
 is( scalar @lists, 0, 'DelPatronList works' );
 
 $schema->storage->txn_rollback;

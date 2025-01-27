@@ -20,7 +20,7 @@ package Koha::Edifact;
 use strict;
 use warnings;
 use File::Slurp qw( read_file );
-use Carp qw( carp croak );
+use Carp        qw( carp croak );
 use Koha::Edifact::Segment;
 use Koha::Edifact::Message;
 
@@ -40,13 +40,11 @@ sub new {
 
     if ( $param_hashref->{filename} ) {
         if ( $param_hashref->{transmission} ) {
-            carp
-"Cannot instantiate $class : both filename and transmission passed";
+            carp "Cannot instantiate $class : both filename and transmission passed";
             return;
         }
         $transmission = read_file( $param_hashref->{filename} );
-    }
-    else {
+    } else {
         $transmission = $param_hashref->{transmission};
     }
     $self->{transmission} = _init($transmission);
@@ -78,8 +76,7 @@ sub interchange_trailer {
     my $trailer = $self->{transmission}->[-1];
     if ( $field eq 'interchange_control_count' ) {
         return $trailer->elem(0);
-    }
-    elsif ( $field eq 'interchange_control_reference' ) {
+    } elsif ( $field eq 'interchange_control_reference' ) {
         return $trailer->elem(1);
     }
     carp "Trailer field $field not recognized";
@@ -107,15 +104,13 @@ sub next_segment {
         if ( $seg->tag eq 'UNH' ) {
 
             $self->{msg_type} = $seg->elem( 1, 0 );
-        }
-        elsif ( $seg->tag eq 'LIN' ) {
+        } elsif ( $seg->tag eq 'LIN' ) {
             $self->{msg_type} = 'detail';
         }
 
         if ( $seg->tag ne 'UNZ' ) {
             $self->{data_iterator}++;
-        }
-        else {
+        } else {
             $self->{data_iterator} = undef;
         }
         return $seg;
@@ -146,8 +141,7 @@ sub _init {
 
         }
         return;
-    }
-    else {
+    } else {
         my $s = substr $msg, 10;
         croak "File does not start with a Service string advice :$s";
     }
@@ -165,15 +159,13 @@ sub message_array {
         if ( $seg->tag eq 'UNH' ) {
             $in_msg = 1;
             push @{$msg}, $seg;
-        }
-        elsif ( $seg->tag eq 'UNT' ) {
+        } elsif ( $seg->tag eq 'UNT' ) {
             $in_msg = 0;
             if ( @{$msg} ) {
                 push @{$msg_arr}, Koha::Edifact::Message->new($msg);
                 $msg = [];
             }
-        }
-        elsif ($in_msg) {
+        } elsif ($in_msg) {
             push @{$msg}, $seg;
         }
     }

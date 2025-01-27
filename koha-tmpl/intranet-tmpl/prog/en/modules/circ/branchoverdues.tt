@@ -4,18 +4,18 @@
 [% USE KohaDates %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% tx("Overdues at {library}", { library = Branches.GetLoggedInBranchname }) | html %] &rsaquo;
-    [% t("Circulation") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Overdues at {library}", { library = Branches.GetLoggedInBranchname }) | html %]
+        &rsaquo; [% t("Circulation") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_branchoverdues" class="circ">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
-
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
@@ -30,18 +30,22 @@
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
+    <h1>Circulation: Overdues at [% Branches.GetLoggedInBranchname | html %]</h1>
 
-<h1>Circulation: Overdues at [% Branches.GetLoggedInBranchname | html %]</h1>
-
-<form name="selectlocation" action="branchoverdues.pl" method="get">
-    <label for="location">Shelving location selected: </label><select id="location" name="location">
-        <option value="">All shelving locations</option>
-        [% FOREACH locationsloo IN locationsloop %]
-            [% IF ( locationsloo.selected ) %]<option value="[% locationsloo.authorised_value | html %]" selected="selected">[% locationsloo.lib | html %]</option>[% ELSE %]<option value="[% locationsloo.authorised_value | html %]">[% locationsloo.lib | html %]</option>[% END %]
-        [% END %]
-    </select>
-    <input type="submit" name="location" class="btn btn-primary" value="OK" />
-</form>
+    <form name="selectlocation" action="branchoverdues.pl" method="get">
+        <label for="location">Shelving location selected: </label
+        ><select id="location" name="location">
+            <option value="">All shelving locations</option>
+            [% FOREACH locationsloo IN locationsloop %]
+                [% IF ( locationsloo.selected ) %]
+                    <option value="[% locationsloo.authorised_value | html %]" selected="selected">[% locationsloo.lib | html %]</option>
+                [% ELSE %]
+                    <option value="[% locationsloo.authorised_value | html %]">[% locationsloo.lib | html %]</option>
+                [% END %]
+            [% END %]
+        </select>
+        <input type="submit" name="location" class="btn btn-primary" value="OK" />
+    </form>
 
     [% IF ( overduesloop ) %]
         <div class="page-section">
@@ -54,47 +58,43 @@
                 </tr>
                 [% FOREACH overduesloo IN overduesloop %]
                     <tr>
+                        <td> [% overduesloo.date_due | $KohaDates as_due_date => 1 %] </td>
                         <td>
-                            [% overduesloo.date_due | $KohaDates as_due_date => 1 %]
-                        </td>
-                        <td>
-                            [% INCLUDE 'biblio-title.inc' biblio=overduesloo link = 1 %] [% IF ( overduesloo.author ) %] by [% overduesloo.author | html %][% END %]
+                            [% INCLUDE 'biblio-title.inc' biblio=overduesloo link = 1 %] [% IF ( overduesloo.author ) %]by [% overduesloo.author | html %][% END %]
 
-                                <br />Barcode : [% overduesloo.barcode | html %]
+                            <br />Barcode : [% overduesloo.barcode | html %]
                         </td>
                         <td>
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber | uri %]">[% overduesloo.borrowersurname | html %], [% overduesloo.borrowerfirstname | html %]</a>
-                            <br />[% overduesloo.cardnumber | html %]
-                            <br />[% overduesloo.borrowerphone | html %]<br />
-                        [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail | uri %]?subject=Overdue: [% overduesloo.title | uri %]">
-                        [% overduesloo.borroweremail | html %]</a>[% END %]
+                            <br />[% overduesloo.cardnumber | html %] <br />[% overduesloo.borrowerphone | html %]<br />
+                            [% IF ( overduesloo.borroweremail ) %]
+                                <a href="mailto:[% overduesloo.borroweremail | uri %]?subject=Overdue: [% overduesloo.title | uri %]"> [% overduesloo.borroweremail | html %]</a>
+                            [% END %]
                         </td>
-                        <td>[% Branches.GetName( overduesloo.homebranch ) | html %] [% overduesloo.itemcallnumber | html %]
-                        </td>
+                        <td>[% Branches.GetName( overduesloo.homebranch ) | html %] [% overduesloo.itemcallnumber | html %] </td>
                     </tr>
                 [% END %]
             </table>
-        </div> <!-- /.page-section -->
+        </div>
+        <!-- /.page-section -->
     [% ELSE %]
-        <div class="alert alert-info">There are no overdues for today[% IF ( location ) %] at the selected location[% END %].</div>
+        <div class="alert alert-info">There are no overdues for today[% IF ( location ) %]at the selected location[% END %].</div>
     [% END %]
     [% IF ( todayoverduesloop ) %]
         <div id="branch_odues_today_odues" class="page-section">
             <table style="width:100%;">
-            <caption>Today's notifications</caption>
-            <tr>
-                <th>Date due</th>
-                <th>Title</th>
-                <th>Borrower</th>
-                <th>Location</th>
-                <th>Cancel</th>
-            </tr>
+                <caption>Today's notifications</caption>
+                <tr>
+                    <th>Date due</th>
+                    <th>Title</th>
+                    <th>Borrower</th>
+                    <th>Location</th>
+                    <th>Cancel</th>
+                </tr>
                 [% FOREACH todayoverduesloo IN todayoverduesloop %]
                     <tr>
                         <td>
-                            <p>
-                            [% todayoverduesloo.date_due | $KohaDates as_due_date => 1 %]
-                            </p>
+                            <p> [% todayoverduesloo.date_due | $KohaDates as_due_date => 1 %] </p>
                         </td>
                         <td>
                             <p>
@@ -104,23 +104,28 @@
                             </p>
                         </td>
                         <td>
-                            <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber | uri %]">[% todayoverduesloo.borrowersurname | html %] &nbsp; [% todayoverduesloo.borrowerfirstname | html %]</a>
-                            <br />[% todayoverduesloo.cardnumber | html %]<br />
-                            <br />[% todayoverduesloo.borrowerphone | html %]<br />
-                        [% IF ( todayoverduesloo.borroweremail ) %]<a href="mailto:[% todayoverduesloo.borroweremail | uri %]?subject=Overdue: [% todayoverduesloo.title | uri %]">
-                        [% todayoverduesloo.borroweremail | html %]</a>[% END %]
+                            <p
+                                ><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber | uri %]"
+                                    >[% todayoverduesloo.borrowersurname | html %] &nbsp; [% todayoverduesloo.borrowerfirstname | html %]</a
+                                >
+                                <br />[% todayoverduesloo.cardnumber | html %]<br />
+                                <br />[% todayoverduesloo.borrowerphone | html %]<br />
+                                [% IF ( todayoverduesloo.borroweremail ) %]
+                                    <a href="mailto:[% todayoverduesloo.borroweremail | uri %]?subject=Overdue: [% todayoverduesloo.title | uri %]"> [% todayoverduesloo.borroweremail | html %]</a>
+                                [% END %]
                             </p>
                         </td>
-                        <td><p>[% Branches.GetName( todayoverduesloo.homebranch ) | html %] [% todayoverduesloo.itemcallnumber | html %]</p>
-                        </td>
+                        <td><p>[% Branches.GetName( todayoverduesloo.homebranch ) | html %] [% todayoverduesloo.itemcallnumber | html %]</p> </td>
                         <td>
-                        <a href="branchoverdues.pl?action=remove&amp;borrowernumber=[% todayoverduesloo.borrowernumber | uri %]&amp;itemnumber=[% todayoverduesloo.itemnumber | uri %]&amp;method=phone&amp;location=[% todayoverduesloo.location | uri %]">Cancel notification</a>
+                            <a
+                                href="branchoverdues.pl?action=remove&amp;borrowernumber=[% todayoverduesloo.borrowernumber | uri %]&amp;itemnumber=[% todayoverduesloo.itemnumber | uri %]&amp;method=phone&amp;location=[% todayoverduesloo.location | uri %]"
+                                >Cancel notification</a
+                            >
                         </td>
                     </tr>
                 [% END %]
             </table>
         </div>
     [% END %]
-
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -19,7 +19,6 @@ package Koha::Config::SysPref;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use C4::Log;
@@ -35,7 +34,6 @@ Koha::Config::SysPref - Koha System Preference Object class
 =head2 Class Methods
 
 =cut
-
 
 =head3 store
 

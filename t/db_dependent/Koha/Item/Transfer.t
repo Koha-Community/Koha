@@ -46,7 +46,7 @@ subtest 'item relation tests' => sub {
     );
 
     my $transfer_item = $transfer->item;
-    is( ref( $transfer_item ), 'Koha::Item', 'Koha::Item::Transfer->item should return a Koha::Item' );
+    is( ref($transfer_item),        'Koha::Item',      'Koha::Item::Transfer->item should return a Koha::Item' );
     is( $transfer_item->itemnumber, $item->itemnumber, 'Koha::Item::Transfer->item should return the correct item' );
 
     $schema->storage->txn_rollback;
@@ -57,7 +57,7 @@ subtest 'from_library relation tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $transfer = $builder->build_object(
         {
             class => 'Koha::Item::Transfers',
@@ -68,8 +68,11 @@ subtest 'from_library relation tests' => sub {
     );
 
     my $from_library = $transfer->from_library;
-    is( ref( $from_library ), 'Koha::Library', 'Koha::Item::Transfer->from_library should return a Koha::Library' );
-    is( $from_library->branchcode, $library->branchcode, 'Koha::Item::Transfer->from_library should return the correct library' );
+    is( ref($from_library), 'Koha::Library', 'Koha::Item::Transfer->from_library should return a Koha::Library' );
+    is(
+        $from_library->branchcode, $library->branchcode,
+        'Koha::Item::Transfer->from_library should return the correct library'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -79,7 +82,7 @@ subtest 'to_library relation tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $transfer = $builder->build_object(
         {
             class => 'Koha::Item::Transfers',
@@ -90,8 +93,11 @@ subtest 'to_library relation tests' => sub {
     );
 
     my $to_library = $transfer->to_library;
-    is( ref( $to_library ), 'Koha::Library', 'Koha::Item::Transfer->to_library should return a Koha::Library' );
-    is( $to_library->branchcode, $library->branchcode, 'Koha::Item::Transfer->to_library should return the correct library' );
+    is( ref($to_library), 'Koha::Library', 'Koha::Item::Transfer->to_library should return a Koha::Library' );
+    is(
+        $to_library->branchcode, $library->branchcode,
+        'Koha::Item::Transfer->to_library should return the correct library'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -128,32 +134,30 @@ subtest 'transit tests' => sub {
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => {
-                itemnumber => $item->itemnumber
-            }
+            value => { itemnumber => $item->itemnumber }
         }
     );
     is( ref($checkout), 'Koha::Checkout', 'Mock checkout added' );
 
     throws_ok { $transfer->transit() }
     'Koha::Exceptions::Item::Transfer::OnLoan',
-      'Exception thrown if item is checked out';
+        'Exception thrown if item is checked out';
 
     $checkout->delete;
 
     # CartToShelf test
-    $item->set({ location => 'CART', permanent_location => 'TEST' })->store();
-    is ( $item->location, 'CART', 'Item location set to CART');
+    $item->set( { location => 'CART', permanent_location => 'TEST' } )->store();
+    is( $item->location, 'CART', 'Item location set to CART' );
     $transfer->discard_changes;
     $transfer->transit();
     $item->discard_changes;
-    is ( $item->location, 'TEST', 'Item location correctly restored to match permanent location');
+    is( $item->location, 'TEST', 'Item location correctly restored to match permanent location' );
 
     # Transit state set
     ok( $transfer->datesent, 'Transit set the datesent for the transfer' );
 
     # Last seen
-    ok ( $item->datelastseen, 'Transit set item datelastseen date');
+    ok( $item->datelastseen, 'Transit set item datelastseen date' );
 
     $schema->storage->txn_rollback;
 };
@@ -177,11 +181,11 @@ subtest 'receive tests' => sub {
         {
             class => 'Koha::Item::Transfers',
             value => {
-                itemnumber   => $item->itemnumber,
-                frombranch   => $library2->branchcode,
-                tobranch     => $library1->branchcode,
+                itemnumber  => $item->itemnumber,
+                frombranch  => $library2->branchcode,
+                tobranch    => $library1->branchcode,
                 datearrived => undef,
-                reason       => 'Manual'
+                reason      => 'Manual'
             }
         }
     );
@@ -191,16 +195,14 @@ subtest 'receive tests' => sub {
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => {
-                itemnumber => $item->itemnumber
-            }
+            value => { itemnumber => $item->itemnumber }
         }
     );
     is( ref($checkout), 'Koha::Checkout', 'Mock checkout added' );
 
     throws_ok { $transfer->receive() }
     'Koha::Exceptions::Item::Transfer::OnLoan',
-      'Exception thrown if item is checked out';
+        'Exception thrown if item is checked out';
 
     $checkout->delete;
 
@@ -223,7 +225,7 @@ subtest 'in_transit tests' => sub {
 
     my $library_from = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_to   = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $item     = $builder->build_sample_item(
+    my $item         = $builder->build_sample_item(
         {
             homebranch    => $library_to->branchcode,
             holdingbranch => $library_from->branchcode,
@@ -242,13 +244,13 @@ subtest 'in_transit tests' => sub {
     ok( !$transfer->in_transit, 'in_transit returns false when only daterequested is defined' );
 
     $transfer->datesent(dt_from_string)->store;
-    ok( $transfer->in_transit, 'in_transit returns true when datesent is defined');
+    ok( $transfer->in_transit, 'in_transit returns true when datesent is defined' );
 
     $transfer->datearrived(dt_from_string)->store;
-    ok( !$transfer->in_transit, 'in_transit returns false when datearrived is defined');
+    ok( !$transfer->in_transit, 'in_transit returns false when datearrived is defined' );
 
     $transfer->set( { datearrived => undef, datecancelled => dt_from_string } )->store;
-    ok( !$transfer->in_transit, 'in_transit returns false when datecancelled is defined');
+    ok( !$transfer->in_transit, 'in_transit returns false when datecancelled is defined' );
 
     $schema->storage->txn_rollback;
 };
@@ -288,16 +290,16 @@ subtest 'cancel tests' => sub {
 
     # Missing mandatory parameter
     throws_ok { $transfer->cancel() } 'Koha::Exceptions::MissingParameter',
-      'Exception thrown if a reason is not passed to cancel';
+        'Exception thrown if a reason is not passed to cancel';
 
     # Item in transit should result in failure
-    throws_ok { $transfer->cancel({ reason => $cancellation_reason }) }
+    throws_ok { $transfer->cancel( { reason => $cancellation_reason } ) }
     'Koha::Exceptions::Item::Transfer::InTransit',
-      'Exception thrown if item is in transit';
+        'Exception thrown if item is in transit';
 
-    $transfer->cancel({ reason => $cancellation_reason, force => 1});
+    $transfer->cancel( { reason => $cancellation_reason, force => 1 } );
     ok( $transfer->datecancelled, 'Forced cancellation, cancellation date set' );
-    is( $transfer->cancellation_reason, 'Manual', 'Forced cancellation, cancellation reason is set');
+    is( $transfer->cancellation_reason, 'Manual', 'Forced cancellation, cancellation reason is set' );
 
     $transfer->datecancelled(undef);
     $transfer->cancellation_reason(undef);
@@ -305,9 +307,9 @@ subtest 'cancel tests' => sub {
 
     # Transit state unset
     $transfer->store()->discard_changes;
-    $transfer->cancel({ reason => $cancellation_reason });
+    $transfer->cancel( { reason => $cancellation_reason } );
     ok( $transfer->datecancelled, 'Cancellation date set upon call to cancel' );
-    is( $transfer->cancellation_reason, 'Manual', 'Cancellation reason is set');
+    is( $transfer->cancellation_reason, 'Manual', 'Cancellation reason is set' );
 
     $schema->storage->txn_rollback;
 };

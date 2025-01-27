@@ -3,14 +3,16 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% IF( do_it ) %]
-        [% t("Results") | html %] &rsaquo;
-    [% END %]
-    [% t("Acquisitions statistics") | html %] &rsaquo;
-    [% t("Reports") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% IF( do_it ) %]
+            [% t("Results") | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Acquisitions statistics") | html %]
+        &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -40,294 +42,291 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='reports-menu' %]
-
-<h1>Acquisitions statistics </h1>
-[% IF ( do_it ) %]
-	[% FOREACH mainloo IN mainloop %]
-        [% IF ( mainloo.loopfilter.size ) %]
-            <p><strong>Filtered on:</strong></p>
-            [% FOREACH loopfilte IN mainloo.loopfilter %]
-                <p>
-                    [% SWITCH loopfilte.crit %]
-                        [% CASE '0' %]<span>Placed on (from)</span>
-                        [% CASE '1' %]<span>Placed on (to)</span>
-                        [% CASE '2' %]<span>Received on (from)</span>
-                        [% CASE '3' %]<span>Received on (to)</span>
-                        [% CASE '4' %]<span>Vendor</span>
-                        [% CASE '5' %]<span>Home library</span>
-                        [% CASE '6' %]<span>Collection</span>
-                        [% CASE '7' %]<span>Item type</span>
-                        [% CASE '8' %]<span>Fund</span>
-                        [% CASE '9' %]<span>Sort1</span>
-                        [% CASE '10' %]<span>Sort2</span>
-                        [% CASE %]<span>Unknown filter</span>
-                    [% END %]
-                    : [% loopfilte.filter | html %]
-                </p>
-			[% END %]
-		[% END %]
-
-		<table>
-			<tr>
-				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% loopco.coltitle | html %]</th>
-				[% END %]
-				<th>TOTAL</th>
-			</tr>
-				[% FOREACH loopro IN mainloo.looprow %]
-					<tr>
-						<td [% IF loopro.hilighted %]class="hilighted"[% END %]>
-						[% loopro.rowtitle | html %]</td>
-						[% FOREACH loopcel IN loopro.loopcell %]
-							<td>
-								[% IF ( loopcel.value ) %][% loopcel.value | html %]
-								[% ELSE %] &nbsp;
-								[% END %]
-							</td>
-						[% END %]
-						<td>
-							[% loopro.totalrow | html %]
-						</td>
-					</tr>
-				[% END %]
-				<tr >
-					<th>TOTAL</th>
-					[% FOREACH loopfoote IN mainloo.loopfooter %]
-						<th>
-							[% loopfoote.totalcol | html %]
-						</th>
-					[% END %]
-					<th>[% mainloo.total | html %]</th>
-				</tr>
-		</table>
-	[% END %]
-[% ELSE %]
-	<form method="get" action="/cgi-bin/koha/reports/acquisitions_stats.pl">
-	<fieldset class="rows">
-	<legend>Acquisitions statistics</legend>
-	<table>
-		<thead>
-			<tr>
-			<th>Title</th>
-			<th>Row</th>
-			<th>Column</th>
-			<th>Filter</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="hilighted">
-                <td>Placed on</td>
-				<td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
-				<td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
-                <td>
-                    From <input type="text" size="10" id="placedonfrom" name="Filter" value="" class="flatpickr" data-date_to="placedonto" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                    To <input size="10" id="placedonto" name="Filter" type="text" value="" class="flatpickr" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                </td>
-			</tr>
-			<tr class="hilighted">
-				<td>&nbsp;</td>
-				<td colspan="2">group by <select name="PlacedOnDisplay">
-					<option value="">None</option>
-					<option value ="1">Day of week</option>
-					<option value ="2">Month</option>
-					<option value ="3">Year</option>
-					</select>
-
-				</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-                <td>Received on</td>
-				<td><input type="radio" name="Line" value="aqorders.datereceived" /></td>
-				<td><input type="radio" name="Column" value="aqorders.datereceived" /></td>
-                <td>
-                    From <input type="text" size="10" id="receivedonfrom" name="Filter" value="" class="flatpickr" data-date_to="receivedonto" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                    To <input type="text" size="10" id="receivedonto" name="Filter" value="" class="flatpickr" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                </td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td colspan="2">group by <select name="ReceivedOnDisplay">
-					<option value="">None</option>
-					<option value ="1">Day of week</option>
-					<option value ="2">Month</option>
-					<option value ="3">Year</option>
-					</select>
-
-				</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr class="hilighted">
-				<td>Vendor</td>
-				<td><input type="radio" checked="checked" name="Line" value="aqbooksellers.name" /></td>
-				<td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
-                <td>
-                    <select name="Filter">
-                        <option value="">All vendors</option>
-                        [% FOREACH bookseller IN booksellers %]
-                            <option value="[% bookseller.name | html %]">[% bookseller.name | html %]</option>
+    <h1>Acquisitions statistics </h1>
+    [% IF ( do_it ) %]
+        [% FOREACH mainloo IN mainloop %]
+            [% IF ( mainloo.loopfilter.size ) %]
+                <p><strong>Filtered on:</strong></p>
+                [% FOREACH loopfilte IN mainloo.loopfilter %]
+                    <p>
+                        [% SWITCH loopfilte.crit %]
+                        [% CASE '0' %]
+                            <span>Placed on (from)</span>
+                        [% CASE '1' %]
+                            <span>Placed on (to)</span>
+                        [% CASE '2' %]
+                            <span>Received on (from)</span>
+                        [% CASE '3' %]
+                            <span>Received on (to)</span>
+                        [% CASE '4' %]
+                            <span>Vendor</span>
+                        [% CASE '5' %]
+                            <span>Home library</span>
+                        [% CASE '6' %]
+                            <span>Collection</span>
+                        [% CASE '7' %]
+                            <span>Item type</span>
+                        [% CASE '8' %]
+                            <span>Fund</span>
+                        [% CASE '9' %]
+                            <span>Sort1</span>
+                        [% CASE '10' %]
+                            <span>Sort2</span>
+                        [% CASE %]
+                            <span>Unknown filter</span>
                         [% END %]
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Home library</td>
-                <td><input type="radio" name="Line" value="items.homebranch" /></td>
-                <td><input type="radio" name="Column" value="items.homebranch" /></td>
-                <td>
-                    <select name="Filter">
-                        <option value="" selected="selected">All libraries</option>
-                        [% FOREACH branch IN branches %]
-                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                        [% END %]
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    [% IF ccode_label %]
-                        [% ccode_label | html %]
-                    [% ELSE %]
-                        <span>Collection</span>
-                    [% END %]
-                </td>
-                <td><input type="radio" name="Line" value="items.ccode" /></td>
-                <td><input type="radio" name="Column" value="items.ccode" /></td>
-                <td>
-                    [% IF ccode_avlist.size %]
-                        <select name="Filter">
-                            <option value="" selected="selected">All</option>
-                            [% FOREACH ccode_av IN ccode_avlist %]
-                                <option value="[% ccode_av.authorised_value | html %]">[% ccode_av.lib | html %]</option>
-                            [% END %]
-                        </select>
-                    [% ELSE %]
-                        <input type="text" name="Filter" />
-                    [% END %]
-                </td>
-            </tr>
-			<tr>
-                <td>Item type</td>
-				<td><input type="radio" name="Line" value="biblioitems.itemtype" /></td>
-				<td><input type="radio" name="Column" value="biblioitems.itemtype" /></td>
-                <td>
-                    <select name="Filter" id="itemtypes">
-                        <option value="">All item types</option>
-                        [% FOREACH itemtype IN itemtypes %]
-                        <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
-                        [% END %]
-                    </select>
-                </td>
-			</tr>
-
-			<tr>
-				<td>Fund</td>
-				<td><input type="radio" name="Line" value="aqbudgets.budget_code" /></td>
-				<td><input type="radio" name="Column" value="aqbudgets.budget_code" /></td>
-                <td>
-                    <select name="Filter" id="budget">
-                        <option value="">All funds</option>
-                        [% FOREACH value IN Budgets.values %]
-                        <option value="[% value | html %]">[% Budgets.labels.$value | html %]</option>
-                        [% END %]
-                    </select>
-                </td>
-			</tr>
-
-			[% IF ( hassort1 ) %]
-				<tr class="hilighted">
-					<td>Sort1</td>
-					<td><input type="radio" name="Line" value="aqorders.sort1" /></td>
-					<td><input type="radio" name="Column" value="aqorders.sort1" /></td>
-                    <td>
-                        <select name="Filter" id="sort1">
-                            <option value="">All</option>
-                            [% FOREACH value IN Sort1.values %]
-                            <option value="[% value | html %]">[% Sort1.labels.$value | html %]</option>
-                            [% END %]
-                        </select>
-                    </td>
-				</tr>
-			[% END %]
-			[% IF ( hassort2 ) %]
-				<tr [% IF HglghtSort2 %]class="hilighted"[% END %]>
-					<td>Sort2</td>
-					<td><input type="radio" name="Line" value="aqorders.sort2" /></td>
-					<td><input type="radio" name="Column" value="aqorders.sort2" /></td>
-                    <td>
-                        <select name="Filter" id="sort2">
-                            <option value="">All</option>
-                            [% FOREACH value IN Sort2.values %]
-                            <option value="[% value | html %]">[% Sort2.labels.$value | html %]</option>
-                            [% END %]
-                        </select>
-                    </td>
-				</tr>
-			[% END %]
-		</tbody>
-	</table><br />
-	</fieldset>
-
-<fieldset class="rows">
-    <legend> Cell value </legend>
-    <ol>
-        <li>
-            <label for="cellvalue1">Count items:</label><input type="radio" name="Cellvalue" id="cellvalue1" value="1" checked="checked" />
-        </li>
-        <li>
-            <label for="cellvalue2">Count unique bibliographic records:</label><input type="radio" name="Cellvalue" id="cellvalue2" value="2" />
-        </li>
-        <li>
-            <label for="cellvalue3">Amount:</label><input type="radio" name="Cellvalue" id="cellvalue3" value="3" />
-        </li>
-        <li>
-            <label for="cellvalue4">Ordered amount:</label><input type="radio" name="Cellvalue" id="cellvalue4" value="4" />
-        </li>
-        <li>
-            <label for="cellvalue5">Spent amount:</label><input type="radio" name="Cellvalue" id="cellvalue5" value="5" />
-        </li>
-    </ol>
-</fieldset>
-
-	<fieldset class="rows">
-	<legend>Output</legend>
-    <ol>
-        <li>
-            <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" />
-        </li>
-        <li>
-            <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
-            <label class="inline" for="basename">Named: </label> <input type="text" name="basename" id="basename" value="Export" />
-            <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME">
-                <option value="CSV">CSV</option>
-            </select>
-            <select name="sep" id="sep">
-            [% FOREACH value IN CGIsepChoice.values.sort() %]
-              [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-              [% ELSE %]
-                <option value="[% value | html %]">[% value | html %]</option>
-              [% END %]
+                        : [% loopfilte.filter | html %]
+                    </p>
+                [% END %]
             [% END %]
-            </select>
-        </li>
-    </ol>
-	</fieldset>
 
-	<fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name | html %]" />
-	<input type="hidden" name="do_it" value="1" />
-	</fieldset>
-	</form>
-[% END %]
+            <table>
+                <tr>
+                    <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                    [% FOREACH loopco IN mainloo.loopcol %]
+                        <th>[% loopco.coltitle | html %]</th>
+                    [% END %]
+                    <th>TOTAL</th>
+                </tr>
+                [% FOREACH loopro IN mainloo.looprow %]
+                    <tr>
+                        <td [% IF loopro.hilighted %]class="hilighted"[% END %]> [% loopro.rowtitle | html %]</td>
+                        [% FOREACH loopcel IN loopro.loopcell %]
+                            <td>
+                                [% IF ( loopcel.value ) %]
+                                    [% loopcel.value | html %]
+                                [% ELSE %]
+                                    &nbsp;
+                                [% END %]
+                            </td>
+                        [% END %]
+                        <td> [% loopro.totalrow | html %] </td>
+                    </tr>
+                [% END %]
+                <tr>
+                    <th>TOTAL</th>
+                    [% FOREACH loopfoote IN mainloo.loopfooter %]
+                        <th> [% loopfoote.totalcol | html %] </th>
+                    [% END %]
+                    <th>[% mainloo.total | html %]</th>
+                </tr>
+            </table>
+        [% END %]
+    [% ELSE %]
+        <form method="get" action="/cgi-bin/koha/reports/acquisitions_stats.pl">
+            <fieldset class="rows">
+                <legend>Acquisitions statistics</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Filter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hilighted">
+                            <td>Placed on</td>
+                            <td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
+                            <td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
+                            <td>
+                                From <input type="text" size="10" id="placedonfrom" name="Filter" value="" class="flatpickr" data-date_to="placedonto" />
+                                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                                To <input size="10" id="placedonto" name="Filter" type="text" value="" class="flatpickr" />
+                                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                            </td>
+                        </tr>
+                        <tr class="hilighted">
+                            <td>&nbsp;</td>
+                            <td colspan="2"
+                                >group by
+                                <select name="PlacedOnDisplay">
+                                    <option value="">None</option>
+                                    <option value="1">Day of week</option>
+                                    <option value="2">Month</option>
+                                    <option value="3">Year</option>
+                                </select>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Received on</td>
+                            <td><input type="radio" name="Line" value="aqorders.datereceived" /></td>
+                            <td><input type="radio" name="Column" value="aqorders.datereceived" /></td>
+                            <td>
+                                From <input type="text" size="10" id="receivedonfrom" name="Filter" value="" class="flatpickr" data-date_to="receivedonto" />
+                                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                                To <input type="text" size="10" id="receivedonto" name="Filter" value="" class="flatpickr" />
+                                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td colspan="2"
+                                >group by
+                                <select name="ReceivedOnDisplay">
+                                    <option value="">None</option>
+                                    <option value="1">Day of week</option>
+                                    <option value="2">Month</option>
+                                    <option value="3">Year</option>
+                                </select>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr class="hilighted">
+                            <td>Vendor</td>
+                            <td><input type="radio" checked="checked" name="Line" value="aqbooksellers.name" /></td>
+                            <td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
+                            <td>
+                                <select name="Filter">
+                                    <option value="">All vendors</option>
+                                    [% FOREACH bookseller IN booksellers %]
+                                        <option value="[% bookseller.name | html %]">[% bookseller.name | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Home library</td>
+                            <td><input type="radio" name="Line" value="items.homebranch" /></td>
+                            <td><input type="radio" name="Column" value="items.homebranch" /></td>
+                            <td>
+                                <select name="Filter">
+                                    <option value="" selected="selected">All libraries</option>
+                                    [% FOREACH branch IN branches %]
+                                        <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                [% IF ccode_label %]
+                                    [% ccode_label | html %]
+                                [% ELSE %]
+                                    <span>Collection</span>
+                                [% END %]
+                            </td>
+                            <td><input type="radio" name="Line" value="items.ccode" /></td>
+                            <td><input type="radio" name="Column" value="items.ccode" /></td>
+                            <td>
+                                [% IF ccode_avlist.size %]
+                                    <select name="Filter">
+                                        <option value="" selected="selected">All</option>
+                                        [% FOREACH ccode_av IN ccode_avlist %]
+                                            <option value="[% ccode_av.authorised_value | html %]">[% ccode_av.lib | html %]</option>
+                                        [% END %]
+                                    </select>
+                                [% ELSE %]
+                                    <input type="text" name="Filter" />
+                                [% END %]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Item type</td>
+                            <td><input type="radio" name="Line" value="biblioitems.itemtype" /></td>
+                            <td><input type="radio" name="Column" value="biblioitems.itemtype" /></td>
+                            <td>
+                                <select name="Filter" id="itemtypes">
+                                    <option value="">All item types</option>
+                                    [% FOREACH itemtype IN itemtypes %]
+                                        <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
 
+                        <tr>
+                            <td>Fund</td>
+                            <td><input type="radio" name="Line" value="aqbudgets.budget_code" /></td>
+                            <td><input type="radio" name="Column" value="aqbudgets.budget_code" /></td>
+                            <td>
+                                <select name="Filter" id="budget">
+                                    <option value="">All funds</option>
+                                    [% FOREACH value IN Budgets.values %]
+                                        <option value="[% value | html %]">[% Budgets.labels.$value | html %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+
+                        [% IF ( hassort1 ) %]
+                            <tr class="hilighted">
+                                <td>Sort1</td>
+                                <td><input type="radio" name="Line" value="aqorders.sort1" /></td>
+                                <td><input type="radio" name="Column" value="aqorders.sort1" /></td>
+                                <td>
+                                    <select name="Filter" id="sort1">
+                                        <option value="">All</option>
+                                        [% FOREACH value IN Sort1.values %]
+                                            <option value="[% value | html %]">[% Sort1.labels.$value | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </td>
+                            </tr>
+                        [% END %]
+                        [% IF ( hassort2 ) %]
+                            <tr [% IF HglghtSort2 %]class="hilighted"[% END %]>
+                                <td>Sort2</td>
+                                <td><input type="radio" name="Line" value="aqorders.sort2" /></td>
+                                <td><input type="radio" name="Column" value="aqorders.sort2" /></td>
+                                <td>
+                                    <select name="Filter" id="sort2">
+                                        <option value="">All</option>
+                                        [% FOREACH value IN Sort2.values %]
+                                            <option value="[% value | html %]">[% Sort2.labels.$value | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody> </table
+                ><br />
+            </fieldset>
+
+            <fieldset class="rows">
+                <legend> Cell value </legend>
+                <ol>
+                    <li> <label for="cellvalue1">Count items:</label><input type="radio" name="Cellvalue" id="cellvalue1" value="1" checked="checked" /> </li>
+                    <li> <label for="cellvalue2">Count unique bibliographic records:</label><input type="radio" name="Cellvalue" id="cellvalue2" value="2" /> </li>
+                    <li> <label for="cellvalue3">Amount:</label><input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li>
+                    <li> <label for="cellvalue4">Ordered amount:</label><input type="radio" name="Cellvalue" id="cellvalue4" value="4" /> </li>
+                    <li> <label for="cellvalue5">Spent amount:</label><input type="radio" name="Cellvalue" id="cellvalue5" value="5" /> </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="rows">
+                <legend>Output</legend>
+                <ol>
+                    <li> <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+                    <li>
+                        <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label>
+                        <input type="text" name="basename" id="basename" value="Export" />
+                        <label class="inline" for="MIME">Into an application:</label>
+                        <select name="MIME" id="MIME">
+                            <option value="CSV">CSV</option>
+                        </select>
+                        <select name="sep" id="sep">
+                            [% FOREACH value IN CGIsepChoice.values.sort() %]
+                                [% IF ( value == CGIsepChoice.default ) %]
+                                    <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% value | html %]">[% value | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <input type="hidden" name="report_name" value="[% report_name | html %]" />
+                <input type="hidden" name="do_it" value="1" />
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

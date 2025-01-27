@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <rss version="2.0">
-
-<channel>
- <title>[% shelf.shelfname | html %]</title>
- <!-- prettier-ignore-start -->
+    <channel>
+        <title>[% shelf.shelfname | html %]</title>
+        <!-- prettier-ignore-start -->
  <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=[% shelf.shelfnumber | html %]</link>
  <!-- prettier-ignore-end -->
- <description>RSS feed for public list [% shelf.shelfname | html %]</description>
+        <description>RSS feed for public list [% shelf.shelfname | html %]</description>
 
-[% FOREACH i IN itemsloop %]
- <item>
-  <title>
-    [% i.title | html %]
-    [% IF i.author %]
-        by [% i.author | html %]
-    [% END %]
-  </title>
-  <!-- prettier-ignore-start -->
+        [% FOREACH i IN itemsloop %]
+            <item>
+                <title>
+                    [% i.title | html %]
+                    [% IF i.author %]
+                        by [% i.author | html %]
+                    [% END %]
+                </title>
+                <!-- prettier-ignore-start -->
   <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | html %]</link>
   <!-- prettier-ignore-end -->
- </item>
-[% END %]
-
-</channel>
+            </item>
+        [% END %]
+    </channel>
 </rss>

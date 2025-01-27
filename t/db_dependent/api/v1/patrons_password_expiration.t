@@ -46,8 +46,7 @@ subtest 'basic tests' => sub {
         }
     );
     my $password = 'thePassword123';
-    $privileged_patron->set_password(
-        { password => $password, skip_validation => 1 } );
+    $privileged_patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $privileged_patron->userid;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -55,35 +54,29 @@ subtest 'basic tests' => sub {
     my $new_password = 'abc';
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password/expiration_date" => json =>
-          { expiration_date => '2021-01-01' } )
-      ->status_is(200)->json_is('');
+            . $patron->id
+            . "/password/expiration_date" => json => { expiration_date => '2021-01-01' } )->status_is(200)->json_is('');
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password/expiration_date" => json =>
-          { expiration_date => '01/13/2021' } )
-      ->status_is(400)->json_is('/errors/0/message' => 'Does not match date format.');
+            . $patron->id
+            . "/password/expiration_date" => json => { expiration_date => '01/13/2021' } )->status_is(400)
+        ->json_is( '/errors/0/message' => 'Does not match date format.' );
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password/expiration_date" => json =>
-          { expiration_date => '13/01/2021' } )
-      ->status_is(400)->json_is('/errors/0/message' => 'Does not match date format.');
+            . $patron->id
+            . "/password/expiration_date" => json => { expiration_date => '13/01/2021' } )->status_is(400)
+        ->json_is( '/errors/0/message' => 'Does not match date format.' );
 
     $privileged_patron->flags(0)->store();
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
-          . $patron->id
-          . "/password/expiration_date" => json =>
-          { expiration_date => '2021-01-01' } )
-      ->status_is(403)->json_is({
-           error => "Authorization failure. Missing required permission(s).",
-           "required_permissions" => {
-               "superlibrarian" => "1"
-           }
-      });
+            . $patron->id
+            . "/password/expiration_date" => json => { expiration_date => '2021-01-01' } )->status_is(403)->json_is(
+        {
+            error                  => "Authorization failure. Missing required permission(s).",
+            "required_permissions" => { "superlibrarian" => "1" }
+        }
+            );
 
     $schema->storage->txn_rollback;
 };

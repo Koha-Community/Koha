@@ -21,7 +21,7 @@ use utf8;
 use XML::Simple;
 use Encode;
 
-use Test::More; #See plan tests => \d+ below
+use Test::More;    #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 
 my $koha_conf = $ENV{KOHA_CONF};
@@ -31,20 +31,14 @@ my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
-
-eval{
-    use C4::Context;
-};
+eval { use C4::Context; };
 if ($@) {
     plan skip_all => "Tests skip. You must have a working Context\n";
-}
-elsif (not defined $intranet) {
+} elsif ( not defined $intranet ) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
-}
-else {
+} else {
     plan tests => 4;
 }
-
 
 $intranet =~ s#/$##;
 
@@ -55,15 +49,18 @@ $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'Load the intranet login p
 $agent->form_name('loginform');
 $agent->field( 'login_password', $password );
 $agent->field( 'login_userid',   $user );
-$agent->field( 'branch',   '' );
+$agent->field( 'branch',         '' );
 $agent->click( '', 'Login to the intranet' );
 $agent->get_ok( "$intranet/cgi-bin/koha/about.pl?tab=team", 'Load the about page' );
 
 # Test about > timeline is correctly encoded
-my $encoded_latin_name    = Encode::encode('UTF-8', 'Frédéric Demians');
-my $encoded_cyrillic_name = Encode::encode('UTF-8', 'Сергій Дубик');
-my $history_page          = Encode::encode('UTF-8', $agent->text());
+my $encoded_latin_name    = Encode::encode( 'UTF-8', 'Frédéric Demians' );
+my $encoded_cyrillic_name = Encode::encode( 'UTF-8', 'Сергій Дубик' );
+my $history_page          = Encode::encode( 'UTF-8', $agent->text() );
 
 like( $history_page, qr/$encoded_latin_name/, "Latin characters with umlauts show correctly on the history page." );
-like( $history_page, qr/$encoded_cyrillic_name/, "Cyrillic characters with umlauts show correctly on the history page." );
+like(
+    $history_page, qr/$encoded_cyrillic_name/,
+    "Cyrillic characters with umlauts show correctly on the history page."
+);
 

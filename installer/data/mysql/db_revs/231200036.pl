@@ -29,7 +29,7 @@ return {
             $sth->execute( $label, $name, $name );
         }
 
-        $sth->execute( 'Collections', 'ccode', 'collection-code' );
+        $sth->execute( 'Collections',       'ccode',         'collection-code' );
         $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary' );
         $sth->execute( 'Home libraries',    'homebranch',    'homelibrary' );
 

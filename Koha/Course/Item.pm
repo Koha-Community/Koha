@@ -17,7 +17,6 @@ package Koha::Course::Item;
 
 use Modern::Perl;
 
-
 use base qw(Koha::Object);
 
 use Koha::Course::Reserves;
@@ -35,7 +34,7 @@ Koha::Course::Item - Koha Course Item Object class
 =cut
 
 sub is_enabled {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->enabled eq 'yes';
 }
@@ -48,7 +47,7 @@ sub course_reserves {
     my ($self) = @_;
 
     my $rs = $self->_result->course_reserves;
-    return Koha::Course::Reserves->_new_from_dbic( $rs );
+    return Koha::Course::Reserves->_new_from_dbic($rs);
 }
 
 =head3 item
@@ -59,7 +58,7 @@ sub item {
     my ($self) = @_;
 
     my $rs = $self->_result->itemnumber;
-    return Koha::Item->_new_from_dbic( $rs );
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head2 Internal methods

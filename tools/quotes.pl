@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( catch try );
 
 use C4::Auth qw( get_template_and_user );
@@ -42,11 +42,10 @@ my @messages;
 
 if ( $op eq 'add_form' ) {
     $template->param( quote => Koha::Quotes->find($id), );
-}
-elsif ( $op eq 'cud-add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my @fields = qw(
-      source
-      text
+        source
+        text
     );
 
     if ($id) {
@@ -58,12 +57,10 @@ elsif ( $op eq 'cud-add_validate' ) {
         try {
             $quote->store;
             push @messages, { type => 'message', code => 'success_on_update' };
-        }
-        catch {
+        } catch {
             push @messages, { type => 'alert', code => 'error_on_update' };
         }
-    }
-    else {
+    } else {
         my $quote = Koha::Quote->new(
             {
                 id => $id,
@@ -74,19 +71,17 @@ elsif ( $op eq 'cud-add_validate' ) {
         try {
             $quote->store;
             push @messages, { type => 'message', code => 'success_on_insert' };
-        }
-        catch {
+        } catch {
             push @messages, { type => 'alert', code => 'error_on_insert' };
         };
     }
     $op = 'list';
-}
-else {
+} else {
     $op = 'list';
 }
 
 $template->param( quotes_count => Koha::Quotes->search->count )
-  if $op eq 'list';
+    if $op eq 'list';
 
 $template->param(
     messages => \@messages,

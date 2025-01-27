@@ -47,8 +47,7 @@ sub move {
             openapi => { error => "Bad request - new position invalid" },
             status  => 400
         );
-    }
-    elsif ($rota) {
+    } elsif ($rota) {
         return $c->render_resource_not_found("Stage");
     } else {
         return $c->render_resource_not_found("Rota");

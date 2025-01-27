@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Patron lists") | html %] &rsaquo;
-    [% t("Tools") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Patron lists") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'greybox.inc' %]
 </head>
@@ -30,22 +31,20 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='tools-menu' %]
-
-        <div id="toolbar" class="btn-toolbar">
-            <div class="btn-group">
-                <a class="btn btn-default" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
-            </div>
+    <div id="toolbar" class="btn-toolbar">
+        <div class="btn-group">
+            <a class="btn btn-default" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
         </div>
+    </div>
 
-        <h1>Patron lists</h1>
+    <h1>Patron lists</h1>
 
-        [% IF ( lists ) %]
-
+    [% IF ( lists ) %]
         <div class="page-section">
             <table id="patron-lists-table">
                 <thead>
                     <tr>
-                        <input type="button" type="submit" class="btn btn-default btn-sm disabled" value="Delete selected lists" id="delete_selected_lists"/>
+                        <input type="button" type="submit" class="btn btn-default btn-sm disabled" value="Delete selected lists" id="delete_selected_lists" />
                         <th>Name</th>
                         <th>Patrons in list</th>
                         <th>Shared</th>
@@ -58,7 +57,7 @@
                         [% SET shared_by_other = l.owner.id != logged_in_user.id %]
                         <tr>
                             <td>
-                                <input class="select_patron" type="checkbox" autocomplete="off" data-patron-list-id="[% l.patron_list_id | html %]">
+                                <input class="select_patron" type="checkbox" autocomplete="off" data-patron-list-id="[% l.patron_list_id | html %]" />
                                 <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]">[% l.name | html %]</a>
                             </td>
                             <td>[% l.patron_list_patrons_rs.count || 0 | html %]</td>
@@ -70,23 +69,30 @@
                                         by you
                                     [% END %]
                                 [% END %]
-
                             </td>
                             <td>
                                 <div class="btn-group dropup">
-                                    <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id | html %]" role="button" data-bs-toggle="dropdown" href="#">
-                                    Actions
-                                    </a>
+                                    <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="listactions[% l.patron_list_id | html %]">
-                                        <li><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li>
+                                        <li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li
+                                        >
                                         [% UNLESS shared_by_other %]
-                                            <li><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit list</a></li>
-                                            <li><a class="delete_patron dropdown-item" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"><i class="fa fa-trash-can"></i> Delete list</a></li>
+                                            <li
+                                                ><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit list</a></li
+                                            >
+                                            <li
+                                                ><a class="delete_patron dropdown-item" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"
+                                                    ><i class="fa fa-trash-can"></i> Delete list</a
+                                                ></li
+                                            >
                                         [% END %]
                                         [% IF ( l.patron_list_patrons_rs.count ) %]
                                             <li><hr class="dropdown-divider" /></li>
                                             <li>
-                                                <a class="print_cards dropdown-item" href="/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id | html %]" data-patron_list_id="[% l.patron_list_id | html %]"><i class="fa fa-print"></i> Print patron cards</a>
+                                                <a class="print_cards dropdown-item" href="/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id | html %]" data-patron_list_id="[% l.patron_list_id | html %]"
+                                                    ><i class="fa fa-print"></i> Print patron cards</a
+                                                >
                                             </li>
                                             [% IF CAN_user_tools_edit_patrons %]
                                                 <li>
@@ -110,33 +116,31 @@
                     [% END %]
                 </tbody>
             </table>
-        </div> <!-- /.page-section -->
+        </div>
+        <!-- /.page-section -->
 
-            <!-- Modal to print patron cards -->
-            <div class="modal" id="patronExportModal" tabindex="-1" role="dialog" aria-labelledby="patronExportModal_label" aria-hidden="true">
-                <div class="modal-dialog">
+        <!-- Modal to print patron cards -->
+        <div class="modal" id="patronExportModal" tabindex="-1" role="dialog" aria-labelledby="patronExportModal_label" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="patronExportModal_label">Print patron cards</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                </div>
-                </div>
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="patronExportModal_label">Print patron cards</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                    </div>
                 </div>
             </div>
-
-        [% ELSE %]
-           <div class="alert alert-info">There are no patron lists.</div>
-        [% END %]
-
+        </div>
+    [% ELSE %]
+        <div class="alert alert-info">There are no patron lists.</div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-
     <script>
         $(document).ready(function() {
             var patronExportModal = $("#patronExportModal");

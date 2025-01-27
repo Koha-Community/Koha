@@ -17,7 +17,6 @@ package Koha::Acquisition::Invoice::Adjustment;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Acquisition::Invoices;
 use Koha::Acquisition::Funds;
@@ -43,9 +42,9 @@ Return the invoice for this adjustment
 =cut
 
 sub invoice {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $invoice_rs = $self->_result->invoiceid;
-    return Koha::Acquisition::Invoice->_new_from_dbic( $invoice_rs );
+    return Koha::Acquisition::Invoice->_new_from_dbic($invoice_rs);
 }
 
 =head3 fund
@@ -57,10 +56,10 @@ Return the fund for this adjustment
 =cut
 
 sub fund {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $fund_rs = $self->_result->budget;
     return unless $fund_rs;
-    return Koha::Acquisition::Fund->_new_from_dbic( $fund_rs );
+    return Koha::Acquisition::Fund->_new_from_dbic($fund_rs);
 }
 
 =head3 type

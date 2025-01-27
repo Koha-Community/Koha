@@ -72,46 +72,32 @@
                         [% c.date_end | $KohaDates %]
                     [% END %]
                 </td>
-                <td>
-                    [% c.club_enrollments.count | html %]
-                </td>
+                <td> [% c.club_enrollments.count | html %] </td>
                 [% UNLESS destination == 'holds' %]
                     <td class="actions">
                         <div class="btn-group dropup">
-                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id | html %]" role="button" data-bs-toggle="dropdown" href="#">
-                                Actions
-                            </a>
+                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
                             <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="clubactions[% c.id | html %]">
                                 [% IF ( c.club_enrollments.count ) %]
                                     <li>
-                                        <a class="dropdown-item" href="club-enrollments.pl?id=[% c.id | uri %]">
-                                            <i class="fa fa-list-ul"></i> Enrollments
-                                        </a>
+                                        <a class="dropdown-item" href="club-enrollments.pl?id=[% c.id | uri %]"> <i class="fa fa-list-ul"></i> Enrollments </a>
                                     </li>
                                 [% ELSE %]
                                     <li data-bs-toggle="tooltip" data-bs-placement="left" title="There are no enrollments for this club yet">
-                                        <a class="dropdown-item disabled" aria-disabled="true" href="#">
-                                            <i class="fa fa-list-ul"></i> Enrollments
-                                        </a>
+                                        <a class="dropdown-item disabled" aria-disabled="true" href="#"> <i class="fa fa-list-ul"></i> Enrollments </a>
                                     </li>
                                 [% END %]
                                 [% IF CAN_user_clubs_edit_clubs %]
                                     <li>
-                                        <a class="dropdown-item" href="clubs-add-modify.pl?id=[% c.id | uri %]">
-                                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
-                                        </a>
+                                        <a class="dropdown-item" href="clubs-add-modify.pl?id=[% c.id | uri %]"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item delete_club" href="#" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
-                                            <i class="fa fa-trash-can"></i> Delete
-                                        </a>
+                                        <a class="dropdown-item delete_club" href="#" data-id="[% c.id | html %]" data-name="[% c.name | html %]"> <i class="fa fa-trash-can"></i> Delete </a>
                                     </li>
                                 [% END %]
                                 [% IF ( c.club_enrollments.count ) %]
                                     <li>
-                                        <a class="dropdown-item club_hold_search" href="#" data-id="[% c.id | html %]">
-                                            <i class="fa fa-search"></i> Search to hold
-                                        </a>
+                                        <a class="dropdown-item club_hold_search" href="#" data-id="[% c.id | html %]"> <i class="fa fa-search"></i> Search to hold </a>
                                     </li>
                                 [% END %]
                             </ul>
@@ -121,4 +107,5 @@
             </tr>
         [% END %]
     </tbody>
-</table> <!-- /.clubs-table -->
+</table>
+<!-- /.clubs-table -->

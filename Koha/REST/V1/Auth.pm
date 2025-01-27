@@ -41,7 +41,7 @@ use Koha::Exceptions::Authorization;
 use MIME::Base64 qw( decode_base64 );
 use Module::Load::Conditional;
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -56,7 +56,7 @@ This subroutine is called before every request to API.
 =cut
 
 sub under {
-    my ( $c ) = @_;
+    my ($c) = @_;
 
     my $status = 0;
 
@@ -65,7 +65,7 @@ sub under {
         # /api/v1/{namespace}
         my $namespace = $c->req->url->to_abs->path->[2] // '';
 
-        my $is_public = 0; # By default routes are not public
+        my $is_public = 0;    # By default routes are not public
         my $is_plugin = 0;
 
         if ( $namespace eq 'public' ) {
@@ -82,49 +82,44 @@ sub under {
                 if !C4::Context->preference('RESTPublicAPI');
         }
 
-        if ( $c->req->url->to_abs->path =~ m#^/api/v1/oauth/# || $c->req->url->to_abs->path =~ m#^/api/v1/public/oauth/#) {
+        if (   $c->req->url->to_abs->path =~ m#^/api/v1/oauth/#
+            || $c->req->url->to_abs->path =~ m#^/api/v1/public/oauth/# )
+        {
             # Requesting OAuth endpoints shouldn't go through the API authentication chain
             $status = 1;
-        }
-        elsif ( $namespace eq '' or $namespace eq '.html' ) {
+        } elsif ( $namespace eq '' or $namespace eq '.html' ) {
             $status = 1;
-        }
-        else {
-            $status = authenticate_api_request($c, { is_public => $is_public, is_plugin => $is_plugin });
+        } else {
+            $status = authenticate_api_request( $c, { is_public => $is_public, is_plugin => $is_plugin } );
         }
 
     } catch {
-        unless (blessed($_)) {
+        unless ( blessed($_) ) {
             $c->unhandled_exception($_);
         }
-        if ($_->isa('Koha::Exceptions::UnderMaintenance')) {
-            return $c->render(status => 503, json => { error => $_->error });
-        }
-        elsif ($_->isa('Koha::Exceptions::Authentication::SessionExpired')) {
-            return $c->render(status => 401, json => { error => $_->error });
-        }
-        elsif ($_->isa('Koha::Exceptions::Authentication::Required')) {
-            return $c->render(status => 401, json => { error => $_->error });
-        }
-        elsif ($_->isa('Koha::Exceptions::Authentication')) {
-            return $c->render(status => 401, json => { error => $_->error });
-        }
-        elsif ($_->isa('Koha::Exceptions::BadParameter')) {
-            return $c->render(status => 400, json => $_->error );
-        }
-        elsif ($_->isa('Koha::Exceptions::Authorization::Unauthorized')) {
-            return $c->render(status => 403, json => {
-                error => $_->error,
-                required_permissions => $_->required_permissions,
-            });
-        }
-        elsif ($_->isa('Koha::Exceptions::Authorization')) {
-            return $c->render(status => 403, json => { error => $_->error });
-        }
-        elsif ($_->isa('Koha::Exceptions')) {
-            return $c->render(status => 500, json => { error => $_->error });
-        }
-        else {
+        if ( $_->isa('Koha::Exceptions::UnderMaintenance') ) {
+            return $c->render( status => 503, json => { error => $_->error } );
+        } elsif ( $_->isa('Koha::Exceptions::Authentication::SessionExpired') ) {
+            return $c->render( status => 401, json => { error => $_->error } );
+        } elsif ( $_->isa('Koha::Exceptions::Authentication::Required') ) {
+            return $c->render( status => 401, json => { error => $_->error } );
+        } elsif ( $_->isa('Koha::Exceptions::Authentication') ) {
+            return $c->render( status => 401, json => { error => $_->error } );
+        } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render( status => 400, json => $_->error );
+        } elsif ( $_->isa('Koha::Exceptions::Authorization::Unauthorized') ) {
+            return $c->render(
+                status => 403,
+                json   => {
+                    error                => $_->error,
+                    required_permissions => $_->required_permissions,
+                }
+            );
+        } elsif ( $_->isa('Koha::Exceptions::Authorization') ) {
+            return $c->render( status => 403, json => { error => $_->error } );
+        } elsif ( $_->isa('Koha::Exceptions') ) {
+            return $c->render( status => 500, json => { error => $_->error } );
+        } else {
             $c->unhandled_exception($_);
         }
     };
@@ -161,162 +156,136 @@ sub authenticate_api_request {
 
     my $authorization_header = $c->req->headers->authorization;
 
-    if ($authorization_header and $authorization_header =~ /^Bearer /) {
+    if ( $authorization_header and $authorization_header =~ /^Bearer / ) {
+
         # attempt to use OAuth2 authentication
-        if ( ! Module::Load::Conditional::can_load(
-                    modules => {'Net::OAuth2::AuthorizationServer' => undef} )) {
-            Koha::Exceptions::Authorization::Unauthorized->throw(
-                error => 'Authentication failure.'
-            );
-        }
-        else {
+        if ( !Module::Load::Conditional::can_load( modules => { 'Net::OAuth2::AuthorizationServer' => undef } ) ) {
+            Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Authentication failure.' );
+        } else {
             require Net::OAuth2::AuthorizationServer;
         }
 
         my $server = Net::OAuth2::AuthorizationServer->new;
-        my $grant = $server->client_credentials_grant(Koha::OAuth::config);
-        my ($type, $token) = split / /, $authorization_header;
-        my ($valid_token, $error) = $grant->verify_access_token(
+        my $grant  = $server->client_credentials_grant(Koha::OAuth::config);
+        my ( $type, $token ) = split / /, $authorization_header;
+        my ( $valid_token, $error ) = $grant->verify_access_token(
             access_token => $token,
         );
 
         if ($valid_token) {
             my $patron_id = Koha::ApiKeys->find( $valid_token->{client_id} )->patron_id;
-            $user         = Koha::Patrons->find($patron_id);
-        }
-        else {
+            $user = Koha::Patrons->find($patron_id);
+        } else {
+
             # If we have "Authorization: Bearer" header and oauth authentication
             # failed, do not try other authentication means
-            Koha::Exceptions::Authentication::Required->throw(
-                error => 'Authentication failure.'
-            );
+            Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
         }
-    }
-    elsif ( $authorization_header and $authorization_header =~ /^Basic / ) {
+    } elsif ( $authorization_header and $authorization_header =~ /^Basic / ) {
         unless ( C4::Context->preference('RESTBasicAuth') ) {
-            Koha::Exceptions::Authentication::Required->throw(
-                error => 'Basic authentication disabled'
-            );
+            Koha::Exceptions::Authentication::Required->throw( error => 'Basic authentication disabled' );
         }
-        $user = $c->_basic_auth( $authorization_header );
-        unless ( $user ) {
+        $user = $c->_basic_auth($authorization_header);
+        unless ($user) {
+
             # If we have "Authorization: Basic" header and authentication
             # failed, do not try other authentication means
-            Koha::Exceptions::Authentication::Required->throw(
-                error => 'Authentication failure.'
-            );
+            Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
         }
-    }
-    else {
+    } else {
 
         my $cookie = $c->cookie('CGISESSID');
 
         # Mojo doesn't use %ENV the way CGI apps do
         # Manually pass the remote_address to check_auth_cookie
         my $remote_addr = $c->tx->remote_address;
-        my ($status, $session) = check_cookie_auth(
-                                                $cookie, undef,
-                                                { remote_addr => $remote_addr });
+        my ( $status, $session ) = check_cookie_auth(
+            $cookie, undef,
+            { remote_addr => $remote_addr }
+        );
 
         if ( $c->req->url->to_abs->path eq '/api/v1/auth/otp/token_delivery' ) {
             if ( $status eq 'additional-auth-needed' ) {
                 $user        = Koha::Patrons->find( $session->param('number') );
                 $cookie_auth = 1;
+            } elsif ( $status eq 'ok' ) {
+                Koha::Exceptions::Authentication->throw( error => 'Cannot request a new token.' );
+            } else {
+                Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
             }
-            elsif ( $status eq 'ok' ) {
-                Koha::Exceptions::Authentication->throw(
-                    error => 'Cannot request a new token.' );
-            }
-            else {
-                Koha::Exceptions::Authentication::Required->throw(
-                    error => 'Authentication failure.' );
-            }
-        }
-        elsif (  $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration'
-              || $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration/verification' ) {
+        } elsif ( $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration'
+            || $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration/verification' )
+        {
 
             if ( $status eq 'setup-additional-auth-needed' ) {
                 $user        = Koha::Patrons->find( $session->param('number') );
                 $cookie_auth = 1;
-            }
-            elsif ( $status eq 'ok' ) {
+            } elsif ( $status eq 'ok' ) {
                 $user = Koha::Patrons->find( $session->param('number') );
                 if ( $user->auth_method ne 'password' ) {
+
                     # If the user already enabled 2FA they don't need to register again
-                    Koha::Exceptions::Authentication->throw(
-                        error => 'Cannot request this route.' );
+                    Koha::Exceptions::Authentication->throw( error => 'Cannot request this route.' );
                 }
                 $cookie_auth = 1;
-            }
-            else {
-                Koha::Exceptions::Authentication::Required->throw(
-                    error => 'Authentication failure.' );
+            } else {
+                Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
             }
 
         } else {
-            if ($status eq "ok") {
-                $user = Koha::Patrons->find( $session->param('number') );
+            if ( $status eq "ok" ) {
+                $user        = Koha::Patrons->find( $session->param('number') );
                 $cookie_auth = 1;
-            }
-            elsif ($status eq "anon") {
+            } elsif ( $status eq "anon" ) {
                 $cookie_auth = 1;
-            }
-            elsif ($status eq "additional-auth-needed") {
-            }
-            elsif ($status eq "maintenance") {
-                Koha::Exceptions::UnderMaintenance->throw(
-                    error => 'System is under maintenance.'
-                );
-            }
-            elsif ($status eq "expired" and $authorization) {
-                Koha::Exceptions::Authentication::SessionExpired->throw(
-                    error => 'Session has been expired.'
-                );
-            }
-            elsif ($status eq "failed" and $authorization) {
-                Koha::Exceptions::Authentication::Required->throw(
-                    error => 'Authentication failure.'
-                );
-            }
-            elsif ($authorization) {
-                Koha::Exceptions::Authentication->throw(
-                    error => 'Unexpected authentication status.'
-                );
+            } elsif ( $status eq "additional-auth-needed" ) {
+            } elsif ( $status eq "maintenance" ) {
+                Koha::Exceptions::UnderMaintenance->throw( error => 'System is under maintenance.' );
+            } elsif ( $status eq "expired" and $authorization ) {
+                Koha::Exceptions::Authentication::SessionExpired->throw( error => 'Session has been expired.' );
+            } elsif ( $status eq "failed" and $authorization ) {
+                Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
+            } elsif ($authorization) {
+                Koha::Exceptions::Authentication->throw( error => 'Unexpected authentication status.' );
             }
         }
     }
 
-    $c->stash('koha.user' => $user);
+    $c->stash( 'koha.user' => $user );
     C4::Context->interface('api');
 
-    if ( $user and !$cookie_auth ) { # cookie-auth sets this and more, don't mess with that
-        $c->_set_userenv( $user );
+    if ( $user and !$cookie_auth ) {    # cookie-auth sets this and more, don't mess with that
+        $c->_set_userenv($user);
     }
 
-    if ( !$authorization and
-         ( $params->{is_public} and
-          ( C4::Context->preference('RESTPublicAnonymousRequests') or
-            $user) or $params->{is_plugin} )
-    ) {
+    if (
+        !$authorization
+        and (
+            $params->{is_public} and ( C4::Context->preference('RESTPublicAnonymousRequests')
+                or $user )
+            or $params->{is_plugin}
+        )
+        )
+    {
         # We do not need any authorization
         # Check the parameters
         validate_query_parameters( $c, $spec );
         return 1;
-    }
-    else {
+    } else {
+
         # We are required authorization, there needs
         # to be an identified user
-        Koha::Exceptions::Authentication::Required->throw(
-            error => 'Authentication failure.' )
-          unless $user;
+        Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' )
+            unless $user;
     }
 
-
     my $permissions = $authorization->{'permissions'};
+
     # Check if the user is authorized
-    if ( ( defined($permissions) and haspermission($user->userid, $permissions) )
-        or allow_owner($c, $authorization, $user)
-        or allow_guarantor($c, $authorization, $user) ) {
+    if (   ( defined($permissions) and haspermission( $user->userid, $permissions ) )
+        or allow_owner( $c, $authorization, $user )
+        or allow_guarantor( $c, $authorization, $user ) )
+    {
 
         validate_query_parameters( $c, $spec );
 
@@ -325,7 +294,7 @@ sub authenticate_api_request {
     }
 
     Koha::Exceptions::Authorization::Unauthorized->throw(
-        error => "Authorization failure. Missing required permission(s).",
+        error                => "Authorization failure. Missing required permission(s).",
         required_permissions => $permissions,
     );
 }
@@ -342,17 +311,16 @@ sub validate_query_parameters {
     # Check for malformed query parameters
     my @errors;
     my %valid_parameters = map { ( $_->{in} eq 'query' ) ? ( $_->{name} => 1 ) : () } @{ $action_spec->{parameters} };
-    my $existing_params = $c->req->query_params->to_hash;
+    my $existing_params  = $c->req->query_params->to_hash;
     for my $param ( keys %{$existing_params} ) {
-        push @errors, { path => "/query/" . $param, message => 'Malformed query string' } unless exists $valid_parameters{$param};
+        push @errors, { path => "/query/" . $param, message => 'Malformed query string' }
+            unless exists $valid_parameters{$param};
     }
 
     push @errors, { path => "/query/_per_page", message => 'Invalid value: 0' }
         if exists $existing_params->{_per_page} && $existing_params->{_per_page} == 0;
 
-    Koha::Exceptions::BadParameter->throw(
-        error => \@errors
-    ) if @errors;
+    Koha::Exceptions::BadParameter->throw( error => \@errors ) if @errors;
 }
 
 =head3 allow_owner
@@ -378,11 +346,11 @@ achieved by defining the operation as follows:
 =cut
 
 sub allow_owner {
-    my ($c, $authorization, $user) = @_;
+    my ( $c, $authorization, $user ) = @_;
 
     return unless $authorization->{'allow-owner'};
 
-    return check_object_ownership($c, $user) if $user and $c;
+    return check_object_ownership( $c, $user ) if $user and $c;
 }
 
 =head3 allow_guarantor
@@ -393,15 +361,15 @@ guarantees.
 =cut
 
 sub allow_guarantor {
-    my ($c, $authorization, $user) = @_;
+    my ( $c, $authorization, $user ) = @_;
 
-    if (!$c || !$user || !$authorization || !$authorization->{'allow-guarantor'}){
+    if ( !$c || !$user || !$authorization || !$authorization->{'allow-guarantor'} ) {
         return;
     }
 
     my $guarantees = $user->guarantee_relationships->guarantees->as_list;
-    foreach my $guarantee (@{$guarantees}) {
-        return 1 if check_object_ownership($c, $guarantee);
+    foreach my $guarantee ( @{$guarantees} ) {
+        return 1 if check_object_ownership( $c, $guarantee );
     }
 }
 
@@ -418,7 +386,7 @@ the subroutine that you created.
 =cut
 
 sub check_object_ownership {
-    my ($c, $user) = @_;
+    my ( $c, $user ) = @_;
 
     return if not $c or not $user;
 
@@ -430,19 +398,16 @@ sub check_object_ownership {
         reserve_id      => \&_object_ownership_by_reserve_id,
     };
 
-    foreach my $param ( keys %{ $parameters } ) {
+    foreach my $param ( keys %{$parameters} ) {
         my $check_ownership = $parameters->{$param};
-        if ($c->stash($param)) {
-            return &$check_ownership($c, $user, $c->stash($param));
-        }
-        elsif ($c->param($param)) {
-            return &$check_ownership($c, $user, $c->param($param));
-        }
-        elsif ($c->match->stack->[-1]->{$param}) {
-            return &$check_ownership($c, $user, $c->match->stack->[-1]->{$param});
-        }
-        elsif ($c->req->json && $c->req->json->{$param}) {
-            return 1 if &$check_ownership($c, $user, $c->req->json->{$param});
+        if ( $c->stash($param) ) {
+            return &$check_ownership( $c, $user, $c->stash($param) );
+        } elsif ( $c->param($param) ) {
+            return &$check_ownership( $c, $user, $c->param($param) );
+        } elsif ( $c->match->stack->[-1]->{$param} ) {
+            return &$check_ownership( $c, $user, $c->match->stack->[-1]->{$param} );
+        } elsif ( $c->req->json && $c->req->json->{$param} ) {
+            return 1 if &$check_ownership( $c, $user, $c->req->json->{$param} );
         }
     }
 }
@@ -455,7 +420,7 @@ belongs to C<$user>.
 =cut
 
 sub _object_ownership_by_accountlines_id {
-    my ($c, $user, $accountlines_id) = @_;
+    my ( $c, $user, $accountlines_id ) = @_;
 
     my $accountline = Koha::Account::Lines->find($accountlines_id);
     return $accountline && $user->borrowernumber == $accountline->borrowernumber;
@@ -468,7 +433,7 @@ Compares C<$borrowernumber> to currently logged in C<$user>.
 =cut
 
 sub _object_ownership_by_patron_id {
-    my ($c, $user, $patron_id) = @_;
+    my ( $c, $user, $patron_id ) = @_;
 
     return $user->borrowernumber == $patron_id;
 }
@@ -483,12 +448,14 @@ borrowernumber to currently logged in C<$user>.
 =cut
 
 sub _object_ownership_by_checkout_id {
-    my ($c, $user, $issue_id) = @_;
+    my ( $c, $user, $issue_id ) = @_;
 
     my $issue = Koha::Checkouts->find($issue_id);
     $issue = Koha::Old::Checkouts->find($issue_id) unless $issue;
-    return $issue && $issue->borrowernumber
-            && $user->borrowernumber == $issue->borrowernumber;
+    return
+           $issue
+        && $issue->borrowernumber
+        && $user->borrowernumber == $issue->borrowernumber;
 }
 
 =head3 _object_ownership_by_reserve_id
@@ -501,7 +468,7 @@ TODO: Also compare against old_reserves
 =cut
 
 sub _object_ownership_by_reserve_id {
-    my ($c, $user, $reserve_id) = @_;
+    my ( $c, $user, $reserve_id ) = @_;
 
     my $reserve = Koha::Holds->find($reserve_id);
     return $reserve && $user->borrowernumber == $reserve->borrowernumber;
@@ -553,26 +520,25 @@ sub _set_userenv {
     my $passed_library_id = $c->req->headers->header('x-koha-library');
     my $THE_library;
 
-    if ( $passed_library_id ) {
-        $THE_library = Koha::Libraries->find( $passed_library_id );
+    if ($passed_library_id) {
+        $THE_library = Koha::Libraries->find($passed_library_id);
         Koha::Exceptions::Authorization::Unauthorized->throw(
-            "Unauthorized attempt to set library to $passed_library_id"
-        ) unless $THE_library and $patron->can_log_into($THE_library);
-    }
-    else {
+            "Unauthorized attempt to set library to $passed_library_id")
+            unless $THE_library and $patron->can_log_into($THE_library);
+    } else {
         $THE_library = $patron->library;
     }
 
     C4::Context->set_userenv(
-        $patron->borrowernumber,  # number,
-        $patron->userid,          # userid,
-        $patron->cardnumber,      # cardnumber
-        $patron->firstname,       # firstname
-        $patron->surname,         # surname
-        $THE_library->branchcode, # branch
-        $THE_library->branchname, # branchname
-        $patron->flags,           # flags,
-        $patron->email,           # emailaddress
+        $patron->borrowernumber,     # number,
+        $patron->userid,             # userid,
+        $patron->cardnumber,         # cardnumber
+        $patron->firstname,          # firstname
+        $patron->surname,            # surname
+        $THE_library->branchcode,    # branch
+        $THE_library->branchname,    # branchname
+        $patron->flags,              # flags,
+        $patron->email,              # emailaddress
     );
 
     return $c;

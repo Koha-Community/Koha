@@ -50,10 +50,10 @@ Return the patron linked to this account line
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->patron;
     return unless $rs;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 manager
@@ -63,10 +63,10 @@ Return the manager linked to this account line
 =cut
 
 sub manager {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->manager;
     return unless $rs;
-    return Koha::Patron->_new_from_dbic( $rs );
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 item
@@ -76,11 +76,11 @@ Return the item linked to this account line if exists
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->itemnumber;
     return unless $rs;
     require Koha::Item;
-    return Koha::Item->_new_from_dbic( $rs );
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head3 checkout
@@ -111,7 +111,7 @@ Returns a Koha::Library object representing where the accountline was recorded
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->library;
     return unless $rs;
     return Koha::Library->_new_from_dbic($rs);
@@ -124,10 +124,10 @@ Return the credit_type linked to this account line
 =cut
 
 sub credit_type {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->credit_type_code;
     return unless $rs;
-    return Koha::Account::CreditType->_new_from_dbic( $rs );
+    return Koha::Account::CreditType->_new_from_dbic($rs);
 }
 
 =head3 debit_type
@@ -137,10 +137,10 @@ Return the debit_type linked to this account line
 =cut
 
 sub debit_type {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->debit_type_code;
     return unless $rs;
-    return Koha::Account::DebitType->_new_from_dbic( $rs );
+    return Koha::Account::DebitType->_new_from_dbic($rs);
 }
 
 =head3 credit_offsets
@@ -153,12 +153,10 @@ sub credit_offsets {
     my ( $self, $cond, $attr ) = @_;
 
     unless ( $self->is_credit ) {
-        Koha::Exceptions::Account::IsNotCredit->throw(
-            error => 'Account line ' . $self->id . ' is not a credit'
-        );
+        Koha::Exceptions::Account::IsNotCredit->throw( error => 'Account line ' . $self->id . ' is not a credit' );
     }
 
-    my $rs = $self->_result->search_related( 'account_offsets_credits', $cond, $attr);
+    my $rs = $self->_result->search_related( 'account_offsets_credits', $cond, $attr );
     return unless $rs;
     return Koha::Account::Offsets->_new_from_dbic($rs);
 }
@@ -173,12 +171,10 @@ sub debit_offsets {
     my ( $self, $cond, $attr ) = @_;
 
     unless ( $self->is_debit ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . ' is not a debit'
-        );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . ' is not a debit' );
     }
 
-    my $rs = $self->_result->search_related( 'account_offsets_debits', $cond, $attr);
+    my $rs = $self->_result->search_related( 'account_offsets_debits', $cond, $attr );
     return unless $rs;
     return Koha::Account::Offsets->_new_from_dbic($rs);
 }
@@ -198,15 +194,11 @@ sub credits {
     my ( $self, $cond, $attr ) = @_;
 
     unless ( $self->is_debit ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . ' is not a debit'
-        );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . ' is not a debit' );
     }
 
-    my $cond_m = { map { "credit.".$_ => $cond->{$_} } keys %{$cond}};
-    my $rs =
-      $self->_result->search_related('account_offsets_debits')
-      ->search_related( 'credit', $cond_m, $attr );
+    my $cond_m = { map { "credit." . $_ => $cond->{$_} } keys %{$cond} };
+    my $rs     = $self->_result->search_related('account_offsets_debits')->search_related( 'credit', $cond_m, $attr );
     return unless $rs;
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
@@ -226,15 +218,11 @@ sub debits {
     my ( $self, $cond, $attr ) = @_;
 
     unless ( $self->is_credit ) {
-        Koha::Exceptions::Account::IsNotCredit->throw(
-            error => 'Account line ' . $self->id . ' is not a credit'
-        );
+        Koha::Exceptions::Account::IsNotCredit->throw( error => 'Account line ' . $self->id . ' is not a credit' );
     }
 
-    my $cond_m = { map { "debit.".$_ => $cond->{$_} } keys %{$cond}};
-    my $rs =
-      $self->_result->search_related('account_offsets_credits')
-      ->search_related( 'debit', $cond_m, $attr );
+    my $cond_m = { map { "debit." . $_ => $cond->{$_} } keys %{$cond} };
+    my $rs     = $self->_result->search_related('account_offsets_credits')->search_related( 'debit', $cond_m, $attr );
     return unless $rs;
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
@@ -253,26 +241,23 @@ as 'void' by updating it's status to "VOID".
 =cut
 
 sub void {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     # Make sure it is a credit we are voiding
     unless ( $self->is_credit ) {
-        Koha::Exceptions::Account::IsNotCredit->throw(
-            error => 'Account line ' . $self->id . 'is not a credit' );
+        Koha::Exceptions::Account::IsNotCredit->throw( error => 'Account line ' . $self->id . 'is not a credit' );
     }
 
     # Make sure it is not already voided
     if ( $self->status && $self->status eq 'VOID' ) {
-        Koha::Exceptions::Account->throw(
-            error => 'Account line ' . $self->id . 'is already void' );
+        Koha::Exceptions::Account->throw( error => 'Account line ' . $self->id . 'is already void' );
     }
 
     # Check for mandatory parameters
-    my @mandatory = ( 'interface' );
+    my @mandatory = ('interface');
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
 
@@ -281,17 +266,14 @@ sub void {
         my @optional = ( 'staff_id', 'branch' );
         for my $param (@optional) {
             unless ( defined( $params->{$param} ) ) {
-                Koha::Exceptions::MissingParameter->throw( error =>
-"The $param parameter is mandatory when interface is set to 'intranet'"
-                );
+                Koha::Exceptions::MissingParameter->throw(
+                    error => "The $param parameter is mandatory when interface is set to 'intranet'" );
             }
         }
     }
 
     # Find any applied offsets for the credit so we may reverse them
-    my @account_offsets =
-      Koha::Account::Offsets->search(
-        { credit_id => $self->id, amount => { '<' => 0 }  } )->as_list;
+    my @account_offsets = Koha::Account::Offsets->search( { credit_id => $self->id, amount => { '<' => 0 } } )->as_list;
 
     my $void;
     $self->_result->result_source->schema->txn_do(
@@ -321,21 +303,22 @@ sub void {
             )->store();
 
             # Link void to payment
-            $self->set({
-                amountoutstanding => $self->amount,
-                status => 'VOID'
-            })->store();
+            $self->set(
+                {
+                    amountoutstanding => $self->amount,
+                    status            => 'VOID'
+                }
+            )->store();
             $self->apply( { debits => [$void] } );
 
             # Reverse any applied payments
             foreach my $account_offset (@account_offsets) {
-                my $fee_paid =
-                  Koha::Account::Lines->find( $account_offset->debit_id );
+                my $fee_paid = Koha::Account::Lines->find( $account_offset->debit_id );
 
                 next unless $fee_paid;
 
-                my $amount_paid = $account_offset->amount * -1; # amount paid is stored as a negative amount
-                my $new_amount = $fee_paid->amountoutstanding + $amount_paid;
+                my $amount_paid = $account_offset->amount * -1;    # amount paid is stored as a negative amount
+                my $new_amount  = $fee_paid->amountoutstanding + $amount_paid;
                 $fee_paid->amountoutstanding($new_amount);
                 $fee_paid->store();
 
@@ -355,8 +338,8 @@ sub void {
                     $self->borrowernumber,
                     Dumper(
                         {
-                            action         => 'void_payment',
-                            borrowernumber => $self->borrowernumber,
+                            action            => 'void_payment',
+                            borrowernumber    => $self->borrowernumber,
                             amount            => $self->amount,
                             amountoutstanding => $self->amountoutstanding,
                             description       => $self->description,
@@ -365,8 +348,7 @@ sub void {
                             note              => $self->note,
                             itemnumber        => $self->itemnumber,
                             manager_id        => $self->manager_id,
-                            offsets =>
-                              [ map { $_->unblessed } @account_offsets ],
+                            offsets           => [ map { $_->unblessed } @account_offsets ],
                         }
                     )
                 );
@@ -396,32 +378,27 @@ sub cancel {
 
     # Make sure it is a charge we are reducing
     unless ( $self->is_debit ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . 'is not a debit' );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . 'is not a debit' );
     }
     if ( $self->debit_type_code eq 'PAYOUT' ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . 'is a payout' );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . 'is a payout' );
     }
 
     # Make sure it is not already cancelled
     if ( $self->status && $self->status eq 'CANCELLED' ) {
-        Koha::Exceptions::Account->throw(
-            error => 'Account line ' . $self->id . 'is already cancelled' );
+        Koha::Exceptions::Account->throw( error => 'Account line ' . $self->id . 'is already cancelled' );
     }
 
     # Make sure it has not be paid yet
     if ( $self->amount != $self->amountoutstanding ) {
-        Koha::Exceptions::Account->throw(
-            error => 'Account line ' . $self->id . 'is already offset' );
+        Koha::Exceptions::Account->throw( error => 'Account line ' . $self->id . 'is already offset' );
     }
 
     # Check for mandatory parameters
     my @mandatory = ( 'staff_id', 'branch' );
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
 
@@ -497,24 +474,20 @@ sub reduce {
 
     # Make sure it is a charge we are reducing
     unless ( $self->is_debit ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . 'is not a debit' );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . 'is not a debit' );
     }
     if ( $self->debit_type_code eq 'PAYOUT' ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . 'is a payout' );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . 'is a payout' );
     }
     if ( $self->debit_type_code eq 'VOID' ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $self->id . 'is void' );
+        Koha::Exceptions::Account::IsNotDebit->throw( error => 'Account line ' . $self->id . 'is void' );
     }
 
     # Check for mandatory parameters
     my @mandatory = ( 'interface', 'reduction_type', 'amount' );
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
 
@@ -523,28 +496,26 @@ sub reduce {
         my @optional = ( 'staff_id', 'branch' );
         for my $param (@optional) {
             unless ( defined( $params->{$param} ) ) {
-                Koha::Exceptions::MissingParameter->throw( error =>
-"The $param parameter is mandatory when interface is set to 'intranet'"
-                );
+                Koha::Exceptions::MissingParameter->throw(
+                    error => "The $param parameter is mandatory when interface is set to 'intranet'" );
             }
         }
     }
 
     # Make sure the reduction isn't more than the original
     my $original = $self->amount;
-    Koha::Exceptions::Account::AmountNotPositive->throw(
-        error => 'Reduce amount passed is not positive' )
-      unless ( $params->{amount} > 0 );
-    Koha::Exceptions::ParameterTooHigh->throw( error =>
-"Amount to reduce ($params->{amount}) is higher than original amount ($original)"
-    ) unless ( $original >= $params->{amount} );
+    Koha::Exceptions::Account::AmountNotPositive->throw( error => 'Reduce amount passed is not positive' )
+        unless ( $params->{amount} > 0 );
+    Koha::Exceptions::ParameterTooHigh->throw(
+        error => "Amount to reduce ($params->{amount}) is higher than original amount ($original)" )
+        unless ( $original >= $params->{amount} );
     my $reduced =
-      $self->credits( { credit_type_code => [ 'DISCOUNT', 'REFUND' ] } )->total;
-    Koha::Exceptions::ParameterTooHigh->throw( error =>
-"Combined reduction ($params->{amount} + $reduced) is higher than original amount ("
-          . abs($original)
-          . ")" )
-      unless ( $original >= ( $params->{amount} + abs($reduced) ) );
+        $self->credits( { credit_type_code => [ 'DISCOUNT', 'REFUND' ] } )->total;
+    Koha::Exceptions::ParameterTooHigh->throw(
+              error => "Combined reduction ($params->{amount} + $reduced) is higher than original amount ("
+            . abs($original)
+            . ")" )
+        unless ( $original >= ( $params->{amount} + abs($reduced) ) );
 
     my $status = { 'REFUND' => 'REFUNDED', 'DISCOUNT' => 'DISCOUNTED' };
 
@@ -581,8 +552,7 @@ sub reduce {
 
                 $reduction->apply( { debits => [$self] } );
                 $reduction->status('APPLIED')->store();
-            }
-            else {
+            } else {
 
                 # Zero amount offset used to link original 'debit' to
                 # reduction 'credit'
@@ -625,20 +595,17 @@ Applies the credit to a given debits array reference.
 sub apply {
     my ( $self, $params ) = @_;
 
-    my $debits      = $params->{debits};
+    my $debits = $params->{debits};
 
     unless ( $self->is_credit ) {
-        Koha::Exceptions::Account::IsNotCredit->throw(
-            error => 'Account line ' . $self->id . ' is not a credit'
-        );
+        Koha::Exceptions::Account::IsNotCredit->throw( error => 'Account line ' . $self->id . ' is not a credit' );
     }
 
     my $available_credit = $self->amountoutstanding * -1;
 
     unless ( $available_credit > 0 ) {
         Koha::Exceptions::Account::NoAvailableCredit->throw(
-            error => 'Outstanding credit is ' . $available_credit . ' and cannot be applied'
-        );
+            error => 'Outstanding credit is ' . $available_credit . ' and cannot be applied' );
     }
 
     my $schema = Koha::Database->new->schema;
@@ -750,34 +717,29 @@ sub payout {
 
     # Make sure it is a credit we are paying out
     unless ( $self->is_credit ) {
-        Koha::Exceptions::Account::IsNotCredit->throw(
-            error => 'Account line ' . $self->id . ' is not a credit' );
+        Koha::Exceptions::Account::IsNotCredit->throw( error => 'Account line ' . $self->id . ' is not a credit' );
     }
 
     # Check for mandatory parameters
-    my @mandatory =
-      ( 'interface', 'staff_id', 'branch', 'payout_type', 'amount' );
+    my @mandatory = ( 'interface', 'staff_id', 'branch', 'payout_type', 'amount' );
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
 
     # Make sure there is outstanding credit to pay out
     my $outstanding = -1 * $self->amountoutstanding;
-    my $amount =
-      $params->{amount} ? $params->{amount} : $outstanding;
-    Koha::Exceptions::Account::AmountNotPositive->throw(
-        error => 'Payout amount passed is not positive' )
-      unless ( $amount > 0 );
+    my $amount      = $params->{amount} ? $params->{amount} : $outstanding;
+    Koha::Exceptions::Account::AmountNotPositive->throw( error => 'Payout amount passed is not positive' )
+        unless ( $amount > 0 );
     Koha::Exceptions::ParameterTooHigh->throw(
         error => "Amount to payout ($amount) is higher than amountoutstanding ($outstanding)" )
-      unless ($outstanding >= $amount );
+        unless ( $outstanding >= $amount );
 
     # Make sure we record the cash register for cash transactions
     Koha::Exceptions::Account::RegisterRequired->throw()
-      if ( C4::Context->preference("UseCashRegisters")
+        if ( C4::Context->preference("UseCashRegisters")
         && defined( $params->{payout_type} )
         && ( $params->{payout_type} eq 'CASH' || $params->{payout_type} eq 'SIP00' )
         && !defined( $params->{cash_register} ) );
@@ -845,31 +807,24 @@ or debits and applied, via an offset, to the corresponding debit or credit.
 sub adjust {
     my ( $self, $params ) = @_;
 
-    my $amount       = $params->{amount};
-    my $update_type  = $params->{type};
-    my $interface    = $params->{interface};
+    my $amount      = $params->{amount};
+    my $update_type = $params->{type};
+    my $interface   = $params->{interface};
 
-    unless ( exists($Koha::Account::Line::allowed_update->{$update_type}) ) {
-        Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Update type not recognised'
-        );
+    unless ( exists( $Koha::Account::Line::allowed_update->{$update_type} ) ) {
+        Koha::Exceptions::Account::UnrecognisedType->throw( error => 'Update type not recognised' );
     }
 
     my $debit_type_code = $self->debit_type_code;
     my $account_status  = $self->status;
     unless (
         (
-            exists(
-                $Koha::Account::Line::allowed_update->{$update_type}
-                  ->{$debit_type_code}
-            )
-            && ( $Koha::Account::Line::allowed_update->{$update_type}
-                ->{$debit_type_code} eq $account_status )
+            exists( $Koha::Account::Line::allowed_update->{$update_type}->{$debit_type_code} )
+            && ( $Koha::Account::Line::allowed_update->{$update_type}->{$debit_type_code} eq $account_status )
         )
-      )
+        )
     {
-        Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Update type not allowed on this debit_type' );
+        Koha::Exceptions::Account::UnrecognisedType->throw( error => 'Update type not allowed on this debit_type' );
     }
 
     my $schema = Koha::Database->new->schema;
@@ -887,14 +842,13 @@ sub adjust {
 
             # Catch cases that require patron refunds
             if ( $new_outstanding < 0 ) {
-                my $account =
-                  Koha::Patrons->find( $self->borrowernumber )->account;
-                my $credit = $account->add_credit(
+                my $account = Koha::Patrons->find( $self->borrowernumber )->account;
+                my $credit  = $account->add_credit(
                     {
-                        amount      => $new_outstanding * -1,
-                        type        => 'OVERPAYMENT',
-                        interface   => $interface,
-                        ( $update_type eq 'overdue_update' ? ( item_id => $self->itemnumber ) : ()),
+                        amount    => $new_outstanding * -1,
+                        type      => 'OVERPAYMENT',
+                        interface => $interface,
+                        ( $update_type eq 'overdue_update' ? ( item_id => $self->itemnumber ) : () ),
                     }
                 );
                 $new_outstanding = 0;
@@ -920,10 +874,11 @@ sub adjust {
 
             if ( C4::Context->preference("FinesLog") ) {
                 logaction(
-                    "FINES", 'UPDATE', #undef becomes UPDATE in UpdateFine
+                    "FINES", 'UPDATE',    #undef becomes UPDATE in UpdateFine
                     $self->borrowernumber,
                     Dumper(
-                        {   action            => $update_type,
+                        {
+                            action            => $update_type,
                             borrowernumber    => $self->borrowernumber,
                             amount            => $amount,
                             description       => undef,
@@ -1000,15 +955,13 @@ sub to_api_mapping {
 sub is_renewable {
     my ($self) = @_;
 
-    return (
-        $self->amountoutstanding == 0 &&
-        $self->debit_type_code &&
-        $self->debit_type_code eq 'OVERDUE' &&
-        $self->status &&
-        $self->status eq 'UNRETURNED' &&
-        $self->item &&
-        $self->patron
-    ) ? 1 : 0;
+    return (   $self->amountoutstanding == 0
+            && $self->debit_type_code
+            && $self->debit_type_code eq 'OVERDUE'
+            && $self->status
+            && $self->status eq 'UNRETURNED'
+            && $self->item
+            && $self->patron ) ? 1 : 0;
 }
 
 =head3 renew_item
@@ -1022,7 +975,7 @@ Caller must call is_renewable before.
 =cut
 
 sub renew_item {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $outcome = {};
 
@@ -1033,13 +986,12 @@ sub renew_item {
     # - There is an interface param passed and it's value is 'opac'
 
     if (
-        !C4::Context->preference('RenewAccruingItemWhenPaid') ||
-        (
-            !C4::Context->preference('RenewAccruingItemInOpac') &&
-            $params->{interface} &&
-            $params->{interface} eq 'opac'
+        !C4::Context->preference('RenewAccruingItemWhenPaid')
+        || (   !C4::Context->preference('RenewAccruingItemInOpac')
+            && $params->{interface}
+            && $params->{interface} eq 'opac' )
         )
-    ) {
+    {
         return;
     }
 
@@ -1048,9 +1000,9 @@ sub renew_item {
         $self->patron,
         $self->item->checkout
     );
-    if ( $can_renew ) {
+    if ($can_renew) {
         my $borrowernumber = $self->patron->borrowernumber;
-        my $due_date = C4::Circulation::AddRenewal(
+        my $due_date       = C4::Circulation::AddRenewal(
             {
                 borrowernumber => $borrowernumber,
                 itemnumber     => $itemnumber,
@@ -1082,54 +1034,59 @@ Specific store method to generate credit number before saving
 sub store {
     my ($self) = @_;
 
-    my $AutoCreditNumber = C4::Context->preference('AutoCreditNumber');
+    my $AutoCreditNumber      = C4::Context->preference('AutoCreditNumber');
     my $credit_number_enabled = $self->is_credit && $self->credit_type->credit_number_enabled;
 
-    if ($AutoCreditNumber && $credit_number_enabled && !$self->in_storage) {
-        if (defined $self->credit_number) {
+    if ( $AutoCreditNumber && $credit_number_enabled && !$self->in_storage ) {
+        if ( defined $self->credit_number ) {
             Koha::Exceptions::Account->throw('AutoCreditNumber is enabled but credit_number is already defined');
         }
 
-        my $rs = Koha::Database->new->schema->resultset($self->_type);
+        my $rs = Koha::Database->new->schema->resultset( $self->_type );
 
-        if ($AutoCreditNumber eq 'incremental') {
-            my $max = $rs->search({
-                credit_number => { -regexp => '^[0-9]+$' }
-            }, {
-                select => \'CAST(credit_number AS UNSIGNED)',
-                as => ['credit_number'],
-            })->get_column('credit_number')->max;
+        if ( $AutoCreditNumber eq 'incremental' ) {
+            my $max = $rs->search(
+                { credit_number => { -regexp => '^[0-9]+$' } },
+                {
+                    select => \'CAST(credit_number AS UNSIGNED)',
+                    as     => ['credit_number'],
+                }
+            )->get_column('credit_number')->max;
             $max //= 0;
-            $self->credit_number($max + 1);
-        } elsif ($AutoCreditNumber eq 'annual') {
-            my $now = dt_from_string;
-            my $prefix = sprintf('%d-', $now->year);
-            my $max = $rs->search({
-                -and => [
-                    credit_number => { -regexp => '[0-9]{4}$' },
-                    credit_number => { -like => "$prefix%" },
-                ],
-            })->get_column('credit_number')->max;
-            $max //= $prefix . '0000';
-            my $incr = substr($max, length $prefix);
-            $self->credit_number(sprintf('%s%04d', $prefix, $incr + 1));
-        } elsif ($AutoCreditNumber eq 'branchyyyymmincr') {
-            my $userenv = C4::Context->userenv;
-            if ($userenv) {
-                my $branch = $userenv->{branch};
-                my $now = dt_from_string;
-                my $prefix = sprintf('%s%d%02d', $branch, $now->year, $now->month);
-                my $pattern = $prefix;
-                $pattern =~ s/([\?%_])/\\$1/g;
-                my $max = $rs->search({
+            $self->credit_number( $max + 1 );
+        } elsif ( $AutoCreditNumber eq 'annual' ) {
+            my $now    = dt_from_string;
+            my $prefix = sprintf( '%d-', $now->year );
+            my $max    = $rs->search(
+                {
                     -and => [
                         credit_number => { -regexp => '[0-9]{4}$' },
-                        credit_number => { -like => "$pattern%" },
+                        credit_number => { -like   => "$prefix%" },
                     ],
-                })->get_column('credit_number')->max;
+                }
+            )->get_column('credit_number')->max;
+            $max //= $prefix . '0000';
+            my $incr = substr( $max, length $prefix );
+            $self->credit_number( sprintf( '%s%04d', $prefix, $incr + 1 ) );
+        } elsif ( $AutoCreditNumber eq 'branchyyyymmincr' ) {
+            my $userenv = C4::Context->userenv;
+            if ($userenv) {
+                my $branch  = $userenv->{branch};
+                my $now     = dt_from_string;
+                my $prefix  = sprintf( '%s%d%02d', $branch, $now->year, $now->month );
+                my $pattern = $prefix;
+                $pattern =~ s/([\?%_])/\\$1/g;
+                my $max = $rs->search(
+                    {
+                        -and => [
+                            credit_number => { -regexp => '[0-9]{4}$' },
+                            credit_number => { -like   => "$pattern%" },
+                        ],
+                    }
+                )->get_column('credit_number')->max;
                 $max //= $prefix . '0000';
-                my $incr = substr($max, length $prefix);
-                $self->credit_number(sprintf('%s%04d', $prefix, $incr + 1));
+                my $incr = substr( $max, length $prefix );
+                $self->credit_number( sprintf( '%s%04d', $prefix, $incr + 1 ) );
             }
         }
     }

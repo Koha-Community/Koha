@@ -25,19 +25,19 @@ use MARC::File::XML;
 
 use base ("HTTP::OAI::GetRecord");
 
-
 sub new {
-    my ($class, $repository, %args) = @_;
+    my ( $class, $repository, %args ) = @_;
 
     my $self = HTTP::OAI::GetRecord->new(%args);
 
-    my $prefix = $repository->{koha_identifier} . ':';
+    my $prefix         = $repository->{koha_identifier} . ':';
     my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
     my $items_included = $repository->items_included( $args{metadataPrefix} );
-    my $dbh = C4::Context->dbh;
+    my $dbh            = C4::Context->dbh;
     my $sql;
     my @bind_params = ($biblionumber);
-    if ( $items_included ) {
+    if ($items_included) {
+
         # Take latest timestamp of biblio and any items
         # Or timestamp of deleted items where bib not deleted
         $sql .= "
@@ -65,11 +65,12 @@ sub new {
         ";
     }
 
-    my $sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
-    $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
-    my ($timestamp, $deleted);
+    my $sth = $dbh->prepare($sql) || die( 'Could not prepare statement: ' . $dbh->errstr );
+    $sth->execute(@bind_params)   || die( 'Could not execute statement: ' . $sth->errstr );
+    my ( $timestamp, $deleted );
+
     # If there are no rows in biblio_metadata, try deletedbiblio_metadata
-    unless ( ($timestamp = $sth->fetchrow) ) {
+    unless ( ( $timestamp = $sth->fetchrow ) ) {
         $sql = "
             SELECT max(timestamp)
             FROM   deletedbiblio_metadata
@@ -77,16 +78,17 @@ sub new {
         ";
         @bind_params = ($biblionumber);
 
-        $sth = $dbh->prepare($sql) || die('Could not prepare statement: ' . $dbh->errstr);
-        $sth->execute( @bind_params ) || die('Could not execute statement: ' . $sth->errstr);
-        unless ( ($timestamp = $sth->fetchrow) )
-        {
+        $sth = $dbh->prepare($sql)  || die( 'Could not prepare statement: ' . $dbh->errstr );
+        $sth->execute(@bind_params) || die( 'Could not execute statement: ' . $sth->errstr );
+        unless ( ( $timestamp = $sth->fetchrow ) ) {
             return HTTP::OAI::Response->new(
-             requestURL  => $repository->self_url(),
-             errors      => [ HTTP::OAI::Error->new(
-                code    => 'idDoesNotExist',
-                message => "There is no biblio record with this identifier",
-                ) ],
+                requestURL => $repository->self_url(),
+                errors     => [
+                    HTTP::OAI::Error->new(
+                        code    => 'idDoesNotExist',
+                        message => "There is no biblio record with this identifier",
+                    )
+                ],
             );
         }
         $deleted = 1;
@@ -104,14 +106,10 @@ sub new {
     my ( $marcxml, $marcxml_error ) =
         $deleted ? undef : $repository->get_biblio_marcxml( $biblionumber, $args{metadataPrefix} );
     if ( !$marcxml ) {
-        $self->record(
-            Koha::OAI::Server::DeletedRecord->new($timestamp, \@setSpecs, %args)
-        );
+        $self->record( Koha::OAI::Server::DeletedRecord->new( $timestamp, \@setSpecs, %args ) );
     } else {
         $args{about} = [$marcxml_error] if $marcxml_error;
-        $self->record(
-            Koha::OAI::Server::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args)
-        );
+        $self->record( Koha::OAI::Server::Record->new( $repository, $marcxml, $timestamp, \@setSpecs, %args ) );
     }
     return $self;
 }

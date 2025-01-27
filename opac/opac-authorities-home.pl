@@ -19,8 +19,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use URI::Escape qw( uri_escape_utf8 );
+use CGI          qw ( -utf8 );
+use URI::Escape  qw( uri_escape_utf8 );
 use Array::Utils qw(intersect);
 
 use C4::Auth qw( get_template_and_user );
@@ -37,24 +37,24 @@ use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
 my $query        = CGI->new;
-my $op           = $query->param('op') || '';
+my $op           = $query->param('op')           || '';
 my $authtypecode = $query->param('authtypecode') || '';
 my $dbh          = C4::Context->dbh;
 
-my $startfrom = $query->param('startfrom') || 1;
+my $startfrom      = $query->param('startfrom')      || 1;
 my $resultsperpage = $query->param('resultsperpage') || 20;
-my $authid    = $query->param('authid');
+my $authid         = $query->param('authid');
 my ( $template, $loggedinuser, $cookie );
 
-my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 
 if ( $op eq "do_search" ) {
     my @input_marclist = $query->multi_param('marclist');
-    my @and_or = $query->multi_param('and_or');
-    my @excluding = $query->multi_param('excluding');
-    my @operator = $query->multi_param('operator');
-    my $orderby = $query->param('orderby');
-    my @value = $query->multi_param('value');
+    my @and_or         = $query->multi_param('and_or');
+    my @excluding      = $query->multi_param('excluding');
+    my @operator       = $query->multi_param('operator');
+    my $orderby        = $query->param('orderby');
+    my @value          = $query->multi_param('value');
     $value[0] ||= q||;
 
     # validation of "Where"
@@ -62,15 +62,14 @@ if ( $op eq "do_search" ) {
     my @marclist        = intersect( @input_marclist, @valid_marc_list );
     @marclist = ('all') unless @marclist;
 
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    my $searcher = Koha::SearchEngine::Search->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    my $search_query = $builder->build_authorities_query_compat( \@marclist, \@and_or,
-        \@excluding, \@operator, \@value, $authtypecode, $orderby );
+    my $builder      = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $searcher     = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $search_query = $builder->build_authorities_query_compat(
+        \@marclist,  \@and_or,
+        \@excluding, \@operator, \@value, $authtypecode, $orderby
+    );
     my $offset = ( $startfrom - 1 ) * $resultsperpage + 1;
-    my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $offset, $resultsperpage );
+    my ( $results, $total ) = $searcher->search_auth_compat( $search_query, $offset, $resultsperpage );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tt",
@@ -82,18 +81,19 @@ if ( $op eq "do_search" ) {
     $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');
 
     # multi page display gestion
-    my $value_url = uri_escape_utf8($value[0]);
-    my $base_url = "opac-authorities-home.pl?"
-      ."marclist=$marclist[0]"
-      ."&amp;and_or=$and_or[0]"
-      ."&amp;excluding=$excluding[0]"
-      ."&amp;operator=$operator[0]"
-      ."&amp;value=$value_url"
-      ."&amp;resultsperpage=$resultsperpage"
-      ."&amp;type=opac"
-      ."&amp;op=do_search"
-      ."&amp;authtypecode=$authtypecode"
-      ."&amp;orderby=$orderby";
+    my $value_url = uri_escape_utf8( $value[0] );
+    my $base_url =
+          "opac-authorities-home.pl?"
+        . "marclist=$marclist[0]"
+        . "&amp;and_or=$and_or[0]"
+        . "&amp;excluding=$excluding[0]"
+        . "&amp;operator=$operator[0]"
+        . "&amp;value=$value_url"
+        . "&amp;resultsperpage=$resultsperpage"
+        . "&amp;type=opac"
+        . "&amp;op=do_search"
+        . "&amp;authtypecode=$authtypecode"
+        . "&amp;orderby=$orderby";
 
     my $from = ( $startfrom - 1 ) * $resultsperpage + 1;
     my $to;
@@ -103,25 +103,24 @@ if ( $op eq "do_search" ) {
 
     if ( $total < $startfrom * $resultsperpage ) {
         $to = $total;
-    }
-    else {
+    } else {
         $to = $startfrom * $resultsperpage;
     }
 
     my $AuthorityXSLTOpacResultsDisplay = C4::Context->preference('AuthorityXSLTOpacResultsDisplay');
-    if ($results && $AuthorityXSLTOpacResultsDisplay) {
+    if ( $results && $AuthorityXSLTOpacResultsDisplay ) {
         my $lang = C4::Languages::getlanguage();
         foreach my $result (@$results) {
-            my $authority = Koha::Authorities->find($result->{authid});
+            my $authority = Koha::Authorities->find( $result->{authid} );
             next unless $authority;
             my $authtypecode = $authority->authtypecode;
-            my $xsl = $AuthorityXSLTOpacResultsDisplay;
+            my $xsl          = $AuthorityXSLTOpacResultsDisplay;
 
             $xsl =~ s/\{langcode\}/$lang/g;
             $xsl =~ s/\{authtypecode\}/$authtypecode/g;
             my $xslt_engine = Koha::XSLT::Base->new;
-            my $output = $xslt_engine->transform({ xml => $authority->marcxml, file => $xsl });
-            if ($xslt_engine->err) {
+            my $output      = $xslt_engine->transform( { xml => $authority->marcxml, file => $xsl } );
+            if ( $xslt_engine->err ) {
                 warn "XSL transformation failed ($xsl): " . $xslt_engine->err;
                 next;
             }
@@ -134,13 +133,14 @@ if ( $op eq "do_search" ) {
             $base_url,  int( $total / $resultsperpage ) + 1,
             $startfrom, 'startfrom'
         ),
-        total     => $total,
-        from      => $from,
-        to        => $to,
+        total => $total,
+        from  => $from,
+        to    => $to,
     );
 
-    unless (C4::Context->preference('OPACShowUnusedAuthorities')) {
-#       TODO implement usage counts in the indexes to filter during searching
+    unless ( C4::Context->preference('OPACShowUnusedAuthorities') ) {
+
+        #       TODO implement usage counts in the indexes to filter during searching
         my @usedauths = grep { $_->{used} > 0 } @$results;
         $results = \@usedauths;
     }
@@ -148,31 +148,36 @@ if ( $op eq "do_search" ) {
     $template->param( result => $results ) if $results;
 
     # Opac search history
-    if (C4::Context->preference('EnableOpacSearchHistory')) {
-        if ( $startfrom == 1) {
-            my $path_info = $query->url(-path_info=>1);
-            my $query_cgi_history = $query->url(-query=>1);
+    if ( C4::Context->preference('EnableOpacSearchHistory') ) {
+        if ( $startfrom == 1 ) {
+            my $path_info         = $query->url( -path_info => 1 );
+            my $query_cgi_history = $query->url( -query     => 1 );
             $query_cgi_history =~ s/^$path_info\?//;
             $query_cgi_history =~ s/;/&/g;
 
-            unless ( $loggedinuser ) {
-                my $new_search = C4::Search::History::add_to_session({
-                        cgi => $query,
+            unless ($loggedinuser) {
+                my $new_search = C4::Search::History::add_to_session(
+                    {
+                        cgi        => $query,
                         query_desc => $value[0],
-                        query_cgi => $query_cgi_history,
-                        total => $total,
-                        type => "authority",
-                });
+                        query_cgi  => $query_cgi_history,
+                        total      => $total,
+                        type       => "authority",
+                    }
+                );
             } else {
+
                 # To the session (the user is logged in)
-                C4::Search::History::add({
-                    userid => $loggedinuser,
-                    sessionid => $query->cookie("CGISESSID"),
-                    query_desc => $value[0],
-                    query_cgi => $query_cgi_history,
-                    total => $total,
-                    type => "authority",
-                });
+                C4::Search::History::add(
+                    {
+                        userid     => $loggedinuser,
+                        sessionid  => $query->cookie("CGISESSID"),
+                        query_desc => $value[0],
+                        query_cgi  => $query_cgi_history,
+                        total      => $total,
+                        type       => "authority",
+                    }
+                );
             }
         }
     }
@@ -181,15 +186,14 @@ if ( $op eq "do_search" ) {
     $template->param(
         startfrom      => $startfrom,
         resultsperpage => $resultsperpage,
-        countfuzzy     => !(C4::Context->preference('OPACShowUnusedAuthorities')),
+        countfuzzy     => !( C4::Context->preference('OPACShowUnusedAuthorities') ),
         resultcount    => scalar @$results,
         authtypecode   => $authtypecode,
         authtypetext   => $authority_types->find($authtypecode)->authtypetext,
         isEDITORS      => $authtypecode eq 'EDITORS',
     );
 
-}
-else {
+} else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authorities-home.tt",

@@ -127,16 +127,16 @@ use Koha::SearchEngine::Elasticsearch::Indexer;
 use MARC::Field;
 use Modern::Perl;
 use Pod::Usage qw( pod2usage );
-use Try::Tiny qw( catch try );
+use Try::Tiny  qw( catch try );
 
 my $verbose = 0;
-my $commit = 5000;
-my ($delete, $reset, $help, $man, $processes);
-my ($index_biblios, $index_authorities);
-my (@biblionumbers,@authids,$where);
+my $commit  = 5000;
+my ( $delete,        $reset, $help, $man, $processes );
+my ( $index_biblios, $index_authorities );
+my ( @biblionumbers, @authids, $where );
 my $desc;
 
-$|=1; # flushes output
+$| = 1;    # flushes output
 
 GetOptions(
     'c|commit=i'    => \$commit,
@@ -155,51 +155,54 @@ GetOptions(
 );
 
 # Default is to do both
-unless ($index_authorities || $index_biblios) {
+unless ( $index_authorities || $index_biblios ) {
     $index_authorities = $index_biblios = 1;
 }
 
-if ($processes && ( @biblionumbers || @authids) ) {
+if ( $processes && ( @biblionumbers || @authids ) ) {
     die "Argument p|processes cannot be combined with bn|bnumber or ai|authid";
 }
 
-pod2usage(1) if $help;
+pod2usage(1)                                 if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 
 _sanity_check();
 
-if ($reset){
+if ($reset) {
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     $delete = 1;
 }
 
-_verify_index_state($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, $delete) if ($index_biblios);
-_verify_index_state($Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX, $delete) if ($index_authorities);
+_verify_index_state( $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX,     $delete ) if ($index_biblios);
+_verify_index_state( $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX, $delete ) if ($index_authorities);
 
 my $slice_index = 0;
 my $slice_count = ( $processes //= 1 );
 my %iterator_options;
 
-if ($slice_count > 1) {
+if ( $slice_count > 1 ) {
+
     # Fire up child processes for processing slices from 2 on. This main process will handle slice 1.
     $slice_index = 0;
-    for (my $proc = 1; $proc < $slice_count; $proc++) {
+    for ( my $proc = 1 ; $proc < $slice_count ; $proc++ ) {
         my $pid = fork();
         die "Failed to fork a child process\n" unless defined $pid;
-        if ($pid == 0) {
+        if ( $pid == 0 ) {
+
             # Child process, give it a slice to process
             $slice_index = $proc;
             last;
         }
     }
+
     # Fudge the commit count a bit to spread out the Elasticsearch commits
     $commit *= 1 + 0.10 * $slice_index;
-    $commit = int( $commit );
-    _log(1, "Processing slice @{[$slice_index + 1]} of $slice_count\n");
+    $commit = int($commit);
+    _log( 1, "Processing slice @{[$slice_index + 1]} of $slice_count\n" );
     $iterator_options{slice} = { index => $slice_index, count => $slice_count };
 }
 
-if( $desc ){
+if ($desc) {
     $iterator_options{desc} = 1;
 }
 
@@ -209,12 +212,12 @@ if ($where) {
 
 my $next;
 if ($index_biblios) {
-    _log(1, "Indexing biblios\n");
+    _log( 1, "Indexing biblios\n" );
     if (@biblionumbers) {
         $next = sub {
             my $r = shift @biblionumbers;
             return () unless defined $r;
-            return ($r, Koha::BiblioUtils->get_from_biblionumber($r, item_data => 1 ));
+            return ( $r, Koha::BiblioUtils->get_from_biblionumber( $r, item_data => 1 ) );
         };
     } else {
         my $records = Koha::BiblioUtils->get_all_biblios_iterator(%iterator_options);
@@ -222,16 +225,16 @@ if ($index_biblios) {
             $records->next();
         }
     }
-    _do_reindex($next, $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX);
+    _do_reindex( $next, $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX );
 }
 if ($index_authorities) {
-    _log(1, "Indexing authorities\n");
+    _log( 1, "Indexing authorities\n" );
     if (@authids) {
         $next = sub {
             my $r = shift @authids;
             return () unless defined $r;
             my $a = Koha::MetadataRecord::Authority->get_from_authid($r);
-            return ($r, $a);
+            return ( $r, $a );
         };
     } else {
         my $records = Koha::MetadataRecord::Authority->get_all_authorities_iterator(%iterator_options);
@@ -239,12 +242,13 @@ if ($index_authorities) {
             $records->next();
         }
     }
-    _do_reindex($next, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX);
+    _do_reindex( $next, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX );
 }
 
-if ($slice_index == 0) {
+if ( $slice_index == 0 ) {
+
     # Main process, wait for children
-    for (my $proc = 1; $proc < $processes; $proc++) {
+    for ( my $proc = 1 ; $proc < $processes ; $proc++ ) {
         wait();
     }
 }
@@ -262,21 +266,22 @@ Checks the index state and recreates it if requested.
 sub _verify_index_state {
     my ( $index_name, $recreate ) = @_;
 
-    _log(1, "Checking state of $index_name index\n");
+    _log( 1, "Checking state of $index_name index\n" );
     my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
 
     if ($recreate) {
-        _log(1, "Dropping and recreating $index_name index\n");
+        _log( 1, "Dropping and recreating $index_name index\n" );
         $indexer->drop_index() if $indexer->index_exists();
         $indexer->create_index();
-    }
-    elsif (!$indexer->index_exists) {
+    } elsif ( !$indexer->index_exists ) {
+
         # Create index if does not exist
         $indexer->create_index();
-    } elsif ($indexer->is_index_status_ok) {
+    } elsif ( $indexer->is_index_status_ok ) {
+
         # Update mapping unless index is some kind of problematic state
         $indexer->update_mappings();
-    } elsif ($indexer->is_index_status_recreate_required) {
+    } elsif ( $indexer->is_index_status_recreate_required ) {
         warn qq/Index "$index_name" has status "recreate required", suggesting it should be recreated/;
     }
 }
@@ -303,7 +308,7 @@ sub _do_reindex {
         my $record = $record->record;
         $count++;
         if ( $verbose == 1 ) {
-            _log( 1, "$count records processed\n" ) if ( $count % 1000 == 0);
+            _log( 1, "$count records processed\n" ) if ( $count % 1000 == 0 );
         } else {
             _log( 2, "$id\n" );
         }
@@ -313,13 +318,13 @@ sub _do_reindex {
         if ( !( --$commit_count ) ) {
             _log( 1, "Committing $commit records...\n" );
             my $response;
-            try{
+            try {
                 $response = $indexer->update_index( \@id_buffer, \@commit_buffer );
                 _handle_response($response);
                 _log( 1, "Commit complete\n" );
             } catch {
-                _log(1,"Elasticsearch exception thrown: ".$_->type."\n");
-                _log(2,"Details: ".$_->details."\n");
+                _log( 1, "Elasticsearch exception thrown: " . $_->type . "\n" );
+                _log( 2, "Details: " . $_->details . "\n" );
             };
             $commit_count  = $commit;
             @id_buffer     = ();
@@ -343,6 +348,7 @@ Checks some basic stuff to ensure that it's sane before we start.
 =cut
 
 sub _sanity_check {
+
     # Do we have an elasticsearch block defined?
     my $conf = C4::Context->config('elasticsearch');
     die "No 'elasticsearch' block is defined in koha-conf.xml.\n" if ( !$conf );
@@ -356,14 +362,17 @@ Parse the return from update_index and display errors depending on verbosity of 
 
 sub _handle_response {
     my ($response) = @_;
-    if( $response->{errors} eq 'true' ){
+    if ( $response->{errors} eq 'true' ) {
         _log( 1, "There were errors during indexing\n" );
-        if ( $verbose > 1 ){
-            foreach my $item (@{$response->{items}}){
+        if ( $verbose > 1 ) {
+            foreach my $item ( @{ $response->{items} } ) {
                 next unless defined $item->{index}->{error};
-                print "Record #" . $item->{index}->{_id} . " " .
-                      $item->{index}->{error}->{reason} . " (" . $item->{index}->{error}->{type} . ") : " .
-                      $item->{index}->{error}->{caused_by}->{type} . " (" . $item->{index}->{error}->{caused_by}->{reason} . ")\n";
+                print "Record #"
+                    . $item->{index}->{_id} . " "
+                    . $item->{index}->{error}->{reason} . " ("
+                    . $item->{index}->{error}->{type} . ") : "
+                    . $item->{index}->{error}->{caused_by}->{type} . " ("
+                    . $item->{index}->{error}->{caused_by}->{reason} . ")\n";
             }
         }
     }
@@ -381,7 +390,7 @@ include a trailing newline automatically.
 =cut
 
 sub _log {
-    my ($level, $msg) = @_;
+    my ( $level, $msg ) = @_;
 
-    print "[$$] $msg" if ($verbose >= $level);
+    print "[$$] $msg" if ( $verbose >= $level );
 }

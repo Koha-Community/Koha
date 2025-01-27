@@ -30,31 +30,38 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
-my $class_sort_1 = $builder->build({ source=>'ClassSortRule' });
-my $class_sort_2 = $builder->build({ source=>'ClassSortRule' });
-my $class_split = $builder->build({ source=>'ClassSplitRule' });
+my $builder             = t::lib::TestBuilder->new;
+my $class_sort_1        = $builder->build( { source => 'ClassSortRule' } );
+my $class_sort_2        = $builder->build( { source => 'ClassSortRule' } );
+my $class_split         = $builder->build( { source => 'ClassSplitRule' } );
 my $nb_of_class_sources = Koha::ClassSources->search->count;
-my $new_cs_1 = Koha::ClassSource->new({
-    cn_source => 'source_1',
-    description => 'a_test_1',
-    used => '1',
-    class_sort_rule => $class_sort_1->{class_sort_rule},#'sort_rule_1',
-    class_split_rule => $class_split->{class_split_rule},
-})->store;
-my $new_cs_2 = Koha::ClassSource->new({
-    cn_source => 'source_2',
-    description => 'a_test_2',
-    used => '0',
-    class_sort_rule => $class_sort_2->{class_sort_rule},#'sort_rule_1',
-    class_split_rule => $class_split->{class_split_rule},
-})->store;
+my $new_cs_1            = Koha::ClassSource->new(
+    {
+        cn_source        => 'source_1',
+        description      => 'a_test_1',
+        used             => '1',
+        class_sort_rule  => $class_sort_1->{class_sort_rule},    #'sort_rule_1',
+        class_split_rule => $class_split->{class_split_rule},
+    }
+)->store;
+my $new_cs_2 = Koha::ClassSource->new(
+    {
+        cn_source        => 'source_2',
+        description      => 'a_test_2',
+        used             => '0',
+        class_sort_rule  => $class_sort_2->{class_sort_rule},    #'sort_rule_1',
+        class_split_rule => $class_split->{class_split_rule},
+    }
+)->store;
 
-is( $new_cs_1->cn_source, 'source_1', 'Adding a new classification should have set the cn_source');
+is( $new_cs_1->cn_source,              'source_1', 'Adding a new classification should have set the cn_source' );
 is( Koha::ClassSources->search->count, $nb_of_class_sources + 2, 'The 2 classifcations should have been added' );
 
 my $retrieved_cs_1 = Koha::ClassSources->find( $new_cs_1->cn_source );
-is( $retrieved_cs_1->description, $new_cs_1->description, 'Find a source by cn_source should return the correct source' );
+is(
+    $retrieved_cs_1->description, $new_cs_1->description,
+    'Find a source by cn_source should return the correct source'
+);
 
 $retrieved_cs_1->delete;
 is( Koha::ClassSources->search->count, $nb_of_class_sources + 1, 'Delete should have deleted the classification' );

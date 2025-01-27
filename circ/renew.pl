@@ -21,8 +21,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::Circulation qw( barcodedecode CanBookBeRenewed GetLatestAutoRenewDate AddRenewal );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
@@ -32,10 +32,10 @@ my $cgi = CGI->new;
 
 my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "circ/renew.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        template_name => "circ/renew.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { circulate => "circulate_remaining_permissions" },
     }
 );
 
@@ -53,9 +53,9 @@ my ( $item, $checkout, $patron );
 my $error = q{};
 my ( $soonest_renew_date, $latest_auto_renew_date );
 
-if ($op eq 'cud-renew' && $barcode) {
+if ( $op eq 'cud-renew' && $barcode ) {
     $barcode = barcodedecode($barcode) if $barcode;
-    $item = Koha::Items->find({ barcode => $barcode });
+    $item    = Koha::Items->find( { barcode => $barcode } );
 
     if ($item) {
 
@@ -68,20 +68,18 @@ if ($op eq 'cud-renew' && $barcode) {
             if ( ( $patron->is_debarred || q{} ) lt dt_from_string()->ymd() ) {
                 my $can_renew;
                 my $info;
-                ( $can_renew, $error, $info ) =
-                  CanBookBeRenewed( $patron, $checkout, $override_limit );
+                ( $can_renew, $error, $info ) = CanBookBeRenewed( $patron, $checkout, $override_limit );
 
-                if ( $error && ($error eq 'on_reserve') ) {
+                if ( $error && ( $error eq 'on_reserve' ) ) {
                     if ($override_holds) {
                         $can_renew = 1;
                         $error     = undef;
-                    }
-                    else {
+                    } else {
                         $can_renew = 0;
                     }
                 }
 
-                if ( $error && ($error eq 'too_soon' or $error eq 'auto_too_soon') ) {
+                if ( $error && ( $error eq 'too_soon' or $error eq 'auto_too_soon' ) ) {
                     $soonest_renew_date = $info->{soonest_renew_date};
                 }
                 if ( $error && ( $error eq 'auto_too_late' ) ) {
@@ -93,10 +91,9 @@ if ($op eq 'cud-renew' && $barcode) {
                 if ($can_renew) {
                     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
                     my $date_due =
-                      ( C4::Context->preference('SpecifyDueDate')
-                          && $hard_due_date )
-                      ? $hard_due_date
-                      : $cgi->param('renewonholdduedate');
+                        ( C4::Context->preference('SpecifyDueDate') && $hard_due_date )
+                        ? $hard_due_date
+                        : $cgi->param('renewonholdduedate');
 
                     $date_due = AddRenewal(
                         {
@@ -108,31 +105,29 @@ if ($op eq 'cud-renew' && $barcode) {
                     );
                     $template->param( date_due => $date_due );
                 }
-            }
-            else {
+            } else {
                 $error = "patron_restricted";
             }
-        }
-        else {
+        } else {
             $error = "no_checkout";
         }
-    }
-    else {
+    } else {
         $error = "no_item";
     }
 
     $template->param(
-        item     => $item,
-        issue    => $checkout,
-        borrower => $patron,
-        error    => $error,
-        soonestrenewdate => $soonest_renew_date,
+        item                => $item,
+        issue               => $checkout,
+        borrower            => $patron,
+        error               => $error,
+        soonestrenewdate    => $soonest_renew_date,
         latestautorenewdate => $latest_auto_renew_date,
     );
 }
 
 $template->param( hard_due_date => $hard_due_date );
+
 # Checking if there is a Fast Cataloging Framework
-$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

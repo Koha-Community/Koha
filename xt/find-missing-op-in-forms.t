@@ -33,10 +33,10 @@ push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 
 my @errors;
-for my $file ( @files ) {
+for my $file (@files) {
     chomp $file;
     my @e = catch_missing_op($file);
-    push @errors, sprintf "%s:%s", $file, join (",", @e) if @e;
+    push @errors, sprintf "%s:%s", $file, join( ",", @e ) if @e;
 }
 
 is(
@@ -72,7 +72,7 @@ sub catch_missing_op {
             } else {
                 push @errors, $line_open_form;
             }
-            $has_op = 0;
+            $has_op  = 0;
             $in_form = 0;
         }
     }

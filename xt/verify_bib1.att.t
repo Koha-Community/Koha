@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 2;
 
-foreach my $record_type ( qw( biblios authorities ) ) {
+foreach my $record_type (qw( biblios authorities )) {
 
     subtest "bib1.att tests for $record_type" => sub {
 
@@ -38,7 +38,7 @@ foreach my $record_type ( qw( biblios authorities ) ) {
             }
         }
 
-        foreach my $code (keys %{$att_codes}) {
+        foreach my $code ( keys %{$att_codes} ) {
             is( $att_codes->{$code}, 1, "Only one occurrence for code ($code)" );
         }
     };

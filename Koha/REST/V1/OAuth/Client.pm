@@ -60,17 +60,17 @@ sub login {
         }
     } else {
         $redirect_url = C4::Context->preference('staffClientBaseURL') . '/api/v1/oauth/login/';
-        $uri = '/cgi-bin/koha/mainpage.pl';
+        $uri          = '/cgi-bin/koha/mainpage.pl';
     }
 
     unless ( $provider_config && $provider_config->{authorize_url} ) {
         my $error = "No configuration found for your provider";
-        return $c->redirect_to($uri."?auth_error=$error");
+        return $c->redirect_to( $uri . "?auth_error=$error" );
     }
 
     unless ( $provider_config->{authorize_url} =~ /response_type=code/ ) {
-        my $authorize_url = Mojo::URL->new($provider_config->{authorize_url});
-        $authorize_url->query->append(response_type => 'code');
+        my $authorize_url = Mojo::URL->new( $provider_config->{authorize_url} );
+        $authorize_url->query->append( response_type => 'code' );
         $provider_config->{authorize_url} = $authorize_url->to_string;
     }
 
@@ -80,6 +80,7 @@ sub login {
     my $state;
 
     if ($is_callback) {
+
         # callback, check CSRF token
         unless (
             Koha::Token->new->check_csrf(
@@ -88,24 +89,29 @@ sub login {
                     token      => $c->param('state'),
                 }
             )
-          )
+            )
         {
             my $error = "wrong_csrf_token";
             return $c->redirect_to( $uri . "?auth_error=$error" );
         }
-    }
-    else {
+    } else {
+
         # initial request, generate CSRF token
         $state = Koha::Token->new->generate_csrf( { session_id => $c->req->cookie('CGISESSID')->value } );
     }
 
-    return $c->oauth2->get_token_p( $provider => { ( !$is_callback ? ( state => $state ) : () ), redirect_uri => $redirect_url . $provider . "/" . $interface } )->then(
+    return $c->oauth2->get_token_p(
+        $provider => {
+            ( !$is_callback ? ( state => $state ) : () ), redirect_uri => $redirect_url . $provider . "/" . $interface
+        }
+    )->then(
         sub {
             return unless my $response = shift;
 
             try {
                 my ( $patron, $mapped_data, $domain ) = Koha::Auth::Client::OAuth->new->get_user(
-                    {   provider  => $provider,
+                    {
+                        provider  => $provider,
                         data      => $response,
                         interface => $interface,
                         config    => $c->oauth2->providers->{$provider}
@@ -122,7 +128,8 @@ sub login {
                     );
                 }
 
-                my $session_id = $c->auth->session({ patron => $patron, interface => $interface, provider => $provider });
+                my $session_id =
+                    $c->auth->session( { patron => $patron, interface => $interface, provider => $provider } );
 
                 $c->cookie( CGISESSID => $session_id, { path => "/" } );
 
@@ -130,6 +137,7 @@ sub login {
             } catch {
                 my $error = $_;
                 $c->app->log->error($error);
+
                 # TODO: Review behavior
                 if ( blessed $error ) {
                     if ( $error->isa('Koha::Exceptions::Auth::Unauthorized') ) {
@@ -142,7 +150,7 @@ sub login {
 
                 $error = uri_escape_utf8($error);
 
-                $c->redirect_to($uri."?auth_error=$error");
+                $c->redirect_to( $uri . "?auth_error=$error" );
             };
         }
     )->catch(
@@ -150,7 +158,7 @@ sub login {
             my $error = shift;
             $c->app->log->error($error);
             $error = uri_escape_utf8($error);
-            $c->redirect_to($uri."?auth_error=$error");
+            $c->redirect_to( $uri . "?auth_error=$error" );
         }
     )->wait;
 }

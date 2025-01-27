@@ -20,28 +20,27 @@ use CGI qw ( -utf8 );
 
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 
 use Koha::BackgroundJobs;
 use Koha::Virtualshelves;
 
-my $input             = CGI->new;
-my $op                = $input->param('op') || 'list';
+my $input = CGI->new;
+my $op    = $input->param('op') || 'list';
 my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/background_jobs.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+        template_name => "admin/background_jobs.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
-my $logged_in_user = Koha::Patrons->find($loggedinuser);
-my $can_manage_background_jobs =
-  $logged_in_user->has_permission( { parameters => 'manage_background_jobs' } );
+my $logged_in_user             = Koha::Patrons->find($loggedinuser);
+my $can_manage_background_jobs = $logged_in_user->has_permission( { parameters => 'manage_background_jobs' } );
 
 if ( $op eq 'view' ) {
     my $id = $input->param('id');
@@ -50,12 +49,11 @@ if ( $op eq 'view' ) {
             && !$can_manage_background_jobs )
         {
             push @messages, { code => 'cannot_view_job' };
-        }
-        else {
+        } else {
             $template->param( job => $job, );
             if ( $job->status ne 'new' ) {
                 my $report = $job->additional_report() || {};
-                $template->param( %$report );
+                $template->param(%$report);
             }
         }
     } else {
@@ -64,14 +62,13 @@ if ( $op eq 'view' ) {
 }
 
 if ( $op eq 'cud-cancel' ) {
-    my $id = $input->param('id');
+    my $id  = $input->param('id');
     my $job = Koha::BackgroundJobs->find($id);
     if (   $can_manage_background_jobs
         || $job->borrowernumber eq $logged_in_user->borrowernumber )
     {
         $job->cancel;
-    }
-    else {
+    } else {
         push @messages, { code => 'cannot_cancel_job' };
     }
     $op = 'list';

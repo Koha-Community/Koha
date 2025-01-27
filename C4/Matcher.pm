@@ -19,7 +19,6 @@ package C4::Matcher;
 
 use Modern::Perl;
 
-
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
@@ -84,13 +83,13 @@ present in the database.  Each hashref includes:
 
 sub GetMatcherList {
     my $dbh = C4::Context->dbh;
-    
+
     my $sth = $dbh->prepare_cached("SELECT matcher_id, code, description FROM marc_matchers ORDER BY matcher_id");
     $sth->execute();
     my @results = ();
-    while (my $row = $sth->fetchrow_hashref) {
+    while ( my $row = $sth->fetchrow_hashref ) {
         push @results, $row;
-    } 
+    }
     return @results;
 }
 
@@ -106,7 +105,7 @@ sub GetMatcherId {
     my ($code) = @_;
     my $dbh = C4::Context->dbh;
 
-    my $matcher_id = $dbh->selectrow_array("SELECT matcher_id FROM marc_matchers WHERE code = ?", undef, $code);
+    my $matcher_id = $dbh->selectrow_array( "SELECT matcher_id FROM marc_matchers WHERE code = ?", undef, $code );
     return $matcher_id;
 }
 
@@ -125,26 +124,26 @@ and defaults to 1000.
 
 sub new {
     my $class = shift;
-    my $self = {};
+    my $self  = {};
 
     $self->{'id'} = undef;
 
-    if ($#_ > -1) {
+    if ( $#_ > -1 ) {
         $self->{'record_type'} = shift;
     } else {
         $self->{'record_type'} = 'biblio';
     }
 
-    if ($#_ > -1) {
+    if ( $#_ > -1 ) {
         $self->{'threshold'} = shift;
     } else {
         $self->{'threshold'} = 1000;
     }
 
-    $self->{'code'} = '';
+    $self->{'code'}        = '';
     $self->{'description'} = '';
 
-    $self->{'matchpoints'} = [];
+    $self->{'matchpoints'}     = [];
     $self->{'required_checks'} = [];
 
     bless $self, $class;
@@ -163,8 +162,8 @@ id does not exist, returns undef.
 
 sub fetch {
     my $class = shift;
-    my $id = shift;
-    my $dbh = C4::Context->dbh();
+    my $id    = shift;
+    my $dbh   = C4::Context->dbh();
 
     my $sth = $dbh->prepare_cached("SELECT * FROM marc_matchers WHERE matcher_id = ?");
     $sth->execute($id);
@@ -173,30 +172,30 @@ sub fetch {
     return unless defined $row;
 
     my $self = {};
-    $self->{'id'} = $row->{'matcher_id'};
+    $self->{'id'}          = $row->{'matcher_id'};
     $self->{'record_type'} = $row->{'record_type'};
-    $self->{'code'} = $row->{'code'};
+    $self->{'code'}        = $row->{'code'};
     $self->{'description'} = $row->{'description'};
-    $self->{'threshold'} = int($row->{'threshold'});
+    $self->{'threshold'}   = int( $row->{'threshold'} );
     bless $self, $class;
 
     # matchpoints
     $self->{'matchpoints'} = [];
     $sth = $dbh->prepare_cached("SELECT * FROM matcher_matchpoints WHERE matcher_id = ? ORDER BY matchpoint_id");
-    $sth->execute($self->{'id'});
-    while (my $row = $sth->fetchrow_hashref) {
-        my $matchpoint = $self->_fetch_matchpoint($row->{'matchpoint_id'});
+    $sth->execute( $self->{'id'} );
+    while ( my $row = $sth->fetchrow_hashref ) {
+        my $matchpoint = $self->_fetch_matchpoint( $row->{'matchpoint_id'} );
         push @{ $self->{'matchpoints'} }, $matchpoint;
     }
 
     # required checks
     $self->{'required_checks'} = [];
     $sth = $dbh->prepare_cached("SELECT * FROM matchchecks WHERE matcher_id = ? ORDER BY matchcheck_id");
-    $sth->execute($self->{'id'});
-    while (my $row = $sth->fetchrow_hashref) {
-        my $source_matchpoint = $self->_fetch_matchpoint($row->{'source_matchpoint_id'});
-        my $target_matchpoint = $self->_fetch_matchpoint($row->{'target_matchpoint_id'});
-        my $matchcheck = {};
+    $sth->execute( $self->{'id'} );
+    while ( my $row = $sth->fetchrow_hashref ) {
+        my $source_matchpoint = $self->_fetch_matchpoint( $row->{'source_matchpoint_id'} );
+        my $target_matchpoint = $self->_fetch_matchpoint( $row->{'target_matchpoint_id'} );
+        my $matchcheck        = {};
         $matchcheck->{'source_matchpoint'} = $source_matchpoint;
         $matchcheck->{'target_matchpoint'} = $target_matchpoint;
         push @{ $self->{'required_checks'} }, $matchcheck;
@@ -206,33 +205,36 @@ sub fetch {
 }
 
 sub _fetch_matchpoint {
-    my $self = shift;
+    my $self          = shift;
     my $matchpoint_id = shift;
-    
+
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare_cached("SELECT * FROM matchpoints WHERE matchpoint_id = ?");
     $sth->execute($matchpoint_id);
-    my $row = $sth->fetchrow_hashref;
+    my $row        = $sth->fetchrow_hashref;
     my $matchpoint = {};
     $matchpoint->{'index'} = $row->{'search_index'};
-    $matchpoint->{'score'} = int($row->{'score'});
+    $matchpoint->{'score'} = int( $row->{'score'} );
     $sth->finish();
 
     $matchpoint->{'components'} = [];
     $sth = $dbh->prepare_cached("SELECT * FROM matchpoint_components WHERE matchpoint_id = ? ORDER BY sequence");
     $sth->execute($matchpoint_id);
-    while ($row = $sth->fetchrow_hashref) {
+    while ( $row = $sth->fetchrow_hashref ) {
         my $component = {};
-        $component->{'tag'} = $row->{'tag'};
-        $component->{'subfields'} = { map { $_ => 1 } split(//,  $row->{'subfields'}) };
-        $component->{'offset'} = int($row->{'offset'});
-        $component->{'length'} = int($row->{'length'});
-        $component->{'norms'} = [];
-        my $sth2 = $dbh->prepare_cached("SELECT * 
+        $component->{'tag'}       = $row->{'tag'};
+        $component->{'subfields'} = { map { $_ => 1 } split( //, $row->{'subfields'} ) };
+        $component->{'offset'}    = int( $row->{'offset'} );
+        $component->{'length'}    = int( $row->{'length'} );
+        $component->{'norms'}     = [];
+        my $sth2 = $dbh->prepare_cached(
+            "SELECT * 
                                          FROM matchpoint_component_norms 
-                                         WHERE matchpoint_component_id = ? ORDER BY sequence");
-        $sth2->execute($row->{'matchpoint_component_id'});
-        while (my $row2 = $sth2->fetchrow_hashref) {
+                                         WHERE matchpoint_component_id = ? ORDER BY sequence"
+        );
+        $sth2->execute( $row->{'matchpoint_component_id'} );
+
+        while ( my $row2 = $sth2->fetchrow_hashref ) {
             push @{ $component->{'norms'} }, $row2->{'norm_routine'};
         }
         push @{ $matchpoint->{'components'} }, $component;
@@ -255,11 +257,13 @@ is replaced.
 sub store {
     my $self = shift;
 
-    if (defined $self->{'id'}) {
+    if ( defined $self->{'id'} ) {
+
         # update
         $self->_del_matcher_components();
         $self->_update_marc_matchers();
     } else {
+
         # create new
         $self->_new_marc_matchers();
     }
@@ -272,9 +276,10 @@ sub _del_matcher_components {
 
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare_cached("DELETE FROM matchpoints WHERE matcher_id = ?");
-    $sth->execute($self->{'id'});
+    $sth->execute( $self->{'id'} );
     $sth = $dbh->prepare_cached("DELETE FROM matchchecks WHERE matcher_id = ?");
-    $sth->execute($self->{'id'});
+    $sth->execute( $self->{'id'} );
+
     # foreign key delete cascades take care of deleting relevant rows
     # from matcher_matchpoints, matchpoint_components, and
     # matchpoint_component_norms
@@ -284,23 +289,30 @@ sub _update_marc_matchers {
     my $self = shift;
 
     my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare_cached("UPDATE marc_matchers 
+    my $sth = $dbh->prepare_cached(
+        "UPDATE marc_matchers 
                                     SET code = ?,
                                         description = ?,
                                         record_type = ?,
                                         threshold = ?
-                                    WHERE matcher_id = ?");
-    $sth->execute($self->{'code'}, $self->{'description'}, $self->{'record_type'}, $self->{'threshold'}, $self->{'id'});
+                                    WHERE matcher_id = ?"
+    );
+    $sth->execute(
+        $self->{'code'}, $self->{'description'}, $self->{'record_type'}, $self->{'threshold'},
+        $self->{'id'}
+    );
 }
 
 sub _new_marc_matchers {
     my $self = shift;
 
     my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare_cached("INSERT INTO marc_matchers
+    my $sth = $dbh->prepare_cached(
+        "INSERT INTO marc_matchers
                                     (code, description, record_type, threshold)
-                                    VALUES (?, ?, ?, ?)");
-    $sth->execute($self->{'code'}, $self->{'description'}, $self->{'record_type'}, $self->{'threshold'});
+                                    VALUES (?, ?, ?, ?)"
+    );
+    $sth->execute( $self->{'code'}, $self->{'description'}, $self->{'record_type'}, $self->{'threshold'} );
     $self->{'id'} = $dbh->{'mysql_insertid'};
 }
 
@@ -310,60 +322,71 @@ sub _store_matcher_components {
     my $dbh = C4::Context->dbh();
     my $sth;
     my $matcher_id = $self->{'id'};
-    foreach my $matchpoint (@{ $self->{'matchpoints'}}) {
+    foreach my $matchpoint ( @{ $self->{'matchpoints'} } ) {
         my $matchpoint_id = $self->_store_matchpoint($matchpoint);
-        $sth = $dbh->prepare_cached("INSERT INTO matcher_matchpoints (matcher_id, matchpoint_id)
-                                     VALUES (?, ?)");
-        $sth->execute($matcher_id, $matchpoint_id);
+        $sth = $dbh->prepare_cached(
+            "INSERT INTO matcher_matchpoints (matcher_id, matchpoint_id)
+                                     VALUES (?, ?)"
+        );
+        $sth->execute( $matcher_id, $matchpoint_id );
     }
-    foreach my $matchcheck (@{ $self->{'required_checks'} }) {
-        my $source_matchpoint_id = $self->_store_matchpoint($matchcheck->{'source_matchpoint'});
-        my $target_matchpoint_id = $self->_store_matchpoint($matchcheck->{'target_matchpoint'});
-        $sth = $dbh->prepare_cached("INSERT INTO matchchecks
+    foreach my $matchcheck ( @{ $self->{'required_checks'} } ) {
+        my $source_matchpoint_id = $self->_store_matchpoint( $matchcheck->{'source_matchpoint'} );
+        my $target_matchpoint_id = $self->_store_matchpoint( $matchcheck->{'target_matchpoint'} );
+        $sth = $dbh->prepare_cached(
+            "INSERT INTO matchchecks
                                      (matcher_id, source_matchpoint_id, target_matchpoint_id)
-                                     VALUES (?, ?, ?)");
-        $sth->execute($matcher_id, $source_matchpoint_id,  $target_matchpoint_id);
+                                     VALUES (?, ?, ?)"
+        );
+        $sth->execute( $matcher_id, $source_matchpoint_id, $target_matchpoint_id );
     }
 
 }
 
 sub _store_matchpoint {
-    my $self = shift;
+    my $self       = shift;
     my $matchpoint = shift;
 
     my $dbh = C4::Context->dbh();
     my $sth;
     my $matcher_id = $self->{'id'};
-    $sth = $dbh->prepare_cached("INSERT INTO matchpoints (matcher_id, search_index, score)
-                                 VALUES (?, ?, ?)");
-    $sth->execute($matcher_id, $matchpoint->{'index'}, $matchpoint->{'score'}||0);
+    $sth = $dbh->prepare_cached(
+        "INSERT INTO matchpoints (matcher_id, search_index, score)
+                                 VALUES (?, ?, ?)"
+    );
+    $sth->execute( $matcher_id, $matchpoint->{'index'}, $matchpoint->{'score'} || 0 );
     my $matchpoint_id = $dbh->{'mysql_insertid'};
-    my $seqnum = 0;
-    foreach my $component (@{ $matchpoint->{'components'} }) {
+    my $seqnum        = 0;
+
+    foreach my $component ( @{ $matchpoint->{'components'} } ) {
         $seqnum++;
-        $sth = $dbh->prepare_cached("INSERT INTO matchpoint_components 
+        $sth = $dbh->prepare_cached(
+            "INSERT INTO matchpoint_components 
                                      (matchpoint_id, sequence, tag, subfields, `offset`, length)
-                                     VALUES (?, ?, ?, ?, ?, ?)");
-        $sth->bind_param(1, $matchpoint_id);
-        $sth->bind_param(2, $seqnum);
-        $sth->bind_param(3, $component->{'tag'});
-        $sth->bind_param(4, join "", sort keys %{ $component->{'subfields'} });
-        $sth->bind_param(5, $component->{'offset'}||0);
-        $sth->bind_param(6, $component->{'length'});
+                                     VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $sth->bind_param( 1, $matchpoint_id );
+        $sth->bind_param( 2, $seqnum );
+        $sth->bind_param( 3, $component->{'tag'} );
+        $sth->bind_param( 4, join "", sort keys %{ $component->{'subfields'} } );
+        $sth->bind_param( 5, $component->{'offset'} || 0 );
+        $sth->bind_param( 6, $component->{'length'} );
         $sth->execute();
         my $matchpoint_component_id = $dbh->{'mysql_insertid'};
-        my $normseq = 0;
-        foreach my $norm (@{ $component->{'norms'} }) {
+        my $normseq                 = 0;
+
+        foreach my $norm ( @{ $component->{'norms'} } ) {
             $normseq++;
-            $sth = $dbh->prepare_cached("INSERT INTO matchpoint_component_norms
+            $sth = $dbh->prepare_cached(
+                "INSERT INTO matchpoint_component_norms
                                          (matchpoint_component_id, sequence, norm_routine)
-                                         VALUES (?, ?, ?)");
-            $sth->execute($matchpoint_component_id, $normseq, $norm);
+                                         VALUES (?, ?, ?)"
+            );
+            $sth->execute( $matchpoint_component_id, $normseq, $norm );
         }
     }
     return $matchpoint_id;
 }
-
 
 =head2 delete
 
@@ -375,12 +398,12 @@ from the database.
 =cut
 
 sub delete {
-    my $class = shift;
+    my $class      = shift;
     my $matcher_id = shift;
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("DELETE FROM marc_matchers WHERE matcher_id = ?");
-    $sth->execute($matcher_id); # relying on cascading deletes to clean up everything
+    $sth->execute($matcher_id);    # relying on cascading deletes to clean up everything
 }
 
 =head2 record_type
@@ -478,16 +501,16 @@ normalization subroutine (under C4::Normalize) to be applied
 to the source string.
 
 =cut
-    
+
 sub add_matchpoint {
     my $self = shift;
-    my ($index, $score, $matchcomponents) = @_;
+    my ( $index, $score, $matchcomponents ) = @_;
 
     my $matchpoint = {};
-    $matchpoint->{'index'} = $index;
-    $matchpoint->{'score'} = $score;
+    $matchpoint->{'index'}      = $index;
+    $matchpoint->{'score'}      = $score;
     $matchpoint->{'components'} = [];
-    foreach my $input_component (@{ $matchcomponents }) {
+    foreach my $input_component ( @{$matchcomponents} ) {
         push @{ $matchpoint->{'components'} }, _parse_match_component($input_component);
     }
     push @{ $self->{'matchpoints'} }, $matchpoint;
@@ -508,14 +531,18 @@ will receive the assigned score.
 
 sub add_simple_matchpoint {
     my $self = shift;
-    my ($index, $score, $source_tag, $source_subfields, $source_offset, $source_length, $source_normalizer) = @_;
+    my ( $index, $score, $source_tag, $source_subfields, $source_offset, $source_length, $source_normalizer ) = @_;
 
-    $self->add_matchpoint($index, $score, [
-                          { tag => $source_tag, subfields => $source_subfields,
-                            offset => $source_offset, 'length' => $source_length,
-                            norms => [ $source_normalizer ]
-                          }
-                         ]);
+    $self->add_matchpoint(
+        $index, $score,
+        [
+            {
+                tag    => $source_tag,    subfields => $source_subfields,
+                offset => $source_offset, 'length'  => $source_length,
+                norms  => [$source_normalizer]
+            }
+        ]
+    );
 }
 
 =head2 add_required_check
@@ -552,19 +579,19 @@ to the source string.
 
 sub add_required_check {
     my $self = shift;
-    my ($source_matchpoint, $target_matchpoint) = @_;
+    my ( $source_matchpoint, $target_matchpoint ) = @_;
 
     my $matchcheck = {};
-    $matchcheck->{'source_matchpoint'}->{'index'} = '';
-    $matchcheck->{'source_matchpoint'}->{'score'} = 0;
+    $matchcheck->{'source_matchpoint'}->{'index'}      = '';
+    $matchcheck->{'source_matchpoint'}->{'score'}      = 0;
     $matchcheck->{'source_matchpoint'}->{'components'} = [];
-    $matchcheck->{'target_matchpoint'}->{'index'} = '';
-    $matchcheck->{'target_matchpoint'}->{'score'} = 0;
+    $matchcheck->{'target_matchpoint'}->{'index'}      = '';
+    $matchcheck->{'target_matchpoint'}->{'score'}      = 0;
     $matchcheck->{'target_matchpoint'}->{'components'} = [];
-    foreach my $input_component (@{ $source_matchpoint }) {
+    foreach my $input_component ( @{$source_matchpoint} ) {
         push @{ $matchcheck->{'source_matchpoint'}->{'components'} }, _parse_match_component($input_component);
     }
-    foreach my $input_component (@{ $target_matchpoint }) {
+    foreach my $input_component ( @{$target_matchpoint} ) {
         push @{ $matchcheck->{'target_matchpoint'}->{'components'} }, _parse_match_component($input_component);
     }
     push @{ $self->{'required_checks'} }, $matchcheck;
@@ -584,14 +611,26 @@ must match for a match to be considered valid.
 
 sub add_simple_required_check {
     my $self = shift;
-    my ($source_tag, $source_subfields, $source_offset, $source_length, $source_normalizer,
-        $target_tag, $target_subfields, $target_offset, $target_length, $target_normalizer) = @_;
+    my (
+        $source_tag, $source_subfields, $source_offset, $source_length, $source_normalizer,
+        $target_tag, $target_subfields, $target_offset, $target_length, $target_normalizer
+    ) = @_;
 
     $self->add_required_check(
-      [ { tag => $source_tag, subfields => $source_subfields, offset => $source_offset, 'length' => $source_length,
-          norms => [ $source_normalizer ] } ],
-      [ { tag => $target_tag, subfields => $target_subfields, offset => $target_offset, 'length' => $target_length,
-          norms => [ $target_normalizer ] } ]
+        [
+            {
+                tag      => $source_tag, subfields => $source_subfields, offset => $source_offset,
+                'length' => $source_length,
+                norms    => [$source_normalizer]
+            }
+        ],
+        [
+            {
+                tag      => $target_tag, subfields => $target_subfields, offset => $target_offset,
+                'length' => $target_length,
+                norms    => [$target_normalizer]
+            }
+        ]
     );
 }
 
@@ -623,7 +662,7 @@ in order of decreasing score, i.e., the best match is first.
 
 sub get_matches {
     my $self = shift;
-    my ($source_record, $max_matches) = @_;
+    my ( $source_record, $max_matches ) = @_;
 
     my $matches = {};
 
@@ -633,11 +672,11 @@ sub get_matches {
         next if scalar(@source_keys) == 0;
 
         @source_keys = C4::Koha::GetVariationsOfISBNs(@source_keys)
-          if ( $matchpoint->{index} =~ /^isbn$/i
+            if ( $matchpoint->{index} =~ /^isbn$/i
             && C4::Context->preference('AggressiveMatchOnISBN') );
 
         @source_keys = C4::Koha::GetVariationsOfISSNs(@source_keys)
-          if ( $matchpoint->{index} =~ /^issn$/i
+            if ( $matchpoint->{index} =~ /^issn$/i
             && C4::Context->preference('AggressiveMatchOnISSN') );
 
         # build query
@@ -647,35 +686,41 @@ sub get_matches {
         my $total_hits;
         if ( $self->{'record_type'} eq 'biblio' ) {
 
-            my $phr = ( C4::Context->preference('AggressiveMatchOnISBN') || C4::Context->preference('AggressiveMatchOnISSN') )  ? ',phr' : q{};
-            $query = join( " OR ",
-                map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys );
-                #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
+            my $phr =
+                ( C4::Context->preference('AggressiveMatchOnISBN') || C4::Context->preference('AggressiveMatchOnISSN') )
+                ? ',phr'
+                : q{};
+            $query = join(
+                " OR ",
+                map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys
+            );
+
+            #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
 
             # Use state variables to avoid recreating the objects every time.
             # With Elasticsearch this also avoids creating a massive amount of
             # ES connectors that would eventually run out of file descriptors.
-            state $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+            state $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
             ( $error, $searchresults, $total_hits ) =
-              $searcher->simple_search_compat( $query, 0, $max_matches, undef, skip_normalize => 1 );
+                $searcher->simple_search_compat( $query, 0, $max_matches, undef, skip_normalize => 1 );
 
             if ( defined $error ) {
                 warn "search failed ($query) $error";
-            }
-            else {
+            } else {
                 foreach my $matched ( @{$searchresults} ) {
                     my $target_record = C4::Search::new_record_from_zebra( 'biblioserver', $matched );
-                    my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
-                    my $id = ( $biblionumber_tag > 10 ) ?
-                        $target_record->field($biblionumber_tag)->subfield($biblionumber_subfield) :
-                        $target_record->field($biblionumber_tag)->data();
+                    my ( $biblionumber_tag, $biblionumber_subfield ) =
+                        C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
+                    my $id =
+                        ( $biblionumber_tag > 10 )
+                        ? $target_record->field($biblionumber_tag)->subfield($biblionumber_subfield)
+                        : $target_record->field($biblionumber_tag)->data();
                     $matches->{$id}->{score} += $matchpoint->{score};
                     $matches->{$id}->{record} = $target_record;
                 }
             }
 
-        }
-        elsif ( $self->{'record_type'} eq 'authority' ) {
+        } elsif ( $self->{'record_type'} eq 'authority' ) {
             my @marclist;
             my @and_or;
             my @excluding = [];
@@ -687,20 +732,22 @@ sub get_matches {
                 push @operator, 'exact';
                 push @value,    $key;
             }
+
             # Use state variables to avoid recreating the objects every time.
             # With Elasticsearch this also avoids creating a massive amount of
             # ES connectors that would eventually run out of file descriptors.
-            state $builder  = Koha::SearchEngine::QueryBuilder->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
-            state $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
+            state $builder =
+                Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+            state $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
             my $search_query = $builder->build_authorities_query_compat(
                 \@marclist, \@and_or, \@excluding, \@operator,
-                \@value, undef, 'AuthidAsc'
+                \@value,    undef,    'AuthidAsc'
             );
             my ( $authresults, $total ) = $searcher->search_auth_compat( $search_query, 0, 20 );
 
             foreach my $result (@$authresults) {
-                my $id = $result->{authid};
-                my $target_record = Koha::Authorities->find( $id )->record;
+                my $id            = $result->{authid};
+                my $target_record = Koha::Authorities->find($id)->record;
                 $matches->{$id}->{score} += $matchpoint->{'score'};
                 $matches->{$id}->{record} = $target_record;
             }
@@ -708,17 +755,19 @@ sub get_matches {
     }
 
     # get rid of any that don't meet the threshold
-    $matches = { map { ($matches->{$_}->{score} >= $self->{'threshold'}) ? ($_ => $matches->{$_}) : () } keys %$matches };
+    $matches =
+        { map { ( $matches->{$_}->{score} >= $self->{'threshold'} ) ? ( $_ => $matches->{$_} ) : () } keys %$matches };
 
     my @results = ();
-    if ($self->{'record_type'} eq 'biblio') {
+    if ( $self->{'record_type'} eq 'biblio' ) {
         require C4::Biblio;
+
         # get rid of any that don't meet the required checks
         $matches = {
             map {
                 _passes_required_checks( $source_record, $matches->{$_}->{'record'}, $self->{'required_checks'} )
-                  ? ( $_ => $matches->{$_} )
-                  : ()
+                    ? ( $_ => $matches->{$_} )
+                    : ()
             } keys %$matches
         };
 
@@ -728,30 +777,28 @@ sub get_matches {
                 score     => $matches->{$id}->{score}
             };
         }
-    } elsif ($self->{'record_type'} eq 'authority') {
+    } elsif ( $self->{'record_type'} eq 'authority' ) {
         require C4::AuthoritiesMarc;
+
         # get rid of any that don't meet the required checks
         $matches = {
             map {
                 _passes_required_checks( $source_record, $matches->{$_}->{'record'}, $self->{'required_checks'} )
-                  ? ( $_ => $matches->{$_} )
-                  : ()
+                    ? ( $_ => $matches->{$_} )
+                    : ()
             } keys %$matches
         };
 
-        foreach my $id (keys %$matches) {
+        foreach my $id ( keys %$matches ) {
             push @results, {
                 record_id => $id,
                 score     => $matches->{$id}->{score}
             };
         }
     }
-    @results = sort {
-        $b->{'score'} cmp $a->{'score'} or
-        $b->{'record_id'} cmp $a->{'record_id'}
-    } @results;
-    if (scalar(@results) > $max_matches) {
-        @results = @results[0..$max_matches-1];
+    @results = sort { $b->{'score'} cmp $a->{'score'} or $b->{'record_id'} cmp $a->{'record_id'} } @results;
+    if ( scalar(@results) > $max_matches ) {
+        @results = @results[ 0 .. $max_matches - 1 ];
     }
     return @results;
 }
@@ -768,35 +815,35 @@ aid setting up a HTML editing form.
 
 sub dump {
     my $self = shift;
-   
+
     my $result = {};
 
-    $result->{'matcher_id'} = $self->{'id'};
-    $result->{'code'} = $self->{'code'};
+    $result->{'matcher_id'}  = $self->{'id'};
+    $result->{'code'}        = $self->{'code'};
     $result->{'description'} = $self->{'description'};
     $result->{'record_type'} = $self->{'record_type'};
 
     $result->{'matchpoints'} = [];
-    foreach my $matchpoint (@{ $self->{'matchpoints'} }) {
-        push @{  $result->{'matchpoints'} }, $matchpoint;
+    foreach my $matchpoint ( @{ $self->{'matchpoints'} } ) {
+        push @{ $result->{'matchpoints'} }, $matchpoint;
     }
     $result->{'matchchecks'} = [];
-    foreach my $matchcheck (@{ $self->{'required_checks'} }) {
-        push @{  $result->{'matchchecks'} }, $matchcheck;
+    foreach my $matchcheck ( @{ $self->{'required_checks'} } ) {
+        push @{ $result->{'matchchecks'} }, $matchcheck;
     }
 
     return $result;
 }
 
 sub _passes_required_checks {
-    my ($source_record, $target_record, $matchchecks) = @_;
+    my ( $source_record, $target_record, $matchchecks ) = @_;
 
     # no checks supplied == automatic pass
-    return 1 if $#{ $matchchecks } == -1;
+    return 1 if $#{$matchchecks} == -1;
 
-    foreach my $matchcheck (@{ $matchchecks }) {
-        my $source_key = join "", _get_match_keys($source_record, $matchcheck->{'source_matchpoint'});
-        my $target_key = join "", _get_match_keys($target_record, $matchcheck->{'target_matchpoint'});
+    foreach my $matchcheck ( @{$matchchecks} ) {
+        my $source_key = join "", _get_match_keys( $source_record, $matchcheck->{'source_matchpoint'} );
+        my $target_key = join "", _get_match_keys( $target_record, $matchcheck->{'target_matchpoint'} );
         return 0 unless $source_key eq $target_key;
     }
     return 1;
@@ -804,8 +851,8 @@ sub _passes_required_checks {
 
 sub _get_match_keys {
 
-    my $source_record = shift;
-    my $matchpoint = shift;
+    my $source_record           = shift;
+    my $matchpoint              = shift;
     my $check_only_first_repeat = @_ ? shift : 0;
 
     # If there is more than one component to the matchpoint (e.g.,
@@ -824,62 +871,56 @@ sub _get_match_keys {
     #    second 003 + second 001
 
     my @keys = ();
-    for (my $i = 0; $i <= $#{ $matchpoint->{'components'} }; $i++) {
+    for ( my $i = 0 ; $i <= $#{ $matchpoint->{'components'} } ; $i++ ) {
         my $component = $matchpoint->{'components'}->[$i];
-        my $j = -1;
+        my $j         = -1;
 
         my @fields = ();
-        my $tag = $component->{'tag'};
-        if ($tag && $tag eq 'LDR'){
+        my $tag    = $component->{'tag'};
+        if ( $tag && $tag eq 'LDR' ) {
             $fields[0] = $source_record->leader();
-        }
-        else {
+        } else {
             @fields = $source_record->field($tag);
         }
 
-        FIELD: foreach my $field (@fields) {
+    FIELD: foreach my $field (@fields) {
             $j++;
             last FIELD if $j > 0 and $check_only_first_repeat;
             last FIELD if $i > 0 and $j > $#keys;
 
             my $string;
-            if ( ! ref $field ){
+            if ( !ref $field ) {
                 $string = "$field";
-            }
-            elsif ( $field->is_control_field() ) {
+            } elsif ( $field->is_control_field() ) {
                 $string = $field->data();
-            } elsif ( defined $component->{subfields} && keys %{$component->{subfields}} ){
+            } elsif ( defined $component->{subfields} && keys %{ $component->{subfields} } ) {
                 $string = $field->as_string(
-                    join('', keys %{ $component->{ subfields } }), ' ' # ' ' as separator
+                    join( '', keys %{ $component->{subfields} } ), ' '    # ' ' as separator
                 );
             } else {
                 $string = $field->as_string();
             }
 
-            if ($component->{'length'}>0) {
-                $string= substr($string, $component->{'offset'}, $component->{'length'});
-            } elsif ($component->{'offset'}) {
-                $string= substr($string, $component->{'offset'});
+            if ( $component->{'length'} > 0 ) {
+                $string = substr( $string, $component->{'offset'}, $component->{'length'} );
+            } elsif ( $component->{'offset'} ) {
+                $string = substr( $string, $component->{'offset'} );
             }
 
             my $norms = $component->{'norms'};
-            my $key = $string;
+            my $key   = $string;
 
-            foreach my $norm ( @{ $norms } ) {
+            foreach my $norm ( @{$norms} ) {
                 if ( grep { $norm eq $_ } valid_normalization_routines() ) {
                     if ( $norm eq 'remove_spaces' ) {
                         $key = remove_spaces($key);
-                    }
-                    elsif ( $norm eq 'upper_case' ) {
+                    } elsif ( $norm eq 'upper_case' ) {
                         $key = upper_case($key);
-                    }
-                    elsif ( $norm eq 'lower_case' ) {
+                    } elsif ( $norm eq 'lower_case' ) {
                         $key = lower_case($key);
-                    }
-                    elsif ( $norm eq 'legacy_default' ) {
+                    } elsif ( $norm eq 'legacy_default' ) {
                         $key = legacy_default($key);
-                    }
-                    elsif ( $norm eq 'ISBN' ) {
+                    } elsif ( $norm eq 'ISBN' ) {
                         $key = ISBN($key);
                     }
                 } else {
@@ -888,7 +929,7 @@ sub _get_match_keys {
                 }
             }
 
-            if ($i == 0) {
+            if ( $i == 0 ) {
                 push @keys, $key if $key;
             } else {
                 $keys[$j] .= " $key" if $key;
@@ -898,16 +939,15 @@ sub _get_match_keys {
     return @keys;
 }
 
-
 sub _parse_match_component {
     my $input_component = shift;
 
     my $component = {};
-    $component->{'tag'} = $input_component->{'tag'};
-    $component->{'subfields'} = { map { $_ => 1 } split(//, $input_component->{'subfields'}) };
-    $component->{'offset'} = exists($input_component->{'offset'}) ? $input_component->{'offset'} : -1;
-    $component->{'length'} = $input_component->{'length'} ? $input_component->{'length'} : 0;
-    $component->{'norms'} =  $input_component->{'norms'} ? $input_component->{'norms'} : [];
+    $component->{'tag'}       = $input_component->{'tag'};
+    $component->{'subfields'} = { map { $_ => 1 } split( //, $input_component->{'subfields'} ) };
+    $component->{'offset'}    = exists( $input_component->{'offset'} ) ? $input_component->{'offset'} : -1;
+    $component->{'length'}    = $input_component->{'length'}           ? $input_component->{'length'} : 0;
+    $component->{'norms'}     = $input_component->{'norms'}            ? $input_component->{'norms'}  : [];
 
     return $component;
 }

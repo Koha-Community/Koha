@@ -48,9 +48,12 @@ $email_sender_module->mock(
 
 use_ok('C4::Context');
 use_ok('C4::Members');
-use_ok('C4::Acquisition', qw( NewBasket ));
-use_ok('C4::Biblio', qw( AddBiblio GetBiblioData ));
-use_ok('C4::Letters', qw( GetMessageTransportTypes GetMessage EnqueueLetter GetQueuedMessages SendQueuedMessages ResendMessage GetLetters GetPreparedLetter SendAlerts ));
+use_ok( 'C4::Acquisition', qw( NewBasket ) );
+use_ok( 'C4::Biblio',      qw( AddBiblio GetBiblioData ) );
+use_ok(
+    'C4::Letters',
+    qw( GetMessageTransportTypes GetMessage EnqueueLetter GetQueuedMessages SendQueuedMessages ResendMessage GetLetters GetPreparedLetter SendAlerts )
+);
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
@@ -69,47 +72,50 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
 my $builder = t::lib::TestBuilder->new;
-my $dbh = C4::Context->dbh;
+my $dbh     = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|DELETE FROM message_transport_types|);
 t::lib::Mocks::mock_preference( 'EmailFieldPrimary', '' );
 
-my $library = $builder->build({
-    source => 'Branch',
-    value  => {
-        branchemail      => 'branchemail@address.com',
-        branchreplyto    => 'branchreplyto@address.com',
-        branchreturnpath => 'branchreturnpath@address.com',
+my $library = $builder->build(
+    {
+        source => 'Branch',
+        value  => {
+            branchemail      => 'branchemail@address.com',
+            branchreplyto    => 'branchreplyto@address.com',
+            branchreturnpath => 'branchreturnpath@address.com',
+        }
     }
-});
-my $patron_category = $builder->build({ source => 'Category' })->{categorycode};
-my $date = dt_from_string;
-my $borrowernumber = Koha::Patron->new({
-    firstname    => 'Jane',
-    surname      => 'Smith',
-    categorycode => $patron_category,
-    branchcode   => $library->{branchcode},
-    dateofbirth  => $date,
-    smsalertnumber => undef,
-})->store->borrowernumber;
+);
+my $patron_category = $builder->build( { source => 'Category' } )->{categorycode};
+my $date            = dt_from_string;
+my $borrowernumber  = Koha::Patron->new(
+    {
+        firstname      => 'Jane',
+        surname        => 'Smith',
+        categorycode   => $patron_category,
+        branchcode     => $library->{branchcode},
+        dateofbirth    => $date,
+        smsalertnumber => undef,
+    }
+)->store->borrowernumber;
 
 my $marc_record = MARC::Record->new;
-my( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
-
-
+my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
 
 # GetMessageTransportTypes
 my $mtts = C4::Letters::GetMessageTransportTypes();
 is( @$mtts, 0, 'GetMessageTransportTypes returns the correct number of message types' );
 
-$dbh->do(q|
+$dbh->do(
+    q|
     INSERT INTO message_transport_types( message_transport_type ) VALUES ('email'), ('phone'), ('print'), ('sms')
-|);
+|
+);
 $mtts = C4::Letters::GetMessageTransportTypes();
-is_deeply( $mtts, ['email', 'phone', 'print', 'sms'], 'GetMessageTransportTypes returns all values' );
-
+is_deeply( $mtts, [ 'email', 'phone', 'print', 'sms' ], 'GetMessageTransportTypes returns all values' );
 
 # EnqueueLetter
 is( C4::Letters::EnqueueLetter(), undef, 'EnqueueLetter without argument returns undef' );
@@ -137,29 +143,33 @@ is( $message_id, undef, 'EnqueueLetter without the message type argument argumen
 
 $my_message->{message_transport_type} = 'sms';
 $message_id = C4::Letters::EnqueueLetter($my_message);
-ok(defined $message_id && $message_id > 0, 'new message successfully queued');
-
+ok( defined $message_id && $message_id > 0, 'new message successfully queued' );
 
 # GetQueuedMessages
 my $messages = C4::Letters::GetQueuedMessages();
 is( @$messages, 1, 'GetQueuedMessages without argument returns all the entries' );
 
-$messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
-is( @$messages, 1, 'one message stored for the borrower' );
-is( $messages->[0]->{message_id}, $message_id, 'EnqueueLetter returns the message id correctly' );
+$messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+is( @$messages,                       1,               'one message stored for the borrower' );
+is( $messages->[0]->{message_id},     $message_id,     'EnqueueLetter returns the message id correctly' );
 is( $messages->[0]->{borrowernumber}, $borrowernumber, 'EnqueueLetter stores the borrower number correctly' );
-is( $messages->[0]->{subject}, $my_message->{letter}->{title}, 'EnqueueLetter stores the subject correctly' );
-is( $messages->[0]->{content}, $my_message->{letter}->{content}, 'EnqueueLetter stores the content correctly' );
-is( $messages->[0]->{message_transport_type}, $my_message->{message_transport_type}, 'EnqueueLetter stores the message type correctly' );
+is( $messages->[0]->{subject},        $my_message->{letter}->{title},   'EnqueueLetter stores the subject correctly' );
+is( $messages->[0]->{content},        $my_message->{letter}->{content}, 'EnqueueLetter stores the content correctly' );
+is(
+    $messages->[0]->{message_transport_type}, $my_message->{message_transport_type},
+    'EnqueueLetter stores the message type correctly'
+);
 is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pending correctly' );
 isnt( $messages->[0]->{time_queued}, undef, 'Time queued inserted by default in message_queue table' );
-is( $messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed equals time queued when created in message_queue table' );
-is( $messages->[0]->{failure_code}, '', 'Failure code for successful message correctly empty');
+is(
+    $messages->[0]->{updated_on}, $messages->[0]->{time_queued},
+    'Time status changed equals time queued when created in message_queue table'
+);
+is( $messages->[0]->{failure_code}, '', 'Failure code for successful message correctly empty' );
 
 # Setting time_queued to something else than now
 my $yesterday = dt_from_string->subtract( days => 1 );
-Koha::Notice::Messages->find($messages->[0]->{message_id})->time_queued($yesterday)->store;
-
+Koha::Notice::Messages->find( $messages->[0]->{message_id} )->time_queued($yesterday)->store;
 
 # EnqueueLetter - Test characters limitation for SMS
 $my_message->{letter}->{content} = "a" x 2000;
@@ -193,11 +203,11 @@ throws_ok {
 }
 'Koha::Exceptions::BadParameter', 'Empty string message_id throws an exception';
 
-my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' });
-is($messages_processed, 0, 'No queued messages processed if type limit passed with unused type');
-$messages_processed = C4::Letters::SendQueuedMessages( { type => 'sms' });
-is($messages_processed, 0, 'All queued messages processed, nothing sent');
-$messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
+my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' } );
+is( $messages_processed, 0, 'No queued messages processed if type limit passed with unused type' );
+$messages_processed = C4::Letters::SendQueuedMessages( { type => 'sms' } );
+is( $messages_processed, 0, 'All queued messages processed, nothing sent' );
+$messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
 is(
     $messages->[0]->{status},
     'failed',
@@ -208,15 +218,18 @@ is(
     'MISSING_SMS',
     'Correct failure code set for borrower with no smsalertnumber set'
 );
-isnt($messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed differs from time queued when status changes' );
-is(dt_from_string($messages->[0]->{time_queued}), $yesterday, 'Time queued remaines inmutable' );
+isnt(
+    $messages->[0]->{updated_on}, $messages->[0]->{time_queued},
+    'Time status changed differs from time queued when status changes'
+);
+is( dt_from_string( $messages->[0]->{time_queued} ), $yesterday, 'Time queued remaines inmutable' );
 
 # ResendMessage
-my $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
-$message = C4::Letters::GetMessage( $messages->[0]->{message_id});
-is( $resent, 1, 'The message should have been resent' );
-is($message->{status},'pending', 'ResendMessage sets status to pending correctly (bug 12426)');
-$resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
+my $resent = C4::Letters::ResendMessage( $messages->[0]->{message_id} );
+$message = C4::Letters::GetMessage( $messages->[0]->{message_id} );
+is( $resent,            1,         'The message should have been resent' );
+is( $message->{status}, 'pending', 'ResendMessage sets status to pending correctly (bug 12426)' );
+$resent = C4::Letters::ResendMessage( $messages->[0]->{message_id} );
 is( $resent, 0, 'The message should not have been resent again' );
 $resent = C4::Letters::ResendMessage();
 is( $resent, undef, 'ResendMessage should return undef if not message_id given' );
@@ -228,7 +241,7 @@ is( $messages->[0]->{failure_code}, 'MISSING_SMS', 'Failure code set correctly f
 my $letters = C4::Letters::GetLetters();
 is( @$letters, 0, 'GetLetters returns the correct number of letters' );
 
-my $title = q|<<branches.branchname>> - <<status>>|;
+my $title   = q|<<branches.branchname>> - <<status>>|;
 my $content = q{Dear <<borrowers.firstname>> <<borrowers.surname>>,
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
 
@@ -245,12 +258,15 @@ Don't forget your date of birth: <<borrowers.dateofbirth>>.
 Look at this wonderful biblio timestamp: <<biblio.timestamp>>.
 };
 
-$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,?,?,'email')|, undef, $library->{branchcode}, $title, $content );
+$dbh->do(
+    q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,?,?,'email')|,
+    undef, $library->{branchcode}, $title, $content
+);
 $letters = C4::Letters::GetLetters();
-is( @$letters, 1, 'GetLetters returns the correct number of letters' );
+is( @$letters,               1,           'GetLetters returns the correct number of letters' );
 is( $letters->[0]->{module}, 'my module', 'GetLetters gets the module correctly' );
-is( $letters->[0]->{code}, 'my code', 'GetLetters gets the code correctly' );
-is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
+is( $letters->[0]->{code},   'my code',   'GetLetters gets the code correctly' );
+is( $letters->[0]->{name},   'my name',   'GetLetters gets the name correctly' );
 
 my $data_1 = { module => 'blah', code => 'ISBN', name => 'book' };
 my $data_2 = { module => 'blah', code => 'ISSN' };
@@ -264,17 +280,20 @@ my ($ISBN_letter) = grep { $_->{code} eq 'ISBN' } @$letters;
 is( $ISBN_letter->{name}, 'book', 'letter name for "ISBN" letter is book' );
 
 # GetPreparedLetter
-t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
+t::lib::Mocks::mock_preference( 'OPACBaseURL',     'http://thisisatest.com' );
 t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
-t::lib::Mocks::mock_preference( 'ReplytoDefault', q{} );
+t::lib::Mocks::mock_preference( 'ReplytoDefault',  q{} );
 
 my $sms_content = 'This is a SMS for an <<status>>';
-$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,'my title',?,'sms')|, undef, $library->{branchcode}, $sms_content );
+$dbh->do(
+    q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,'my title',?,'sms')|,
+    undef, $library->{branchcode}, $sms_content
+);
 
 my $tables = {
     borrowers => $borrowernumber,
-    branches => $library->{branchcode},
-    biblio => $biblionumber,
+    branches  => $library->{branchcode},
+    biblio    => $biblionumber,
 };
 my $substitute = {
     status => 'overdue',
@@ -289,22 +308,24 @@ my $repeat = [
         barcode        => '5678',
     },
 ];
-my $prepared_letter = GetPreparedLetter((
-    module      => 'my module',
-    branchcode  => $library->{branchcode},
-    letter_code => 'my code',
-    tables      => $tables,
-    substitute  => $substitute,
-    repeat      => $repeat,
-));
-my $retrieved_library = Koha::Libraries->find($library->{branchcode});
-my $my_title_letter = $retrieved_library->branchname . qq| - $substitute->{status}|;
-my $biblio_timestamp = dt_from_string( GetBiblioData($biblionumber)->{timestamp} );
+my $prepared_letter = GetPreparedLetter(
+    (
+        module      => 'my module',
+        branchcode  => $library->{branchcode},
+        letter_code => 'my code',
+        tables      => $tables,
+        substitute  => $substitute,
+        repeat      => $repeat,
+    )
+);
+my $retrieved_library = Koha::Libraries->find( $library->{branchcode} );
+my $my_title_letter   = $retrieved_library->branchname . qq| - $substitute->{status}|;
+my $biblio_timestamp  = dt_from_string( GetBiblioData($biblionumber)->{timestamp} );
 my $my_content_letter = qq|Dear Jane Smith,
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
 
-|.$retrieved_library->branchname.qq|
-|.$retrieved_library->branchaddress1.qq|
+| . $retrieved_library->branchname . qq|
+| . $retrieved_library->branchaddress1 . qq|
 URL: http://thisisatest.com
 
 The following item(s) is/are currently $substitute->{status}:
@@ -313,87 +334,120 @@ The following item(s) is/are currently $substitute->{status}:
 <item> 2. $repeat->[1]->{itemcallnumber}, Barcode: $repeat->[1]->{barcode} </item>
 
 Thank-you for your prompt attention to this matter.
-Don't forget your date of birth: | . output_pref({ dt => $date, dateonly => 1 }) . q|.
-Look at this wonderful biblio timestamp: | . output_pref({ dt => $biblio_timestamp })  . ".\n";
+Don't forget your date of birth: | . output_pref( { dt => $date, dateonly => 1 } ) . q|.
+Look at this wonderful biblio timestamp: | . output_pref( { dt => $biblio_timestamp } ) . ".\n";
 
-is( $prepared_letter->{title}, $my_title_letter, 'GetPreparedLetter returns the title correctly' );
+is( $prepared_letter->{title},   $my_title_letter,   'GetPreparedLetter returns the title correctly' );
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
 
-$prepared_letter = GetPreparedLetter((
-    module                 => 'my module',
-    branchcode             => $library->{branchcode},
-    letter_code            => 'my code',
-    tables                 => $tables,
-    substitute             => $substitute,
-    repeat                 => $repeat,
-    message_transport_type => 'sms',
-));
-$my_content_letter = qq|This is a SMS for an $substitute->{status}|;
-is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
-
-warning_is {
-    $prepared_letter = GetPreparedLetter((
+$prepared_letter = GetPreparedLetter(
+    (
         module                 => 'my module',
         branchcode             => $library->{branchcode},
         letter_code            => 'my code',
         tables                 => $tables,
-        substitute             => { status => undef },
+        substitute             => $substitute,
         repeat                 => $repeat,
         message_transport_type => 'sms',
-    ));
+    )
+);
+$my_content_letter = qq|This is a SMS for an $substitute->{status}|;
+is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
+
+warning_is {
+    $prepared_letter = GetPreparedLetter(
+        (
+            module                 => 'my module',
+            branchcode             => $library->{branchcode},
+            letter_code            => 'my code',
+            tables                 => $tables,
+            substitute             => { status => undef },
+            repeat                 => $repeat,
+            message_transport_type => 'sms',
+        )
+    );
 }
 undef, "No warning if GetPreparedLetter called with substitute containing undefined value";
-is( $prepared_letter->{content}, q|This is a SMS for an |, 'GetPreparedLetter returns the content correctly when substitute contains undefined value' );
+is(
+    $prepared_letter->{content}, q|This is a SMS for an |,
+    'GetPreparedLetter returns the content correctly when substitute contains undefined value'
+);
 
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test_date','TEST_DATE','Test dates','A title with a timestamp: <<biblio.timestamp>>','This one only contains the date: <<biblio.timestamp | dateonly>>.');});
-$prepared_letter = GetPreparedLetter((
-    module                 => 'test_date',
-    branchcode             => '',
-    letter_code            => 'test_date',
-    tables                 => $tables,
-    substitute             => $substitute,
-    repeat                 => $repeat,
-));
-is( $prepared_letter->{content}, q|This one only contains the date: | . output_pref({ dt => $date, dateonly => 1 }) . q|.|, 'dateonly test 1' );
+$dbh->do(
+    q{INSERT INTO letter (module, code, name, title, content) VALUES ('test_date','TEST_DATE','Test dates','A title with a timestamp: <<biblio.timestamp>>','This one only contains the date: <<biblio.timestamp | dateonly>>.');}
+);
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'test_date',
+        branchcode  => '',
+        letter_code => 'test_date',
+        tables      => $tables,
+        substitute  => $substitute,
+        repeat      => $repeat,
+    )
+);
+is(
+    $prepared_letter->{content},
+    q|This one only contains the date: | . output_pref( { dt => $date, dateonly => 1 } ) . q|.|, 'dateonly test 1'
+);
 
 $dbh->do(q{UPDATE letter SET content = 'And also this one:<<timestamp | dateonly>>.' WHERE code = 'test_date';});
-$prepared_letter = GetPreparedLetter((
-    module                 => 'test_date',
-    branchcode             => '',
-    letter_code            => 'test_date',
-    tables                 => $tables,
-    substitute             => $substitute,
-    repeat                 => $repeat,
-));
-is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $date, dateonly => 1 }) . q|.|, 'dateonly test 2' );
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'test_date',
+        branchcode  => '',
+        letter_code => 'test_date',
+        tables      => $tables,
+        substitute  => $substitute,
+        repeat      => $repeat,
+    )
+);
+is(
+    $prepared_letter->{content}, q|And also this one:| . output_pref( { dt => $date, dateonly => 1 } ) . q|.|,
+    'dateonly test 2'
+);
 
 $dbh->do(q{UPDATE letter SET content = 'And also this one:<<timestamp|dateonly >>.' WHERE code = 'test_date';});
-$prepared_letter = GetPreparedLetter((
-    module                 => 'test_date',
-    branchcode             => '',
-    letter_code            => 'test_date',
-    tables                 => $tables,
-    substitute             => $substitute,
-    repeat                 => $repeat,
-));
-is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $date, dateonly => 1 }) . q|.|, 'dateonly test 3' );
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'test_date',
+        branchcode  => '',
+        letter_code => 'test_date',
+        tables      => $tables,
+        substitute  => $substitute,
+        repeat      => $repeat,
+    )
+);
+is(
+    $prepared_letter->{content}, q|And also this one:| . output_pref( { dt => $date, dateonly => 1 } ) . q|.|,
+    'dateonly test 3'
+);
 
 t::lib::Mocks::mock_preference( 'TimeFormat', '12hr' );
 my $yesterday_night = $date->clone->add( days => -1 )->set_hour(22);
-$dbh->do(q|UPDATE biblio SET timestamp = ? WHERE biblionumber = ?|, undef, $yesterday_night, $biblionumber );
+$dbh->do( q|UPDATE biblio SET timestamp = ? WHERE biblionumber = ?|, undef, $yesterday_night, $biblionumber );
 $dbh->do(q{UPDATE letter SET content = 'And also this one:<<timestamp>>.' WHERE code = 'test_date';});
-$prepared_letter = GetPreparedLetter((
-    module                 => 'test_date',
-    branchcode             => '',
-    letter_code            => 'test_date',
-    tables                 => $tables,
-    substitute             => $substitute,
-    repeat                 => $repeat,
-));
-is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $yesterday_night }) . q|.|, 'dateonly test 3' );
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'test_date',
+        branchcode  => '',
+        letter_code => 'test_date',
+        tables      => $tables,
+        substitute  => $substitute,
+        repeat      => $repeat,
+    )
+);
+is(
+    $prepared_letter->{content}, q|And also this one:| . output_pref( { dt => $yesterday_night } ) . q|.|,
+    'dateonly test 3'
+);
 
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER','Acquisition Order','Order','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order> Basket name: [% basket.basketname %]');});
+$dbh->do(
+    q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');}
+);
+$dbh->do(
+    q{INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER','Acquisition Order','Order','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order> Basket name: [% basket.basketname %]');}
+);
 
 my $testacqorder2_content = <<EOF;
 [%- USE Price -%]
@@ -403,38 +457,46 @@ Ordernumber [% order.ordernumber %] [% order.quantity %] [% order.listprice | \$
 [% END %]
 EOF
 
-$dbh->do("INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER2','Acquisition Order','Order','$testacqorder2_content');");
+$dbh->do(
+    "INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER2','Acquisition Order','Order','$testacqorder2_content');"
+);
 
-my $popito = $builder->build({
-    source => 'Aqbookseller',
-    value  => { name => 'Popito' }
-});
-
-my $order_1 = $builder->build({
-    source => 'Aqorder',
-    value  => {
-       quantity => 2,
-       listprice => '12.00'
+my $popito = $builder->build(
+    {
+        source => 'Aqbookseller',
+        value  => { name => 'Popito' }
     }
-});
+);
 
-my $order_2 = $builder->build({
-    source => 'Aqorder',
-    value  => {
-       quantity => 1,
-       listprice => '23.50'
+my $order_1 = $builder->build(
+    {
+        source => 'Aqorder',
+        value  => {
+            quantity  => 2,
+            listprice => '12.00'
+        }
     }
-});
+);
 
-$prepared_letter = GetPreparedLetter((
-    module                 => 'orderacquisition',
-    branchcode             => '',
-    letter_code            => 'TESTACQORDER2',
-    tables                 => { 'aqbooksellers' => $popito->{id} },
-    loops                  => {
-        aqorders => [ $order_1->{ordernumber}, $order_2->{ordernumber} ]
+my $order_2 = $builder->build(
+    {
+        source => 'Aqorder',
+        value  => {
+            quantity  => 1,
+            listprice => '23.50'
+        }
     }
-));
+);
+
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'orderacquisition',
+        branchcode  => '',
+        letter_code => 'TESTACQORDER2',
+        tables      => { 'aqbooksellers' => $popito->{id} },
+        loops       => { aqorders        => [ $order_1->{ordernumber}, $order_2->{ordernumber} ] }
+    )
+);
 
 my $testacqorder2_expected = qq|Popito
 
@@ -444,12 +506,12 @@ Ordernumber | . $order_2->{ordernumber} . qq| 1 23.50
 
 |;
 
-is($prepared_letter->{content}, $testacqorder2_expected);
+is( $prepared_letter->{content}, $testacqorder2_expected );
 
 # Test that _parseletter doesn't modify its parameters bug 15429
 {
     my $values = { dateexpiry => '2015-12-13', };
-    C4::Letters::_parseletter($prepared_letter, 'borrowers', $values);
+    C4::Letters::_parseletter( $prepared_letter, 'borrowers', $values );
     is( $values->{dateexpiry}, '2015-12-13', "_parseletter doesn't modify its parameters" );
 }
 
@@ -457,31 +519,37 @@ is($prepared_letter->{content}, $testacqorder2_expected);
 {
     my $values = { dateexpiry => '2015-12-13', };
 
-    t::lib::Mocks::mock_preference('dateformat', 'metric');
-    t::lib::Mocks::mock_preference('timeformat', '24hr');
-    my $letter = C4::Letters::_parseletter({ content => "expiry on <<borrowers.dateexpiry>>"}, 'borrowers', $values);
+    t::lib::Mocks::mock_preference( 'dateformat', 'metric' );
+    t::lib::Mocks::mock_preference( 'timeformat', '24hr' );
+    my $letter = C4::Letters::_parseletter( { content => "expiry on <<borrowers.dateexpiry>>" }, 'borrowers', $values );
     is( $letter->{content}, 'expiry on 13/12/2015' );
 
-    t::lib::Mocks::mock_preference('dateformat', 'metric');
-    t::lib::Mocks::mock_preference('timeformat', '12hr');
-    $letter = C4::Letters::_parseletter({ content => "expiry on <<borrowers.dateexpiry>>"}, 'borrowers', $values);
+    t::lib::Mocks::mock_preference( 'dateformat', 'metric' );
+    t::lib::Mocks::mock_preference( 'timeformat', '12hr' );
+    $letter = C4::Letters::_parseletter( { content => "expiry on <<borrowers.dateexpiry>>" }, 'borrowers', $values );
     is( $letter->{content}, 'expiry on 13/12/2015' );
 }
 
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
-        name => "my vendor",
-        address1 => "bookseller's address",
-        phone => "0123456",
-        active => 1,
+        name         => "my vendor",
+        address1     => "bookseller's address",
+        phone        => "0123456",
+        active       => 1,
         deliverytime => 5,
     }
 )->store;
 my $booksellerid = $bookseller->id;
 
-Koha::Acquisition::Bookseller::Contact->new( { name => 'John Smith',  phone => '0123456x1', claimacquisition => 1, orderacquisition => 1, booksellerid => $booksellerid } )->store;
-Koha::Acquisition::Bookseller::Contact->new( { name => 'Leo Tolstoy', phone => '0123456x2', claimissues      => 1, booksellerid => $booksellerid } )->store;
-my $basketno = NewBasket($booksellerid, 1, 'The basket name');
+Koha::Acquisition::Bookseller::Contact->new(
+    {
+        name         => 'John Smith', phone => '0123456x1', claimacquisition => 1, orderacquisition => 1,
+        booksellerid => $booksellerid
+    }
+)->store;
+Koha::Acquisition::Bookseller::Contact->new(
+    { name => 'Leo Tolstoy', phone => '0123456x2', claimissues => 1, booksellerid => $booksellerid } )->store;
+my $basketno = NewBasket( $booksellerid, 1, 'The basket name' );
 
 my $budget_period_id = C4::Budgets::AddBudgetPeriod(
     {
@@ -501,13 +569,13 @@ my $budgetid = C4::Budgets::AddBudget(
 );
 
 my $bib = MARC::Record->new();
-if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
     $bib->append_fields(
-        MARC::Field->new('200', ' ', ' ', a => 'Silence in the library'),
+        MARC::Field->new( '200', ' ', ' ', a => 'Silence in the library' ),
     );
 } else {
     $bib->append_fields(
-        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+        MARC::Field->new( '245', ' ', ' ', a => 'Silence in the library' ),
     );
 }
 
@@ -521,28 +589,29 @@ my $logged_in_user = $builder->build_object(
     }
 );
 
-t::lib::Mocks::mock_userenv({ patron => $logged_in_user });
+t::lib::Mocks::mock_userenv( { patron => $logged_in_user } );
 
-($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
+( $biblionumber, $biblioitemnumber ) = AddBiblio( $bib, '' );
 my $order = Koha::Acquisition::Order->new(
     {
-        basketno => $basketno,
-        quantity => 1,
+        basketno     => $basketno,
+        quantity     => 1,
         biblionumber => $biblionumber,
-        budget_id => $budgetid,
+        budget_id    => $budgetid,
     }
 )->store;
 my $ordernumber = $order->ordernumber;
 
-Koha::Acquisition::Baskets->find( $basketno )->close;
+Koha::Acquisition::Baskets->find($basketno)->close;
 my $err;
 warning_like {
-    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
-    qr/^Bookseller .* without emails at/,
+    $err = SendAlerts( 'claimacquisition', [$ordernumber], 'TESTACQCLAIM' )
+}
+qr/^Bookseller .* without emails at/,
     "SendAlerts prints a warning";
-is($err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail results in an error");
+is( $err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail results in an error" );
 
-$bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+$bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
 $bookseller->contacts->next->email('testemail@mydomain.com')->store;
 
 # Ensure that the preference 'ClaimsLog' is set to logging
@@ -612,94 +681,119 @@ t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
 }
 
 {
-warning_like {
-    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
+    warning_like {
+        $err = SendAlerts( 'claimacquisition', [$ordernumber], 'TESTACQCLAIM' )
+    }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked send_or_die routine";
+        "SendAlerts is using the mocked send_or_die routine";
 
-is($err, 1, "Successfully sent claim");
-is($email_object->email->header('To'), 'testemail@mydomain.com', "mailto correct in sent claim");
-is($email_object->email->body, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Claim notice text constructed successfully');
+    is( $err,                               1,                        "Successfully sent claim" );
+    is( $email_object->email->header('To'), 'testemail@mydomain.com', "mailto correct in sent claim" );
+    is(
+        $email_object->email->body,
+        'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)',
+        'Claim notice text constructed successfully'
+    );
 
-my $mocked_koha_email = Test::MockModule->new('Koha::Email');
-$mocked_koha_email->mock( 'send_or_die', sub {
-    Email::Sender::Failure->throw('something went wrong');
-});
+    my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+    $mocked_koha_email->mock(
+        'send_or_die',
+        sub {
+            Email::Sender::Failure->throw('something went wrong');
+        }
+    );
 
-warning_like {
-    $err = SendAlerts( 'claimacquisition', [ $ordernumber ] , 'TESTACQCLAIM' ); }
+    warning_like {
+        $err = SendAlerts( 'claimacquisition', [$ordernumber], 'TESTACQCLAIM' );
+    }
     qr{something went wrong},
-    'Warning is printed';
+        'Warning is printed';
 
-is($err->{error}, 'something went wrong', "Send exception, error message returned");
+    is( $err->{error}, 'something went wrong', "Send exception, error message returned" );
 }
 
 {
-use C4::Serials qw( NewSubscription GetSerials findSerialsByStatus ModSerialStatus );
+    use C4::Serials qw( NewSubscription GetSerials findSerialsByStatus ModSerialStatus );
 
-my $notes = 'notes';
-my $internalnotes = 'intnotes';
-my $number_pattern = $builder->build_object(
-    {
-        class => 'Koha::Subscription::Numberpatterns',
-        value => { numberingmethod => 'No. {X}' }
+    my $notes          = 'notes';
+    my $internalnotes  = 'intnotes';
+    my $number_pattern = $builder->build_object(
+        {
+            class => 'Koha::Subscription::Numberpatterns',
+            value => { numberingmethod => 'No. {X}' }
+        }
+    );
+    my $subscriptionid = NewSubscription(
+        undef,        "",     undef, undef,          undef, $biblionumber,
+        '2013-01-01', 1,      undef, undef,          undef,
+        undef,        undef,  undef, undef,          undef, undef,
+        1,            $notes, undef, '2013-01-01',   undef, $number_pattern->id,
+        undef,        undef,  0,     $internalnotes, 0,
+        undef,        undef,  0,     undef,          '2013-12-31', 0
+    );
+    $dbh->do(
+        q{INSERT INTO letter (module, code, name, title, content) VALUES ('serial','RLIST','Serial issue notification','Serial issue notification','<<biblio.title>>,<<subscription.subscriptionid>>,<<serial.serialseq>>');}
+    );
+    my ( $serials_count, @serials ) = GetSerials($subscriptionid);
+    my $serial = $serials[0];
+
+    my $patron = Koha::Patron->new(
+        {
+            firstname    => 'John',
+            surname      => 'Smith',
+            categorycode => $patron_category,
+            branchcode   => $library->{branchcode},
+            dateofbirth  => $date,
+            email        => 'john.smith@test.de',
+        }
+    )->store;
+    my $borrowernumber = $patron->borrowernumber;
+    my $subscription   = Koha::Subscriptions->find($subscriptionid);
+    $subscription->add_subscriber($patron);
+
+    t::lib::Mocks::mock_userenv( { branch => $library->{branchcode} } );
+    my $err2;
+    warning_like {
+        $err2 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' )
     }
-);
-my $subscriptionid = NewSubscription(
-     undef,      "",     undef, undef, undef, $biblionumber,
-    '2013-01-01', 1, undef, undef,  undef,
-    undef,      undef,  undef, undef, undef, undef,
-    1,          $notes,undef, '2013-01-01', undef, $number_pattern->id,
-    undef,       undef,  0,    $internalnotes,  0,
-    undef, undef, 0,          undef,         '2013-12-31', 0
-);
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('serial','RLIST','Serial issue notification','Serial issue notification','<<biblio.title>>,<<subscription.subscriptionid>>,<<serial.serialseq>>');});
-my ($serials_count, @serials) = GetSerials($subscriptionid);
-my $serial = $serials[0];
-
-my $patron = Koha::Patron->new({
-    firstname    => 'John',
-    surname      => 'Smith',
-    categorycode => $patron_category,
-    branchcode   => $library->{branchcode},
-    dateofbirth  => $date,
-    email        => 'john.smith@test.de',
-})->store;
-my $borrowernumber = $patron->borrowernumber;
-my $subscription = Koha::Subscriptions->find( $subscriptionid );
-$subscription->add_subscriber( $patron );
-
-t::lib::Mocks::mock_userenv({ branch => $library->{branchcode} });
-my $err2;
-warning_like {
-$err2 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked send_or_die routine";
+        "SendAlerts is using the mocked send_or_die routine";
 
-is($err2, 1, "Successfully sent serial notification");
-is($email_object->email->header('To'), 'john.smith@test.de', "mailto correct in sent serial notification");
-is($email_object->email->body, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
+    is( $err2,                              1,                    "Successfully sent serial notification" );
+    is( $email_object->email->header('To'), 'john.smith@test.de', "mailto correct in sent serial notification" );
+    is(
+        $email_object->email->body, 'Silence in the library,' . $subscriptionid . ',No. 0',
+        'Serial notification text constructed successfully'
+    );
 
-t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'robert.tables@mail.com' );
+    t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'robert.tables@mail.com' );
 
-my $err3;
-warning_like {
-$err3 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
+    my $err3;
+    warning_like {
+        $err3 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' )
+    }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked send_or_die routine";
-is($email_object->email->header('To'), 'robert.tables@mail.com', "mailto address overwritten by SendAllMailsTo preference");
+        "SendAlerts is using the mocked send_or_die routine";
+    is(
+        $email_object->email->header('To'), 'robert.tables@mail.com',
+        "mailto address overwritten by SendAllMailsTo preference"
+    );
 
-my $mocked_koha_email = Test::MockModule->new('Koha::Email');
-$mocked_koha_email->mock( 'send_or_die', sub {
-    Email::Sender::Failure->throw('something went wrong');
-});
+    my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+    $mocked_koha_email->mock(
+        'send_or_die',
+        sub {
+            Email::Sender::Failure->throw('something went wrong');
+        }
+    );
 
-warning_like {
-    $err = SendAlerts( 'issue', $serial->{serialid} , 'RLIST' ); }
+    warning_like {
+        $err = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' );
+    }
     qr{something went wrong},
-    'Warning is printed';
+        'Warning is printed';
 
-is($err->{error}, 'something went wrong', "Send exception, error message returned");
+    is( $err->{error}, 'something went wrong', "Send exception, error message returned" );
 
 }
 t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
@@ -723,34 +817,37 @@ subtest 'SendAlerts - claimissue' => sub {
 
     use C4::Serials;
 
-    $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimissues','TESTSERIALCLAIM','Serial claim test','Serial claim test','<<serial.serialid>>|<<subscription.startdate>>|<<biblio.title>>|<<biblioitems.issn>>');});
+    $dbh->do(
+        q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimissues','TESTSERIALCLAIM','Serial claim test','Serial claim test','<<serial.serialid>>|<<subscription.startdate>>|<<biblio.title>>|<<biblioitems.issn>>');}
+    );
 
     my $bookseller = Koha::Acquisition::Bookseller->new(
         {
-            name => "my vendor",
-            address1 => "bookseller's address",
-            phone => "0123456",
-            active => 1,
+            name         => "my vendor",
+            address1     => "bookseller's address",
+            phone        => "0123456",
+            active       => 1,
             deliverytime => 5,
         }
     )->store;
     my $booksellerid = $bookseller->id;
 
-    Koha::Acquisition::Bookseller::Contact->new( { name => 'Leo Tolstoy', phone => '0123456x2', claimissues => 1, booksellerid => $booksellerid } )->store;
+    Koha::Acquisition::Bookseller::Contact->new(
+        { name => 'Leo Tolstoy', phone => '0123456x2', claimissues => 1, booksellerid => $booksellerid } )->store;
 
     my $bib = MARC::Record->new();
-    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
         $bib->append_fields(
-            MARC::Field->new('011', ' ', ' ', a => 'xxxx-yyyy'),
-            MARC::Field->new('200', ' ', ' ', a => 'Silence in the library'),
+            MARC::Field->new( '011', ' ', ' ', a => 'xxxx-yyyy' ),
+            MARC::Field->new( '200', ' ', ' ', a => 'Silence in the library' ),
         );
     } else {
         $bib->append_fields(
-            MARC::Field->new('022', ' ', ' ', a => 'xxxx-yyyy'),
-            MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+            MARC::Field->new( '022', ' ', ' ', a => 'xxxx-yyyy' ),
+            MARC::Field->new( '245', ' ', ' ', a => 'Silence in the library' ),
         );
     }
-    my ($biblionumber) = AddBiblio($bib, '');
+    my ($biblionumber) = AddBiblio( $bib, '' );
 
     my $number_pattern = $builder->build_object(
         {
@@ -760,101 +857,118 @@ subtest 'SendAlerts - claimissue' => sub {
     );
 
     my $subscriptionid = NewSubscription(
-         undef, "", $booksellerid, undef, undef, $biblionumber,
-        '2013-01-01', 1, undef, undef,  undef,
-        undef,  undef,  undef, undef, undef, undef,
-        1, 'public',undef, '2013-01-01', undef, $number_pattern->id,
-        undef, undef,  0, 'internal',  0,
-        undef, undef, 0,  undef, '2013-12-31', 0
+        undef,        "",       $booksellerid, undef,        undef, $biblionumber,
+        '2013-01-01', 1,        undef,         undef,        undef,
+        undef,        undef,    undef,         undef,        undef, undef,
+        1,            'public', undef,         '2013-01-01', undef, $number_pattern->id,
+        undef,        undef,    0,             'internal',   0,
+        undef,        undef,    0,             undef,        '2013-12-31', 0
     );
 
-    my ($serials_count, @serials) = GetSerials($subscriptionid);
-    my  @serialids = ($serials[0]->{serialid});
+    my ( $serials_count, @serials ) = GetSerials($subscriptionid);
+    my @serialids = ( $serials[0]->{serialid} );
 
     my $err;
     warning_like {
-        $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' ) }
-        qr/^Bookseller .* without emails at/,
+        $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' )
+    }
+    qr/^Bookseller .* without emails at/,
         "Warn on vendor without email address";
 
-    $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+    $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
     $bookseller->contacts->next->email('testemail@mydomain.com')->store;
 
     # Ensure that the preference 'ClaimsLog' is set to logging
     t::lib::Mocks::mock_preference( 'ClaimsLog', 'on' );
 
     # SendAlerts needs branchemail or KohaAdminEmailAddress as sender
-    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 
     t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
 
     {
-    warning_like {
-        $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ) }
+        warning_like {
+            $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' )
+        }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked send_or_die routine (claimissues)";
-    is( $err, 1, "Successfully sent claim" );
-    is( $email_object->email->header('To'),
-        'testemail@mydomain.com', "mailto correct in sent claim" );
-    is( scalar $email_object->email->header('Reply-To'), undef, "reply-to is not set" );
-    is(
-        $email_object->email->body,
-        "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy",
-        'Serial claim letter for 1 issue constructed successfully'
-    );
+            "SendAlerts is using the mocked send_or_die routine (claimissues)";
+        is( $err, 1, "Successfully sent claim" );
+        is(
+            $email_object->email->header('To'),
+            'testemail@mydomain.com', "mailto correct in sent claim"
+        );
+        is( scalar $email_object->email->header('Reply-To'), undef, "reply-to is not set" );
+        is(
+            $email_object->email->body,
+            "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy",
+            'Serial claim letter for 1 issue constructed successfully'
+        );
     }
 
     t::lib::Mocks::mock_preference( 'SerialsDefaultEmailAddress', 'ser-default@domain.com' );
-    t::lib::Mocks::mock_preference( 'SerialsDefaultReplyTo', 'ser-replyto@domain.com' );
+    t::lib::Mocks::mock_preference( 'SerialsDefaultReplyTo',      'ser-replyto@domain.com' );
 
     {
-    warning_like {
-        $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ) }
+        warning_like {
+            $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' )
+        }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked send_or_die routine (claimissues)";
-    is( $email_object->email->header('From'),
-        'ser-default@domain.com', "SerialsDefaultEmailAddress is used to serial claim issue" );
-    is( $email_object->email->header('Reply-To'),
-        'ser-replyto@domain.com', "SerialsDefaultReplyTo is used to sent serial claim issue" );
+            "SendAlerts is using the mocked send_or_die routine (claimissues)";
+        is(
+            $email_object->email->header('From'),
+            'ser-default@domain.com', "SerialsDefaultEmailAddress is used to serial claim issue"
+        );
+        is(
+            $email_object->email->header('Reply-To'),
+            'ser-replyto@domain.com', "SerialsDefaultReplyTo is used to sent serial claim issue"
+        );
 
-    my $mocked_koha_email = Test::MockModule->new('Koha::Email');
-    $mocked_koha_email->mock( 'send_or_die', sub {
-            Email::Sender::Failure->throw('something went wrong');
-    });
+        my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+        $mocked_koha_email->mock(
+            'send_or_die',
+            sub {
+                Email::Sender::Failure->throw('something went wrong');
+            }
+        );
 
-    warning_like {
-        $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ); }
+        warning_like {
+            $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' );
+        }
         qr{something went wrong},
-        'Warning is printed';
+            'Warning is printed';
 
-    is($err->{error}, 'something went wrong', "Send exception, error message returned");
+        is( $err->{error}, 'something went wrong', "Send exception, error message returned" );
     }
 
     {
-    my $publisheddate = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-    my $serialexpected = ( C4::Serials::findSerialsByStatus( 1, $subscriptionid ) )[0];
-    ModSerialStatus( $serials[0]->{serialid}, "No. 1", $publisheddate, $publisheddate, $publisheddate, '3', 'a note' );
-    ($serials_count, @serials) = GetSerials($subscriptionid);
-    push @serialids, ($serials[1]->{serialid});
+        my $publisheddate  = output_pref( { dt => dt_from_string, dateformat => 'iso', dateonly => 1 } );
+        my $serialexpected = ( C4::Serials::findSerialsByStatus( 1, $subscriptionid ) )[0];
+        ModSerialStatus(
+            $serials[0]->{serialid}, "No. 1", $publisheddate, $publisheddate, $publisheddate, '3',
+            'a note'
+        );
+        ( $serials_count, @serials ) = GetSerials($subscriptionid);
+        push @serialids, ( $serials[1]->{serialid} );
 
-    warning_like { $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' ); }
+        warning_like { $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' ); }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked send_or_die routine (claimissues)";
+            "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
-    is(
-        $email_object->email->body,
-        "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy"
-          . $email_object->email->crlf
-          . "$serialids[1]|2013-01-01|Silence in the library|xxxx-yyyy",
-        "Serial claim letter for 2 issues constructed successfully"
-    );
+        is(
+            $email_object->email->body,
+            "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy"
+                . $email_object->email->crlf
+                . "$serialids[1]|2013-01-01|Silence in the library|xxxx-yyyy",
+            "Serial claim letter for 2 issues constructed successfully"
+        );
 
-    $dbh->do(q{DELETE FROM letter WHERE code = 'TESTSERIALCLAIM';});
-    warning_like {
-        $err = SendAlerts( 'orderacquisition', $basketno , 'TESTSERIALCLAIM' ) }
+        $dbh->do(q{DELETE FROM letter WHERE code = 'TESTSERIALCLAIM';});
+        warning_like {
+            $err = SendAlerts( 'orderacquisition', $basketno, 'TESTSERIALCLAIM' )
+        }
         qr/No orderacquisition TESTSERIALCLAIM letter transported by email/,
-        "GetPreparedLetter warns about missing notice template";
-    is($err->{'error'}, 'no_letter', "No TESTSERIALCLAIM letter was defined");
+            "GetPreparedLetter warns about missing notice template";
+        is( $err->{'error'}, 'no_letter', "No TESTSERIALCLAIM letter was defined" );
     }
 
 };
@@ -878,9 +992,10 @@ subtest 'GetPreparedLetter' => sub {
         );
     }
     qr{^ERROR: nothing to substitute},
-'GetPreparedLetter should warn if tables, substiture and repeat are not set';
-    is( $letter, undef,
-'No letter should be returned by GetPreparedLetter if something went wrong'
+        'GetPreparedLetter should warn if tables, substiture and repeat are not set';
+    is(
+        $letter, undef,
+        'No letter should be returned by GetPreparedLetter if something went wrong'
     );
 
     warning_like {
@@ -891,9 +1006,10 @@ subtest 'GetPreparedLetter' => sub {
         );
     }
     qr{^ERROR: nothing to substitute},
-'GetPreparedLetter should warn if tables, substiture and repeat are not set, even if the key is passed';
-    is( $letter, undef,
-'No letter should be returned by GetPreparedLetter if something went wrong'
+        'GetPreparedLetter should warn if tables, substiture and repeat are not set, even if the key is passed';
+    is(
+        $letter, undef,
+        'No letter should be returned by GetPreparedLetter if something went wrong'
     );
 
 };
@@ -1025,11 +1141,12 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
 
     plan tests => 14;
 
-    t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
-    t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
+    t::lib::Mocks::mock_preference( 'SMSSendDriver',                 'Email' );
+    t::lib::Mocks::mock_preference( 'EmailSMSSendDriverFromAddress', '' );
 
     my $patron = Koha::Patrons->find($borrowernumber);
-    $dbh->do(q|
+    $dbh->do(
+        q|
         INSERT INTO message_queue(borrowernumber, subject, content, message_transport_type, status, letter_code)
         VALUES (?, 'subject', 'content', 'sms', 'pending', 'just_a_code')
         |, undef, $borrowernumber
@@ -1037,12 +1154,13 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
     eval { C4::Letters::SendQueuedMessages(); };
     is( $@, '', 'SendQueuedMessages should not explode if the patron does not have a sms provider set' );
 
-    my $sms_pro = $builder->build_object({ class => 'Koha::SMS::Providers', value => { domain => 'kidclamp.rocks' } });
+    my $sms_pro =
+        $builder->build_object( { class => 'Koha::SMS::Providers', value => { domain => 'kidclamp.rocks' } } );
     $patron->set( { smsalertnumber => '5555555555', sms_provider_id => $sms_pro->id() } )->store;
-    $message_id = C4::Letters::EnqueueLetter($my_message); #using datas set around line 95 and forward
+    $message_id = C4::Letters::EnqueueLetter($my_message);    #using datas set around line 95 and forward
 
     warning_like { C4::Letters::SendQueuedMessages(); }
-        qr|Fake send_or_die|,
+    qr|Fake send_or_die|,
         "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
     $message = $schema->resultset('MessageQueue')->search(
@@ -1053,26 +1171,32 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
     )->next();
 
     is( $message->letter_id, $messages->[0]->{id}, "Message letter_id is set correctly" );
-    is( $message->to_address(), '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set' );
+    is(
+        $message->to_address(), '5555555555@kidclamp.rocks',
+        'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set'
+    );
     is(
         $message->from_address(),
         'from@example.com',
         'SendQueuedMessages uses message queue item \"from address\" for SMS by email when EmailSMSSendDriverFromAddress system preference is not set'
     );
 
-    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber, status => 'sent'})->delete(); #clear borrower queue
+    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )->delete()
+        ;    #clear borrower queue
 
-    t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', 'override@example.com');
+    t::lib::Mocks::mock_preference( 'EmailSMSSendDriverFromAddress', 'override@example.com' );
 
     $message_id = C4::Letters::EnqueueLetter($my_message);
     warning_like { C4::Letters::SendQueuedMessages(); }
-        qr|Fake send_or_die|,
+    qr|Fake send_or_die|,
         "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
-    $message = $schema->resultset('MessageQueue')->search({
-        borrowernumber => $borrowernumber,
-        status => 'sent'
-    })->next();
+    $message = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next();
 
     is(
         $message->from_address(),
@@ -1080,40 +1204,55 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
         'SendQueuedMessages uses EmailSMSSendDriverFromAddress value for SMS by email when EmailSMSSendDriverFromAddress is set'
     );
 
-    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber,status => 'sent'})->delete(); #clear borrower queue
+    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )->delete()
+        ;    #clear borrower queue
     $my_message->{to_address} = 'fixme@kidclamp.iswrong';
     $message_id = C4::Letters::EnqueueLetter($my_message);
 
-    my $number_attempted = C4::Letters::SendQueuedMessages({
-        borrowernumber => -1, # -1 still triggers the borrowernumber condition
-        letter_code    => 'PASSWORD_RESET',
-    });
-    is ( $number_attempted, 0, 'There were no password reset messages for SendQueuedMessages to attempt.' );
+    my $number_attempted = C4::Letters::SendQueuedMessages(
+        {
+            borrowernumber => -1,                 # -1 still triggers the borrowernumber condition
+            letter_code    => 'PASSWORD_RESET',
+        }
+    );
+    is( $number_attempted, 0, 'There were no password reset messages for SendQueuedMessages to attempt.' );
 
     warning_like { C4::Letters::SendQueuedMessages(); }
-        qr|Fake send_or_die|,
+    qr|Fake send_or_die|,
         "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
-    my $sms_message_address = $schema->resultset('MessageQueue')->search({
-        borrowernumber => $borrowernumber,
-        status => 'sent'
-    })->next()->to_address();
-    is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address is set incorrectly' );
+    my $sms_message_address = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next()->to_address();
+    is(
+        $sms_message_address, '5555555555@kidclamp.rocks',
+        'SendQueuedMessages populates the to address correctly for SMS by email when to_address is set incorrectly'
+    );
 
     # Test using SMS::Send::Test driver that's bundled with SMS::Send
-    t::lib::Mocks::mock_preference('SMSSendDriver', "AU::Test");
+    t::lib::Mocks::mock_preference( 'SMSSendDriver', "AU::Test" );
 
-    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber, status => 'sent'})->delete(); #clear borrower queue
+    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )->delete()
+        ;    #clear borrower queue
     C4::Letters::EnqueueLetter($my_message);
     C4::Letters::SendQueuedMessages();
 
-    $sms_message_address = $schema->resultset('MessageQueue')->search({
-        borrowernumber => $borrowernumber,
-        status => 'sent'
-    })->next()->to_address();
-    is( $sms_message_address, '5555555555', 'SendQueuedMessages populates the to address correctly for SMS by SMS::Send driver to smsalertnumber when to_address is set incorrectly' );
+    $sms_message_address = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next()->to_address();
+    is(
+        $sms_message_address, '5555555555',
+        'SendQueuedMessages populates the to address correctly for SMS by SMS::Send driver to smsalertnumber when to_address is set incorrectly'
+    );
 
-    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber, status => 'sent'})->delete(); #clear borrower queue
+    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )->delete()
+        ;    #clear borrower queue
 };
 
 subtest 'Test guarantor handling in SendQueuedMessages' => sub {
@@ -1121,9 +1260,9 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
     plan tests => 19;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
-    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 1 );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor',  1 );
 
-    my $patron     = Koha::Patrons->find($borrowernumber);
+    my $patron = Koha::Patrons->find($borrowernumber);
 
     my $patron_category =
         $builder->build( { source => 'Category', value => { category_type => 'A', can_be_guarantee => 0 } } )
@@ -1216,13 +1355,15 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
 
     is(
         $message->cc_address(),
-        $guarantor1->email.",".$guarantor2->email,
+        $guarantor1->email . "," . $guarantor2->email,
         'SendQueuedMessages sets cc address to both guarantor emails when patron has email defined'
     );
 
     is( $email_object->email->header('To'), $patron->email, "mailto correctly uses patrons email address" );
-    is( $email_object->email->header('Cc'), $guarantor1->email.", ".$guarantor2->email, "cc correctly uses both guarantors" );
-
+    is(
+        $email_object->email->header('Cc'), $guarantor1->email . ", " . $guarantor2->email,
+        "cc correctly uses both guarantors"
+    );
 
     # reset message - testing explicit to passed to enqueue
     Koha::Notice::Messages->find($message_id)->delete;
@@ -1248,12 +1389,15 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
 
     is(
         $message->cc_address(),
-        $guarantor1->email.",".$guarantor2->email,
+        $guarantor1->email . "," . $guarantor2->email,
         'SendQueuedMessages sets cc address to both guarantor emails when "to" is already specified'
     );
 
     is( $email_object->email->header('To'), 'to@example.com', "mailto correctly uses passed email" );
-    is( $email_object->email->header('Cc'), $guarantor1->email.", ".$guarantor2->email, "cc correctly uses both guarantors" );
+    is(
+        $email_object->email->header('Cc'), $guarantor1->email . ", " . $guarantor2->email,
+        "cc correctly uses both guarantors"
+    );
 
     # clear borrower queue
     Koha::Notice::Messages->find($message_id)->delete;
@@ -1264,36 +1408,49 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
 subtest 'get_item_content' => sub {
     plan tests => 2;
 
-    t::lib::Mocks::mock_preference('dateformat', 'metric');
-    t::lib::Mocks::mock_preference('timeformat', '24hr');
+    t::lib::Mocks::mock_preference( 'dateformat', 'metric' );
+    t::lib::Mocks::mock_preference( 'timeformat', '24hr' );
     my @items = (
-        {date_due => '2041-01-01 12:34', title => 'a first title', barcode => 'a_first_barcode', author => 'a_first_author', itemnumber => 1 },
-        {date_due => '2042-01-02 23:45', title => 'a second title', barcode => 'a_second_barcode', author => 'a_second_author', itemnumber => 2 },
+        {
+            date_due => '2041-01-01 12:34', title      => 'a first title', barcode => 'a_first_barcode',
+            author   => 'a_first_author',   itemnumber => 1
+        },
+        {
+            date_due => '2042-01-02 23:45', title      => 'a second title', barcode => 'a_second_barcode',
+            author   => 'a_second_author',  itemnumber => 2
+        },
     );
     my @item_content_fields = qw( date_due title barcode author itemnumber );
 
     my $items_content;
-    for my $item ( @items ) {
-        $items_content .= C4::Letters::get_item_content( { item => $item, item_content_fields => \@item_content_fields } );
+    for my $item (@items) {
+        $items_content .=
+            C4::Letters::get_item_content( { item => $item, item_content_fields => \@item_content_fields } );
     }
 
     my $expected_items_content = <<EOF;
 01/01/2041 12:34\ta first title\ta_first_barcode\ta_first_author\t1
 02/01/2042 23:45\ta second title\ta_second_barcode\ta_second_author\t2
 EOF
-    is( $items_content, $expected_items_content, 'get_item_content should return correct items info with time (default)' );
-
+    is(
+        $items_content, $expected_items_content,
+        'get_item_content should return correct items info with time (default)'
+    );
 
     $items_content = q||;
-    for my $item ( @items ) {
-        $items_content .= C4::Letters::get_item_content( { item => $item, item_content_fields => \@item_content_fields, dateonly => 1, } );
+    for my $item (@items) {
+        $items_content .= C4::Letters::get_item_content(
+            { item => $item, item_content_fields => \@item_content_fields, dateonly => 1, } );
     }
 
     $expected_items_content = <<EOF;
 01/01/2041\ta first title\ta_first_barcode\ta_first_author\t1
 02/01/2042\ta second title\ta_second_barcode\ta_second_author\t2
 EOF
-    is( $items_content, $expected_items_content, 'get_item_content should return correct items info without time (if dateonly => 1)' );
+    is(
+        $items_content, $expected_items_content,
+        'get_item_content should return correct items info without time (if dateonly => 1)'
+    );
 };
 
 subtest 'Test where parameter for SendQueuedMessages' => sub {
@@ -1301,13 +1458,15 @@ subtest 'Test where parameter for SendQueuedMessages' => sub {
 
     my $dbh = C4::Context->dbh;
 
-    my $borrowernumber = Koha::Patron->new({
-        firstname    => 'Jane',
-        surname      => 'Smith',
-        categorycode => $patron_category,
-        branchcode   => $library->{branchcode},
-        dateofbirth  => $date,
-    })->store->borrowernumber;
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname    => 'Jane',
+            surname      => 'Smith',
+            categorycode => $patron_category,
+            branchcode   => $library->{branchcode},
+            dateofbirth  => $date,
+        }
+    )->store->borrowernumber;
 
     $dbh->do(q|DELETE FROM message_queue|);
     $my_message = {
@@ -1349,18 +1508,21 @@ subtest 'Test where parameter for SendQueuedMessages' => sub {
         'message_transport_type' => 'sms',
         'from_address'           => 'from@example.com'
     };
-    my @id = ( C4::Letters::EnqueueLetter($my_message),
+    my @id = (
+        C4::Letters::EnqueueLetter($my_message),
         C4::Letters::EnqueueLetter($my_message2),
         C4::Letters::EnqueueLetter($my_message3),
     );
-    C4::Letters::SendQueuedMessages({
-        # Test scalar/arrayref in parameter too
-        letter_code => [ 'TEST_MESSAGE', 'SOMETHING_NOT_THERE' ],
-        type => 'sms',
-        where => q{content NOT LIKE '%skipped%'},
-    });
-    is( Koha::Notice::Messages->find( $id[0] )->status, 'failed', 'Processed but failed' );
-    is( Koha::Notice::Messages->find( $id[1] )->status, 'failed', 'Processed but failed' );
+    C4::Letters::SendQueuedMessages(
+        {
+            # Test scalar/arrayref in parameter too
+            letter_code => [ 'TEST_MESSAGE', 'SOMETHING_NOT_THERE' ],
+            type        => 'sms',
+            where       => q{content NOT LIKE '%skipped%'},
+        }
+    );
+    is( Koha::Notice::Messages->find( $id[0] )->status, 'failed',  'Processed but failed' );
+    is( Koha::Notice::Messages->find( $id[1] )->status, 'failed',  'Processed but failed' );
     is( Koha::Notice::Messages->find( $id[2] )->status, 'pending', 'Skipped, still pending' );
 };
 
@@ -1369,14 +1531,16 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
 
     my $dbh = C4::Context->dbh;
 
-    my $borrowernumber = Koha::Patron->new({
-        firstname    => 'Jane',
-        surname      => 'Smith',
-        categorycode => $patron_category,
-        branchcode   => $library->{branchcode},
-        dateofbirth  => $date,
-        email          => 'shouldnotwork@wrong.net',
-    })->store->borrowernumber;
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname    => 'Jane',
+            surname      => 'Smith',
+            categorycode => $patron_category,
+            branchcode   => $library->{branchcode},
+            dateofbirth  => $date,
+            email        => 'shouldnotwork@wrong.net',
+        }
+    )->store->borrowernumber;
 
     $dbh->do(q|DELETE FROM message_queue|);
     $my_message = {
@@ -1392,62 +1556,81 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
         'message_transport_type' => 'email',
         'from_address'           => 'from@example.com'
     };
-    C4::Letters::EnqueueLetter($my_message) for 1..5;
+    C4::Letters::EnqueueLetter($my_message) for 1 .. 5;
 
-    $send_or_die_count = 0; # reset
+    $send_or_die_count = 0;    # reset
     my $messages_sent;
     my $regex = qr|Fake send_or_die|;
     warning_like {
-        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 1 } ) }
-        $regex,
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 1 } )
+    }
+    $regex,
         "SendQueuedMessages with limit 1";
-    is( $messages_sent, 1,
-        'Sent 1 message with limit of 1 and 5 unprocessed messages' );
+    is(
+        $messages_sent, 1,
+        'Sent 1 message with limit of 1 and 5 unprocessed messages'
+    );
 
     warnings_like {
-        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 2 } ) }
-        [ map { $regex } 1..2 ],
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 2 } )
+    }
+    [ map { $regex } 1 .. 2 ],
         "SendQueuedMessages with limit 2";
-    is( $messages_sent, 2,
-        'Sent 2 messages with limit of 2 and 4 unprocessed messages' );
+    is(
+        $messages_sent, 2,
+        'Sent 2 messages with limit of 2 and 4 unprocessed messages'
+    );
 
     warnings_like {
-        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 3 } ) }
-        [ map { $regex } 1..2 ],
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 3 } )
+    }
+    [ map { $regex } 1 .. 2 ],
         "SendQueuedMessages with limit 3";
-    is( $messages_sent, 2,
-        'Sent 2 messages with limit of 3 and 2 unprocessed messages' );
+    is(
+        $messages_sent, 2,
+        'Sent 2 messages with limit of 3 and 2 unprocessed messages'
+    );
 
     is( $send_or_die_count, 5, '5 messages sent' );
+
     # Mimic correct status in queue for next tests
-    Koha::Notice::Messages->search({ to_address => { 'LIKE', '%wrong.net' }})->update({ status => 'sent' });
+    Koha::Notice::Messages->search( { to_address => { 'LIKE', '%wrong.net' } } )->update( { status => 'sent' } );
 
     # Now add a few domain limits too, sending 2 more mails to wrongnet, 2 to fake1, 2 to fake2
     # Since we already sent 5 to wrong.net, we expect one deferral when limiting to 6
     # Similarly we arrange for 1 deferral for fake1, and 2 for fake2
     # We set therefore limit to 3 sent messages: we expect 2 sent, 4 deferred (so 6 processed)
-    t::lib::Mocks::mock_config( 'message_domain_limits', { domain => [
-        { name => 'wrong.net',    limit => 6, unit => '1m' },
-        { name => 'fake1.domain', limit => 1, unit => '1m' },
-        { name => 'fake2.domain', limit => 0, unit => '1m' },
-    ]});
-    C4::Letters::EnqueueLetter($my_message) for 1..2;
+    t::lib::Mocks::mock_config(
+        'message_domain_limits',
+        {
+            domain => [
+                { name => 'wrong.net',    limit => 6, unit => '1m' },
+                { name => 'fake1.domain', limit => 1, unit => '1m' },
+                { name => 'fake2.domain', limit => 0, unit => '1m' },
+            ]
+        }
+    );
+    C4::Letters::EnqueueLetter($my_message) for 1 .. 2;
     $my_message->{to_address} = 'someone@fake1.domain';
-    C4::Letters::EnqueueLetter($my_message) for 1..2;
+    C4::Letters::EnqueueLetter($my_message) for 1 .. 2;
     $my_message->{to_address} = 'another@fake2.domain';
-    C4::Letters::EnqueueLetter($my_message) for 1..2;
-    my $mocked_util = Test::MockModule->new('Koha::Notice::Util');
+    C4::Letters::EnqueueLetter($my_message) for 1 .. 2;
+    my $mocked_util         = Test::MockModule->new('Koha::Notice::Util');
     my $count_exceeds_calls = 0;
-    $mocked_util->mock( 'exceeds_limit', sub {
-        $count_exceeds_calls++;
-        $mocked_util->original('exceeds_limit')->(@_);
-    });
+    $mocked_util->mock(
+        'exceeds_limit',
+        sub {
+            $count_exceeds_calls++;
+            $mocked_util->original('exceeds_limit')->(@_);
+        }
+    );
     warnings_like {
-        $messages_sent = C4::Letters::SendQueuedMessages({ limit => 3 }) }
-        [ qr/wrong.net reached limit/, $regex, qr/fake1.domain reached limit/, $regex ],
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 3 } )
+    }
+    [ qr/wrong.net reached limit/, $regex, qr/fake1.domain reached limit/, $regex ],
         "SendQueuedMessages with limit 2 and domain limits";
-    is( $messages_sent, 2, 'Only expecting 2 sent messages' );
-    is(  Koha::Notice::Messages->search({ status => 'pending' })->count, 4, 'Still 4 pending' );
+    is( $messages_sent,                                                   2, 'Only expecting 2 sent messages' );
+    is( Koha::Notice::Messages->search( { status => 'pending' } )->count, 4, 'Still 4 pending' );
     is( $count_exceeds_calls, 6, 'We saw 6 messages while checking domain limits: so we deferred 4' );
 };
 
@@ -1457,14 +1640,16 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
 
     my $dbh = C4::Context->dbh;
 
-    my $borrowernumber = Koha::Patron->new({
-        firstname    => 'Jane',
-        surname      => 'Smith',
-        categorycode => $patron_category,
-        branchcode   => $library->{branchcode},
-        dateofbirth  => $date,
-        smsalertnumber => undef,
-    })->store->borrowernumber;
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname      => 'Jane',
+            surname        => 'Smith',
+            categorycode   => $patron_category,
+            branchcode     => $library->{branchcode},
+            dateofbirth    => $date,
+            smsalertnumber => undef,
+        }
+    )->store->borrowernumber;
 
     $dbh->do(q|DELETE FROM message_queue|);
     $my_message = {
@@ -1478,26 +1663,26 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
         'borrowernumber'         => $borrowernumber,
         'to_address'             => 'to@example.org',
         'message_transport_type' => 'email',
-        'from_address'           => '@example.com' # invalid from_address
+        'from_address'           => '@example.com'      # invalid from_address
     };
     my $message_id = C4::Letters::EnqueueLetter($my_message);
-    $send_or_die_count = 0; # reset
+    $send_or_die_count = 0;                             # reset
     my $processed = C4::Letters::SendQueuedMessages( { message_id => $message_id } );
     is( $send_or_die_count, 0, 'Nothing sent when one message_id passed' );
     my $message_1 = C4::Letters::GetMessage($message_id);
-    is( $message_1->{status}, 'failed', 'Invalid from_address => status failed' );
-    is( $message_1->{failure_code}, 'INVALID_EMAIL:from', 'Failure code set correctly for invalid email parameter');
+    is( $message_1->{status},       'failed',             'Invalid from_address => status failed' );
+    is( $message_1->{failure_code}, 'INVALID_EMAIL:from', 'Failure code set correctly for invalid email parameter' );
 
-    $my_message->{from_address} = 'root@example.org'; # valid from_address
+    $my_message->{from_address} = 'root@example.org';                        # valid from_address
     $message_id = C4::Letters::EnqueueLetter($my_message);
     warning_like { C4::Letters::SendQueuedMessages( { message_id => $message_id } ); }
-        qr|Fake send_or_die|,
+    qr|Fake send_or_die|,
         "SendQueuedMessages is using the mocked send_or_die routine";
     is( $send_or_die_count, 1, 'One message passed through' );
-    $message_1 = C4::Letters::GetMessage($message_1->{message_id});
+    $message_1 = C4::Letters::GetMessage( $message_1->{message_id} );
     my $message_2 = C4::Letters::GetMessage($message_id);
     is( $message_1->{status}, 'failed', 'Message 1 status is unchanged' );
-    is( $message_2->{status}, 'sent', 'Valid from_address => status sent' );
+    is( $message_2->{status}, 'sent',   'Valid from_address => status sent' );
 };
 
 subtest 'Template toolkit syntax in parameters' => sub {

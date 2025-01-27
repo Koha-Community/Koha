@@ -6,10 +6,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Course reserves") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Course reserves") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 
 </head>
@@ -29,62 +31,64 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-                    [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_delete_reserves %]
-                    <div id="toolbar">
-                        [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                            <a class="btn btn-default" id="new_course" href="/cgi-bin/koha/course_reserves/course.pl"><i class="fa fa-plus"></i> New course</a>
-                        [% END %]
-                        [% IF ( CAN_user_coursereserves_delete_reserves ) %]
-                            <a class="btn btn-default" id="batch_rm" href="/cgi-bin/koha/course_reserves/batch_rm_items.pl"><i class="fa fa-minus"></i> Batch remove reserves</a>
-                        [% END %]
-                    </div><!-- /toolbar -->
-                    [% END %]
+    [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_delete_reserves %]
+        <div id="toolbar">
+            [% IF ( CAN_user_coursereserves_manage_courses ) %]
+                <a class="btn btn-default" id="new_course" href="/cgi-bin/koha/course_reserves/course.pl"><i class="fa fa-plus"></i> New course</a>
+            [% END %]
+            [% IF ( CAN_user_coursereserves_delete_reserves ) %]
+                <a class="btn btn-default" id="batch_rm" href="/cgi-bin/koha/course_reserves/batch_rm_items.pl"><i class="fa fa-minus"></i> Batch remove reserves</a>
+            [% END %] </div
+        ><!-- /toolbar -->
+    [% END %]
 
-                    <h1>Courses</h1>
-                    <div class="page-section">
-                        <table id="course_reserves_table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Dept.</th>
-                                    <th>Course #</th>
-                                    <th>Section</th>
-                                    <th>[% tp('Semester', 'Term') | html %]</th>
-                                    <th>Instructors</th>
-                                    <th>Staff note</th>
-                                    <th>Public note</th>
-                                    <th># of students</th>
-                                    <th>Enabled</th>
-                                </tr>
-                            </thead>
+    <h1>Courses</h1>
+    <div class="page-section">
+        <table id="course_reserves_table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Dept.</th>
+                    <th>Course #</th>
+                    <th>Section</th>
+                    <th>[% tp('Semester', 'Term') | html %]</th>
+                    <th>Instructors</th>
+                    <th>Staff note</th>
+                    <th>Public note</th>
+                    <th># of students</th>
+                    <th>Enabled</th>
+                </tr>
+            </thead>
 
-                            <tbody>
-                                [% FOREACH c IN courses %]
-                                    <tr>
-                                        <td><a href="course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %][%- IF c.section -%] - [% c.section | html %][%- END -%]</a></td>
-                                        <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department ) | html %]</td>
-                                        <td>[% c.course_number | html %]</td>
-                                        <td>[% c.section | html %]</td>
-                                        <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) | html %]</td>
-                                        <td>
-                                            [% FOREACH i IN c.instructors %]
-                                                <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a></div>
-                                            [% END %]
-                                        </td>
-                                        <td>[% c.staff_note | html %]</td>
-                                        <td>[% c.public_note | $raw %]</td>
-                                        <td>[% c.students_count | html %]</td>
-                                        <td>
-                                            [% IF c.enabled == 'yes' %]
-                                                Yes
-                                            [% ELSE %]
-                                                No
-                                            [% END %]
-                                        </td>
-                                [% END %]
-                            </tbody>
-                        </table>
-                    </div> <!-- /.page-section -->
+            <tbody>
+                [% FOREACH c IN courses %]
+                    <tr>
+                        <td><a href="course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %][%- IF c.section -%]- [% c.section | html %][%- END -%]</a></td>
+                        <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department ) | html %]</td>
+                        <td>[% c.course_number | html %]</td>
+                        <td>[% c.section | html %]</td>
+                        <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) | html %]</td>
+                        <td>
+                            [% FOREACH i IN c.instructors %]
+                                <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a></div>
+                            [% END %]
+                        </td>
+                        <td>[% c.staff_note | html %]</td>
+                        <td>[% c.public_note | $raw %]</td>
+                        <td>[% c.students_count | html %]</td>
+                        <td>
+                            [% IF c.enabled == 'yes' %]
+                                Yes
+                            [% ELSE %]
+                                No
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    </div>
+    <!-- /.page-section -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

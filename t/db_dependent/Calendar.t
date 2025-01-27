@@ -53,12 +53,12 @@ subtest 'Original tests from t' => sub {
         }
     );
 
-    my $mpl = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
-    my $cpl = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
+    my $mpl  = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
+    my $cpl  = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
     my $rows = [    # add weekly holidays
         { branchcode => $mpl, weekday => 0 },                  # sundays
         { branchcode => $mpl, weekday => 6 },                  # saturdays
-        { branchcode => $mpl, day     => 1, month => 1 },      # new year's day
+        { branchcode => $mpl, day     => 1,  month => 1 },     # new year's day
         { branchcode => $mpl, day     => 25, month => 12 },    # chrismas
     ];
     $schema->resultset('RepeatableHoliday')->delete_all;

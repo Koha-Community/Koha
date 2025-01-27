@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More; #See plan tests => \d+ below
+use Test::More;    #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -39,16 +39,12 @@ my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
-eval{
-    use C4::Context;
-};
+eval { use C4::Context; };
 if ($@) {
     plan skip_all => "Tests skip. You must have a working Context\n";
-}
-elsif (not defined $intranet) {
+} elsif ( not defined $intranet ) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
-}
-else {
+} else {
     plan tests => 30;
 }
 
@@ -57,94 +53,103 @@ my $dbh = C4::Context->dbh;
 $intranet =~ s#/$##;
 
 my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
-my ($category, $expected_base, $add_form_link_exists);
+my ( $category, $expected_base, $add_form_link_exists );
 
 # -------------------------------------------------- LOGIN
-
 
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
 $agent->field( 'login_password', $password );
 $agent->field( 'login_userid',   $user );
-$agent->field( 'branch',   '' );
+$agent->field( 'branch',         '' );
 $agent->click_ok( '', 'login to staff interface' );
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 
 #---------------------------------------- Test with corean, greek and emoji chars
 
 $category = '学協会μμ😀';
-$dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
-$dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category);
+$dbh->do( q|DELETE FROM authorised_values WHERE category = ?|,                undef, $category );
+$dbh->do( q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category );
 
 $expected_base = q|authorised_values.pl|;
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Connect to Authorized values page' );
+$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl",             'Connect to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form", 'Open to create a new category' );
 $agent->form_name('Aform');
-$agent->field('category', $category);
+$agent->field( 'category', $category );
 $agent->click_ok( '', "Create new AV category " );
 
-$agent->base_like(qr|$expected_base|, "check base");
+$agent->base_like( qr|$expected_base|, "check base" );
 $add_form_link_exists = 0;
 for my $link ( $agent->links() ) {
     if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=| . uri_escape_utf8($category) ) {
         $add_form_link_exists = 1;
     }
 }
-is( $add_form_link_exists, 1, 'Add a new category button should be displayed');
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=" . uri_escape_utf8($category), 'Open to create a new AV for this category' );
+is( $add_form_link_exists, 1, 'Add a new category button should be displayed' );
+$agent->get_ok(
+    "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=" . uri_escape_utf8($category),
+    'Open to create a new AV for this category'
+);
 
 $agent->form_name('Aform');
-$agent->field('authorised_value', 'επιμεq');
-$agent->field('lib_opac', 'autdesc2');
-$agent->field('lib', 'desc1');
-$agent->field('branches', '');
+$agent->field( 'authorised_value', 'επιμεq' );
+$agent->field( 'lib_opac',         'autdesc2' );
+$agent->field( 'lib',              'desc1' );
+$agent->field( 'branches',         '' );
 $agent->click_ok( '', "Create a new value for the category" );
 
-$agent->base_like(qr|$expected_base|, "check base");
+$agent->base_like( qr|$expected_base|, "check base" );
 $add_form_link_exists = 0;
-my $add_form_re = q|authorised_values.pl\?op=add_form&category=|  . uri_escape_utf8($category);
+my $add_form_re = q|authorised_values.pl\?op=add_form&category=| . uri_escape_utf8($category);
 for my $link ( $agent->links() ) {
     if ( $link->url =~ qr|$add_form_re| ) {
         $add_form_link_exists = 1;
     }
 }
-is( $add_form_link_exists, 1, 'Add a new category button should be displayed');
+is( $add_form_link_exists, 1, 'Add a new category button should be displayed' );
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Return to Authorized values page' );
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=" . uri_escape_utf8($category) . "&offset=0", 'Search the values inserted' );
-my $text = $agent->text() ;
-#Tests on UTF-8
-ok ( ( length(Encode::encode('UTF-8', $text)) != length($text) ) , 'UTF-8 are multi-byte. Good') ;
-ok ($text =~  m/学協会μμ/, 'UTF-8 (Asia) chars are correctly present. Good');
-ok ($text =~  m/επιμεq/, 'UTF-8 (Greek) chars are correctly present. Good');
-ok ($text =~  m/😀/, 'UTF-8 (emoji) chars are correctly present. Good');
+$agent->get_ok(
+    "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=" . uri_escape_utf8($category) . "&offset=0",
+    'Search the values inserted'
+);
+my $text = $agent->text();
 
-Koha::AuthorisedValueCategories->find($category)->delete; # Clean up
+#Tests on UTF-8
+ok( ( length( Encode::encode( 'UTF-8', $text ) ) != length($text) ), 'UTF-8 are multi-byte. Good' );
+ok( $text =~ m/学協会μμ/,  'UTF-8 (Asia) chars are correctly present. Good' );
+ok( $text =~ m/επιμεq/, 'UTF-8 (Greek) chars are correctly present. Good' );
+ok( $text =~ m/😀/,      'UTF-8 (emoji) chars are correctly present. Good' );
+
+Koha::AuthorisedValueCategories->find($category)->delete;    # Clean up
 
 #---------------------------------------- Test with only latin utf-8 (could be taken as Latin-1/ISO 8859-1)
 
 $category = 'tòmas';
-$dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
-$dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category);
+$dbh->do( q|DELETE FROM authorised_values WHERE category = ?|,                undef, $category );
+$dbh->do( q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category );
 
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Connect to Authorized values page' );
+$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl",             'Connect to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form", 'Open to create a new category' );
 $agent->form_name('Aform');
-$agent->field('category', $category);
+$agent->field( 'category', $category );
 $agent->click_ok( '', "Create new AV category" );
 
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=$category", 'Open to create a new AV for this category' );
+$agent->get_ok(
+    "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=$category",
+    'Open to create a new AV for this category'
+);
 $agent->form_name('Aform');
-$agent->field('authorised_value', 'ràmen');
-$agent->field('lib_opac', 'autdesc2');
-$agent->field('lib', 'desc1');
-$agent->field('branches', '');
+$agent->field( 'authorised_value', 'ràmen' );
+$agent->field( 'lib_opac',         'autdesc2' );
+$agent->field( 'lib',              'desc1' );
+$agent->field( 'branches',         '' );
 $agent->click_ok( '', "Create a new value for the category" );
 
 $expected_base = q|authorised_values.pl|;
-$agent->base_like(qr|$expected_base|, "check base");
+$agent->base_like( qr|$expected_base|, "check base" );
 $add_form_link_exists = 0;
-$add_form_re = q|authorised_values.pl\?op=add_form&category=|  . uri_escape_utf8($category);
+$add_form_re          = q|authorised_values.pl\?op=add_form&category=| . uri_escape_utf8($category);
 for my $link ( $agent->links() ) {
     if ( $link->url =~ qr|$add_form_re| ) {
         $add_form_link_exists = 1;
@@ -153,11 +158,15 @@ for my $link ( $agent->links() ) {
 is( $add_form_link_exists, 1, );
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Return to Authorized values page' );
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=tòmas&offset=0", 'Search the values inserted' );
-my $text2 = $agent->text() ;
-#Tests on UTF-8
-ok ( ( length(Encode::encode('UTF-8', $text)) != length($text) ) , 'UTF-8 are multi-byte. Good') ;
-ok ($text2 =~  m/tòmas/, 'UTF-8 not Latin-1 first test is OK. Good');
-ok ($text2=~  m/ràmen/, 'UTF-8 not Latin-1 second test is OK. Good');
+$agent->get_ok(
+    "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=tòmas&offset=0",
+    'Search the values inserted'
+);
+my $text2 = $agent->text();
 
-Koha::AuthorisedValueCategories->find($category)->delete; # Clean up
+#Tests on UTF-8
+ok( ( length( Encode::encode( 'UTF-8', $text ) ) != length($text) ), 'UTF-8 are multi-byte. Good' );
+ok( $text2 =~ m/tòmas/, 'UTF-8 not Latin-1 first test is OK. Good' );
+ok( $text2 =~ m/ràmen/, 'UTF-8 not Latin-1 second test is OK. Good' );
+
+Koha::AuthorisedValueCategories->find($category)->delete;    # Clean up

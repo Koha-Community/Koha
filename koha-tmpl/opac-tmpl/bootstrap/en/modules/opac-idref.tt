@@ -3,74 +3,74 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-  <style>
-    #idref h2.role {
-        background-color: #DDDEEE;
-        cursor: pointer;
-    }
-    #idref table {
-        margin: 0;
-    }
-  </style>
+    <style>
+        #idref h2.role {
+            background-color: #dddeee;
+            cursor: pointer;
+        }
+        #idref table {
+            margin: 0;
+        }
+    </style>
 [% END %]
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='idref' bodyclass='scrollto' %]
 <div class="main">
-  [% IF error %]
-    This ppn is not found on the idref service.
-  [% ELSE %]
-    [% FOREACH role IN content %]
-      <div>
-        <h1 class="role" title="Click to expand this role">[% role.role_name | html %] ([% role.count | html %])</h1>
-          <div class="docs">
-            <table>
-                <caption class="sr-only">[% role.role_name | html %]</caption>
-              <thead>
-                <tr>
-                  <th>Citation</th>
-                  <th>Koha</th>
-                  <th>Sudoc</th>
-                </tr>
-              </thead>
-              <tbody>
-                [% FOREACH doc IN role.docs %]
-                  <tr>
-                    <td>[% doc.citation | html %]</td>
-                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn | uri %]" target="_blank">Koha</a></td>
-                    <td><a href="http://www.sudoc.fr/[% doc.ppn | uri %]" target="_blank" rel="noreferrer">Sudoc</a></td>
-                  </tr>
-                [% END %]
-              </tbody>
-            </table>
-          </div>
-      </div>
+    [% IF error %]
+        This ppn is not found on the idref service.
+    [% ELSE %]
+        [% FOREACH role IN content %]
+            <div>
+                <h1 class="role" title="Click to expand this role">[% role.role_name | html %] ([% role.count | html %])</h1>
+                <div class="docs">
+                    <table>
+                        <caption class="sr-only">[% role.role_name | html %]</caption>
+                        <thead>
+                            <tr>
+                                <th>Citation</th>
+                                <th>Koha</th>
+                                <th>Sudoc</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH doc IN role.docs %]
+                                <tr>
+                                    <td>[% doc.citation | html %]</td>
+                                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn | uri %]" target="_blank">Koha</a></td>
+                                    <td><a href="http://www.sudoc.fr/[% doc.ppn | uri %]" target="_blank" rel="noreferrer">Sudoc</a></td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        [% END %]
     [% END %]
-  [% END %]
 </div>
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-<script>
-  $(document).ready(function (){
-      $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
-          'filter': false,
-          'columnDefs': [
-              { 'targets': [-1, -2], 'sortable': false }
-          ],
-      }));
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function () {
+            $("table").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    filter: false,
+                    columnDefs: [{ targets: [-1, -2], sortable: false }],
+                })
+            );
 
-      $(".role").click(function(){
-          var docs_node = $(this).parent().find("div.docs");
-          if ( $(docs_node).is(":visible") ) {
-              $(".docs").hide();
-          } else {
-              $(".docs").hide();
-              docs_node.show();
-          }
-      });
-      $(".docs").hide();
-  });
-</script>
+            $(".role").click(function () {
+                var docs_node = $(this).parent().find("div.docs");
+                if ($(docs_node).is(":visible")) {
+                    $(".docs").hide();
+                } else {
+                    $(".docs").hide();
+                    docs_node.show();
+                }
+            });
+            $(".docs").hide();
+        });
+    </script>
 [% END %]
 
-[% INCLUDE 'opac-bottom.inc' is_popup=1%]
+[% INCLUDE 'opac-bottom.inc' is_popup=1 %]

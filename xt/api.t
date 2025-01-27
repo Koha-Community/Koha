@@ -22,7 +22,7 @@ use Data::Dumper;
 use FindBin();
 use IPC::Cmd        qw(can_run);
 use List::MoreUtils qw(any);
-use File::Slurp qw(read_file);
+use File::Slurp     qw(read_file);
 
 my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
@@ -184,10 +184,10 @@ subtest 'POST (201) have location header' => sub {
         my $content = read_file($file);
         if ( grep { $file eq $_ } @exceptions ) {
             pass("$file is skipped - exception");
-        }
-        elsif ( $content !~ /status\s*=>\s*201/s ) {
+        } elsif ( $content !~ /status\s*=>\s*201/s ) {
             pass("$file does not seem to have a POST endpoint");
-        } elsif ( $content =~ /\$c->res->headers->location\(.*?\);\s*return\s+\$c->render\s*\(\s*status\s*=>\s*201,/s ) {
+        } elsif ( $content =~ /\$c->res->headers->location\(.*?\);\s*return\s+\$c->render\s*\(\s*status\s*=>\s*201,/s )
+        {
             pass("$file contains the location header");
         } else {
             fail("$file does not contain the location header");

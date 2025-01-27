@@ -30,7 +30,7 @@
                             [% IF branchloo.selected %]
                                 <option value="[% branchloo.branchcode | html %]" selected="selected">[% branchloo.branchname | html %]</option>
                             [% ELSE %]
-                                <option value="[% branchloo.branchcode | html %]" >[% branchloo.branchname | html %]</option>
+                                <option value="[% branchloo.branchcode | html %]">[% branchloo.branchname | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -44,7 +44,6 @@
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
         [% END %]
-
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "budgets_search" bt_active= 1 %]

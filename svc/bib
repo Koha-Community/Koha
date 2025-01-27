@@ -21,8 +21,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( check_api_auth );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( check_api_auth );
 use C4::Biblio qw( GetFrameworkCode );
 use C4::Items;
 use XML::Simple;
@@ -31,10 +31,10 @@ use Koha::Biblios;
 my $query = CGI->new;
 binmode STDOUT, ':encoding(UTF-8)';
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
-unless ($status eq "ok") {
-    print $query->header(-type => 'text/xml', -status => '403 Forbidden');
-    print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { editcatalogue => 'edit_catalogue' } );
+unless ( $status eq "ok" ) {
+    print $query->header( -type => 'text/xml', -status => '403 Forbidden' );
+    print XMLout( { auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
     exit 0;
 }
 
@@ -42,22 +42,22 @@ unless ($status eq "ok") {
 my $path_info = $query->path_info();
 
 my $biblionumber = undef;
-if ($path_info =~ m!^/(\d+)$!) {
+if ( $path_info =~ m!^/(\d+)$! ) {
     $biblionumber = $1;
 } else {
-    print $query->header(-type => 'text/xml', -status => '400 Bad Request');
+    print $query->header( -type => 'text/xml', -status => '400 Bad Request' );
 }
 
 # are we retrieving, updating or deleting a bib?
-if ($query->request_method eq "GET") {
-    fetch_bib($query, $biblionumber);
-} elsif ($query->request_method eq "POST") {
-    update_bib($query, $biblionumber);
-} elsif ($query->request_method eq "DELETE") {
-    delete_bib($query, $biblionumber);
+if ( $query->request_method eq "GET" ) {
+    fetch_bib( $query, $biblionumber );
+} elsif ( $query->request_method eq "POST" ) {
+    update_bib( $query, $biblionumber );
+} elsif ( $query->request_method eq "DELETE" ) {
+    delete_bib( $query, $biblionumber );
 } else {
-    print $query->header(-type => 'text/xml', -status => '405 Method not allowed');
-    print XMLout({ error => 'Method not allowed' }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    print $query->header( -type => 'text/xml', -status => '405 Method not allowed' );
+    print XMLout( { error => 'Method not allowed' }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
     exit 0;
 }
 
@@ -85,29 +85,28 @@ sub fetch_bib {
 }
 
 sub update_bib {
-    my $query = shift;
-    my $biblionumber = shift;
-    my $biblio = Koha::Biblios->find( $biblionumber );
-    my $old_record = $biblio->metadata;
+    my $query         = shift;
+    my $biblionumber  = shift;
+    my $biblio        = Koha::Biblios->find($biblionumber);
+    my $old_record    = $biblio->metadata;
     my $frameworkcode = $query->url_param('frameworkcode') // GetFrameworkCode($biblionumber);
-    unless  (defined $old_record) {
-        print $query->header(-type => 'text/xml', -status => '404 Not Found');
+    unless ( defined $old_record ) {
+        print $query->header( -type => 'text/xml', -status => '404 Not Found' );
         return;
     }
 
     my $result = {};
-    my $inxml = $query->param('POSTDATA');
-    print $query->header(-type => 'text/xml', -charset => 'utf-8');
+    my $inxml  = $query->param('POSTDATA');
+    print $query->header( -type => 'text/xml', -charset => 'utf-8' );
 
-    my $record = eval {MARC::Record::new_from_xml( $inxml, "UTF-8", C4::Context->preference('marcflavour'))};
+    my $record        = eval { MARC::Record::new_from_xml( $inxml, "UTF-8", C4::Context->preference('marcflavour') ) };
     my $do_not_escape = 0;
     if ($@) {
         $result->{'status'} = "failed";
-        $result->{'error'} = $@;
+        $result->{'error'}  = $@;
     } else {
         my $fullrecord = $record->clone();
-        my ( $itemtag, $itemsubfield ) =
-          C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+        my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
 
         # delete any item tags
         foreach my $field ( $record->field($itemtag) ) {
@@ -118,37 +117,39 @@ sub update_bib {
             foreach my $field ( $fullrecord->field($itemtag) ) {
                 my $one_item_record = $record->clone();
                 $one_item_record->add_fields($field);
-                C4::Items::ModItemFromMarc( $one_item_record, $biblionumber,
-                    $field->subfield($itemsubfield) );
+                C4::Items::ModItemFromMarc(
+                    $one_item_record, $biblionumber,
+                    $field->subfield($itemsubfield)
+                );
             }
         }
 
         C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode );
-        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblio     = Koha::Biblios->find($biblionumber);
         my $new_record = $biblio->metadata_record( { embed_items => scalar $query->url_param('items') } );
 
-        $result->{'status'} = "ok";
+        $result->{'status'}       = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();
         $xml =~ s/<\?xml.*?\?>//i;
-        $result->{'marcxml'} =  $xml;
+        $result->{'marcxml'} = $xml;
         $do_not_escape = 1;
     }
-   
-    print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1, NoEscape => $do_not_escape); 
+
+    print XMLout( $result, NoAttr => 1, RootName => 'response', XMLDecl => 1, NoEscape => $do_not_escape );
 }
 
 sub delete_bib {
-    my $query = shift;
+    my $query        = shift;
     my $biblionumber = shift;
-    my $error = C4::Biblio::DelBiblio($biblionumber);
+    my $error        = C4::Biblio::DelBiblio($biblionumber);
 
-    if (defined $error) {
-        print $query->header(-type => 'text/xml', -status => '400 Bad request');
-        print XMLout({ error => $error }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    if ( defined $error ) {
+        print $query->header( -type => 'text/xml', -status => '400 Bad request' );
+        print XMLout( { error => $error }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
         exit 0;
     }
 
-    print $query->header(-type => 'text/xml');
-    print XMLout({ status => 'OK, biblio deleted' }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    print $query->header( -type => 'text/xml' );
+    print XMLout( { status => 'OK, biblio deleted' }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
 }

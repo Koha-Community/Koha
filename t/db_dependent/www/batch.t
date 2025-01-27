@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More; #See plan tests => \d+ below
+use Test::More;    #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -38,22 +38,20 @@ use C4::Context;
 my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 my $file =
-  $marcflavour eq 'UNIMARC'
-  ? "$testdir/data/unimarcrecord.mrc"
-  : "$testdir/data/marc21record.mrc";
+    $marcflavour eq 'UNIMARC'
+    ? "$testdir/data/unimarcrecord.mrc"
+    : "$testdir/data/marc21record.mrc";
 
 my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
-if (not defined $intranet) {
-    plan skip_all =>
-         "You must set the environment variable KOHA_INTRANET_URL to ".
-         "point this test to your staff interface. If you do not have ".
-         "KOHA_CONF set, you must also set KOHA_USER and KOHA_PASS for ".
-         "your username and password";
-}
-else {
+if ( not defined $intranet ) {
+    plan skip_all => "You must set the environment variable KOHA_INTRANET_URL to "
+        . "point this test to your staff interface. If you do not have "
+        . "KOHA_CONF set, you must also set KOHA_USER and KOHA_PASS for "
+        . "your username and password";
+} else {
     plan tests => 24;
 }
 
@@ -71,8 +69,7 @@ my $import_batch_id = $mock_zebra->load_records_ui($file);
 my $bookdescription;
 if ( $marcflavour eq 'UNIMARC' ) {
     $bookdescription = 'Jeffrey Esakov et Tom Weiss';
-}
-else {
+} else {
     $bookdescription = 'Data structures';
 }
 
@@ -81,7 +78,7 @@ $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
 $agent->field( 'login_password', $password );
 $agent->field( 'login_userid',   $user );
-$agent->field( 'branch',   '' );
+$agent->field( 'branch',         '' );
 $agent->click_ok( '', 'login to staff interface' );
 
 # Get datatable for the batch id
@@ -95,29 +92,36 @@ my $biblionumber = $jsonresponse->{data}[0]->{matched};
 
 $agent->get_ok(
     "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber",
-    'getting imported bib' );
-$agent->content_contains( 'Details for ' . $bookdescription,
-    'bib is imported' );
+    'getting imported bib'
+);
+$agent->content_contains(
+    'Details for ' . $bookdescription,
+    'bib is imported'
+);
 
 $agent->get("$intranet/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=$import_batch_id");
 $agent->form_number(5);
 $agent->click_ok( 'mainformsubmit', "revert import" );
 
 sleep(1);
+
 # FIXME - This if fragile and can fail if there is a race condition
-my $job = Koha::BackgroundJobs->search({ type => 'marc_import_revert_batch' })->last;
+my $job = Koha::BackgroundJobs->search( { type => 'marc_import_revert_batch' } )->last;
 my $i;
 while ( $job->discard_changes->status ne 'finished' ) {
     sleep(1);
     last if ++$i > 10;
 }
-is ( $job->status, 'finished', 'job is finished' );
+is( $job->status, 'finished', 'job is finished' );
 
 $agent->get_ok(
     "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber",
-    'getting reverted bib' );
-$agent->content_contains( 'The record you requested does not exist',
-    'bib is gone' );
+    'getting reverted bib'
+);
+$agent->content_contains(
+    'The record you requested does not exist',
+    'bib is gone'
+);
 
 $agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
 $jsonresponse = decode_json $agent->content;

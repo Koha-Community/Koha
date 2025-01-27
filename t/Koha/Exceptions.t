@@ -27,17 +27,15 @@ subtest 'Koha::Exceptions::Hold tests' => sub {
 
     use_ok('Koha::Exceptions::Hold');
 
-    throws_ok
-        { Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'W' ); }
-        'Koha::Exceptions::Hold::CannotSuspendFound',
+    throws_ok { Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'W' ); }
+    'Koha::Exceptions::Hold::CannotSuspendFound',
         'Exception is thrown :-D';
 
     # stringify the exception
     is( "$@", 'Found hold cannot be suspended. Status=W', 'Exception stringified correctly' );
 
-    throws_ok
-        { Koha::Exceptions::Hold::CannotSuspendFound->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Hold::CannotSuspendFound',
+    throws_ok { Koha::Exceptions::Hold::CannotSuspendFound->throw("Manual message exception") }
+    'Koha::Exceptions::Hold::CannotSuspendFound',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
@@ -48,17 +46,15 @@ subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
 
     use_ok('Koha::Exceptions::Object');
 
-    throws_ok
-        { Koha::Exceptions::Object::FKConstraint->throw( broken_fk => 'nasty', value => 'fk' ); }
-        'Koha::Exceptions::Object::FKConstraint',
+    throws_ok { Koha::Exceptions::Object::FKConstraint->throw( broken_fk => 'nasty', value => 'fk' ); }
+    'Koha::Exceptions::Object::FKConstraint',
         'Exception is thrown :-D';
 
     # stringify the exception
     is( "$@", 'Invalid parameter passed, nasty=fk does not exist', 'Exception stringified correctly' );
 
-    throws_ok
-        { Koha::Exceptions::Object::FKConstraint->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Object::FKConstraint',
+    throws_ok { Koha::Exceptions::Object::FKConstraint->throw("Manual message exception") }
+    'Koha::Exceptions::Object::FKConstraint',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 
@@ -73,11 +69,13 @@ subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
         'Koha::Exceptions::Object::BadValue exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", 'Invalid value passed, a_property=a_value expected type is datetime', 'Koha::Exceptions::Object::BadValue stringified correctly' );
+    is(
+        "$@", 'Invalid value passed, a_property=a_value expected type is datetime',
+        'Koha::Exceptions::Object::BadValue stringified correctly'
+    );
 
-    throws_ok
-        { Koha::Exceptions::Object::BadValue->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Object::BadValue',
+    throws_ok { Koha::Exceptions::Object::BadValue->throw("Manual message exception") }
+    'Koha::Exceptions::Object::BadValue',
         'Koha::Exceptions::Object::BadValue is thrown :-D';
     is( "$@", 'Manual message exception', 'Koha::Exceptions::Object::BadValue not stringified if manually passed' );
 };
@@ -88,17 +86,15 @@ subtest 'Koha::Exceptions::Password tests' => sub {
 
     use_ok('Koha::Exceptions::Password');
 
-    throws_ok
-        { Koha::Exceptions::Password::TooShort->throw( length => 4, min_length => 5 ); }
-        'Koha::Exceptions::Password::TooShort',
+    throws_ok { Koha::Exceptions::Password::TooShort->throw( length => 4, min_length => 5 ); }
+    'Koha::Exceptions::Password::TooShort',
         'Exception is thrown :-D';
 
     # stringify the exception
     is( "$@", 'Password length (4) is shorter than required (5)', 'Exception stringified correctly' );
 
-    throws_ok
-        { Koha::Exceptions::Password::TooShort->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Password::TooShort',
+    throws_ok { Koha::Exceptions::Password::TooShort->throw("Manual message exception") }
+    'Koha::Exceptions::Password::TooShort',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
@@ -110,24 +106,29 @@ subtest 'Koha::Exceptions::Metadata tests' => sub {
     use_ok('Koha::Exceptions::Metadata');
 
     my $object = Test::MockObject->new;
-    $object->mock( 'id', 'an_id' );
+    $object->mock( 'id',           'an_id' );
     $object->mock( 'biblionumber', 'a_biblionumber' );
-    $object->mock( 'format', 'a_format' );
-    $object->mock( 'schema', 'a_schema' );
+    $object->mock( 'format',       'a_format' );
+    $object->mock( 'schema',       'a_schema' );
 
-    throws_ok
-        { Koha::Exceptions::Metadata::Invalid->throw(
-            id => 'an_id', biblionumber => 'a_biblionumber', format => 'a_format',
-            schema => 'a_schema', decoding_error => 'a_nasty_error' ); }
-        'Koha::Exceptions::Metadata::Invalid',
+    throws_ok {
+        Koha::Exceptions::Metadata::Invalid->throw(
+            id     => 'an_id',    biblionumber   => 'a_biblionumber', format => 'a_format',
+            schema => 'a_schema', decoding_error => 'a_nasty_error'
+        );
+    }
+    'Koha::Exceptions::Metadata::Invalid',
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", 'Invalid data, cannot decode metadata object (biblio_metadata.id=an_id, biblionumber=a_biblionumber, format=a_format, schema=a_schema, decoding_error=\'a_nasty_error\')', 'Exception stringified correctly' );
+    is(
+        "$@",
+        'Invalid data, cannot decode metadata object (biblio_metadata.id=an_id, biblionumber=a_biblionumber, format=a_format, schema=a_schema, decoding_error=\'a_nasty_error\')',
+        'Exception stringified correctly'
+    );
 
-    throws_ok
-        { Koha::Exceptions::Metadata::Invalid->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Metadata::Invalid',
+    throws_ok { Koha::Exceptions::Metadata::Invalid->throw("Manual message exception") }
+    'Koha::Exceptions::Metadata::Invalid',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
@@ -138,17 +139,15 @@ subtest 'Koha::Exceptions::Patron::Relationship tests' => sub {
 
     use_ok('Koha::Exceptions::Patron::Relationship');
 
-    throws_ok
-        { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( no_relationship => 1 ); }
-        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+    throws_ok { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( no_relationship => 1 ); }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown :-D';
 
     # stringify the exception
     is( "$@", 'No relationship passed.', 'Exception stringified correctly' );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( relationship => 'some' ); }
-        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+    throws_ok { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( relationship => 'some' ); }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown :-D';
 
     # stringify the exception
@@ -166,14 +165,14 @@ subtest 'Koha::Exceptions::Patron::Relationship tests' => sub {
     'Koha::Exceptions::Patron::Relationship::DuplicateRelationship', 'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@",
+    is(
+        "$@",
         "There already exists a relationship for the same guarantor ($guarantor_id) and guarantee ($guarantee_id) combination",
         'Exception stringified correctly'
     );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+    throws_ok { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw("Manual message exception") }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
@@ -182,18 +181,20 @@ subtest 'Koha::Exceptions::Object::NotInstantiated tests' => sub {
 
     plan tests => 4;
 
-    throws_ok
-        { Koha::Exceptions::Object::NotInstantiated->throw(
-            method => 'brain_explode', class => 'Koha::JD' ); }
-        'Koha::Exceptions::Object::NotInstantiated',
+    throws_ok {
+        Koha::Exceptions::Object::NotInstantiated->throw( method => 'brain_explode', class => 'Koha::JD' );
+    }
+    'Koha::Exceptions::Object::NotInstantiated',
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", 'Tried to access the \'brain_explode\' method, but Koha::JD is not instantiated', 'Exception stringified correctly' );
+    is(
+        "$@", 'Tried to access the \'brain_explode\' method, but Koha::JD is not instantiated',
+        'Exception stringified correctly'
+    );
 
-    throws_ok
-        { Koha::Exceptions::Object::NotInstantiated->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Object::NotInstantiated',
+    throws_ok { Koha::Exceptions::Object::NotInstantiated->throw("Manual message exception") }
+    'Koha::Exceptions::Object::NotInstantiated',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
@@ -208,13 +209,13 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
     my $attribute = 'ATTRIBUTE';
 
     my $mocked_attribute = Test::MockObject->new();
-    $mocked_attribute->mock('code', sub { return $code } );
-    $mocked_attribute->mock('attribute', sub { return $attribute } );
+    $mocked_attribute->mock( 'code',      sub { return $code } );
+    $mocked_attribute->mock( 'attribute', sub { return $attribute } );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Attribute::NonRepeatable->throw(
-            attribute => $mocked_attribute ); }
-        'Koha::Exceptions::Patron::Attribute::NonRepeatable',
+    throws_ok {
+        Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $mocked_attribute );
+    }
+    'Koha::Exceptions::Patron::Attribute::NonRepeatable',
         'Exception is thrown :-D';
 
     # stringify the exception
@@ -224,9 +225,8 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
         'Exception stringified correctly'
     );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Patron::Attribute::NonRepeatable',
+    throws_ok { Koha::Exceptions::Patron::Attribute::NonRepeatable->throw("Manual message exception") }
+    'Koha::Exceptions::Patron::Attribute::NonRepeatable',
         'Exception is thrown :-D';
 
     is(
@@ -235,10 +235,10 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
         'Exception not stringified if manually passed'
     );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw(
-            attribute => $mocked_attribute ); }
-        'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
+    throws_ok {
+        Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( attribute => $mocked_attribute );
+    }
+    'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
         'Exception is thrown :-D';
 
     # stringify the exception
@@ -248,9 +248,8 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
         'Exception stringified correctly'
     );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
+    throws_ok { Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw("Manual message exception") }
+    'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
         'Exception is thrown :-D';
 
     is(
@@ -261,10 +260,10 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
 
     my $type = "SOME_TYPE";
 
-    throws_ok
-        { Koha::Exceptions::Patron::Attribute::InvalidType->throw(
-            type => $type ); }
-        'Koha::Exceptions::Patron::Attribute::InvalidType',
+    throws_ok {
+        Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $type );
+    }
+    'Koha::Exceptions::Patron::Attribute::InvalidType',
         'Exception is thrown :-D';
 
     # stringify the exception
@@ -274,9 +273,8 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
         'Exception stringified correctly'
     );
 
-    throws_ok
-        { Koha::Exceptions::Patron::Attribute::InvalidType->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Patron::Attribute::InvalidType',
+    throws_ok { Koha::Exceptions::Patron::Attribute::InvalidType->throw("Manual message exception") }
+    'Koha::Exceptions::Patron::Attribute::InvalidType',
         'Exception is thrown :-D';
 
     is(
@@ -294,18 +292,17 @@ subtest 'Koha::Exceptions::Patron tests' => sub {
 
     my $type = 'yahey';
 
-    throws_ok
-        { Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
-            type => $type ); }
-        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+    throws_ok {
+        Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw( type => $type );
+    }
+    'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
         'Exception is thrown :-D';
 
     # stringify the exception
     is( "$@", "Missing mandatory extended attribute (type=$type)", 'Exception stringified correctly' );
 
-    throws_ok
-        { Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw( "Manual message exception" ) }
-        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+    throws_ok { Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw("Manual message exception") }
+    'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
@@ -318,19 +315,19 @@ subtest 'Koha::Exceptions::Plugin tests' => sub {
 
     my $plugin_class = 'yahey';
 
-    throws_ok
-        { Koha::Exceptions::Plugin::InstallDied->throw(
-            plugin_class => $plugin_class ); }
-        'Koha::Exceptions::Plugin::InstallDied',
+    throws_ok {
+        Koha::Exceptions::Plugin::InstallDied->throw( plugin_class => $plugin_class );
+    }
+    'Koha::Exceptions::Plugin::InstallDied',
         'Exception is thrown :-D';
 
     # stringify the exception
     is( "$@", "Calling 'install' died for plugin $plugin_class", 'Exception stringified correctly' );
 
-    throws_ok
-        { Koha::Exceptions::Plugin::UpgradeDied->throw(
-            plugin_class => $plugin_class ); }
-        'Koha::Exceptions::Plugin::UpgradeDied',
+    throws_ok {
+        Koha::Exceptions::Plugin::UpgradeDied->throw( plugin_class => $plugin_class );
+    }
+    'Koha::Exceptions::Plugin::UpgradeDied',
         'Exception is thrown :-D';
 
     # stringify the exception
@@ -349,6 +346,7 @@ subtest 'Koha::Exceptions::Booking tests' => sub {
 
     # stringify the exception
     is( "$@", '[Adding or updating the booking would result in a clash]', 'Exception stringified correctly' );
+
     # FIXME: I don't understand why the stringified message here gets wrapped in square brackets...
 };
 
@@ -368,9 +366,8 @@ subtest 'Koha::Exception tests' => sub {
 
     my $exception_message = "This is a message";
 
-    throws_ok
-        { Koha::Exceptions::Weird->throw( $exception_message ) }
-        'Koha::Exception',
+    throws_ok { Koha::Exceptions::Weird->throw($exception_message) }
+    'Koha::Exception',
         'Exception is thrown :-D';
 
     is(
@@ -379,9 +376,8 @@ subtest 'Koha::Exception tests' => sub {
         'Exception not stringified if manually passed'
     );
 
-    throws_ok
-        { Koha::Exceptions::Weird->throw( a => "A", b => "B" ) }
-        'Koha::Exception',
+    throws_ok { Koha::Exceptions::Weird->throw( a => "A", b => "B" ) }
+    'Koha::Exception',
         'Exception is thrown :-D';
 
     is(
@@ -390,9 +386,8 @@ subtest 'Koha::Exception tests' => sub {
         'Exception stringified correctly'
     );
 
-    throws_ok
-        { Koha::Exceptions::Weird->throw( a => "A" ) }
-        'Koha::Exception',
+    throws_ok { Koha::Exceptions::Weird->throw( a => "A" ) }
+    'Koha::Exception',
         'Exception is thrown :-D';
 
     is(
@@ -401,9 +396,8 @@ subtest 'Koha::Exception tests' => sub {
         'Exception stringified correctly, b skipped entirely'
     );
 
-    throws_ok
-        { Koha::Exceptions::Weird->throw() }
-        'Koha::Exception',
+    throws_ok { Koha::Exceptions::Weird->throw() }
+    'Koha::Exception',
         'Exception is thrown :-D';
 
     is(
@@ -418,9 +412,10 @@ subtest 'Passing parameters when throwing exception' => sub {
 
     use Koha::Exceptions;
 
-    throws_ok { Koha::Exceptions::WrongParameter->throw( name => 'wrong1', type => 'ARRAY', value => [ 1, 2 ] ) } qr/Koha::Exceptions::WrongParameter/, 'Exception thrown';
+    throws_ok { Koha::Exceptions::WrongParameter->throw( name => 'wrong1', type => 'ARRAY', value => [ 1, 2 ] ) }
+    qr/Koha::Exceptions::WrongParameter/, 'Exception thrown';
     my $desc = $@;
-    like( $desc, qr/name => wrong1/, 'Found name' );
-    like( $desc, qr/type => ARRAY/, 'Found type' );
+    like( $desc, qr/name => wrong1/,        'Found name' );
+    like( $desc, qr/type => ARRAY/,         'Found type' );
     like( $desc, qr/value => ARRAY\(\w+\)/, 'Found value' );
 };

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,17 +20,17 @@
 use Modern::Perl;
 
 use Koha::Util::FrameworkPlugin qw(wrapper);
-use C4::Auth qw( get_template_and_user );
-use CGI qw ( -utf8 );
+use C4::Auth                    qw( get_template_and_user );
+use CGI                         qw ( -utf8 );
 use C4::Context;
 
 use C4::Search;
 use C4::Output qw( output_html_with_http_headers );
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number) = @_;
-my $function_name= $field_number;
-my $res="
+    my ( $dbh, $record, $tagslib, $field_number ) = @_;
+    my $function_name = $field_number;
+    my $res           = "
 <script>
 function Clic$function_name(event) {
     event.preventDefault();
@@ -43,26 +42,29 @@ function Clic$function_name(event) {
 </script>
 ";
 
-return ($function_name,$res);
+    return ( $function_name, $res );
 }
 
-
 sub plugin {
-my ($input) = @_;
-	my $index= $input->param('index');
-	my $result= $input->param('result');
+    my ($input) = @_;
+    my $index   = $input->param('index');
+    my $result  = $input->param('result');
 
+    my $dbh = C4::Context->dbh;
 
-	my $dbh = C4::Context->dbh;
-
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_128b.tt",
-			     query => $input,
-			     type => "intranet",
-			     flagsrequired => {editcatalogue => '*'},
-			     });
-	my $f1 = substr($result,0,2); $f1 = wrapper( $f1 ) if $f1;
-	$template->param(index => $index,
-			 "f1$f1" => 1);
-        output_html_with_http_headers $input, $cookie, $template->output;
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_128b.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
+    my $f1 = substr( $result, 0, 2 );
+    $f1 = wrapper($f1) if $f1;
+    $template->param(
+        index   => $index,
+        "f1$f1" => 1
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }

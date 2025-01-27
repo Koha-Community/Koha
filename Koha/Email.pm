@@ -23,7 +23,7 @@ use Modern::Perl;
 use Email::Address;
 use Email::MessageID;
 use Email::MIME;
-use List::Util qw( pairs );
+use List::Util   qw( pairs );
 use Scalar::Util qw( blessed );
 
 use Koha::Exceptions;
@@ -59,7 +59,7 @@ sub new_from_string {
         unless $email_string;
 
     my $self = $class->SUPER::new();
-    my $mime = Email::MIME->new( $email_string );
+    my $mime = Email::MIME->new($email_string);
     $self->{email} = $mime;
 
     return $self;
@@ -113,8 +113,7 @@ sub create {
 
     if ( C4::Context->preference('SendAllEmailsTo') ) {
         $args->{to} = C4::Context->preference('SendAllEmailsTo');
-    }
-    else {
+    } else {
         $args->{to} = $params->{to};
     }
 
@@ -141,11 +140,11 @@ sub create {
 
     foreach my $address ( keys %{$addresses} ) {
         Koha::Exceptions::BadParameter->throw(
-            error => "Invalid '$address' parameter: " . $addresses->{$address},
+            error     => "Invalid '$address' parameter: " . $addresses->{$address},
             parameter => $address
-          )
-          if $addresses->{$address}
-          and !Koha::Email->is_valid( $addresses->{$address} );
+            )
+            if $addresses->{$address}
+            and !Koha::Email->is_valid( $addresses->{$address} );
     }
 
     $args->{cc} = $addresses->{cc}
@@ -154,6 +153,7 @@ sub create {
         if $addresses->{bcc};
 
     my $email;
+
     # FIXME: This is ugly, but aids backportability
     # TODO: Remove this and move address and default headers handling
     #       to separate subs to be (re)used
@@ -165,9 +165,8 @@ sub create {
         $email->bcc( $args->{bcc} )           if $args->{bcc};
         $email->reply_to( $args->{reply_to} ) if $args->{reply_to};
         $email->subject( $args->{subject} )   if $args->{subject};
-    }
-    else {
-        $email = $self->SUPER::new( $args );
+    } else {
+        $email = $self->SUPER::new($args);
     }
 
     $email->header( 'Reply-To', $addresses->{reply_to} )
@@ -184,8 +183,7 @@ sub create {
 
     if ( $params->{text_body} ) {
         $email->text_body( $params->{text_body}, %{ $params->{body_params} } );
-    }
-    elsif ( $params->{html_body} ) {
+    } elsif ( $params->{html_body} ) {
         $email->html_body( $params->{html_body}, %{ $params->{body_params} } );
     }
 
@@ -218,8 +216,8 @@ sub send_or_die {
         my @headers = $self->email->header_str_pairs;
         foreach my $pair ( pairs @headers ) {
             my ( $header, $value ) = @$pair;
-            push @recipients, split (', ', $value)
-                if grep { $_ eq $header } ('To', 'Cc', 'Bcc');
+            push @recipients, split( ', ', $value )
+                if grep { $_ eq $header } ( 'To', 'Cc', 'Bcc' );
         }
 
         # Remove the Bcc header
@@ -231,7 +229,7 @@ sub send_or_die {
 
     unless ( $args->{from} ) {    # don't do it if passed an explicit 'from' param
         $args->{from} = $self->email->header_str('Sender');
-        $self->email->header_str_set('Sender'); # remove Sender header
+        $self->email->header_str_set('Sender');    # remove Sender header
     }
 
     $self->SUPER::send_or_die($args);

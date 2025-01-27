@@ -51,9 +51,7 @@ sub add {
         unless ( $item_group->biblio_id eq $c->param('biblio_id') ) {
             return $c->render(
                 status  => 409,
-                openapi => {
-                    error => 'Item group does not belong to passed biblio_id'
-                }
+                openapi => { error => 'Item group does not belong to passed biblio_id' }
             );
         }
 
@@ -61,7 +59,7 @@ sub add {
         my $body    = $c->req->json;
         my $item_id = $body->{item_id};
 
-        $item_group->add_item({ item_id => $item_id });
+        $item_group->add_item( { item_id => $item_id } );
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $item_id );
 
@@ -69,35 +67,26 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($item_group),
         );
-    }
-    catch {
+    } catch {
         if ( blessed($_) ) {
 
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 if ( $_->broken_fk eq 'itemnumber' ) {
                     return $c->render(
                         status  => 409,
-                        openapi => {
-                            error => "Given item_id does not exist"
-                        }
+                        openapi => { error => "Given item_id does not exist" }
                     );
-                }
-                elsif ( $_->broken_fk eq 'biblio_id' ) {
+                } elsif ( $_->broken_fk eq 'biblio_id' ) {
                     return $c->render(
                         status  => 409,
-                        openapi => {
-                            error => "Given item_id does not belong to the item group's biblio"
-                        }
+                        openapi => { error => "Given item_id does not belong to the item group's biblio" }
                     );
                 }
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
 
                 return $c->render(
                     status  => 409,
-                    openapi => {
-                        error => "The given item_id is already linked to the item group"
-                    }
+                    openapi => { error => "The given item_id is already linked to the item group" }
                 );
             }
         }
@@ -125,12 +114,10 @@ sub delete {
         }
     );
 
-    unless ( $item_link ) {
+    unless ($item_link) {
         return $c->render(
             status  => 404,
-            openapi => {
-                error => 'No such item group <-> item relationship'
-            }
+            openapi => { error => 'No such item group <-> item relationship' }
         );
     }
 

@@ -31,32 +31,41 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder        = t::lib::TestBuilder->new;
 my $num_of_baskets = Koha::Acquisition::Baskets->search->count;
 
-my $bookseller = Koha::Acquisition::Bookseller->new({
-    name => 'Bookseller1',
-})->store;
+my $bookseller = Koha::Acquisition::Bookseller->new(
+    {
+        name => 'Bookseller1',
+    }
+)->store;
 
-my $basket = Koha::Acquisition::Basket->new({
-    basketname => 'Basket1',
-    booksellerid => $bookseller->id,
-    is_standing => 0,
-})->store;
+my $basket = Koha::Acquisition::Basket->new(
+    {
+        basketname   => 'Basket1',
+        booksellerid => $bookseller->id,
+        is_standing  => 0,
+    }
+)->store;
 
-my $basket2 = Koha::Acquisition::Basket->new({
-    basketname => 'BasketToDelete',
-    booksellerid => $bookseller->id,
-    is_standing => 0,
-})->store;
+my $basket2 = Koha::Acquisition::Basket->new(
+    {
+        basketname   => 'BasketToDelete',
+        booksellerid => $bookseller->id,
+        is_standing  => 0,
+    }
+)->store;
 
-like( $basket->basketno, qr|^\d+$|, 'Adding a new basket should have set the basketno');
+like( $basket->basketno, qr|^\d+$|, 'Adding a new basket should have set the basketno' );
 
 my $retrieved_basket = Koha::Acquisition::Baskets->find( $basket->basketno );
 is( $retrieved_basket->basketname, $basket->basketname, 'Find a basket by id should return the correct basket' );
 
 my $retrieved_bookseller = $retrieved_basket->bookseller;
-is( $retrieved_bookseller->name, $bookseller->name, "Finding the bookseller of a basket by the basket's booksellerid should work as expected" );
+is(
+    $retrieved_bookseller->name, $bookseller->name,
+    "Finding the bookseller of a basket by the basket's booksellerid should work as expected"
+);
 
 $basket2->delete;
 is( Koha::Acquisition::Baskets->search->count, $num_of_baskets + 1, 'Delete should have deleted the basket' );

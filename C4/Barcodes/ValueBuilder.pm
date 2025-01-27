@@ -25,11 +25,12 @@ use C4::Context;
 sub get_barcode {
     my ($args) = @_;
     my $nextnum;
+
     # not the best, two catalogers could add the same barcode easily this way :/
     my $query = "select max(cast(barcode as unsigned)) from items";
-    my $sth = C4::Context->dbh->prepare($query);
+    my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute();
-    while (my ($count)= $sth->fetchrow_array) {
+    while ( my ($count) = $sth->fetchrow_array ) {
         $nextnum = $count;
     }
     $nextnum++;
@@ -42,19 +43,19 @@ package C4::Barcodes::ValueBuilder::hbyymmincr;
 use C4::Context;
 
 sub get_barcode {
-    my ($args) = @_;
+    my ($args)  = @_;
     my $nextnum = 0;
-    my $year = substr($args->{year}, -2);
-    my $month = $args->{mon};
-    my $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
-    my $sth = C4::Context->dbh->prepare($query);
+    my $year    = substr( $args->{year}, -2 );
+    my $month   = $args->{mon};
+    my $query   = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
+    my $sth     = C4::Context->dbh->prepare($query);
     $sth->execute("^[-a-zA-Z]{1,}$year$month");
-    while (my ($count)= $sth->fetchrow_array) {
+    while ( my ($count) = $sth->fetchrow_array ) {
         $nextnum = $count if $count;
-        $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 9999 items per month
+        $nextnum = 0      if $nextnum == 9999;    # this sequence only allows for cataloging 9999 items per month
     }
     $nextnum++;
-    $nextnum = sprintf("%0*d", "4",$nextnum);
+    $nextnum = sprintf( "%0*d", "4", $nextnum );
     $nextnum = $year . $month . $nextnum;
     my $scr = qq~
         let elt = \$("#"+id);
@@ -73,7 +74,6 @@ sub get_barcode {
     return $nextnum, $scr;
 }
 
-
 package C4::Barcodes::ValueBuilder::annual;
 use C4::Context;
 
@@ -81,19 +81,18 @@ sub get_barcode {
     my ($args) = @_;
     my $nextnum;
     my $query = "select max(cast( substring_index(barcode, '-',-1) as signed)) from items where barcode like ?";
-    my $sth=C4::Context->dbh->prepare($query);
-    $sth->execute($args->{year} . '-%');
-    while (my ($count)= $sth->fetchrow_array) {
+    my $sth   = C4::Context->dbh->prepare($query);
+    $sth->execute( $args->{year} . '-%' );
+    while ( my ($count) = $sth->fetchrow_array ) {
         $nextnum = $count if $count;
     }
     $nextnum++;
-    $nextnum = sprintf("%0*d", "4",$nextnum);
+    $nextnum = sprintf( "%0*d", "4", $nextnum );
     $nextnum = "$args->{year}-$nextnum";
     return $nextnum;
 }
 
 1;
-
 
 =head1 Barcodes::ValueBuilder
 

@@ -31,7 +31,7 @@ BEGIN {
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
+my $builder         = t::lib::TestBuilder->new;
 my $nb_of_shortcuts = Koha::KeyboardShortcuts->search->count;
 
 my $shortcut_hash = {
@@ -40,12 +40,12 @@ my $shortcut_hash = {
 };
 
 my $new_shortcut = Koha::KeyboardShortcut->new($shortcut_hash)->store;
-is( Koha::KeyboardShortcuts->count, $nb_of_shortcuts + 1, 'Adding a new shortcut increases count');
+is( Koha::KeyboardShortcuts->count, $nb_of_shortcuts + 1, 'Adding a new shortcut increases count' );
 
-my $found_shortcut = Koha::KeyboardShortcuts->find( "this_cut" );
-is_deeply( $found_shortcut->unblessed, $shortcut_hash, 'We find the right object');
+my $found_shortcut = Koha::KeyboardShortcuts->find("this_cut");
+is_deeply( $found_shortcut->unblessed, $shortcut_hash, 'We find the right object' );
 
 $found_shortcut->delete;
-is( Koha::KeyboardShortcuts->count, $nb_of_shortcuts, 'Deleting a new shortcut works');
+is( Koha::KeyboardShortcuts->count, $nb_of_shortcuts, 'Deleting a new shortcut works' );
 
 $schema->storage->txn_rollback;

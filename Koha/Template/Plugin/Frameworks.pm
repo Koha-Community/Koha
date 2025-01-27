@@ -44,7 +44,6 @@ is not found
 
 =cut
 
-
 sub GetName {
     my ( $self, $frameworkcode ) = @_;
     return q{} unless defined $frameworkcode;

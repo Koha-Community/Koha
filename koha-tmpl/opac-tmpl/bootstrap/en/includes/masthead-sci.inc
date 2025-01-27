@@ -20,9 +20,7 @@
 
             <ul class="navbar-nav ml-auto">
                 [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
-                    <li class="nav-item">
-                        [% INCLUDE 'langmenu.inc' %]
-                    </li>
+                    <li class="nav-item"> [% INCLUDE 'langmenu.inc' %] </li>
                 [% END # / IF opaclanguagedisplay %]
 
                 <li class="nav-item">
@@ -33,21 +31,19 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a id="sci_logout" href="/cgi-bin/koha/sci/sci-main.pl?logout.x=1" class="nav-link logout">
-                        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log out
-                    </a>
+                    <a id="sci_logout" href="/cgi-bin/koha/sci/sci-main.pl?logout.x=1" class="nav-link logout"> <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log out </a>
                 </li>
             </ul>
-        </nav> <!-- /navbar -->
+        </nav>
+        <!-- /navbar -->
 
         [% IF ( OpacHeader ) %]
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col">
-                        [% PROCESS koha_news_block news => OpacHeader %]
-                    </div>
+                    <div class="col"> [% PROCESS koha_news_block news => OpacHeader %] </div>
                 </div>
             </div>
         [% END # /IF opacheader %]
-
-    </div> <!-- /navbar -->
+    </div>
+    <!-- /navbar -->
+</div>

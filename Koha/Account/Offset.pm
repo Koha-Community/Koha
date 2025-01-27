@@ -17,7 +17,6 @@ package Koha::Account::Offset;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Account::Lines;
 
@@ -44,10 +43,10 @@ Returns the related accountline that increased the amount owed by the patron.
 =cut
 
 sub debit {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $debit_rs = $self->_result->debit;
     return unless $debit_rs;
-    return Koha::Account::Line->_new_from_dbic( $debit_rs );
+    return Koha::Account::Line->_new_from_dbic($debit_rs);
 }
 
 =head3 credit
@@ -59,10 +58,10 @@ Returns the related accountline that decreased the amount owed by the patron.
 =cut
 
 sub credit {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $credit_rs = $self->_result->credit;
     return unless $credit_rs;
-    return Koha::Account::Line->_new_from_dbic( $credit_rs );
+    return Koha::Account::Line->_new_from_dbic($credit_rs);
 }
 
 =head3 _type

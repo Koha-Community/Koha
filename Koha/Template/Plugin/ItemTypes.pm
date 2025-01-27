@@ -30,12 +30,13 @@ sub GetDescription {
     return q{} unless defined $itemtypecode;
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
-    my $cache_key    = $want_parent ? "Itemtype_parent_description:".$itemtypecode : "Itemtype_description:" . $itemtypecode;
+    my $cache_key =
+        $want_parent ? "Itemtype_parent_description:" . $itemtypecode : "Itemtype_description:" . $itemtypecode;
 
-    my $cached       = $memory_cache->get_from_cache($cache_key);
+    my $cached = $memory_cache->get_from_cache($cache_key);
     return $cached if $cached;
 
-    my $itemtype = Koha::ItemTypes->find( $itemtypecode );
+    my $itemtype = Koha::ItemTypes->find($itemtypecode);
     unless ($itemtype) {
         $memory_cache->set_in_cache( $cache_key, q{} );
         return q{};
@@ -44,7 +45,10 @@ sub GetDescription {
     my $parent;
     $parent = $itemtype->parent if $want_parent;
 
-    my $description = $parent ? $parent->translated_description . "->" . $itemtype->translated_description : $itemtype->translated_description;
+    my $description =
+          $parent
+        ? $parent->translated_description . "->" . $itemtype->translated_description
+        : $itemtype->translated_description;
     $memory_cache->set_in_cache( $cache_key, $description );
 
     return $description;

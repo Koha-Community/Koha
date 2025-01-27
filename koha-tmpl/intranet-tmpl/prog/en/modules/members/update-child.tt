@@ -3,82 +3,82 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Choose adult category") | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Choose adult category") | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_update-child" class="pat">
-    <div class="main container-fluid">
+<div class="main container-fluid">
+    [% IF ( MULTI ) %]
+        <h1> Choose adult category </h1>
 
-[% IF ( MULTI ) %]
-
-    <h1> Choose adult category </h1>
-
-    [% IF patron_categories %]
-        <form method="post" id="updatechildf" action="update-child.pl">
-            [% INCLUDE 'csrf-token.inc' %]
-            <fieldset>
-                <table id="catst">
-                    <thead>
-                        <tr>
-                        <th>&nbsp;</th>
-                        <th>Code</th>
-                        <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH patron_category IN patron_categories %]
+        [% IF patron_categories %]
+            <form method="post" id="updatechildf" action="update-child.pl">
+                [% INCLUDE 'csrf-token.inc' %]
+                <fieldset>
+                    <table id="catst">
+                        <thead>
                             <tr>
-                                <td>
-                                    <input type="radio" id="catcode[% patron_category.categorycode | html %]" name="catcode" value="[% patron_category.categorycode | html %]" />
-                                </td>
-                                <td>[% patron_category.categorycode | html %]</td>
-                                <td><label for="catcode[% patron_category.categorycode | html %]"><strong>[% patron_category.description | html %]</strong></label></td>
+                                <th>&nbsp;</th>
+                                <th>Code</th>
+                                <th>Description</th>
                             </tr>
-                        [% END %]
-                    </tbody>
-                </table>
-                <input type="hidden" name="op" value="cud-update" />
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                <input type="hidden" name="cattype" value="[% cattype | html %]" />
-            </fieldset>
-            <nav class="navbar navbar-default fixed-bottom">
-                <div class="container-fluid">
-                    <fieldset class="action">
-                        <input class="btn btn-primary" type="submit" value="Submit" />
-                        <button type="button" class="btn btn-default close_window">Cancel</button>
-                    </fieldset>
-                </div>
-            </nav>
-        </form>
+                        </thead>
+                        <tbody>
+                            [% FOREACH patron_category IN patron_categories %]
+                                <tr>
+                                    <td>
+                                        <input type="radio" id="catcode[% patron_category.categorycode | html %]" name="catcode" value="[% patron_category.categorycode | html %]" />
+                                    </td>
+                                    <td>[% patron_category.categorycode | html %]</td>
+                                    <td
+                                        ><label for="catcode[% patron_category.categorycode | html %]"><strong>[% patron_category.description | html %]</strong></label></td
+                                    >
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="op" value="cud-update" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                    <input type="hidden" name="cattype" value="[% cattype | html %]" />
+                </fieldset>
+                <nav class="navbar navbar-default fixed-bottom">
+                    <div class="container-fluid">
+                        <fieldset class="action">
+                            <input class="btn btn-primary" type="submit" value="Submit" />
+                            <button type="button" class="btn btn-default close_window">Cancel</button>
+                        </fieldset>
+                    </div>
+                </nav>
+            </form>
+        [% END %]
     [% END %]
-[% END %]
-</div> <!-- /.main.container-fluid -->
-
+</div>
+<!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-
-        $(document).ready(function() {
-            $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "order": [[ 2, "asc" ]],
-                "columnDefs": [
-                    { "targets": [ 0 ], "orderable": false, "searchable":  false }
-                ],
-                "paginate": false
-            }));
+        $(document).ready(function () {
+            $("#catst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    dom: "t",
+                    order: [[2, "asc"]],
+                    columnDefs: [{ targets: [0], orderable: false, searchable: false }],
+                    paginate: false,
+                })
+            );
             $("#updatechildf").validate({
                 rules: {
                     catcode: {
                         required: true,
                     },
-                }
+                },
             });
         });
     </script>

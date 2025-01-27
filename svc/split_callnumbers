@@ -8,16 +8,16 @@ use C4::ClassSplitRoutine::RegEx;
 our ( $query, $response ) = C4::Service->init( parameters => 'parameters_remaining_permissions' );
 
 sub get_split_callnumbers {
-    my $regexs = from_json( $query->param('regexs') );
-    my $c = $query->param('callnumbers');
+    my $regexs      = from_json( $query->param('regexs') );
+    my $c           = $query->param('callnumbers');
     my @callnumbers = split "\n", $c;
     my @callnumbers_split;
-    for my $callnumber ( @callnumbers ) {
-        my @lines = C4::ClassSplitRoutine::RegEx::split_callnumber($callnumber, $regexs);
+    for my $callnumber (@callnumbers) {
+        my @lines = C4::ClassSplitRoutine::RegEx::split_callnumber( $callnumber, $regexs );
         push @callnumbers_split, { inline => $callnumber, split => \@lines };
     }
     $response->param( split_callnumbers => \@callnumbers_split );
-    C4::Service->return_success( $response );
+    C4::Service->return_success($response);
 }
 
 C4::Service->dispatch(

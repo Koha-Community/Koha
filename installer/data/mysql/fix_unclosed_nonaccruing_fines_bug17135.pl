@@ -17,18 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 
 use C4::Context;
 use C4::Overdues qw/CalcFine/;
-use C4::Log qw( logaction );
+use C4::Log      qw( logaction );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Getopt::Long qw( GetOptions );
 
-my ($help, $verbose, $confirm, $log, $stdout_log);
+my ( $help, $verbose, $confirm, $log, $stdout_log );
 
 GetOptions(
     'h|help'    => \$help,
@@ -59,10 +58,12 @@ ENDUSAGE
         exit 0;
     }
 
-    Bug_17135_fix({
-        'verbose' => $verbose, 'log' => $log,
-        'confirm' => $confirm, 'stdout_log' => $stdout_log
-    });
+    Bug_17135_fix(
+        {
+            'verbose' => $verbose, 'log'        => $log,
+            'confirm' => $confirm, 'stdout_log' => $stdout_log
+        }
+    );
 
     exit 0;
 }
@@ -70,37 +71,37 @@ ENDUSAGE
 sub Bug_17135_fix {
     my $params = shift;
 
-    my $verbose = $params->{'verbose'};
-    my $log = $params->{'log'};
-    my $confirm = $params->{'confirm'};
+    my $verbose    = $params->{'verbose'};
+    my $log        = $params->{'log'};
+    my $confirm    = $params->{'confirm'};
     my $stdout_log = $params->{'stdout_log'};
 
     my $control = C4::Context->preference('CircControl');
-    my $mode = C4::Context->preference('finesMode');
-    my $today = dt_from_string();
-    my $dbh = C4::Context->dbh;
+    my $mode    = C4::Context->preference('finesMode');
+    my $today   = dt_from_string();
+    my $dbh     = C4::Context->dbh;
 
     ## fetch the unclosed FU fines linked to the issues by issue_id
     my $acclines = getFinesForChecking();
 
-    Warn("Got ".scalar(@$acclines)." FU accountlines to check") if $verbose;
+    Warn( "Got " . scalar(@$acclines) . " FU accountlines to check" ) if $verbose;
 
-    my $different_dates_cnt = 0;
+    my $different_dates_cnt       = 0;
     my $not_due_not_accruning_cnt = 0;
-    my $due_not_accruning_cnt = 0;
-    my $forfixing = [];
+    my $due_not_accruning_cnt     = 0;
+    my $forfixing                 = [];
     my $old_date_pattern;
     for my $fine (@$acclines) {
         my $datedue = dt_from_string( $fine->{date_due} );
-        my $due = output_pref($datedue);
+        my $due     = output_pref($datedue);
         $fine->{current_due_date} = $due;
         my $due_qr = qr/$due/;
         ## if the dates in fine description and in the issue record match,
         ## this is a legit post-Bug Bug 15675 accruing overdue fine
         ## which does not require any correction
-        next if ($fine->{description} =~ /$due_qr/);
+        next if ( $fine->{description} =~ /$due_qr/ );
 
-        if( !$old_date_pattern ) {
+        if ( !$old_date_pattern ) {
             ## for extracting old due date from fine description
             ## not used for fixing anything, logging/debug purposes only
             $old_date_pattern = $due;
@@ -108,7 +109,7 @@ sub Bug_17135_fix {
             $old_date_pattern =~ s/[0-9]/\\d/g;
             $old_date_pattern = qr/$old_date_pattern/;
         }
-        if ($fine->{description} =~ / ($old_date_pattern)$/) {
+        if ( $fine->{description} =~ / ($old_date_pattern)$/ ) {
             my $old_date_due = $1;
             $fine->{old_date_due} = $old_date_due;
             ### Warn("'$due' vs '$old_date_due'") if $verbose;
@@ -118,10 +119,10 @@ sub Bug_17135_fix {
         $different_dates_cnt++;
         ## after the last renewal, item is no longer due = it's not accruing,
         ## fine still needs to be closed
-        unless ($fine->{item_is_due}) {
+        unless ( $fine->{item_is_due} ) {
             $fine->{log_entry} = 'item not due, fine not accruing';
             $not_due_not_accruning_cnt++;
-            push(@$forfixing, $fine);
+            push( @$forfixing, $fine );
             next;
         }
 
@@ -131,13 +132,15 @@ sub Bug_17135_fix {
         {
             my $statement;
             if ( C4::Context->preference('item-level_itypes') ) {
-                $statement = "SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode, items.itemlost, items.replacementprice
+                $statement =
+                    "SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode, items.itemlost, items.replacementprice
                     FROM issues
                     LEFT JOIN items USING (itemnumber)
                     WHERE date_due < NOW() AND issue_id = ?
                 ";
             } else {
-                $statement = "SELECT issues.*, biblioitems.itemtype, items.itype, items.homebranch, items.barcode, items.itemlost, replacementprice
+                $statement =
+                    "SELECT issues.*, biblioitems.itemtype, items.itype, items.homebranch, items.barcode, items.itemlost, replacementprice
                     FROM issues
                     LEFT JOIN items USING (itemnumber)
                     LEFT JOIN biblioitems USING (biblioitemnumber)
@@ -146,21 +149,21 @@ sub Bug_17135_fix {
             }
 
             my $sth = $dbh->prepare($statement);
-            $sth->execute($fine->{issue_id});
-            my $overdues = $sth->fetchall_arrayref({});
-            last if (@$overdues != 1);
+            $sth->execute( $fine->{issue_id} );
+            my $overdues = $sth->fetchall_arrayref( {} );
+            last if ( @$overdues != 1 );
             my $overdue = $overdues->[0];
 
             ### last if $overdue->{itemlost}; ## arguable
             my $patron = Koha::Patron->find( $overdue->{borrowernumber} );
             my $branchcode =
-             ( $control eq 'ItemHomeLibrary' ) ? $overdue->{homebranch}
-             : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
-             :                                     $overdue->{branchcode};
+                  ( $control eq 'ItemHomeLibrary' ) ? $overdue->{homebranch}
+                : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
+                :                                     $overdue->{branchcode};
 
             my ($amount) = CalcFine( $overdue, $patron->categorycode, $branchcode, $datedue, $today );
             ### Warn("CalcFine() returned '$amount'");
-            last if ($amount > 0); ## accruing fine, skip closing
+            last if ( $amount > 0 );    ## accruing fine, skip closing
 
             ## If we are here: item is due again, but fine is not accruing
             ## yet (overdue may be in the grace period, 1st charging period
@@ -172,48 +175,48 @@ sub Bug_17135_fix {
         if ($is_not_accruing) {
             $fine->{log_entry} = 'item due, fine not accruing yet';
             $due_not_accruning_cnt++;
-            push(@$forfixing, $fine);
-        };
+            push( @$forfixing, $fine );
+        }
     }
 
-    if( $verbose ) {
-        Warn( "Fine records with mismatched old vs current due dates: $different_dates_cnt" );
-        Warn( "Non-accruing accountlines FU records (item not due): ".$not_due_not_accruning_cnt );
-        Warn( "Non-accruing accountlines FU records (item due): ".$due_not_accruning_cnt );
+    if ($verbose) {
+        Warn("Fine records with mismatched old vs current due dates: $different_dates_cnt");
+        Warn( "Non-accruing accountlines FU records (item not due): " . $not_due_not_accruning_cnt );
+        Warn( "Non-accruing accountlines FU records (item due): " . $due_not_accruning_cnt );
     }
 
     my $updated_cnt = 0;
-    my $update_sql = "UPDATE accountlines SET accounttype = 'F' WHERE accounttype = 'FU' AND accountlines_id = ? LIMIT 1";
+    my $update_sql =
+        "UPDATE accountlines SET accounttype = 'F' WHERE accounttype = 'FU' AND accountlines_id = ? LIMIT 1";
     for my $fine (@$forfixing) {
-        my $logentry = "Closing old FU fine (Bug 17135); accountlines_id=".$fine->{accountlines_id};
-        $logentry .= " issue_id=".$fine->{issue_id}." amount=".$fine->{amount};
-        $logentry .= "; due dates (old, current): '".$fine->{old_date_due}."', '".$fine->{current_due_date}."'";
-        $logentry .= "; reason: ".$fine->{log_entry};
-        print($logentry."\n") if ($stdout_log);
+        my $logentry = "Closing old FU fine (Bug 17135); accountlines_id=" . $fine->{accountlines_id};
+        $logentry .= " issue_id=" . $fine->{issue_id} . " amount=" . $fine->{amount};
+        $logentry .= "; due dates (old, current): '" . $fine->{old_date_due} . "', '" . $fine->{current_due_date} . "'";
+        $logentry .= "; reason: " . $fine->{log_entry};
+        print( $logentry. "\n" ) if ($stdout_log);
 
-        next unless ($confirm && $mode eq 'production');
-        my $rows_affected = $dbh->do($update_sql, undef, $fine->{accountlines_id});
+        next unless ( $confirm && $mode eq 'production' );
+        my $rows_affected = $dbh->do( $update_sql, undef, $fine->{accountlines_id} );
         $updated_cnt += $rows_affected;
-        logaction("FINES", "FU", $fine->{borrowernumber}, $logentry) if ($log);
+        logaction( "FINES", "FU", $fine->{borrowernumber}, $logentry ) if ($log);
     }
 
     # Regardless of verbose, we report at least a number here
-    if( @$forfixing > 0 ) {
-        if( $confirm && $mode eq 'production') {
-            Warn( "Database update done, $updated_cnt".
-                ( @$forfixing == $updated_cnt? "": ( "/". @$forfixing )).
-                " fine records closed successfully." );
+    if ( @$forfixing > 0 ) {
+        if ( $confirm && $mode eq 'production' ) {
+            Warn(     "Database update done, $updated_cnt"
+                    . ( @$forfixing == $updated_cnt ? "" : ( "/" . @$forfixing ) )
+                    . " fine records closed successfully." );
         } else {
-            Warn( "Dry run (test only mode), skipping ". @$forfixing.
-                " fine records." );
+            Warn( "Dry run (test only mode), skipping " . @$forfixing . " fine records." );
         }
     } else {
-        Warn( "No fine records needed to be fixed" );
+        Warn("No fine records needed to be fixed");
     }
 }
 
 sub getFinesForChecking {
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "SELECT acc.*, iss.date_due,
         IF(iss.date_due < NOW(), 1, 0) AS item_is_due
         FROM accountlines acc
@@ -227,9 +230,9 @@ sub getFinesForChecking {
 
     my $sth = $dbh->prepare($query);
     $sth->execute();
-    return $sth->fetchall_arrayref({});
+    return $sth->fetchall_arrayref( {} );
 }
 
 sub Warn {
-    print join("\n", @_, '');
+    print join( "\n", @_, '' );
 }

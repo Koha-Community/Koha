@@ -5,35 +5,34 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Recalls history for") | html %] [% INCLUDE 'patron-title.inc' %]
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Recalls history for") | html %]
+        [% INCLUDE 'patron-title.inc' %]
+        [% t("Patrons") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="recalls_history" class="pat">
-    [% WRAPPER 'header.inc' %]
-        [% INCLUDE 'patron-search-header.inc' %]
-    [% END %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'patron-search-header.inc' %]
+[% END %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-        <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo;
-        Recalls history for [% INCLUDE 'patron-title.inc' %]
-    </div>
-    [% WRAPPER 'main-container.inc' aside='circ-menu' %]
-                    [% INCLUDE 'members-toolbar.inc' %]
-                    <h1>Recalls history</h1>
-                    [% IF Koha.Preference('UseRecalls') %]
-                        <input type="checkbox" id="hide_old" name="hide_old" checked="checked">
-                        <label for="hide_old">Show old recalls</label>
-                        [% INCLUDE 'recalls.inc' %]
-                    [% ELSE %]
-                         <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
-                    [% END %]
+<div id="breadcrumbs"> <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Recalls history for [% INCLUDE 'patron-title.inc' %] </div>
+[% WRAPPER 'main-container.inc' aside='circ-menu' %]
+    [% INCLUDE 'members-toolbar.inc' %]
+    <h1>Recalls history</h1>
+    [% IF Koha.Preference('UseRecalls') %]
+        <input type="checkbox" id="hide_old" name="hide_old" checked="checked" />
+        <label for="hide_old">Show old recalls</label>
+        [% INCLUDE 'recalls.inc' %]
+    [% ELSE %]
+        <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
     [% END %]
+[% END %]
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]

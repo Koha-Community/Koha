@@ -2,18 +2,18 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
-        [% t("Print barcode range") | html %] &rsaquo;
-        [% t("Label creator") | html %] &rsaquo;
-        [% t("Cataloging") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
-    [% INCLUDE 'greybox.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Print barcode range") | html %]
+        &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'greybox.inc' %]
 </head>
 <body id="labels_label-home" class="tools labels">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -31,29 +31,29 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
-                    [% INCLUDE 'labels-toolbar.inc' %]
-                    <h1>Print barcode range</h1>
-                    <form name="add_by_number" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-add" />
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="from-input">From:</label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="from" id="from-input" value="0" style="text-align: right;"/>
-                                </li>
-                                <li>
-                                    <label for="to-input">To:</label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="to" id="to-input" value="0" style="text-align: right;"/>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <button type="button" class="btn btn-primary" id="print">Print range</button>
-                        </fieldset>
-                    </form>
-    [% END %]
+[% WRAPPER 'main-container.inc' aside='cat-menu' %]
+    [% INCLUDE 'labels-toolbar.inc' %]
+    <h1>Print barcode range</h1>
+    <form name="add_by_number" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-add" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="from-input">From:</label>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="from" id="from-input" value="0" style="text-align: right;" />
+                </li>
+                <li>
+                    <label for="to-input">To:</label>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="to" id="to-input" value="0" style="text-align: right;" />
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <button type="button" class="btn btn-primary" id="print">Print range</button>
+        </fieldset>
+    </form>
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
@@ -61,46 +61,54 @@
             var str = "";
             str += "from=" + document.getElementById("from-input").value + "&";
             str += "to=" + document.getElementById("to-input").value;
-            return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?" + str, 400, 800);
+            return GB_showCenter("Export labels", "/cgi-bin/koha/labels/label-print.pl?" + str, 400, 800);
         }
 
-        function checkTwoValue(_from, _to, _id){
+        function checkTwoValue(_from, _to, _id) {
             var result = _from.length == _to.length;
             if (_from[0] == "0" || _to[0] == "0") {
-                switch (_id){
-                    case 'from-input':
-                        var to_inp = $("#to-input")
-                        if (to_inp.hasClass('error')){
-                            to_inp.removeClass('error').addClass('valid');
+                switch (_id) {
+                    case "from-input":
+                        var to_inp = $("#to-input");
+                        if (to_inp.hasClass("error")) {
+                            to_inp.removeClass("error").addClass("valid");
                             $("to-input-error").remove();
                         }
-                        if ($('#to-input-error').length){
+                        if ($("#to-input-error").length) {
                             $("#to-input-error").remove();
                         }
                         return result;
-                    case 'to-input':
-                        var from_inp = $("#from-input")
-                        if (from_inp.hasClass('error')){
-                            from_inp.removeClass('error').addClass('valid');
+                    case "to-input":
+                        var from_inp = $("#from-input");
+                        if (from_inp.hasClass("error")) {
+                            from_inp.removeClass("error").addClass("valid");
                         }
-                        if ($('#from-input-error').length){
+                        if ($("#from-input-error").length) {
                             $("#from-input-error").remove();
                         }
                         return result;
-                    }
                 }
-                return true;
             }
+            return true;
+        }
 
         $(document).ready(function () {
             $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
-            $.validator.addMethod("gt", function(value, element, params) {
-                return parseInt(value) >= parseInt($(params).val());
-            }, _("Must be greater or equal to the from value."));
+            $.validator.addMethod(
+                "gt",
+                function (value, element, params) {
+                    return parseInt(value) >= parseInt($(params).val());
+                },
+                _("Must be greater or equal to the from value.")
+            );
 
-            $.validator.addMethod("eq", function(value, element, params) {
-                return checkTwoValue($("#from-input").val(), $("#to-input").val(), $(element).attr('id'));
-            }, _("From and to values must have the same length."));
+            $.validator.addMethod(
+                "eq",
+                function (value, element, params) {
+                    return checkTwoValue($("#from-input").val(), $("#to-input").val(), $(element).attr("id"));
+                },
+                _("From and to values must have the same length.")
+            );
 
             $("form[name=add_by_number]").validate({
                 rules: {
@@ -114,23 +122,16 @@
                         gt: "#from-input",
                         eq: "#from-input",
                         eq: "#to-input",
-                    }
-                }
+                    },
+                },
             });
 
             $("#print").on("click", function () {
-                if ( $("form[name=add_by_number]").valid() ) {
+                if ($("form[name=add_by_number]").valid()) {
                     return Xport();
                 }
             });
         });
-
-
-
-
-
-
-
     </script>
 [% END %]
 

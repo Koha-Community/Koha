@@ -2,17 +2,17 @@
 
 use Modern::Perl;
 
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context;
 use C4::UsageStats;
 use C4::Log qw( cronlogaction );
-use POSIX qw( strftime );
+use POSIX   qw( strftime );
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $help, $verbose, $force, $quiet );
 GetOptions(
@@ -29,7 +29,7 @@ if ($help) {
 unless ( C4::Context->preference('UsageStats') ) {
     $quiet && exit;
     pod2usage(
-q|
+        q|
 The UsageStats system preference is not set.
 If your library wants to share their usage statistics with the Koha community, you have to switch on this system preference
 
@@ -46,7 +46,7 @@ C4::Context->set_preference(
     strftime( "%s", localtime )
 );
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 =head1 NAME
 

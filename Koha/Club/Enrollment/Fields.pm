@@ -19,7 +19,6 @@ package Koha::Club::Enrollment::Fields;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Club::Enrollment::Field;

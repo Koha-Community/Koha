@@ -36,30 +36,30 @@ subtest 'anonymize() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron           = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $anonymous_patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     is( $patron->old_checkouts->count, 0, 'Patron has no old checkouts' );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
-    throws_ok
-        { $patron->old_checkouts->anonymize; }
-        'Koha::Exceptions::SysPref::NotSet',
+    throws_ok { $patron->old_checkouts->anonymize; }
+    'Koha::Exceptions::SysPref::NotSet',
         'Exception thrown because AnonymousPatron not set';
 
     is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
-    is( $patron->old_checkouts->anonymize + 0,
-        0, 'Anonymizing an empty resultset returns 0' );
+    is(
+        $patron->old_checkouts->anonymize + 0,
+        0, 'Anonymizing an empty resultset returns 0'
+    );
 
     my $checkout_1 = $builder->build_object(
         {
             class => 'Koha::Old::Checkouts',
-            value =>
-              { borrowernumber => $patron->id, timestamp => dt_from_string() }
+            value => { borrowernumber => $patron->id, timestamp => dt_from_string() }
         }
     );
     my $checkout_2 = $builder->build_object(
@@ -93,17 +93,15 @@ subtest 'anonymize() tests' => sub {
     is( $patron->old_checkouts->count, 4, 'Patron has 4 completed checkouts' );
 
     # filter them so only the older two are part of the resultset
-    my $checkouts = $patron->old_checkouts->filter_by_last_update(
-        { min_days => 1 } );
+    my $checkouts = $patron->old_checkouts->filter_by_last_update( { min_days => 1 } );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
-    throws_ok
-        { $checkouts->anonymize; }
-        'Koha::Exceptions::SysPref::NotSet',
+    throws_ok { $checkouts->anonymize; }
+    'Koha::Exceptions::SysPref::NotSet',
         'Exception thrown because AnonymousPatron not set';
 
-    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
-    is( $patron->old_checkouts->count, 4, 'Patron has 4 completed checkouts' );
+    is( $@->syspref,                   'AnonymousPatron', 'syspref parameter is correctly passed' );
+    is( $patron->old_checkouts->count, 4,                 'Patron has 4 completed checkouts' );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
@@ -122,16 +120,14 @@ subtest 'filter_by_anonymizable() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $anonymous_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
     # patron_1 => keep records forever
-    my $patron_1 = $builder->build_object(
-        { class => 'Koha::Patrons', value => { privacy => 0 } } );
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons', value => { privacy => 0 } } );
 
     # patron_2 => never keep records
-    my $patron_2 = $builder->build_object(
-        { class => 'Koha::Patrons', value => { privacy => 1 } } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { privacy => 1 } } );
 
     is( $patron_1->old_checkouts->count, 0, 'patron_1 has no old checkouts' );
     is( $patron_2->old_checkouts->count, 0, 'patron_2 has no old checkouts' );
@@ -168,6 +164,7 @@ subtest 'filter_by_anonymizable() tests' => sub {
             }
         }
     );
+
     # borrowernumber == undef => never listed as anonymizable
     my $checkout_5 = $builder->build_object(
         {
@@ -177,6 +174,7 @@ subtest 'filter_by_anonymizable() tests' => sub {
             }
         }
     );
+
     # borrowernumber == anonymous patron => never listed as anonymizable
     my $checkout_6 = $builder->build_object(
         {
@@ -195,14 +193,12 @@ subtest 'filter_by_anonymizable() tests' => sub {
     is( $patron_2->old_checkouts->count, 2, 'patron_2 has 2 completed checkouts' );
 
     # filter them so only the older two are part of the resultset
-    my $checkouts = Koha::Old::Checkouts->search(
-        { 'me.borrowernumber' => [ $patron_1->id, $patron_2->id ] } );
+    my $checkouts = Koha::Old::Checkouts->search( { 'me.borrowernumber' => [ $patron_1->id, $patron_2->id ] } );
     is( $checkouts->count, 4, 'Total of 4 checkouts returned correctly' );
     my $rs = $checkouts->filter_by_anonymizable;
     is( $rs->count, 2, 'Only 2 can be anonymized' );
 
-    $rs = $checkouts->filter_by_anonymizable->filter_by_last_update(
-        { days => 1 } );
+    $rs = $checkouts->filter_by_anonymizable->filter_by_last_update( { days => 1 } );
 
     is( $rs->count, 1, 'Only 1 can be anonymized with date filter applied' );
 

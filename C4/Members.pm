@@ -19,11 +19,10 @@ package C4::Members;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use C4::Context;
 use Scalar::Util qw( looks_like_number );
-use Date::Calc qw( check_date Date_to_Days );
+use Date::Calc   qw( check_date Date_to_Days );
 use C4::Overdues qw( checkoverdues );
 use C4::Reserves;
 use C4::Accounts;
@@ -37,14 +36,15 @@ use Koha::AdditionalContents;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      GetBorrowersToExpunge
+        GetBorrowersToExpunge
 
-      IssueSlip
+        IssueSlip
     );
 }
 
@@ -128,26 +128,25 @@ The "message" field that comes from the DB is OK.
 # DEPRECATED Do not use this subroutine!
 sub patronflags {
     my %flags;
-    my ( $patroninformation) = @_;
-    my $dbh=C4::Context->dbh;
-    my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
-    my $account = $patron->account;
+    my ($patroninformation)  = @_;
+    my $dbh                  = C4::Context->dbh;
+    my $patron               = Koha::Patrons->find( $patroninformation->{borrowernumber} );
+    my $account              = $patron->account;
     my $patron_charge_limits = $patron->is_patron_inside_charge_limits();
     if ( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
         my %flaginfo;
         my $noissuescharge = $patron_charge_limits->{noissuescharge}->{limit} || 5;
         $flaginfo{'message'} = sprintf 'Patron owes %.02f', $patron_charge_limits->{noissuescharge}->{charge};
-        $flaginfo{'amount'}  = sprintf "%.02f", $patron_charge_limits->{noissuescharge}->{charge};
+        $flaginfo{'amount'}  = sprintf "%.02f",             $patron_charge_limits->{noissuescharge}->{charge};
         if ( $patron_charge_limits->{noissuescharge}->{overlimit} && !C4::Context->preference("AllowFineOverride") ) {
             $flaginfo{'noissues'} = 1;
         }
         $flags{'CHARGES'} = \%flaginfo;
-    }
-    elsif ( ( my $balance = $account->balance ) < 0 ) {
+    } elsif ( ( my $balance = $account->balance ) < 0 ) {
         my %flaginfo;
         $flaginfo{'message'} = sprintf 'Patron has credit of %.02f', -$balance;
-        $flaginfo{'amount'}  = sprintf "%.02f", $balance;
-        $flags{'CREDITS'} = \%flaginfo;
+        $flaginfo{'amount'}  = sprintf "%.02f",                      $balance;
+        $flags{'CREDITS'}    = \%flaginfo;
     }
 
     # Check the debt of this patrons guarantees
@@ -156,9 +155,10 @@ sub patronflags {
     if ( defined $no_issues_charge_guarantees ) {
         if ( $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit} ) {
             my %flaginfo;
-            $flaginfo{'message'} = sprintf 'patron guarantees owe %.02f', $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
-            $flaginfo{'amount'}  = $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
-            $flaginfo{'noissues'} = 1 unless C4::Context->preference("allowfineoverride");
+            $flaginfo{'message'} = sprintf 'patron guarantees owe %.02f',
+                $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
+            $flaginfo{'amount'}          = $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
+            $flaginfo{'noissues'}        = 1 unless C4::Context->preference("allowfineoverride");
             $flags{'CHARGES_GUARANTEES'} = \%flaginfo;
         }
     }
@@ -184,7 +184,7 @@ sub patronflags {
             $flaginfo{'message'}         = $patroninformation->{'debarredcomment'};
             $flaginfo{'noissues'}        = 1;
             $flaginfo{'dateend'}         = $patroninformation->{'debarred'};
-            $flags{'DBARRED'}           = \%flaginfo;
+            $flags{'DBARRED'}            = \%flaginfo;
         }
     }
     if (   $patroninformation->{'borrowernotes'}
@@ -194,22 +194,19 @@ sub patronflags {
         $flaginfo{'message'} = $patroninformation->{'borrowernotes'};
         $flags{'NOTES'}      = \%flaginfo;
     }
-    my ( $odues, $itemsoverdue ) = C4::Overdues::checkoverdues($patroninformation->{'borrowernumber'});
+    my ( $odues, $itemsoverdue ) = C4::Overdues::checkoverdues( $patroninformation->{'borrowernumber'} );
     if ( $odues && $odues > 0 ) {
         my %flaginfo;
         $flaginfo{'message'}  = "Yes";
         $flaginfo{'itemlist'} = $itemsoverdue;
-        foreach ( sort { $a->{'date_due'} cmp $b->{'date_due'} }
-            @$itemsoverdue )
-        {
-            $flaginfo{'itemlisttext'} .=
-              "$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";  # newline is display layer
+        foreach ( sort { $a->{'date_due'} cmp $b->{'date_due'} } @$itemsoverdue ) {
+            $flaginfo{'itemlisttext'} .= "$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n"; # newline is display layer
         }
         $flags{'ODUES'} = \%flaginfo;
     }
 
-    my $waiting_holds = $patron->holds->search({ found => 'W' });
-    my $nowaiting = $waiting_holds->count;
+    my $waiting_holds = $patron->holds->search( { found => 'W' } );
+    my $nowaiting     = $waiting_holds->count;
     if ( $nowaiting > 0 ) {
         my %flaginfo;
         $flaginfo{'message'}  = "Reserved items available";
@@ -235,18 +232,22 @@ sub patronflags {
 
 sub GetBorrowersToExpunge {
 
-    my $params = shift;
-    my $filterdate       = $params->{'not_borrowed_since'};
-    my $filterexpiry     = $params->{'expired_before'};
-    my $filterlastseen   = $params->{'last_seen'};
-    my $filtercategory   = $params->{'category_code'};
-    my $filterbranch     = $params->{'branchcode'} ||
-                        ((C4::Context->preference('IndependentBranches')
-                             && C4::Context->userenv
-                             && !C4::Context->IsSuperLibrarian()
-                             && C4::Context->userenv->{branch})
-                         ? C4::Context->userenv->{branch}
-                         : "");
+    my $params         = shift;
+    my $filterdate     = $params->{'not_borrowed_since'};
+    my $filterexpiry   = $params->{'expired_before'};
+    my $filterlastseen = $params->{'last_seen'};
+    my $filtercategory = $params->{'category_code'};
+    my $filterbranch   = $params->{'branchcode'}
+        || (
+        (
+               C4::Context->preference('IndependentBranches')
+            && C4::Context->userenv
+            && !C4::Context->IsSuperLibrarian()
+            && C4::Context->userenv->{branch}
+        )
+        ? C4::Context->userenv->{branch}
+        : ""
+        );
     my $filterpatronlist = $params->{'patron_list_id'};
 
     my $dbh   = C4::Context->dbh;
@@ -266,7 +267,7 @@ sub GetBorrowersToExpunge {
             ) as tmp ON borrowers.borrowernumber=tmp.guarantor_id
             LEFT JOIN old_issues USING (borrowernumber)
             LEFT JOIN issues USING (borrowernumber)|;
-    if ( $filterpatronlist  ){
+    if ($filterpatronlist) {
         $query .= q| LEFT JOIN patron_list_patrons USING (borrowernumber)|;
     }
     $query .= q| WHERE  category_type <> 'S'
@@ -276,36 +277,36 @@ sub GetBorrowersToExpunge {
     |;
     my @query_params;
     if ( $filterbranch && $filterbranch ne "" ) {
-        $query.= " AND borrowers.branchcode = ? ";
+        $query .= " AND borrowers.branchcode = ? ";
         push( @query_params, $filterbranch );
     }
-    if ( $filterexpiry ) {
+    if ($filterexpiry) {
         $query .= " AND dateexpiry < ? ";
         push( @query_params, $filterexpiry );
     }
-    if ( $filterlastseen ) {
+    if ($filterlastseen) {
         $query .= ' AND lastseen < ? ';
         push @query_params, $filterlastseen;
     }
-    if ( $filtercategory ) {
-        if (ref($filtercategory) ne 'ARRAY' ) {
-            $filtercategory = [ $filtercategory ];
+    if ($filtercategory) {
+        if ( ref($filtercategory) ne 'ARRAY' ) {
+            $filtercategory = [$filtercategory];
         }
-        if ( @$filtercategory ) {
-            $query .= " AND categorycode IN (" . join(',', ('?') x @$filtercategory) . ") ";
+        if (@$filtercategory) {
+            $query .= " AND categorycode IN (" . join( ',', ('?') x @$filtercategory ) . ") ";
             push( @query_params, @$filtercategory );
         }
     }
-    if ( $filterpatronlist ){
-        $query.=" AND patron_list_id = ? ";
+    if ($filterpatronlist) {
+        $query .= " AND patron_list_id = ? ";
         push( @query_params, $filterpatronlist );
     }
     $query .= " GROUP BY borrowers.borrowernumber";
     $query .= q|
         ) xxx WHERE currentissue IS NULL|;
-    if ( $filterdate ) {
-        $query.=" AND ( latestissue < ? OR latestissue IS NULL ) ";
-        push @query_params,$filterdate;
+    if ($filterdate) {
+        $query .= " AND ( latestissue < ? OR latestissue IS NULL ) ";
+        push @query_params, $filterdate;
     }
 
     if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
@@ -314,10 +315,9 @@ sub GetBorrowersToExpunge {
     }
 
     my $sth = $dbh->prepare($query);
-    if (scalar(@query_params)>0){
+    if ( scalar(@query_params) > 0 ) {
         $sth->execute(@query_params);
-    }
-    else {
+    } else {
         $sth->execute;
     }
 
@@ -377,22 +377,22 @@ sub GetBorrowersToExpunge {
 =cut
 
 sub IssueSlip {
-    my ($branch, $borrowernumber, $quickslip) = @_;
+    my ( $branch, $borrowernumber, $quickslip ) = @_;
 
     # FIXME Check callers before removing this statement
     #return unless $borrowernumber;
 
-    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $patron = Koha::Patrons->find($borrowernumber);
     return unless $patron;
 
-    my $pending_checkouts = $patron->pending_checkouts; # Should be $patron->checkouts->pending?
+    my $pending_checkouts = $patron->pending_checkouts;    # Should be $patron->checkouts->pending?
 
-    my ($letter_code, %repeat, %loops);
-    if ( $quickslip ) {
-        my $today_start = dt_from_string->set( hour => 0, minute => 0, second => 0 );
-        my $today_end = dt_from_string->set( hour => 23, minute => 59, second => 0 );
-        $today_start = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_start );
-        $today_end = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_end );
+    my ( $letter_code, %repeat, %loops );
+    if ($quickslip) {
+        my $today_start = dt_from_string->set( hour => 0,  minute => 0,  second => 0 );
+        my $today_end   = dt_from_string->set( hour => 23, minute => 59, second => 0 );
+        $today_start = Koha::Database->new->schema->storage->datetime_parser->format_datetime($today_start);
+        $today_end   = Koha::Database->new->schema->storage->datetime_parser->format_datetime($today_end);
         $letter_code = 'ISSUEQSLIP';
 
         # issue date or lastreneweddate is today
@@ -403,8 +403,7 @@ sub IssueSlip {
                         '>=' => $today_start,
                         '<=' => $today_end,
                     },
-                    lastreneweddate =>
-                      { '>=' => $today_start, '<=' => $today_end, }
+                    lastreneweddate => { '>=' => $today_start, '<=' => $today_end, }
                 }
             }
         );
@@ -419,18 +418,19 @@ sub IssueSlip {
             };
         }
 
-        %repeat =  (
-            checkedout => \@checkouts, # Historical syntax
+        %repeat = (
+            checkedout => \@checkouts,    # Historical syntax
         );
         %loops = (
-            issues => [ map { $_->{issues}{itemnumber} } @checkouts ], # TT syntax
+            issues => [ map { $_->{issues}{itemnumber} } @checkouts ],    # TT syntax
         );
-    }
-    else {
-        my $today = Koha::Database->new->schema->storage->datetime_parser->format_datetime( dt_from_string );
+    } else {
+        my $today = Koha::Database->new->schema->storage->datetime_parser->format_datetime(dt_from_string);
+
         # Checkouts due in the future
-        my $checkouts = $pending_checkouts->search({ date_due => { '>' => $today } });
-        my @checkouts; my @overdues;
+        my $checkouts = $pending_checkouts->search( { date_due => { '>' => $today } } );
+        my @checkouts;
+        my @overdues;
         while ( my $c = $checkouts->next ) {
             my $all = $c->unblessed_all_relateds;
             push @checkouts, {
@@ -442,7 +442,7 @@ sub IssueSlip {
         }
 
         # Checkouts due in the past are overdues
-        my $overdues = $pending_checkouts->search({ date_due => { '<=' => $today } });
+        my $overdues = $pending_checkouts->search( { date_due => { '<=' => $today } } );
         while ( my $o = $overdues->next ) {
             my $all = $o->unblessed_all_relateds;
             push @overdues, {
@@ -466,24 +466,24 @@ sub IssueSlip {
             overdue    => \@overdues,
         );
         %loops = (
-            issues => [ map { $_->{issues}{itemnumber} } @checkouts ],
-            overdues   => [ map { $_->{issues}{itemnumber} } @overdues ],
-            opac_news => \@news_ids,
+            issues              => [ map { $_->{issues}{itemnumber} } @checkouts ],
+            overdues            => [ map { $_->{issues}{itemnumber} } @overdues ],
+            opac_news           => \@news_ids,
             additional_contents => \@news_ids,
         );
     }
 
-    return  C4::Letters::GetPreparedLetter (
-        module => 'circulation',
+    return C4::Letters::GetPreparedLetter(
+        module      => 'circulation',
         letter_code => $letter_code,
-        branchcode => $branch,
-        lang => $patron->lang,
-        tables => {
-            'branches'    => $branch,
-            'borrowers'   => $borrowernumber,
+        branchcode  => $branch,
+        lang        => $patron->lang,
+        tables      => {
+            'branches'  => $branch,
+            'borrowers' => $borrowernumber,
         },
         repeat => \%repeat,
-        loops => \%loops,
+        loops  => \%loops,
     );
 }
 

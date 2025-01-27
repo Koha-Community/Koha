@@ -41,12 +41,8 @@ subtest 'basket() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $basket = $builder->build_object(
-        {
-            class => 'Koha::Acquisition::Baskets'
-        }
-    );
-    my $order = $builder->build_object(
+    my $basket = $builder->build_object( { class => 'Koha::Acquisition::Baskets' } );
+    my $order  = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
             value => { basketno => $basket->basketno }
@@ -54,10 +50,14 @@ subtest 'basket() tests' => sub {
     );
 
     my $retrieved_basket = $order->basket;
-    is( ref($retrieved_basket), 'Koha::Acquisition::Basket',
-        'Type is correct for ->basket' );
-    is_deeply( $retrieved_basket->unblessed,
-        $basket->unblessed, "Correct basket found and updated" );
+    is(
+        ref($retrieved_basket), 'Koha::Acquisition::Basket',
+        'Type is correct for ->basket'
+    );
+    is_deeply(
+        $retrieved_basket->unblessed,
+        $basket->unblessed, "Correct basket found and updated"
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -79,14 +79,14 @@ subtest 'biblio() tests' => sub {
 
     # Add and link a biblio to the order
     my $biblio = $builder->build_sample_biblio();
-    $order->set({ biblionumber => $biblio->biblionumber })->store->discard_changes;
+    $order->set( { biblionumber => $biblio->biblionumber } )->store->discard_changes;
 
     my $THE_biblio = $order->biblio;
-    is( ref($THE_biblio), 'Koha::Biblio', 'Returns a Koha::Biblio object' );
+    is( ref($THE_biblio),          'Koha::Biblio',        'Returns a Koha::Biblio object' );
     is( $THE_biblio->biblionumber, $biblio->biblionumber, 'It is not cheating about the object' );
 
     $order->biblio->delete;
-    $order = Koha::Acquisition::Orders->find($order->ordernumber);
+    $order = Koha::Acquisition::Orders->find( $order->ordernumber );
     ok( $order, 'The order is not deleted if the biblio is deleted' );
     is( $order->biblio, undef, 'order.biblio is correctly set to NULL when the biblio is deleted' );
 
@@ -97,11 +97,7 @@ subtest 'store' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
-    my $o = $builder->build_object(
-        {
-            class => 'Koha::Acquisition::Orders'
-        }
-    );
+    my $o = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
 
     subtest 'entrydate' => sub {
         plan tests => 2;
@@ -146,9 +142,11 @@ subtest 'fund' => sub {
     );
 
     my $order = Koha::Acquisition::Orders->find( $o->ordernumber );
-    is( ref( $order->fund ),
+    is(
+        ref( $order->fund ),
         'Koha::Acquisition::Fund',
-        '->fund should return a Koha::Acquisition::Fund object' );
+        '->fund should return a Koha::Acquisition::Fund object'
+    );
     $schema->storage->txn_rollback;
 };
 
@@ -159,13 +157,15 @@ subtest 'invoice' => sub {
     my $o = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => { cancellationreason => 'XXXXXXXX', invoiceid => undef }, # not received yet
+            value => { cancellationreason => 'XXXXXXXX', invoiceid => undef },    # not received yet
         }
     );
 
     my $order = Koha::Acquisition::Orders->find( $o->ordernumber );
-    is( $order->invoice, undef,
-        '->invoice should return undef if no invoice defined yet');
+    is(
+        $order->invoice, undef,
+        '->invoice should return undef if no invoice defined yet'
+    );
 
     my $invoice = $builder->build_object(
         {
@@ -175,8 +175,10 @@ subtest 'invoice' => sub {
 
     $o->invoiceid( $invoice->invoiceid )->store;
     $order = Koha::Acquisition::Orders->find( $o->ordernumber );
-    is( ref( $order->invoice ), 'Koha::Acquisition::Invoice',
-        '->invoice should return a Koha::Acquisition::Invoice object if an invoice is defined');
+    is(
+        ref( $order->invoice ), 'Koha::Acquisition::Invoice',
+        '->invoice should return a Koha::Acquisition::Invoice object if an invoice is defined'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -188,24 +190,29 @@ subtest 'subscription' => sub {
     my $o = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => { subscriptionid => undef }, # not linked to a subscription
+            value => { subscriptionid => undef },    # not linked to a subscription
         }
     );
 
     my $order = Koha::Acquisition::Orders->find( $o->ordernumber );
-    is( $order->subscription, undef,
-        '->subscription should return undef if not created from a subscription');
+    is(
+        $order->subscription, undef,
+        '->subscription should return undef if not created from a subscription'
+    );
 
     $o = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
+
             # Will be linked to a subscription by TestBuilder
         }
     );
 
     $order = Koha::Acquisition::Orders->find( $o->ordernumber );
-    is( ref( $order->subscription ), 'Koha::Subscription',
-        '->subscription should return a Koha::Subscription object if created from a subscription');
+    is(
+        ref( $order->subscription ), 'Koha::Subscription',
+        '->subscription should return a Koha::Subscription object if created from a subscription'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -215,49 +222,49 @@ subtest 'duplicate_to | add_item' => sub {
 
     $schema->storage->txn_begin;
 
-    my $item = $builder->build_sample_item;
+    my $item         = $builder->build_sample_item;
     my $order_no_sub = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value =>
-              {
-                  biblionumber => $item->biblionumber,
-                  subscriptionid => undef, # not linked to a subscription
-              }
+            value => {
+                biblionumber   => $item->biblionumber,
+                subscriptionid => undef,                 # not linked to a subscription
+            }
         }
     );
-    $order_no_sub->basket->create_items(undef)->store; # use syspref
+    $order_no_sub->basket->create_items(undef)->store;    # use syspref
     $order_no_sub->add_item( $item->itemnumber );
 
     $item = $builder->build_sample_item;
     my $order_from_sub = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value =>
-              {
-                  biblionumber => $item->biblionumber,
-                  # Will be linked to a subscription by TestBuilder
-              }
+            value => {
+                biblionumber => $item->biblionumber,
+
+                # Will be linked to a subscription by TestBuilder
+            }
         }
     );
-    $order_from_sub->basket->create_items(undef)->store; # use syspref
+    $order_from_sub->basket->create_items(undef)->store;    # use syspref
     $order_from_sub->add_item( $item->itemnumber );
 
-    my $basket_to = $builder->build_object(
-         { class => 'Koha::Acquisition::Baskets' });
+    my $basket_to = $builder->build_object( { class => 'Koha::Acquisition::Baskets' } );
 
     subtest 'Create item on receiving' => sub {
         plan tests => 2;
 
-        t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
+        t::lib::Mocks::mock_preference( 'AcqCreateItem', 'receiving' );
 
         my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
-        is( $duplicated_order->items->count, 0,
+        is(
+            $duplicated_order->items->count, 0,
             'Items should not be copied if the original order did not create items on ordering'
         );
 
         $duplicated_order = $order_from_sub->duplicate_to($basket_to);
-        is( $duplicated_order->items->count, 0,
+        is(
+            $duplicated_order->items->count, 0,
             'Items should not be copied if the original order is created from a subscription'
         );
     };
@@ -265,15 +272,17 @@ subtest 'duplicate_to | add_item' => sub {
     subtest 'Create item on ordering' => sub {
         plan tests => 2;
 
-        t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
+        t::lib::Mocks::mock_preference( 'AcqCreateItem', 'ordering' );
 
         my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
-        is( $duplicated_order->items->count, 1,
+        is(
+            $duplicated_order->items->count, 1,
             'Items should be copied if items are created on ordering'
         );
 
         $duplicated_order = $order_from_sub->duplicate_to($basket_to);
-        is( $duplicated_order->items->count, 0,
+        is(
+            $duplicated_order->items->count, 0,
             'Items should never be copied if the original order is created from a subscription'
         );
     };
@@ -282,7 +291,7 @@ subtest 'duplicate_to | add_item' => sub {
         plan tests => 1;
 
         my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
-        is($duplicated_order->invoiceid, undef, "invoiceid should be set to null for a new duplicated order");
+        is( $duplicated_order->invoiceid, undef, "invoiceid should be set to null for a new duplicated order" );
     };
 
     $schema->storage->txn_rollback;
@@ -318,6 +327,7 @@ subtest 'current_item_level_holds() tests' => sub {
             itemnumber       => $item_2->itemnumber,
         }
     );
+
     # Add a hold in the future
     C4::Reserves::AddReserve(
         {
@@ -333,29 +343,27 @@ subtest 'current_item_level_holds() tests' => sub {
     my $order = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => {
-                biblionumber => undef
-            }
+            value => { biblionumber => undef }
         }
     );
 
     my $holds = $order->current_item_level_holds;
 
-    is( ref($holds), 'Koha::Holds', 'Koha::Holds iterator returned if no linked biblio' );
-    is( $holds->count, 0, 'Count is 0 if no linked biblio' );
+    is( ref($holds),   'Koha::Holds', 'Koha::Holds iterator returned if no linked biblio' );
+    is( $holds->count, 0,             'Count is 0 if no linked biblio' );
 
-    $order->set({ biblionumber => $biblio->biblionumber })->store->discard_changes;
+    $order->set( { biblionumber => $biblio->biblionumber } )->store->discard_changes;
 
     $holds = $order->current_item_level_holds;
 
-    is( ref($holds), 'Koha::Holds', 'Koha::Holds iterator returned if no linked items' );
-    is( $holds->count, 0, 'Count is 0 if no linked items' );
+    is( ref($holds),   'Koha::Holds', 'Koha::Holds iterator returned if no linked items' );
+    is( $holds->count, 0,             'Count is 0 if no linked items' );
 
     $order->add_item( $item_2->itemnumber );
     $order->add_item( $item_3->itemnumber );
 
     $holds = $order->current_item_level_holds;
-    is( $holds->count, 1, 'Only current (not future) holds are returned');
+    is( $holds->count, 1, 'Only current (not future) holds are returned' );
 
     $schema->storage->txn_rollback;
 };
@@ -371,19 +379,19 @@ subtest 'claim*' => sub {
     );
 
     my $now = dt_from_string;
-    is( $order->claims->count, 0, 'No claim yet, ->claims should return an empty set');
-    is( $order->claims_count, 0, 'No claim yet, ->claims_count should return 0');
-    is( $order->claimed_date, undef, 'No claim yet, ->claimed_date should return undef');
+    is( $order->claims->count, 0,     'No claim yet, ->claims should return an empty set' );
+    is( $order->claims_count,  0,     'No claim yet, ->claims_count should return 0' );
+    is( $order->claimed_date,  undef, 'No claim yet, ->claimed_date should return undef' );
 
     my $claim_1 = $order->claim;
     my $claim_2 = $order->claim;
 
-    $claim_1->claimed_on($now->clone->subtract(days => 1))->store;
+    $claim_1->claimed_on( $now->clone->subtract( days => 1 ) )->store;
     $claim_2->claimed_on($now)->store;
 
-    is( $order->claims->count, 2, '->claims should return the correct number of claims');
-    is( $order->claims_count, 2, '->claims_count should return the correct number of claims');
-    is( dt_from_string($order->claimed_date), $now, '->claimed_date should return the date of the last claim');
+    is( $order->claims->count,                  2,    '->claims should return the correct number of claims' );
+    is( $order->claims_count,                   2,    '->claims_count should return the correct number of claims' );
+    is( dt_from_string( $order->claimed_date ), $now, '->claimed_date should return the date of the last claim' );
 
     $schema->storage->txn_rollback;
 };
@@ -538,27 +546,22 @@ subtest 'filter_by_late' => sub {
     $late_orders = $orders->filter_by_lates( { delay => 6 } );
     is( $late_orders->count, 0 );
 
-    $late_orders = $orders->filter_by_lates(
-        { estimated_from => $now->clone->subtract( days => 6 ) } );
+    $late_orders = $orders->filter_by_lates( { estimated_from => $now->clone->subtract( days => 6 ) } );
     is( $late_orders->count,             2 );
     is( $late_orders->next->ordernumber, $order_3->ordernumber );
 
-    $late_orders = $orders->filter_by_lates(
-        { estimated_from => $now->clone->subtract( days => 5 ) } );
+    $late_orders = $orders->filter_by_lates( { estimated_from => $now->clone->subtract( days => 5 ) } );
     is( $late_orders->count,             2 );
     is( $late_orders->next->ordernumber, $order_3->ordernumber );
 
-    $late_orders = $orders->filter_by_lates(
-        { estimated_from => $now->clone->subtract( days => 4 ) } );
+    $late_orders = $orders->filter_by_lates( { estimated_from => $now->clone->subtract( days => 4 ) } );
     is( $late_orders->count,             2 );
     is( $late_orders->next->ordernumber, $order_3->ordernumber );
 
-    $late_orders = $orders->filter_by_lates(
-        { estimated_from => $now->clone->subtract( days => 3 ) } );
+    $late_orders = $orders->filter_by_lates( { estimated_from => $now->clone->subtract( days => 3 ) } );
     is( $late_orders->count, 2 );
 
-    $late_orders = $orders->filter_by_lates(
-        { estimated_from => $now->clone->subtract( days => 1 ) } );
+    $late_orders = $orders->filter_by_lates( { estimated_from => $now->clone->subtract( days => 1 ) } );
     is( $late_orders->count, 1 );
 
     $late_orders = $orders->filter_by_lates(
@@ -606,7 +609,7 @@ subtest 'filter_out_cancelled & filter_by_cancelled' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-    my $now        = dt_from_string;
+    my $now     = dt_from_string;
     my $order_1 = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
@@ -643,9 +646,8 @@ subtest 'filter_out_cancelled & filter_by_cancelled' => sub {
         }
     );
 
-    is( $orders->filter_out_cancelled->count, 2);
-    is( $orders->filter_by_cancelled->count, 1);
-
+    is( $orders->filter_out_cancelled->count, 2 );
+    is( $orders->filter_by_cancelled->count,  1 );
 
     $schema->storage->txn_rollback;
 };
@@ -655,12 +657,13 @@ subtest 'creator ()' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders', value => { created_by => $patron->borrowernumber } });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $order  = $builder->build_object(
+        { class => 'Koha::Acquisition::Orders', value => { created_by => $patron->borrowernumber } } );
 
     my $creator = $order->creator;
 
-    is($creator->borrowernumber, $patron->borrowernumber, 'Patron is order creator');
+    is( $creator->borrowernumber, $patron->borrowernumber, 'Patron is order creator' );
 
     $creator->delete;
 
@@ -707,21 +710,22 @@ subtest 'cancel() tests' => sub {
             value => { branchcode => $item->homebranch, flags => 1 }
         }
     );
-    t::lib::Mocks::mock_userenv({ patron => $patron });
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
 
     # Add a checkout so deleting the item fails because od 'book_on_loan'
     C4::Circulation::AddIssue( $patron, $item->barcode );
 
-    my $result = $order->cancel({ reason => $reason });
+    my $result = $order->cancel( { reason => $reason } );
+
     # refresh the order object
     $order->discard_changes;
 
-    is( $result, $order, 'self is returned' );
+    is( $result,             $order,      'self is returned' );
     is( $order->orderstatus, 'cancelled', 'Order is not marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is not undef' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is set' );
-    is( ref(Koha::Items->find($item->id)), 'Koha::Item', 'The item is present' );
-    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is present' );
+    is( $order->cancellationreason,             $reason,        'cancellationreason is set' );
+    is( ref( Koha::Items->find( $item->id ) ),  'Koha::Item',   'The item is present' );
+    is( ref( Koha::Biblios->find($biblio_id) ), 'Koha::Biblio', 'The biblio is present' );
     my @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delitem', 'An error message is attached to the order' );
 
@@ -735,15 +739,14 @@ subtest 'cancel() tests' => sub {
 
     C4::Circulation::AddReturn( $item->barcode );
 
-    $order = Koha::Acquisition::Orders->find($order->ordernumber);
-    $order->cancel({ reason => $reason })
-          ->discard_changes;
+    $order = Koha::Acquisition::Orders->find( $order->ordernumber );
+    $order->cancel( { reason => $reason } )->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
-    is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
-    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is present' );
+    is( $order->cancellationreason,             $reason,        'cancellationreason is undef' );
+    is( Koha::Items->find( $item->id ),         undef,          'The item is no longer present' );
+    is( ref( Koha::Biblios->find($biblio_id) ), 'Koha::Biblio', 'The biblio is present' );
     @messages = @{ $order->object_messages };
     is( scalar @messages, 0, 'No messages' );
 
@@ -757,8 +760,8 @@ subtest 'cancel() tests' => sub {
 
     my $item_1 = $builder->build_sample_item;
     $biblio_id = $item_1->biblionumber;
-    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio_id });
-    $order     = $builder->build_object(
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio_id } );
+    $order = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
             value => {
@@ -771,15 +774,14 @@ subtest 'cancel() tests' => sub {
     );
     $order->add_item( $item_1->id );
 
-    $order->cancel({ reason => $reason, delete_biblio => 1 })
-          ->discard_changes;
+    $order->cancel( { reason => $reason, delete_biblio => 1 } )->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
-    is( Koha::Items->find($item_1->id), undef, 'The item is no longer present' );
-    is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The item is still present' );
-    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    is( $order->cancellationreason,              $reason,        'cancellationreason is undef' );
+    is( Koha::Items->find( $item_1->id ),        undef,          'The item is no longer present' );
+    is( ref( Koha::Items->find( $item_2->id ) ), 'Koha::Item',   'The item is still present' );
+    is( ref( Koha::Biblios->find($biblio_id) ),  'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delbiblio_items', 'Cannot delete biblio and it gets notified' );
 
@@ -819,14 +821,13 @@ subtest 'cancel() tests' => sub {
         }
     );
 
-    $order->cancel({ reason => $reason, delete_biblio => 1 })
-          ->discard_changes;
+    $order->cancel( { reason => $reason, delete_biblio => 1 } )->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
-    is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
-    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    is( $order->cancellationreason,             $reason,        'cancellationreason is undef' );
+    is( Koha::Items->find( $item->id ),         undef,          'The item is no longer present' );
+    is( ref( Koha::Biblios->find($biblio_id) ), 'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delbiblio_uncancelled_orders', 'Cannot delete biblio and it gets notified' );
 
@@ -863,14 +864,13 @@ subtest 'cancel() tests' => sub {
         }
     );
 
-    $order->cancel({ reason => $reason, delete_biblio => 1 })
-          ->discard_changes;
+    $order->cancel( { reason => $reason, delete_biblio => 1 } )->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
-    is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
-    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    is( $order->cancellationreason,             $reason,        'cancellationreason is undef' );
+    is( Koha::Items->find( $item->id ),         undef,          'The item is no longer present' );
+    is( ref( Koha::Biblios->find($biblio_id) ), 'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delbiblio_subscriptions', 'Cannot delete biblio and it gets notified' );
 
@@ -896,14 +896,13 @@ subtest 'cancel() tests' => sub {
     );
     $order->add_item( $item->id );
 
-    $order->cancel({ reason => $reason, delete_biblio => 1 })
-          ->discard_changes;
+    $order->cancel( { reason => $reason, delete_biblio => 1 } )->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is not marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is not undef' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is set' );
-    is( Koha::Items->find($item->id), undef, 'The item is not present' );
-    is( Koha::Biblios->find($biblio_id), undef, 'The biblio is not present' );
+    is( $order->cancellationreason,      $reason, 'cancellationreason is set' );
+    is( Koha::Items->find( $item->id ),  undef,   'The item is not present' );
+    is( Koha::Biblios->find($biblio_id), undef,   'The biblio is not present' );
     @messages = @{ $order->object_messages };
     is( scalar @messages, 0, 'No errors' );
 
@@ -920,10 +919,10 @@ subtest 'cancel() tests' => sub {
         {
             class => 'Koha::Suggestions',
             value => {
-                biblionumber => $biblio_id,
+                biblionumber  => $biblio_id,
                 suggesteddate => dt_from_string,
-                STATUS => 'ORDERED',
-                archived => 0,
+                STATUS        => 'ORDERED',
+                archived      => 0,
             }
         }
     );
@@ -940,13 +939,12 @@ subtest 'cancel() tests' => sub {
         }
     );
 
-    $order->cancel({ reason => $reason })
-          ->discard_changes;
+    $order->cancel( { reason => $reason } )->discard_changes;
 
     $suggestion = Koha::Suggestions->find( $suggestion->id );
 
     is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
-    is( $suggestion->STATUS, 'ACCEPTED', 'Suggestion status is correctly reverted after order is cancelled' );
+    is( $suggestion->STATUS, 'ACCEPTED',  'Suggestion status is correctly reverted after order is cancelled' );
 
     # Scenario:
     # * order with two items attached
@@ -958,9 +956,9 @@ subtest 'cancel() tests' => sub {
     # => biblio delete error notified
     # => item delete error notified
 
-    $item_1    = $builder->build_sample_item;
-    $item_2    = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
-    my $item_3 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+    $item_1 = $builder->build_sample_item;
+    $item_2 = $builder->build_sample_item( { biblionumber => $item_1->biblionumber } );
+    my $item_3 = $builder->build_sample_item( { biblionumber => $item_1->biblionumber } );
     $biblio_id = $item_1->biblionumber;
     $order     = $builder->build_object(
         {
@@ -989,37 +987,38 @@ subtest 'cancel() tests' => sub {
         }
     );
 
-    $order->cancel({ reason => $reason, delete_biblio => 1 })
-          ->discard_changes;
+    $order->cancel( { reason => $reason, delete_biblio => 1 } )->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
-    is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
-    is( Koha::Items->find($item_1->id), undef, 'The item is no longer present' );
-    is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The on loan item is still present' );
-    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    is( $order->cancellationreason,              $reason,        'cancellationreason is undef' );
+    is( Koha::Items->find( $item_1->id ),        undef,          'The item is no longer present' );
+    is( ref( Koha::Items->find( $item_2->id ) ), 'Koha::Item',   'The on loan item is still present' );
+    is( ref( Koha::Biblios->find($biblio_id) ),  'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->object_messages };
-    is( $messages[0]->message, 'error_delitem', 'Cannot delete on loan item' );
-    is( $messages[0]->payload->{item}->id, $item_2->id, 'Cannot delete on loan item' );
-    is( $messages[0]->payload->{reason}, 'book_on_loan', 'Item on loan notified' );
-    is( $messages[1]->message, 'error_delitem', 'Cannot delete reserved and found item' );
-    is( $messages[1]->payload->{item}->id, $item_3->id, 'Cannot delete reserved and found item' );
-    is( $messages[1]->payload->{reason}, 'book_reserved', 'Item reserved notified' );
-    is( $messages[2]->message, 'error_delbiblio_items', 'Cannot delete on loan item' );
-    is( $messages[2]->payload->{biblio}->id, $biblio_id, 'The right biblio is attached' );
+    is( $messages[0]->message,               'error_delitem',         'Cannot delete on loan item' );
+    is( $messages[0]->payload->{item}->id,   $item_2->id,             'Cannot delete on loan item' );
+    is( $messages[0]->payload->{reason},     'book_on_loan',          'Item on loan notified' );
+    is( $messages[1]->message,               'error_delitem',         'Cannot delete reserved and found item' );
+    is( $messages[1]->payload->{item}->id,   $item_3->id,             'Cannot delete reserved and found item' );
+    is( $messages[1]->payload->{reason},     'book_reserved',         'Item reserved notified' );
+    is( $messages[2]->message,               'error_delbiblio_items', 'Cannot delete on loan item' );
+    is( $messages[2]->payload->{biblio}->id, $biblio_id,              'The right biblio is attached' );
 
     # Call ->store with biblionumber NULL (as ->cancel does)
-    $item_1 = $builder->build_sample_item;
+    $item_1    = $builder->build_sample_item;
     $biblio_id = $item_1->biblionumber;
-    $order= $builder->build_object({
-        class => 'Koha::Acquisition::Orders',
-        value => {
-            orderstatus             => 'new',
-            biblionumber            => $biblio_id,
-            datecancellationprinted => undef,
-            cancellationreason      => undef,
+    $order     = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
         }
-    });
+    );
     my $columns = {
         biblionumber            => undef,
         cancellationreason      => $reason,
@@ -1027,7 +1026,8 @@ subtest 'cancel() tests' => sub {
         orderstatus             => 'cancelled',
     };
     lives_ok { $order->set($columns)->store; } 'No croak on missing biblionumber when cancelling an order';
-    throws_ok { $order->orderstatus('new')->store; } qr/Cannot insert order: Mandatory parameter biblionumber is missing/, 'Expected croak';
+    throws_ok { $order->orderstatus('new')->store; }
+    qr/Cannot insert order: Mandatory parameter biblionumber is missing/, 'Expected croak';
 
     # Try to cancel again, not overwriting cancellation date
     my $dt = dt_from_string->subtract( days => 1 );

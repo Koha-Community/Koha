@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw(
     DelBiblio
     GetBiblioData
@@ -32,8 +32,8 @@ use C4::Biblio qw(
     ModBiblio
     TransformHtmlToMarc
 );
-use C4::Serials qw( CountSubscriptionFromBiblionumber );
-use C4::Reserves qw( MergeHolds );
+use C4::Serials     qw( CountSubscriptionFromBiblionumber );
+use C4::Reserves    qw( MergeHolds );
 use C4::Acquisition qw( ModOrder GetOrdersByBiblionumber );
 
 use Koha::BiblioFrameworks;
@@ -44,26 +44,27 @@ use Koha::MetadataRecord;
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "cataloguing/merge.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { editcatalogue => 'edit_catalogue' },
+        template_name => "cataloguing/merge.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { editcatalogue => 'edit_catalogue' },
     }
 );
 
 my @biblionumbers = $input->multi_param('biblionumber');
-my $op = $input->param('op') || q{};
+my $op            = $input->param('op') || q{};
 
 my @errors;
+
 #------------------------
 # Merging
 #------------------------
-if ($op eq 'cud-merge') {
+if ( $op eq 'cud-merge' ) {
 
     my $dbh = C4::Context->dbh;
 
     # Creating a new record from the html code
-    my $record       = TransformHtmlToMarc( $input, 1 );
+    my $record           = TransformHtmlToMarc( $input, 1 );
     my $ref_biblionumber = $input->param('ref_biblionumber');
     @biblionumbers = grep { $_ != $ref_biblionumber } @biblionumbers;
 
@@ -72,54 +73,56 @@ if ($op eq 'cud-merge') {
     my $report_fields_str = $input->param('report_fields');
     $report_fields_str ||= C4::Context->preference('MergeReportFields');
     my @report_fields;
-    foreach my $field_str (split /,/, $report_fields_str) {
-        if ($field_str =~ /(\d{3})([0-9a-z]*)/) {
-            my ($field, $subfields) = ($1, $2);
+    foreach my $field_str ( split /,/, $report_fields_str ) {
+        if ( $field_str =~ /(\d{3})([0-9a-z]*)/ ) {
+            my ( $field, $subfields ) = ( $1, $2 );
             push @report_fields, {
-                tag => $field,
+                tag       => $field,
                 subfields => [ split //, $subfields ]
-            }
+            };
         }
     }
 
     # Rewriting the leader
     my $biblio = Koha::Biblios->find($ref_biblionumber);
-    $record->leader($biblio->metadata->record->leader());
+    $record->leader( $biblio->metadata->record->leader() );
+
     #Take new framework code
     my $frameworkcode = $input->param('frameworkcode');
 
     # Modifying the reference record
-    ModBiblio($record, $ref_biblionumber, $frameworkcode);
+    ModBiblio( $record, $ref_biblionumber, $frameworkcode );
 
     my $report_header = {};
-    foreach my $biblionumber ($ref_biblionumber, @biblionumbers) {
+    foreach my $biblionumber ( $ref_biblionumber, @biblionumbers ) {
+
         # build report
-        my $biblio = Koha::Biblios->find($biblionumber);
-        my $marcrecord = $biblio->metadata->record;
+        my $biblio        = Koha::Biblios->find($biblionumber);
+        my $marcrecord    = $biblio->metadata->record;
         my %report_record = (
             biblionumber => $biblionumber,
-            fields => {},
+            fields       => {},
         );
         foreach my $field (@report_fields) {
-            my @marcfields = $marcrecord->field($field->{tag});
+            my @marcfields = $marcrecord->field( $field->{tag} );
             foreach my $marcfield (@marcfields) {
                 my $tag = $marcfield->tag();
-                if (scalar @{$field->{subfields}}) {
-                    foreach my $subfield (@{$field->{subfields}}) {
+                if ( scalar @{ $field->{subfields} } ) {
+                    foreach my $subfield ( @{ $field->{subfields} } ) {
                         my @values = $marcfield->subfield($subfield);
                         $report_header->{ $tag . $subfield } = 1;
-                        push @{ $report_record{fields}->{$tag . $subfield} }, @values;
+                        push @{ $report_record{fields}->{ $tag . $subfield } }, @values;
                     }
-                } elsif ($field->{tag} gt '009') {
+                } elsif ( $field->{tag} gt '009' ) {
                     my @marcsubfields = $marcfield->subfields();
                     foreach my $marcsubfield (@marcsubfields) {
-                        my ($code, $value) = @$marcsubfield;
+                        my ( $code, $value ) = @$marcsubfield;
                         $report_header->{ $tag . $code } = 1;
                         push @{ $report_record{fields}->{ $tag . $code } }, $value;
                     }
                 } else {
                     $report_header->{ $tag . '@' } = 1;
-                    push @{ $report_record{fields}->{ $tag .'@' } }, $marcfield->data();
+                    push @{ $report_record{fields}->{ $tag . '@' } }, $marcfield->data();
                 }
             }
         }
@@ -143,9 +146,9 @@ if ($op eq 'cud-merge') {
         ref_biblionumber => scalar $input->param('ref_biblionumber')
     );
 
-#-------------------------
-# Show records to merge
-#-------------------------
+    #-------------------------
+    # Show records to merge
+    #-------------------------
 } else {
     my $ref_biblionumber = $input->param('ref_biblionumber');
 
@@ -154,26 +157,26 @@ if ($op eq 'cud-merge') {
         $framework //= GetFrameworkCode($ref_biblionumber);
 
         # Getting MARC Structure
-        my $tagslib = GetMarcStructure(1, $framework);
+        my $tagslib = GetMarcStructure( 1, $framework );
 
-        my $marcflavour = lc(C4::Context->preference('marcflavour'));
+        my $marcflavour = lc( C4::Context->preference('marcflavour') );
 
         # Creating a loop for display
         my @records;
         foreach my $biblionumber (@biblionumbers) {
-            my $biblio = Koha::Biblios->find($biblionumber);
-            my $marcrecord = $biblio->metadata->record;
+            my $biblio        = Koha::Biblios->find($biblionumber);
+            my $marcrecord    = $biblio->metadata->record;
             my $frameworkcode = GetFrameworkCode($biblionumber);
-            my $recordObj = Koha::MetadataRecord->new({'record' => $marcrecord, schema => $marcflavour});
-            my $record = {
-                recordid => $biblionumber,
-                record => $marcrecord,
+            my $recordObj     = Koha::MetadataRecord->new( { 'record' => $marcrecord, schema => $marcflavour } );
+            my $record        = {
+                recordid      => $biblionumber,
+                record        => $marcrecord,
                 frameworkcode => $frameworkcode,
-                display => $recordObj->createMergeHash($tagslib),
+                display       => $recordObj->createMergeHash($tagslib),
             };
-            if ($ref_biblionumber and $ref_biblionumber == $biblionumber) {
+            if ( $ref_biblionumber and $ref_biblionumber == $biblionumber ) {
                 $record->{reference} = 1;
-                $template->param(ref_record => $record);
+                $template->param( ref_record => $record );
                 unshift @records, $record;
             } else {
                 push @records, $record;
@@ -184,38 +187,40 @@ if ($op eq 'cud-merge') {
 
         # Parameters
         $template->param(
-            ref_biblionumber => $ref_biblionumber,
-            records => \@records,
-            ref_record => $records[0],
-            framework => $framework,
-            biblionumbertag => $biblionumbertag,
+            ref_biblionumber  => $ref_biblionumber,
+            records           => \@records,
+            ref_record        => $records[0],
+            framework         => $framework,
+            biblionumbertag   => $biblionumbertag,
             MergeReportFields => C4::Context->preference('MergeReportFields'),
         );
     } else {
         my @records;
         foreach my $biblionumber (@biblionumbers) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
-            my $record = {
-                biblionumber => $biblionumber,
-                data => GetBiblioData($biblionumber),
+            my $record        = {
+                biblionumber  => $biblionumber,
+                data          => GetBiblioData($biblionumber),
                 frameworkcode => $frameworkcode,
             };
             push @records, $record;
         }
+
         # Ask the user to choose which record will be the kept
         $template->param(
             choosereference => 1,
-            records => \@records,
+            records         => \@records,
         );
 
-        my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+        my $frameworks = Koha::BiblioFrameworks->search( {}, { order_by => ['frameworktext'] } );
         $template->param( frameworks => $frameworks );
     }
 }
 
 if (@errors) {
+
     # Errors
-    $template->param( errors  => \@errors );
+    $template->param( errors => \@errors );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -4,7 +4,7 @@
             <option value="[% prefix | html %][% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
         [% ELSE %]
             <option value="[% prefix | html %][% l.branchcode | html %]">[% l.branchname | html %]</option>
-        [% END%]
+        [% END %]
     [% END %]
 [% END %]
 
@@ -12,11 +12,11 @@
     <option id="nodesk" value="">---</option>
     [% FOREACH d IN desks %]
         [% IF d.branchcode == branch %]
-          [% IF selected == d.desk_id || ( selected == '' && loop.first ) %]
-            <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" selected="selected">[% d.desk_name | html %]</option>
-          [% ELSE %]
-            <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" >[% d.desk_name | html %]</option>
-          [% END %]
+            [% IF selected == d.desk_id || ( selected == '' && loop.first ) %]
+                <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" selected="selected">[% d.desk_name | html %]</option>
+            [% ELSE %]
+                <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]">[% d.desk_name | html %]</option>
+            [% END %]
         [% ELSE %]
             <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled style="display: none">[% d.desk_name | html %]</option>
         [% END %]
@@ -27,12 +27,12 @@
     [% FOREACH r IN registers %]
         [% IF r.branch == Branches.GetLoggedInBranchcode %]
             [% IF r.selected %]
-                <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]" selected="selected">[% r.name | html %]</option>
+                <option class="[%- r.branch | html -%][%- IF r.branch_default -%]default[%- END -%]" value="[% r.id | html %]" selected="selected">[% r.name | html %]</option>
             [% ELSE %]
-                <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]">[% r.name | html %]</option>
-            [% END%]
+                <option class="[%- r.branch | html -%][%- IF r.branch_default -%]default[%- END -%]" value="[% r.id | html %]">[% r.name | html %]</option>
+            [% END %]
         [% ELSE %]
-            <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]" disabled="disabled" style="display: none">[% r.name | html %]</option>
+            <option class="[%- r.branch | html -%][%- IF r.branch_default -%]default[%- END -%]" value="[% r.id | html %]" disabled="disabled" style="display: none">[% r.name | html %]</option>
         [% END %]
     [% END %]
 [% END %]
@@ -60,13 +60,9 @@
 [% BLOCK options_for_item_types %]
     [% FOREACH itemtype IN itemtypes %]
         [% IF itemtype.itemtype == selected_itemtype %]
-            <option value="[% itemtype.itemtype | html %]" selected="selected">
-                [% itemtype.translated_description | html %]
-            </option>
+            <option value="[% itemtype.itemtype | html %]" selected="selected"> [% itemtype.translated_description | html %] </option>
         [% ELSE %]
-            <option value="[% itemtype.itemtype | html %]">
-                [% itemtype.translated_description | html %]
-            </option>
+            <option value="[% itemtype.itemtype | html %]"> [% itemtype.translated_description | html %] </option>
         [% END %]
     [% END %]
 [% END %]
@@ -98,12 +94,12 @@
                     [% IF ( subfield.mandatory ) %]
                         <label class="required">[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
                     [% ELSE %]
-                       <label>[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
+                        <label>[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
                     [% END %]
 
                     [% SET mv = subfield.marc_value %]
                     [% IF ( mv.type == 'hidden' ) %]
-                        <input type="hidden" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
+                        <input type="hidden" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                     [% ELSIF ( mv.type == 'select' ) %]
                         [% SET select_readonly = '' %]
                         [% SET select_disabled = '' %]
@@ -115,77 +111,119 @@
                             [% SET select_class = 'input_marceditor select2 ' _ kohafield %]
                         [% END %]
 
-                        <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor [% kohafield | html %]" [% select_readonly | html %] [% select_disabled | html %] data-category="[% mv.category | html %]" data-width="50%">
-
-                        [% SET matched = 0 %]
-                        [% FOREACH aval IN mv.values %]
-                            [% IF aval == mv.default %]
-                                [% SET matched = 1 %]
-                                <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
-                            [% ELSE %]
-                                [% IF subfield.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
-                                    <option disabled="disabled" value="[%- aval | html -%]" title="Return claims must be processed from the patron details page">[%- mv.labels.$aval | html -%]</option>
-                                [% ELSIF subfield.IS_LOST_AV && Koha.Preference("BundleLostValue") && aval == Koha.Preference("BundleLostValue") %]
-                                    <option disabled="disabled" value="[%- aval | html -%]" title="Bundle losses are set at checkin automatically">[%- mv.labels.$aval | html -%]</option>
-                                [%  ELSE %]
-                                    <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                        <select
+                            name="[% kohafield | html %]"
+                            id="[%- mv.id | html -%]"
+                            class="input_marceditor [% kohafield | html %]"
+                            [% select_readonly | html %]
+                            [% select_disabled | html %]
+                            data-category="[% mv.category | html %]"
+                            data-width="50%"
+                        >
+                            [% SET matched = 0 %]
+                            [% FOREACH aval IN mv.values %]
+                                [% IF aval == mv.default %]
+                                    [% SET matched = 1 %]
+                                    <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
+                                [% ELSE %]
+                                    [% IF subfield.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
+                                        <option disabled="disabled" value="[%- aval | html -%]" title="Return claims must be processed from the patron details page">[%- mv.labels.$aval | html -%]</option>
+                                    [% ELSIF subfield.IS_LOST_AV && Koha.Preference("BundleLostValue") && aval == Koha.Preference("BundleLostValue") %]
+                                        <option disabled="disabled" value="[%- aval | html -%]" title="Bundle losses are set at checkin automatically">[%- mv.labels.$aval | html -%]</option>
+                                    [% ELSE %]
+                                        <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                    [% END %]
                                 [% END %]
                             [% END %]
-                        [% END %]
-                        [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
-                        [%# If the current value is not in the authorised list  and is not a field where 0 means unset #%]
+                            [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
+                                [%# If the current value is not in the authorised list  and is not a field where 0 means unset #%]
                                 <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%] (Not an authorised value)</option>
-                        [% END %]
-                            </select>
+                            [% END %]
+                        </select>
                         [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
-                            <span style="float:right;" title="The current value [% mv.default | html %] is not configured for the authorised value category controlling this subfield"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                            <span style="float:right;" title="The current value [% mv.default | html %] is not configured for the authorised value category controlling this subfield"
+                                ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i
+                            ></span>
                         [% END %]
                     [% ELSIF ( mv.type == 'text_auth' ) %]
                         [% IF mv.readonly %]
-                            <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                            <input
+                                type="text"
+                                id="[%- mv.id | html -%]"
+                                name="[% kohafield | html %]"
+                                class="input_marceditor [% kohafield | html %]"
+                                maxlength="[%- mv.maxlength | html -%]"
+                                value="[%- mv.value | html -%]"
+                                readonly="readonly"
+                            />
                         [% ELSE %]
                             <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                             [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
-                            <a href="#" class="buttonDot"  onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
+                            <a href="#" class="buttonDot" onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
                         [% END %]
                     [% ELSIF ( mv.type == 'text_plugin' ) %]
                         [% IF mv.readonly %]
-                            <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                            <input
+                                type="text"
+                                id="[%- mv.id | html -%]"
+                                name="[% kohafield | html %]"
+                                class="input_marceditor [% kohafield | html %]"
+                                maxlength="[%- mv.maxlength | html -%]"
+                                value="[%- mv.value | html -%]"
+                                readonly="readonly"
+                            />
                         [% ELSE %]
                             <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                             [% IF ( mv.nopopup ) %]
                                 <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="No  popup">...</a>
-                            [% ELSE  %]
+                            [% ELSE %]
                                 <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="Tag editor">...</a>
                             [% END %]
-                            [% UNLESS no_plugin %][%# FIXME - from batchMod-edit, jQuery is included at the end of the template and cataloguing plugins are not working in this situation %]
+                            [% UNLESS no_plugin %]
+                                [%# FIXME - from batchMod-edit, jQuery is included at the end of the template and cataloguing plugins are not working in this situation %]
                                 [%- mv.javascript | $raw -%]
                             [% END %]
                         [% END %]
                     [% ELSIF ( mv.type == 'text' ) %]
                         [% IF mv.readonly %]
-                            <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                            <input
+                                type="text"
+                                id="[%- mv.id | html -%]"
+                                name="[% kohafield | html %]"
+                                class="input_marceditor [% kohafield | html %]"
+                                maxlength="[%- mv.maxlength | html -%]"
+                                value="[%- mv.value | html -%]"
+                                readonly="readonly"
+                            />
                         [% ELSE %]
                             <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% END %]
                     [% ELSIF ( mv.type == 'textarea' ) %]
                         [% IF mv.readonly %]
-                            <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" rows="5" cols="64" readonly="readonly" >[% mv.value | html %]</textarea>
+                            <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" rows="5" cols="64" readonly="readonly">[% mv.value | html %]</textarea>
                         [% ELSE %]
-                            <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" rows="5" cols="64" >[% mv.value | html %]</textarea>
+                            <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" rows="5" cols="64">[% mv.value | html %]</textarea>
                         [% END %]
                     [% ELSIF ( mv.type == 'date_field' ) %]
-                         <input type="text" id="[% mv.id | html %]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %] flatpickr" value="[% mv.value | html %]" class="flatpickr" data-flatpickr-set-to-today="true" />
+                        <input type="text" id="[% mv.id | html %]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %] flatpickr" value="[% mv.value | html %]" class="flatpickr" data-flatpickr-set-to-today="true" />
                     [% ELSIF ( mv.type == 'datetime_field' ) %]
-                         <input type="text" id="[% mv.id | html %]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %] flatpickr" value="[% mv.value | html %]" data-flatpickr-enable-time="true" data-flatpickr-set-to-today="true" />
+                        <input
+                            type="text"
+                            id="[% mv.id | html %]"
+                            name="[% kohafield | html %]"
+                            class="input_marceditor [% kohafield | html %] flatpickr"
+                            value="[% mv.value | html %]"
+                            data-flatpickr-enable-time="true"
+                            data-flatpickr-set-to-today="true"
+                        />
                     [% END %]
 
                     [% IF subfield.kohafield == 'items.more_subfields_xml' %]
                         <input type="hidden" name="items.more_subfields_xml" value="[% subfield.subfield | html %]" />
                     [% END %]
-                    <input type="hidden" name="tag"       value="[% subfield.tag | html %]" />
+                    <input type="hidden" name="tag" value="[% subfield.tag | html %]" />
                     <input type="hidden" name="kohafield" value="[% subfield.kohafield | html %]" /> [%# We should not need that but all item forms are not rewritten yet %]
-                    <input type="hidden" name="subfield"  value="[% subfield.subfield | html %]" />
+                    <input type="hidden" name="subfield" value="[% subfield.subfield | html %]" />
                     <input type="hidden" name="mandatory" value="[% subfield.mandatory | html %]" />
                     <input type="hidden" name="important" value="[% subfield.important | html %]" />
 
@@ -199,19 +237,27 @@
 
                     [% IF add_delete_checkbox %]
                         [% UNLESS ( subfield.mandatory ) %]
-                            <input type="checkbox" id="row[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]" title="Check to delete subfield [% subfield.subfield | html %]" name="disable_input" value="[% kohafield | html %]" />
+                            <input
+                                type="checkbox"
+                                id="row[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]"
+                                title="Check to delete subfield [% subfield.subfield | html %]"
+                                name="disable_input"
+                                value="[% kohafield | html %]"
+                            />
                         [% ELSE %]
                             <span class="required">Required</span>
                         [% END %]
                     [% ELSE %]
-                        [% IF ( subfield.mandatory ) %] <span class="required">Required</span>
-                        [% ELSIF ( subfield.important ) %] <span class="important">Important</span>
+                        [% IF ( subfield.mandatory ) %]
+                            <span class="required">Required</span>
+                        [% ELSIF ( subfield.important ) %]
+                            <span class="important">Important</span>
                         [% END %]
                     [% END %]
 
                     [% IF add_regex %]
                         [% IF (mv.type == 'text' || mv.type == 'text_plugin' || mv.type == 'textarea' ) %]
-                            <a href="#" name="[% kohafield | html %]_field_regex" class="field_regex" id="[% subfield.id | html %]" >RegEx</a>
+                            <a href="#" name="[% kohafield | html %]_field_regex" class="field_regex" id="[% subfield.id | html %]">RegEx</a>
                         [% END %]
                     [% END %]
 
@@ -222,7 +268,6 @@
                     [% END %]
 
                     <span class="hint" id="hint[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]"></span>
-
                 </div>
             </li>
         [% END %]
@@ -230,146 +275,147 @@
 [% END %]
 
 [% BLOCK items_table_batchmod %]
-<div class="page-section">
-    [% IF display_columns_selection %][%# Needs js/pages/batchMod.js %]
-        [% IF checkboxes_edit OR checkboxes_delete %]
-            <div class="btn-toolbar selections-toolbar">
-                <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
+    <div class="page-section">
+        [% IF display_columns_selection %]
+            [%# Needs js/pages/batchMod.js %]
+            [% IF checkboxes_edit OR checkboxes_delete %]
+                <div class="btn-toolbar selections-toolbar">
+                    <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
+                </div>
+            [% END %]
+
+            <div id="cataloguing_additem_itemlist">
+                <p id="selections">
+                    <strong>Show/hide columns:</strong>
+                    <span class="selected">
+                        <input type="checkbox" checked="checked" id="showall" />
+                        <label for="showall">Show all columns</label>
+                    </span>
+                    <span>
+                        <input type="checkbox" id="hideall" />
+                        <label for="hideall">Hide all columns</label>
+                    </span>
+
+                    [% FOREACH header IN item_header_loop %]
+                        <span class="selected">
+                            <input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" />
+                            <label for="checkheader[% loop.count | html %]">[% header.header_value | html %]</label>
+                        </span>
+                    [% END %]
+                </p>
+                <!-- /#selections -->
             </div>
         [% END %]
-
-        <div id="cataloguing_additem_itemlist">
-
-            <p id="selections">
-                <strong>Show/hide columns:</strong>
-                <span class="selected">
-                    <input type="checkbox" checked="checked" id="showall" />
-                    <label for="showall">Show all columns</label>
-                </span>
-                <span>
-                    <input type="checkbox" id="hideall" />
-                    <label for="hideall">Hide all columns</label>
-                </span>
-
-                [% FOREACH header IN item_header_loop %]
-                    <span class="selected">
-                        <input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" />
-                        <label for="checkheader[% loop.count | html %]">[% header.header_value | html %]</label>
-                    </span>
-                [% END %]
-            </p> <!-- /#selections -->
-        </div>
-    [% END %]
-    [% SET date_fields = [ 'dateaccessioned', 'onloan', 'datelastseen', 'datelastborrowed', 'replacementpricedate' ] %]
-    <table id="itemst">
-        <thead>
-            <tr>
-                <th></th>
-                [% IF checkboxes_edit OR checkboxes_delete %]
-                    <th></th>
-                [% END %]
-                <th class="anti-the">Title</th>
-                <th class="holds_count" title="Item holds / Total holds">Holds</th>
-                [% FOREACH item_header IN headers %]
-                    [% IF item_header.column_name %]
-                        <th data-colname="[% item_header.column_name | html %]">
-                            [% item_header.header_value | html %]
-                        </th>
-                    [% ELSE %]
-                        <th>
-                            [% item_header.header_value | html %]
-                        </th>
-                    [% END %]
-                [% END %]
-            </tr>
-        </thead>
-        <tbody>
-            [% FOREACH item IN items %]
-                [% SET can_be_edited = !item.nomod && !( Koha.Preference('IndependentBranches') && ! logged_in_user && item.homebranch != Branches.GetLoggedInBranchname() ) %]
-
+        [% SET date_fields = [ 'dateaccessioned', 'onloan', 'datelastseen', 'datelastborrowed', 'replacementpricedate' ] %]
+        <table id="itemst">
+            <thead>
                 <tr>
-                    <td>[% item.index + 1 | html %]</td>
-                    [% IF checkboxes_edit %]
-                        [% UNLESS can_be_edited%]
-                            <td class="error">
-                                <i class="fa fa-times fa-lg" title="Cannot edit"></i>
-                            </td>
-                        [% ELSE %]
-                            <td>
-                                <input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" data-is-onloan="[% item.is_checked_out | html %]" />
-                            </td>
-                        [% END %]
-                    [% ELSIF checkboxes_delete %]
-                        [% UNLESS can_be_edited %]
-                            <td class="error">
-                                <i class="fa fa-times fa-lg" title="Cannot delete"></i>
-                            </td>
-                        [% ELSE %]
-                            [% IF item.safe_to_delete %]
-                                <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" /></td>
-                            [% ELSE %]
-                                [% SET messages = item.safe_to_delete.messages %]
-                                [% FOR m IN messages %]
-                                    [% SWITCH m.message %]
-                                    [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
-                                    [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
-                                    [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
-                                    [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
-                                    [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
-                                    [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ m.message _ ')' %]
-                                    [% END %]
-                                [% END %]
-
-                                <td class="error">
-                                    <i class="fa fa-times fa-lg" title="[% cannot_delete_reason | html %]"></i>
-                                </td>
-                            [% END %]
-
-                        [% END %]
+                    <th></th>
+                    [% IF checkboxes_edit OR checkboxes_delete %]
+                        <th></th>
                     [% END %]
-                    <td>
-                        <label for="row[% item.itemnumber | html %]">
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]">
-                                [% item.biblio.title | html %]
-                            </a>
-                            [% IF ( item.biblio.author ) %], by [% item.biblio.author | html %][% END %]
-                        </label>
-                    </td>
-                    <td class="holds_count">
-                        [% IF item.holds %]
-                            [% IF item.item_holds %]
-                                [% SET a_title = tx("Holds on this item: {item_holds} / Total holds on this record: {total_holds}", { item_holds=item.item_holds, total_holds=item.holds }) %]
-                            [% ELSE %]
-                                [% SET a_title = tx("No holds on this item / Total holds on this record: {total_holds}", { total_holds=item.holds }) %]
-                            [% END %]
+                    <th class="anti-the">Title</th>
+                    <th class="holds_count" title="Item holds / Total holds">Holds</th>
+                    [% FOREACH item_header IN headers %]
+                        [% IF item_header.column_name %]
+                            <th data-colname="[% item_header.column_name | html %]"> [% item_header.header_value | html %] </th>
                         [% ELSE %]
-                            [% IF item.holds %]
-                                [% SET a_title = tx("Holds on this record: {total_holds}", { total_holds=item.holds }) %]
-                            [% ELSE %]
-                                [% SET a_title = t("No holds on this record") %]
-                            [% END %]
-                        [% END # /IF item.holds %]
-                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="[% a_title | html %]">
-                        [% IF item.holds %]
-                            [% item.item_holds | html %]/[% item.holds | html %]
-                        [% ELSE %]
-                            [% item.holds | html %]
-                        [% END %]
-                        </a>
-                    </td>
-                    [% FOREACH header IN headers %]
-                        [% SET attribute = header.attribute %]
-                        [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
-                            <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
-                        [% ELSE %]
-                            <td>[% item.$attribute | html %]</td>
+                            <th> [% item_header.header_value | html %] </th>
                         [% END %]
                     [% END %]
                 </tr>
-            [% END # /FOREACH items %]
-        </tbody>
-    </table> <!-- /#itemst -->
-</div>
+            </thead>
+            <tbody>
+                [% FOREACH item IN items %]
+                    [% SET can_be_edited = !item.nomod && !( Koha.Preference('IndependentBranches') && ! logged_in_user && item.homebranch != Branches.GetLoggedInBranchname() ) %]
+
+                    <tr>
+                        <td>[% item.index + 1 | html %]</td>
+                        [% IF checkboxes_edit %]
+                            [% UNLESS can_be_edited %]
+                                <td class="error">
+                                    <i class="fa fa-times fa-lg" title="Cannot edit"></i>
+                                </td>
+                            [% ELSE %]
+                                <td>
+                                    <input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" data-is-onloan="[% item.is_checked_out | html %]" />
+                                </td>
+                            [% END %]
+                        [% ELSIF checkboxes_delete %]
+                            [% UNLESS can_be_edited %]
+                                <td class="error">
+                                    <i class="fa fa-times fa-lg" title="Cannot delete"></i>
+                                </td>
+                            [% ELSE %]
+                                [% IF item.safe_to_delete %]
+                                    <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" /></td>
+                                [% ELSE %]
+                                    [% SET messages = item.safe_to_delete.messages %]
+                                    [% FOR m IN messages %]
+                                        [% SWITCH m.message %]
+                                        [% CASE "book_on_loan" %]
+                                            [% SET cannot_delete_reason = t("Item is checked out") %]
+                                        [% CASE "not_same_branch" %]
+                                            [% SET cannot_delete_reason = t("Item does not belong to your library") %]
+                                        [% CASE "book_reserved" %]
+                                            [% SET cannot_delete_reason = t("Item has a waiting hold") %]
+                                        [% CASE "linked_analytics" %]
+                                            [% SET cannot_delete_reason = t("Item has linked analytics") %]
+                                        [% CASE "last_item_for_hold" %]
+                                            [% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
+                                        [% CASE %]
+                                            [% SET cannot_delete_reason = t("Unknown reason") _ '(' _ m.message _ ')' %]
+                                        [% END %]
+                                    [% END %]
+
+                                    <td class="error">
+                                        <i class="fa fa-times fa-lg" title="[% cannot_delete_reason | html %]"></i>
+                                    </td>
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                        <td>
+                            <label for="row[% item.itemnumber | html %]">
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]"> [% item.biblio.title | html %] </a>
+                                [% IF ( item.biblio.author ) %], by [% item.biblio.author | html %][% END %]
+                            </label>
+                        </td>
+                        <td class="holds_count">
+                            [% IF item.holds %]
+                                [% IF item.item_holds %]
+                                    [% SET a_title = tx("Holds on this item: {item_holds} / Total holds on this record: {total_holds}", { item_holds=item.item_holds, total_holds=item.holds }) %]
+                                [% ELSE %]
+                                    [% SET a_title = tx("No holds on this item / Total holds on this record: {total_holds}", { total_holds=item.holds }) %]
+                                [% END %]
+                            [% ELSE %]
+                                [% IF item.holds %]
+                                    [% SET a_title = tx("Holds on this record: {total_holds}", { total_holds=item.holds }) %]
+                                [% ELSE %]
+                                    [% SET a_title = t("No holds on this record") %]
+                                [% END %]
+                            [% END # /IF item.holds %]
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="[% a_title | html %]">
+                                [% IF item.holds %]
+                                    [% item.item_holds | html %]/[% item.holds | html %]
+                                [% ELSE %]
+                                    [% item.holds | html %]
+                                [% END %]
+                            </a>
+                        </td>
+                        [% FOREACH header IN headers %]
+                            [% SET attribute = header.attribute %]
+                            [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
+                                <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
+                            [% ELSE %]
+                                <td>[% item.$attribute | html %]</td>
+                            [% END %]
+                        [% END %]
+                    </tr>
+                [% END # /FOREACH items %]
+            </tbody>
+        </table>
+        <!-- /#itemst -->
+    </div>
 [% END %]
 
 [%# BOOTSTRAP TAB WRAPPER USAGE                                                                         %]
@@ -388,13 +434,9 @@
 
 [% BLOCK tabs %]
     [% IF ( id ) %]
-        <div id="[% id | html %]" class="toptabs">
-            [% content | $raw %]
-        </div>
+        <div id="[% id | html %]" class="toptabs"> [% content | $raw %] </div>
     [% ELSE %]
-        <div class="toptabs">
-            [% content | $raw %]
-        </div>
+        <div class="toptabs"> [% content | $raw %] </div>
     [% END %]
 [% END %]
 
@@ -406,46 +448,53 @@
 
 [% BLOCK tab_item %]
     <li [% IF id %]id="[% id | html %]"[% END %] class="nav-item" role="presentation">
-    [% IF ( bt_active ) %]
-        [% IF (linktab) %]
-            <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | html %]-tab">
-                [% content | $raw %]
-            </a>
+        [% IF ( bt_active ) %]
+            [% IF (linktab) %]
+                <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | html %]-tab"> [% content | $raw %] </a>
+            [% ELSE %]
+                <a
+                    class="nav-link active"
+                    href="#[% tabname | uri %]_panel"
+                    id="[% tabname | html %]-tab"
+                    data-tabname="[% tabname | uri %]"
+                    aria-controls="[% tabname | uri %]_panel"
+                    role="tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#[% tabname | uri %]_panel"
+                >
+                    [% content | $raw %]
+                </a>
+            [% END %]
         [% ELSE %]
-            <a class="nav-link active" href="#[% tabname | uri %]_panel" id="[% tabname | html %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
-                [% content | $raw %]
-            </a>
+            [% IF (linktab) %]
+                <a class="nav-link" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab"> [% content | $raw %] </a>
+            [% ELSE %]
+                <a
+                    class="nav-link"
+                    href="#[% tabname | uri %]_panel"
+                    id="[% tabname | uri %]-tab"
+                    data-tabname="[% tabname | uri %]"
+                    aria-controls="[% tabname | uri %]_panel"
+                    role="tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#[% tabname | uri %]_panel"
+                >
+                    [% content | $raw %]
+                </a>
+            [% END %]
         [% END %]
-    [% ELSE %]
-        [% IF (linktab) %]
-            <a class="nav-link" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
-                [% content | $raw %]
-            </a>
-        [% ELSE %]
-            <a class="nav-link" href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
-                [% content | $raw %]
-            </a>
-        [% END %]
-    [% END %]
     </li>
 [% END %]
 
-
 [% BLOCK tab_panels %]
-    <div class="tab-content">
-        [% content | $raw %]
-    </div>
+    <div class="tab-content"> [% content | $raw %] </div>
 [% END %]
 
 [% BLOCK tab_panel %]
     [% IF ( bt_active ) %]
-        <div class="tab-pane show active" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0">
-            [% content| $raw %]
-        </div>
+        <div class="tab-pane show active" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0"> [% content| $raw %] </div>
     [% ELSE %]
-        <div class="tab-pane" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0">
-            [% content| $raw %]
-        </div>
+        <div class="tab-pane" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0"> [% content| $raw %] </div>
     [% END %]
 [% END %]
 
@@ -497,14 +546,10 @@
 [% BLOCK breadcrumb_item %]
     [% IF ( bc_active ) %]
         <li class="breadcrumb-item active" aria-current="page">
-            <a href="#">
-                [% content | $raw %]
-            </a>
+            <a href="#"> [% content | $raw %] </a>
         </li>
     [% ELSE %]
-        <li class="breadcrumb-item">
-            [% content | $raw %]
-        </li>
+        <li class="breadcrumb-item"> [% content | $raw %] </li>
     [% END %]
 [% END %]
 
@@ -520,33 +565,39 @@
 [%# [ END ]                                                      %]
 
 [% BLOCK accordion %]
-    <div class="panel-group" id="[% panelgroup_id | $raw %]_group" role="tablist" aria-multiselectable="true">
-        [% content | $raw %]
-    </div>
+    <div class="panel-group" id="[% panelgroup_id | $raw %]_group" role="tablist" aria-multiselectable="true"> [% content | $raw %] </div>
 [% END %]
 
 [% BLOCK accordion_item %]
-    <div class="panel panel-default">
-        [% content | $raw %]
-    </div>
+    <div class="panel panel-default"> [% content | $raw %] </div>
 [% END %]
 
 [% BLOCK accordion_heading %]
     <div class="panel-heading" role="tab" id="[% panel_id | $raw %]_heading">
         <h2 class="panel-title">
-            <a id="[% panel_id | $raw %]Toggle" href="#[% panel_id | $raw %]_panel" class="collapsed" role="button" data-bs-toggle="collapse" data-parent="#[% panelgroup_id | $raw %]_group" aria-expanded="false" aria-controls="[% panel_id | $raw %]_panel">
+            <a
+                id="[% panel_id | $raw %]Toggle"
+                href="#[% panel_id | $raw %]_panel"
+                class="collapsed"
+                role="button"
+                data-bs-toggle="collapse"
+                data-parent="#[% panelgroup_id | $raw %]_group"
+                aria-expanded="false"
+                aria-controls="[% panel_id | $raw %]_panel"
+            >
                 [% content | $raw %]
             </a>
         </h2>
-    </div> <!-- /.panel-heading -->
+    </div>
+    <!-- /.panel-heading -->
 [% END %]
 
 [% BLOCK accordion_panel %]
     <div id="[% panel_id | $raw %]_panel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="[% panel_id | $raw %]_heading">
-        <div class="panel-body">
-            [% content | $raw %]
-        </div> <!-- /.panel-body -->
-    </div> <!-- /.panel-collapse -->
+        <div class="panel-body"> [% content | $raw %] </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel-collapse -->
 [% END %]
 
 [% BLOCK acquisitions_filter_form %]

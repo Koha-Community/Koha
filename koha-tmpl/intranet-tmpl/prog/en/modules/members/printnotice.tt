@@ -4,11 +4,12 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% title | html %] &rsaquo;
-    [% t("Patrons") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% title | html %]
+        &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,7 +17,7 @@
 
 [% Asset.css("css/print.css") | $raw %]
 [% IF ( Koha.Preference('SlipCSS') ) %]
-<link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
+    <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
 <!-- prettier-ignore-start -->
 [% IF style %]<style>[% style | $raw %]</style>[% END %]
@@ -24,13 +25,13 @@
 </head>
 
 <body id="members_printslip" class="member">
-    <div id="slip">
-        [% IF plain %]
-            <pre>[% IF ( slip ) %][% slip | html %][% ELSE %]No slip template found[% END %]</pre>
-        [% ELSE %]
-            [% IF ( slip ) %][% slip | $raw %][% ELSE %]No slip template found[% END %]
-        [% END %]
-    </div>
+<div id="slip">
+    [% IF plain %]
+        <pre>[% IF ( slip ) %][% slip | html %][% ELSE %]No slip template found[% END %]</pre>
+    [% ELSE %]
+        [% IF ( slip ) %][% slip | $raw %][% ELSE %]No slip template found[% END %]
+    [% END %]
+</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'slip-print.inc' #printThenClose %]

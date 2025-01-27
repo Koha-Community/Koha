@@ -32,15 +32,17 @@ push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 
 my @errors;
-for my $file ( @files ) {
+for my $file (@files) {
     chomp $file;
     my @lines = sort grep /\_\(\'/, read_file($file);
     push @errors, { name => $file, lines => \@lines } if @lines;
 }
 
 ok( !@errors, "Files do not contain single quotes _(' " )
-  or diag(
+    or diag(
     "Files list: \n",
-    join( "\n",
-        map { $_->{name} . ': ' . join( ', ', @{ $_->{lines} } ) } @errors )
-  );
+    join(
+        "\n",
+        map { $_->{name} . ': ' . join( ', ', @{ $_->{lines} } ) } @errors
+    )
+    );

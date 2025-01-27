@@ -20,41 +20,43 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw/check_api_auth/;
 use C4::Context;
-use C4::ImportBatch qw( GetWebserviceBatchId AddBiblioToBatch AddItemsToImportBiblio BatchFindDuplicates BatchCommitRecords );
+use C4::ImportBatch
+    qw( GetWebserviceBatchId AddBiblioToBatch AddItemsToImportBiblio BatchFindDuplicates BatchCommitRecords );
 use C4::Matcher;
 use XML::Simple;
+
 # use Carp::Always;
 
 my $query = CGI->new;
 binmode STDOUT, ':encoding(UTF-8)';
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
-unless ($status eq "ok") {
-    print $query->header(-type => 'text/xml', -status => '403 Forbidden');
-    print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { editcatalogue => 'edit_catalogue' } );
+unless ( $status eq "ok" ) {
+    print $query->header( -type => 'text/xml', -status => '403 Forbidden' );
+    print XMLout( { auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
     exit 0;
 }
 
 my $xml;
-if ($query->request_method eq "POST") {
+if ( $query->request_method eq "POST" ) {
     $xml = $query->param('xml');
 }
 if ($xml) {
     my %params = map { $_ => scalar $query->param($_) } $query->param;
-    my $result = import_bib($xml, \%params );
-    print $query->header(-type => 'text/xml');
-    print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    my $result = import_bib( $xml, \%params );
+    print $query->header( -type => 'text/xml' );
+    print XMLout( $result, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
 } else {
-    print $query->header(-type => 'text/xml', -status => '400 Bad Request');
+    print $query->header( -type => 'text/xml', -status => '400 Bad Request' );
 }
 
 exit 0;
 
 sub import_bib {
-    my ($inxml, $params) = @_;
+    my ( $inxml, $params ) = @_;
 
     my $result = {};
 
@@ -62,35 +64,35 @@ sub import_bib {
     my $framework         = delete $params->{framework}   || '';
     my $overlay_framework = $params->{overlay_framework};
 
-    if (my $matcher_code = delete $params->{match}) {
+    if ( my $matcher_code = delete $params->{match} ) {
         $params->{matcher_id} = C4::Matcher::GetMatcherId($matcher_code);
     }
 
     my $batch_id = GetWebserviceBatchId($params);
     unless ($batch_id) {
         $result->{'status'} = "failed";
-        $result->{'error'} = "Batch create error";
+        $result->{'error'}  = "Batch create error";
         return $result;
     }
 
     my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
-    my $marc_record = eval {MARC::Record::new_from_xml( $inxml, "UTF-8", $marcflavour)};
+    my $marc_record = eval { MARC::Record::new_from_xml( $inxml, "UTF-8", $marcflavour ) };
     if ($@) {
         $result->{'status'} = "failed";
-        $result->{'error'} = $@;
+        $result->{'error'}  = $@;
         return $result;
     }
-    if(C4::Context->preference('autoControlNumber') eq 'biblionumber'){
+    if ( C4::Context->preference('autoControlNumber') eq 'biblionumber' ) {
         my @control_num = $marc_record->field('001');
         $marc_record->delete_fields(@control_num);
     }
 
-    my $import_record_id = AddBiblioToBatch($batch_id, 0, $marc_record, "utf8", 1);
-    my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 'UPDATE COUNTS');
+    my $import_record_id = AddBiblioToBatch( $batch_id, 0, $marc_record, "utf8", 1 );
+    my @import_items_ids = AddItemsToImportBiblio( $batch_id, $import_record_id, $marc_record, 'UPDATE COUNTS' );
 
-    my $matcher = C4::Matcher->new($params->{record_type} || 'biblio');
-    $matcher = C4::Matcher->fetch($params->{matcher_id});
-    my $number_of_matches =  BatchFindDuplicates($batch_id, $matcher);
+    my $matcher = C4::Matcher->new( $params->{record_type} || 'biblio' );
+    $matcher = C4::Matcher->fetch( $params->{matcher_id} );
+    my $number_of_matches = BatchFindDuplicates( $batch_id, $matcher );
 
     # XXX we are ignoring the result of this;
     BatchCommitRecords(
@@ -104,16 +106,19 @@ sub import_bib {
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare("SELECT matched_biblionumber FROM import_biblios WHERE import_record_id =?");
     $sth->execute($import_record_id);
-    my $biblionumber=$sth->fetchrow_arrayref->[0] || '';
+    my $biblionumber = $sth->fetchrow_arrayref->[0] || '';
     $sth = $dbh->prepare("SELECT overlay_status FROM import_records WHERE import_record_id =?");
     $sth->execute($import_record_id);
     my $match_status = $sth->fetchrow_arrayref->[0] || 'no_match';
-    my $url = C4::Context->preference('staffClientBaseURL') .'/cgi-bin/koha/catalogue/detail.pl?biblionumber='. $biblionumber;
+    my $url =
+          C4::Context->preference('staffClientBaseURL')
+        . '/cgi-bin/koha/catalogue/detail.pl?biblionumber='
+        . $biblionumber;
 
-    $result->{'status'} = "ok";
+    $result->{'status'}          = "ok";
     $result->{'import_batch_id'} = $batch_id;
-    $result->{'match_status'} = $match_status;
-    $result->{'biblionumber'} = $biblionumber;
-    $result->{'url'} = $url;
+    $result->{'match_status'}    = $match_status;
+    $result->{'biblionumber'}    = $biblionumber;
+    $result->{'url'}             = $url;
     return $result;
 }

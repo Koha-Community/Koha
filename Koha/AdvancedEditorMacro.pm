@@ -16,7 +16,6 @@ package Koha::AdvancedEditorMacro;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -35,12 +34,11 @@ Koha::AdvancedEditorMacro - Koha Advanced editor macro object class
 
 sub to_api_mapping {
     return {
-        id                  => 'macro_id',
-        macro               => 'macro_text',
-        borrowernumber      => 'patron_id',
+        id             => 'macro_id',
+        macro          => 'macro_text',
+        borrowernumber => 'patron_id',
     };
 }
-
 
 =head2 Internal methods
 

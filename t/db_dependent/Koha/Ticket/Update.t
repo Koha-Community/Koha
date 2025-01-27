@@ -33,19 +33,17 @@ subtest 'ticket() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $ticket  = $builder->build_object({ class => 'Koha::Tickets' });
+    my $ticket = $builder->build_object( { class => 'Koha::Tickets' } );
     my $update = $builder->build_object(
         {
             class => 'Koha::Ticket::Updates',
-            value => {
-                ticket_id => $ticket->id
-            }
+            value => { ticket_id => $ticket->id }
         }
     );
 
     my $linked_ticket = $update->ticket;
     is( ref($linked_ticket), 'Koha::Ticket', 'Koha::Ticket::Update->ticket returns a Koha::Ticket object' );
-    is( $linked_ticket->id, $ticket->id, 'Koha::Ticket::Update->ticket returns the right Koha::Ticket' );
+    is( $linked_ticket->id,  $ticket->id,    'Koha::Ticket::Update->ticket returns the right Koha::Ticket' );
 
     $schema->storage->txn_rollback;
 };
@@ -56,19 +54,17 @@ subtest 'user() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $user  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $user   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $update = $builder->build_object(
         {
             class => 'Koha::Ticket::Updates',
-            value => {
-                user_id => $user->id
-            }
+            value => { user_id => $user->id }
         }
     );
 
     my $linked_user = $update->user;
     is( ref($linked_user), 'Koha::Patron', 'Koha::Ticket::Update->user returns a Koha::Patron object' );
-    is( $linked_user->id, $user->id, 'Koha::Ticket::Update->user returns the right Koha::Patron' );
+    is( $linked_user->id,  $user->id,      'Koha::Ticket::Update->user returns the right Koha::Patron' );
 
     $schema->storage->txn_rollback;
 };

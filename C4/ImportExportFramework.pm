@@ -29,17 +29,17 @@ use List::MoreUtils qw( indexes );
 use C4::Context;
 use Koha::Logger;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA    = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
         ExportFramework
         ImportFramework
         createODS
     );
 }
-
 
 use constant XMLSTR => '<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
@@ -74,14 +74,12 @@ use constant XMLSTR => '<?xml version="1.0" encoding="UTF-8"?>
 </Workbook>
 ';
 
-
 use constant ODSSTR => '<?xml version="1.0" encoding="UTF-8"?>
 <office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" office:version="1.0">
 <office:scripts/>
 <office:font-face-decls/>
 <office:automatic-styles/>
 </office:document-content>';
-
 
 use constant ODS_STYLES_STR => '<?xml version="1.0" encoding="UTF-8"?>
 <office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" office:version="1.0">
@@ -90,7 +88,6 @@ use constant ODS_STYLES_STR => '<?xml version="1.0" encoding="UTF-8"?>
 <office:automatic-styles></office:automatic-styles>
 <office:master-styles></office:master-styles>
 </office:document-styles>';
-
 
 use constant ODS_SETTINGS_STR => '<?xml version="1.0" encoding="UTF-8"?>
 <office:document-settings xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" office:version="1.0"><office:settings>
@@ -147,7 +144,6 @@ use constant ODS_SETTINGS_STR => '<?xml version="1.0" encoding="UTF-8"?>
 </config:config-item-set>
 </office:settings></office:document-settings>';
 
-
 use constant ODS_MANIFEST_STR => '<?xml version="1.0" encoding="UTF-8"?>
 <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
  <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.spreadsheet" manifest:full-path="/"/>
@@ -167,7 +163,6 @@ use constant ODS_MANIFEST_STR => '<?xml version="1.0" encoding="UTF-8"?>
  <manifest:file-entry manifest:media-type="" manifest:full-path="Thumbnails/"/>
  <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="settings.xml"/>
 </manifest:manifest>';
-
 
 =head1 NAME
 
@@ -200,22 +195,21 @@ succes
 
 =cut
 
-sub ExportFramework
-{
-    my ($frameworkcode, $xmlStrRef, $mode, $frameworktype) = @_;
+sub ExportFramework {
+    my ( $frameworkcode, $xmlStrRef, $mode, $frameworktype ) = @_;
 
     my $dbh = C4::Context->dbh;
     if ($dbh) {
         my $dom;
         my $root;
         my $elementSS;
-        if ($mode eq 'ods' || $mode eq 'excel') {
+        if ( $mode eq 'ods' || $mode eq 'excel' ) {
             eval {
                 my $parser = XML::LibXML->new();
-                $dom = $parser->parse_string(($mode && $mode eq 'ods')?ODSSTR:XMLSTR);
+                $dom = $parser->parse_string( ( $mode && $mode eq 'ods' ) ? ODSSTR : XMLSTR );
                 if ($dom) {
                     $root = $dom->documentElement();
-                    if ($mode && $mode eq 'ods') {
+                    if ( $mode && $mode eq 'ods' ) {
                         my $elementBody = $dom->createElement('office:body');
                         $root->appendChild($elementBody);
                         $elementSS = $dom->createElement('office:spreadsheet');
@@ -229,65 +223,73 @@ sub ExportFramework
             }
         }
 
-        my $table = 'marc_tag_structure';
+        my $table    = 'marc_tag_structure';
         my $subtable = 'marc_subfield_structure';
-        if ($frameworktype eq "authority") {
-            $table = 'auth_tag_structure';
+        if ( $frameworktype eq "authority" ) {
+            $table    = 'auth_tag_structure';
             $subtable = 'auth_subfield_structure';
         }
 
-        if (_export_table($table, $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode, $frameworktype)) {
-            if (_export_table($subtable, $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode, $frameworktype)) {
-                $$xmlStrRef = $dom->toString(1) if ($mode eq 'ods' || $mode eq 'excel');
+        if (
+            _export_table(
+                $table, $dbh, ( $mode eq 'csv' ) ? $xmlStrRef : $dom, ( $mode eq 'ods' ) ? $elementSS : $root,
+                $frameworkcode, $mode, $frameworktype
+            )
+            )
+        {
+            if (
+                _export_table(
+                    $subtable, $dbh, ( $mode eq 'csv' ) ? $xmlStrRef : $dom, ( $mode eq 'ods' ) ? $elementSS : $root,
+                    $frameworkcode, $mode, $frameworktype
+                )
+                )
+            {
+                $$xmlStrRef = $dom->toString(1) if ( $mode eq 'ods' || $mode eq 'excel' );
                 return 1;
             }
         }
     }
     return 0;
-}#ExportFramework
-
-
-
+}    #ExportFramework
 
 # Export all the data from a mysql table to an spreadsheet.
-sub _export_table
-{
-    my ($table, $dbh, $dom, $root, $frameworkcode, $mode, $frameworktype) = @_;
-    if ($mode eq 'csv') {
-        _export_table_csv($table, $dbh, $dom, $root, $frameworkcode, $frameworktype);
-    } elsif ($mode eq 'ods') {
-        _export_table_ods($table, $dbh, $dom, $root, $frameworkcode, $frameworktype);
+sub _export_table {
+    my ( $table, $dbh, $dom, $root, $frameworkcode, $mode, $frameworktype ) = @_;
+    if ( $mode eq 'csv' ) {
+        _export_table_csv( $table, $dbh, $dom, $root, $frameworkcode, $frameworktype );
+    } elsif ( $mode eq 'ods' ) {
+        _export_table_ods( $table, $dbh, $dom, $root, $frameworkcode, $frameworktype );
     } else {
-        _export_table_excel($table, $dbh, $dom, $root, $frameworkcode, $frameworktype);
+        _export_table_excel( $table, $dbh, $dom, $root, $frameworkcode, $frameworktype );
     }
 }
 
 # Export the mysql table to an csv file
-sub _export_table_csv
-{
-    my ($table, $dbh, $strCSV, $root, $frameworkcode, $frameworktype) = @_;
+sub _export_table_csv {
+    my ( $table, $dbh, $strCSV, $root, $frameworkcode, $frameworktype ) = @_;
 
     eval {
         # First row with the name of the columns
         my $query = 'SHOW COLUMNS FROM ' . $table;
-        my $sth = $dbh->prepare($query);
+        my $sth   = $dbh->prepare($query);
         $sth->execute();
         my @fields = ();
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             $$strCSV .= '"' . $hashRef->{Field} . '",';
             push @fields, $hashRef->{Field};
         }
         chop $$strCSV;
         $$strCSV .= chr(10);
+
         # Populate rows with the data from mysql
         $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
-        if ($frameworktype eq "authority") {
+        if ( $frameworktype eq "authority" ) {
             $query = 'SELECT * FROM ' . $table . ' WHERE authtypecode=?';
         }
         $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $data;
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             for my $field (@fields) {
                 my $value = $hashRef->{$field} // q||;
                 $value =~ s/[\r\n]//g;
@@ -299,6 +301,7 @@ sub _export_table_csv
         }
         $$strCSV .= chr(10);
         for (@fields) {
+
             # Separator for change of table
             $$strCSV .= '"#-#",';
         }
@@ -311,63 +314,63 @@ sub _export_table_csv
         return 0;
     }
     return 1;
-}#_export_table_csv
-
+}    #_export_table_csv
 
 # Export the mysql table to an ods file
-sub _export_table_ods
-{
-    my ($table, $dbh, $dom, $root, $frameworkcode, $frameworktype) = @_;
+sub _export_table_ods {
+    my ( $table, $dbh, $dom, $root, $frameworkcode, $frameworktype ) = @_;
 
     eval {
         my $elementTable = $dom->createElement('table:table');
-        $elementTable->setAttribute('table:name', $table);
-        $elementTable->setAttribute('table:print', 'false');
+        $elementTable->setAttribute( 'table:name',  $table );
+        $elementTable->setAttribute( 'table:print', 'false' );
         $root->appendChild($elementTable);
         my $elementRow = $dom->createElement('table:table-row');
         $elementTable->appendChild($elementRow);
 
         my $elementCell;
         my $elementData;
+
         # First row with the name of the columns
         my $query = 'SHOW COLUMNS FROM ' . $table;
-        my $sth = $dbh->prepare($query);
+        my $sth   = $dbh->prepare($query);
         $sth->execute();
         my @fields = ();
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             $elementCell = $dom->createElement('table:table-cell');
-            $elementCell->setAttribute('office:value-type', 'string');
-            $elementCell->setAttribute('office:value', $hashRef->{Field});
+            $elementCell->setAttribute( 'office:value-type', 'string' );
+            $elementCell->setAttribute( 'office:value',      $hashRef->{Field} );
             $elementRow->appendChild($elementCell);
             $elementData = $dom->createElement('text:p');
             $elementCell->appendChild($elementData);
-            $elementData->appendTextNode($hashRef->{Field});
-            push @fields, {name => $hashRef->{Field}, type => ($hashRef->{Type} =~ /int/i)?'float':'string'};
+            $elementData->appendTextNode( $hashRef->{Field} );
+            push @fields, { name => $hashRef->{Field}, type => ( $hashRef->{Type} =~ /int/i ) ? 'float' : 'string' };
         }
+
         # Populate rows with the data from mysql
         $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
-        if ($frameworktype eq "authority") {
+        if ( $frameworktype eq "authority" ) {
             $query = 'SELECT * FROM ' . $table . ' WHERE authtypecode=?';
         }
         $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $data;
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             $elementRow = $dom->createElement('table:table-row');
             $elementTable->appendChild($elementRow);
             for (@fields) {
-                $data = $hashRef->{$_->{name}};
-                if ($_->{type} eq 'float' && !defined($data)) {
+                $data = $hashRef->{ $_->{name} };
+                if ( $_->{type} eq 'float' && !defined($data) ) {
                     $data = '0';
-                } elsif ($_->{type} eq 'string' && !defined($data)) {
+                } elsif ( $_->{type} eq 'string' && !defined($data) ) {
                     $data = q{};
-                } elsif ($_->{type} eq 'string' && (!$data && $data ne '0')) {
+                } elsif ( $_->{type} eq 'string' && ( !$data && $data ne '0' ) ) {
                     $data = '#';
                 }
-                $data = _parseContent2Xml($data) if ($_->{type} eq 'string');
+                $data        = _parseContent2Xml($data) if ( $_->{type} eq 'string' );
                 $elementCell = $dom->createElement('table:table-cell');
-                $elementCell->setAttribute('office:value-type', $_->{type});
-                $elementCell->setAttribute('office:value', $data);
+                $elementCell->setAttribute( 'office:value-type', $_->{type} );
+                $elementCell->setAttribute( 'office:value',      $data );
                 $elementRow->appendChild($elementCell);
                 $elementData = $dom->createElement('text:p');
                 $elementCell->appendChild($elementData);
@@ -380,17 +383,15 @@ sub _export_table_ods
         return 0;
     }
     return 1;
-}#_export_table_ods
-
+}    #_export_table_ods
 
 # Export the mysql table to an excel-xml (openoffice/libreoffice compatible) file
-sub _export_table_excel
-{
-    my ($table, $dbh, $dom, $root, $frameworkcode, $frameworktype) = @_;
+sub _export_table_excel {
+    my ( $table, $dbh, $dom, $root, $frameworkcode, $frameworktype ) = @_;
 
     eval {
         my $elementWS = $dom->createElement('Worksheet');
-        $elementWS->setAttribute('ss:Name', $table);
+        $elementWS->setAttribute( 'ss:Name', $table );
         $root->appendChild($elementWS);
         my $elementTable = $dom->createElement('ss:Table');
         $elementWS->appendChild($elementTable);
@@ -401,45 +402,46 @@ sub _export_table_excel
         my $elementCell;
         my $elementData;
         my $query = 'SHOW COLUMNS FROM ' . $table;
-        my $sth = $dbh->prepare($query);
+        my $sth   = $dbh->prepare($query);
         $sth->execute();
         my @fields = ();
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             $elementCell = $dom->createElement('ss:Cell');
-            $elementCell->setAttribute('ss:StyleID', 's27');
+            $elementCell->setAttribute( 'ss:StyleID', 's27' );
             $elementRow->appendChild($elementCell);
             $elementData = $dom->createElement('ss:Data');
-            $elementData->setAttribute('ss:Type', 'String');
+            $elementData->setAttribute( 'ss:Type', 'String' );
             $elementCell->appendChild($elementData);
-            $elementData->appendTextNode($hashRef->{Field});
-            push @fields, {name => $hashRef->{Field}, type => ($hashRef->{Type} =~ /int/i)?'Number':'String'};
+            $elementData->appendTextNode( $hashRef->{Field} );
+            push @fields, { name => $hashRef->{Field}, type => ( $hashRef->{Type} =~ /int/i ) ? 'Number' : 'String' };
         }
+
         # Populate rows with the data from mysql
         $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
-        if ($frameworktype eq "authority") {
+        if ( $frameworktype eq "authority" ) {
             $query = 'SELECT * FROM ' . $table . ' WHERE authtypecode=?';
         }
         $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $data;
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             $elementRow = $dom->createElement('ss:Row');
             $elementTable->appendChild($elementRow);
             for (@fields) {
                 $elementCell = $dom->createElement('ss:Cell');
                 $elementRow->appendChild($elementCell);
                 $elementData = $dom->createElement('ss:Data');
-                $elementData->setAttribute('ss:Type', $_->{type});
+                $elementData->setAttribute( 'ss:Type', $_->{type} );
                 $elementCell->appendChild($elementData);
-                $data = $hashRef->{$_->{name}};
-                if ($_->{type} eq 'Number' && !defined($data)) {
+                $data = $hashRef->{ $_->{name} };
+                if ( $_->{type} eq 'Number' && !defined($data) ) {
                     $data = '0';
-                } elsif ($_->{type} eq 'String' && !defined($data)) {
+                } elsif ( $_->{type} eq 'String' && !defined($data) ) {
                     $data = q{};
-                } elsif ($_->{type} eq 'String' && (!$data && $data ne '0')) {
+                } elsif ( $_->{type} eq 'String' && ( !$data && $data ne '0' ) ) {
                     $data = '#';
                 }
-                $elementData->appendTextNode(($_->{type} eq 'String')?_parseContent2Xml($data):$data);
+                $elementData->appendTextNode( ( $_->{type} eq 'String' ) ? _parseContent2Xml($data) : $data );
             }
         }
     };
@@ -448,51 +450,44 @@ sub _export_table_excel
         return 0;
     }
     return 1;
-}#_export_table_excel
+}    #_export_table_excel
 
 # Format chars problematics to a correct format for xml.
-sub _parseContent2Xml
-{
+sub _parseContent2Xml {
     my $content = shift;
 
     $content =~ s/\&(?![a-zA-Z#0-9]{1,4};)/&amp;/g;
     $content =~ s/</&lt;/g;
     $content =~ s/>/&gt;/g;
     return $content;
-}#_parseContent2Xml
-
+}    #_parseContent2Xml
 
 # Get the tmp directory on the system
-sub _getTmp
-{
+sub _getTmp {
     my $tmp = '/tmp';
-    if ($ENV{'TMP'} && -d $ENV{'TMP'}) {
+    if ( $ENV{'TMP'} && -d $ENV{'TMP'} ) {
         $tmp = $ENV{'TMP'};
-    } elsif ($ENV{'TMPDIR'} && -d $ENV{'TMPDIR'}) {
+    } elsif ( $ENV{'TMPDIR'} && -d $ENV{'TMPDIR'} ) {
         $tmp = $ENV{'TMPDIR'};
-    } elsif ($ENV{'TEMP'} && -d $ENV{'TEMP'}) {
+    } elsif ( $ENV{'TEMP'} && -d $ENV{'TEMP'} ) {
         $tmp = $ENV{'TEMP'};
     }
     return $tmp;
-}#_getTmp
-
+}    #_getTmp
 
 # Create our tempdir directory for the ods process
-sub _createTmpDir
-{
+sub _createTmpDir {
     my $tmp = shift;
 
-    my $tempdir = (-d $tmp)?$tmp . '/':'./';
-    $tempdir .= 'tmp_ods_' . Digest::MD5::md5_hex(Digest::MD5::md5_hex(time().{}.rand().{}.$$));
-    eval {
-        mkdir $tempdir;
-    };
+    my $tempdir = ( -d $tmp ) ? $tmp . '/' : './';
+    $tempdir .= 'tmp_ods_' . Digest::MD5::md5_hex( Digest::MD5::md5_hex( time() . {} . rand() . {} . $$ ) );
+    eval { mkdir $tempdir; };
     if ($@) {
         return;
     } else {
         return $tempdir;
     }
-}#_createTmpDir
+}    #_createTmpDir
 
 =head2 createODS
 
@@ -503,58 +498,58 @@ success
 
 =cut
 
-sub createODS
-{
-    my ($strContent, $lang, $strODSRef) = @_;
+sub createODS {
+    my ( $strContent, $lang, $strODSRef ) = @_;
 
-    my $tmp = _getTmp();
+    my $tmp        = _getTmp();
     my $tempModule = 1;
     my $tempdir;
     eval {
         require File::Temp;
         import File::Temp qw/ tempfile tempdir /;
-        $tempdir = tempdir ( 'tmp_ods_' . $$ . '_XXXXXXXX', DIR => (-d $tmp)?$tmp:'.', CLEANUP => 1);
+        $tempdir = tempdir( 'tmp_ods_' . $$ . '_XXXXXXXX', DIR => ( -d $tmp ) ? $tmp : '.', CLEANUP => 1 );
     };
     if ($@) {
         $tempModule = 0;
-        $tempdir = _createTmpDir($tmp);
+        $tempdir    = _createTmpDir($tmp);
     }
     if ($tempdir) {
         my $fh;
+
         # populate tempdir directory with the ods elements
         eval {
-            if (open($fh, '>',  "$tempdir/content.xml")) {
+            if ( open( $fh, '>', "$tempdir/content.xml" ) ) {
                 print {$fh} $strContent;
                 close($fh);
             }
-            if (open($fh, '>', "$tempdir/mimetype")) {
+            if ( open( $fh, '>', "$tempdir/mimetype" ) ) {
                 print {$fh} 'application/vnd.oasis.opendocument.spreadsheet';
                 close($fh);
             }
-            if (open($fh, '>', "$tempdir/meta.xml")) {
+            if ( open( $fh, '>', "$tempdir/meta.xml" ) ) {
                 print {$fh} _getMeta($lang);
                 close($fh);
             }
-            if (open($fh, '>', "$tempdir/styles.xml")) {
+            if ( open( $fh, '>', "$tempdir/styles.xml" ) ) {
                 print {$fh} ODS_STYLES_STR;
                 close($fh);
             }
-            if (open($fh, '>', "$tempdir/settings.xml")) {
+            if ( open( $fh, '>', "$tempdir/settings.xml" ) ) {
                 print {$fh} ODS_SETTINGS_STR;
                 close($fh);
             }
-            mkdir($tempdir.'/META-INF/');
-            mkdir($tempdir.'/Configurations2/');
-            mkdir($tempdir.'/Configurations2/acceleator/');
-            mkdir($tempdir.'/Configurations2/images/');
-            mkdir($tempdir.'/Configurations2/popupmenu/');
-            mkdir($tempdir.'/Configurations2/statusbar/');
-            mkdir($tempdir.'/Configurations2/floater/');
-            mkdir($tempdir.'/Configurations2/menubar/');
-            mkdir($tempdir.'/Configurations2/progressbar/');
-            mkdir($tempdir.'/Configurations2/toolbar/');
+            mkdir( $tempdir . '/META-INF/' );
+            mkdir( $tempdir . '/Configurations2/' );
+            mkdir( $tempdir . '/Configurations2/acceleator/' );
+            mkdir( $tempdir . '/Configurations2/images/' );
+            mkdir( $tempdir . '/Configurations2/popupmenu/' );
+            mkdir( $tempdir . '/Configurations2/statusbar/' );
+            mkdir( $tempdir . '/Configurations2/floater/' );
+            mkdir( $tempdir . '/Configurations2/menubar/' );
+            mkdir( $tempdir . '/Configurations2/progressbar/' );
+            mkdir( $tempdir . '/Configurations2/toolbar/' );
 
-            if (open($fh, '>', "$tempdir/META-INF/manifest.xml")) {
+            if ( open( $fh, '>', "$tempdir/META-INF/manifest.xml" ) ) {
                 print {$fh} ODS_MANIFEST_STR;
                 close($fh);
             }
@@ -562,35 +557,38 @@ sub createODS
         if ($@) {
             Koha::Logger->get->warn("Error createODS $@");
         } else {
+
             # create ods file from tempdir directory
             eval {
                 require Archive::Zip;
                 import Archive::Zip qw( :ERROR_CODES :CONSTANTS );
                 my $zip = Archive::Zip->new();
                 $zip->addTree( $tempdir, '' );
-                $zip->writeToFileNamed($tempdir . '/new.ods');
+                $zip->writeToFileNamed( $tempdir . '/new.ods' );
             };
             if ($@) {
                 my $cmd = qx(which zip 2>/dev/null || whereis zip);
                 chomp $cmd;
-                $cmd = 'zip' if (!$cmd || !-x $cmd);
+                $cmd = 'zip' if ( !$cmd || !-x $cmd );
                 system("cd $tempdir && $cmd -r new.ods ./");
             }
             my $ok = 0;
+
             # read ods file and return as a string
-            if (-f "$tempdir/new.ods") {
-                if (open ($fh, '<', "$tempdir/new.ods")) {
+            if ( -f "$tempdir/new.ods" ) {
+                if ( open( $fh, '<', "$tempdir/new.ods" ) ) {
                     binmode $fh;
                     my $buffer;
-                    while (read ($fh, $buffer, 65536)) {
+                    while ( read( $fh, $buffer, 65536 ) ) {
                         $$strODSRef .= $buffer;
                     }
                     close($fh);
                     $ok = 1;
                 }
             }
+
             # delete tempdir directory
-            if (!$tempModule && $tempdir) {
+            if ( !$tempModule && $tempdir ) {
                 eval {
                     require File::Path;
                     import File::Temp qw/ rmtree /;
@@ -604,16 +602,14 @@ sub createODS
         }
     }
     return 0;
-}#createODS
-
+}    #createODS
 
 # return Meta content for ods file
-sub _getMeta
-{
+sub _getMeta {
     my $lang = shift;
 
-    my $myDate = strftime ("%Y-%m-%dT%H:%M:%S", localtime(time()));
-    my $meta = '<?xml version="1.0" encoding="UTF-8"?>
+    my $myDate = strftime( "%Y-%m-%dT%H:%M:%S", localtime( time() ) );
+    my $meta   = '<?xml version="1.0" encoding="UTF-8"?>
     <office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:ooo="http://openoffice.org/2004/office" office:version="1.0">
         <office:meta>
             <meta:generator>ods-php</meta:generator>
@@ -629,8 +625,7 @@ sub _getMeta
         </office:meta>
     </office:document-meta>';
     return $meta;
-}#_getMeta
-
+}    #_getMeta
 
 =head2 ImportFramework
 
@@ -641,29 +636,29 @@ success
 
 =cut
 
-sub ImportFramework
-{
-    my ($filename, $frameworkcode, $deleteFilename, $frameworktype) = @_;
+sub ImportFramework {
+    my ( $filename, $frameworkcode, $deleteFilename, $frameworktype ) = @_;
 
     my $tempdir;
-    my $ok = -1;
+    my $ok  = -1;
     my $dbh = C4::Context->dbh;
     $frameworktype ||= '';
-    if (-r $filename && $dbh) {
+    if ( -r $filename && $dbh ) {
         my $extension = '';
-        if ($filename =~ /\.(csv|ods|xml)$/i) {
+        if ( $filename =~ /\.(csv|ods|xml)$/i ) {
             $extension = lc($1);
         } else {
-            unlink ($filename) if ($deleteFilename); # remove temporary file
+            unlink($filename) if ($deleteFilename);    # remove temporary file
             return -1;
         }
-        if ($extension eq 'ods') {
-            ($tempdir, $filename) = _openODS($filename, $deleteFilename);
+        if ( $extension eq 'ods' ) {
+            ( $tempdir, $filename ) = _openODS( $filename, $deleteFilename );
         }
         if ($filename) {
             my $dom;
             eval {
-                if ($extension eq 'ods' || $extension eq 'xml') {
+                if ( $extension eq 'ods' || $extension eq 'xml' ) {
+
                     # They have xml structure, so read it on a dom object
                     my $parser = XML::LibXML->new();
                     $dom = $parser->parse_file($filename);
@@ -671,35 +666,69 @@ sub ImportFramework
                         my $root = $dom->documentElement();
                     }
                 } else {
+
                     # They are text files, so open it to read
-                    open($dom, '<', $filename);
+                    open( $dom, '<', $filename );
                 }
 
-                my $table = 'marc_tag_structure';
+                my $table    = 'marc_tag_structure';
                 my $subtable = 'marc_subfield_structure';
-                if ($frameworktype eq "authority") {
-                    $table = 'auth_tag_structure';
+                if ( $frameworktype eq "authority" ) {
+                    $table    = 'auth_tag_structure';
                     $subtable = 'auth_subfield_structure';
                 }
 
                 if ($dom) {
+
                     # Process both tables
-                    my $numDeleted = 0;
+                    my $numDeleted    = 0;
                     my $numDeletedAux = 0;
-                    if ($frameworktype eq "authority"){
-                        if (($numDeletedAux = _import_table($dbh, $table, $frameworkcode, $dom, ['authtypecode', 'tagfield'], $extension, $frameworktype)) >= 0) {
-                            $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                            if (($numDeletedAux = _import_table($dbh, $subtable, $frameworkcode, $dom, ['authtypecode', 'tagfield', 'tagsubfield'], $extension, $frameworktype)) >= 0) {
-                                $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                                $ok = ($numDeleted > 0)?$numDeleted:0;
+                    if ( $frameworktype eq "authority" ) {
+                        if (
+                            (
+                                $numDeletedAux = _import_table(
+                                    $dbh, $table, $frameworkcode, $dom, [ 'authtypecode', 'tagfield' ], $extension,
+                                    $frameworktype
+                                )
+                            ) >= 0
+                            )
+                        {
+                            $numDeleted += $numDeletedAux if ( $numDeletedAux > 0 );
+                            if (
+                                (
+                                    $numDeletedAux = _import_table(
+                                        $dbh, $subtable, $frameworkcode, $dom,
+                                        [ 'authtypecode', 'tagfield', 'tagsubfield' ], $extension, $frameworktype
+                                    )
+                                ) >= 0
+                                )
+                            {
+                                $numDeleted += $numDeletedAux if ( $numDeletedAux > 0 );
+                                $ok = ( $numDeleted > 0 ) ? $numDeleted : 0;
                             }
                         }
                     } else {
-                        if (($numDeletedAux = _import_table($dbh, $table, $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension, $frameworktype)) >= 0) {
-                            $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                            if (($numDeletedAux = _import_table($dbh, $subtable, $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension, $frameworktype)) >= 0) {
-                                $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                                $ok = ($numDeleted > 0)?$numDeleted:0;
+                        if (
+                            (
+                                $numDeletedAux = _import_table(
+                                    $dbh, $table, $frameworkcode, $dom, [ 'frameworkcode', 'tagfield' ], $extension,
+                                    $frameworktype
+                                )
+                            ) >= 0
+                            )
+                        {
+                            $numDeleted += $numDeletedAux if ( $numDeletedAux > 0 );
+                            if (
+                                (
+                                    $numDeletedAux = _import_table(
+                                        $dbh, $subtable, $frameworkcode, $dom,
+                                        [ 'frameworkcode', 'tagfield', 'tagsubfield' ], $extension, $frameworktype
+                                    )
+                                ) >= 0
+                                )
+                            {
+                                $numDeleted += $numDeletedAux if ( $numDeletedAux > 0 );
+                                $ok = ( $numDeleted > 0 ) ? $numDeleted : 0;
                             }
                         }
                     }
@@ -710,16 +739,16 @@ sub ImportFramework
             if ($@) {
                 Koha::Logger->get->warn("Error ImportFramework $@");
             } else {
-                if ($extension eq 'csv') {
+                if ( $extension eq 'csv' ) {
                     close($dom) if ($dom);
                 }
             }
         }
-        unlink ($filename) if ($deleteFilename); # remove temporary file
+        unlink($filename) if ($deleteFilename);    # remove temporary file
     } else {
         Koha::Logger->get->warn("Error ImportFramework no conex to database or not readeable $filename");
     }
-    if ($deleteFilename && $tempdir && -d $tempdir && -w $tempdir) {
+    if ( $deleteFilename && $tempdir && -d $tempdir && -w $tempdir ) {
         eval {
             require File::Path;
             import File::Temp qw/ rmtree /;
@@ -730,71 +759,68 @@ sub ImportFramework
         }
     }
     return $ok;
-}#ImportFramework
+}    #ImportFramework
 
 # Open (uncompress) ods file and return the content.xml file
-sub _openODS
-{
-    my ($filename, $deleteFilename) = @_;
+sub _openODS {
+    my ( $filename, $deleteFilename ) = @_;
 
-    my $tmp = _getTmp();
+    my $tmp        = _getTmp();
     my $tempModule = 1;
     my $tempdir;
     eval {
         require File::Temp;
         import File::Temp qw/ tempfile tempdir /;
-        $tempdir = tempdir ( 'tmp_ods_' . $$ . '_XXXXXXXX', DIR => (-d $tmp)?$tmp:'.', CLEANUP => 1);
+        $tempdir = tempdir( 'tmp_ods_' . $$ . '_XXXXXXXX', DIR => ( -d $tmp ) ? $tmp : '.', CLEANUP => 1 );
     };
     if ($@) {
         $tempModule = 0;
-        $tempdir = _createTmpDir($tmp);
+        $tempdir    = _createTmpDir($tmp);
     }
     if ($tempdir) {
         eval {
             require Archive::Zip;
             import Archive::Zip qw( :ERROR_CODES :CONSTANTS );
             my $zip = Archive::Zip->new($filename);
-            foreach my $file ($zip->members) {
-                next if ($file->isDirectory);
-                (my $extractName = $file->fileName) =~ s{.*/}{};
-                next unless ($extractName eq 'content.xml');
+            foreach my $file ( $zip->members ) {
+                next if ( $file->isDirectory );
+                ( my $extractName = $file->fileName ) =~ s{.*/}{};
+                next unless ( $extractName eq 'content.xml' );
                 $file->extractToFileNamed("$tempdir/$extractName");
             }
         };
         if ($@) {
             my $cmd = qx(which unzip 2>/dev/null || whereis unzip);
             chomp $cmd;
-            $cmd = 'unzip' if (!$cmd || !-x $cmd);
+            $cmd = 'unzip' if ( !$cmd || !-x $cmd );
             system("$cmd $filename -d $tempdir");
         }
-        if (-f "$tempdir/content.xml") {
-            unlink ($filename) if ($deleteFilename);
-            return ($tempdir, "$tempdir/content.xml");
+        if ( -f "$tempdir/content.xml" ) {
+            unlink($filename) if ($deleteFilename);
+            return ( $tempdir, "$tempdir/content.xml" );
         }
     }
-    unlink ($filename) if ($deleteFilename);
-    return ($tempdir, undef);
-}#_openODS
-
-
+    unlink($filename) if ($deleteFilename);
+    return ( $tempdir, undef );
+}    #_openODS
 
 # Check the table and columns corresponds with worksheet
-sub _check_validity_worksheet
-{
-    my ($dbh, $table, $nodeFields, $fieldsA, $format) = @_;
+sub _check_validity_worksheet {
+    my ( $dbh, $table, $nodeFields, $fieldsA, $format ) = @_;
 
     my $ret = 0;
     eval {
         my $query = 'DESCRIBE ' . $table;
-        my $sth = $dbh->prepare($query);
+        my $sth   = $dbh->prepare($query);
         $sth->execute();
         $sth->finish;
         $query = 'SHOW COLUMNS FROM ' . $table;
-        $sth = $dbh->prepare($query);
+        $sth   = $dbh->prepare($query);
         $sth->execute();
         my $fields = {};
-        while (my $hashRef = $sth->fetchrow_hashref) {
-            $fields->{$hashRef->{Field}} = $hashRef->{Field};
+
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
+            $fields->{ $hashRef->{Field} } = $hashRef->{Field};
         }
         my @fields;
         my $fieldsR;
@@ -802,40 +828,39 @@ sub _check_validity_worksheet
             $fieldsR = $fieldsA;
         } else {
             $fieldsR = \@fields;
-            _getFields($nodeFields, $fieldsR, $format);
+            _getFields( $nodeFields, $fieldsR, $format );
         }
         $ret = 1;
         for (@$fieldsR) {
-            unless (exists($fields->{$_})) {
+            unless ( exists( $fields->{$_} ) ) {
                 $ret = 0;
                 last;
             }
         }
     };
     return $ret;
-}#_check_validity_worksheet
-
+}    #_check_validity_worksheet
 
 # Import the data from an excel-xml/ods to mysql tables.
-sub _import_table
-{
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $format, $frameworktype) = @_;
+sub _import_table {
+    my ( $dbh, $table, $frameworkcode, $dom, $PKArray, $format, $frameworktype ) = @_;
     my %fields2Delete;
     my $query;
     my @fields;
     $frameworktype ||= '';
+
     # Create hash with all elements defined by primary key to know which ones to delete after parsing the spreadsheet
     eval {
         @fields = @$PKArray;
         shift @fields;
-        $query = 'SELECT ' . join(',', @fields) . ' FROM ' . $table . ' WHERE frameworkcode=?';
-        if ($frameworktype eq "authority") {
-            $query = 'SELECT ' . join(',', @fields) . ' FROM ' . $table . ' WHERE authtypecode=?';
+        $query = 'SELECT ' . join( ',', @fields ) . ' FROM ' . $table . ' WHERE frameworkcode=?';
+        if ( $frameworktype eq "authority" ) {
+            $query = 'SELECT ' . join( ',', @fields ) . ' FROM ' . $table . ' WHERE authtypecode=?';
         }
         my $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $field;
-        while (my $hashRef = $sth->fetchrow_hashref) {
+        while ( my $hashRef = $sth->fetchrow_hashref ) {
             $field = '';
             map { $field .= $hashRef->{$_} . '_'; } @fields;
             chop $field;
@@ -844,52 +869,55 @@ sub _import_table
         $sth->finish;
     };
     my $ok = 0;
-    if ($format eq 'csv') {
+    if ( $format eq 'csv' ) {
         my @fieldsName = ();
         eval {
             my $query = 'SHOW COLUMNS FROM ' . $table;
-            my $sth = $dbh->prepare($query);
+            my $sth   = $dbh->prepare($query);
             $sth->execute();
-            while (my $hashRef = $sth->fetchrow_hashref) {
+            while ( my $hashRef = $sth->fetchrow_hashref ) {
                 push @fieldsName, $hashRef->{Field};
             }
         };
-        $ok = _import_table_csv($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, \@fieldsName, $frameworktype);
-    } elsif ($format eq 'ods') {
-        $ok = _import_table_ods($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, $frameworktype);
+        $ok = _import_table_csv(
+            $dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, \@fieldsName,
+            $frameworktype
+        );
+    } elsif ( $format eq 'ods' ) {
+        $ok = _import_table_ods( $dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, $frameworktype );
     } else {
-        $ok = _import_table_excel($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, $frameworktype);
+        $ok = _import_table_excel( $dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, $frameworktype );
     }
     if ($ok) {
-        if (($ok = scalar(keys %fields2Delete)) > 0) {
+        if ( ( $ok = scalar( keys %fields2Delete ) ) > 0 ) {
             $query = 'DELETE FROM ' . $table . ' WHERE ';
-            map {$query .= $_ . '=? AND ';} @$PKArray;
-            $query = substr($query, 0, -4);
+            map { $query .= $_ . '=? AND '; } @$PKArray;
+            $query = substr( $query, 0, -4 );
             my $sth = $dbh->prepare($query);
-            for (keys %fields2Delete) {
-                eval {
-                    $sth->execute(($frameworkcode, split('_', $_)));
-                };
+            for ( keys %fields2Delete ) {
+                eval { $sth->execute( ( $frameworkcode, split( '_', $_ ) ) ); };
             }
         }
     } else {
         $ok = -1;
     }
     return $ok;
-}#_import_table
-
+}    #_import_table
 
 # Insert/Update the row from the spreadsheet in the database
-sub _processRow_DB
-{
-    my ($dbh, $table, $fields, $dataStr, $updateStr, $dataFields, $dataFieldsHash, $PKArray, $fieldsPK, $fields2Delete) = @_;
+sub _processRow_DB {
+    my (
+        $dbh, $table, $fields, $dataStr, $updateStr, $dataFields, $dataFieldsHash, $PKArray, $fieldsPK,
+        $fields2Delete
+    ) = @_;
 
     my $ok = 0;
     my $query;
-    $query = 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $dataStr . ') ON DUPLICATE KEY UPDATE ' . $updateStr;
+    $query =
+        'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $dataStr . ') ON DUPLICATE KEY UPDATE ' . $updateStr;
     eval {
         my $sth = $dbh->prepare($query);
-        $sth->execute((@$dataFields, @$dataFields));
+        $sth->execute( ( @$dataFields, @$dataFields ) );
     };
     if ($@) {
         Koha::Logger->get->warn("Error _processRow_DB $@");
@@ -900,46 +928,60 @@ sub _processRow_DB
         my $field = '';
         map { $field .= $dataFieldsHash->{$_} . '_'; } @$fieldsPK;
         chop $field;
-        delete $fields2Delete->{$field} if (exists($fields2Delete->{$field}));
+        delete $fields2Delete->{$field} if ( exists( $fields2Delete->{$field} ) );
     }
     return $ok;
-}#_processRow_DB
-
+}    #_processRow_DB
 
 # Process the rows of a worksheet and insert/update them in a mysql table.
-sub _processRows_Table
-{
-    my ($dbh, $frameworkcode, $nodeR, $table, $PKArray, $format, $fields2Delete, $frameworktype) = @_;
+sub _processRows_Table {
+    my ( $dbh, $frameworkcode, $nodeR, $table, $PKArray, $format, $fields2Delete, $frameworktype ) = @_;
 
     my $query;
-    my @fields = ();
-    my $fields = '';
-    my $dataStr = '';
+    my @fields    = ();
+    my $fields    = '';
+    my $dataStr   = '';
     my $updateStr = '';
-    my $j = 0;
-    my $ok = 0;
-    my @fieldsPK = @$PKArray;
+    my $j         = 0;
+    my $ok        = 0;
+    my @fieldsPK  = @$PKArray;
     shift @fieldsPK;
+
     while ($nodeR) {
-        if ($nodeR->nodeType == 1 && (($format && $format eq 'ods' && $nodeR->nodeName =~ /(?:table:)?table-row/) || ($nodeR->nodeName =~ /(?:ss:)?Row/)) && $nodeR->hasChildNodes()) {
-            if ($j == 0) {
+        if (
+            $nodeR->nodeType == 1
+            && (   ( $format && $format eq 'ods' && $nodeR->nodeName =~ /(?:table:)?table-row/ )
+                || ( $nodeR->nodeName =~ /(?:ss:)?Row/ ) )
+            && $nodeR->hasChildNodes()
+            )
+        {
+            if ( $j == 0 ) {
+
                 # Get name columns
-                _getFields($nodeR, \@fields, $format);
-                return 0 unless _check_validity_worksheet($dbh, $table, $nodeR, \@fields, $format);
-                $fields = join(',', @fields);
+                _getFields( $nodeR, \@fields, $format );
+                return 0 unless _check_validity_worksheet( $dbh, $table, $nodeR, \@fields, $format );
+                $fields  = join( ',', @fields );
                 $dataStr = '';
-                map { $dataStr .= '?,';} @fields;
+                map { $dataStr .= '?,'; } @fields;
                 chop($dataStr) if ($dataStr);
                 $updateStr = '';
-                map { $updateStr .= $_ . '=?,';} @fields;
+                map { $updateStr .= $_ . '=?,'; } @fields;
                 chop($updateStr) if ($updateStr);
             } else {
+
                 # Get data from row
-                my ($dataFields, $dataFieldsR) = _getDataFields($frameworkcode, $nodeR, \@fields, $format, $frameworktype);
-                if (scalar(@fields) == scalar(@$dataFieldsR)) {
-                    $ok = _processRow_DB($dbh, $table, $fields, $dataStr, $updateStr, $dataFieldsR, $dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+                my ( $dataFields, $dataFieldsR ) =
+                    _getDataFields( $frameworkcode, $nodeR, \@fields, $format, $frameworktype );
+                if ( scalar(@fields) == scalar(@$dataFieldsR) ) {
+                    $ok = _processRow_DB(
+                        $dbh,     $table,     $fields, $dataStr, $updateStr, $dataFieldsR, $dataFields,
+                        $PKArray, \@fieldsPK, $fields2Delete
+                    );
                 } else {
-                    warn "$j don't match number of fields " . scalar(@fields) . ' vs ' . scalar(@$dataFieldsR) . "($dataStr)";
+                    warn "$j don't match number of fields "
+                        . scalar(@fields) . ' vs '
+                        . scalar(@$dataFieldsR)
+                        . "($dataStr)";
                 }
             }
             $j++;
@@ -947,244 +989,246 @@ sub _processRows_Table
         $nodeR = $nodeR->nextSibling;
     }
     return 1;
-}#_processRows_Table
-
-
-
+}    #_processRows_Table
 
 # Import worksheet from the csv file to the mysql table
-sub _import_table_csv
-{
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $fields, $frameworktype) = @_;
-    my $row = '';
-    my $partialRow = '';
-    my $numFields = @$fields;
+sub _import_table_csv {
+    my ( $dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $fields, $frameworktype ) = @_;
+    my $row            = '';
+    my $partialRow     = '';
+    my $numFields      = @$fields;
     my $fieldsNameRead = 0;
     my @arrData;
-    my ($fieldsStr, $dataStr, $updateStr, @empty_indexes);
+    my ( $fieldsStr, $dataStr, $updateStr, @empty_indexes );
     my @fieldsPK = @$PKArray;
     shift @fieldsPK;
-    my $ok = 0;
+    my $ok  = 0;
     my $pos = 0;
     my $csv = Text::CSV_XS->new( { binary => 1, formula => "empty" } );
+
     while ( my $row = $csv->getline($dom) ) {
         my @fields = @$row;
         @arrData = @fields;
-        next if scalar @arrData == grep { $_ eq '' } @arrData; # Emtpy lines
-        #$arrData[0] = substr($arrData[0], 1) if ($arrData[0] =~ /^"/);
-        #$arrData[$#arrData] =~ s/[\r\n]+$//;
-        #chop $arrData[$#arrData] if ($arrData[$#arrData] =~ /"$/);
+        next if scalar @arrData == grep { $_ eq '' } @arrData;    # Emtpy lines
+            #$arrData[0] = substr($arrData[0], 1) if ($arrData[0] =~ /^"/);
+            #$arrData[$#arrData] =~ s/[\r\n]+$//;
+            #chop $arrData[$#arrData] if ($arrData[$#arrData] =~ /"$/);
         if (@arrData) {
-            if ($arrData[0] eq '#-#' && $arrData[$#arrData] eq '#-#') {
+            if ( $arrData[0] eq '#-#' && $arrData[$#arrData] eq '#-#' ) {
+
                 # Change of table with separators #-#
                 return 1;
-            } elsif ($fieldsNameRead && $arrData[0] eq 'tagfield') {
+            } elsif ( $fieldsNameRead && $arrData[0] eq 'tagfield' ) {
+
                 # Change of table because we begin with field name with former field names read
-                seek($dom, $pos, 0);
+                seek( $dom, $pos, 0 );
                 return 1;
             }
-            if (!$fieldsNameRead) {
+            if ( !$fieldsNameRead ) {
+
                 # New table, we read the field names
                 $fieldsNameRead = 1;
-                $fields = [@arrData];
+                $fields         = [@arrData];
                 my $non_empty_fields = [ grep { $_ ne '' } @$fields ];
                 @empty_indexes = indexes { $_ eq '' } @$fields;
-                $fieldsStr = join(',', @$non_empty_fields);
-                $dataStr = '';
-                map { $dataStr .= '?,';} @$non_empty_fields;
+                $fieldsStr     = join( ',', @$non_empty_fields );
+                $dataStr       = '';
+                map { $dataStr .= '?,'; } @$non_empty_fields;
                 chop($dataStr) if ($dataStr);
                 $updateStr = '';
-                map { $updateStr .= $_ . '=?,';} @$non_empty_fields;
+                map { $updateStr .= $_ . '=?,'; } @$non_empty_fields;
                 chop($updateStr) if ($updateStr);
             } else {
+
                 # Read data
-                my $j = 0;
+                my $j          = 0;
                 my %dataFields = ();
                 my @values;
                 for my $value (@arrData) {
                     if ( grep { $_ == $j } @empty_indexes ) {
+
                         # empty field
-                    } elsif ($frameworktype eq "authority"){
-                        if ($fields->[$j] eq 'authtypecode' && $value ne $frameworkcode) {
-                            $dataFields{$fields->[$j]} = $frameworkcode;
+                    } elsif ( $frameworktype eq "authority" ) {
+                        if ( $fields->[$j] eq 'authtypecode' && $value ne $frameworkcode ) {
+                            $dataFields{ $fields->[$j] } = $frameworkcode;
                             push @values, $frameworkcode;
-                        } elsif ($fields->[$j] eq 'isurl' && defined $value && $value eq q{}) {
-                            $dataFields{$fields->[$j]} = undef;
+                        } elsif ( $fields->[$j] eq 'isurl' && defined $value && $value eq q{} ) {
+                            $dataFields{ $fields->[$j] } = undef;
                             push @values, undef;
                         } else {
-                            $dataFields{$fields->[$j]} = $value;
+                            $dataFields{ $fields->[$j] } = $value;
                             push @values, $value;
                         }
-                        $j++
+                        $j++;
                     } else {
-                        if ($fields->[$j] eq 'frameworkcode' && $value ne $frameworkcode) {
-                            $dataFields{$fields->[$j]} = $frameworkcode;
+                        if ( $fields->[$j] eq 'frameworkcode' && $value ne $frameworkcode ) {
+                            $dataFields{ $fields->[$j] } = $frameworkcode;
                             push @values, $frameworkcode;
-                        } elsif ($fields->[$j] eq 'isurl' && defined $value && $value eq q{}) {
-                            $dataFields{$fields->[$j]} = undef;
+                        } elsif ( $fields->[$j] eq 'isurl' && defined $value && $value eq q{} ) {
+                            $dataFields{ $fields->[$j] } = undef;
                             push @values, undef;
                         } else {
-                            $dataFields{$fields->[$j]} = $value;
+                            $dataFields{ $fields->[$j] } = $value;
                             push @values, $value;
                         }
-                        $j++
+                        $j++;
                     }
                 }
-                $ok = _processRow_DB($dbh, $table, $fieldsStr, $dataStr, $updateStr, \@values, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+                $ok = _processRow_DB(
+                    $dbh,       $table, $fieldsStr, $dataStr, $updateStr, \@values, \%dataFields, $PKArray,
+                    \@fieldsPK, $fields2Delete
+                );
             }
             $pos = tell($dom);
         }
         @arrData = ();
     }
     return $ok;
-}#_import_table_csv
-
+}    #_import_table_csv
 
 # Import worksheet from the ods content.xml file to the mysql table
-sub _import_table_ods
-{
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $frameworktype) = @_;
+sub _import_table_ods {
+    my ( $dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $frameworktype ) = @_;
 
     my $xc = XML::LibXML::XPathContext->new($dom);
-    $xc->registerNs('xmlns:office','urn:oasis:names:tc:opendocument:xmlns:office:1.0');
-    $xc->registerNs('xmlns:table','urn:oasis:names:tc:opendocument:xmlns:table:1.0');
-    $xc->registerNs('xmlns:text','urn:oasis:names:tc:opendocument:xmlns:text:1.0');
+    $xc->registerNs( 'xmlns:office', 'urn:oasis:names:tc:opendocument:xmlns:office:1.0' );
+    $xc->registerNs( 'xmlns:table',  'urn:oasis:names:tc:opendocument:xmlns:table:1.0' );
+    $xc->registerNs( 'xmlns:text',   'urn:oasis:names:tc:opendocument:xmlns:text:1.0' );
     my @nodes;
-    @nodes = $xc->findnodes('//table:table[@table:name="' . $table . '"]');
-    if (@nodes == 1 && $nodes[0]->hasChildNodes()) {
+    @nodes = $xc->findnodes( '//table:table[@table:name="' . $table . '"]' );
+    if ( @nodes == 1 && $nodes[0]->hasChildNodes() ) {
         my $nodeR = $nodes[0]->firstChild;
-        return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, 'ods', $fields2Delete, $frameworktype);
+        return _processRows_Table(
+            $dbh, $frameworkcode, $nodeR, $table, $PKArray, 'ods', $fields2Delete,
+            $frameworktype
+        );
     } else {
         Koha::Logger->get->warn("Error _import_table_ods there's not worksheet for $table");
     }
     return 0;
-}#_import_table_ods
-
+}    #_import_table_ods
 
 # Import worksheet from the excel-xml file to the mysql table
-sub _import_table_excel
-{
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $frameworktype) = @_;
+sub _import_table_excel {
+    my ( $dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $frameworktype ) = @_;
 
     my $xc = XML::LibXML::XPathContext->new($dom);
-    $xc->registerNs('xmlns','urn:schemas-microsoft-com:office:spreadsheet');
-    $xc->registerNs('xmlns:ss','urn:schemas-microsoft-com:office:spreadsheet');
-    $xc->registerNs('xmlns:x','urn:schemas-microsoft-com:office:excel');
+    $xc->registerNs( 'xmlns',    'urn:schemas-microsoft-com:office:spreadsheet' );
+    $xc->registerNs( 'xmlns:ss', 'urn:schemas-microsoft-com:office:spreadsheet' );
+    $xc->registerNs( 'xmlns:x',  'urn:schemas-microsoft-com:office:excel' );
     my @nodes;
-    @nodes = $xc->findnodes('//ss:Worksheet[@ss:Name="' . $table . '"]');
-    if (@nodes > 0) {
-        for (my $i=0; $i < @nodes; $i++) {
-            my @nodesT = $nodes[$i]->getElementsByTagNameNS('urn:schemas-microsoft-com:office:spreadsheet', 'Table');
-            if (@nodesT == 1 && $nodesT[0]->hasChildNodes()) {
+    @nodes = $xc->findnodes( '//ss:Worksheet[@ss:Name="' . $table . '"]' );
+    if ( @nodes > 0 ) {
+        for ( my $i = 0 ; $i < @nodes ; $i++ ) {
+            my @nodesT = $nodes[$i]->getElementsByTagNameNS( 'urn:schemas-microsoft-com:office:spreadsheet', 'Table' );
+            if ( @nodesT == 1 && $nodesT[0]->hasChildNodes() ) {
                 my $nodeR = $nodesT[0]->firstChild;
-                return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, undef, $fields2Delete, $frameworktype);
+                return _processRows_Table(
+                    $dbh, $frameworkcode, $nodeR, $table, $PKArray, undef, $fields2Delete,
+                    $frameworktype
+                );
             }
         }
     } else {
         Koha::Logger->get->warn("Error _import_table_excel there's not worksheet for $table");
     }
     return 0;
-}#_import_table_excel
-
+}    #_import_table_excel
 
 # Get the data from a cell on a ods file through the value attribute or the text node
-sub _getDataNodeODS
-{
+sub _getDataNodeODS {
     my $node = shift;
 
     my $data;
     my $repeated = 0;
-    if ($node->nodeType == 1 && $node->nodeName =~ /(?:table:)?table-cell/) {
-        if ($node->hasAttributeNS('urn:oasis:names:tc:opendocument:xmlns:office:1.0', 'value')) {
-            $data = $node->getAttributeNS('urn:oasis:names:tc:opendocument:xmlns:office:1.0', 'value');
-        } elsif ($node->hasChildNodes()) {
-            my @nodes2 = $node->getElementsByTagNameNS('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'p');
-            if (@nodes2 == 1 && $nodes2[0]->hasChildNodes()) {
+    if ( $node->nodeType == 1 && $node->nodeName =~ /(?:table:)?table-cell/ ) {
+        if ( $node->hasAttributeNS( 'urn:oasis:names:tc:opendocument:xmlns:office:1.0', 'value' ) ) {
+            $data = $node->getAttributeNS( 'urn:oasis:names:tc:opendocument:xmlns:office:1.0', 'value' );
+        } elsif ( $node->hasChildNodes() ) {
+            my @nodes2 = $node->getElementsByTagNameNS( 'urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'p' );
+            if ( @nodes2 == 1 && $nodes2[0]->hasChildNodes() ) {
                 $data = $nodes2[0]->firstChild->nodeValue;
             }
         }
-        if ($node->hasAttributeNS('urn:oasis:names:tc:opendocument:xmlns:table:1.0', 'number-columns-repeated')) {
-            $repeated = $node->getAttributeNS('urn:oasis:names:tc:opendocument:xmlns:table:1.0', 'number-columns-repeated');
+        if ( $node->hasAttributeNS( 'urn:oasis:names:tc:opendocument:xmlns:table:1.0', 'number-columns-repeated' ) ) {
+            $repeated =
+                $node->getAttributeNS( 'urn:oasis:names:tc:opendocument:xmlns:table:1.0', 'number-columns-repeated' );
         }
     }
-    return ($data, $repeated);
-}#_getDataNodeODS
-
+    return ( $data, $repeated );
+}    #_getDataNodeODS
 
 # Get the data from a row of a spreadsheet
-sub _getDataFields
-{
-    my ($frameworkcode, $node, $fields, $format, $frameworktype) = @_;
+sub _getDataFields {
+    my ( $frameworkcode, $node, $fields, $format, $frameworktype ) = @_;
 
-    my $dataFields = {};
+    my $dataFields  = {};
     my @dataFieldsA = ();
     $frameworktype ||= '';
-    if ($node && $node->hasChildNodes()) {
+    if ( $node && $node->hasChildNodes() ) {
         my $node2 = $node->firstChild;
-        my ($data, $repeated);
-        my $i = 0;
+        my ( $data, $repeated );
+        my $i  = 0;
         my $ok = 0;
         $repeated = 0;
         while ($node2) {
-            if ($format && $format eq 'ods') {
-                ($data, $repeated) = _getDataNodeODS($node2) if ($repeated <= 0);
+            if ( $format && $format eq 'ods' ) {
+                ( $data, $repeated ) = _getDataNodeODS($node2) if ( $repeated <= 0 );
                 $repeated--;
                 $ok = 1;
             } else {
-                if ($node2->nodeType == 1 && $node2->nodeName  =~ /(?:ss:)?Cell/) {
-                    my @nodes3 = $node2->getElementsByTagNameNS('urn:schemas-microsoft-com:office:spreadsheet', 'Data');
-                    if (@nodes3 == 1 && $nodes3[0]->hasChildNodes()) {
+                if ( $node2->nodeType == 1 && $node2->nodeName =~ /(?:ss:)?Cell/ ) {
+                    my @nodes3 =
+                        $node2->getElementsByTagNameNS( 'urn:schemas-microsoft-com:office:spreadsheet', 'Data' );
+                    if ( @nodes3 == 1 && $nodes3[0]->hasChildNodes() ) {
                         $data = $nodes3[0]->firstChild->nodeValue;
-                        $ok = 1;
+                        $ok   = 1;
                     }
                 }
             }
             if ($ok) {
                 $data //= '';
-                $data = '' if ($data eq '#');
-                if ($frameworktype eq "authority") {
+                $data = '' if ( $data eq '#' );
+                if ( $frameworktype eq "authority" ) {
                     if ( $fields->[$i] eq 'authtypecode' ) {
                         $data = $frameworkcode;
-                    }
-                    elsif ( $fields->[$i] eq 'isurl' ) {
+                    } elsif ( $fields->[$i] eq 'isurl' ) {
                         $data = undef if defined $data && $data eq q{};
                     }
                 } else {
                     if ( $fields->[$i] eq 'frameworkcode' ) {
                         $data = $frameworkcode;
-                    }
-                    elsif ( $fields->[$i] eq 'isurl' ) {
+                    } elsif ( $fields->[$i] eq 'isurl' ) {
                         $data = undef if defined $data && $data eq q{};
                     }
                 }
-                $dataFields->{$fields->[$i]} = $data;
+                $dataFields->{ $fields->[$i] } = $data;
                 push @dataFieldsA, $data;
                 $i++;
             }
-            $ok = 0;
-            $node2 = $node2->nextSibling if ($repeated <= 0);
+            $ok    = 0;
+            $node2 = $node2->nextSibling if ( $repeated <= 0 );
         }
     }
-    return ($dataFields, \@dataFieldsA);
-}#_getDataFields
-
+    return ( $dataFields, \@dataFieldsA );
+}    #_getDataFields
 
 # Get the data from the first row to know the column names
-sub _getFields
-{
-    my ($node, $fields, $format) = @_;
+sub _getFields {
+    my ( $node, $fields, $format ) = @_;
 
-    if ($node && $node->hasChildNodes()) {
+    if ( $node && $node->hasChildNodes() ) {
         my $node2 = $node->firstChild;
-        my ($data, $repeated);
+        my ( $data, $repeated );
         while ($node2) {
-            if ($format && $format eq 'ods') {
-                ($data, $repeated) = _getDataNodeODS($node2);
-                push @$fields, $data if (defined($data));
+            if ( $format && $format eq 'ods' ) {
+                ( $data, $repeated ) = _getDataNodeODS($node2);
+                push @$fields, $data if ( defined($data) );
             } else {
-                if ($node2->nodeType == 1 && $node2->nodeName =~ /(?:ss:)?Cell/) {
-                    my @nodes3 = $node2->getElementsByTagNameNS('urn:schemas-microsoft-com:office:spreadsheet', 'Data');
-                    if (@nodes3 == 1 && $nodes3[0]->hasChildNodes()) {
+                if ( $node2->nodeType == 1 && $node2->nodeName =~ /(?:ss:)?Cell/ ) {
+                    my @nodes3 =
+                        $node2->getElementsByTagNameNS( 'urn:schemas-microsoft-com:office:spreadsheet', 'Data' );
+                    if ( @nodes3 == 1 && $nodes3[0]->hasChildNodes() ) {
                         $data = $nodes3[0]->firstChild->nodeValue;
                         push @$fields, $data;
                     }
@@ -1193,10 +1237,7 @@ sub _getFields
             $node2 = $node2->nextSibling;
         }
     }
-}#_getFields
-
-
-
+}    #_getFields
 
 1;
 __END__

@@ -9,7 +9,7 @@
             </div>
 
             <div class="form-content">
-                <input name="barcode" id="ren_barcode" class="head-searchbox form-control" accesskey="r" type="text" placeholder="Scan a barcode to renew" size="40"/>
+                <input name="barcode" id="ren_barcode" class="head-searchbox form-control" accesskey="r" type="text" placeholder="Scan a barcode to renew" size="40" />
             </div>
             <input type="hidden" name="op" value="cud-renew" />
             <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>

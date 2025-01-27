@@ -5,22 +5,27 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% SWITCH op %]
+<title
+    >[% FILTER collapse %]
+        [% SWITCH op %]
         [% CASE 'add_form' %]
             [% IF field %]
-                [% tx("Modify field '{field_name}'", { field_name = field.name }) | html %] &rsaquo;
+                [% tx("Modify field '{field_name}'", { field_name = field.name }) | html %]
+                &rsaquo;
             [% ELSE %]
-                [% t("New field") | html %] &rsaquo;
+                [% t("New field") | html %]
+                &rsaquo;
             [% END %]
-            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %] &rsaquo;
+            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
+            &rsaquo;
         [% CASE 'list' %]
-            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %] &rsaquo;
-    [% END %]
-    [% t("Additional fields") | html %] &rsaquo;
-    [% t("Administration") | html %] &rsaquo;
-    [% t("Koha") | html %]
-[% END %]</title>
+            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Additional fields") | html %]
+        &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -30,7 +35,7 @@
 [% show_searchable = searchable_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 
 <body id="ser_add_fields" class="ser">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -40,39 +45,36 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
         [% SWITCH op %]
-            [% CASE 'add_form' %]
+        [% CASE 'add_form' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a>
+            [% END %]
+            [% IF field %]
                 [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a>
-                [% END %]
-                [% IF field %]
-                    [% WRAPPER breadcrumb_item %]
-                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=[% tablename | uri %]">[% tx("Table '{table_name}'", { table_name = tablename } ) | html %]</a>
-                    [% END %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        [% tx("Modify field '{field_name}'", { field_name = field.name }) | html %]
-                    [% END %]
-                [% ELSE %]
-                    [% WRAPPER breadcrumb_item %]
-                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=[% tablename | uri %]">[% tx("Table '{table_name}'", { table_name = tablename } ) | html %]</a>
-                    [% END %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        [% t("New field" ) | html %]
-                    [% END %]
-                [% END %]
-
-            [% CASE 'list' %]
-                [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a>
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=[% tablename | uri %]">[% tx("Table '{table_name}'", { table_name = tablename } ) | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
+                    [% tx("Modify field '{field_name}'", { field_name = field.name }) | html %]
                 [% END %]
-
-            [% CASE %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=[% tablename | uri %]">[% tx("Table '{table_name}'", { table_name = tablename } ) | html %]</a>
+                [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Additional fields</span>
+                    [% t("New field" ) | html %]
                 [% END %]
-
+            [% END %]
+        [% CASE 'list' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
+            [% END %]
+        [% CASE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Additional fields</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -111,12 +113,14 @@
 
     [% IF op == 'list_tables' %]
         [% IF CAN_user_acquisition_order_manage || CAN_user_serials_edit_subscription || CAN_user_updatecharges_remaining_permissions || CAN_user_erm %]
-        <h1>Additional fields</h1>
+            <h1>Additional fields</h1>
 
-        <div class="page-section">
-            [% BLOCK table_option %]
-                <li><a href="?tablename=[% value | uri %]">[% content | $raw %] (<span class="ex">[% value | html %]</span>)</a></li>
-            [% END %]
+            <div class="page-section">
+                [% BLOCK table_option %]
+                    <li
+                        ><a href="?tablename=[% value | uri %]">[% content | $raw %] (<span class="ex">[% value | html %]</span>)</a></li
+                    >
+                [% END %]
                 [% IF CAN_user_acquisition_order_manage || CAN_user_acquisition_edit_invoices %]
                     <h2>Acquisitions</h2>
                     <ul>
@@ -149,11 +153,11 @@
                     <ul>
                         [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]
                     </ul>
-                [% END %]
-        </div><!-- /.page-section -->
-            [% ELSE %]
-                Additional permissions are required for editing additional fields
-            [% END %]
+                [% END %] </div
+            ><!-- /.page-section -->
+        [% ELSE %]
+            Additional permissions are required for editing additional fields
+        [% END %]
     [% ELSIF op == 'list' %]
         <h1>Additional fields for '[% tablename | html %]'</h1>
         [% IF fields %]
@@ -183,28 +187,36 @@
                                     <td>[% field.marcfield | html %]</td>
                                     <td>
                                         [% SWITCH field.marcfield_mode %]
-                                            [% CASE 'get' %]Get value from MARC record
-                                            [% CASE 'set' %]Save value to MARC record
+                                        [% CASE 'get' %]
+                                            Get value from MARC record
+                                        [% CASE 'set' %]
+                                            Save value to MARC record
                                         [% END %]
                                     </td>
                                 [% END %]
                                 [% IF show_searchable %]
-                                    <td>
-                                        [% IF field.searchable %]Yes[% ELSE %]No[% END %]
-                                    </td>
+                                    <td> [% IF field.searchable %]Yes[% ELSE %]No[% END %] </td>
                                 [% END %]
-                                    <td>
-                                        [% IF field.repeatable %]Yes[% ELSE %]No[% END %]
-                                    </td>
+                                <td> [% IF field.repeatable %]Yes[% ELSE %]No[% END %] </td>
                                 <td class="actions">
                                     <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                    <a class="submit-form-link btn btn-default btn-xs" href="#" data-action="additional-fields.pl" data-method="post" data-op="cud-delete" data-field_id="[% field.id | html %]" data-tablename="[% tablename | html %]" data-confirmation-msg="[% t('Are you sure you want to delete this field?') | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                    <a
+                                        class="submit-form-link btn btn-default btn-xs"
+                                        href="#"
+                                        data-action="additional-fields.pl"
+                                        data-method="post"
+                                        data-op="cud-delete"
+                                        data-field_id="[% field.id | html %]"
+                                        data-tablename="[% tablename | html %]"
+                                        data-confirmation-msg="[% t('Are you sure you want to delete this field?') | html %]"
+                                        ><i class="fa fa-trash-can"></i> Delete</a
+                                    >
                                 </td>
                             </tr>
                         [% END %]
                     </tbody>
-                </table>
-            </div><!-- /.page-section -->
+                </table> </div
+            ><!-- /.page-section -->
         [% ELSE %]
             [% IF tablename %]There are no additional fields defined for this table.[% END %]
         [% END %]
@@ -284,39 +296,42 @@
             </fieldset>
         </form>
     [% END %]
-
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE "datatables.inc" %]
     [% Asset.js("js/form-submit.js") | $raw %]
     <script>
-        $(document).ready(function(){
-            $('#selecttable').find(":submit").hide();
-            $('#selecttable select').change(function() {
-                $('#selecttable').submit();
+        $(document).ready(function () {
+            $("#selecttable").find(":submit").hide();
+            $("#selecttable select").change(function () {
+                $("#selecttable").submit();
             });
 
-            $("#fieldst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "autoWidth": false,
-                "dom": 't<"bottom pager"ilpf>',
-                "pagingType": 'full',
-                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                "pageLength": 20,
-                "order": [[ 0, "asc" ]],
-            }));
+            $("#fieldst").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    autoWidth: false,
+                    dom: 't<"bottom pager"ilpf>',
+                    pagingType: "full",
+                    lengthMenu: [
+                        [10, 20, 50, 100, -1],
+                        [10, 20, 50, 100, "All"],
+                    ],
+                    pageLength: 20,
+                    order: [[0, "asc"]],
+                })
+            );
 
-            $("#add_field").on('submit', function() {
-                if ( $("#marcfield").length && $("select[name='authorised_value_category']").length ) {
-                    if ( $("#marcfield").val().length > 0
-                        && $("select[name='authorised_value_category']" ).val().length > 0 ) {
-                        alert(_("You cannot select an authorised value category and a MARC field") );
+            $("#add_field").on("submit", function () {
+                if ($("#marcfield").length && $("select[name='authorised_value_category']").length) {
+                    if ($("#marcfield").val().length > 0 && $("select[name='authorised_value_category']").val().length > 0) {
+                        alert(_("You cannot select an authorised value category and a MARC field"));
                         return false;
                     }
                 }
-                if ( $("#marcfield").length && $("#repeatable").length) {
-                    if ( $("#marcfield").val().length > 0 && $("#repeatable").prop('checked') == true ) {
-                        alert(_("You cannot set a MARC field as repeatable") );
+                if ($("#marcfield").length && $("#repeatable").length) {
+                    if ($("#marcfield").val().length > 0 && $("#repeatable").prop("checked") == true) {
+                        alert(_("You cannot set a MARC field as repeatable"));
                         return false;
                     }
                 }

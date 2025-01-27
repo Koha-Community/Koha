@@ -30,7 +30,7 @@ use Koha::Old::Holds;
 use Koha::DateUtils qw( dt_from_string );
 
 use List::MoreUtils qw( any );
-use Try::Tiny qw( catch try );
+use Try::Tiny       qw( catch try );
 
 =head1 API
 
@@ -50,7 +50,7 @@ sub list {
 
     return try {
         my $holds_set =
-              $old
+            $old
             ? Koha::Old::Holds->new
             : Koha::Holds->new;
 
@@ -87,10 +87,10 @@ sub add {
         my $hold_date         = $body->{hold_date};
         my $non_priority      = $body->{non_priority};
 
-        my $overrides = $c->stash('koha.overrides');
+        my $overrides    = $c->stash('koha.overrides');
         my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
 
-        if(!C4::Context->preference( 'AllowHoldDateInFuture' ) && $hold_date) {
+        if ( !C4::Context->preference('AllowHoldDateInFuture') && $hold_date ) {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Hold date in future not allowed" }
@@ -109,21 +109,17 @@ sub add {
                     openapi => { error => "Item $item_id doesn't belong to biblio $biblio_id" }
                 );
             }
-        }
-        elsif ($item_id) {
+        } elsif ($item_id) {
             $item = Koha::Items->find($item_id);
 
             unless ($item) {
                 return $c->render_resource_not_found("Item");
-            }
-            else {
+            } else {
                 $biblio = $item->biblio;
             }
-        }
-        elsif ($biblio_id) {
+        } elsif ($biblio_id) {
             $biblio = Koha::Biblios->find($biblio_id);
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 400,
                 openapi => { error => "At least one of biblio_id, item_id should be given" }
@@ -137,7 +133,7 @@ sub add {
             );
         }
 
-        my $patron = Koha::Patrons->find( $patron_id );
+        my $patron = Koha::Patrons->find($patron_id);
         unless ($patron) {
             return $c->render(
                 status  => 400,
@@ -146,43 +142,40 @@ sub add {
         }
 
         # If the hold is being forced, no need to validate
-        unless( $can_override ){
+        unless ($can_override) {
+
             # Validate pickup location
             my $valid_pickup_location;
             if ($item) {    # item-level hold
                 $valid_pickup_location =
-                  any { $_->branchcode eq $pickup_library_id }
-                $item->pickup_locations(
-                    { patron => $patron } )->as_list;
-            }
-            else {
+                    any { $_->branchcode eq $pickup_library_id }
+                    $item->pickup_locations( { patron => $patron } )->as_list;
+            } else {
                 $valid_pickup_location =
-                  any { $_->branchcode eq $pickup_library_id }
-                $biblio->pickup_locations(
-                    { patron => $patron } )->as_list;
+                    any { $_->branchcode eq $pickup_library_id }
+                    $biblio->pickup_locations( { patron => $patron } )->as_list;
             }
 
             return $c->render(
                 status  => 400,
-                openapi => {
-                    error => 'The supplied pickup location is not valid'
-                }
+                openapi => { error => 'The supplied pickup location is not valid' }
             ) unless $valid_pickup_location;
 
-            my $can_place_hold
-                = $item
+            my $can_place_hold =
+                $item
                 ? C4::Reserves::CanItemBeReserved( $patron, $item )
                 : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
 
-            if ( C4::Context->preference('maxreserves') && $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
+            if ( C4::Context->preference('maxreserves')
+                && $patron->holds->count + 1 > C4::Context->preference('maxreserves') )
+            {
                 $can_place_hold->{status} = 'tooManyReserves';
             }
 
             unless ( $can_place_hold->{status} eq 'OK' ) {
                 return $c->render(
-                    status => 403,
-                    openapi =>
-                        { error => "Hold cannot be placed. Reason: " . $can_place_hold->{status} }
+                    status  => 403,
+                    openapi => { error => "Hold cannot be placed. Reason: " . $can_place_hold->{status} }
                 );
             }
         }
@@ -222,13 +215,12 @@ sub add {
             status  => 201,
             openapi => $c->objects->to_api($hold),
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions') ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 my $broken_fk = $_->broken_fk;
 
-                if ( grep { $_ eq $broken_fk } keys %{Koha::Holds->new->to_api_mapping} ) {
+                if ( grep { $_ eq $broken_fk } keys %{ Koha::Holds->new->to_api_mapping } ) {
                     $c->render(
                         status  => 404,
                         openapi => Koha::Holds->new->to_api_mapping->{$broken_fk} . ' not found.'
@@ -256,28 +248,24 @@ sub edit {
         return $c->render_resource_not_found("Hold")
             unless $hold;
 
-        my $overrides = $c->stash('koha.overrides');
+        my $overrides    = $c->stash('koha.overrides');
         my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
 
         my $body = $c->req->json;
 
         my $pickup_library_id = $body->{pickup_library_id};
 
-        if (
-            defined $pickup_library_id
-            && ( !$hold->is_pickup_location_valid({ library_id => $pickup_library_id }) && !$can_override )
-          )
+        if ( defined $pickup_library_id
+            && ( !$hold->is_pickup_location_valid( { library_id => $pickup_library_id } ) && !$can_override ) )
         {
             return $c->render(
                 status  => 400,
-                openapi => {
-                    error => 'The supplied pickup location is not valid'
-                }
+                openapi => { error => 'The supplied pickup location is not valid' }
             );
         }
 
         $pickup_library_id //= $hold->branchcode;
-        my $priority         = $body->{priority} // $hold->priority;
+        my $priority        = $body->{priority}        // $hold->priority;
         my $hold_date       = $body->{hold_date}       // $hold->reservedate;
         my $expiration_date = $body->{expiration_date} // $hold->expirationdate;
 
@@ -294,16 +282,14 @@ sub edit {
             expirationdate => $expiration_date,
         };
 
-
         C4::Reserves::ModReserve($params);
-        $hold->discard_changes; # refresh
+        $hold->discard_changes;    # refresh
 
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($hold),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -317,7 +303,7 @@ Method that handles deleting a Koha::Hold object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold = Koha::Holds->find($c->param('hold_id'));
+    my $hold = Koha::Holds->find( $c->param('hold_id') );
 
     return $c->render_resource_not_found("Hold")
         unless $hold;
@@ -340,8 +326,7 @@ sub delete {
         $hold->cancel( { cancellation_reason => $cancellation_reason } );
 
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -368,15 +353,14 @@ sub suspend {
         $hold->discard_changes;
         $c->res->headers->location( $c->req->url->to_string );
 
-        my $suspend_until = $end_date ? dt_from_string($hold->suspend_until)->ymd : undef;
+        my $suspend_until = $end_date ? dt_from_string( $hold->suspend_until )->ymd : undef;
         return $c->render(
             status  => 201,
             openapi => {
                 end_date => $suspend_until,
             }
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Hold::CannotSuspendFound') ) {
             return $c->render( status => 400, openapi => { error => "$_" } );
         }
@@ -394,7 +378,7 @@ Method that handles resuming a hold
 sub resume {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold = Koha::Holds->find($c->param('hold_id'));
+    my $hold = Koha::Holds->find( $c->param('hold_id') );
     my $body = $c->req->json;
 
     return $c->render_resource_not_found("Hold")
@@ -403,8 +387,7 @@ sub resume {
     return try {
         $hold->resume;
         return $c->render_resource_deleted;
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -418,7 +401,7 @@ Method that handles modifying a Koha::Hold object
 sub update_priority {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold = Koha::Holds->find($c->param('hold_id'));
+    my $hold = Koha::Holds->find( $c->param('hold_id') );
 
     return $c->render_resource_not_found("Hold")
         unless $hold;
@@ -433,8 +416,7 @@ sub update_priority {
         );
 
         return $c->render( status => 200, openapi => $priority );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -449,7 +431,7 @@ used for building the dropdown selector
 sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold = Koha::Holds->find( $c->param('hold_id'), { prefetch => [ 'patron' ] } );
+    my $hold = Koha::Holds->find( $c->param('hold_id'), { prefetch => ['patron'] } );
 
     return $c->render_resource_not_found("Hold")
         unless $hold;
@@ -459,8 +441,7 @@ sub pickup_locations {
 
         if ( $hold->itemnumber ) {
             $ps_set = $hold->item->pickup_locations( { patron => $hold->patron } );
-        }
-        else {
+        } else {
             $ps_set = $hold->biblio->pickup_locations( { patron => $hold->patron } );
         }
 
@@ -473,12 +454,10 @@ sub pickup_locations {
 
             @response = map {
                 my $library = $_;
-                $library->{needs_override} = (
-                    any { $_->branchcode eq $library->{library_id} }
-                    $ps_set->as_list
-                  )
-                  ? Mojo::JSON->false
-                  : Mojo::JSON->true;
+                $library->{needs_override} =
+                    ( any { $_->branchcode eq $library->{library_id} } $ps_set->as_list )
+                    ? Mojo::JSON->false
+                    : Mojo::JSON->true;
                 $library;
             } @{$libraries};
 
@@ -488,15 +467,14 @@ sub pickup_locations {
             );
         }
 
-        my $pickup_locations = $c->objects->search( $ps_set );
+        my $pickup_locations = $c->objects->search($ps_set);
         @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
 
         return $c->render(
             status  => 200,
             openapi => \@response
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -510,7 +488,7 @@ Method that handles modifying the pickup location of a Koha::Hold object
 sub update_pickup_location {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold = Koha::Holds->find($c->param('hold_id'));
+    my $hold = Koha::Holds->find( $c->param('hold_id') );
 
     return $c->render_resource_not_found("Hold")
         unless $hold;
@@ -543,19 +521,14 @@ sub update_pickup_location {
 
         return $c->render(
             status  => 200,
-            openapi => {
-                pickup_library_id => $pickup_library_id
-            }
+            openapi => { pickup_library_id => $pickup_library_id }
         );
-    }
-    catch {
+    } catch {
 
         if ( blessed $_ and $_->isa('Koha::Exceptions::Hold::InvalidPickupLocation') ) {
             return $c->render(
                 status  => 400,
-                openapi => {
-                    error => "$_"
-                }
+                openapi => { error => "$_" }
             );
         }
 

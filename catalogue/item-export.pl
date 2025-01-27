@@ -26,23 +26,27 @@ use C4::Output;
 
 my $cgi = CGI->new;
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => 'catalogue/itemsearch_csv.tt',
-    query => $cgi,
-    type => 'intranet',
-    flagsrequired   => { catalogue => 1 },
-});
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => 'catalogue/itemsearch_csv.tt',
+        query         => $cgi,
+        type          => 'intranet',
+        flagsrequired => { catalogue => 1 },
+    }
+);
 
 my @itemnumbers = $cgi->multi_param('itemnumber');
-my $format = $cgi->param('format') // 'csv';
+my $format      = $cgi->param('format') // 'csv';
 
-my $items = Koha::Items->search({ itemnumber => { -in => \@itemnumbers } });
+my $items = Koha::Items->search( { itemnumber => { -in => \@itemnumbers } } );
 
-if ($format eq 'barcodes') {
-    print $cgi->header({
-        type => 'text/plain',
-        attachment => 'barcodes.txt',
-    });
+if ( $format eq 'barcodes' ) {
+    print $cgi->header(
+        {
+            type       => 'text/plain',
+            attachment => 'barcodes.txt',
+        }
+    );
 
     while ( my $item = $items->next ) {
         print $item->barcode . "\n";
@@ -54,10 +58,12 @@ $template->param(
     results => $items,
 );
 
-print $cgi->header({
-    type => 'text/csv',
-    attachment => 'items.csv',
-});
+print $cgi->header(
+    {
+        type       => 'text/csv',
+        attachment => 'items.csv',
+    }
+);
 for my $line ( split '\n', $template->output ) {
     print "$line\n" unless $line =~ m|^\s*$|;
 }

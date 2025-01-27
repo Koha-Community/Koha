@@ -20,12 +20,12 @@
 
 use Modern::Perl;
 
-use CGI qw( -utf8 );
+use CGI             qw( -utf8 );
 use List::MoreUtils qw( uniq );
 
-use C4::Auth qw( get_template_and_user );
-use C4::Circulation qw( barcodedecode );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth           qw( get_template_and_user );
+use C4::Circulation    qw( barcodedecode );
+use C4::Output         qw( output_html_with_http_headers );
 use C4::CourseReserves qw( GetCourse ModCourse ModCourseItem ModCourseReserve );
 
 use Koha::Items;
@@ -43,18 +43,18 @@ my $homebranch    = $cgi->param('homebranch');
 my $holdingbranch = $cgi->param('holdingbranch');
 my $location      = $cgi->param('location');
 
-my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
-my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
-my $homebranch_enabled    = scalar $cgi->param('homebranch_enabled') ? 1 : 0;
+my $itype_enabled         = scalar $cgi->param('itype_enabled')         ? 1 : 0;
+my $ccode_enabled         = scalar $cgi->param('ccode_enabled')         ? 1 : 0;
+my $homebranch_enabled    = scalar $cgi->param('homebranch_enabled')    ? 1 : 0;
 my $holdingbranch_enabled = scalar $cgi->param('holdingbranch_enabled') ? 1 : 0;
-my $location_enabled      = scalar $cgi->param('location_enabled') ? 1 : 0;
+my $location_enabled      = scalar $cgi->param('location_enabled')      ? 1 : 0;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "course_reserves/batch_add_items.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { coursereserves => 'add_reserves' },
+        template_name => "course_reserves/batch_add_items.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { coursereserves => 'add_reserves' },
     }
 );
 
@@ -65,12 +65,11 @@ if ( $course_id && $course ) {
 
     if ( !$op ) {
         $template->param( action => 'display_form' );
-    }
-    elsif ( $op eq 'cud-add' ) {
-        my @barcodes = uniq( split( /\s\n/, $barcodes ) );
+    } elsif ( $op eq 'cud-add' ) {
+        my @barcodes      = uniq( split( /\s\n/, $barcodes ) );
         my @biblionumbers = uniq( split( /\s\n/, $biblionumbers ) );
 
-        if (@barcodes > 0) {
+        if ( @barcodes > 0 ) {
             my @items;
             my @invalid_barcodes;
             for my $b (@barcodes) {
@@ -79,8 +78,7 @@ if ( $course_id && $course ) {
 
                 if ($item) {
                     push( @items, $item );
-                }
-                else {
+                } else {
                     push( @invalid_barcodes, $b );
                 }
             }
@@ -103,7 +101,7 @@ if ( $course_id && $course ) {
 
                 my $staff_note  = $cgi->param('item_staff_note');
                 my $public_note = $cgi->param('item_public_note');
-                my $cr_id = ModCourseReserve(
+                my $cr_id       = ModCourseReserve(
                     course_id   => $course_id,
                     ci_id       => $ci_id,
                     staff_note  => $staff_note,
@@ -119,16 +117,15 @@ if ( $course_id && $course ) {
                 barcodes         => 1,
             );
 
-        } elsif (@biblionumbers > 0) {
+        } elsif ( @biblionumbers > 0 ) {
             my @biblios;
             my @invalid_biblionumbers;
             for my $b (@biblionumbers) {
-                my $biblio = Koha::Biblios->find( $b );
+                my $biblio = Koha::Biblios->find($b);
 
                 if ($biblio) {
                     push( @biblios, $biblio );
-                }
-                else {
+                } else {
                     push( @invalid_biblionumbers, $b );
                 }
             }
@@ -151,7 +148,7 @@ if ( $course_id && $course ) {
 
                 my $staff_note  = $cgi->param('biblio_staff_note');
                 my $public_note = $cgi->param('biblio_public_note');
-                my $cr_id = ModCourseReserve(
+                my $cr_id       = ModCourseReserve(
                     course_id   => $course_id,
                     ci_id       => $ci_id,
                     staff_note  => $staff_note,
@@ -160,11 +157,11 @@ if ( $course_id && $course ) {
             }
 
             $template->param(
-                action           => 'display_results',
-                biblios_added    => \@biblios,
+                action                => 'display_results',
+                biblios_added         => \@biblios,
                 invalid_biblionumbers => \@invalid_biblionumbers,
-                course_id        => $course_id,
-                biblionumbers    => 1,
+                course_id             => $course_id,
+                biblionumbers         => 1,
             );
         }
     }

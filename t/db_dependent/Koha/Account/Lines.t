@@ -32,7 +32,7 @@ use Koha::Account::Offsets;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'total_outstanding() tests' => sub {
@@ -41,13 +41,14 @@ subtest 'total_outstanding() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    my $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total_outstanding, 0, 'total_outstanding returns 0 if no lines (undef case)' );
 
     my $debit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -57,7 +58,8 @@ subtest 'total_outstanding() tests' => sub {
     )->store;
 
     my $debit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -66,11 +68,12 @@ subtest 'total_outstanding() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total_outstanding, 20, 'total_outstanding sums correctly' );
 
     my $credit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
@@ -78,11 +81,12 @@ subtest 'total_outstanding() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total_outstanding, 10, 'total_outstanding sums correctly' );
 
     my $credit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
@@ -90,11 +94,12 @@ subtest 'total_outstanding() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total_outstanding, 0, 'total_outstanding sums correctly' );
 
     my $credit_3 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => -100,
@@ -102,7 +107,7 @@ subtest 'total_outstanding() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total_outstanding, -100, 'total_outstanding sums correctly' );
 
     $schema->storage->txn_rollback;
@@ -114,13 +119,14 @@ subtest 'total() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    my $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total, 0, 'total returns 0 if no lines (undef case)' );
 
     my $debit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -130,8 +136,9 @@ subtest 'total() tests' => sub {
     )->store;
 
     my $debit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
-            debit_type_code       => "OVERDUE",
+        {
+            borrowernumber    => $patron->id,
+            debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
             amountoutstanding => 10,
@@ -139,11 +146,12 @@ subtest 'total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total, 20, 'total sums correctly' );
 
     my $credit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
@@ -151,11 +159,12 @@ subtest 'total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total, 10, 'total sums correctly' );
 
     my $credit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
@@ -163,11 +172,12 @@ subtest 'total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total, 0, 'total sums correctly' );
 
     my $credit_3 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => -100,
@@ -175,7 +185,7 @@ subtest 'total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->total, -100, 'total sums correctly' );
 
     $schema->storage->txn_rollback;
@@ -187,13 +197,14 @@ subtest 'credits_total() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    my $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->credits_total, 0, 'credits_total returns 0 if no lines (undef case)' );
 
     my $debit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -203,7 +214,8 @@ subtest 'credits_total() tests' => sub {
     )->store;
 
     my $debit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -212,11 +224,12 @@ subtest 'credits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->credits_total, 0, 'credits_total sums correctly' );
 
     my $credit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
@@ -224,11 +237,12 @@ subtest 'credits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->credits_total, -10, 'credits_total sums correctly' );
 
     my $credit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
@@ -236,11 +250,12 @@ subtest 'credits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->credits_total, -20, 'credits_total sums correctly' );
 
     my $credit_3 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => -100,
@@ -248,7 +263,7 @@ subtest 'credits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->credits_total, -120, 'credits_total sums correctly' );
 
     $schema->storage->txn_rollback;
@@ -260,13 +275,14 @@ subtest 'debits_total() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    my $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->debits_total, 0, 'debits_total returns 0 if no lines (undef case)' );
 
     my $debit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -276,7 +292,8 @@ subtest 'debits_total() tests' => sub {
     )->store;
 
     my $debit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             debit_type_code   => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
@@ -285,11 +302,12 @@ subtest 'debits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->debits_total, 20, 'debits_total sums correctly' );
 
     my $credit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => 0,
@@ -297,11 +315,12 @@ subtest 'debits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->debits_total, 20, 'debits_total sums correctly' );
 
     my $credit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => 0,
@@ -309,11 +328,12 @@ subtest 'debits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->debits_total, 20, 'debits_total sums correctly' );
 
     my $credit_3 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->id,
+        {
+            borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => 0,
@@ -321,7 +341,7 @@ subtest 'debits_total() tests' => sub {
         }
     )->store;
 
-    $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
+    $lines = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
     is( $lines->debits_total, 20, 'debits_total sums correctly' );
 
     $schema->storage->txn_rollback;

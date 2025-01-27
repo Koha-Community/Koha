@@ -40,10 +40,10 @@ Return the checked out item
 =cut
 
 sub item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $item_rs = $self->_result->item;
     return unless $item_rs;
-    return Koha::Item->_new_from_dbic( $item_rs );
+    return Koha::Item->_new_from_dbic($item_rs);
 }
 
 =head3 account_lines
@@ -55,9 +55,9 @@ Return the checked out account_lines
 =cut
 
 sub account_lines {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $account_lines_rs = $self->_result->account_lines;
-    return Koha::Account::Lines->_new_from_dbic( $account_lines_rs );
+    return Koha::Account::Lines->_new_from_dbic($account_lines_rs);
 }
 
 =head3 library
@@ -69,10 +69,10 @@ Return the library in which the transaction took place. Might return I<undef>.
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $library_rs = $self->_result->library;
     return unless $library_rs;
-    return Koha::Library->_new_from_dbic( $library_rs );
+    return Koha::Library->_new_from_dbic($library_rs);
 }
 
 =head3 patron
@@ -84,10 +84,10 @@ Return the patron for who the checkout has been done
 =cut
 
 sub patron {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $patron_rs = $self->_result->patron;
     return unless $patron_rs;
-    return Koha::Patron->_new_from_dbic( $patron_rs );
+    return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
 =head3 issuer
@@ -99,10 +99,10 @@ Return the patron by whom the checkout was done
 =cut
 
 sub issuer {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $issuer_rs = $self->_result->issuer;
     return unless $issuer_rs;
-    return Koha::Patron->_new_from_dbic( $issuer_rs );
+    return Koha::Patron->_new_from_dbic($issuer_rs);
 }
 
 =head3 renewals
@@ -114,10 +114,10 @@ Return a Koha::Checkouts::Renewals set attached to this checkout
 =cut
 
 sub renewals {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $renewals_rs = $self->_result->renewals;
     return unless $renewals_rs;
-    return Koha::Checkouts::Renewals->_new_from_dbic( $renewals_rs );
+    return Koha::Checkouts::Renewals->_new_from_dbic($renewals_rs);
 }
 
 =head3 anonymize

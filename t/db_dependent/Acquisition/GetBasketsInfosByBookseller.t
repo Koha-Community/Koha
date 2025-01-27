@@ -4,8 +4,9 @@ use Modern::Perl;
 use Test::More tests => 43;
 use Data::Dumper;
 
-use C4::Acquisition qw( NewBasket GetBasket GetBasketsInfosByBookseller ReopenBasket AddInvoice GetInvoice ModReceiveOrder );
-use C4::Biblio qw( AddBiblio );
+use C4::Acquisition
+    qw( NewBasket GetBasket GetBasketsInfosByBookseller ReopenBasket AddInvoice GetInvoice ModReceiveOrder );
+use C4::Biblio  qw( AddBiblio );
 use C4::Budgets qw( AddBudget GetBudget );
 use C4::Context;
 use Koha::Database;
@@ -16,17 +17,17 @@ $schema->storage->txn_begin();
 
 my $supplier = Koha::Acquisition::Bookseller->new(
     {
-        name => 'my vendor',
-        address1 => 'bookseller\'s address',
-        phone => '0123456',
-        active => 1,
+        name         => 'my vendor',
+        address1     => 'bookseller\'s address',
+        phone        => '0123456',
+        active       => 1,
         deliverytime => 5,
     }
 )->store;
 my $supplierid = $supplier->id;
 
 my $basketno;
-ok($basketno = NewBasket($supplierid, 1), 'NewBasket(  $supplierid , 1  ) returns $basketno');
+ok( $basketno = NewBasket( $supplierid, 1 ), 'NewBasket(  $supplierid , 1  ) returns $basketno' );
 
 my $budget_period_id = C4::Budgets::AddBudgetPeriod(
     {
@@ -44,143 +45,145 @@ my $budgetid = C4::Budgets::AddBudget(
         budget_period_id => $budget_period_id,
     }
 );
-my $budget = C4::Budgets::GetBudget( $budgetid );
+my $budget = C4::Budgets::GetBudget($budgetid);
 
-my ($biblionumber1, $biblioitemnumber1) = AddBiblio(MARC::Record->new, '');
-my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
-my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
+my ( $biblionumber1, $biblioitemnumber1 ) = AddBiblio( MARC::Record->new, '' );
+my ( $biblionumber2, $biblioitemnumber2 ) = AddBiblio( MARC::Record->new, '' );
+my ( $biblionumber3, $biblioitemnumber3 ) = AddBiblio( MARC::Record->new, '' );
 
 my $order1 = Koha::Acquisition::Order->new(
     {
-        basketno => $basketno,
-        quantity => 2,
+        basketno     => $basketno,
+        quantity     => 2,
         biblionumber => $biblionumber1,
-        budget_id => $budget->{budget_id},
+        budget_id    => $budget->{budget_id},
     }
 )->store;
 my $ordernumber1 = $order1->ordernumber;
 
 my $order2 = Koha::Acquisition::Order->new(
     {
-        basketno => $basketno,
-        quantity => 4,
+        basketno     => $basketno,
+        quantity     => 4,
         biblionumber => $biblionumber2,
-        budget_id => $budget->{budget_id},
+        budget_id    => $budget->{budget_id},
     }
 )->store;
 my $ordernumber2 = $order2->ordernumber;
 
-my $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+my $baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 1, 'Start: 1 basket' );
 my $basket = $baskets->[0];
-is( $basket->{total_items}, 6, 'Start with 6 items' );
-is( $basket->{total_biblios}, 2, 'Start with 2 biblios' );
-is( $basket->{total_items_cancelled}, 0, 'Start with 0 item cancelled' );
-is( $basket->{expected_items}, 6, 'Start with 6 items expected' );
+is( $basket->{total_items},             6, 'Start with 6 items' );
+is( $basket->{total_biblios},           2, 'Start with 2 biblios' );
+is( $basket->{total_items_cancelled},   0, 'Start with 0 item cancelled' );
+is( $basket->{expected_items},          6, 'Start with 6 items expected' );
 is( $basket->{total_biblios_cancelled}, 0, 'Start with 0 biblio cancelled' );
 
 $order1->uncertainprice(1)->store;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
-$basket = $baskets->[0];
-is( $basket->{uncertainprices}, 1, "Uncertain prcies returns number of uncertain items");
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
+$basket  = $baskets->[0];
+is( $basket->{uncertainprices}, 1, "Uncertain prcies returns number of uncertain items" );
 $order2->uncertainprice(1)->store;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
-$basket = $baskets->[0];
-is( $basket->{uncertainprices}, 2, "Uncertain prcies returns number of uncertain items");
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
+$basket  = $baskets->[0];
+is( $basket->{uncertainprices}, 2, "Uncertain prcies returns number of uncertain items" );
 $order1->uncertainprice(0)->store;
 $order2->uncertainprice(0)->store;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
-$basket = $baskets->[0];
-is( $basket->{uncertainprices}, 0, "Uncertain prcies returns number of uncertain items");
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
+$basket  = $baskets->[0];
+is( $basket->{uncertainprices}, 0, "Uncertain prcies returns number of uncertain items" );
 
 Koha::Acquisition::Orders->find($ordernumber2)->cancel;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 1, 'Order2 deleted, still 1 basket' );
 $basket = $baskets->[0];
-is( $basket->{total_items}, 6, 'Order2 deleted, still 6 items' );
-is( $basket->{total_biblios}, 2, 'Order2 deleted, still 2 biblios' );
-is( $basket->{total_items_cancelled}, 4, 'Order2 deleted, 4 items cancelled' );
-is( $basket->{expected_items}, 2, 'Order2 deleted, now 2 items are expected' );
+is( $basket->{total_items},             6, 'Order2 deleted, still 6 items' );
+is( $basket->{total_biblios},           2, 'Order2 deleted, still 2 biblios' );
+is( $basket->{total_items_cancelled},   4, 'Order2 deleted, 4 items cancelled' );
+is( $basket->{expected_items},          2, 'Order2 deleted, now 2 items are expected' );
 is( $basket->{total_biblios_cancelled}, 1, 'Order2 deleted, 1 biblios cancelled' );
 
 Koha::Acquisition::Orders->find($ordernumber1)->cancel;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 1, 'Both orders deleted, still 1 basket' );
 $basket = $baskets->[0];
-is( $basket->{total_items}, 6, 'Both orders deleted, still 6 items' );
-is( $basket->{total_biblios}, 2, 'Both orders deleted, still 2 biblios' );
-is( $basket->{total_items_cancelled}, 6, 'Both orders deleted, 6 items cancelled' );
-is( $basket->{expected_items}, 0, 'Both orders delete, now 0 items are expected' );
+is( $basket->{total_items},             6, 'Both orders deleted, still 6 items' );
+is( $basket->{total_biblios},           2, 'Both orders deleted, still 2 biblios' );
+is( $basket->{total_items_cancelled},   6, 'Both orders deleted, 6 items cancelled' );
+is( $basket->{expected_items},          0, 'Both orders delete, now 0 items are expected' );
 is( $basket->{total_biblios_cancelled}, 2, 'Both orders deleted, 2 biblios cancelled' );
 
-Koha::Acquisition::Baskets->find( $basketno )->close;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+Koha::Acquisition::Baskets->find($basketno)->close;
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 0, 'Basket is closed, 0 basket opened' );
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid, 1 );
-is( scalar(@$baskets), 1, 'Basket is closed, test allbasket parameter');
+is( scalar(@$baskets), 1, 'Basket is closed, test allbasket parameter' );
 
-C4::Acquisition::ReopenBasket( $basketno );
+C4::Acquisition::ReopenBasket($basketno);
 my $order3 = Koha::Acquisition::Order->new(
     {
-        basketno => $basketno,
-        quantity => 4,
+        basketno     => $basketno,
+        quantity     => 4,
         biblionumber => $biblionumber3,
-        budget_id => $budget->{budget_id},
+        budget_id    => $budget->{budget_id},
     }
 )->store;
 my $ordernumber3 = $order3->ordernumber;
 
-Koha::Acquisition::Baskets->find( $basketno )->close;
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+Koha::Acquisition::Baskets->find($basketno)->close;
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 1, 'Basket is closed and has items to receive' );
 $basket = $baskets->[0];
-is( $basket->{total_items}, 10, '2 orders deleted, 1 order pending, 10 items total' );
-is( $basket->{total_biblios}, 3, '2 orders deleted, 1 order pending, 3 biblios total' );
-is( $basket->{total_items_cancelled}, 6, '2 orders deleted, 1 order pending, still 6 items cancelled' );
-is( $basket->{expected_items}, 4, '2 orders delete, 1 order pending, 4 items are expected' );
-is( $basket->{total_biblios_cancelled}, 2, '2 orders deleted, 1 order pending, still 2 biblios cancelled' );
+is( $basket->{total_items},             10, '2 orders deleted, 1 order pending, 10 items total' );
+is( $basket->{total_biblios},           3,  '2 orders deleted, 1 order pending, 3 biblios total' );
+is( $basket->{total_items_cancelled},   6,  '2 orders deleted, 1 order pending, still 6 items cancelled' );
+is( $basket->{expected_items},          4,  '2 orders delete, 1 order pending, 4 items are expected' );
+is( $basket->{total_biblios_cancelled}, 2,  '2 orders deleted, 1 order pending, still 2 biblios cancelled' );
 
-my $invoiceid1 = C4::Acquisition::AddInvoice(invoicenumber => 'invoice1', booksellerid => $supplierid, unknown => "unknown");
-my $invoice1 = C4::Acquisition::GetInvoice( $invoiceid1 );
+my $invoiceid1 =
+    C4::Acquisition::AddInvoice( invoicenumber => 'invoice1', booksellerid => $supplierid, unknown => "unknown" );
+my $invoice1 = C4::Acquisition::GetInvoice($invoiceid1);
 my ( $date_received, $ordernumber4 ) = C4::Acquisition::ModReceiveOrder(
     {
-        biblionumber         => $biblionumber3,
-        order                => $order3->unblessed,
-        quantityreceived     => 2,
-        budget_id            => $budget->{budget_id},
-        invoice              => $invoice1,
+        biblionumber     => $biblionumber3,
+        order            => $order3->unblessed,
+        quantityreceived => 2,
+        budget_id        => $budget->{budget_id},
+        invoice          => $invoice1,
     }
 );
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 1, 'Basket is closed and still has items to receive' );
 $basket = $baskets->[0];
-is( $basket->{total_items}, 10, '2 orders deleted, 1 order pending, 10 items total' );
-is( $basket->{total_biblios}, 3, '2 orders deleted, 1 order pending, 3 biblios total' );
-is( $basket->{total_items_cancelled}, 6, '2 orders deleted, 1 order pending, still 6 items cancelled' );
-is( $basket->{expected_items}, 2, '2 orders delete, 1 order pending, 2 items are expected' );
-is( $basket->{total_biblios_cancelled}, 2, '2 orders deleted, 1 order pending, still 2 biblios cancelled' );
+is( $basket->{total_items},             10, '2 orders deleted, 1 order pending, 10 items total' );
+is( $basket->{total_biblios},           3,  '2 orders deleted, 1 order pending, 3 biblios total' );
+is( $basket->{total_items_cancelled},   6,  '2 orders deleted, 1 order pending, still 6 items cancelled' );
+is( $basket->{expected_items},          2,  '2 orders delete, 1 order pending, 2 items are expected' );
+is( $basket->{total_biblios_cancelled}, 2,  '2 orders deleted, 1 order pending, still 2 biblios cancelled' );
 
-my $invoiceid2 = C4::Acquisition::AddInvoice(invoicenumber => 'invoice1', booksellerid => $supplierid, unknown => "unknown");
-my $invoice2 = C4::Acquisition::GetInvoice( $invoiceid2 );
+my $invoiceid2 =
+    C4::Acquisition::AddInvoice( invoicenumber => 'invoice1', booksellerid => $supplierid, unknown => "unknown" );
+my $invoice2 = C4::Acquisition::GetInvoice($invoiceid2);
 my ( $date_received2, $ordernumber5 ) = C4::Acquisition::ModReceiveOrder(
     {
-        biblionumber         => $biblionumber3,
-        order                => $order3->get_from_storage->unblessed,
-        quantityreceived     => 2,
-        budget_id            => $budget->{budget_id},
-        invoice              => $invoice2,
+        biblionumber     => $biblionumber3,
+        order            => $order3->get_from_storage->unblessed,
+        quantityreceived => 2,
+        budget_id        => $budget->{budget_id},
+        invoice          => $invoice2,
     }
 );
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid, 1 );
-is( scalar(@$baskets), 1, 'Basket is closed and has no items to receive, test allbasket parameter');
+is( scalar(@$baskets), 1, 'Basket is closed and has no items to receive, test allbasket parameter' );
 $basket = $baskets->[0];
-is( $basket->{total_items}, 10, 'Basket is closed and has no items to receive, still 10 items total' );
-is( $basket->{total_biblios}, 3, 'Basket is closed and has no items to receive, still 3 biblios total' );
-is( $basket->{total_items_cancelled}, 6, 'Basket is closed and has no items to receive, still 6 items cancelled' );
-is( $basket->{expected_items}, 0, 'Basket is closed and has no items to receive, 0 items are expected' );
-is( $basket->{total_biblios_cancelled}, 2, 'Basket is closed and has no items to receive, still 2 biblios cancelled' );
+is( $basket->{total_items},             10, 'Basket is closed and has no items to receive, still 10 items total' );
+is( $basket->{total_biblios},           3,  'Basket is closed and has no items to receive, still 3 biblios total' );
+is( $basket->{total_items_cancelled},   6,  'Basket is closed and has no items to receive, still 6 items cancelled' );
+is( $basket->{expected_items},          0,  'Basket is closed and has no items to receive, 0 items are expected' );
+is( $basket->{total_biblios_cancelled}, 2,  'Basket is closed and has no items to receive, still 2 biblios cancelled' );
 
-$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller($supplierid);
 is( scalar(@$baskets), 0, 'Basket is closed and has no items to receive' );
 
 $schema->storage->txn_rollback();

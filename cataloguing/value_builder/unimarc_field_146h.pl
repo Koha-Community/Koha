@@ -17,14 +17,14 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::I18N;
 
 my $builder = sub {
     my $params = shift;
-    my $id = $params->{id};
+    my $id     = $params->{id};
 
     return qq|
 <script>
@@ -41,13 +41,15 @@ function Click$id(event) {
 
 my $launcher = sub {
     my $params = shift;
-    my $cgi = $params->{cgi};
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name => "cataloguing/value_builder/unimarc_field_146h.tt",
-        query => $cgi,
-        type => 'intranet',
-        flagsrequired => { editcatalogue => '*' },
-    });
+    my $cgi    = $params->{cgi};
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_146h.tt",
+            query         => $cgi,
+            type          => 'intranet',
+            flagsrequired => { editcatalogue => '*' },
+        }
+    );
 
     my @options = (
         { value => 'a', label => __('performers total') },
@@ -72,15 +74,15 @@ my $launcher = sub {
         { value => 'z', label => __('devices, other performers') },
     );
 
-    my $value = $cgi->param('value');
-    my $number = substr($value, 0, 3);
-    my $category = substr($value, 3, 1);
+    my $value    = $cgi->param('value');
+    my $number   = substr( $value, 0, 3 );
+    my $category = substr( $value, 3, 1 );
 
     $template->param(
-        id => scalar $cgi->param('id'),
-        number => $number,
+        id       => scalar $cgi->param('id'),
+        number   => $number,
         category => $category,
-        options => \@options,
+        options  => \@options,
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 };

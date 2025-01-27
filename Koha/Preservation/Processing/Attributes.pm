@@ -17,7 +17,6 @@ package Koha::Preservation::Processing::Attributes;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Preservation::Processing::Attribute;

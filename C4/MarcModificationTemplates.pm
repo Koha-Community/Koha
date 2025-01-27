@@ -40,23 +40,22 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      GetModificationTemplates
-      AddModificationTemplate
-      DelModificationTemplate
+        GetModificationTemplates
+        AddModificationTemplate
+        DelModificationTemplate
 
-      GetModificationTemplateAction
-      GetModificationTemplateActions
+        GetModificationTemplateAction
+        GetModificationTemplateActions
 
-      AddModificationTemplateAction
-      ModModificationTemplateAction
-      DelModificationTemplateAction
-      MoveModificationTemplateAction
+        AddModificationTemplateAction
+        ModModificationTemplateAction
+        DelModificationTemplateAction
+        MoveModificationTemplateAction
 
-      ModifyRecordsWithTemplate
-      ModifyRecordWithTemplate
+        ModifyRecordsWithTemplate
+        ModifyRecordWithTemplate
     );
 }
-
 
 =head1 NAME
 
@@ -81,20 +80,20 @@ files telling Koha what fields to insert data into.
 =cut
 
 sub GetModificationTemplates {
-  my ( $template_id ) = @_;
+    my ($template_id) = @_;
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates ORDER BY name");
-  $sth->execute();
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates ORDER BY name");
+    $sth->execute();
 
-  my @templates;
-  while ( my $template = $sth->fetchrow_hashref() ) {
-    $template->{'selected'} = 1
-        if $template_id && $template->{'template_id'} eq $template_id;
-    push( @templates, $template );
-  }
+    my @templates;
+    while ( my $template = $sth->fetchrow_hashref() ) {
+        $template->{'selected'} = 1
+            if $template_id && $template->{'template_id'} eq $template_id;
+        push( @templates, $template );
+    }
 
-  return @templates;
+    return @templates;
 }
 
 =head2
@@ -107,45 +106,45 @@ sub GetModificationTemplates {
 =cut
 
 sub AddModificationTemplate {
-  my ( $template_name, $template_id_copy ) = @_;
+    my ( $template_name, $template_id_copy ) = @_;
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("INSERT INTO marc_modification_templates ( name ) VALUES ( ? )");
-  $sth->execute( $template_name );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO marc_modification_templates ( name ) VALUES ( ? )");
+    $sth->execute($template_name);
 
-  $sth = $dbh->prepare("SELECT * FROM marc_modification_templates WHERE name = ?");
-  $sth->execute( $template_name );
-  my $row = $sth->fetchrow_hashref();
-  my $template_id = $row->{'template_id'};
+    $sth = $dbh->prepare("SELECT * FROM marc_modification_templates WHERE name = ?");
+    $sth->execute($template_name);
+    my $row         = $sth->fetchrow_hashref();
+    my $template_id = $row->{'template_id'};
 
-  if ( $template_id_copy ) {
-    my @actions = GetModificationTemplateActions( $template_id_copy );
-    foreach my $action ( @actions ) {
-      AddModificationTemplateAction(
-        $template_id,
-        $action->{'action'},
-        $action->{'field_number'},
-        $action->{'from_field'},
-        $action->{'from_subfield'},
-        $action->{'field_value'},
-        $action->{'to_field'},
-        $action->{'to_subfield'},
-        $action->{'to_regex_search'},
-        $action->{'to_regex_replace'},
-        $action->{'to_regex_modifiers'},
-        $action->{'conditional'},
-        $action->{'conditional_field'},
-        $action->{'conditional_subfield'},
-        $action->{'conditional_comparison'},
-        $action->{'conditional_value'},
-        $action->{'conditional_regex'},
-        $action->{'description'},
-      );
+    if ($template_id_copy) {
+        my @actions = GetModificationTemplateActions($template_id_copy);
+        foreach my $action (@actions) {
+            AddModificationTemplateAction(
+                $template_id,
+                $action->{'action'},
+                $action->{'field_number'},
+                $action->{'from_field'},
+                $action->{'from_subfield'},
+                $action->{'field_value'},
+                $action->{'to_field'},
+                $action->{'to_subfield'},
+                $action->{'to_regex_search'},
+                $action->{'to_regex_replace'},
+                $action->{'to_regex_modifiers'},
+                $action->{'conditional'},
+                $action->{'conditional_field'},
+                $action->{'conditional_subfield'},
+                $action->{'conditional_comparison'},
+                $action->{'conditional_value'},
+                $action->{'conditional_regex'},
+                $action->{'description'},
+            );
 
+        }
     }
-  }
 
-  return $template_id;
+    return $template_id;
 }
 
 =head2
@@ -155,11 +154,11 @@ sub AddModificationTemplate {
 =cut
 
 sub DelModificationTemplate {
-  my ( $template_id ) = @_;
+    my ($template_id) = @_;
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("DELETE FROM marc_modification_templates WHERE template_id = ?");
-  $sth->execute( $template_id );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("DELETE FROM marc_modification_templates WHERE template_id = ?");
+    $sth->execute($template_id);
 }
 
 =head2
@@ -169,14 +168,14 @@ sub DelModificationTemplate {
 =cut
 
 sub GetModificationTemplateAction {
-  my ( $mmta_id ) = @_;
+    my ($mmta_id) = @_;
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE mmta_id = ?");
-  $sth->execute( $mmta_id );
-  my $action = $sth->fetchrow_hashref();
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE mmta_id = ?");
+    $sth->execute($mmta_id);
+    my $action = $sth->fetchrow_hashref();
 
-  return $action;
+    return $action;
 }
 
 =head2
@@ -186,18 +185,18 @@ sub GetModificationTemplateAction {
 =cut
 
 sub GetModificationTemplateActions {
-  my ( $template_id ) = @_;
+    my ($template_id) = @_;
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE template_id = ? ORDER BY ordering");
-  $sth->execute( $template_id );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE template_id = ? ORDER BY ordering");
+    $sth->execute($template_id);
 
-  my @actions;
-  while ( my $action = $sth->fetchrow_hashref() ) {
-    push( @actions, $action );
-  }
+    my @actions;
+    while ( my $action = $sth->fetchrow_hashref() ) {
+        push( @actions, $action );
+    }
 
-  return @actions;
+    return @actions;
 }
 
 =head2
@@ -217,38 +216,39 @@ sub GetModificationTemplateActions {
 =cut
 
 sub AddModificationTemplateAction {
-  my (
-    $template_id,
-    $action,
-    $field_number,
-    $from_field,
-    $from_subfield,
-    $field_value,
-    $to_field,
-    $to_subfield,
-    $to_regex_search,
-    $to_regex_replace,
-    $to_regex_modifiers,
-    $conditional,
-    $conditional_field,
-    $conditional_subfield,
-    $conditional_comparison,
-    $conditional_value,
-    $conditional_regex,
-    $description
-  ) = @_;
+    my (
+        $template_id,
+        $action,
+        $field_number,
+        $from_field,
+        $from_subfield,
+        $field_value,
+        $to_field,
+        $to_subfield,
+        $to_regex_search,
+        $to_regex_replace,
+        $to_regex_modifiers,
+        $conditional,
+        $conditional_field,
+        $conditional_subfield,
+        $conditional_comparison,
+        $conditional_value,
+        $conditional_regex,
+        $description
+    ) = @_;
 
-  $conditional ||= undef;
-  $conditional_comparison ||= undef;
-  $conditional_regex ||= '0';
+    $conditional            ||= undef;
+    $conditional_comparison ||= undef;
+    $conditional_regex      ||= '0';
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare( 'SELECT MAX(ordering) + 1 AS next_ordering FROM marc_modification_template_actions WHERE template_id = ?' );
-  $sth->execute( $template_id );
-  my $row = $sth->fetchrow_hashref;
-  my $ordering = $row->{'next_ordering'} || 1;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        'SELECT MAX(ordering) + 1 AS next_ordering FROM marc_modification_template_actions WHERE template_id = ?');
+    $sth->execute($template_id);
+    my $row      = $sth->fetchrow_hashref;
+    my $ordering = $row->{'next_ordering'} || 1;
 
-  my $query = "
+    my $query = "
   INSERT INTO marc_modification_template_actions (
   mmta_id,
   template_id,
@@ -273,29 +273,29 @@ sub AddModificationTemplateAction {
   )
   VALUES ( NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
-  $sth = $dbh->prepare( $query );
+    $sth = $dbh->prepare($query);
 
-  $sth->execute(
-    $template_id,
-    $ordering,
-    $action,
-    $field_number,
-    $from_field,
-    $from_subfield,
-    $field_value,
-    $to_field,
-    $to_subfield,
-    $to_regex_search,
-    $to_regex_replace,
-    $to_regex_modifiers,
-    $conditional,
-    $conditional_field,
-    $conditional_subfield,
-    $conditional_comparison,
-    $conditional_value,
-    $conditional_regex,
-    $description
-  );
+    $sth->execute(
+        $template_id,
+        $ordering,
+        $action,
+        $field_number,
+        $from_field,
+        $from_subfield,
+        $field_value,
+        $to_field,
+        $to_subfield,
+        $to_regex_search,
+        $to_regex_replace,
+        $to_regex_modifiers,
+        $conditional,
+        $conditional_field,
+        $conditional_subfield,
+        $conditional_comparison,
+        $conditional_value,
+        $conditional_regex,
+        $description
+    );
 }
 
 =head2
@@ -315,33 +315,33 @@ sub AddModificationTemplateAction {
 =cut
 
 sub ModModificationTemplateAction {
-  my (
-    $mmta_id,
-    $action,
-    $field_number,
-    $from_field,
-    $from_subfield,
-    $field_value,
-    $to_field,
-    $to_subfield,
-    $to_regex_search,
-    $to_regex_replace,
-    $to_regex_modifiers,
-    $conditional,
-    $conditional_field,
-    $conditional_subfield,
-    $conditional_comparison,
-    $conditional_value,
-    $conditional_regex,
-    $description
-  ) = @_;
+    my (
+        $mmta_id,
+        $action,
+        $field_number,
+        $from_field,
+        $from_subfield,
+        $field_value,
+        $to_field,
+        $to_subfield,
+        $to_regex_search,
+        $to_regex_replace,
+        $to_regex_modifiers,
+        $conditional,
+        $conditional_field,
+        $conditional_subfield,
+        $conditional_comparison,
+        $conditional_value,
+        $conditional_regex,
+        $description
+    ) = @_;
 
-  my $dbh = C4::Context->dbh;
-  $conditional ||= undef;
-  $conditional_comparison ||= undef;
-  $conditional_regex ||= '0';
+    my $dbh = C4::Context->dbh;
+    $conditional            ||= undef;
+    $conditional_comparison ||= undef;
+    $conditional_regex      ||= '0';
 
-  my $query = "
+    my $query = "
   UPDATE marc_modification_template_actions SET
   action = ?,
   field_number = ?,
@@ -362,30 +362,29 @@ sub ModModificationTemplateAction {
   description = ?
   WHERE mmta_id = ?";
 
-  my $sth = $dbh->prepare( $query );
+    my $sth = $dbh->prepare($query);
 
-  $sth->execute(
-    $action,
-    $field_number,
-    $from_field,
-    $from_subfield,
-    $field_value,
-    $to_field,
-    $to_subfield,
-    $to_regex_search,
-    $to_regex_replace,
-    $to_regex_modifiers,
-    $conditional,
-    $conditional_field,
-    $conditional_subfield,
-    $conditional_comparison,
-    $conditional_value,
-    $conditional_regex,
-    $description,
-    $mmta_id
-  );
+    $sth->execute(
+        $action,
+        $field_number,
+        $from_field,
+        $from_subfield,
+        $field_value,
+        $to_field,
+        $to_subfield,
+        $to_regex_search,
+        $to_regex_replace,
+        $to_regex_modifiers,
+        $conditional,
+        $conditional_field,
+        $conditional_subfield,
+        $conditional_comparison,
+        $conditional_value,
+        $conditional_regex,
+        $description,
+        $mmta_id
+    );
 }
-
 
 =head2
   DelModificationTemplateAction
@@ -396,16 +395,17 @@ sub ModModificationTemplateAction {
 =cut
 
 sub DelModificationTemplateAction {
-  my ( $mmta_id ) = @_;
+    my ($mmta_id) = @_;
 
-  my $action = GetModificationTemplateAction( $mmta_id );
+    my $action = GetModificationTemplateAction($mmta_id);
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("DELETE FROM marc_modification_template_actions WHERE mmta_id = ?");
-  $sth->execute( $mmta_id );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("DELETE FROM marc_modification_template_actions WHERE mmta_id = ?");
+    $sth->execute($mmta_id);
 
-  $sth = $dbh->prepare("UPDATE marc_modification_template_actions SET ordering = ordering - 1 WHERE template_id = ? AND ordering > ?");
-  $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
+    $sth = $dbh->prepare(
+        "UPDATE marc_modification_template_actions SET ordering = ordering - 1 WHERE template_id = ? AND ordering > ?");
+    $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
 }
 
 =head2
@@ -416,55 +416,62 @@ sub DelModificationTemplateAction {
   Changes the order for the given action.
   Options for $where are 'up', 'down', 'top' and 'bottom'
 =cut
+
 sub MoveModificationTemplateAction {
-  my ( $mmta_id, $where ) = @_;
+    my ( $mmta_id, $where ) = @_;
 
-  my $action = GetModificationTemplateAction( $mmta_id );
+    my $action = GetModificationTemplateAction($mmta_id);
 
-  return if ( $action->{'ordering'} eq '1' && ( $where eq 'up' || $where eq 'top' ) );
-  return if ( $action->{'ordering'} eq GetModificationTemplateActions( $action->{'template_id'} ) && ( $where eq 'down' || $where eq 'bottom' ) );
+    return if ( $action->{'ordering'} eq '1' && ( $where eq 'up' || $where eq 'top' ) );
+    return
+        if ( $action->{'ordering'} eq GetModificationTemplateActions( $action->{'template_id'} )
+        && ( $where eq 'down' || $where eq 'bottom' ) );
 
-  my $dbh = C4::Context->dbh;
-  my ( $sth, $query );
+    my $dbh = C4::Context->dbh;
+    my ( $sth, $query );
 
-  if ( $where eq 'up' || $where eq 'down' ) {
+    if ( $where eq 'up' || $where eq 'down' ) {
 
-    ## For up and down, we just swap the ordering number with the one above or below it.
+        ## For up and down, we just swap the ordering number with the one above or below it.
 
-    ## Change the ordering for the other action
-    $query = "UPDATE marc_modification_template_actions SET ordering = ? WHERE template_id = ? AND ordering = ?";
+        ## Change the ordering for the other action
+        $query = "UPDATE marc_modification_template_actions SET ordering = ? WHERE template_id = ? AND ordering = ?";
 
-    my $ordering = $action->{'ordering'};
-    $ordering-- if ( $where eq 'up' );
-    $ordering++ if ( $where eq 'down' );
+        my $ordering = $action->{'ordering'};
+        $ordering-- if ( $where eq 'up' );
+        $ordering++ if ( $where eq 'down' );
 
-    $sth = $dbh->prepare( $query );
-    $sth->execute( $action->{'ordering'}, $action->{'template_id'}, $ordering );
+        $sth = $dbh->prepare($query);
+        $sth->execute( $action->{'ordering'}, $action->{'template_id'}, $ordering );
 
-    ## Change the ordering for this action
-    $query = "UPDATE marc_modification_template_actions SET ordering = ? WHERE mmta_id = ?";
-    $sth = $dbh->prepare( $query );
-    $sth->execute( $ordering, $action->{'mmta_id'} );
+        ## Change the ordering for this action
+        $query = "UPDATE marc_modification_template_actions SET ordering = ? WHERE mmta_id = ?";
+        $sth   = $dbh->prepare($query);
+        $sth->execute( $ordering, $action->{'mmta_id'} );
 
-  } elsif ( $where eq 'top' ) {
+    } elsif ( $where eq 'top' ) {
 
-    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ordering + 1 WHERE template_id = ? AND ordering < ?');
-    $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
+        $sth = $dbh->prepare(
+            'UPDATE marc_modification_template_actions SET ordering = ordering + 1 WHERE template_id = ? AND ordering < ?'
+        );
+        $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
 
-    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = 1 WHERE mmta_id = ?');
-    $sth->execute( $mmta_id );
+        $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = 1 WHERE mmta_id = ?');
+        $sth->execute($mmta_id);
 
-  } elsif ( $where eq 'bottom' ) {
+    } elsif ( $where eq 'bottom' ) {
 
-    my $ordering = GetModificationTemplateActions( $action->{'template_id'} );
+        my $ordering = GetModificationTemplateActions( $action->{'template_id'} );
 
-    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ordering - 1 WHERE template_id = ? AND ordering > ?');
-    $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
+        $sth = $dbh->prepare(
+            'UPDATE marc_modification_template_actions SET ordering = ordering - 1 WHERE template_id = ? AND ordering > ?'
+        );
+        $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
 
-    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ? WHERE mmta_id = ?');
-    $sth->execute( $ordering, $mmta_id );
+        $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ? WHERE mmta_id = ?');
+        $sth->execute( $ordering, $mmta_id );
 
-  }
+    }
 
 }
 
@@ -477,11 +484,11 @@ sub MoveModificationTemplateAction {
 =cut
 
 sub ModifyRecordsWithTemplate {
-  my ( $template_id, $batch ) = @_;
+    my ( $template_id, $batch ) = @_;
 
-  while ( my $record = $batch->next() ) {
-    ModifyRecordWithTemplate( $template_id, $record );
-  }
+    while ( my $record = $batch->next() ) {
+        ModifyRecordWithTemplate( $template_id, $record );
+    }
 }
 
 =head2
@@ -497,77 +504,85 @@ sub ModifyRecordWithTemplate {
     my ( $template_id, $record ) = @_;
 
     my $current_date = dt_from_string()->ymd();
-    my $branchcode = '';
+    my $branchcode   = '';
     $branchcode = C4::Context->userenv->{branch} if C4::Context->userenv;
 
-    my @actions = GetModificationTemplateActions( $template_id );
+    my @actions = GetModificationTemplateActions($template_id);
 
-    foreach my $a ( @actions ) {
-        my $action = $a->{'action'};
-        my $field_number = $a->{'field_number'} // 1;
-        my $from_field = $a->{'from_field'};
-        my $from_subfield = $a->{'from_subfield'};
-        my $field_value = $a->{'field_value'};
-        my $to_field = $a->{'to_field'};
-        my $to_subfield = $a->{'to_subfield'};
-        my $to_regex_search = $a->{'to_regex_search'};
-        my $to_regex_replace = $a->{'to_regex_replace'};
-        my $to_regex_modifiers = $a->{'to_regex_modifiers'};
-        my $conditional = $a->{'conditional'};
-        my $conditional_field = $a->{'conditional_field'};
-        my $conditional_subfield = $a->{'conditional_subfield'};
+    foreach my $a (@actions) {
+        my $action                 = $a->{'action'};
+        my $field_number           = $a->{'field_number'} // 1;
+        my $from_field             = $a->{'from_field'};
+        my $from_subfield          = $a->{'from_subfield'};
+        my $field_value            = $a->{'field_value'};
+        my $to_field               = $a->{'to_field'};
+        my $to_subfield            = $a->{'to_subfield'};
+        my $to_regex_search        = $a->{'to_regex_search'};
+        my $to_regex_replace       = $a->{'to_regex_replace'};
+        my $to_regex_modifiers     = $a->{'to_regex_modifiers'};
+        my $conditional            = $a->{'conditional'};
+        my $conditional_field      = $a->{'conditional_field'};
+        my $conditional_subfield   = $a->{'conditional_subfield'};
         my $conditional_comparison = $a->{'conditional_comparison'};
-        my $conditional_value = $a->{'conditional_value'};
-        my $conditional_regex = $a->{'conditional_regex'};
+        my $conditional_value      = $a->{'conditional_value'};
+        my $conditional_regex      = $a->{'conditional_regex'};
 
-        if ( $field_value ) {
+        if ($field_value) {
             $field_value =~ s/__CURRENTDATE__/$current_date/g;
             $field_value =~ s/__BRANCHCODE__/$branchcode/g;
         }
 
-        my $do = 1;
+        my $do            = 1;
         my $field_numbers = [];
-        if ( $conditional ) {
+        if ($conditional) {
             if ( $conditional_comparison eq 'exists' ) {
-                $field_numbers = field_exists({
-                        record => $record,
-                        field => $conditional_field,
+                $field_numbers = field_exists(
+                    {
+                        record   => $record,
+                        field    => $conditional_field,
                         subfield => $conditional_subfield,
-                    });
-                $do = $conditional eq 'if'
+                    }
+                );
+                $do =
+                      $conditional eq 'if'
                     ? @$field_numbers
                     : not @$field_numbers;
-            }
-            elsif ( $conditional_comparison eq 'not_exists' ) {
-                $field_numbers = field_exists({
-                        record => $record,
-                        field => $conditional_field,
+            } elsif ( $conditional_comparison eq 'not_exists' ) {
+                $field_numbers = field_exists(
+                    {
+                        record   => $record,
+                        field    => $conditional_field,
                         subfield => $conditional_subfield
-                    });
-                $do = $conditional eq 'if'
+                    }
+                );
+                $do =
+                    $conditional eq 'if'
                     ? not @$field_numbers
                     : @$field_numbers;
-            }
-            elsif ( $conditional_comparison eq 'equals' ) {
-                $field_numbers = field_equals({
-                    record => $record,
-                    value => $conditional_value,
-                    field => $conditional_field,
-                    subfield => $conditional_subfield,
-                    is_regex => $conditional_regex,
-                });
-                $do = $conditional eq 'if'
+            } elsif ( $conditional_comparison eq 'equals' ) {
+                $field_numbers = field_equals(
+                    {
+                        record   => $record,
+                        value    => $conditional_value,
+                        field    => $conditional_field,
+                        subfield => $conditional_subfield,
+                        is_regex => $conditional_regex,
+                    }
+                );
+                $do =
+                      $conditional eq 'if'
                     ? @$field_numbers
                     : not @$field_numbers;
-            }
-            elsif ( $conditional_comparison eq 'not_equals' ) {
-                $field_numbers = field_equals({
-                    record => $record,
-                    value => $conditional_value,
-                    field => $conditional_field,
-                    subfield => $conditional_subfield,
-                    is_regex => $conditional_regex,
-                });
+            } elsif ( $conditional_comparison eq 'not_equals' ) {
+                $field_numbers = field_equals(
+                    {
+                        record   => $record,
+                        value    => $conditional_value,
+                        field    => $conditional_field,
+                        subfield => $conditional_subfield,
+                        is_regex => $conditional_regex,
+                    }
+                );
                 my $all_fields = [
                     1 .. scalar @{
                         field_exists(
@@ -579,20 +594,22 @@ sub ModifyRecordWithTemplate {
                         )
                     }
                 ];
-                $field_numbers = [Koha::MoreUtils::singleton ( @$field_numbers, @$all_fields ) ];
-                if ( $from_field == $conditional_field ){
-                    $do = $conditional eq 'if'
+                $field_numbers = [ Koha::MoreUtils::singleton( @$field_numbers, @$all_fields ) ];
+                if ( $from_field == $conditional_field ) {
+                    $do =
+                          $conditional eq 'if'
                         ? @$field_numbers
                         : not @$field_numbers;
                 } else {
-                    $do = $conditional eq 'if'
+                    $do =
+                        $conditional eq 'if'
                         ? not @$field_numbers
                         : @$field_numbers;
                 }
             }
         }
 
-        if ( $do ) {
+        if ($do) {
 
             # field_number == 0 if all field need to be updated
             # or 1 if only the first field need to be updated
@@ -600,103 +617,118 @@ sub ModifyRecordWithTemplate {
             # A condition has been given
             if ( @$field_numbers > 0 ) {
                 if ( $field_number == 1 ) {
+
                     # We want only the first
-                    if ( $from_field == $conditional_field ){
+                    if ( $from_field == $conditional_field ) {
+
                         # want first field matching condition
                         $field_numbers = [ $field_numbers->[0] ];
                     } else {
+
                         # condition doesn't match, so just want first occurrence of from field
-                        $field_numbers = [ 1 ];
+                        $field_numbers = [1];
                     }
                 } else {
-                    unless ( $from_field == $conditional_field ){
+                    unless ( $from_field == $conditional_field ) {
+
                         # condition doesn't match from fields so need all occurrences of from fields for action
-                        $field_numbers = field_exists({
-                            record => $record,
-                            field => $from_field,
-                            subfield => $from_subfield,
-                        });
+                        $field_numbers = field_exists(
+                            {
+                                record   => $record,
+                                field    => $from_field,
+                                subfield => $from_subfield,
+                            }
+                        );
                     }
                 }
             }
+
             # There was no condition
             else {
                 if ( $field_number == 1 ) {
+
                     # We want to process the first field
-                    $field_numbers = [ 1 ];
+                    $field_numbers = [1];
                 }
             }
 
             if ( $action eq 'copy_field' ) {
-                copy_field({
-                    record => $record,
-                    from_field => $from_field,
-                    from_subfield => $from_subfield,
-                    to_field => $to_field,
-                    to_subfield => $to_subfield,
-                    regex => {
-                        search => $to_regex_search,
-                        replace => $to_regex_replace,
-                        modifiers => $to_regex_modifiers
-                    },
-                    field_numbers => $field_numbers,
-                });
-            }
-            elsif ( $action eq 'copy_and_replace_field' ) {
-                copy_and_replace_field({
-                    record => $record,
-                    from_field => $from_field,
-                    from_subfield => $from_subfield,
-                    to_field => $to_field,
-                    to_subfield => $to_subfield,
-                    regex => {
-                        search => $to_regex_search,
-                        replace => $to_regex_replace,
-                        modifiers => $to_regex_modifiers
-                    },
-                    field_numbers => $field_numbers,
-                });
-            }
-            elsif ( $action eq 'add_field' ) {
-                add_field({
-                    record => $record,
-                    field => $from_field,
-                    subfield => $from_subfield,
-                    values => [ $field_value ],
-                    field_numbers => $field_numbers,
-                });
-            }
-            elsif ( $action eq 'update_field' ) {
-                update_field({
-                    record => $record,
-                    field => $from_field,
-                    subfield => $from_subfield,
-                    values => [ $field_value ],
-                    field_numbers => $field_numbers,
-                });
-            }
-            elsif ( $action eq 'move_field' ) {
-                move_field({
-                    record => $record,
-                    from_field => $from_field,
-                    from_subfield => $from_subfield,
-                    to_field => $to_field,
-                    to_subfield => $to_subfield,
-                    regex => {
-                        search => $to_regex_search,
-                        replace => $to_regex_replace,
-                        modifiers => $to_regex_modifiers
-                    },
-                    field_numbers => $field_numbers,
-                });
-            }
-            elsif ( $action eq 'delete_field' ) {
-                delete_field({
-                    record => $record,
-                    field => $from_field,
-                    subfield => $from_subfield,
-                    field_numbers => $field_numbers,
-                });
+                copy_field(
+                    {
+                        record        => $record,
+                        from_field    => $from_field,
+                        from_subfield => $from_subfield,
+                        to_field      => $to_field,
+                        to_subfield   => $to_subfield,
+                        regex         => {
+                            search    => $to_regex_search,
+                            replace   => $to_regex_replace,
+                            modifiers => $to_regex_modifiers
+                        },
+                        field_numbers => $field_numbers,
+                    }
+                );
+            } elsif ( $action eq 'copy_and_replace_field' ) {
+                copy_and_replace_field(
+                    {
+                        record        => $record,
+                        from_field    => $from_field,
+                        from_subfield => $from_subfield,
+                        to_field      => $to_field,
+                        to_subfield   => $to_subfield,
+                        regex         => {
+                            search    => $to_regex_search,
+                            replace   => $to_regex_replace,
+                            modifiers => $to_regex_modifiers
+                        },
+                        field_numbers => $field_numbers,
+                    }
+                );
+            } elsif ( $action eq 'add_field' ) {
+                add_field(
+                    {
+                        record        => $record,
+                        field         => $from_field,
+                        subfield      => $from_subfield,
+                        values        => [$field_value],
+                        field_numbers => $field_numbers,
+                    }
+                );
+            } elsif ( $action eq 'update_field' ) {
+                update_field(
+                    {
+                        record        => $record,
+                        field         => $from_field,
+                        subfield      => $from_subfield,
+                        values        => [$field_value],
+                        field_numbers => $field_numbers,
+                    }
+                );
+            } elsif ( $action eq 'move_field' ) {
+                move_field(
+                    {
+                        record        => $record,
+                        from_field    => $from_field,
+                        from_subfield => $from_subfield,
+                        to_field      => $to_field,
+                        to_subfield   => $to_subfield,
+                        regex         => {
+                            search    => $to_regex_search,
+                            replace   => $to_regex_replace,
+                            modifiers => $to_regex_modifiers
+                        },
+                        field_numbers => $field_numbers,
+                    }
+                );
+            } elsif ( $action eq 'delete_field' ) {
+                delete_field(
+                    {
+                        record        => $record,
+                        field         => $from_field,
+                        subfield      => $from_subfield,
+                        field_numbers => $field_numbers,
+                    }
+                );
             }
         }
     }

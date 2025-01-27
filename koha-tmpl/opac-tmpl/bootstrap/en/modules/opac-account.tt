@@ -12,12 +12,15 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% FILTER collapse %]
-    [% t("Your charges") | html %] &rsaquo;
-    [% PROCESS 'library_name_title' %]
-[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Your charges") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+[% END %]
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-account' bodyclass='scrollto' %]
@@ -36,13 +39,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col col-lg-2 order-2 order-lg-1">
-                <div id="navigation">
-                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-                </div>
+                <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
             </div>
             <div class="col-md-12 col-lg-10 order-1">
                 <div id="useraccount" class="maincontent">
-
                     <h1>Your charges</h1>
                     [% IF message %]
                         <div class="alert alert-info">
@@ -69,123 +69,127 @@
                     [% END %]
 
                     [% PROCESS 'account-table.inc' ACCOUNT_LINES = ACCOUNT_LINES, ENABLE_OPAC_PAYMENTS = ENABLE_OPAC_PAYMENTS, plugins = plugins %]
-
-                </div> <!-- / #useraccount -->
-            </div> <!-- / .col-10 -->
-        </div> <!-- / .row -->
-    </div> <!-- / .container-fluid -->
-</div> <!-- / .main -->
+                </div>
+                <!-- / #useraccount -->
+            </div>
+            <!-- / .col-10 -->
+        </div>
+        <!-- / .row -->
+    </div>
+    <!-- / .container-fluid -->
+</div>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-<script>
-$( document ).ready(function() {
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $( document ).ready(function() {
 
-    var txtActivefilter = _("Filter paid transactions");
-    var txtInactivefilter = _("Show all transactions");
+            var txtActivefilter = _("Filter paid transactions");
+            var txtInactivefilter = _("Show all transactions");
 
-    var fines_table = $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-         [% IF ENABLE_OPAC_PAYMENTS %]
-         "order": [[ 1, "desc" ]],
-         [% ELSE %]
-         "order": [[ 0, "desc" ]],
-         [% END %]
-         "dom": '<"#filter_p">',
-         "responsive": {
-            "details": { "type": 'column',"target": -1 }
-         },
-         "columnDefs": [
-            { "className": 'dtr-control', "orderable": false, "targets": -1 }
-         ],
-         'fnDrawCallback': function() {
-            show_hiddentfoot('#finestable');
-         }
-    } ));
+            var fines_table = $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                 [% IF ENABLE_OPAC_PAYMENTS %]
+                 "order": [[ 1, "desc" ]],
+                 [% ELSE %]
+                 "order": [[ 0, "desc" ]],
+                 [% END %]
+                 "dom": '<"#filter_p">',
+                 "responsive": {
+                    "details": { "type": 'column',"target": -1 }
+                 },
+                 "columnDefs": [
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                 ],
+                 'fnDrawCallback': function() {
+                    show_hiddentfoot('#finestable');
+                 }
+            } ));
 
-    $('table[id^="finestable-"]').dataTable($.extend(true, {}, dataTablesDefaults, {
-         "responsive": {
-            "details": { "type": 'column',"target": -1 }
-         },
-         "columnDefs": [
-            { "className": 'dtr-control', "orderable": false, "targets": -1 }
-         ],
-         'fnDrawCallback': function() {
-            show_hiddentfoot('table[id^="finestable-"]');
-         }
-    } ));
+            $('table[id^="finestable-"]').dataTable($.extend(true, {}, dataTablesDefaults, {
+                 "responsive": {
+                    "details": { "type": 'column',"target": -1 }
+                 },
+                 "columnDefs": [
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                 ],
+                 'fnDrawCallback': function() {
+                    show_hiddentfoot('table[id^="finestable-"]');
+                 }
+            } ));
 
-    function show_hiddentfoot(selector) {
-        $('.finestable tfoot .sum').show();
-        if ($(".finestable tfoot td.dtr-hidden").length > 0) {
-            $(selector+" tfoot th").removeAttr( "colspan" );
-            $(".finestable tfoot .dtr-control").hide();
-        }
-    }
-    $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter+'</a>');
-    $('#filter_paid').click(function(e) {
-        e.preventDefault();
-        let filteredValue = '';
-        if ($(this).hasClass('filtered')) {
-            $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter);
-        } else { //Not filtered. Let's do it!
-            filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
-            $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtInactivefilter);
-        }
-        fines_table.DataTable().columns(-2).search(filteredValue, {regex: true}).draw();
-        $(this).toggleClass('filtered');
-    });
-
-    //Start filtered
-    $('#filter_paid').click();
-
-    $(".pay-online").removeClass("hidden");
-
-    $("#amount-to-pay-label").hide();
-
-    $(".checkbox-pay, input[name='payment_method']").change( function() {
-        // Disable the pay button if no fees are selected
-        //$("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length );
-
-        // Calculate the total amount to be paid based on selected fees
-        var total = 0;
-        $(".checkbox-pay").each( function() {
-            if ( $(this).is(":checked") ) {
-                var id = this.id.split("checkbox-pay-")[1];
-                total += parseFloat( $("#amount-" + id).val() );
+            function show_hiddentfoot(selector) {
+                $('.finestable tfoot .sum').show();
+                if ($(".finestable tfoot td.dtr-hidden").length > 0) {
+                    $(selector+" tfoot th").removeAttr( "colspan" );
+                    $(".finestable tfoot .dtr-control").hide();
+                }
             }
-        });
+            $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter+'</a>');
+            $('#filter_paid').click(function(e) {
+                e.preventDefault();
+                let filteredValue = '';
+                if ($(this).hasClass('filtered')) {
+                    $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter);
+                } else { //Not filtered. Let's do it!
+                    filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
+                    $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtInactivefilter);
+                }
+                fines_table.DataTable().columns(-2).search(filteredValue, {regex: true}).draw();
+                $(this).toggleClass('filtered');
+            });
 
-        var p = Promise.resolve();
-        if ( total ) {
-            p = Promise.all(
-                $('input[name="payment_method"]').map(function() {
-                    var self = this;
-                    return new Promise(function(resolve, reject) {
-                        var threshold = $(self).data('threshold');
-                        var help = $(self).parent().siblings('.help-block');
-                        if(!threshold || threshold == '' || threshold <= total) {
-                            $(self).prop('disabled', false);
-                            help.addClass('hide');
-                        } else {
-                            $(self).prop('disabled', true);
-                            help.html( _("Minimum amount needed by this service is %s").format(parseInt(threshold,10).toFixed(2)) ).removeClass('hide');
-                        }
-                        resolve();
-                    })
-                }).toArray()
-            );
+            //Start filtered
+            $('#filter_paid').click();
 
-            $("#amount-to-pay").html( total.toFixed(2) );
-            $("#amount-to-pay-label").show();
-        } else {
-            $('input[name="payment_method"]').prop('disabled', false).parent().siblings('.help-block').addClass('hide');
+            $(".pay-online").removeClass("hidden");
+
             $("#amount-to-pay-label").hide();
-        }
-        p.then(function() {
-            $("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length || ! $('input[name="payment_method"]:checked:not(:disabled)').length);
-        })
-    });
-});
-</script>
+
+            $(".checkbox-pay, input[name='payment_method']").change( function() {
+                // Disable the pay button if no fees are selected
+                //$("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length );
+
+                // Calculate the total amount to be paid based on selected fees
+                var total = 0;
+                $(".checkbox-pay").each( function() {
+                    if ( $(this).is(":checked") ) {
+                        var id = this.id.split("checkbox-pay-")[1];
+                        total += parseFloat( $("#amount-" + id).val() );
+                    }
+                });
+
+                var p = Promise.resolve();
+                if ( total ) {
+                    p = Promise.all(
+                        $('input[name="payment_method"]').map(function() {
+                            var self = this;
+                            return new Promise(function(resolve, reject) {
+                                var threshold = $(self).data('threshold');
+                                var help = $(self).parent().siblings('.help-block');
+                                if(!threshold || threshold == '' || threshold <= total) {
+                                    $(self).prop('disabled', false);
+                                    help.addClass('hide');
+                                } else {
+                                    $(self).prop('disabled', true);
+                                    help.html( _("Minimum amount needed by this service is %s").format(parseInt(threshold,10).toFixed(2)) ).removeClass('hide');
+                                }
+                                resolve();
+                            })
+                        }).toArray()
+                    );
+
+                    $("#amount-to-pay").html( total.toFixed(2) );
+                    $("#amount-to-pay-label").show();
+                } else {
+                    $('input[name="payment_method"]').prop('disabled', false).parent().siblings('.help-block').addClass('hide');
+                    $("#amount-to-pay-label").hide();
+                }
+                p.then(function() {
+                    $("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length || ! $('input[name="payment_method"]:checked:not(:disabled)').length);
+                })
+            });
+        });
+    </script>
 [% END %]

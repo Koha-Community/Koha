@@ -52,56 +52,46 @@ subtest 'q handling tests' => sub {
     Koha::Cities->new->delete;
 
     # No cities, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)->json_is( [] );
 
     my $names = [ 'AA', 'BA', 'BA', 'CA', 'DA', 'EB', 'FB', 'GB', 'HB', 'IB', ];
 
     # Add 10 cities
     foreach my $i ( 0 .. 9 ) {
-        $builder->build_object(
-            { class => 'Koha::Cities', value => { city_name => $names->[$i] } }
-        );
+        $builder->build_object( { class => 'Koha::Cities', value => { city_name => $names->[$i] } } );
     }
 
     t::lib::Mocks::mock_preference( 'RESTdefaultPageSize', 20 );
 
     my $q_ends_with_a = 'q={"name":{"-like":"%A"}}';
 
-    my $cities =
-      $t->get_ok(
-        "//$userid:$password@/api/v1/cities?$q_ends_with_a")
-      ->status_is(200)->tx->res->json;
+    my $cities = $t->get_ok("//$userid:$password@/api/v1/cities?$q_ends_with_a")->status_is(200)->tx->res->json;
 
     is( scalar @{$cities}, 5, '5 cities retrieved' );
 
     my $q_starts_with_a = 'q={"name":{"-like":"A%"}}';
 
     $cities =
-      $t->get_ok(
-        "//$userid:$password@/api/v1/cities?$q_ends_with_a&$q_starts_with_a")
-      ->status_is(200)->tx->res->json;
+        $t->get_ok("//$userid:$password@/api/v1/cities?$q_ends_with_a&$q_starts_with_a")->status_is(200)->tx->res->json;
 
     is( scalar @{$cities}, 1, '1 city retrieved' );
 
     my $q_empty_list = "q=[]";
 
     $cities =
-      $t->get_ok(
-        "//$userid:$password@/api/v1/cities?$q_ends_with_a&$q_starts_with_a&$q_empty_list")
-      ->status_is(200)->tx->res->json;
+        $t->get_ok("//$userid:$password@/api/v1/cities?$q_ends_with_a&$q_starts_with_a&$q_empty_list")->status_is(200)
+        ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'empty list as trailing query, 1 city retrieved' );
 
     $cities =
-      $t->get_ok(
-        "//$userid:$password@/api/v1/cities?$q_empty_list&$q_ends_with_a&$q_starts_with_a")
-      ->status_is(200)->tx->res->json;
+        $t->get_ok("//$userid:$password@/api/v1/cities?$q_empty_list&$q_ends_with_a&$q_starts_with_a")->status_is(200)
+        ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'empty list as first query, 1 city retrieved' );
 
-    $t->get_ok("//$userid:$password@/api/v1/cities" => { 'x-koha-request-id' => 100 } )
-      ->header_is( 'x-koha-request-id' => 100 );
+    $t->get_ok( "//$userid:$password@/api/v1/cities" => { 'x-koha-request-id' => 100 } )
+        ->header_is( 'x-koha-request-id' => 100 );
 
     $schema->storage->txn_rollback;
 };
@@ -124,27 +114,18 @@ subtest 'x-koha-embed tests' => sub {
 
     my $patron_id = $builder->build_object( { class => 'Koha::Patrons' } )->id;
 
-    my $res = $t->get_ok(
-        "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}"
-          => { 'x-koha-embed' => 'extended_attributes' } )->status_is(200)
-      ->tx->res->json;
+    my $res = $t->get_ok( "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}" =>
+            { 'x-koha-embed' => 'extended_attributes' } )->status_is(200)->tx->res->json;
 
     is( scalar @{$res}, 1, 'One patron returned' );
 
-    $res = $t->get_ok(
-        "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}" => {
-            'x-koha-embed' =>
-              'extended_attributes,custom_bad_embed,another_bad_embed'
-        }
-    )->status_is(400);
+    $res = $t->get_ok( "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}" =>
+            { 'x-koha-embed' => 'extended_attributes,custom_bad_embed,another_bad_embed' } )->status_is(400);
 
-    $res = $t->get_ok(
-        "//$userid:$password@/api/v1/cities" => {
-            'x-koha-embed' => 'any_embed'
-        }
-    )->status_is(400)->tx->res->json;
+    $res = $t->get_ok( "//$userid:$password@/api/v1/cities" => { 'x-koha-embed' => 'any_embed' } )->status_is(400)
+        ->tx->res->json;
 
-    is($res, 'Embedding objects is not allowed on this endpoint.', 'Correct error message is returned');
+    is( $res, 'Embedding objects is not allowed on this endpoint.', 'Correct error message is returned' );
 
     $schema->storage->txn_rollback;
 };

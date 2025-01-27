@@ -35,10 +35,11 @@ subtest 'enqueue() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $import_batch = $builder->build_object({ class => 'Koha::ImportBatches' });
+    my $import_batch = $builder->build_object( { class => 'Koha::ImportBatches' } );
+
     # Add two records
-    $builder->build_object({ class => 'Koha::Import::Records', value => { import_batch_id => $import_batch->id } });
-    $builder->build_object({ class => 'Koha::Import::Records', value => { import_batch_id => $import_batch->id } });
+    $builder->build_object( { class => 'Koha::Import::Records', value => { import_batch_id => $import_batch->id } } );
+    $builder->build_object( { class => 'Koha::Import::Records', value => { import_batch_id => $import_batch->id } } );
 
     my $job_id = Koha::BackgroundJob::MARCImportRevertBatch->new->enqueue( { import_batch_id => $import_batch->id } );
     my $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;

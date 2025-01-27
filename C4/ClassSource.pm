@@ -23,10 +23,11 @@ use C4::ClassSortRoutine qw( GetClassSortKey );
 
 use Koha::Cache::Memory::Lite;
 
-our (@ISA, @EXPORT_OK);
+our ( @ISA, @EXPORT_OK );
+
 BEGIN {
     require Exporter;
-    @ISA    = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
         GetClassSources
         GetClassSource
@@ -78,13 +79,13 @@ foreach my $cn_source (sort keys %$sources) {
 
 sub GetClassSources {
 
-    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
-    my $class_sources = $memory_cache->get_from_cache( "GetClassSource:All" );;
-    unless( $class_sources ){
+    my $memory_cache  = Koha::Cache::Memory::Lite->get_instance();
+    my $class_sources = $memory_cache->get_from_cache("GetClassSource:All");
+    unless ($class_sources) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("SELECT * FROM `class_sources`");
         $sth->execute();
-        while (my $source = $sth->fetchrow_hashref) {
+        while ( my $source = $sth->fetchrow_hashref ) {
             $class_sources->{ $source->{'cn_source'} } = $source;
         }
         $memory_cache->set_in_cache( "GetClassSource:All", $class_sources );
@@ -107,7 +108,7 @@ sub GetClassSource {
     return unless $cn_source;
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
     my $class_source = $memory_cache->get_from_cache( "GetClassSource:" . $cn_source );
-    unless( $class_source ){
+    unless ($class_source) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("SELECT * FROM `class_sources` WHERE cn_source = ?");
         $sth->execute($cn_source);
@@ -129,9 +130,9 @@ sub GetClassSortRule {
 
     my ($class_sort_rule) = (@_);
     return unless $class_sort_rule;
-    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    my $memory_cache     = Koha::Cache::Memory::Lite->get_instance();
     my $class_sort_rules = $memory_cache->get_from_cache( "GetClassSortRule:" . $class_sort_rule );
-    unless( $class_sort_rules ){
+    unless ($class_sort_rules) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("SELECT * FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
         $sth->execute($class_sort_rule);
@@ -152,21 +153,21 @@ and the defined call number source.
 
 sub GetClassSort {
 
-    my ($cn_source, $cn_class, $cn_item) = @_;
+    my ( $cn_source, $cn_class, $cn_item ) = @_;
 
     my $source_ref = GetClassSource($cn_source);
-    unless (defined $source_ref) {
-        $source_ref = GetClassSource(C4::Context->preference("DefaultClassificationSource"));
+    unless ( defined $source_ref ) {
+        $source_ref = GetClassSource( C4::Context->preference("DefaultClassificationSource") );
     }
     my $routine = "";
-    if (defined $source_ref) {
-        my $rule_ref = GetClassSortRule($source_ref->{'class_sort_rule'});
-        if (defined $rule_ref) {
+    if ( defined $source_ref ) {
+        my $rule_ref = GetClassSortRule( $source_ref->{'class_sort_rule'} );
+        if ( defined $rule_ref ) {
             $routine = $rule_ref->{'sort_routine'};
         }
-    } 
+    }
 
-    return GetClassSortKey($routine, $cn_class, $cn_item);
+    return GetClassSortKey( $routine, $cn_class, $cn_item );
 
 }
 

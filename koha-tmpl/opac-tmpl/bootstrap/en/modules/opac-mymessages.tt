@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <rss version="2.0">
-   <channel>
-      <title></title>
-      <!-- prettier-ignore-start -->
+    <channel>
+        <title></title>
+        <!-- prettier-ignore-start -->
       <link></link>
       <!-- prettier-ignore-end -->
-      <description></description>
-      <language></language>
-      <pubDate></pubDate>
-      <lastBuildDate></lastBuildDate>
-      <docs></docs>
-      <generator></generator>
-      <managingEditor></managingEditor>
-      <webMaster></webMaster>
-      [% FOREACH message_lis IN message_list %]
-      <item>
-        <title>[% message_lis.subject | html %]</title>
-        <!-- prettier-ignore-start -->
+        <description></description>
+        <language></language>
+        <pubDate></pubDate>
+        <lastBuildDate></lastBuildDate>
+        <docs></docs>
+        <generator></generator>
+        <managingEditor></managingEditor>
+        <webMaster></webMaster>
+        [% FOREACH message_lis IN message_list %]
+            <item>
+                <title>[% message_lis.subject | html %]</title>
+                <!-- prettier-ignore-start -->
         <link>[% message_lis.title | html %]</link>
         <!-- prettier-ignore-end -->
-        <description>[% message_lis.content | html %]</description>
-        <pubDate>[% message_lis.time_queued | html %]</pubDate>
-        <guid>[% message_lis.title | html %]</guid>
-      </item>
-      [% END %]
-   </channel>
+                <description>[% message_lis.content | html %]</description>
+                <pubDate>[% message_lis.time_queued | html %]</pubDate>
+                <guid>[% message_lis.title | html %]</guid>
+            </item>
+        [% END %]
+    </channel>
 </rss>

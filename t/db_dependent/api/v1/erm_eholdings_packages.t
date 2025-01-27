@@ -62,8 +62,7 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No EHoldings package, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages")
-      ->status_is(200)->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages")->status_is(200)->json_is( [] );
 
     my $ehpackage = $builder->build_object(
         {
@@ -73,8 +72,8 @@ subtest 'list() tests' => sub {
     );
 
     # One EHoldings package created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages")
-      ->status_is(200)->json_is( [ $ehpackage->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages")->status_is(200)
+        ->json_is( [ $ehpackage->to_api ] );
 
     my $another_ehpackage = $builder->build_object(
         {
@@ -93,28 +92,24 @@ subtest 'list() tests' => sub {
     );
 
     # Two EHoldings packages created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages")
-      ->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages")->status_is(200)->json_is(
         [
             $ehpackage->to_api,
             $another_ehpackage->to_api,
             $ehpackage_with_another_package_type->to_api
         ]
-      );
+    );
 
     # Filtering works, two EHoldings packages sharing package_type
-    $t->get_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages?package_type="
-          . $ehpackage->package_type )->status_is(200)
-      ->json_is( [ $ehpackage->to_api, $another_ehpackage->to_api ] );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages?package_type=" . $ehpackage->package_type )
+        ->status_is(200)->json_is( [ $ehpackage->to_api, $another_ehpackage->to_api ] );
 
     # Attempt to search by name like 'ko'
     $ehpackage->delete;
     $another_ehpackage->delete;
     $ehpackage_with_another_package_type->delete;
-    $t->get_ok(
-qq~//$userid:$password@/api/v1/erm/eholdings/local/packages?q=[{"me.name":{"like":"%ko%"}}]~
-    )->status_is(200)->json_is( [] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/eholdings/local/packages?q=[{"me.name":{"like":"%ko%"}}]~)
+        ->status_is(200)->json_is( [] );
 
     my $ehpackage_to_search = $builder->build_object(
         {
@@ -127,21 +122,15 @@ qq~//$userid:$password@/api/v1/erm/eholdings/local/packages?q=[{"me.name":{"like
     );
 
     # Search works, searching for name like 'ko'
-    $t->get_ok(
-qq~//$userid:$password@/api/v1/erm/eholdings/local/packages?q=[{"me.name":{"like":"%ko%"}}]~
-    )->status_is(200)->json_is( [ $ehpackage_to_search->to_api ] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/eholdings/local/packages?q=[{"me.name":{"like":"%ko%"}}]~)
+        ->status_is(200)->json_is( [ $ehpackage_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages?blah=blah")
-      ->status_is(400)
-      ->json_is(
-        [ { path => '/query/blah', message => 'Malformed query string' } ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
-    $t->get_ok(
-        "//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -152,8 +141,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $ehpackage =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } );
+    my $ehpackage = $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } );
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -175,30 +163,25 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This EHoldings package exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/"
-          . $ehpackage->package_id )->status_is(200)
-      ->json_is( $ehpackage->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/" . $ehpackage->package_id )->status_is(200)
+        ->json_is( $ehpackage->to_api );
 
     # Return one EHoldings package with embed
     $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/"
-          . $ehpackage->package_id =>
-          { 'x-koha-embed' => 'resources+count' } )->status_is(200)
-      ->json_is( { %{ $ehpackage->to_api }, resources_count => 0 } );
+            . $ehpackage->package_id => { 'x-koha-embed' => 'resources+count' } )->status_is(200)
+        ->json_is( { %{ $ehpackage->to_api }, resources_count => 0 } );
 
     # Unauthorized access
-    $t->get_ok(
-        "//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages/"
-          . $ehpackage->package_id )->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages/" . $ehpackage->package_id )
+        ->status_is(403);
 
     # Attempt to get non-existent EHoldings package
-    my $ehpackage_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } );
-    my $non_existent_id = $ehpackage_to_delete->package_id;
+    my $ehpackage_to_delete = $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } );
+    my $non_existent_id     = $ehpackage_to_delete->package_id;
     $ehpackage_to_delete->delete;
 
-    $t->get_ok(
-"//$userid:$password@/api/v1/erm/eholdings/local/packages/$non_existent_id"
-    )->status_is(404)->json_is( '/error' => 'Package not found' );
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages/$non_existent_id")->status_is(404)
+        ->json_is( '/error' => 'Package not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -237,9 +220,8 @@ subtest 'add() tests' => sub {
     };
 
     # Unauthorized attempt to write
-    $t->post_ok(
-        "//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages" =>
-          json => $ehpackage )->status_is(403);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages" => json => $ehpackage )
+        ->status_is(403);
 
     # Authorized attempt to write invalid data
     my $ehpackage_with_invalid_field = {
@@ -247,48 +229,42 @@ subtest 'add() tests' => sub {
         name => "Package name",
     };
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json =>
-          $ehpackage_with_invalid_field )->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json => $ehpackage_with_invalid_field )
+        ->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-          );
+        );
 
     # Authorized attempt to write
     my $ehpackage_id =
-      $t->post_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json =>
-          $ehpackage )->status_is( 201, 'REST3.2.1' )->header_like(
+        $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json => $ehpackage )
+        ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/erm/eholdings/local/packages/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $ehpackage->{name} )
-      ->json_is( '/print_identifier' => $ehpackage->{print_identifier} )
-      ->json_is( '/notes'            => $ehpackage->{notes} )
-      ->json_is( '/publisher_name'   => $ehpackage->{publisher_name} )
-      ->tx->res->json->{package_id};
+    )->json_is( '/name' => $ehpackage->{name} )->json_is( '/print_identifier' => $ehpackage->{print_identifier} )
+        ->json_is( '/notes' => $ehpackage->{notes} )->json_is( '/publisher_name' => $ehpackage->{publisher_name} )
+        ->tx->res->json->{package_id};
 
     # Authorized attempt to create with null id
     $ehpackage->{package_id} = undef;
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json =>
-          $ehpackage )->status_is(400)->json_has('/errors');
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json => $ehpackage )->status_is(400)
+        ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $ehpackage->{package_id} = $ehpackage_id;
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json =>
-          $ehpackage )->status_is(400)->json_is(
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json => $ehpackage )->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
                 path    => "/body/package_id"
             }
         ]
-          );
+        );
 
     $schema->storage->txn_rollback;
 };
@@ -319,24 +295,18 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $ehpackage_id =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } )
-      ->package_id;
+    my $ehpackage_id = $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } )->package_id;
 
     # Unauthorized attempt to update
-    $t->put_ok(
-"//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-          => json => { name => 'New unauthorized name change' } )
-      ->status_is(403);
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id" => json =>
+            { name => 'New unauthorized name change' } )->status_is(403);
 
     # Attempt partial update on a PUT
     my $ehpackage_with_missing_field = { package_type => "Package type", };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-          => json => $ehpackage_with_missing_field )->status_is(400)
-      ->json_is( "/errors" =>
-          [ { message => "Missing property.", path => "/body/name" } ] );
+    $t->put_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id" => json =>
+            $ehpackage_with_missing_field )->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $ehpackage_with_updated_field = {
@@ -346,10 +316,8 @@ subtest 'update() tests' => sub {
         notes        => "Notes"
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-          => json => $ehpackage_with_updated_field )->status_is(200)
-      ->json_is( '/name' => 'Package name' );
+    $t->put_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id" => json =>
+            $ehpackage_with_updated_field )->status_is(200)->json_is( '/name' => 'Package name' );
 
     # Authorized attempt to write invalid data
     my $ehpackage_with_invalid_field = {
@@ -357,33 +325,29 @@ subtest 'update() tests' => sub {
         name => "Package name",
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-          => json => $ehpackage_with_invalid_field )->status_is(400)->json_is(
+    $t->put_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id" => json =>
+            $ehpackage_with_invalid_field )->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-          );
+            );
 
     # Attempt to update non-existent EHolding package
-    my $ehpackage_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } );
-    my $non_existent_id = $ehpackage_to_delete->package_id;
+    my $ehpackage_to_delete = $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } );
+    my $non_existent_id     = $ehpackage_to_delete->package_id;
     $ehpackage_to_delete->delete;
 
-    $t->put_ok(
-"//$userid:$password@/api/v1/erm/eholdings/local/packages/$non_existent_id"
-          => json => $ehpackage_with_updated_field )->status_is(404);
+    $t->put_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/$non_existent_id" => json =>
+            $ehpackage_with_updated_field )->status_is(404);
 
     # Wrong method (POST)
     $ehpackage_with_updated_field->{package_id} = 2;
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-          => json => $ehpackage_with_updated_field )->status_is(404);
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id" => json =>
+            $ehpackage_with_updated_field )->status_is(404);
 
     $schema->storage->txn_rollback;
 };
@@ -414,24 +378,17 @@ subtest 'delete() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $ehpackage_id =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } )
-      ->package_id;
+    my $ehpackage_id = $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } )->package_id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok(
-"//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-    )->status_is(403);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id")->status_is(403);
 
     # Delete existing EHolding package
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-    )->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id")
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent EHolding package
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-    )->status_is(404);
+    $t->delete_ok("//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

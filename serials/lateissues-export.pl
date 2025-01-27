@@ -36,11 +36,11 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $supplierid = $query->param('supplierid');
-my @serialids = $query->multi_param('serialid');
-my $op = $query->param('op') || q{};
+my @serialids  = $query->multi_param('serialid');
+my $op         = $query->param('op') || q{};
 
 my $csv_profile_id = $query->param('csv_profile');
-my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
+my $csv_profile    = Koha::CsvProfiles->find($csv_profile_id);
 die "There is no valid csv profile given" unless $csv_profile;
 
 my $delimiter = $csv_profile->csv_separator;
@@ -58,29 +58,31 @@ my $csv = Text::CSV_XS->new(
 
 my $content = $csv_profile->content;
 my ( @headers, @fields );
-while ( $content =~ /
+while (
+    $content =~ /
     ([^=\|]+) # header
     =?
     ([^\|]*) # fieldname (table.row or row)
     \|? /gxms
-) {
+    )
+{
     my $header = $1;
-    my $field = ($2 eq '') ? $1 : $2;
+    my $field  = ( $2 eq '' ) ? $1 : $2;
 
-    $header =~ s/^\s+|\s+$//g; # Trim whitespaces
+    $header =~ s/^\s+|\s+$//g;    # Trim whitespaces
     push @headers, $header;
 
-    $field =~ s/[^.]+\.//; # Remove the table name if exists.
-    $field =~ s/^\s+|\s+$//g; # Trim whitespaces
+    $field =~ s/[^.]+\.//;        # Remove the table name if exists.
+    $field =~ s/^\s+|\s+$//g;     # Trim whitespaces
     push @fields, $field;
 }
 
 my @rows;
-for my $serialid ( @serialids ) {
-    my @missingissues = GetLateOrMissingIssues($supplierid, $serialid);
-    my $issue = $missingissues[0];
+for my $serialid (@serialids) {
+    my @missingissues = GetLateOrMissingIssues( $supplierid, $serialid );
+    my $issue         = $missingissues[0];
     my @row;
-    for my $field ( @fields ) {
+    for my $field (@fields) {
         push @row, $issue->{$field};
     }
     push @rows, \@row;
@@ -96,7 +98,7 @@ print $query->header(
 
 print join( $delimiter, @headers ) . "\n";
 
-for my $row ( @rows ) {
+for my $row (@rows) {
     $csv->combine(@$row);
     my $string = $csv->string;
     print $string, "\n";

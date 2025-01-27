@@ -30,7 +30,7 @@ use Koha::Biblios;
 
 use t::lib::TestBuilder;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
@@ -50,121 +50,120 @@ my $set1_id = AddOAISet($set1);
 my $marcflavour = C4::Context->preference('marcflavour');
 my $mapping1;
 
-if ($marcflavour eq 'UNIMARC' ){
+if ( $marcflavour eq 'UNIMARC' ) {
     $mapping1 = [
         {
-            rule_order => 1,
-            marcfield => '200',
+            rule_order   => 1,
+            marcfield    => '200',
             marcsubfield => 'a',
-            operator => 'equal',
-            marcvalue => 'myTitle'
+            operator     => 'equal',
+            marcvalue    => 'myTitle'
         },
         {
-            rule_order => 2,
+            rule_order    => 2,
             rule_operator => 'and',
-            marcfield => '200',
-            marcsubfield => 'f',
-            operator => 'equal',
-            marcvalue => 'myAuthor'
+            marcfield     => '200',
+            marcsubfield  => 'f',
+            operator      => 'equal',
+            marcvalue     => 'myAuthor'
         },
     ];
 } else {
     $mapping1 = [
         {
-            rule_order => 1,
-            marcfield => '245',
+            rule_order   => 1,
+            marcfield    => '245',
             marcsubfield => 'a',
-            operator => 'equal',
-            marcvalue => 'myTitle'
+            operator     => 'equal',
+            marcvalue    => 'myTitle'
         },
         {
-            rule_order => 2,
+            rule_order    => 2,
             rule_operator => 'and',
-            marcfield => '100',
-            marcsubfield => 'a',
-            operator => 'equal',
-            marcvalue => 'myAuthor'
+            marcfield     => '100',
+            marcsubfield  => 'a',
+            operator      => 'equal',
+            marcvalue     => 'myAuthor'
         },
     ];
 }
 
 #Add 1st mapping for set1
-ModOAISetMappings($set1_id, $mapping1);
+ModOAISetMappings( $set1_id, $mapping1 );
 
-my $biblio_1 = $builder->build_sample_biblio({ title => 'myTitle' });
-my $biblio_2 = $builder->build_sample_biblio({ title => 'myTitle', author => 'myAuthor' });
+my $biblio_1 = $builder->build_sample_biblio( { title => 'myTitle' } );
+my $biblio_2 = $builder->build_sample_biblio( { title => 'myTitle', author => 'myAuthor' } );
 
 my $biblionumber1 = $biblio_1->biblionumber;
 my $biblionumber2 = $biblio_2->biblionumber;
 
-
 my $record = $biblio_1->metadata->record;
 my @setsEq = CalcOAISetsBiblio($record);
-ok(!@setsEq, 'If only one condition is true, the record does not belong to the set');
+ok( !@setsEq, 'If only one condition is true, the record does not belong to the set' );
 
 $record = $biblio_2->metadata->record;
 @setsEq = CalcOAISetsBiblio($record);
-is_deeply(@setsEq, $set1_id, 'If all conditions are true, the record belongs to the set');
+is_deeply( @setsEq, $set1_id, 'If all conditions are true, the record belongs to the set' );
 
-if ($marcflavour eq 'UNIMARC' ){
+if ( $marcflavour eq 'UNIMARC' ) {
     $mapping1 = [
         {
-            rule_order => 1,
-            marcfield => '200',
+            rule_order   => 1,
+            marcfield    => '200',
             marcsubfield => 'a',
-            operator => 'equal',
-            marcvalue => 'myTitle'
+            operator     => 'equal',
+            marcvalue    => 'myTitle'
         },
         {
-            rule_order => 2,
+            rule_order    => 2,
             rule_operator => 'or',
-            marcfield => '200',
-            marcsubfield => 'f',
-            operator => 'equal',
-            marcvalue => 'myAuthor'
+            marcfield     => '200',
+            marcsubfield  => 'f',
+            operator      => 'equal',
+            marcvalue     => 'myAuthor'
         },
         {
-            rule_order => 3,
+            rule_order    => 3,
             rule_operator => 'and',
-            marcfield => '995',
-            marcsubfield => 'r',
-            operator => 'equal',
-            marcvalue => 'myItemType'
+            marcfield     => '995',
+            marcsubfield  => 'r',
+            operator      => 'equal',
+            marcvalue     => 'myItemType'
         },
 
     ];
 } else {
     $mapping1 = [
         {
-            rule_order => 1,
-            marcfield => '245',
+            rule_order   => 1,
+            marcfield    => '245',
             marcsubfield => 'a',
-            operator => 'equal',
-            marcvalue => 'myTitle'
+            operator     => 'equal',
+            marcvalue    => 'myTitle'
         },
         {
-            rule_order => 2,
+            rule_order    => 2,
             rule_operator => 'or',
-            marcfield => '100',
-            marcsubfield => 'a',
-            operator => 'equal',
-            marcvalue => 'myAuthor'
+            marcfield     => '100',
+            marcsubfield  => 'a',
+            operator      => 'equal',
+            marcvalue     => 'myAuthor'
         },
         {
-            rule_order => 3,
+            rule_order    => 3,
             rule_operator => 'and',
-            marcfield => '942',
-            marcsubfield => 'c',
-            operator => 'equal',
-            marcvalue => 'myItemType'
+            marcfield     => '942',
+            marcsubfield  => 'c',
+            operator      => 'equal',
+            marcvalue     => 'myItemType'
         },
     ];
 }
 
-ModOAISetMappings($set1_id, $mapping1);
+ModOAISetMappings( $set1_id, $mapping1 );
 
-$biblio_1 = $builder->build_sample_biblio({ title => 'myTitle' });
-$biblio_2 = $builder->build_sample_biblio({ author => 'myAuthor', itemtype => 'myItemType' });
+$biblio_1 = $builder->build_sample_biblio( { title  => 'myTitle' } );
+$biblio_2 = $builder->build_sample_biblio( { author => 'myAuthor', itemtype => 'myItemType' } );
 
 $biblionumber1 = $biblio_1->biblionumber;
 $biblionumber2 = $biblio_2->biblionumber;
@@ -172,10 +171,16 @@ $biblionumber2 = $biblio_2->biblionumber;
 $record = $biblio_1->metadata->record;
 @setsEq = CalcOAISetsBiblio($record);
 
-is_deeply(@setsEq, $set1_id, 'Boolean operators precedence is respected, the record with only the title belongs to the set');
+is_deeply(
+    @setsEq, $set1_id,
+    'Boolean operators precedence is respected, the record with only the title belongs to the set'
+);
 
 $record = $biblio_2->metadata->record;
 @setsEq = CalcOAISetsBiblio($record);
-is_deeply(@setsEq, $set1_id, 'Boolean operators precedence is respected, the record with author and itemtype belongs to the set');
+is_deeply(
+    @setsEq, $set1_id,
+    'Boolean operators precedence is respected, the record with author and itemtype belongs to the set'
+);
 
 $schema->storage->txn_rollback;

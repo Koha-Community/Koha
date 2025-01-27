@@ -912,6 +912,7 @@ Return a hashref of core fields
 =cut
 
 sub _get_core_fields {
+
     # FIXME: This should all be made translatable as is basically a
     #        code => description mapping. The metadata() sub is using this
     #        descriptions as keys. I thought this was a bug on this backend
@@ -1172,13 +1173,15 @@ sub _standard_request2biblio {
         ($record) = MarcToUTF8Record( $record, $marcflavour );
     }
 
-    if( $marcflavour eq 'MARC21' ) {
-        $record->append_fields(MARC::Field->new( '020', '', '', a => $isbn )) if $isbn;
-        $record->append_fields(MARC::Field->new( '100', '1', '', a => $author )) if $author;
-        $record->append_fields(MARC::Field->new( '245', '0', '0', a => $title )) if $title;
-    }elsif( $marcflavour eq 'UNIMARC' ) {
-        $record->append_fields(MARC::Field->new( '010', '', '', a => $isbn )) if $isbn;
-        $record->append_fields(MARC::Field->new( '200', '', '', $title ? ( 'a' => $title ) : undef, $author ? ( 'f' => $author ) : undef)) if $author || $title;
+    if ( $marcflavour eq 'MARC21' ) {
+        $record->append_fields( MARC::Field->new( '020', '',  '',  a => $isbn ) )   if $isbn;
+        $record->append_fields( MARC::Field->new( '100', '1', '',  a => $author ) ) if $author;
+        $record->append_fields( MARC::Field->new( '245', '0', '0', a => $title ) )  if $title;
+    } elsif ( $marcflavour eq 'UNIMARC' ) {
+        $record->append_fields( MARC::Field->new( '010', '', '', a => $isbn ) ) if $isbn;
+        $record->append_fields(
+            MARC::Field->new( '200', '', '', $title ? ( 'a' => $title ) : undef, $author ? ( 'f' => $author ) : undef )
+        ) if $author || $title;
     }
 
     # Suppress the record

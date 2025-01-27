@@ -99,7 +99,7 @@ subtest 'superlibrarian tests' => sub {
         'updatecharges'    => 0,
     };
 
-    my $authz = Koha::Auth::Permissions->get_authz_from_flags({ flags => $flags });
+    my $authz = Koha::Auth::Permissions->get_authz_from_flags( { flags => $flags } );
 
     my $expected = {
         'CAN_user_acquisition_budget_add_del'                       => 1,
@@ -295,5 +295,5 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_updatecharges'                                    => 1,
     };
 
-    is_deeply($authz,$expected,'Expected permissions generated for superlibrarian');
+    is_deeply( $authz, $expected, 'Expected permissions generated for superlibrarian' );
 };

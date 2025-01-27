@@ -28,8 +28,8 @@ use Koha::Club::Enrollments;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $cgi->cookie('CGISESSID') );
+my ($auth_status) =
+    check_cookie_auth( $cgi->cookie('CGISESSID') );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }

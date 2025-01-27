@@ -89,7 +89,7 @@ sub transport {
     $params->{debug} = $self->debug;
 
     require Email::Sender::Transport::SMTP::Persistent;
-    my $transport = Email::Sender::Transport::SMTP::Persistent->new( $params );
+    my $transport = Email::Sender::Transport::SMTP::Persistent->new($params);
 
     return $transport;
 }
@@ -135,7 +135,7 @@ suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    my $json_smtp = $self->SUPER::to_api( $params );
+    my $json_smtp = $self->SUPER::to_api($params);
     return unless $json_smtp;
     delete $json_smtp->{password};
 
@@ -150,9 +150,7 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return {
-        id => 'smtp_server_id'
-    };
+    return { id => 'smtp_server_id' };
 }
 
 =head2 Internal methods

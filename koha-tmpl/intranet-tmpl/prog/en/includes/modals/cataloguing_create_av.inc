@@ -38,6 +38,9 @@
                     <button class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
-        </div> <!-- /.modal-content -->
-    </div> <!-- /.modal-dialog -->
-</div> <!-- /#avCreate -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /#avCreate -->

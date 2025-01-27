@@ -21,10 +21,11 @@ use Modern::Perl;
 
 use Array::Utils qw( array_minus );
 use Class::Inspector;
-use List::MoreUtils qw( any );
+use List::MoreUtils           qw( any );
 use Module::Load::Conditional qw( can_load );
 use Module::Load;
-use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
+use Module::Pluggable search_path => ['Koha::Plugin'],
+    except                        => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
 use Try::Tiny;
 use POSIX qw(getpid);
 
@@ -41,7 +42,7 @@ use constant ENABLED_PLUGINS_CACHE_KEY => 'enabled_plugins';
 BEGIN {
     my $pluginsdir = C4::Context->config("pluginsdir");
     my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
-    push @INC, array_minus(@pluginsdir, @INC) ;
+    push @INC, array_minus( @pluginsdir, @INC );
     pop @INC if $INC[-1] eq '.';
 }
 
@@ -77,7 +78,7 @@ updated by preceding plugins, provided that these plugins support that.
 =cut
 
 sub call {
-    my ($class, $method, @args) = @_;
+    my ( $class, $method, @args ) = @_;
 
     return unless C4::Context->config('enable_plugins');
 
@@ -86,13 +87,14 @@ sub call {
     @plugins = grep { $_->can($method) } @plugins;
 
     # TODO: Remove warn when after_hold_create is removed from the codebase
-    warn "after_hold_create is deprecated and will be removed soon. Contact the following plugin's authors: " . join( ', ', map {$_->{metadata}->{name}} @plugins)
+    warn "after_hold_create is deprecated and will be removed soon. Contact the following plugin's authors: "
+        . join( ', ', map { $_->{metadata}->{name} } @plugins )
         if $method eq 'after_hold_create' and @plugins;
 
     foreach my $plugin (@plugins) {
         my $response = eval { $plugin->$method(@args) };
         if ($@) {
-            warn sprintf("Plugin error (%s): %s", $plugin->get_metadata->{name}, $@);
+            warn sprintf( "Plugin error (%s): %s", $plugin->get_metadata->{name}, $@ );
             next;
         }
 
@@ -122,7 +124,7 @@ sub get_enabled_plugins {
 
         my @plugin_classes;
         try {
-            my $rs = Koha::Plugins::Datas->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
+            my $rs = Koha::Plugins::Datas->search( { plugin_key => '__ENABLED__', plugin_value => 1 } );
             @plugin_classes = $rs->get_column('plugin_class');
         } catch {
             warn "$_";
@@ -132,14 +134,14 @@ sub get_enabled_plugins {
             next unless can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 );
 
             my $plugin = eval { $plugin_class->new() };
-            if ($@ || !$plugin) {
+            if ( $@ || !$plugin ) {
                 warn "Failed to instantiate plugin $plugin_class: $@";
                 next;
             }
 
             push @$enabled_plugins, $plugin;
         }
-        Koha::Cache::Memory::Lite->set_in_cache(ENABLED_PLUGINS_CACHE_KEY, $enabled_plugins);
+        Koha::Cache::Memory::Lite->set_in_cache( ENABLED_PLUGINS_CACHE_KEY, $enabled_plugins );
     }
 
     return @$enabled_plugins;
@@ -147,6 +149,7 @@ sub get_enabled_plugins {
 
 sub _verbose {
     my $class = shift;
+
     # Return false when running unit tests
     return exists $ENV{_} && $ENV{_} =~ /\/prove(\s|$)|\/koha-qa\.pl$|\.t$/ ? 0 : 1;
 }
@@ -206,17 +209,17 @@ sub GetPlugins {
     my $errors       = $params->{errors};
 
     # By default dont warn here unless asked to do so.
-    my $verbose      = $params->{verbose} // 0;
+    my $verbose = $params->{verbose} // 0;
 
-    my $filter = ( $method ) ? { plugin_method => $method } : undef;
+    my $filter = ($method) ? { plugin_method => $method } : undef;
 
     my $plugin_classes = Koha::Plugins::Methods->search(
         $filter,
-        {   columns  => 'plugin_class',
+        {
+            columns  => 'plugin_class',
             distinct => 1
         }
     )->_resultset->get_column('plugin_class');
-
 
     # Loop through all plugins that implement at least a method
     my ( @plugins, @failing );
@@ -227,31 +230,35 @@ sub GetPlugins {
             my $failed_instantiation;
 
             try {
-                $plugin = $plugin_class->new({
-                    enable_plugins => $self->{'enable_plugins'}
-                        # loads even if plugins are disabled
-                        # FIXME: is this for testing without bothering to mock config?
-                });
-            }
-            catch {
+                $plugin = $plugin_class->new(
+                    {
+                        enable_plugins => $self->{'enable_plugins'}
+
+                            # loads even if plugins are disabled
+                            # FIXME: is this for testing without bothering to mock config?
+                    }
+                );
+            } catch {
                 warn "$_";
                 $failed_instantiation = 1;
             };
 
             next if $failed_instantiation;
 
-            next unless $plugin->is_enabled or
-                        defined($params->{all}) && $params->{all};
+            next
+                unless $plugin->is_enabled
+                or defined( $params->{all} ) && $params->{all};
 
             # filter the plugin out by metadata
             my $plugin_metadata = $plugin->get_metadata;
             next
                 if $plugin_metadata
                 and %$req_metadata
-                and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
+                and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} }
+                keys %$req_metadata;
 
             push @plugins, $plugin;
-        } elsif( $errors ) {
+        } elsif ($errors) {
             push @failing, { error => 1, name => $plugin_class };
         }
     }
@@ -287,16 +294,15 @@ sub InstallPlugins {
             my $failed_instantiation;
 
             try {
-                $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
-            }
-            catch {
+                $plugin = $plugin_class->new( { enable_plugins => $self->{'enable_plugins'} } );
+            } catch {
                 warn "$_";
                 $failed_instantiation = 1;
             };
 
             next if $failed_instantiation;
 
-            Koha::Plugins::Methods->search({ plugin_class => $plugin_class })->delete();
+            Koha::Plugins::Methods->search( { plugin_class => $plugin_class } )->delete();
 
             foreach my $method ( @{ Class::Inspector->methods( $plugin_class, 'public' ) } ) {
                 Koha::Plugins::Method->new(

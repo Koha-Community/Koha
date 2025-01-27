@@ -58,19 +58,18 @@ sub new {
         unless $params->{to_date};
 
     Carp::confess("Key 'patron' is not a Koha::Patron object!")
-      unless $params->{patron}->isa('Koha::Patron');
+        unless $params->{patron}->isa('Koha::Patron');
     Carp::confess("Key 'library' is not a Koha::Library object!")
-      unless $params->{library}->isa('Koha::Library');
+        unless $params->{library}->isa('Koha::Library');
     Carp::confess("Key 'item' is not a Koha::Item object!")
-      unless $params->{item}->isa('Koha::Item');
+        unless $params->{item}->isa('Koha::Item');
     Carp::confess("Key 'to_date' is not a DateTime object!")
-      unless $params->{to_date}->isa('DateTime');
+        unless $params->{to_date}->isa('DateTime');
 
     if ( $params->{from_date} ) {
         Carp::croak("Key 'from_date' is not a DateTime object!")
-          unless $params->{from_date}->isa('DateTime');
-    }
-    else {
+            unless $params->{from_date}->isa('DateTime');
+    } else {
         $params->{from_date} = dt_from_string();
     }
 
@@ -102,9 +101,9 @@ sub accumulate_rentalcharge {
 
     my $units = $lengthunit_rule->rule_value;
     my $rentalcharge_increment =
-      ( $units eq 'days' )
-      ? $itemtype->rentalcharge_daily
-      : $itemtype->rentalcharge_hourly;
+        ( $units eq 'days' )
+        ? $itemtype->rentalcharge_daily
+        : $itemtype->rentalcharge_hourly;
 
     return 0 unless $rentalcharge_increment && $rentalcharge_increment > 0;
 
@@ -117,18 +116,14 @@ sub accumulate_rentalcharge {
                 $self->from_date->truncate( to => 'minute' ),
                 $self->to_date->truncate( to => 'minute' )
             );
-        }
-        else {
-            $duration = $self->to_date->truncate( to => 'minute' )
-              ->delta_ms( $self->from_date->truncate( to => 'minute' ) );
-        }
-    }
-    else {
-        if ( $itemtype->rentalcharge_daily_calendar ) {
+        } else {
             $duration =
-              $calendar->days_between( $self->from_date, $self->to_date );
+                $self->to_date->truncate( to => 'minute' )->delta_ms( $self->from_date->truncate( to => 'minute' ) );
         }
-        else {
+    } else {
+        if ( $itemtype->rentalcharge_daily_calendar ) {
+            $duration = $calendar->days_between( $self->from_date, $self->to_date );
+        } else {
             $duration = $self->to_date->delta_days( $self->from_date );
         }
     }
@@ -147,7 +142,7 @@ sub patron {
     my ( $self, $patron ) = @_;
 
     Carp::carp("Setting 'patron' to something other than a Koha::Patron is not supported!")
-      if ($patron && !$patron->isa('Koha::Patron'));
+        if ( $patron && !$patron->isa('Koha::Patron') );
 
     $self->{patron} = $patron if $patron;
 
@@ -164,7 +159,7 @@ sub library {
     my ( $self, $library ) = @_;
 
     Carp::carp("Setting 'library' to something other than a Koha::Library is not supported!")
-      if ($library && !$library->isa('Koha::Library'));
+        if ( $library && !$library->isa('Koha::Library') );
 
     $self->{library} = $library if $library;
 
@@ -181,7 +176,7 @@ sub item {
     my ( $self, $item ) = @_;
 
     Carp::carp("Setting 'item' to something other than a Koha::Item is not supported!")
-      if ($item && !$item->isa('Koha::Item'));
+        if ( $item && !$item->isa('Koha::Item') );
 
     $self->{item} = $item if $item;
 
@@ -198,7 +193,7 @@ sub to_date {
     my ( $self, $to_date ) = @_;
 
     Carp::carp("Setting 'to_date' to something other than a DateTime is not supported!")
-      if ($to_date && !$to_date->isa('DateTime'));
+        if ( $to_date && !$to_date->isa('DateTime') );
 
     $self->{to_date} = $to_date if $to_date;
 
@@ -215,7 +210,7 @@ sub from_date {
     my ( $self, $from_date ) = @_;
 
     Carp::carp("Setting 'from_date' to something other than a DateTime is not supported!")
-      if ($from_date && !$from_date->isa('DateTime'));
+        if ( $from_date && !$from_date->isa('DateTime') );
 
     $self->{from_date} = $from_date if $from_date && $from_date->isa('DateTime');
 

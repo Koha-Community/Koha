@@ -42,7 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $ua = LWP::UserAgent->new;
 
 # See http://documentation.abes.fr/aideidrefdeveloppeur/index.html#MicroWebBiblio
-my $base = 'http://www.idref.fr/services/biblio/';
+my $base     = 'http://www.idref.fr/services/biblio/';
 my $unimarc3 = $cgi->param('unimarc3');
 
 my $request = HTTP::Request->new(
@@ -51,40 +51,42 @@ my $request = HTTP::Request->new(
 );
 $request->protocol('HTTP/1.1');
 my $response = $ua->request($request);
-if ( not $response->is_success) {
-    $template->param(error => $base.$unimarc3.'.json');
+if ( not $response->is_success ) {
+    $template->param( error => $base . $unimarc3 . '.json' );
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
 
-my $content = Encode::decode("utf8", $response->content);
-my $json = from_json( $content );
+my $content = Encode::decode( "utf8", $response->content );
+my $json    = from_json($content);
 my $r;
-my @results = ref $json->{sudoc}{result} eq "ARRAY"
-            ? @{ $json->{sudoc}{result} }
-            : ($json->{sudoc}{result});
+my @results =
+    ref $json->{sudoc}{result} eq "ARRAY"
+    ? @{ $json->{sudoc}{result} }
+    : ( $json->{sudoc}{result} );
 
 for my $result (@results) {
     my $role_node = $result->{'role'};
     my @roles =
-      ref $role_node eq "ARRAY"
-      ? @$role_node
-      : ($role_node);
+        ref $role_node eq "ARRAY"
+        ? @$role_node
+        : ($role_node);
     for my $role (@roles) {
-        my @docs = ref $role->{doc} eq "ARRAY"
+        my @docs =
+            ref $role->{doc} eq "ARRAY"
             ? @{ $role->{doc} }
             : $role->{doc};
         push @$r,
-          {
+            {
             role_name => $role->{roleName},
             count     => $role->{count},
             docs      => \@docs,
-          };
+            };
     }
 }
 
 $template->param(
-    content => $r,
+    content  => $r,
     unimarc3 => $unimarc3,
 );
 

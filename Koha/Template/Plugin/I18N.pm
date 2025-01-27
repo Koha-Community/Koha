@@ -63,7 +63,7 @@ there are no variables and not pluralisations to consider.
 =cut
 
 sub t {
-    my ($self, $msgid) = @_;
+    my ( $self, $msgid ) = @_;
     return __($msgid);
 }
 
@@ -77,8 +77,8 @@ includes a variable
 =cut
 
 sub tx {
-    my ($self, $msgid, $vars) = @_;
-    return __x($msgid, %$vars);
+    my ( $self, $msgid, $vars ) = @_;
+    return __x( $msgid, %$vars );
 }
 
 =head2 tn
@@ -91,8 +91,8 @@ singular and plural forms
 =cut
 
 sub tn {
-    my ($self, $msgid, $msgid_plural, $count) = @_;
-    return __n($msgid, $msgid_plural, $count);
+    my ( $self, $msgid, $msgid_plural, $count ) = @_;
+    return __n( $msgid, $msgid_plural, $count );
 }
 
 =head2 tnx
@@ -105,8 +105,8 @@ that needs singular and plural forms and includes a variable
 =cut
 
 sub tnx {
-    my ($self, $msgid, $msgid_plural, $count, $vars) = @_;
-    return __nx($msgid, $msgid_plural, $count, %$vars);
+    my ( $self, $msgid, $msgid_plural, $count, $vars ) = @_;
+    return __nx( $msgid, $msgid_plural, $count, %$vars );
 }
 
 =head2 txn
@@ -116,8 +116,8 @@ Alias of tnx
 =cut
 
 sub txn {
-    my ($self, $msgid, $msgid_plural, $count, $vars) = @_;
-    return __xn($msgid, $msgid_plural, $count, %$vars);
+    my ( $self, $msgid, $msgid_plural, $count, $vars ) = @_;
+    return __xn( $msgid, $msgid_plural, $count, %$vars );
 }
 
 =head2 tp
@@ -135,8 +135,8 @@ can understand the context correctly.
 =cut
 
 sub tp {
-    my ($self, $msgctxt, $msgid) = @_;
-    return __p($msgctxt, $msgid);
+    my ( $self, $msgctxt, $msgid ) = @_;
+    return __p( $msgctxt, $msgid );
 }
 
 =head2 tpx
@@ -149,8 +149,8 @@ that needs both a contextual hint and includes a variable.
 =cut
 
 sub tpx {
-    my ($self, $msgctxt, $msgid, $vars) = @_;
-    return __px($msgctxt, $msgid, %$vars);
+    my ( $self, $msgctxt, $msgid, $vars ) = @_;
+    return __px( $msgctxt, $msgid, %$vars );
 }
 
 =head2 tnp
@@ -164,8 +164,8 @@ forms.
 =cut
 
 sub tnp {
-    my ($self, $msgctxt, $msgid, $msgid_plural, $count) = @_;
-    return __np($msgctxt, $msgid, $msgid_plural, $count);
+    my ( $self, $msgctxt, $msgid, $msgid_plural, $count ) = @_;
+    return __np( $msgctxt, $msgid, $msgid_plural, $count );
 }
 
 =head2 tnpx
@@ -179,8 +179,8 @@ and also includes variables.
 =cut
 
 sub tnpx {
-    my ($self, $msgctxt, $msgid, $msgid_plural, $count, $vars) = @_;
-    return __npx($msgctxt, $msgid, $msgid_plural, $count, %$vars);
+    my ( $self, $msgctxt, $msgid, $msgid_plural, $count, $vars ) = @_;
+    return __npx( $msgctxt, $msgid, $msgid_plural, $count, %$vars );
 }
 
 1;

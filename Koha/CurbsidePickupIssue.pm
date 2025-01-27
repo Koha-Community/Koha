@@ -39,7 +39,7 @@ Return the checkout object
 =cut
 
 sub checkout {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return Koha::Checkouts->find( $self->issue_id );
 }

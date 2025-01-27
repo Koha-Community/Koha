@@ -21,14 +21,14 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Encode;
-use Carp qw( carp );
+use Carp      qw( carp );
 use Try::Tiny qw( catch try );
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw(
-  GetFrameworkCode
-  GetMarcISBN
-  GetMarcSubjects
+    GetFrameworkCode
+    GetMarcISBN
+    GetMarcSubjects
 );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Biblios;
@@ -77,12 +77,10 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
         if ( !defined $iso2709 ) {
             carp "Error sending mail: empty list";
             $template->param( error => 1 );
-        }
-        elsif ( !defined $user_email or $user_email eq '' ) {
+        } elsif ( !defined $user_email or $user_email eq '' ) {
             carp "Error sending mail: sender's email address is invalid";
             $template->param( error => 1 );
-        }
-        else {
+        } else {
             my %loops = ( biblio => \@biblionumbers, );
 
             my %substitute = (
@@ -129,23 +127,21 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
             email   => $email,
         );
         output_html_with_http_headers $query, $cookie, $template->output,
-          undef, { force_no_caching => 1 };
+            undef, { force_no_caching => 1 };
 
-    }
-    else {
+    } else {
         $template->param(
             shelfid => $shelfid,
             url     => "/cgi-bin/koha/opac-sendshelf.pl",
         );
         output_html_with_http_headers $query, $cookie, $template->output,
-          undef, { force_no_caching => 1 };
+            undef, { force_no_caching => 1 };
     }
-}
-else {
+} else {
     $template->param(
         invalidlist => 1,
         url         => "/cgi-bin/koha/opac-sendshelf.pl",
     );
     output_html_with_http_headers $query, $cookie, $template->output, undef,
-      { force_no_caching => 1 };
+        { force_no_caching => 1 };
 }

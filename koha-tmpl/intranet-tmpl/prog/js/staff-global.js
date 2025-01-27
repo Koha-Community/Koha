@@ -61,13 +61,14 @@ $.fn.selectTabByID = function (tabID) {
 
 $(document).ready(function () {
     //check if sticky element is stuck, if so add floating class
-    if ( $('.sticky').length ) {
-      const observer = new IntersectionObserver(
-        ([e]) => e.target.classList.toggle('floating', e.intersectionRatio < 1),
-        {threshold: [1]}
-      );
+    if ($(".sticky").length) {
+        const observer = new IntersectionObserver(
+            ([e]) =>
+                e.target.classList.toggle("floating", e.intersectionRatio < 1),
+            { threshold: [1] }
+        );
 
-      observer.observe(document.querySelector('.sticky'));
+        observer.observe(document.querySelector(".sticky"));
     }
 
     //check for a hash before setting focus
@@ -75,9 +76,12 @@ $(document).ready(function () {
     if (!hash) {
         $(".tab-pane.active input:text:first").focus();
     }
-    $("#header_search a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-        $(e.target.hash).find("input:text:first").focus();
-    });
+    $("#header_search a[data-bs-toggle='tab']").on(
+        "shown.bs.tab",
+        function (e) {
+            $(e.target.hash).find("input:text:first").focus();
+        }
+    );
 
     $(".close, .close_window").on("click", function (e) {
         e.preventDefault();
@@ -149,12 +153,19 @@ $(document).ready(function () {
         number: true,
     });
 
-    jQuery.validator.addMethod("decimal_rate", function(value, element) {
-        return this.optional( element ) || /^[\-]?\d{0,2}(\.\d{0,3})*$/.test( value );
-    }, __('Please enter a decimal number in the format: 0.0') );
+    jQuery.validator.addMethod(
+        "decimal_rate",
+        function (value, element) {
+            return (
+                this.optional(element) ||
+                /^[\-]?\d{0,2}(\.\d{0,3})*$/.test(value)
+            );
+        },
+        __("Please enter a decimal number in the format: 0.0")
+    );
 
     jQuery.validator.addClassRules("rate", {
-        decimal_rate: true
+        decimal_rate: true,
     });
 
     $("#logout").on("click", function () {
@@ -169,7 +180,7 @@ $(document).ready(function () {
         return checkEnter(e);
     });
 
-    $("#header_search .nav-tabs a").on("click",function(){
+    $("#header_search .nav-tabs a").on("click", function () {
         var field_index = $(this).parent().index();
         keep_text(field_index);
     });
@@ -222,7 +233,7 @@ $(document).ready(function () {
             const previous_patron = {
                 borrowernumber: escape_str($("#hiddenborrowernumber").val()),
                 name: escape_str($("#hiddenborrowername").val()),
-                card: escape_str($("#hiddenborrowercard").val())
+                card: escape_str($("#hiddenborrowercard").val()),
             };
 
             previous_patrons.unshift(previous_patron);
@@ -302,18 +313,22 @@ $(document).ready(function () {
     });
 
     // add back to top button on each staff page
-    $("body").append('<button id="backtotop" class="btn btn-default" aria-label="' + __("Back to top") + '"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>');
+    $("body").append(
+        '<button id="backtotop" class="btn btn-default" aria-label="' +
+            __("Back to top") +
+            '"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>'
+    );
     $("#backtotop").hide();
-    $(window).scroll(function(){
-        if ( $(window).scrollTop() < 300 ) {
+    $(window).scroll(function () {
+        if ($(window).scrollTop() < 300) {
             $("#backtotop").fadeOut();
         } else {
             $("#backtotop").fadeIn();
         }
     });
-    $("#backtotop").click(function(e) {
+    $("#backtotop").click(function (e) {
         e.preventDefault();
-        $("html,body").animate({scrollTop: 0}, "slow");
+        $("html,body").animate({ scrollTop: 0 }, "slow");
     });
 
     $("body").on("change", "#set-library-branch", function () {
@@ -326,17 +341,24 @@ $(document).ready(function () {
                     $(this).prop("selected", true);
                     $(this).prop("disabled", false);
                     $(this).show();
-                } else if ( $(this).hasClass(selectedBranch) ) {
+                } else if ($(this).hasClass(selectedBranch)) {
                     $("#nodesk").prop("disabled", true); // we have desk, no need for nodesk option
                     $("#nodesk").hide();
                     $(this).prop("disabled", false);
                     $(this).show();
-                    if ( selectedBranch == $(".logged-in-branch-code").html() && $(".logged-in-desk-id").length ) {
-                        $("#set-library-desk_id").val( $(".logged-in-desk-id").html() );
+                    if (
+                        selectedBranch == $(".logged-in-branch-code").html() &&
+                        $(".logged-in-desk-id").length
+                    ) {
+                        $("#set-library-desk_id").val(
+                            $(".logged-in-desk-id").html()
+                        );
                     } else {
                         $("#nodesk").hide();
                         $("#set-library-desk_id").val(
-                            $("#set-library-desk_id option:not([disabled]):first").val()
+                            $(
+                                "#set-library-desk_id option:not([disabled]):first"
+                            ).val()
                         );
                     }
                 } else {
@@ -346,52 +368,69 @@ $(document).ready(function () {
             });
 
         $("#set-library-register_id").val("");
-        $("#set-library-register_id").children().each(function() {
-            // default to no-register
-            if ($(this).is("#noregister")) {
-                $(this).prop("selected", true)
-            } else if ($(this).hasClass(selectedBranch)) {
-                // display branch registers
-                $(this).prop("disabled", false);
-                $(this).show();
-                // default to branch default if there is one
-                if ($(this).hasClass("default")) {
-                    $(this).prop("selected", true)
+        $("#set-library-register_id")
+            .children()
+            .each(function () {
+                // default to no-register
+                if ($(this).is("#noregister")) {
+                    $(this).prop("selected", true);
+                } else if ($(this).hasClass(selectedBranch)) {
+                    // display branch registers
+                    $(this).prop("disabled", false);
+                    $(this).show();
+                    // default to branch default if there is one
+                    if ($(this).hasClass("default")) {
+                        $(this).prop("selected", true);
+                    }
+                } else {
+                    // hide non-branch registers
+                    $(this).hide();
+                    $(this).prop("disabled", true);
                 }
-            } else {
-                // hide non-branch registers
-                $(this).hide();
-                $(this).prop("disabled", true);
-            }
-        });
+            });
     });
 
-    $("body").on("click", "#setlibrary_panel #cancel_set_library", function(e){
-        e.preventDefault();
-        $("#setlibrary_panel").removeClass("setlibrary_panel_open").html("").hide();
-    });
+    $("body").on(
+        "click",
+        "#setlibrary_panel #cancel_set_library",
+        function (e) {
+            e.preventDefault();
+            $("#setlibrary_panel")
+                .removeClass("setlibrary_panel_open")
+                .html("")
+                .hide();
+        }
+    );
 
-    $("#branch_select_cog").on("click", function(e){
+    $("#branch_select_cog").on("click", function (e) {
         e.stopPropagation();
         let setlibrary_panel = $("#setlibrary_panel");
-        if( setlibrary_panel.hasClass("setlibrary_panel_open") ){
-            setlibrary_panel.removeClass("setlibrary_panel_open").html("").hide();
+        if (setlibrary_panel.hasClass("setlibrary_panel_open")) {
+            setlibrary_panel
+                .removeClass("setlibrary_panel_open")
+                .html("")
+                .hide();
         } else {
             setlibrary_panel.addClass("setlibrary_panel_open").show();
-            $("#setlibrary_panel").load( "/cgi-bin/koha/circ/set-library.pl #set-library-form", function(){
-                // setLibraryDeskOptions();
-            });
+            $("#setlibrary_panel").load(
+                "/cgi-bin/koha/circ/set-library.pl #set-library-form",
+                function () {
+                    // setLibraryDeskOptions();
+                }
+            );
         }
     });
 
-    $("#logged-in-dropdown").on('hidden.bs.dropdown', function () {
-        $("#setlibrary_panel").removeClass("setlibrary_panel_open").html("").hide();
+    $("#logged-in-dropdown").on("hidden.bs.dropdown", function () {
+        $("#setlibrary_panel")
+            .removeClass("setlibrary_panel_open")
+            .html("")
+            .hide();
     });
 
-    if ( $('[data-bs-toggle="tooltip"]').length ) {
+    if ($('[data-bs-toggle="tooltip"]').length) {
         $('[data-bs-toggle="tooltip"]').tooltip();
     }
-
 });
 
 function removeLastBorrower() {
@@ -437,7 +476,11 @@ function logOut() {
     localStorage.removeItem("copiedPermissions");
 
     // Remove DataTables states
-    Object.keys(localStorage).forEach(k => {if (k.match(/^DataTables_/)) { localStorage.removeItem(k)}});
+    Object.keys(localStorage).forEach(k => {
+        if (k.match(/^DataTables_/)) {
+            localStorage.removeItem(k);
+        }
+    });
 }
 
 function openHelp() {
@@ -675,8 +718,8 @@ function patron_autocomplete(node, options) {
                 link_to == "circ"
                     ? "/cgi-bin/koha/circ/circulation.pl"
                     : link_to == "reserve"
-                    ? "/cgi-bin/koha/reserve/request.pl"
-                    : "/cgi-bin/koha/members/moremember.pl";
+                      ? "/cgi-bin/koha/reserve/request.pl"
+                      : "/cgi-bin/koha/members/moremember.pl";
             item.link +=
                 (url_params ? "?" + url_params + "&" : "?") +
                 "borrowernumber=" +
@@ -703,11 +746,17 @@ function patron_autocomplete(node, options) {
                     (item.link ? '<a href="' + item.link + '">' : "<a>") +
                     (item.surname ? item.surname.escapeHtml() : "") +
                     ", " +
-                    (item.preferred_name ? item.preferred_name.escapeHtml() : item.firstname ? item.firstname.escapeHtml() : "") +
+                    (item.preferred_name
+                        ? item.preferred_name.escapeHtml()
+                        : item.firstname
+                          ? item.firstname.escapeHtml()
+                          : "") +
                     " " +
                     (item.middle_name ? item.middle_name.escapeHtml() : "") +
                     " " +
-                    (item.other_name ? "(" + item.other_name.escapeHtml() + ")" : "") +
+                    (item.other_name
+                        ? "(" + item.other_name.escapeHtml() + ")"
+                        : "") +
                     cardnumber.escapeHtml() +
                     " " +
                     (item.date_of_birth
@@ -901,13 +950,19 @@ function selectBsTabByHash(tabs_container_id) {
  * @param {string} start - The icon which will be temporarily replaced
  * @param {string} replacement - The icon which will be the temporary replacement
  */
-function toggleBtnIcon( element, start, replacement ){
-    let icon = element.find( "." + start );
-    icon.fadeOut( 1000, function(){
-        $(this).removeClass( start ).addClass( replacement ).fadeIn( 1000, function(){
-            $(this).fadeOut( 1000, function(){
-                $(this).removeClass( replacement ).addClass( start ).fadeIn( 1000 );
+function toggleBtnIcon(element, start, replacement) {
+    let icon = element.find("." + start);
+    icon.fadeOut(1000, function () {
+        $(this)
+            .removeClass(start)
+            .addClass(replacement)
+            .fadeIn(1000, function () {
+                $(this).fadeOut(1000, function () {
+                    $(this)
+                        .removeClass(replacement)
+                        .addClass(start)
+                        .fadeIn(1000);
+                });
             });
-        });
     });
 }

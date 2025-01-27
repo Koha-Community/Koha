@@ -28,7 +28,7 @@ use Koha::Items;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
@@ -64,9 +64,10 @@ subtest 'Test StoreLastBorrower' => sub {
     my $patron_object = $item->last_returned_by();
     is( $patron_object, undef, 'Koha::Item::last_returned_by returned undef' );
 
-    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode},  undef, dt_from_string('2010-10-10') );
+    my ( $returned, undef, undef ) =
+        C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
-    $item = $item->get_from_storage;
+    $item          = $item->get_from_storage;
     $patron_object = $item->last_returned_by();
     is( ref($patron_object), 'Koha::Patron', 'Koha::Item::last_returned_by returned Koha::Patron' );
 
@@ -87,9 +88,10 @@ subtest 'Test StoreLastBorrower' => sub {
         }
     );
 
-    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
+    ( $returned, undef, undef ) =
+        C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
-    $item = $item->get_from_storage;
+    $item          = $item->get_from_storage;
     $patron_object = $item->last_returned_by();
     is( $patron_object->id, $patron->{borrowernumber}, 'Second patron to return item replaces the first' );
 
@@ -101,15 +103,20 @@ subtest 'Test StoreLastBorrower' => sub {
     );
     $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    $item->last_returned_by($patron_object->borrowernumber);
+    $item->last_returned_by( $patron_object->borrowernumber );
     $item = $item->get_from_storage;
     my $patron_object2 = $item->last_returned_by();
-    is( $patron_object->id, $patron_object2->id,
-        'Calling last_returned_by with Borrower object sets last_returned_by to that borrower' );
+    is(
+        $patron_object->id, $patron_object2->id,
+        'Calling last_returned_by with Borrower object sets last_returned_by to that borrower'
+    );
 
     $patron_object->delete;
     $item = $item->get_from_storage;
-    is( $item->last_returned_by, undef, 'last_returned_by should return undef if the last patron to return the item has been deleted' );
+    is(
+        $item->last_returned_by, undef,
+        'last_returned_by should return undef if the last patron to return the item has been deleted'
+    );
 
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '0' );
     $patron = $builder->build(
@@ -128,7 +135,8 @@ subtest 'Test StoreLastBorrower' => sub {
             },
         }
     );
-    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
+    ( $returned, undef, undef ) =
+        C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
     $item = $item->get_from_storage;
     is( $item->last_returned_by, undef, 'Last patron to return item should not be stored if StoreLastBorrower if off' );

@@ -28,16 +28,15 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      GetSubscriptionFrequencies
-      GetSubscriptionFrequency
-      AddSubscriptionFrequency
-      ModSubscriptionFrequency
-      DelSubscriptionFrequency
+        GetSubscriptionFrequencies
+        GetSubscriptionFrequency
+        AddSubscriptionFrequency
+        ModSubscriptionFrequency
+        DelSubscriptionFrequency
 
-      GetSubscriptionsWithFrequency
+        GetSubscriptionsWithFrequency
     );
 }
-
 
 =head1 NAME
 
@@ -58,7 +57,7 @@ gets frequencies restricted on filters
 =cut
 
 sub GetSubscriptionFrequencies {
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM subscription_frequencies
@@ -86,7 +85,7 @@ gets frequency where $frequencyid is the identifier
 sub GetSubscriptionFrequency {
     my ($frequencyid) = @_;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM subscription_frequencies
@@ -133,28 +132,28 @@ Only description is mandatory.
 sub AddSubscriptionFrequency {
     my $frequency = shift;
 
-    unless(ref($frequency) eq 'HASH' && defined $frequency->{'description'} && $frequency->{'description'} ne '') {
+    unless ( ref($frequency) eq 'HASH' && defined $frequency->{'description'} && $frequency->{'description'} ne '' ) {
         return;
     }
 
     my @keys;
     my @values;
     foreach (qw/ description unit issuesperunit unitsperissue expectedissuesayear displayorder /) {
-        if(exists $frequency->{$_}) {
-            push @keys, $_;
+        if ( exists $frequency->{$_} ) {
+            push @keys,   $_;
             push @values, $frequency->{$_};
         }
     }
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "INSERT INTO subscription_frequencies";
-    $query .= '(' . join(',', @keys) . ')';
-    $query .= ' VALUES (' . ('?,' x (scalar(@keys)-1)) . '?)';
+    $query .= '(' . join( ',', @keys ) . ')';
+    $query .= ' VALUES (' . ( '?,' x ( scalar(@keys) - 1 ) ) . '?)';
     my $sth = $dbh->prepare($query);
-    my $rv = $sth->execute(@values);
+    my $rv  = $sth->execute(@values);
 
-    if(defined $rv) {
-        return $dbh->last_insert_id(undef, undef, "subscription_frequencies", undef);
+    if ( defined $rv ) {
+        return $dbh->last_insert_id( undef, undef, "subscription_frequencies", undef );
     }
 
     return $rv;
@@ -197,34 +196,33 @@ Only id is mandatory.
 sub ModSubscriptionFrequency {
     my $frequency = shift;
 
-    unless(
-      ref($frequency) eq 'HASH'
-      && defined $frequency->{'id'} && $frequency->{'id'} > 0
-      && (
-        (defined $frequency->{'description'}
-        && $frequency->{'description'} ne '')
-        || !defined $frequency->{'description'}
-      )
-    ) {
+    unless (
+           ref($frequency) eq 'HASH'
+        && defined $frequency->{'id'}
+        && $frequency->{'id'} > 0
+        && ( ( defined $frequency->{'description'} && $frequency->{'description'} ne '' )
+            || !defined $frequency->{'description'} )
+        )
+    {
         return;
     }
 
     my @keys;
     my @values;
     foreach (qw/ description unit issuesperunit unitsperissue expectedissuesayear displayorder /) {
-        if(exists $frequency->{$_}) {
-            push @keys, $_;
+        if ( exists $frequency->{$_} ) {
+            push @keys,   $_;
             push @values, $frequency->{$_};
         }
     }
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = "UPDATE subscription_frequencies";
-    $query .= ' SET ' . join(' = ?,', @keys) . ' = ?';
+    $query .= ' SET ' . join( ' = ?,', @keys ) . ' = ?';
     $query .= ' WHERE id = ?';
     my $sth = $dbh->prepare($query);
 
-    return $sth->execute(@values, $frequency->{'id'});
+    return $sth->execute( @values, $frequency->{'id'} );
 }
 
 =head2 DelSubscriptionFrequency
@@ -242,7 +240,7 @@ Delete a frequency
 sub DelSubscriptionFrequency {
     my $frequencyid = shift;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         DELETE FROM subscription_frequencies
         WHERE id = ?
@@ -264,7 +262,7 @@ sub GetSubscriptionsWithFrequency {
 
     return unless $frequencyid;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT *
         FROM subscription
@@ -273,8 +271,8 @@ sub GetSubscriptionsWithFrequency {
     };
     my $sth = $dbh->prepare($query);
     my @results;
-    if ($sth->execute($frequencyid)) {
-        @results = @{ $sth->fetchall_arrayref({}) };
+    if ( $sth->execute($frequencyid) ) {
+        @results = @{ $sth->fetchall_arrayref( {} ) };
     }
     return @results;
 }

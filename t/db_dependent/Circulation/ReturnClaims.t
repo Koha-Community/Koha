@@ -61,9 +61,9 @@ $branch = $builder->build( { source => 'Branch' } )->{branchcode};
 subtest 'Test Koha::Checkout::claim_returned, do not mark as returned' => sub {
     plan tests => 7;
 
-    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue',  1 );
     t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{} );
-    my $item   = $builder->build_sample_item;
+    my $item     = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $checkout = AddIssue( $patron, $item->barcode );
 
@@ -74,22 +74,22 @@ subtest 'Test Koha::Checkout::claim_returned, do not mark as returned' => sub {
         }
     );
 
-    is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
-    is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );
-    is( $claim->borrowernumber, $patron->id, "Claim borrowernumber matches" );
-    is( $claim->notes, "Test note", "Claim notes match" );
-    is( $claim->created_by, $patron->id, "Claim created_by matches" );
+    is( $claim->issue_id,       $checkout->id, "Claim issue id matches" );
+    is( $claim->itemnumber,     $item->id,     "Claim itemnumber matches" );
+    is( $claim->borrowernumber, $patron->id,   "Claim borrowernumber matches" );
+    is( $claim->notes,          "Test note",   "Claim notes match" );
+    is( $claim->created_by,     $patron->id,   "Claim created_by matches" );
     ok( $claim->created_on, "Claim created_on is set" );
 
     my $checkout2 = Koha::Checkouts->find( $checkout->id );
-    is( $checkout2->id, $checkout->id, "Item is still checked out to patron")
+    is( $checkout2->id, $checkout->id, "Item is still checked out to patron" );
 };
 
 subtest 'Test Koha::Patronn::return_claims' => sub {
     plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
-    my $item   = $builder->build_sample_item;
+    my $item     = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $checkout = AddIssue( $patron, $item->barcode );
 
@@ -106,18 +106,18 @@ subtest 'Test Koha::Patronn::return_claims' => sub {
 
     my $claim = $claims->next;
 
-    is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
-    is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );
-    is( $claim->borrowernumber, $patron->id, "Claim borrowernumber matches" );
-    is( $claim->notes, "Test note", "Claim notes match" );
-    is( $claim->created_by, $patron->id, "Claim created_by matches" );
+    is( $claim->issue_id,       $checkout->id, "Claim issue id matches" );
+    is( $claim->itemnumber,     $item->id,     "Claim itemnumber matches" );
+    is( $claim->borrowernumber, $patron->id,   "Claim borrowernumber matches" );
+    is( $claim->notes,          "Test note",   "Claim notes match" );
+    is( $claim->created_by,     $patron->id,   "Claim created_by matches" );
     ok( $claim->created_on, "Claim created_on is set" );
 };
 
 subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
     plan tests => 8;
 
-    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue',  1 );
     t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{claim_returned} );
     my $item     = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -130,17 +130,17 @@ subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
         }
     );
 
-    is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
-    is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );
-    is( $claim->borrowernumber, $patron->id, "Claim borrowernumber matches" );
-    is( $claim->notes, "Test note", "Claim notes match" );
-    is( $claim->created_by, $patron->id, "Claim created_by matches" );
+    is( $claim->issue_id,       $checkout->id, "Claim issue id matches" );
+    is( $claim->itemnumber,     $item->id,     "Claim itemnumber matches" );
+    is( $claim->borrowernumber, $patron->id,   "Claim borrowernumber matches" );
+    is( $claim->notes,          "Test note",   "Claim notes match" );
+    is( $claim->created_by,     $patron->id,   "Claim created_by matches" );
     ok( $claim->created_on, "Claim created_on is set" );
 
     my $checkout2 = Koha::Checkouts->find( $checkout->id );
-    is( $checkout2, undef, "Checkout is not longer in the issues table");
+    is( $checkout2, undef, "Checkout is not longer in the issues table" );
     $checkout2 = Koha::Old::Checkouts->find( $checkout->id );
-    is( $checkout2->id, $checkout->id, "Checkout was found in the old_issues table");
+    is( $checkout2->id, $checkout->id, "Checkout was found in the old_issues table" );
 };
 
 subtest 'Test Koha::Checkout::claim_returned, should refund a previous lost fee if refund_lost_fee is set' => sub {

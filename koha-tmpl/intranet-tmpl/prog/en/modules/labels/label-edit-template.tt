@@ -2,23 +2,22 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% FILTER collapse %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
         [% IF( template_id ) %]
             [% tx("Edit label template {template_id}", { template_id = template_id }) | html %]
         [% ELSE %]
             [% t("New label template") | html %]
-        [% END %] &rsaquo;
-        [% t("Templates") | html %] &rsaquo;
-        [% t("Label creator") | html %] &rsaquo;
-        [% t("Cataloging") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
+        [% END %]
+        &rsaquo; [% t("Templates") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="labels_label-edit-template" class="tools labels">
-    [% WRAPPER 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
@@ -43,151 +42,147 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
-                    [% INCLUDE 'labels-toolbar.inc' %]
+[% WRAPPER 'main-container.inc' aside='cat-menu' %]
+    [% INCLUDE 'labels-toolbar.inc' %]
 
-                    [% IF ( template_id ) %]
-                        <h1>Edit label template [% template_id | html %]</h1>
-                    [% ELSE %]
-                        <h1>New label template</h1>
-                    [% END %]
+    [% IF ( template_id ) %]
+        <h1>Edit label template [% template_id | html %]</h1>
+    [% ELSE %]
+        <h1>New label template</h1>
+    [% END %]
 
-                    <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="post">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <fieldset class="rows">
-                                <ol>
-                                    <li>
-                                        <span class="label">Template ID:</span>[% IF ( template_id ) %][% template_id | html %][% ELSE %]N/A[% END %]
-                                    </li>
-                                    <li>
-                                        <label for="template_code">Template code:</label>
-                                        <input type="text" size="30" maxlength="43" name="template_code" id="template_code" value="[% template_code | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="template_desc">Template description:</label>
-                                        <textarea cols="30" rows="3" id="template_desc" name="template_desc">[% template_desc | html %]</textarea>
-                                    </li>
- 									<li>
-                                 <label for="units">Units:</label>
-                                 <select id="units" name="units">
-                                 [% FOREACH unit IN units %]
-                                     <option value="[% unit.type | html %]" [% IF unit.selected %]selected="selected"[% END %]>
-                                     [% SWITCH unit.type %]
-                                     [%   CASE 'POINT' %]
-                                     <span>PostScript points</span>
-                                     [%   CASE 'AGATE' %]
-                                     <span>Agates</span>
-                                     [%   CASE 'INCH' %]
-                                     <span>US Inches</span>
-                                     [%   CASE 'MM' %]
-                                     <span>SI Millimeters</span>
-                                     [%   CASE 'CM' %]
-                                     <span>SI Centimeters</span>
-                                     [% END %]
-                                 </option>
-                                 [% END %]
-                                 </select>
-                             </li>
-                                    <li>
-                                        <label for="page_height">Page height:</label>
-                                        <input type="text" size="4" name="page_height" id="page_height" value="[% page_height | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="page_width">Page width:</label>
-                                        <input type="text" size="4" name="page_width" id="page_width" value="[% page_width | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="label_width">Label width:</label>
-                                        <input type="text" size="4" name="label_width" id="label_width" value="[% label_width | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="label_height">Label height:</label>
-                                        <input type="text" size="4" name="label_height" id="label_height" value="[% label_height | html %]" />
-                                    </li>
-
-                                </ol>
-                            </fieldset>
-                        </div>
-                        <div class="col-md-6">
-                            <fieldset class="rows">
-                                <ol><li>
-                                    <label for="top_margin">Top page margin:</label>
-                                    <input type="text" size="4" name="top_margin" id="top_margin" value="[% top_margin | html %]" />
-                                </li>
-                                <li>
-                                    <label for="left_margin">Left page margin:</label>
-                                    <input type="text" size="4" name="left_margin" id="left_margin" value="[% left_margin | html %]" />
-                                </li>
-                                    <li>
-                                        <label for="top_text_margin">Top text margin:</label>
-                                        <input type="text" size="4" name="top_text_margin" id="top_text_margin" value="[% top_text_margin | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="left_text_margin">Left text margin:</label>
-                                        <input type="text" size="4" name="left_text_margin" id="left_text_margin" value="[% left_text_margin | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="cols">Number of columns:</label>
-                                        <input type="text" size="4" name="cols" id="cols" value="[% cols | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="rows">Number of rows:</label>
-                                        <input type="text" size="4" name="rows" id="rows" value="[% rows | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="col_gap">Gap between columns:</label>
-                                        <input type="text" size="4" name="col_gap" id="col_gap" value="[% col_gap | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="row_gap">Gap between rows:</label>
-                                        <input type="text" size="4" name="row_gap" id="row_gap" value="[% row_gap | html %]" />
-                                    </li>
-
-                                    <li>
-                                        <label for="profile_id">Profile:</label>
-                                        [% IF ( profile_list ) %]
-                                        <select id="profile_id" name="profile_id">
-                                        [% FOREACH profile_lis IN profile_list %]
-<option value="[% profile_lis.profile_id | html %]" [% IF profile_lis.selected %]selected="selected"[% END %]>
-                                        [% profile_lis.printer_name | html %]/[% profile_lis.paper_bin | html %]
-                                        </option>
+    <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset class="rows">
+                    <ol>
+                        <li> <span class="label">Template ID:</span>[% IF ( template_id ) %][% template_id | html %][% ELSE %]N/A[% END %] </li>
+                        <li>
+                            <label for="template_code">Template code:</label>
+                            <input type="text" size="30" maxlength="43" name="template_code" id="template_code" value="[% template_code | html %]" />
+                        </li>
+                        <li>
+                            <label for="template_desc">Template description:</label>
+                            <textarea cols="30" rows="3" id="template_desc" name="template_desc">[% template_desc | html %]</textarea>
+                        </li>
+                        <li>
+                            <label for="units">Units:</label>
+                            <select id="units" name="units">
+                                [% FOREACH unit IN units %]
+                                    <option value="[% unit.type | html %]" [% IF unit.selected %]selected="selected"[% END %]>
+                                        [% SWITCH unit.type %]
+                                        [% CASE 'POINT' %]
+                                            <span>PostScript points</span>
+                                        [% CASE 'AGATE' %]
+                                            <span>Agates</span>
+                                        [% CASE 'INCH' %]
+                                            <span>US Inches</span>
+                                        [% CASE 'MM' %]
+                                            <span>SI Millimeters</span>
+                                        [% CASE 'CM' %]
+                                            <span>SI Centimeters</span>
                                         [% END %]
-                                        </select>
-                                        [% END %]
-                                        [% IF ( profile_list.size == 1 ) %]
-                                        <br>
-                                        <a href="/cgi-bin/koha/labels/label-edit-profile.pl?op=new">Make a new printer profile.</a>
-                                        [% END %]
-                                    </li>
-                                </ol>
-                            </fieldset>
-                        </div>
-                    </div>
-                        <fieldset class="action">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-save" />
-                            [% IF ( template_id ) %]
-                            <input type="hidden" name="template_id" value="[% template_id | html %]" />
+                                    </option>
+                                [% END %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="page_height">Page height:</label>
+                            <input type="text" size="4" name="page_height" id="page_height" value="[% page_height | html %]" />
+                        </li>
+                        <li>
+                            <label for="page_width">Page width:</label>
+                            <input type="text" size="4" name="page_width" id="page_width" value="[% page_width | html %]" />
+                        </li>
+                        <li>
+                            <label for="label_width">Label width:</label>
+                            <input type="text" size="4" name="label_width" id="label_width" value="[% label_width | html %]" />
+                        </li>
+                        <li>
+                            <label for="label_height">Label height:</label>
+                            <input type="text" size="4" name="label_height" id="label_height" value="[% label_height | html %]" />
+                        </li>
+                    </ol>
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+                <fieldset class="rows">
+                    <ol
+                        ><li>
+                            <label for="top_margin">Top page margin:</label>
+                            <input type="text" size="4" name="top_margin" id="top_margin" value="[% top_margin | html %]" />
+                        </li>
+                        <li>
+                            <label for="left_margin">Left page margin:</label>
+                            <input type="text" size="4" name="left_margin" id="left_margin" value="[% left_margin | html %]" />
+                        </li>
+                        <li>
+                            <label for="top_text_margin">Top text margin:</label>
+                            <input type="text" size="4" name="top_text_margin" id="top_text_margin" value="[% top_text_margin | html %]" />
+                        </li>
+                        <li>
+                            <label for="left_text_margin">Left text margin:</label>
+                            <input type="text" size="4" name="left_text_margin" id="left_text_margin" value="[% left_text_margin | html %]" />
+                        </li>
+                        <li>
+                            <label for="cols">Number of columns:</label>
+                            <input type="text" size="4" name="cols" id="cols" value="[% cols | html %]" />
+                        </li>
+                        <li>
+                            <label for="rows">Number of rows:</label>
+                            <input type="text" size="4" name="rows" id="rows" value="[% rows | html %]" />
+                        </li>
+                        <li>
+                            <label for="col_gap">Gap between columns:</label>
+                            <input type="text" size="4" name="col_gap" id="col_gap" value="[% col_gap | html %]" />
+                        </li>
+                        <li>
+                            <label for="row_gap">Gap between rows:</label>
+                            <input type="text" size="4" name="row_gap" id="row_gap" value="[% row_gap | html %]" />
+                        </li>
+
+                        <li>
+                            <label for="profile_id">Profile:</label>
+                            [% IF ( profile_list ) %]
+                                <select id="profile_id" name="profile_id">
+                                    [% FOREACH profile_lis IN profile_list %]
+                                        <option value="[% profile_lis.profile_id | html %]" [% IF profile_lis.selected %]selected="selected"[% END %]> [% profile_lis.printer_name | html %]/[% profile_lis.paper_bin | html %] </option>
+                                    [% END %]
+                                </select>
                             [% END %]
-                            <input type="submit" class="btn btn-primary" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
-                        </fieldset>
-                </form>
+                            [% IF ( profile_list.size == 1 ) %]
+                                <br />
+                                <a href="/cgi-bin/koha/labels/label-edit-profile.pl?op=new">Make a new printer profile.</a>
+                            [% END %]
+                        </li>
+                    </ol>
+                </fieldset>
+            </div>
+        </div>
+        <fieldset class="action">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-save" />
+            [% IF ( template_id ) %]
+                <input type="hidden" name="template_id" value="[% template_id | html %]" />
+            [% END %]
+            <input type="submit" class="btn btn-primary" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
+        </fieldset>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
             var selectedUnit = $("#units option:selected").val();
             var unitfields = $("#page_height,#page_width,#label_width,#label_height,#top_margin,#left_margin,#top_text_margin,#left_text_margin,#col_gap,#row_gap");
-            $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
-            $("#units").change(function(){
+            $(unitfields).after('<span class="unit">' + getUnit(selectedUnit) + "</span>");
+            $("#units").change(function () {
                 $(".unit").html(getUnit($(this).val()));
             });
         });
-        function getUnit(unit){
-            switch(unit){
+        function getUnit(unit) {
+            switch (unit) {
                 case "POINT":
                     var unit = " pt";
                     break;

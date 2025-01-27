@@ -32,38 +32,34 @@ Koha::Auth::Permissions - Class for setting up CAN_user_* permissions
 =cut
 
 sub get_authz_from_flags {
-    my ($class,$args) = @_;
+    my ( $class, $args ) = @_;
     my $flags = $args->{flags};
     my $authz;
     my $all_perms = C4::Auth::get_all_subpermissions();
-    if ($flags && $all_perms){
+    if ( $flags && $all_perms ) {
         foreach my $module ( keys %$all_perms ) {
-            if (
-                ( $flags->{superlibrarian} == 1 ) ||
-                ( defined($flags->{$module}) && $flags->{$module} == 1 )
-            ) {
+            if (   ( $flags->{superlibrarian} == 1 )
+                || ( defined( $flags->{$module} ) && $flags->{$module} == 1 ) )
+            {
                 foreach my $subperm ( keys %{ $all_perms->{$module} } ) {
-                    $authz->{ "CAN_user_${module}_${subperm}" } = 1;
+                    $authz->{"CAN_user_${module}_${subperm}"} = 1;
                 }
-            }
-            elsif ( ref( $flags->{$module} ) ){
+            } elsif ( ref( $flags->{$module} ) ) {
                 foreach my $subperm ( keys %{ $flags->{$module} } ) {
-                    $authz->{ "CAN_user_${module}_${subperm}" } = 1;
+                    $authz->{"CAN_user_${module}_${subperm}"} = 1;
                 }
             }
         }
         foreach my $module ( keys %$flags ) {
-            if (
-                ( $flags->{superlibrarian} == 1 ) ||
-                ( $flags->{$module} == 1 ) ||
-                ( ref( $flags->{$module} ) )
-            ) {
-                $authz->{ "CAN_user_$module" } = 1;
+            if (   ( $flags->{superlibrarian} == 1 )
+                || ( $flags->{$module} == 1 )
+                || ( ref( $flags->{$module} ) ) )
+            {
+                $authz->{"CAN_user_$module"} = 1;
             }
         }
     }
     return $authz;
 }
-
 
 1;

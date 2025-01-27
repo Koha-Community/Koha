@@ -15,7 +15,7 @@
 
         [% IF report.not_deleted_itemnumbers.size %]
             <div class="alert alert-warning">
-                [% report.not_deleted_itemnumbers.size | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN report.not_deleted_itemnumbers %][% not_deleted_itemnumber | html %] [% END %]
+                [% report.not_deleted_itemnumbers.size | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN report.not_deleted_itemnumbers %][% not_deleted_itemnumber | html %][% END %]
             </div>
         [% END %]
 
@@ -39,18 +39,25 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% SWITCH m.code %]
-                [% CASE 'item_not_deleted' %]
-                    [% item_link = BLOCK %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% m.biblionumber | uri %]&itemnumber=[% m.itemnumber | uri %]">[% m.barcode | html %]</a>[% END %]
-                    <span>Item with barcode [% item_link | $raw | $KohaSpan%] cannot be deleted:</span>
-                    [% SWITCH m.reason %]
-                        [% CASE "book_on_loan" %]<span>Item is checked out</span>
-                        [% CASE "not_same_branch" %]<span>Item does not belong to your library</span>
-                        [% CASE "book_reserved" %]<span>Item has a waiting hold</span>
-                        [% CASE "linked_analytics" %]<span>Item has linked analytics</span>
-                        [% CASE "last_item_for_hold" %]<span>Last item for bibliographic record with biblio-level hold on it</span>
-                        [% CASE %]<span>Unknown reason '[% m.reason | html %]'</span>
-                    [% END %]
-                [% CASE %]<span>Unknown message '[% m.code | html %]'</span>
+            [% CASE 'item_not_deleted' %]
+                [% item_link = BLOCK %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% m.biblionumber | uri %]&itemnumber=[% m.itemnumber | uri %]">[% m.barcode | html %]</a>[% END %]
+                <span>Item with barcode [% item_link | $raw | $KohaSpan %] cannot be deleted:</span>
+                [% SWITCH m.reason %]
+                [% CASE "book_on_loan" %]
+                    <span>Item is checked out</span>
+                [% CASE "not_same_branch" %]
+                    <span>Item does not belong to your library</span>
+                [% CASE "book_reserved" %]
+                    <span>Item has a waiting hold</span>
+                [% CASE "linked_analytics" %]
+                    <span>Item has linked analytics</span>
+                [% CASE "last_item_for_hold" %]
+                    <span>Last item for bibliographic record with biblio-level hold on it</span>
+                [% CASE %]
+                    <span>Unknown reason '[% m.reason | html %]'</span>
+                [% END %]
+            [% CASE %]
+                <span>Unknown message '[% m.code | html %]'</span>
             [% END %]
         </div>
     [% END %]

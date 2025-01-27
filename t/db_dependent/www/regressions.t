@@ -30,11 +30,10 @@ use Koha::Caches;
 
 use MARC::Field;
 
-my $intranet =
-  $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseURL");
-my $opac = $ENV{KOHA_OPAC_URL} || C4::Context->preference("OPACBaseURL");
+my $intranet = $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseURL");
+my $opac     = $ENV{KOHA_OPAC_URL}     || C4::Context->preference("OPACBaseURL");
 
-my $context = C4::Context->new();
+my $context   = C4::Context->new();
 my $db_name   = $context->config("database");
 my $db_host   = $context->config("hostname");
 my $db_port   = $context->config("port") || '';
@@ -56,90 +55,63 @@ subtest 'open redirection vulnerabilities in tracklinks' => sub {
     # Incorrect URI at Biblio level
     $biblio = $builder->build_sample_biblio();
     my $biblionumber2 = $biblio->biblionumber;
-    my $record = $biblio->metadata->record;
-    my $new856 = MARC::Field->new( '856', '', '', u => "www.bing.com" );
+    my $record        = $biblio->metadata->record;
+    my $new856        = MARC::Field->new( '856', '', '', u => "www.bing.com" );
     $record->insert_fields_ordered($new856);
     C4::Biblio::ModBiblio( $record, $biblionumber2 );
 
     # URI at Biblio level
     $biblio = $builder->build_sample_biblio();
     my $biblionumber3 = $biblio->biblionumber;
-    $record        = $biblio->metadata->record;
+    $record = $biblio->metadata->record;
     $new856 = MARC::Field->new( '856', '', '', u => "http://www.google.com" );
     $record->insert_fields_ordered($new856);
     C4::Biblio::ModBiblio( $record, $biblionumber3 );
 
     # URI at Item level
-    my $item = $builder->build_sample_item( { uri => 'http://www.google.com' } );
+    my $item        = $builder->build_sample_item( { uri => 'http://www.google.com' } );
     my $itemnumber1 = $item->itemnumber;
 
     # Incorrect URI at Item level
     $item = $builder->build_sample_item( { uri => 'www.bing.com ' } );
     my $itemnumber2 = $item->itemnumber;
 
-    my $no_biblionumber =
-      '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com';
-    my $bad_biblionumber1 =
-      '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&biblionumber='
-      . $biblionumber1;
-    my $bad_biblionumber2 =
-      '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&biblionumber='
-      . $biblionumber2;
-    my $good_biblionumber =
-      '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&biblionumber='
-      . $biblionumber3;
-    my $bad_itemnumber =
-      '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&itemnumber='
-      . $itemnumber2;
-    my $good_itemnumber =
-      '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&itemnumber='
-      . $itemnumber1;
+    my $no_biblionumber   = '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com';
+    my $bad_biblionumber1 = '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&biblionumber=' . $biblionumber1;
+    my $bad_biblionumber2 = '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&biblionumber=' . $biblionumber2;
+    my $good_biblionumber = '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&biblionumber=' . $biblionumber3;
+    my $bad_itemnumber    = '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&itemnumber=' . $itemnumber2;
+    my $good_itemnumber   = '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&itemnumber=' . $itemnumber1;
 
     Koha::Caches->flush_L1_caches;
+
     # Don't Track
     C4::Context->set_preference( 'TrackClicks', '' );
-    $t->get_ok( $opac . $no_biblionumber )
-      ->status_is( 404, "404 for no biblionumber" );
-    $t->get_ok( $opac . $bad_biblionumber1 )
-      ->status_is( 404, "404 for biblionumber containing no URI - pref off" );
+    $t->get_ok( $opac . $no_biblionumber )->status_is( 404, "404 for no biblionumber" );
+    $t->get_ok( $opac . $bad_biblionumber1 )->status_is( 404, "404 for biblionumber containing no URI - pref off" );
     $t->get_ok( $opac . $bad_biblionumber2 )
-      ->status_is( 404, "404 for biblionumber containing different URI - pref off" );
-    $t->get_ok( $opac . $good_biblionumber )
-      ->status_is( 404, "404 for biblionumber with matching URI - pref off" );
-    $t->get_ok( $opac . $bad_itemnumber )
-      ->status_is( 404, "404 for itemnumber containing different URI- pref off" );
-    $t->get_ok( $opac . $good_itemnumber )
-      ->status_is( 404, "404 for itemnumber with matching URI - pref off" );
+        ->status_is( 404, "404 for biblionumber containing different URI - pref off" );
+    $t->get_ok( $opac . $good_biblionumber )->status_is( 404, "404 for biblionumber with matching URI - pref off" );
+    $t->get_ok( $opac . $bad_itemnumber )->status_is( 404, "404 for itemnumber containing different URI- pref off" );
+    $t->get_ok( $opac . $good_itemnumber )->status_is( 404, "404 for itemnumber with matching URI - pref off" );
 
     # Track
     C4::Context->set_preference( 'TrackClicks', 'track' );
-    $t->get_ok( $opac . $no_biblionumber )
-      ->status_is( 404, "404 for no biblionumber" );
-    $t->get_ok( $opac . $bad_biblionumber1 )
-      ->status_is( 404, "404 for biblionumber containing no URI" );
-    $t->get_ok( $opac . $bad_biblionumber2 )
-      ->status_is( 404, "404 for biblionumber containing different URI" );
-    $t->get_ok( $opac . $good_biblionumber )
-      ->status_is( 302, "302 for biblionumber with matching URI" );
-    $t->get_ok( $opac . $bad_itemnumber )
-      ->status_is( 404, "404 for itemnumber containing different URI" );
-    $t->get_ok( $opac . $good_itemnumber )
-      ->status_is( 302, "302 for itemnumber with matching URI" );
+    $t->get_ok( $opac . $no_biblionumber )->status_is( 404, "404 for no biblionumber" );
+    $t->get_ok( $opac . $bad_biblionumber1 )->status_is( 404, "404 for biblionumber containing no URI" );
+    $t->get_ok( $opac . $bad_biblionumber2 )->status_is( 404, "404 for biblionumber containing different URI" );
+    $t->get_ok( $opac . $good_biblionumber )->status_is( 302, "302 for biblionumber with matching URI" );
+    $t->get_ok( $opac . $bad_itemnumber )->status_is( 404, "404 for itemnumber containing different URI" );
+    $t->get_ok( $opac . $good_itemnumber )->status_is( 302, "302 for itemnumber with matching URI" );
 
     # Track Anonymous
     C4::Context->set_preference( 'TrackClicks', 'anonymous' );
-    $t->get_ok( $opac . $no_biblionumber )
-      ->status_is( 404, "404 for no biblionumber" );
-    $t->get_ok( $opac . $bad_biblionumber1 )
-      ->status_is( 404, "404 for biblionumber containing no URI" );
-    $t->get_ok( $opac . $bad_biblionumber2 )
-      ->status_is( 404, "404 for biblionumber containing different URI" );
-    $t->get_ok( $opac . $good_biblionumber )
-      ->status_is( 302, "302 for biblionumber with matching URI" );
-    $t->get_ok( $opac . $bad_itemnumber )
-      ->status_is( 404, "404 for itemnumber containing different URI" );
-    $t->get_ok( $opac . $good_itemnumber )
-      ->status_is( 302, "302 for itemnumber with matching URI" );
+    $t->get_ok( $opac . $no_biblionumber )->status_is( 404, "404 for no biblionumber" );
+    $t->get_ok( $opac . $bad_biblionumber1 )->status_is( 404, "404 for biblionumber containing no URI" );
+    $t->get_ok( $opac . $bad_biblionumber2 )->status_is( 404, "404 for biblionumber containing different URI" );
+    $t->get_ok( $opac . $good_biblionumber )->status_is( 302, "302 for biblionumber with matching URI" );
+    $t->get_ok( $opac . $bad_itemnumber )->status_is( 404, "404 for itemnumber containing different URI" );
+    $t->get_ok( $opac . $good_itemnumber )->status_is( 302, "302 for itemnumber with matching URI" );
 };
 
 `mysql -u $db_user --password="$db_passwd" -h $db_host -P $db_port --database="$db_name" < dumpfile.sql`;

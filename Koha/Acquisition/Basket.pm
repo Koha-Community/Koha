@@ -48,7 +48,7 @@ Returns the vendor
 sub bookseller {
     my ($self) = @_;
     my $bookseller_rs = $self->_result->booksellerid;
-    return Koha::Acquisition::Bookseller->_new_from_dbic( $bookseller_rs );
+    return Koha::Acquisition::Bookseller->_new_from_dbic($bookseller_rs);
 }
 
 =head3 creator
@@ -61,9 +61,9 @@ Returns the I<Koha::Patron> for the basket creator.
 
 sub creator {
     my ($self) = @_;
-    my $borrowernumber = $self->authorisedby; # FIXME missing FK here
+    my $borrowernumber = $self->authorisedby;    # FIXME missing FK here
     return unless $borrowernumber;
-    return Koha::Patrons->find( $borrowernumber );
+    return Koha::Patrons->find($borrowernumber);
 }
 
 =head3 basket_group
@@ -77,7 +77,7 @@ sub basket_group {
 
     my $basket_group_rs = $self->_result->basket_group;
     return unless $basket_group_rs;
-    return Koha::Acquisition::BasketGroup->_new_from_dbic( $basket_group_rs );
+    return Koha::Acquisition::BasketGroup->_new_from_dbic($basket_group_rs);
 }
 
 =head3 orders
@@ -93,7 +93,7 @@ sub orders {
     my ($self) = @_;
 
     my $orders_rs = $self->_result->orders;
-    return Koha::Acquisition::Orders->_new_from_dbic( $orders_rs );
+    return Koha::Acquisition::Orders->_new_from_dbic($orders_rs);
 }
 
 =head3 edi_order
@@ -127,7 +127,7 @@ Returns C<create_items> for this basket, falling back to C<AcqCreateItem> if uns
 =cut
 
 sub effective_create_items {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->create_items || C4::Context->preference('AcqCreateItem');
 }
@@ -145,9 +145,9 @@ Return implicit undef if the basket is not closed, or the vendor does not have a
 =cut
 
 sub estimated_delivery_date {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return unless $self->closedate and $self->bookseller->deliverytime;
-    return dt_from_string($self->closedate)->add( days => $self->bookseller->deliverytime);
+    return dt_from_string( $self->closedate )->add( days => $self->bookseller->deliverytime );
 }
 
 =head3 late_since_days
@@ -161,9 +161,9 @@ Return implicit undef if the basket is not closed.
 =cut
 
 sub late_since_days {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return unless $self->closedate;
-    return dt_from_string->delta_days(dt_from_string($self->closedate))->delta_days();
+    return dt_from_string->delta_days( dt_from_string( $self->closedate ) )->delta_days();
 }
 
 =head3 authorizer
@@ -176,9 +176,10 @@ Returns the patron who authorized/created this basket.
 
 sub authorizer {
     my ($self) = @_;
+
     # FIXME We should use a DBIC rs, but the FK is missing
     return unless $self->authorisedby;
-    return scalar Koha::Patrons->find($self->authorisedby);
+    return scalar Koha::Patrons->find( $self->authorisedby );
 }
 
 =head3 is_closed
@@ -192,7 +193,7 @@ Returns a boolean value representing if the basket is closed.
 sub is_closed {
     my ($self) = @_;
 
-    return ($self->closedate) ? 1 : 0;
+    return ( $self->closedate ) ? 1 : 0;
 }
 
 =head3 close
@@ -214,20 +215,18 @@ sub close {
 
     $self->_result->result_source->schema->txn_do(
         sub {
-            my $open_orders = $self->orders->search(
-                {
-                    orderstatus => { not_in => [ 'complete', 'cancelled' ] }
-                }
-            );
+            my $open_orders = $self->orders->search( { orderstatus => { not_in => [ 'complete', 'cancelled' ] } } );
+
             # Mark open orders as ordered
-            $open_orders->update({ orderstatus => 'ordered' }, { no_triggers => 1 });
+            $open_orders->update( { orderstatus => 'ordered' }, { no_triggers => 1 } );
+
             # set as closed
-            $self->set({ closedate => \'NOW()' })->store;
+            $self->set( { closedate => \'NOW()' } )->store;
         }
     );
 
     # Log the closure
-    if (C4::Context->preference("AcquisitionLog")) {
+    if ( C4::Context->preference("AcquisitionLog") ) {
         logaction(
             'ACQUISITIONS',
             'CLOSE_BASKET',
@@ -250,12 +249,13 @@ suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    my $json_basket = $self->SUPER::to_api( $params );
+    my $json_basket = $self->SUPER::to_api($params);
     return unless $json_basket;
 
-    $json_basket->{closed} = ( $self->closedate )
-                                    ? Mojo::JSON->true
-                                    : Mojo::JSON->false;
+    $json_basket->{closed} =
+        ( $self->closedate )
+        ? Mojo::JSON->true
+        : Mojo::JSON->false;
 
     return $json_basket;
 }

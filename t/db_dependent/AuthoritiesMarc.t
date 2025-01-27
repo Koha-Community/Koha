@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!  
+# This Koha test module is a stub!
 # Add more tests here!!!
 
 use Modern::Perl;
@@ -17,18 +17,27 @@ use Koha::Database;
 use Koha::Authority::Types;
 
 BEGIN {
-        use_ok('C4::AuthoritiesMarc', qw( GetHeaderAuthority AddAuthority AddAuthorityTrees GetAuthority BuildAuthHierarchies GenerateHierarchy BuildSummary DelAuthority CompareFieldWithAuthority ModAuthority merge ));
+    use_ok(
+        'C4::AuthoritiesMarc',
+        qw( GetHeaderAuthority AddAuthority AddAuthorityTrees GetAuthority BuildAuthHierarchies GenerateHierarchy BuildSummary DelAuthority CompareFieldWithAuthority ModAuthority merge )
+    );
 }
 
 # We are now going to be testing the authorities hierarchy code, and
 # therefore need to pretend that we have consistent data in our database
 my $module = Test::MockModule->new('C4::AuthoritiesMarc');
-$module->mock('GetHeaderAuthority', sub {
-    return {'authtrees' => ''};
-});
-$module->mock('AddAuthorityTrees', sub {
-    return;
-});
+$module->mock(
+    'GetHeaderAuthority',
+    sub {
+        return { 'authtrees' => '' };
+    }
+);
+$module->mock(
+    'AddAuthorityTrees',
+    sub {
+        return;
+    }
+);
 $module->mock(
     'GetAuthority',
     sub {
@@ -71,69 +80,86 @@ $module->mock(
     }
 );
 
-
-my $schema  = Koha::Database->new->schema;
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
+my $dbh     = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 
-t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 
 # Authority type GEOGR_NAME is hardcoded here
-if( ! Koha::Authority::Types->find('GEOGR_NAME') ) {
-    $builder->build({ source => 'AuthType', value => { authtypecode => 'GEOGR_NAME' }});
-};
+if ( !Koha::Authority::Types->find('GEOGR_NAME') ) {
+    $builder->build( { source => 'AuthType', value => { authtypecode => 'GEOGR_NAME' } } );
+}
 
-is(BuildAuthHierarchies(3, 1), '1,2,3', "Built linked authtrees hierarchy string");
+is( BuildAuthHierarchies( 3, 1 ), '1,2,3', "Built linked authtrees hierarchy string" );
 
-my $expectedhierarchy = [ [ {
-        'authid' => '1',
-        'value' => 'United States',
-        'class' => 'child0',
-        'children' => [ {
-            'authid' => '2',
-            'value' => 'New York (State)',
-            'class' => 'child1',
-            'children' => [ {
-                'authid' => '3',
-                'current_value' => 1,
-                'value' => 'New York (City)',
-                'class' => 'child2',
-                'children' => [],
-                'parents' => [ {
-                    'authid' => '2',
-                    'value' => 'New York (State)'
-                } ]
-            } ],
-            'parents' => [ {
-                'authid' => '1',
-                'value' => 'United States'
-            } ]
-        } ],
-        'parents' => []
-} ] ];
+my $expectedhierarchy = [
+    [
+        {
+            'authid'   => '1',
+            'value'    => 'United States',
+            'class'    => 'child0',
+            'children' => [
+                {
+                    'authid'   => '2',
+                    'value'    => 'New York (State)',
+                    'class'    => 'child1',
+                    'children' => [
+                        {
+                            'authid'        => '3',
+                            'current_value' => 1,
+                            'value'         => 'New York (City)',
+                            'class'         => 'child2',
+                            'children'      => [],
+                            'parents'       => [
+                                {
+                                    'authid' => '2',
+                                    'value'  => 'New York (State)'
+                                }
+                            ]
+                        }
+                    ],
+                    'parents' => [
+                        {
+                            'authid' => '1',
+                            'value'  => 'United States'
+                        }
+                    ]
+                }
+            ],
+            'parents' => []
+        }
+    ]
+];
 
-is_deeply(GenerateHierarchy(3), $expectedhierarchy, "Generated hierarchy data structure for linked hierarchy");
+is_deeply( GenerateHierarchy(3), $expectedhierarchy, "Generated hierarchy data structure for linked hierarchy" );
 
-is(BuildAuthHierarchies(4, 1), '4', "Built unlinked authtrees hierarchy string");
-$expectedhierarchy = [ [ {
-    'authid' => '4',
-    'current_value' => 1,
-    'value' => 'New York (City)',
-    'class' => 'child0',
-    'children' => [],
-    'parents' => []
-} ] ];
-is_deeply(GenerateHierarchy(4), $expectedhierarchy, "Generated hierarchy data structure for unlinked hierarchy");
+is( BuildAuthHierarchies( 4, 1 ), '4', "Built unlinked authtrees hierarchy string" );
+$expectedhierarchy = [
+    [
+        {
+            'authid'        => '4',
+            'current_value' => 1,
+            'value'         => 'New York (City)',
+            'class'         => 'child0',
+            'children'      => [],
+            'parents'       => []
+        }
+    ]
+];
+is_deeply( GenerateHierarchy(4), $expectedhierarchy, "Generated hierarchy data structure for unlinked hierarchy" );
 
 # set up auth_types for next tests
 $dbh->do('DELETE FROM auth_types');
-$dbh->do(q{
+$dbh->do(
+    q{
     INSERT INTO auth_types (authtypecode, authtypetext, auth_tag_to_report, summary)
     VALUES ('GEOGR_NAME', 'Geographic Name', '151', 'Geographic Name')
-});
+}
+);
 
-t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 my $expected_marc21_summary = {
     'authorized' => [
         {
@@ -181,17 +207,17 @@ is_deeply(
 );
 
 my $marc21_subdiv = MARC::Record->new();
-$marc21_subdiv->add_fields(
-    [ '181', ' ', ' ', x => 'Political aspects' ]
-);
-warning_is { BuildSummary($marc21_subdiv, 99999, 'GEN_SUBDIV') } [],
+$marc21_subdiv->add_fields( [ '181', ' ', ' ', x => 'Political aspects' ] );
+warning_is { BuildSummary( $marc21_subdiv, 99999, 'GEN_SUBDIV' ) } [],
     'BuildSummary does not generate warning if main heading subfield not present';
 
-t::lib::Mocks::mock_preference('marcflavour', 'UNIMARC');
-$dbh->do(q{
+t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+$dbh->do(
+    q{
     INSERT INTO auth_types (authtypecode, authtypetext, auth_tag_to_report, summary)
     VALUES ('NP', 'Auteur', '200', '[200a][, 200b][ 200d][ ; 200c][ (200f)]')
-});
+}
+);
 $dbh->do(
     q{
     INSERT INTO marc_subfield_structure (frameworkcode,authtypecode,tagfield)
@@ -201,9 +227,9 @@ $dbh->do(
 
 my $unimarc_name_auth = MARC::Record->new();
 $unimarc_name_auth->add_fields(
-    ['100', ' ', ' ',  a => '20121025              frey50       '],
-    ['200', ' ', ' ',  a => 'Fossey', b => 'Brigitte' ],
-    ['152', ' ', ' ',  a => 'NP'],
+    [ '100', ' ', ' ', a => '20121025              frey50       ' ],
+    [ '200', ' ', ' ', a => 'Fossey', b => 'Brigitte' ],
+    [ '152', ' ', ' ', a => 'NP' ],
 );
 my $expected_unimarc_name_summary = {
     'authorized' => [
@@ -226,7 +252,7 @@ my $expected_unimarc_name_summary = {
 };
 
 is_deeply(
-    BuildSummary($unimarc_name_auth, 99999, 'NP'),
+    BuildSummary( $unimarc_name_auth, 99999, 'NP' ),
     $expected_unimarc_name_summary,
     'test BuildSummary for UNIMARC'
 );
@@ -282,21 +308,27 @@ subtest 'AddAuthority should create heading field with display form' => sub {
 subtest 'CompareFieldWithAuthority tests' => sub {
     plan tests => 3;
 
-    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 
-    $builder->build({ source => 'AuthType', value => { authtypecode => 'PERSO_NAME' }});
+    $builder->build( { source => 'AuthType', value => { authtypecode => 'PERSO_NAME' } } );
 
-    my $field = MARC::Field->new('100', 0, 0, a => 'Lastname, Firstname', b => 'b', c => 'c');
+    my $field = MARC::Field->new( '100', 0, 0, a => 'Lastname, Firstname', b => 'b', c => 'c' );
 
-    ok(C4::AuthoritiesMarc::CompareFieldWithAuthority({'field' => $field, 'authid' => 5}), 'Authority matches');
+    ok( C4::AuthoritiesMarc::CompareFieldWithAuthority( { 'field' => $field, 'authid' => 5 } ), 'Authority matches' );
 
-    $field->add_subfields(i => 'X');
+    $field->add_subfields( i => 'X' );
 
-    ok(C4::AuthoritiesMarc::CompareFieldWithAuthority({'field' => $field, 'authid' => 5}), 'Compare ignores unlisted subfields');
+    ok(
+        C4::AuthoritiesMarc::CompareFieldWithAuthority( { 'field' => $field, 'authid' => 5 } ),
+        'Compare ignores unlisted subfields'
+    );
 
-    $field->add_subfields(d => 'd');
+    $field->add_subfields( d => 'd' );
 
-    ok(!C4::AuthoritiesMarc::CompareFieldWithAuthority({'field' => $field, 'authid' => 5}), 'Authority does not match');
+    ok(
+        !C4::AuthoritiesMarc::CompareFieldWithAuthority( { 'field' => $field, 'authid' => 5 } ),
+        'Authority does not match'
+    );
 };
 
 $schema->storage->txn_rollback;
@@ -310,25 +342,23 @@ subtest 'ModAuthority() tests' => sub {
     $schema->storage->txn_begin;
 
     my $auth_type = 'GEOGR_NAME';
-    my $record  = MARC::Record->new;
+    my $record    = MARC::Record->new;
     $record->add_fields(
-            [ '001', '1' ],
-            [ '151', ' ', ' ', a => 'United States' ]
-            );
-;
+        [ '001', '1' ],
+        [ '151', ' ', ' ', a => 'United States' ]
+    );
+
     my $auth_id = AddAuthority( $record, undef, $auth_type );
 
     my $mocked_authorities_marc = Test::MockModule->new('C4::AuthoritiesMarc');
     $mocked_authorities_marc->mock( 'merge', sub { warn 'merge called'; } );
 
-    warning_is
-        { ModAuthority( $auth_id, $record, $auth_type ); }
-        'merge called',
+    warning_is { ModAuthority( $auth_id, $record, $auth_type ); }
+    'merge called',
         'No param, merge called';
 
-    warning_is
-        { ModAuthority( $auth_id, $record, $auth_type, { skip_merge => 1 } ); }
-        undef,
+    warning_is { ModAuthority( $auth_id, $record, $auth_type, { skip_merge => 1 } ); }
+    undef,
         'skip_merge passed, merge not called';
 
     $schema->storage->txn_rollback;
@@ -341,27 +371,25 @@ subtest 'DelAuthority() tests' => sub {
     $schema->storage->txn_begin;
 
     my $auth_type = 'GEOGR_NAME';
-    my $record  = MARC::Record->new;
+    my $record    = MARC::Record->new;
     $record->add_fields(
-            [ '001', '1' ],
-            [ '151', ' ', ' ', a => 'United States' ]
-            );
-;
+        [ '001', '1' ],
+        [ '151', ' ', ' ', a => 'United States' ]
+    );
+
     my $auth_id = AddAuthority( $record, undef, $auth_type );
 
     my $mocked_authorities_marc = Test::MockModule->new('C4::AuthoritiesMarc');
     $mocked_authorities_marc->mock( 'merge', sub { warn 'merge called'; } );
 
-    warning_is
-        { DelAuthority({ authid => $auth_id }); }
-        'merge called',
+    warning_is { DelAuthority( { authid => $auth_id } ); }
+    'merge called',
         'No param, merge called';
 
     $auth_id = AddAuthority( $record, undef, $auth_type );
 
-    warning_is
-        { DelAuthority({ authid => $auth_id, skip_merge => 1 }); }
-        undef,
+    warning_is { DelAuthority( { authid => $auth_id, skip_merge => 1 } ); }
+    undef,
         'skip_merge passed, merge not called';
 
     $schema->storage->txn_rollback;

@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 =head1 NAME
 
 addbybiblionumber.pl
@@ -58,9 +57,9 @@ addbybiblionumber.pl
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI        qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 
 use Koha::Biblios;
 use Koha::Virtualshelves;
@@ -84,10 +83,11 @@ if ( @biblionumbers == 0 && $query->param('biblionumbers') ) {
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "virtualshelves/addbybiblionumber.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
+    {
+        template_name => "virtualshelves/addbybiblionumber.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { catalogue => 1 },
     }
 );
 
@@ -115,7 +115,8 @@ if ( $op && $op !~ /^cud-/ ) {
 
         #Reload the page where you came from
         print $query->header;
-        print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+        print
+            "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
         exit;
     }
 
@@ -152,25 +153,28 @@ if ( $op && $op !~ /^cud-/ ) {
 
 } else {
     my $private_shelves = Koha::Virtualshelves->search(
-        {   public                  => 0,
+        {
+            public                  => 0,
             owner                   => $loggedinuser,
             allow_change_from_owner => 1,
         },
         { order_by => 'shelfname' }
     );
     my $shelves_shared_with_me = Koha::Virtualshelves->search(
-        {   public                              => 0,
+        {
+            public                              => 0,
             'virtualshelfshares.borrowernumber' => $loggedinuser,
             allow_change_from_others            => 1,
         },
         { join => 'virtualshelfshares', }
     );
     my $public_shelves = Koha::Virtualshelves->search(
-        {   public   => 1,
-            -or      => [
+        {
+            public => 1,
+            -or    => [
                 -and => {
                     allow_change_from_owner => 1,
-                    owner     => $loggedinuser,
+                    owner                   => $loggedinuser,
                 },
                 allow_change_from_others => 1,
                 allow_change_from_staff  => 1,
@@ -188,10 +192,11 @@ if ( $op && $op !~ /^cud-/ ) {
 
 my @biblios;
 for my $biblionumber (@biblionumbers) {
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblio = Koha::Biblios->find($biblionumber);
     push(
         @biblios,
-        {   biblionumber => $biblionumber,
+        {
+            biblionumber => $biblionumber,
             title        => $biblio->title,
             author       => $biblio->author,
         }
@@ -204,7 +209,7 @@ $template->param(
 );
 
 $template->param(
-    newshelf => $newshelf || 0,
+    newshelf   => $newshelf || 0,
     authorized => $authorized,
     errcode    => $errcode,
 );

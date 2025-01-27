@@ -1,7 +1,6 @@
 [% USE KohaDates %]
 
 [% IF enrollments %]
-
     <h2>Clubs currently enrolled in</h2>
 
     <table id="clubs-table-enrolled" class="table table-bordered table-striped">
@@ -24,9 +23,7 @@
                     <td>[% e.date_enrolled | $KohaDates %]</td>
                     <td>
                         [% IF e.club.club_template.is_enrollable_from_opac %]
-                            <button class="btn btn-sm btn-danger cancel_enrollment" data-id="[% e.id | html %]">
-                                <i class="fa fa-times" aria-hidden="true"></i> Cancel enrollment
-                            </button>
+                            <button class="btn btn-sm btn-danger cancel_enrollment" data-id="[% e.id | html %]"> <i class="fa fa-times" aria-hidden="true"></i> Cancel enrollment </button>
                         [% ELSE %]
                             Contact your library to be disenrolled from this club.
                         [% END %]
@@ -39,7 +36,6 @@
 [% END %]
 
 [% IF clubs %]
-
     <h2>Clubs you can enroll in</h2>
 
     <table id="clubs-table-unenrolled" class="table table-bordered table-striped">
@@ -59,9 +55,7 @@
                     <td>[% c.description | html %]</td>
                     <td>
                         [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.notice_email_address ) %]
-                            <button class="btn btn-sm btn-primary load_enrollment" data-id="[% c.id | html%]">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Enroll
-                            </button>
+                            <button class="btn btn-sm btn-primary load_enrollment" data-id="[% c.id | html %]"> <i class="fa fa-plus" aria-hidden="true"></i> Enroll </button>
                         [% ELSE %]
                             <span class="hint">You must have an email address to enroll</span>
                         [% END %]
@@ -72,64 +66,61 @@
         </tbody>
     </table>
 [% END %]
-
 <script>
-function loadEnrollmentForm( id ) {
-    $("body").css("cursor", "progress");
-    $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber | html %]&id=' + id, function() {
-        $("body").css("cursor", "default");
-    });
+    function loadEnrollmentForm( id ) {
+        $("body").css("cursor", "progress");
+        $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber | html %]&id=' + id, function() {
+            $("body").css("cursor", "default");
+        });
 
-    return false;
-}
+        return false;
+    }
 
-function cancelEnrollment( id ) {
-    $("body").css("cursor", "progress");
-    $.ajax({
-        type: "POST",
-        url: '/cgi-bin/koha/svc/club/cancel_enrollment',
-        data: { id: id, csrf_token: $('meta[name="csrf-token"]').attr('content'), },
-        success: function( data ) {
-            if ( data.success ) {
-                $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber | html %]', function() {
-                    $("body").css("cursor", "default");
-                });
-            } else {
-                alert(_("Unable to cancel enrollment!"));
-            }
-        },
-        dataType: 'json'
-    });
-    return false;
-}
-
-    var Tables = $("#clubs-table-enrolled,#clubs-table-unenrolled");
-    Tables.each(function(){
-        $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
-            "searching": false,
-            "paging": false,
-            "info": false,
-            "responsive": {
-                "details": { "type": "column", "target": -1 }
+    function cancelEnrollment( id ) {
+        $("body").css("cursor", "progress");
+        $.ajax({
+            type: "POST",
+            url: '/cgi-bin/koha/svc/club/cancel_enrollment',
+            data: { id: id, csrf_token: $('meta[name="csrf-token"]').attr('content'), },
+            success: function( data ) {
+                if ( data.success ) {
+                    $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber | html %]', function() {
+                        $("body").css("cursor", "default");
+                    });
+                } else {
+                    alert(_("Unable to cancel enrollment!"));
+                }
             },
-            "columnDefs": [
-                { "orderable": false, "searchable": false, "targets": [ 'NoSort' ] },
-                { "className": "dtr-control", "orderable": false, "targets": -1 },
-            ],
-        }));
-    });
+            dataType: 'json'
+        });
+        return false;
+    }
 
-    $(".cancel_enrollment").on("click", function(e){
-        e.preventDefault();
-        let clubid = $(this).data("id");
-        cancelEnrollment( clubid );
-    });
+        var Tables = $("#clubs-table-enrolled,#clubs-table-unenrolled");
+        Tables.each(function(){
+            $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+                "searching": false,
+                "paging": false,
+                "info": false,
+                "responsive": {
+                    "details": { "type": "column", "target": -1 }
+                },
+                "columnDefs": [
+                    { "orderable": false, "searchable": false, "targets": [ 'NoSort' ] },
+                    { "className": "dtr-control", "orderable": false, "targets": -1 },
+                ],
+            }));
+        });
 
-    $(".load_enrollment").on("click", function(e){
-        e.preventDefault();
-        let clubid = $(this).data("id");
-        loadEnrollmentForm( clubid );
-    });
+        $(".cancel_enrollment").on("click", function(e){
+            e.preventDefault();
+            let clubid = $(this).data("id");
+            cancelEnrollment( clubid );
+        });
 
-
+        $(".load_enrollment").on("click", function(e){
+            e.preventDefault();
+            let clubid = $(this).data("id");
+            loadEnrollmentForm( clubid );
+        });
 </script>

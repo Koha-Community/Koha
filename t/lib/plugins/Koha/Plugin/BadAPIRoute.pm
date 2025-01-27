@@ -6,7 +6,7 @@ use Mojo::JSON qw( decode_json );
 
 use base qw(Koha::Plugins::Base);
 
-our $VERSION = 0.01;
+our $VERSION  = 0.01;
 our $metadata = {
     name            => 'Bad API Route Plugin',
     author          => 'John Doe',

@@ -97,11 +97,13 @@ my $letters = [
 ];
 
 my $sth = $dbh->prepare(
-q|INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type) VALUES (?, ?, ?, ?, ?, ?, ?)|
+    q|INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type) VALUES (?, ?, ?, ?, ?, ?, ?)|
 );
 for my $l (@$letters) {
-    $sth->execute( $l->{module}, $l->{code}, $l->{branchcode}, $l->{name},
-        $l->{title}, $l->{content}, $l->{message_transport_type} );
+    $sth->execute(
+        $l->{module}, $l->{code},    $l->{branchcode}, $l->{name},
+        $l->{title},  $l->{content}, $l->{message_transport_type}
+    );
 
     # GetLettersAvailableForALibrary does not return these fields
     delete $l->{title};
@@ -111,67 +113,86 @@ for my $l (@$letters) {
 }
 
 my $available_letters;
-$available_letters =
-  C4::Letters::GetLettersAvailableForALibrary( { module => 'circulation' } );
-is( scalar(@$available_letters),
-    3, 'There should be 3 default letters for circulation (3 distinct codes)' );
-
-$available_letters = C4::Letters::GetLettersAvailableForALibrary(
-    { module => 'circulation', branchcode => '' } );
-is( scalar(@$available_letters), 3,
-'There should be 3 default letters for circulation (3 distinct codes), branchcode=""'
+$available_letters = C4::Letters::GetLettersAvailableForALibrary( { module => 'circulation' } );
+is(
+    scalar(@$available_letters),
+    3, 'There should be 3 default letters for circulation (3 distinct codes)'
 );
-is_deeply( $available_letters->[0],
-    $letters->[2], 'The letters should be sorted by name (A)' );
-is_deeply( $available_letters->[1],
-    $letters->[0], 'The letters should be sorted by name (B)' );
-is_deeply( $available_letters->[2],
-    $letters->[3], 'The letters should be sorted by name (C)' );
 
-$available_letters = C4::Letters::GetLettersAvailableForALibrary(
-    { module => 'circulation', branchcode => 'CPL' } );
-is( scalar(@$available_letters), 3,
-'There should be 3 default letters for circulation (3 distinct codes), branchcode="CPL"'
+$available_letters = C4::Letters::GetLettersAvailableForALibrary( { module => 'circulation', branchcode => '' } );
+is(
+    scalar(@$available_letters), 3,
+    'There should be 3 default letters for circulation (3 distinct codes), branchcode=""'
 );
-is_deeply( $available_letters->[0],
-    $letters->[6], 'The letters should be sorted by name (A)' );
-is_deeply( $available_letters->[1],
-    $letters->[5], 'The letters should be sorted by name (B)' );
-is_deeply( $available_letters->[2],
-    $letters->[3], 'The letters should be sorted by name (C)' );
+is_deeply(
+    $available_letters->[0],
+    $letters->[2], 'The letters should be sorted by name (A)'
+);
+is_deeply(
+    $available_letters->[1],
+    $letters->[0], 'The letters should be sorted by name (B)'
+);
+is_deeply(
+    $available_letters->[2],
+    $letters->[3], 'The letters should be sorted by name (C)'
+);
 
-$available_letters = C4::Letters::GetLettersAvailableForALibrary(
-    { module => 'circulation', branchcode => 'MPL' } );
-is( scalar(@$available_letters), 3,
-'There should be 3 default letters for circulation (3 distinct codes), branchcode="CPL"'
+$available_letters = C4::Letters::GetLettersAvailableForALibrary( { module => 'circulation', branchcode => 'CPL' } );
+is(
+    scalar(@$available_letters), 3,
+    'There should be 3 default letters for circulation (3 distinct codes), branchcode="CPL"'
 );
-is_deeply( $available_letters->[0],
-    $letters->[2], 'The letters should be sorted by name (A)' );
-is_deeply( $available_letters->[1],
-    $letters->[7], 'The letters should be sorted by name (B)' );
-is_deeply( $available_letters->[2],
-    $letters->[3], 'The letters should be sorted by name (C)' );
+is_deeply(
+    $available_letters->[0],
+    $letters->[6], 'The letters should be sorted by name (A)'
+);
+is_deeply(
+    $available_letters->[1],
+    $letters->[5], 'The letters should be sorted by name (B)'
+);
+is_deeply(
+    $available_letters->[2],
+    $letters->[3], 'The letters should be sorted by name (C)'
+);
+
+$available_letters = C4::Letters::GetLettersAvailableForALibrary( { module => 'circulation', branchcode => 'MPL' } );
+is(
+    scalar(@$available_letters), 3,
+    'There should be 3 default letters for circulation (3 distinct codes), branchcode="CPL"'
+);
+is_deeply(
+    $available_letters->[0],
+    $letters->[2], 'The letters should be sorted by name (A)'
+);
+is_deeply(
+    $available_letters->[1],
+    $letters->[7], 'The letters should be sorted by name (B)'
+);
+is_deeply(
+    $available_letters->[2],
+    $letters->[3], 'The letters should be sorted by name (C)'
+);
 
 my $letters_by_module = C4::Letters::GetLetters( { module => 'circulation' } );
-is( scalar(@$letters_by_module),
-    3, '3 different letter codes exist for circulation' );
+is(
+    scalar(@$letters_by_module),
+    3, '3 different letter codes exist for circulation'
+);
 
 my $letters_by_branchcode = C4::Letters::GetLetters( { branchcode => 'CPL' } );
-is( scalar(@$letters_by_branchcode),
-    2, '2 different letter codes exist for CPL' );
+is(
+    scalar(@$letters_by_branchcode),
+    2, '2 different letter codes exist for CPL'
+);
 
 # On the way, we test DelLetter
 is(
-    C4::Letters::DelLetter(
-        { module => 'cataloguing', code => 'code1', branchcode => 'MPL' }
-    ),
+    C4::Letters::DelLetter( { module => 'cataloguing', code => 'code1', branchcode => 'MPL' } ),
     '0E0',
     'No letter exist for MPL cat/code1'
 );
 is(
-    C4::Letters::DelLetter(
-        { module => 'circulation', code => 'code1', branchcode => '' }
-    ),
+    C4::Letters::DelLetter( { module => 'circulation', code => 'code1', branchcode => '' } ),
     2,
     '2 default letters existed for circ/code1 (1 for email and 1 for sms)'
 );
@@ -188,9 +209,7 @@ is(
     '1 letter existed for CPL circ/code1/email'
 );
 is(
-    C4::Letters::DelLetter(
-        { module => 'circulation', code => 'code1', branchcode => 'MPL' }
-    ),
+    C4::Letters::DelLetter( { module => 'circulation', code => 'code1', branchcode => 'MPL' } ),
     1,
     '1 letter existed for MPL circ/code1'
 );

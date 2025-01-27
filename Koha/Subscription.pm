@@ -19,7 +19,6 @@ package Koha::Subscription;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::Biblios;
 use Koha::Acquisition::Booksellers;
@@ -49,7 +48,7 @@ Returns the biblio linked to this subscription as a Koha::Biblio object
 sub biblio {
     my ($self) = @_;
 
-    return Koha::Biblios->find($self->biblionumber);
+    return Koha::Biblios->find( $self->biblionumber );
 }
 
 =head3 vendor
@@ -60,7 +59,7 @@ Returns the vendor/supplier linked to this subscription as a Koha::Acquisition::
 
 sub vendor {
     my ($self) = @_;
-    return Koha::Acquisition::Booksellers->find($self->aqbooksellerid);
+    return Koha::Acquisition::Booksellers->find( $self->aqbooksellerid );
 }
 
 =head3 subscribers
@@ -74,8 +73,10 @@ return a Koha::Patrons object
 sub subscribers {
     my ($self) = @_;
     my $schema = Koha::Database->new->schema;
-    my @borrowernumbers = $schema->resultset('Alert')->search({ externalid => $self->subscriptionid })->get_column( 'borrowernumber' )->all;
-    return Koha::Patrons->search({ borrowernumber => {-in => \@borrowernumbers } });
+    my @borrowernumbers =
+        $schema->resultset('Alert')->search( { externalid => $self->subscriptionid } )->get_column('borrowernumber')
+        ->all;
+    return Koha::Patrons->search( { borrowernumber => { -in => \@borrowernumbers } } );
 }
 
 =head3 add_subscriber
@@ -87,10 +88,10 @@ Add a new subscriber (Koha::Patron) to this subscription
 =cut
 
 sub add_subscriber {
-    my ( $self, $patron )  = @_;
+    my ( $self, $patron ) = @_;
     my $schema = Koha::Database->new->schema;
-    my $rs = $schema->resultset('Alert');
-    $rs->create({ externalid => $self->subscriptionid, borrowernumber => $patron->borrowernumber });
+    my $rs     = $schema->resultset('Alert');
+    $rs->create( { externalid => $self->subscriptionid, borrowernumber => $patron->borrowernumber } );
 }
 
 =head3 remove_subscriber
@@ -102,10 +103,10 @@ Remove a subscriber (Koha::Patron) from this subscription
 =cut
 
 sub remove_subscriber {
-    my ($self, $patron) = @_;
-    my $schema = Koha::Database->new->schema;
-    my $rs = $schema->resultset('Alert');
-    my $subscriber = $rs->find({ externalid => $self->subscriptionid, borrowernumber => $patron->borrowernumber });
+    my ( $self, $patron ) = @_;
+    my $schema     = Koha::Database->new->schema;
+    my $rs         = $schema->resultset('Alert');
+    my $subscriber = $rs->find( { externalid => $self->subscriptionid, borrowernumber => $patron->borrowernumber } );
     $subscriber->delete if $subscriber;
 }
 
@@ -118,8 +119,8 @@ Return the subscription frequency
 =cut
 
 sub frequency {
-    my($self)=@_;
-    my $frequency_rs= $self->_result->periodicity;
+    my ($self) = @_;
+    my $frequency_rs = $self->_result->periodicity;
     return Koha::Subscription::Frequency->_new_from_dbic($frequency_rs);
 }
 
@@ -128,12 +129,11 @@ sub frequency {
 =cut
 
 sub get_search_info {
-    my $self=shift;
+    my $self            = shift;
     my $searched_sub_id = shift;
-    my $biblio = Koha::Biblios->find( { 'biblionumber' => $searched_sub_id } );
+    my $biblio          = Koha::Biblios->find( { 'biblionumber' => $searched_sub_id } );
     return unless $biblio;
-    my $biblioitem =
-      Koha::Biblioitems->find( { 'biblionumber' => $searched_sub_id } );
+    my $biblioitem = Koha::Biblioitems->find( { 'biblionumber' => $searched_sub_id } );
 
     my $sub_mana_info = {
         'title'         => $biblio->title,
@@ -149,16 +149,13 @@ sub get_search_info {
 =cut
 
 sub get_sharable_info {
-    my $self = shift;
-    my $shared_sub_id = shift;
-    my $subscription  = Koha::Subscriptions->find($shared_sub_id);
-    my $biblio        = Koha::Biblios->find( $subscription->biblionumber );
-    my $biblioitem    = Koha::Biblioitems->find(
-        { 'biblionumber' => $subscription->biblionumber } );
-    my $sub_frequency =
-      Koha::Subscription::Frequencies->find( $subscription->periodicity );
-    my $sub_numberpatteern =
-      Koha::Subscription::Numberpatterns->find( $subscription->numberpattern );
+    my $self               = shift;
+    my $shared_sub_id      = shift;
+    my $subscription       = Koha::Subscriptions->find($shared_sub_id);
+    my $biblio             = Koha::Biblios->find( $subscription->biblionumber );
+    my $biblioitem         = Koha::Biblioitems->find( { 'biblionumber' => $subscription->biblionumber } );
+    my $sub_frequency      = Koha::Subscription::Frequencies->find( $subscription->periodicity );
+    my $sub_numberpatteern = Koha::Subscription::Numberpatterns->find( $subscription->numberpattern );
 
     my $sub_mana_info = {
         'title'           => $biblio->title,
@@ -193,7 +190,6 @@ sub get_sharable_info {
     };
     return $sub_mana_info;
 }
-
 
 =head3 _type
 

@@ -13,14 +13,14 @@ use t::lib::TestBuilder;
 use Test::More tests => 9;
 
 BEGIN {
-    use_ok('C4::Circulation', qw( GetHardDueDate GetLoanLength ));
+    use_ok( 'C4::Circulation', qw( GetHardDueDate GetLoanLength ) );
 }
 can_ok(
     'C4::Circulation',
     qw(
-      GetHardDueDate
-      GetLoanLength
-      )
+        GetHardDueDate
+        GetLoanLength
+    )
 );
 
 my $schema = Koha::Database->new->schema;
@@ -86,7 +86,7 @@ my $samplecat = {
     category_type         => 'A',
 };
 my $query =
-"INSERT INTO categories (categorycode,description,enrolmentperiod,enrolmentperioddate,dateofbirthrequired,enrolmentfee,overduenoticerequired ,reservefee ,hidelostitems ,category_type) VALUES( ?,?,?,?,?,?,?,?,?,?)";
+    "INSERT INTO categories (categorycode,description,enrolmentperiod,enrolmentperioddate,dateofbirthrequired,enrolmentfee,overduenoticerequired ,reservefee ,hidelostitems ,category_type) VALUES( ?,?,?,?,?,?,?,?,?,?)";
 $dbh->do(
     $query, {},
     $samplecat->{categorycode},          $samplecat->{description},
@@ -96,16 +96,16 @@ $dbh->do(
     $samplecat->{hidelostitems},         $samplecat->{category_type}
 );
 
-my $builder = t::lib::TestBuilder->new;
-my $sampleitemtype1 = $builder->build({ source => 'Itemtype' })->{itemtype};
-my $sampleitemtype2 = $builder->build({ source => 'Itemtype' })->{itemtype};
+my $builder         = t::lib::TestBuilder->new;
+my $sampleitemtype1 = $builder->build( { source => 'Itemtype' } )->{itemtype};
+my $sampleitemtype2 = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
 #Begin Tests
 
 my $default = {
-    issuelength => 0,
+    issuelength   => 0,
     renewalperiod => 0,
-    lengthunit => 'days'
+    lengthunit    => 'days'
 };
 
 #Test get_effective_rules
@@ -201,9 +201,9 @@ my $sampleissuingrule3 = {
     }
 };
 
-Koha::CirculationRules->set_rules( $sampleissuingrule1 );
-Koha::CirculationRules->set_rules( $sampleissuingrule2 );
-Koha::CirculationRules->set_rules( $sampleissuingrule3 );
+Koha::CirculationRules->set_rules($sampleissuingrule1);
+Koha::CirculationRules->set_rules($sampleissuingrule2);
+Koha::CirculationRules->set_rules($sampleissuingrule3);
 
 #Test GetLoanLength
 is_deeply(
@@ -246,8 +246,10 @@ is_deeply(
 );
 
 #Test GetHardDueDate
-my @hardduedate = C4::Circulation::GetHardDueDate( $samplecat->{categorycode},
-    $sampleitemtype1, $samplebranch1->{branchcode} );
+my @hardduedate = C4::Circulation::GetHardDueDate(
+    $samplecat->{categorycode},
+    $sampleitemtype1, $samplebranch1->{branchcode}
+);
 is_deeply(
     \@hardduedate,
     [

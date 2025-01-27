@@ -53,9 +53,9 @@ Return the register_id for the register attached to the current session.
 sub session_register_id {
     my ($self) = @_;
 
-    return C4::Context->userenv ?
-        C4::Context->userenv->{'register_id'} :
-        '';
+    return C4::Context->userenv
+        ? C4::Context->userenv->{'register_id'}
+        : '';
 }
 
 =head2 session_register_name
@@ -68,8 +68,8 @@ sub session_register_name {
     my ($self) = @_;
 
     return C4::Context->userenv
-      ? C4::Context->userenv->{'register_name'}
-      : '';
+        ? C4::Context->userenv->{'register_name'}
+        : '';
 }
 
 =head2 all
@@ -87,19 +87,18 @@ sub all {
     return unless C4::Context->preference('UseCashRegisters');
 
     my $filters = $params->{filters} // {};
-    my $where = { archived => 0 };
+    my $where   = { archived => 0 };
     $where->{branch} = C4::Context->userenv->{'branch'}
-      if ( $filters->{current_branch} && C4::Context->userenv );
+        if ( $filters->{current_branch} && C4::Context->userenv );
     my $registers = Koha::Cash::Registers->search($where)->unblessed();
 
     my $selected = $params->{selected};
     for my $register ( @{$registers} ) {
         if ( defined($selected) ) {
             $register->{selected} = ( $register->{id} == $selected ) ? 1 : 0;
-        }
-        else {
-            $register->{selected} = ( defined( $self->session_register_id )
-              && $register->{id} eq $self->session_register_id ) ? 1 : 0;
+        } else {
+            $register->{selected} =
+                ( defined( $self->session_register_id ) && $register->{id} eq $self->session_register_id ) ? 1 : 0;
         }
     }
 

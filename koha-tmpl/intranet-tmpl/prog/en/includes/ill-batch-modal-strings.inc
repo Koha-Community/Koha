@@ -22,17 +22,17 @@
     var ill_batch_metadata_less = _("Less");
     var ill_batch_available_via = _("Available via");
     var ill_batch_metadata = {
-        'doi': _("DOI"),
-        'pmid': _("PubMed ID"),
-        'issn': _("ISSN"),
-        'title': _("Title"),
-        'year': _("Year"),
-        'issue': _("Issue"),
-        'pages': _("Pages"),
-        'publisher': _("Publisher"),
-        'article_title': _("Article title"),
-        'article_author': _("Article author"),
-        'volume': _("Volume")
+        doi: _("DOI"),
+        pmid: _("PubMed ID"),
+        issn: _("ISSN"),
+        title: _("Title"),
+        year: _("Year"),
+        issue: _("Issue"),
+        pages: _("Pages"),
+        publisher: _("Publisher"),
+        article_title: _("Article title"),
+        article_author: _("Article author"),
+        volume: _("Volume"),
     };
 </script>
 <!-- / ill-batch-table-strings.inc -->

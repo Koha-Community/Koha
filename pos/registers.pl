@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use CGI;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 
@@ -49,8 +49,7 @@ my $registers = Koha::Cash::Registers->search(
 
 if ( !$registers->count ) {
     $template->param( error_registers => 1 );
-}
-else {
+} else {
     $template->param( registers => $registers );
 }
 
@@ -66,8 +65,7 @@ if ( $op eq 'cashup' ) {
                     amount     => $register->outstanding_accountlines->total
                 }
             );
-        }
-        else {
+        } else {
             for my $register ( $registers->as_list ) {
                 $register->add_cashup(
                     {
@@ -77,8 +75,7 @@ if ( $op eq 'cashup' ) {
                 );
             }
         }
-    }
-    else {
+    } else {
         $template->param( error_cashup_permission => 1 );
     }
 }

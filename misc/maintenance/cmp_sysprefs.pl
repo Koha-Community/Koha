@@ -28,7 +28,7 @@ use Modern::Perl;
 use open OUT => ':encoding(UTF-8)', ':std';
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script;
 use C4::Context;
@@ -81,7 +81,7 @@ if ( $cmd =~ /^c/i && $filename ) {
     my $cmp = ComparePrefs( $dbprefs, $fileprefs );
     PrintCompare( $cmp, "database", "file $filename" );
     HandleCompareChanges( $cmp, $dbprefs, $fileprefs )
-      if $compare_add || $compare_del || $compare_upd;
+        if $compare_add || $compare_del || $compare_upd;
 }
 
 #restore prefs
@@ -152,7 +152,8 @@ sub ComparePrefs {
 }
 
 sub ReadPrefsFromDb {
-    my $sql = 'SELECT variable AS orgkey, LOWER(variable) AS variable, value, type FROM systempreferences ORDER BY variable';
+    my $sql =
+        'SELECT variable AS orgkey, LOWER(variable) AS variable, value, type FROM systempreferences ORDER BY variable';
     my $hash = $dbh->selectall_hashref( $sql, 'variable' );
     return $hash;
 }
@@ -194,7 +195,7 @@ sub SavePrefsToDb {
 
     #will not erase everything! you can do that in mysql :)
     foreach my $k ( keys %$hash ) {
-        my $v = $hash->{$k}->{value} eq 'NULL' ? undef : $hash->{$k}->{value};
+        my $v    = $hash->{$k}->{value} eq 'NULL' ? undef : $hash->{$k}->{value};
         my $kwc  = $hash->{$k}->{orgkey} // $k;
         my $type = $hash->{$k}->{type}   // 'Free';
 
@@ -213,14 +214,14 @@ sub InsertIgnoreOnePref {
         'INSERT IGNORE INTO systempreferences (variable, value, type)
         VALUES (?,?,?)', undef, ( $kwc, $v, $t )
     );
-    return !defined($i) || $i eq '0E0'? 0: $i;
+    return !defined($i) || $i eq '0E0' ? 0 : $i;
 }
 
 sub UpdateOnePref {
     my ( $k, $v ) = @_;
     return 0 if lc $k eq 'version';
     my $i = $dbh->do( 'UPDATE systempreferences SET value=? WHERE variable=?', undef, ( $v, $k ) );
-    return !defined($i) || $i eq '0E0'? 0: $i;
+    return !defined($i) || $i eq '0E0' ? 0 : $i;
 }
 
 sub DeleteOnePref {
@@ -231,19 +232,19 @@ sub DeleteOnePref {
         $sql .= " AND COALESCE(explanation,'')='' AND COALESCE(options,'')=''";
     }
     my $i = $dbh->do( $sql, undef, ($k) );
-    return !defined($i) || $i eq '0E0'? 0: $i;
+    return !defined($i) || $i eq '0E0' ? 0 : $i;
 }
 
 sub CheckVersionPref {    #additional precaution
                           #if there are versions, compare them
     my ($hash) = @_;
-    my $hv = exists $hash->{version}? $hash->{version}->{value}: undef;
+    my $hv = exists $hash->{version} ? $hash->{version}->{value} : undef;
     return if !defined $hv;
     my ($dv) = $dbh->selectrow_array(
         'SELECT value FROM systempreferences
         WHERE variable LIKE ?', undef, ('version')
     );
-    return if !defined $dv;
+    return                                 if !defined $dv;
     die "Versions do not match ($dv, $hv)" if $dv ne $hv;
 }
 

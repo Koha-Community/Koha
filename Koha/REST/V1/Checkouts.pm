@@ -52,13 +52,13 @@ sub list {
     try {
         my $checkouts_set;
 
-        if ( $checked_in ) {
+        if ($checked_in) {
             $checkouts_set = Koha::Old::Checkouts->new;
         } else {
             $checkouts_set = Koha::Checkouts->new;
         }
 
-        my $checkouts = $c->objects->search( $checkouts_set );
+        my $checkouts = $c->objects->search($checkouts_set);
 
         return $c->render(
             status  => 200,
@@ -92,8 +92,7 @@ sub get {
             status  => 200,
             openapi => $c->objects->to_api($checkout),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -112,15 +111,16 @@ sub _check_availability {
     my $ignore_reserves = 0;                   # Don't ignore reserves
     my $params          = { item => $item };
 
-    my ( $impossible, $confirmation, $alerts, $messages ) =
-      C4::Circulation::CanBookBeIssued( $patron, undef, undef, $inprocess,
-        $ignore_reserves, $params );
+    my ( $impossible, $confirmation, $alerts, $messages ) = C4::Circulation::CanBookBeIssued(
+        $patron,          undef, undef, $inprocess,
+        $ignore_reserves, $params
+    );
 
     if ( $c->stash('is_public') ) {
 
         # Upgrade some confirmations to blockers
         my @should_block =
-          qw/TOO_MANY ISSUED_TO_ANOTHER RESERVED RESERVE_WAITING TRANSFERRED PROCESSING AGE_RESTRICTION/;
+            qw/TOO_MANY ISSUED_TO_ANOTHER RESERVED RESERVE_WAITING TRANSFERRED PROCESSING AGE_RESTRICTION/;
         for my $block (@should_block) {
             if ( exists( $confirmation->{$block} ) ) {
                 $impossible->{$block} = $confirmation->{$block};
@@ -130,7 +130,7 @@ sub _check_availability {
 
         # Remove any non-public info that's returned by CanBookBeIssued
         my @restricted_keys =
-          qw/issued_borrowernumber issued_cardnumber issued_firstname issued_surname resborrowernumber resbranchcode rescardnumber reserve_id resfirstname resreservedate ressurname item_notforloan/;
+            qw/issued_borrowernumber issued_cardnumber issued_firstname issued_surname resborrowernumber resbranchcode rescardnumber reserve_id resfirstname resreservedate ressurname item_notforloan/;
         for my $key (@restricted_keys) {
             delete $confirmation->{$key};
             delete $impossible->{$key};
@@ -149,19 +149,18 @@ Controller function that handles retrieval of Checkout availability
 =cut
 
 sub get_availability {
-    my $c = shift->openapi->valid_input or return;
+    my $c    = shift->openapi->valid_input or return;
     my $user = $c->stash('koha.user');
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
     my $item   = Koha::Items->find( $c->param('item_id') );
 
-    my ( $impossible, $confirmation, $warnings ) =
-      $c->_check_availability( $patron, $item );
+    my ( $impossible, $confirmation, $warnings ) = $c->_check_availability( $patron, $item );
 
     my @confirm_keys = sort keys %{$confirmation};
     unshift @confirm_keys, $item->id;
     unshift @confirm_keys, $user->id
-      if $user;
+        if $user;
 
     my $token = Koha::Token->new->generate_jwt( { id => join( ':', @confirm_keys ) } );
 
@@ -182,7 +181,7 @@ Add a new checkout
 =cut
 
 sub add {
-    my $c = shift->openapi->valid_input or return;
+    my $c    = shift->openapi->valid_input or return;
     my $user = $c->stash('koha.user');
 
     my $body      = $c->req->json;
@@ -246,7 +245,6 @@ sub add {
             );
         }
 
-
         my $patron = Koha::Patrons->find($patron_id);
         unless ($patron) {
             return $c->render(
@@ -258,8 +256,7 @@ sub add {
             );
         }
 
-        my ( $impossible, $confirmation, $warnings ) =
-          $c->_check_availability( $patron, $item );
+        my ( $impossible, $confirmation, $warnings ) = $c->_check_availability( $patron, $item );
 
         # * Fail for blockers - render 403
         if ( keys %{$impossible} ) {
@@ -280,8 +277,7 @@ sub add {
             if ( my $token = $c->param('confirmation') ) {
                 my $confirm_keys = join( ":", sort keys %{$confirmation} );
                 $confirm_keys = $user->id . ":" . $item->id . ":" . $confirm_keys;
-                $confirmed = Koha::Token->new->check_jwt(
-                    { id => $confirm_keys, token => $token } );
+                $confirmed    = Koha::Token->new->check_jwt( { id => $confirm_keys, token => $token } );
             }
 
             unless ($confirmed) {
@@ -295,21 +291,18 @@ sub add {
         # Call 'AddIssue'
         my $checkout = AddIssue( $patron, $item->barcode );
         if ($checkout) {
-            $c->res->headers->location(
-                $c->req->url->to_string . '/' . $checkout->id );
+            $c->res->headers->location( $c->req->url->to_string . '/' . $checkout->id );
             return $c->render(
                 status  => 201,
                 openapi => $c->objects->to_api($checkout),
             );
-        }
-        else {
+        } else {
             return $c->render(
                 status  => 500,
                 openapi => { error => 'Unknown error during checkout' }
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -334,18 +327,16 @@ sub get_renewals {
             unless $checkout;
 
         my $renewals_rs = $checkout->renewals;
-        my $renewals = $c->objects->search( $renewals_rs );
+        my $renewals    = $c->objects->search($renewals_rs);
 
         return $c->render(
             status  => 200,
             openapi => $renewals
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 renew
 
@@ -357,18 +348,18 @@ sub renew {
     my $c = shift->openapi->valid_input or return;
 
     my $checkout_id = $c->param('checkout_id');
-    my $seen = $c->param('seen') || 1;
-    my $checkout = Koha::Checkouts->find( $checkout_id );
+    my $seen        = $c->param('seen') || 1;
+    my $checkout    = Koha::Checkouts->find($checkout_id);
 
     return $c->render_resource_not_found("Checkout")
         unless $checkout;
 
     return try {
-        my ($can_renew, $error) = CanBookBeRenewed($checkout->patron, $checkout);
+        my ( $can_renew, $error ) = CanBookBeRenewed( $checkout->patron, $checkout );
 
-        if (!$can_renew) {
+        if ( !$can_renew ) {
             return $c->render(
-                status => 403,
+                status  => 403,
                 openapi => { error => "Renewal not authorized ($error)" }
             );
         }
@@ -388,8 +379,7 @@ sub renew {
             status  => 201,
             openapi => $c->objects->to_api($checkout),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -404,13 +394,13 @@ sub allows_renewal {
     my $c = shift->openapi->valid_input or return;
 
     my $checkout_id = $c->param('checkout_id');
-    my $checkout = Koha::Checkouts->find( $checkout_id );
+    my $checkout    = Koha::Checkouts->find($checkout_id);
 
     return $c->render_resource_not_found("Checkout")
         unless $checkout;
 
     return try {
-        my ($can_renew, $error) = CanBookBeRenewed($checkout->patron, $checkout);
+        my ( $can_renew, $error ) = CanBookBeRenewed( $checkout->patron, $checkout );
 
         my $renewable = Mojo::JSON->false;
         $renewable = Mojo::JSON->true if $can_renew;
@@ -424,17 +414,16 @@ sub allows_renewal {
             }
         );
         return $c->render(
-            status => 200,
+            status  => 200,
             openapi => {
-                allows_renewal => $renewable,
-                max_renewals => $rule->rule_value,
+                allows_renewal   => $renewable,
+                max_renewals     => $rule->rule_value,
                 current_renewals => $checkout->renewals_count,
-                unseen_renewals => $checkout->unseen_renewals,
-                error => $error
+                unseen_renewals  => $checkout->unseen_renewals,
+                error            => $error
             }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

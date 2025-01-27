@@ -27,10 +27,10 @@ sub _get_record_for_export {
     } elsif ( $record_type eq 'bibs' ) {
         $record = _get_biblio_for_export( { %$params, biblionumber => $record_id } );
     } else {
-        Koha::Logger->get->warn( "Record_type $record_type not supported." );
+        Koha::Logger->get->warn("Record_type $record_type not supported.");
     }
     if ( !$record ) {
-        Koha::Logger->get->warn( "Record $record_id could not be exported." );
+        Koha::Logger->get->warn("Record $record_id could not be exported.");
         return;
     }
 
@@ -51,32 +51,30 @@ sub _get_record_for_export {
         },
     );
     if ($conditions) {
-        foreach my $condition (@{$conditions}) {
-            my ($field_tag, $subfield, $operator, $match_value) = @{$condition};
-            my @fields = $record->field($field_tag);
+        foreach my $condition ( @{$conditions} ) {
+            my ( $field_tag, $subfield, $operator, $match_value ) = @{$condition};
+            my @fields    = $record->field($field_tag);
             my $no_target = 0;
 
-            if (!@fields) {
+            if ( !@fields ) {
                 $no_target = 1;
-            }
-            else {
-                if ($operator eq '?') {
+            } else {
+                if ( $operator eq '?' ) {
                     return unless any { $subfield ? $_->subfield($subfield) : $_->data() } @fields;
-                } elsif ($operator eq '!?') {
+                } elsif ( $operator eq '!?' ) {
                     return if any { $subfield ? $_->subfield($subfield) : $_->data() } @fields;
                 } else {
                     my $op;
-                    if (exists $operators{$operator}) {
+                    if ( exists $operators{$operator} ) {
                         $op = $operators{$operator};
                     } else {
                         die("Invalid operator: $op");
                     }
-                    my @target_values = map { $subfield ? $_->subfield($subfield) : ($_->data()) } @fields;
-                    if (!@target_values) {
+                    my @target_values = map { $subfield ? $_->subfield($subfield) : ( $_->data() ) } @fields;
+                    if ( !@target_values ) {
                         $no_target = 1;
-                    }
-                    else {
-                        return unless all { $op->($_, $match_value) } @target_values;
+                    } else {
+                        return unless all { $op->( $_, $match_value ) } @target_values;
                     }
                 }
             }
@@ -108,8 +106,8 @@ sub _get_record_for_export {
 }
 
 sub _get_authority_for_export {
-    my ($params) = @_;
-    my $authid = $params->{authid} || return;
+    my ($params)  = @_;
+    my $authid    = $params->{authid} || return;
     my $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
     return unless $authority;
     return $authority->record;
@@ -139,12 +137,12 @@ sub _get_biblio_for_export {
                 record       => $record,
                 embed_items  => 1,
                 biblionumber => $biblionumber,
-                itemnumbers => $itemnumbers,
+                itemnumbers  => $itemnumbers,
             }
         );
-        if ($only_export_items_for_branches && @$only_export_items_for_branches) {
+        if ( $only_export_items_for_branches && @$only_export_items_for_branches ) {
             my %export_items_for_branches = map { $_ => 1 } @$only_export_items_for_branches;
-            my ( $homebranchfield, $homebranchsubfield ) = GetMarcFromKohaField( 'items.homebranch' );
+            my ( $homebranchfield, $homebranchsubfield ) = GetMarcFromKohaField('items.homebranch');
 
             for my $itemfield ( $record->field($homebranchfield) ) {
                 my $homebranch = $itemfield->subfield($homebranchsubfield);
@@ -169,14 +167,14 @@ sub export {
     my $csv_profile_id     = $params->{csv_profile_id};
     my $output_filepath    = $params->{output_filepath};
 
-    if( !$record_type ) {
-        Koha::Logger->get->warn( "No record_type given." );
+    if ( !$record_type ) {
+        Koha::Logger->get->warn("No record_type given.");
         return;
     }
     return unless @$record_ids;
 
     my $fh;
-    if ( $output_filepath ) {
+    if ($output_filepath) {
         open $fh, '>', $output_filepath or die "Cannot open file $output_filepath ($!)";
         select $fh;
         binmode $fh, ':encoding(UTF-8)' unless $format eq 'csv';
@@ -190,17 +188,17 @@ sub export {
             next unless $record;
             my $errorcount_on_decode = eval { scalar( MARC::File::USMARC->decode( $record->as_usmarc )->warnings() ) };
             if ( $errorcount_on_decode or $@ ) {
-                my $msg = "Record $record_id could not be exported. " .
-                    ( $@ // '' );
+                my $msg = "Record $record_id could not be exported. " . ( $@ // '' );
                 chomp $msg;
-                Koha::Logger->get->info( $msg );
+                Koha::Logger->get->info($msg);
                 next;
             }
             print $record->as_usmarc();
         }
     } elsif ( $format eq 'xml' ) {
         my $marcflavour = C4::Context->preference("marcflavour");
-        MARC::File::XML->default_record_format( ( $marcflavour eq 'UNIMARC' && $record_type eq 'auths' ) ? 'UNIMARCAUTH' : $marcflavour );
+        MARC::File::XML->default_record_format(
+            ( $marcflavour eq 'UNIMARC' && $record_type eq 'auths' ) ? 'UNIMARCAUTH' : $marcflavour );
 
         print MARC::File::XML::header();
         print "\n";
@@ -214,7 +212,7 @@ sub export {
         print "\n";
     } elsif ( $format eq 'csv' ) {
         die 'There is no valid csv profile defined for this export'
-            unless Koha::CsvProfiles->find( $csv_profile_id );
+            unless Koha::CsvProfiles->find($csv_profile_id);
         print marc2csv( $record_ids, $csv_profile_id, $itemnumbers );
     }
 

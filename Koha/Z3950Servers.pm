@@ -17,7 +17,6 @@ package Koha::Z3950Servers;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Z3950Server;

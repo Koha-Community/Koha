@@ -37,20 +37,20 @@ subtest 'Basic function tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $plugin = Koha::Template::Plugin::CirculationRules->new();
-    ok($plugin, "initialized CirculationRules plugin");
+    ok( $plugin, "initialized CirculationRules plugin" );
 
-    my $rule_value = $plugin->Get($library_1->branchcode,'*','*','maxholds');
-    is($rule_value, undef, 'Max holds not set, Get returns undef');
+    my $rule_value = $plugin->Get( $library_1->branchcode, '*', '*', 'maxholds' );
+    is( $rule_value, undef, 'Max holds not set, Get returns undef' );
 
-    $rule_value = $plugin->Search($library_1->branchcode,'*','*','maxholds');
-    is($rule_value, undef, 'Max holds not set, Search returns undef');
+    $rule_value = $plugin->Search( $library_1->branchcode, '*', '*', 'maxholds' );
+    is( $rule_value, undef, 'Max holds not set, Search returns undef' );
 
-    my $rule = $plugin->Search($library_1->branchcode,'*','*','maxholds', { want_rule => 1 } );
-    is($rule, undef, 'Max holds not set, Search with want_rule returns undef');
+    my $rule = $plugin->Search( $library_1->branchcode, '*', '*', 'maxholds', { want_rule => 1 } );
+    is( $rule, undef, 'Max holds not set, Search with want_rule returns undef' );
 
     Koha::CirculationRules->set_rule(
         {
@@ -70,23 +70,24 @@ subtest 'Basic function tests' => sub {
         }
     );
 
-    $rule_value = $plugin->Get($library_1->branchcode,'*','*','max_holds');
-    is($rule_value, "", 'Max holds set to blank string (unlimited), Get returns blank string for branch');
+    $rule_value = $plugin->Get( $library_1->branchcode, '*', '*', 'max_holds' );
+    is( $rule_value, "", 'Max holds set to blank string (unlimited), Get returns blank string for branch' );
 
-    $rule = $plugin->Search($library_1->branchcode,'*','*','max_holds', { want_rule => 1 } );
-    is(ref $rule, "Koha::CirculationRule" , 'Max holds set to blank string, Search with want_rule returns a circulation rules object');
-    is( $rule->rule_value, "",'Max holds set to blank string (unlimited), returned rule has correct value');
+    $rule = $plugin->Search( $library_1->branchcode, '*', '*', 'max_holds', { want_rule => 1 } );
+    is(
+        ref $rule, "Koha::CirculationRule",
+        'Max holds set to blank string, Search with want_rule returns a circulation rules object'
+    );
+    is( $rule->rule_value, "", 'Max holds set to blank string (unlimited), returned rule has correct value' );
 
-    $rule_value = $plugin->Get($library_2->branchcode,'*','*','max_holds');
-    is($rule_value, 5, 'Max holds default set to 5, Get returns 5 for branch with no rule set');
+    $rule_value = $plugin->Get( $library_2->branchcode, '*', '*', 'max_holds' );
+    is( $rule_value, 5, 'Max holds default set to 5, Get returns 5 for branch with no rule set' );
 
-    $rule_value = $plugin->Search('*','*','*','max_holds');
-    is($rule_value, 5, 'Search for all libraries max holds rule, Search returns 5');
+    $rule_value = $plugin->Search( '*', '*', '*', 'max_holds' );
+    is( $rule_value, 5, 'Search for all libraries max holds rule, Search returns 5' );
 
-    $rule_value = $plugin->Search($library_1->branchcode,'*','*','max_holds');
-    is($rule_value, "", 'Max holds set to blank string (unlimited), Get returns blank string for branch');
-
-
+    $rule_value = $plugin->Search( $library_1->branchcode, '*', '*', 'max_holds' );
+    is( $rule_value, "", 'Max holds set to blank string (unlimited), Get returns blank string for branch' );
 
     $schema->storage->txn_rollback;
 };

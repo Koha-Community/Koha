@@ -19,7 +19,6 @@ package Koha::SMS::Providers;
 
 use Modern::Perl;
 
-
 use Koha::SMS::Provider;
 
 use base qw(Koha::Objects);
