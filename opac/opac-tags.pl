@@ -193,19 +193,20 @@ if ($is_ajax) {
         }
         $js_reply .= "\n\t]";
     }
-    
-	my $err_string = '';
-	if (scalar @errors) {
-		$err_string = ",\n\talerts: [";	# open response_function
-		my $i = 1;
-		foreach (@errors) {
-			my $key = (keys %$_)[0];
-			$err_string .= "\n\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '")';
-			if($i < scalar @errors){ $err_string .= ","; }
-			$i++;
-		}
-		$err_string .= "\n\t]\n";	# close response_function
-	}
+
+    my $err_string = '';
+    if ( scalar @errors ) {
+        $err_string = ",\n\talerts: [";    # open response_function
+        my $i = 1;
+        foreach (@errors) {
+            my $key = ( keys %$_ )[0];
+            ( my $quote_escaped = $_->{$key} ) =~ s|"|\\"|g;
+            $err_string .= sprintf qq{\n\t\t KOHA.Tags.tag_message.%s("%s")}, $key, $quote_escaped;
+            if ( $i < scalar @errors ) { $err_string .= ","; }
+            $i++;
+        }
+        $err_string .= "\n\t]\n";          # close response_function
+    }
 
     # Add per-biblionumber results for use on results page
     my $js_perbib = "";
@@ -216,8 +217,9 @@ if ($is_ajax) {
         my $i = 0;
         foreach (@{$bibResult->{errors}}) {
             $js_bibres .= "," if ($i);
-			my $key = (keys %$_)[0];
-			$js_bibres .= "\n\t\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '")';
+            my $key = ( keys %$_ )[0];
+            ( my $quote_escaped = $_->{$key} ) =~ s|"|\\"|g;
+            $js_bibres .= sprintf qq{\n\t\t\t KOHA.Tags.tag_message.%s("%s")}, $key, $quote_escaped;
             $i++;
         }
         $js_bibres .= "\n\t\t]\n\t}";
@@ -377,4 +379,3 @@ response = {
 };
 
 =cut
-
