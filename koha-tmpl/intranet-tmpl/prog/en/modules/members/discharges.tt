@@ -71,16 +71,14 @@
 
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-            $('#pending_updates table').kohaTable({
+        $(document).ready(function () {
+            $("#pending_updates table").kohaTable({
                 paging: false,
                 info: true,
                 searching: true,
                 order: [[2, "asc"]],
-                columnDefs: [
-                    { targets: -1, orderable: false }
-                ],
-            ));
+                columnDefs: [{ targets: -1, orderable: false }],
+            });
         });
     </script>
 [% END %]
