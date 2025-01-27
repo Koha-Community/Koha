@@ -147,16 +147,22 @@ $(document).ready(function() {
             }
             return false;   // cancel submit
         }
-        if ($(event.target).is('#test_button')) {
-            $(event.target).text( __("Testing...") ).prop('disabled', true);
-            $.ajax(Object.assign({}, {...review_ajax_params, type: "GET"}, {
-                data: {
-                    tag: $('#test').val(),
-                    op: 'test',
-                },
-                success: success_test_call // success_reject
-            }));
-            return false;   // cancel submit
+        if ($(event.target).is("#test_button")) {
+            $(event.target).text(__("Testing...")).prop("disabled", true);
+            $.ajax(
+                Object.assign(
+                    {},
+                    { ...review_ajax_params, type: "GET" },
+                    {
+                        data: {
+                            tag: escape_str($("#test").val()),
+                            op: "test",
+                        },
+                        success: success_test_call, // success_reject
+                    }
+                )
+            );
+            return false; // cancel submit
         }
     });
     $("*").ajaxError(function(evt, request, settings){
