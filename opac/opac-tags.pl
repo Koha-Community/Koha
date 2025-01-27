@@ -196,7 +196,8 @@ if ($is_ajax) {
 		my $i = 1;
 		foreach (@errors) {
 			my $key = (keys %$_)[0];
-			$err_string .= "\n\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '")';
+            ( my $quote_escaped = $_->{$key} ) =~ s|"|\\"|g;
+            $err_string .= sprintf qq{\n\t\t KOHA.Tags.tag_message.%s("%s")}, $key, $quote_escaped;
 			if($i < scalar @errors){ $err_string .= ","; }
 			$i++;
 		}
@@ -213,7 +214,8 @@ if ($is_ajax) {
         foreach (@{$bibResult->{errors}}) {
             $js_bibres .= "," if ($i);
 			my $key = (keys %$_)[0];
-			$js_bibres .= "\n\t\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '")';
+            ( my $quote_escaped = $_->{$key} ) =~ s|"|\\"|g;
+            $js_bibres .= sprintf qq{\n\t\t\t KOHA.Tags.tag_message.%s("%s")}, $key, $quote_escaped;
             $i++;
         }
         $js_bibres .= "\n\t\t]\n\t}";
@@ -374,4 +376,3 @@ response = {
 };
 
 =cut
-
