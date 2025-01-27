@@ -213,7 +213,7 @@ $(document).ready(function () {
                     { ...review_ajax_params, type: "GET" },
                     {
                         data: {
-                            tag: $("#test").val(),
+                            tag: escape_str($("#test").val()),
                             op: "test",
                         },
                         success: success_test_call, // success_reject
