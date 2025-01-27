@@ -74,7 +74,7 @@ export default {
         doResourceDelete: Function,
         goToResourceAdd: Function,
         doResourceSelect: Function,
-        tableFilters: Array,
+        tableFilters: { type: Array, default: [] },
         getFilters: Function,
         filterTable: Function,
         tableUrl: Function,
@@ -85,7 +85,7 @@ export default {
             initialized: false,
             searchable_additional_fields: [],
             searchable_av_options: [],
-            filters: this.getFilters(this.$route.query),
+            filters: this.getFilters ? this.getFilters(this.$route.query) : {},
         };
     },
     created() {

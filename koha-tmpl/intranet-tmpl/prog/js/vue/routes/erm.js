@@ -15,9 +15,6 @@ import EHoldingsEBSCOPackagesShow from "../components/ERM/EHoldingsEBSCOPackages
 import EHoldingsEBSCOResourcesShow from "../components/ERM/EHoldingsEBSCOResourcesShow.vue";
 import EHoldingsEBSCOTitlesList from "../components/ERM/EHoldingsEBSCOTitlesList.vue";
 import EHoldingsEBSCOTitlesShow from "../components/ERM/EHoldingsEBSCOTitlesShow.vue";
-import LicensesList from "../components/ERM/LicensesList.vue";
-import LicensesShow from "../components/ERM/LicensesShow.vue";
-import LicensesFormAdd from "../components/ERM/LicensesFormAdd.vue";
 import UsageStatisticsDataProvidersList from "../components/ERM/UsageStatisticsDataProvidersList.vue";
 import UsageStatisticsDataProvidersSummary from "../components/ERM/UsageStatisticsDataProvidersSummary.vue";
 import UsageStatisticsDataProvidersFormAdd from "../components/ERM/UsageStatisticsDataProvidersFormAdd.vue";
@@ -79,28 +76,29 @@ export const routes = [
                 title: $__("Licenses"),
                 icon: "fa fa-gavel",
                 is_end_node: true,
+                resource: "ERM/LicenseResource.vue",
                 children: [
                     {
                         path: "",
                         name: "LicensesList",
-                        component: markRaw(LicensesList),
+                        component: markRaw(ResourceWrapper),
                     },
                     {
                         path: ":license_id",
                         name: "LicensesShow",
-                        component: markRaw(LicensesShow),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Show license"),
                     },
                     {
                         path: "add",
                         name: "LicensesFormAdd",
-                        component: markRaw(LicensesFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Add license"),
                     },
                     {
                         path: "edit/:license_id",
                         name: "LicensesFormAddEdit",
-                        component: markRaw(LicensesFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Edit license"),
                     },
                 ],

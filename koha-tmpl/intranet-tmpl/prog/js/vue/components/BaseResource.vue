@@ -175,7 +175,11 @@ export default {
             resource.extended_attributes = additionalFieldValues;
         },
         getFilters(query, filterData) {
-            const filters = filterData ? filterData : this.tableFilters;
+            const filters = filterData
+                ? filterData
+                : this.tableFilters
+                  ? this.tableFilters
+                  : [];
             const filterOptions = filters.reduce((acc, filter) => {
                 acc[filter.name] = filter.value;
                 return acc;
