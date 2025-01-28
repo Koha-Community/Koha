@@ -112,7 +112,7 @@
 [% END %]
 <script>
     var patron_lists_dt_params = {
-        columnDefs: [{ sortable: false, bSearchable: false, targets: ["NoSort"] }],
+        columnDefs: [{ orderable: false, bSearchable: false, targets: ["NoSort"] }],
         sPaginationType: "full",
     };
     $("#table_listnopatron").kohaTable(patron_lists_dt_params);

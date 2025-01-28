@@ -598,7 +598,7 @@
             $("#suggestt").kohaTable({
                 "order": [[ 1, "asc" ]],
                 "columnDefs": [
-                  [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %],
+                  [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "orderable": false, "searchable": false }[% END %],
                     { "className": 'dtr-control', "orderable": false, "targets": -1 },
                     { responsivePriority: 1, targets: 1 }
                 ],

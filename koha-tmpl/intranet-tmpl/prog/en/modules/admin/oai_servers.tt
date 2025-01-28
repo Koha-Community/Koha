@@ -213,7 +213,7 @@
         [% ELSE %]
             $(document).ready(function() {
                 $("#serverst").kohaTable({
-                    columnDefs: [{ sortable: false, targets: ["NoSort"] }],
+                    columnDefs: [{ orderable: false, targets: ["NoSort"] }],
                     pagingType: "full",
                 });
                 $(".delete").on("click",function(e){

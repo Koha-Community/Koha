@@ -335,7 +335,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $("#illrequestlist").kohaTable({
-            columnDefs: [{ targets: [-1], sortable: false, searchable: false }],
+            columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
             order: [[3, "desc"]],
         });
         $("#backend-dropdown-options").removeClass("nojs");
