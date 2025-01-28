@@ -54,7 +54,7 @@
                             <th class="recall-itemtypes">Available item types</th>
                             <th class="recall-locations">Available locations</th>
                             <th class="recall-date title-string">Earliest recall date</th>
-                            <th class="recall-action nosort">&nbsp;</th>
+                            <th class="recall-action NoSort">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,7 +153,6 @@
         $(document).ready(function () {
             $("#recalls-table").kohaTable({
                 columnDefs: [
-                    { orderable: false, targets: ["nosort"] },
                     { type: "title-string", targets: ["title-string"] },
                     { type: "anti-the", targets: ["anti-the"] },
                 ],

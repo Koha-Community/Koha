@@ -337,7 +337,7 @@
                                             <caption>[% issues_count | html %] Item(s) checked out</caption>
                                             <thead>
                                                 <tr>
-                                                    [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
+                                                    [% IF ( JacketImages ) %]<th class="NoSort">&nbsp;</th>[% END %]
                                                     <th class="all anti-the">Title</th>
                                                     <th>Author</th>
                                                     <th class="psort">Due</th>
@@ -355,11 +355,11 @@
                                                         <th>Fines</th>
                                                     [% END %]
                                                     [% IF Koha.Preference('OPACMySummaryHTML') %]
-                                                        <th class="nosort">Links</th>
+                                                        <th class="NoSort">Links</th>
                                                     [% END %]
                                                     [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                         <th class="hidden">Checkout note</th>
-                                                        <th id="checkout-notes" class="nosort noExport" title="Use this to report any problems with your currently checked out items">Report a problem</th>
+                                                        <th id="checkout-notes" class="NoSort noExport" title="Use this to report any problems with your currently checked out items">Report a problem</th>
                                                     [% END %]
                                                     <th></th>
                                                 </tr>
@@ -728,14 +728,14 @@
                                         <!-- OVERDUES TABLE ROWS -->
                                         <thead>
                                             <tr>
-                                                [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
+                                                [% IF ( JacketImages ) %]<th class="NoSort">&nbsp;</th>[% END %]
                                                 <th class="all anti-the">Title</th>
                                                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                                                 [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
                                                 <th>Call number</th>
                                                 <th class="psort">Due</th>
                                                 [% IF ( OpacRenewalAllowed ) %]
-                                                    <th class="nosort">Renew</th>
+                                                    <th class="NoSort">Renew</th>
                                                 [% END %]
                                                 [% IF ( OPACFinesTab ) %]
                                                     <th>Fines</th>
@@ -862,7 +862,7 @@
                                                 <th>Expires on</th>
                                                 <th>Pickup location</th>
                                                 <th>Status</th>
-                                                <th class="nosort">&nbsp;</th>
+                                                <th class="NoSort">&nbsp;</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -1210,7 +1210,6 @@
                     "sorting" : [[ thIndex, 'asc' ]],
                     "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
                     "columnDefs": [
-                        { "targets": [ "nosort" ],"orderable": false,"searchable": false },
                         { "type": "anti-the", "targets" : [ "anti-the" ] },
                         { "visible": false, "targets" : [ "hidden" ] },
                         { "className": 'dtr-control', "orderable": false, "targets": -1 }

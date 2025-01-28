@@ -129,7 +129,6 @@ $(document).ready(function () {
 
     $("#recalls-table").kohaTable({
         columnDefs: [
-            { orderable: false, targets: ["nosort"] },
             { type: "title-string", targets: ["title-string"] },
             { type: "anti-the", targets: ["anti-the"] },
         ],

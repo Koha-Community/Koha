@@ -51,7 +51,7 @@
                                     <th class="recall-title anti-the">Title</th>
                                     <th class="recall-patron">Requested by</th>
                                     <th class="recall-library">Pickup location</th>
-                                    <th class="recall-action nosort">&nbsp;</th>
+                                    <th class="recall-action NoSort">&nbsp;</th>
                                 </tr></thead
                             >
                             <tbody>
@@ -104,7 +104,7 @@
                                         <th class="recall-title anti-the">Title</th>
                                         <th class="recall-patron">Requested by</th>
                                         <th class="recall-library">Pickup location</th>
-                                        <th class="recall-action nosort">&nbsp;</th>
+                                        <th class="recall-action NoSort">&nbsp;</th>
                                     </tr></thead
                                 >
                                 <tbody>
@@ -158,7 +158,6 @@
         $(document).ready(function () {
             $("#recallswaiting-table, #recallsover-table").kohaTable({
                 autoWidth: false,
-                columnDefs: [{ orderable: false, targets: ["nosort"] }],
                 pagingType: "full_numbers",
             });
 
