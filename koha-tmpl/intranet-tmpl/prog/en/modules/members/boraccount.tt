@@ -483,6 +483,7 @@
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
         <input type="hidden" name="accountlines_id" id="accountlines_id" value="" />
+        <input type="hidden" name="op" value="cud-cancel" />
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
