@@ -164,7 +164,7 @@
                                 <caption>Your tags</caption>
                                 <thead>
                                     <tr>
-                                        <th>&nbsp;</th>
+                                        <th class="NoSort">&nbsp;</th>
                                         <th>Term</th>
                                         <th class="all anti-the">Title</th>
                                         <th>Date added</th>
@@ -298,7 +298,6 @@
             $("#mytagst").kohaTable({
                 sorting: [[2, "asc"]],
                 columnDefs: [
-                    { targets: [0], orderable: false, searchable: false },
                     { className: "dtr-control", orderable: false, targets: -1 },
                     { responsivePriority: 1, targets: 2 },
                 ],

@@ -153,14 +153,14 @@
                                 <th>Order line</th>
                                 <th title="Item holds / Total holds">Holds</th>
                                 <th>Summary</th>
-                                <th>More</th>
+                                <th class="NoSort">More</th>
                                 <th>Replacement price</th>
                                 <th>Quantity</th>
                                 <th>Fund</th>
                                 <th>Est cost</th>
                                 <th>Actual cost</th>
                                 <th>TOTAL</th>
-                                <th></th>
+                                <th class="NoSort"></th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -376,7 +376,6 @@
                         [5, 10, 20, 50, 100, -1],
                         [5, 10, 20, 50, 100, _("All")],
                     ],
-                    columnDefs: [{ targets: [5, -1], orderable: false, searchable: false }],
                     columns: [
                         { type: "html" },
                         { type: "html" },

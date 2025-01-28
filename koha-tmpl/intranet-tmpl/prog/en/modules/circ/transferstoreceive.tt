@@ -50,7 +50,7 @@
                                     <th>On hold for</th>
                                     <th>Home library</th>
                                     <th>Call number</th>
-                                    <th>&nbsp;</th>
+                                    <th class="NoSort">&nbsp;</th>
                                 </tr></thead
                             >
                             <tbody
@@ -115,9 +115,6 @@
         $(document).ready(function() {
             [% FOREACH branchesloo IN branchesloop %]
                 $("#transferst[% branchesloo.branchcode | html %]").kohaTable({
-                    columnDefs: [
-                        { targets: [-1], orderable: false, searchable: false },
-                    ],
                     dom: "t",
                     paginate: false,
                 });

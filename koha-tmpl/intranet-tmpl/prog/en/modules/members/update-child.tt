@@ -24,7 +24,7 @@
                     <table id="catst">
                         <thead>
                             <tr>
-                                <th>&nbsp;</th>
+                                <th class="NoSort">&nbsp;</th>
                                 <th>Code</th>
                                 <th>Description</th>
                             </tr>
@@ -68,7 +68,6 @@
             $("#catst").kohaTable({
                 dom: "t",
                 order: [[2, "asc"]],
-                columnDefs: [{ targets: [0], orderable: false, searchable: false }],
                 paginate: false,
             });
             $("#updatechildf").validate({

@@ -91,7 +91,7 @@
                     <caption class="sr-only">Current session</caption>
                     <thead>
                         <tr>
-                            <th></th>
+                            <th class="NoSort"></th>
                             <th>Date</th>
                             <th>Search</th>
                             <th>Results</th>
@@ -297,10 +297,7 @@
             let history_tables = $(".historyt").kohaTable({
                 order: [[1, "desc"]],
                 dom: '<"top"<"table_entries"><"table_controls"fB>>t',
-                columnDefs: [
-                    { targets: [0], orderable: false, searchable: false },
-                    { className: "dtr-control", orderable: false, targets: -1 },
-                ],
+                columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: _("Search"),

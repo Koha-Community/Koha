@@ -257,7 +257,7 @@
                         <th>Auth value</th>
                         <th>Indicator 1</th>
                         <th>Indicator 2</th>
-                        <th>&nbsp;</th>
+                        <th class="NoSort">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -326,7 +326,6 @@
     <script>
         $(document).ready(function () {
             $("#table_marctagstructure").kohaTable({
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                 pagingType: "full",
             });
             $("#select_display").on("change", function () {

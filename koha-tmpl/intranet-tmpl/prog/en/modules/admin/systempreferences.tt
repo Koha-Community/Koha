@@ -334,9 +334,9 @@
                 <thead
                     ><tr>
                         <th>Preference</th>
-                        <th>Explanation</th>
-                        <th>Value</th>
-                        <th class="noExport">Actions</th>
+                        <th class="NoSort">Explanation</th>
+                        <th class="NoSort">Value</th>
+                        <th class="noExport NoSort">Actions</th>
                     </tr></thead
                 >
                 <tbody
@@ -498,7 +498,6 @@
                [% IF ( loop ) %]
                    $("#sysprefst").kohaTable({
                        dom: '<"top pager"ilf>t',
-                       columnDefs: [{ targets: [-1, -2, -3], orderable: false }],
                        paginate: false,
                    });
                [% END %]

@@ -56,8 +56,8 @@
                             <thead
                                 ><tr>
                                     <th>Title</th>
-                                    <th>Location</th>
-                                    <th>&nbsp;</th>
+                                    <th class="NoSort">Location</th>
+                                    <th class="NoSort">&nbsp;</th>
                                 </tr></thead
                             >
 
@@ -162,7 +162,6 @@
                 }
             });
             $("#itemst").kohaTable({
-                columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
                 order: [[0, "asc"]],
                 pagingType: "full",
             });

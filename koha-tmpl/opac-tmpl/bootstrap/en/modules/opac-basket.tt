@@ -314,11 +314,11 @@
                                 <caption class="sr-only">Items in your cart</caption>
                                 <thead>
                                     <tr>
-                                        <th class="noprint">&nbsp;</th>
+                                        <th class="noprint NoSort">&nbsp;</th>
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
-                                        <th>Location (Status)</th>
+                                        <th class="NoSort">Location (Status)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -546,7 +546,6 @@
             if( $("#itemst").length > 0 ){
                 var itemst = $("#itemst").kohaTable({
                     order: [[1, "asc"]],
-                    columnDefs: [{ targets: [0, -1], orderable: false, searchable: false }],
                 });
 
                 var buttons = new $.fn.dataTable.Buttons(itemst, {

@@ -43,7 +43,7 @@
                 <thead>
                     <tr>
                         <th>Library</th>
-                        <th>Authname</th>
+                        <th class="NoSort">Authname</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +73,6 @@
     <script>
         $(document).ready(function () {
             $("#od_info").kohaTable({
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                 pagingType: "full",
             });
         });

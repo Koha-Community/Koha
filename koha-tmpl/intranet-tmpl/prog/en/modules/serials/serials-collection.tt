@@ -221,7 +221,7 @@
                                 <thead>
                                     <tr>
                                         [% IF ( CAN_user_serials_receive_serials ) %]
-                                            <th>Edit</th>
+                                            <th class="NoSort">Edit</th>
                                         [% END %]
                                         [% IF ( subscriptions.size > 1 ) %]
                                             <th># Subs</th>
@@ -234,7 +234,7 @@
                                         <th>Notes</th>
                                         <th>Library</th>
                                         [% IF ( routing ) %]
-                                            <th>Routing</th>
+                                            <th class="NoSort">Routing</th>
                                         [% END %]
                                     </tr>
                                 </thead>
@@ -360,7 +360,6 @@
                 $("#subscription_years a:first").tab("show");
             }
             $(".subscription-year-table").kohaTable({
-                columnDefs: [{ targets: [0, -1], orderable: false, searchable: false }],
                 order: [[0, "desc"]],
                 dom: "t",
                 autoWidth: false,

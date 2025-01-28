@@ -73,7 +73,7 @@
                         <th>Public enrollment</th>
                         <th>Email required</th>
                         <th>Library</th>
-                        <th class="noExport">Actions</th>
+                        <th class="noExport NoSort">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -151,13 +151,11 @@
             tTable = $("#club-templates-table").kohaTable({
                 pagingType: "full",
                 dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
             });
 
             cTable = $("#clubs-table").kohaTable({
                 pagingType: "full",
                 dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
             });
 
             $("body").on("click", ".delete_club", function (e) {

@@ -210,10 +210,10 @@
                         <table id="biblios" class="records">
                             <thead>
                                 <tr>
-                                    <th>&nbsp;</th>
+                                    <th class="NoSort">&nbsp;</th>
                                     <th>Biblionumber</th>
                                     <th>Title</th>
-                                    <th>&nbsp;</th>
+                                    <th class="NoSort">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -249,10 +249,10 @@
                         <table id="authorities" class="records">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="NoSort">&nbsp;</th>
                                     <th>AuthID</th>
                                     <th>Summary</th>
-                                    <th>&nbsp;</th>
+                                    <th class="NoSort">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -355,7 +355,6 @@
 
             $("#biblios").kohaTable({
                 columnDefs: [
-                    { targets: [0, 3], orderable: false, searchable: false },
                     { targets: [1], type: "num-html" },
                 ],
                 dom: "t",
@@ -365,7 +364,6 @@
 
             $("#authorities").kohaTable({
                 columnDefs: [
-                    { targets: [0, 3], orderable: false, searchable: false },
                     { targets: [1], type: "num-html" },
                 ],
                 dom: "t",

@@ -220,7 +220,7 @@
                 <thead
                     ><tr
                         ><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Attributes</th
-                        ><th class="noExport">Actions</th>
+                        ><th class="noExport NoSort">Actions</th>
                     </tr></thead
                 >
                 <tbody>
@@ -319,7 +319,6 @@
         [% ELSE %]
             $(document).ready(function() {
                 $("#serverst").kohaTable({
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                     pagingType: "full",
                 });
                 $(".delete").on("click",function(e){

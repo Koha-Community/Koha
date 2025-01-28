@@ -53,7 +53,7 @@
                                     <th>On loan</th>
                                     <th>Home library</th>
                                     <th>Call number</th>
-                                    <th>Actions</th>
+                                    <th class="NoSort">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -100,9 +100,6 @@
         $(document).ready(function() {
             [% FOREACH library IN libraries %]
                 $("#transferst[% library.branchcode | html %]").kohaTable({
-                    columnDefs: [
-                        { targets: [-1], orderable: false, searchable: false },
-                    ],
                     dom: "t",
                     paginate: false,
                 });

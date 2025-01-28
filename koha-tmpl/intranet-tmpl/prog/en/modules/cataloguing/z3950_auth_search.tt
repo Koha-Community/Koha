@@ -100,7 +100,7 @@
                         [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') %]
                             <th>Additional fields</th>
                         [% END %]
-                        <th class="noExport">Actions</th>
+                        <th class="noExport NoSort">Actions</th>
                     </tr></thead
                 >
                 <tbody
@@ -267,7 +267,6 @@
         $(document).ready(function () {
             $("#resultst").kohaTable({
                 dom: "t",
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                 order: [[1, "asc"]],
                 paginate: false,
             });

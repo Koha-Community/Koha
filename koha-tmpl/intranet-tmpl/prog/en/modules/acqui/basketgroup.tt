@@ -271,7 +271,7 @@
                                 <th>Billing place</th>
                                 <th>Delivery place</th>
                                 <th>Number of baskets</th>
-                                <th>Action</th>
+                                <th class="NoSort">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -323,7 +323,7 @@
                                 <th>Billing place</th>
                                 <th>Delivery place</th>
                                 <th>Number of baskets</th>
-                                <th>Action</th>
+                                <th class="NoSort">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -426,7 +426,6 @@
             [% END %]
             [% UNLESS ( grouping ) %]
                 let dt_params = {
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                     autoWidth: false,
                     pagingType: "full",
                 };

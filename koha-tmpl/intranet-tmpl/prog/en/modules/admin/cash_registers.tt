@@ -171,8 +171,8 @@
                         <th>Description</th>
                         <th>Library</th>
                         <th>Library default</th>
-                        <th>Initial float</th>
-                        <th class="noExport">Actions</th>
+                        <th class="NoSort">Initial float</th>
+                        <th class="noExport NoSort">Actions</th>
                     </thead>
                     <tbody>
                         [% FOREACH cash_register IN cash_registers %]
@@ -237,7 +237,6 @@
     <script>
         $(document).ready(function () {
             var crtable = $("#table_cash_registers").kohaTable({
-                columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
                 order: [[1, "asc"]],
                 paginationType: "full",
             });

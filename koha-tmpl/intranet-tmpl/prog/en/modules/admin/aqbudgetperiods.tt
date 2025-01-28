@@ -484,7 +484,7 @@
                                     <th>End date</th>
                                     <th>Locked</th>
                                     <th>Total</th>
-                                    <th class="noExport">Actions</th>
+                                    <th class="noExport NoSort">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -524,7 +524,7 @@
                                     <th>End date</th>
                                     <th>Locked</th>
                                     <th>Total</th>
-                                    <th class="noExport">Actions</th>
+                                    <th class="noExport NoSort">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -568,7 +568,6 @@
             [% END %]
 
             let dt_params = {
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                 pagingType: "full",
                 autoWidth: false,
             };

@@ -295,7 +295,7 @@
                         <th>Description</th>
                         <th>Numbering formula</th>
                         <th>Display order</th>
-                        <th class="noExport">Actions</th>
+                        <th class="noExport NoSort">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -391,7 +391,6 @@
         $(document).ready(function(){
 
             $("#numberpatternst").kohaTable({
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                 pagingType: "full",
             });
 

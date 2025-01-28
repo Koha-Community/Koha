@@ -135,7 +135,7 @@
                                         <th>Basket group</th>
                                         <th>Internal note</th>
                                         <th>Closed</th>
-                                        <th class="noExport">Actions</th>
+                                        <th class="noExport NoSort">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -269,7 +269,6 @@
                 searching: false,
                 info: false,
                 order: [[1, "asc"]],
-                columnDefs: [{ targets: [-1], orderable: false }],
             });
             $("#supplierlist").change(function () {
                 var id = $(this).find("option:selected").val();

@@ -148,7 +148,7 @@
                                         <th>Status</th>
                                         <th>Request placed</th>
                                         <th>Last updated</th>
-                                        <th></th>
+                                        <th class="NoSort"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -370,7 +370,6 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $("#illrequestlist").kohaTable({
-            columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
             order: [[3, "desc"]],
         });
         $("#backend-dropdown-options").removeClass("nojs");

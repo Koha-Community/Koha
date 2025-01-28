@@ -91,7 +91,7 @@
                                             [% CASE 'Description' %]
                                                 <th>Description</th>
                                             [% CASE 'Actions' %]
-                                                <th class="noExport">Actions</th>
+                                                <th class="noExport NoSort">Actions</th>
                                             [% CASE 'Profile ID' %]
                                                 <th>Profile ID</th>
                                             [% CASE 'Printer Name' %]
@@ -219,7 +219,6 @@
             $("#labels-table").kohaTable({
                 pagingType: "full",
                 order: [[1, "asc"]],
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
             });
         });
     </script>

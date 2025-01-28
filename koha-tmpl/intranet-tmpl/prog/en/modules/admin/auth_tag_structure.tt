@@ -248,7 +248,7 @@
                         <th>Repeatable</th>
                         <th>Mandatory</th>
                         <th>Authorized<br />value</th>
-                        <th>&nbsp;</th>
+                        <th class="NoSort">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -290,7 +290,6 @@
     <script>
         $(document).ready(function () {
             $("#table_authtagstructure").kohaTable({
-                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                 pagingType: "full",
             });
         });

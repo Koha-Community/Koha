@@ -57,7 +57,7 @@
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Total</th>
-                        <th>&nbsp;</th>
+                        <th class="NoSort">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,7 +121,6 @@
            var suggestionst = $("#suggestionst").kohaTable({
                columnDefs: [
                    { targets: [0], visible: false, searchable: true }, // must be searchable for filtering
-                   { targets: [-1], orderable: false, searchable: false },
                ],
                pagingType: "full",
            });

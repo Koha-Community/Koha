@@ -173,7 +173,7 @@
                         <table id="biblios" class="records">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="NoSort"></th>
                                     <th>Biblionumber</th>
                                     <th>Title</th>
                                     <th>Items</th>
@@ -217,7 +217,7 @@
                     <table id="authorities" class="records">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th class="NoSort"></th>
                                 <th>AuthID</th>
                                 <th>Summary</th>
                                 <th>Used in</th>
@@ -348,7 +348,6 @@
 
           $("#biblios").kohaTable({
               columnDefs: [
-                  { targets: [0], orderable: false, searchable: false },
                   { targets: [3, 4], type: "num-html" },
               ],
               dom: "t",
@@ -358,7 +357,6 @@
 
           $("#authorities").kohaTable({
               columnDefs: [
-                  { targets: [0], orderable: false, searchable: false },
                   { targets: [3], type: "num-html" },
               ],
               dom: "t",

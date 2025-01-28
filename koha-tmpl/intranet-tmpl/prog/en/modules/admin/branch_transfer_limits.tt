@@ -83,7 +83,7 @@
                             <thead>
                                 <tr>
                                     <th>Library</th>
-                                    <th>Allow transfer?</th>
+                                    <th class="NoSort">Allow transfer?</th>
                                 </tr>
                             </thead>
 
@@ -180,7 +180,6 @@
 
             [% FOREACH codes_loo IN codes_loop %]
                 $("#[% codes_loo.code | html %]table").kohaTable({
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                     paginate: false,
                 });
             [% END %]

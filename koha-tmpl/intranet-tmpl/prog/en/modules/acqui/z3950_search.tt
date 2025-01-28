@@ -190,9 +190,9 @@
                                 <th>ISBN</th>
                                 <th>LCCN</th>
                                 [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' ) %]
-                                    <th>Additional fields</th>
+                                    <th class="NoSort">Additional fields</th>
                                 [% END %]
-                                <th>Actions</th>
+                                <th class="NoSort">Actions</th>
                             </tr></thead
                         >
                         <tbody
@@ -334,10 +334,7 @@
     <script>
         $(document).ready(function () {
             var resultst = $("#resultst").kohaTable({
-                columnDefs: [
-                    { targets: [-1, -2], orderable: false, searchable: false },
-                    { targets: [1], type: "nsb-nse" },
-                ],
+                columnDefs: [{ targets: [1], type: "nsb-nse" }],
                 order: [[1, "asc"]],
                 paginate: false,
                 searching: false,
