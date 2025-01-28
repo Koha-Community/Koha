@@ -470,7 +470,6 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
         let policy = [% To.json(policy.unblessed) | $raw %];
@@ -640,7 +639,7 @@
 
             let dt_tables = new Array("to_be_stagedt", "staged_and_readyt", "patron_is_outsidet", "delivered_todayt");
             dt_tables.forEach(function( id, index ){
-                KohaTable( id , {
+                $("#" + id).kohaTable({
                     "autoWidth": false
                 }, dt_settings[ index ] );
             });
