@@ -40,29 +40,6 @@ var dataTablesDefaults = {
     dom: "t",
     buttons: ["clearFilter", "copy", "csv", "print"],
     paging: false,
-    buttons: [
-        {
-            fade: 100,
-            className: "dt_button_clear_filter",
-            titleAttr: __("Clear filter"),
-            enabled: false,
-            text:
-                '<i class="fa fa-lg fa-times"></i> <span class="dt-button-text">' +
-                __("Clear filter") +
-                "</span>",
-            available: function (dt) {
-                // The "clear filter" button is made available if this test returns true
-                if (dt.settings()[0].aanFeatures.f) {
-                    // aanFeatures.f is null if there is no search form
-                    return true;
-                }
-            },
-            action: function (e, dt, node) {
-                dt.search("").draw("page");
-                node.addClass("disabled");
-            },
-        },
-    ],
     initComplete: function (settings) {
         var tableId = settings.nTable.id;
         state = settings.oLoadedState;
@@ -183,21 +160,46 @@ function _dt_buttons(params) {
         },
     ];
 
-    let buttons = [];
-    buttons.push({
-        fade: 100,
-        className: "dt_button_clear_filter",
-        titleAttr: __("Clear filter"),
-        enabled: false,
-        text:
-            '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' +
-            __("Clear filter") +
-            "</span>",
-        action: function (e, dt, node, config) {
-            dt.search("").draw("page");
-            node.addClass("disabled");
+    let buttons = [
+        {
+            fade: 100,
+            className: "dt_button_clear_filter",
+            titleAttr: _("Clear filter"),
+            enabled: false,
+            text:
+                '<i class="fa fa-lg fa-times" aria-hidden="true"></i> <span class="dt-button-text">' +
+                _("Clear filter") +
+                "</span>",
+            action: function (e, dt, node, config) {
+                dt.search("").draw("page");
+                node.addClass("disabled");
+            },
         },
-    });
+        {
+            extend: "csvHtml5",
+            text: _("CSV"),
+            exportOptions: {
+                columns: exportColumns,
+                format: export_format,
+            },
+        },
+        {
+            extend: "copyHtml5",
+            text: _("Copy"),
+            exportOptions: {
+                columns: exportColumns,
+                format: export_format,
+            },
+        },
+        {
+            extend: "print",
+            text: _("Print"),
+            exportOptions: {
+                columns: exportColumns,
+                format: export_format,
+            },
+        },
+    ];
 
     // Retrieving bKohaColumnsUseNames from the options passed to the constructor, not DT's settings
     // But ideally should be retrieved using table.data()
@@ -233,19 +235,6 @@ function _dt_buttons(params) {
             },
         });
     }
-
-    buttons.push({
-        extend: "collection",
-        autoClose: true,
-        fade: 100,
-        className: "export_controls",
-        titleAttr: __("Export or print"),
-        text:
-            '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' +
-            __("Export") +
-            "</span>",
-        buttons: export_buttons,
-    });
 
     return buttons;
 }
