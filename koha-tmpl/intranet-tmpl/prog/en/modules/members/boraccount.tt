@@ -137,7 +137,7 @@
       <td class="actions">
         [% IF ( account.is_credit ) %]
           [% IF Koha.Preference('UseEmailReceipts') %]
-          <div class="btn-group">
+                                        <div class="btn-group dropup">
           <button class="btn btn-xs btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-receipt"></i> Receipt</button>
           <ul class="dropdown-menu dropdown-menu-end">
               <li><a target="_blank" href="printfeercpt.pl?accountlines_id=[% account.accountlines_id | uri %]" class="receipt-print-action dropdown-item"><i class="fa fa-print"></i> Print</a></li>
@@ -147,8 +147,8 @@
                       <input type="hidden" name="op" value="cud-send_receipt" />
                       <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
                       <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+                                                        <button type="submit" class="dropdown-item receipt-email-action"> <i class="fa fa-envelope"></i> Email </button>
                   </form>
-                  <a href="#" class="receipt-email-action"><i class="fa fa-envelope"></i> Email</a>
               </li>
           </ul>
           </div>
@@ -473,11 +473,6 @@
                 $("#charged + span").text(amountoutstanding);
                 $("#discount").attr({ "value": (0).format_price(), "max": amountoutstanding, "min": 0 });
                 $("#discount").focus();
-            });
-
-            $(".receipt-email-action").on("click", function(e){
-                e.preventDefault();
-                return $(this).siblings('form').submit();
             });
         });
     </script>
