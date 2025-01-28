@@ -211,12 +211,14 @@
             </tr>
             <tr>
                 <th scope="row">Message broker: </th>
-                [% IF warnConnectBroker == 'Error connecting' %]
+                [% IF warnConnectBroker %]
                     <td class="text-bg-warning"><strong>Using SQL polling (Fallback, Error connecting to RabbitMQ)</strong></td>
-                [% ELSIF warnConnectBroker %]
-                    <td class="text-bg-warning"><strong>Using SQL polling</strong></td>
+                [% ELSE %]
+                    [% IF Koha.Preference('JobsNotificationMethod') == 'polling' %]
+                        <td class="text-bg-info">Using SQL polling</td>
                 [% ELSE %]
                     <td class="text-bg-info">Using RabbitMQ</td>
+                [% END %]
                 [% END %]
             </tr>
             <tr>

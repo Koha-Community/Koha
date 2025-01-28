@@ -178,7 +178,7 @@ if ( $tab eq 'about' ) {
         $where_is_memcached_config = 'config_only';
     }
 
-    message_broker_check($template);
+    job_notification_method_check($template);
     elasticsearch_check($template);
 
     $template->param(
@@ -606,7 +606,7 @@ if($tab eq 'sysinfo') {
         $template->param( warnFastCataloging => $no_FA_framework );
     }
 
-    message_broker_check($template);
+    job_notification_method_check($template);
 
     #BZ 28267: Warn administrators if there are database rows with a format other than 'DYNAMIC'
     {
@@ -909,19 +909,15 @@ sub elasticsearch_check {
     }
 }
 
-sub message_broker_check {
-    my $template = shift;
-    {
+sub job_notification_method_check {
+    my ($template) = @_;
+
+    if ( C4::Context->preference('JobsNotificationMethod') eq 'STOMP' ) {
+
         # BackgroundJob - test connection to message broker
         my $conn = Koha::BackgroundJob->connect;
         if (! $conn) {
-            if (C4::Context->preference('JobsNotificationMethod') eq 'STOMP' ) {
-                $template->param( warnConnectBroker => 'Error connecting' );
-            } else {
-                $template->param(
-                    warnConnectBroker => C4::Context->preference('JobsNotificationMethod')
-                );
-            }
+            $template->param( warnConnectBroker => 1 );
         }
     }
   }
