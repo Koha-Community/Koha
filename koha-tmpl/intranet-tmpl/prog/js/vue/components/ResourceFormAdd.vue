@@ -73,6 +73,7 @@ export default {
         listComponent: String,
         resource: Object,
         onSubmit: Function,
+        resourceName: String,
     },
     created() {
         if (this.$route.params[this.idAttr]) {

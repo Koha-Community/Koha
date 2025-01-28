@@ -122,6 +122,19 @@
             v-on="getEventHandlers()"
         ></component>
     </template>
+    <template
+        v-else-if="
+            attr.type == 'relationship' && !attr.componentPath && attr.props
+        "
+    >
+        <component
+            :is="relationshipWidget"
+            :title="attr.label"
+            :apiClient="attr.apiClient"
+            v-bind="requiredProps()"
+            v-on="getEventHandlers()"
+        ></component>
+    </template>
 </template>
 
 <script>
@@ -157,6 +170,12 @@ export default {
             } else {
                 return this.attr.disabled || false;
             }
+        },
+        relationshipWidget() {
+            const component = this.identifyAndImportComponent({
+                componentPath: "./RelationshipWidget.vue",
+            });
+            return component;
         },
     },
     methods: {

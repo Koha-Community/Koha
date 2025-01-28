@@ -54,7 +54,7 @@ export default {
                         acc[key] = prop.value;
                     }
                 }
-                if (prop.type === "boolean") {
+                if (prop.type === "boolean" || prop.type === "object") {
                     acc[key] = prop.value;
                 }
 

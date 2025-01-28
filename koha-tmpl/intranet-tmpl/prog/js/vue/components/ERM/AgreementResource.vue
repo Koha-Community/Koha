@@ -261,11 +261,23 @@ export default {
                         ],
                     },
                     label: __("Periods"),
-                    componentPath: "./ERM/AgreementPeriods.vue",
                     props: {
-                        periods: {
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "periods",
+                        },
+                        resourceName: {
+                            type: "string",
+                            value: "period",
+                        },
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                started_on: null,
+                                ended_on: null,
+                                cancellation_deadline: null,
+                                notes: null,
+                            },
                         },
                     },
                     subFields: [
@@ -408,7 +420,6 @@ export default {
                     name: "licenses",
                     type: "relationship",
                     label: __("Licenses"),
-                    componentPath: "./ERM/AgreementLicenses.vue",
                     showElement: {
                         type: "table",
                         columnData: "agreement_licenses",
@@ -445,18 +456,26 @@ export default {
                             },
                         ],
                     },
+                    apiClient: APIClient.erm.licenses,
                     props: {
-                        agreement_licenses: {
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                license_id: null,
+                                status: null,
+                                physical_location: null,
+                                notes: "",
+                                uri: "",
+                                license: { name: "" },
+                            },
+                        },
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "agreement_licenses",
                         },
-                        av_agreement_license_statuses: {
-                            type: "av",
-                            av: null,
-                        },
-                        av_agreement_license_location: {
-                            type: "av",
-                            av: null,
+                        resourceName: {
+                            type: "string",
+                            value: "license",
                         },
                     },
                     subFields: [
