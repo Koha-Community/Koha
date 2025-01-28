@@ -57,14 +57,14 @@
         [% IF id_column == 'borrowernumbers' %]
             <div class="alert alert-warning"><p>Warning, the following borrowernumbers were not found:</p></div>
         [% ELSE %]
-            <div class="alert alert-warning"><p>Warning, the following cardnumbers were not found:</p></div>
+            <div class="alert alert-warning"><p>Warning, the following card numbers were not found:</p></div>
         [% END %]
         <table style="margin:auto;">
             <thead>
                 [% IF id_column == 'borrowernumbers' %]
                     <tr><th>Borrowernumbers not found</th></tr>
                 [% ELSE %]
-                    <tr><th>Cardnumbers not found</th></tr>
+                    <tr><th>Card numbers not found</th></tr>
                 [% END %]
             </thead>
             <tbody>
@@ -79,14 +79,14 @@
         [% IF id_column == 'borrowernumbers' %]
             <div class="alert alert-warning"><p>Warning, the following borrowernumbers were already in this list:</p></div>
         [% ELSE %]
-            <div class="alert alert-warning"><p>Warning, the following cardnumbers were already in this list:</p></div>
+            <div class="alert alert-warning"><p>Warning, the following card numbers were already in this list:</p></div>
         [% END %]
         <table style="margin:auto;">
             <thead>
                 [% IF id_column == 'borrowernumbers' %]
                     <tr><th>Borrowernumbers already in list</th></tr>
                 [% ELSE %]
-                    <tr><th>Cardnumbers already in list</th></tr>
+                    <tr><th>Card numbers already in list</th></tr>
                 [% END %]
             </thead>
             <tbody>
@@ -123,7 +123,7 @@
                     <li class="radio">
                         <label class="id_choice" for="add_by_cardnumbers">
                             <input id="add_by_cardnumbers" type="radio" name="id_column" value="cardnumbers" checked="checked" />
-                            <span class="add_by_cardnumbers">Cardnumbers</span>
+                            <span class="add_by_cardnumbers">Card numbers</span>
                         </label>
                         <label class="id_choice" for="add_by_borrowernumbers">
                             <input id="add_by_borrowernumbers" type="radio" name="id_column" value="borrowernumbers" />
