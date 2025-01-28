@@ -166,7 +166,7 @@ SKIP: {
             'Password field is obscured initially'
         );
 
-        $driver->find_element('//input[@id="show-password-toggle-checkbox-modal"]')->click;
+        $driver->find_element('//div[@id="loginModal"]//input[@class="show-password-toggle-checkbox"]')->click;
 
         is(
             $driver->find_element('//div[@id="loginModal"]//input[@id="mpassword"]')->get_attribute('type'),
@@ -174,7 +174,7 @@ SKIP: {
             'Password field is shown'
         );
 
-        $driver->find_element('//input[@id="show-password-toggle-checkbox-modal"]')->click;
+        $driver->find_element('//div[@id="loginModal"]//input[@class="show-password-toggle-checkbox"]')->click;
 
         $driver->find_element('//div[@id="loginModal"]//input[@type="submit"]')->click;
         like( $driver->get_title, qr(Koha online catalog), 'Patron without permission should be able to login to the OPAC using the modal' );
@@ -214,7 +214,7 @@ SKIP: {
             'Password field is obscured initially'
         );
 
-        $driver->find_element('//input[@id="show-password-toggle-checkbox-main"]')->click;
+        $driver->find_element('//div[@id="login"]//input[@class="show-password-toggle-checkbox"]')->click;
 
         is(
             $driver->find_element('//div[@id="login"]//input[@id="password"]')->get_attribute('type'),
@@ -222,7 +222,7 @@ SKIP: {
             'Password field is shown'
         );
 
-        $driver->find_element('//input[@id="show-password-toggle-checkbox-main"]')->click;
+        $driver->find_element('//div[@id="login"]//input[@class="show-password-toggle-checkbox"]')->click;
         $s->submit_form;
         $driver->find_element('//div[@id="userdetails"]');
         like( $driver->get_title, qr(Your library home), 'Patron without permissions should be able to login to the OPAC using the form on the right');
