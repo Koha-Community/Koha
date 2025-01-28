@@ -437,7 +437,6 @@
             [% ELSE %]
                 grouped = $("#grouped").kohaTable({
                     dom: "t",
-                    columnDefs: [{ orderable: false, targets: ["NoSort"] }],
                     autoWidth: false,
                     language: {
                         emptyTable: _("There are no baskets in this group"),
@@ -445,7 +444,6 @@
                 });
                 ungrouped = $("#ungrouped").kohaTable({
                     dom: "t",
-                    columnDefs: [{ orderable: false, targets: ["NoSort"] }],
                     autoWidth: false,
                     language: {
                         emptyTable: _("There are no ungrouped baskets"),

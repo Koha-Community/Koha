@@ -73,10 +73,7 @@ $(document).ready(function () {
 
     $("#stock_rotation_manage_items").kohaTable(
         {
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-                { type: "anti-the", targets: ["anti-the"] },
-            ],
+            columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
             pagingType: "full",
             autoWidth: false,
         },
@@ -85,10 +82,7 @@ $(document).ready(function () {
 
     $("#stock_rotation").kohaTable(
         {
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-                { type: "anti-the", targets: ["anti-the"] },
-            ],
+            columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
             pagingType: "full",
             autoWidth: false,
         },

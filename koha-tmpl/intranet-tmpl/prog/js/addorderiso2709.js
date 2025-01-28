@@ -3,10 +3,7 @@
 $(document).ready(function () {
     $("#Aform").preventDoubleFormSubmit();
     $("#files").kohaTable({
-        columnDefs: [
-            { orderable: false, searchable: false, targets: ["NoSort"] },
-            { type: "anti-the", targets: ["anti-the"] },
-        ],
+        columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
         pagingType: "full",
         order: [],
     });

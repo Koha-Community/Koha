@@ -1384,14 +1384,7 @@ $(document).ready(function () {
                 autoWidth: false,
                 dom: "rt",
                 order: [],
-                columnDefs: [
-                    {
-                        orderable: false,
-                        searchable: false,
-                        targets: ["NoSort"],
-                    },
-                    { type: "anti-the", targets: ["anti-the"] },
-                ],
+                columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
                 columns: [
                     {
                         data: "id",

@@ -75,10 +75,7 @@ var success_test_call = function () {
 
 $(document).ready(function () {
     $("#tagst").kohaTable({
-        columnDefs: [
-            { orderable: false, searchable: false, targets: ["NoSort"] },
-            { type: "anti-the", targets: ["anti-the"] },
-        ],
+        columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
         order: [[2, "desc"]],
         pagingType: "full",
     });

@@ -688,9 +688,6 @@
 
          $(document).ready(function() {
             var contractst = $("#contractst").kohaTable({
-                columnDefs: [
-                    { orderable: false, searchable:  false, targets: [ 'NoSort' ] }
-                ],
                 dom: 't'
             } );
             $('body').on('click', '.delete-contact', null, delete_contact);

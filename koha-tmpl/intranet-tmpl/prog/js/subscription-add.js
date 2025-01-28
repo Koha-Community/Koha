@@ -564,10 +564,7 @@ function mana_search() {
             ],
             autoWidth: false,
             columnDefs: [{ width: "35%", targets: 1 }],
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-                { type: "anti-the", targets: ["anti-the"] },
-            ],
+            columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
         });
         if (
             $("#mana_results_datatable").length &&

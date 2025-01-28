@@ -30,7 +30,6 @@ $(document).ready(function () {
         populateHiddenCheckboxes($(this).attr("id").split("-")[1]);
     });
     $("#table_marcsubfieldstructure").kohaTable({
-        columnDefs: [{ sortable: false, targets: ["NoSort"] }],
         order: [],
         paginate: false,
     });

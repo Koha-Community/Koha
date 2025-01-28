@@ -53,9 +53,6 @@ function tableInit(oldtabid, newtabid) {
     }
 
     $("#" + newtabid + "_table").kohaTable({
-        columnDefs: [
-            { orderable: false, searchable: false, targets: ["NoSort"] },
-        ],
         paging: false,
         autoWidth: false,
     });
@@ -154,10 +151,7 @@ $(document).ready(function () {
 
     $("#facet_biblios_table").DataTable(
         $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { orderable: false, targets: ["NoSort"] },
-                { searchable: false, visible: false, targets: 0 },
-            ],
+            columnDefs: [{ searchable: false, visible: false, targets: 0 }],
             dom: "t",
             paging: false,
             autoWidth: false,
