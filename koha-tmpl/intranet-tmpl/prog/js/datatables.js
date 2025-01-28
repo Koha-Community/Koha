@@ -1380,6 +1380,18 @@ function update_search_description(
             }
         }
 
+        var default_column_defs = [
+            { targets: ["string-sort"], type: "string" },
+            { targets: ["anti-the"], type: "anti-the" },
+            { targets: ["NoSort"], orderable: false, searchable: false },
+        ];
+        if (settings["columnDefs"] === undefined) {
+            settings["columnDefs"] = default_column_defs;
+        } else {
+            settings["columnDefs"] =
+                settings["columnDefs"].concat(default_column_defs);
+        }
+
         $(this).data("bKohaColumnsUseNames", settings.bKohaColumnsUseNames);
         $(this).data("bKohaAjaxSVC", settings.bKohaAjaxSVC); // Must not be used for new tables!
         var table = $(this).dataTable(settings);
