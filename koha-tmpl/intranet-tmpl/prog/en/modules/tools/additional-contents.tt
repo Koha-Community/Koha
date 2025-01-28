@@ -580,15 +580,6 @@
                 } else {
                     table.search(term).draw();
                 }
-                clearFilter(term);
-            }
-
-            function clearFilter(term) {
-                if (term == "") {
-                    $(".dt_button_clear_filter").addClass("disabled");
-                } else {
-                    $(".dt_button_clear_filter").removeClass("disabled");
-                }
             }
 
             /* Custom table search configuration: If a table row
@@ -655,13 +646,6 @@
                     // Table must be filtered by the <option>'s text, not its value
                     var opt = $(this).find("option:selected").text();
                     filterDataTable(table_dt, 2, opt);
-                });
-
-                $(".dt_button_clear_filter").on("click", function () {
-                    table_dt.search("").columns().search("").draw();
-                    $("#news-filter select").each(function () {
-                        $(this).val("");
-                    });
                 });
             });
         </script>
