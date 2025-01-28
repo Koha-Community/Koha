@@ -188,6 +188,24 @@ sub store {
             }
         }
 
+        my $prevent_withdrawing_of = C4::Context->preference('PreventWithDrawingItemsStatus');
+        my @statuses_to_prevent    = defined $prevent_withdrawing_of ? split( ',', $prevent_withdrawing_of ) : ();
+        my $prevent_onloan         = grep { $_ eq 'checkedout' } @statuses_to_prevent;
+        my $prevent_intransit      = grep { $_ eq 'intransit' } @statuses_to_prevent;
+
+        if ( exists $updated_columns{withdrawn} && $updated_columns{withdrawn} ) {
+            my $transfer = $pre_mod_item->get_transfer;
+            if ( $pre_mod_item->onloan && $prevent_onloan ) {
+                Koha::Exceptions::Item::Transfer::OnLoan->throw( error => "onloan_cannot_withdraw" );
+                return $self->SUPER::store;
+            }
+
+            if ( defined $transfer && $transfer->in_transit && $prevent_intransit ) {
+                Koha::Exceptions::Item::Transfer::InTransit->throw( error => "intransit_cannot_withdraw" );
+                return $self->SUPER::store;
+            }
+        }
+
         if (   exists $updated_columns{itemcallnumber}
             or exists $updated_columns{cn_source} )
         {

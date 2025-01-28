@@ -50,6 +50,7 @@ use MARC::File::XML;
 use MIME::Base64 qw( decode_base64url encode_base64url );
 use Storable     qw( freeze thaw );
 use URI::Escape  qw( uri_escape_utf8 );
+use Try::Tiny    qw( catch try );
 
 our $dbh = C4::Context->dbh;
 
@@ -641,7 +642,13 @@ if ( $op eq "cud-additem" ) {
         if ( $newitemlost && $newitemlost ge '1' && !$olditemlost ) {
             LostItem( $item->itemnumber, 'additem' );
         }
-        $item->store;
+        try {
+            $item->store;
+        } catch {
+            if ( ref $_ && $_->can('error') ) {
+                push @errors, $_->error;
+            }
+        }
     }
 
     $nextop = "cud-additem";
