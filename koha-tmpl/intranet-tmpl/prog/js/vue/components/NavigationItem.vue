@@ -63,7 +63,4 @@ export default {
 span.item-last {
     padding: 7px 3px;
 }
-#navmenulist .breadcrumb-item::before {
-    display: none;
-}
 </style>
