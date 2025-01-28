@@ -579,10 +579,10 @@
                                         [% END %]
                                         <th class="NoSort">Place hold</th>
                                         [% IF ( active && !closedate ) %]
-                                            <th class="NoSort">Modify</th>
+                                            <th class="NoSort noExport">Modify</th>
                                         [% END %]
                                         [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-                                            <th class="NoSort">Cancel order</th>
+                                            <th class="NoSort noExport">Cancel order</th>
                                         [% END %]
                                     </tr>
                                 </thead>
@@ -1236,7 +1236,6 @@
             $("#orders").kohaTable({
                 pagingType: "full",
                 autoWidth: false,
-                exportColumns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18[% IF (Koha.Preference('EDIFACT') && ediaccount) %],19[% END %]],
             }, table_settings);
 
             $("#cancelledorderst").kohaTable({

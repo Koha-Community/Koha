@@ -741,10 +741,6 @@ function _dt_buttons(params) {
     let table_settings = params.table_settings;
 
     var exportColumns = ":visible:not(.noExport)";
-    if (settings.hasOwnProperty("exportColumns")) {
-        // A custom buttons configuration has been passed from the page
-        exportColumns = settings["exportColumns"];
-    }
 
     const export_format_spreadsheet = {
         body: function (data, row, column, node) {
