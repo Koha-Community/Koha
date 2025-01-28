@@ -39,7 +39,7 @@ var dataTablesDefaults = {
     },
     dom: "t",
     buttons: ["clearFilter", "copy", "csv", "print"],
-    paginate: false,
+    paging: false,
     buttons: [
         {
             fade: 100,
@@ -315,7 +315,6 @@ function _dt_visibility(table_settings, table_dt) {
             {},
             dataTablesDefaults,
             {
-                paging: true,
                 searching: true,
                 language: {
                     emptyTable: options.emptyTable
