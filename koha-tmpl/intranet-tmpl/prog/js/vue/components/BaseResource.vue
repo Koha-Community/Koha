@@ -4,7 +4,6 @@ import { build_url } from "../composables/datatables";
 
 export default {
     setup(props) {
-        //global setup for all resource (list and show for now, but maybe others?) components here
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
 
@@ -22,7 +21,7 @@ export default {
             setWarning,
             format_date,
             patron_to_html,
-            logged_in_user,
+            ...(typeof logged_in_user !== "undefined" && { logged_in_user }),
             escape_str,
             get_lib_from_av,
             map_av_dt_filter,
@@ -90,7 +89,7 @@ export default {
          * @param {Object} callback - Callback to call after deletion (optional)
          * @return {void}
          */
-        doResourceDelete: function (resource, callback) {
+        doResourceDelete: function (resource, callback, table) {
             let resourceId = resource
                 ? resource[this.idAttr]
                 : this[this.resourceName][this.idAttr];
@@ -120,13 +119,7 @@ export default {
                             if (typeof callback === "function") {
                                 callback();
                             } else {
-                                if (this.$options.name === this.listComponent) {
-                                    this.$refs.table.redraw(
-                                        this.getResourceTableUrl()
-                                    );
-                                } else {
-                                    this.goToResourceList();
-                                }
+                                callback.ajax.reload();
                             }
                         },
                         error => {}

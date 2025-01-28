@@ -78,6 +78,7 @@ export default {
         getFilters: Function,
         filterTable: Function,
         tableUrl: Function,
+        hasAdditionalFields: { type: Boolean, default: false },
     },
     data: function () {
         return {
@@ -92,13 +93,17 @@ export default {
         if (this.embedded) {
             this.getResourceCount().then(() => (this.initialized = true));
         } else {
-            this.getResourceCount().then(() =>
-                this.getSearchableAdditionalFields().then(() =>
-                    this.getSearchableAVOptions().then(
-                        () => (this.initialized = true)
-                    )
-                )
-            );
+            this.getResourceCount().then(() => {
+                if (this.hasAdditionalFields) {
+                    this.getSearchableAdditionalFields().then(() =>
+                        this.getSearchableAVOptions().then(
+                            () => (this.initialized = true)
+                        )
+                    );
+                } else {
+                    this.initialized = true;
+                }
+            });
         }
     },
     methods: {

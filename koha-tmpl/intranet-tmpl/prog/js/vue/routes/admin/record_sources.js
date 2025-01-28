@@ -1,6 +1,7 @@
 import { markRaw } from "vue";
-import RecordSourcesFormAdd from "../../components/Admin/RecordSources/FormAdd.vue";
-import RecordSourcesList from "../../components/Admin/RecordSources/List.vue";
+
+import ResourceWrapper from "../../components/ResourceWrapper.vue";
+
 import { $__ } from "../../i18n";
 
 export default {
@@ -14,20 +15,21 @@ export default {
             title: $__("Record sources"),
             path: "/cgi-bin/koha/admin/record_sources",
             is_end_node: true,
+            resource: "Admin/RecordSources/RecordSourcesResource.vue",
             children: [
                 {
                     path: "",
                     name: "RecordSourcesList",
-                    component: markRaw(RecordSourcesList),
+                    component: markRaw(ResourceWrapper),
                 },
                 {
-                    component: markRaw(RecordSourcesFormAdd),
+                    component: markRaw(ResourceWrapper),
                     name: "RecordSourcesFormAdd",
                     path: "add",
                     title: $__("Add record source"),
                 },
                 {
-                    component: markRaw(RecordSourcesFormAdd),
+                    component: markRaw(ResourceWrapper),
                     name: "RecordSourcesFormAddEdit",
                     path: "edit/:record_source_id",
                     title: $__("Edit record source"),
