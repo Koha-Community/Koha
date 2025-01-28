@@ -167,10 +167,10 @@
                     <table id="checkouts">
                         <thead>
                             <tr>
-                                <th>&nbsp;</th>
+                                <th class="NoSort">&nbsp;</th>
                                 <th>Due date</th>
                                 <th>Title</th>
-                                <th>Item type</th>
+                                <th class="NoSort">Item type</th>
                                 <th>Home library</th>
                                 <th>Checked out on</th>
                                 <th>Checked out from</th>
@@ -268,20 +268,14 @@
             $("#selectall").click();
 
             $("#checkouts").kohaTable({
-                columnDefs: [
-                    { targets: [0, 3], orderable: false, searchable: false },
-                    { targets: [1], type: "num-html" },
-                ],
+                columnDefs: [{ targets: [1], type: "num-html" }],
                 dom: "t",
                 order: [],
                 paginate: false,
             });
 
             $("#checkouts_result").kohaTable({
-                columnDefs: [
-                    { targets: [0, 3], orderable: false, searchable: false },
-                    { targets: [1], type: "num-html" },
-                ],
+                columnDefs: [{ targets: [1], type: "num-html" }],
                 dom: "t",
                 order: [],
                 paginate: false,
