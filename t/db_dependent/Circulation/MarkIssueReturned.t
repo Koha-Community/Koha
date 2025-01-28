@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 6;
 use Test::Exception;
+use Test::Warn;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -133,7 +134,7 @@ subtest 'Anonymous patron tests' => sub {
 
 subtest 'Manually pass a return date' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -165,18 +166,17 @@ subtest 'Manually pass a return date' => sub {
 
     $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
-    {
-        # Hiding the expected warning displayed by DBI
-        # DBD::mysql::st execute failed: Incorrect datetime value: 'bad_date' for column 'returndate'
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 );
-        }
-        'Koha::Exceptions::Object::BadValue',
-            'An exception is thrown on bad date';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok {
+                $issue_id =
+                    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 );
+            }
+            'Koha::Exceptions::Object::BadValue',
+                'An exception is thrown on bad date';
+        },
+        qr{Incorrect datetime value: 'bad_date' for column .*returndate}
+    );
 
     $schema->storage->txn_rollback;
 };

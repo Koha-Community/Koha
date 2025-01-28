@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 12;
 use Test::Exception;
+use Test::Warn;
 
 use Koha::Suggestions;
 use Koha::Notice::Messages;
@@ -142,11 +143,8 @@ is( Koha::Suggestions->search->count, $nb_of_suggestions + 1, 'Delete should hav
 $schema->storage->txn_rollback;
 
 subtest 'constraints' => sub {
-    plan tests => 11;
+    plan tests => 15;
     $schema->storage->txn_begin;
-
-    my $print_error = $schema->storage->dbh->{PrintError};
-    $schema->storage->dbh->{PrintError} = 0;
 
     my $patron = $builder->build_object( { class => "Koha::Patrons" } );
     my $biblio = $builder->build_sample_biblio();
@@ -194,16 +192,16 @@ subtest 'constraints' => sub {
     );
 
     # managerid
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            $suggestion->managedby($nonexistent_borrowernumber)->store;
-        }
-        'Koha::Exceptions::Object::FKConstraint',
-            'store raises an exception on invalid managerid';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok {
+                $suggestion->managedby($nonexistent_borrowernumber)->store;
+            }
+            'Koha::Exceptions::Object::FKConstraint',
+                'store raises an exception on invalid managerid';
+        },
+        qr{a foreign key constraint fails}
+    );
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->managedby( $manager->borrowernumber )->store;
     $manager->delete;
@@ -214,16 +212,16 @@ subtest 'constraints' => sub {
     );
 
     # acceptedby
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            $suggestion->acceptedby($nonexistent_borrowernumber)->store;
-        }
-        'Koha::Exceptions::Object::FKConstraint',
-            'store raises an exception on invalid acceptedby id';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok {
+                $suggestion->acceptedby($nonexistent_borrowernumber)->store;
+            }
+            'Koha::Exceptions::Object::FKConstraint',
+                'store raises an exception on invalid acceptedby id';
+        },
+        qr{a foreign key constraint fails}
+    );
     my $acceptor = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->acceptedby( $acceptor->borrowernumber )->store;
     $acceptor->delete;
@@ -234,16 +232,16 @@ subtest 'constraints' => sub {
     );
 
     # rejectedby
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            $suggestion->rejectedby($nonexistent_borrowernumber)->store;
-        }
-        'Koha::Exceptions::Object::FKConstraint',
-            'store raises an exception on invalid rejectedby id';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok {
+                $suggestion->rejectedby($nonexistent_borrowernumber)->store;
+            }
+            'Koha::Exceptions::Object::FKConstraint',
+                'store raises an exception on invalid rejectedby id';
+        },
+        qr{a foreign key constraint fails}
+    );
     my $rejecter = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->rejectedby( $rejecter->borrowernumber )->store;
     $rejecter->delete;
@@ -254,15 +252,14 @@ subtest 'constraints' => sub {
     );
 
     # budgetid
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-
-        throws_ok { $suggestion->budgetid($nonexistent_borrowernumber)->store; }
-        'Koha::Exceptions::Object::FKConstraint',
-            'store raises an exception on invalid budgetid';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok { $suggestion->budgetid($nonexistent_borrowernumber)->store; }
+            'Koha::Exceptions::Object::FKConstraint',
+                'store raises an exception on invalid budgetid';
+        },
+        qr{a foreign key constraint fails}
+    );
     my $fund = $builder->build_object( { class => "Koha::Acquisition::Funds" } );
     $suggestion->budgetid( $fund->id )->store;
     $fund->delete;
@@ -272,7 +269,6 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related budget is deleted"
     );
 
-    $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
 };
 

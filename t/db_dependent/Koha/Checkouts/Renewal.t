@@ -84,30 +84,22 @@ subtest "store() tests" => sub {
         'Renewal stored on the DB'
     );
 
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
+    my $another_checkout = $builder->build_object( { class => 'Koha::Checkouts' } );
+    my $checkout_id      = $another_checkout->id;
+    $another_checkout->delete;
 
-        my $another_checkout = $builder->build_object( { class => 'Koha::Checkouts' } );
-        my $checkout_id      = $another_checkout->id;
-        $another_checkout->delete;
-
-        my $THE_renewal;
-
-        throws_ok {
-            $THE_renewal = Koha::Checkouts::Renewal->new(
-                {
-                    checkout_id => $checkout_id,
-                    interface   => 'intranet'
-                }
-            )->store;
-        }
-        'Koha::Exceptions::Object::FKConstraint',
-            'An exception is thrown on invalid checkout_id';
-        close STDERR;
-
-        is( $@->broken_fk, 'checkout_id', 'Exception field is correct' );
+    throws_ok {
+        Koha::Checkouts::Renewal->new(
+            {
+                checkout_id => $checkout_id,
+                interface   => 'intranet'
+            }
+        )->store;
     }
+    'Koha::Exceptions::Object::FKConstraint',
+        'An exception is thrown on invalid checkout_id';
+
+    is( $@->broken_fk, 'checkout_id', 'Exception field is correct' );
 
     $schema->storage->txn_rollback;
 };

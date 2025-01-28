@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 95;
+use Test::More tests => 96;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -300,19 +300,16 @@ $status   = ModSuggestion($mod_suggestion5);
 $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
 is( @$messages, 3, 'ModSuggestions does send a message if the status has been changed' );
 
-{
-    # Hiding the expected warning displayed by DBI
-    # DBD::mysql::st execute failed: Incorrect date value: 'invalid date!' for column 'manageddate'
-    local *STDERR;
-    open STDERR, '>', '/dev/null';
+$mod_suggestion4->{manageddate} = 'invalid date!';
+warning_like(
+    sub {
+        ModSuggestion($mod_suggestion4);
+    },
+    qr{Incorrect date value: 'invalid date!' for column .*manageddate}
+);
+$messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber2 } );
 
-    $mod_suggestion4->{manageddate} = 'invalid date!';
-    ModSuggestion($mod_suggestion4);
-    $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber2 } );
-
-    close STDERR;
-    is( scalar(@$messages), 1, 'No new letter should have been generated if the update raised an error' );
-}
+is( scalar(@$messages), 1, 'No new letter should have been generated if the update raised an error' );
 
 is( GetSuggestionInfo(), undef, 'GetSuggestionInfo without the suggestion id returns undef' );
 $suggestion = GetSuggestionInfo($my_suggestionid);

@@ -370,7 +370,7 @@ subtest 'is_active' => sub {
 
 subtest 'add_guarantor() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -397,16 +397,16 @@ subtest 'add_guarantor() tests' => sub {
 
     is( $guarantors->count, 1, 'No guarantors added' );
 
-    {
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            $patron_1->add_guarantor( { guarantor_id => $patron_2->borrowernumber, relationship => 'father2' } );
-        }
-        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-            'Exception is thrown for duplicated relationship';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok {
+                $patron_1->add_guarantor( { guarantor_id => $patron_2->borrowernumber, relationship => 'father2' } );
+            }
+            'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+                'Exception is thrown for duplicated relationship';
+        },
+        qr{Duplicate entry.* for key 'guarantor_guarantee_idx'}
+    );
 
     $schema->storage->txn_rollback;
 };

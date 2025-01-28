@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 7;
 use Test::Exception;
+use Test::Warn;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -116,7 +117,7 @@ subtest "store() tests" => sub {
 
 subtest "resolve() tests" => sub {
 
-    plan tests => 10;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -158,16 +159,14 @@ subtest "resolve() tests" => sub {
     my $deleted_patron_id = $deleted_patron->id;
     $deleted_patron->delete;
 
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-
-        throws_ok { $claim->resolve( { resolution => "X", resolved_by => $deleted_patron_id } ) }
-        'Koha::Exceptions::Object::FKConstraint',
-            "Exception thrown on invalid resolver";
-
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok { $claim->resolve( { resolution => "X", resolved_by => $deleted_patron_id } ) }
+            'Koha::Exceptions::Object::FKConstraint',
+                "Exception thrown on invalid resolver";
+        },
+        qr{a foreign key constraint fails}
+    );
 
     my $today    = dt_from_string;
     my $tomorrow = dt_from_string->add( days => 1 );

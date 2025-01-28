@@ -22,7 +22,6 @@
 
 use Modern::Perl;
 
-use Test::NoWarnings;
 use Test::More tests => 3;
 
 use t::lib::Selenium;

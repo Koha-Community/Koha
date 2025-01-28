@@ -21,6 +21,7 @@ use Test::NoWarnings;
 use Test::More tests => 5;
 use Test::MockModule;
 use Test::Exception;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 
@@ -33,7 +34,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -102,16 +103,16 @@ subtest 'store() tests' => sub {
     my $deleted_id       = $patron_to_delete->id;
     $patron_to_delete->delete;
 
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            Koha::ApiKey->new( { patron_id => $deleted_id, description => 'a description' } )->store
-        }
-        'Koha::Exceptions::Object::FKConstraint',
-            'Invalid patron ID raises exception';
-        close STDERR;
-    }
+    warning_like(
+        sub {
+            throws_ok {
+                Koha::ApiKey->new( { patron_id => $deleted_id, description => 'a description' } )->store
+            }
+            'Koha::Exceptions::Object::FKConstraint',
+                'Invalid patron ID raises exception';
+        },
+        qr{a foreign key constraint fails}
+    );
     is( $@->message,   'Broken FK constraint', 'Exception message is correct' );
     is( $@->broken_fk, 'patron_id',            'Exception field is correct' );
 

@@ -946,7 +946,7 @@ subtest "Test update method" => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     # Using Koha::Library::Groups to test Koha::Object>-store
     # Simple object with foreign keys and unique key
@@ -966,49 +966,53 @@ subtest 'store() tests' => sub {
     );
 
     my $dbh = $schema->storage->dbh;
-    {
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok { $library_group->store }
-        'Koha::Exceptions::Object::FKConstraint',
-            'Exception is thrown correctly';
-        is(
-            $@->message,
-            "Broken FK constraint",
-            'Exception message is correct'
-        );
-        is(
-            $@->broken_fk,
-            'branchcode',
-            'Exception field is correct'
-        );
+    warning_like(
+        sub {
+            throws_ok { $library_group->store }
+            'Koha::Exceptions::Object::FKConstraint',
+                'Exception is thrown correctly';
+        },
+        qr{a foreign key constraint fails}
+    );
+    is(
+        $@->message,
+        "Broken FK constraint",
+        'Exception message is correct'
+    );
+    is(
+        $@->broken_fk,
+        'branchcode',
+        'Exception field is correct'
+    );
 
-        $library_group = $builder->build_object( { class => 'Koha::Library::Groups' } );
+    $library_group = $builder->build_object( { class => 'Koha::Library::Groups' } );
 
-        my $new_library_group = Koha::Library::Group->new(
-            {
-                branchcode => $library_group->branchcode,
-                title      => $library_group->title,
-            }
-        );
+    my $new_library_group = Koha::Library::Group->new(
+        {
+            branchcode => $library_group->branchcode,
+            title      => $library_group->title,
+        }
+    );
 
-        throws_ok { $new_library_group->store }
-        'Koha::Exceptions::Object::DuplicateID',
-            'Exception is thrown correctly';
+    warning_like(
+        sub {
+            throws_ok { $new_library_group->store }
+            'Koha::Exceptions::Object::DuplicateID',
+                'Exception is thrown correctly';
+        },
+        qr{Duplicate entry.* for key 'title'}
+    );
 
-        is(
-            $@->message,
-            'Duplicate ID',
-            'Exception message is correct'
-        );
-
-        like(
-            $@->duplicate_id,
-            qr/(library_groups\.)?title/,
-            'Exception field is correct (note that MySQL 8 is displaying the tablename)'
-        );
-        close STDERR;
-    }
+    is(
+        $@->message,
+        'Duplicate ID',
+        'Exception message is correct'
+    );
+    like(
+        $@->duplicate_id,
+        qr/(library_groups\.)?title/,
+        'Exception field is correct (note that MySQL 8 is displaying the tablename)'
+    );
 
     # Successful test
     $library_group->set( { title => 'Manuel' } );
@@ -1065,21 +1069,23 @@ subtest 'store() tests' => sub {
 
     subtest 'Bad value tests' => sub {
 
-        plan tests => 3;
+        plan tests => 4;
 
         my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-        try {
-            local *STDERR;
-            open STDERR, '>', '/dev/null';
-            $patron->lastseen('wrong_value')->store;
-            close STDERR;
-        } catch {
-            ok( $_->isa('Koha::Exceptions::Object::BadValue'), 'Exception thrown correctly' );
-            like( $_->property, qr/(borrowers\.)?lastseen/, 'Column should be the expected one' )
-                ;    # The table name is not always displayed, it depends on the DBMS version
-            is( $_->value, 'wrong_value', 'Value should be the expected one' );
-        };
+        warning_like(
+            sub {
+                try {
+                    $patron->lastseen('wrong_value')->store;
+                } catch {
+                    ok( $_->isa('Koha::Exceptions::Object::BadValue'), 'Exception thrown correctly' );
+                    like( $_->property, qr/(borrowers\.)?lastseen/, 'Column should be the expected one' )
+                        ;    # The table name is not always displayed, it depends on the DBMS version
+                    is( $_->value, 'wrong_value', 'Value should be the expected one' );
+                };
+            },
+            qr{Incorrect datetime value: 'wrong_value' for column .*lastseen}
+        );
     };
 
     $schema->storage->txn_rollback;

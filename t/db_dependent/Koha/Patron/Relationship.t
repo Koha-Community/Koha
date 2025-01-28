@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 2;
 use Test::Exception;
+use Test::Warn;
 
 use Koha::Database;
 use Koha::Patrons;
@@ -36,7 +37,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -110,23 +111,24 @@ subtest 'store() tests' => sub {
         }
     );
 
-    {
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok { $relationship_2->store; }
-        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-            'Exception is thrown for duplicated relationship';
+    warning_like(
+        sub {
+            throws_ok { $relationship_2->store; }
+            'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+                'Exception is thrown for duplicated relationship';
+        },
+        qr{Duplicate entry.* for key 'guarantor_guarantee_idx'}
+    );
 
-        is(
-            "$@",
-            "There already exists a relationship for the same guarantor ("
-                . $patron_2->borrowernumber
-                . ") and guarantee ("
-                . $patron_1->borrowernumber
-                . ") combination",
-            'Exception stringified correctly'
-        );
-    }
+    is(
+        "$@",
+        "There already exists a relationship for the same guarantor ("
+            . $patron_2->borrowernumber
+            . ") and guarantee ("
+            . $patron_1->borrowernumber
+            . ") combination",
+        'Exception stringified correctly'
+    );
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', '' );
 
