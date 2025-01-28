@@ -16,6 +16,8 @@
             filterTable,
             tableUrl,
             embedded,
+            hasAdditionalFields,
+            resourceName,
         }"
         @select-resource="$emit('select-resource', $event)"
     />
@@ -29,6 +31,7 @@
             listComponent,
             goToResourceEdit,
             doResourceDelete,
+            resourceName,
         }"
     />
     <ResourceFormAdd
@@ -41,6 +44,7 @@
             listComponent,
             resource: newResource,
             onSubmit,
+            resourceName,
         }"
     />
 </template>
@@ -115,7 +119,6 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Agreement name"),
-                    showInTable: true,
                 },
                 {
                     name: "vendor_id",
@@ -146,7 +149,6 @@ export default {
                     textAreaRows: 10,
                     textAreaCols: 50,
                     label: __("Description"),
-                    showInTable: true,
                 },
                 {
                     name: "status",
@@ -154,7 +156,6 @@ export default {
                     type: "select",
                     label: __("Status"),
                     avCat: "av_agreement_statuses",
-                    showInTable: true,
                     onSelected: resource => {
                         if (resource.status !== "closed") {
                             resource.closure_reason = null;
@@ -167,21 +168,18 @@ export default {
                     type: "select",
                     label: __("Closure reason"),
                     avCat: "av_agreement_closure_reasons",
-                    showInTable: true,
                     disabled: agreement => agreement.status !== "closed",
                 },
                 {
                     name: "is_perpetual",
                     type: "boolean",
                     label: __("Is perpetual"),
-                    showInTable: true,
                 },
                 {
                     name: "renewal_priority",
                     type: "select",
                     label: __("Renewal priority"),
                     avCat: "av_agreement_renewal_priorities",
-                    showInTable: true,
                 },
                 {
                     name: "license_info",
@@ -1023,11 +1021,15 @@ export default {
         newResource() {
             return this[this.resourceName];
         },
+        hasAdditionalFields() {
+            return this.resourceAttrs.some(
+                attr => attr.name === "additional_fields"
+            );
+        },
     },
     created() {
         //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
         this.assignAVs(this.resourceAttrs);
-        this.getResourceTableColumns();
     },
     emits: ["select-resource"],
     name: "AgreementResource",

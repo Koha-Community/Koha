@@ -15,6 +15,8 @@
             getFilters,
             filterTable,
             tableUrl,
+            hasAdditionalFields,
+            resourceName,
         }"
         @select-resource="$emit('select-resource', $event)"
     />
@@ -28,6 +30,7 @@
             listComponent,
             goToResourceEdit,
             doResourceDelete,
+            resourceName,
         }"
     />
     <ResourceFormAdd
@@ -40,6 +43,7 @@
             listComponent,
             resource: newResource,
             onSubmit,
+            resourceName,
         }"
     />
 </template>
@@ -53,7 +57,6 @@ import ResourceList from "../../ResourceList.vue";
 
 export default {
     components: { ResourceShow, ResourceFormAdd, ResourceList },
-    extends: BaseResource,
     extends: BaseResource,
     props: {
         action: String,
@@ -94,7 +97,6 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Name"),
-                    showInTable: true,
                 },
                 {
                     name: "can_be_edited",
@@ -193,12 +195,15 @@ export default {
         newResource() {
             return this[this.resourceName];
         },
+        hasAdditionalFields() {
+            return this.resourceAttrs.some(
+                attr => attr.name === "additional_fields"
+            );
+        },
     },
     created() {
         //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
         this.assignAVs(this.resourceAttrs);
-        // FIXME: We should use this to get the table columns, replace the explicit method if possible
-        this.getResourceTableColumns();
     },
     name: "RecordSourcesResource",
 };

@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else id="resource_list">
+    <div v-else :id="`${resourceName}_list`">
         <Toolbar v-if="!embedded">
             <ToolbarButton
                 action="add"
@@ -79,6 +79,7 @@ export default {
         filterTable: Function,
         tableUrl: Function,
         hasAdditionalFields: { type: Boolean, default: false },
+        resourceName: String,
     },
     data: function () {
         return {

@@ -16,6 +16,7 @@
             filterTable,
             tableUrl,
             hasAdditionalFields,
+            resourceName,
         }"
         @select-resource="$emit('select-resource', $event)"
     />
@@ -29,6 +30,7 @@
             listComponent,
             goToResourceEdit,
             doResourceDelete,
+            resourceName,
         }"
     />
     <ResourceFormAdd
@@ -41,6 +43,7 @@
             listComponent,
             resource: newResource,
             onSubmit,
+            resourceName,
         }"
     />
 </template>
@@ -115,7 +118,6 @@ export default {
                     required: true,
                     type: "text",
                     label: __("License name"),
-                    showInTable: true,
                 },
                 {
                     name: "vendor_id",
@@ -146,7 +148,6 @@ export default {
                     textAreaRows: 10,
                     textAreaCols: 50,
                     label: __("Description"),
-                    showInTable: true,
                 },
                 {
                     name: "status",
@@ -154,7 +155,6 @@ export default {
                     type: "select",
                     label: __("Status"),
                     avCat: "av_license_statuses",
-                    showInTable: true,
                 },
                 {
                     name: "started_on",
@@ -586,8 +586,6 @@ export default {
     created() {
         //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
         this.assignAVs(this.resourceAttrs);
-        // FIXME: We should use this to get the table columns, replace the explicit method if possible
-        this.getResourceTableColumns();
     },
     name: "LicenseResource",
 };

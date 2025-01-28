@@ -135,12 +135,6 @@ export default {
         getResourceTableUrl: function () {
             return this.resourceTableUrl;
         },
-        getResourceTableColumns: function () {
-            //This is where I left off
-            let tableAttrs = this.resourceAttrs.filter(
-                attr => attr.showInTable
-            );
-        },
         doResourceSelect: function (resource, dt, event) {
             this.$emit("select-resource", resource[this.idAttr]);
         },

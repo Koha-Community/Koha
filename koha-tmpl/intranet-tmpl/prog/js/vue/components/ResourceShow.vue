@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else id="resources_show">
+    <div v-else :id="`${resourceName}_show`">
         <Toolbar>
             <ToolbarButton
                 action="edit"
@@ -71,6 +71,7 @@ export default {
         listComponent: String,
         goToResourceEdit: Function,
         doResourceDelete: Function,
+        resourceName: String,
     },
     created() {
         this.getResource(this.$route.params[this.idAttr]);

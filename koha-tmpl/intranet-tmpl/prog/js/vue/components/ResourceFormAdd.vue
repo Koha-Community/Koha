@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else id="resources_add">
+    <div v-else :id="`${resourceName}_add`">
         <h2 v-if="resourceToAddOrEdit[idAttr]">
             {{
                 $__("Edit") +
