@@ -612,6 +612,7 @@
                     ],
                     pagingType: "full_numbers",
                 });
+                let table_dt = table.DataTable();
 
                 $("#del_form").on("click", ".delete_news", function (e) {
                     e.preventDefault();
@@ -632,32 +633,32 @@
 
                 $("#show_expired").on("change", function () {
                     /* redraw the DataTable according to the custom search function */
-                    table.draw();
+                    table_dt.draw();
                 });
 
-                table.on("search.dt", function () {
-                    var term = table.search();
+                table_dt.on("search.dt", function () {
+                    var term = table_dt.search();
                     $("#news_keyword").val(term);
                 });
 
                 $("#news_keyword").on("keyup", function () {
                     var term = $(this).val();
-                    filterDataTable(table, null, term);
+                    filterDataTable(table_dt, null, term);
                 });
 
                 $("#news_display_location").on("change", function () {
                     var term = $(this).val();
-                    filterDataTable(table, 1, term);
+                    filterDataTable(table_dt, 1, term);
                 });
 
                 $("#news_library").on("change", function () {
                     // Table must be filtered by the <option>'s text, not its value
                     var opt = $(this).find("option:selected").text();
-                    filterDataTable(table, 2, opt);
+                    filterDataTable(table_dt, 2, opt);
                 });
 
                 $(".dt_button_clear_filter").on("click", function () {
-                    table.search("").columns().search("").draw();
+                    table_dt.search("").columns().search("").draw();
                     $("#news-filter select").each(function () {
                         $(this).val("");
                     });
