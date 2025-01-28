@@ -11,13 +11,13 @@ return {
         # Do you stuffs here
         $dbh->do(
             q{
-            INSERT INTO permissions (module_bit, code, description)
+            INSERT IGNORE INTO permissions (module_bit, code, description)
             VALUES (10, 'edit_notes', 'Edit accountline notes')
         }
         );
 
         # permissions
-        say $out "Added new permission 'updatecharges:edit_notes'";
+        say_success( $out, "Added new permission 'updatecharges:edit_notes'");
 
     },
 };
