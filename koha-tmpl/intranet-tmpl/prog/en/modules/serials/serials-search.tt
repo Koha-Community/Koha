@@ -337,25 +337,16 @@
             var osrlt = $("#opened_panel table").kohaTable({
                 pagingType: "full",
                 order: [[2, "asc"]],
-                columnDefs: [
-                    { type: "anti-the", targets: ["anti-the"] },
-                ],
             });
 
             var csrlt = $("#closed_panel table").kohaTable({
                 // FIXME sort function of additional_fields!
                 order: [[2, "asc"]],
                 pagingType: "full",
-                columnDefs: [
-                    { type: "anti-the", targets: ["anti-the"] },
-                ],
             });
 
             var manarlt = $("#mana_results_datatable").kohaTable({
                 pagingType: "full",
-                columnDefs: [
-                    { type: "anti-the", targets: ["anti-the"] },
-                ],
             });
 
             $("#reopensub").click(function(){

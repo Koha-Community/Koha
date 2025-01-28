@@ -128,10 +128,7 @@ $(document).ready(function () {
     });
 
     $("#recalls-table").kohaTable({
-        columnDefs: [
-            { type: "title-string", targets: ["title-string"] },
-            { type: "anti-the", targets: ["anti-the"] },
-        ],
+        columnDefs: [{ type: "title-string", targets: ["title-string"] }],
         pagingType: "full_numbers",
     });
 

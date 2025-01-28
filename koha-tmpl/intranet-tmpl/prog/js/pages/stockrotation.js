@@ -73,7 +73,6 @@ $(document).ready(function () {
 
     $("#stock_rotation_manage_items").kohaTable(
         {
-            columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
             pagingType: "full",
             autoWidth: false,
         },
@@ -82,7 +81,6 @@ $(document).ready(function () {
 
     $("#stock_rotation").kohaTable(
         {
-            columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
             pagingType: "full",
             autoWidth: false,
         },

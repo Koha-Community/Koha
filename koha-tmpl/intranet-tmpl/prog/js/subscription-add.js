@@ -564,7 +564,6 @@ function mana_search() {
             ],
             autoWidth: false,
             columnDefs: [{ width: "35%", targets: 1 }],
-            columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
         });
         if (
             $("#mana_results_datatable").length &&

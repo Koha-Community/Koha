@@ -96,10 +96,7 @@ $(document).ready(function () {
 
     $("#itemst").kohaTable({
         dom: "t",
-        columnDefs: [
-            { type: "anti-the", targets: ["anti-the"] },
-            { type: "callnumbers", targets: ["callnumbers"] },
-        ],
+        columnDefs: [{ type: "callnumbers", targets: ["callnumbers"] }],
         order: [[1, "asc"]],
         paging: false,
     });

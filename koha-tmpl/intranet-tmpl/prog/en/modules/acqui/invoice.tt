@@ -565,7 +565,6 @@
                 paging: false,
                 searching: false,
                 dom: "t",
-                columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
             });
             [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
                 $("#invoice_files_table").kohaTable({

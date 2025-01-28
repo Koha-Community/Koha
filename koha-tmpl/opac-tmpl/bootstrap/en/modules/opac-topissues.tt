@@ -149,10 +149,7 @@
         $(function () {
             $("#topissuest").kohaTable({
                 sorting: [[3, "desc"]],
-                columnDefs: [
-                    { type: "anti-the", targets: ["anti-the"] },
-                    { className: "dtr-control", orderable: false, targets: -1 },
-                ],
+                columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
                 responsive: {
                     details: {
                         type: "column",

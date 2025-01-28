@@ -476,7 +476,6 @@ $(document).ready(function () {
                     paging: false,
                     processing: true,
                     serverSide: false,
-                    columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
                     ajax: {
                         url: "/cgi-bin/koha/svc/holds",
                         data: function (d) {

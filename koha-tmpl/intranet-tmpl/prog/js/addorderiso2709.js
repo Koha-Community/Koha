@@ -3,7 +3,6 @@
 $(document).ready(function () {
     $("#Aform").preventDoubleFormSubmit();
     $("#files").kohaTable({
-        columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
         pagingType: "full",
         order: [],
     });

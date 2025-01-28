@@ -174,7 +174,6 @@ $(document).ready(function () {
         columnDefs: [
             { targets: [0, 1], orderable: false, searchable: true },
             { targets: [0], visible: false },
-            { type: "anti-the", targets: ["anti-the"] },
         ],
         paging: false,
     });

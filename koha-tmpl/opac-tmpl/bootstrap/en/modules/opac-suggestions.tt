@@ -602,16 +602,6 @@
                     { "className": 'dtr-control', "orderable": false, "targets": -1 },
                     { responsivePriority: 1, targets: 1 }
                 ],
-                "columns": [
-                    [% IF ( loggedinusername ) %]null,[% END %]
-                    { "type": "anti-the" },
-                    null,
-                    null,
-                    [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]null,[% END %]
-                    [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]null,[% END %]
-                    null,
-                    null
-                ],
                 "responsive": {
                     details: {
                         type: 'column',
