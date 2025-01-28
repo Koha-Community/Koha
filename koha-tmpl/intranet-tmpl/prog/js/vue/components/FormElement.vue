@@ -135,10 +135,24 @@
             v-on="getEventHandlers()"
         ></component>
     </template>
+    <template v-else-if="attr.type == 'relationshipSelect'">
+        <label
+            v-if="attr.label"
+            :for="attr.name"
+            :class="{ required: attr.required }"
+            >{{ attr.label }}:</label
+        >
+        <FormRelationshipSelect
+            v-bind="attr"
+            :resource="resource"
+        ></FormRelationshipSelect>
+        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
+    </template>
 </template>
 
 <script>
 import BaseElement from "./BaseElement.vue";
+import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 
 export default {
     props: {
@@ -202,5 +216,6 @@ export default {
         },
     },
     name: "FormElement",
+    components: { FormRelationshipSelect },
 };
 </script>
