@@ -267,6 +267,23 @@ sub _search {
             'AuthidAsc' );
         ( $matched_auths, $total ) =
           $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
+        my $matched_auths_exact = [];
+        for my $matched_auth (@$matched_auths) {
+            my $auth = Koha::Authorities->find( $matched_auth->{authid} );
+            unless ($auth) {
+                $total--;
+                next;
+            }
+            my $auth_rec = $auth->record;
+            my $s040f    = $auth_rec->subfield( '040', 'f' ) // '';
+            if ( !$s040f || $s040f eq $thesaurus ) {
+                push @{$matched_auths_exact}, $matched_auth;
+            }
+            else {
+                $total--;
+            }
+        }
+        $matched_auths = $matched_auths_exact
     }
     return ( $matched_auths, $total );
 
