@@ -265,9 +265,13 @@ export default {
                             type: "resourceProperty",
                             resourceProperty: "periods",
                         },
-                        resourceName: {
-                            type: "string",
-                            value: "period",
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("period"),
+                                nameUC: __("Period"),
+                                namePL: __("periods"),
+                            },
                         },
                         newRelationship: {
                             type: "object",
@@ -472,9 +476,13 @@ export default {
                             type: "resourceProperty",
                             resourceProperty: "agreement_licenses",
                         },
-                        resourceName: {
-                            type: "string",
-                            value: "license",
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("license"),
+                                nameUC: __("License"),
+                                namePL: __("licenses"),
+                            },
                         },
                     },
                     subFields: [
@@ -569,9 +577,13 @@ export default {
                             type: "resourceProperty",
                             resourceProperty: "agreement_relationships",
                         },
-                        resourceName: {
-                            type: "string",
-                            value: "relationship",
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("relationship"),
+                                nameUC: __("Relationship"),
+                                namePL: __("relationships"),
+                            },
                         },
                         filters: {
                             type: "filter",

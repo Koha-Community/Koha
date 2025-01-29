@@ -127,6 +127,7 @@
             :is="relationshipWidget"
             :title="attr.label"
             :apiClient="attr.apiClient"
+            :name="attr.name"
             v-bind="requiredProps()"
             v-on="getEventHandlers()"
         ></component>
