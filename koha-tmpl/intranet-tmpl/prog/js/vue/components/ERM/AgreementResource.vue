@@ -189,7 +189,7 @@ export default {
                 },
                 {
                     name: "additional_fields",
-                    type: "relationship",
+                    type: "component",
                     showElement: {
                         type: "relationship",
                         hidden: agreement =>
@@ -260,6 +260,7 @@ export default {
                         ],
                     },
                     label: __("Periods"),
+                    group: __("Periods"),
                     props: {
                         resourceRelationships: {
                             type: "resourceProperty",
@@ -345,8 +346,8 @@ export default {
                 },
                 {
                     name: "user_roles",
-                    type: "relationship",
-                    label: __("Users"),
+                    type: "component",
+                    group: __("Users"),
                     componentPath: "./ERM/UserRoles.vue",
                     showElement: {
                         type: "table",
@@ -423,6 +424,7 @@ export default {
                     name: "licenses",
                     type: "relationshipWidget",
                     label: __("Licenses"),
+                    group: __("Licenses"),
                     showElement: {
                         type: "table",
                         columnData: "agreement_licenses",
@@ -550,6 +552,7 @@ export default {
                     name: "relationships",
                     type: "relationshipWidget",
                     label: __("Relationships"),
+                    group: __("Relationships"),
                     showElement: {
                         type: "component",
                         hidden: agreement =>
@@ -625,7 +628,7 @@ export default {
                 },
                 {
                     name: "packages",
-                    type: "relationship",
+                    type: "component",
                     componentPath: null,
                     showElement: {
                         type: "component",
@@ -642,8 +645,9 @@ export default {
                 },
                 {
                     name: "documents",
-                    type: "relationship",
+                    type: "component",
                     componentPath: "./ERM/Documents.vue",
+                    group: "Documents",
                     showElement: {
                         type: "component",
                         hidden: agreement => !!agreement.documents?.length,

@@ -32,14 +32,6 @@
                         </li>
                     </ol>
                 </fieldset>
-                <template
-                    v-for="(attr, index) in resourceAttrs.filter(attr =>
-                        attr.type.includes('relationship')
-                    )"
-                    v-bind:key="'rel-' + index"
-                >
-                    <FormElement :resource="resourceToAddOrEdit" :attr="attr" />
-                </template>
                 <fieldset class="action">
                     <ButtonSubmit />
                     <router-link
@@ -93,10 +85,7 @@ export default {
             );
         },
         getFieldGroupings() {
-            const nonRelationalFields = this.resourceAttrs.filter(
-                attr => !attr.type.includes("relationship")
-            );
-            const groupings = nonRelationalFields.reduce((acc, attr) => {
+            const groupings = this.resourceAttrs.reduce((acc, attr) => {
                 if (
                     attr.hasOwnProperty("group") &&
                     attr.group !== null &&
@@ -104,13 +93,19 @@ export default {
                 ) {
                     return [...acc, attr.group];
                 }
+                if (!attr.hasOwnProperty("group")) {
+                    attr.group = "noGroupFound";
+                    if (!acc.includes("noGroupFound")) {
+                        return [...acc, "noGroupFound"];
+                    }
+                }
                 return acc;
             }, []);
             if (groupings.length === 0) {
                 return [
                     {
                         name: null,
-                        fields: nonRelationalFields,
+                        fields: this.resourceAttrs,
                     },
                 ];
             }
@@ -119,7 +114,7 @@ export default {
                     ra => ra.group === group
                 );
                 const groupInfo = {
-                    name: group,
+                    name: group === "noGroupFound" ? null : group,
                     fields: groupFields,
                 };
                 return [...acc, groupInfo];

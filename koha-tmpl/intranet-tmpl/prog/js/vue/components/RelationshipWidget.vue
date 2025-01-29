@@ -1,6 +1,6 @@
 <template>
     <fieldset class="rows" :id="`${name + '_' + 'relationship'}`">
-        <legend>{{ title }}</legend>
+        <legend v-if="title">{{ title }}</legend>
         <fieldset
             :id="`${name + '_' + counter}`"
             class="rows"

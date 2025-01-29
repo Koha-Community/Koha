@@ -1,6 +1,5 @@
 <template>
     <fieldset class="rows" id="user_roles">
-        <legend>{{ $__("Users") }}</legend>
         <fieldset
             class="rows"
             v-for="(user_role, counter) in user_roles"
@@ -21,46 +20,6 @@
                         :index="counter"
                     />
                 </li>
-
-                <!-- <li>
-                    <label :for="`user_id_${counter}`" class="required"
-                        >{{ $__("User") }}:</label
-                    >
-                    <span class="user">
-                        {{ user_role.patron_str }}
-                    </span>
-                    &nbsp;
-                    <a
-                        href="#patron_search_modal"
-                        @click="selectUser(counter)"
-                        class="btn btn-default"
-                        data-bs-toggle="modal"
-                        ><i class="fa fa-plus"></i> {{ $__("Select user") }}</a
-                    >
-                    <span class="required">{{ $__("Required") }}</span>
-                </li> -->
-                <!-- <li>
-                    <label :for="`user_role_${counter}`" class="required"
-                        >{{ $__("Role") }}:</label
-                    >
-                    <v-select
-                        :id="`user_role_${counter}`"
-                        v-model="user_role.role"
-                        label="description"
-                        :reduce="av => av.value"
-                        :options="av_user_roles"
-                    >
-                        <template #search="{ attributes, events }">
-                            <input
-                                :required="!user_role.role"
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                            />
-                        </template>
-                    </v-select>
-                    <span class="required">{{ $__("Required") }}</span>
-                </li> -->
             </ol>
         </fieldset>
         <input

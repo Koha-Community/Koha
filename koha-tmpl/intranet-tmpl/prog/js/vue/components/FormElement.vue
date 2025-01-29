@@ -93,7 +93,7 @@
         </v-select>
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
-    <template v-else-if="attr.type == 'component'">
+    <template v-else-if="attr.type == 'component' && attr.componentPath">
         <label
             v-if="attr.label"
             :for="attr.name"
@@ -115,17 +115,10 @@
         ></component>
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
-    <template v-else-if="attr.type == 'relationship' && attr.componentPath">
-        <component
-            :is="requiredComponent"
-            v-bind="requiredProps()"
-            v-on="getEventHandlers()"
-        ></component>
-    </template>
     <template v-else-if="attr.type == 'relationshipWidget'">
         <component
             :is="relationshipWidget"
-            :title="attr.label"
+            :title="attr.group ? null : attr.label"
             :apiClient="attr.apiClient"
             :name="attr.name"
             v-bind="requiredProps()"

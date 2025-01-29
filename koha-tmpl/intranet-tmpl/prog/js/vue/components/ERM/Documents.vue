@@ -1,6 +1,5 @@
 <template>
     <fieldset class="rows" id="documents">
-        <legend>{{ $__("Documents") }}</legend>
         <fieldset
             :id="`document_${counter}`"
             class="rows"
@@ -22,89 +21,6 @@
                         :index="counter"
                     />
                 </li>
-
-                <!-- <li>
-                    <label>{{ $__("File") }}:</label>
-                    <div class="file_information">
-                        <span v-if="!document.file_name">
-                            {{ $__("Select a file") }}
-                            <input
-                                type="file"
-                                @change="selectFile($event, counter)"
-                                :id="`file_${counter}`"
-                                :name="`file_${counter}`"
-                            />
-                        </span>
-                        <span v-else>
-                            {{ $__("Update file") }}
-                            <input
-                                type="file"
-                                @change="selectFile($event, counter)"
-                                :id="`file_${counter}`"
-                                :name="`file_${counter}`"
-                            />
-                        </span>
-                        <ol>
-                            <li v-show="document.file_name">
-                                {{ $__("File name") }}:
-                                <span>{{ document.file_name }}</span>
-                            </li>
-                            <li v-show="document.file_type">
-                                {{ $__("File type") }}:
-                                <span>{{ document.file_type }}</span>
-                            </li>
-                            <li v-show="document.file_name">
-                                {{ $__("File description") }}:
-                                <input
-                                    :id="`file_description_${counter}`"
-                                    type="text"
-                                    class="file_description"
-                                    :name="`file_description_${counter}`"
-                                    v-model="document.file_description"
-                                    :placeholder="$__('File description')"
-                                />
-                            </li>
-                            <li v-show="document.uploaded_on">
-                                {{ $__("Uploaded on") }}:
-                                <span>{{
-                                    format_date(document.uploaded_on)
-                                }}</span>
-                            </li>
-                        </ol>
-                    </div>
-                </li>
-                <li>
-                    <label :for="`physical_location_${counter}`"
-                        >{{ $__("Physical location") }}:
-                    </label>
-                    <input
-                        :id="`physical_location_${counter}`"
-                        type="text"
-                        class="physical_location"
-                        :name="`physical_location_${counter}`"
-                        v-model="document.physical_location"
-                        :placeholder="$__('Physical location')"
-                    />
-                </li>
-                <li>
-                    <label :for="`uri_${counter}`">{{ $__("URI") }}:</label>
-                    <input
-                        :id="`uri_${counter}`"
-                        v-model="document.uri"
-                        :placeholder="$__('URI')"
-                    />
-                </li>
-                <li>
-                    <label :for="`notes_${counter}`">{{ $__("Notes") }}:</label>
-                    <input
-                        :id="`notes_${counter}`"
-                        type="text"
-                        class="notes"
-                        :name="`notes_${counter}`"
-                        v-model="document.notes"
-                        :placeholder="$__('Notes')"
-                    />
-                </li> -->
             </ol>
         </fieldset>
         <a class="btn btn-default" @click="addDocument"
