@@ -1,14 +1,11 @@
 <template>
-    <component :is="getComponent()" v-bind="componentProps"> </component>
+    <component :is="getComponent()" v-bind="componentProps"></component>
 </template>
 
 <script>
 import { defineAsyncComponent } from "vue";
-import BaseResource from "./BaseResource.vue";
-import ResourceShow from "./ResourceShow.vue";
 
 export default {
-    components: { ResourceShow, BaseResource },
     methods: {
         getComponent() {
             const routeResource = this.$route.meta.self.parent.resource;
@@ -19,13 +16,13 @@ export default {
         componentProps() {
             const routeName = this.$route.meta.self.name;
             if (routeName.includes("Show")) {
-                return { action: "show" };
+                return { routeAction: "show" };
             } else if (routeName.includes("Edit")) {
-                return { action: "edit" };
+                return { routeAction: "edit" };
             } else if (routeName.includes("Add")) {
-                return { action: "add" };
+                return { routeAction: "add" };
             } else {
-                return { action: "list" };
+                return { routeAction: "list" };
             }
         },
     },

@@ -1,11 +1,10 @@
 <template>
     <ResourceList
-        v-if="action === 'list'"
+        v-if="routeAction === 'list'"
         v-bind="{
             apiClient,
             i18n,
             tableOptions,
-            resourceName,
             goToResourceShow,
             goToResourceEdit,
             doResourceDelete,
@@ -22,7 +21,7 @@
         @select-resource="$emit('select-resource', $event)"
     />
     <ResourceShow
-        v-if="action === 'show'"
+        v-if="routeAction === 'show'"
         v-bind="{
             idAttr,
             apiClient,
@@ -35,7 +34,7 @@
         }"
     />
     <ResourceFormAdd
-        v-if="['add', 'edit'].includes(action)"
+        v-if="['add', 'edit'].includes(routeAction)"
         v-bind="{
             idAttr,
             apiClient,
@@ -62,7 +61,7 @@ export default {
     components: { ResourceShow, ResourceFormAdd, ResourceList },
     extends: BaseResource,
     props: {
-        action: String,
+        routeAction: String,
         embedded: { type: Boolean, default: false },
     },
     setup(props) {
@@ -1054,16 +1053,6 @@ export default {
                 this.$router.push(new_route);
             }
             table.redraw(this.tableUrl(filters));
-        },
-    },
-    computed: {
-        newResource() {
-            return this[this.resourceName];
-        },
-        hasAdditionalFields() {
-            return this.resourceAttrs.some(
-                attr => attr.name === "additional_fields"
-            );
         },
     },
     created() {

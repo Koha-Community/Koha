@@ -1,6 +1,6 @@
 <template>
     <ResourceList
-        v-if="action === 'list'"
+        v-if="routeAction === 'list'"
         v-bind="{
             apiClient,
             i18n,
@@ -21,7 +21,7 @@
         @select-resource="$emit('select-resource', $event)"
     />
     <ResourceShow
-        v-if="action === 'show'"
+        v-if="routeAction === 'show'"
         v-bind="{
             idAttr,
             apiClient,
@@ -34,7 +34,7 @@
         }"
     />
     <ResourceFormAdd
-        v-if="['add', 'edit'].includes(action)"
+        v-if="['add', 'edit'].includes(routeAction)"
         v-bind="{
             idAttr,
             apiClient,
@@ -61,7 +61,7 @@ export default {
     components: { ResourceShow, ResourceFormAdd, ResourceList },
     extends: BaseResource,
     props: {
-        action: String,
+        routeAction: String,
     },
     setup(props) {
         const AVStore = inject("AVStore");
@@ -572,16 +572,6 @@ export default {
             return [];
         },
         async filterTable(filters, table, embedded = false) {},
-    },
-    computed: {
-        newResource() {
-            return this[this.resourceName];
-        },
-        hasAdditionalFields() {
-            return this.resourceAttrs.some(
-                attr => attr.name === "additional_fields"
-            );
-        },
     },
     created() {
         //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data

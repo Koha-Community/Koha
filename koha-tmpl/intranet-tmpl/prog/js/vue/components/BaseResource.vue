@@ -3,6 +3,9 @@ import { inject } from "vue";
 import { build_url } from "../composables/datatables";
 
 export default {
+    props: {
+        routeAction: String,
+    },
     setup(props) {
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
@@ -119,7 +122,7 @@ export default {
                             if (typeof callback === "function") {
                                 callback();
                             } else {
-                                if (this.$props.action === "list") {
+                                if (this.$props.routeAction === "list") {
                                     callback.ajax.reload();
                                 } else {
                                     this.goToResourceList();
@@ -188,6 +191,16 @@ export default {
                 }
             });
             return filterOptions;
+        },
+    },
+    computed: {
+        newResource() {
+            return this[this.resourceName];
+        },
+        hasAdditionalFields() {
+            return this.resourceAttrs.some(
+                attr => attr.name === "additional_fields"
+            );
         },
     },
     name: "BaseResource",
