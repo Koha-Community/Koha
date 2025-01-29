@@ -89,7 +89,7 @@ export default {
          * @param {Object} callback - Callback to call after deletion (optional)
          * @return {void}
          */
-        doResourceDelete: function (resource, callback, table) {
+        doResourceDelete: function (resource, callback) {
             let resourceId = resource
                 ? resource[this.idAttr]
                 : this[this.resourceName][this.idAttr];
@@ -119,7 +119,11 @@ export default {
                             if (typeof callback === "function") {
                                 callback();
                             } else {
-                                callback.ajax.reload();
+                                if (this.$props.action === "list") {
+                                    callback.ajax.reload();
+                                } else {
+                                    this.goToResourceList();
+                                }
                             }
                         },
                         error => {}
