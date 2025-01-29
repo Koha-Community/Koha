@@ -8,7 +8,7 @@
         <input
             :id="`${attr.name}${index}`"
             v-model="resource[attr.name]"
-            :placeholder="attr.label"
+            :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
         />
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
@@ -24,7 +24,7 @@
             v-model="resource[attr.name]"
             :rows="attr.textAreaRows"
             :cols="attr.textAreaCols"
-            :placeholder="attr.label"
+            :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
         />
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
