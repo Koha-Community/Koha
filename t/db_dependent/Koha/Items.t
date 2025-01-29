@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 26;
+use Test::More tests => 28;
 
 use Test::MockModule;
 use Test::Exception;
@@ -72,6 +72,163 @@ is( Koha::Items->search->count, $nb_of_items + 2, 'The 2 items should have been 
 
 my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
+
+subtest 'search' => sub {
+
+    plan tests => 9;
+    $schema->storage->txn_begin;
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    my $available_items = Koha::Items->search(
+        {
+            _status      => 'available',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $available_items->count == 2, "Filtered to 2 available items" );
+
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 1,
+        }
+    );
+
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            damaged      => 1,
+        }
+    );
+
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            withdrawn    => 1,
+        }
+    );
+
+    my $item_6 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            notforloan   => 1,
+        }
+    );
+
+    my $lost_items = Koha::Items->search(
+        {
+            _status      => 'lost',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    my $damaged_items = Koha::Items->search(
+        {
+            _status      => 'damaged',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    my $withdrawn_items = Koha::Items->search(
+        {
+            _status      => 'withdrawn',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    my $notforloan_items = Koha::Items->search(
+        {
+            _status      => 'not_for_loan',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $lost_items->count == 1,       "Filtered to 1 lost item" );
+    ok( $damaged_items->count == 1,    "Filtered to 1 damaged item" );
+    ok( $withdrawn_items->count == 1,  "Filtered to 1 withdrawn item" );
+    ok( $notforloan_items->count == 1, "Filtered to 1 notforloan item" );
+
+    C4::Circulation::AddIssue( $patron, $item_1->barcode );
+
+    my $checked_out_items = Koha::Items->search(
+        {
+            _status      => 'checked_out',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $checked_out_items->count == 1, "Filtered to 1 checked out item" );
+
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_2->itemnumber,
+                frombranch => $library_1->{branchcode},
+                tobranch   => $library_2->{branchcode},
+            }
+        }
+    );
+
+    my $in_transit_items = Koha::Items->search(
+        {
+            _status      => 'in_transit',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $in_transit_items->count == 1, "Filtered to 1 in transit item" );
+
+    my $item_7 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    my $hold_1 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item_7->itemnumber, reservedate => dt_from_string,
+            }
+        }
+    );
+
+    my $on_hold_items = Koha::Items->search(
+        {
+            _status      => 'on_hold',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $on_hold_items->count == 1, "Filtered to 1 on hold item" );
+
+    my $item_8 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            restricted   => 1,
+        }
+    );
+
+    my $restricted_items = Koha::Items->search(
+        {
+            _status      => 'restricted',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $restricted_items->count == 1, "Filtered to 1 restricted item" );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'store' => sub {
     plan tests => 8;
