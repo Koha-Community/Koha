@@ -10,6 +10,7 @@
         data-bs-toggle="modal"
         ><i class="fa fa-plus"></i> {{ $__("Select user") }}</a
     >
+    <input type="hidden" name="selected_patron_id" id="selected_patron_id" />
 </template>
 
 <script>
@@ -35,10 +36,8 @@ export default {
                 "#patron_search_modal",
                 this.newUserSelected
             );
-            // this.selected_user_counter = counter
         },
         newUserSelected(e) {
-            // let c = this.selected_user_counter
             let selected_patron_id =
                 document.getElementById("selected_patron_id").value;
             let patron;

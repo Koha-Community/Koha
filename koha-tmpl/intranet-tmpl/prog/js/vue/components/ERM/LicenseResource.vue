@@ -244,13 +244,13 @@ export default {
                 },
                 {
                     name: "user_roles",
-                    type: "relationship",
-                    label: __("Users"),
-                    componentPath: "./ERM/UserRoles.vue",
+                    type: "relationshipWidget",
+                    group: __("Users"),
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
                         hidden: license => !!license.user_roles?.length,
+                        label: __("License users"),
                         columns: [
                             {
                                 name: __("Name"),
@@ -265,17 +265,25 @@ export default {
                         ],
                     },
                     props: {
-                        user_roles: {
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "user_roles",
                         },
-                        av_user_roles: {
-                            type: "av",
-                            av: null,
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("user"),
+                                nameUC: __("License user"),
+                                namePL: __("users"),
+                            },
                         },
-                        user_type: {
-                            type: "string",
-                            value: __("License user %s"),
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                user_id: null,
+                                role: null,
+                                patron_str: "",
+                            },
                         },
                     },
                     subFields: [
@@ -320,8 +328,8 @@ export default {
                 },
                 {
                     name: "documents",
-                    type: "relationship",
-                    componentPath: "./ERM/Documents.vue",
+                    type: "relationshipWidget",
+                    group: __("Documents"),
                     showElement: {
                         type: "component",
                         hidden: license => !!license.documents?.length,
@@ -334,9 +342,29 @@ export default {
                         },
                     },
                     props: {
-                        documents: {
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "documents",
+                        },
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("document"),
+                                nameUC: __("Document"),
+                                namePL: __("documents"),
+                            },
+                        },
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                file_name: null,
+                                file_type: null,
+                                file_description: null,
+                                file_content: null,
+                                physical_location: null,
+                                uri: null,
+                                notes: null,
+                            },
                         },
                     },
                     subFields: [

@@ -259,7 +259,6 @@ export default {
                             },
                         ],
                     },
-                    label: __("Periods"),
                     group: __("Periods"),
                     props: {
                         resourceRelationships: {
@@ -346,9 +345,8 @@ export default {
                 },
                 {
                     name: "user_roles",
-                    type: "component",
+                    type: "relationshipWidget",
                     group: __("Users"),
-                    componentPath: "./ERM/UserRoles.vue",
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
@@ -367,17 +365,25 @@ export default {
                         ],
                     },
                     props: {
-                        user_roles: {
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "user_roles",
                         },
-                        av_user_roles: {
-                            type: "av",
-                            av: null,
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("user"),
+                                nameUC: __("Agreement user"),
+                                namePL: __("users"),
+                            },
                         },
-                        user_type: {
-                            type: "string",
-                            value: __("Agreement user %s"),
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                user_id: null,
+                                role: null,
+                                patron_str: "",
+                            },
                         },
                     },
                     subFields: [
@@ -423,7 +429,6 @@ export default {
                 {
                     name: "licenses",
                     type: "relationshipWidget",
-                    label: __("Licenses"),
                     group: __("Licenses"),
                     showElement: {
                         type: "table",
@@ -551,7 +556,6 @@ export default {
                 {
                     name: "relationships",
                     type: "relationshipWidget",
-                    label: __("Relationships"),
                     group: __("Relationships"),
                     showElement: {
                         type: "component",
@@ -645,11 +649,11 @@ export default {
                 },
                 {
                     name: "documents",
-                    type: "component",
-                    componentPath: "./ERM/Documents.vue",
-                    group: "Documents",
+                    type: "relationshipWidget",
+                    group: __("Documents"),
                     showElement: {
                         type: "component",
+                        label: __("Agreement users"),
                         hidden: agreement => !!agreement.documents?.length,
                         componentPath: "./DocumentDisplay.vue",
                         props: {
@@ -660,9 +664,29 @@ export default {
                         },
                     },
                     props: {
-                        documents: {
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "documents",
+                        },
+                        resourceStrings: {
+                            type: "object",
+                            value: {
+                                nameLC: __("document"),
+                                nameUC: __("Document"),
+                                namePL: __("documents"),
+                            },
+                        },
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                file_name: null,
+                                file_type: null,
+                                file_description: null,
+                                file_content: null,
+                                physical_location: null,
+                                uri: null,
+                                notes: null,
+                            },
                         },
                     },
                     subFields: [
