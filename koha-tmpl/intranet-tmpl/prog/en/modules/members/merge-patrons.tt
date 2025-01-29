@@ -247,6 +247,7 @@
 
                         [% FOREACH p IN patrons %]
                             <div id="col-[% p.borrowernumber | html %]-orig"class="col[% loop.index | html %]">
+<!-- prettier-ignore-start -->
 <!-- <pre> block is unindented to avoid unwanted whitespace -->
 <pre>
 [% IF ( p.surname ) %][% p.surname | html %], [% p.firstname | html %][% ELSE %]-[% END %]
@@ -277,6 +278,7 @@
 [% IF ( p.updated_on ) %][% p.updated_on | html %][% ELSE %]-[% END %]
 [% IF ( p.userid ) %][% p.userid | html %][% ELSE %]-[% END %]
 </pre>
+<!-- prettier-ignore-end -->
                             </div>
                         [% END %]
                         [% FOREACH p IN patrons %]
