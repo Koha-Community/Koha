@@ -122,11 +122,7 @@
             v-on="getEventHandlers()"
         ></component>
     </template>
-    <template
-        v-else-if="
-            attr.type == 'relationship' && !attr.componentPath && attr.props
-        "
-    >
+    <template v-else-if="attr.type == 'relationshipWidget'">
         <component
             :is="relationshipWidget"
             :title="attr.label"

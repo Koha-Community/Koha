@@ -33,8 +33,8 @@
                     </ol>
                 </fieldset>
                 <template
-                    v-for="(attr, index) in resourceAttrs.filter(
-                        attr => attr.type === 'relationship'
+                    v-for="(attr, index) in resourceAttrs.filter(attr =>
+                        attr.type.includes('relationship')
                     )"
                     v-bind:key="'rel-' + index"
                 >
@@ -94,7 +94,7 @@ export default {
         },
         getFieldGroupings() {
             const nonRelationalFields = this.resourceAttrs.filter(
-                attr => attr.type !== "relationship"
+                attr => !attr.type.includes("relationship")
             );
             const groupings = nonRelationalFields.reduce((acc, attr) => {
                 if (

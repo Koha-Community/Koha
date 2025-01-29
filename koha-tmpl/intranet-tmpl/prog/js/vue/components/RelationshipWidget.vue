@@ -25,6 +25,7 @@
                         :resource="resourceRelationship"
                         :attr="attr"
                         :index="counter"
+                        v-bind="handleOptions()"
                     />
                 </li>
             </ol>
@@ -55,6 +56,7 @@ export default {
     data() {
         return {
             resourceRelationshipCount: null,
+            options: null,
         };
     },
     props: {
@@ -65,13 +67,18 @@ export default {
         apiClient: Object,
         newRelationship: Object,
         filters: Object,
+        fetchOptions: Boolean,
     },
     beforeCreate() {
         if (this.apiClient) {
             this.apiClient.count().then(
                 count => {
-                    this.resourceRelationshipCount = count;
-                    this.initialized = true;
+                    if (this.fetchOptions) {
+                        this.getSelectOptions(this.filters);
+                    } else {
+                        this.resourceRelationshipCount = count;
+                        this.initialized = true;
+                    }
                 },
                 error => {}
             );
@@ -86,6 +93,18 @@ export default {
         },
         deleteResourceRelationship(counter) {
             this.resourceRelationships.splice(counter, 1);
+        },
+        getSelectOptions(filters) {
+            const searchFilters = filters ? filters : {};
+            this.apiClient.getAll(searchFilters).then(options => {
+                this.options = options;
+                this.resourceRelationshipCount = options.length;
+                this.initialized = true;
+            });
+        },
+        handleOptions() {
+            if (!this.options) return {};
+            return { options: this.options };
         },
     },
     components: {

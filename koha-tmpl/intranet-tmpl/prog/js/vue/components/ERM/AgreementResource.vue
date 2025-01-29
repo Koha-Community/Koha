@@ -233,7 +233,7 @@ export default {
                 },
                 {
                     name: "periods",
-                    type: "relationship",
+                    type: "relationshipWidget",
                     showElement: {
                         type: "table",
                         columnData: "periods",
@@ -418,7 +418,7 @@ export default {
                 },
                 {
                     name: "licenses",
-                    type: "relationship",
+                    type: "relationshipWidget",
                     label: __("Licenses"),
                     showElement: {
                         type: "table",
@@ -541,8 +541,8 @@ export default {
                 },
                 {
                     name: "relationships",
-                    type: "relationship",
-                    componentPath: "./ERM/AgreementRelationships.vue",
+                    type: "relationshipWidget",
+                    label: __("Relationships"),
                     showElement: {
                         type: "component",
                         hidden: agreement =>
@@ -556,18 +556,36 @@ export default {
                             },
                         },
                     },
+                    apiClient: APIClient.erm.agreements,
                     props: {
-                        agreement_id: {
-                            type: "resourceProperty",
-                            resourceProperty: "agreement_id",
+                        newRelationship: {
+                            type: "object",
+                            value: {
+                                related_agreement_id: null,
+                                relationship: null,
+                                notes: "",
+                            },
                         },
-                        av_agreement_relationships: {
-                            type: "av",
-                            av: null,
-                        },
-                        relationships: {
+                        resourceRelationships: {
                             type: "resourceProperty",
                             resourceProperty: "agreement_relationships",
+                        },
+                        resourceName: {
+                            type: "string",
+                            value: "relationship",
+                        },
+                        filters: {
+                            type: "filter",
+                            keys: {
+                                "me.agreement_id": {
+                                    property: "agreement_id",
+                                    filterType: "!=",
+                                },
+                            },
+                        },
+                        fetchOptions: {
+                            type: "boolean",
+                            value: true,
                         },
                     },
                     subFields: [
@@ -577,12 +595,14 @@ export default {
                             label: __("Related agreement"),
                             requiredKey: "agreement_id",
                             selectLabel: "name",
+                            required: true,
                         },
                         {
                             name: "relationship",
                             type: "select",
                             label: __("Relationship"),
                             avCat: "av_agreement_relationships",
+                            required: true,
                         },
                         {
                             name: "notes",

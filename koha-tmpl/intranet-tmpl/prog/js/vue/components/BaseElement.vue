@@ -62,6 +62,32 @@ export default {
                     const currentValue = acc[key];
                     acc[key] = !!currentValue;
                 }
+
+                if (prop.type === "filter") {
+                    Object.keys(prop.keys).forEach(k => {
+                        if (
+                            prop.keys[k].hasOwnProperty("filterType") &&
+                            prop.keys[k].filterType
+                        ) {
+                            acc[key] = {
+                                [k]: {
+                                    [prop.keys[k].filterType]:
+                                        this.accessNestedProperty(
+                                            prop.keys[k].property,
+                                            this.resource
+                                        ),
+                                },
+                            };
+                        } else {
+                            acc[key] = {
+                                [k]: this.accessNestedProperty(
+                                    prop.keys[k].property,
+                                    this.resource
+                                ),
+                            };
+                        }
+                    });
+                }
                 return acc;
             }, {});
             const attr = show ? this.attr.showElement : this.attr;
