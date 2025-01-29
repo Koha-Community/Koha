@@ -1,8 +1,6 @@
-import HttpClient from "./http-client";
-
-export class PreservationAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class PreservationAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/api/v1/preservation/",
         });
     }
@@ -10,7 +8,7 @@ export class PreservationAPIClient extends HttpClient {
     get config() {
         return {
             get: () =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "config",
                 }),
         };
@@ -19,7 +17,7 @@ export class PreservationAPIClient extends HttpClient {
     get trains() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "trains/" + id,
                     headers: {
                         "x-koha-embed":
@@ -27,7 +25,7 @@ export class PreservationAPIClient extends HttpClient {
                     },
                 }),
             getAll: (query = {}) =>
-                this.get({
+                this.httpClient.get({
                     endpoint:
                         "trains?" +
                         new URLSearchParams({
@@ -36,21 +34,21 @@ export class PreservationAPIClient extends HttpClient {
                         }),
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "trains/" + id,
                 }),
             create: train =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "trains",
                     body: train,
                 }),
             update: (train, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "trains/" + id,
                     body: train,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "trains?" +
                         new URLSearchParams({
@@ -65,14 +63,14 @@ export class PreservationAPIClient extends HttpClient {
     get processings() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "processings/" + id,
                     headers: {
                         "x-koha-embed": "attributes",
                     },
                 }),
             getAll: query =>
-                this.get({
+                this.httpClient.get({
                     endpoint:
                         "processings?" +
                         new URLSearchParams({
@@ -82,21 +80,21 @@ export class PreservationAPIClient extends HttpClient {
                 }),
 
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "processings/" + id,
                 }),
             create: processing =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "processings",
                     body: processing,
                 }),
             update: (processing, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "processings/" + id,
                     body: processing,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "processings?" +
                         new URLSearchParams({
@@ -111,7 +109,7 @@ export class PreservationAPIClient extends HttpClient {
     get train_items() {
         return {
             get: (train_id, id) =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "trains/" + train_id + "/items/" + id,
                     headers: {
                         "x-koha-embed":
@@ -119,31 +117,31 @@ export class PreservationAPIClient extends HttpClient {
                     },
                 }),
             delete: (train_id, id) =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "trains/" + train_id + "/items/" + id,
                 }),
             create: (train_item, train_id) =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "trains/" + train_id + "/items",
                     body: train_item,
                 }),
             createAll: (train_items, train_id) =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "trains/" + train_id + "/items/batch",
                     body: train_items,
                 }),
             copy: (new_train_id, train_id, id) =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "trains/" + train_id + "/items/" + id + "/copy",
                     body: { train_id: new_train_id },
                 }),
             update: (train_item, train_id, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "trains/" + train_id + "/items/" + id,
                     body: train_item,
                 }),
             count: (train_id, query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "trains/" +
                         train_id +
@@ -169,27 +167,29 @@ export class PreservationAPIClient extends HttpClient {
                     _per_page: 1,
                     q: JSON.stringify(q),
                 };
-                return this.get({
-                    endpoint:
-                        "waiting-list/items?" + new URLSearchParams(params),
-                    headers: {
-                        "x-koha-embed": "biblio",
-                    },
-                }).then(response => {
-                    return response.length ? response[0] : undefined;
-                });
+                return this.httpClient
+                    .get({
+                        endpoint:
+                            "waiting-list/items?" + new URLSearchParams(params),
+                        headers: {
+                            "x-koha-embed": "biblio",
+                        },
+                    })
+                    .then(response => {
+                        return response.length ? response[0] : undefined;
+                    });
             },
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "waiting-list/items/" + id,
                 }),
             createAll: items =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "waiting-list/items",
                     body: items,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "waiting-list/items?" +
                         new URLSearchParams({

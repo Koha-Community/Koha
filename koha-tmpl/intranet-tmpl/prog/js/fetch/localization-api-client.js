@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class LocalizationAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class LocalizationAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/localization",
         });
     }
@@ -10,7 +8,7 @@ export class LocalizationAPIClient extends HttpClient {
     get localizations() {
         return {
             create: localization =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "entity=%s&code=%s&lang=%s&translation=%s".format(
                         encodeURIComponent(localization.entity),
@@ -24,7 +22,7 @@ export class LocalizationAPIClient extends HttpClient {
                     },
                 }),
             update: localization =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "",
                     body: "id=%s&lang=%s&translation=%s".format(
                         encodeURIComponent(localization.id),
@@ -37,7 +35,7 @@ export class LocalizationAPIClient extends HttpClient {
                     },
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "/?id=%s".format(id),
                     headers: {
                         "Content-Type":

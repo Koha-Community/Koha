@@ -1,8 +1,6 @@
-import HttpClient from "./http-client";
-
-export class ERMAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class ERMAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/api/v1/erm/",
         });
     }
@@ -10,7 +8,7 @@ export class ERMAPIClient extends HttpClient {
     get config() {
         return {
             get: () =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "config",
                 }),
         };
@@ -19,7 +17,7 @@ export class ERMAPIClient extends HttpClient {
     get agreements() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "agreements/" + id,
                     headers: {
                         "x-koha-embed":
@@ -27,27 +25,27 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             getAll: (query, params) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "agreements",
                     query,
                     params,
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "agreements/" + id,
                 }),
             create: agreement =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "agreements",
                     body: agreement,
                 }),
             update: (agreement, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "agreements/" + id,
                     body: agreement,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "agreements?" +
                         new URLSearchParams({
@@ -62,7 +60,7 @@ export class ERMAPIClient extends HttpClient {
     get licenses() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "licenses/" + id,
                     headers: {
                         "x-koha-embed":
@@ -70,7 +68,7 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             getAll: (query, params) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "licenses",
                     query,
                     params,
@@ -79,21 +77,21 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "licenses/" + id,
                 }),
             create: license =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "licenses",
                     body: license,
                 }),
             update: (license, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "licenses/" + id,
                     body: license,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "licenses?" +
                         new URLSearchParams({
@@ -108,7 +106,7 @@ export class ERMAPIClient extends HttpClient {
     get localPackages() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "eholdings/local/packages/" + id,
                     headers: {
                         "x-koha-embed":
@@ -116,7 +114,7 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             getAll: (query, params) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "eholdings/local/packages",
                     query,
                     params,
@@ -125,21 +123,21 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "eholdings/local/packages/" + id,
                 }),
             create: local_package =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "eholdings/local/packages",
                     body: local_package,
                 }),
             update: (local_package, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "eholdings/local/packages/" + id,
                     body: local_package,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "eholdings/local/packages?" +
                         new URLSearchParams({
@@ -154,28 +152,28 @@ export class ERMAPIClient extends HttpClient {
     get localTitles() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "eholdings/local/titles/" + id,
                     headers: {
                         "x-koha-embed": "resources,resources.package",
                     },
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "eholdings/local/titles/" + id,
                 }),
             create: local_package =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "eholdings/local/titles",
                     body: local_package,
                 }),
             update: (local_package, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "eholdings/local/titles/" + id,
                     body: local_package,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "eholdings/local/titles?" +
                         new URLSearchParams({
@@ -185,12 +183,12 @@ export class ERMAPIClient extends HttpClient {
                         }),
                 }),
             import: body =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "eholdings/local/titles/import",
                     body,
                 }),
             import_kbart: body =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "eholdings/local/titles/import_kbart",
                     body,
                 }),
@@ -200,7 +198,7 @@ export class ERMAPIClient extends HttpClient {
     get localResources() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "eholdings/local/resources/" + id,
                     headers: {
                         "x-koha-embed": "title,package,vendor",
@@ -212,7 +210,7 @@ export class ERMAPIClient extends HttpClient {
     get EBSCOPackages() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "eholdings/ebsco/packages/" + id,
                     headers: {
                         "x-koha-embed":
@@ -220,7 +218,7 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             patch: (id, body) =>
-                this.patch({
+                this.httpClient.patch({
                     endpoint: "eholdings/ebsco/packages/" + id,
                     body,
                 }),
@@ -230,7 +228,7 @@ export class ERMAPIClient extends HttpClient {
     get EBSCOTitles() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "eholdings/ebsco/titles/" + id,
                     headers: {
                         "x-koha-embed": "resources,resources.package",
@@ -242,14 +240,14 @@ export class ERMAPIClient extends HttpClient {
     get EBSCOResources() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "eholdings/ebsco/resources/" + id,
                     headers: {
                         "x-koha-embed": "title,package,vendor",
                     },
                 }),
             patch: (id, body) =>
-                this.patch({
+                this.httpClient.patch({
                     endpoint: "eholdings/ebsco/resources/" + id,
                     body,
                 }),
@@ -259,31 +257,31 @@ export class ERMAPIClient extends HttpClient {
     get usage_data_providers() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "usage_data_providers/" + id,
                 }),
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "usage_data_providers",
                     query,
                     query,
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "usage_data_providers/" + id,
                 }),
             create: usage_data_provider =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "usage_data_providers",
                     body: usage_data_provider,
                 }),
             update: (usage_data_provider, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "usage_data_providers/" + id,
                     body: usage_data_provider,
                 }),
             process_SUSHI_response: (id, body) =>
-                this.post({
+                this.httpClient.post({
                     endpoint:
                         "usage_data_providers/" +
                         id +
@@ -291,17 +289,17 @@ export class ERMAPIClient extends HttpClient {
                     body: body,
                 }),
             process_COUNTER_file: (id, body) =>
-                this.post({
+                this.httpClient.post({
                     endpoint:
                         "usage_data_providers/" + id + "/process_COUNTER_file",
                     body: body,
                 }),
             test: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "usage_data_providers/" + id + "/test_connection",
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "usage_data_providers?" +
                         new URLSearchParams({
@@ -316,11 +314,11 @@ export class ERMAPIClient extends HttpClient {
     get counter_files() {
         return {
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "counter_files/" + id,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "counter_files?" +
                         new URLSearchParams({
@@ -335,17 +333,17 @@ export class ERMAPIClient extends HttpClient {
     get default_usage_reports() {
         return {
             getAll: query =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "default_usage_reports",
                     query,
                 }),
             create: default_usage_report =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "default_usage_reports",
                     body: default_usage_report,
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "default_usage_reports/" + id,
                 }),
         };
@@ -354,12 +352,12 @@ export class ERMAPIClient extends HttpClient {
     get usage_platforms() {
         return {
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "usage_platforms",
                     query: query,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "usage_platforms?" +
                         new URLSearchParams({
@@ -374,12 +372,12 @@ export class ERMAPIClient extends HttpClient {
     get usage_items() {
         return {
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "usage_items",
                     query: query,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "usage_items?" +
                         new URLSearchParams({
@@ -394,12 +392,12 @@ export class ERMAPIClient extends HttpClient {
     get usage_databases() {
         return {
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "usage_databases",
                     query: query,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "usage_databases?" +
                         new URLSearchParams({
@@ -414,12 +412,12 @@ export class ERMAPIClient extends HttpClient {
     get usage_titles() {
         return {
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "usage_titles",
                     query: query,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "usage_titles?" +
                         new URLSearchParams({
@@ -434,7 +432,7 @@ export class ERMAPIClient extends HttpClient {
     get counter_registry() {
         return {
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "counter_registry",
                     query,
                 }),
@@ -443,7 +441,7 @@ export class ERMAPIClient extends HttpClient {
     get sushi_service() {
         return {
             getAll: query =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "sushi_service",
                     query,
                 }),

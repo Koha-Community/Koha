@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class CataloguingAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class CataloguingAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/",
         });
     }
@@ -10,7 +8,7 @@ export class CataloguingAPIClient extends HttpClient {
     get catalog_bib() {
         return {
             create: bib_info =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "new_bib/?frameworkcode=%s".format(
                         bib_info.frameworkcode
                     ),
@@ -20,7 +18,7 @@ export class CataloguingAPIClient extends HttpClient {
                     },
                 }),
             update: bib_info =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "bib/%s?frameworkcode=%s".format(
                         bib_info.id,
                         bib_info.frameworkcode

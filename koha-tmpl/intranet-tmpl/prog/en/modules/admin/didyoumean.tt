@@ -99,7 +99,7 @@
 
         function yesimeant() {
             var OPACdidyoumean = serialize_plugins("opac");
-            const client = APIClient.syspref;
+            const client = APIClient.sysprefs;
             client.sysprefs.update("OPACdidyoumean", OPACdidyoumean).then(
                 success => {
                     alert(_("Successfully saved configuration"));

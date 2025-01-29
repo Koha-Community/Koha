@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class SysprefAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class SysprefAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/config/systempreferences",
         });
     }
@@ -10,15 +8,16 @@ export class SysprefAPIClient extends HttpClient {
     get sysprefs() {
         return {
             get: variable =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "/?pref=" + variable,
                 }),
             update: (variable, value) =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
-                    body: "pref_%s=%s".format(
+                    body: "pref_%s=%s&csrf_token=%s".format(
                         encodeURIComponent(variable),
-                        encodeURIComponent(value)
+                        encodeURIComponent(value),
+                        csrf_token
                     ),
                     headers: {
                         "Content-Type":
@@ -26,7 +25,7 @@ export class SysprefAPIClient extends HttpClient {
                     },
                 }),
             update_all: sysprefs =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: Object.keys(sysprefs)
                         .map(variable =>

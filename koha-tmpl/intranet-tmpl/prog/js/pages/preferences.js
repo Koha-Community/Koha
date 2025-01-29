@@ -1,5 +1,4 @@
-/* keep tidy */
-/* global KOHA CodeMirror to_highlight search_jumped humanMsg themelang */
+/* global KOHA CodeMirror to_highlight search_jumped humanMsg dataTablesDefaults themelang */
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {
@@ -49,7 +48,7 @@ KOHA.Preferences = {
             return;
         }
         KOHA.AJAX.MarkRunning($(form).find(".save-all"), __("Saving..."));
-        const client = APIClient.syspref;
+        const client = APIClient.sysprefs;
         client.sysprefs
             .update_all(sysprefs)
             .then(

@@ -1,8 +1,6 @@
-import HttpClient from "./http-client";
-
-export class AcquisitionAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class AcquisitionAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/api/v1/acquisitions/",
         });
     }
@@ -10,7 +8,7 @@ export class AcquisitionAPIClient extends HttpClient {
     get vendors() {
         return {
             getAll: (query, params) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "vendors",
                     query,
                     params: { _order_by: "name", ...params },

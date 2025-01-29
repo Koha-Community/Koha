@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class ArticleRequestAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class ArticleRequestAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/article_request",
             headers: {
                 "Content-Type":
@@ -14,22 +12,22 @@ export class ArticleRequestAPIClient extends HttpClient {
     get articleRequests() {
         return {
             process: id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "id=%s&op=%s".format(id, "cud-process"),
                 }),
             complete: id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "id=%s&op=%s".format(id, "cud-complete"),
                 }),
             pending: id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "id=%s&op=%s".format(id, "cud-pending"),
                 }),
             update_urls: (id, urls) =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "id=%s&urls=%s&op=%s".format(
                         id,
@@ -38,7 +36,7 @@ export class ArticleRequestAPIClient extends HttpClient {
                     ),
                 }),
             update_library_id: (id, library_id) =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "id=%s&library_id=%s&op=%s".format(
                         id,

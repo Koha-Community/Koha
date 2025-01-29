@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class CoverImageAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class CoverImageAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/cover_images",
         });
     }
@@ -10,7 +8,7 @@ export class CoverImageAPIClient extends HttpClient {
     get cover_images() {
         return {
             delete: image_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "imagenumber=%s&op=%s".format(image_id, "cud-delete"),
                     headers: {

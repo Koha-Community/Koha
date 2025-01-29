@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class TicketAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class TicketAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/",
         });
     }
@@ -10,7 +8,7 @@ export class TicketAPIClient extends HttpClient {
     get tickets() {
         return {
             mark_as_viewed: ticket_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "problem_reports",
                     body: "report_id=%s&op=%s".format(ticket_id, "cud-viewed"),
                     headers: {
@@ -19,7 +17,7 @@ export class TicketAPIClient extends HttpClient {
                     },
                 }),
             mark_as_closed: ticket_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "problem_reports",
                     body: "report_id=%s&op=%s".format(ticket_id, "cud-closed"),
                     headers: {
@@ -28,7 +26,7 @@ export class TicketAPIClient extends HttpClient {
                     },
                 }),
             mark_as_new: ticket_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "problem_reports",
                     body: "report_id=%s&op=%s".format(ticket_id, "cud-new"),
                     headers: {

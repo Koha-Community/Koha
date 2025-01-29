@@ -1,8 +1,6 @@
-import HttpClient from "./http-client.js";
-
-export class RecallAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class RecallAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/cgi-bin/koha/svc/recall",
         });
     }
@@ -10,7 +8,7 @@ export class RecallAPIClient extends HttpClient {
     get recalls() {
         return {
             cancel: recall_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "recall_id=%s&op=%s".format(recall_id, "cud-cancel"),
                     headers: {
@@ -19,7 +17,7 @@ export class RecallAPIClient extends HttpClient {
                     },
                 }),
             expire: recall_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "recall_id=%s&op=%s".format(recall_id, "cud-expire"),
                     headers: {
@@ -29,7 +27,7 @@ export class RecallAPIClient extends HttpClient {
                 }),
 
             revert: recall_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "recall_id=%s&op=%s".format(recall_id, "cud-revert"),
                     headers: {
@@ -39,7 +37,7 @@ export class RecallAPIClient extends HttpClient {
                 }),
 
             overdue: recall_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "recall_id=%s&op=%s".format(recall_id, "cud-overdue"),
                     headers: {
@@ -49,7 +47,7 @@ export class RecallAPIClient extends HttpClient {
                 }),
 
             transit: recall_id =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: "recall_id=%s&op=%s".format(recall_id, "cud-transit"),
                     headers: {

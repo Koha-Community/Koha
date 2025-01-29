@@ -1,8 +1,6 @@
-import HttpClient from "./http-client";
-
-export class ItemAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class ItemAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/api/v1/",
         });
     }
@@ -10,7 +8,7 @@ export class ItemAPIClient extends HttpClient {
     get items() {
         return {
             getAll: (query, params, headers) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "items",
                     query,
                     params,

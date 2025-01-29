@@ -1,8 +1,6 @@
-import HttpClient from "./http-client";
-
-export class AdditionalFieldsAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class AdditionalFieldsAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/api/v1/extended_attribute_types",
         });
     }
@@ -10,7 +8,7 @@ export class AdditionalFieldsAPIClient extends HttpClient {
     get additional_fields() {
         return {
             getAll: resource_type =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "?resource_type=" + resource_type,
                 }),
         };

@@ -1,8 +1,6 @@
-import HttpClient from "./http-client";
-
-export class RecordSourcesAPIClient extends HttpClient {
-    constructor() {
-        super({
+export class RecordSourcesAPIClient {
+    constructor(HttpClient) {
+        this.httpClient = new HttpClient({
             baseURL: "/api/v1/record_sources",
         });
     }
@@ -10,32 +8,32 @@ export class RecordSourcesAPIClient extends HttpClient {
     get record_sources() {
         return {
             create: record_source =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "",
                     body: record_source,
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "/" + id,
                 }),
             update: (record_source, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "/" + id,
                     body: record_source,
                 }),
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "/" + id,
                 }),
             getAll: (query, params) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "/",
                     query,
                     params,
                     headers: {},
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "?" +
                         new URLSearchParams({
