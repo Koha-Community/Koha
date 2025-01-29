@@ -24,8 +24,8 @@ module.exports = {
             options: {
                 printWidth: 240,
                 htmlWhitespaceSensitivity: "strict",
-                parser: "jinja-template",
-                plugins: ["prettier-plugin-jinja-template"],
+                parser: "template-toolkit",
+                plugins: ["@koha-community/prettier-plugin-template-toolkit"],
             },
         },
     ],
