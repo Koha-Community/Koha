@@ -154,13 +154,21 @@
                                         <input type="text" name="patron_notes" id="patron_notes" size="50" />
                                     </li>
 
-                                    <li>
-                                        <label for="format">Format:</label>
-                                        <select name="format" id="format">
-                                            <option value="PHOTOCOPY">Photocopy</option>
-                                            <option value="SCAN">Digital scan</option>
-                                        </select>
-                                    </li>
+                                    [% SET ArticleRequestsSupportedFormats = Koha.MultivaluePreference('ArticleRequestsSupportedFormats') %]
+                                    [% IF ArticleRequestsSupportedFormats.size %]
+                                        <li>
+                                            <label for="format">Format:</label>
+                                            <select name="format" id="format">
+                                                [% FOR format IN ArticleRequestsSupportedFormats %]
+                                                    [% IF format == 'PHOTOCOPY' %]
+                                                        <option value="PHOTOCOPY">Photocopy</option>
+                                                    [% ELSIF format == 'SCAN' %]
+                                                        <option value="SCAN">Digital scan</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                        </li>
+                                    [% END %]
 
                                     [% IF AllPublicBranches.size > 1 %]
                                         <li>
@@ -249,27 +257,56 @@
 [% BLOCK jsinclude %]
     <script>
         $(document).ready( function() {
-            allow_submit = false;
-            $('#place-article-request').on('submit', function( event ){
-                if ( ! allow_submit ) {
-                    event.preventDefault();
+                    allow_submit = false;
+                    $('#place-article-request').on('submit', function( event ){
+                        if ( ! allow_submit ) {
+                            event.preventDefault();
 
-                    [% IF article_request_type == 'item_only' %]
-                        if ( ! $("input:radio[name='itemnumber']").is(":checked") ) {
-                            alert( _("Please select a specific item for this article request.") );
-                            return 0;
+                            [% IF article_request_type == 'item_only' %]
+                                if ( ! $("input:radio[name='itemnumber']").is(":checked") ) {
+                                    alert( _("Please select a specific item for this article request.") );
+                                    return 0;
+                                }
+                            [% END %]
+
+                            var mandatory_fields = "[% mandatory_fields | html %]";
+                            var m = new Array();
+                            if ( mandatory_fields ) m = mandatory_fields.split(",");
+                            var f = new Array();
+
+                            for (i = 0; i < m.length; i++) {
+                                if ( ! $("#" + m[i]).val() ) {
+                                    f.push( m[i] );
+                                }
+                            }
+
+                            if ( f.length ) {
+                                alert( _("The following fields are required and not filled in: ") + f.join(", ") );
+                                return 0;
+                            }
+
+                            // Check if all fields are blank
+                            if( m.length == 0 && $('#title').val()=='' && $('#author').val()=='' && $('#volume').val()=='' && $('#issue').val()=='' && $('#date').val()=='' && $('#pages').val()=='' && $('#chapters').val()=='' && $('#patron_notes').val()=='' && !$('input[name="toc_request"]').prop('checked') ) {
+                                alert( _("Please fill in at least one field.") );
+                                return 0;
+                            }
+
+                            allow_submit = true;
+                            $('#place-article-request').submit();
                         }
-                    [% END %]
+                    });
 
-                    var mandatory_fields = "[% mandatory_fields | html %]";
-                    var m = new Array();
-                    if ( mandatory_fields ) m = mandatory_fields.split(",");
-                    var f = new Array();
+                    // Initialize format(s)
+                    var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | $raw %]";
+                    if( !supported_formats.match(/PHOTOCOPY/) )
+                        $('#format option[value="PHOTOCOPY"]').remove();
+                    if( !supported_formats.match(/SCAN/) )
+                        $('#format option[value="SCAN"]').remove();
 
-                    for (i = 0; i < m.length; i++) {
-                        if ( ! $("#" + m[i]).val() ) {
-                            f.push( m[i] );
-                        }
+                    if( $('#format option').length > 1 ) {
+                        // Select first listed format
+                        var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
+                        $('#format option[value="'+first_format+'"]').attr('selected', true);
                     }
 
                     if ( f.length ) {
@@ -288,47 +325,6 @@
                 }
             });
 
-            // Initialize format(s)
-            var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | $raw %]";
-            if( !supported_formats.match(/PHOTOCOPY/) )
-                $('#format option[value="PHOTOCOPY"]').remove();
-            if( !supported_formats.match(/SCAN/) )
-                $('#format option[value="SCAN"]').remove();
-
-            if( $('#format option').length > 1 ) {
-                // Select first listed format
-                var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
-                $('#format option[value="'+first_format+'"]').attr('selected', true);
-            }
-
-            if ( f.length ) {
-                alert( _("The following fields are required and not filled in: ") + f.join(", ") );
-                return 0;
-            }
-
-            // Check if all fields are blank
-            if( m.length == 0 && $('#title').val()=='' && $('#author').val()=='' && $('#volume').val()=='' && $('#issue').val()=='' && $('#date').val()=='' && $('#pages').val()=='' && $('#chapters').val()=='' && $('#patron_notes').val()=='' && !$('input[name="toc_request"]').prop('checked') ) {
-                alert( _("Please fill in at least one field.") );
-                return 0;
-            }
-
-            allow_submit = true;
-            $('#place-article-request').submit();
-        }
-    });
-
-    // Initialize format(s)
-    var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | html %]";
-    if( !supported_formats.match(/PHOTOCOPY/) )
-        $('#format option[value="PHOTOCOPY"]').remove();
-    if( !supported_formats.match(/SCAN/) )
-        $('#format option[value="SCAN"]').remove();
-
-    if( $('#format option').length > 1 ) {
-        // Select first listed format
-        var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
-        $('#format option[value="'+first_format+'"]').attr('selected', true);
-    }
-});
-</script>
+        });
+    </script>
 [% END %]
