@@ -58,6 +58,23 @@ subtest 'yaml_preference() tests' => sub {
     $context->unmock( 'preference' );
 };
 
+subtest 'multivalue_preference() tests' => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', '' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), [] );
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', 'some' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), ['some'] );
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', 'some|more|values' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), [ 'some', 'more', 'values' ] );
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', 'some,more,values' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), [ 'some', 'more', 'values' ] );
+};
+
 subtest 'needs_install() tests' => sub {
 
     plan tests => 2;

@@ -70,6 +70,11 @@ sub Preference {
     return C4::Context->preference( $pref );
 }
 
+sub MultivaluePreference {
+    my ( $self, $pref ) = @_;
+    return C4::Context->multivalue_preference( $pref );
+}
+
 =head3 CSVDelimiter
 
 The delimiter option 'tabs' is stored in the DB as 'tabulation' to avoid issues

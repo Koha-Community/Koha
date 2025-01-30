@@ -353,6 +353,24 @@ sub yaml_preference {
     return $yaml;
 }
 
+=head2 multivalue_preference
+
+Retrieves the required system preference value, and splits it
+into pieces using the I<pipe> (|) symbol as separator.
+
+=cut
+
+sub multivalue_preference {
+    my ( $self, $preference ) = @_;
+
+    my $syspref = $self->preference($preference) // q{};
+
+    return [ split qr{\|}, $syspref ]
+        if $syspref =~ qr{\|};
+
+    return [ split qr{,}, $syspref ]
+}
+
 =head2 enable_syspref_cache
 
   C4::Context->enable_syspref_cache();

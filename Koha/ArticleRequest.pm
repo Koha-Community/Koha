@@ -252,10 +252,9 @@ sub store {
     if ( !$self->in_storage ) {
         $self->created_on( dt_from_string() );
     }
-    my $format = $self->format;
-    if ( C4::Context->preference('ArticleRequestsSupportedFormats') !~ /\b$format\b/ ) {
-        Koha::Exceptions::ArticleRequest::WrongFormat->throw;
-    }
+
+    Koha::Exceptions::ArticleRequest::WrongFormat->throw
+        unless grep { $_ eq $self->format } @{ C4::Context->multivalue_preference('ArticleRequestsSupportedFormats') };
 
     return $self->SUPER::store;
 }
