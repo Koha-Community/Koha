@@ -1,13 +1,7 @@
 import { markRaw } from "vue";
 
 import Home from "../components/SIP2/Home.vue";
-import SIP2InstitutionsList from "../components/SIP2/SIP2InstitutionsList.vue";
-import SIP2InstitutionsFormAdd from "../components/SIP2/SIP2InstitutionsFormAdd.vue";
-import SIP2InstitutionsShow from "../components/SIP2/SIP2InstitutionsShow.vue";
-import SIP2AccountsList from "../components/SIP2/SIP2AccountsList.vue";
-import SIP2AccountsFormAdd from "../components/SIP2/SIP2AccountsFormAdd.vue";
-import SIP2AccountsShow from "../components/SIP2/SIP2AccountsShow.vue";
-
+import ResourceWrapper from "../components/ResourceWrapper.vue";
 import { $__ } from "../i18n";
 
 export const routes = [
@@ -28,28 +22,29 @@ export const routes = [
                 title: $__("Institutions"),
                 icon: "fa fa-building-columns",
                 is_end_node: true,
+                resource: "SIP2/SIP2InstitutionResource.vue",
                 children: [
                     {
                         path: "",
                         name: "SIP2InstitutionsList",
-                        component: markRaw(SIP2InstitutionsList),
+                        component: markRaw(ResourceWrapper),
                     },
                     {
                         path: ":sip_institution_id",
                         name: "SIP2InstitutionsShow",
-                        component: markRaw(SIP2InstitutionsShow),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Show institution"),
                     },
                     {
                         path: "add",
                         name: "SIP2InstitutionsFormAdd",
-                        component: markRaw(SIP2InstitutionsFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Add institution"),
                     },
                     {
                         path: "edit/:sip_institution_id",
                         name: "SIP2InstitutionsFormAddEdit",
-                        component: markRaw(SIP2InstitutionsFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Edit institution"),
                     },
                 ],
