@@ -309,7 +309,7 @@
         function patronListAdd() {
             var borrowernumbers = JSON.parse(localStorage.getItem("patron_search_selections")) || [];
             if (borrowernumbers.length > 0) {
-                const client = APIClient.patron;
+                const client = APIClient.patron_list;
                 client.lists.add_patrons({ patron_ids: borrowernumbers, new_list_name: $("#new_patron_list").val(), list_id: $("#add_to_patron_list").val() }).then(
                     success => {
                         $("#patron_list_dialog").show();

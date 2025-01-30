@@ -8,6 +8,7 @@ import ClubAPIClient from "./club-api-client.js";
 import CoverImageAPIClient from "./cover-image-api-client.js";
 import LocalizationAPIClient from "./localization-api-client.js";
 import PatronAPIClient from "./patron-api-client.js";
+import PatronListAPIClient from "./patron-list-api-client.js";
 import RecallAPIClient from "./recall-api-client.js";
 import SysprefAPIClient from "./system-preferences-api-client.js";
 import TicketAPIClient from "./ticket-api-client.js";
@@ -21,6 +22,7 @@ export const APIClient = {
     cover_image: new CoverImageAPIClient(HttpClient),
     localization: new LocalizationAPIClient(HttpClient),
     patron: new PatronAPIClient(HttpClient),
+    patron_list: new PatronListAPIClient(HttpClient),
     recall: new RecallAPIClient(HttpClient),
     sysprefs: new SysprefAPIClient(HttpClient),
     ticket: new TicketAPIClient(HttpClient),
