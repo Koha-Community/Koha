@@ -517,10 +517,16 @@
                         <span class="label">Return-Path: </span>
                         [% library.branchreturnpath | html %]
                     </li>
+                    [% IF ( library.smtp_server.id ) %]
                     <li>
                         <span class="label">SMTP server: </span>
-                        [% smtp_server.name | html %]
+                            [% IF ( CAN_user_parameters_manage_smtp_servers ) %]
+                                <a href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&smtp_server_id=[% library.smtp_server.id | uri %]">[% library.smtp_server.name | html %]</a>
+                            [% ELSE %]
+                                [% library.smtp_server.name | html %]
+                            [% END %]
                     </li>
+                    [% END %]
                     <li>
                         <span class="label">URL: </span>
                         [% IF ( library.branchurl ) %]
