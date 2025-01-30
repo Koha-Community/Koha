@@ -7,6 +7,13 @@
                 @go-to-add-resource="goToResourceAdd"
                 :title="$__('New %s').format(i18n.displayNameLc)"
             />
+            <ToolbarButton
+                v-for="(button, i) in getToolbarButtons()"
+                v-bind:key="i"
+                :to="button.to"
+                :icon="button.icon"
+                :title="button.title"
+            />
         </Toolbar>
         <fieldset
             v-if="tableFilters?.length > 0 && resourceCount > 0"
@@ -68,7 +75,6 @@ export default {
         apiClient: Object,
         i18n: Object,
         tableOptions: Object,
-        resourceName: String,
         goToResourceShow: Function,
         goToResourceEdit: Function,
         doResourceDelete: Function,
@@ -80,8 +86,12 @@ export default {
         tableUrl: Function,
         hasAdditionalFields: { type: Boolean, default: false },
         resourceName: String,
+        getToolbarButtons: {
+            type: Function,
+            default: () => [],
+        },
     },
-    data: function () {
+    data() {
         return {
             resourceCount: 0,
             initialized: false,
@@ -150,13 +160,6 @@ export default {
                             }));
                     });
                 });
-        },
-        redrawTable() {
-            if (this.filterTable) {
-                this.filterTable();
-            } else {
-                this.table.redraw(this.tableUrl(this.filters));
-            }
         },
     },
     components: { Toolbar, ToolbarButton, KohaTable, FormElement },

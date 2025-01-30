@@ -2,13 +2,11 @@ import { markRaw } from "vue";
 
 import Home from "../components/ERM/Home.vue";
 import EHoldingsLocalPackagesFormAdd from "../components/ERM/EHoldingsLocalPackagesFormAdd.vue";
-import EHoldingsLocalTitlesFormAdd from "../components/ERM/EHoldingsLocalTitlesFormAdd.vue";
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
 import EHoldingsLocalTitlesKBARTImport from "../components/ERM/EHoldingsLocalTitlesKBARTImport.vue";
 import EHoldingsLocalPackagesList from "../components/ERM/EHoldingsLocalPackagesList.vue";
 import EHoldingsLocalPackagesShow from "../components/ERM/EHoldingsLocalPackagesShow.vue";
 import EHoldingsLocalResourcesShow from "../components/ERM/EHoldingsLocalResourcesShow.vue";
-import EHoldingsLocalTitlesList from "../components/ERM/EHoldingsLocalTitlesList.vue";
 import EHoldingsLocalTitlesShow from "../components/ERM/EHoldingsLocalTitlesShow.vue";
 import EHoldingsEBSCOPackagesList from "../components/ERM/EHoldingsEBSCOPackagesList.vue";
 import EHoldingsEBSCOPackagesShow from "../components/ERM/EHoldingsEBSCOPackagesShow.vue";
@@ -159,13 +157,12 @@ export const routes = [
                                 title: $__("Titles"),
                                 icon: "fa-solid fa-arrow-down-a-z",
                                 is_end_node: true,
+                                resource: "ERM/EHoldingsLocalTitleResource.vue",
                                 children: [
                                     {
                                         path: "",
                                         name: "EHoldingsLocalTitlesList",
-                                        component: markRaw(
-                                            EHoldingsLocalTitlesList
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                     },
                                     {
                                         path: ":title_id",
@@ -178,17 +175,13 @@ export const routes = [
                                     {
                                         path: "add",
                                         name: "EHoldingsLocalTitlesFormAdd",
-                                        component: markRaw(
-                                            EHoldingsLocalTitlesFormAdd
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                         title: $__("Add title"),
                                     },
                                     {
                                         path: "edit/:title_id",
                                         name: "EHoldingsLocalTitlesFormAddEdit",
-                                        component: markRaw(
-                                            EHoldingsLocalTitlesFormAdd
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                         title: $__("Edit title"),
                                     },
                                     {

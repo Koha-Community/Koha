@@ -3,6 +3,7 @@
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
             >{{ attr.label }}:</label
         >
         <input
@@ -17,6 +18,7 @@
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
             >{{ attr.label }}:</label
         >
         <textarea
@@ -33,6 +35,7 @@
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
             >{{ attr.label }}:</label
         >
         <input
@@ -70,13 +73,14 @@
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
             >{{ attr.label }}:</label
         >
         <v-select
             :id="`${attr.name}${index}`"
             v-model="resource[attr.name]"
             :label="attr.selectLabel"
-            :reduce="av => av[attr.requiredKey]"
+            :reduce="av => selectRequiredKey(av)"
             :options="selectOptions"
             :required="!resource[attr.name] && attr.required"
             :disabled="disabled"
@@ -98,6 +102,7 @@
             v-if="attr.label"
             :for="attr.name"
             :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
             >{{ attr.label }}:</label
         >
         <component
@@ -130,6 +135,7 @@
             v-if="attr.label"
             :for="attr.name"
             :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
             >{{ attr.label }}:</label
         >
         <FormRelationshipSelect
@@ -183,6 +189,11 @@ export default {
         },
     },
     methods: {
+        selectRequiredKey(av) {
+            if (this.attr.requiredKey == "package_id")
+                return parseInt(av[this.attr.requiredKey]);
+            return av[this.attr.requiredKey];
+        },
         isVModelRequired(componentPath) {
             let vModelRequired = true;
             const componentsNotRequiringVModel = [
