@@ -276,7 +276,6 @@ sub DelLetter {
       - claim acquisition orders (claimacquisition)
       - send acquisition orders to the vendor (orderacquisition)
       - notify patrons about newly received serial issues (issue)
-      - notify patrons when their account is created (members)
 
     Returns undef or { error => 'message } on failure.
     Returns true on success.
