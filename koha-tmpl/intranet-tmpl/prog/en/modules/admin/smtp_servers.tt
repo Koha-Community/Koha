@@ -492,7 +492,7 @@
                 <li><span class="label">Timeout (secs): </span> [%- default_config.timeout | html -%]</li>
                 <li><span class="label">SSL: </span> [%- IF default_config.ssl_mode == 'disabled' -%]<span>Disabled</span>[%- ELSIF default_config.ssl_mode == 'ssl' -%]<span>SSL</span>[%- ELSE -%]<span>STARTTLS</span>[%- END -%]</li>
                 <li><span class="label">Debug mode: </span> [%- IF default_config.debug -%]Yes[%- ELSE -%]No[%- END -%]</li>
-                [% IF op == 'list' %]
+                [% IF op == 'list' && default_config.id %]
                     <li><a href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&smtp_server_id=[% default_config.id | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
                 [% END %]
             </ul>
