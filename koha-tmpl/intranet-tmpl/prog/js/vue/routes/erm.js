@@ -341,7 +341,7 @@ export const routes = [
                     },
                     {
                         path: "reports",
-                        title: "Reports",
+                        title: $__("Reports"),
                         icon: "fa fa-bar-chart",
                         is_end_node: true,
                         children: [
