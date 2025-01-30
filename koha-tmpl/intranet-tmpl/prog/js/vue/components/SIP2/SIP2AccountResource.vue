@@ -446,6 +446,59 @@ export default {
                     ],
                 },
                 {
+                    name: "item_fields",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "item_fields",
+                        hidden: account => !!account.item_fields?.length,
+                        columns: [
+                            {
+                                name: __("Field"),
+                                value: "field",
+                            },
+                            {
+                                name: __("Code"),
+                                value: "code",
+                            },
+                        ],
+                    },
+                    group: __("SIP response mappings"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "item_fields",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("item field"),
+                            nameUpperCase: __("Item field"),
+                            namePlural: __("item fields"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                field: null,
+                                code: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "field",
+                            required: true,
+                            type: "text",
+                            placeholder: "XY",
+                            label: __("Field"),
+                        },
+                        {
+                            name: "code",
+                            required: true,
+                            type: "text",
+                            placeholder: "permanent_location",
+                            label: __("Code"),
+                        },
+                    ],
+                },
+                {
                     name: "ae_field_template",
                     type: "textarea",
                     label: __("AE field template"),
@@ -659,6 +712,11 @@ export default {
             if (!account.terminator) {
                 account.terminator = null;
             }
+
+            account.item_fields = account.item_fields.map(
+                ({ account_id, account_item_field_id, ...keepAttrs }) =>
+                    keepAttrs
+            );
 
             account.patron_attributes = account.patron_attributes.map(
                 ({ account_id, account_patron_attribute_id, ...keepAttrs }) =>

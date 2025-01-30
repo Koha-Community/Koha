@@ -175,6 +175,24 @@ return {
                     $patron_attribute->{code}
                 ) if $patron_attribute;
             }
+
+            # Accounts item fields
+            my @item_fields =
+                ref $SIPconfig->{accounts}->{$account_key}->{item_field} eq "ARRAY"
+                ? @{ $SIPconfig->{accounts}->{$account_key}->{item_field} }
+                : ( $SIPconfig->{accounts}->{$account_key}->{item_field} );
+
+            my $insert_item_fields = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_account_item_fields (sip_account_id, field, code) VALUES (?, ?, ?)});
+
+            foreach my $item_field (@item_fields) {
+                $insert_item_fields->execute(
+                    $new_account_id,
+                    $item_field->{field},
+                    $item_field->{code}
+                ) if $item_field;
+            }
+
         }
     },
 };

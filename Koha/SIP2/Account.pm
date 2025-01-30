@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use base qw(Koha::SIP2::Object Koha::Object);
 
+use Koha::SIP2::Account::ItemFields;
 use Koha::SIP2::Account::PatronAttributes;
 use Koha::SIP2::Institution;
 
@@ -72,6 +73,11 @@ sub get_for_config {
     # Add relations
     # If a single element, return that, otherwise return a list
 
+    my @item_fields = map { $_->get_for_config } @{ $self->item_fields->as_list };
+    if (@item_fields) {
+        $unblessed->{item_field} = scalar(@item_fields) == 1 ? $item_fields[0] : \@item_fields;
+    }
+
     my @patron_attributes = map { $_->get_for_config } @{ $self->patron_attributes->as_list };
     if (@patron_attributes) {
         $unblessed->{patron_attribute} = scalar(@patron_attributes) == 1 ? $patron_attributes[0] : \@patron_attributes;
@@ -91,6 +97,32 @@ sub institution {
     my $institution_rs = $self->_result->sip_institution;
     return unless $institution_rs;
     return Koha::SIP2::Institution->_new_from_dbic($institution_rs);
+}
+
+=head3 item_fields
+
+Returns the item fields for this SIP account
+
+=cut
+
+sub item_fields {
+    my ( $self, $item_fields ) = @_;
+
+    if ($item_fields) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->item_fields->delete;
+
+                for my $item_field (@$item_fields) {
+                    $self->_result->add_to_sip_account_item_fields($item_field);
+                }
+            }
+        );
+    }
+
+    my $item_fields_rs = $self->_result->sip_account_item_fields;
+    return Koha::SIP2::Account::ItemFields->_new_from_dbic($item_fields_rs);
 }
 
 =head3 patron_attributes
