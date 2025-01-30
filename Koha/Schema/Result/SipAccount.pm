@@ -346,6 +346,21 @@ __PACKAGE__->add_unique_constraint("account_login_id", ["login_id"]);
 
 =head1 RELATIONS
 
+=head2 sip_account_patron_attributes
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SipAccountPatronAttribute>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sip_account_patron_attributes",
+  "Koha::Schema::Result::SipAccountPatronAttribute",
+  { "foreign.sip_account_id" => "self.sip_account_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sip_institution
 
 Type: belongs_to

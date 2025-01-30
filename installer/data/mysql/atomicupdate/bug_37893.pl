@@ -90,8 +90,8 @@ return {
             my $encoding              = $SIPconfig->{accounts}->{$account_key}->{encoding};
 
             my $error_detect;
-            if ( defined $SIPconfig->{accounts}->{$account_key}->{'error-detect'} ){
-                $error_detect = $SIPconfig->{accounts}->{$account_key}->{'error-detect'} eq 'enabled' ? 1 : 0
+            if ( defined $SIPconfig->{accounts}->{$account_key}->{'error-detect'} ) {
+                $error_detect = $SIPconfig->{accounts}->{$account_key}->{'error-detect'} eq 'enabled' ? 1 : 0;
             }
 
             my $format_due_date             = $SIPconfig->{accounts}->{$account_key}->{format_due_date};
@@ -156,6 +156,25 @@ return {
                 $show_outstanding_amount,
                 $terminator
             );
+
+            my $new_account_id = $dbh->last_insert_id( undef, undef, "sip_accounts", "sip_account_id" );
+
+            # Accounts patron attributes
+            my @patron_attributes =
+                ref $SIPconfig->{accounts}->{$account_key}->{patron_attribute} eq "ARRAY"
+                ? @{ $SIPconfig->{accounts}->{$account_key}->{patron_attribute} }
+                : ( $SIPconfig->{accounts}->{$account_key}->{patron_attribute} );
+
+            my $insert_patron_attributes = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_account_patron_attributes (sip_account_id, field, code) VALUES (?, ?, ?)});
+
+            foreach my $patron_attribute (@patron_attributes) {
+                $insert_patron_attributes->execute(
+                    $new_account_id,
+                    $patron_attribute->{field},
+                    $patron_attribute->{code}
+                ) if $patron_attribute;
+            }
         }
     },
 };

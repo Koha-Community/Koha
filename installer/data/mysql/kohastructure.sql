@@ -6131,6 +6131,25 @@ CREATE TABLE `sip_accounts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `sip_account_patron_attributes`
+--
+
+DROP TABLE IF EXISTS `sip_account_patron_attributes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sip_account_patron_attributes` (
+  `sip_account_patron_attribute_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
+  `field` varchar(80) NOT NULL COMMENT 'SIP field name e.g. XY',
+  `code` varchar(80) NOT NULL COMMENT 'Patron attribute code as in borrower_attribute_types.code',
+  PRIMARY KEY (`sip_account_patron_attribute_id`),
+  UNIQUE KEY `sip_account` (`sip_account_patron_attribute_id`,`sip_account_id`),
+  KEY `sip_account_patron_attributes_ibfk_1` (`sip_account_id`),
+  CONSTRAINT `sip_account_patron_attributes_ibfk_1` FOREIGN KEY (`sip_account_id`) REFERENCES `sip_accounts` (`sip_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sip_institutions`
 --
 

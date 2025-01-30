@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use base qw(Koha::SIP2::Object Koha::Object);
 
+use Koha::SIP2::Account::PatronAttributes;
 use Koha::SIP2::Institution;
 
 =head1 NAME
@@ -68,6 +69,14 @@ sub get_for_config {
         delete $unblessed->{error_detect};
     }
 
+    # Add relations
+    # If a single element, return that, otherwise return a list
+
+    my @patron_attributes = map { $_->get_for_config } @{ $self->patron_attributes->as_list };
+    if (@patron_attributes) {
+        $unblessed->{patron_attribute} = scalar(@patron_attributes) == 1 ? $patron_attributes[0] : \@patron_attributes;
+    }
+
     return $unblessed;
 }
 
@@ -82,6 +91,32 @@ sub institution {
     my $institution_rs = $self->_result->sip_institution;
     return unless $institution_rs;
     return Koha::SIP2::Institution->_new_from_dbic($institution_rs);
+}
+
+=head3 patron_attributes
+
+Returns the patron attributes for this SIP account
+
+=cut
+
+sub patron_attributes {
+    my ( $self, $patron_attributes ) = @_;
+
+    if ($patron_attributes) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->patron_attributes->delete;
+
+                for my $patron_attribute (@$patron_attributes) {
+                    $self->_result->add_to_sip_account_patron_attributes($patron_attribute);
+                }
+            }
+        );
+    }
+
+    my $patron_attributes_rs = $self->_result->sip_account_patron_attributes;
+    return Koha::SIP2::Account::PatronAttributes->_new_from_dbic($patron_attributes_rs);
 }
 
 =head3 type

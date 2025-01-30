@@ -38,8 +38,7 @@ sub list {
     return try {
         my $insitutions = $c->objects->search( Koha::SIP2::Accounts->new );
         return $c->render( status => 200, openapi => $insitutions );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -64,8 +63,7 @@ sub get {
             status  => 200,
             openapi => $account
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -85,17 +83,19 @@ sub add {
 
                 my $body = $c->req->json;
 
-                my $account = Koha::SIP2::Account->new_from_api($body)->store;
+                my $patron_attributes = delete $body->{patron_attributes} // [];
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $account->sip_account_id);
+                my $account = Koha::SIP2::Account->new_from_api($body)->store;
+                $account->patron_attributes($patron_attributes);
+
+                $c->res->headers->location( $c->req->url->to_string . '/' . $account->sip_account_id );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($account),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::SIP2::Account->new->to_api_mapping;
 
@@ -105,15 +105,10 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }
@@ -142,35 +137,33 @@ sub update {
 
                 my $body = $c->req->json;
 
-                $account->set_from_api($body)->store;
+                my $patron_attributes = delete $body->{patron_attributes} // [];
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $account->sip_account_id);
+                $account->set_from_api($body)->store;
+                $account->patron_attributes($patron_attributes);
+
+                $c->res->headers->location( $c->req->url->to_string . '/' . $account->sip_account_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($account),
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::SIP2::Account->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 

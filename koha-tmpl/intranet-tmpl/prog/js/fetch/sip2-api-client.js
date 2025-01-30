@@ -47,6 +47,9 @@ export class SIP2APIClient {
             get: id =>
                 this.get({
                     endpoint: "accounts/" + id,
+                    headers: {
+                        "x-koha-embed": "patron_attributes",
+                    },
                 }),
             getAll: params =>
                 this.getAll({

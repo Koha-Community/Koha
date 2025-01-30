@@ -393,6 +393,59 @@ export default {
                     group: "Details",
                 },
                 {
+                    name: "patron_attributes",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "patron_attributes",
+                        hidden: account => !!account.patron_attributes?.length,
+                        columns: [
+                            {
+                                name: __("Field"),
+                                value: "field",
+                            },
+                            {
+                                name: __("Code"),
+                                value: "code",
+                            },
+                        ],
+                    },
+                    group: __("SIP response mappings"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "patron_attributes",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("patron attribute"),
+                            nameUpperCase: __("Patron attribute"),
+                            namePlural: __("patron attributes"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                field: null,
+                                code: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "field",
+                            required: true,
+                            type: "text",
+                            placeholder: "XY",
+                            label: __("Field"),
+                        },
+                        {
+                            name: "code",
+                            required: true,
+                            type: "text",
+                            placeholder: "CODE",
+                            label: __("Code"),
+                        },
+                    ],
+                },
+                {
                     name: "ae_field_template",
                     type: "textarea",
                     label: __("AE field template"),
@@ -606,6 +659,11 @@ export default {
             if (!account.terminator) {
                 account.terminator = null;
             }
+
+            account.patron_attributes = account.patron_attributes.map(
+                ({ account_id, account_patron_attribute_id, ...keepAttrs }) =>
+                    keepAttrs
+            );
 
             const client = APIClient.sip2;
             if (sip_account_id) {

@@ -23,6 +23,7 @@
           type: string
           enum:
             - institution
+            - patron_attributes
         collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
@@ -132,6 +133,16 @@
       - application/json
     parameters:
       - $ref: "../swagger.yaml#/parameters/sip_account_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - patron_attributes
+        collectionFormat: csv
     responses:
       200:
         description: A SIP2 account

@@ -1,4 +1,4 @@
-package Koha::SIP2::Object;
+package Koha::SIP2::Account::PatronAttribute;
 
 # This file is part of Koha.
 #
@@ -17,19 +17,13 @@ package Koha::SIP2::Object;
 
 use Modern::Perl;
 
+use Koha::Database;
+
 use base qw(Koha::Object);
-
-use DateTime;
-
-# use Koha::SIP2::ServerParams;
 
 =head1 NAME
 
-Koha::SIP2::Object - Base class for SIP2 objects
-
-=head1 SYNOPSIS
-
-This is the base class for SIP2 objects in the Koha library system.
+Koha::SIP2::Account::PatronAttribute - Koha SIP2 Account Patron Attribute Object class
 
 =head1 API
 
@@ -37,33 +31,29 @@ This is the base class for SIP2 objects in the Koha library system.
 
 =cut
 
-=head3 store
+=head3 get_for_config
 
-store
+Returns the patron attribute hashref as expected by C4/SIP/Sip/Configuration->new;
 
 =cut
 
-sub store {
+sub get_for_config {
     my ($self) = @_;
 
-    _update_config_timestamp();
-    return $self->SUPER::store;
+    return {
+        'field' => $self->field,
+        'code'  => $self->code,
+    };
 }
 
-sub delete {
-    my ($self) = @_;
+=head2 Internal methods
 
-    _update_config_timestamp();
-    return $self->SUPER::delete;
+=head3 _type
+
+=cut
+
+sub _type {
+    return 'SipAccountPatronAttribute';
 }
-
-# sub _update_config_timestamp {
-#     my $timestamp = DateTime->now;
-
-#     my $config_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } )
-#         || Koha::SIP2::ServerParam->new( { key => 'config_timestamp' } );
-#     $config_timestamp->value( DateTime->now->epoch )->store;
-# }
 
 1;
-
