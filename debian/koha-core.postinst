@@ -177,7 +177,7 @@ for site in $(koha-list); do
         cat <<EOF >>$log4perl_config
 log4perl.logger.sip = DEBUG, SIP
 log4perl.appender.SIP=Log::Log4perl::Appender::File
-log4perl.appender.SIP.filename=/var/log/koha/$site/sip.log
+log4perl.appender.SIP.filename=/var/log/koha/$site/sip-output.log
 log4perl.appender.SIP.mode=append
 log4perl.appender.SIP.layout=PatternLayout
 log4perl.appender.SIP.layout.ConversionPattern=[%d] [%P] [%p] %X{accountid}@%X{peeraddr}: %m %l%n

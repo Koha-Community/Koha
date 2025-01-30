@@ -77,7 +77,8 @@ start_sip()
             fi
 
             DAEMONOPTS="--name=${name}-koha-sip \
-                    --output=/var/log/koha/${name}/sip.log \
+                    --errlog=/var/log/koha/${name}/sip-error.log \
+                    --output=/var/log/koha/${name}/sip-output.log \
                     --verbose=1 \
                     --respawn \
                     --delay=30 \
@@ -115,7 +116,8 @@ stop_sip()
     if is_sip_running $name; then
 
         DAEMONOPTS="--name=${name}-koha-sip \
-                    --output=/var/log/koha/${name}/sip.log \
+                    --errlog=/var/log/koha/${name}/sip-error.log \
+                    --output=/var/log/koha/${name}/sip-output.log \
                     --verbose=1 \
                     --respawn \
                     --delay=30 \
@@ -227,7 +229,7 @@ _check_and_fix_perms()
 {
     local name=$1
 
-    local files="/var/log/koha/${name}/sip.log"
+    local files="/var/log/koha/${name}/sip-error.log /var/log/koha/${name}/sip-output.log"
 
     for file in ${files}
     do
