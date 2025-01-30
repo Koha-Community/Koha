@@ -308,7 +308,7 @@ sub SendAlerts {
         my $subscription = Koha::Subscriptions->find( $subscriptionid );
         my $subscribers = $subscription->subscribers;
         while ( my $patron = $subscribers->next ) {
-            my $email = $patron->email or next;
+            my $email = $patron->notice_email_address or next;
 
 #                    warn "sending issues...";
             my $userenv = C4::Context->userenv;
