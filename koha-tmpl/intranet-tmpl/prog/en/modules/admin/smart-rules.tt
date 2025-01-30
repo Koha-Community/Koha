@@ -124,7 +124,7 @@
                             <th>Fine/suspension grace period</th>
                             <th>Overdue fines cap (amount)</th>
                             <th>Cap fine at replacement price</th>
-                            <th>Expire reserve charge</th>
+                            <th>Expired hold charge</th>
                             <th>Suspension in days (day)</th>
                             <th>Max. suspension duration (day)</th>
                             <th>Suspension charging interval</th>
@@ -311,7 +311,7 @@
                                                 </td>
                                                 <td>
                                                     [% IF expire_reserves_charge.defined && expire_reserves_charge != '' %]
-                                                        [% expire_reserves_charge | html %]
+                                                        [% expire_reserves_charge | $Price %]
                                                     [% ELSE %]
                                                         <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=ExpireReservesMaxPickUpDelayCharge">Default</a>
                                                     [% END %]
@@ -498,7 +498,7 @@
                                 <td><input type="text" name="firstremind" id="firstremind" size="2" /> </td>
                                 <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /> </td>
                                 <td><input type="checkbox" name="cap_fine_to_replacement_price" id="cap_fine_to_replacement_price" /></td>
-                                <td><input type="text" name="expire_reserves_charge" id="expire_reserves_charge" size="6"/></td>
+                                <td><input type="text" name="expire_reserves_charge" id="expire_reserves_charge" size="6" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /></td>
                                 <td><input type="text" name="finedays" id="fined" size="3" /> </td>
                                 <td><input type="text" name="maxsuspensiondays" id="maxsuspensiondays" size="3" /> </td>
                                 <td><input type="text" name="suspension_chargeperiod" id="suspension_chargeperiod" size="3" /> </td>
@@ -590,7 +590,7 @@
                                   <th>Fine/suspension grace period</th>
                                   <th>Overdue fines cap (amount)</th>
                                   <th>Cap fine at replacement price</th>
-                                  <th>Expire reserve charge</th>
+                                  <th>Expired hold charge</th>
                                   <th>Suspension in days (day)</th>
                                   <th>Max. suspension duration (day)</th>
                                   <th>Suspension charging interval</th>
@@ -1612,7 +1612,7 @@
                             // If the value is not an integer for
                             //     - "Current checkouts allowed"
                             //     - "Current on-site checkouts allowed"
-                            //     - "Expire reserve charge"
+                            //     - "Expired hold charge"
                             //     - "Holds allowed (total)"
                             //     - "Holds allowed (daily)"
                             //     - "Holds per record (count)"
