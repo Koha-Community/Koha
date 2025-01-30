@@ -310,9 +310,11 @@ sub multivalue_preference {
     my ( $self, $preference ) = @_;
 
     my $syspref = $self->preference($preference) // q{};
-    my $values  = [ split qr{\|}, $syspref ];
 
-    return $values;
+    return [ split qr{\|}, $syspref ]
+        if $syspref =~ qr{\|};
+
+    return [ split qr{,}, $syspref ]
 }
 
 =head2 enable_syspref_cache

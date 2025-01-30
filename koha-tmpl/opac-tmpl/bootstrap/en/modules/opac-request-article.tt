@@ -156,13 +156,21 @@
                                         <input type="text" name="patron_notes" id="patron_notes" size="50"/>
                                     </li>
 
+                                    [% SET ArticleRequestsSupportedFormats = Koha.MultivaluePreference('ArticleRequestsSupportedFormats') %]
+                                    [% IF ArticleRequestsSupportedFormats.size %]
                                     <li>
                                         <label for="format">Format:</label>
                                         <select name="format" id="format">
-                                            <option value="PHOTOCOPY">Photocopy</option>
-                                            <option value="SCAN">Digital scan</option>
+                                            [% FOR format IN ArticleRequestsSupportedFormats %]
+                                                [% IF format == 'PHOTOCOPY' %]
+                                                    <option value="PHOTOCOPY">Photocopy</option>
+                                                [% ELSIF format == 'SCAN' %]
+                                                    <option value="SCAN">Digital scan</option>
+                                                [% END %]
+                                            [% END %]
                                         </select>
                                     </li>
+                                    [% END %]
 
                                     [% IF AllPublicBranches.size > 1 %]
                                         <li>
@@ -300,18 +308,6 @@ $(document).ready( function() {
         }
     });
 
-    // Initialize format(s)
-    var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | html %]";
-    if( !supported_formats.match(/PHOTOCOPY/) )
-        $('#format option[value="PHOTOCOPY"]').remove();
-    if( !supported_formats.match(/SCAN/) )
-        $('#format option[value="SCAN"]').remove();
-
-    if( $('#format option').length > 1 ) {
-        // Select first listed format
-        var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
-        $('#format option[value="'+first_format+'"]').attr('selected', true);
-    }
 });
 </script>
 [% END %]
