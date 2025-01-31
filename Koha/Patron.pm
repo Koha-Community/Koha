@@ -207,8 +207,6 @@ sub store {
     my $self   = shift;
     my $params = @_ ? shift : {};
 
-    my $guarantors = $params->{guarantors} // [];
-
     $self->_result->result_source->schema->txn_do(
         sub {
             if (
@@ -329,20 +327,6 @@ sub store {
 
                 $self->borrowernumber(undef);
 
-                if (    C4::Context->preference('ChildNeedsGuarantor')
-                    and ( $self->is_child or $self->category->can_be_guarantee )
-                    and $self->contactname eq ""
-                    and !@$guarantors )
-                {
-                    Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
-                }
-
-                foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child ) {
-                        Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
-                    }
-                }
-
                 $self = $self->SUPER::store;
 
                 $self->add_enrolment_fee_if_needed(0);
@@ -384,23 +368,6 @@ sub store {
                     $self->guarantor_relationships->delete
                         unless ( $self->category->can_be_guarantee );
 
-                }
-
-                my @existing_guarantors = $self->guarantor_relationships()->guarantors->as_list;
-                push @$guarantors, @existing_guarantors;
-
-                if (    C4::Context->preference('ChildNeedsGuarantor')
-                    and ( $self->is_child or $self->category->can_be_guarantee )
-                    and ( !defined $self->contactname || $self->contactname eq "" )
-                    and !@$guarantors )
-                {
-                    Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
-                }
-
-                foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child ) {
-                        Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
-                    }
                 }
 
                 # Actionlogs
@@ -2833,6 +2800,36 @@ sub _anonymize_column {
         $val = $nullable ? undef : $col_info->{default_value};
     }
     $self->$col($val);
+}
+
+=head3 validate_guarantor
+
+    Koha::Patron->validate_guarantor(\@guarantors, $contactname, $category );
+
+    Validates guarantor patron.
+
+=cut
+
+sub validate_guarantor {
+    my ( $self, $guarantors, $contactname, $category ) = @_;
+
+    my $valid_guarantor = @$guarantors ? @$guarantors : $contactname;
+
+    if (    C4::Context->preference('ChildNeedsGuarantor')
+        and ( $category->category_type eq 'C' or $category->can_be_guarantee )
+        and !$valid_guarantor )
+    {
+        Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
+    }
+
+    foreach my $guarantor (@$guarantors) {
+        if ( $guarantor->is_guarantee ) {
+            Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
+        } elsif ( $guarantor->is_child ) {
+            Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( child_guarantor => 1 );
+        }
+    }
+
 }
 
 =head3 add_guarantor

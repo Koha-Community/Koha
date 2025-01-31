@@ -2624,93 +2624,70 @@ subtest 'get_lists_with_patron() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'guarantor requirements tests' => sub {
+subtest 'validate_guarantor() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
     my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-    my $child_category =
-        $builder->build( { source => 'Category', value => { category_type => 'C', can_be_guarantee => 1 } } )
-        ->{categorycode};
-    my $patron_category =
-        $builder->build( { source => 'Category', value => { category_type => 'A', can_be_guarantee => 0 } } )
-        ->{categorycode};
-
-    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
+    my $guarantee_category =
+        $builder->build(
+        { source => 'Category', value => { categorycode => "GUARANTEE", category_type => 'C', can_be_guarantee => 1 } }
+        );
+    my $guarantor_category =
+        $builder->build(
+        { source => 'Category', value => { categorycode => "GUARANTOR", category_type => 'A', can_be_guarantee => 0 } }
+        );
 
     my $child = Koha::Patron->new(
         {
             branchcode   => $branchcode,
-            categorycode => $child_category,
+            categorycode => $guarantee_category->{categorycode},
             contactname  => ''
         }
     );
-    $child->store();
-
-    ok(
-        Koha::Patrons->find( $child->id ),
-        'Child patron can be stored without guarantor when ChildNeedsGuarantor is off.'
-    );
-
-    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 1 );
-
-    my $child2 = Koha::Patron->new(
-        {
-            branchcode   => $branchcode,
-            categorycode => $child_category,
-            contactname  => ''
-        }
-    );
-    my $child3 = $builder->build_object(
+    my $child2 = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { categorycode => $child_category }
+            value => { categorycode => $guarantee_category->{categorycode} }
         }
     );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { categorycode => $patron_category }
+            value => { categorycode => $guarantor_category->{categorycode} }
         }
     );
 
-    throws_ok { $child2->store(); }
+    my @guarantors;
+    my $contactname = "";
+    my $category    = Koha::Patron::Categories->find( $guarantee_category->{categorycode} );
+
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
+
+    lives_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
+    'Validation passes when ChildNeedsGuarantor syspref is disabled';
+
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 1 );
+
+    throws_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
     'Koha::Exceptions::Patron::Relationship::NoGuarantor',
         'Exception thrown when guarantor is required but not provided.';
 
-    my @guarantors = ( $patron, $child3 );
-    throws_ok { $child2->store( { guarantors => \@guarantors } ); }
+    @guarantors = ( $patron, $child2 );
+    throws_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
     'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception thrown when child patron is added as guarantor.';
 
-    #test ModMember
     @guarantors = ($patron);
-    $child2->store( { guarantors => \@guarantors } )->discard_changes();
+    lives_ok { $child->validate_guarantor( \@guarantors, undef, $category ); }
+    'Validation passes when valid guarantors are passed in array';
 
-    t::lib::Mocks::mock_preference( 'borrowerRelationship', '' );
-
-    my $relationship = Koha::Patron::Relationship->new(
-        {
-            guarantor_id => $patron->borrowernumber,
-            guarantee_id => $child2->borrowernumber,
-            relationship => ''
-        }
-    );
-    $relationship->store();
-
-    ok( $child2->store(), 'Child patron can be modified and stored when guarantor is stored' );
-
-    @guarantors = ($child3);
-    throws_ok { $child2->store( { guarantors => \@guarantors } ); }
-    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
-        'Exception thrown when child patron is modified and child patron is added as guarantor.';
-
-    $relationship->delete;
-    throws_ok { $child2->store(); }
-    'Koha::Exceptions::Patron::Relationship::NoGuarantor',
-        'Exception thrown when guarantor is deleted.';
+    @guarantors  = ();
+    $contactname = "Guarantor";
+    lives_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
+    'Validation passes when guarantor contanct name is passed';
 
     $schema->storage->txn_rollback;
 };
