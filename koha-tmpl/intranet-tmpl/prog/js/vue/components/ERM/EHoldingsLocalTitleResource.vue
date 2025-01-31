@@ -32,6 +32,7 @@
             goToResourceEdit,
             doResourceDelete,
             resourceName,
+            getFieldGroupings,
         }"
     />
     <ResourceFormAdd
@@ -45,6 +46,7 @@
             resource: newResource,
             onSubmit,
             resourceName,
+            getFieldGroupings,
         }"
     />
 </template>
@@ -104,91 +106,76 @@ export default {
                     name: "publication_title",
                     required: true,
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Publication title"),
                 },
                 {
                     name: "print_identifier",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Print-format identifier"),
                 },
                 {
                     name: "online_identifier",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Online-format identifier"),
                 },
                 {
                     name: "date_first_issue_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Date of first serial issue available online"),
                 },
                 {
                     name: "num_first_vol_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Number of first volume available online"),
                 },
                 {
                     name: "num_first_issue_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Number of first issue available online"),
                 },
                 {
                     name: "date_last_issue_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Date of last issue available online"),
                 },
                 {
                     name: "num_last_vol_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Number of last volume available online"),
                 },
                 {
                     name: "num_last_issue_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Number of last issue available online"),
                 },
                 {
                     name: "title_url",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Title-level URL"),
                 },
                 {
                     name: "first_author",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("First author"),
                 },
                 {
                     name: "embargo_info",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Embargo information"),
                 },
                 {
                     name: "coverage_depth",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Coverage depth"),
                 },
                 {
                     name: "notes",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Notes"),
                 },
                 {
                     name: "publisher_name",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Publisher name"),
                 },
                 {
@@ -196,48 +183,40 @@ export default {
                     type: "select",
                     label: __("Publication type"),
                     avCat: "av_title_publication_types",
-                    style: { width: "25rem" },
                 },
                 {
                     name: "date_monograph_published_print",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Date the monograph is first published in print"),
                 },
                 {
                     name: "date_monograph_published_online",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Date the monograph is first published online"),
                 },
                 {
                     name: "monograph_volume",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Number of volume for monograph"),
                 },
                 {
                     name: "monograph_edition",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Edition of the monograph"),
                 },
                 {
                     name: "first_editor",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("First editor"),
                 },
                 {
                     name: "parent_publication_title_id",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Title identifier of the parent publication"),
                 },
                 {
                     name: "preceding_publication_title_id",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __(
                         "Title identifier of any preceding publication title"
                     ),
@@ -245,7 +224,6 @@ export default {
                 {
                     name: "access_type",
                     type: "text",
-                    style: { width: "25rem" },
                     label: __("Access type"),
                 },
                 {
@@ -260,13 +238,69 @@ export default {
                             ? __("Create bibliographic record")
                             : __("Update bibliographic record"),
                     value: false,
-                    style: { width: "25rem" },
                 },
                 {
                     name: "resources",
                     type: "relationshipWidget",
                     group: __("Packages"),
                     apiClient: APIClient.erm.localPackages,
+                    showElement: {
+                        type: "component",
+                        hidden: title => title.resources.length > 0,
+                        componentPath: "./RelationshipTableDisplay.vue",
+                        props: {
+                            tableOptions: {
+                                type: "object",
+                                value: {
+                                    columns: [
+                                        {
+                                            title: __("Name"),
+                                            data: "package.name",
+                                            searchable: true,
+                                            orderable: true,
+                                            render: function (
+                                                data,
+                                                type,
+                                                row,
+                                                meta
+                                            ) {
+                                                return (
+                                                    '<a role="button" class="show">' +
+                                                    escape_str(
+                                                        `${row.package.name} (#${row.package.package_id})`
+                                                    ) +
+                                                    "</a>"
+                                                );
+                                            },
+                                        },
+                                    ],
+                                    options: {
+                                        embed: "package",
+                                    },
+                                    url:
+                                        APIClient.erm._baseURL +
+                                        "eholdings/local/resources",
+                                },
+                            },
+                            apiClient: {
+                                type: "object",
+                                value: APIClient.erm.localPackages,
+                            },
+                            filters: {
+                                type: "filter",
+                                keys: {
+                                    title_id: { property: "title_id" },
+                                },
+                            },
+                            resource: {
+                                type: "resource",
+                            },
+                            resourceName: {
+                                type: "string",
+                                value: "package",
+                            },
+                        },
+                    },
                     props: {
                         newRelationship: {
                             type: "object",
@@ -337,10 +371,6 @@ export default {
                                     type: "string",
                                     value: "started_on_",
                                     indexRequired: true,
-                                },
-                                required: {
-                                    type: "boolean",
-                                    value: true,
                                 },
                                 date_to: {
                                     type: "string",
@@ -594,3 +624,12 @@ export default {
     name: "EHoldingsLocalTitlesResource",
 };
 </script>
+
+<style scoped>
+:deep(fieldset.rows ol table) {
+    display: table;
+}
+:deep(fieldset.rows label) {
+    width: 25rem;
+}
+</style>

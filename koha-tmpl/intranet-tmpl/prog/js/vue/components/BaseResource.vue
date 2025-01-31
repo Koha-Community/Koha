@@ -192,6 +192,42 @@ export default {
             });
             return filterOptions;
         },
+        getFieldGroupings() {
+            const groupings = this.resourceAttrs.reduce((acc, attr) => {
+                if (
+                    attr.hasOwnProperty("group") &&
+                    attr.group !== null &&
+                    !acc.includes(attr.group)
+                ) {
+                    return [...acc, attr.group];
+                }
+                if (!attr.hasOwnProperty("group")) {
+                    attr.group = "noGroupFound";
+                    if (!acc.includes("noGroupFound")) {
+                        return [...acc, "noGroupFound"];
+                    }
+                }
+                return acc;
+            }, []);
+            if (groupings.length === 0) {
+                return [
+                    {
+                        name: null,
+                        fields: this.resourceAttrs,
+                    },
+                ];
+            }
+            return groupings.reduce((acc, group) => {
+                const groupFields = this.resourceAttrs.filter(
+                    ra => ra.group === group
+                );
+                const groupInfo = {
+                    name: group === "noGroupFound" ? null : group,
+                    fields: groupFields,
+                };
+                return [...acc, groupInfo];
+            }, []);
+        },
     },
     computed: {
         newResource() {

@@ -16,30 +16,21 @@
             {{ i18n.displayName + " #" + resource[idAttr] }}
         </h2>
         <div>
-            <fieldset class="rows">
+            <fieldset
+                class="rows"
+                v-for="(group, counter) in getFieldGroupings()"
+                v-bind:key="counter"
+            >
+                <legend v-if="group.name">{{ group.name }}</legend>
                 <ol>
                     <li
-                        v-for="(attr, index) in resourceAttrs.filter(
-                            attr => attr.showElement?.type !== 'relationship'
-                        )"
+                        v-for="(attr, index) in group.fields"
                         v-bind:key="index"
                     >
-                        <ShowElement
-                            :resource="resource"
-                            :attr="attr"
-                            :index="index"
-                        />
+                        <ShowElement :resource="resource" :attr="attr" />
                     </li>
                 </ol>
             </fieldset>
-            <template
-                v-for="(attr, index) in resourceAttrs.filter(
-                    attr => attr.showElement?.type === 'relationship'
-                )"
-                v-bind:key="'rel-' + index"
-            >
-                <ShowElement :resource="resource" :attr="attr" />
-            </template>
             <fieldset class="action">
                 <router-link
                     :to="{ name: listComponent }"
@@ -72,6 +63,7 @@ export default {
         goToResourceEdit: Function,
         doResourceDelete: Function,
         resourceName: String,
+        getFieldGroupings: Function,
     },
     created() {
         this.getResource(this.$route.params[this.idAttr]);

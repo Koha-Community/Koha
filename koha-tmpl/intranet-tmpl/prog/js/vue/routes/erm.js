@@ -7,7 +7,6 @@ import EHoldingsLocalTitlesKBARTImport from "../components/ERM/EHoldingsLocalTit
 import EHoldingsLocalPackagesList from "../components/ERM/EHoldingsLocalPackagesList.vue";
 import EHoldingsLocalPackagesShow from "../components/ERM/EHoldingsLocalPackagesShow.vue";
 import EHoldingsLocalResourcesShow from "../components/ERM/EHoldingsLocalResourcesShow.vue";
-import EHoldingsLocalTitlesShow from "../components/ERM/EHoldingsLocalTitlesShow.vue";
 import EHoldingsEBSCOPackagesList from "../components/ERM/EHoldingsEBSCOPackagesList.vue";
 import EHoldingsEBSCOPackagesShow from "../components/ERM/EHoldingsEBSCOPackagesShow.vue";
 import EHoldingsEBSCOResourcesShow from "../components/ERM/EHoldingsEBSCOResourcesShow.vue";
@@ -167,9 +166,7 @@ export const routes = [
                                     {
                                         path: ":title_id",
                                         name: "EHoldingsLocalTitlesShow",
-                                        component: markRaw(
-                                            EHoldingsLocalTitlesShow
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                         title: $__("Show title"),
                                     },
                                     {

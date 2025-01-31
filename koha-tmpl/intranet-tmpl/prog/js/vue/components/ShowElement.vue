@@ -1,5 +1,5 @@
 <template>
-    <div
+    <template
         v-if="
             attribute.type == 'text' ||
             attribute.type == 'textarea' ||
@@ -18,8 +18,8 @@
                 }}
             </span>
         </LinkWrapper>
-    </div>
-    <div
+    </template>
+    <template
         v-else-if="
             attribute.type == 'av' ||
             (attribute.type == 'select' && attribute.avCat)
@@ -31,13 +31,13 @@
                 get_lib_from_av(attribute.avCat, resource[attribute.name])
             }}</span>
         </LinkWrapper>
-    </div>
-    <div v-else-if="attribute.type == 'boolean'">
+    </template>
+    <template v-else-if="attribute.type == 'boolean'">
         <label>{{ attribute.label }}:</label>
         <span v-if="resource[attribute.name]">{{ $__("Yes") }}</span>
         <span v-else>{{ $__("No") }}</span>
-    </div>
-    <div v-else-if="attribute.type === 'table'">
+    </template>
+    <template v-else-if="attribute.type === 'table'">
         <template v-if="attribute.hidden && attribute.hidden(resource)">
             <label>{{ attribute.label }}</label>
             <table>
@@ -97,15 +97,16 @@
                 </tbody>
             </table>
         </template>
-    </div>
-    <div v-else-if="attribute?.type === 'component'">
+    </template>
+    <template v-else-if="attribute?.type === 'component'">
         <template v-if="attribute.hidden && attribute.hidden(resource)">
+            <label v-if="attribute.label">{{ attribute.label }}:</label>
             <component
                 :is="requiredComponent"
                 v-bind="requiredProps(true)"
             ></component>
         </template>
-    </div>
+    </template>
     <template v-else-if="attr.type == 'relationship' && attr.componentPath">
         <template v-if="attribute.hidden && attribute.hidden(resource)">
             <component
