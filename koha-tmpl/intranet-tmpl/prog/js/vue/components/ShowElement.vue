@@ -32,7 +32,9 @@
             }}</span>
         </LinkWrapper>
     </template>
-    <template v-else-if="attribute.type == 'boolean'">
+    <template
+        v-else-if="attribute.type == 'boolean' || attribute.type == 'checkbox'"
+    >
         <label>{{ attribute.label }}:</label>
         <span v-if="resource[attribute.name]">{{ $__("Yes") }}</span>
         <span v-else>{{ $__("No") }}</span>

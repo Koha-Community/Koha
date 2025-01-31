@@ -115,7 +115,7 @@
             v-on="getEventHandlers()"
         ></component>
     </template>
-    <template v-else-if="attr.type == 'relationshipWidget'">
+    <template v-else-if="attr.type == 'relationshipWidget' && attr.props">
         <component
             :is="relationshipWidget"
             :title="attr.group ? null : attr.label"

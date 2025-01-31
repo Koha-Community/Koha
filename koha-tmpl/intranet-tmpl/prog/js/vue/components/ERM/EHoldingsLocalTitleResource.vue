@@ -265,7 +265,9 @@ export default {
                                                 meta
                                             ) {
                                                 return (
-                                                    '<a role="button" class="show">' +
+                                                    '<a href="/cgi-bin/koha/erm/eholdings/local/resources/' +
+                                                    row.resource_id +
+                                                    '" class="show">' +
                                                     escape_str(
                                                         `${row.package.name} (#${row.package.package_id})`
                                                     ) +
@@ -298,6 +300,10 @@ export default {
                             resourceName: {
                                 type: "string",
                                 value: "package",
+                            },
+                            hasAdditionalFields: {
+                                type: "boolean",
+                                value: true,
                             },
                         },
                     },

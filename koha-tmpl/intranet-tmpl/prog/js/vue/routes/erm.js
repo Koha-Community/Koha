@@ -1,11 +1,8 @@
 import { markRaw } from "vue";
 
 import Home from "../components/ERM/Home.vue";
-import EHoldingsLocalPackagesFormAdd from "../components/ERM/EHoldingsLocalPackagesFormAdd.vue";
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
 import EHoldingsLocalTitlesKBARTImport from "../components/ERM/EHoldingsLocalTitlesKBARTImport.vue";
-import EHoldingsLocalPackagesList from "../components/ERM/EHoldingsLocalPackagesList.vue";
-import EHoldingsLocalPackagesShow from "../components/ERM/EHoldingsLocalPackagesShow.vue";
 import EHoldingsLocalResourcesShow from "../components/ERM/EHoldingsLocalResourcesShow.vue";
 import EHoldingsEBSCOPackagesList from "../components/ERM/EHoldingsEBSCOPackagesList.vue";
 import EHoldingsEBSCOPackagesShow from "../components/ERM/EHoldingsEBSCOPackagesShow.vue";
@@ -117,36 +114,30 @@ export const routes = [
                                 title: $__("Packages"),
                                 icon: "fa fa-archive",
                                 is_end_node: true,
+                                resource:
+                                    "ERM/EHoldingsLocalPackageResource.vue",
                                 children: [
                                     {
                                         path: "",
                                         name: "EHoldingsLocalPackagesList",
-                                        component: markRaw(
-                                            EHoldingsLocalPackagesList
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                     },
                                     {
                                         path: ":package_id",
                                         name: "EHoldingsLocalPackagesShow",
-                                        component: markRaw(
-                                            EHoldingsLocalPackagesShow
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                         title: $__("Show package"),
                                     },
                                     {
                                         path: "add",
                                         name: "EHoldingsLocalPackagesFormAdd",
-                                        component: markRaw(
-                                            EHoldingsLocalPackagesFormAdd
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                         title: $__("Add package"),
                                     },
                                     {
                                         path: "edit/:package_id",
                                         name: "EHoldingsLocalPackagesFormAddEdit",
-                                        component: markRaw(
-                                            EHoldingsLocalPackagesFormAdd
-                                        ),
+                                        component: markRaw(ResourceWrapper),
                                         title: $__("Edit package"),
                                     },
                                 ],

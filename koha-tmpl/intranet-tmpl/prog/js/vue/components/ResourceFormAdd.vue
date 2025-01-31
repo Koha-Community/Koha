@@ -15,7 +15,7 @@
             <form @submit="onSubmit($event, resourceToAddOrEdit)">
                 <fieldset
                     class="rows"
-                    v-for="(group, counter) in getFieldGroupings()"
+                    v-for="(group, counter) in getFieldGroupings('Form')"
                     v-bind:key="counter"
                 >
                     <legend v-if="group.name">{{ group.name }}</legend>

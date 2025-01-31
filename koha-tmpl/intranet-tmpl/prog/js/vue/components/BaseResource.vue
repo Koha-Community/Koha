@@ -192,8 +192,13 @@ export default {
             });
             return filterOptions;
         },
-        getFieldGroupings() {
-            const groupings = this.resourceAttrs.reduce((acc, attr) => {
+        getFieldGroupings(component) {
+            const displayProperty = `hideIn${component}`;
+            const attributesToConsider = this.resourceAttrs.filter(
+                ra =>
+                    !ra.hasOwnProperty(displayProperty) || !ra[displayProperty]
+            );
+            const groupings = attributesToConsider.reduce((acc, attr) => {
                 if (
                     attr.hasOwnProperty("group") &&
                     attr.group !== null &&
@@ -213,12 +218,12 @@ export default {
                 return [
                     {
                         name: null,
-                        fields: this.resourceAttrs,
+                        fields: attributesToConsider,
                     },
                 ];
             }
             return groupings.reduce((acc, group) => {
-                const groupFields = this.resourceAttrs.filter(
+                const groupFields = attributesToConsider.filter(
                     ra => ra.group === group
                 );
                 const groupInfo = {

@@ -38,6 +38,10 @@ export default {
         },
         resource: Object,
         resourceName: String,
+        hasAdditionalFields: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -106,9 +110,6 @@ export default {
         },
     },
     computed: {
-        hasAdditionalFields() {
-            return this.resource.hasOwnProperty("extended_attributes");
-        },
         formattedTableOptions() {
             if (this.filters) {
                 this.tableOptions.url += "?q=" + JSON.stringify(this.filters);

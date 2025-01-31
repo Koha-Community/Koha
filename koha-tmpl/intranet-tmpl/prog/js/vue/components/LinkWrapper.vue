@@ -40,6 +40,9 @@ export default {
             });
             this.linkData.href = this.linkData.href.slice(0, -1);
         }
+        if (props.linkData?.href && props.linkData.slug) {
+            props.linkData.href += `/${props.resource[props.linkData.slug]}`;
+        }
         return {
             formattedParams,
         };
