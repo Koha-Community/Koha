@@ -188,6 +188,57 @@ subtest '_status() tests' => sub {
     }
 
     t::lib::Mocks::mock_preference( 'UseRecalls', 0 );
+    $schema->storage->txn_rollback;
+};
+
+subtest 'store PreventWithDrawingItemsStatus' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'PreventWithDrawingItemsStatus', 'intransit,checkedout' );
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $item = $builder->build_sample_item(
+        {
+            withdrawn => 0,
+        }
+    );
+
+    #Check item out
+    C4::Circulation::AddIssue( $patron, $item->barcode );
+
+    throws_ok { $item->withdrawn('1')->store }
+    'Koha::Exceptions::Item::Transfer::OnLoan',
+        'Exception thrown when trying to withdraw checked-out item';
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            withdrawn => 0,
+        }
+    );
+
+    #set in_transit
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_2->itemnumber,
+                frombranch => $library_1->{branchcode},
+                tobranch   => $library_2->{branchcode},
+                datesent   => '1999-12-31',
+            }
+        }
+    );
+
+    throws_ok { $item_2->withdrawn('1')->store }
+    'Koha::Exceptions::Item::Transfer::InTransit',
+        'Exception thrown when trying to withdraw item in transit';
+
+    t::lib::Mocks::mock_preference( 'PreventWithDrawingItemsStatus', '' );
 
     $schema->storage->txn_rollback;
 };
@@ -197,7 +248,6 @@ subtest 'z3950_status' => sub {
 
     $schema->storage->txn_begin;
     t::lib::Mocks::mock_preference( 'z3950Status', '' );
-
     my $itemtype = $builder->build_object( { class => "Koha::ItemTypes" } );
     my $item     = $builder->build_sample_item(
         {
