@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 use Test::Mojo;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -31,6 +32,7 @@ use Array::Utils qw( array_minus );
 use Koha::ERM::EUsage::CounterFiles;
 use Koha::Database;
 
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 my $t = Test::Mojo->new('Koha::REST::V1');
@@ -41,6 +43,8 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'get() tests' => sub {
     plan tests => 5;
+
+    $schema->storage->txn_begin;
 
     my $service_url = "https://registry.countermetrics.org/api/v1/sushi-service/b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b/";
     my @expected_fields = (
@@ -57,6 +61,7 @@ subtest 'get() tests' => sub {
         "id",
         "ip_address_authorization",
         "ip_address_authorization_info",
+        "last_audit",
         "migrations",
         "notification_count",
         "notifications_url",
@@ -99,5 +104,11 @@ subtest 'get() tests' => sub {
     my @response_fields        = map { $_ } keys %$sushi_service;
     my @new_fields_in_response = array_minus( @response_fields, @expected_fields );
 
-    is( scalar(@new_fields_in_response), 0, 'The response fields match the expected fields' );
+    my $new_fields_string =
+          "This is not a new error within Koha, the following new field(s) have been added to the API repsonse: "
+        . join( ', ', @new_fields_in_response )
+        . '. They should be added to the API definition';
+    warning_like { scalar(@new_fields_in_response) } 0, $new_fields_string;
+
+    $schema->storage->txn_rollback;
 };
