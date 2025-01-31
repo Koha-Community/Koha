@@ -79,6 +79,7 @@ if ($op eq 'export') {
         if ($uploadFd && !$input->cgi_error) {
             my $tmpfilename = $input->tmpFileName(scalar $input->param($fieldname));
             $filename = $tmpfilename . '.' . $extension; # rename the tmp file with the extension
+            $frameworkcode = ''                                             if $frameworkcode eq 'default';
             $ok = ImportFramework($filename, $frameworkcode, 1, 'biblio') if (rename($tmpfilename, $filename));
         }
     }
