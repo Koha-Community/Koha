@@ -569,6 +569,15 @@ sub _gen_blob {
 sub _gen_default_values {
     my ($self) = @_;
     return {
+        ArticleRequest => {
+            format => sub {
+                my $formats = C4::Context->multivalue_preference('ArticleRequestsSupportedFormats');
+                return $formats->[ int( rand( scalar @$formats ) ) ];
+            }
+            },
+        AuthorisedValueCategory => {
+            is_integer_only => 0,
+        },
         BackgroundJob => {
             context => '{}'
         },
