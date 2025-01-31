@@ -281,20 +281,24 @@ if (@delete_guarantor) {
 }
 
 #Check if guarantor requirements are met
-my $valid_guarantor = @guarantors ? @guarantors : $newdata{'contactname'};
-if (   ( $op eq 'cud-save' || $op eq 'cud-insert' )
-    && C4::Context->preference('ChildNeedsGuarantor')
-    && ( $category->category_type eq 'C' || $category->can_be_guarantee )
-    && !$valid_guarantor )
-{
-    push @errors, 'ERROR_child_no_guarantor';
-}
-
-foreach my $guarantor (@guarantors) {
-    if (   ( $op eq 'cud-save' || $op eq 'cud-insert' )
-        && ( $guarantor->is_child || $guarantor->is_guarantee || ( $patron && $patron->is_guarantor ) ) )
-    {
-        push @errors, 'ERROR_guarantor_is_guarantee';
+if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) ) {
+    unless ( $patron && $patron->is_guarantor ) {
+        try {
+            Koha::Patron->validate_guarantor( \@guarantors, $newdata{'contactname'}, $category );
+        } catch {
+            if ( ref($_) eq "Koha::Exceptions::Patron::Relationship::NoGuarantor" ) {
+                push @errors, "ERROR_child_no_guarantor";
+            } elsif ( ref($_) eq "Koha::Exceptions::Patron::Relationship::InvalidRelationship" ) {
+                if ( $_->full_message eq "Guarantee patron cannot be a guarantor." ) {
+                    push @errors, "ERROR_guarantor_is_guarantee";
+                } elsif ( $_->full_message eq "Child patron cannot be a guarantor." ) {
+                    push @errors, "ERROR_child_is_guarantor";
+                }
+            }
+            return;
+        };
+    } else {
+        push @errors, "ERROR_guarantee_is_guarantor";
     }
 }
 
@@ -447,7 +451,7 @@ if ( ( !$nok ) and $nodouble and ( $op eq 'cud-insert' or $op eq 'cud-save' ) ) 
         delete $newdata{password2};
         $success = 1;
         $patron  = try {
-            Koha::Patron->new( \%newdata )->store( { guarantors => \@guarantors } );
+            Koha::Patron->new( \%newdata )->store();
         } catch {
             $success = 0;
             $nok     = 1;
@@ -561,7 +565,7 @@ if ( ( !$nok ) and $nodouble and ( $op eq 'cud-insert' or $op eq 'cud-save' ) ) 
         delete $newdata{guarantor_relationship};
 
         try {
-            $patron->set( \%newdata )->store( { guarantors => \@guarantors } ) if scalar( keys %newdata ) > 1;
+            $patron->set( \%newdata )->store() if scalar( keys %newdata ) > 1;
 
             # bug 4508 - avoid crash if we're not updating any columns in the borrowers table (editing patron attrs or msg prefs)
             $success = 1;

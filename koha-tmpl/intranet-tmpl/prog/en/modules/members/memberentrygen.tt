@@ -195,7 +195,10 @@
                                     <li id="ERROR_child_is_guarantor">Child patron cannot be a guarantor.</li>
                                 [% END %]
                                 [% IF ( ERROR_guarantor_is_guarantee ) %]
-                                    <li id="ERROR_guarantor_is_guarantee">A guarantor cannot be a guarantee.</li>
+                                    <li id="ERROR_guarantor_is_guarantee">A guarantee cannot be a guarantor.</li>
+                                [% END %]
+                                [% IF ( ERROR_guarantee_is_guarantor ) %]
+                                    <li id="ERROR_guarantee_is_guarantor">A guarantor cannot be a guarantee.</li>
                                 [% END %]
                                 [% IF ( ERROR_cannot_delete_guarantor ) %]
                                     <li id="ERROR_cannot_delete_guarantor">Cannot delete guarantor(s). A child patron needs a guarantor.</li>
