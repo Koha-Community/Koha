@@ -44,8 +44,7 @@ subtest 'request() tests' => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { lastseen => undef } } );
     my $item   = $builder->build_sample_item;
 
-    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
-    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+    my $ar_module = mock_article_request_module();
 
     my $ar = Koha::ArticleRequest->new(
         {
@@ -100,8 +99,7 @@ subtest 'set_pending() tests' => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $biblio = $builder->build_sample_biblio;
 
-    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
-    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+    my $ar_module = mock_article_request_module();
 
     my $ar = Koha::ArticleRequest->new(
         {
@@ -124,8 +122,7 @@ subtest 'process() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
-    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+    my $ar_module = mock_article_request_module();
 
     my $ar = $builder->build_object(
         {
@@ -147,8 +144,7 @@ subtest 'complete() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
-    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+    my $ar_module = mock_article_request_module();
 
     my $ar = $builder->build_object(
         {
@@ -178,8 +174,7 @@ subtest 'cancel() tests' => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item   = $builder->build_sample_item;
 
-    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
-    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+    my $ar_module = mock_article_request_module();
 
     my $ar = Koha::ArticleRequest->new(
         {
@@ -227,3 +222,16 @@ subtest 'store' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+sub mock_article_request_module {
+    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
+    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+    $ar_mock->mock(
+        'format',
+        sub {
+            my $formats = C4::Context->multivalue_preference('ArticleRequestsSupportedFormats');
+            return $formats->[ int( rand( scalar @$formats ) ) ];
+        }
+    );
+    return $ar_mock;
+}
