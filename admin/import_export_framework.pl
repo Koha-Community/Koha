@@ -84,11 +84,12 @@ if ( $op eq 'export' ) {
         my $uploadFd  = $input->upload($fieldname);
         if ( $uploadFd && !$input->cgi_error ) {
             my $tmpfilename = $input->tmpFileName( scalar $input->param($fieldname) );
-            $filename = $tmpfilename . '.' . $extension;    # rename the tmp file with the extension
+            $filename      = $tmpfilename . '.' . $extension;    # rename the tmp file with the extension
+            $frameworkcode = ''                                             if $frameworkcode eq 'default';
             $ok = ImportFramework( $filename, $frameworkcode, 1, 'biblio' ) if ( rename( $tmpfilename, $filename ) );
         }
     }
-    if ( $ok >= 0 ) {                                       # If everything went ok go to the framework marc structure
+    if ( $ok >= 0 ) {    # If everything went ok go to the framework marc structure
         print $input->redirect(
             -location => '/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=' . $frameworkcode );
     } else {
