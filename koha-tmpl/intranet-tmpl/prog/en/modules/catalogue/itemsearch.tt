@@ -194,7 +194,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% WRAPPER 'main-container.inc' %]
+[% WRAPPER 'main-container.inc' wide_full => 1 %]
 
     <div id="item-search-block">
       <h1>Item search</h1>
@@ -337,21 +337,18 @@
             </div>
           </fieldset>
       </form>
-[% END %]
-    <div class="row">
-        <div class="col-md-12">
-            <div id="results-wrapper">
-
-            </div>
-        </div>
     </div>
 
-        <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
-            <!-- dummy values which will be replaced by JavaScript -->
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-show" />
-            <input type="hidden" id="batch_mod_del" name="del" value="0" />
-        </form>
+    <div id="results-wrapper"></div>
+
+    <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
+        <!-- dummy values which will be replaced by JavaScript -->
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-show" />
+        <input type="hidden" id="batch_mod_del" name="del" value="0" />
+    </form>
+[% END %]
+
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
