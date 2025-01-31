@@ -31,6 +31,7 @@
             goToResourceEdit,
             doResourceDelete,
             resourceName,
+            getFieldGroupings,
         }"
     />
     <ResourceFormAdd
@@ -44,6 +45,7 @@
             resource: newResource,
             onSubmit,
             resourceName,
+            getFieldGroupings,
         }"
     />
 </template>
@@ -556,7 +558,7 @@ export default {
                 {
                     name: "relationships",
                     type: "relationshipWidget",
-                    group: __("Relationships"),
+                    group: __("Related agreements"),
                     showElement: {
                         type: "component",
                         hidden: agreement =>
@@ -587,9 +589,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLowerCase: __("relationship"),
-                                nameUpperCase: __("Relationship"),
-                                namePlural: __("relationships"),
+                                nameLowerCase: __("related agreement"),
+                                nameUpperCase: __("Related agreement"),
+                                namePlural: __("related agreements"),
                             },
                         },
                         filters: {

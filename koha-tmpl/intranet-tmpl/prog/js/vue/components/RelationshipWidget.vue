@@ -91,7 +91,7 @@ export default {
     },
     methods: {
         addResourceRelationship() {
-            this.resourceRelationships.push(this.newRelationship);
+            this.resourceRelationships.push({ ...this.newRelationship });
         },
         deleteResourceRelationship(counter) {
             this.resourceRelationships.splice(counter, 1);

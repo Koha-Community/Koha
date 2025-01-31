@@ -31,6 +31,7 @@
             goToResourceEdit,
             doResourceDelete,
             resourceName,
+            getFieldGroupings,
         }"
     />
     <ResourceFormAdd
@@ -44,6 +45,7 @@
             resource: newResource,
             onSubmit,
             resourceName,
+            getFieldGroupings,
         }"
     />
 </template>
