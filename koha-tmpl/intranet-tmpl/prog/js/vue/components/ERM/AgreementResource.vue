@@ -92,8 +92,8 @@ export default {
                 resourceTableUrl: APIClient.erm._baseURL + "agreements",
                 i18n: {
                     displayName: __("Agreement"),
-                    displayNameLc: __("agreement"),
-                    displayNamePl: __("agreements"),
+                    displayNameLowerCase: __("agreement"),
+                    displayNamePlural: __("agreements"),
                 },
                 av_agreement_statuses,
                 av_agreement_closure_reasons,
@@ -268,9 +268,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("period"),
-                                nameUC: __("Period"),
-                                namePL: __("periods"),
+                                nameLowerCase: __("period"),
+                                nameUpperCase: __("Period"),
+                                namePlural: __("periods"),
                             },
                         },
                         newRelationship: {
@@ -372,9 +372,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("user"),
-                                nameUC: __("Agreement user"),
-                                namePL: __("users"),
+                                nameLowerCase: __("user"),
+                                nameUpperCase: __("Agreement user"),
+                                namePlural: __("users"),
                             },
                         },
                         newRelationship: {
@@ -486,9 +486,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("license"),
-                                nameUC: __("License"),
-                                namePL: __("licenses"),
+                                nameLowerCase: __("license"),
+                                nameUpperCase: __("License"),
+                                namePlural: __("licenses"),
                             },
                         },
                     },
@@ -587,9 +587,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("relationship"),
-                                nameUC: __("Relationship"),
-                                namePL: __("relationships"),
+                                nameLowerCase: __("relationship"),
+                                nameUpperCase: __("Relationship"),
+                                namePlural: __("relationships"),
                             },
                         },
                         filters: {
@@ -671,9 +671,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("document"),
-                                nameUC: __("Document"),
-                                namePL: __("documents"),
+                                nameLowerCase: __("document"),
+                                nameUpperCase: __("Document"),
+                                namePlural: __("documents"),
                             },
                         },
                         newRelationship: {

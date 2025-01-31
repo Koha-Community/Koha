@@ -8,11 +8,13 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ resourceStrings.nameUC + " " + (counter + 1) }}
+                {{ resourceStrings.nameUpperCase + " " + (counter + 1) }}
                 <a href="#" @click.prevent="deleteResourceRelationship(counter)"
                     ><i class="fa fa-trash"></i>
                     {{
-                        $__("Remove this %s").format(resourceStrings.nameLC)
+                        $__("Remove this %s").format(
+                            resourceStrings.nameLowerCase
+                        )
                     }}</a
                 >
             </legend>
@@ -32,10 +34,12 @@
             class="btn btn-default"
             @click="addResourceRelationship"
             ><font-awesome-icon icon="plus" />
-            {{ $__("Add new %s").format(resourceStrings.nameLC) }}</a
+            {{ $__("Add new %s").format(resourceStrings.nameLowerCase) }}</a
         >
         <span v-else>{{
-            $__("There are no %s created yet").format(resourceStrings.namePL)
+            $__("There are no %s created yet").format(
+                resourceStrings.namePlural
+            )
         }}</span>
     </fieldset>
 </template>

@@ -75,8 +75,8 @@ export default {
                 resourceTableUrl: APIClient.record_sources._baseURL,
                 i18n: {
                     displayName: __("Record source"),
-                    displayNameLc: __("record source"),
-                    displayNamePl: __("record sources"),
+                    displayNameLowerCase: __("record source"),
+                    displayNamePlural: __("record sources"),
                 },
             }),
         };

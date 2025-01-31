@@ -84,8 +84,8 @@ export default {
                 resourceTableUrl: APIClient.erm._baseURL + "licenses",
                 i18n: {
                     displayName: __("License"),
-                    displayNameLc: __("license"),
-                    displayNamePl: __("licenses"),
+                    displayNameLowerCase: __("license"),
+                    displayNamePlural: __("licenses"),
                 },
             }),
             av_license_types,
@@ -272,9 +272,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("user"),
-                                nameUC: __("License user"),
-                                namePL: __("users"),
+                                nameLowerCase: __("user"),
+                                nameUpperCase: __("License user"),
+                                namePlural: __("users"),
                             },
                         },
                         newRelationship: {
@@ -349,9 +349,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("document"),
-                                nameUC: __("Document"),
-                                namePL: __("documents"),
+                                nameLowerCase: __("document"),
+                                nameUpperCase: __("Document"),
+                                namePlural: __("documents"),
                             },
                         },
                         newRelationship: {

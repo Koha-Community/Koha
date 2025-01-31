@@ -5,7 +5,7 @@
             <ToolbarButton
                 action="add"
                 @go-to-add-resource="goToResourceAdd"
-                :title="$__('New %s').format(i18n.displayNameLc)"
+                :title="$__('New %s').format(i18n.displayNameLowerCase)"
             />
             <ToolbarButton
                 v-for="(button, i) in getToolbarButtons()"
@@ -49,7 +49,7 @@
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
-            {{ $__("There are no %s defined").format(i18n.displayNamePl) }}
+            {{ $__("There are no %s defined").format(i18n.displayNamePlural) }}
         </div>
     </div>
 </template>

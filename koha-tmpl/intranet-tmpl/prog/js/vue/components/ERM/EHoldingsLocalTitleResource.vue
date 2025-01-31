@@ -88,8 +88,8 @@ export default {
                     APIClient.erm._baseURL + "eholdings/local/titles",
                 i18n: {
                     displayName: __("Title"),
-                    displayNameLc: __("title"),
-                    displayNamePl: __("titles"),
+                    displayNameLowerCase: __("title"),
+                    displayNamePlural: __("titles"),
                 },
                 av_title_publication_types,
                 vendors,
@@ -319,9 +319,9 @@ export default {
                         resourceStrings: {
                             type: "object",
                             value: {
-                                nameLC: __("package"),
-                                nameUC: __("Package"),
-                                namePL: __("packages"),
+                                nameLowerCase: __("package"),
+                                nameUpperCase: __("Package"),
+                                namePlural: __("packages"),
                             },
                         },
                         fetchOptions: {
