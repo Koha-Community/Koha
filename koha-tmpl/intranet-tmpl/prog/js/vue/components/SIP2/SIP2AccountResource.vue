@@ -446,6 +446,59 @@ export default {
                     ],
                 },
                 {
+                    name: "custom_item_fields",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "custom_item_fields",
+                        hidden: account => !!account.custom_item_fields?.length,
+                        columns: [
+                            {
+                                name: __("Field"),
+                                value: "field",
+                            },
+                            {
+                                name: __("Template"),
+                                value: "template",
+                            },
+                        ],
+                    },
+                    group: __("SIP response mappings"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "custom_item_fields",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("custom item field"),
+                            nameUpperCase: __("Custom item field"),
+                            namePlural: __("custom item fields"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                field: null,
+                                template: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "field",
+                            required: true,
+                            type: "text",
+                            placeholder: "IN",
+                            label: __("Field"),
+                        },
+                        {
+                            name: "template",
+                            required: true,
+                            type: "text",
+                            placeholder: "[% item.itemnumber %]",
+                            label: __("Template"),
+                        },
+                    ],
+                },
+                {
                     name: "item_fields",
                     type: "relationshipWidget",
                     showElement: {

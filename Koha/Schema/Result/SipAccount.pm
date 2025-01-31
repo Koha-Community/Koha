@@ -346,6 +346,21 @@ __PACKAGE__->add_unique_constraint("account_login_id", ["login_id"]);
 
 =head1 RELATIONS
 
+=head2 sip_account_custom_item_fields
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SipAccountCustomItemField>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sip_account_custom_item_fields",
+  "Koha::Schema::Result::SipAccountCustomItemField",
+  { "foreign.sip_account_id" => "self.sip_account_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sip_account_item_fields
 
 Type: has_many
@@ -392,8 +407,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-01-31 15:25:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZyPf+EtRduqZRzWInkTgTA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-01-31 16:01:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4oEQ+Ijd2cbYHszQPLRldw
 
 
 __PACKAGE__->add_columns(

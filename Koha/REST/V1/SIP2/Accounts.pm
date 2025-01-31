@@ -83,10 +83,12 @@ sub add {
 
                 my $body = $c->req->json;
 
+                my $custom_item_fields = delete $body->{custom_item_fields} // [];
                 my $item_fields = delete $body->{item_fields} // [];
                 my $patron_attributes = delete $body->{patron_attributes} // [];
 
                 my $account = Koha::SIP2::Account->new_from_api($body)->store;
+                $account->custom_item_fields($custom_item_fields);
                 $account->item_fields($item_fields);
                 $account->patron_attributes($patron_attributes);
 
@@ -139,10 +141,12 @@ sub update {
 
                 my $body = $c->req->json;
 
+                my $custom_item_fields = delete $body->{custom_item_fields} // [];
                 my $item_fields = delete $body->{item_fields} // [];
                 my $patron_attributes = delete $body->{patron_attributes} // [];
 
                 $account->set_from_api($body)->store;
+                $account->custom_item_fields($custom_item_fields);
                 $account->item_fields($item_fields);
                 $account->patron_attributes($patron_attributes);
 

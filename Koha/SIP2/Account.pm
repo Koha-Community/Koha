@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use base qw(Koha::SIP2::Object Koha::Object);
 
+use Koha::SIP2::Account::CustomItemFields;
 use Koha::SIP2::Account::ItemFields;
 use Koha::SIP2::Account::PatronAttributes;
 use Koha::SIP2::Institution;
@@ -73,6 +74,12 @@ sub get_for_config {
     # Add relations
     # If a single element, return that, otherwise return a list
 
+    my @custom_item_fields = map { $_->get_for_config } @{ $self->custom_item_fields->as_list };
+    if (@custom_item_fields) {
+        $unblessed->{custom_item_field} =
+            scalar(@custom_item_fields) == 1 ? $custom_item_fields[0] : \@custom_item_fields;
+    }
+
     my @item_fields = map { $_->get_for_config } @{ $self->item_fields->as_list };
     if (@item_fields) {
         $unblessed->{item_field} = scalar(@item_fields) == 1 ? $item_fields[0] : \@item_fields;
@@ -97,6 +104,32 @@ sub institution {
     my $institution_rs = $self->_result->sip_institution;
     return unless $institution_rs;
     return Koha::SIP2::Institution->_new_from_dbic($institution_rs);
+}
+
+=head3 custom_item_fields
+
+Returns the custom item fields for this SIP account
+
+=cut
+
+sub custom_item_fields {
+    my ( $self, $custom_item_fields ) = @_;
+
+    if ($custom_item_fields) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->custom_item_fields->delete;
+
+                for my $custom_item_field (@$custom_item_fields) {
+                    $self->_result->add_to_sip_account_custom_item_fields($custom_item_field);
+                }
+            }
+        );
+    }
+
+    my $custom_item_fields_rs = $self->_result->sip_account_custom_item_fields;
+    return Koha::SIP2::Account::CustomItemFields->_new_from_dbic($custom_item_fields_rs);
 }
 
 =head3 item_fields
