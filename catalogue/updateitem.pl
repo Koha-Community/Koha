@@ -90,9 +90,13 @@ if ( $op eq "cud-set_non_public_note" ) {
     print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
     exit;
 }
-
-$item->store;
-
+eval { $item->store; };
+if ($@) {
+    my $error_message = $@->message;
+    print $cgi->redirect(
+        "moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber&nowithdraw=$error_message#item$itemnumber");
+    exit;
+}
 LostItem( $itemnumber, 'moredetail' ) if $op eq "cud-set_lost";
 
 print $cgi->redirect(

@@ -81,9 +81,10 @@ my $title = $query->param('title');
 my $bi    = $query->param('bi');
 $bi         = $biblionumber unless $bi;
 $itemnumber = $query->param('itemnumber');
-my $data         = &GetBiblioData($biblionumber);
-my $dewey        = $data->{'dewey'};
-my $showallitems = $query->param('showallitems');
+my $data           = &GetBiblioData($biblionumber);
+my $dewey          = $data->{'dewey'};
+my $showallitems   = $query->param('showallitems');
+my $withdraw_error = $query->param('nowithdraw');
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
@@ -325,6 +326,7 @@ $template->param(
 );
 
 $template->param(
+    withdraw_error      => $withdraw_error,
     ITEM_DATA           => \@item_data,
     moredetailview      => 1,
     loggedinuser        => $loggedinuser,
@@ -341,4 +343,3 @@ my $holds = $biblio->holds;
 $template->param( holdcount => $holds->count );
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
