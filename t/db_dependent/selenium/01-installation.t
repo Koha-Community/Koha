@@ -22,7 +22,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 
 use t::lib::Selenium;
 use C4::Context;
@@ -56,7 +56,7 @@ SKIP: {
         unless $ENV{KOHA_TESTING};
 
     my $dbh = eval { C4::Context->dbh; };
-    skip "Tests won't run if the database does not exist", 2 if $@;
+    skip "Tests won't run if the database does not exist", 3 if $@;
 
     {
         my $dup_err;
