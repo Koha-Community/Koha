@@ -430,7 +430,7 @@
             <!-- Display dates for 100 and 700 fields -->
             <xsl:if test="(@tag=100 or @tag=700) and marc:subfield[@code='d']">
                 <span class="authordates">
-                <xsl:text>, </xsl:text>
+                <xsl:text> </xsl:text>
                 <xsl:call-template name="chopPunctuation">
                     <xsl:with-param name="chopString">
                         <xsl:call-template name="subfieldSelect">
