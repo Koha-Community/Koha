@@ -549,21 +549,61 @@
             </xsl:call-template>
         </xsl:if>
 
-        <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
+        <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730]">
             <span class="results_summary uniform_title"><span class="label">Uniform titles: </span>
-                <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
+                <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730]">
                     <xsl:if test="marc:subfield[@code='i']">
 			    <xsl:call-template name="subfieldSelect">
 				    <xsl:with-param name="codes">i</xsl:with-param>
 			    </xsl:call-template>
 		    </xsl:if>
 		    <xsl:text> </xsl:text>
+                    <a>
+                        <xsl:choose>
+                            <xsl:when
+                                test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                                <xsl:attribute name="href">
+                                    <xsl:text>/cgi-bin/koha/catalogue/search.pl?q=an:</xsl:text>
+                                    <xsl:value-of
+                                        select="str:encode-uri(marc:subfield[@code=9], true())" />
+                                    <xsl:if test="$AuthorLinkSortBy!='default'">
+                                        <xsl:text>&amp;sort_by=</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortBy" />
+                                        <xsl:text>_</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortOrder" />
+                                    </xsl:if>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="href">
+                                    <xsl:text>/cgi-bin/koha/catalogue/search.pl?q=au:"</xsl:text>
+                                    <xsl:value-of
+                                        select="str:encode-uri(marc:subfield[@code='a'], true())" />
+                                    <xsl:text>"</xsl:text>
+                                    <xsl:if test="$AuthorLinkSortBy!='default'">
+                                        <xsl:text>&amp;sort_by=</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortBy" />
+                                        <xsl:text>_</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortOrder" />
+                                    </xsl:if>
+                                </xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     <xsl:for-each select="marc:subfield">
                         <xsl:if test="contains('adfghklmnoprst',@code)">
                             <xsl:value-of select="text()"/>
                             <xsl:text> </xsl:text>
                         </xsl:if>
                     </xsl:for-each>
+                    </a>
+                    <xsl:if test="marc:subfield[@code=9]">
+                        <xsl:call-template name="showAuthlink">
+                            <xsl:with-param name="authid">
+                                <xsl:value-of
+                                    select="str:encode-uri(marc:subfield[@code=9], true())" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
                     <xsl:if test="position() != last()">
                         <span class="separator"><xsl:text> | </xsl:text></span>
                     </xsl:if>
@@ -617,6 +657,39 @@
         <xsl:if test="marc:datafield[@tag=700][@ind2=2 and not(marc:subfield[@code='i'])] or marc:datafield[@tag=710][@ind2=2 and not(marc:subfield[@code='i'])] or marc:datafield[@tag=711][@ind2=2 and not(marc:subfield[@code='i'])]">
             <span class="results_summary contained_works"><span class="label">Contained works: </span>
                 <xsl:for-each select="marc:datafield[@tag=700][@ind2=2][not(marc:subfield[@code='i'])] | marc:datafield[@tag=710][@ind2=2][not(marc:subfield[@code='i'])] | marc:datafield[@tag=711][@ind2=2][not(marc:subfield[@code='i'])]">
+
+                    <a>
+                        <xsl:choose>
+                            <xsl:when
+                                test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                                <xsl:attribute name="href">
+                                    <xsl:text>/cgi-bin/koha/catalogue/search.pl?q=an:</xsl:text>
+                                    <xsl:value-of
+                                        select="str:encode-uri(marc:subfield[@code=9], true())" />
+                                    <xsl:if test="$AuthorLinkSortBy!='default'">
+                                        <xsl:text>&amp;sort_by=</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortBy" />
+                                        <xsl:text>_</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortOrder" />
+                                    </xsl:if>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="href">
+                                    <xsl:text>/cgi-bin/koha/catalogue/search.pl?q=au:"</xsl:text>
+                                    <xsl:value-of
+                                        select="str:encode-uri(marc:subfield[@code='a'], true())" />
+                                    <xsl:text>"</xsl:text>
+                                    <xsl:if test="$AuthorLinkSortBy!='default'">
+                                        <xsl:text>&amp;sort_by=</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortBy" />
+                                        <xsl:text>_</xsl:text>
+                                        <xsl:value-of select="$AuthorLinkSortOrder" />
+                                    </xsl:if>
+                                </xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+
                     <xsl:variable name="str">
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">abcdfghiklmnporstux</xsl:with-param>
@@ -648,6 +721,17 @@
                             <xsl:text>]</xsl:text>
                         </span>
                     </xsl:if>
+
+                    </a>
+                    <xsl:if test="marc:subfield[@code=9]">
+                        <xsl:call-template name="showAuthlink">
+                            <xsl:with-param name="authid">
+                                <xsl:value-of
+                                    select="str:encode-uri(marc:subfield[@code=9], true())" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
+
                     <xsl:choose>
                         <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
                     </xsl:choose>
