@@ -828,6 +828,10 @@ elsif ( $op eq "cud-delete" ) {
     );
     if ( $op eq "duplicate" ) {
         $biblionumber = "";
+        if ( ref($record) eq 'MARC::Record' ) {
+            $record->delete_fields( $record->field('035') );
+            $record->delete_fields( $record->field('040') );
+        }
     }
 
     if($changed_framework){
