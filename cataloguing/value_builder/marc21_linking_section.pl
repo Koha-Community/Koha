@@ -85,20 +85,17 @@ my $launcher = sub {
         my $biblio = Koha::Biblios->find($biblionumber);
         $marcrecord = $biblio->metadata->record;
 
-        my $subfield_value_9 = $biblionumber;
-        my $subfield_value_0 = $biblionumber;
 
         #my $subfield_value_0;
         #$subfield_value_0 = $marcrecord->field('001')->data
         #  if $marcrecord->field('001');
         my $subfield_value_w;
-        if ( $marcrecord->field('001') ) {
-            $subfield_value_w = $marcrecord->field('001')->data;
-        } else {
-            $subfield_value_w = $biblionumber;
-        }
 
+        my $subfield_value_7;
+        my $subfield_value_9;
+        my $subfield_value_0;
         my $subfield_value_a;
+        my $subfield_value_b;
         my $subfield_value_c;
         my $subfield_value_d;
         my $subfield_value_e;
@@ -106,13 +103,11 @@ my $launcher = sub {
         my $subfield_value_h;
 
         my $subfield_value_i;
+        my $subfield_value_k = '';
 
         my $subfield_value_p;
 
         my $subfield_value_t;
-        if ( $marcrecord->field('245') ) {
-            $subfield_value_t = $marcrecord->title();
-        }
 
         my $subfield_value_u;
         my $subfield_value_v;
@@ -120,20 +115,93 @@ my $launcher = sub {
         my $subfield_value_y;
         my $subfield_value_z;
 
-        $subfield_value_x = $marcrecord->field('022')->subfield("a")
-          if ( $marcrecord->field('022') );
-        $subfield_value_z = $marcrecord->field('020')->subfield("a")
-          if ( $marcrecord->field('020') );
+        my $main_entry;
+        if ( $marcrecord->field('1..') ) {
+            $main_entry = $marcrecord->field('1..')->clone;
+            if ( $main_entry->tag eq '111' ) {
+                $main_entry->delete_subfield( code => qr/[94j]/ );
+            }
+            else {
+                $main_entry->delete_subfield( code => qr/[94e]/ );
+            }
+        }
+        my $s7 = "nn" . substr( $marcrecord->leader, 6, 2 );
+        if ($main_entry) {
+            my $c1 = 'n';
+            if ( $main_entry->tag =~ /^1[01]/ ) {
+                $c1 = $main_entry->indicator('1')
+                  if $main_entry->tag =~ /^1[01]/;
+                $c1 = $main_entry->tag eq '100' ? 1 : 2 unless $c1 =~ /\d/;
+            }
+            my $c0 =
+              ( $main_entry->tag eq '100' ) ? 'p'
+              : (
+                $main_entry->tag eq '110' ? 'c'
+                : ( $main_entry->tag eq '111' ? 'm' : 'u' )
+              );
+            substr( $s7, 0, 2, $c0 . $c1 );
+        }
+        $subfield_value_7 = $s7;
+
+        if ($main_entry) {
+            my $a = $main_entry->as_string;
+            $a =~ s/\.$// unless $a =~ /\b[a-z]{1,2}\.$/i;
+            $subfield_value_a = $a;
+        }
+
+        my $f245c = $marcrecord->field('245')->clone;
+        $f245c->delete_subfield( code => 'c' );
+        my $t = $f245c->as_string;
+        $t =~ s/(\s*\/\s*|\.)$//;
+        $t = ucfirst substr( $t, $f245c->indicator('2') );
+        $subfield_value_t = $t;
+        if ( $marcrecord->field('250') ) {
+            my $b = $marcrecord->field('250')->as_string;
+            $b =~ s/\.$//;
+            $subfield_value_b = $b;
+        }
+        if ( $marcrecord->field('260') ) {
+            my $d = $marcrecord->field('260')->as_string('abc');
+            $d =~ s/\.$//;
+            $subfield_value_d = $d;
+        }
+        for my $f ( $marcrecord->field('8[013][01]') ) {
+            my $k = $f->as_string('abcdnjltnp');
+            if ( $f->subfield('x') ) {
+                $k .= ', ISSN ' . $f->subfield('x');
+            }
+            if ( $f->subfield('v') ) {
+                $k .= ' ; ' . $f->subfield('v');
+            }
+            $subfield_value_k .= $subfield_value_k ? ". $k" : $k;
+        }
+        for my $f ( $marcrecord->field('022') ) {
+            $subfield_value_x = $f->subfield('a') if $f->subfield('a');
+        }
+        for my $f ( $marcrecord->field('020') ) {
+            $subfield_value_z = $f->subfield('a') if $f->subfield('a');
+        }
+        if ( $marcrecord->field('001') ) {
+            my $w = $marcrecord->field('001')->data;
+            if ( $marcrecord->field('003') ) {
+                $w = '(' . $marcrecord->field('003')->data . ')' . $w;
+            }
+            $subfield_value_w = $w;
+        }
+        $subfield_value_w ||= $biblionumber;
 
         # escape the 's
+        $subfield_value_7 =~ s/'/\\'/g;
         $subfield_value_9 =~ s/'/\\'/g;
         $subfield_value_0 =~ s/'/\\'/g;
         $subfield_value_a =~ s/'/\\'/g;
+        $subfield_value_b =~ s/'/\\'/g;
         $subfield_value_c =~ s/'/\\'/g;
         $subfield_value_d =~ s/'/\\'/g;
         $subfield_value_e =~ s/'/\\'/g;
         $subfield_value_h =~ s/'/\\'/g;
         $subfield_value_i =~ s/'/\\'/g;
+        $subfield_value_k =~ s/'/\\'/g;
         $subfield_value_p =~ s/'/\\'/g;
         $subfield_value_t =~ s/'/\\'/g;
         $subfield_value_u =~ s/'/\\'/g;
@@ -146,14 +214,17 @@ my $launcher = sub {
             fillinput        => 1,
             index            => scalar $query->param('index') . "",
             biblionumber     => $biblionumber ? $biblionumber : "",
+            subfield_value_7 => "$subfield_value_7",
             subfield_value_9 => "$subfield_value_9",
             subfield_value_0 => "$subfield_value_0",
             subfield_value_a => "$subfield_value_a",
+            subfield_value_b => "$subfield_value_b",
             subfield_value_c => "$subfield_value_c",
             subfield_value_d => "$subfield_value_d",
             subfield_value_e => "$subfield_value_e",
             subfield_value_h => "$subfield_value_h",
             subfield_value_i => "$subfield_value_i",
+            subfield_value_k => "$subfield_value_k",
             subfield_value_p => "$subfield_value_p",
             subfield_value_t => "$subfield_value_t",
             subfield_value_u => "$subfield_value_u",
