@@ -2941,46 +2941,83 @@ sub prepare_host_field {
     my $field;
     my $host_field;
     if ( $marcflavour eq 'MARC21' ) {
-        if ( $field = $host->field('100') || $host->field('110') || $host->field('11') ) {
-            my $s = $field->as_string('ab');
-            if ($s) {
-                $sfd{a} = $s;
+        my $main_entry;
+        my @f773subfields;
+        if ( $host->field('1..') ) {
+            $main_entry = $host->field('1..')->clone;
+            if ( $main_entry->tag eq '111' ) {
+                $main_entry->delete_subfield( code => qr/[94j]/ );
+            }
+            else {
+                $main_entry->delete_subfield( code => qr/[94e]/ );
             }
         }
-        if ( $field = $host->field('245') ) {
-            my $s = $field->as_string('a');
-            if ($s) {
-                $sfd{t} = $s;
+        my $s7 = "nn" . substr( $host->leader, 6, 2 );
+        if ($main_entry) {
+            my $c1 = 'n';
+            if ( $main_entry->tag =~ /^1[01]/ ) {
+                $c1 = $main_entry->indicator('1')
+                  if $main_entry->tag =~ /^1[01]/;
+                $c1 = $main_entry->tag eq '100' ? 1 : 2 unless $c1 =~ /\d/;
             }
+            my $c0 =
+              ( $main_entry->tag eq '100' ) ? 'p'
+              : (
+                $main_entry->tag eq '110' ? 'c'
+                : ( $main_entry->tag eq '111' ? 'm' : 'u' )
+              );
+            substr( $s7, 0, 2, $c0 . $c1 );
         }
-        if ( $field = $host->field('260') ) {
-            my $s = $field->as_string('abc');
-            if ($s) {
-                $sfd{d} = $s;
+        push @f773subfields, ( '7', $s7 );
+
+        if ($main_entry) {
+            my $a = $main_entry->as_string;
+            $a =~ s/\.$// unless $a =~ /\b[a-z]{1,2}\.$/i;
+            push @f773subfields, ( 'a', $a );
+        }
+
+        my $f245c = $host->field('245')->clone;
+        $f245c->delete_subfield( code => 'c' );
+        my $t = $f245c->as_string;
+        $t =~ s/(\s*\/\s*|\.)$//;
+        $t = ucfirst substr( $t, $f245c->indicator('2') );
+        push @f773subfields, ( 't', $t );
+        if ( $host->field('250') ) {
+            my $b = $host->field('250')->as_string;
+            $b =~ s/\.$//;
+            push @f773subfields, ( 'b', $b );
+        }
+        if ( $host->field('260') ) {
+            my $d = $host->field('260')->as_string('abc');
+            $d =~ s/\.$//;
+            push @f773subfields, ( 'd', $d );
+        }
+        for my $f ( $host->field('8[013][01]') ) {
+            my $k = $f->as_string('abcdnjltnp');
+            if ( $f->subfield('x') ) {
+                $k .= ', ISSN ' . $f->subfield('x');
             }
-        }
-        if ( $field = $host->field('240') ) {
-            my $s = $field->as_string();
-            if ($s) {
-                $sfd{b} = $s;
+            if ( $f->subfield('v') ) {
+                $k .= ' ; ' . $f->subfield('v');
             }
+            push @f773subfields, ( 'k', $k );
         }
-        if ( $field = $host->field('022') ) {
-            my $s = $field->as_string('a');
-            if ($s) {
-                $sfd{x} = $s;
+        for my $f ( $host->field('022') ) {
+            push @f773subfields, ( 'x', $f->subfield('a') )
+              if $f->subfield('a');
+        }
+        for my $f ( $host->field('020') ) {
+            push @f773subfields, ( 'z', $f->subfield('a') )
+              if $f->subfield('a');
+        }
+        if ( $host->field('001') ) {
+            my $w = $host->field('001')->data;
+            if ( $host->field('003') ) {
+                $w = '(' . $host->field('003')->data . ')' . $w;
             }
+            push @f773subfields, ( 'w', $w );
         }
-        if ( $field = $host->field('020') ) {
-            my $s = $field->as_string('a');
-            if ($s) {
-                $sfd{z} = $s;
-            }
-        }
-        if ( $field = $host->field('001') ) {
-            $sfd{w} = $field->data(),;
-        }
-        $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
+        $host_field = MARC::Field->new( 773, '0', ' ', @f773subfields );
         return $host_field;
     }
     elsif ( $marcflavour eq 'UNIMARC' ) {
