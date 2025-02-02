@@ -184,6 +184,9 @@
                         var code = subfields[i];
                         var subfield = subfields[i + 1];
 
+                        if (code.value == '7') {
+                            subfield.value = "[% subfield_value_7 | html %]";
+                        }
                         if (code.value == '9') {
                             subfield.value = "[% subfield_value_9 | html %]";
                         }
@@ -192,6 +195,9 @@
                         }
                         if (code.value == 'a') {
                             subfield.value = "[% subfield_value_a | html %]";
+                        }
+                        if (code.value == 'b') {
+                            subfield.value = "[% subfield_value_b | html %]";
                         }
                         if (code.value == 'c') {
                             subfield.value = "[% subfield_value_c | html %]";
@@ -207,6 +213,9 @@
                         }
                         if (code.value == 'i') {
                             subfield.value = "[% subfield_value_i | html %]";
+                        }
+                        if (code.value == 'k') {
+                            subfield.value = "[% subfield_value_k | html %]";
                         }
                         if (code.value == 'p') {
                             subfield.value = "[% subfield_value_p | html %]";
