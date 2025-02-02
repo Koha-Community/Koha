@@ -657,6 +657,9 @@ if ($op eq "cud-add") {
             my $date = POSIX::strftime( "%y%m%d", localtime );
             substr( $s008, 0, 6, $date );
             $record->field('008')->update($s008);
+            $record->delete_fields( $record->field('010') );
+            $record->delete_fields( $record->field('035') );
+            $record->delete_fields( $record->field('040') );
         } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' && $record && $record->subfield( '100', 'a' ) ) {
             my $s100a = $record->subfield( '100', 'a' );
             my $date  = POSIX::strftime( "%Y%m%d", localtime );
