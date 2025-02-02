@@ -197,7 +197,7 @@
                                 </div>
                             [% END %]
 
-                            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                            [% IF ( CAN_user_editcatalogue_edit_catalogue && ( CAN_user_nukat_merge_biblio || CAN_user_nukat_delete_biblio ) ) %]
                                 <div class="btn-group">
                                     <a class="btn btn-default btn-xs" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a>
                                 </div>
@@ -206,7 +206,7 @@
                                     <button type="button" id="results_batch_ops" class="btn btn-default btn-xs dropdown-toggle disabled" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
                                     </button>
-                                    [% IF ( CAN_user_tools_records_batchmod || CAN_user_tools_records_batchdel || CAN_user_editcatalogue_edit_catalogue ) %]
+                                    [% IF ( CAN_user_tools_records_batchmod || CAN_user_tools_records_batchdel || CAN_user_editcatalogue_edit_catalogue && CAN_user_nukat_merge_biblio ) %]
                                     <ul class="dropdown-menu">
                                         [% IF ( CAN_user_tools_records_batchmod ) %]
                                         <li><a class="results_batch_op dropdown-item" data-op="edit" href="#">Batch edit records</a></li>
@@ -214,7 +214,9 @@
                                         [% IF ( CAN_user_tools_records_batchdel ) %]
                                         <li><a class="results_batch_op dropdown-item" data-op="delete" href="#">Batch delete records</a></li>
                                         [% END %]
+                                        [% IF ( CAN_user_nukat_merge_biblio ) %]
                                         <li><a class="results_batch_op dropdown-item" data-op="merge" href="#">Merge records</a></li>
+                                        [% END %]
                                     </ul>
                                     [% END %]
                                 </div>

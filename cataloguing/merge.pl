@@ -47,7 +47,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "cataloguing/merge.tt",
         query           => $input,
         type            => "intranet",
-        flagsrequired   => { editcatalogue => 'edit_catalogue' },
+        flagsrequired   => { editcatalogue => 'edit_catalogue', nukat => 'merge_biblio' },
     }
 );
 

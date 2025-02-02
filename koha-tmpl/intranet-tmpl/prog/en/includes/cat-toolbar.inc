@@ -128,7 +128,7 @@
                 <li><a class="dropdown-item" href="#" id="z3950copy">Replace record via Z39.50/SRU</a></li>
             [% END %]
 
-            [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
+            [% IF CAN_user_nukat_delete_biblio and CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
                     <li data-bs-toggle="tooltip" data-bs-placement="left" title="[%- I18N.tnx('There is an item attached to this record. You must delete all items before deleting this record', 'There are {count} items attached to this record. You must delete all items before deleting this record', count, { count => count }) -%]">
                         <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" href="#">Delete record</a>

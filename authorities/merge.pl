@@ -39,7 +39,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "authorities/merge.tt",
         query           => $input,
         type            => "intranet",
-        flagsrequired   => { editauthorities => 1 },
+        flagsrequired   => { editauthorities => 1, nukat => 'merge_auth' },
     }
 );
 
