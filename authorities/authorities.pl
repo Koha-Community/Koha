@@ -584,6 +584,24 @@ if ($breedingid) {
     $record = GetAuthority($authid);
 }
 
+if (   $record
+    && $record->subfield( '010', 'a' )
+    && $record->subfield( '010', 'a' ) =~ /^[pm]/
+    && !Koha::Patrons->find($loggedinuser)
+    ->has_permission( { nukat => 'edit_dbn_mesh' } ) )
+{
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "authorities/authorities.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { nukat => 'edit_dbn_mesh' },
+        }
+    );
+
+    # print $input->redirect("/cgi-bin/koha/errors/401.pl");
+}
+
 my ($oldauthnumtagfield,$oldauthnumtagsubfield);
 my ($oldauthtypetagfield,$oldauthtypetagsubfield);
 $is_a_modif=0;
