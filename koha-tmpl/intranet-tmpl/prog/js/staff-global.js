@@ -213,6 +213,24 @@ $(document).ready(function () {
             );
         }
 
+        if (previous_patrons.length) {
+            let p = previous_patrons[0];
+            $("#lastborrowerlink").show();
+            $("#lastborrowerlink").prop("title", `${p["name"]} (${p["card"]})`);
+            $("#lastborrowerlink").prop(
+                "href",
+                `/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}`
+            );
+            $("#lastborrower-window").css("display", "inline-flex");
+
+            previous_patrons.reverse();
+            for (i in previous_patrons) {
+                p = previous_patrons[i];
+                const el = `<li><a class="dropdown-item" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}">${p["name"]} (${p["card"]})</a></li>`;
+                $("#lastBorrowerList").prepend(el);
+            }
+        }
+
         if ($("#hiddenborrowernumber").val()) {
             // Remove this patron from the list if they are already there
             previous_patrons = previous_patrons.filter(function (p) {
@@ -233,24 +251,6 @@ $(document).ready(function () {
                 "previousPatrons",
                 JSON.stringify(previous_patrons)
             );
-        }
-
-        if (previous_patrons.length) {
-            let p = previous_patrons[0];
-            $("#lastborrowerlink").show();
-            $("#lastborrowerlink").prop("title", `${p["name"]} (${p["card"]})`);
-            $("#lastborrowerlink").prop(
-                "href",
-                `/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}`
-            );
-            $("#lastborrower-window").css("display", "inline-flex");
-
-            previous_patrons.reverse();
-            for (i in previous_patrons) {
-                p = previous_patrons[i];
-                const el = `<li><a class="dropdown-item" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}">${p["name"]} (${p["card"]})</a></li>`;
-                $("#lastBorrowerList").prepend(el);
-            }
         }
     }
 
