@@ -105,11 +105,10 @@ subtest 'get() tests' => sub {
     my @response_fields        = map { $_ } keys %$sushi_service;
     my @new_fields_in_response = array_minus( @response_fields, @expected_fields );
 
-    my $new_fields_string =
-          "This is not a new error within Koha, the following new field(s) have been added to the API response: "
+    is( scalar(@new_fields_in_response), 0, "Compare response from sushi server" )
+        or diag "This is not a new error within Koha, the following new field(s) have been added to the API response: "
         . join( ', ', @new_fields_in_response )
         . '. They should be added to the API definition';
-    warning_like { scalar(@new_fields_in_response) } 0, $new_fields_string;
 
     $schema->storage->txn_rollback;
 };
