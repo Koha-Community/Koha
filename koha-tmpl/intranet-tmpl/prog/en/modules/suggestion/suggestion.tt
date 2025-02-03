@@ -1273,14 +1273,13 @@
 [% BLOCK funds_dropdown %]
     <label for="budgetid">Fund:</label>
     <select name="budgetid" id="budgetid">
-        [% IF op == 'save' %]
+        [% UNLESS op == 'save' %]
             <option value="">Any</option>
+        [% END %]
+        [% IF budgetid == '__NONE__' %]
+            <option value="__NONE__" selected="selected">None</option>
         [% ELSE %]
-            [% IF budgetid == '__NONE__' %]
-                <option value="__NONE__" selected="selected">None</option>
-            [% ELSE %]
-                <option value="__NONE__">None</option>
-            [% END %]
+            <option value="__NONE__">None</option>
         [% END %]
         [% FOREACH budget IN sugg_budgets %]
             [% IF ( budget.selected ) %]
