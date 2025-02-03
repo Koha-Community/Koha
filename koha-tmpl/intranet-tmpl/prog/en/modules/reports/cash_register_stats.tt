@@ -163,7 +163,7 @@
                     <th>Transaction type</th>
                     <th>Notes</th>
                     <th>Amount</th>
-                    <th>Bibliographic record title</th>
+                    <th class="anti-the">Bibliographic record title</th>
                     <th>Barcode</th>
                     <th>Item type</th>
                 </tr>
@@ -174,8 +174,8 @@
                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | uri %]">[% loopresul.cardnumber | html %]</a></td>
                     <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
                     <td>[% loopresul.branchname | html %]</td>
-                    <td>[% loopresul.date | $KohaDates %]</td>
-                    <td>[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
+                    <td data-order="[% loopresul.date | html %]">[% loopresul.date | $KohaDates %]</td>
+                    <td data-order="[% loopresul.timestamp | html %]">[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
                     <td>[% loopresul.type_description | html %]</td>
                     <td>[% loopresul.note | html %]</td>
                     <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
