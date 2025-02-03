@@ -138,12 +138,14 @@
             :resource="resource"
         ></FormRelationshipSelect>
     </template>
+    <ToolTip v-if="attr.toolTip" :toolTip="attr.toolTip"></ToolTip>
     <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
 </template>
 
 <script>
 import BaseElement from "./BaseElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
+import ToolTip from "./ToolTip.vue";
 
 export default {
     props: {
@@ -212,6 +214,6 @@ export default {
         },
     },
     name: "FormElement",
-    components: { FormRelationshipSelect },
+    components: { FormRelationshipSelect, ToolTip },
 };
 </script>
