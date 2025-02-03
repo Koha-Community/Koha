@@ -12,7 +12,6 @@
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
         />
-        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
     <template v-else-if="attr.type == 'textarea'">
         <label
@@ -29,7 +28,6 @@
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
         />
-        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
     <template v-else-if="attr.type == 'checkbox'">
         <label
@@ -44,7 +42,6 @@
             v-model="resource[attr.name]"
             @change="attr.onChange && attr.onChange(resource)"
         />
-        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
     <template v-else-if="attr.type == 'boolean'">
         <label :for="`${attr.name}${index}`">{{ attr.label }}:</label>
@@ -95,7 +92,6 @@
                 />
             </template>
         </v-select>
-        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
     <template v-else-if="attr.type == 'component' && attr.componentPath">
         <label
@@ -118,7 +114,6 @@
             v-bind="requiredProps()"
             v-on="getEventHandlers()"
         ></component>
-        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
     <template v-else-if="attr.type == 'relationshipWidget'">
         <component
@@ -142,8 +137,8 @@
             v-bind="attr"
             :resource="resource"
         ></FormRelationshipSelect>
-        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </template>
+    <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
 </template>
 
 <script>
