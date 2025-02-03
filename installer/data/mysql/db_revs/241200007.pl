@@ -1,8 +1,9 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "30300",
-    description => "Add Patron expiry to messaging preference",
+    description => "Add 'patron expiry' to messaging preferences",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -21,7 +22,7 @@ return {
                 VALUES ('Patron_Expiry', 0)
             }
             );
-            say $out "Message attribute added";
+            say_success( $out, "Message attribute 'Patron_Expiry' added" );
             my $query = q{
                 SELECT message_attribute_id
                 FROM message_attributes
@@ -43,7 +44,7 @@ return {
             }, {}, $message_attribute_id, $message_attribute_id, $message_attribute_id, $message_attribute_id
 
             );
-            say $out "MEMBERSHIP_EXPIRY added to message_transports";
+            say_success( $out, "MEMBERSHIP_EXPIRY added to message_transports" );
 
             my $days_notice = C4::Context->preference('MembershipExpiryDaysNotice');
             if ($days_notice) {
@@ -71,9 +72,10 @@ return {
                         message_attribute_id = ?
                 }, {}, $message_attribute_id
                 );
+                say_success( $out, "'Patron expiry' notification activated in patron accounts" );
             }
         } else {
-            say $out "Patron_Expiry message attribute exists, skipping update";
+            say_success( $out, "'Patron_Expiry' message attribute already exists, skipping update" );
         }
     },
 };
