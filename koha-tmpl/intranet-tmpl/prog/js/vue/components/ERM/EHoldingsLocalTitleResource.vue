@@ -622,10 +622,6 @@ export default {
             ];
         },
     },
-    created() {
-        //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
-        this.assignAVs(this.resourceAttrs);
-    },
     emits: ["select-resource"],
     name: "EHoldingsLocalTitlesResource",
 };

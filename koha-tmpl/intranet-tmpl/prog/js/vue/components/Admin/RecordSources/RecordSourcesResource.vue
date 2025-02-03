@@ -193,10 +193,6 @@ export default {
         },
         async filterTable(filters, table, embedded = false) {},
     },
-    created() {
-        //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
-        this.assignAVs(this.resourceAttrs);
-    },
     name: "RecordSourcesResource",
 };
 </script>

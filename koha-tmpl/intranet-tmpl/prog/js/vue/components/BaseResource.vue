@@ -145,7 +145,8 @@ export default {
         doResourceSelect: function (resource, dt, event) {
             this.$emit("select-resource", resource[this.idAttr]);
         },
-        assignAVs(attrs) {
+        populateAttributesWithAuthorisedValues(attrs) {
+            if (!attrs) return;
             attrs.forEach(attr => {
                 if (attr.type === "select" && typeof attr.avCat === "string") {
                     const avKey = attr.avCat;
@@ -161,7 +162,7 @@ export default {
                     });
                 }
                 if (attr.subFields?.length) {
-                    this.assignAVs(attr.subFields);
+                    this.populateAttributesWithAuthorisedValues(attr.subFields);
                 }
             });
         },
@@ -243,6 +244,9 @@ export default {
                 attr => attr.name === "additional_fields"
             );
         },
+    },
+    created() {
+        this.populateAttributesWithAuthorisedValues(this.resourceAttrs);
     },
     name: "BaseResource",
     props: {
