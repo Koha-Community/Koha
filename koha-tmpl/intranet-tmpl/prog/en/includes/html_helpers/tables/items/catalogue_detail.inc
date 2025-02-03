@@ -231,6 +231,13 @@
     [% IF Koha.Preference('UseCourseReserves') %]
         const av_courses_term = new Map([% To.json(AuthorisedValues.Get('TERM')) | $raw %].map( av => [av.authorised_value, av.lib]));
     [% END %]
+
+    const coded_values = {
+        library: new Map(all_libraries.map( l => [l.branchname, l.branchcode] )),
+        item_type: new Map(all_item_types.map( i => [i.translated_description, i.itemtype] )),
+        collection_code: new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.ccode' })) | $raw %].map( av => [av.lib, av.authorised_value])),
+    };
+
     [% IF Koha.Preference('URLLinkText') %]
         const url_link_text = "[% Koha.Preference('URLLinkText') | html %]";
     [% ELSE %]
@@ -240,7 +247,7 @@
     [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
     [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
     let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-    let embed = ["+strings,home_library,holding_library,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
+    let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
     [% IF Koha.Preference('LocalCoverImages') %]
         embed.push('cover_image_ids');
     [% END %]
@@ -282,6 +289,7 @@
     };
     function build_items_table (tab_id, add_filters, dt_options, drawcallback) {
 
+        let table_dt;
         if ( dt_options && dt_options.hasOwnProperty('destroy') ) {
             // Keep a copy of the user settings, the destroy is going to trigger the column-visibility.dt event for all columns
             let user_colvis_bak= Object.assign({}, user_colvis[tab_id]);
@@ -370,6 +378,7 @@
             [% IF ( item_level_itypes ) %]
             {
                 data: "me.item_type_id", // FIXME Cannot filter by biblioitem.itemtype
+                datatype: "coded_value:item_type",
                 className: "itype",
                 searchable: true,
                 orderable: true,
@@ -388,7 +397,8 @@
             },
             [% END %]
             {
-                data: "holding_library.name:me.holding_library_id",
+                data: "me.holding_library_id",
+                datatype: "coded_value:library",
                 className: "location",
                 searchable: true,
                 orderable: true,
@@ -397,7 +407,8 @@
                 }
             },
             {
-                data: "home_library.name:me.home_library_id",
+                data: "me.home_library_id",
+                datatype: "coded_value:library",
                 className: "homebranch",
                 searchable: true,
                 orderable: true,
@@ -420,6 +431,7 @@
             },
             {
                 data: "me.collection_code",
+                datatype: "coded_value:collection_code",
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
@@ -875,7 +887,7 @@
         filters_options,
         );
 
-        let table_dt = items_table.DataTable();
+        table_dt = items_table.DataTable();
         table_dt.on("column-visibility.dt", function(e, settings, column, state, recalc ){
             if (recalc === false) return;
 

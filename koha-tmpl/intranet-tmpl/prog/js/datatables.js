@@ -444,6 +444,9 @@ function _dt_default_ajax (params){
             var length = data.length;
             var start  = data.start;
 
+            let api = new $.fn.dataTable.Api(settings);
+            const global_search = api.search();
+
             var dataSet = {
                 _page: Math.floor(start/length) + 1,
                 _per_page: length
@@ -456,6 +459,7 @@ function _dt_default_ajax (params){
                 for (var i=0;i<attributes.length;i++){
                     var part = {};
                     var attr = attributes[i];
+                    let default_build = true;
                     let criteria = options.criteria;
                     if ( value.match(/^\^(.*)\$$/) ) {
                         value = value.replace(/^\^/, '').replace(/\$$/, '');
@@ -474,6 +478,9 @@ function _dt_default_ajax (params){
                     }
 
                     if ( col.datatype !== undefined ) {
+                        default_build = false;
+                        let coded_datatype =
+                            col.datatype.match(/^coded_value:(.*)/);
                         if (col.datatype == 'related-object') {
                             let query_term = value;
 
@@ -485,12 +492,54 @@ function _dt_default_ajax (params){
                                 [col.related + '.' + col.relatedKey]: col.relatedValue,
                                 [col.related + '.' + col.relatedSearchOn]: query_term
                             };
+                        } else if (
+                            coded_datatype &&
+                            coded_datatype.length > 1
+                        ) {
+                            if (global_search.length) {
+                                coded_datatype = coded_datatype[1];
+                                const regex = new RegExp(
+                                    `^${global_search}`,
+                                    "i"
+                                );
+                                if (
+                                    coded_values &&
+                                    coded_values.hasOwnProperty(coded_datatype)
+                                ) {
+                                    let codes = [
+                                        ...coded_values[
+                                            coded_datatype
+                                        ].entries(),
+                                    ]
+                                        .filter(([label]) => regex.test(label))
+                                        .map(([, code]) => code);
+
+                                    if (codes.length) {
+                                        part[
+                                            !attr.includes(".")
+                                                ? "me." + attr
+                                                : attr
+                                        ] = codes;
+                                    } else {
+                                        // Coded value not found using the description, fallback to code
+                                        default_build = true;
+                                    }
+                                } else {
+                                    console.log(
+                                        "coded datatype %s not supported yet".format(
+                                            coded_datatype
+                                        )
+                                    );
+                                }
+                            } else {
+                                default_build = true;
+                            }
                         } else {
                             console.log("datatype %s not supported yet".format(col.datatype));
                         }
                     }
 
-                    if (col.datatype != 'related-object') {
+                    if (default_build) {
                         let value_part;
                         if ( criteria === 'exact' ) {
                             value_part = built_value ? [value, built_value] : value
@@ -502,7 +551,7 @@ function _dt_default_ajax (params){
                         part[!attr.includes('.')?'me.'+attr:attr] = value_part;
                     }
 
-                    parts.push(part);
+                    if (Object.keys(part).length) parts.push(part);
                 }
                 return parts;
             }
