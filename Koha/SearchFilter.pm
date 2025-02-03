@@ -51,7 +51,7 @@ sub expand_filter {
     my $operands = $query->{operands};
     my $indexes = $query->{indexes};
 
-    my $query_limit = "(";
+    my $query_limit = "";
     for( my $i = 0; $i < scalar @$operands; $i++ ){
         next unless @$operands[$i];
         my $index = @$indexes[$i] ? @$indexes[$i] . "=" : "";
@@ -61,7 +61,7 @@ sub expand_filter {
         my $limit = $operator . $index . $query;
         $query_limit .= $limit;
     }
-    $query_limit .= ")";
+    $query_limit = "(" . $query_limit . ")" if $query_limit;
 
     return ($limits, $query_limit);
 }
