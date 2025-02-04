@@ -5,12 +5,12 @@
             {{
                 $__("Edit") +
                 " " +
-                i18n.displayName +
+                i18n.displayNameLowerCase +
                 " #" +
                 resourceToAddOrEdit[idAttr]
             }}
         </h2>
-        <h2 v-else>{{ $__("New") + " " + i18n.displayName }}</h2>
+        <h2 v-else>{{ $__("New") + " " + i18n.displayNameLowerCase }}</h2>
         <ul
             v-if="formGroupsDisplayMode == 'tabs'"
             class="nav nav-tabs"
@@ -19,6 +19,7 @@
             <li
                 v-for="(tab, counter) in getFieldGroupings('Form')"
                 class="nav-item"
+                :key="`tab${counter}`"
             >
                 <a
                     href="#"
