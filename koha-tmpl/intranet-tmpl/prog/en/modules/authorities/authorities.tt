@@ -464,6 +464,14 @@
                     </div>
                 [% END # /IF duplicateauthid %]
 
+                [% IF dbn_copy %]
+                <script>
+                    if (! window.confirm("Tworzysz rekord CKHF w NUKAT jako kopię rekordu DBN.\nJeśli nie to było twoim celem, wybierz 'Anuluj'.\nJeśli tak, wybierz 'OK', dokonaj koniecznych korekt (pole 040, kropka na końcu 1XX itp.) i zapisz rekord.")) {
+                        history.back();
+                    }
+                </script>
+                [% END # /IF dbn_copy %]
+
                 <form method="post" id="f" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-add" />

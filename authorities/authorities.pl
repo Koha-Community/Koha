@@ -551,6 +551,8 @@ if ( $op eq 'cud-change-framework' ) {
     $changed_authtype = 1;
 }
 
+my $dbn_copy;
+
 my $dbh = C4::Context->dbh;
 my $authobj = Koha::Authorities->find($authid);
 if ( $authid && !$authobj ) {
@@ -584,7 +586,8 @@ if ($breedingid) {
     $record = GetAuthority($authid);
 }
 
-if (   $record
+if (   $op ne 'duplicate'
+    && $record
     && $record->subfield( '010', 'a' )
     && $record->subfield( '010', 'a' ) =~ /^[pm]/
     && !Koha::Patrons->find($loggedinuser)
@@ -653,13 +656,57 @@ if ($op eq "cud-add") {
     if ( $op eq "duplicate" ) {
         $authid = "";
         if ( C4::Context->preference('marcflavour') eq 'MARC21' && $record && $record->field('008') ) {
+            my $leader = $record->leader;
+            substr( $leader, 0, 6, '     n' );
+            substr( $leader, 12, 5, '     ' );
+            $record->leader($leader);
+            $record->delete_fields( $record->field('001') );
             my $s008 = $record->field('008')->data;
             my $date = POSIX::strftime( "%y%m%d", localtime );
             substr( $s008, 0, 6, $date );
             $record->field('008')->update($s008);
-            $record->delete_fields( $record->field('010') );
-            $record->delete_fields( $record->field('035') );
             $record->delete_fields( $record->field('040') );
+            if (   $record->subfield( '010', 'a' )
+                && $record->subfield( '010', 'a' ) =~ /^p/
+                && $record->field('1..')->tag =~ /^1[013]./ )
+            {
+                $record->insert_fields_ordered(
+                    MARC::Field->new(
+                        '035', ' ', ' ',
+                        a => "(PlWaBN)" . $record->subfield( '010', 'a' )
+                    )
+                );
+                substr( $s008, 14, 3, 'aab' );
+                substr( $s008, 10, 1, '|' );
+                substr( $s008, 39, 1, 'c' );
+                $record->field('008')->update($s008);
+                $record->insert_fields_ordered(
+                    MARC::Field->new( '040', ' ', ' ', f => 'kaba' ) );
+                my $heading_field = $record->field('1..');
+                if ( $heading_field->tag ne '130'
+                    && !$heading_field->subfield('t') )
+                {
+                    my @heading_subfields = $heading_field->subfields;
+                    my $last_subfield_code =
+                      $heading_subfields[$#heading_subfields]->[0];
+                    my $last_subfield_val =
+                      $heading_subfields[$#heading_subfields]->[1];
+                    unless ( substr( $last_subfield_val, -1 ) eq '.' ) {
+                        $heading_field->update(
+                            $last_subfield_code => "$last_subfield_val." );
+                    }
+                }
+                $dbn_copy = 1;
+            }
+            else {
+                if ( substr( $s008, 15, 1 ) eq 'a' ) {
+                    $record->insert_fields_ordered(
+                        MARC::Field->new( '040', ' ', ' ', f => 'kaba' ) );
+                }
+                $record->delete_fields( $record->field('024') );
+                $record->delete_fields( $record->field('035') );
+            }
+            $record->delete_fields( $record->field('010') );
         } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' && $record && $record->subfield( '100', 'a' ) ) {
             my $s100a = $record->subfield( '100', 'a' );
             my $date  = POSIX::strftime( "%Y%m%d", localtime );
@@ -694,5 +741,6 @@ $template->param(
     linkid          => $linkid,
     authtypetext    => $type ? $type->authtypetext : "",
     hide_marc       => C4::Context->preference('hide_marc'),
+    dbn_copy        => $dbn_copy,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
