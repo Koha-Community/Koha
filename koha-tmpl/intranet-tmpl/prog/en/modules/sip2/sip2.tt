@@ -22,6 +22,7 @@
         <script>
             const institutions_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'institutions', 'institutions', 'json' ) | $raw %];
             const accounts_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'accounts', 'accounts', 'json' ) | $raw %];
+            const listeners_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'listeners', 'listeners', 'json' ) | $raw %];
             const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
         </script>
         [% Asset.js("js/vue/dist/sip2.js") | $raw %]

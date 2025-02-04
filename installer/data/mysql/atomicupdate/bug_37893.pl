@@ -257,5 +257,21 @@ return {
             }
 
         }
+
+        # Listeners #
+        my @listener_keys = keys %{ $SIPconfig->{listeners} };
+        foreach my $listener_key (@listener_keys) {
+            my $insert_listeners = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_listeners (client_timeout, port, protocol, timeout, transport) VALUES (?, ?, ?, ?, ?)}
+            );
+
+            my $test = $insert_listeners->execute(
+                $SIPconfig->{listeners}->{$listener_key}->{client_timeout},
+                $SIPconfig->{listeners}->{$listener_key}->{port},
+                $SIPconfig->{listeners}->{$listener_key}->{protocol},
+                $SIPconfig->{listeners}->{$listener_key}->{timeout},
+                $SIPconfig->{listeners}->{$listener_key}->{transport}
+            );
+        }
     },
 };

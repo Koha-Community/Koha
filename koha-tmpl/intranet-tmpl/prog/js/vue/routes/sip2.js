@@ -81,6 +81,38 @@ export const routes = [
                     },
                 ],
             },
+            {
+                path: "/cgi-bin/koha/sip2/listeners",
+                title: $__("Listeners"),
+                icon: "fa fa-signal",
+                is_end_node: true,
+                resource: "SIP2/SIP2ListenerResource.vue",
+                children: [
+                    {
+                        path: "",
+                        name: "SIP2ListenersList",
+                        component: markRaw(ResourceWrapper),
+                    },
+                    {
+                        path: ":sip_listener_id",
+                        name: "SIP2ListenersShow",
+                        component: markRaw(ResourceWrapper),
+                        title: $__("Show listener"),
+                    },
+                    {
+                        path: "add",
+                        name: "SIP2ListenersFormAdd",
+                        component: markRaw(ResourceWrapper),
+                        title: $__("Add listener"),
+                    },
+                    {
+                        path: "edit/:sip_listener_id",
+                        name: "SIP2ListenersFormAddEdit",
+                        component: markRaw(ResourceWrapper),
+                        title: $__("Edit listener"),
+                    },
+                ],
+            },
         ],
     },
 ];

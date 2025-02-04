@@ -1,0 +1,28 @@
+---
+type: object
+properties:
+  sip_listener_id:
+    type: integer
+    description: unique identifier
+    readOnly: true
+  port:
+    description: port
+    type: string
+  client_timeout:
+    description: protocol
+    type:
+      - integer
+      - "null"
+  protocol:
+    description: protocol
+    type: string
+  timeout:
+    description: timeout
+    type: integer
+  transport:
+    description: timeout
+    type: string
+
+additionalProperties: false
+required:
+  - sip_listener_id
