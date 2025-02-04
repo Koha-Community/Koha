@@ -31,7 +31,7 @@
         </fieldset>
         <a
             v-if="resourceRelationshipCount > 0 || noCountRequired"
-            class="btn btn-default"
+            class="btn btn-default add-new-relationship"
             @click="addResourceRelationship"
             ><font-awesome-icon icon="plus" />
             {{ $__("Add new %s").format(resourceStrings.nameLowerCase) }}</a
@@ -114,3 +114,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.add-new-relationship {
+    margin-top: 0.5em;
+}
+</style>
