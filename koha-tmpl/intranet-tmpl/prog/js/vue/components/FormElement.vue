@@ -1,4 +1,19 @@
 <template>
+    <template v-if="attr.type == 'number'">
+        <label
+            :for="`${attr.name}${index}`"
+            :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
+            >{{ attr.label }}:</label
+        >
+        <input
+            :id="`${attr.name}${index}`"
+            type="number"
+            v-model="resource[attr.name]"
+            :placeholder="attr.placeholder || attr.label"
+            :required="attr.required ? true : false"
+        />
+    </template>
     <template v-if="attr.type == 'text'">
         <label
             :for="`${attr.name}${index}`"
@@ -230,3 +245,17 @@ export default {
     components: { FormRelationshipSelect, ToolTip, AdditionalFieldsEntry },
 };
 </script>
+
+<style scoped>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+</style>
