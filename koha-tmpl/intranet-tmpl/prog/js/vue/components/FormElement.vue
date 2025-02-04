@@ -104,24 +104,26 @@
         <component
             v-if="isVModelRequired(attr.componentPath)"
             :is="requiredComponent"
-            v-bind="requiredProps()"
+            v-bind="getComponentProps()"
             v-model="resource[attr.name]"
             v-on="getEventHandlers()"
         ></component>
         <component
             v-else
             :is="requiredComponent"
-            v-bind="requiredProps()"
+            v-bind="getComponentProps()"
             v-on="getEventHandlers()"
         ></component>
     </template>
-    <template v-else-if="attr.type == 'relationshipWidget' && attr.props">
+    <template
+        v-else-if="attr.type == 'relationshipWidget' && attr.componentProps"
+    >
         <component
             :is="relationshipWidget"
             :title="attr.group ? null : attr.label"
             :apiClient="attr.apiClient"
             :name="attr.name"
-            v-bind="requiredProps()"
+            v-bind="getComponentProps()"
             v-on="getEventHandlers()"
         ></component>
     </template>

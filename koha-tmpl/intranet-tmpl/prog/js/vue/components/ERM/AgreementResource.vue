@@ -136,7 +136,7 @@ export default {
                         },
                     },
                     componentPath: "./FormSelectVendors.vue",
-                    props: {
+                    componentProps: {
                         id: {
                             type: "string",
                             value: "agreement_id_",
@@ -198,26 +198,24 @@ export default {
                             !!agreement._strings?.additional_field_values
                                 ?.length,
                         componentPath: "./AdditionalFieldsDisplay.vue",
-                        props: {
-                            resource_type: {
+                        componentProps: {
+                            extended_attributes_resource_type: {
                                 type: "string",
                                 value: "agreement",
                             },
                             additional_field_values: {
-                                type: "resourceProperty",
                                 resourceProperty:
                                     "_strings.additional_field_values",
                             },
                         },
                     },
                     componentPath: "./AdditionalFieldsEntry.vue",
-                    props: {
-                        resource_type: {
+                    componentProps: {
+                        extended_attributes_resource_type: {
                             type: "string",
                             value: "agreement",
                         },
                         additional_field_values: {
-                            type: "resourceProperty",
                             resourceProperty: "extended_attributes",
                         },
                         resource: {
@@ -262,20 +260,16 @@ export default {
                         ],
                     },
                     group: __("Periods"),
-                    props: {
+                    componentProps: {
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "periods",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("period"),
-                                nameUpperCase: __("Period"),
-                                namePlural: __("periods"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("period"),
+                            nameUpperCase: __("Period"),
+                            namePlural: __("periods"),
                         },
-                        newRelationship: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 started_on: null,
@@ -285,14 +279,14 @@ export default {
                             },
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "started_on",
                             type: "component",
                             label: __("Start date"),
                             componentPath: "./FlatPickrWrapper.vue",
                             required: true,
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "started_on_",
@@ -315,7 +309,7 @@ export default {
                             label: __("End date"),
                             componentPath: "./FlatPickrWrapper.vue",
                             required: false,
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "ended_on_",
@@ -329,7 +323,7 @@ export default {
                             label: __("Cancellation deadline"),
                             componentPath: "./FlatPickrWrapper.vue",
                             required: false,
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "cancellation_deadline_",
@@ -366,20 +360,16 @@ export default {
                             },
                         ],
                     },
-                    props: {
+                    componentProps: {
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "user_roles",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("user"),
-                                nameUpperCase: __("Agreement user"),
-                                namePlural: __("users"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("user"),
+                            nameUpperCase: __("Agreement user"),
+                            namePlural: __("users"),
                         },
-                        newRelationship: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 user_id: null,
@@ -388,14 +378,14 @@ export default {
                             },
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "user_id",
                             type: "component",
                             label: __("User"),
                             componentPath: "./PatronSearch.vue",
                             required: true,
-                            props: {
+                            componentProps: {
                                 name: {
                                     type: "string",
                                     value: "user_id",
@@ -469,8 +459,8 @@ export default {
                         ],
                     },
                     apiClient: APIClient.erm.licenses,
-                    props: {
-                        newRelationship: {
+                    componentProps: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 license_id: null,
@@ -482,33 +472,28 @@ export default {
                             },
                         },
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "agreement_licenses",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("license"),
-                                nameUpperCase: __("License"),
-                                namePlural: __("licenses"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("license"),
+                            nameUpperCase: __("License"),
+                            namePlural: __("licenses"),
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "license_id",
                             type: "component",
                             label: __("License"),
                             componentPath: "./InfiniteScrollSelect.vue",
                             required: true,
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "license_id_",
                                     indexRequired: true,
                                 },
                                 selectedData: {
-                                    type: "resourceProperty",
                                     resourceProperty: "license",
                                 },
                                 dataType: {
@@ -565,7 +550,7 @@ export default {
                             !!agreement.agreement_relationships?.length,
                         componentPath:
                             "./ERM/AgreementRelationshipsDisplay.vue",
-                        props: {
+                        componentProps: {
                             agreement: {
                                 type: "resource",
                                 value: null,
@@ -573,8 +558,8 @@ export default {
                         },
                     },
                     apiClient: APIClient.erm.agreements,
-                    props: {
-                        newRelationship: {
+                    componentProps: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 related_agreement_id: null,
@@ -583,16 +568,12 @@ export default {
                             },
                         },
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "agreement_relationships",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("related agreement"),
-                                nameUpperCase: __("Related agreement"),
-                                namePlural: __("related agreements"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("related agreement"),
+                            nameUpperCase: __("Related agreement"),
+                            namePlural: __("related agreements"),
                         },
                         filters: {
                             type: "filter",
@@ -608,7 +589,7 @@ export default {
                             value: true,
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "related_agreement_id",
                             type: "select",
@@ -641,7 +622,7 @@ export default {
                         hidden: agreement =>
                             !!agreement.agreement_packages?.length,
                         componentPath: "./ERM/AgreementPackagesDisplay.vue",
-                        props: {
+                        componentProps: {
                             agreement: {
                                 type: "resource",
                                 value: null,
@@ -658,27 +639,23 @@ export default {
                         label: __("Agreement users"),
                         hidden: agreement => !!agreement.documents?.length,
                         componentPath: "./DocumentDisplay.vue",
-                        props: {
+                        componentProps: {
                             resource: {
                                 type: "resource",
                                 value: null,
                             },
                         },
                     },
-                    props: {
+                    componentProps: {
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "documents",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("document"),
-                                nameUpperCase: __("Document"),
-                                namePlural: __("documents"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("document"),
+                            nameUpperCase: __("Document"),
+                            namePlural: __("documents"),
                         },
-                        newRelationship: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 file_name: null,
@@ -691,13 +668,13 @@ export default {
                             },
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "document",
                             type: "component",
                             componentPath: "./DocumentSelect.vue",
                             label: __("File"),
-                            props: {
+                            componentProps: {
                                 counter: {
                                     type: "string",
                                     value: "",
@@ -1054,13 +1031,12 @@ export default {
                     type: "component",
                     label: __("on"),
                     componentPath: "./FlatPickrWrapper.vue",
-                    props: {
+                    componentProps: {
                         id: {
                             type: "string",
                             value: "max_expiration_date_filter",
                         },
                         disabled: {
-                            type: "resourceProperty",
                             resourceProperty: "by_expired",
                         },
                     },

@@ -125,7 +125,7 @@ export default {
                         },
                     },
                     componentPath: "./FormSelectVendors.vue",
-                    props: {
+                    componentProps: {
                         id: {
                             type: "string",
                             value: "package_id_",
@@ -174,31 +174,27 @@ export default {
                         ],
                     },
                     apiClient: APIClient.erm.agreements,
-                    props: {
-                        newRelationship: {
+                    componentProps: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 agreement_id: null,
                             },
                         },
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "package_agreements",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("agreement"),
-                                nameUpperCase: __("Agreement"),
-                                namePlural: __("agreements"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("agreement"),
+                            nameUpperCase: __("Agreement"),
+                            namePlural: __("agreements"),
                         },
                         fetchOptions: {
                             type: "boolean",
                             value: true,
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "agreement_id",
                             type: "select",
@@ -219,7 +215,7 @@ export default {
                         type: "component",
                         hidden: erm_package => erm_package,
                         componentPath: "./RelationshipTableDisplay.vue",
-                        props: {
+                        componentProps: {
                             tableOptions: {
                                 type: "object",
                                 value: {

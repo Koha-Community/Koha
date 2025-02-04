@@ -30,7 +30,7 @@ export default {
     },
     name: "AdditionalFieldsDisplay",
     props: {
-        resource_type: String,
+        extended_attributes_resource_type: String,
         additional_field_values: Array,
     },
 };

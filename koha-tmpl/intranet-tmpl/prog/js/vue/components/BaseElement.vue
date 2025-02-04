@@ -21,10 +21,10 @@ export default {
 
             return defineAsyncComponent(() => import(`${importPath}`));
         },
-        requiredProps(show = false) {
+        getComponentProps(show = false) {
             const propList = show
-                ? this.attr.showElement.props
-                : this.attr.props;
+                ? this.attr.showElement.componentProps
+                : this.attr.componentProps;
             if (!propList) {
                 return {};
             }
@@ -34,7 +34,7 @@ export default {
                 if (prop.type === "resource") {
                     acc[key] = this.resource;
                 }
-                if (prop.type === "resourceProperty") {
+                if (prop.hasOwnProperty("resourceProperty")) {
                     if (prop.resourceProperty.includes(".")) {
                         acc[key] = this.accessNestedProperty(
                             prop.resourceProperty,
@@ -43,6 +43,9 @@ export default {
                     } else {
                         acc[key] = this.resource[prop.resourceProperty];
                     }
+                }
+                if (key === "relationshipStrings") {
+                    acc[key] = prop;
                 }
                 if (prop.type === "av") {
                     acc[key] = prop.av;
@@ -91,8 +94,8 @@ export default {
                 return acc;
             }, {});
             const attr = show ? this.attr.showElement : this.attr;
-            if (attr.subFields?.length) {
-                props.subFields = attr.subFields;
+            if (attr.relationshipFields?.length) {
+                props.relationshipFields = attr.relationshipFields;
             }
             return props;
         },

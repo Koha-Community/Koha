@@ -248,7 +248,7 @@ export default {
                         type: "component",
                         hidden: title => title.resources.length > 0,
                         componentPath: "./RelationshipTableDisplay.vue",
-                        props: {
+                        componentProps: {
                             tableOptions: {
                                 type: "object",
                                 value: {
@@ -307,8 +307,8 @@ export default {
                             },
                         },
                     },
-                    props: {
-                        newRelationship: {
+                    componentProps: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 package_id: null,
@@ -319,23 +319,19 @@ export default {
                             },
                         },
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "resources",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("package"),
-                                nameUpperCase: __("Package"),
-                                namePlural: __("packages"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("package"),
+                            nameUpperCase: __("Package"),
+                            namePlural: __("packages"),
                         },
                         fetchOptions: {
                             type: "boolean",
                             value: true,
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "package_id",
                             type: "select",
@@ -359,7 +355,7 @@ export default {
                                 },
                             },
                             componentPath: "./FormSelectVendors.vue",
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "resource_vendor_id_",
@@ -372,7 +368,7 @@ export default {
                             type: "component",
                             label: __("Start date"),
                             componentPath: "./FlatPickrWrapper.vue",
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "started_on_",
@@ -390,7 +386,7 @@ export default {
                             type: "component",
                             label: __("End date"),
                             componentPath: "./FlatPickrWrapper.vue",
-                            props: {
+                            componentProps: {
                                 id: {
                                     type: "string",
                                     value: "ended_on_",

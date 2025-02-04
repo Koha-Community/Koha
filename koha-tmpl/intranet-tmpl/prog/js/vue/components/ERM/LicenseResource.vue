@@ -136,7 +136,7 @@ export default {
                         },
                     },
                     componentPath: "./FormSelectVendors.vue",
-                    props: {
+                    componentProps: {
                         id: {
                             type: "string",
                             value: "license_id_",
@@ -169,7 +169,7 @@ export default {
                         value: "started_on",
                         format: this.format_date,
                     },
-                    props: {
+                    componentProps: {
                         id: {
                             type: "string",
                             value: "started_on",
@@ -195,7 +195,7 @@ export default {
                         value: "ended_on",
                         format: this.format_date,
                     },
-                    props: {
+                    componentProps: {
                         id: {
                             type: "string",
                             value: "ended_on",
@@ -210,26 +210,24 @@ export default {
                         hidden: license =>
                             !!license._strings?.additional_field_values?.length,
                         componentPath: "./AdditionalFieldsDisplay.vue",
-                        props: {
-                            resource_type: {
+                        componentProps: {
+                            extended_attributes_resource_type: {
                                 type: "string",
                                 value: "license",
                             },
                             additional_field_values: {
-                                type: "resourceProperty",
                                 resourceProperty:
                                     "_strings.additional_field_values",
                             },
                         },
                     },
                     componentPath: "./AdditionalFieldsEntry.vue",
-                    props: {
-                        resource_type: {
+                    componentProps: {
+                        extended_attributes_resource_type: {
                             type: "string",
                             value: "license",
                         },
                         additional_field_values: {
-                            type: "resourceProperty",
                             resourceProperty: "extended_attributes",
                         },
                         resource: {
@@ -266,20 +264,16 @@ export default {
                             },
                         ],
                     },
-                    props: {
+                    componentProps: {
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "user_roles",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("user"),
-                                nameUpperCase: __("License user"),
-                                namePlural: __("users"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("user"),
+                            nameUpperCase: __("License user"),
+                            namePlural: __("users"),
                         },
-                        newRelationship: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 user_id: null,
@@ -288,14 +282,14 @@ export default {
                             },
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "user_id",
                             type: "component",
                             label: __("User"),
                             componentPath: "./PatronSearch.vue",
                             required: true,
-                            props: {
+                            componentProps: {
                                 name: {
                                     type: "string",
                                     value: "user_id",
@@ -336,27 +330,23 @@ export default {
                         type: "component",
                         hidden: license => !!license.documents?.length,
                         componentPath: "./DocumentDisplay.vue",
-                        props: {
+                        componentProps: {
                             resource: {
                                 type: "resource",
                                 value: null,
                             },
                         },
                     },
-                    props: {
+                    componentProps: {
                         resourceRelationships: {
-                            type: "resourceProperty",
                             resourceProperty: "documents",
                         },
-                        resourceStrings: {
-                            type: "object",
-                            value: {
-                                nameLowerCase: __("document"),
-                                nameUpperCase: __("Document"),
-                                namePlural: __("documents"),
-                            },
+                        relationshipStrings: {
+                            nameLowerCase: __("document"),
+                            nameUpperCase: __("Document"),
+                            namePlural: __("documents"),
                         },
-                        newRelationship: {
+                        newRelationshipDefaultAttrs: {
                             type: "object",
                             value: {
                                 file_name: null,
@@ -369,13 +359,13 @@ export default {
                             },
                         },
                     },
-                    subFields: [
+                    relationshipFields: [
                         {
                             name: "document",
                             type: "component",
                             componentPath: "./DocumentSelect.vue",
                             label: __("File"),
-                            props: {
+                            componentProps: {
                                 counter: {
                                     type: "string",
                                     value: "",

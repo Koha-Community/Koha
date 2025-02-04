@@ -137,13 +137,15 @@ export default {
     },
     beforeCreate() {
         const client = APIClient.additional_fields;
-        client.additional_fields.getAll(this.resource_type).then(
-            available_fields => {
-                this.available_fields = available_fields;
-                this.initialized = true;
-            },
-            error => {}
-        );
+        client.additional_fields
+            .getAll(this.extended_attributes_resource_type)
+            .then(
+                available_fields => {
+                    this.available_fields = available_fields;
+                    this.initialized = true;
+                },
+                error => {}
+            );
     },
     watch: {
         current_additional_fields_values: {
@@ -296,7 +298,7 @@ export default {
     },
     name: "AdditionalFieldsEntry",
     props: {
-        resource_type: String,
+        extended_attributes_resource_type: String,
         additional_field_values: Array,
         resource: Object,
     },

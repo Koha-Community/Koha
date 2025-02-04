@@ -8,18 +8,21 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ resourceStrings.nameUpperCase + " " + (counter + 1) }}
+                {{ relationshipStrings.nameUpperCase + " " + (counter + 1) }}
                 <a href="#" @click.prevent="deleteResourceRelationship(counter)"
                     ><i class="fa fa-trash"></i>
                     {{
                         $__("Remove this %s").format(
-                            resourceStrings.nameLowerCase
+                            relationshipStrings.nameLowerCase
                         )
                     }}</a
                 >
             </legend>
             <ol>
-                <li v-for="(attr, index) in subFields" v-bind:key="index">
+                <li
+                    v-for="(attr, index) in relationshipFields"
+                    v-bind:key="index"
+                >
                     <FormElement
                         :resource="resourceRelationship"
                         :attr="attr"
@@ -34,11 +37,11 @@
             class="btn btn-default add-new-relationship"
             @click="addResourceRelationship"
             ><font-awesome-icon icon="plus" />
-            {{ $__("Add new %s").format(resourceStrings.nameLowerCase) }}</a
+            {{ $__("Add new %s").format(relationshipStrings.nameLowerCase) }}</a
         >
         <span v-else>{{
             $__("There are no %s created yet").format(
-                resourceStrings.namePlural
+                relationshipStrings.namePlural
             )
         }}</span>
     </fieldset>
@@ -62,11 +65,11 @@ export default {
     },
     props: {
         resourceRelationships: Array,
-        subFields: Array,
-        resourceStrings: Object,
+        relationshipFields: Array,
+        relationshipStrings: Object,
         title: String,
         apiClient: Object,
-        newRelationship: Object,
+        newRelationshipDefaultAttrs: Object,
         filters: Object,
         fetchOptions: Boolean,
         name: String,
@@ -91,7 +94,9 @@ export default {
     },
     methods: {
         addResourceRelationship() {
-            this.resourceRelationships.push({ ...this.newRelationship });
+            this.resourceRelationships.push({
+                ...this.newRelationshipDefaultAttrs,
+            });
         },
         deleteResourceRelationship(counter) {
             this.resourceRelationships.splice(counter, 1);

@@ -105,7 +105,7 @@
             <label v-if="attribute.label">{{ attribute.label }}:</label>
             <component
                 :is="requiredComponent"
-                v-bind="requiredProps(true)"
+                v-bind="getComponentProps(true)"
             ></component>
         </template>
     </template>
@@ -113,7 +113,7 @@
         <template v-if="attribute.hidden && attribute.hidden(resource)">
             <component
                 :is="requiredComponent"
-                v-bind="requiredProps(true)"
+                v-bind="getComponentProps(true)"
             ></component>
         </template>
     </template>

@@ -5,6 +5,11 @@ import { build_url } from "../composables/datatables";
 export default {
     props: {
         routeAction: String,
+        resourceName: String,
+        idAttr: String,
+        showComponent: String,
+        addComponent: String,
+        editComponent: String,
     },
     setup(props) {
         const { setConfirmationDialog, setMessage, setError, setWarning } =
@@ -154,15 +159,17 @@ export default {
                     attr.requiredKey = "value";
                     attr.selectLabel = "description";
                 }
-                if (attr.type == "relationship" && attr.props) {
-                    Object.keys(attr.props).forEach(key => {
-                        if (attr.props[key].type == "av") {
-                            attr.props[key].av = this[key];
+                if (attr.type == "relationship" && attr.componentProps) {
+                    Object.keys(attr.componentProps).forEach(key => {
+                        if (attr.componentProps[key].type == "av") {
+                            attr.componentProps[key].av = this[key];
                         }
                     });
                 }
-                if (attr.subFields?.length) {
-                    this.populateAttributesWithAuthorisedValues(attr.subFields);
+                if (attr.relationshipFields?.length) {
+                    this.populateAttributesWithAuthorisedValues(
+                        attr.relationshipFields
+                    );
                 }
             });
         },
@@ -249,12 +256,5 @@ export default {
         this.populateAttributesWithAuthorisedValues(this.resourceAttrs);
     },
     name: "BaseResource",
-    props: {
-        resourceName: String,
-        idAttr: String,
-        showComponent: String,
-        addComponent: String,
-        editComponent: String,
-    },
 };
 </script>
