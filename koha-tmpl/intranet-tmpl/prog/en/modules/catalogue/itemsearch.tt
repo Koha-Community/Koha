@@ -369,7 +369,7 @@
         function showItemSelections( number ){
             let caret = ' <span class="caret">';
             if( number > 0 ){
-                $("#table_search_selections").show().find("span").text(_("Items selected: " + number ) );
+                $("#table_search_selections").show().find("span").html(_("Items selected: ") + number );
                 $("#batch_mod_menu").removeClass("disabled").prop("disabled", false);
                 $("#export-button").html(_("Export selected results (%s) to").format  ( number ) + caret);
             } else {
