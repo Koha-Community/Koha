@@ -361,6 +361,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sip_account_custom_patron_fields
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SipAccountCustomPatronField>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sip_account_custom_patron_fields",
+  "Koha::Schema::Result::SipAccountCustomPatronField",
+  { "foreign.sip_account_id" => "self.sip_account_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sip_account_item_fields
 
 Type: has_many
@@ -407,8 +422,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-01-31 16:01:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4oEQ+Ijd2cbYHszQPLRldw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-04 13:31:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UHTiGnqzk7zyAXgBlBUSxg
 
 
 __PACKAGE__->add_columns(

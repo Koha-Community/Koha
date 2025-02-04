@@ -21,6 +21,7 @@ use base qw(Koha::SIP2::Object Koha::Object);
 
 use Koha::SIP2::Account::CustomItemFields;
 use Koha::SIP2::Account::ItemFields;
+use Koha::SIP2::Account::CustomPatronFields;
 use Koha::SIP2::Account::PatronAttributes;
 use Koha::SIP2::Institution;
 
@@ -83,6 +84,12 @@ sub get_for_config {
     my @item_fields = map { $_->get_for_config } @{ $self->item_fields->as_list };
     if (@item_fields) {
         $unblessed->{item_field} = scalar(@item_fields) == 1 ? $item_fields[0] : \@item_fields;
+    }
+
+    my @custom_patron_fields = map { $_->get_for_config } @{ $self->custom_patron_fields->as_list };
+    if (@custom_patron_fields) {
+        $unblessed->{custom_patron_field} =
+            scalar(@custom_patron_fields) == 1 ? $custom_patron_fields[0] : \@custom_patron_fields;
     }
 
     my @patron_attributes = map { $_->get_for_config } @{ $self->patron_attributes->as_list };
@@ -156,6 +163,32 @@ sub item_fields {
 
     my $item_fields_rs = $self->_result->sip_account_item_fields;
     return Koha::SIP2::Account::ItemFields->_new_from_dbic($item_fields_rs);
+}
+
+=head3 custom_patron_fields
+
+Returns the custom patron fields for this SIP account
+
+=cut
+
+sub custom_patron_fields {
+    my ( $self, $custom_patron_fields ) = @_;
+
+    if ($custom_patron_fields) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->custom_patron_fields->delete;
+
+                for my $custom_patron_field (@$custom_patron_fields) {
+                    $self->_result->add_to_sip_account_custom_patron_fields($custom_patron_field);
+                }
+            }
+        );
+    }
+
+    my $custom_patron_fields_rs = $self->_result->sip_account_custom_patron_fields;
+    return Koha::SIP2::Account::CustomPatronFields->_new_from_dbic($custom_patron_fields_rs);
 }
 
 =head3 patron_attributes

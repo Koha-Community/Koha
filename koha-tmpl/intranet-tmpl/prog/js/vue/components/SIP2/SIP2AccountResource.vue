@@ -393,6 +393,60 @@ export default {
                     group: "Details",
                 },
                 {
+                    name: "custom_patron_fields",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "custom_patron_fields",
+                        hidden: account =>
+                            !!account.custom_patron_fields?.length,
+                        columns: [
+                            {
+                                name: __("Field"),
+                                value: "field",
+                            },
+                            {
+                                name: __("Template"),
+                                value: "template",
+                            },
+                        ],
+                    },
+                    group: __("SIP response mappings"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "custom_patron_fields",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("custom patron field"),
+                            nameUpperCase: __("Custom patron field"),
+                            namePlural: __("custom patron fields"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                field: null,
+                                template: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "field",
+                            required: true,
+                            type: "text",
+                            placeholder: "XY",
+                            label: __("Field"),
+                        },
+                        {
+                            name: "template",
+                            required: true,
+                            type: "text",
+                            placeholder: "[% patron.dateexpiry %]",
+                            label: __("Template"),
+                        },
+                    ],
+                },
+                {
                     name: "patron_attributes",
                     type: "relationshipWidget",
                     showElement: {
