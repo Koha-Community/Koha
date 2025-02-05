@@ -75,31 +75,54 @@
 
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
-<style>
-    .CodeMirror {
-        resize: vertical;
-    }
-    .cm-sqlParams {
-        color: #11917b;
-    }
-    .cm-columnPlaceholder {
-        color: #bf2d5d;
-    }
-    #mana_search_errortext {
-        font-family: monospace;
-        font-weight: bold;
-    }
-    .data-plain {
-        display: none;
-    }
-    div.radio label {
-        font-weight: bold;
-        margin: 0;
-    }
-    #tabs .tab-pane {
-        display: block;
-    }
-</style>
+[% FILTER collapse %]
+    <style>
+        .CodeMirror {
+            resize: vertical;
+        }
+        .cm-sqlParams {
+            color: #11917b;
+        }
+        .cm-columnPlaceholder {
+            color: #bf2d5d;
+        }
+        #mana_search_errortext {
+            font-family: monospace;
+            font-weight: bold;
+        }
+        .data-plain {
+            display: none;
+        }
+        div.radio label {
+            font-weight: bold;
+            margin: 0;
+        }
+        #tabs .tab-pane {
+            display: block;
+        }
+
+        #column_selection {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+
+        #column_options {
+            flex-shrink: 1;
+        }
+
+        #column_controls {
+            flex-shrink: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #selected_columns {
+            flex-grow: 1;
+        }
+    </style>
+[% END %]
 [% Asset.css("css/reports.css") | $raw %]
 [% Asset.css("lib/d3c3/c3.min.css") | $raw %]
 </head>
@@ -526,7 +549,7 @@
                         <!-- /.rows -->
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-report" />
-                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                 [% END # /build1 %]
@@ -554,8 +577,8 @@
 
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-choose_type" />
-                            <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-default goback" name="back"><i class="fa fa-left-long" aria-hidden="true"></i> Back</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                 [% END # /IF (build2 ) %]
@@ -572,43 +595,38 @@
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <fieldset>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div style="float: left;">
-                                        <select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width:200px; height:300px;">
-                                            [% FOREACH table IN columns.keys.sort %]
-                                                <optgroup label="[% table | html %]">
-                                                    [% FOREACH column IN columns.item(table) %]
-                                                        <option value="[% column.name | html %]">
-                                                            [% IF ( column.description ) %]
-                                                                [% column.description | html %]
-                                                                &nbsp; / &nbsp; [% column.name | html %]
-                                                            [% ELSE %]
-                                                                [% column.name | html %]
-                                                            [% END %]
-                                                        </option>
-                                                    [% END %]
-                                                </optgroup>
-                                            [% END %]
-                                        </select>
-                                    </div>
-                                    <div style="width: 6.3em; float: right; margin-top: 100px">
-                                        <input type="button" name="Add" value="Add" class="button" style="width:6em;" id="addColumn" /><br />
-                                        <input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" id="delColumn" />
-                                    </div>
+                            <div id="column_selection">
+                                <div id="column_options">
+                                    <select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
+                                        [% FOREACH table IN columns.keys.sort %]
+                                            <optgroup label="[% table | html %]">
+                                                [% FOREACH column IN columns.item(table) %]
+                                                    <option value="[% column.name | html %]">
+                                                        [% IF ( column.description ) %]
+                                                            [% column.description | html %]
+                                                            &nbsp; / &nbsp; [% column.name | html %]
+                                                        [% ELSE %]
+                                                            [% column.name | html %]
+                                                        [% END %]
+                                                    </option>
+                                                [% END %]
+                                            </optgroup>
+                                        [% END %]
+                                    </select>
                                 </div>
-                                <!-- /.col-sm-6 -->
-
-                                <div class="col-sm-6">
-                                    <select id="selectedColumns" name="columns" multiple="multiple" size="25" style="width:200px; height:300px;"> </select>
+                                <div id="column_controls">
+                                    <button type="button" class="btn btn-default m-3" id="addColumn">Add <i class="fa fa-right-long" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-default m-3" id="delColumn"><i class="fa fa-left-long" aria-hidden="true"></i> Delete</button>
+                                </div>
+                                <div id="selected_columns">
+                                    <select id="selectedColumns" name="columns" multiple="multiple" size="25" style="min-width:200px; height:300px;"> </select>
                                 </div>
                             </div>
-                            <!-- /.row -->
                         </fieldset>
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-choose_columns" />
-                            <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-default goback" name="back"> <i class="fa fa-left-long" aria-hidden="true"></i> Back</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                     <!-- /#column_submit -->
@@ -701,8 +719,8 @@
 
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-choose_criteria" />
-                            <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-default goback" name="back"> <i class="fa fa-left-long" aria-hidden="true"></i> Back</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                 [% END # /IF ( build4 ) %]
@@ -741,8 +759,8 @@
 
                         <fieldset class="action"
                             ><input type="hidden" name="op" value="cud-choose_operations" />
-                            <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-default goback" name="back"> <i class="fa fa-left-long" aria-hidden="true"></i> Back</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                 [% END # /IF ( build5 ) %]
