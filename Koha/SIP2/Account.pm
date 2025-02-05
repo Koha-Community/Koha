@@ -23,6 +23,7 @@ use Koha::SIP2::Account::CustomItemFields;
 use Koha::SIP2::Account::ItemFields;
 use Koha::SIP2::Account::CustomPatronFields;
 use Koha::SIP2::Account::PatronAttributes;
+use Koha::SIP2::Account::SystemPreferenceOverrides;
 use Koha::SIP2::Institution;
 
 =head1 NAME
@@ -95,6 +96,12 @@ sub get_for_config {
     my @patron_attributes = map { $_->get_for_config } @{ $self->patron_attributes->as_list };
     if (@patron_attributes) {
         $unblessed->{patron_attribute} = scalar(@patron_attributes) == 1 ? $patron_attributes[0] : \@patron_attributes;
+    }
+
+    my %system_preference_overrides =
+        map { $_->variable => $_->value } @{ $self->system_preference_overrides->as_list };
+    if (%system_preference_overrides) {
+        $unblessed->{syspref_overrides} = \%system_preference_overrides;
     }
 
     return $unblessed;
@@ -215,6 +222,32 @@ sub patron_attributes {
 
     my $patron_attributes_rs = $self->_result->sip_account_patron_attributes;
     return Koha::SIP2::Account::PatronAttributes->_new_from_dbic($patron_attributes_rs);
+}
+
+=head3 system_preference_overrides
+
+Returns the system preference overrides for this SIP account
+
+=cut
+
+sub system_preference_overrides {
+    my ( $self, $system_preference_overrides ) = @_;
+
+    if ($system_preference_overrides) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->system_preference_overrides->delete;
+
+                for my $system_preference_override (@$system_preference_overrides) {
+                    $self->_result->add_to_sip_account_system_preference_overrides($system_preference_override);
+                }
+            }
+        );
+    }
+
+    my $system_preference_overrides_rs = $self->_result->sip_account_system_preference_overrides;
+    return Koha::SIP2::Account::SystemPreferenceOverrides->_new_from_dbic($system_preference_overrides_rs);
 }
 
 =head3 type

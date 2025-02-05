@@ -606,6 +606,60 @@ export default {
                     ],
                 },
                 {
+                    name: "system_preference_overrides",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "system_preference_overrides",
+                        hidden: account =>
+                            !!account.system_preference_overrides?.length,
+                        columns: [
+                            {
+                                name: __("Variable"),
+                                value: "variable",
+                            },
+                            {
+                                name: __("Value"),
+                                value: "value",
+                            },
+                        ],
+                    },
+                    group: __("Syspref overrides"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "system_preference_overrides",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("system preference override"),
+                            nameUpperCase: __("System preference override"),
+                            namePlural: __("system preference overrides"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                variable: null,
+                                value: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "variable",
+                            required: true,
+                            type: "text",
+                            placeholder: "AllFinesNeedOverride",
+                            label: __("Variable"),
+                        },
+                        {
+                            name: "value",
+                            required: true,
+                            type: "text",
+                            placeholder: "1",
+                            label: __("Value"),
+                        },
+                    ],
+                },
+                {
                     name: "ae_field_template",
                     type: "textarea",
                     label: __("AE field template"),

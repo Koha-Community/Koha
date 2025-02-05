@@ -229,6 +229,33 @@ return {
                 ) if $item_field;
             }
 
+            # Accounts system preference overrides
+            my @account_system_preference_overrides =
+                ref $SIPconfig->{accounts}->{$account_key}->{syspref_overrides} eq "ARRAY"
+                ? @{ $SIPconfig->{accounts}->{$account_key}->{syspref_overrides} }
+                : ( $SIPconfig->{accounts}->{$account_key}->{syspref_overrides} );
+
+            my $insert_account_system_preference_overrides = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_account_system_preference_overrides (sip_account_id, variable, value) VALUES (?, ?, ?)}
+            );
+
+            foreach my $account_system_preference_override (@account_system_preference_overrides) {
+
+                if ( ref $account_system_preference_override eq 'HASH' ) {
+                    for my $key ( keys %{$account_system_preference_override} ) {
+                        my $override_value = $account_system_preference_override->{$key};
+                        if ( ref $account_system_preference_override->{$key} eq 'ARRAY' ) {
+                            $override_value = $account_system_preference_override->{$key}->[0];
+                        }
+                        $insert_account_system_preference_overrides->execute(
+                            $new_account_id,
+                            $key,
+                            $override_value
+                        );
+                    }
+                }
+            }
+
         }
     },
 };

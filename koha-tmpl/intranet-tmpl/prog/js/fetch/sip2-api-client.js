@@ -49,7 +49,7 @@ export class SIP2APIClient {
                     endpoint: "accounts/" + id,
                     headers: {
                         "x-koha-embed":
-                            "custom_item_fields,item_fields,custom_patron_fields,patron_attributes",
+                            "custom_item_fields,item_fields,custom_patron_fields,patron_attributes,system_preference_overrides",
                     },
                 }),
             getAll: params =>
