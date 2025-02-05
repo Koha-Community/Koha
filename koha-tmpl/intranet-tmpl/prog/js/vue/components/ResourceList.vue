@@ -71,7 +71,7 @@ export default {
         };
     },
     props: {
-        embedded: { type: Boolean, default: false },
+        embedded: Boolean,
         apiClient: Object,
         i18n: Object,
         tableOptions: Object,

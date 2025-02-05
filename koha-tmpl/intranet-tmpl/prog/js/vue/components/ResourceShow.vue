@@ -68,9 +68,9 @@ export default {
     created() {
         this.getResource(this.$route.params[this.idAttr]);
     },
-    beforeRouteUpdate(to, from) {
-        this.resource = this.getResource(to.params[this.idAttr]);
-    },
+    // beforeRouteUpdate(to, from) {
+    //     this.resource = this.getResource(to.params[this.idAttr])
+    // },
     methods: {
         async getResource(resourceId) {
             this.apiClient.get(resourceId).then(

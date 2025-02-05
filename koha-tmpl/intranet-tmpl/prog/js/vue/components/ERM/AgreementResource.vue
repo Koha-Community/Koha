@@ -1,55 +1,3 @@
-<template>
-    <ResourceList
-        v-if="routeAction === 'list'"
-        v-bind="{
-            apiClient,
-            i18n,
-            tableOptions,
-            goToResourceShow,
-            goToResourceEdit,
-            doResourceDelete,
-            goToResourceAdd,
-            doResourceSelect,
-            tableFilters,
-            getFilters,
-            filterTable,
-            tableUrl,
-            embedded,
-            hasAdditionalFields,
-            extendedAttributesResourceType,
-        }"
-        @select-resource="$emit('select-resource', $event)"
-    />
-    <ResourceShow
-        v-if="routeAction === 'show'"
-        v-bind="{
-            idAttr,
-            apiClient,
-            i18n,
-            resourceAttrs,
-            listComponent,
-            goToResourceEdit,
-            doResourceDelete,
-            resourceName,
-            getFieldGroupings,
-        }"
-    />
-    <ResourceFormAdd
-        v-if="['add', 'edit'].includes(routeAction)"
-        v-bind="{
-            idAttr,
-            apiClient,
-            i18n,
-            resourceAttrs,
-            listComponent,
-            resource: newResource,
-            onSubmit,
-            resourceName,
-            getFieldGroupings,
-        }"
-    />
-</template>
-
 <script>
 import { inject } from "vue";
 import BaseResource from "../BaseResource.vue";
@@ -96,6 +44,9 @@ export default {
                     displayName: __("Agreement"),
                     displayNameLowerCase: __("agreement"),
                     displayNamePlural: __("agreements"),
+                },
+                additionalProps: {
+                    embedded: props.embedded,
                 },
                 extendedAttributesResourceType: "agreement",
                 av_agreement_statuses,

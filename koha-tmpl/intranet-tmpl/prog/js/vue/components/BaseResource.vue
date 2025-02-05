@@ -1,16 +1,60 @@
+<template>
+    <ResourceList
+        v-if="routeAction === 'list'"
+        v-bind="{
+            apiClient,
+            i18n,
+            tableOptions,
+            goToResourceShow,
+            goToResourceEdit,
+            doResourceDelete,
+            goToResourceAdd,
+            doResourceSelect,
+            tableFilters,
+            getFilters,
+            filterTable,
+            tableUrl,
+            hasAdditionalFields,
+            extendedAttributesResourceType,
+            ...(additionalProps && { ...additionalProps }),
+        }"
+        @select-resource="$emit('select-resource', $event)"
+    />
+    <ResourceShow
+        v-if="routeAction === 'show'"
+        v-bind="{
+            idAttr,
+            apiClient,
+            i18n,
+            resourceAttrs,
+            listComponent,
+            goToResourceEdit,
+            doResourceDelete,
+            resourceName,
+            getFieldGroupings,
+        }"
+    />
+    <ResourceFormAdd
+        v-if="['add', 'edit'].includes(routeAction)"
+        v-bind="{
+            idAttr,
+            apiClient,
+            i18n,
+            resourceAttrs,
+            listComponent,
+            resource: newResource,
+            onSubmit,
+            resourceName,
+            getFieldGroupings,
+        }"
+    />
+</template>
+
 <script>
 import { inject } from "vue";
 import { build_url } from "../composables/datatables";
 
 export default {
-    props: {
-        routeAction: String,
-        resourceName: String,
-        idAttr: String,
-        showComponent: String,
-        addComponent: String,
-        editComponent: String,
-    },
     setup(props) {
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
@@ -34,6 +78,7 @@ export default {
             get_lib_from_av,
             map_av_dt_filter,
             build_url,
+            additionalProps: props.additionalProps || {},
         };
     },
     methods: {
