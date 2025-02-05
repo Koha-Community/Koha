@@ -195,8 +195,8 @@ export default {
                     showElement: {
                         type: "relationship",
                         hidden: agreement =>
-                            !!agreement._strings?.additional_field_values
-                                ?.length,
+                            agreement._strings?.additional_field_values
+                                ?.length > 0,
                         componentPath: "./AdditionalFieldsDisplay.vue",
                         componentProps: {
                             extended_attributes_resource_type: {
@@ -419,7 +419,7 @@ export default {
                     ],
                 },
                 {
-                    name: "licenses",
+                    name: "agreement_licenses",
                     type: "relationshipWidget",
                     group: __("Licenses"),
                     showElement: {
@@ -541,7 +541,7 @@ export default {
                     ],
                 },
                 {
-                    name: "relationships",
+                    name: "agreement_relationships",
                     type: "relationshipWidget",
                     group: __("Related agreements"),
                     showElement: {

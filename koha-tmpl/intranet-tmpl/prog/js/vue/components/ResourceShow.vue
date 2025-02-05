@@ -18,7 +18,7 @@
         <div>
             <fieldset
                 class="rows"
-                v-for="(group, counter) in getFieldGroupings('Show')"
+                v-for="(group, counter) in getFieldGroupings('Show', resource)"
                 v-bind:key="counter"
             >
                 <legend v-if="group.name">{{ group.name }}</legend>

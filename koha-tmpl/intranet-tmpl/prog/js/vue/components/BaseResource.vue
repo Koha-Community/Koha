@@ -200,7 +200,7 @@ export default {
             });
             return filterOptions;
         },
-        getFieldGroupings(component) {
+        getFieldGroupings(component, resource) {
             const displayProperty = `hideIn${component}`;
             const attributesToConsider = this.resourceAttrs.filter(
                 ra =>
@@ -237,7 +237,22 @@ export default {
                 const groupInfo = {
                     name: group === "noGroupFound" ? null : group,
                     fields: groupFields,
+                    hasDataToDisplay: false,
                 };
+                if (component === "Show" && resource) {
+                    groupFields.forEach(field => {
+                        if (
+                            resource.hasOwnProperty(field.name) &&
+                            resource[field.name] &&
+                            resource[field.name]?.length > 0
+                        ) {
+                            groupInfo.hasDataToDisplay = true;
+                        }
+                    });
+                    if (!groupInfo.hasDataToDisplay) {
+                        return [...acc];
+                    }
+                }
                 return [...acc, groupInfo];
             }, []);
         },

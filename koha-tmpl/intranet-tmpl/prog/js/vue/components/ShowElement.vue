@@ -109,7 +109,9 @@
             ></component>
         </template>
     </template>
-    <template v-else-if="attr.type == 'relationship' && attr.componentPath">
+    <template
+        v-else-if="attribute.type == 'relationship' && attribute.componentPath"
+    >
         <template v-if="attribute.hidden && attribute.hidden(resource)">
             <component
                 :is="requiredComponent"
