@@ -119,15 +119,29 @@
             ></component>
         </template>
     </template>
+    <template
+        v-else-if="
+            attr.name == 'additional_fields' &&
+            resource._strings?.additional_field_values.length > 0
+        "
+    >
+        <AdditionalFieldsDisplay
+            :additional_field_values="resource._strings.additional_field_values"
+            :extended_attributes_resource_type="
+                attr.extended_attributes_resource_type
+            "
+        ></AdditionalFieldsDisplay>
+    </template>
 </template>
 
 <script>
 import { inject } from "vue";
 import LinkWrapper from "./LinkWrapper.vue";
 import BaseElement from "./BaseElement.vue";
+import AdditionalFieldsDisplay from "./AdditionalFieldsDisplay.vue";
 
 export default {
-    components: { LinkWrapper },
+    components: { LinkWrapper, AdditionalFieldsDisplay },
     extends: BaseElement,
     setup() {
         const AVStore = inject("AVStore");

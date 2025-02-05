@@ -140,11 +140,22 @@
             :resource="resource"
         ></FormRelationshipSelect>
     </template>
+    <template v-else-if="attr.name == 'additional_fields'">
+        <AdditionalFieldsEntry
+            :resource="resource"
+            :additional_field_values="resource.extended_attributes"
+            :extended_attributes_resource_type="
+                attr.extended_attributes_resource_type
+            "
+            @additional-fields-changed="additionalFieldsChanged"
+        ></AdditionalFieldsEntry>
+    </template>
     <ToolTip v-if="attr.toolTip" :toolTip="attr.toolTip"></ToolTip>
     <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
 </template>
 
 <script>
+import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
 import BaseElement from "./BaseElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
@@ -216,6 +227,6 @@ export default {
         },
     },
     name: "FormElement",
-    components: { FormRelationshipSelect, ToolTip },
+    components: { FormRelationshipSelect, ToolTip, AdditionalFieldsEntry },
 };
 </script>

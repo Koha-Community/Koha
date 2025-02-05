@@ -16,7 +16,7 @@
             tableUrl,
             embedded,
             hasAdditionalFields,
-            resourceName,
+            extendedAttributesResourceType,
         }"
         @select-resource="$emit('select-resource', $event)"
     />
@@ -97,6 +97,7 @@ export default {
                     displayNameLowerCase: __("agreement"),
                     displayNamePlural: __("agreements"),
                 },
+                extendedAttributesResourceType: "agreement",
                 av_agreement_statuses,
                 av_agreement_closure_reasons,
                 av_agreement_renewal_priorities,
@@ -191,44 +192,8 @@ export default {
                 },
                 {
                     name: "additional_fields",
-                    type: "component",
-                    showElement: {
-                        type: "relationship",
-                        hidden: agreement =>
-                            agreement._strings?.additional_field_values
-                                ?.length > 0,
-                        componentPath: "./AdditionalFieldsDisplay.vue",
-                        componentProps: {
-                            extended_attributes_resource_type: {
-                                type: "string",
-                                value: "agreement",
-                            },
-                            additional_field_values: {
-                                resourceProperty:
-                                    "_strings.additional_field_values",
-                            },
-                        },
-                    },
-                    componentPath: "./AdditionalFieldsEntry.vue",
-                    componentProps: {
-                        extended_attributes_resource_type: {
-                            type: "string",
-                            value: "agreement",
-                        },
-                        additional_field_values: {
-                            resourceProperty: "extended_attributes",
-                        },
-                        resource: {
-                            type: "resource",
-                            value: "agreement",
-                        },
-                    },
-                    events: [
-                        {
-                            name: "additional-fields-changed",
-                            callback: this.additionalFieldsChanged,
-                        },
-                    ],
+                    extended_attributes_resource_type:
+                        this.extendedAttributesResourceType,
                 },
                 {
                     name: "periods",

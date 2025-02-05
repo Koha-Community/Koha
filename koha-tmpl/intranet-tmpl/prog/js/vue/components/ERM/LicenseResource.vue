@@ -16,7 +16,7 @@
             filterTable,
             tableUrl,
             hasAdditionalFields,
-            resourceName,
+            extendedAttributesResourceType,
         }"
         @select-resource="$emit('select-resource', $event)"
     />
@@ -89,11 +89,12 @@ export default {
                     displayNameLowerCase: __("license"),
                     displayNamePlural: __("licenses"),
                 },
+                extendedAttributesResourceType: "license",
+                av_license_types,
+                av_license_statuses,
+                av_user_roles,
+                vendors,
             }),
-            av_license_types,
-            av_license_statuses,
-            av_user_roles,
-            vendors,
         };
     },
     data() {
@@ -204,43 +205,8 @@ export default {
                 },
                 {
                     name: "additional_fields",
-                    type: "relationship",
-                    showElement: {
-                        type: "relationship",
-                        hidden: license =>
-                            !!license._strings?.additional_field_values?.length,
-                        componentPath: "./AdditionalFieldsDisplay.vue",
-                        componentProps: {
-                            extended_attributes_resource_type: {
-                                type: "string",
-                                value: "license",
-                            },
-                            additional_field_values: {
-                                resourceProperty:
-                                    "_strings.additional_field_values",
-                            },
-                        },
-                    },
-                    componentPath: "./AdditionalFieldsEntry.vue",
-                    componentProps: {
-                        extended_attributes_resource_type: {
-                            type: "string",
-                            value: "license",
-                        },
-                        additional_field_values: {
-                            resourceProperty: "extended_attributes",
-                        },
-                        resource: {
-                            type: "resource",
-                            value: "license",
-                        },
-                    },
-                    events: [
-                        {
-                            name: "additional-fields-changed",
-                            callback: this.additionalFieldsChanged,
-                        },
-                    ],
+                    extended_attributes_resource_type:
+                        this.extendedAttributesResourceType,
                 },
                 {
                     name: "user_roles",

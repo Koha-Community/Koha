@@ -114,6 +114,9 @@ export default {
             });
             return property;
         },
+        additionalFieldsChanged(additionalFieldValues, resource) {
+            resource.extended_attributes = additionalFieldValues;
+        },
     },
     name: "BaseElement",
 };

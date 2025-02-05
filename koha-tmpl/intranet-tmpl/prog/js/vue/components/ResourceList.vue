@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceName}_list`">
+    <div v-else :id="`${extendedAttributesResourceType}_list`">
         <Toolbar v-if="!embedded">
             <ToolbarButton
                 action="add"
@@ -85,7 +85,7 @@ export default {
         filterTable: Function,
         tableUrl: Function,
         hasAdditionalFields: { type: Boolean, default: false },
-        resourceName: String,
+        extendedAttributesResourceType: String,
         getToolbarButtons: {
             type: Function,
             default: () => [],
@@ -128,15 +128,17 @@ export default {
         },
         async getSearchableAdditionalFields() {
             const client = APIClient.additional_fields;
-            await client.additional_fields.getAll(this.resourceName).then(
-                searchable_additional_fields => {
-                    this.searchable_additional_fields =
-                        searchable_additional_fields.filter(
-                            field => field.searchable
-                        );
-                },
-                error => {}
-            );
+            await client.additional_fields
+                .getAll(this.extendedAttributesResourceType)
+                .then(
+                    searchable_additional_fields => {
+                        this.searchable_additional_fields =
+                            searchable_additional_fields.filter(
+                                field => field.searchable
+                            );
+                    },
+                    error => {}
+                );
         },
         async getSearchableAVOptions() {
             const client_av = APIClient.authorised_values;

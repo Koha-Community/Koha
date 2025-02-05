@@ -16,7 +16,7 @@
             tableUrl,
             embedded,
             hasAdditionalFields,
-            resourceName,
+            extendedAttributesResourceType,
             getToolbarButtons,
         }"
         @select-resource="$emit('select-resource', $event)"
@@ -79,7 +79,7 @@ export default {
 
         return {
             ...BaseResource.setup({
-                resourceName: "erm_package",
+                resourceName: "package",
                 nameAttr: "name",
                 idAttr: "package_id",
                 showComponent: "EHoldingsLocalPackagesShow",
@@ -94,6 +94,7 @@ export default {
                     displayNameLowerCase: __("package"),
                     displayNamePlural: __("packages"),
                 },
+                extendedAttributesResourceType: "package",
                 av_package_types,
                 av_package_content_types,
                 vendors,
@@ -150,6 +151,11 @@ export default {
                     required: false,
                     type: "text",
                     label: __("Notes"),
+                },
+                {
+                    name: "additional_fields",
+                    extended_attributes_resource_type:
+                        this.extendedAttributesResourceType,
                 },
                 {
                     name: "package_agreements",
@@ -249,7 +255,7 @@ export default {
                     },
                 },
             ],
-            erm_package: {
+            package: {
                 package_id: null,
                 vendor_id: null,
                 name: "",
