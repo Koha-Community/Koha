@@ -129,9 +129,20 @@ $filters->{from_placed_on} = my $from_placed_on = dt_from_string;
 $filters->{to_placed_on}   = my $to_placed_on   = dt_from_string;
 $filters->{from_placed_on}->set_time_zone('floating')->subtract( years => 1 );
 
+my $budgetperiods = C4::Budgets::GetBudgetPeriods;
+my $bp_loop       = $budgetperiods;
+for my $bp ( @{$budgetperiods} ) {
+    my $hierarchy = C4::Budgets::GetBudgetHierarchy( $$bp{budget_period_id}, undef, undef, 1 );
+    for my $budget ( @{$hierarchy} ) {
+        $$budget{budget_display_name} = sprintf( "%s", ">" x $$budget{depth} . $$budget{budget_name} );
+    }
+    $$bp{hierarchy} = $hierarchy;
+}
+
 $template->param(
     type              => 'intranet',
     loop_budget       => \@budget_loop,
+    bp_loop           => $bp_loop,
     total             => $total,
     totspent          => $totspent,
     totordered        => $totordered,
