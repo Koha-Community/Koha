@@ -98,8 +98,6 @@ sub tidy {
         return tidy_perl($file);
     } elsif ( $filetype eq 'js' ) {
         return tidy_js($file);
-    } elsif ( $filetype eq 'vue' ) {
-        return tidy_vue($file);
     } elsif ( $filetype eq 'tt' ) {
         return tidy_tt($file);
     } else {
@@ -139,12 +137,6 @@ sub tidy_perl {
 }
 
 sub tidy_js {
-    my ($file) = @_;
-    my $cmd    = sprintf q{yarn --silent run prettier %s%s}, ( $no_write ? '' : '--write ' ), $file;
-    print qx{$cmd};
-}
-
-sub tidy_vue {
     my ($file) = @_;
     my $cmd    = sprintf q{yarn --silent run prettier %s%s}, ( $no_write ? '' : '--write ' ), $file;
     print qx{$cmd};
@@ -193,8 +185,7 @@ sub get_filetype {
     return 'perl' if $file =~ m{^svc} || $file =~ m{^opac/svc};
     return 'perl' if $file =~ m{\.pl$} || $file =~ m{\.pm} || $file =~ m{\.t$};
 
-    return 'js' if $file =~ m{\.js$} || $file =~ m{\.ts$};
-    return 'vue' if $file =~ m{\.vue$};
+    return 'js' if $file =~ m{\.js$} || $file =~ m{\.ts$} || $file =~ m{\.vue$};
 
     return 'tt' if $file =~ m{\.inc$} || $file =~ m{\.tt$};
 

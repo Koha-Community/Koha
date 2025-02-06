@@ -5,18 +5,10 @@ module.exports = {
     useTabs: false,
     overrides: [
         {
-            files: ["*.js", "*.ts"],
+            files: ["*.js", "*.ts", "*.vue"],
             options: {
                 trailingComma: "es5",
                 arrowParens: "avoid",
-            },
-        },
-        {
-            files: "*.vue",
-            options: {
-                trailingComma: "es5",
-                arrowParens: "avoid",
-                semi: false,
             },
         },
         {
