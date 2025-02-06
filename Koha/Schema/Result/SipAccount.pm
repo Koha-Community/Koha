@@ -406,6 +406,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sip_account_sort_bin_mappings
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SipAccountSortBinMapping>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sip_account_sort_bin_mappings",
+  "Koha::Schema::Result::SipAccountSortBinMapping",
+  { "foreign.sip_account_id" => "self.sip_account_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sip_account_system_preference_overrides
 
 Type: has_many
@@ -437,8 +452,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-05 13:46:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WMlJotQoh47vVKXLPZ93cg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-06 16:48:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HkXHNDQw+5MKHCjxhbCdmA
 
 
 __PACKAGE__->add_columns(

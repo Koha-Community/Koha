@@ -23,6 +23,7 @@ use Koha::SIP2::Account::CustomItemFields;
 use Koha::SIP2::Account::ItemFields;
 use Koha::SIP2::Account::CustomPatronFields;
 use Koha::SIP2::Account::PatronAttributes;
+use Koha::SIP2::Account::SortBinMappings;
 use Koha::SIP2::Account::SystemPreferenceOverrides;
 use Koha::SIP2::Institution;
 
@@ -102,6 +103,12 @@ sub get_for_config {
         map { $_->variable => $_->value } @{ $self->system_preference_overrides->as_list };
     if (%system_preference_overrides) {
         $unblessed->{syspref_overrides} = \%system_preference_overrides;
+    }
+
+    my @sort_bin_mappings = map { $_->get_for_config } @{ $self->sort_bin_mappings->as_list };
+    if (@sort_bin_mappings) {
+        $unblessed->{sort_bin_mapping} =
+            scalar(@sort_bin_mappings) == 1 ? $sort_bin_mappings[0] : \@sort_bin_mappings;
     }
 
     return $unblessed;
@@ -222,6 +229,32 @@ sub patron_attributes {
 
     my $patron_attributes_rs = $self->_result->sip_account_patron_attributes;
     return Koha::SIP2::Account::PatronAttributes->_new_from_dbic($patron_attributes_rs);
+}
+
+=head3 sort_bin_mappings
+
+Returns the sort bin mappings for this SIP account
+
+=cut
+
+sub sort_bin_mappings {
+    my ( $self, $sort_bin_mappings ) = @_;
+
+    if ($sort_bin_mappings) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->sort_bin_mappings->delete;
+
+                for my $sort_bin_mapping (@$sort_bin_mappings) {
+                    $self->_result->add_to_sip_account_sort_bin_mappings($sort_bin_mapping);
+                }
+            }
+        );
+    }
+
+    my $sort_bin_mappings_rs = $self->_result->sip_account_sort_bin_mappings;
+    return Koha::SIP2::Account::SortBinMappings->_new_from_dbic($sort_bin_mappings_rs);
 }
 
 =head3 system_preference_overrides

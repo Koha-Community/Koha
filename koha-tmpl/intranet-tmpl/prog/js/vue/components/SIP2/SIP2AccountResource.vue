@@ -606,6 +606,47 @@ export default {
                     ],
                 },
                 {
+                    name: "sort_bin_mappings",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "sort_bin_mappings",
+                        hidden: account => !!account.sort_bin_mappings?.length,
+                        columns: [
+                            {
+                                name: __("Mapping"),
+                                value: "mapping",
+                            },
+                        ],
+                    },
+                    group: __("SIP response mappings"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "sort_bin_mappings",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("sort bin mapping"),
+                            nameUpperCase: __("Sort bin mapping"),
+                            namePlural: __("sort bin mappings"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                mapping: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "mapping",
+                            required: true,
+                            type: "text",
+                            placeholder: "CPL:location:eq:OFFICE:2",
+                            label: __("Mapping"),
+                        },
+                    ],
+                },
+                {
                     name: "system_preference_overrides",
                     type: "relationshipWidget",
                     showElement: {

@@ -229,6 +229,22 @@ return {
                 ) if $item_field;
             }
 
+            # Accounts sort bin mappings
+            my @sort_bin_mappings =
+                ref $SIPconfig->{accounts}->{$account_key}->{sort_bin_mapping} eq "ARRAY"
+                ? @{ $SIPconfig->{accounts}->{$account_key}->{sort_bin_mapping} }
+                : ( $SIPconfig->{accounts}->{$account_key}->{sort_bin_mapping} );
+
+            my $insert_sort_bin_mappings = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_account_sort_bin_mappings (sip_account_id, mapping) VALUES (?, ?)});
+
+            foreach my $sort_bin_mapping (@sort_bin_mappings) {
+                $insert_sort_bin_mappings->execute(
+                    $new_account_id,
+                    $sort_bin_mapping->{mapping}
+                ) if $sort_bin_mapping;
+            }
+
             # Accounts system preference overrides
             my @account_system_preference_overrides =
                 ref $SIPconfig->{accounts}->{$account_key}->{syspref_overrides} eq "ARRAY"

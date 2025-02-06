@@ -6210,6 +6210,24 @@ CREATE TABLE `sip_account_item_fields` (
 -- Table structure for table `sip_account_system_preference_overrides`
 --
 
+DROP TABLE IF EXISTS `sip_account_sort_bin_mappings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sip_account_sort_bin_mappings` (
+  `sip_account_sort_bin_mapping_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
+  `mapping` varchar(255) NOT NULL COMMENT 'The mapping definition',
+  PRIMARY KEY (`sip_account_sort_bin_mapping_id`),
+  UNIQUE KEY `sip_account` (`sip_account_sort_bin_mapping_id`,`sip_account_id`),
+  KEY `sip_account_sort_bin_mappings_ibfk_1` (`sip_account_id`),
+  CONSTRAINT `sip_account_sort_bin_mappings_ibfk_1` FOREIGN KEY (`sip_account_id`) REFERENCES `sip_accounts` (`sip_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sip_account_system_preference_overrides`
+--
+
 DROP TABLE IF EXISTS `sip_account_system_preference_overrides`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
