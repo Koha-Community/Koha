@@ -36,11 +36,6 @@ export default {
         const defaults = this.getFilters(this.$route.query, tableFilters);
 
         return {
-            record_source: {
-                record_source_id: null,
-                name: "",
-                can_be_edited: false,
-            },
             resourceAttrs: [
                 {
                     name: "name",

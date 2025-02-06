@@ -50,19 +50,6 @@ export default {
         const defaults = this.getFilters(this.$route.query, tableFilters);
 
         return {
-            license: {
-                license_id: null,
-                name: "",
-                vendor_id: null,
-                description: "",
-                type: "",
-                status: "",
-                started_on: undefined,
-                ended_on: undefined,
-                user_roles: [],
-                documents: [],
-                extended_attributes: [],
-            },
             resourceAttrs: [
                 {
                     name: "name",
@@ -101,6 +88,13 @@ export default {
                     label: __("Description"),
                 },
                 {
+                    name: "type",
+                    required: true,
+                    type: "select",
+                    label: __("Type"),
+                    avCat: "av_license_types",
+                },
+                {
                     name: "status",
                     required: true,
                     type: "select",
@@ -112,7 +106,6 @@ export default {
                     type: "component",
                     label: __("Start date"),
                     componentPath: "./FlatPickrWrapper.vue",
-                    required: true,
                     showElement: {
                         type: "text",
                         value: "started_on",
@@ -122,10 +115,6 @@ export default {
                         id: {
                             type: "string",
                             value: "started_on",
-                        },
-                        required: {
-                            type: "boolean",
-                            value: true,
                         },
                         date_to: {
                             type: "string",

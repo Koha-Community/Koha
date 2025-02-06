@@ -617,23 +617,6 @@ export default {
                     ],
                 },
             ],
-            agreement: {
-                agreement_id: null,
-                name: "",
-                vendor_id: null,
-                description: "",
-                status: "",
-                closure_reason: "",
-                is_perpetual: false,
-                renewal_priority: "",
-                license_info: "",
-                periods: [],
-                user_roles: [],
-                agreement_licenses: [],
-                agreement_relationships: [],
-                documents: [],
-                extended_attributes: [],
-            },
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: {

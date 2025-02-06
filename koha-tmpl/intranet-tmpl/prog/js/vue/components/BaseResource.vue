@@ -81,6 +81,11 @@ export default {
             additionalProps: props.additionalProps || {},
         };
     },
+    data() {
+        return {
+            resourceToBeGenerated: {},
+        };
+    },
     methods: {
         /**
          * Navigates to the show page of the given resource.
@@ -107,7 +112,7 @@ export default {
                 params: {
                     [this.idAttr]: resource
                         ? resource[this.idAttr]
-                        : this[this.resourceName][this.idAttr],
+                        : this.newResource[this.idAttr],
                 },
             });
         },
@@ -145,10 +150,10 @@ export default {
         doResourceDelete: function (resource, callback) {
             let resourceId = resource
                 ? resource[this.idAttr]
-                : this[this.resourceName][this.idAttr];
+                : this.newResource[this.idAttr];
             let resourceName = resource
                 ? resource[this.nameAttr]
-                : this[this.resourceName][this.nameAttr];
+                : this.newResource[this.nameAttr];
 
             this.setConfirmationDialog(
                 {
@@ -304,7 +309,38 @@ export default {
     },
     computed: {
         newResource() {
-            return this[this.resourceName];
+            this.resourceToBeGenerated = this.resourceAttrs.reduce(
+                (acc, attr) => {
+                    if (attr.hasOwnProperty("defaultValue")) {
+                        acc[attr.name] = attr.defaultValue;
+                        return acc;
+                    }
+                    if (["text", "textarea", "select"].includes(attr.type)) {
+                        acc[attr.name] = "";
+                        return acc;
+                    }
+                    if (["boolean", "checkbox"].includes(attr.type)) {
+                        acc[attr.name] = false;
+                        return acc;
+                    }
+                    if (
+                        attr.name === "additional_fields" ||
+                        attr.type === "relationshipWidget"
+                    ) {
+                        acc[
+                            attr.name === "additional_fields"
+                                ? "extended_attributes"
+                                : attr.name
+                        ] = [];
+                        return acc;
+                    }
+                    acc[attr.name] = null;
+                    return acc;
+                },
+                {}
+            );
+            this.resourceToBeGenerated[this.idAttr] = null;
+            return this.resourceToBeGenerated;
         },
         hasAdditionalFields() {
             return this.resourceAttrs.some(
