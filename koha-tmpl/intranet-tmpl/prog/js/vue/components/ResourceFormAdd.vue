@@ -65,6 +65,52 @@
                     </fieldset>
                 </div>
             </div>
+            <div v-else-if="formGroupsDisplayMode == 'accordion'">
+                <div
+                    v-if="formGroupsDisplayMode == 'accordion'"
+                    v-for="(group, counter) in getFieldGroupings('Form')"
+                    v-bind:key="counter"
+                    class="accordion"
+                >
+                    <fieldset class="accordion-item">
+                        <legend
+                            v-if="group.name"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            :data-bs-target="`#collapse-${counter}`"
+                            aria-expanded="true"
+                            :aria-controls="`collapse-${counter}`"
+                        >
+                            <i
+                                class="fa fa-caret-down"
+                                title="Collapse this section"
+                            ></i>
+                            {{ group.name }}
+                        </legend>
+                        <div
+                            :id="`collapse-${counter}`"
+                            class="accordion-collapse collapse show"
+                            :aria-labelledby="`heading-${counter}`"
+                            data-bs-parent="#formAccordion"
+                        >
+                            <fieldset class="accordion-body rows">
+                                <ol>
+                                    <li
+                                        v-for="(attr, index) in group.fields"
+                                        v-bind:key="index"
+                                    >
+                                        <FormElement
+                                            :resource="resourceToAddOrEdit"
+                                            :attr="attr"
+                                            :index="index"
+                                        />
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
             <div v-else>
                 <fieldset
                     v-for="(group, counter) in getFieldGroupings('Form')"
@@ -162,5 +208,30 @@ div.rows li {
 }
 div.rows + div.rows {
     margin-top: 0em;
+}
+.accordion fieldset legend {
+    border: 1px solid #fff;
+    margin-bottom: 0rem;
+    margin-left: -0.5em;
+    margin-top: -0.5em;
+    padding: 0.7em;
+}
+.accordion fieldset legend.collapsed {
+    margin-bottom: -0.5em;
+}
+.accordion fieldset legend:hover {
+    border: 1px solid #6faf44;
+    cursor: pointer;
+}
+.accordion fieldset legend i {
+    color: #4c7aa8;
+    font-size: 80%;
+    padding-right: 0.2rem;
+}
+.accordion legend.collapsed i.fa.fa-caret-down::before {
+    content: "\f0da";
+}
+.accordion fieldset.rows ol {
+    padding: 0;
 }
 </style>
