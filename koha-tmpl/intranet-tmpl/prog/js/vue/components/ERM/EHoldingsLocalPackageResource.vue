@@ -373,17 +373,6 @@ export default {
                 },
             ];
         },
-        getTableFilters() {
-            return [];
-        },
-        tableUrl(filters) {
-            let url = this.getResourceTableUrl();
-            return url;
-        },
-        async filterTable(filters, table, embedded = false) {},
-        getToolbarButtons() {
-            return [];
-        },
         getRelationshipTableColumns() {
             const get_lib_from_av = this.get_lib_from_av;
 

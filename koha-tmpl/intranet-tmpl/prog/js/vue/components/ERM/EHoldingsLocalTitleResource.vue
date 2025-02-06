@@ -508,14 +508,6 @@ export default {
                 },
             ];
         },
-        getTableFilters() {
-            return [];
-        },
-        tableUrl(filters) {
-            let url = this.getResourceTableUrl();
-            return url;
-        },
-        async filterTable(filters, table, embedded = false) {},
         getToolbarButtons() {
             return [
                 {

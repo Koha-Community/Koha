@@ -41,10 +41,9 @@ export default {
                     displayNameLowerCase: __("agreement"),
                     displayNamePlural: __("agreements"),
                 },
-                additionalProps: {
-                    embedded: props.embedded,
-                },
+                embedded: props.embedded,
                 extendedAttributesResourceType: "agreement",
+                resourceListFiltersRequired: true,
                 av_agreement_statuses,
                 av_agreement_closure_reasons,
                 av_agreement_renewal_priorities,
@@ -526,7 +525,7 @@ export default {
                     ],
                 },
                 {
-                    name: "packages",
+                    name: "agreement_packages",
                     type: "component",
                     componentPath: null,
                     showElement: {

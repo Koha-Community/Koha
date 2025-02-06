@@ -127,10 +127,6 @@ export default {
                 },
             ];
         },
-        getTableFilters() {
-            return [];
-        },
-        async filterTable(filters, table, embedded = false) {},
     },
     name: "RecordSourcesResource",
 };

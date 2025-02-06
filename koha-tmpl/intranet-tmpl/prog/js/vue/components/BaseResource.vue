@@ -2,50 +2,36 @@
     <ResourceList
         v-if="routeAction === 'list'"
         v-bind="{
-            apiClient,
-            i18n,
-            tableOptions,
-            goToResourceShow,
-            goToResourceEdit,
-            doResourceDelete,
-            goToResourceAdd,
-            doResourceSelect,
-            tableFilters,
-            getFilters,
-            filterTable,
-            tableUrl,
-            hasAdditionalFields,
-            extendedAttributesResourceType,
-            ...(additionalProps && { ...additionalProps }),
+            ...passCommonProps(),
+            ...optionalResourceProps,
         }"
         @select-resource="$emit('select-resource', $event)"
-    />
+    >
+        <template #filters="{ table }">
+            <ResourceListFilters
+                v-if="optionalResourceProps.resourceListFiltersRequired"
+                :tableFilters="tableFilters"
+                :embedded="optionalResourceProps.embedded"
+                :filterTable="filterTable"
+                :getFilters="getFilters"
+                :table="table"
+            />
+        </template>
+    </ResourceList>
     <ResourceShow
         v-if="routeAction === 'show'"
         v-bind="{
-            idAttr,
-            apiClient,
-            i18n,
-            resourceAttrs,
-            listComponent,
-            goToResourceEdit,
-            doResourceDelete,
-            resourceName,
-            getFieldGroupings,
+            ...passCommonProps(),
+            ...optionalResourceProps,
         }"
     />
     <ResourceFormAdd
         v-if="['add', 'edit'].includes(routeAction)"
         v-bind="{
-            idAttr,
-            apiClient,
-            i18n,
-            resourceAttrs,
-            listComponent,
+            ...passCommonProps(),
             resource: newResource,
             onSubmit,
-            resourceName,
-            getFieldGroupings,
+            ...optionalResourceProps,
         }"
     />
 </template>
@@ -53,12 +39,18 @@
 <script>
 import { inject } from "vue";
 import { build_url } from "../composables/datatables";
+import ResourceListFilters from "./ResourceListFilters.vue";
 import ResourceShow from "./ResourceShow.vue";
 import ResourceFormAdd from "./ResourceFormAdd.vue";
 import ResourceList from "./ResourceList.vue";
 
 export default {
-    components: { ResourceShow, ResourceFormAdd, ResourceList },
+    components: {
+        ResourceListFilters,
+        ResourceShow,
+        ResourceFormAdd,
+        ResourceList,
+    },
     setup(props) {
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
@@ -68,6 +60,14 @@ export default {
 
         const format_date = $date;
         const patron_to_html = $patron_to_html;
+
+        const optionalResourceProps = {
+            embedded: props.embedded || null,
+            extendedAttributesResourceType:
+                props.extendedAttributesResourceType || null,
+            resourceListFiltersRequired:
+                props.resourceListFiltersRequired || null,
+        };
 
         return {
             ...props,
@@ -82,7 +82,7 @@ export default {
             get_lib_from_av,
             map_av_dt_filter,
             build_url,
-            additionalProps: props.additionalProps || {},
+            optionalResourceProps,
         };
     },
     data() {
@@ -91,6 +91,26 @@ export default {
         };
     },
     methods: {
+        passCommonProps() {
+            const commonProps = {
+                idAttr: this.idAttr,
+                apiClient: this.apiClient,
+                i18n: this.i18n,
+                tableOptions: this.tableOptions,
+                goToResourceShow: this.goToResourceShow,
+                goToResourceEdit: this.goToResourceEdit,
+                doResourceDelete: this.doResourceDelete,
+                goToResourceAdd: this.goToResourceAdd,
+                doResourceSelect: this.doResourceSelect,
+                hasAdditionalFields: this.hasAdditionalFields,
+                getFieldGroupings: this.getFieldGroupings,
+                resourceAttrs: this.resourceAttrs,
+                listComponent: this.listComponent,
+                resourceName: this.resourceName,
+            };
+
+            return commonProps;
+        },
         /**
          * Navigates to the show page of the given resource.
          *
@@ -253,6 +273,10 @@ export default {
                 }
             });
             return filterOptions;
+        },
+        // This is a default method, which can be overridden at the resource level
+        getTableFilters() {
+            return [];
         },
         getFieldGroupings(component, resource) {
             const displayProperty = `hideIn${component}`;

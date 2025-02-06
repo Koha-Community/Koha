@@ -15,27 +15,9 @@
                 :title="button.title"
             />
         </Toolbar>
-        <fieldset
-            v-if="tableFilters?.length > 0 && resourceCount > 0"
-            class="filters"
-        >
-            <template
-                v-for="(filter, index) in tableFilters"
-                v-bind:key="index"
-            >
-                <FormElement
-                    :resource="filters"
-                    :attr="filter"
-                    :index="index"
-                />
-            </template>
-            <input
-                @click="filterTable(filters, table, embedded)"
-                id="filterTable"
-                type="button"
-                :value="$__('Filter')"
-            />
-        </fieldset>
+        <template v-if="resourceCount > 0">
+            <slot name="filters" :table="table" />
+        </template>
         <div v-if="resourceCount > 0" class="page-section">
             <KohaTable
                 ref="table"
@@ -80,10 +62,9 @@ export default {
         doResourceDelete: Function,
         goToResourceAdd: Function,
         doResourceSelect: Function,
-        tableFilters: { type: Array, default: [] },
-        getFilters: Function,
-        filterTable: Function,
-        tableUrl: Function,
+        // tableFilters: { type: Array, default: [] },
+        // getFilters: Function,
+        // filterTable: Function | null,
         hasAdditionalFields: { type: Boolean, default: false },
         extendedAttributesResourceType: String,
         getToolbarButtons: {
@@ -168,10 +149,3 @@ export default {
     name: "ResourcesList",
 };
 </script>
-
-<style scoped>
-.filters > input[type="checkbox"],
-.filters > input[type="button"] {
-    margin-left: 1rem;
-}
-</style>
