@@ -1,12 +1,8 @@
 <script>
 import BaseResource from "../../BaseResource.vue";
 import { APIClient } from "../../../fetch/api-client.js";
-import ResourceShow from "../../ResourceShow.vue";
-import ResourceFormAdd from "../../ResourceFormAdd.vue";
-import ResourceList from "../../ResourceList.vue";
 
 export default {
-    components: { ResourceShow, ResourceFormAdd, ResourceList },
     extends: BaseResource,
     props: {
         routeAction: String,

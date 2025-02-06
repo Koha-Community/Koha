@@ -53,8 +53,12 @@
 <script>
 import { inject } from "vue";
 import { build_url } from "../composables/datatables";
+import ResourceShow from "./ResourceShow.vue";
+import ResourceFormAdd from "./ResourceFormAdd.vue";
+import ResourceList from "./ResourceList.vue";
 
 export default {
+    components: { ResourceShow, ResourceFormAdd, ResourceList },
     setup(props) {
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
