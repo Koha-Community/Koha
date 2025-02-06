@@ -117,20 +117,20 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
-import SettingsProcessings from "./SettingsProcessings.vue"
+import { inject } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
+import SettingsProcessings from "./SettingsProcessings.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { av_notforloan } = storeToRefs(AVStore)
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { av_notforloan } = storeToRefs(AVStore);
+        const { get_lib_from_av } = AVStore;
 
-        const { setMessage, setWarning } = inject("mainStore")
-        const PreservationStore = inject("PreservationStore")
-        const { config } = PreservationStore
+        const { setMessage, setWarning } = inject("mainStore");
+        const PreservationStore = inject("PreservationStore");
+        const { config } = PreservationStore;
 
         return {
             av_notforloan,
@@ -138,25 +138,25 @@ export default {
             setMessage,
             setWarning,
             config,
-        }
+        };
     },
     data() {
         return {
             initialized: true,
-        }
+        };
     },
     methods: {
         checkForm(train) {
-            let errors = []
+            let errors = [];
 
             errors.forEach(function (e) {
-                setWarning(e)
-            })
-            return !errors.length
+                setWarning(e);
+            });
+            return !errors.length;
         },
         onSubmit(e) {
-            e.preventDefault()
-            const client = APIClient.sysprefs
+            e.preventDefault();
+            const client = APIClient.sysprefs;
             client.sysprefs
                 .update(
                     "PreservationNotForLoanWaitingListIn",
@@ -170,13 +170,13 @@ export default {
                 )
                 .then(
                     success => {
-                        this.setMessage(this.$__("Settings updated"), true)
+                        this.setMessage(this.$__("Settings updated"), true);
                     },
                     error => {}
-                )
+                );
         },
     },
     components: { SettingsProcessings },
     name: "Settings",
-}
+};
 </script>

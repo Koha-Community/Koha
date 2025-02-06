@@ -95,21 +95,21 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { av_notforloan } = storeToRefs(AVStore)
+        const AVStore = inject("AVStore");
+        const { av_notforloan } = storeToRefs(AVStore);
 
-        const { setMessage, setWarning } = inject("mainStore")
+        const { setMessage, setWarning } = inject("mainStore");
 
-        const PreservationStore = inject("PreservationStore")
-        const { config } = PreservationStore
+        const PreservationStore = inject("PreservationStore");
+        const { config } = PreservationStore;
 
-        return { av_notforloan, setMessage, setWarning, config }
+        return { av_notforloan, setMessage, setWarning, config };
     },
     data() {
         return {
@@ -127,76 +127,76 @@ export default {
             },
             processings: [],
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.train_id) {
-                vm.train = vm.getTrain(to.params.train_id)
+                vm.train = vm.getTrain(to.params.train_id);
             } else {
-                vm.initialized = true
+                vm.initialized = true;
             }
-        })
+        });
     },
     beforeCreate() {
-        const client = APIClient.preservation
+        const client = APIClient.preservation;
         client.processings.getAll().then(
             processings => {
-                this.processings = processings
+                this.processings = processings;
             },
             error => {}
-        )
+        );
     },
     methods: {
         async getTrain(train_id) {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             client.trains.get(train_id).then(train => {
-                this.train = train
-                this.initialized = true
-            })
+                this.train = train;
+                this.initialized = true;
+            });
         },
         checkForm(train) {
-            let errors = []
+            let errors = [];
 
             errors.forEach(function (e) {
-                setWarning(e)
-            })
-            return !errors.length
+                setWarning(e);
+            });
+            return !errors.length;
         },
         onSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
 
-            let train = JSON.parse(JSON.stringify(this.train)) // copy
-            let train_id = train.train_id
+            let train = JSON.parse(JSON.stringify(this.train)); // copy
+            let train_id = train.train_id;
             if (!this.checkForm(train)) {
-                return false
+                return false;
             }
 
-            delete train.train_id
-            delete train.default_processing
-            delete train.items
+            delete train.train_id;
+            delete train.default_processing;
+            delete train.items;
 
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             if (train_id) {
                 client.trains.update(train, train_id).then(
                     success => {
-                        this.setMessage(this.$__("Train updated"))
-                        this.$router.push({ name: "TrainsList" })
+                        this.setMessage(this.$__("Train updated"));
+                        this.$router.push({ name: "TrainsList" });
                     },
                     error => {}
-                )
+                );
             } else {
                 client.trains.create(train).then(
                     success => {
-                        this.setMessage(this.$__("Train created"))
-                        this.$router.push({ name: "TrainsList" })
+                        this.setMessage(this.$__("Train created"));
+                        this.$router.push({ name: "TrainsList" });
                     },
                     error => {}
-                )
+                );
             }
         },
     },
     components: {},
     name: "TrainsFormAdd",
-}
+};
 </script>

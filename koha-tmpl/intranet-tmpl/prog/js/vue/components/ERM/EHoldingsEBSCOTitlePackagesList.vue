@@ -43,17 +43,17 @@
 </template>
 
 <script>
-import { createVNode, render } from "vue"
-import { useDataTable } from "../../composables/datatables"
+import { createVNode, render } from "vue";
+import { useDataTable } from "../../composables/datatables";
 
 export default {
     setup() {
-        const table_id = "package_list"
-        useDataTable(table_id)
+        const table_id = "package_list";
+        useDataTable(table_id);
 
         return {
             table_id,
-        }
+        };
     },
     data() {
         return {
@@ -62,33 +62,33 @@ export default {
                 selection_type: 0,
             },
             display_filters: false,
-        }
+        };
     },
     methods: {
         show_resource: function (resource_id) {
             this.$router.push({
                 name: "EHoldingsEBSCOResourcesShow",
                 params: { resource_id },
-            })
+            });
         },
         toggle_filters: function (e) {
-            this.display_filters = !this.display_filters
+            this.display_filters = !this.display_filters;
         },
         filter_table: function () {
             $("#" + this.table_id)
                 .DataTable()
-                .draw()
+                .draw();
         },
         build_datatable: function () {
-            let show_resource = this.show_resource
-            let resources = this.resources
-            let filters = this.filters
-            let table_id = this.table_id
-            let router = this.$router
+            let show_resource = this.show_resource;
+            let resources = this.resources;
+            let filters = this.filters;
+            let table_id = this.table_id;
+            let router = this.$router;
 
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
-            )
+            );
             $("#" + table_id).dataTable({
                 ...dataTablesDefaults,
                 ...{
@@ -109,38 +109,38 @@ export default {
                             orderable: false,
                             render: function (data, type, row, meta) {
                                 // Rendering done in drawCallback
-                                return ""
+                                return "";
                             },
                             width: "100%",
                         },
                     ],
                     drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings)
+                        var api = new $.fn.dataTable.Api(settings);
 
-                        if (!api.rows({ search: "applied" }).count()) return
+                        if (!api.rows({ search: "applied" }).count()) return;
 
                         $.each(
                             $(this).find("tbody tr td:first-child"),
                             function (index, e) {
-                                let tr = $(this).parent()
-                                let row = api.row(tr).data()
-                                if (!row) return // Happen if the table is empty
+                                let tr = $(this).parent();
+                                let row = api.row(tr).data();
+                                if (!row) return; // Happen if the table is empty
                                 let { href } = router.resolve({
                                     name: "EHoldingsEBSCOResourcesShow",
                                     params: { resource_id: row.resource_id },
-                                })
+                                });
                                 let n = createVNode(
                                     "a",
                                     {
                                         role: "button",
                                         href,
                                         onClick: e => {
-                                            e.preventDefault()
-                                            show_resource(row.resource_id)
+                                            e.preventDefault();
+                                            show_resource(row.resource_id);
                                         },
                                     },
                                     `${row.package.name}`
-                                )
+                                );
                                 if (row.is_selected) {
                                     n = createVNode("span", {}, [
                                         n,
@@ -153,11 +153,11 @@ export default {
                                             },
                                             title: __("Is selected"),
                                         }),
-                                    ])
+                                    ]);
                                 }
-                                render(n, e)
+                                render(n, e);
                             }
-                        )
+                        );
                     },
                     initComplete: function () {
                         $.fn.dataTable.ext.search.push(
@@ -176,22 +176,22 @@ export default {
                                             row.is_selected) ||
                                         (filters.selection_type == 2 &&
                                             !row.is_selected))
-                                )
+                                );
                             }
-                        )
+                        );
                     },
                 },
-            })
+            });
         },
     },
     mounted() {
-        this.build_datatable()
+        this.build_datatable();
     },
     props: {
         resources: Array,
     },
     name: "EHoldingsEBSCOTitlePackagesList",
-}
+};
 </script>
 
 <style scoped>

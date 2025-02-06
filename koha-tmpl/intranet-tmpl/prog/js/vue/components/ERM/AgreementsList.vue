@@ -58,32 +58,32 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import { inject, ref, reactive } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
-import { build_url } from "../../composables/datatables"
-import KohaTable from "../KohaTable.vue"
+import flatPickr from "vue-flatpickr-component";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import { inject, ref, reactive } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
+import { build_url } from "../../composables/datatables";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
+        const vendorStore = inject("vendorStore");
+        const { vendors } = storeToRefs(vendorStore);
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref()
+        const table = ref();
 
         const filters = reactive({
             by_expired: false,
             max_expiration_date: "",
             by_mine: false,
-        })
+        });
         return {
             vendors,
             get_lib_from_av,
@@ -95,18 +95,18 @@ export default {
             escape_str,
             agreement_table_settings,
             filters,
-        }
+        };
     },
     data: function () {
         this.filters.by_expired =
-            this.$route.query.by_expired === "true" || false
-        this.filters.by_mine = this.$route.query.by_mine || false
+            this.$route.query.by_expired === "true" || false;
+        this.filters.by_mine = this.$route.query.by_mine || false;
         this.filters.max_expiration_date =
-            this.$route.query.max_expiration_date || ""
+            this.$route.query.max_expiration_date || "";
 
-        let filters = this.filters
+        let filters = this.filters;
 
-        let logged_in_user = this.logged_in_user
+        let logged_in_user = this.logged_in_user;
         return {
             fp_config: flatpickr_defaults,
             agreement_count: 0,
@@ -124,9 +124,9 @@ export default {
                 filters_options: {
                     1: () =>
                         this.vendors.map(e => {
-                            e["_id"] = e["id"]
-                            e["_str"] = e["name"]
-                            return e
+                            e["_id"] = e["id"];
+                            e["_str"] = e["name"];
+                            return e;
                         }),
                     3: () => this.map_av_dt_filter("av_agreement_statuses"),
                     4: () =>
@@ -157,13 +157,13 @@ export default {
                     "user_roles.user_id": function () {
                         return filters.by_mine
                             ? logged_in_user.borrowernumber
-                            : ""
+                            : "";
                     },
                 },
             },
             before_route_entered: false,
             building_table: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -175,36 +175,36 @@ export default {
                             .getSearchableAVOptions()
                             .then(() => (vm.initialized = true))
                     )
-            )
-        })
+            );
+        });
     },
     methods: {
         async getAgreementCount() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.agreements.count().then(
                 count => {
-                    this.agreement_count = count
+                    this.agreement_count = count;
                 },
                 error => {}
-            )
+            );
         },
         async getSearchableAdditionalFields() {
-            const client = APIClient.additional_fields
+            const client = APIClient.additional_fields;
             await client.additional_fields.getAll("agreement").then(
                 searchable_additional_fields => {
                     this.searchable_additional_fields =
                         searchable_additional_fields.filter(
                             field => field.searchable
-                        )
+                        );
                 },
                 error => {}
-            )
+            );
         },
         async getSearchableAVOptions() {
-            const client_av = APIClient.authorised_values
+            const client_av = APIClient.authorised_values;
             let av_cat_array = this.searchable_additional_fields
                 .filter(field => field.authorised_value_category_name)
-                .map(field => field.authorised_value_category_name)
+                .map(field => field.authorised_value_category_name);
 
             await client_av.values
                 .getCategoriesWithValues([
@@ -214,27 +214,27 @@ export default {
                     av_cat_array.forEach(av_cat => {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
-                        )
+                        );
                         this.searchable_av_options[av_cat] =
                             av_match.authorised_values.map(av => ({
                                 value: av.value,
                                 label: av.description,
-                            }))
-                    })
-                })
+                            }));
+                    });
+                });
         },
         doShow: function ({ agreement_id }, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.$router.push({
                 name: "AgreementsShow",
                 params: { agreement_id },
-            })
+            });
         },
         doEdit: function ({ agreement_id }, dt, event) {
             this.$router.push({
                 name: "AgreementsFormAddEdit",
                 params: { agreement_id },
-            })
+            });
         },
         doDelete: function (agreement, dt, event) {
             this.setConfirmationDialog(
@@ -247,7 +247,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.agreements.delete(agreement.agreement_id).then(
                         success => {
                             this.setMessage(
@@ -255,27 +255,27 @@ export default {
                                     agreement.name
                                 ),
                                 true
-                            )
-                            dt.draw()
+                            );
+                            dt.draw();
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
         doSelect: function (agreement, dt, event) {
-            this.$emit("select-agreement", agreement.agreement_id)
-            this.$emit("close")
+            this.$emit("select-agreement", agreement.agreement_id);
+            this.$emit("close");
         },
         get_today_date: function () {
-            return new Date().toISOString().substring(0, 10)
+            return new Date().toISOString().substring(0, 10);
         },
         table_url: function () {
-            let url = "/api/v1/erm/agreements"
+            let url = "/api/v1/erm/agreements";
             if (this.filters.by_expired)
                 url +=
-                    "?max_expiration_date=" + this.filters.max_expiration_date
-            return url
+                    "?max_expiration_date=" + this.filters.max_expiration_date;
+            return url;
         },
         filter_table: async function () {
             if (!this.embedded) {
@@ -283,20 +283,20 @@ export default {
                     this.filters.by_expired &&
                     !this.filters.max_expiration_date
                 ) {
-                    this.filters.max_expiration_date = this.get_today_date()
+                    this.filters.max_expiration_date = this.get_today_date();
                 }
                 if (!this.filters.by_expired) {
-                    this.filters.max_expiration_date = ""
+                    this.filters.max_expiration_date = "";
                 }
-                let { href } = this.$router.resolve({ name: "AgreementsList" })
-                let new_route = build_url(href, this.filters)
-                this.$router.push(new_route)
+                let { href } = this.$router.resolve({ name: "AgreementsList" });
+                let new_route = build_url(href, this.filters);
+                this.$router.push(new_route);
             }
-            this.$refs.table.redraw(this.table_url())
+            this.$refs.table.redraw(this.table_url());
         },
         getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av
-            let escape_str = this.escape_str
+            let get_lib_from_av = this.get_lib_from_av;
+            let escape_str = this.escape_str;
 
             return [
                 {
@@ -311,7 +311,7 @@ export default {
                             '" class="show">' +
                             escape_str(`${row.name} (#${row.agreement_id})`) +
                             "</a>"
-                        )
+                        );
                     },
                 },
                 {
@@ -326,7 +326,7 @@ export default {
                                   '">' +
                                   escape_str(row.vendor.name) +
                                   "</a>"
-                            : ""
+                            : "";
                     },
                 },
                 {
@@ -343,7 +343,7 @@ export default {
                     render: function (data, type, row, meta) {
                         return escape_str(
                             get_lib_from_av("av_agreement_statuses", row.status)
-                        )
+                        );
                     },
                 },
                 {
@@ -357,7 +357,7 @@ export default {
                                 "av_agreement_closure_reasons",
                                 row.closure_reason
                             )
-                        )
+                        );
                     },
                 },
                 {
@@ -368,7 +368,7 @@ export default {
                     render: function (data, type, row, meta) {
                         return escape_str(
                             row.is_perpetual ? __("Yes") : __("No")
-                        )
+                        );
                     },
                 },
                 {
@@ -382,23 +382,23 @@ export default {
                                 "av_agreement_renewal_priorities",
                                 row.renewal_priority
                             )
-                        )
+                        );
                     },
                 },
-            ]
+            ];
         },
     },
     mounted() {
         if (this.embedded) {
-            this.getAgreementCount().then(() => (this.initialized = true))
+            this.getAgreementCount().then(() => (this.initialized = true));
         }
     },
     watch: {
         "filters.by_expired": function (newVal, oldVal) {
             if (newVal) {
-                this.filters.max_expiration_date = this.get_today_date()
+                this.filters.max_expiration_date = this.get_today_date();
             } else {
-                this.filters.max_expiration_date = ""
+                this.filters.max_expiration_date = "";
             }
         },
     },
@@ -411,7 +411,7 @@ export default {
     },
     name: "AgreementsList",
     emits: ["select-agreement", "close"],
-}
+};
 </script>
 
 <style scoped>

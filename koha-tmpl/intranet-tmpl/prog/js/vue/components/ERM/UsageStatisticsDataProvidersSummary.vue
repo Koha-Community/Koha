@@ -24,19 +24,19 @@
 </template>
 
 <script>
-import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue"
-import { inject, ref } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import KohaTable from "../KohaTable.vue"
+import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue";
+import { inject, ref } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore") // Left in for future permissions fixes
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore"); // Left in for future permissions fixes
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref()
+        const table = ref();
 
         return {
             get_lib_from_av,
@@ -44,7 +44,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             table,
-        }
+        };
     },
     data: function () {
         return {
@@ -59,22 +59,22 @@ export default {
                 // add_filters: true,
                 actions: {},
             },
-        }
+        };
     },
     methods: {
         async getUsageDataProviders() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.usage_data_providers.getAll().then(
                 usage_data_providers => {
-                    this.usage_data_providers = usage_data_providers
-                    this.initialized = true
+                    this.usage_data_providers = usage_data_providers;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         table_url() {
-            let url = "/api/v1/erm/usage_data_providers"
-            return url
+            let url = "/api/v1/erm/usage_data_providers";
+            return url;
         },
         getTableColumns() {
             const columns = [
@@ -84,12 +84,12 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.name
+                        return row.name;
                     },
                 },
-            ]
+            ];
 
-            const data_types = ["title", "platform", "database", "item"]
+            const data_types = ["title", "platform", "database", "item"];
             data_types.forEach(data_type => {
                 columns.push(
                     {
@@ -100,8 +100,8 @@ export default {
                         render: function (data, type, row, meta) {
                             const date = row[`earliest_${data_type}`]
                                 ? row[`earliest_${data_type}`]
-                                : __("N/A")
-                            return date
+                                : __("N/A");
+                            return date;
                         },
                     },
                     {
@@ -112,53 +112,53 @@ export default {
                         render: function (data, type, row, meta) {
                             const date = row[`latest_${data_type}`]
                                 ? row[`latest_${data_type}`]
-                                : __("N/A")
-                            return date
+                                : __("N/A");
+                            return date;
                         },
                     }
-                )
-            })
+                );
+            });
 
-            return columns
+            return columns;
         },
         createTableHeader() {
-            const table = this.$refs.table.$el.getElementsByTagName("table")[0]
+            const table = this.$refs.table.$el.getElementsByTagName("table")[0];
 
-            const row = table.insertRow(0)
+            const row = table.insertRow(0);
             const [cellOne, cellTwo, cellThree, cellFour, cellFive] =
                 Array.from("1".repeat(5)).map(item => {
-                    const cell = document.createElement("th")
-                    row.appendChild(cell)
-                    return cell
-                })
-            cellTwo.colSpan = 2
-            cellTwo.innerHTML = this.$__("Title reports")
-            cellThree.colSpan = 2
-            cellThree.innerHTML = this.$__("Platform reports")
-            cellFour.colSpan = 2
-            cellFour.innerHTML = this.$__("Database reports")
-            cellFive.colSpan = 2
-            cellFive.innerHTML = this.$__("Item reports")
+                    const cell = document.createElement("th");
+                    row.appendChild(cell);
+                    return cell;
+                });
+            cellTwo.colSpan = 2;
+            cellTwo.innerHTML = this.$__("Title reports");
+            cellThree.colSpan = 2;
+            cellThree.innerHTML = this.$__("Platform reports");
+            cellFour.colSpan = 2;
+            cellFour.innerHTML = this.$__("Database reports");
+            cellFive.colSpan = 2;
+            cellFive.innerHTML = this.$__("Item reports");
 
-            this.$refs.table_div.classList.remove("hide-table")
+            this.$refs.table_div.classList.remove("hide-table");
         },
     },
     watch: {
         table() {
             // table needs to be rendered before header can be created and
             // table is hidden by .hide-table until table header is created
-            this.createTableHeader()
+            this.createTableHeader();
         },
     },
     mounted() {
         if (!this.building_table) {
-            this.building_table = true
-            this.getUsageDataProviders()
+            this.building_table = true;
+            this.getUsageDataProviders();
         }
     },
     components: { Toolbar, KohaTable },
     name: "UsageStatisticsDataProvidersSummary",
-}
+};
 </script>
 
 <style scoped>

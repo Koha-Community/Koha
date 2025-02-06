@@ -44,22 +44,22 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import ButtonSubmit from "../ButtonSubmit.vue"
-import { APIClient } from "../../fetch/api-client.js"
-import UsageStatisticsReportBuilder from "./UsageStatisticsReportBuilder.vue"
-import UsageStatisticsSavedReports from "./UsageStatisticsSavedReports.vue"
+import { inject } from "vue";
+import ButtonSubmit from "../ButtonSubmit.vue";
+import { APIClient } from "../../fetch/api-client.js";
+import UsageStatisticsReportBuilder from "./UsageStatisticsReportBuilder.vue";
+import UsageStatisticsSavedReports from "./UsageStatisticsSavedReports.vue";
 
 export default {
     setup() {
         const { setConfirmationDialog, setMessage, setError } =
-            inject("mainStore")
+            inject("mainStore");
 
         return {
             setConfirmationDialog,
             setMessage,
             setError,
-        }
+        };
     },
     data() {
         return {
@@ -68,16 +68,16 @@ export default {
             default_usage_report: null,
             default_usage_reports: [],
             usage_data_providers: [],
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getUsageDataProviders()
-        })
+            vm.getUsageDataProviders();
+        });
     },
     methods: {
         async getUsageDataProviders() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.usage_data_providers.getAll().then(
                 usage_data_providers => {
                     if (usage_data_providers.length === 0) {
@@ -85,16 +85,16 @@ export default {
                             this.$__(
                                 "No data providers have been created -  no report data will be available"
                             )
-                        )
+                        );
                     }
-                    this.usage_data_providers = usage_data_providers
-                    this.initialized = true
+                    this.usage_data_providers = usage_data_providers;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         changeCustomOrDefault(e) {
-            this.custom_or_default = e.target.getAttribute("data-content")
+            this.custom_or_default = e.target.getAttribute("data-content");
         },
     },
     components: {
@@ -103,7 +103,7 @@ export default {
         UsageStatisticsSavedReports,
     },
     name: "UsageStatisticsReportsHome",
-}
+};
 </script>
 
 <style scoped>

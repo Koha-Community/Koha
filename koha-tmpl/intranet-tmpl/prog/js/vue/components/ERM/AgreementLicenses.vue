@@ -94,15 +94,15 @@
 </template>
 
 <script>
-import { APIClient } from "../../fetch/api-client.js"
-import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
+import { APIClient } from "../../fetch/api-client.js";
+import InfiniteScrollSelect from "../InfiniteScrollSelect.vue";
 
 export default {
     name: "AgreementLicenses",
     data() {
         return {
             license_count: null,
-        }
+        };
     },
     props: {
         av_agreement_license_statuses: Array,
@@ -110,14 +110,14 @@ export default {
         agreement_licenses: Array,
     },
     beforeCreate() {
-        const client = APIClient.erm
+        const client = APIClient.erm;
         client.licenses.count().then(
             count => {
-                this.license_count = count
-                this.initialized = true
+                this.license_count = count;
+                this.initialized = true;
             },
             error => {}
-        )
+        );
     },
     methods: {
         addLicense() {
@@ -128,14 +128,14 @@ export default {
                 notes: "",
                 uri: "",
                 license: { name: "" },
-            })
+            });
         },
         deleteLicense(counter) {
-            this.agreement_licenses.splice(counter, 1)
+            this.agreement_licenses.splice(counter, 1);
         },
     },
     components: {
         InfiniteScrollSelect,
     },
-}
+};
 </script>

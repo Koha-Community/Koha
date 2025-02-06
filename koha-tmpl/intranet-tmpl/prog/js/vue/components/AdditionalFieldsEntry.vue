@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { APIClient } from "../fetch/api-client.js"
+import { APIClient } from "../fetch/api-client.js";
 
 export default {
     data() {
@@ -133,17 +133,17 @@ export default {
             available_fields: [],
             av_options: [],
             current_additional_fields_values: {},
-        }
+        };
     },
     beforeCreate() {
-        const client = APIClient.additional_fields
+        const client = APIClient.additional_fields;
         client.additional_fields.getAll(this.resource_type).then(
             available_fields => {
-                this.available_fields = available_fields
-                this.initialized = true
+                this.available_fields = available_fields;
+                this.initialized = true;
             },
             error => {}
-        )
+        );
     },
     watch: {
         current_additional_fields_values: {
@@ -151,15 +151,15 @@ export default {
             handler(current_additional_fields_values) {
                 this.updateParentAdditionalFieldValues(
                     current_additional_fields_values
-                )
+                );
             },
         },
         available_fields: function (available_fields) {
             if (available_fields) {
-                const client_av = APIClient.authorised_values
+                const client_av = APIClient.authorised_values;
                 let av_cat_array = available_fields
                     .map(field => field.authorised_value_category_name)
-                    .filter(field => field)
+                    .filter(field => field);
 
                 client_av.values
                     .getCategoriesWithValues([
@@ -171,20 +171,20 @@ export default {
                         av_cat_array.forEach(av_cat => {
                             let av_match = av_categories.find(
                                 element => element.category_name == av_cat
-                            )
+                            );
                             this.av_options[av_cat] =
                                 av_match.authorised_values.map(av => ({
                                     value: av.value,
                                     label: av.description,
-                                }))
-                        })
+                                }));
+                        });
 
                         // Iterate on available fields
                         available_fields.forEach(available_field => {
                             // Initialize current field as empty array
                             this.current_additional_fields_values[
                                 available_field.extended_attribute_type_id
-                            ] = []
+                            ] = [];
 
                             // Grab all existing field values of this field
                             let existing_field_values =
@@ -193,13 +193,13 @@ export default {
                                         afv.field_id ==
                                             available_field.extended_attribute_type_id &&
                                         afv.value
-                                )
+                                );
 
                             // If there are existing field values for this field, add them to current_additional_fields_values
                             if (existing_field_values.length) {
                                 existing_field_values.forEach(
                                     existing_field_value => {
-                                        let label = ""
+                                        let label = "";
                                         if (
                                             available_field.authorised_value_category_name
                                         ) {
@@ -210,19 +210,19 @@ export default {
                                                 av_option =>
                                                     av_option.value ==
                                                     existing_field_value.value
-                                            )
+                                            );
                                             label = av_value.length
                                                 ? av_value[0].label
-                                                : ""
+                                                : "";
                                         }
                                         this.current_additional_fields_values[
                                             existing_field_value.field_id
                                         ].push({
                                             value: existing_field_value.value,
                                             label: label,
-                                        })
+                                        });
                                     }
-                                )
+                                );
 
                                 // Otherwise add them as empty if not AV field
                             } else {
@@ -236,32 +236,32 @@ export default {
                                             label: "",
                                             value: "",
                                         },
-                                    ]
+                                    ];
                                 }
                             }
-                        })
-                    })
+                        });
+                    });
             }
         },
     },
     methods: {
         clearField: function (current_field, event) {
-            event.preventDefault()
-            current_field.value = ""
+            event.preventDefault();
+            current_field.value = "";
         },
         cloneField: function (available_field, current, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.current_additional_fields_values[
                 available_field.extended_attribute_type_id
             ].push({
                 value: current.value,
                 label: available_field.name,
-            })
+            });
         },
         updateParentAdditionalFieldValues: function (
             current_additional_fields_values
         ) {
-            let updatedAdditionalFields = []
+            let updatedAdditionalFields = [];
             Object.keys(current_additional_fields_values).forEach(field_id => {
                 if (
                     !Array.isArray(
@@ -271,7 +271,7 @@ export default {
                 ) {
                     current_additional_fields_values[field_id] = [
                         current_additional_fields_values[field_id],
-                    ]
+                    ];
                 }
                 if (current_additional_fields_values[field_id]) {
                     let new_extended_attributes =
@@ -280,14 +280,14 @@ export default {
                                 field_id: field_id,
                                 value: value.value,
                             })
-                        )
+                        );
                     updatedAdditionalFields = updatedAdditionalFields.concat(
                         new_extended_attributes
-                    )
+                    );
                 }
-            })
+            });
 
-            this.$emit("additional-fields-changed", updatedAdditionalFields)
+            this.$emit("additional-fields-changed", updatedAdditionalFields);
         },
     },
     name: "AdditionalFieldsEntry",
@@ -295,5 +295,5 @@ export default {
         resource_type: String,
         additional_field_values: Array,
     },
-}
+};
 </script>

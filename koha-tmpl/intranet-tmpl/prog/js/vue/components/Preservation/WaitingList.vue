@@ -176,19 +176,19 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component"
-import Toolbar from "../Toolbar.vue"
-import { inject, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client"
-import KohaTable from "../KohaTable.vue"
+import flatPickr from "vue-flatpickr-component";
+import Toolbar from "../Toolbar.vue";
+import { inject, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const table = ref()
+        const table = ref();
 
-        const PreservationStore = inject("PreservationStore")
-        const { config } = PreservationStore
+        const PreservationStore = inject("PreservationStore");
+        const { config } = PreservationStore;
 
         const {
             setMessage,
@@ -196,7 +196,7 @@ export default {
             setConfirmationDialog,
             loading,
             loaded,
-        } = inject("mainStore")
+        } = inject("mainStore");
 
         return {
             table,
@@ -206,7 +206,7 @@ export default {
             setConfirmationDialog,
             loading,
             loaded,
-        }
+        };
     },
     data: function () {
         return {
@@ -227,49 +227,49 @@ export default {
             last_items: [],
             train_list: [],
             train_id_selected_for_add: null,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getCountWaitingListItems()
-            vm.getTrainList()
-        })
+            vm.getCountWaitingListItems();
+            vm.getTrainList();
+        });
     },
     methods: {
         async getCountWaitingListItems() {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             client.waiting_list_items.count().then(count => {
-                this.count_waiting_list_items = count
-                this.initialized = true
-            })
+                this.count_waiting_list_items = count;
+                this.initialized = true;
+            });
         },
         getTrainList: function () {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             client.trains.getAll().then(
                 trains => (this.train_list = trains),
                 error => {}
-            )
+            );
         },
         addItemsToTrain: function (e) {
-            e.preventDefault()
-            $("#add_to_train").modal("hide")
-            let item_ids = this.last_items.map(i => i.item_id)
+            e.preventDefault();
+            $("#add_to_train").modal("hide");
+            let item_ids = this.last_items.map(i => i.item_id);
             this.$router.push({
                 name: "TrainsFormAddItems",
                 params: {
                     train_id: this.train_id_selected_for_add,
                     item_ids: item_ids.join(","),
                 },
-            })
+            });
         },
         addItemsToWaitingList: function (e) {
-            e.preventDefault()
-            $("#add_to_waiting_list").modal("hide")
-            let items = []
+            e.preventDefault();
+            $("#add_to_waiting_list").modal("hide");
+            let items = [];
             this.barcode_list
                 .split("\n")
-                .forEach(barcode => items.push({ barcode }))
-            const client = APIClient.preservation
+                .forEach(barcode => items.push({ barcode }));
+            const client = APIClient.preservation;
             client.waiting_list_items.createAll(items).then(
                 result => {
                     if (result.length) {
@@ -282,36 +282,36 @@ export default {
                                     items.length - result.length
                                 ),
                                 true
-                            )
+                            );
                         } else {
                             this.setMessage(
                                 this.$__("%s new items added.").format(
                                     result.length
                                 ),
                                 true
-                            )
+                            );
                         }
-                        this.last_items = result
+                        this.last_items = result;
                         if (this.$refs.table) {
                             this.$refs.table.redraw(
                                 "/api/v1/preservation/waiting-list/items"
-                            )
+                            );
                         } else {
-                            this.getCountWaitingListItems()
+                            this.getCountWaitingListItems();
                         }
                     } else {
-                        this.setWarning(this.$__("No items added"))
+                        this.setWarning(this.$__("No items added"));
                     }
                 },
                 error => {}
-            )
-            this.barcode_list = ""
+            );
+            this.barcode_list = "";
         },
         doShow: function (biblio, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             location.href =
                 "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" +
-                biblio.biblio_id
+                biblio.biblio_id;
         },
         doRemoveItem: function (item, dt, event) {
             this.setConfirmationDialog(
@@ -324,22 +324,22 @@ export default {
                     cancel_label: this.$__("No, do not remove"),
                 },
                 () => {
-                    const client = APIClient.preservation
+                    const client = APIClient.preservation;
                     client.waiting_list_items.delete(item.item_id).then(
                         success => {
                             this.setMessage(
                                 this.$__("Item removed from the waiting list"),
                                 true
-                            )
-                            dt.draw()
+                            );
+                            dt.draw();
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
         getTableColumns: function () {
-            let escape_str = this.escape_str
+            let escape_str = this.escape_str;
             return [
                 {
                     data: "biblio.title",
@@ -347,7 +347,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return `<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=${row.biblio.biblio_id}">${row.biblio.title}</a>`
+                        return `<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=${row.biblio.biblio_id}">${row.biblio.title}</a>`;
                     },
                 },
                 {
@@ -368,12 +368,12 @@ export default {
                     searchable: true,
                     orderable: true,
                 },
-            ]
+            ];
         },
     },
     components: { flatPickr, KohaTable, Toolbar },
     name: "WaitingList",
-}
+};
 </script>
 
 <style scoped>

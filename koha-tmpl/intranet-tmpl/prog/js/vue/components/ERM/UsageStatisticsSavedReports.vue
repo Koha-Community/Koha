@@ -56,74 +56,76 @@
 </template>
 
 <script>
-import ButtonSubmit from "../ButtonSubmit.vue"
-import { APIClient } from "../../fetch/api-client.js"
-import { inject } from "vue"
+import ButtonSubmit from "../ButtonSubmit.vue";
+import { APIClient } from "../../fetch/api-client.js";
+import { inject } from "vue";
 
 export default {
     setup() {
-        const { setMessage, setError } = inject("mainStore")
+        const { setMessage, setError } = inject("mainStore");
 
         return {
             setMessage,
             setError,
-        }
+        };
     },
     data() {
         return {
             initialized: false,
             default_usage_report: null,
             default_usage_reports: [],
-        }
+        };
     },
     mounted() {
-        this.getDefaultUsageReports()
+        this.getDefaultUsageReports();
     },
     methods: {
         async getDefaultUsageReports() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.default_usage_reports.getAll().then(
                 default_usage_reports => {
-                    this.default_usage_reports = default_usage_reports
-                    this.initialized = true
+                    this.default_usage_reports = default_usage_reports;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         async deleteSavedReport(e) {
-            e.preventDefault()
-            const id = this.default_usage_report.erm_default_usage_report_id
+            e.preventDefault();
+            const id = this.default_usage_report.erm_default_usage_report_id;
             if (id) {
-                const client = APIClient.erm
+                const client = APIClient.erm;
                 await client.default_usage_reports.delete(id).then(
                     success => {
-                        this.setMessage(this.$__("Report deleted successfully"))
+                        this.setMessage(
+                            this.$__("Report deleted successfully")
+                        );
                         this.default_usage_reports =
                             this.default_usage_reports.filter(
                                 report =>
                                     report.erm_default_usage_report_id !== id
-                            )
-                        this.default_usage_report = null
+                            );
+                        this.default_usage_report = null;
                     },
                     error => {}
-                )
+                );
             } else {
                 this.setError(
                     this.$__("No report was selected - could not delete")
-                )
+                );
             }
         },
         displayDefaultReport(e) {
-            e.preventDefault()
+            e.preventDefault();
             this.$router.push({
                 name: "UsageStatisticsReportsViewer",
                 query: { data: this.default_usage_report.report_url_params },
-            })
+            });
         },
     },
     components: {
         ButtonSubmit,
     },
     name: "UsageStatisticsSaveReports",
-}
+};
 </script>

@@ -65,28 +65,28 @@
 </template>
 
 <script>
-import { inject, ref, reactive } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client.js"
-import { build_url_params, build_url } from "../../composables/datatables"
-import KohaTable from "../KohaTable.vue"
+import { inject, ref, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
+import { build_url_params, build_url } from "../../composables/datatables";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
+        const AVStore = inject("AVStore");
         const { av_package_types, av_package_content_types } =
-            storeToRefs(AVStore)
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+            storeToRefs(AVStore);
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const ERMStore = inject("ERMStore")
-        const { config } = ERMStore
+        const ERMStore = inject("ERMStore");
+        const { config } = ERMStore;
 
-        const table = ref()
+        const table = ref();
         const filters = reactive({
             package_name: "",
             content_type: "",
             selection_type: "",
-        })
+        });
 
         return {
             av_package_types,
@@ -96,15 +96,15 @@ export default {
             map_av_dt_filter,
             config,
             table,
-        }
+        };
     },
     data: function () {
         this.filters = {
             package_name: this.$route.query.package_name || "",
             content_type: this.$route.query.content_type || "",
             selection_type: this.$route.query.selection_type || "",
-        }
-        let filters = this.filters
+        };
+        let filters = this.filters;
 
         return {
             packages: [],
@@ -125,47 +125,47 @@ export default {
                 actions: { 0: ["show"] },
                 default_filters: {
                     name: function () {
-                        return filters.package_name || ""
+                        return filters.package_name || "";
                     },
                     content_type: function () {
-                        return filters.content_type || ""
+                        return filters.content_type || "";
                     },
                     selection_type: function () {
-                        return filters.selection_type || ""
+                        return filters.selection_type || "";
                     },
                 },
             },
             show_table: build_url_params(filters).length ? true : false,
             local_count_packages: null,
-        }
+        };
     },
     computed: {
         local_packages_url() {
             let { href } = this.$router.resolve({
                 name: "EHoldingsLocalPackagesList",
-            })
-            return build_url(href, this.filters)
+            });
+            return build_url(href, this.filters);
         },
     },
     methods: {
         doShow: function ({ package_id }, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.$router.push({
                 name: "EHoldingsEBSCOPackagesShow",
                 params: { package_id },
-            })
+            });
         },
         filter_table: async function () {
             let { href } = this.$router.resolve({
                 name: "EHoldingsEBSCOPackagesList",
-            })
-            let new_route = build_url(href, this.filters)
-            this.$router.push(new_route)
-            this.show_table = true
-            this.local_count_packages = null
+            });
+            let new_route = build_url(href, this.filters);
+            this.$router.push(new_route);
+            this.show_table = true;
+            this.local_count_packages = null;
 
             if (this.config.settings.ERMProviders.includes("local")) {
-                const client = APIClient.erm
+                const client = APIClient.erm;
                 const query = this.filters
                     ? {
                           "me.name": {
@@ -175,20 +175,20 @@ export default {
                               ? { "me.content_type": this.filters.content_type }
                               : {}),
                       }
-                    : {}
+                    : {};
                 client.localPackages.count(query).then(
                     count => (this.local_count_packages = count),
                     error => {}
-                )
+                );
             }
 
             if (this.$refs.table) {
-                this.$refs.table.redraw("/api/v1/erm/eholdings/ebsco/packages")
+                this.$refs.table.redraw("/api/v1/erm/eholdings/ebsco/packages");
             }
         },
         getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av
-            let escape_str = this.escape_str
+            let get_lib_from_av = this.get_lib_from_av;
+            let escape_str = this.escape_str;
 
             return [
                 {
@@ -202,15 +202,15 @@ export default {
                             row.package_id +
                             '" class="show">' +
                             escape_str(`${row.name} (#${row.package_id})`) +
-                            "</a>"
+                            "</a>";
                         if (row.is_selected) {
                             node +=
                                 " " +
                                 '<i class="fa fa-check-square" style="color: green; float: right;" title="' +
                                 __("Is selected") +
-                                '" />'
+                                '" />';
                         }
-                        return node
+                        return node;
                     },
                 },
                 {
@@ -219,7 +219,7 @@ export default {
                     searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        return row.vendor ? escape_str(row.vendor.name) : ""
+                        return row.vendor ? escape_str(row.vendor.name) : "";
                     },
                 },
                 {
@@ -233,7 +233,7 @@ export default {
                                 "av_package_types",
                                 row.package_type
                             )
-                        )
+                        );
                     },
                 },
                 {
@@ -246,13 +246,13 @@ export default {
                                 "av_package_content_types",
                                 row.content_type
                             )
-                        )
+                        );
                     },
                 },
-            ]
+            ];
         },
     },
     components: { KohaTable },
     name: "EHoldingsEBSCOPackagesList",
-}
+};
 </script>

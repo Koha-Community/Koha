@@ -15,17 +15,17 @@
 </template>
 
 <script>
-import { APIClient } from "../../fetch/api-client.js"
-import { ref } from "vue"
-import KohaTable from "../KohaTable.vue"
+import { APIClient } from "../../fetch/api-client.js";
+import { ref } from "vue";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const table = ref()
+        const table = ref();
 
         return {
             table,
-        }
+        };
     },
     data() {
         return {
@@ -40,11 +40,11 @@ export default {
                 table_settings: this.title_table_settings,
                 add_filters: true,
             },
-        }
+        };
     },
     methods: {
         async getData() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client[`usage_${this.data_type}s`]
                 .count({
                     usage_data_provider_id:
@@ -52,18 +52,18 @@ export default {
                 })
                 .then(
                     count => {
-                        this.data_count = count
-                        this.initialized = true
+                        this.data_count = count;
+                        this.initialized = true;
                     },
                     error => {}
-                )
+                );
         },
         table_url() {
             let url = "/api/v1/erm/usage_%ss?usage_data_provider_id=%s".format(
                 this.data_type,
                 this.$route.params.usage_data_provider_id
-            )
-            return url
+            );
+            return url;
         },
         getTableColumns() {
             const column_options = [
@@ -141,23 +141,23 @@ export default {
                         orderable: true,
                     },
                 },
-            ]
+            ];
             const columns = column_options
                 .filter(column => column.used_by.includes(this.data_type))
-                .map(result => result.column)
-            return columns
+                .map(result => result.column);
+            return columns;
         },
     },
     mounted() {
         if (!this.building_table) {
-            this.building_table = true
-            this.getData()
+            this.building_table = true;
+            this.getData();
         }
     },
     props: ["data_type"],
     components: { KohaTable },
     name: "UsageStatisticsProviderDataList",
-}
+};
 </script>
 
 <style scoped>

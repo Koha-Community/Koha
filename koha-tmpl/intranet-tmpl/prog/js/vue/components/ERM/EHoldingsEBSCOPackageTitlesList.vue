@@ -60,22 +60,22 @@
 </template>
 
 <script>
-import { inject, ref, reactive } from "vue"
-import { storeToRefs } from "pinia"
-import KohaTable from "../KohaTable.vue"
+import { inject, ref, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { av_title_publication_types } = storeToRefs(AVStore)
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore");
+        const { av_title_publication_types } = storeToRefs(AVStore);
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const table = ref()
+        const table = ref();
         const filters = reactive({
             publication_title: "",
             publication_type: "",
             selection_type: "",
-        })
+        });
 
         return {
             av_title_publication_types,
@@ -83,15 +83,15 @@ export default {
             escape_str,
             map_av_dt_filter,
             table,
-        }
+        };
     },
     data() {
         this.filters = {
             publication_title: this.$route.query.publication_title || "",
             publication_type: this.$route.query.publication_type || "",
             selection_type: this.$route.query.selection_type || "",
-        }
-        let filters = this.filters
+        };
+        let filters = this.filters;
         return {
             tableOptions: {
                 columns: this.getTableColumns(),
@@ -115,40 +115,40 @@ export default {
                 actions: { 0: ["show"] },
                 default_filters: {
                     publication_title: function () {
-                        return filters.publication_title || ""
+                        return filters.publication_title || "";
                     },
                     publication_type: function () {
-                        return filters.publication_type || ""
+                        return filters.publication_type || "";
                     },
                     selection_type: function () {
-                        return filters.selection_type || ""
+                        return filters.selection_type || "";
                     },
                 },
             },
             display_filters: false,
-        }
+        };
     },
     methods: {
         doShow: function ({ resource_id }, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.$router.push({
                 name: "EHoldingsEBSCOResourcesShow",
                 params: { resource_id },
-            })
+            });
         },
         filter_table: function () {
             this.$refs.table.redraw(
                 "/api/v1/erm/eholdings/ebsco/packages/" +
                     this.package_id +
                     "/resources"
-            )
+            );
         },
         toggle_filters: function (e) {
-            this.display_filters = !this.display_filters
+            this.display_filters = !this.display_filters;
         },
         getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av
-            let map_av_dt_filter = this.map_av_dt_filter
+            let get_lib_from_av = this.get_lib_from_av;
+            let map_av_dt_filter = this.map_av_dt_filter;
 
             return [
                 {
@@ -162,15 +162,15 @@ export default {
                             row.resource_id +
                             '" class="show">' +
                             escape_str(`${row.title.publication_title}`) +
-                            "</a>"
+                            "</a>";
                         if (row.is_selected) {
                             node +=
                                 " " +
                                 '<i class="fa fa-check-square" style="color: green; float: right;" title="' +
                                 __("Is selected") +
-                                '" />'
+                                '" />';
                         }
-                        return node
+                        return node;
                     },
                 },
                 {
@@ -184,10 +184,10 @@ export default {
                                 "av_title_publication_types",
                                 row.title.publication_type
                             )
-                        )
+                        );
                     },
                 },
-            ]
+            ];
         },
     },
     props: {
@@ -195,7 +195,7 @@ export default {
     },
     components: { KohaTable },
     name: "EHoldingsEBSCOPackageTitlesList",
-}
+};
 </script>
 
 <style scoped>

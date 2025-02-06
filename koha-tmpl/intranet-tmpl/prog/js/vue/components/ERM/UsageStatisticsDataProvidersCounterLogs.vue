@@ -16,21 +16,21 @@
 </template>
 
 <script>
-import { APIClient } from "../../fetch/api-client.js"
-import { inject, ref } from "vue"
-import KohaTable from "../KohaTable.vue"
+import { APIClient } from "../../fetch/api-client.js";
+import { inject, ref } from "vue";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref()
+        const table = ref();
 
         return {
             table,
             setConfirmationDialog,
             setMessage,
-        }
+        };
     },
     data: function () {
         return {
@@ -60,11 +60,11 @@ export default {
                     ],
                 },
             },
-        }
+        };
     },
     methods: {
         async getCounterFiles() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.counter_files
                 .count({
                     usage_data_provider_id:
@@ -72,21 +72,21 @@ export default {
                 })
                 .then(
                     count => {
-                        this.counter_files_count = count
-                        this.initialized = true
+                        this.counter_files_count = count;
+                        this.initialized = true;
                     },
                     error => {}
-                )
+                );
         },
         table_url() {
-            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${this.$route.params.usage_data_provider_id}`
-            return url
+            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${this.$route.params.usage_data_provider_id}`;
+            return url;
         },
         download_counter_file(counter_log, dt, event) {
             window.location.href =
                 "/api/v1/erm/counter_files/" +
                 counter_log.counter_files_id +
-                "/file/content"
+                "/file/content";
         },
         delete_counter_file(counter_log, dt, event) {
             this.setConfirmationDialog(
@@ -99,7 +99,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.counter_files
                         .delete(counter_log.counter_files_id)
                         .then(
@@ -109,13 +109,13 @@ export default {
                                         counter_log.filename
                                     ),
                                     true
-                                )
-                                dt.draw()
+                                );
+                                dt.draw();
                             },
                             error => {}
-                        )
+                        );
                 }
-            )
+            );
         },
         getTableColumns() {
             return [
@@ -129,9 +129,9 @@ export default {
                     data: "importdate",
                     title: __("Import date"),
                     render: function (data, type, row, meta) {
-                        const date = row.importdate.substr(0, 10)
-                        const time = row.importdate.substr(11, 8)
-                        return `${date} ${time}`
+                        const date = row.importdate.substr(0, 10);
+                        const time = row.importdate.substr(11, 8);
+                        return `${date} ${time}`;
                     },
                     searchable: true,
                     orderable: true,
@@ -139,31 +139,31 @@ export default {
                 {
                     title: __("Imported by"),
                     render: function (data, type, row, meta) {
-                        const { patron } = row
+                        const { patron } = row;
                         const importer = patron
                             ? '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
                               patron.patron_id +
                               '">' +
                               $patron_to_html(patron) +
                               "</a>"
-                            : this.$__("Cronjob")
-                        return importer
+                            : this.$__("Cronjob");
+                        return importer;
                     },
                     searchable: true,
                     orderable: true,
                 },
-            ]
+            ];
         },
     },
     mounted() {
         if (!this.building_table) {
-            this.building_table = true
-            this.getCounterFiles()
+            this.building_table = true;
+            this.getCounterFiles();
         }
     },
     components: { KohaTable },
     name: "UsageStatisticsTitlesList",
-}
+};
 </script>
 
 <style scoped>

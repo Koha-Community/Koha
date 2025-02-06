@@ -25,26 +25,26 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import Breadcrumbs from "../Breadcrumbs.vue"
-import Help from "../Help.vue"
-import LeftMenu from "../LeftMenu.vue"
-import Dialog from "../Dialog.vue"
-import { APIClient } from "../../fetch/api-client.js"
-import "vue-select/dist/vue-select.css"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import Breadcrumbs from "../Breadcrumbs.vue";
+import Help from "../Help.vue";
+import LeftMenu from "../LeftMenu.vue";
+import Dialog from "../Dialog.vue";
+import { APIClient } from "../../fetch/api-client.js";
+import "vue-select/dist/vue-select.css";
+import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
+        const AVStore = inject("AVStore");
 
-        const mainStore = inject("mainStore")
+        const mainStore = inject("mainStore");
 
-        const { loading, loaded, setError } = mainStore
+        const { loading, loaded, setError } = mainStore;
 
-        const PreservationStore = inject("PreservationStore")
+        const PreservationStore = inject("PreservationStore");
 
-        const { config } = storeToRefs(PreservationStore)
+        const { config } = storeToRefs(PreservationStore);
 
         return {
             AVStore,
@@ -52,49 +52,49 @@ export default {
             loaded,
             config,
             setError,
-        }
+        };
     },
     data() {
         return {
             initialized: false,
-        }
+        };
     },
     beforeCreate() {
-        this.loading()
+        this.loading();
 
         const fetch_additional_config = () => {
-            let promises = []
-            const av_client = APIClient.authorised_values
+            let promises = [];
+            const av_client = APIClient.authorised_values;
             promises.push(
                 av_client.values.get("NOT_LOAN").then(
                     values => {
-                        this.AVStore.av_notforloan = values
+                        this.AVStore.av_notforloan = values;
                     },
                     error => {}
                 )
-            )
-            return Promise.all(promises)
-        }
+            );
+            return Promise.all(promises);
+        };
 
-        const client = APIClient.preservation
+        const client = APIClient.preservation;
         client.config
             .get()
             .then(config => {
-                this.config = config
+                this.config = config;
                 if (this.config.settings.enabled != 1) {
                     return this.setError(
                         this.$__(
                             'The preservation module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=PreservationModule">PreservationModule</a> to use it'
                         ),
                         false
-                    )
+                    );
                 }
-                return fetch_additional_config()
+                return fetch_additional_config();
             })
             .then(() => {
-                this.loaded()
-                this.initialized = true
-            })
+                this.loaded();
+                this.initialized = true;
+            });
     },
 
     components: {
@@ -103,7 +103,7 @@ export default {
         Help,
         LeftMenu,
     },
-}
+};
 </script>
 
 <style>

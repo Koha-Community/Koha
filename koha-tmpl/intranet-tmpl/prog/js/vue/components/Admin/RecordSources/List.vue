@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import Toolbar from "../../Toolbar.vue"
-import ToolbarButton from "../../ToolbarButton.vue"
-import { inject } from "vue"
-import { APIClient } from "../../../fetch/api-client.js"
-import KohaTable from "../../KohaTable.vue"
+import Toolbar from "../../Toolbar.vue";
+import ToolbarButton from "../../ToolbarButton.vue";
+import { inject } from "vue";
+import { APIClient } from "../../../fetch/api-client.js";
+import KohaTable from "../../KohaTable.vue";
 
 export default {
     data() {
@@ -55,7 +55,7 @@ export default {
                         render: function (data, type, row, meta) {
                             return escape_str(
                                 row.can_be_edited ? __("Yes") : __("No")
-                            )
+                            );
                         },
                     },
                 ],
@@ -75,41 +75,41 @@ export default {
             },
             initialized: false,
             record_sources_count: 0,
-        }
+        };
     },
     setup() {
         const { setWarning, setMessage, setError, setConfirmationDialog } =
-            inject("mainStore")
+            inject("mainStore");
         return {
             setWarning,
             setMessage,
             setError,
             setConfirmationDialog,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getRecordSourcesCount().then(() => (vm.initialized = true))
-        })
+            vm.getRecordSourcesCount().then(() => (vm.initialized = true));
+        });
     },
     methods: {
         async getRecordSourcesCount() {
-            const client = APIClient.record_sources
+            const client = APIClient.record_sources;
             await client.record_sources.count().then(
                 count => {
-                    this.record_sources_count = count
+                    this.record_sources_count = count;
                 },
                 error => {}
-            )
+            );
         },
         newRecordSource() {
-            this.$router.push({ name: "RecordSourcesFormAdd" })
+            this.$router.push({ name: "RecordSourcesFormAdd" });
         },
         doEdit: function ({ record_source_id }, dt, event) {
             this.$router.push({
                 name: "RecordSourcesFormAddEdit",
                 params: { record_source_id },
-            })
+            });
         },
         doDelete: function (record_source, dt, event) {
             this.setConfirmationDialog(
@@ -122,7 +122,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.record_sources
+                    const client = APIClient.record_sources;
                     client.record_sources
                         .delete(record_source.record_source_id)
                         .then(
@@ -132,13 +132,13 @@ export default {
                                         "Record source '%s' deleted"
                                     ).format(record_source.name),
                                     true
-                                )
-                                dt.draw()
+                                );
+                                dt.draw();
                             },
                             error => {}
-                        )
+                        );
                 }
-            )
+            );
         },
     },
     components: {
@@ -146,5 +146,5 @@ export default {
         Toolbar,
         ToolbarButton,
     },
-}
+};
 </script>

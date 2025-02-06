@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { APIClient } from "../../fetch/api-client.js"
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     name: "UserRoles",
@@ -78,8 +78,8 @@ export default {
     },
     beforeCreate() {
         this.user_roles.forEach(u => {
-            u.patron_str = $patron_to_html(u.patron)
-        })
+            u.patron_str = $patron_to_html(u.patron);
+        });
     },
     methods: {
         addUser() {
@@ -87,10 +87,10 @@ export default {
                 user_id: null,
                 role: null,
                 patron_str: "",
-            })
+            });
         },
         deleteUser(counter) {
-            this.user_roles.splice(counter, 1)
+            this.user_roles.splice(counter, 1);
         },
         selectUser(counter) {
             // This is a bit dirty, the "select user" window should be rewritten and be a Vue component
@@ -99,23 +99,23 @@ export default {
                 "hidden.bs.modal",
                 "#patron_search_modal",
                 this.newUserSelected
-            )
-            this.selected_user_counter = counter
+            );
+            this.selected_user_counter = counter;
         },
         newUserSelected(e) {
-            let c = this.selected_user_counter
+            let c = this.selected_user_counter;
             let selected_patron_id =
-                document.getElementById("selected_patron_id").value
-            let patron
-            const client = APIClient.patron
+                document.getElementById("selected_patron_id").value;
+            let patron;
+            const client = APIClient.patron;
             // FIXME We are missing a "loading..."
             client.patrons.get(selected_patron_id).then(p => {
-                patron = p
-                this.user_roles[c].patron = patron
-                this.user_roles[c].patron_str = $patron_to_html(patron)
-                this.user_roles[c].user_id = patron.patron_id
-            })
+                patron = p;
+                this.user_roles[c].patron = patron;
+                this.user_roles[c].patron_str = $patron_to_html(patron);
+                this.user_roles[c].user_id = patron.patron_id;
+            });
         },
     },
-}
+};
 </script>

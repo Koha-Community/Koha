@@ -90,24 +90,24 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
-import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue"
-import FormSelectVendors from "../FormSelectVendors.vue"
-import { setMessage, setError, setWarning } from "../../messages"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue";
+import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue";
+import FormSelectVendors from "../FormSelectVendors.vue";
+import { setMessage, setError, setWarning } from "../../messages";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
+        const AVStore = inject("AVStore");
         const { av_package_types, av_package_content_types } =
-            storeToRefs(AVStore)
+            storeToRefs(AVStore);
 
         return {
             av_package_types,
             av_package_content_types,
-        }
+        };
     },
     data() {
         return {
@@ -125,91 +125,91 @@ export default {
                 extended_attributes: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.package_id) {
-                vm.erm_package = vm.getPackage(to.params.package_id)
+                vm.erm_package = vm.getPackage(to.params.package_id);
             } else {
-                vm.initialized = true
+                vm.initialized = true;
             }
-        })
+        });
     },
     methods: {
         getPackage(package_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.localPackages.get(package_id).then(
                 erm_package => {
-                    this.erm_package = erm_package
-                    this.initialized = true
+                    this.erm_package = erm_package;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         checkForm(erm_package) {
-            let errors = []
-            let package_agreements = erm_package.package_agreements
-            const agreement_ids = package_agreements.map(pa => pa.agreement_id)
+            let errors = [];
+            let package_agreements = erm_package.package_agreements;
+            const agreement_ids = package_agreements.map(pa => pa.agreement_id);
             const duplicate_agreement_ids = agreement_ids.filter(
                 (id, i) => agreement_ids.indexOf(id) !== i
-            )
+            );
 
             if (duplicate_agreement_ids.length) {
-                errors.push(this.$__("An agreement is used several times"))
+                errors.push(this.$__("An agreement is used several times"));
             }
 
             errors.forEach(function (e) {
-                setWarning(e)
-            })
-            return !errors.length
+                setWarning(e);
+            });
+            return !errors.length;
         },
         onSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
 
-            let erm_package = JSON.parse(JSON.stringify(this.erm_package)) // copy
+            let erm_package = JSON.parse(JSON.stringify(this.erm_package)); // copy
 
             if (!this.checkForm(erm_package)) {
-                return false
+                return false;
             }
 
-            let package_id = erm_package.package_id
-            delete erm_package.package_id
-            delete erm_package.resources
-            delete erm_package.vendor
-            delete erm_package.resources_count
-            delete erm_package.is_selected
-            delete erm_package._strings
+            let package_id = erm_package.package_id;
+            delete erm_package.package_id;
+            delete erm_package.resources;
+            delete erm_package.vendor;
+            delete erm_package.resources_count;
+            delete erm_package.is_selected;
+            delete erm_package._strings;
 
             erm_package.package_agreements = erm_package.package_agreements.map(
                 ({ package_id, agreement, ...keepAttrs }) => keepAttrs
-            )
+            );
 
-            const client = APIClient.erm
+            const client = APIClient.erm;
             if (package_id) {
                 client.localPackages.update(erm_package, package_id).then(
                     success => {
-                        setMessage(this.$__("Package updated"))
+                        setMessage(this.$__("Package updated"));
                         this.$router.push({
                             name: "EHoldingsLocalPackagesList",
-                        })
+                        });
                     },
                     error => {}
-                )
+                );
             } else {
                 client.localPackages.create(erm_package).then(
                     success => {
-                        setMessage(this.$__("Package created"))
+                        setMessage(this.$__("Package created"));
                         this.$router.push({
                             name: "EHoldingsLocalPackagesList",
-                        })
+                        });
                     },
                     error => {}
-                )
+                );
             }
         },
         additionalFieldsChanged(additionalFieldValues) {
-            this.erm_package.extended_attributes = additionalFieldValues
+            this.erm_package.extended_attributes = additionalFieldValues;
         },
     },
     components: {
@@ -218,5 +218,5 @@ export default {
         AdditionalFieldsEntry,
     },
     name: "EHoldingsEBSCOPackagesFormAdd",
-}
+};
 </script>

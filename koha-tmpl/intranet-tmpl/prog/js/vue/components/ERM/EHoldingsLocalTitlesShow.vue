@@ -263,23 +263,23 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import EHoldingsTitlePackagesList from "./EHoldingsLocalTitlePackagesList.vue"
-import { APIClient } from "../../fetch/api-client.js"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import { inject } from "vue";
+import EHoldingsTitlePackagesList from "./EHoldingsLocalTitlePackagesList.vue";
+import { APIClient } from "../../fetch/api-client.js";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         return {
             get_lib_from_av,
             setConfirmationDialog,
             setMessage,
-        }
+        };
     },
     data() {
         return {
@@ -313,26 +313,26 @@ export default {
                 resources: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getTitle(to.params.title_id)
-        })
+            vm.getTitle(to.params.title_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.title = this.getTitle(to.params.title_id)
+        this.title = this.getTitle(to.params.title_id);
     },
     methods: {
         getTitle(title_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.localTitles.get(title_id).then(
                 title => {
-                    this.title = title
-                    this.initialized = true
+                    this.title = title;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         delete_title: function (title_id, title_publication_title) {
             this.setConfirmationDialog(
@@ -345,7 +345,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.localTitles.delete(title_id).then(
                         success => {
                             this.setMessage(
@@ -353,15 +353,15 @@ export default {
                                     title_publication_title
                                 ),
                                 true
-                            )
+                            );
                             this.$router.push({
                                 name: "EHoldingsLocalTitlesList",
-                            })
+                            });
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
     },
     components: {
@@ -370,7 +370,7 @@ export default {
         ToolbarButton,
     },
     name: "EHoldingsLocalTitlesShow",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {

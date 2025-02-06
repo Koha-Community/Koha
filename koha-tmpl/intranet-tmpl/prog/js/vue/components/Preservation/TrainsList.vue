@@ -59,22 +59,22 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import { inject, ref, reactive } from "vue"
-import { APIClient } from "../../fetch/api-client"
-import { build_url } from "../../composables/datatables"
-import KohaTable from "../KohaTable.vue"
+import flatPickr from "vue-flatpickr-component";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import { inject, ref, reactive } from "vue";
+import { APIClient } from "../../fetch/api-client";
+import { build_url } from "../../composables/datatables";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
         const { setConfirmationDialog, setMessage, setWarning } =
-            inject("mainStore")
-        const table = ref()
-        const filters = reactive({ status: "" })
+            inject("mainStore");
+        const table = ref();
+        const filters = reactive({ status: "" });
         return {
             get_lib_from_av,
             map_av_dt_filter,
@@ -83,10 +83,10 @@ export default {
             setWarning,
             table,
             filters,
-        }
+        };
     },
     data: function () {
-        this.filters.status = this.$route.query.status || ""
+        this.filters.status = this.$route.query.status || "";
         return {
             fp_config: flatpickr_defaults,
             count_trains: 0,
@@ -117,37 +117,37 @@ export default {
                     ],
                 },
             },
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getCountTrains()
-        })
+            vm.getCountTrains();
+        });
     },
     computed: {},
     methods: {
         async getCountTrains() {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             client.trains.count().then(
                 count => {
-                    this.count_trains = count
-                    this.initialized = true
+                    this.count_trains = count;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         doShow: function (train, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.$router.push({
                 name: "TrainsShow",
                 params: { train_id: train.train_id },
-            })
+            });
         },
         doEdit: function (train, dt, event) {
             this.$router.push({
                 name: "TrainsFormEdit",
                 params: { train_id: train.train_id },
-            })
+            });
         },
         doDelete: function (train, dt, event) {
             this.setConfirmationDialog(
@@ -160,70 +160,70 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.preservation
+                    const client = APIClient.preservation;
                     client.trains.delete(train.train_id).then(
                         success => {
                             this.setMessage(
                                 this.$__("Train %s deleted").format(train.name),
                                 true
-                            )
-                            dt.draw()
+                            );
+                            dt.draw();
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
         doAddItems: function (train, dt, event) {
             if (train.closed_on != null) {
-                this.setWarning(this.$__("Cannot add items to a closed train"))
+                this.setWarning(this.$__("Cannot add items to a closed train"));
             } else {
                 this.$router.push({
                     name: "TrainsFormAddItem",
                     params: { train_id: train.train_id },
-                })
+                });
             }
         },
         table_url() {
-            let url = "/api/v1/preservation/trains"
-            let q
+            let url = "/api/v1/preservation/trains";
+            let q;
             if (this.filters.status == "closed") {
                 q = {
                     "me.closed_on": { "!=": null },
                     "me.sent_on": null,
                     "me.received_on": null,
-                }
+                };
             } else if (this.filters.status == "sent") {
                 q = {
                     "me.closed_on": { "!=": null },
                     "me.sent_on": { "!=": null },
                     "me.received_on": null,
-                }
+                };
             } else if (this.filters.status == "received") {
                 q = {
                     "me.closed_on": { "!=": null },
                     "me.sent_on": { "!=": null },
                     "me.received_on": { "!=": null },
-                }
+                };
             }
             if (q) {
-                url += "?" + new URLSearchParams({ q: JSON.stringify(q) })
+                url += "?" + new URLSearchParams({ q: JSON.stringify(q) });
             }
 
-            return url
+            return url;
         },
         filter_table: async function () {
             let new_route = build_url(
                 "/cgi-bin/koha/preservation/trains",
                 this.filters
-            )
-            this.$router.push(new_route)
+            );
+            this.$router.push(new_route);
             if (this.$refs.table) {
-                this.$refs.table.redraw(this.table_url())
+                this.$refs.table.redraw(this.table_url());
             }
         },
         getTableColumns: function () {
-            let escape_str = this.escape_str
+            let escape_str = this.escape_str;
             return [
                 {
                     title: __("Name"),
@@ -231,7 +231,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return `<a href="/cgi-bin/koha/preservation/trains/${row.train_id}" class="show">${row.name} (#${row.train_id})</a>`
+                        return `<a href="/cgi-bin/koha/preservation/trains/${row.train_id}" class="show">${row.name} (#${row.train_id})</a>`;
                     },
                 },
                 {
@@ -240,7 +240,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return $date(row.created_on)
+                        return $date(row.created_on);
                     },
                 },
                 {
@@ -249,7 +249,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return $date(row.closed_on)
+                        return $date(row.closed_on);
                     },
                 },
                 {
@@ -258,7 +258,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return $date(row.sent_on)
+                        return $date(row.sent_on);
                     },
                 },
                 {
@@ -267,16 +267,16 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return $date(row.received_on)
+                        return $date(row.received_on);
                     },
                 },
-            ]
+            ];
         },
     },
     components: { flatPickr, Toolbar, ToolbarButton, KohaTable },
     name: "trainsList",
     emits: ["select-train", "close"],
-}
+};
 </script>
 
 <style scoped>

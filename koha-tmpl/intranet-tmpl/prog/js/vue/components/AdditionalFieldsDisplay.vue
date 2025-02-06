@@ -26,12 +26,12 @@ export default {
     data() {
         return {
             fields_to_display: [],
-        }
+        };
     },
     name: "AdditionalFieldsDisplay",
     props: {
         resource_type: String,
         additional_field_values: Array,
     },
-}
+};
 </script>

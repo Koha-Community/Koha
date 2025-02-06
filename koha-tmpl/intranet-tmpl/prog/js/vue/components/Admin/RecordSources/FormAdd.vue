@@ -53,16 +53,16 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { setMessage, setError, setWarning } from "../../../messages"
-import { APIClient } from "../../../fetch/api-client.js"
+import { inject } from "vue";
+import { setMessage, setError, setWarning } from "../../../messages";
+import { APIClient } from "../../../fetch/api-client.js";
 
 export default {
     setup() {
-        const { setMessage } = inject("mainStore")
+        const { setMessage } = inject("mainStore");
         return {
             setMessage,
-        }
+        };
     },
     data() {
         return {
@@ -72,58 +72,58 @@ export default {
                 can_be_edited: false,
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.record_source_id) {
-                vm.getRecordSource(to.params.record_source_id)
+                vm.getRecordSource(to.params.record_source_id);
             } else {
-                vm.initialized = true
+                vm.initialized = true;
             }
-        })
+        });
     },
     methods: {
         async getRecordSource(record_source_id) {
-            const client = APIClient.record_sources
+            const client = APIClient.record_sources;
             client.record_sources.get(record_source_id).then(
                 record_source => {
-                    this.record_source = record_source
-                    this.record_source_id = record_source_id
-                    this.initialized = true
+                    this.record_source = record_source;
+                    this.record_source_id = record_source_id;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         onSubmit(e) {
-            e.preventDefault()
-            const client = APIClient.record_sources
-            let response
+            e.preventDefault();
+            const client = APIClient.record_sources;
+            let response;
             // RO attribute
-            delete this.record_source.record_source_id
+            delete this.record_source.record_source_id;
             if (this.record_source_id) {
                 // update
                 response = client.record_sources
                     .update(this.record_source, this.record_source_id)
                     .then(
                         success => {
-                            setMessage(this.$__("Record source updated!"))
-                            this.$router.push({ name: "RecordSourcesList" })
+                            setMessage(this.$__("Record source updated!"));
+                            this.$router.push({ name: "RecordSourcesList" });
                         },
                         error => {}
-                    )
+                    );
             } else {
                 response = client.record_sources
                     .create(this.record_source)
                     .then(
                         success => {
-                            setMessage(this.$__("Record source created!"))
-                            this.$router.push({ name: "RecordSourcesList" })
+                            setMessage(this.$__("Record source created!"));
+                            this.$router.push({ name: "RecordSourcesList" });
                         },
                         error => {}
-                    )
+                    );
             }
         },
     },
-}
+};
 </script>

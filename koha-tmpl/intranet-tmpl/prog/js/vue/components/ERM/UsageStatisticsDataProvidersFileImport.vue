@@ -35,20 +35,20 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import ButtonSubmit from "../ButtonSubmit.vue"
-import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue";
+import ButtonSubmit from "../ButtonSubmit.vue";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore") // Left in for future permissions fixes
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore"); // Left in for future permissions fixes
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const { setMessage } = inject("mainStore")
+        const { setMessage } = inject("mainStore");
 
         return {
             setMessage,
-        }
+        };
     },
     data() {
         return {
@@ -60,25 +60,25 @@ export default {
                 date: null,
                 date_uploaded: null,
             },
-        }
+        };
     },
     methods: {
         selectFile(e) {
-            let files = e.target.files
-            if (!files) return
-            let file = files[0]
-            const reader = new FileReader()
-            reader.onload = e => this.loadFile(file.name, e.target.result)
-            reader.readAsBinaryString(file)
+            let files = e.target.files;
+            if (!files) return;
+            let file = files[0];
+            const reader = new FileReader();
+            reader.onload = e => this.loadFile(file.name, e.target.result);
+            reader.readAsBinaryString(file);
         },
         loadFile(filename, content) {
-            this.file.filename = filename
-            this.file.file_content = btoa(content)
-            this.getDataProvider(this.$route.params.usage_data_provider_id)
+            this.file.filename = filename;
+            this.file.file_content = btoa(content);
+            this.getDataProvider(this.$route.params.usage_data_provider_id);
         },
         addDocument(e) {
-            e.preventDefault()
-            const client = APIClient.erm
+            e.preventDefault();
+            const client = APIClient.erm;
             client.usage_data_providers
                 .process_COUNTER_file(this.file.usage_data_provider_id, {
                     usage_data_provider_id: this.file.usage_data_provider_id,
@@ -87,7 +87,7 @@ export default {
                 })
                 .then(
                     success => {
-                        let message = ""
+                        let message = "";
                         success.jobs.forEach((job, i) => {
                             message +=
                                 "<li>" +
@@ -98,15 +98,15 @@ export default {
                                 job.job_id +
                                 '" target="_blank">' +
                                 this.$__("Check job progress") +
-                                ".</a></li>"
-                        })
-                        this.setMessage(message, true)
+                                ".</a></li>";
+                        });
+                        this.setMessage(message, true);
                     },
                     error => {}
-                )
+                );
         },
         clearForm(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             this.file = {
                 filename: null,
@@ -115,27 +115,27 @@ export default {
                 file_content: null,
                 date: null,
                 date_uploaded: null,
-            }
+            };
         },
         async getDataProvider(usage_data_provider_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.usage_data_providers.get(usage_data_provider_id).then(
                 usage_data_provider => {
                     this.file.usage_data_provider_id =
-                        usage_data_provider.erm_usage_data_provider_id
+                        usage_data_provider.erm_usage_data_provider_id;
                 },
                 error => {}
-            )
+            );
         },
     },
     mounted() {
-        this.getDataProvider(this.$route.params.usage_data_provider_id)
+        this.getDataProvider(this.$route.params.usage_data_provider_id);
     },
     components: {
         ButtonSubmit,
     },
     name: "UsageStatisticsDataProvidersFileImport",
-}
+};
 </script>
 
 <style scoped>

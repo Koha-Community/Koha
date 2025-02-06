@@ -26,24 +26,24 @@
 </template>
 
 <script>
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import { inject, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client.js"
-import KohaTable from "../KohaTable.vue"
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import { inject, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
+        const vendorStore = inject("vendorStore");
+        const { vendors } = storeToRefs(vendorStore);
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref()
+        const table = ref();
 
         return {
             vendors,
@@ -53,7 +53,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             license_table_settings,
-        }
+        };
     },
     data: function () {
         return {
@@ -77,9 +77,9 @@ export default {
                 filters_options: {
                     1: () =>
                         this.vendors.map(e => {
-                            e["_id"] = e["id"]
-                            e["_str"] = e["name"]
-                            return e
+                            e["_id"] = e["id"];
+                            e["_str"] = e["name"];
+                            return e;
                         }),
                     3: () => this.map_av_dt_filter("av_license_types"),
                     4: () => this.map_av_dt_filter("av_license_statuses"),
@@ -89,7 +89,7 @@ export default {
                     "-1": ["edit", "delete"],
                 },
             },
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -101,36 +101,36 @@ export default {
                             .getSearchableAVOptions()
                             .then(() => (vm.initialized = true))
                     )
-            )
-        })
+            );
+        });
     },
     methods: {
         async getLicenseCount() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.licenses.count().then(
                 count => {
-                    this.license_count = count
+                    this.license_count = count;
                 },
                 error => {}
-            )
+            );
         },
         async getSearchableAdditionalFields() {
-            const client = APIClient.additional_fields
+            const client = APIClient.additional_fields;
             await client.additional_fields.getAll("license").then(
                 searchable_additional_fields => {
                     this.searchable_additional_fields =
                         searchable_additional_fields.filter(
                             field => field.searchable
-                        )
+                        );
                 },
                 error => {}
-            )
+            );
         },
         async getSearchableAVOptions() {
-            const client_av = APIClient.authorised_values
+            const client_av = APIClient.authorised_values;
             let av_cat_array = this.searchable_additional_fields
                 .filter(field => field.authorised_value_category_name)
-                .map(field => field.authorised_value_category_name)
+                .map(field => field.authorised_value_category_name);
 
             await client_av.values
                 .getCategoriesWithValues([
@@ -140,24 +140,24 @@ export default {
                     av_cat_array.forEach(av_cat => {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
-                        )
+                        );
                         this.searchable_av_options[av_cat] =
                             av_match.authorised_values.map(av => ({
                                 value: av.value,
                                 label: av.description,
-                            }))
-                    })
-                })
+                            }));
+                    });
+                });
         },
         doShow: function ({ license_id }, dt, event) {
-            event.preventDefault()
-            this.$router.push({ name: "LicensesShow", params: { license_id } })
+            event.preventDefault();
+            this.$router.push({ name: "LicensesShow", params: { license_id } });
         },
         doEdit: function ({ license_id }, dt, event) {
             this.$router.push({
                 name: "LicensesFormAddEdit",
                 params: { license_id },
-            })
+            });
         },
         doDelete: function (license, dt, event) {
             this.setConfirmationDialog(
@@ -170,7 +170,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.licenses.delete(license.license_id).then(
                         success => {
                             this.setMessage(
@@ -178,16 +178,16 @@ export default {
                                     license.name
                                 ),
                                 true
-                            )
-                            dt.draw()
+                            );
+                            dt.draw();
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
         getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av
+            let get_lib_from_av = this.get_lib_from_av;
 
             return [
                 {
@@ -202,7 +202,7 @@ export default {
                             '" class="show">' +
                             escape_str(`${row.name} (#${row.license_id})`) +
                             "</a>"
-                        )
+                        );
                     },
                 },
                 {
@@ -217,7 +217,7 @@ export default {
                                   '">' +
                                   escape_str(row.vendor.name) +
                                   "</a>"
-                            : ""
+                            : "";
                     },
                 },
 
@@ -235,7 +235,7 @@ export default {
                     render: function (data, type, row, meta) {
                         return escape_str(
                             get_lib_from_av("av_license_types", row.type)
-                        )
+                        );
                     },
                 },
                 {
@@ -246,7 +246,7 @@ export default {
                     render: function (data, type, row, meta) {
                         return escape_str(
                             get_lib_from_av("av_license_statuses", row.status)
-                        )
+                        );
                     },
                 },
                 {
@@ -255,7 +255,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return $date(row.started_on)
+                        return $date(row.started_on);
                     },
                 },
                 {
@@ -264,10 +264,10 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return $date(row.ended_on)
+                        return $date(row.ended_on);
                     },
                 },
-            ]
+            ];
         },
     },
     props: {
@@ -276,5 +276,5 @@ export default {
     },
     components: { Toolbar, ToolbarButton, KohaTable },
     name: "LicensesList",
-}
+};
 </script>

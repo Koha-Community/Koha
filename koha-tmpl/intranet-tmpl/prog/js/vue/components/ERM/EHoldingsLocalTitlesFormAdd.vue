@@ -412,22 +412,22 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
-import { setMessage, setError, setWarning } from "../../messages"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue";
+import { setMessage, setError, setWarning } from "../../messages";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { av_title_publication_types } = storeToRefs(AVStore)
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { av_title_publication_types } = storeToRefs(AVStore);
+        const { get_lib_from_av } = AVStore;
 
         return {
             av_title_publication_types,
             get_lib_from_av,
-        }
+        };
     },
     data() {
         return {
@@ -462,92 +462,92 @@ export default {
                 create_linked_biblio: false,
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.title_id) {
-                vm.title = vm.getTitle(to.params.title_id)
+                vm.title = vm.getTitle(to.params.title_id);
             } else {
-                vm.initialized = true
+                vm.initialized = true;
             }
-        })
+        });
     },
     methods: {
         getTitle(title_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.localTitles.get(title_id).then(
                 title => {
-                    this.title = title
-                    this.initialized = true
+                    this.title = title;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         checkForm(title) {
-            let errors = []
+            let errors = [];
 
-            let resources = title.resources
-            const package_ids = resources.map(al => al.package_id)
+            let resources = title.resources;
+            const package_ids = resources.map(al => al.package_id);
             const duplicate_package_ids = package_ids.filter(
                 (id, i) => package_ids.indexOf(id) !== i
-            )
+            );
 
             if (duplicate_package_ids.length) {
-                errors.push(this.$__("A package is used several times"))
+                errors.push(this.$__("A package is used several times"));
             }
 
             errors.forEach(function (e) {
-                setWarning(e)
-            })
-            return !errors.length
+                setWarning(e);
+            });
+            return !errors.length;
         },
         onSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
 
-            let title = JSON.parse(JSON.stringify(this.title)) // copy
+            let title = JSON.parse(JSON.stringify(this.title)); // copy
 
             if (!this.checkForm(title)) {
-                return false
+                return false;
             }
 
-            let title_id = title.title_id
-            delete title.title_id
-            delete title.biblio_id
+            let title_id = title.title_id;
+            delete title.title_id;
+            delete title.biblio_id;
 
             // Cannot use the map/keepAttrs because of the reserved keywork 'package'
             title.resources.forEach(function (e) {
-                delete e.package
-                delete e.resource_id
-            })
+                delete e.package;
+                delete e.resource_id;
+            });
 
-            const client = APIClient.erm
+            const client = APIClient.erm;
             if (title_id) {
                 client.localTitles.update(title, title_id).then(
                     success => {
-                        setMessage(this.$__("Title updated"))
+                        setMessage(this.$__("Title updated"));
                         this.$router.push({
                             name: "EHoldingsLocalTitlesList",
-                        })
+                        });
                     },
                     error => {}
-                )
+                );
             } else {
                 client.localTitles.create(title).then(
                     success => {
-                        setMessage(this.$__("Title created"))
+                        setMessage(this.$__("Title created"));
                         this.$router.push({
                             name: "EHoldingsLocalTitlesList",
-                        })
+                        });
                     },
                     error => {}
-                )
+                );
             }
         },
     },
     components: { EHoldingsTitlesFormAddResources },
     name: "EHoldingsLocalTitlesFormAdd",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {

@@ -35,20 +35,20 @@
 </template>
 
 <script>
-import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue"
-import { inject, ref } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import KohaTable from "../KohaTable.vue"
+import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue";
+import { inject, ref } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore") // Left in for future permissions fixes
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore"); // Left in for future permissions fixes
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
         const { setConfirmationDialog, setMessage, setWarning } =
-            inject("mainStore")
+            inject("mainStore");
 
-        const table = ref()
+        const table = ref();
 
         return {
             get_lib_from_av,
@@ -57,7 +57,7 @@ export default {
             setMessage,
             setWarning,
             table,
-        }
+        };
     },
     data: function () {
         return {
@@ -90,25 +90,25 @@ export default {
                     ],
                 },
             },
-        }
+        };
     },
     methods: {
         async getUsageDataProviderCount() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.usage_data_providers.count().then(
                 count => {
-                    this.usage_data_provider_count = count
-                    this.initialized = true
+                    this.usage_data_provider_count = count;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         table_url() {
-            let url = "/api/v1/erm/usage_data_providers"
-            return url
+            let url = "/api/v1/erm/usage_data_providers";
+            return url;
         },
         show_usage_data_provider(usage_data_provider, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
 
             this.$router.push({
                 name: "UsageStatisticsDataProvidersShow",
@@ -116,7 +116,7 @@ export default {
                     usage_data_provider_id:
                         usage_data_provider.erm_usage_data_provider_id,
                 },
-            })
+            });
         },
         edit_usage_data_provider(usage_data_provider, dt, event) {
             this.$router.push({
@@ -125,7 +125,7 @@ export default {
                     usage_data_provider_id:
                         usage_data_provider.erm_usage_data_provider_id,
                 },
-            })
+            });
         },
         delete_usage_data_provider(usage_data_provider, dt, event) {
             this.setConfirmationDialog(
@@ -138,7 +138,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.usage_data_providers
                         .delete(usage_data_provider.erm_usage_data_provider_id)
                         .then(
@@ -148,16 +148,17 @@ export default {
                                         usage_data_provider.name
                                     ),
                                     true
-                                )
-                                dt.draw()
+                                );
+                                dt.draw();
                             },
                             error => {}
-                        )
+                        );
                 }
-            )
+            );
         },
         run_harvester_now(usage_data_provider, dt, event) {
-            const { erm_usage_data_provider_id: id, name } = usage_data_provider
+            const { erm_usage_data_provider_id: id, name } =
+                usage_data_provider;
 
             if (!usage_data_provider.active) {
                 this.setConfirmationDialog(
@@ -170,19 +171,19 @@ export default {
                         cancel_label: this.$__("No, do not update status"),
                     },
                     () => {
-                        usage_data_provider.active = 1
-                        delete usage_data_provider.erm_usage_data_provider_id
+                        usage_data_provider.active = 1;
+                        delete usage_data_provider.erm_usage_data_provider_id;
                         // const counter_files = usage_data_provider.counter_files
                         // delete usage_data_provider.counter_files
-                        delete usage_data_provider.earliest_platform
-                        delete usage_data_provider.latest_platform
-                        delete usage_data_provider.earliest_title
-                        delete usage_data_provider.latest_title
-                        delete usage_data_provider.earliest_database
-                        delete usage_data_provider.latest_database
-                        delete usage_data_provider.earliest_item
-                        delete usage_data_provider.latest_item
-                        const client = APIClient.erm
+                        delete usage_data_provider.earliest_platform;
+                        delete usage_data_provider.latest_platform;
+                        delete usage_data_provider.earliest_title;
+                        delete usage_data_provider.latest_title;
+                        delete usage_data_provider.earliest_database;
+                        delete usage_data_provider.latest_database;
+                        delete usage_data_provider.earliest_item;
+                        delete usage_data_provider.latest_item;
+                        const client = APIClient.erm;
                         client.usage_data_providers
                             .update(usage_data_provider, id)
                             .then(
@@ -192,17 +193,17 @@ export default {
                                             "Updated status for usage data provider %s"
                                         ).format(name),
                                         true
-                                    )
+                                    );
                                     // usage_data_provider.counter_files =
                                     // counter_files
-                                    dt.draw()
+                                    dt.draw();
                                 },
                                 error => {}
-                            )
+                            );
                     }
-                )
+                );
             } else {
-                let date = new Date()
+                let date = new Date();
                 this.setConfirmationDialog(
                     {
                         title: this.$__(
@@ -229,21 +230,21 @@ export default {
                         ],
                     },
                     callback_result => {
-                        const client = APIClient.erm
+                        const client = APIClient.erm;
                         client.usage_data_providers
                             .process_SUSHI_response(id, {
                                 begin_date: callback_result.inputs.find(
                                     input => {
-                                        return input.id == "begin_date"
+                                        return input.id == "begin_date";
                                     }
                                 ).value,
                                 end_date: callback_result.inputs.find(input => {
-                                    return input.id == "end_date"
+                                    return input.id == "end_date";
                                 }).value,
                             })
                             .then(
                                 success => {
-                                    let message = ""
+                                    let message = "";
                                     success.jobs.forEach((job, i) => {
                                         message +=
                                             "<li>" +
@@ -254,21 +255,22 @@ export default {
                                             job.job_id +
                                             '" target="_blank">' +
                                             this.$__("Check job progress") +
-                                            ".</a></li>"
-                                    })
-                                    this.setMessage(message, true)
+                                            ".</a></li>";
+                                    });
+                                    this.setMessage(message, true);
                                 },
                                 error => {}
-                            )
+                            );
                     }
-                )
+                );
             }
         },
         test_harvester_connection(usage_data_provider, dt, event) {
-            const { erm_usage_data_provider_id: id, name } = usage_data_provider
+            const { erm_usage_data_provider_id: id, name } =
+                usage_data_provider;
 
             if (usage_data_provider.active) {
-                const client = APIClient.erm
+                const client = APIClient.erm;
                 client.usage_data_providers.test(id).then(
                     success => {
                         if (success) {
@@ -277,25 +279,25 @@ export default {
                                     "Harvester connection was successful for usage data provider %s"
                                 ).format(name),
                                 true
-                            )
+                            );
                         } else {
                             this.setMessage(
                                 this.$__(
                                     "No connection for usage data provider %s, please check your credentials and try again."
                                 ).format(name),
                                 true
-                            )
+                            );
                         }
                     },
                     error => {}
-                )
+                );
             } else {
                 this.setWarning(
                     this.$__(
                         "This data provider is inactive - connection testing is not possible"
                     ),
                     true
-                )
+                );
             }
         },
         getTableColumns() {
@@ -314,7 +316,7 @@ export default {
                                 `${row.name} (#${row.erm_usage_data_provider_id})`
                             ) +
                             "</a>"
-                        )
+                        );
                     },
                 },
                 {
@@ -326,8 +328,8 @@ export default {
                 {
                     title: __("Status"),
                     render: function (data, type, row, meta) {
-                        const status = row.active ? "Active" : "Inactive"
-                        return status
+                        const status = row.active ? "Active" : "Inactive";
+                        return status;
                     },
                     searchable: true,
                     orderable: true,
@@ -338,18 +340,18 @@ export default {
                     searchable: true,
                     orderable: true,
                 },
-            ]
+            ];
         },
     },
     mounted() {
         if (!this.building_table) {
-            this.building_table = true
-            this.getUsageDataProviderCount()
+            this.building_table = true;
+            this.getUsageDataProviderCount();
         }
     },
     components: { Toolbar, KohaTable },
     name: "DataProvidersList",
-}
+};
 </script>
 
 <style scoped>

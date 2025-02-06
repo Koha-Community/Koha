@@ -97,7 +97,7 @@
 export default {
     props: ["usage_data_provider"],
     name: "UsageStatisticsDataProviderDetails",
-}
+};
 </script>
 
 <style scoped>

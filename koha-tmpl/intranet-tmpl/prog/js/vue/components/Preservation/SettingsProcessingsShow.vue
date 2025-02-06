@@ -87,26 +87,26 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import { inject } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
 
 export default {
     setup() {
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         return {
             notice_templates,
             setConfirmationDialog,
             setMessage,
-        }
+        };
     },
     computed: {
         notice_template() {
             return this.notice_templates.find(
                 n => n.id == this.processing.letter_code
-            )
+            );
         },
     },
     data() {
@@ -118,26 +118,26 @@ export default {
                 attributes: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getProcessing(to.params.processing_id)
-        })
+            vm.getProcessing(to.params.processing_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.processing = this.getProcessing(to.params.processing_id)
+        this.processing = this.getProcessing(to.params.processing_id);
     },
     methods: {
         async getProcessing(processing_id) {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             await client.processings.get(processing_id).then(
                 processing => {
-                    this.processing = processing
-                    this.initialized = true
+                    this.processing = processing;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         doDelete: function () {
             this.setConfirmationDialog(
@@ -150,7 +150,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.preservation
+                    const client = APIClient.preservation;
                     client.processings
                         .delete(this.processing.processing_id)
                         .then(
@@ -160,17 +160,17 @@ export default {
                                         this.processing.name
                                     ),
                                     true
-                                )
-                                this.$router.push({ name: "Settings" })
+                                );
+                                this.$router.push({ name: "Settings" });
                             },
                             error => {}
-                        )
+                        );
                 }
-            )
+            );
         },
     },
     components: { Toolbar, ToolbarButton },
     name: "ProcessingsShow",
-}
+};
 </script>
 <style scoped></style>

@@ -55,38 +55,38 @@
 </template>
 
 <script>
-import { APIClient } from "../../fetch/api-client.js"
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     data() {
         return {
             agreements: [],
             initialized: false,
-        }
+        };
     },
     beforeCreate() {
-        const client = APIClient.erm
+        const client = APIClient.erm;
         client.agreements.getAll().then(
             agreements => {
-                this.agreements = agreements
-                this.initialized = true
+                this.agreements = agreements;
+                this.initialized = true;
             },
             error => {}
-        )
+        );
     },
     methods: {
         addAgreement() {
             this.package_agreements.push({
                 agreement_id: null,
-            })
+            });
         },
         deleteAgreement(counter) {
-            this.package_agreements.splice(counter, 1)
+            this.package_agreements.splice(counter, 1);
         },
     },
     props: {
         package_agreements: Array,
     },
     name: "EHoldingsLocalPackageAgreements",
-}
+};
 </script>

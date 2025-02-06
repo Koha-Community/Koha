@@ -22,22 +22,22 @@
     </nav>
 </template>
 <script>
-import { inject } from "vue"
-import { storeToRefs } from "pinia"
-import NavigationItem from "./NavigationItem.vue"
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
+import NavigationItem from "./NavigationItem.vue";
 export default {
     name: "Breadcrumbs",
     setup: () => {
-        const navigationStore = inject("navigationStore")
-        const { breadcrumbs } = storeToRefs(navigationStore)
-        const { params } = navigationStore
+        const navigationStore = inject("navigationStore");
+        const { breadcrumbs } = storeToRefs(navigationStore);
+        const { params } = navigationStore;
         return {
             breadcrumbs,
             params,
-        }
+        };
     },
     components: {
         NavigationItem,
     },
-}
+};
 </script>

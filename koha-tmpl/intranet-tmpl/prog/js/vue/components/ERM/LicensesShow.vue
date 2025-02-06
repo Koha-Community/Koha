@@ -155,21 +155,21 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue"
+import { inject } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
 
 export default {
     setup() {
-        const format_date = $date
-        const patron_to_html = $patron_to_html
+        const format_date = $date;
+        const patron_to_html = $patron_to_html;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
 
         return {
             format_date,
@@ -177,7 +177,7 @@ export default {
             get_lib_from_av,
             setConfirmationDialog,
             setMessage,
-        }
+        };
     },
     data() {
         return {
@@ -196,23 +196,23 @@ export default {
                 ended_on: undefined,
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.license = vm.getLicense(to.params.license_id)
-        })
+            vm.license = vm.getLicense(to.params.license_id);
+        });
     },
     methods: {
         async getLicense(license_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.licenses.get(license_id).then(
                 license => {
-                    this.license = license
-                    this.initialized = true
+                    this.license = license;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         delete_license: function (license_id, license_name) {
             this.setConfirmationDialog(
@@ -225,7 +225,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.licenses.delete(license_id).then(
                         success => {
                             this.setMessage(
@@ -233,18 +233,18 @@ export default {
                                     license_name
                                 ),
                                 true
-                            )
-                            this.$router.push({ name: "LicensesList" })
+                            );
+                            this.$router.push({ name: "LicensesList" });
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
     },
     components: { Toolbar, ToolbarButton, AdditionalFieldsDisplay },
     name: "LicensesShow",
-}
+};
 </script>
 <style scoped>
 #license_documents ul {

@@ -357,29 +357,29 @@
 </template>
 
 <script>
-import ButtonSubmit from "../ButtonSubmit.vue"
-import { inject } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client.js"
+import ButtonSubmit from "../ButtonSubmit.vue";
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
+        const AVStore = inject("AVStore");
         const {
             av_report_types,
             av_platform_reports_metrics,
             av_database_reports_metrics,
             av_title_reports_metrics,
             av_item_reports_metrics,
-        } = storeToRefs(AVStore)
+        } = storeToRefs(AVStore);
 
         const { setConfirmationDialog, setMessage, setError } =
-            inject("mainStore")
+            inject("mainStore");
 
-        const { getMonthsData, getColumnOptions } = inject("reportsStore")
+        const { getMonthsData, getColumnOptions } = inject("reportsStore");
 
-        const months_data = getMonthsData()
-        const title_property_column_options = getColumnOptions()
+        const months_data = getMonthsData();
+        const title_property_column_options = getColumnOptions();
 
         return {
             av_report_types,
@@ -392,7 +392,7 @@ export default {
             setError,
             months_data,
             title_property_column_options,
-        }
+        };
     },
     data() {
         return {
@@ -479,16 +479,16 @@ export default {
             request_url: null,
             report_name: "",
             data_type: null,
-        }
+        };
     },
     methods: {
         async getData(query, report_type) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client[`usage_${report_type}s`].getAll(query).then(
                 response => {
                     // If multiple searches are done we need to keep the results of the
                     // earlier searches but not allow for duplicate objects in the option array
-                    const addNewData = [...this.filter_data, ...response]
+                    const addNewData = [...this.filter_data, ...response];
                     const removedDuplicates = [
                         ...new Map(
                             addNewData.map(object => [
@@ -496,36 +496,36 @@ export default {
                                 object,
                             ])
                         ).values(),
-                    ]
-                    this.filter_data = removedDuplicates
+                    ];
+                    this.filter_data = removedDuplicates;
                 },
                 error => {}
-            )
+            );
         },
         dataSearchFilter(e) {
-            const report_type = this.query.report_type
-            const data_type = this.data_type
+            const report_type = this.query.report_type;
+            const data_type = this.data_type;
             if (!report_type) {
-                alert("Please select a report type")
+                alert("Please select a report type");
             }
             if (e.target.value.length > 1) {
                 const providers = this.query.usage_data_providers
                     ? this.query.usage_data_providers
-                    : []
-                const dataQueryObject = {}
-                dataQueryObject[data_type] = { "-like": `${e.target.value}%` }
+                    : [];
+                const dataQueryObject = {};
+                dataQueryObject[data_type] = { "-like": `${e.target.value}%` };
                 if (providers.length) {
-                    dataQueryObject.usage_data_provider_id = providers
+                    dataQueryObject.usage_data_provider_id = providers;
                 }
-                this.getData(dataQueryObject, this.data_type)
+                this.getData(dataQueryObject, this.data_type);
             }
         },
         validateYear(year) {
-            const validYearCheck = /^\d{4}$/.test(year) ? true : false
-            return validYearCheck
+            const validYearCheck = /^\d{4}$/.test(year) ? true : false;
+            return validYearCheck;
         },
         clearForm(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             this.query = {
                 data_display: "monthly",
@@ -538,111 +538,111 @@ export default {
                 start_year: null,
                 end_month: null,
                 end_year: null,
-            }
-            this.yearly_filter_required = true
+            };
+            this.yearly_filter_required = true;
         },
         buildCustomReport(e) {
-            e.preventDefault()
+            e.preventDefault();
 
-            const urlParams = this.validateFormAndCreateUrlParams()
+            const urlParams = this.validateFormAndCreateUrlParams();
 
             this.$router.push({
                 name: "UsageStatisticsReportsViewer",
                 query: { data: JSON.stringify(urlParams) },
-            })
+            });
         },
         monthSelector(e) {
             if (!this.query.start_year || !this.query.end_year) {
                 alert(
                     "Please select a start and end year before choosing this option"
-                )
-                return
+                );
+                return;
             }
             if (e.target.id === "yearly_filter_required_no") {
-                const years = []
+                const years = [];
                 for (
                     let i = parseInt(this.query.start_year);
                     i <= parseInt(this.query.end_year);
                     i++
                 ) {
-                    years.push(i)
+                    years.push(i);
                 }
 
                 const months = this.determineMonths(
                     this.query,
                     years,
                     this.months_data
-                )
+                );
 
-                this.time_period_columns_builder = months
-                this.yearly_filter_required = false
+                this.time_period_columns_builder = months;
+                this.yearly_filter_required = false;
             } else {
-                this.time_period_columns_builder = null
-                this.yearly_filter_required = true
+                this.time_period_columns_builder = null;
+                this.yearly_filter_required = true;
             }
         },
         determineMonths(query, years, months_data) {
-            const { start_month, end_month } = query
-            const months_per_year = {}
-            const numberOfYears = years.length
+            const { start_month, end_month } = query;
+            const months_per_year = {};
+            const numberOfYears = years.length;
 
             years.forEach((year, index) => {
                 // No month parameters selected - return all months
                 if (!start_month && !end_month) {
                     const copied_months = months_data.map(month => {
-                        return { ...month }
-                    })
-                    months_per_year[year] = copied_months
-                    return
+                        return { ...month };
+                    });
+                    months_per_year[year] = copied_months;
+                    return;
                 }
                 // If a report of 3+ years is chosen, "middle" years will return all months
                 if (index > 0 && index + 1 < numberOfYears) {
                     const copied_months = months_data.map(month => {
-                        return { ...month }
-                    })
-                    months_per_year[year] = copied_months
-                    return
+                        return { ...month };
+                    });
+                    months_per_year[year] = copied_months;
+                    return;
                 }
                 // If a single year report is chosen, return the correct number of months
                 if (index === 0 && numberOfYears === 1) {
-                    const months = []
-                    const first_month = start_month ? parseInt(start_month) : 1
-                    const last_month = end_month ? parseInt(end_month) : 12
+                    const months = [];
+                    const first_month = start_month ? parseInt(start_month) : 1;
+                    const last_month = end_month ? parseInt(end_month) : 12;
                     for (let i = first_month; i <= last_month; i++) {
-                        months.push(months_data[i - 1])
+                        months.push(months_data[i - 1]);
                     }
-                    months_per_year[year] = months
-                    return
+                    months_per_year[year] = months;
+                    return;
                 }
                 // If a multiple year report is chosen, ensure the first year has the correct months
                 if (index === 0 && numberOfYears > 1) {
-                    const months = []
-                    const first_month = start_month ? parseInt(start_month) : 1
+                    const months = [];
+                    const first_month = start_month ? parseInt(start_month) : 1;
                     for (let i = first_month; i <= 12; i++) {
-                        months.push(months_data[i - 1])
+                        months.push(months_data[i - 1]);
                     }
-                    months_per_year[year] = months
-                    return
+                    months_per_year[year] = months;
+                    return;
                 }
                 // If a multiple year report is chosen, ensure the final year has the correct months
                 if (index + 1 === numberOfYears && numberOfYears > 1) {
-                    const months = []
-                    const last_month = end_month ? parseInt(end_month) : 12
+                    const months = [];
+                    const last_month = end_month ? parseInt(end_month) : 12;
                     for (let i = 1; i <= last_month; i++) {
-                        months.push(months_data[i - 1])
+                        months.push(months_data[i - 1]);
                     }
-                    months_per_year[year] = months
-                    return
+                    months_per_year[year] = months;
+                    return;
                 }
-            })
-            return months_per_year
+            });
+            return months_per_year;
         },
         updateMonthsRequired($event, key, index, time_period_columns) {
-            const value = $event.target.checked
+            const value = $event.target.checked;
 
-            time_period_columns[key][index].active = value
+            time_period_columns[key][index].active = value;
 
-            this.time_period_columns_builder = time_period_columns
+            this.time_period_columns_builder = time_period_columns;
         },
         buildMonthlyUrlQuery(
             query,
@@ -650,26 +650,26 @@ export default {
             data_display,
             db_table
         ) {
-            let url
-            let prefix
+            let url;
+            let prefix;
             switch (data_display) {
                 case "monthly":
                 case "monthly_with_totals":
-                    url = `/api/v1/erm/eUsage/monthly_report/${db_table}`
-                    prefix = "erm_usage_muses"
-                    break
+                    url = `/api/v1/erm/eUsage/monthly_report/${db_table}`;
+                    prefix = "erm_usage_muses";
+                    break;
                 case "metric_type":
-                    url = `/api/v1/erm/eUsage/metric_types_report/${db_table}`
-                    prefix = "erm_usage_muses"
-                    break
+                    url = `/api/v1/erm/eUsage/metric_types_report/${db_table}`;
+                    prefix = "erm_usage_muses";
+                    break;
                 case "usage_data_provider":
-                    url = `/api/v1/erm/eUsage/provider_rollup_report/${db_table}`
-                    prefix = `erm_usage_${db_table}s.erm_usage_muses`
-                    break
+                    url = `/api/v1/erm/eUsage/provider_rollup_report/${db_table}`;
+                    prefix = `erm_usage_${db_table}s.erm_usage_muses`;
+                    break;
             }
 
             // Work out which years are included in the query
-            const years = []
+            const years = [];
             const {
                 start_year,
                 end_year,
@@ -678,61 +678,61 @@ export default {
                 usage_data_providers,
                 keywords,
                 report_type,
-            } = query
+            } = query;
 
             for (let i = parseInt(start_year); i <= parseInt(end_year); i++) {
-                years.push(i)
+                years.push(i);
             }
 
             const months = time_period_columns
                 ? time_period_columns
-                : this.determineMonths(query, years, this.months_data)
-            this.time_period_columns_builder = months
+                : this.determineMonths(query, years, this.months_data);
+            this.time_period_columns_builder = months;
 
             // Build a query array by year - [{ year1 }, {year2} ...etc]
             const queryArray = years.map(year => {
-                const queryByYear = {}
+                const queryByYear = {};
 
-                queryByYear[`${prefix}.year`] = year
-                queryByYear[`${prefix}.report_type`] = report_type
+                queryByYear[`${prefix}.year`] = year;
+                queryByYear[`${prefix}.report_type`] = report_type;
 
                 // Find the months applicable to each year, ignoring months that have been de-selected
                 const queryMonths = months[year]
                     .filter(month => month.active)
                     .map(month => {
-                        return month.value
-                    })
-                queryByYear[`${prefix}.month`] = queryMonths
+                        return month.value;
+                    });
+                queryByYear[`${prefix}.month`] = queryMonths;
                 // Add any keyword query
                 if (keywords) {
                     const object_ids = keywords.map(object => {
-                        return object[`${db_table}_id`]
-                    })
-                    queryByYear[`${prefix}.${db_table}_id`] = object_ids
+                        return object[`${db_table}_id`];
+                    });
+                    queryByYear[`${prefix}.${db_table}_id`] = object_ids;
                 }
                 // Add any metric types query
                 if (metric_types) {
-                    queryByYear[`${prefix}.metric_type`] = metric_types
+                    queryByYear[`${prefix}.metric_type`] = metric_types;
                 }
                 // Add any access types query
                 if (access_types) {
-                    queryByYear[`${prefix}.access_type`] = access_types
+                    queryByYear[`${prefix}.access_type`] = access_types;
                 }
                 // Add any data provider query
                 if (usage_data_providers) {
                     queryByYear[`${prefix}.usage_data_provider_id`] =
-                        usage_data_providers
+                        usage_data_providers;
                 }
 
-                return queryByYear
-            })
+                return queryByYear;
+            });
 
-            url += `?q=${JSON.stringify(queryArray)}`
+            url += `?q=${JSON.stringify(queryArray)}`;
 
-            return url
+            return url;
         },
         buildYearlyUrlQuery(query, db_table) {
-            let url = `/api/v1/erm/eUsage/yearly_report/${db_table}`
+            let url = `/api/v1/erm/eUsage/yearly_report/${db_table}`;
             const {
                 start_year,
                 end_year,
@@ -741,74 +741,74 @@ export default {
                 usage_data_providers,
                 keywords,
                 report_type,
-            } = query
-            const queryObject = {}
+            } = query;
+            const queryObject = {};
             // Work out which years are included in the query
-            const years = []
+            const years = [];
 
             for (let i = parseInt(start_year); i <= parseInt(end_year); i++) {
-                years.push(i)
+                years.push(i);
             }
-            queryObject["erm_usage_yuses.year"] = years
-            this.time_period_columns_builder = years
-            queryObject[`erm_usage_yuses.report_type`] = report_type
+            queryObject["erm_usage_yuses.year"] = years;
+            this.time_period_columns_builder = years;
+            queryObject[`erm_usage_yuses.report_type`] = report_type;
 
             // Add any metric types query
             if (metric_types) {
-                queryObject[`erm_usage_yuses.metric_type`] = metric_types
+                queryObject[`erm_usage_yuses.metric_type`] = metric_types;
             }
             // Add any access types query
             if (access_types) {
-                queryObject[`erm_usage_yuses.access_type`] = access_types
+                queryObject[`erm_usage_yuses.access_type`] = access_types;
             }
             // Add any keyword query
             if (keywords) {
                 const object_ids = keywords.map(object => {
-                    return object[`${db_table}_id`]
-                })
-                queryObject[`erm_usage_yuses.${db_table}_id`] = object_ids
+                    return object[`${db_table}_id`];
+                });
+                queryObject[`erm_usage_yuses.${db_table}_id`] = object_ids;
             }
             // Add any data provider query
             if (usage_data_providers) {
                 queryObject[`erm_usage_yuses.usage_data_provider_id`] =
-                    usage_data_providers
+                    usage_data_providers;
             }
-            url += `?q=${JSON.stringify(queryObject)}`
+            url += `?q=${JSON.stringify(queryObject)}`;
 
-            return url
+            return url;
         },
         setMetricTypesAndProviderList(e) {
-            const report_type = e
-            const possible_metric_types = []
-            let av_type
+            const report_type = e;
+            const possible_metric_types = [];
+            let av_type;
 
-            this.filter_data.length = 0
-            this.query.keywords = null
+            this.filter_data.length = 0;
+            this.query.keywords = null;
 
             if (report_type) {
                 switch (report_type.substring(0, 1)) {
                     case "P":
-                        av_type = this.av_platform_reports_metrics
-                        this.data_type = "platform"
-                        break
+                        av_type = this.av_platform_reports_metrics;
+                        this.data_type = "platform";
+                        break;
                     case "T":
-                        av_type = this.av_title_reports_metrics
-                        this.data_type = "title"
-                        break
+                        av_type = this.av_title_reports_metrics;
+                        this.data_type = "title";
+                        break;
                     case "I":
-                        av_type = this.av_item_reports_metrics
-                        this.data_type = "item"
-                        break
+                        av_type = this.av_item_reports_metrics;
+                        this.data_type = "item";
+                        break;
                     case "D":
-                        av_type = this.av_database_reports_metrics
-                        this.data_type = "database"
-                        break
+                        av_type = this.av_database_reports_metrics;
+                        this.data_type = "database";
+                        break;
                 }
 
                 if (report_type === "TR_J3" || report_type === "TR_B3") {
-                    this.access_types_options = ["Controlled", "OA_Gold"]
+                    this.access_types_options = ["Controlled", "OA_Gold"];
                 } else {
-                    this.access_types_options = []
+                    this.access_types_options = [];
                 }
 
                 for (const metric in this.metric_types_matrix) {
@@ -820,108 +820,108 @@ export default {
                     ) {
                         const av_metric_type = av_type.find(
                             type => metric === type.value
-                        )
-                        possible_metric_types.push(av_metric_type)
+                        );
+                        possible_metric_types.push(av_metric_type);
                     }
                 }
-                this.metric_types_options = possible_metric_types
+                this.metric_types_options = possible_metric_types;
 
                 // Limit usage data providers to those with the applicable report type
                 this.usage_data_provider_list =
                     this.usage_data_providers.filter(provider => {
-                        const report_types = provider.report_types
-                        const single_report_types = report_types.split(";")
-                        single_report_types.pop()
+                        const report_types = provider.report_types;
+                        const single_report_types = report_types.split(";");
+                        single_report_types.pop();
 
-                        return single_report_types.includes(report_type)
-                    })
+                        return single_report_types.includes(report_type);
+                    });
                 // Unselect any additional columns that aren't applicable to this data_type
                 const title_properties = Object.keys(
                     this.title_property_column_options
-                )
-                title_properties.shift() // Remove the first column as this is a default
+                );
+                title_properties.shift(); // Remove the first column as this is a default
                 title_properties.forEach(prop => {
                     if (
                         !this.title_property_column_options[
                             prop
                         ].used_by.includes(this.data_type)
                     ) {
-                        this.title_property_column_options[prop].active = false
+                        this.title_property_column_options[prop].active = false;
                     }
-                })
+                });
             } else {
-                this.metric_types_options = []
-                this.query.metric_types = null
+                this.metric_types_options = [];
+                this.query.metric_types = null;
                 // Reset data providers to include all providers
-                this.usage_data_provider_list = [...this.usage_data_providers]
+                this.usage_data_provider_list = [...this.usage_data_providers];
             }
         },
         setReportTypesAndResetFilterData(providers) {
-            const permittedReportTypes = []
+            const permittedReportTypes = [];
             if (providers.length === 0) {
-                this.report_types_options = this.av_report_types
-                this.query.keywords = null
-                this.filter_data.length = 0
-                return
+                this.report_types_options = this.av_report_types;
+                this.query.keywords = null;
+                this.filter_data.length = 0;
+                return;
             }
 
             providers.forEach(id => {
                 const data_provider = this.usage_data_providers.find(
                     item => item.erm_usage_data_provider_id === id
-                )
-                const report_types = data_provider.report_types
-                const single_report_types = report_types.split(";")
-                single_report_types.pop() // remove trailing "" from array
+                );
+                const report_types = data_provider.report_types;
+                const single_report_types = report_types.split(";");
+                single_report_types.pop(); // remove trailing "" from array
 
                 single_report_types.forEach(type => {
                     const report_type = this.av_report_types.find(
                         rt => rt.value === type
-                    )
-                    permittedReportTypes.push(report_type)
-                })
+                    );
+                    permittedReportTypes.push(report_type);
+                });
                 // If we change/remove a data provider then we don't want data being displayed from that provider in the dropdown
                 const removeProviderData = this.filter_data.filter(
                     obj => obj.erm_usage_data_provider_id !== id
-                )
-                this.filter_data = removeProviderData
-            })
-            this.report_types_options = permittedReportTypes
+                );
+                this.filter_data = removeProviderData;
+            });
+            this.report_types_options = permittedReportTypes;
         },
         defineColumns(title_props) {
-            const columns = []
+            const columns = [];
             // Add user selected columns
-            const title_properties = Object.keys(title_props)
+            const title_properties = Object.keys(title_props);
             title_properties.forEach(prop => {
                 if (title_props[prop].active) {
-                    columns.push(title_props[prop].id)
+                    columns.push(title_props[prop].id);
                 }
-            })
+            });
 
-            return columns
+            return columns;
         },
         async saveToDefaultReports(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             if (!this.report_name) {
-                alert("Please provide a report name")
-                return
+                alert("Please provide a report name");
+                return;
             }
-            const params = this.validateFormAndCreateUrlParams()
+            const params = this.validateFormAndCreateUrlParams();
             const report = {
                 report_name: this.report_name,
                 report_url_params: JSON.stringify(params),
-            }
+            };
 
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.default_usage_reports.create(report).then(
                 success => {
-                    this.setMessage(this.$__("Report saved successfully"))
+                    this.setMessage(this.$__("Report saved successfully"));
                 },
                 error => {}
-            )
+            );
         },
         validateFormAndCreateUrlParams() {
-            const queryObject = { ...this.query }
+            const queryObject = { ...this.query };
             const {
                 start_year,
                 end_year,
@@ -929,34 +929,34 @@ export default {
                 report_type,
                 metric_types,
                 access_types,
-            } = queryObject
+            } = queryObject;
 
             if (!report_type || !start_year || !end_year) {
                 alert(
                     "You have not filled in all the required fields, please try again"
-                )
-                return
+                );
+                return;
             }
 
             // validate if the year is a valid string
-            const valid_start_year = this.validateYear(start_year)
-            const valid_end_year = this.validateYear(end_year)
+            const valid_start_year = this.validateYear(start_year);
+            const valid_end_year = this.validateYear(end_year);
 
             if (!valid_start_year || !valid_end_year) {
                 this.setError(
                     this.$__("Please enter a year with the format YYYY")
-                )
-                return
+                );
+                return;
             }
 
             // If no metric types are selected then all possible values should be included for backend data filtering
             if (!metric_types || (metric_types && metric_types.length === 0)) {
                 const final_metric_types = this.metric_types_options.map(
                     metric => {
-                        return metric.value
+                        return metric.value;
                     }
-                )
-                queryObject.metric_types = final_metric_types
+                );
+                queryObject.metric_types = final_metric_types;
             }
             // If no access types are selected then all possible values should be included for backend data filtering ( but only for TR_J3 and TR_B3 reports)
             if (
@@ -965,10 +965,10 @@ export default {
             ) {
                 const final_access_types = this.access_types_options.map(
                     access => {
-                        return access
+                        return access;
                     }
-                )
-                queryObject.access_types = final_access_types
+                );
+                queryObject.access_types = final_access_types;
             }
 
             // Determine which database table should be queried
@@ -979,15 +979,15 @@ export default {
                       data_display,
                       this.data_type
                   )
-                : this.buildYearlyUrlQuery(queryObject, this.data_type)
-            const type = data_display
+                : this.buildYearlyUrlQuery(queryObject, this.data_type);
+            const type = data_display;
             const columns =
                 data_display === "usage_data_provider"
                     ? []
-                    : this.defineColumns(this.title_property_column_options)
+                    : this.defineColumns(this.title_property_column_options);
             const yearly_filter = data_display.includes("monthly")
                 ? this.yearly_filter_required
-                : false
+                : false;
 
             const urlParams = {
                 url,
@@ -996,16 +996,16 @@ export default {
                 yearly_filter,
                 type,
                 tp_columns: this.time_period_columns_builder,
-            }
+            };
 
-            return urlParams
+            return urlParams;
         },
     },
     props: ["usage_data_providers"],
     components: {
         ButtonSubmit,
     },
-}
+};
 </script>
 
 <style scoped>

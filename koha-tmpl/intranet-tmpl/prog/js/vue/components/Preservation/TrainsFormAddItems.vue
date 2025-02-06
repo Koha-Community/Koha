@@ -105,19 +105,19 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../../fetch/api-client"
+import { inject } from "vue";
+import { APIClient } from "../../fetch/api-client";
 
 export default {
     setup() {
-        const { setMessage, setWarning, loading, loaded } = inject("mainStore")
+        const { setMessage, setWarning, loading, loaded } = inject("mainStore");
         return {
             setMessage,
             setWarning,
             loading,
             loaded,
             api_mappings,
-        }
+        };
     },
     data() {
         return {
@@ -134,13 +134,13 @@ export default {
             initialized: false,
             av_options: {},
             attributes: [],
-        }
+        };
     },
     beforeCreate() {
-        const client = APIClient.preservation
+        const client = APIClient.preservation;
         client.processings
             .getAll()
-            .then(processings => (this.processings = processings))
+            .then(processings => (this.processings = processings));
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -154,48 +154,48 @@ export default {
                                 .refreshAttributes()
                                 .then(() => (vm.initialized = true))
                         )
-                )
-        })
+                );
+        });
     },
     methods: {
         async getTrain(train_id) {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             await client.trains.get(train_id).then(
                 train => {
-                    this.train = train
-                    this.processing_id = train.default_processing_id
+                    this.train = train;
+                    this.processing_id = train.default_processing_id;
                 },
                 error => {}
-            )
+            );
         },
         async getItems(item_ids) {
-            const client = APIClient.item
-            let q = { "me.item_id": item_ids }
+            const client = APIClient.item;
+            let q = { "me.item_id": item_ids };
             await client.items.getAll(q, {}, { "x-koha-embed": "biblio" }).then(
                 items => {
-                    this.items = items
+                    this.items = items;
                 },
                 error => {}
-            )
+            );
         },
         columnApiMapping(item, db_column) {
-            let table_col = db_column.split(".")
-            let table = table_col[0]
-            let col = table_col[1]
-            let api_attribute = this.api_mappings[table][col] || col
+            let table_col = db_column.split(".");
+            let table = table_col[0];
+            let col = table_col[1];
+            let api_attribute = this.api_mappings[table][col] || col;
             return table == "biblio" || table == "biblioitems"
                 ? item.biblio[api_attribute]
-                : item[api_attribute]
+                : item[api_attribute];
         },
         async refreshAttributes() {
-            this.loading()
+            this.loading();
 
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             await client.processings.get(this.processing_id).then(
                 processing => (this.processing = processing),
                 error => {}
-            )
-            this.attributes = []
+            );
+            this.attributes = [];
             this.processing.attributes.forEach(attribute => {
                 this.attributes.push({
                     processing_attribute_id: attribute.processing_attribute_id,
@@ -203,12 +203,12 @@ export default {
                     type: attribute.type,
                     option_source: attribute.option_source,
                     value: "",
-                })
-            })
-            const client_av = APIClient.authorised_values
+                });
+            });
+            const client_av = APIClient.authorised_values;
             let av_cat_array = this.processing.attributes
                 .filter(attribute => attribute.type == "authorised_value")
-                .map(attribute => attribute.option_source)
+                .map(attribute => attribute.option_source);
 
             client_av.values
                 .getCategoriesWithValues([
@@ -218,27 +218,27 @@ export default {
                     av_cat_array.forEach(av_cat => {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
-                        )
-                        this.av_options[av_cat] = av_match.authorised_values
-                    })
+                        );
+                        this.av_options[av_cat] = av_match.authorised_values;
+                    });
                 })
-                .then(() => this.loaded())
+                .then(() => this.loaded());
         },
         addAttribute(processing_attribute_id) {
             let last_index = this.attributes.findLastIndex(
                 attribute =>
                     attribute.processing_attribute_id == processing_attribute_id
-            )
+            );
             let new_attribute = (({ value, ...keepAttrs }) => keepAttrs)(
                 this.attributes[last_index]
-            )
-            this.attributes.splice(last_index + 1, 0, new_attribute)
+            );
+            this.attributes.splice(last_index + 1, 0, new_attribute);
         },
         removeAttribute(counter) {
-            this.attributes.splice(counter, 1)
+            this.attributes.splice(counter, 1);
         },
         onSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             let train_items = this.items.map(item => {
                 return {
@@ -248,16 +248,16 @@ export default {
                         let value =
                             a.type == "db_column"
                                 ? this.columnApiMapping(item, a.option_source)
-                                : a.value
+                                : a.value;
                         return {
                             processing_attribute_id: a.processing_attribute_id,
                             value,
-                        }
+                        };
                     }),
-                }
-            })
+                };
+            });
 
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             client.train_items.createAll(train_items, this.train.train_id).then(
                 result => {
                     if (result.length) {
@@ -265,22 +265,22 @@ export default {
                             this.$__(
                                 "%s items have been added to train %s."
                             ).format(result.length, this.train.train_id)
-                        )
+                        );
                         this.$router.push({
                             name: "TrainsShow",
                             params: { train_id: this.train.train_id },
-                        })
+                        });
                     } else {
                         this.setMessage(
                             this.$__("No items have been added to the train.")
-                        )
+                        );
                     }
                 },
                 error => {}
-            )
+            );
         },
     },
     components: {},
     name: "TrainsFormAddItems",
-}
+};
 </script>

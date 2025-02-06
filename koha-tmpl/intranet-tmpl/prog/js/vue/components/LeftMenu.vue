@@ -16,25 +16,25 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import NavigationItem from "./NavigationItem.vue"
+import { inject } from "vue";
+import NavigationItem from "./NavigationItem.vue";
 export default {
     name: "LeftMenu",
     data() {
         return {
             navigationTree: this.leftNavigation,
-        }
+        };
     },
     setup: () => {
-        const navigationStore = inject("navigationStore")
-        const { leftNavigation } = navigationStore
+        const navigationStore = inject("navigationStore");
+        const { leftNavigation } = navigationStore;
         return {
             leftNavigation,
-        }
+        };
     },
     async beforeMount() {
         if (this.condition)
-            this.navigationTree = await this.condition(this.navigationTree)
+            this.navigationTree = await this.condition(this.navigationTree);
     },
     props: {
         title: String,
@@ -43,7 +43,7 @@ export default {
     components: {
         NavigationItem,
     },
-}
+};
 </script>
 
 <style scoped>

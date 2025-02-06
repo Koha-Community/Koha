@@ -243,18 +243,18 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import EHoldingsTitlePackagesList from "./EHoldingsEBSCOTitlePackagesList.vue"
-import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue";
+import EHoldingsTitlePackagesList from "./EHoldingsEBSCOTitlePackagesList.vue";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
 
         return {
             get_lib_from_av,
-        }
+        };
     },
     data() {
         return {
@@ -288,33 +288,33 @@ export default {
                 resources: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getTitle(to.params.title_id)
-        })
+            vm.getTitle(to.params.title_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.title = this.getTitle(to.params.title_id)
+        this.title = this.getTitle(to.params.title_id);
     },
     methods: {
         getTitle(title_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.EBSCOTitles.get(title_id).then(
                 title => {
-                    this.title = title
-                    this.initialized = true
+                    this.title = title;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
     },
     components: {
         EHoldingsTitlePackagesList,
     },
     name: "EHoldingsEBSCOTitlesShow",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {

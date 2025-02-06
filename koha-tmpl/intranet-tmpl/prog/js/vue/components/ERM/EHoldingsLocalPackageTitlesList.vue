@@ -5,21 +5,21 @@
 </template>
 
 <script>
-import { inject, ref } from "vue"
-import KohaTable from "../KohaTable.vue"
+import { inject, ref } from "vue";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const table = ref()
+        const table = ref();
         return {
             get_lib_from_av,
             map_av_dt_filter,
             escape_str,
             table,
-        }
+        };
     },
     data() {
         return {
@@ -39,19 +39,19 @@ export default {
                     0: ["show"],
                 },
             },
-        }
+        };
     },
     methods: {
         doShow: function ({ resource_id }, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.$router.push({
                 name: "EHoldingsLocalResourcesShow",
                 params: { resource_id },
-            })
+            });
         },
         getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av
-            let escape_str = this.escape_str
+            let get_lib_from_av = this.get_lib_from_av;
+            let escape_str = this.escape_str;
 
             return [
                 {
@@ -66,7 +66,7 @@ export default {
                             '" class="show">' +
                             escape_str(row.title.publication_title) +
                             "</a>"
-                        )
+                        );
                     },
                 },
                 {
@@ -80,10 +80,10 @@ export default {
                                 "av_title_publication_types",
                                 row.title.publication_type
                             )
-                        )
+                        );
                     },
                 },
-            ]
+            ];
         },
     },
     props: {
@@ -91,5 +91,5 @@ export default {
     },
     components: { KohaTable },
     name: "EHoldingsLocalPackageTitlesList",
-}
+};
 </script>

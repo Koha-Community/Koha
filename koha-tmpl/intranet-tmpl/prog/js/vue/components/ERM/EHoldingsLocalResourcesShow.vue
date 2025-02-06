@@ -101,16 +101,16 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
 export default {
     setup() {
-        const format_date = $date
+        const format_date = $date;
 
         return {
             format_date,
-        }
+        };
     },
     data() {
         return {
@@ -125,31 +125,31 @@ export default {
                 package: {},
             },
             initialized: false,
-        }
+        };
     },
 
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getResource(to.params.resource_id)
-        })
+            vm.getResource(to.params.resource_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.resource = this.getResource(to.params.resource_id)
+        this.resource = this.getResource(to.params.resource_id);
     },
     methods: {
         getResource(resource_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.localResources.get(resource_id).then(
                 resource => {
-                    this.resource = resource
-                    this.initialized = true
+                    this.resource = resource;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
     },
     name: "EHoldingsLocalResourcesShow",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {

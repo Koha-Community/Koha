@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import Breadcrumbs from "../../Breadcrumbs.vue"
-import Help from "../../Help.vue"
-import Dialog from "../../Dialog.vue"
+import Breadcrumbs from "../../Breadcrumbs.vue";
+import Help from "../../Help.vue";
+import Dialog from "../../Dialog.vue";
 
 export default {
     components: {
@@ -28,7 +28,7 @@ export default {
         Dialog,
         Help,
     },
-}
+};
 </script>
 
 <style></style>

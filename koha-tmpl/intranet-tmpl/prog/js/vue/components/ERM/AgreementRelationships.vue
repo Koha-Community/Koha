@@ -89,25 +89,25 @@
 </template>
 
 <script>
-import { APIClient } from "../../fetch/api-client.js"
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     data() {
         return {
             agreements: [],
-        }
+        };
     },
     beforeCreate() {
-        const client = APIClient.erm
+        const client = APIClient.erm;
         client.agreements
             .getAll({ "me.agreement_id": { "!=": this.agreement_id } })
             .then(
                 agreements => {
-                    this.agreements = agreements
-                    this.initialized = true
+                    this.agreements = agreements;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
     },
     methods: {
         addRelationship() {
@@ -115,10 +115,10 @@ export default {
                 related_agreement_id: null,
                 relationship: null,
                 notes: "",
-            })
+            });
         },
         deleteRelationship(counter) {
-            this.relationships.splice(counter, 1)
+            this.relationships.splice(counter, 1);
         },
     },
     props: {
@@ -127,5 +127,5 @@ export default {
         relationships: Array,
     },
     name: "AgreementRelationships",
-}
+};
 </script>

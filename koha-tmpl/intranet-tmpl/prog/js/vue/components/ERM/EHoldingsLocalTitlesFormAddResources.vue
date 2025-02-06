@@ -89,9 +89,9 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component"
-import { APIClient } from "../../fetch/api-client.js"
-import FormSelectVendors from "../FormSelectVendors.vue"
+import flatPickr from "vue-flatpickr-component";
+import { APIClient } from "../../fetch/api-client.js";
+import FormSelectVendors from "../FormSelectVendors.vue";
 
 export default {
     setup() {},
@@ -99,17 +99,17 @@ export default {
         return {
             packages: [],
             fp_config: flatpickr_defaults,
-        }
+        };
     },
     beforeCreate() {
-        const client = APIClient.erm
+        const client = APIClient.erm;
         client.localPackages.getAll().then(
             packages => {
-                this.packages = packages
-                this.initialized = true
+                this.packages = packages;
+                this.initialized = true;
             },
             error => {}
-        )
+        );
     },
     methods: {
         addPackage() {
@@ -119,10 +119,10 @@ export default {
                 started_on: null,
                 ended_on: null,
                 proxy: "",
-            })
+            });
         },
         deletePackage(counter) {
-            this.resources.splice(counter, 1)
+            this.resources.splice(counter, 1);
         },
     },
     props: {
@@ -130,5 +130,5 @@ export default {
     },
     components: { flatPickr, FormSelectVendors },
     name: "EHoldingsLocalTitlesFormAddResources",
-}
+};
 </script>

@@ -139,28 +139,28 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import flatPickr from "vue-flatpickr-component"
-import UserRoles from "./UserRoles.vue"
-import Documents from "./Documents.vue"
-import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue"
-import FormSelectVendors from "../FormSelectVendors.vue"
-import { setMessage, setWarning } from "../../messages"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import flatPickr from "vue-flatpickr-component";
+import UserRoles from "./UserRoles.vue";
+import Documents from "./Documents.vue";
+import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue";
+import FormSelectVendors from "../FormSelectVendors.vue";
+import { setMessage, setWarning } from "../../messages";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
+        const AVStore = inject("AVStore");
         const { av_license_types, av_license_statuses, av_user_roles } =
-            storeToRefs(AVStore)
+            storeToRefs(AVStore);
 
         return {
             av_license_types,
             av_license_statuses,
             av_user_roles,
             max_allowed_packet,
-        }
+        };
     },
     data() {
         return {
@@ -179,31 +179,31 @@ export default {
                 extended_attributes: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.license_id) {
-                vm.license = vm.getLicense(to.params.license_id)
+                vm.license = vm.getLicense(to.params.license_id);
             } else {
-                vm.initialized = true
+                vm.initialized = true;
             }
-        })
+        });
     },
     methods: {
         async getLicense(license_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.licenses.get(license_id).then(license => {
-                this.license = license
-                this.initialized = true
-            })
+                this.license = license;
+                this.initialized = true;
+            });
         },
         checkForm(license) {
-            let errors = []
+            let errors = [];
 
             let documents_with_uploaded_files = license.documents.filter(
                 doc => typeof doc.file_content !== "undefined"
-            )
+            );
             if (
                 documents_with_uploaded_files.filter(
                     doc => atob(doc.file_content).length >= max_allowed_packet
@@ -213,7 +213,7 @@ export default {
                     this.$__("File size exceeds maximum allowed: %s MB").format(
                         (max_allowed_packet / (1024 * 1024)).toFixed(2)
                     )
-                )
+                );
             }
             license.user_roles.forEach((user, i) => {
                 if (user.patron_str === "") {
@@ -221,59 +221,59 @@ export default {
                         this.$__("License user %s is missing a user").format(
                             i + 1
                         )
-                    )
+                    );
                 }
-            })
-            setWarning(errors.join("<br>"))
-            return !errors.length
+            });
+            setWarning(errors.join("<br>"));
+            return !errors.length;
         },
         onSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
 
-            let license = JSON.parse(JSON.stringify(this.license)) // copy
-            let license_id = license.license_id
+            let license = JSON.parse(JSON.stringify(this.license)); // copy
+            let license_id = license.license_id;
 
             if (!this.checkForm(license)) {
-                return false
+                return false;
             }
 
-            delete license.license_id
-            delete license.vendor
-            delete license._strings
+            delete license.license_id;
+            delete license.vendor;
+            delete license._strings;
 
             if (license.vendor_id == "") {
-                license.vendor_id = null
+                license.vendor_id = null;
             }
 
             license.user_roles = license.user_roles.map(
                 ({ patron, patron_str, ...keepAttrs }) => keepAttrs
-            )
+            );
 
             license.documents = license.documents.map(
                 ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
-            )
+            );
 
-            const client = APIClient.erm
+            const client = APIClient.erm;
             if (license_id) {
                 client.licenses.update(license, license_id).then(
                     success => {
-                        setMessage(this.$__("License updated"))
-                        this.$router.push({ name: "LicensesList" })
+                        setMessage(this.$__("License updated"));
+                        this.$router.push({ name: "LicensesList" });
                     },
                     error => {}
-                )
+                );
             } else {
                 client.licenses.create(license).then(
                     success => {
-                        setMessage(this.$__("License created"))
-                        this.$router.push({ name: "LicensesList" })
+                        setMessage(this.$__("License created"));
+                        this.$router.push({ name: "LicensesList" });
                     },
                     error => {}
-                )
+                );
             }
         },
         additionalFieldsChanged(additionalFieldValues) {
-            this.license.extended_attributes = additionalFieldValues
+            this.license.extended_attributes = additionalFieldValues;
         },
     },
     components: {
@@ -284,5 +284,5 @@ export default {
         AdditionalFieldsEntry,
     },
     name: "LicensesFormAdd",
-}
+};
 </script>

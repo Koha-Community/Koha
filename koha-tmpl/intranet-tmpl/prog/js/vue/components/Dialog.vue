@@ -116,14 +116,14 @@
 </template>
 
 <script>
-import { inject, watch, nextTick } from "vue"
-import { storeToRefs } from "pinia"
-import flatPickr from "vue-flatpickr-component"
+import { inject, watch, nextTick } from "vue";
+import { storeToRefs } from "pinia";
+import flatPickr from "vue-flatpickr-component";
 export default {
     data() {
         return {
             fp_config: flatpickr_defaults,
-        }
+        };
     },
     methods: {
         submit: function (e) {
@@ -135,18 +135,18 @@ export default {
                         (input.value == null || input.value == "")
                 ).length
             ) {
-                this.$refs.confirmationform.reportValidity()
+                this.$refs.confirmationform.reportValidity();
             } else {
                 this.accept_callback().then(() => {
                     nextTick(() => {
-                        $("#confirmation.modal").modal("hide")
-                    })
-                })
+                        $("#confirmation.modal").modal("hide");
+                    });
+                });
             }
         },
     },
     setup() {
-        const mainStore = inject("mainStore")
+        const mainStore = inject("mainStore");
         const {
             message,
             error,
@@ -155,28 +155,28 @@ export default {
             accept_callback,
             is_submitting,
             is_loading,
-        } = storeToRefs(mainStore)
-        const { removeMessages, removeConfirmationMessages } = mainStore
+        } = storeToRefs(mainStore);
+        const { removeMessages, removeConfirmationMessages } = mainStore;
 
         watch(warning, newWarning => {
             if (!newWarning) {
-                $("#warning.modal").modal("hide")
-                return
+                $("#warning.modal").modal("hide");
+                return;
             }
             nextTick(() => {
-                $("#warning.modal").modal("show")
-            })
-        })
+                $("#warning.modal").modal("show");
+            });
+        });
 
         watch(confirmation, newConfirmation => {
             if (!newConfirmation) {
-                $("#confirmation.modal").modal("hide")
-                return
+                $("#confirmation.modal").modal("hide");
+                return;
             }
             nextTick(() => {
-                $("#confirmation.modal").modal("show")
-            })
-        })
+                $("#confirmation.modal").modal("show");
+            });
+        });
 
         return {
             message,
@@ -188,12 +188,12 @@ export default {
             is_loading,
             removeMessages,
             removeConfirmationMessages,
-        }
+        };
     },
     components: {
         flatPickr,
     },
-}
+};
 </script>
 
 <style scoped>

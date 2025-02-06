@@ -108,21 +108,21 @@
 <script>
 export default {
     setup() {
-        const format_date = $date
-        return { format_date }
+        const format_date = $date;
+        return { format_date };
     },
     methods: {
         selectFile(e, i) {
-            let files = e.target.files
-            if (!files) return
-            let file = files[0]
-            const reader = new FileReader()
-            reader.onload = e => this.loadFile(file.name, e.target.result, i)
-            reader.readAsBinaryString(file)
+            let files = e.target.files;
+            if (!files) return;
+            let file = files[0];
+            const reader = new FileReader();
+            reader.onload = e => this.loadFile(file.name, e.target.result, i);
+            reader.readAsBinaryString(file);
         },
         loadFile(filename, content, i) {
-            this.documents[i].file_name = filename
-            this.documents[i].file_content = btoa(content)
+            this.documents[i].file_name = filename;
+            this.documents[i].file_content = btoa(content);
         },
         addDocument() {
             this.documents.push({
@@ -133,15 +133,15 @@ export default {
                 physical_location: null,
                 uri: null,
                 notes: null,
-            })
+            });
         },
         deleteDocument(counter) {
-            this.documents.splice(counter, 1)
+            this.documents.splice(counter, 1);
         },
     },
     name: "Documents",
     props: {
         documents: Array,
     },
-}
+};
 </script>

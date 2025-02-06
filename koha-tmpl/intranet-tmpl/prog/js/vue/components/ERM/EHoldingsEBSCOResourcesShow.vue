@@ -120,17 +120,17 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const format_date = $date
+        const format_date = $date;
 
         return {
             format_date,
-        }
+        };
     },
     data() {
         return {
@@ -146,51 +146,51 @@ export default {
             },
             initialized: false,
             updating_is_selected: false,
-        }
+        };
     },
 
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getResource(to.params.resource_id)
-        })
+            vm.getResource(to.params.resource_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.resource = this.getResource(to.params.resource_id)
+        this.resource = this.getResource(to.params.resource_id);
     },
     methods: {
         getResource(resource_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.EBSCOResources.get(resource_id).then(
                 resource => {
-                    this.resource = resource
-                    this.initialized = true
-                    this.updating_is_selected = false
+                    this.resource = resource;
+                    this.initialized = true;
+                    this.updating_is_selected = false;
                 },
                 error => {}
-            )
+            );
         },
         edit_selected(is_selected) {
-            this.updating_is_selected = true
-            const client = APIClient.erm
+            this.updating_is_selected = true;
+            const client = APIClient.erm;
             client.EBSCOResources.patch(this.resource.resource_id, {
                 is_selected,
             }).then(
                 result => {
                     // Refresh the page. We should not need that actually.
-                    this.getResource(this.resource.resource_id)
+                    this.getResource(this.resource.resource_id);
                 },
                 error => {}
-            )
+            );
         },
         add_to_holdings() {
-            this.edit_selected(true)
+            this.edit_selected(true);
         },
         remove_from_holdings() {
-            this.edit_selected(false)
+            this.edit_selected(false);
         },
     },
     name: "EHoldingsEBSCOResourcesShow",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {

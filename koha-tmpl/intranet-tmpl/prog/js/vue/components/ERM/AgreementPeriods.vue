@@ -67,13 +67,13 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component"
+import flatPickr from "vue-flatpickr-component";
 export default {
     name: "AgreementPeriods",
     data() {
         return {
             fp_config: flatpickr_defaults,
-        }
+        };
     },
     props: {
         periods: Array,
@@ -85,14 +85,14 @@ export default {
                 ended_on: null,
                 cancellation_deadline: null,
                 notes: null,
-            })
+            });
         },
         deletePeriod(counter) {
-            this.periods.splice(counter, 1)
+            this.periods.splice(counter, 1);
         },
     },
     components: {
         flatPickr,
     },
-}
+};
 </script>

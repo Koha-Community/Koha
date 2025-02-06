@@ -40,26 +40,26 @@
 </template>
 
 <script>
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import { inject, ref, reactive } from "vue"
-import { storeToRefs } from "pinia"
-import { APIClient } from "../../fetch/api-client.js"
-import KohaTable from "../KohaTable.vue"
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import { inject, ref, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
+import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
-        const { av_title_publication_types } = storeToRefs(AVStore)
-        const { get_lib_from_av, map_av_dt_filter } = AVStore
+        const AVStore = inject("AVStore");
+        const { av_title_publication_types } = storeToRefs(AVStore);
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref()
+        const table = ref();
         const filters = reactive({
             publication_title: "",
             publication_type: "",
-        })
+        });
 
         return {
             av_title_publication_types,
@@ -71,14 +71,14 @@ export default {
             setConfirmationDialog,
             setMessage,
             eholdings_titles_table_settings,
-        }
+        };
     },
     data: function () {
         this.filters = {
             publication_title: this.$route.query.publication_title || "",
             publication_type: this.$route.query.publication_type || "",
-        }
-        let filters = this.filters
+        };
+        let filters = this.filters;
 
         return {
             title_count: 0,
@@ -107,35 +107,35 @@ export default {
                 },
             },
             cannot_search: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getTitleCount().then(() => (vm.initialized = true))
-        })
+            vm.getTitleCount().then(() => (vm.initialized = true));
+        });
     },
     methods: {
         async getTitleCount() {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             await client.localTitles.count().then(
                 count => {
-                    this.title_count = count
+                    this.title_count = count;
                 },
                 error => {}
-            )
+            );
         },
         doShow: function ({ title_id }, dt, event) {
-            event.preventDefault()
+            event.preventDefault();
             this.$router.push({
                 name: "EHoldingsLocalTitlesShow",
                 params: { title_id },
-            })
+            });
         },
         doEdit: function ({ title_id }, dt, event) {
             this.$router.push({
                 name: "EHoldingsLocalTitlesFormAddEdit",
                 params: { title_id },
-            })
+            });
         },
         doDelete: function (title, dt, event) {
             this.setConfirmationDialog(
@@ -148,7 +148,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.localTitles.delete(title.title_id).then(
                         success => {
                             this.setMessage(
@@ -156,17 +156,17 @@ export default {
                                     title.publication_title
                                 ),
                                 true
-                            )
-                            dt.draw()
+                            );
+                            dt.draw();
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
         getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av
-            let escape_str = this.escape_str
+            let get_lib_from_av = this.get_lib_from_av;
+            let escape_str = this.escape_str;
 
             return [
                 {
@@ -183,7 +183,7 @@ export default {
                                 `${row.publication_title} (#${row.title_id})`
                             ) +
                             "</a>"
-                        )
+                        );
                     },
                 },
                 {
@@ -198,7 +198,7 @@ export default {
                                 ? "<br/>"
                                 : "") +
                             escape_str(row.first_editor)
-                        )
+                        );
                     },
                 },
                 {
@@ -212,7 +212,7 @@ export default {
                                 "av_title_publication_types",
                                 row.publication_type
                             )
-                        )
+                        );
                     },
                 },
                 {
@@ -221,8 +221,8 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        let print_identifier = row.print_identifier
-                        let online_identifier = row.online_identifier
+                        let print_identifier = row.print_identifier;
+                        let online_identifier = row.online_identifier;
                         return [
                             print_identifier
                                 ? escape_str(
@@ -238,13 +238,13 @@ export default {
                                       )
                                   )
                                 : "",
-                        ].join("<br/>")
+                        ].join("<br/>");
                     },
                 },
-            ]
+            ];
         },
     },
     components: { Toolbar, ToolbarButton, KohaTable },
     name: "EHoldingsLocalTitlesList",
-}
+};
 </script>

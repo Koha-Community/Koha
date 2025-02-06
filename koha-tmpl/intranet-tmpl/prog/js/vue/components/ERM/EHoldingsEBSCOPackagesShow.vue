@@ -113,22 +113,22 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
-import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
-import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue";
+import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue";
+import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const format_date = $date
+        const format_date = $date;
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
 
         return {
             format_date,
             get_lib_from_av,
-        }
+        };
     },
     data() {
         return {
@@ -146,51 +146,51 @@ export default {
             },
             initialized: false,
             updating_is_selected: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getPackage(to.params.package_id)
-        })
+            vm.getPackage(to.params.package_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.erm_package = this.getPackage(to.params.package_id)
+        this.erm_package = this.getPackage(to.params.package_id);
     },
     methods: {
         getPackage(package_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.EBSCOPackages.get(package_id).then(
                 erm_package => {
-                    this.erm_package = erm_package
-                    this.initialized = true
-                    this.updating_is_selected = false
+                    this.erm_package = erm_package;
+                    this.initialized = true;
+                    this.updating_is_selected = false;
                 },
                 error => {}
-            )
+            );
         },
         edit_selected(is_selected) {
-            this.updating_is_selected = true
-            const client = APIClient.erm
+            this.updating_is_selected = true;
+            const client = APIClient.erm;
             client.EBSCOPackages.patch(this.erm_package.package_id, {
                 is_selected,
             }).then(
                 result => {
                     // Refresh the page. We should not need that actually.
-                    this.getPackage(this.erm_package.package_id)
+                    this.getPackage(this.erm_package.package_id);
                 },
                 error => {}
-            )
+            );
         },
         add_to_holdings() {
-            this.edit_selected(true)
+            this.edit_selected(true);
         },
         remove_from_holdings() {
-            this.edit_selected(false)
+            this.edit_selected(false);
         },
         refreshAgreements() {
             // FIXME We could GET /erm/eholdings/packages/$package_id/agreements instead
-            this.initialized = false
-            this.getPackage(this.erm_package.package_id)
+            this.initialized = false;
+            this.getPackage(this.erm_package.package_id);
         },
     },
     components: {
@@ -198,7 +198,7 @@ export default {
         EHoldingsPackageTitlesList,
     },
     name: "EHoldingsEBSCOPackagesShow",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {

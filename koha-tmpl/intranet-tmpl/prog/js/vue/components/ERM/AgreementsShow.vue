@@ -341,21 +341,21 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../../fetch/api-client.js"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue"
+import { inject } from "vue";
+import { APIClient } from "../../fetch/api-client.js";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
 
 export default {
     setup() {
-        const format_date = $date
-        const patron_to_html = $patron_to_html
+        const format_date = $date;
+        const patron_to_html = $patron_to_html;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
 
         return {
             format_date,
@@ -363,7 +363,7 @@ export default {
             get_lib_from_av,
             setConfirmationDialog,
             setMessage,
-        }
+        };
     },
     data() {
         return {
@@ -385,26 +385,26 @@ export default {
                 agreement_packages: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getAgreement(to.params.agreement_id)
-        })
+            vm.getAgreement(to.params.agreement_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.agreement = this.getAgreement(to.params.agreement_id)
+        this.agreement = this.getAgreement(to.params.agreement_id);
     },
     methods: {
         async getAgreement(agreement_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.agreements.get(agreement_id).then(
                 agreement => {
-                    this.agreement = agreement
-                    this.initialized = true
+                    this.agreement = agreement;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         delete_agreement: function (agreement_id, agreement_name) {
             this.setConfirmationDialog(
@@ -417,7 +417,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.agreements.delete(agreement_id).then(
                         success => {
                             this.setMessage(
@@ -425,18 +425,18 @@ export default {
                                     agreement_name
                                 ),
                                 true
-                            )
-                            this.$router.push({ name: "AgreementsList" })
+                            );
+                            this.$router.push({ name: "AgreementsList" });
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
     },
     components: { Toolbar, ToolbarButton, AdditionalFieldsDisplay },
     name: "AgreementsShow",
-}
+};
 </script>
 <style scoped>
 #agreement_documents ul {

@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
-        return { vendors }
+        const vendorStore = inject("vendorStore");
+        const { vendors } = storeToRefs(vendorStore);
+        return { vendors };
     },
     computed: {
         vendorOptions() {
@@ -31,7 +31,7 @@ export default {
                     (v.aliases.length > 0
                         ? " (" + v.aliases.map(a => a.alias).join(", ") + ")"
                         : ""),
-            }))
+            }));
         },
     },
     methods: {
@@ -40,8 +40,8 @@ export default {
                 (vendor.full_search || "")
                     .toLocaleLowerCase()
                     .indexOf(search.toLocaleLowerCase()) > -1
-            )
+            );
         },
     },
-}
+};
 </script>

@@ -281,24 +281,24 @@
 </template>
 
 <script>
-import { inject, createVNode, render } from "vue"
-import { APIClient } from "../../fetch/api-client"
-import { useDataTable } from "../../composables/datatables"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import { inject, createVNode, render } from "vue";
+import { APIClient } from "../../fetch/api-client";
+import { useDataTable } from "../../composables/datatables";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
 
 export default {
     setup() {
-        const format_date = $date
+        const format_date = $date;
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
 
         const { setConfirmationDialog, setMessage, setWarning } =
-            inject("mainStore")
+            inject("mainStore");
 
-        const table_id = "item_list"
-        useDataTable(table_id)
+        const table_id = "item_list";
+        useDataTable(table_id);
 
         return {
             format_date,
@@ -307,7 +307,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             setWarning,
-        }
+        };
     },
     data() {
         return {
@@ -327,29 +327,29 @@ export default {
             train_item_id_to_copy: null,
             selected_items: [],
             av_options: {},
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getTrain(to.params.train_id).then(() => vm.build_datatable())
-            vm.getTrainList()
-        })
+            vm.getTrain(to.params.train_id).then(() => vm.build_datatable());
+            vm.getTrainList();
+        });
     },
     methods: {
         async getTrain(train_id) {
-            const client = APIClient.preservation
+            const client = APIClient.preservation;
             await client.trains.get(train_id).then(
                 train => {
-                    this.train = train
+                    this.train = train;
                     let display_table = this.train.items.every(
                         item =>
                             item.processing_id ==
                             this.train.default_processing_id
-                    )
+                    );
                     if (display_table) {
-                        this.item_table.data = []
+                        this.item_table.data = [];
                         this.train.items.forEach(item => {
-                            let item_row = {}
+                            let item_row = {};
                             this.train.default_processing.attributes.forEach(
                                 attribute => {
                                     item_row[
@@ -360,20 +360,20 @@ export default {
                                                 a.processing_attribute_id ==
                                                 attribute.processing_attribute_id
                                         )
-                                        .map(a => a._strings.value.str)
+                                        .map(a => a._strings.value.str);
                                 }
-                            )
-                            item_row.item = item
-                            this.item_table.data.push(item_row)
-                        })
-                        this.item_table.columns = []
+                            );
+                            item_row.item = item;
+                            this.item_table.data.push(item_row);
+                        });
+                        this.item_table.columns = [];
                         this.item_table.columns.push(
                             {
                                 name: "checkboxes",
                                 className: "checkboxes",
                                 width: "5%",
                                 render: (data, type, row) => {
-                                    return ""
+                                    return "";
                                 },
                             },
                             {
@@ -381,17 +381,17 @@ export default {
                                 title: this.$__("ID"),
                                 data: "item.user_train_item_id",
                             }
-                        )
+                        );
                         train.default_processing.attributes.forEach(a =>
                             this.item_table.columns.push({
                                 name: a.name,
                                 title: a.name,
                                 data: a.processing_attribute_id,
                                 render: (data, type, row) => {
-                                    return data.join("<br/>")
+                                    return data.join("<br/>");
                                 },
                             })
-                        )
+                        );
                         this.item_table.columns.push({
                             name: "actions",
                             className: "actions noExport",
@@ -399,23 +399,23 @@ export default {
                             searchable: false,
                             orderable: false,
                             render: (data, type, row) => {
-                                return ""
+                                return "";
                             },
-                        })
+                        });
                     }
-                    this.initialized = true
-                    this.item_table.display = display_table
+                    this.initialized = true;
+                    this.item_table.display = display_table;
                 },
                 error => {}
-            )
+            );
         },
         getTrainList: function () {
-            const client = APIClient.preservation
-            let q = { "me.closed_on": null }
+            const client = APIClient.preservation;
+            let q = { "me.closed_on": null };
             client.trains.getAll(q).then(
                 trains => (this.train_list = trains),
                 error => {}
-            )
+            );
         },
         deleteTrain: function (train) {
             this.setConfirmationDialog(
@@ -428,43 +428,43 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.preservation
+                    const client = APIClient.preservation;
                     client.trains.delete(train.train_id).then(
                         success => {
                             this.setMessage(
                                 this.$__("Train %s deleted").format(train.name),
                                 true
-                            )
-                            this.$router.push({ name: "TrainsList" })
+                            );
+                            this.$router.push({ name: "TrainsList" });
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
         async updateTrainDate(attribute) {
-            let train = JSON.parse(JSON.stringify(this.train))
-            let train_id = train.train_id
-            delete train.train_id
-            delete train.items
-            delete train.default_processing
-            train[attribute] = new Date()
-            const client = APIClient.preservation
+            let train = JSON.parse(JSON.stringify(this.train));
+            let train_id = train.train_id;
+            delete train.train_id;
+            delete train.items;
+            delete train.default_processing;
+            train[attribute] = new Date();
+            const client = APIClient.preservation;
             if (train_id) {
                 return client.trains
                     .update(train, train_id)
-                    .then(() => this.getTrain(this.train.train_id))
+                    .then(() => this.getTrain(this.train.train_id));
             } else {
                 return client.trains
                     .create(train)
-                    .then(() => this.getTrain(this.train.train_id))
+                    .then(() => this.getTrain(this.train.train_id));
             }
         },
         closeTrain() {
-            this.updateTrainDate("closed_on")
+            this.updateTrainDate("closed_on");
         },
         sendTrain() {
-            this.updateTrainDate("sent_on")
+            this.updateTrainDate("sent_on");
         },
         receiveTrain() {
             this.updateTrainDate("received_on").then(
@@ -472,17 +472,17 @@ export default {
                     // Rebuild the table to show the "copy" button
                     $("#" + this.table_id)
                         .DataTable()
-                        .destroy()
-                    this.build_datatable()
+                        .destroy();
+                    this.build_datatable();
                 },
                 error => {}
-            )
+            );
         },
         editItem(train_item_id) {
             this.$router.push({
                 name: "TrainsFormEditItem",
                 params: { train_id: this.train.train_id, train_item_id },
-            })
+            });
         },
         removeItem(train_item_id) {
             this.setConfirmationDialog(
@@ -494,38 +494,38 @@ export default {
                     cancel_label: this.$__("No, do not remove"),
                 },
                 () => {
-                    const client = APIClient.preservation
+                    const client = APIClient.preservation;
                     client.train_items
                         .delete(this.train.train_id, train_item_id)
                         .then(
                             success => {
-                                this.setMessage(this.$__("Item removed"), true)
+                                this.setMessage(this.$__("Item removed"), true);
                                 this.getTrain(this.train.train_id).then(() => {
                                     $("#" + this.table_id)
                                         .DataTable()
-                                        .destroy()
-                                    this.build_datatable()
-                                })
+                                        .destroy();
+                                    this.build_datatable();
+                                });
                             },
                             error => {}
-                        )
+                        );
                 }
-            )
+            );
         },
         printSlip(train_item_id) {
             window.open(
                 "/cgi-bin/koha/preservation/print_slip.pl?train_item_id=" +
                     train_item_id,
                 "_blank"
-            )
+            );
         },
         selectTrainForCopy(train_item_id) {
-            $("#copy_item_to_train").modal("show")
-            this.train_item_id_to_copy = train_item_id
+            $("#copy_item_to_train").modal("show");
+            this.train_item_id_to_copy = train_item_id;
         },
         copyItem(event) {
-            event.preventDefault()
-            const client = APIClient.preservation
+            event.preventDefault();
+            const client = APIClient.preservation;
             client.train_items
                 .copy(
                     this.train_id_selected_for_copy,
@@ -534,24 +534,24 @@ export default {
                 )
                 .then(
                     success => {
-                        this.setMessage(this.$__("Item copied successfully."))
-                        $("#copy_item_to_train").modal("hide")
+                        this.setMessage(this.$__("Item copied successfully."));
+                        $("#copy_item_to_train").modal("hide");
                     },
                     error => {
                         this.setWarning(
                             this.$__(
                                 "Item cannot be copied to a train, it is already in a non-received train."
                             )
-                        )
+                        );
                     }
-                )
+                );
         },
         clearAll() {
-            this.selected_items = []
+            this.selected_items = [];
             if (this.item_table.display) {
                 $("#" + this.table_id)
                     .find("input[name='user_train_item_id'][type='checkbox']")
-                    .prop("checked", false)
+                    .prop("checked", false);
             }
         },
         selectAll() {
@@ -561,13 +561,13 @@ export default {
                         "input[name='user_train_item_id'][type='checkbox']:not(:disabled)"
                     )
                     .each((i, input) => {
-                        this.selected_items.push($(input).val())
-                        $(input).prop("checked", true)
-                    })
+                        this.selected_items.push($(input).val());
+                        $(input).prop("checked", true);
+                    });
             } else {
                 this.selected_items = this.train.items
                     .filter(i => i.processing.letter_code)
-                    .map(item => item.train_item_id)
+                    .map(item => item.train_item_id);
             }
         },
         printSelected() {
@@ -577,26 +577,26 @@ export default {
                         .map(id => "train_item_id=" + id)
                         .join("&")
                 )
-            )
+            );
         },
         updateSelectedItems(checked, train_item_id) {
             if (checked) {
-                this.selected_items.push(train_item_id)
+                this.selected_items.push(train_item_id);
             } else {
                 this.selected_items = this.selected_items.filter(
                     id => id != train_item_id
-                )
+                );
             }
         },
         build_datatable: function () {
-            let table_id = this.table_id
-            let item_table = this.item_table
-            let removeItem = this.removeItem
-            let editItem = this.editItem
-            let printSlip = this.printSlip
-            let selectTrainForCopy = this.selectTrainForCopy
-            let train = this.train
-            let updateSelectedItems = this.updateSelectedItems
+            let table_id = this.table_id;
+            let item_table = this.item_table;
+            let removeItem = this.removeItem;
+            let editItem = this.editItem;
+            let printSlip = this.printSlip;
+            let selectTrainForCopy = this.selectTrainForCopy;
+            let train = this.train;
+            let updateSelectedItems = this.updateSelectedItems;
 
             let table = KohaTable(table_id, {
                 data: item_table.data,
@@ -604,11 +604,11 @@ export default {
                 autoWidth: false,
                 columns: item_table.columns,
                 drawCallback: function (settings) {
-                    var api = new $.fn.dataTable.Api(settings)
+                    var api = new $.fn.dataTable.Api(settings);
                     $.each($(this).find("td.checkboxes"), function (index, e) {
-                        let tr = $(this).parent()
-                        let train_item = api.row(tr).data().item
-                        let train_item_id = train_item.train_item_id
+                        let tr = $(this).parent();
+                        let train_item = api.row(tr).data().item;
+                        let train_item_id = train_item.train_item_id;
 
                         let checkbox = createVNode("input", {
                             ...(!train_item.processing.letter_code && {
@@ -624,16 +624,16 @@ export default {
                                 updateSelectedItems(
                                     e.target.checked,
                                     train_item_id
-                                )
+                                );
                             },
-                        })
+                        });
 
-                        render(checkbox, e)
-                    })
+                        render(checkbox, e);
+                    });
                     $.each($(this).find("td.actions"), function (index, e) {
-                        let tr = $(this).parent()
-                        let train_item = api.row(tr).data().item
-                        let train_item_id = train_item.train_item_id
+                        let tr = $(this).parent();
+                        let train_item = api.row(tr).data().item;
+                        let train_item_id = train_item.train_item_id;
 
                         let editButton = createVNode(
                             "a",
@@ -641,7 +641,7 @@ export default {
                                 class: "btn btn-default btn-xs",
                                 role: "button",
                                 onClick: () => {
-                                    editItem(train_item_id)
+                                    editItem(train_item_id);
                                 },
                             },
                             [
@@ -652,7 +652,7 @@ export default {
                                 " ",
                                 __("Edit"),
                             ]
-                        )
+                        );
 
                         let removeButton = createVNode(
                             "a",
@@ -660,7 +660,7 @@ export default {
                                 class: "btn btn-default btn-xs",
                                 role: "button",
                                 onClick: () => {
-                                    removeItem(train_item_id)
+                                    removeItem(train_item_id);
                                 },
                             },
                             [
@@ -671,11 +671,11 @@ export default {
                                 " ",
                                 __("Remove"),
                             ]
-                        )
-                        let buttons = [editButton, " ", removeButton]
+                        );
+                        let buttons = [editButton, " ", removeButton];
 
                         if (train.received_on !== null) {
-                            buttons.push(" ")
+                            buttons.push(" ");
                             buttons.push(
                                 createVNode(
                                     "a",
@@ -683,7 +683,7 @@ export default {
                                         class: "btn btn-default btn-xs",
                                         role: "button",
                                         onClick: () => {
-                                            selectTrainForCopy(train_item_id)
+                                            selectTrainForCopy(train_item_id);
                                         },
                                     },
                                     [
@@ -695,7 +695,7 @@ export default {
                                         __("Copy"),
                                     ]
                                 )
-                            )
+                            );
                         }
 
                         if (train_item.processing.letter_code) {
@@ -705,7 +705,7 @@ export default {
                                     class: "btn btn-default btn-xs",
                                     role: "button",
                                     onClick: () => {
-                                        printSlip(train_item_id)
+                                        printSlip(train_item_id);
                                     },
                                 },
                                 [
@@ -715,21 +715,21 @@ export default {
                                     }),
                                     __("Print slip"),
                                 ]
-                            )
-                            buttons.push(" ")
-                            buttons.push(printButton)
+                            );
+                            buttons.push(" ");
+                            buttons.push(printButton);
                         }
 
-                        let n = createVNode("span", {}, buttons)
-                        render(n, e)
-                    })
+                        let n = createVNode("span", {}, buttons);
+                        render(n, e);
+                    });
                 },
-            })
+            });
         },
     },
     components: { Toolbar, ToolbarButton },
     name: "TrainsShow",
-}
+};
 </script>
 <style scoped>
 .action_links a {

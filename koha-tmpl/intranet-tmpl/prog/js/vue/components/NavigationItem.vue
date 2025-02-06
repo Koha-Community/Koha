@@ -56,7 +56,7 @@ export default {
         item: Object,
         params: Object,
     },
-}
+};
 </script>
 
 <style>

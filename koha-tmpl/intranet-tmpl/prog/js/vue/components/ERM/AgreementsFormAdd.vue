@@ -173,22 +173,22 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import AgreementPeriods from "./AgreementPeriods.vue"
-import UserRoles from "./UserRoles.vue"
-import AgreementLicenses from "./AgreementLicenses.vue"
-import AgreementRelationships from "./AgreementRelationships.vue"
-import Documents from "./Documents.vue"
-import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue"
-import ButtonSubmit from "../ButtonSubmit.vue"
-import FormSelectVendors from "../FormSelectVendors.vue"
-import { setMessage, setError, setWarning } from "../../messages"
-import { APIClient } from "../../fetch/api-client.js"
-import { storeToRefs } from "pinia"
+import { inject } from "vue";
+import AgreementPeriods from "./AgreementPeriods.vue";
+import UserRoles from "./UserRoles.vue";
+import AgreementLicenses from "./AgreementLicenses.vue";
+import AgreementRelationships from "./AgreementRelationships.vue";
+import Documents from "./Documents.vue";
+import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue";
+import ButtonSubmit from "../ButtonSubmit.vue";
+import FormSelectVendors from "../FormSelectVendors.vue";
+import { setMessage, setError, setWarning } from "../../messages";
+import { APIClient } from "../../fetch/api-client.js";
+import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore")
+        const AVStore = inject("AVStore");
         const {
             av_agreement_statuses,
             av_agreement_closure_reasons,
@@ -197,7 +197,7 @@ export default {
             av_agreement_license_statuses,
             av_agreement_license_location,
             av_agreement_relationships,
-        } = storeToRefs(AVStore)
+        } = storeToRefs(AVStore);
 
         return {
             av_agreement_statuses,
@@ -208,7 +208,7 @@ export default {
             av_agreement_license_location,
             av_agreement_relationships,
             max_allowed_packet,
-        }
+        };
     },
     data() {
         return {
@@ -230,76 +230,80 @@ export default {
                 extended_attributes: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.agreement_id) {
-                vm.getAgreement(to.params.agreement_id)
+                vm.getAgreement(to.params.agreement_id);
             } else {
-                vm.initialized = true
+                vm.initialized = true;
             }
-        })
+        });
     },
     methods: {
         async getAgreement(agreement_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.agreements.get(agreement_id).then(
                 data => {
-                    this.agreement = data
-                    this.initialized = true
+                    this.agreement = data;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         checkForm(agreement) {
-            let errors = []
+            let errors = [];
 
-            let agreement_licenses = agreement.agreement_licenses
+            let agreement_licenses = agreement.agreement_licenses;
             // Do not use al.license.name here! Its name is not the one linked with al.license_id
             // At this point al.license is meaningless, form/template only modified al.license_id
-            const license_ids = agreement_licenses.map(al => al.license_id)
+            const license_ids = agreement_licenses.map(al => al.license_id);
             const duplicate_license_ids = license_ids.filter(
                 (id, i) => license_ids.indexOf(id) !== i
-            )
+            );
 
             if (duplicate_license_ids.length) {
-                errors.push(this.$__("A license is used several times"))
+                errors.push(this.$__("A license is used several times"));
             }
 
             const related_agreement_ids = agreement.agreement_relationships.map(
                 rs => rs.related_agreement_id
-            )
+            );
             const duplicate_related_agreement_ids =
                 related_agreement_ids.filter(
                     (id, i) => related_agreement_ids.indexOf(id) !== i
-                )
+                );
 
             if (duplicate_related_agreement_ids.length) {
                 errors.push(
                     this.$__(
                         "An agreement is used as relationship several times"
                     )
-                )
+                );
             }
 
             if (
                 agreement_licenses.filter(al => al.status == "controlling")
                     .length > 1
             ) {
-                errors.push(this.$__("Only one controlling license is allowed"))
+                errors.push(
+                    this.$__("Only one controlling license is allowed")
+                );
             }
 
             if (
                 agreement_licenses.filter(al => al.status == "controlling")
                     .length > 1
             ) {
-                errors.push(this.$__("Only one controlling license is allowed"))
+                errors.push(
+                    this.$__("Only one controlling license is allowed")
+                );
             }
 
             let documents_with_uploaded_files = agreement.documents.filter(
                 doc => typeof doc.file_content !== "undefined"
-            )
+            );
             if (
                 documents_with_uploaded_files.filter(
                     doc => atob(doc.file_content).length >= max_allowed_packet
@@ -309,7 +313,7 @@ export default {
                     this.$__("File size exceeds maximum allowed: %s MB").format(
                         (max_allowed_packet / (1024 * 1024)).toFixed(2)
                     )
-                )
+                );
             }
             agreement.user_roles.forEach((user, i) => {
                 if (user.patron_str === "") {
@@ -317,40 +321,40 @@ export default {
                         this.$__("Agreement user %s is missing a user").format(
                             i + 1
                         )
-                    )
+                    );
                 }
-            })
-            setWarning(errors.join("<br>"))
-            return !errors.length
+            });
+            setWarning(errors.join("<br>"));
+            return !errors.length;
         },
         onSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             //let agreement= Object.assign( {} ,this.agreement); // copy
-            let agreement = JSON.parse(JSON.stringify(this.agreement)) // copy
-            let agreement_id = agreement.agreement_id
+            let agreement = JSON.parse(JSON.stringify(this.agreement)); // copy
+            let agreement_id = agreement.agreement_id;
 
             if (!this.checkForm(agreement)) {
-                return false
+                return false;
             }
 
-            delete agreement.agreement_id
-            delete agreement.vendor
-            delete agreement._strings
-            agreement.is_perpetual = agreement.is_perpetual ? true : false
+            delete agreement.agreement_id;
+            delete agreement.vendor;
+            delete agreement._strings;
+            agreement.is_perpetual = agreement.is_perpetual ? true : false;
 
             if (agreement.vendor_id == "") {
-                agreement.vendor_id = null
+                agreement.vendor_id = null;
             }
 
             agreement.periods = agreement.periods.map(
                 ({ agreement_id, agreement_period_id, ...keepAttrs }) =>
                     keepAttrs
-            )
+            );
 
             agreement.user_roles = agreement.user_roles.map(
                 ({ patron, patron_str, ...keepAttrs }) => keepAttrs
-            )
+            );
 
             agreement.agreement_licenses = agreement.agreement_licenses.map(
                 ({
@@ -359,45 +363,45 @@ export default {
                     agreement_license_id,
                     ...keepAttrs
                 }) => keepAttrs
-            )
+            );
 
             agreement.agreement_relationships =
                 agreement.agreement_relationships.map(
                     ({ related_agreement, ...keepAttrs }) => keepAttrs
-                )
+                );
 
             agreement.documents = agreement.documents.map(
                 ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
-            )
+            );
 
-            delete agreement.agreement_packages
+            delete agreement.agreement_packages;
 
-            const client = APIClient.erm
+            const client = APIClient.erm;
             if (agreement_id) {
                 client.agreements.update(agreement, agreement_id).then(
                     success => {
-                        setMessage(this.$__("Agreement updated"))
-                        this.$router.push({ name: "AgreementsList" })
+                        setMessage(this.$__("Agreement updated"));
+                        this.$router.push({ name: "AgreementsList" });
                     },
                     error => {}
-                )
+                );
             } else {
                 client.agreements.create(agreement).then(
                     success => {
-                        setMessage(this.$__("Agreement created"))
-                        this.$router.push({ name: "AgreementsList" })
+                        setMessage(this.$__("Agreement created"));
+                        this.$router.push({ name: "AgreementsList" });
                     },
                     error => {}
-                )
+                );
             }
         },
         onStatusChanged(e) {
             if (e.value != "closed") {
-                this.agreement.closure_reason = ""
+                this.agreement.closure_reason = "";
             }
         },
         additionalFieldsChanged(additionalFieldValues) {
-            this.agreement.extended_attributes = additionalFieldValues
+            this.agreement.extended_attributes = additionalFieldValues;
         },
     },
     components: {
@@ -411,5 +415,5 @@ export default {
         AdditionalFieldsEntry,
     },
     name: "AgreementsFormAdd",
-}
+};
 </script>

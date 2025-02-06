@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import DataTable from "datatables.net-vue3"
-import DataTablesLib from "datatables.net"
-import "datatables.net-buttons"
-import "datatables.net-buttons/js/buttons.html5"
-import "datatables.net-buttons/js/buttons.print"
-import "datatables.net-buttons/js/buttons.colVis"
+import DataTable from "datatables.net-vue3";
+import DataTablesLib from "datatables.net";
+import "datatables.net-buttons";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons/js/buttons.print";
+import "datatables.net-buttons/js/buttons.colVis";
 
-DataTable.use(DataTablesLib)
+DataTable.use(DataTablesLib);
 
 export default {
     name: "KohaTable",
@@ -25,24 +25,24 @@ export default {
         let buttons = _dt_buttons({
             settings: this.options,
             table_settings: this.table_settings,
-        })
+        });
 
         if (this.add_filters) {
-            this.options.orderCellsTop = true
+            this.options.orderCellsTop = true;
         }
 
         if (this.table_settings) {
-            let state_settings = _dt_save_restore_state(this.table_settings)
-            this.options.stateSave = state_settings.stateSave
-            this.options.stateSaveCallback = state_settings.stateSaveCallback
-            this.options.stateLoadCallback = state_settings.stateLoadCallback
+            let state_settings = _dt_save_restore_state(this.table_settings);
+            this.options.stateSave = state_settings.stateSave;
+            this.options.stateSaveCallback = state_settings.stateSaveCallback;
+            this.options.stateLoadCallback = state_settings.stateLoadCallback;
 
             if (
                 this.table_settings.hasOwnProperty("default_display_length") &&
                 this.table_settings.default_display_length != null
             ) {
                 this.options.pageLength =
-                    this.table_settings.default_display_length
+                    this.table_settings.default_display_length;
             }
             if (
                 this.table_settings.hasOwnProperty("default_sort_order") &&
@@ -50,7 +50,7 @@ export default {
             ) {
                 this.options.order = [
                     [this.table_settings.default_sort_order, "asc"],
-                ]
+                ];
             }
         }
 
@@ -78,26 +78,26 @@ export default {
                         targets: "_all",
                         render: function (data, type, row, meta) {
                             if (type == "display") {
-                                return escape_str(data)
+                                return escape_str(data);
                             }
-                            return data
+                            return data;
                         },
                     },
                 ],
                 ...this.options,
             },
-        }
+        };
     },
     setup() {
-        return { dataTablesDefaults }
+        return { dataTablesDefaults };
     },
     methods: {
         redraw: function (url) {
-            this.$refs.table.dt().ajax.url(url).draw()
+            this.$refs.table.dt().ajax.url(url).draw();
         },
         useTableObject: function () {
-            let dt = this.$refs.table.dt()
-            return dt
+            let dt = this.$refs.table.dt();
+            return dt;
         },
     },
     beforeMount() {
@@ -112,10 +112,10 @@ export default {
                                         field.field_id ==
                                         searchable_field.extended_attribute_type_id
                                 )
-                                .map(el => el.value_str)
-                        }
-                        return _render
-                    })(searchable_field)
+                                .map(el => el.value_str);
+                        };
+                        return _render;
+                    })(searchable_field);
 
                     this.tableColumns.push({
                         name: searchable_field.name,
@@ -133,24 +133,24 @@ export default {
                         searchable: true,
                         sortable: false,
                         render: _customRender,
-                    })
+                    });
 
                     if (searchable_field.authorised_value_category_name) {
                         let options =
                             this.searchable_av_options[
                                 searchable_field.authorised_value_category_name
-                            ]
+                            ];
 
                         options.map(e => {
-                            e["_id"] = e["value"]
-                            e["_str"] = e["label"]
-                            return e
-                        })
+                            e["_id"] = e["value"];
+                            e["_str"] = e["label"];
+                            return e;
+                        });
 
                         this.filters_options[this.tableColumns.length - 1] =
-                            options
+                            options;
                     }
-                })
+                });
             }
 
             this.tableColumns = [
@@ -162,100 +162,100 @@ export default {
                     searchable: false,
                     sortable: false,
                     render: (data, type, row) => {
-                        let content = []
+                        let content = [];
                         this.actions["-1"].forEach(action => {
                             if (typeof action === "object") {
-                                let action_name = Object.keys(action)[0]
-                                let should_display = true
+                                let action_name = Object.keys(action)[0];
+                                let should_display = true;
 
                                 if (
                                     typeof action[action_name]
                                         .should_display === "function"
                                 ) {
                                     should_display =
-                                        action[action_name].should_display(row)
+                                        action[action_name].should_display(row);
                                 }
 
                                 if (should_display) {
                                     content.push(
                                         `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i> ${action[action_name].text}</a>`
-                                    )
+                                    );
                                 }
                             } else if (action == "edit") {
                                 content.push(
                                     '<a class="edit btn btn-default btn-xs" role="button"><i class="fa fa-pencil"></i> ' +
                                         this.$__("Edit") +
                                         "</a>"
-                                )
+                                );
                             } else if (action == "delete") {
                                 content.push(
                                     '<a class="delete btn btn-default btn-xs" role="button"><i class="fa fa-trash"></i> ' +
                                         this.$__("Delete") +
                                         "</a>"
-                                )
+                                );
                             } else if (action == "remove") {
                                 content.push(
                                     '<a class="remove btn btn-default btn-xs" role="button"><i class="fa fa-remove"></i> ' +
                                         this.$__("Remove") +
                                         "</a>"
-                                )
+                                );
                             }
-                        })
-                        return content.join(" ")
+                        });
+                        return content.join(" ");
                     },
                 },
-            ]
+            ];
         }
     },
     mounted() {
-        let dt = this.$refs.table.dt()
-        let table_node = dt.table().node()
-        let add_filters = this.add_filters
-        let filters_options = this.filters_options
+        let dt = this.$refs.table.dt();
+        let table_node = dt.table().node();
+        let add_filters = this.add_filters;
+        let filters_options = this.filters_options;
         if (add_filters) {
-            _dt_add_filters(table_node, dt, filters_options)
+            _dt_add_filters(table_node, dt, filters_options);
         }
 
         dt.on("column-visibility.dt", function () {
             if (add_filters) {
-                _dt_add_filters(table_node, dt, filters_options)
+                _dt_add_filters(table_node, dt, filters_options);
             }
-        })
+        });
 
         dt.on("search.dt", function (e, settings) {
             toggledClearFilter(
                 settings.oPreviousSearch.sSearch,
                 settings.nTable.id
-            )
-        })
+            );
+        });
 
         if (Object.keys(this.actions).length) {
-            const self = this
+            const self = this;
             dt.on("draw", () => {
-                const dataSet = dt.rows().data()
+                const dataSet = dt.rows().data();
                 Object.entries(this.actions).forEach(([col_id, actions]) => {
                     dt.column(col_id)
                         .nodes()
                         .to$()
                         .each(function (idx) {
-                            const data = dataSet[idx]
+                            const data = dataSet[idx];
                             actions.forEach(action => {
                                 let action_name =
                                     typeof action === "object"
                                         ? Object.keys(action)[0]
-                                        : action
+                                        : action;
                                 $("." + action_name, this).on("click", e => {
-                                    self.$emit(action_name, data, dt, e)
-                                })
-                            })
-                        })
-                })
-            })
+                                    self.$emit(action_name, data, dt, e);
+                                });
+                            });
+                        });
+                });
+            });
         }
     },
     beforeUnmount() {
-        const dt = this.$refs.table.dt()
-        dt.destroy()
+        const dt = this.$refs.table.dt();
+        dt.destroy();
     },
     components: {
         DataTable,
@@ -304,5 +304,5 @@ export default {
             default: [],
         },
     },
-}
+};
 </script>

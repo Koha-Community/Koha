@@ -120,28 +120,28 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
-import { APIClient } from "../../fetch/api-client.js"
-import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
-import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue"
+import { inject } from "vue";
+import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue";
+import { APIClient } from "../../fetch/api-client.js";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
+import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
 
 export default {
     setup() {
-        const format_date = $date
+        const format_date = $date;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const AVStore = inject("AVStore")
-        const { get_lib_from_av } = AVStore
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
 
         return {
             format_date,
             get_lib_from_av,
             setConfirmationDialog,
             setMessage,
-        }
+        };
     },
     data() {
         return {
@@ -159,26 +159,26 @@ export default {
                 _strings: [],
             },
             initialized: false,
-        }
+        };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getPackage(to.params.package_id)
-        })
+            vm.getPackage(to.params.package_id);
+        });
     },
     beforeRouteUpdate(to, from) {
-        this.erm_package = this.getPackage(to.params.package_id)
+        this.erm_package = this.getPackage(to.params.package_id);
     },
     methods: {
         getPackage(package_id) {
-            const client = APIClient.erm
+            const client = APIClient.erm;
             client.localPackages.get(package_id).then(
                 erm_package => {
-                    this.erm_package = erm_package
-                    this.initialized = true
+                    this.erm_package = erm_package;
+                    this.initialized = true;
                 },
                 error => {}
-            )
+            );
         },
         delete_package: function (package_id, package_name) {
             this.setConfirmationDialog(
@@ -191,7 +191,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm
+                    const client = APIClient.erm;
                     client.localPackages.delete(package_id).then(
                         success => {
                             this.setMessage(
@@ -199,15 +199,15 @@ export default {
                                     package_name
                                 ),
                                 true
-                            )
+                            );
                             this.$router.push({
                                 name: "EHoldingsLocalPackagesList",
-                            })
+                            });
                         },
                         error => {}
-                    )
+                    );
                 }
-            )
+            );
         },
     },
     components: {
@@ -217,7 +217,7 @@ export default {
         AdditionalFieldsDisplay,
     },
     name: "EHoldingsLocalPackagesShow",
-}
+};
 </script>
 <style scoped>
 fieldset.rows label {
