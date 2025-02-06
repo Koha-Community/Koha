@@ -46,9 +46,9 @@ my $subscriptionid = $query->param('subscriptionid');
 # Permission needed otherwise : *
 
 my %permissions = (
-    "cud-del"   => "delete_subscription",
-    "cud-close" => "edit_subscription",
-    "reopen"    => "edit_subscription",
+    "cud-del"    => "delete_subscription",
+    "cud-close"  => "edit_subscription",
+    "cud-reopen" => "edit_subscription",
 );
 
 my $permission = $permissions{$op} // "*";
