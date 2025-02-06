@@ -23,6 +23,7 @@ use Koha::SIP2::Account::CustomItemFields;
 use Koha::SIP2::Account::ItemFields;
 use Koha::SIP2::Account::CustomPatronFields;
 use Koha::SIP2::Account::PatronAttributes;
+use Koha::SIP2::Account::ScreenMsgRegexs;
 use Koha::SIP2::Account::SortBinMappings;
 use Koha::SIP2::Account::SystemPreferenceOverrides;
 use Koha::SIP2::Institution;
@@ -109,6 +110,12 @@ sub get_for_config {
     if (@sort_bin_mappings) {
         $unblessed->{sort_bin_mapping} =
             scalar(@sort_bin_mappings) == 1 ? $sort_bin_mappings[0] : \@sort_bin_mappings;
+    }
+
+    my @screen_msg_regexs = map { $_->get_for_config } @{ $self->screen_msg_regexs->as_list };
+    if (@screen_msg_regexs) {
+        $unblessed->{screen_msg_regex} =
+            scalar(@screen_msg_regexs) == 1 ? $screen_msg_regexs[0] : \@screen_msg_regexs;
     }
 
     return $unblessed;
@@ -229,6 +236,32 @@ sub patron_attributes {
 
     my $patron_attributes_rs = $self->_result->sip_account_patron_attributes;
     return Koha::SIP2::Account::PatronAttributes->_new_from_dbic($patron_attributes_rs);
+}
+
+=head3 screen_msg_regexs
+
+Returns the screen msg regexs for this SIP account
+
+=cut
+
+sub screen_msg_regexs {
+    my ( $self, $screen_msg_regexs ) = @_;
+
+    if ($screen_msg_regexs) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->screen_msg_regexs->delete;
+
+                for my $screen_msg_regex (@$screen_msg_regexs) {
+                    $self->_result->add_to_sip_account_screen_msg_regexs($screen_msg_regex);
+                }
+            }
+        );
+    }
+
+    my $screen_msg_regexs_rs = $self->_result->sip_account_screen_msg_regexs;
+    return Koha::SIP2::Account::ScreenMsgRegexs->_new_from_dbic($screen_msg_regexs_rs);
 }
 
 =head3 sort_bin_mappings

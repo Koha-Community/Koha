@@ -229,6 +229,23 @@ return {
                 ) if $item_field;
             }
 
+            # Accounts screen msg regexs
+            my @screen_msg_regexs =
+                ref $SIPconfig->{accounts}->{$account_key}->{screen_msg_regex} eq "ARRAY"
+                ? @{ $SIPconfig->{accounts}->{$account_key}->{screen_msg_regex} }
+                : ( $SIPconfig->{accounts}->{$account_key}->{screen_msg_regex} );
+
+            my $insert_screen_msg_regexs = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_account_screen_msg_regexs (sip_account_id, find, `replace`) VALUES (?, ?, ?)});
+
+            foreach my $screen_msg_regex (@screen_msg_regexs) {
+                $insert_screen_msg_regexs->execute(
+                    $new_account_id,
+                    $screen_msg_regex->{find},
+                    $screen_msg_regex->{replace}
+                ) if $screen_msg_regex;
+            }
+
             # Accounts sort bin mappings
             my @sort_bin_mappings =
                 ref $SIPconfig->{accounts}->{$account_key}->{sort_bin_mapping} eq "ARRAY"

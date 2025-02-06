@@ -87,6 +87,7 @@ sub add {
                 my $item_fields                 = delete $body->{item_fields}                 // [];
                 my $custom_patron_fields        = delete $body->{custom_patron_fields}        // [];
                 my $patron_attributes           = delete $body->{patron_attributes}           // [];
+                my $screen_msg_regexs           = delete $body->{screen_msg_regexs}           // [];
                 my $sort_bin_mappings           = delete $body->{sort_bin_mappings}           // [];
                 my $system_preference_overrides = delete $body->{system_preference_overrides} // [];
 
@@ -95,6 +96,7 @@ sub add {
                 $account->item_fields($item_fields);
                 $account->custom_patron_fields($custom_patron_fields);
                 $account->patron_attributes($patron_attributes);
+                $account->screen_msg_regexs($screen_msg_regexs);
                 $account->sort_bin_mappings($sort_bin_mappings);
                 $account->system_preference_overrides($system_preference_overrides);
 
@@ -151,6 +153,7 @@ sub update {
                 my $item_fields                 = delete $body->{item_fields}                 // [];
                 my $custom_patron_fields        = delete $body->{custom_patron_fields}        // [];
                 my $patron_attributes           = delete $body->{patron_attributes}           // [];
+                my $screen_msg_regexs           = delete $body->{screen_msg_regexs}           // [];
                 my $sort_bin_mappings           = delete $body->{sort_bin_mappings}           // [];
                 my $system_preference_overrides = delete $body->{system_preference_overrides} // [];
 
@@ -159,6 +162,7 @@ sub update {
                 $account->item_fields($item_fields);
                 $account->custom_patron_fields($custom_patron_fields);
                 $account->patron_attributes($patron_attributes);
+                $account->screen_msg_regexs($screen_msg_regexs);
                 $account->sort_bin_mappings($sort_bin_mappings);
                 $account->system_preference_overrides($system_preference_overrides);
 

@@ -647,6 +647,59 @@ export default {
                     ],
                 },
                 {
+                    name: "screen_msg_regexs",
+                    type: "relationshipWidget",
+                    showElement: {
+                        type: "table",
+                        columnData: "screen_msg_regexs",
+                        hidden: account => !!account.screen_msg_regexs?.length,
+                        columns: [
+                            {
+                                name: __("Find"),
+                                value: "find",
+                            },
+                            {
+                                name: __("Replace"),
+                                value: "replace",
+                            },
+                        ],
+                    },
+                    group: __("SIP response mappings"),
+                    componentProps: {
+                        resourceRelationships: {
+                            resourceProperty: "screen_msg_regexs",
+                        },
+                        relationshipStrings: {
+                            nameLowerCase: __("screen msg regex"),
+                            nameUpperCase: __("Screen msg regex"),
+                            namePlural: __("screen msg regexs"),
+                        },
+                        newRelationshipDefaultAttrs: {
+                            type: "object",
+                            value: {
+                                find: null,
+                                replace: null,
+                            },
+                        },
+                    },
+                    relationshipFields: [
+                        {
+                            name: "find",
+                            required: true,
+                            type: "text",
+                            placeholder: "Greetings from Koha.",
+                            label: __("Find"),
+                        },
+                        {
+                            name: "replace",
+                            required: true,
+                            type: "text",
+                            placeholder: "Welcome to your library!",
+                            label: __("Replace"),
+                        },
+                    ],
+                },
+                {
                     name: "system_preference_overrides",
                     type: "relationshipWidget",
                     showElement: {

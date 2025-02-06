@@ -406,6 +406,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sip_account_screen_msg_regexs
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SipAccountScreenMsgRegex>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sip_account_screen_msg_regexs",
+  "Koha::Schema::Result::SipAccountScreenMsgRegex",
+  { "foreign.sip_account_id" => "self.sip_account_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sip_account_sort_bin_mappings
 
 Type: has_many
@@ -452,8 +467,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-06 16:48:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HkXHNDQw+5MKHCjxhbCdmA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-13 16:12:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gZLaINwjBTmy8eveMfrmhA
 
 
 __PACKAGE__->add_columns(
