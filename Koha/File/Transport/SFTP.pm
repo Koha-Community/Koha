@@ -287,22 +287,30 @@ sub _abort_operation {
     my $stderr = $self->{stderr_capture};
     $self->{stderr_capture} = '';
 
+    my $payload = {
+        status    => $self->{connection}->status,
+        error     => $self->{connection}->error,
+        path      => $path ? $path : $self->{connection}->cwd,
+        error_raw => $stderr
+    };
+
     $self->add_message(
         {
             message => $operation,
             type    => 'error',
-            payload => {
-                status    => $self->{connection}->status,
-                error     => $self->{connection}->error,
-                path      => $path ? $path : $self->{connection}->cwd,
-                error_raw => $stderr
-            }
+            payload => $payload
         }
     );
 
     if ( $self->{connection} ) {
         $self->{connection}->abort;
     }
+
+    my $status = {
+        status     => 'errors',
+        operations => [ { code => $operation, status => 'error', detail => $payload } ]
+    };
+    $self->set( { status => encode_json($status) } )->store();
 
     return;
 }
