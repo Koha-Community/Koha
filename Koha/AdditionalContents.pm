@@ -105,7 +105,10 @@ sub search_for_display {
     $search_params->{-or} = [ { 'lang' => $lang }, '-and' => [ 'lang', 'default', \$subquery ] ]
         if !$search_params->{lang};
 
-    my $attribs = { prefetch => 'additional_content', order_by => 'additional_content.number' };
+    my $attribs = {
+        prefetch => 'additional_content',
+        order_by => { -desc => 'additional_content.published_on' }
+    };
     return Koha::AdditionalContentsLocalizations->search( $search_params, $attribs );
 }
 
