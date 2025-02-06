@@ -55,14 +55,13 @@
                             >
                             <tbody
                                 >[% FOREACH reser IN branchesloo.reserv %]
-                                    [% SET tr_class = '' %]
-                                    [% IF ( reser.messcompa ) %]
-                                        [% tr_class = 'problem' %]
-                                    [% END %]
-                                    <tr class="[% tr_class | html %]">
-                                        <td data-order="[% reser.datetransfer | html %]"
-                                            ><p>[% reser.datetransfer | $KohaDates %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td
-                                        >
+                                    <tr>
+                                        <td data-order="[% reser.datetransfer | html %]">
+                                            [% reser.datetransfer | $KohaDates %]
+                                            [% IF ( reser.messcompa ) %]
+                                                <span class="badge bg-warning text-dark">[% tnx('{count} day late', '{count} days late', reser.diff, { count = reser.diff }) %]</span>
+                                            [% END %]
+                                        </td>
                                         <td>
                                             [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
                                             [% IF ( reser.itemtype ) %](<strong>[% reser.itemtype | html %]</strong>)[% END %]
