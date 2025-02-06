@@ -382,7 +382,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                         [% END %]
                                                             Preferred name:
                                                         </label>
-                                                        <input type="text" id="preferred_name" name="preferred_name" size="20"  value="[% borrower_data.preferred_name | html UNLESS opduplicate %]" />
+                                                        <input type="text" id="preferred_name" name="preferred_name" size="20"  value="[% borrower_data.preferred_name | html UNLESS op == 'duplicate' %]" />
                                                         [% IF ( mandatorypreferred_name ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
