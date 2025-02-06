@@ -91,6 +91,12 @@ export default {
         };
     },
     methods: {
+        /**
+         * Returns an object containing common props that are passed to all components
+         * in this resource component hierarchy.
+         *
+         * @return {Object} The object containing the common props.
+         */
         passCommonProps() {
             const commonProps = {
                 idAttr: this.idAttr,
@@ -117,7 +123,7 @@ export default {
          * @param {Object} resource - The resource to navigate to
          * @return {void}
          */
-        goToResourceShow: function (resource) {
+        goToResourceShow(resource) {
             this.$router.push({
                 name: this.showComponent,
                 params: { [this.idAttr]: resource[this.idAttr] },
@@ -130,7 +136,7 @@ export default {
          * @param {Object} resource - The resource to navigate to (optional)
          * @return {void}
          */
-        goToResourceEdit: function (resource) {
+        goToResourceEdit(resource) {
             this.$router.push({
                 name: this.editComponent,
                 params: {
@@ -145,7 +151,7 @@ export default {
          *
          * @return {void}
          */
-        goToResourceAdd: function () {
+        goToResourceAdd() {
             this.$router.push({
                 name: this.addComponent,
             });
@@ -155,7 +161,7 @@ export default {
          *
          * @return {void}
          */
-        goToResourceList: function () {
+        goToResourceList() {
             this.$router.push({
                 name: this.listComponent,
             });
@@ -171,7 +177,7 @@ export default {
          * @param {Object} callback - Callback to call after deletion (optional)
          * @return {void}
          */
-        doResourceDelete: function (resource, callback) {
+        doResourceDelete(resource, callback) {
             let resourceId = resource
                 ? resource[this.idAttr]
                 : this.newResource[this.idAttr];
@@ -218,12 +224,33 @@ export default {
          *
          * @return {string}
          */
-        getResourceTableUrl: function () {
+        getResourceTableUrl() {
             return this.resourceTableUrl;
         },
-        doResourceSelect: function (resource, dt, event) {
+        /**
+         * Emits the 'select-resource' event with the id of the provided resource.
+         *
+         * @param {Object} resource - The resource object containing the id attribute.
+         * @param {Object} dt - DataTables instance (not used in this function).
+         * @param {Event} event - The event object (not used in this function).
+         */
+
+        doResourceSelect(resource, dt, event) {
             this.$emit("select-resource", resource[this.idAttr]);
         },
+        /**
+         * Populates the resource attributes with authorised values based on their types.
+         *
+         * For each attribute:
+         * - If the attribute type is "select" and it has an authorised value category (avCat),
+         *   it sets the options from the component's corresponding property.
+         * - If the attribute type is "relationship" and it has component properties,
+         *   it assigns authorised values to any marked as type 'av'.
+         * - If the attribute has relationship fields, the function is recursively called
+         *   to populate them as well.
+         *
+         * @param {Array} attrs - The array of attributes to be populated with authorised values.
+         */
         populateAttributesWithAuthorisedValues(attrs) {
             if (!attrs) return;
             attrs.forEach(attr => {
@@ -247,9 +274,29 @@ export default {
                 }
             });
         },
+        /**
+         * Updates the extended_attributes property of the provided resource
+         *
+         * @param {Array} additionalFieldValues - Array of objects with
+         *        name and value properties.
+         * @param {Object} resource - The resource object whose
+         *        extended_attributes property is updated.
+         */
         additionalFieldsChanged(additionalFieldValues, resource) {
             resource.extended_attributes = additionalFieldValues;
         },
+        /**
+         * Builds an object of filter name-value pairs based on the provided
+         * query object and filterData (tableFilters by default).
+         *
+         * Iterates over the query object keys and updates the filterOptions
+         * object with the new values. If a filter name is not found in
+         * filterOptions, it is added.
+         *
+         * @param {Object} query - The query object (taken from the URL params)containing the filter values.
+         * @param {Array} filterData - The array of filter objects (optional).
+         * @return {Object}
+         */
         getFilters(query, filterData) {
             const filters = filterData
                 ? filterData
@@ -274,10 +321,32 @@ export default {
             });
             return filterOptions;
         },
-        // This is a default method, which can be overridden at the resource level
+        /**
+         * Gets the array of filters for the table, if required.
+         * This is a default method that returns an empty array.
+         * It can be overridden at the resource level if filters are required
+         *
+         * @return {Array} The array of filters for the table.
+         */
         getTableFilters() {
             return [];
         },
+        /**
+         * This method takes a component name (e.g. 'Form' or 'Show') and an optional resource object
+         * and returns an array of grouped objects that determine which fields should be grouped together
+         * in the relevant component. Each group object contains the name of the group and an array of the
+         * field objects that belong to that group.
+         *
+         * It first filters the resource attributes to only include those that are not hidden
+         * in the given component. Then it groups the attributes by the group name
+         * (or "noGroupFound" if there is no group name). If the component is 'Show', it also
+         * checks if the resource object has data to display in each group. If not,
+         * the group is not included.
+         *
+         * @param {String} component - The component name (e.g. 'Form' or 'Show').
+         * @param {Object} resource - The resource object (optional).
+         * @return {Array} The array of group objects.
+         */
         getFieldGroupings(component, resource) {
             const displayProperty = `hideIn${component}`;
             const attributesToConsider = this.resourceAttrs.filter(
@@ -336,6 +405,21 @@ export default {
         },
     },
     computed: {
+        /**
+         * Generates a new resource object with default values.
+         *
+         * This method initializes the `resourceToBeGenerated` property by iterating
+         * over `resourceAttrs`, assigning default values based on attribute types.
+         * - If an attribute has a `defaultValue`, it is set accordingly.
+         * - For text, textarea, and select types, an empty string is assigned.
+         * - For boolean and checkbox types, a false value is assigned.
+         * - For additional fields or relationship widgets, an empty array is assigned
+         *   to `extended_attributes` or the attribute name.
+         * - If none of the above apply, a null value is assigned.
+         * The `idAttr` of the resource is also initialized to null.
+         *
+         * @return {Object} The newly generated resource object with default values.
+         */
         newResource() {
             this.resourceToBeGenerated = this.resourceAttrs.reduce(
                 (acc, attr) => {
@@ -370,6 +454,11 @@ export default {
             this.resourceToBeGenerated[this.idAttr] = null;
             return this.resourceToBeGenerated;
         },
+        /**
+         * Determines if the resource has additional fields.
+         *
+         * @return {Boolean} true if the resource has additional fields, false otherwise.
+         */
         hasAdditionalFields() {
             return this.resourceAttrs.some(
                 attr => attr.name === "additional_fields"
