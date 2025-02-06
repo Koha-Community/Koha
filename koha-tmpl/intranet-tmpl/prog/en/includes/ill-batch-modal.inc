@@ -15,12 +15,11 @@
                             <ol>
                                 <li id="batch_name">
                                     <label class="required" for="name">Batch name:</label>
-                                    <input type="text" autocomplete="off" name="name" id="name" type="text"
-                                    value="" />
+                                    <input type="text" autocomplete="off" name="name" id="name" value="" />
                                 </li>
                                 <li id="batch_patron">
                                     <label class="required" for="batchcardnumber">Card number, username or surname:</label>
-                                    <input type="text" autocomplete="off" name="batchcardnumber" id="batchcardnumber" type="text" value="" />
+                                    <input type="text" autocomplete="off" name="batchcardnumber" id="batchcardnumber" value="" />
                                     <span id="patron_link"></span>
                                 </li>
                                 <li id="batch_branch">
