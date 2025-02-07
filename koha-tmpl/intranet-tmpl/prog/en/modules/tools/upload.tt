@@ -481,9 +481,9 @@
             var res = '[% Koha.Preference('OPACBaseURL') | html %]';
             res = res.replace( /\/$/, '');
             res = res + '/cgi-bin/koha/opac-retrieve-file.pl?id=' + hashval;
-            [% IF index %]
-                $(window.opener.document).find('#[% index | html %]').val( res );
-            [% END %]
+            var index = '[% index | html %]';
+            index = index.replace( /^buttonDot_/, '' );
+            if(index) $(window.opener.document).find('#'+index).val( res );
             window.close();
         }
         var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'upload', 'uploadresults', 'json' ) | $raw %];

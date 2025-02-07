@@ -803,26 +803,35 @@ Koha.frameworkPlugins ||= {};
 function registerFrameworkPluginHandler(name, eventType, handler) {
     // 'focus' and 'blur' events do not bubble,
     // so we have to use 'focusin' and 'focusout' instead
-    if (eventType === 'focus') eventType = 'focusin';
-    else if (eventType === 'blur') eventType = 'focusout';
+    if (eventType === "focus") eventType = "focusin";
+    else if (eventType === "blur") eventType = "focusout";
 
     Koha.frameworkPlugins[name] ||= {};
     Koha.frameworkPlugins[name][eventType] ||= handler;
 }
-$(document).ready(function() {
-    function callClickPluginEventHandler (event) {
+$(document).ready(function () {
+    function callClickPluginEventHandler(event) {
         event.preventDefault();
         callPluginEventHandler.call(this, event);
     }
 
-    function callPluginEventHandler (event) {
+    function callPluginEventHandler(event) {
         event.stopPropagation();
 
-        const plugin = event.target.getAttribute('data-plugin');
-        if (plugin && plugin in Koha.frameworkPlugins && event.type in Koha.frameworkPlugins[plugin]) {
+        const plugin = event.target.getAttribute("data-plugin");
+        if (
+            plugin &&
+            plugin in Koha.frameworkPlugins &&
+            event.type in Koha.frameworkPlugins[plugin]
+        ) {
             event.data = {};
-            if (event.target.classList.contains('buttonDot')) {
-                event.data.id = event.target.closest('.subfield_line').querySelector('input.input_marceditor').id;
+            if (
+                event.target.classList.contains("framework_plugin") ||
+                event.target.classList.contains("buttonDot")
+            ) {
+                event.data.id = event.target
+                    .closest(".subfield_line")
+                    .querySelector("input.input_marceditor").id;
             } else {
                 event.data.id = event.target.id;
             }
@@ -834,6 +843,14 @@ $(document).ready(function() {
     // We use delegated event handlers here so that dynamically added elements
     // (like when cloning a field or a subfield) respond to these events
     // without having to re-attach events manually
-    $('.marc_editor').on('click', '.tag_editor.framework_plugin', callClickPluginEventHandler);
-    $('.marc_editor').on('focusin focusout change mousedown mouseup keydown keyup', 'input.input_marceditor.framework_plugin', callPluginEventHandler);
+    $(".marc_editor").on(
+        "click",
+        ".tag_editor.framework_plugin",
+        callClickPluginEventHandler
+    );
+    $(".marc_editor").on(
+        "focusin focusout change mousedown mouseup keydown keyup",
+        "input.input_marceditor.framework_plugin",
+        callPluginEventHandler
+    );
 });

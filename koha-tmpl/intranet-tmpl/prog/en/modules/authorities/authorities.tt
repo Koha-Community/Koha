@@ -729,8 +729,8 @@
                                                                     </select>
                                                                 [% ELSIF ( mv.type == 'text1' ) %]
                                                                     <input type="text" id="[%- mv.id | html -%]" name="[%- mv.id | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" />
-                                                                [% ELSIF ( mv.type == 'text2' ) %]
-                                                                    <input type="text" id="[%- mv.id | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" />
+                                                                [% ELSIF ( mv.type == 'text2' ) # plugin %]
+                                                                    <input type="text" id="[%- mv.id | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" data-plugin="[% mv.plugin | html %]" class="input_marceditor framework_plugin" />
                                                                 [% ELSIF ( mv.type == 'text' ) %]
                                                                     <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength | html -%]" />
                                                                 [% ELSIF ( mv.type == 'textarea' ) %]
@@ -755,7 +755,7 @@
                                                                     [% IF mv.noclick %]
                                                                         <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
                                                                     [% ELSE %]
-                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor" data-plugin="[% mv.plugin | html %]">...</a>
+                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" title="Tag editor" data-plugin="[% mv.plugin | html %]">...</a>
                                                                     [% END %]
                                                                     [% mv.javascript | $raw %]
                                                                 [% END #/IF ( mv.type == 'text1' ) %]
