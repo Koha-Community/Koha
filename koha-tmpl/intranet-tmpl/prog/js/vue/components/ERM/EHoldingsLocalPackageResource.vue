@@ -2,9 +2,7 @@
 import BaseResource from "../BaseResource.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { inject } from "vue";
-import BaseResource from "../BaseResource.vue";
 import { storeToRefs } from "pinia";
-import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     extends: BaseResource,
@@ -55,11 +53,13 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Package name"),
+                    showInTable: true,
                 },
                 {
                     name: "vendor_id",
                     type: "vendor",
                     label: __("Vendor"),
+                    showInTable: true,
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -73,19 +73,34 @@ export default {
                     name: "package_type",
                     type: "select",
                     label: __("Type"),
+                    showInTable: true,
                     avCat: "av_package_types",
                 },
                 {
                     name: "content_type",
                     type: "select",
                     label: __("Content type"),
+                    showInTable: true,
                     avCat: "av_package_content_types",
+                },
+                {
+                    name: "created_on",
+                    type: "date",
+                    label: __("Created on"),
+                    showInTable: true,
+                    hideInForm: true,
+                    showElement: {
+                        type: "text",
+                        value: "created_on",
+                        format: this.format_date,
+                    },
                 },
                 {
                     name: "notes",
                     required: false,
                     type: "text",
                     label: __("Notes"),
+                    showInTable: true,
                 },
                 {
                     name: "additional_fields",
@@ -191,7 +206,6 @@ export default {
                 },
             ],
             tableOptions: {
-                columns: this.getTableColumns(),
                 url: this.getResourceTableUrl(),
                 options: {
                     embed: "resources+count,vendor.name,extended_attributes,+strings",
@@ -258,6 +272,7 @@ export default {
             delete erm_package.resources_count;
             delete erm_package.is_selected;
             delete erm_package._strings;
+            delete erm_package.created_on;
 
             erm_package.package_agreements = erm_package.package_agreements.map(
                 ({ package_id, agreement, ...keepAttrs }) => keepAttrs
@@ -284,86 +299,6 @@ export default {
                     error => {}
                 );
             }
-        },
-        getTableColumns() {
-            let get_lib_from_av = this.get_lib_from_av;
-            let escape_str = this.escape_str;
-            return [
-                {
-                    title: __("Name"),
-                    data: "me.name:me.package_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            '<a role="button" class="show">' +
-                            escape_str(`${row.name} (#${row.package_id})`) +
-                            "</a>"
-                        );
-                    },
-                },
-                {
-                    title: __("Vendor"),
-                    data: "vendor_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return row.vendor_id != undefined
-                            ? '<a href="/cgi-bin/koha/acquisition/vendors/' +
-                                  row.vendor_id +
-                                  '">' +
-                                  escape_str(row.vendor.name) +
-                                  "</a>"
-                            : "";
-                    },
-                },
-                {
-                    title: __("Type"),
-                    data: "package_type",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av(
-                                "av_package_types",
-                                row.package_type
-                            )
-                        );
-                    },
-                },
-                {
-                    title: __("Content type"),
-                    data: "content_type",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av(
-                                "av_package_content_types",
-                                row.content_type
-                            )
-                        );
-                    },
-                },
-                {
-                    title: __("Created on"),
-                    data: "created_on",
-                    searchable: false,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return $date(row.created_on);
-                    },
-                },
-                {
-                    title: __("Notes"),
-                    data: "notes",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return row.notes;
-                    },
-                },
-            ];
         },
         getRelationshipTableColumns() {
             const get_lib_from_av = this.get_lib_from_av;

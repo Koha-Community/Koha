@@ -67,19 +67,19 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Agreement name"),
+                    showInTable: true,
                 },
                 {
                     name: "vendor_id",
                     type: "vendor",
                     label: __("Vendor"),
+                    showInTable: true,
                     showElement: {
                         type: "text",
                         value: "vendor.name",
                         link: {
-                            href: "/cgi-bin/koha/acqui/supplier.pl",
-                            params: {
-                                bookseller_id: "vendor_id",
-                            },
+                            href: "/cgi-bin/koha/acquisition/vendors",
+                            slug: "vendor_id",
                         },
                     },
                 },
@@ -89,12 +89,14 @@ export default {
                     textAreaRows: 10,
                     textAreaCols: 50,
                     label: __("Description"),
+                    showInTable: true,
                 },
                 {
                     name: "status",
                     required: true,
                     type: "select",
                     label: __("Status"),
+                    showInTable: true,
                     avCat: "av_agreement_statuses",
                     onSelected: resource => {
                         if (resource.status !== "closed") {
@@ -107,6 +109,7 @@ export default {
                     name: "closure_reason",
                     type: "select",
                     label: __("Closure reason"),
+                    showInTable: true,
                     avCat: "av_agreement_closure_reasons",
                     disabled: agreement => agreement.status !== "closed",
                 },
@@ -114,11 +117,13 @@ export default {
                     name: "is_perpetual",
                     type: "boolean",
                     label: __("Is perpetual"),
+                    showInTable: true,
                 },
                 {
                     name: "renewal_priority",
                     type: "select",
                     label: __("Renewal priority"),
+                    showInTable: true,
                     avCat: "av_agreement_renewal_priorities",
                 },
                 {
@@ -583,7 +588,6 @@ export default {
                 },
             ],
             tableOptions: {
-                columns: this.getTableColumns(),
                 options: {
                     embed: "user_roles,vendor,extended_attributes,+strings",
                 },
@@ -767,110 +771,6 @@ export default {
                     error => {}
                 );
             }
-        },
-        getTableColumns() {
-            let get_lib_from_av = this.get_lib_from_av;
-            let escape_str = this.escape_str;
-
-            return [
-                {
-                    title: __("ID"),
-                    data: "me.agreement_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            '<a role="button" class="show">' +
-                            escape_str(`${row.agreement_id}`) +
-                            "</a>"
-                        );
-                    },
-                },
-                {
-                    title: __("Name"),
-                    data: "me.name:me.agreement_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            '<a role="button" class="show">' +
-                            escape_str(row.name) +
-                            "</a>"
-                        );
-                    },
-                },
-                {
-                    title: __("Vendor"),
-                    data: "vendor_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return row.vendor_id != undefined
-                            ? '<a href="/cgi-bin/koha/acquisition/vendors/' +
-                                  row.vendor_id +
-                                  '">' +
-                                  escape_str(row.vendor.name) +
-                                  "</a>"
-                            : "";
-                    },
-                },
-                {
-                    title: __("Description"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                },
-                {
-                    title: __("Status"),
-                    data: "status",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av("av_agreement_statuses", row.status)
-                        );
-                    },
-                },
-                {
-                    title: __("Closure reason"),
-                    data: "closure_reason",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av(
-                                "av_agreement_closure_reasons",
-                                row.closure_reason
-                            )
-                        );
-                    },
-                },
-                {
-                    title: __("Is perpetual"),
-                    data: "is_perpetual",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            row.is_perpetual ? __("Yes") : __("No")
-                        );
-                    },
-                },
-                {
-                    title: __("Renewal priority"),
-                    data: "renewal_priority",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av(
-                                "av_agreement_renewal_priorities",
-                                row.renewal_priority
-                            )
-                        );
-                    },
-                },
-            ];
         },
         getTableFilters() {
             return [

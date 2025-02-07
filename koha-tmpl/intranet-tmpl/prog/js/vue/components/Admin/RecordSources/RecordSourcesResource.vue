@@ -34,21 +34,34 @@ export default {
         return {
             resourceAttrs: [
                 {
+                    name: "record_source_id",
+                    required: true,
+                    type: "text",
+                    label: __("Id"),
+                    hideInForm: true,
+                    showInTable: {
+                        title: __("ID"),
+                        data: "record_source_id",
+                        searchable: true,
+                    },
+                },
+                {
                     name: "name",
                     required: true,
                     type: "text",
                     label: __("Name"),
+                    showInTable: true,
                 },
                 {
                     name: "can_be_edited",
                     type: "checkbox",
                     label: __("Can be edited"),
                     value: false,
+                    showInTable: true,
                 },
             ],
             tableOptions: {
                 options: { embed: "usage_count" },
-                columns: this.getTableColumns(),
                 url: this.getResourceTableUrl(),
                 actions: {
                     "-1": [
@@ -67,9 +80,6 @@ export default {
         };
     },
     methods: {
-        tableUrl() {
-            return this.getResourceTableUrl();
-        },
         onSubmit(e, recordSourceToSave) {
             e.preventDefault();
             let response;
@@ -99,33 +109,6 @@ export default {
                     error => {}
                 );
             }
-        },
-        getTableColumns() {
-            let escape_str = this.escape_str;
-
-            return [
-                {
-                    title: __("ID"),
-                    data: "record_source_id",
-                    searchable: true,
-                },
-                {
-                    title: __("Name"),
-                    data: "name",
-                    searchable: true,
-                },
-                {
-                    title: __("Can be edited"),
-                    data: "can_be_edited",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            row.can_be_edited ? __("Yes") : __("No")
-                        );
-                    },
-                },
-            ];
         },
     },
     name: "RecordSourcesResource",

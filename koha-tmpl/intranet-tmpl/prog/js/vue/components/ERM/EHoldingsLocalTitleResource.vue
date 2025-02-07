@@ -50,11 +50,38 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Publication title"),
+                    showInTable: true,
                 },
                 {
                     name: "print_identifier",
                     type: "text",
                     label: __("Print-format identifier"),
+                    showInTable: {
+                        title: __("Identifier"),
+                        data: "print_identifier:online_identifier",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            let print_identifier = row.print_identifier;
+                            let online_identifier = row.online_identifier;
+                            return [
+                                print_identifier
+                                    ? escape_str(
+                                          __("ISBN (Print): %s").format(
+                                              print_identifier
+                                          )
+                                      )
+                                    : "",
+                                online_identifier
+                                    ? escape_str(
+                                          __("ISBN (Online): %s").format(
+                                              online_identifier
+                                          )
+                                      )
+                                    : "",
+                            ].join("<br/>");
+                        },
+                    },
                 },
                 {
                     name: "online_identifier",
@@ -100,6 +127,21 @@ export default {
                     name: "first_author",
                     type: "text",
                     label: __("First author"),
+                    showInTable: {
+                        title: __("Contributors"),
+                        data: "first_author:first_editor",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return (
+                                escape_str(row.first_author) +
+                                (row.first_author && row.first_editor
+                                    ? "<br/>"
+                                    : "") +
+                                escape_str(row.first_editor)
+                            );
+                        },
+                    },
                 },
                 {
                     name: "embargo_info",
@@ -126,6 +168,7 @@ export default {
                     type: "select",
                     label: __("Publication type"),
                     avCat: "av_title_publication_types",
+                    showInTable: true,
                 },
                 {
                     name: "date_monograph_published_print",
@@ -324,7 +367,6 @@ export default {
                 },
             ],
             tableOptions: {
-                columns: this.getTableColumns(),
                 url: this.getResourceTableUrl(),
                 options: {
                     embed: "resources.package",
@@ -408,83 +450,6 @@ export default {
                     error => {}
                 );
             }
-        },
-        getTableColumns() {
-            let get_lib_from_av = this.get_lib_from_av;
-            let escape_str = this.escape_str;
-
-            return [
-                {
-                    title: __("Title"),
-                    data: "me.publication_title:me.title_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            '<a role="button" class="show">' +
-                            escape_str(
-                                `${row.publication_title} (#${row.title_id})`
-                            ) +
-                            "</a>"
-                        );
-                    },
-                },
-                {
-                    title: __("Contributors"),
-                    data: "first_author:first_editor",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            escape_str(row.first_author) +
-                            (row.first_author && row.first_editor
-                                ? "<br/>"
-                                : "") +
-                            escape_str(row.first_editor)
-                        );
-                    },
-                },
-                {
-                    title: __("Publication type"),
-                    data: "publication_type",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av(
-                                "av_title_publication_types",
-                                row.publication_type
-                            )
-                        );
-                    },
-                },
-                {
-                    title: __("Identifier"),
-                    data: "print_identifier:online_identifier",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        let print_identifier = row.print_identifier;
-                        let online_identifier = row.online_identifier;
-                        return [
-                            print_identifier
-                                ? escape_str(
-                                      __("ISBN (Print): %s").format(
-                                          print_identifier
-                                      )
-                                  )
-                                : "",
-                            online_identifier
-                                ? escape_str(
-                                      __("ISBN (Online): %s").format(
-                                          online_identifier
-                                      )
-                                  )
-                                : "",
-                        ].join("<br/>");
-                    },
-                },
-            ];
         },
         getToolbarButtons() {
             return [

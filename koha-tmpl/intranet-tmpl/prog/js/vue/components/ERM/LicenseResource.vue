@@ -52,11 +52,13 @@ export default {
                     required: true,
                     type: "text",
                     label: __("License name"),
+                    showInTable: true,
                 },
                 {
                     name: "vendor_id",
                     type: "vendor",
                     label: __("Vendor"),
+                    showInTable: true,
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -74,12 +76,14 @@ export default {
                     textAreaRows: 10,
                     textAreaCols: 50,
                     label: __("Description"),
+                    showInTable: true,
                 },
                 {
                     name: "type",
                     required: true,
                     type: "select",
                     label: __("Type"),
+                    showInTable: true,
                     avCat: "av_license_types",
                 },
                 {
@@ -87,12 +91,14 @@ export default {
                     required: true,
                     type: "select",
                     label: __("Status"),
+                    showInTable: true,
                     avCat: "av_license_statuses",
                 },
                 {
                     name: "started_on",
                     type: "date",
                     label: __("Start date"),
+                    showInTable: true,
                     showElement: {
                         type: "text",
                         value: "started_on",
@@ -109,7 +115,7 @@ export default {
                     name: "ended_on",
                     type: "date",
                     label: __("End date"),
-                    required: false,
+                    showInTable: true,
                     showElement: {
                         type: "text",
                         value: "ended_on",
@@ -272,7 +278,6 @@ export default {
                 },
             ],
             tableOptions: {
-                columns: this.getTableColumns(),
                 url: this.getResourceTableUrl(),
                 options: { embed: "vendor,extended_attributes,+strings" },
                 table_settings: this.license_table_settings,
@@ -369,100 +374,6 @@ export default {
                     error => {}
                 );
             }
-        },
-        getTableColumns() {
-            let get_lib_from_av = this.get_lib_from_av;
-
-            return [
-                {
-                    title: __("ID"),
-                    data: "me.license_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            '<a role="button" class="show">' +
-                            escape_str(`${row.license_id}`) +
-                            "</a>"
-                        );
-                    },
-                },
-                {
-                    title: __("Name"),
-                    data: "me.name:me.license_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return (
-                            '<a role="button" class="show">' +
-                            escape_str(row.name) +
-                            "</a>"
-                        );
-                    },
-                },
-                {
-                    title: __("Vendor"),
-                    data: "vendor_id",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return row.vendor_id != undefined
-                            ? '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=' +
-                                  row.vendor_id +
-                                  '">' +
-                                  escape_str(row.vendor.name) +
-                                  "</a>"
-                            : "";
-                    },
-                },
-
-                {
-                    title: __("Description"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                },
-                {
-                    title: __("Type"),
-                    data: "type",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av("av_license_types", row.type)
-                        );
-                    },
-                },
-                {
-                    title: __("Status"),
-                    data: "status",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av("av_license_statuses", row.status)
-                        );
-                    },
-                },
-                {
-                    title: __("Started on"),
-                    data: "started_on",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return $date(row.started_on);
-                    },
-                },
-                {
-                    title: __("Ended on"),
-                    data: "ended_on",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        return $date(row.ended_on);
-                    },
-                },
-            ];
         },
     },
     name: "LicenseResource",
