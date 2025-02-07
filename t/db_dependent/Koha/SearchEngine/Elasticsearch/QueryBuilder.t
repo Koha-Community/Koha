@@ -219,7 +219,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 65;
+    plan tests => 68;
 
     my $qb;
 
@@ -254,6 +254,10 @@ subtest 'build_query tests' => sub {
     is( $query->{aggregations}{homebranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount for homebranch');
     is( $query->{aggregations}{holdingbranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount for holdingbranch');
 
+    $options{skip_facets} = 1;
+    $query = $qb->build_query( 'test', %options );
+    ok( !defined $query->{aggregations}, 'Skipping facets means we do not have aggregations in the the query' );
+
     t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'] );
@@ -262,6 +266,10 @@ subtest 'build_query tests' => sub {
         "(donald duck)",
         "query not altered if QueryAutoTruncate disabled"
     );
+    ok( defined $query->{aggregations}, 'Aggregations generated normally' );
+    ( undef, $query ) =
+        $qb->build_query_compat( undef, ['donald duck'], undef, undef, undef, undef, undef, { skip_facets => 1 } );
+    ok( !defined $query->{aggregations}, 'Aggregations generated normally' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'], ['kw,phr'] );
     is(

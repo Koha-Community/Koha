@@ -224,14 +224,18 @@ sub build_query {
         }
     }
 
-    # See _convert_facets in Search.pm for how these get turned into
-    # things that Koha can use.
-    my $size = C4::Context->preference('FacetMaxCount');
-    my @facets = Koha::SearchEngine::Elasticsearch->get_facet_fields;
-    for my $f ( @facets ) {
-        my $name = $f->name;
-        $res->{aggregations}->{$name} = { terms => { field => "${name}__facet" , size => $size } };
-    };
+    unless ( $options{skip_facets} ) {
+
+        # See _convert_facets in Search.pm for how these get turned into
+        # things that Koha can use.
+        my $size = C4::Context->preference('FacetMaxCount');
+        my @facets = Koha::SearchEngine::Elasticsearch->get_facet_fields;
+        for my $f ( @facets ) {
+            my $name = $f->name;
+            $res->{aggregations}->{$name} = { terms => { field => "${name}__facet" , size => $size } };
+        };
+
+    }
 
     $res = _rebuild_to_es_advanced_query($res) if @$es_advanced_searches ;
     return $res;
@@ -314,6 +318,7 @@ sub build_query_compat {
         $options{is_opac} = $params->{is_opac};
         $options{weighted_fields} = $params->{weighted_fields};
         $options{whole_record} = $params->{whole_record};
+        $options{skip_facets}     = $params->{skip_facets};
         $query = $self->build_query( $query_str, %options );
     }
 

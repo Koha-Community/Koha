@@ -655,6 +655,12 @@ sub get_matches {
             # Use state variables to avoid recreating the objects every time.
             # With Elasticsearch this also avoids creating a massive amount of
             # ES connectors that would eventually run out of file descriptors.
+            state $query_builder =
+                Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            ( undef, $query ) = $query_builder->build_query_compat(
+                undef, [$query], undef, undef, undef, undef, undef,
+                { skip_facets => 1 }
+            );
             state $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
             ( $error, $searchresults, $total_hits ) =
               $searcher->simple_search_compat( $query, 0, $max_matches, undef, skip_normalize => 1 );
