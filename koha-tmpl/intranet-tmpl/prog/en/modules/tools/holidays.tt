@@ -610,12 +610,12 @@
             });
             $("#holidayweeklyrepeatable").kohaTable({
                 dom: "t",
-                paginate: false,
+                paging: false,
             });
 
             let dt_params = {
                 dom: "t",
-                paginate: false,
+                paging: false,
                 createdRow: function (row, data, dataIndex) {
                     var holiday = $(row).data("date");
                     if (holiday < datestring) {

@@ -31,7 +31,7 @@ $(document).ready(function () {
     });
     $("#table_marcsubfieldstructure").kohaTable({
         order: [],
-        paginate: false,
+        paging: false,
     });
 
     selectBsTabByHash("subfieldtabs");

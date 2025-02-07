@@ -116,7 +116,7 @@
             [% FOREACH branchesloo IN branchesloop %]
                 $("#transferst[% branchesloo.branchcode | html %]").kohaTable({
                     dom: "t",
-                    paginate: false,
+                    paging: false,
                 });
             [% END %]
         });

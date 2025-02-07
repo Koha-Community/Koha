@@ -1436,7 +1436,7 @@
             hold_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'patron_holds_table', 'json' ) | $raw %];
             $("#patron_holds_table").kohaTable(
                 {
-                    bPaginate: false,
+                    paging: false,
                     bKohaColumnsUseNames: true,
                 },
                 hold_table_settings
@@ -1511,7 +1511,7 @@
             [% END %]
 
             var my_table = $("#requestspecific").kohaTable({
-                paginate: false,
+                paging: false,
                 dom: '<"top pager"ilf>t',
             });
 

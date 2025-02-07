@@ -101,7 +101,7 @@
             [% FOREACH library IN libraries %]
                 $("#transferst[% library.branchcode | html %]").kohaTable({
                     dom: "t",
-                    paginate: false,
+                    paging: false,
                 });
             [% END %]
         });

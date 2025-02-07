@@ -180,7 +180,7 @@
 
             [% FOREACH codes_loo IN codes_loop %]
                 $("#[% codes_loo.code | html %]table").kohaTable({
-                    paginate: false,
+                    paging: false,
                 });
             [% END %]
         });
