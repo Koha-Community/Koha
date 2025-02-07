@@ -1,6 +1,7 @@
 package Koha::FrameworkPlugin;
 
 # Copyright 2014 Rijksmuseum
+# Copyright 2025 Biblibre, Koha development team
 #
 # This file is part of Koha.
 #
@@ -339,6 +340,7 @@ JS
 =head1 AUTHOR
 
     Marcel de Rooy, Rijksmuseum Amsterdam, The Netherlands
+    Julian Maurice, Biblibre, France
 
 =cut
 
