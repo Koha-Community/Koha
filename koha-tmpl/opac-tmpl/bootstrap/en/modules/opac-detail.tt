@@ -800,7 +800,7 @@
                                         [% END %]
                                         [% IF ( subscription.latestserials ) %]
                                             <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
-                                            <table class="table table-bordered table-striped" id="subscriptionst">
+                                            <table class="table table-bordered table-striped subscriptionst">
                                                 <caption class="sr-only">Latest serials</caption>
                                                 <thead>
                                                     <tr>
@@ -1886,7 +1886,7 @@
 
             var serial_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
 
-            KohaTable("#subscriptionst", {
+            KohaTable(".subscriptionst", {
                 dom: '<"clearfix">t',
                 "sorting": [[ 1, "desc" ]],
                 "bKohaColumnsUseNames": true,
@@ -1898,7 +1898,7 @@
                 ],
             }, serial_table_settings);
 
-            var dTables = $("#holdingst,#subscriptionst,#otherholdingst");
+            var dTables = $("#holdingst,.subscriptionst,#otherholdingst");
             $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {
                 dTables.DataTable().responsive.recalc();
             } );
