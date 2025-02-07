@@ -308,15 +308,9 @@ export default {
                         },
                         {
                             name: "started_on",
-                            type: "component",
+                            type: "date",
                             label: __("Start date"),
-                            componentPath: "./FlatPickrWrapper.vue",
                             componentProps: {
-                                id: {
-                                    type: "string",
-                                    value: "started_on_",
-                                    indexRequired: true,
-                                },
                                 date_to: {
                                     type: "string",
                                     value: "ended_on_",
@@ -326,16 +320,8 @@ export default {
                         },
                         {
                             name: "ended_on",
-                            type: "component",
+                            type: "date",
                             label: __("End date"),
-                            componentPath: "./FlatPickrWrapper.vue",
-                            componentProps: {
-                                id: {
-                                    type: "string",
-                                    value: "ended_on_",
-                                    indexRequired: true,
-                                },
-                            },
                         },
                         {
                             name: "proxy",

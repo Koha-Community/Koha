@@ -15,6 +15,12 @@ export default {
     },
     methods: {
         identifyAndImportComponent(attr, show = false) {
+            if (attr.type === "date") {
+                attr.componentPath = "./FlatPickrWrapper.vue";
+            }
+            if (attr.type === "relationshipWidget") {
+                attr.componentPath = "./RelationshipWidget.vue";
+            }
             const importPath = show
                 ? attr.showElement.componentPath
                 : attr.componentPath;

@@ -99,19 +99,14 @@ export default {
                 },
                 {
                     name: "started_on",
-                    type: "component",
+                    type: "date",
                     label: __("Start date"),
-                    componentPath: "./FlatPickrWrapper.vue",
                     showElement: {
                         type: "text",
                         value: "started_on",
                         format: this.format_date,
                     },
                     componentProps: {
-                        id: {
-                            type: "string",
-                            value: "started_on",
-                        },
                         date_to: {
                             type: "string",
                             value: "ended_on",
@@ -120,20 +115,13 @@ export default {
                 },
                 {
                     name: "ended_on",
-                    type: "component",
+                    type: "date",
                     label: __("End date"),
-                    componentPath: "./FlatPickrWrapper.vue",
                     required: false,
                     showElement: {
                         type: "text",
                         value: "ended_on",
                         format: this.format_date,
-                    },
-                    componentProps: {
-                        id: {
-                            type: "string",
-                            value: "ended_on",
-                        },
                     },
                 },
                 {

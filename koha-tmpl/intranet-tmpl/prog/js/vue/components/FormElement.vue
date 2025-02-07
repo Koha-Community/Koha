@@ -108,6 +108,22 @@
             </template>
         </v-select>
     </template>
+    <template v-else-if="attr.type == 'date'">
+        <label
+            v-if="attr.label"
+            :for="attr.name"
+            :class="{ required: attr.required }"
+            :style="{ ...attr.style }"
+            >{{ attr.label }}:</label
+        >
+        <component
+            :is="requiredComponent"
+            :id="attr.name"
+            v-bind="getComponentProps()"
+            v-on="getEventHandlers()"
+            v-model="resource[attr.name]"
+        ></component>
+    </template>
     <template v-else-if="attr.type == 'component' && attr.componentPath">
         <label
             v-if="attr.label"
@@ -134,7 +150,7 @@
         v-else-if="attr.type == 'relationshipWidget' && attr.componentProps"
     >
         <component
-            :is="relationshipWidget"
+            :is="requiredComponent"
             :title="attr.group ? null : attr.label"
             :apiClient="attr.apiClient"
             :name="attr.name"
@@ -205,12 +221,6 @@ export default {
             } else {
                 return this.attr.disabled || false;
             }
-        },
-        relationshipWidget() {
-            const component = this.identifyAndImportComponent({
-                componentPath: "./RelationshipWidget.vue",
-            });
-            return component;
         },
     },
     methods: {

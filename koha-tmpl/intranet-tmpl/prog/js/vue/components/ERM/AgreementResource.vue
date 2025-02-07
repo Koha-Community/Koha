@@ -193,16 +193,10 @@ export default {
                     relationshipFields: [
                         {
                             name: "started_on",
-                            type: "component",
+                            type: "date",
                             label: __("Start date"),
-                            componentPath: "./FlatPickrWrapper.vue",
                             required: true,
                             componentProps: {
-                                id: {
-                                    type: "string",
-                                    value: "started_on_",
-                                    indexRequired: true,
-                                },
                                 required: {
                                     type: "boolean",
                                     value: true,
@@ -216,31 +210,15 @@ export default {
                         },
                         {
                             name: "ended_on",
-                            type: "component",
+                            type: "date",
                             label: __("End date"),
-                            componentPath: "./FlatPickrWrapper.vue",
                             required: false,
-                            componentProps: {
-                                id: {
-                                    type: "string",
-                                    value: "ended_on_",
-                                    indexRequired: true,
-                                },
-                            },
                         },
                         {
                             name: "cancellation_deadline",
-                            type: "component",
+                            type: "date",
                             label: __("Cancellation deadline"),
-                            componentPath: "./FlatPickrWrapper.vue",
                             required: false,
-                            componentProps: {
-                                id: {
-                                    type: "string",
-                                    value: "cancellation_deadline_",
-                                    indexRequired: true,
-                                },
-                            },
                         },
                         {
                             name: "notes",
@@ -922,14 +900,9 @@ export default {
                 },
                 {
                     name: "max_expiration_date",
-                    type: "component",
+                    type: "date",
                     label: __("on"),
-                    componentPath: "./FlatPickrWrapper.vue",
                     componentProps: {
-                        id: {
-                            type: "string",
-                            value: "max_expiration_date_filter",
-                        },
                         disabled: {
                             resourceProperty: "by_expired",
                         },
