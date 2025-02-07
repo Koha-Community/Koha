@@ -6304,6 +6304,21 @@ CREATE TABLE `sip_listeners` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `sip_listeners`
+--
+
+DROP TABLE IF EXISTS `sip_server_params`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sip_server_params` (
+  `sip_server_param_id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(80) DEFAULT NULL,
+  `value` varchar(255) NOT NULL,
+  PRIMARY KEY (`sip_server_param_id`),
+  UNIQUE KEY `server_param_key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `sms_providers`
 --
 

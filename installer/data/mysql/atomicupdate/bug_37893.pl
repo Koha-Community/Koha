@@ -306,5 +306,24 @@ return {
                 $SIPconfig->{listeners}->{$listener_key}->{transport}
             );
         }
+
+        # Server params #
+        my @server_params_keys = keys %{ $SIPconfig->{'server-params'} };
+        foreach my $server_params_key (@server_params_keys) {
+            my $insert_listeners = $dbh->prepare(
+                q{INSERT IGNORE INTO sip_server_params (`key`, value) VALUES (?, ?) }
+            );
+
+            $insert_listeners->execute(
+                $server_params_key,
+                $SIPconfig->{'server-params'}->{$server_params_key}
+            );
+        }
+
+        my $delete_config_timestamp = $dbh->prepare(q{DELETE FROM sip_server_params WHERE `key` = 'config_timestamp' });
+        $delete_config_timestamp->execute();
+        my $timestamp               = DateTime->now;
+        my $insert_config_timestamp = $dbh->prepare(q{INSERT INTO sip_server_params (`key`, value) VALUES (?, ?) });
+        $insert_config_timestamp->execute( 'config_timestamp', $timestamp->epoch );
     },
 };

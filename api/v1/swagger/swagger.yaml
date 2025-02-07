@@ -186,6 +186,8 @@ definitions:
     $ref: ./definitions/sip2_institution.yaml
   sip2_listener:
     $ref: ./definitions/sip2_listener.yaml
+  sip2_server_param:
+    $ref: ./definitions/sip2_server_param.yaml
   smtp_server:
     $ref: ./definitions/smtp_server.yaml
   file_transport:
@@ -615,6 +617,8 @@ paths:
     $ref: ./paths/sip2_listeners.yaml#/~1sip2~1listeners
   "/sip2/listeners/{sip_listener_id}":
     $ref: "./paths/sip2_listeners.yaml#/~1sip2~1listeners~1{sip_listener_id}"
+  /sip2/serverparams:
+    $ref: "./paths/sip2_server_params.yaml#/~1sip2~1server_params"
   /suggestions:
     $ref: ./paths/suggestions.yaml#/~1suggestions
   "/suggestions/{suggestion_id}":

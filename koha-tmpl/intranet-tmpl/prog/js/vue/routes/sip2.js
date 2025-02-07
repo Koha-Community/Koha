@@ -2,6 +2,7 @@ import { markRaw } from "vue";
 
 import Home from "../components/SIP2/Home.vue";
 import ResourceWrapper from "../components/ResourceWrapper.vue";
+import ServerParams from "../components/SIP2/SIP2ServerParams.vue";
 import { $__ } from "../i18n";
 
 export const routes = [
@@ -112,6 +113,19 @@ export const routes = [
                         title: $__("Edit listener"),
                     },
                 ],
+            },
+            {
+                path: "/cgi-bin/koha/sip2/serverparams",
+                title: $__("Server params"),
+                icon: "fa fa-cog",
+                is_end_node: true,
+                children: [
+                    {
+                        path: "",
+                        name: "SIP2ServerParams",
+                        component: markRaw(ServerParams),
+                    },
+                ]
             },
         ],
     },
