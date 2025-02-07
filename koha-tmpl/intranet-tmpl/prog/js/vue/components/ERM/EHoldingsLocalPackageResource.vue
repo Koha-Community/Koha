@@ -58,7 +58,7 @@ export default {
                 },
                 {
                     name: "vendor_id",
-                    type: "component",
+                    type: "vendor",
                     label: __("Vendor"),
                     showElement: {
                         type: "text",
@@ -66,14 +66,6 @@ export default {
                         link: {
                             href: "/cgi-bin/koha/acquisition/vendors",
                             slug: "vendor_id",
-                        },
-                    },
-                    componentPath: "./FormSelectVendors.vue",
-                    componentProps: {
-                        id: {
-                            type: "string",
-                            value: "package_id_",
-                            indexRequired: true,
                         },
                     },
                 },

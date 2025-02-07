@@ -18,6 +18,9 @@ export default {
             if (attr.type === "date") {
                 attr.componentPath = "./FlatPickrWrapper.vue";
             }
+            if (attr.type === "vendor") {
+                attr.componentPath = "./FormSelectVendors.vue";
+            }
             if (attr.type === "relationshipWidget") {
                 attr.componentPath = "./RelationshipWidget.vue";
             }

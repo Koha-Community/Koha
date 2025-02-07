@@ -55,7 +55,7 @@ export default {
                 },
                 {
                     name: "vendor_id",
-                    type: "component",
+                    type: "vendor",
                     label: __("Vendor"),
                     showElement: {
                         type: "text",
@@ -65,14 +65,6 @@ export default {
                             params: {
                                 bookseller_id: "vendor_id",
                             },
-                        },
-                    },
-                    componentPath: "./FormSelectVendors.vue",
-                    componentProps: {
-                        id: {
-                            type: "string",
-                            value: "license_id_",
-                            indexRequired: true,
                         },
                     },
                 },
