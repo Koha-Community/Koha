@@ -129,6 +129,7 @@ $(document).ready(function () {
 
     $("#recalls-table").kohaTable({
         columnDefs: [{ type: "title-string", targets: ["title-string"] }],
+        order: [[1, "asc"]],
         pagingType: "full_numbers",
     });
 

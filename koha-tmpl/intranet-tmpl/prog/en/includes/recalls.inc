@@ -4,7 +4,7 @@
         <table id="recalls-table">
             <thead>
                 <tr>
-                    [% IF checkboxes %]<th class="recall-checkbox nosort">&nbsp;</th>[% END %]
+                    [% IF checkboxes %]<th class="recall-checkbox NoSort">&nbsp;</th>[% END %]
                     <th class="recall-title anti-the">Title</th>
                     [% UNLESS specific_patron %]<th class="recall-patron">Requested by</th>[% END %]
                     <th class="recall-date">Placed on</th>
@@ -12,7 +12,7 @@
                     <th class="recall-branch">Pickup location</th>
                     <th class="recall-status">Status</th>
                     [% UNLESS viewing_old %]<th class="recall-duedate">Due date</th>[% END %]
-                    [% UNLESS viewing_old %]<th class="recall-actions nosort">&nbsp;</th>[% END %]
+                    [% UNLESS viewing_old %]<th class="recall-actions NoSort">&nbsp;</th>[% END %]
                 </tr>
             </thead>
 
