@@ -1,3 +1,4 @@
+<!--prettier-ignore-start -->
 [%~ country_strings = BLOCK ~%]
     [%~ t("Afghanistan") | html ~%],
     [%~ t("Albania") | html ~%],
@@ -194,3 +195,4 @@
     [%~ t("Zambia") | html ~%],
     [%~ t("Zimbabwe") | html ~%]
 [%~ END ~%]
+<!--prettier-ignore-end -->
