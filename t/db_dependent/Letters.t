@@ -29,6 +29,8 @@ use Email::Sender::Failure;
 
 use MARC::Record;
 
+use t::lib::Dates;
+
 use utf8;
 
 my ( $email_object, $sendmail_params );
@@ -162,7 +164,7 @@ is(
 is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pending correctly' );
 isnt( $messages->[0]->{time_queued}, undef, 'Time queued inserted by default in message_queue table' );
 is(
-    $messages->[0]->{updated_on}, $messages->[0]->{time_queued},
+    t::lib::Dates::compare( $messages->[0]->{updated_on}, $messages->[0]->{time_queued} ), 0,
     'Time status changed equals time queued when created in message_queue table'
 );
 is( $messages->[0]->{failure_code}, '', 'Failure code for successful message correctly empty' );
