@@ -1353,12 +1353,16 @@ subtest 'article_requests() tests' => sub {
 
         my $item = $builder->build_sample_item;
 
-        Koha::ArticleRequest->new(
+        $builder->build_object(
             {
-                borrowernumber => $patron->id,
-                biblionumber   => $item->biblionumber,
-                itemnumber     => $item->id,
-                title          => "Title",
+                class => 'Koha::ArticleRequests',
+                value => {
+                    borrowernumber => $patron->id,
+                    biblionumber   => $item->biblionumber,
+                    itemnumber     => $item->id,
+                    title          => "Title",
+
+                }
             }
         )->request;
     }
