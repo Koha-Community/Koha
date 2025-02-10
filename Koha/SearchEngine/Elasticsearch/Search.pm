@@ -214,7 +214,8 @@ sub search_auth_compat {
     my $schema   = $database->schema();
     my $res      = $self->search($query, undef, $count, %options);
 
-    my $bib_searcher = Koha::SearchEngine::Elasticsearch::Search->new({index => 'biblios'});
+    # Use state variables to avoid recreating the objects every time.
+    state $bib_searcher = Koha::SearchEngine::Elasticsearch::Search->new( { index => 'biblios' } );
     my @records;
     my $hits = $res->{'hits'};
     foreach my $es_record (@{$hits->{'hits'}}) {
