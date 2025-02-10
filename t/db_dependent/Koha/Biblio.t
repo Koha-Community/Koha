@@ -840,12 +840,16 @@ subtest 'article_requests() tests' => sub {
 
         my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-        Koha::ArticleRequest->new(
+        $builder->build_object(
             {
-                borrowernumber => $patron->id,
-                biblionumber   => $biblio->id,
-                itemnumber     => $item->id,
-                title          => $biblio->title,
+                class => 'Koha::ArticleRequests',
+                value => {
+                    borrowernumber => $patron->id,
+                    biblionumber   => $biblio->id,
+                    itemnumber     => $item->id,
+                    title          => $biblio->title,
+
+                }
             }
         )->request;
     }
