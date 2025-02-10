@@ -6,6 +6,7 @@
         "
         :reduce="relatedResource => relatedResource.sip_institution_id"
         :options="relatedResourcesOptions"
+        :multiple="allowMultipleChoices"
         :filter-by="filterRelatedResourcesOptions"
         v-model="resource[name]"
     >
@@ -22,6 +23,7 @@ export default {
         relationshipAPIClient: Object | null,
         resource: Object | null,
         name: String | null,
+        allowMultipleChoices: Boolean | null,
     },
     data() {
         return {
