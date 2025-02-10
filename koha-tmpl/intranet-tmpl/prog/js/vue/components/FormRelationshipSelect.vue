@@ -4,7 +4,7 @@
         :getOptionLabel="
             relatedResource => relatedResource[relationshipOptionLabelAttr]
         "
-        :reduce="relatedResource => relatedResource.sip_institution_id"
+        :reduce="relatedResource => relatedResource[relationshipRequiredKey]"
         :options="relatedResourcesOptions"
         :multiple="allowMultipleChoices"
         :filter-by="filterRelatedResourcesOptions"
@@ -24,6 +24,7 @@ export default {
         resource: Object | null,
         name: String | null,
         allowMultipleChoices: Boolean | null,
+        relationshipRequiredKey: String | null,
     },
     data() {
         return {
