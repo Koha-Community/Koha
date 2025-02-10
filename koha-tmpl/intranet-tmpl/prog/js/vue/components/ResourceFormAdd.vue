@@ -177,8 +177,19 @@ export default {
     },
     methods: {
         async getResource(resourceId) {
+            const resourceAttrs = this.resourceAttrs;
             this.apiClient.get(resourceId).then(
                 resource => {
+                    resourceAttrs.forEach(attr => {
+                        if (
+                            attr.formatForForm &&
+                            typeof attr.formatForForm === "function"
+                        ) {
+                            resource[attr.name] = attr.formatForForm(
+                                resource[attr.name]
+                            );
+                        }
+                    });
                     this.resourceToEdit = resource;
                     this.initialized = true;
                 },
