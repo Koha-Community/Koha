@@ -105,7 +105,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 
 subtest 'build_authorities_query_compat() tests' => sub {
 
-    plan tests => 72;
+    plan tests => 81;
 
     my $qb;
 
@@ -114,8 +114,32 @@ subtest 'build_authorities_query_compat() tests' => sub {
         'Creating new query builder object for authorities'
     );
 
-    my $koha_to_index_name = $Koha::SearchEngine::Elasticsearch::QueryBuilder::koha_to_index_name;
+    my $koha_name   = 'any';
     my $search_term = 'a';
+    my $query       = $qb->build_authorities_query_compat(
+        [$koha_name], undef, undef, ['contains'], [$search_term], 'AUTH_TYPE',
+        'asc'
+    );
+    ok( !defined $query->{query}->{bool}->{should}, "Should query not used if 'and_or' not passed" );
+    ok( defined $query->{query}->{bool}->{must},    "Must query used if 'and_or' not passed" );
+    is( $query->{query}->{bool}->{must}[0]->{query_string}->{query}, "a*" );
+    $query = $qb->build_authorities_query_compat(
+        [$koha_name], ['and'], undef, ['contains'], [$search_term], 'AUTH_TYPE',
+        'asc'
+    );
+    ok( !defined $query->{query}->{bool}->{should}, "Should query not used when 'and_or' passed 'and'" );
+    ok( defined $query->{query}->{bool}->{must},    "Must query used when 'and_or' passed 'and'" );
+    is( $query->{query}->{bool}->{must}[0]->{query_string}->{query}, "a*" );
+    $query = $qb->build_authorities_query_compat(
+        [$koha_name], ['or'], undef, ['contains'], [$search_term], 'AUTH_TYPE',
+        'asc'
+    );
+    ok( defined $query->{query}->{bool}->{should}, "Should query used if 'and_or' passed 'or'" );
+    ok( defined $query->{query}->{bool}->{should}, "Must query not used if 'and_or' passed 'or'" );
+    is( $query->{query}->{bool}->{should}[0]->{query_string}->{query}, "a*" );
+
+    my $koha_to_index_name = $Koha::SearchEngine::Elasticsearch::QueryBuilder::koha_to_index_name;
+    $search_term = 'a';
     foreach my $koha_name ( keys %{ $koha_to_index_name } ) {
         my $query = $qb->build_authorities_query_compat( [ $koha_name ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
         if ( $koha_name eq 'all' || $koha_name eq 'any' ) {
@@ -170,7 +194,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
     }
 
     # Sorting
-    my $query = $qb->build_authorities_query_compat( [ 'mainentry' ],  undef, undef, ['start'], [$search_term], 'AUTH_TYPE', 'HeadingAsc' );
+    $query = $qb->build_authorities_query_compat( [ 'mainentry' ],  undef, undef, ['start'], [$search_term], 'AUTH_TYPE', 'HeadingAsc' );
     is_deeply(
         $query->{sort},
         [
