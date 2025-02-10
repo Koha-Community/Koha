@@ -176,6 +176,8 @@ sub tidy_tt {
             $content =~ s#<!--</body>-->#</body>#g;
             $content =~ s#\n*( *)<script>\n*#\n$1<script>\n#g;
             $content =~ s#\n*( *)</script>\n*#\n$1</script>\n#g;
+            $content =~ s#(\[%\s*SWITCH[^\]]*\]\n)\n#$1#g;
+
             if ( $no_write && $pass == 2 ) {
                 print $content;
             } else {
