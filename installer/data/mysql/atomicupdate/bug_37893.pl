@@ -310,9 +310,7 @@ return {
         # Server params #
         my @server_params_keys = keys %{ $SIPconfig->{'server-params'} };
         foreach my $server_params_key (@server_params_keys) {
-            my $insert_listeners = $dbh->prepare(
-                q{INSERT IGNORE INTO sip_server_params (`key`, value) VALUES (?, ?) }
-            );
+            my $insert_listeners = $dbh->prepare(q{INSERT IGNORE INTO sip_server_params (`key`, value) VALUES (?, ?) });
 
             $insert_listeners->execute(
                 $server_params_key,
@@ -325,5 +323,31 @@ return {
         my $timestamp               = DateTime->now;
         my $insert_config_timestamp = $dbh->prepare(q{INSERT INTO sip_server_params (`key`, value) VALUES (?, ?) });
         $insert_config_timestamp->execute( 'config_timestamp', $timestamp->epoch );
+
+        # System preference overrides
+        my @system_preference_overrides =
+            ref $SIPconfig->{syspref_overrides} eq "ARRAY"
+            ? @{ $SIPconfig->{syspref_overrides} }
+            : ( $SIPconfig->{syspref_overrides} );
+
+        my $insert_system_preference_overrides =
+            $dbh->prepare(q{INSERT IGNORE INTO sip_system_preference_overrides (variable, value) VALUES (?, ?)});
+
+        foreach my $system_preference_override (@system_preference_overrides) {
+
+            if ( ref $system_preference_override eq 'HASH' ) {
+                for my $key ( keys %{$system_preference_override} ) {
+                    my $override_value = $system_preference_override->{$key};
+                    if ( ref $system_preference_override->{$key} eq 'ARRAY' ) {
+                        $override_value = $system_preference_override->{$key}->[0];
+                    }
+                    $insert_system_preference_overrides->execute(
+                        $key,
+                        $override_value
+                    );
+                }
+            }
+        }
+
     },
 };

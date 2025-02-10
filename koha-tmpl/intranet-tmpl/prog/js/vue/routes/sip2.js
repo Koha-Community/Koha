@@ -115,9 +115,41 @@ export const routes = [
                 ],
             },
             {
+                path: "/cgi-bin/koha/sip2/system_preference_overrides",
+                title: $__("System preference overrides"),
+                icon: "fa fa-cog",
+                is_end_node: true,
+                resource: "SIP2/SIP2SystemPreferenceOverrideResource.vue",
+                children: [
+                    {
+                        path: "",
+                        name: "SIP2SystemPreferenceOverridesList",
+                        component: markRaw(ResourceWrapper),
+                    },
+                    {
+                        path: ":sip_system_preference_override_id",
+                        name: "SIP2SystemPreferenceOverridesShow",
+                        component: markRaw(ResourceWrapper),
+                        title: $__("Show system preference override"),
+                    },
+                    {
+                        path: "add",
+                        name: "SIP2SystemPreferenceOverridesFormAdd",
+                        component: markRaw(ResourceWrapper),
+                        title: $__("Add system preference override"),
+                    },
+                    {
+                        path: "edit/:sip_system_preference_override_id",
+                        name: "SIP2SystemPreferenceOverridesFormAddEdit",
+                        component: markRaw(ResourceWrapper),
+                        title: $__("Edit system preference override"),
+                    },
+                ],
+            },
+            {
                 path: "/cgi-bin/koha/sip2/serverparams",
                 title: $__("Server params"),
-                icon: "fa fa-cog",
+                icon: "fa fa-server",
                 is_end_node: true,
                 children: [
                     {
@@ -125,7 +157,7 @@ export const routes = [
                         name: "SIP2ServerParams",
                         component: markRaw(ServerParams),
                     },
-                ]
+                ],
             },
         ],
     },

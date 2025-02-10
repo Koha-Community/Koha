@@ -6319,6 +6319,20 @@ CREATE TABLE `sip_server_params` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `sip_system_preference_overrides`
+--
+
+DROP TABLE IF EXISTS `sip_system_preference_overrides`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sip_system_preference_overrides` (
+  `sip_system_preference_override_id` int(11) NOT NULL AUTO_INCREMENT,
+  `variable` varchar(80) NOT NULL COMMENT 'System preference name',
+  `value` varchar(80) NOT NULL COMMENT 'System preference value',
+  PRIMARY KEY (`sip_system_preference_override_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `sms_providers`
 --
 

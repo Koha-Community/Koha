@@ -126,10 +126,47 @@ export class SIP2APIClient {
                 this.getAll({
                     endpoint: "serverparams",
                 }),
-            updateAll: (body) =>
+            updateAll: body =>
                 this.patch({
                     endpoint: "serverparams",
                     body: body,
+                }),
+        };
+    }
+
+    get system_preference_overrides() {
+        return {
+            get: id =>
+                this.get({
+                    endpoint: "system_preference_overrides/" + id,
+                }),
+            getAll: params =>
+                this.getAll({
+                    endpoint: "system_preference_overrides",
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "system_preference_overrides/" + id,
+                }),
+            create: system_preference_override =>
+                this.post({
+                    endpoint: "system_preference_overrides",
+                    body: system_preference_override,
+                }),
+            update: (system_preference_override, id) =>
+                this.put({
+                    endpoint: "system_preference_overrides/" + id,
+                    body: system_preference_override,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "system_preference_overrides?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                 }),
         };
     }

@@ -1,0 +1,276 @@
+---
+/sip2/system_preference_overrides:
+  get:
+    x-mojo-to: SIP2::SystemPreferenceOverrides#list
+    operationId: listSip2SystemPreferenceOverrides
+    tags:
+      - sip2_system_preference_overrides
+    summary: List system preference overrides
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on system preference override sip_system_preference_override_id
+        in: query
+        name: sip_system_preference_override_id
+        required: false
+        type: string
+        collectionFormat: csv
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+    responses:
+      200:
+        description: A list of SIP2 system preference overrides
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_system_preference_override"
+          type: array
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+  post:
+    x-mojo-to: SIP2::SystemPreferenceOverrides#add
+    operationId: addSip2SystemPreferenceOverrides
+    tags:
+      - sip2_system_preference_overrides
+    summary: Add system preference overrides
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new system preference override
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/sip2_system_preference_override"
+    responses:
+      201:
+        description: A successfully created system preference override
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_system_preference_override"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+"/sip2/system_preference_overrides/{sip_system_preference_override_id}":
+  get:
+    x-mojo-to: SIP2::SystemPreferenceOverrides#get
+    operationId: getSipSystemPreferenceOverrides
+    tags:
+      - sip2_system_preference_overrides
+    summary: Get SIP2 system preference overrides
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sip_system_preference_override_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - custom_item_fields
+            - item_fields
+            - custom_patron_fields
+            - patron_attributes
+        collectionFormat: csv
+    responses:
+      200:
+        description: A SIP2 system preference override
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_system_preference_override"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+  put:
+    x-mojo-to: SIP2::SystemPreferenceOverrides#update
+    operationId: updateSip2SystemPreferenceOverrides
+    tags:
+      - sip2_system_preference_overrides
+    summary: Update system preference override
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sip_system_preference_override_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing system preference override
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/sip2_system_preference_override"
+    responses:
+      200:
+        description: A successfully updated system preference override
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_system_preference_override"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+  delete:
+    x-mojo-to: SIP2::SystemPreferenceOverrides#delete
+    operationId: deleteSip2SystemPreferenceOverrides
+    tags:
+      - sip2_system_preference_overrides
+    summary: Delete system preference override
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sip_system_preference_override_id_pp"
+    responses:
+      204:
+        description: System preference override deleted
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Resource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only

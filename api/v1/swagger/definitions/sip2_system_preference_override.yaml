@@ -1,0 +1,19 @@
+---
+type: object
+properties:
+  sip_system_preference_override_id:
+    type: integer
+    description: unique identifier
+    readOnly: true
+  variable:
+    description: variable
+    type: string
+  value:
+    description: value
+    type: string
+
+additionalProperties: false
+required:
+  - sip_system_preference_override_id
+  - variable
+  - value

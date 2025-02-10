@@ -188,6 +188,8 @@ definitions:
     $ref: ./definitions/sip2_listener.yaml
   sip2_server_param:
     $ref: ./definitions/sip2_server_param.yaml
+  sip2_system_preference_override:
+    $ref: ./definitions/sip2_system_preference_override.yaml
   smtp_server:
     $ref: ./definitions/smtp_server.yaml
   file_transport:
@@ -619,6 +621,10 @@ paths:
     $ref: "./paths/sip2_listeners.yaml#/~1sip2~1listeners~1{sip_listener_id}"
   /sip2/serverparams:
     $ref: "./paths/sip2_server_params.yaml#/~1sip2~1server_params"
+  /sip2/system_preference_overrides:
+    $ref: ./paths/sip2_system_preference_overrides.yaml#/~1sip2~1system_preference_overrides
+  "/sip2/system_preference_overrides/{sip_system_preference_override_id}":
+    $ref: "./paths/sip2_system_preference_overrides.yaml#/~1sip2~1system_preference_overrides~1{sip_system_preference_override_id}"
   /suggestions:
     $ref: ./paths/suggestions.yaml#/~1suggestions
   "/suggestions/{suggestion_id}":
@@ -1021,6 +1027,12 @@ parameters:
     description: SIP2 listener internal identifier
     in: path
     name: sip_listener_id
+    required: true
+    type: integer
+  sip_system_preference_override_id_pp:
+    description: SIP2 system preference override internal identifier
+    in: path
+    name: sip_system_preference_override_id
     required: true
     type: integer
   smtp_server_id_pp:
