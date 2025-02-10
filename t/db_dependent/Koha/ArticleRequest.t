@@ -46,10 +46,14 @@ subtest 'request() tests' => sub {
 
     my $ar_module = mock_article_request_module();
 
-    my $ar = Koha::ArticleRequest->new(
+    my $ar = $builder->build_object(
         {
-            borrowernumber => $patron->id,
-            biblionumber   => $item->biblionumber,
+            class => 'Koha::ArticleRequests',
+            value => {
+                borrowernumber => $patron->id,
+                biblionumber   => $item->biblionumber,
+                debit_id       => undef,
+            }
         }
     );
 
@@ -67,11 +71,14 @@ subtest 'request() tests' => sub {
     # set a fee amount
     $amount = 10;
 
-    $ar = Koha::ArticleRequest->new(
+    $ar = $builder->build_object(
         {
-            borrowernumber => $patron->id,
-            biblionumber   => $item->biblionumber,
-            itemnumber     => $item->id,
+            class => 'Koha::ArticleRequests',
+            value => {
+                borrowernumber => $patron->id,
+                biblionumber   => $item->biblionumber,
+                itemnumber     => $item->id,
+            }
         }
     );
 
@@ -101,10 +108,13 @@ subtest 'set_pending() tests' => sub {
 
     my $ar_module = mock_article_request_module();
 
-    my $ar = Koha::ArticleRequest->new(
+    my $ar = $builder->build_object(
         {
-            borrowernumber => $patron->id,
-            biblionumber   => $biblio->id,
+            class => 'Koha::ArticleRequests',
+            value => {
+                borrowernumber => $patron->id,
+                biblionumber   => $biblio->id,
+            }
         }
     );
 
@@ -174,11 +184,14 @@ subtest 'cancel() tests' => sub {
 
     my $ar_module = mock_article_request_module();
 
-    my $ar = Koha::ArticleRequest->new(
+    my $ar = $builder->build_object(
         {
-            borrowernumber => $patron->id,
-            biblionumber   => $item->biblionumber,
-            itemnumber     => $item->id,
+            class => 'Koha::ArticleRequests',
+            value => {
+                borrowernumber => $patron->id,
+                biblionumber   => $item->biblionumber,
+                itemnumber     => $item->id,
+            }
         }
     );
 
