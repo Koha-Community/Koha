@@ -96,6 +96,7 @@
             :options="selectOptions"
             :required="!resource[attr.name] && attr.required"
             :disabled="disabled"
+            :multiple="attr.allowMultipleChoices"
             @option:selected="attr.onSelected && attr.onSelected(resource)"
         >
             <template v-if="attr.required" #search="{ attributes, events }">
